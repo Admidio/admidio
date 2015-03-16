@@ -267,7 +267,6 @@
     <text id="DAT_DATES" development="new" translation="edited">Aktiviteter</text>
     <text id="DAT_DATES_DESC" development="new" translation="edited">Du kan oprette og redigere aktiviteter her. Andre brugere kan tilmelde sig aktiviteterne.</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="edited">Rediger lokale</text>
-    <text id="DAT_EDIT_ROOMS_DESC" development="new" translation="edited">Oprettelse og redigering af lokale.\n%VAR1% Alle organisations indstillinger som ikke er gemt vil gå tabt.</text>
     <text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">En ny mødedato blev oprettet</text>
     <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1" development="new" translation="edited">En ny mødedato i %VAR1% blev oprettet.\n\nTitel: %VAR2%\nDato: %VAR3%\nKalender: %VAR4%\n</text>
     <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2" development="new" translation="edited">Lokalitet: %VAR1%\nLokale: %VAR2%\nDeltagere: %VAR3%\nOprettet af: %VAR4%\n</text>
@@ -309,7 +308,6 @@
     <text id="DOW_CHOOSE_FILE" development="new" translation="edited">Vælg fil</text>
     <text id="DOW_COUNTER" development="new" translation="edited">Tæller</text>
     <text id="DOW_CREATE_FOLDER" development="new" translation="edited">Opret folder</text>
-    <text id="DOW_CREATE_FOLDER_DESC" development="new" translation="edited">Opret folder i %VAR1_BOLD%.</text>
     <text id="DOW_DOWNLOADS" development="new" translation="edited">Filer</text>
     <text id="DOW_DOWNLOADS_DESC" development="new" translation="edited">Forskellige data filer og filtyper kan gøres tilgængelige via download. Disse filer kan kategoriseres i foldere med forskellige adgangs rettigheder.</text>
     <text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">En ny fil blev overført</text>
@@ -434,7 +432,6 @@
     <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Møder kan afholdes her. Lokale skal reserveres på forhånd. Projektor kan frit afbenyttes.</text>
     <text id="INS_DESCRIPTION_MEMBER" development="new" translation="edited">Alle organisations medlemmer</text>
     <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="edited">Gruppe af system administratorer</text>
-    <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="edited">Download konfigurations fil %VAR1_BOLD% og kopier den til Admidio's rod folder. Du kan også finde %VAR2_BOLD% her.\n\nFortsæt installationen når du har kopieret filen på plads.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Indtast database adgangs information</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">Filen %VAR1_BOLD% kunne ikke åbnes.</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="edited">Folderen %VAR1_BOLD% er ikke skrivbar. Venligst sæt skrive rettigheder for at kunne overføre billeder og filer til fil modulet.</text>
@@ -535,7 +532,6 @@
     <text id="LST_LIST_VIEW" development="new" translation="edited">Liste oversigt</text>
     <text id="LST_MAX" development="new" translation="edited">af maximum. %VAR1%</text>
     <text id="LST_MEMBERS_PER_PAGE" development="new" translation="edited">Medlemmer vist pr. side</text>
-    <text id="LST_MEMBERS_PER_PAGE_DESC" development="new" translation="edited">Definér antal af medlemmer vist på en liste side. Sidenummerering forekommer hvis antallet overstiger den definerede værdi. Vis print eksempel og eksport funktionalitet bliver ikke påvirket. Hvis værdien er 0, vil alle medlemmer blive listet og sidenummerering slået fra. (Standard: 20)</text>
     <text id="LST_MEMBER_ASSIGNMENT" development="new" translation="edited">Medlemskabs tildeling</text>
     <text id="LST_MEMBERSHIP_END" development="new" translation="edited">Afslutning af medlemskab</text>
     <text id="LST_MEMBERSHIP_START" development="new" translation="edited">Start på medlemskab</text>
@@ -708,7 +704,6 @@
     <text id="ORG_FIELD_DOWN" development="new" translation="edited">Flyt profil felt ned</text>
     <text id="ORG_FIELD_EXIST" development="new" translation="edited">Feltnavnet eksisterer allerede i denne kategori.</text>
     <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Feltet er kun synligt for godkendte brugere (egen profil &amp; rolle autorisation)</text>
-    <text id="ORG_FIELD_HIDDEN_DESC" development="new" translation="edited">Et felt er typisk synligt for alle brugere. Du bør kun deaktivere dette for brugere med bruger redigerings rettigheder. Alle brugere kan se feltet i egen profil.</text>
     <text id="ORG_FIELD_MANDATORY" development="new" translation="edited">Krævet felt der altid skal udfyldes.</text>
     <text id="ORG_FIELD_MANDATORY_DESC" development="new" translation="edited">Mærket (påkrævet) felter skal altid udfyldes. Denne regel gælder for registreringer og for regulære profil ændringer udført af brugerne selv.</text>
     <text id="ORG_FIELD_NOT_DISABLED" development="new" translation="edited">Felt kan rettes af brugeren selv.</text>
@@ -815,8 +810,6 @@
     <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Vis vandmærke</text>
     <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="edited">Teksten vil blive vist i på alle billeder med en lang kant længere end 200 pixels. (Standard: &#169; %VAR1%)</text>
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="edited">Billeder er blevet tilføjet til albummet hvis de vises på denne side.</text>
-    <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="edited">Minibilleder pr. side (rækker x kolonner)</text>
-    <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="edited">Værdien definerer antallet af rækker og kolonner af minibilleder på en side. (Standard: 3 x 5)</text>
     <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Klik på knappen %VAR1_BOLD% for at vælge billede filer fra harddisken til overførsel.</text>
     <text id="PHO_UPLOAD_HELP_2" development="new" translation="edited">Når du bruger processen med at overføre enkelt billeder, så skal du gentage den op til 5 gange, indtil alle felterne er i brug.</text>
     <text id="PHO_UPLOAD_HELP_3" development="new" translation="edited">Klik så på %VAR1_BOLD% og hav lidt tålmodighed.</text>
@@ -829,13 +822,10 @@
     <text id="PRO_ADD_USER" development="new" translation="edited">Tilføj bruger</text>
     <text id="PRO_CANCEL_MEMBERSHIP" development="new" translation="edited">Afslut medlemsskab</text>
     <text id="PRO_CHANGE_DATE" development="new" translation="edited">Rediger dato</text>
-    <text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="edited">Rediger profil billede</text>
     <text id="PRO_CONFIRMATION_CODE" development="new" translation="edited">Turing code</text>
     <text id="PRO_CURRENT_PASSWORD" development="new" translation="edited">Nuværende kodeord</text>
     <text id="PRO_CURRENT_PICTURE" development="new" translation="edited">Nuværende profil billede</text>
     <text id="PRO_DEFAULT_COUNTRY" development="new" translation="edited">Standard land</text>
-    <text id="PRO_DEFAULT_COUNTRY_DESC" development="new" translation="edited">Defineret land vil blive automatisk valgt ved bruger registrering. (default: Danmark)</text>
-    <text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="edited">Slet profil billede</text>
     <text id="PRO_EDIT_MY_PROFILE" development="new" translation="edited">Rediger egen profil</text>
     <text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="edited">Rediger eget profil billede</text>
     <text id="PRO_EDIT_PASSWORD" development="new" translation="edited">Rediger kodeord</text>
@@ -848,7 +838,6 @@
     <text id="PRO_LOCATION_PROFILE_PICTURES_DESC" development="new" translation="edited">Definer hvor profil billeder skal gemmes (i databasen eller i folderen adm_my_files). Hvis du ændrer dette vil de nuværende billeder IKKE blive kopieret til den nye placering. (Standard: database)</text>
     <text id="PRO_LOGIN_NAME_EXIST" development="new" translation="edited">Det valgte bruger navn eksisterer allerede.\n\nVælg venligst et andet bruger navn.</text>
     <text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">Rediger profil felter</text>
-    <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="new" translation="edited">Du kan oprette og redigere profil felter som kan inddeles i kategorier.\n%VAR1% Alle organisations indstillinger som ikke er gemt vil gå tabt.</text>
     <text id="PRO_MY_PROFILE" development="new" translation="edited">Min profil</text>
     <text id="PRO_MY_PROFILE_DESC" development="new" translation="edited">Egen profil kan vises og redigeres her.</text>
     <text id="PRO_NEW_PASSWORD" development="new" translation="edited">Nyt kodeord</text>
@@ -931,7 +920,6 @@
     <text id="ROL_ROLE" development="new" translation="edited">Rolle</text>
     <text id="ROL_ROLE_ADMINISTRATION" development="new" translation="edited">Rolle administration</text>
     <text id="ROL_ROLE_ADMINISTRATION_DESC" development="new" translation="edited">Roller baseret på bestemte grupper, kurser og afdelinger kan administreres her. Rolle rettigheder kan også defineres her.</text>
-    <text id="ROL_ROLE_ASSIGNMENT" development="new" translation="edited">Rolle tildeling for "%VAR1% %VAR2%"</text>
     <text id="ROL_ROLE_DELETE" development="new" translation="edited">Sletter rolle</text>
     <text id="ROL_ROLE_DELETE_DESC" development="new" translation="edited">Vil du slette rolle %VAR1% ?\n\nAlle medlemskaber bliver slettet samtidigt.</text>
     <text id="ROL_ROLE_DEPENDENCIES" development="new" translation="edited">Et medlem af en afhængig rolle bliver automatisk medlem af %VAR1%!\n\nNår denne afhængighed er sat vil alle eksisterende medlemmer af den afhængige rolle automatisk blive medlem af %VAR1%. Når en afhængighed slettes, vil medlemskaber ikke ændres!</text>
@@ -1053,7 +1041,6 @@
     <text id="SYS_EDITED_BY" development="new" translation="edited">Sidst redigeret af %VAR1% den %VAR2%</text>
     <text id="SYS_EMAIL" development="new" translation="edited">E-mail</text>
     <text id="SYS_EMAIL_INVALID" development="new" translation="edited">E-mail adressen i feltet %VAR1_BOLD% mangler eller indeholder ugyldige karakterer.</text>
-    <text id="SYS_EMAIL_SEND" development="new" translation="edited">E-mail er blevet sendt til %VAR1_BOLD%.</text>
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Posten er synlig for flere organisationer</text>    
     <text id="SYS_END" development="new" translation="edited" description="End of a date">Slut</text>
     <text id="SYS_ERROR" development="new" translation="edited">Fejl</text>

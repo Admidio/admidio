@@ -276,7 +276,6 @@
     <text id="DAT_DATES" development="new" translation="edited">Evenementen</text>
     <text id="DAT_DATES_DESC" development="new" translation="edited">Hier kunt u evenementen maken en bewerken. Gebruikers kunnen zich opgeven hiervoor.</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="edited">Bewerk vergaderzaal</text>
-    <text id="DAT_EDIT_ROOMS_DESC" development="new" translation="edited">Maken en bewerken van vergaderzalen.\n%VAR1% Alle niet opgeslagen voorkeursinstellingen zullen verloren gaan.</text>
     <text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">Een nieuwe afspraak is gemaakt</text>
     <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1" development="new" translation="edited">Nieuwe afspraak op %VAR1% is gemaakt.\n\nTitel: %VAR2%\nDatum: %VAR3%\nKalender: %VAR4%\n</text>
     <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2" development="new" translation="edited">Locatie: %VAR1%\nVergaderzaal: %VAR2%\nDeelnemers: %VAR3%\nGemaakt door: %VAR4%\n</text>
@@ -317,7 +316,6 @@
     <text id="DOW_CHOOSE_FILE" development="new" translation="edited">Kies bestand</text>
     <text id="DOW_COUNTER" development="new" translation="edited">Teller</text>
     <text id="DOW_CREATE_FOLDER" development="new" translation="edited">Maak map</text>
-    <text id="DOW_CREATE_FOLDER_DESC" development="new" translation="edited">Maak map in %VAR1_BOLD%.</text>
     <text id="DOW_DOWNLOADS" development="new" translation="edited">Downloads</text>
     <text id="DOW_DOWNLOADS_DESC" development="new" translation="edited">U kunt hier verschillende soorten bestanden als download aanbieden. Downloads kunnen in mappen verdeeld worden en hieraan kunnen toegangsrechten gekoppeld worden.</text>
     <text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">Nieuw bestand geupload</text>
@@ -444,7 +442,6 @@
     <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Hier kunnen vergaderingen plaatsvinden. Zaal moet van tevoren gereserveerd worden.</text>
     <text id="INS_DESCRIPTION_MEMBER" development="new" translation="edited">Alle leden</text>
     <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="edited">Groep beheerders</text>
-    <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="edited">Download configuratie bestand %VAR1_BOLD% en kopieer bestand naar de root van Admidio's directory. Ook %VAR2_BOLD% kan hier gevonden worden.\n\nGa door wanneer het bestand naar de nieuwe locatie is gekopieerd.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Geef database toegangsinformatie door</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">Bestand %VAR1_BOLD% kan niet geopend worden.</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="edited">Map %VAR1_BOLD% kan niet beschreven worden. Stel schrijfrechten in zodat u foto's en bestanden kunt uploaden.</text>
@@ -543,7 +540,6 @@
     <text id="LST_LIST_VIEW" development="new" translation="edited">Overzicht lijsten</text>
     <text id="LST_MAX" development="new" translation="edited">van maximaal. %VAR1%</text>
     <text id="LST_MEMBERS_PER_PAGE" development="new" translation="edited">Aantal leden per pagina</text>
-    <text id="LST_MEMBERS_PER_PAGE_DESC" development="new" translation="edited">Bepaal aantal leden die per pagina getoond worden. Dit is mogelijk als er meer leden zijn dan de vooraf ingestelde hoeveelheid. Print voorbeeld en export functie worden niet beinvloed. Als aantal 0 is worden alle leden getoond. (standaard: 20)</text>
     <text id="LST_MEMBER_ASSIGNMENT" development="new" translation="edited">Leden toewijzen</text>
     <text id="LST_MEMBERSHIP_END" development="new" translation="edited">Einde lidmaatschap</text>
     <text id="LST_MEMBERSHIP_START" development="new" translation="edited">Begin lidmaatschap</text>
@@ -716,7 +712,6 @@
     <text id="ORG_FIELD_DOWN" development="new" translation="edited">Verplaats profielveld naar beneden</text>
     <text id="ORG_FIELD_EXIST" development="new" translation="edited">Er bestaat in deze categorie al een veld met dezelfde naam.</text>
     <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Veld is alleen zichtbaar voor geautoriseerde gebruikers (eigen prfiel &amp; rol autorisatie)</text>
-    <text id="ORG_FIELD_HIDDEN_DESC" development="new" translation="edited">Een veld is normaal gesproken voor alle gebruikers zichtbaar. Schakel alleen uit voor voor geautoriseerde gebruikers met rechten om te bewerken. Iedere gebruiker kan velden in eigen profiel zien.</text>
     <text id="ORG_FIELD_MANDATORY" development="new" translation="edited">Verplichte velden moeten altijd ingevuld worden.</text>
     <text id="ORG_FIELD_MANDATORY_DESC" development="new" translation="edited">Aangevinkte (verplichte) velden moeten altijd ingevuld worden. Dit geldt voor registratie en wijzigingen van het profiel door gebruiker.</text>
     <text id="ORG_FIELD_NOT_DISABLED" development="new" translation="edited">Veld kan door gebruiker zelf bewerkt worden.</text>
@@ -830,8 +825,6 @@
     <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Toon watermerk</text>
     <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="edited">Tekst wordt getoond in alle foto's die breder zijn dan 200 pixels. (standaard: &#169; %VAR1%)</text>
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="edited">Foto's zijn succesvol toegevoegd aan album als ze op deze pagina getoond worden. </text>
-    <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="edited">Thumbnails per pagina (rij x kolom)</text>
-    <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="edited">Waarden die bepalen hoeveel rijen en kolommen thumbnails op 1 pagina staan. (standaard: 3 x 5)</text>
     <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Klik op de knop %VAR1_BOLD% om foto's te selecteren die u vanaf uw harde schijf wilt uploaden.</text>
     <text id="PHO_UPLOAD_HELP_2" development="new" translation="edited">Als u foto's per stuk gaat uploaden via de functie HTML-upload moet u dit tot maximaal 5 keer herhalen totdat alle velden gevuld zijn.</text>
     <text id="PHO_UPLOAD_HELP_3" development="new" translation="edited">Klik dan op %VAR1_BOLD% en wacht rustig af.</text>
@@ -844,13 +837,10 @@
     <text id="PRO_ADD_USER" development="new" translation="edited">Voeg gebruiker toe</text>
     <text id="PRO_CANCEL_MEMBERSHIP" development="new" translation="edited">Beeindig lidmaatschap</text>
     <text id="PRO_CHANGE_DATE" development="new" translation="edited">Datum aanpassen</text>
-    <text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="edited">Nieuwe profielfoto</text>
     <text id="PRO_CONFIRMATION_CODE" development="new" translation="edited">Neem code over</text>
     <text id="PRO_CURRENT_PASSWORD" development="new" translation="edited">Huidig wachtwoord</text>
     <text id="PRO_CURRENT_PICTURE" development="new" translation="edited">Huidige profielfoto</text>
     <text id="PRO_DEFAULT_COUNTRY" development="new" translation="edited">Standaard land</text>
-    <text id="PRO_DEFAULT_COUNTRY_DESC" development="new" translation="edited">Standaard land wordt automatisch geselecteerd tijdens registratie van gebruiker. (standaard: Duitsland)</text>
-    <text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="edited">Verwijder profielfoto</text>
     <text id="PRO_EDIT_MY_PROFILE" development="new" translation="edited">Bewerk uw profiel</text>
     <text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="edited">Bewerk eigen profielfoto</text>
     <text id="PRO_EDIT_PASSWORD" development="new" translation="edited">Bewerk wachtwoord</text>
@@ -863,7 +853,6 @@
     <text id="PRO_LOCATION_PROFILE_PICTURES_DESC" development="new" translation="edited">Kies svp de locatie waar profielfoto's opgeslagen worden (in database of in map adm_my_files). Wanneer dit wijzigt, zullen huidige foto's niet verplaatst worden naar de nieuwe locatie. (standaard: database)</text>
     <text id="PRO_LOGIN_NAME_EXIST" development="new" translation="edited">Deze gebruikersnaam bestaat al.\n\nKies svp een andere gebruikersnaam.</text>
     <text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">Beheer profielvelden</text>
-    <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="new" translation="edited">U kan profielvelden maken en bewerken welke kunnen worden samengevoegd in categorieen.\n%VAR1% Alle niet-opgeslagen voorkeuren van organisatie zullen verloren gaan.</text>
     <text id="PRO_MY_PROFILE" development="new" translation="edited">Mijn profiel</text>
     <text id="PRO_MY_PROFILE_DESC" development="new" translation="edited">Hier kunt u uw eigen profiel bekijken en wijzigen.</text>
     <text id="PRO_NEW_PASSWORD" development="new" translation="edited">Nieuw wachtwoord</text>
@@ -947,7 +936,6 @@
     <text id="ROL_ROLE" development="new" translation="edited">Rol</text>
     <text id="ROL_ROLE_ADMINISTRATION" development="new" translation="edited">Beheer rol en categorie</text>
     <text id="ROL_ROLE_ADMINISTRATION_DESC" development="new" translation="edited">Hier kunt u een rol (functie) en categorie beheren. Ook kunt u rechten beheren die aan een rol gekoppeld zijn.</text>
-    <text id="ROL_ROLE_ASSIGNMENT" development="new" translation="edited">Verdeling rollen "%VAR1% %VAR2%"</text>
     <text id="ROL_ROLE_DELETE" development="new" translation="edited">Rol verwijderen</text>
     <text id="ROL_ROLE_DELETE_DESC" development="new" translation="edited">Wilt u rol %VAR1% verwijderen?\n\nAlle lidmaatschappen worden dan ook verwijderd.</text>
     <text id="ROL_ROLE_DEPENDENCIES" development="new" translation="edited">Een lid van een afhankelijke rol zal automatisch lid worden van %VAR1%.\n\nAls deze afhankelijkheid is ingesteld zullen alle bestaande leden met deze rol lid worden van %VAR1%. Als de afhankelijkheid verwijderd wordt, zullen lidmaatschappen hetzelfde blijven.</text>
@@ -1066,7 +1054,6 @@
     <text id="SYS_EDITED_BY" development="new" translation="edited">Laatst bewerkt door %VAR1% op %VAR2%</text>
     <text id="SYS_EMAIL" development="new" translation="edited">E-mail</text>
     <text id="SYS_EMAIL_INVALID" development="new" translation="edited">E-mail adres in veld %VAR1_BOLD% bevat onjuiste karakters of is niet compleet.</text>
-    <text id="SYS_EMAIL_SEND" development="new" translation="edited">E-mail is gestuurd naar %VAR1_BOLD%.</text>
     <text id="SYS_EMAIL_NOT_SEND" development="new" translation="edited">E-mail naar %VAR1_BOLD% kon niet verzonden worden.</text>
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Bericht zichtbaar voor meerdere organisaties</text>
     <text id="SYS_END" development="new" translation="edited" description="Einddatum">Tot</text>

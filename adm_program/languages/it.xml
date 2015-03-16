@@ -269,7 +269,6 @@
     <text id="DAT_DATES" development="new" translation="edited">Eventi</text>
     <text id="DAT_DATES_DESC" development="new" translation="edited">Puoi creare e modificare gli eventi qui. Gli utenti possono registrarsi a questi eventi.</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="edited">Modifica stanze</text>
-    <text id="DAT_EDIT_ROOMS_DESC" development="new" translation="edited">Crea e modifica stanze.\n%VAR1% Tutte le preferenze dell'organizzazione non salvate andranno perdute.</text>
     <text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">Una nuova data è stata creata</text>
     <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1" development="new" translation="edited">Una nuova data il %VAR1% è stata creata.\n\nTitolo: %VAR2%\nData: %VAR3%\nCalendario: %VAR4%\n</text>
     <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2" development="new" translation="edited">Località: %VAR1%\nStanza: %VAR2%\nParticipanti: %VAR3%\nCreato da: %VAR4%\n</text>
@@ -311,7 +310,6 @@
     <text id="DOW_CHOOSE_FILE" development="new" translation="edited">File selezionato</text>
     <text id="DOW_COUNTER" development="new" translation="edited">Contatore</text>
     <text id="DOW_CREATE_FOLDER" development="new" translation="edited">Crea cartella</text>
-    <text id="DOW_CREATE_FOLDER_DESC" development="new" translation="edited">Crea cartella in %VAR1_BOLD%.</text>
     <text id="DOW_DOWNLOADS" development="new" translation="edited">Scaricamenti</text>
     <text id="DOW_DOWNLOADS_DESC" development="new" translation="edited">Diversi file di dati e tipi di file possono essere resi disponibili per lo scaricamento. Questi scaricamenti possono essere organizzati in categorie in cartelle con diversi livelli di permesso per l'accesso.</text>
     <text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">Un nuovo file è stato caricato</text>
@@ -434,7 +432,6 @@
     <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Le riunioni possono svolgersi qui. La stanza deve prima essere prenotata. L'uso è libero.</text>
     <text id="INS_DESCRIPTION_MEMBER" development="new" translation="edited">Tutti i membri dell'organizzazione</text>
     <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="edited">Gruppo degli amministratori del sistema</text>
-    <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="edited">Scarica il file di configurazione %VAR1_BOLD% e copia il file nella directory root di Admidio. Anche %VAR2_BOLD% può essere trovato qui.\n\nProcedi quando il file è stato copiato nella nuova posizione.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Inserisci le informazioni di accesso al database</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">Il file %VAR1_BOLD% non può essere aperto.</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="edited">La cartella %VAR1_BOLD% non è abilitata alla scrittura. Per favore definisci i permessi per la scrittura per caricare le foto e i file per il modulo per scaricare.</text>
@@ -535,7 +532,6 @@
     <text id="LST_LIST_VIEW" development="new" translation="edited">Panoramica dell'elenco</text>
     <text id="LST_MAX" development="new" translation="edited">del massimo. %VAR1%</text>
     <text id="LST_MEMBERS_PER_PAGE" development="new" translation="edited">Membri visualizzati per pagina</text>
-    <text id="LST_MEMBERS_PER_PAGE_DESC" development="new" translation="edited">Definisci il numero di membri visualizzati su una pagina dell'elenco. E' prevista la divisione in pagine se il numero di elementi eccede il valore definito.  L'anteprima di stampa e la funzionalità di esportazione non sono interessate. Se il valore è 0, saranno elencati tutti i membri e la divisione in pagine sarà disattivata. (predefinito: 20)</text>
     <text id="LST_MEMBER_ASSIGNMENT" development="new" translation="edited">Assegnazione membro</text>
     <text id="LST_MEMBERSHIP_END" development="new" translation="edited">Fine della membership</text>
     <text id="LST_MEMBERSHIP_START" development="new" translation="edited">Inizio della membership</text>
@@ -706,7 +702,6 @@
     <text id="ORG_FIELD_DOWN" development="new" translation="edited">Sposta sotto il campo del profilo</text>
     <text id="ORG_FIELD_EXIST" development="new" translation="edited">Un campo con lo stesso nome esiste già in questa categoria.</text>
     <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Campo visibile solo per gli utenti autorizzati (autorizzazione solo per il proprio profilo &amp; ruolo)</text>
-    <text id="ORG_FIELD_HIDDEN_DESC" development="new" translation="edited">Un campo di solito è liberamente visibile per tutti gli utenti.  Disabilitalo per autorizzarne la visione solo agli utenti con il permesso di modifica. Ogni utente è abilitato a vedere il campo solo nel proprio profilo.</text>
     <text id="ORG_FIELD_MANDATORY" development="new" translation="edited">Campo obbligatorio che deve sempre essere inserito.</text>
     <text id="ORG_FIELD_MANDATORY_DESC" development="new" translation="edited">I campi contrassegnati (obbligatori) devono sempre essere inseriti.  Questa regola vale per le registrazioni per regolari cambi di profilo eseguiti dagli utenti.</text>
     <text id="ORG_FIELD_NOT_DISABLED" development="new" translation="edited">Il campo può essere modificato dagli utenti stessi.</text>
@@ -813,8 +808,6 @@
     <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Mostra filigrana</text>
     <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="edited">Il testo verrà visualizzato in tutte le foto con un bordo lungo più grande di 200 pixel. (predefinito: &#169; %VAR1%)</text>
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="edited">Le foto sono state aggiunte successo all'album se appaiono in questa pagina.</text>
-    <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="edited">Miniature per pagina (righe x colonne)</text>
-    <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="edited">Valori che definiscono il numero di righe e colonne di miniature su una pagina. (predefinito: 3 x 5)</text>
     <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Premi il pulsante %VAR1_BOLD% al fine di selezionare i file delle foto sull'hard disk per il caricamento.</text>
     <text id="PHO_UPLOAD_HELP_2" development="new" translation="edited">Quando si utilizza il caricamento della singola foto il processo di selezione deve essere ripetuto cinque volte, fino a quando tutti i campi di caricamento saranno usati.</text>
     <text id="PHO_UPLOAD_HELP_3" development="new" translation="edited">Poi premi %VAR1_BOLD% e sii paziente.</text>
@@ -827,13 +820,10 @@
     <text id="PRO_ADD_USER" development="new" translation="edited">Aggiungi utente</text>
     <text id="PRO_CANCEL_MEMBERSHIP" development="new" translation="edited">Cancella membership</text>
     <text id="PRO_CHANGE_DATE" development="new" translation="edited">Cambia data</text>
-    <text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="edited">Cambia immagine del profilo</text>
     <text id="PRO_CONFIRMATION_CODE" development="new" translation="edited">Codice di Turing</text>
     <text id="PRO_CURRENT_PASSWORD" development="new" translation="edited">Password corrente</text>
     <text id="PRO_CURRENT_PICTURE" development="new" translation="edited">Immagine del profilo corrente</text>
     <text id="PRO_DEFAULT_COUNTRY" development="new" translation="edited">Paese predefinito</text>
-    <text id="PRO_DEFAULT_COUNTRY_DESC" development="new" translation="edited">Il paese definito verrà selezionato automaticamente al momento della registrazione dell'utente per facilitare il completamento. (predefinito: Germania)</text>
-    <text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="edited">Elimina immagine del profilo</text>
     <text id="PRO_EDIT_MY_PROFILE" development="new" translation="edited">Modifica il proprio profilo</text>
     <text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="edited">Modifica la propria immagine del profilo</text>
     <text id="PRO_EDIT_PASSWORD" development="new" translation="edited">Modifica password</text>
@@ -846,7 +836,6 @@
     <text id="PRO_LOCATION_PROFILE_PICTURES_DESC" development="new" translation="edited">Si prega di definire dove memorizzare le immagini del profilo (nel database o nella cartella adm_my_files). Quando viene apportata una modifica, le immagini attuali non vengono copiate nella nuova posizione. (predefinito: database)</text>
     <text id="PRO_LOGIN_NAME_EXIST" development="new" translation="edited">Il nome utente selezionato è già esistente.\n\nSi prega di scegliere un altro nome.</text>
     <text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">Gestisci i campi del profilo</text>
-    <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="new" translation="edited">È possibile creare e modificare i campi del profilo che possono essere uniti in categorie.\n%VAR1% Tutte le preferenze dell'organizzazione non salvate andranno perse.</text>
     <text id="PRO_MY_PROFILE" development="new" translation="edited">Il mio profilo</text>
     <text id="PRO_MY_PROFILE_DESC" development="new" translation="edited">Il proprio profilo può essere visualizzato e modificato qui.</text>
     <text id="PRO_NEW_PASSWORD" development="new" translation="edited">Nuova password</text>
@@ -929,7 +918,6 @@
     <text id="ROL_ROLE" development="new" translation="edited">Ruolo</text>
     <text id="ROL_ROLE_ADMINISTRATION" development="new" translation="edited">Amministrazione del ruolo</text>
     <text id="ROL_ROLE_ADMINISTRATION_DESC" development="new" translation="edited">I ruoli basati su determinati gruppi, i corsi e i dipartimenti possono essere gestiti qui. I permessi del ruolo possono essere definiti anche qui.</text>
-    <text id="ROL_ROLE_ASSIGNMENT" development="new" translation="edited">Assegnazione del ruolo per "%VAR1% %VAR2%"</text>
     <text id="ROL_ROLE_DELETE" development="new" translation="edited">Eliminazione del ruolo</text>
     <text id="ROL_ROLE_DELETE_DESC" development="new" translation="edited">Vuoi cancellare il ruolo %VAR1% ?\n\nTutte le membership stanno per essere cancellate di conseguenza.</text>
     <text id="ROL_ROLE_DEPENDENCIES" development="new" translation="edited">Un membro di un ruolo dipendente diventa automaticamente un membro di %VAR1%!\n\nQuando questa dipendenza è impostata tutti i membri esistenti del ruolo dipendente diventeranno membri di %VAR1%. Quando una dipendenza sta per essere cancellato, le membership rimarranno le stesse!</text>
@@ -1053,7 +1041,6 @@
     <text id="SYS_EDITED_BY" development="new" translation="edited">Ultima modifica di %VAR1% il %VAR2%</text>
     <text id="SYS_EMAIL" development="new" translation="edited">Email</text>
     <text id="SYS_EMAIL_INVALID" development="new" translation="edited">L'indirizzo email nel campo %VAR1_BOLD% include caratteri non validi o è incompleto.</text>
-    <text id="SYS_EMAIL_SEND" development="new" translation="edited">Un'email è stata inviata a %VAR1_BOLD%.</text>
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Voce visibile per più organizzazioni</text>
     <text id="SYS_END" development="new" translation="edited" description="End of a date">Fine</text>
     <text id="SYS_ERROR" development="new" translation="edited">Errore</text>

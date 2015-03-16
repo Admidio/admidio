@@ -1,19 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de_sie">
-<version id="3.0.0" translator="Stefan Weiss">
+<version id="3.0.0" translator="Markus Faßbender">
+    <text id="BAC_ONLY_MYSQL" development="new" translation="todo">Das Backupmodul kann nur bei einer MySQL-Datenbank genutzt werden.</text>
+    <text id="ECA_LAYOUT" development="new" translation="todo">Layout</text>
+    <text id="ECA_SCALE_THUMBNAILS_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige skaliert werden soll. (Standard: 250 Pixel)</text>
+    <text id="ECA_MAX_PHOTO_SIZE_DESC" development="new" translation="todo">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild in der Grußkarte haben darf. (Standard: 400 x 250 Pixel)</text>
+    <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="todo">Es wurde bereits eine Konfigurationsdatei gefunden. Eine erneute Installation ist nicht möglich.\n\nFalls Ihre vorherige Installation unterbrochen wurde, können Sie diese hier fortsetzen.</text>
+    <text id="INS_CONTINUE_INSTALLATION" development="new" translation="todo">Installation fortsetzen</text>
+    <text id="INS_DELETE_CONFIG_FILE" development="new" translation="todo">Im Hauptverzeichnis von Admidio %VAR1_BOLD% existiert noch eine Datei config.php. Diese wurde bereits in den Ordner adm_my_files verschoben. Löschen Sie bitte diese Datei im Hauptverzeichnis.</text>
+    <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="changed" translation="todo">Konfigurationsdatei herunterladen</text>
+    <text id="INS_DOWNLOAD_CONFIGURATION_FILE_DESC" development="new" translation="todo">Die Konfigurationsdatei %VAR1_BOLD% konnte nicht im Ordner %VAR2_BOLD% abgelegt werden. Geben Sie dem Ordner bitte Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) oder laden Sie die Konfigurationsdatei herunter und kopieren diese mit einem FTP-Programm in das Admidio Verzeichnis %VAR3_BOLD%.\n\nNachdem Sie die Datei dort abgelegt haben, können Sie die Installation fortsetzen.</text>
+    <text id="INS_INSTALLATION_EXISTS" development="new" translation="todo">In der Datenbank existiert bereits eine Admidio Installation. Eine erneute Installation ist nicht möglich.</text>
+    <text id="INS_NO_INSTALLED_VERSION_FOUND" development="new" translation="todo">Die bereits installierte Version konnte nicht ermittelt werden. Falls Sie bisher noch Version 1.x von Admidio genutzt haben, aktualisieren Sie zuerst auf Version 2.x und starte danach das Update auf Version %VAR1%. Falls Sie bereits Version 2.x oder neuer installiert haben, prüfen Sie bitte die Konsistenz Ihrer Datenbank.</text>
+    <text id="INS_UPDATE_NOT_POSSIBLE" development="new" translation="todo">Eine Aktualisierung der Datenbank ist nicht möglich!</text>
+    <text id="INS_WEBMASTER_LOGIN" development="new" translation="todo">Webmaster-Anmeldung</text>
+    <text id="INS_WEBMASTER_LOGIN_DESC" development="new" translation="todo">Ein Update der Datenbank darf nur von einem Webmaster durchgeführt werden. Geben Sie an dieser Stelle bitte die Zugangsdaten eines Webmasters ein.</text>
+    <text id="INS_WEBMASTER_LOGIN_FAILED" development="new" translation="todo">Zu den eingegebenen Logindaten wurde kein Benutzer gefunden, der Mitglied einer Webmasterrolle ist.</text>
+    <text id="DAT_EDIT_CALENDAR_DESC" development="new" translation="todo">Hier können Kalender angelegt und bearbeitet werden.</text>
+    <text id="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION" development="new" translation="todo">Wechsel zur Kalenderverwaltung</text>
+    <text id="DAT_EDIT_ROOMS_DESC" development="changed" translation="todo">Hier können Räume für Veranstaltungen angelegt und bearbeitet werden.</text>
+    <text id="DOW_CREATE_FOLDER_DESC" development="changed" translation="todo">Der neue Ordner wird im bestehenden Ordner %VAR1_BOLD% angelegt.</text>
+    <text id="DOW_FILES_UPLOADED" development="new" translation="todo">%VAR1% Dateien wurden erfolgreich hochgeladen.</text>
+    <text id="DOW_UPLOAD_ANOTHER_FILE" development="new" translation="todo">Weitere Datei hochladen</text>
+    <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="todo">Die Datei konnte nicht hochgeladen werden oder die Seite wurde ungültig aufgerufen.\n\nVermutlich wurde die maximale Dateigröße für Uploads überschritten. Diese ist auf deinem Server auf %VAR1%B eingestellt.</text>
+    <text id="DOW_UPLOAD_TO_FOLDER" development="new" translation="todo">Die Datei wird in den Ordner %VAR1_BOLD% hochgeladen.</text>
+	<text id="LST_COUNTRY_ISO" development="new" translation="edited">Das Land muss im Code ISO 3166 ALPHA-3 (3 Zeichen) angegeben werden</text>
+    <text id="LST_INFOBOX" development="new" translation="todo" description="A small html box that will show additional informations">Infobox</text>
+    <text id="LST_MEMBER_STATUS" development="new" translation="todo">Mitgliedsstatus</text>
+    <text id="LST_MEMBERS_PER_PAGE_DESC" development="changed" translation="todo">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Standard: 25)</text>
+    <text id="MEM_USER_COULD_BE_CREATED" development="new" translation="todo">Der Benutzer kann angelegt werden.</text>
+    <text id="MEM_DAYS_FIELD_HISTORY" development="new" translation="todo">Standardzeitraum in der Änderungshistorie (Tage)</text>
+    <text id="MEM_DAYS_FIELD_HISTORY_DESC" development="new" translation="todo">Zeitraum in Tagen in denen in der Änderungshistorie der Profilfelder die Veränderungen angezeigt werden. Dies ist der Standardfilter, welcher durch den Benutzer nachher beliebig geändert werden kann. Bei großen Datenbanken dient dies dazu die Datenmenge bei normalen Aufruf der Änderungshistorie einzuschränken. (Standard: 365)</text>
+    <text id="MEM_SHOW_USERS_DESC" development="new" translation="todo">Ist die Einstellung nicht gesetzt werden nur die aktiven Mitglieder dieser Organisation angezeigt. ist die Einstellung aktiviert werden alle Benutzer der Datenbank angezeigt.</text>
+    <text id="MEM_USERS_PER_PAGE" development="new" translation="todo">Anzahl Benutzer pro Seite</text>
+    <text id="MEM_USERS_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Benutzer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer zu der Organisation, so kann man in der Liste blättern. (Standard: 25)</text>
+    <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="todo">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der aktuelle Benutzer wird dort automatisch zum Webmaster ernannt und kann die weitere Einrichtung durchführen. Benutzer, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</text>
+    <text id="ORG_CAPTCHA_WIDTH" development="new" translation="todo">Captcha-Breite</text>
+    <text id="ORG_CAPTCHA_HEIGHT" development="new" translation="todo">Captcha-Höhe</text>
+    <text id="ORG_CAPTCHA_WIDTH_DESC" development="new" translation="todo">Angabe der Breite des Captcha-Bildchens. Hierdurch können zusammen mit der Angabe der Höhe des Captcha-Bildchens die Zeichen im Captcha gestreckt oder gestaucht werden. (Standard: 250)</text>
+    <text id="ORG_CAPTCHA_HEIGHT_DESC" development="new" translation="todo">Angabe der Höhe des Captcha-Bildchens. Hierdurch können zusammen mit der Angabe der Breite des Captcha-Bildchens die Zeichen im Captcha gestreckt oder gestaucht werden. (Standard: 60)</text>
+    <text id="ORG_DIFFERENT_DATABASE_VERSION" development="new" translation="todo">Abweichende Datenbankversion</text>
+    <text id="ORG_LAST_UPDATE_STEP" development="new" translation="todo">Letzter Update-Schritt</text>
+    <text id="ORG_FIELD_HIDDEN_DESC" development="edited" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar, die das Profil sehen dürfen. Ist diese Einstellung nicht gesetzt, dann können nur Benutzer das Feld sehen, die das Profil auch bearbeiten dürfen.</text>
+    <text id="ORG_INVALID_THEME" development="new" translation="todo">Es wurde kein gültiges Theme ausgewählt.</text>
+    <text id="ORG_NEW_ORGANIZATION" development="new" translation="todo">Neue Organisation</text>
+    <text id="ORG_NEW_ORGANIZATION_DESC" development="new" translation="todo">Geben Sie in diesem Formular die Abkürzung, den offiziellen Namen sowie die E-Mail-Adresse der Organisation ein, die Sie hinzufügen möchten. Die E-Mail-Adresse sollte eine allgemeine Adresse der Organisation sein. Diese wird unter anderem als Absenderadresse bei automatischen Systembenachrichtigungen genutzt.</text>
+    <text id="ORG_NOT_SAVED_SETTINGS_LOST" development="new" translation="todo">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</text>
+    <text id="ORG_ORGANIZATION_SUCCESSFULL_ADDED" development="new" translation="todo">Die Organisation %VAR1_BOLD% wurde hinzugefügt. Sie können diese nun bei der Anmeldung auswählen.\n\nFalls Sie für diese Organisation eine separate Homepage erstellt haben, müssen Sie auf der entsprechenden Seite noch die neue Organisation in die config.php eintragen.</text>
+    <text id="ORG_REGIONAL_SETTINGS" development="new" translation="todo">Regionaleinstellungen</text>
+    <text id="PRO_CHOOSE_PHOTO" development="new" translation="todo">Foto auswählen</text>
+    <text id="PHO_ALBUM_LOCK" development="new" translation="todo">Album sperren</text>
+    <text id="PHO_ALBUM_LOCK_DESC" development="new" translation="todo">Gesperrte Alben können von Besuchern und Mitgliedern nicht eingesehen werden. Sie können zum Beispiel ein Album vorübergehen sperren, während Sie gerade alle Bilder des Albums hochladen.</text>
+    <text id="PHO_ALBUM_UNLOCK" development="new" translation="todo">Album entsperren</text>
+    <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="todo">Hier kann eingestellt werden, wie die Fotos im Fotomodul präsentiert werden sollen. Dies kann als modales Fenster geschehen, dann wird im vorhandenen Browserfenster ein neues Fenster geöffnet. Im Hintergrund bleibt die ausgewählte Fotovorschau weiterhin aktiv. Sollen die Bilder im gleichen Fenster dargestellt werden, dann wird die aktuelle Fotovorschau verlassen und eine neue Seite mit dem ausgewählten Foto angezeigt. Soll ein Popup-Fenster erzeugt werden, dann wird ein neues Browserfenster geöffnet in dem das ausgewählte Foto angezeigt wird. Dieses kann dann unabhängig vom Browserfenster mit der Fotovorschau bedient werden. (Standard: Modales Fenster)</text>
+    <text id="PHO_MODAL_WINDOW" development="new" translation="todo">Modales Fenster</text>
+    <text id="PHO_MAX_PHOTO_SIZE_WIDTH" development="new" translation="todo">Max. Bildanzeigegröße (Breite)</text>
+    <text id="PHO_MAX_PHOTO_SIZE_HEIGHT" development="new" translation="todo">Max. Bildanzeigegröße (Höhe)</text>
+    <text id="PHO_NUMBER_OF_ALBUMS_PER_PAGE" development="new" translation="todo">Anzahl Alben pro Seite</text>
+    <text id="PHO_PARENT_ALBUM_DESC" development="new" translation="todo">Ein Album kann einem anderen Album untergeordnet sein. Wählen Sie dazu in der Auswahlliste das Elternalbum zum aktuellen Album aus. Wollen Sie das Album auf der obersten Ebene anzeigen, dann wählen Sie %VAR1_BOLD% aus.</text>
+    <text id="PHO_SAVE_ORIGINALS" development="new" translation="todo">Originale speichern</text>
+    <text id="PHO_SAVE_ORIGINALS_DESC" development="new" translation="todo">Steht genug Speicherplatz zur Verfügung, können hochgeladene Bilder auf dem Server archiviert und z.B. zum Download zur Verfügung gestellt werden.</text>
+    <text id="PHO_THUMBNAILS_PER_PAGE" development="changed" translation="todo">Thumbnails pro Seite</text>
+    <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="changed" translation="todo">Der angegebene Wert bestimmt wieviele kleine Vorschaubilder auf einer Seite angezeigt werden. Hat ein Album mehr Bilder, so wird automatisch eine Seitennavigation hinzugefügt. (Standard: 16)</text>
+    <text id="PHO_SELECT_FOTOS" development="new" translation="todo">Fotos auswählen</text>
+    <text id="PRO_CHANGE_PROFILE_PICTURE" development="changed" translation="todo">Profilbild hochladen</text>
+    <text id="PRO_DELETE_PROFILE_PICTURE" development="changed" translation="todo">Profilbild löschen</text>
+    <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="todo">Angabe eines Landes in dessem Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z.B. bei der Registrierung oder beim Anlegen neuer Benutzer vorausgewählt. Es soll die Eingabe erleichtern und kann aber auch vom Benutzer beliebig geändert werden. (Standard: Deutschland)</text>
+    <text id="PRO_EXPORT_VCARD" development="new" translation="todo">vCard exportieren</text>
+    <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="changed" translation="todo">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.</text>
+    <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="todo">Rollenzuordnung für %VAR1% %VAR2%</text>
+    <text id="SYS_APPLY" development="new" translation="todo">Übernehmen</text>
+    <text id="SYS_CATEGORIES" development="new" translation="todo">Kategorien</text>
+    <text id="SYS_CHARACTERS" development="new" translation="todo">Zeichen</text>
+	<text id="SYS_COUNTRY_EG" development="new" translation="edited">DEU</text>
+    <text id="SYS_DECIMAL_NUMBER" development="new" translation="todo">Dezimalzahl</text>
+    <text id="SYS_EMAIL_SEND" development="changed" translation="todo">Die E-Mail wurde versendet.</text>
+    <text id="SYS_FILTER" development="new" translation="todo">Filter</text>
+    <text id="DAT_MAINTAIN_CATEGORIES_DESC" development="new" translation="todo">Hier können Kategorien angelegt und bearbeitet werden.</text>
+    <text id="SYS_MENU" development="new" translation="todo">Menü</text>
+    <text id="SYS_MESSAGES" development="new" translation="todo">Nachrichten</text>
+    <text id="SYS_NO_DATA_FOUND" development="new" translation="todo">Es wurden keine Daten gefunden.</text>
+    <text id="SYS_STILL_X_CHARACTERS" development="new" translation="todo">noch %VAR1% Zeichen</text>
+    <text id="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION" development="new" translation="todo">Wechsel zur Kategorienverwaltung</text>
+    <text id="SYS_FILENAME_EMPTY" development="new" translation="todo">Es wurde kein Dateiname angegeben!</text>
+    <text id="SYS_FULL_SCREEN" development="new" translation="todo">Vollbild</text>
+    <text id="SYS_MANDATORY_FIELDS" development="new" translation="todo">Pflichtfelder</text>
+    <text id="SYS_NORMAL_PICTURE" development="new" translation="todo">Normalbild</text>
+    <text id="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION" development="new" translation="todo">Die Online-Mitgliederverwaltung</text>
 	<text id="SYS_PM" development="new" translation="todo">Private Nachricht</text>
+    <text id="SYS_ROLES" development="new" translation="todo">Rollen</text>
 	<text id="PMS_MESSAGE" development="new" translation="todo">Private Nachrichten</text>
 	<text id="PMS_SEND_PM" development="new" translation="todo">Private Nachricht senden</text>
 	<text id="PMS_WAS_SENT_TO" development="new" translation="todo">Nachricht wurde gesendet an:</text>
 	<text id="PMS_WAS_NOT_SENT_TO" development="new" translation="todo">Fehler - Nachricht wurde nicht gesendet an:</text>
     <text id="MSG_ACTIVATE_PM_MODULE" development="new" translation="todo">Private Nachrichten aktivieren</text>
     <text id="MSG_ACTIVATE_PM_MODULE_DESC" development="new" translation="todo">Private Nachrichten können über diese Einstellung komplett deaktiviert werden. Das Modul ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: Deaktiviert)</text>
-	<text id="MAI_INTO_TO" development="new" translation="edited">Senden in TO Feld und nicht im Feld BCC</text>
-    <text id="MAI_INTO_TO_DESC" development="new" translation="edited">Wenn eine Email an mehr als eine Person geht dann werden mit diesem Setting die Adressen ins TO Feld anstatt BCC geschrieben.</text>
-    <text id="MSG_CHAT" development="new" translation="todo">Chat</text>
+	<text id="MAI_INTO_TO" development="new" translation="edited">Empfänger im TO-Feld und nicht im BCC-Feld auflisten</text>
+    <text id="MAI_INTO_TO_DESC" development="new" translation="edited">Geht eine E-Mail an mehrere Personen, dann werden die Empfänger bei gesetzter Einstellung alle im TO-Feld der E-Mail aufgelistet. Dadurch kann jeder Empfänger die Namen und E-Mail-Adressen der anderen Empfänger sehen. Außerdem hat er die Möglichkeit auf diese E-Mail an alle anderen Empfänger zu antworten. (Standard: Deaktiviert)</text>
+	<text id="MSG_CHAT" development="new" translation="todo">Chat</text>
 	<text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="todo">Chat aktivieren</text>
 	<text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="todo">Chat Modul aktivieren, welches die Daten dynamisch alle 3 Sekunden aus der Datenbank holt. In der Datenbank werden maximal 99 Einträge gespeichert, ab der 100 meldung werden die ersten 50 wieder gelöscht.</text>
-    <text id="SYS_SELECT_FROM_LIST" development="new" translation="todo">Aus Liste auswählen</text>
+    <text id="MSG_OPPOSITE" development="new" translation="todo">Gesprächspartner</text>
+	<text id="MSG_PM_SEND" development="new" translation="todo">Die Private Nachricht wurde an %VAR1_BOLD% versendet.</text>
+	<text id="MSG_PM_NOT_SEND" development="new" translation="todo">Die Private Nachricht konnte nicht an %VAR1_BOLD% gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n%VAR2%</text>
+	<text id="MSG_REMOVE" development="new" translation="todo">Nachricht entfernen</text>
+	<text id="MSG_REMOVE_CONFIRM" development="new" translation="todo">Entfernen bestätigen</text>
+	<text id="MSG_REMOVE_REVERT" development="new" translation="todo">Entfernen wiederrufen</text>
+	<text id="SYS_SELECT_FROM_LIST" development="new" translation="todo">Aus Liste auswählen</text>
+	<text id="INV_INVENTORY" development="new" translation="todo">Inventarverwaltung</text>
+	<text id="INV_ITEM_MANAGEMENT" development="new" translation="todo">Artikel verwalten</text>
+	<text id="INV_CREATE_ITEM" development="new" translation="todo">Neuer Artikel</text>
+	<text id="PRO_MAINTAIN_ITEM_FIELDS" development="new" translation="todo">Artikelfelder verwalten</text>
+	<text id="SYS_ITEMNAME" development="new" translation="todo">Artikelname</text>
+	<text id="SYS_QUANTITY" development="new" translation="todo">Menge</text>
+    <text id="ORG_CREATE_ITEM_FIELD" development="new" translation="todo">Neues Artikelfeld</text>
+    <text id="ROL_RIGHT_INVENTORY" development="new" translation="todo">Artikel und Lagerverwaltung</text>
 </version>
 <version id="2.4.5" translator="Markus Faßbender">
     <text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="todo">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit "Undisclosed Recipients" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse gefüllt werden. Alle anderen Empfänger werden weiterhin in das BCC-Feld geschrieben. (Standard: Deaktiviert)</text>
@@ -281,7 +382,6 @@
     <text id="DAT_DATES" development="new" translation="todo">Termine</text>
     <text id="DAT_DATES_DESC" development="new" translation="todo">Termine können hier angelegt und angeschaut werden. Benutzer können sich auf Wunsch zu diesen Terminen anmelden.</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="todo">Räume bearbeiten</text>
-    <text id="DAT_EDIT_ROOMS_DESC" development="new" translation="todo">Hier können Räume angelegt und bearbeitet werden.\n%VAR1% Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.</text>
     <text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Termin wurde angelegt</text>
     <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1" development="new" translation="todo">Es wurde ein neuer Termin bei %VAR1% angelegt.\n\nTitel: %VAR2%\nDatum: %VAR3%\nKalender: %VAR4%\n</text>
     <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2" development="new" translation="todo">Ort: %VAR1%\nRaum: %VAR2%\nTeilnehmer: %VAR3%\nAngelegt von: %VAR4%\n</text>
@@ -322,7 +422,6 @@
     <text id="DOW_CHOOSE_FILE" development="new" translation="todo">Datei auswählen</text>
     <text id="DOW_COUNTER" development="new" translation="todo">Zähler</text>
     <text id="DOW_CREATE_FOLDER" development="new" translation="todo">Ordner anlegen</text>
-    <text id="DOW_CREATE_FOLDER_DESC" development="new" translation="todo">Den neuen Ordner im Ordner %VAR1_BOLD% anlegen.</text>
     <text id="DOW_DOWNLOADS" development="new" translation="todo">Downloads</text>
     <text id="DOW_DOWNLOADS_DESC" development="new" translation="todo">Unterschiedliche Daten und Dateien können hier zum Download angeboten werden. Diese können in Ordnern mit individuellen Zugriffsrechten zusammengefasst werden.</text>
     <text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Eine neue Datei wurde hochgeladen</text>
@@ -445,7 +544,6 @@
     <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="todo">Hier können Besprechungen stattfinden. Der Raum muss vorher reserviert werden. Beamer steht zur Verfügung.</text>
     <text id="INS_DESCRIPTION_MEMBER" development="new" translation="todo">Alle Mitglieder der Organisation</text>
     <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="todo">Gruppe der Administratoren des Systems</text>
-    <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="todo">Laden Sie die Konfigurationsdatei %VAR1_BOLD% herunter und kopieren Sie diese in das Admidio Hauptverzeichnis. Dort liegt auch schon eine %VAR2_BOLD%.\n\nErst nachdem die Datei dort abgelegt wurde, können Sie mit der Installation fortfahren.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="todo">Zugangsdaten zur Datenbank eingeben</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="todo">Die Datei %VAR1_BOLD% konnte nicht geöffnet werden.</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="todo">Der Ordner %VAR1_BOLD% besitzt noch keine Schreibrechte. Diese sollten Sie noch vergeben, da ohne Schreibrechte keine Fotos oder Dateien für das Downloadmodul hochgeladen werden können.</text>
@@ -544,7 +642,6 @@
     <text id="LST_LIST_VIEW" development="new" translation="todo">Listenübersicht</text>
     <text id="LST_MAX" development="new" translation="todo">von max. %VAR1%</text>
     <text id="LST_MEMBERS_PER_PAGE" development="new" translation="todo">Anzahl Teilnehmer pro Seite</text>
-    <text id="LST_MEMBERS_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Teilnehmer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Teilnehmer zu einer Rolle, so kann man in der Liste blättern. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 20)</text>
     <text id="LST_MEMBER_ASSIGNMENT" development="new" translation="todo">Mitgliederzuordnung</text>
     <text id="LST_MEMBERSHIP_END" development="new" translation="todo">Mitgliedschaftsende</text>
     <text id="LST_MEMBERSHIP_START" development="new" translation="todo">Mitgliedschaftsbeginn</text>
@@ -715,7 +812,6 @@
     <text id="ORG_FIELD_DOWN" development="new" translation="todo">Profilfeld nach unten verschieben</text>
     <text id="ORG_FIELD_EXIST" development="new" translation="todo">Es existiert bereits ein Feld in dieser Kategorie mit demselben Namen.</text>
     <text id="ORG_FIELD_HIDDEN" development="new" translation="todo">Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar</text>
-    <text id="ORG_FIELD_HIDDEN_DESC" development="new" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen.</text>
     <text id="ORG_FIELD_MANDATORY" development="new" translation="todo">Pflichtfeld, muss immer ausgefüllt werden</text>
     <text id="ORG_FIELD_MANDATORY_DESC" development="new" translation="todo">Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden. Dies gilt für die Registrierung, aber auch bei der gewöhnlichen Profildatenbearbeitung.</text>
     <text id="ORG_FIELD_NOT_DISABLED" development="new" translation="todo">Feld kann durch Benutzer selbst bearbeitet werden</text>
@@ -823,8 +919,6 @@
     <text id="PHO_SHOW_CAPTION" development="new" translation="todo">Bildtext einblenden</text>
     <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="todo">Der eingegebene Text wird in allen angezeigten Fotos, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet. (Standard: &#169; %VAR1%)</text>
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="todo">Die Fotos wurden dem Album erfolgreich hinzugefügt, wenn sie hier angezeigt werden.</text>
-    <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="todo">Thumbnails pro Seite (Spalten x Zeilen)</text>
-    <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="todo">Der hier angegebene Wert bestimmt wieviele Spalten und Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standard: 3 x 5)</text>
     <text id="PHO_UPLOAD_HELP_1" development="new" translation="todo">Auf den Button %VAR1_BOLD% klicken und die gewünschte(n) Fotodatei(en) von der Festplatte auswählen.</text>
     <text id="PHO_UPLOAD_HELP_2" development="new" translation="todo">Bei Einzelbildupload den Vorgang ggf. bis zu fünfmal wiederholen, bis alle Felder gefüllt sind.</text>
     <text id="PHO_UPLOAD_HELP_3" development="new" translation="todo">Dann auf %VAR1_BOLD% klicken und ein wenig Geduld haben.</text>
@@ -837,13 +931,10 @@
     <text id="PRO_ADD_USER" development="new" translation="todo">Benutzer anlegen</text>
     <text id="PRO_CANCEL_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft beenden</text>
     <text id="PRO_CHANGE_DATE" development="new" translation="todo">Datum ändern</text>
-    <text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="todo">Profilfoto ändern</text>
     <text id="PRO_CONFIRMATION_CODE" development="new" translation="todo">Bestätigungscode</text>
     <text id="PRO_CURRENT_PASSWORD" development="new" translation="todo">Aktuelles Passwort</text>
     <text id="PRO_CURRENT_PICTURE" development="new" translation="todo">Aktuelles Profilfoto</text>
     <text id="PRO_DEFAULT_COUNTRY" development="new" translation="todo">Standard-Land</text>
-    <text id="PRO_DEFAULT_COUNTRY_DESC" development="new" translation="todo">Das ausgewählte Land wird beim Anlegen eines neuen Benutzers automatisch vorgeschlagen und erleichtert die Eingabe. (Standard: Deutschland)</text>
-    <text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="todo">Profilfoto löschen</text>
     <text id="PRO_EDIT_MY_PROFILE" development="new" translation="todo">Mein Profil bearbeiten</text>
     <text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="todo">Mein Profilfoto bearbeiten</text>
     <text id="PRO_EDIT_PASSWORD" development="new" translation="todo">Passwort bearbeiten</text>
@@ -856,7 +947,6 @@
     <text id="PRO_LOCATION_PROFILE_PICTURES_DESC" development="new" translation="todo">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Standard: Datenbank)</text>
     <text id="PRO_LOGIN_NAME_EXIST" development="new" translation="todo">Der gewählte Benutzername existiert schon.\n\nWähle bitte einen anderen Namen.</text>
     <text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="todo">Profilfelder pflegen</text>
-    <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="new" translation="todo">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.\n%VAR1% Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.</text>
     <text id="PRO_MY_PROFILE" development="new" translation="todo">Mein Profil</text>
     <text id="PRO_MY_PROFILE_DESC" development="new" translation="todo">Das eigene Benutzerprofil kann hier angeschaut und bearbeitet werden.</text>
     <text id="PRO_NEW_PASSWORD" development="new" translation="todo">Neues Passwort</text>
@@ -939,7 +1029,6 @@
     <text id="ROL_ROLE" development="new" translation="todo">Rolle</text>
     <text id="ROL_ROLE_ADMINISTRATION" development="new" translation="todo">Rollenverwaltung</text>
     <text id="ROL_ROLE_ADMINISTRATION_DESC" development="new" translation="todo">Rollen, dies können Gruppen, Kurse oder Abteilungen sein, können hier erstellt und bearbeitet werden. Auch die Rechte der einzelnen Rollen werden hier festgelegt.</text>
-    <text id="ROL_ROLE_ASSIGNMENT" development="new" translation="todo">Rollenzuordnung für "%VAR1% %VAR2%"</text>
     <text id="ROL_ROLE_DELETE" development="new" translation="todo">Rolle löschen</text>
     <text id="ROL_ROLE_DELETE_DESC" development="new" translation="todo">Wollen Sie die Rolle %VAR1% wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</text>
     <text id="ROL_ROLE_DEPENDENCIES" development="new" translation="todo">Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der %VAR1% sein!\n\nBeim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen Rolle Mitglied der %VAR1%. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften nicht aufgehoben!</text>
@@ -1058,7 +1147,6 @@
     <text id="SYS_EDITED_BY" development="new" translation="todo">Zuletzt bearbeitet von %VAR1% am %VAR2%</text>
     <text id="SYS_EMAIL" development="new" translation="todo">E-Mail</text>
     <text id="SYS_EMAIL_INVALID" development="new" translation="todo">Die E-Mail-Adresse im Feld %VAR1_BOLD% enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</text>
-    <text id="SYS_EMAIL_SEND" development="new" translation="todo">Die E-Mail wurde an %VAR1_BOLD% versendet.</text>
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="todo">Eintrag für mehrere Organisationen sichtbar</text>
     <text id="SYS_END" description="End of a date" development="new" translation="todo">Ende</text>
     <text id="SYS_ERROR" development="new" translation="todo">Fehler</text>

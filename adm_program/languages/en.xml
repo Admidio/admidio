@@ -307,7 +307,6 @@
     <text id="DAT_DATES" development="new" translation="edited">Events</text>
     <text id="DAT_DATES_DESC" development="new" translation="edited">You are able to create and edit events here. Users can register for this events.</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="edited">Edit rooms</text>
-    <text id="DAT_EDIT_ROOMS_DESC" development="new" translation="edited">Creating and editing rooms.\n%VAR1% All unsaved organization preferences will be lost.</text>
     <text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">A new date was created</text>
     <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1" development="new" translation="edited">A new date at %VAR1% was created.\n\nTitle: %VAR2%\nDate: %VAR3%\nCalendar: %VAR4%\n</text>
     <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2" development="new" translation="edited">Location: %VAR1%\nRoom: %VAR2%\nParticipants: %VAR3%\nCreated by: %VAR4%\n</text>
@@ -349,7 +348,6 @@
     <text id="DOW_CHOOSE_FILE" development="new" translation="edited">Select file</text>
     <text id="DOW_COUNTER" development="new" translation="edited">Counter</text>
     <text id="DOW_CREATE_FOLDER" development="new" translation="edited">Create folder</text>
-    <text id="DOW_CREATE_FOLDER_DESC" development="new" translation="edited">Create folder in %VAR1_BOLD%.</text>
     <text id="DOW_DOWNLOADS" development="new" translation="edited">Downloads</text>
     <text id="DOW_DOWNLOADS_DESC" development="new" translation="edited">Different data files and file types can be made available for download. This downloads can be categorized in folders with different access permission levels.</text>
     <text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">A new file was uploaded</text>
@@ -472,7 +470,6 @@
     <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Meetings can take place here. Room has to be reserved before. Beamer is free for use.</text>
     <text id="INS_DESCRIPTION_MEMBER" development="new" translation="edited">All organization members</text>
     <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="edited">Group of system administrators</text>
-    <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="edited">Download configuration file %VAR1_BOLD% and copy file to Admidio's root directory. Also %VAR2_BOLD% can be found there.\n\nProceed when file has been copied to new location.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Enter database access information</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">File %VAR1_BOLD% could not be opened.</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="edited">Folder %VAR1_BOLD% is not write enabled. Please grant write access in order to upload photos and files to download module.</text>
@@ -574,7 +571,6 @@
     <text id="LST_LIST_VIEW" development="new" translation="edited">List overview</text>
     <text id="LST_MAX" development="new" translation="edited">of maximum. %VAR1%</text>
     <text id="LST_MEMBERS_PER_PAGE" development="new" translation="edited">Members displayed per page</text>
-    <text id="LST_MEMBERS_PER_PAGE_DESC" development="new" translation="edited">Define number of members displayed on a list page. Pagination is provided if number of items exceeds defined value. Print preview and export functionality are not affected. If value is 0, all members will be listed and pagination is deactivated. (default: 20)</text>
     <text id="LST_MEMBER_ASSIGNMENT" development="new" translation="edited">Member assignment</text>
     <text id="LST_MEMBERSHIP_END" development="new" translation="edited">End of membership</text>
     <text id="LST_MEMBERSHIP_START" development="new" translation="edited">Start of membership</text>
@@ -745,7 +741,6 @@
     <text id="ORG_FIELD_DOWN" development="new" translation="edited">Move profile field down</text>
     <text id="ORG_FIELD_EXIST" development="new" translation="edited">Field with same name already exists in this category.</text>
     <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Field viewable for authorized users only (own profile &amp; role authorization)</text>
-    <text id="ORG_FIELD_HIDDEN_DESC" development="new" translation="edited">A field is usually free to see for all users. Disable for authorizing users only with user editing permission  Every user is able to see field in own profile.</text>
     <text id="ORG_FIELD_MANDATORY" development="new" translation="edited">Mandatory field that has to be filled in always.</text>
     <text id="ORG_FIELD_MANDATORY_DESC" development="new" translation="edited">Flagged (mandatory) fields always have to be filled in. This rule applies for registrations and for regular profile changes performed by users.</text>
     <text id="ORG_FIELD_NOT_DISABLED" development="new" translation="edited">Field can be edited by users themselves.</text>
@@ -852,8 +847,6 @@
     <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Show watermark</text>
     <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="edited">Text will be shown in all photos with a long edge larger than 200 pixels. (default: &#169; %VAR1%)</text>
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="edited">Photos have been successfully added to album if they appear on this page.</text>
-    <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="edited">Thumbnails per page (rows x columns)</text>
-    <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="edited">Values define number of rows and columns of thumbnails on one page. (default: 3 x 5)</text>
     <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Press button %VAR1_BOLD% in order to select photo files on harddrive for upload.</text>
     <text id="PHO_UPLOAD_HELP_2" development="new" translation="edited">When using single photo upload the selection process has to be repeated up to five times, until all upload fields are in use.</text>
     <text id="PHO_UPLOAD_HELP_3" development="new" translation="edited">Press then %VAR1_BOLD% and be patient.</text>
@@ -866,13 +859,10 @@
     <text id="PRO_ADD_USER" development="new" translation="edited">Add user</text>
     <text id="PRO_CANCEL_MEMBERSHIP" development="new" translation="edited">Cancel membership</text>
     <text id="PRO_CHANGE_DATE" development="new" translation="edited">Change date</text>
-    <text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="edited">Change profile picture</text>
     <text id="PRO_CONFIRMATION_CODE" development="new" translation="edited">Turing code</text>
     <text id="PRO_CURRENT_PASSWORD" development="new" translation="edited">Current password</text>
     <text id="PRO_CURRENT_PICTURE" development="new" translation="edited">Current profile picture</text>
     <text id="PRO_DEFAULT_COUNTRY" development="new" translation="edited">Default country</text>
-    <text id="PRO_DEFAULT_COUNTRY_DESC" development="new" translation="edited">Defined country will be selected automatically at user registration for easier completion. (default: Germany)</text>
-    <text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="edited">Delete profile picture</text>
     <text id="PRO_EDIT_MY_PROFILE" development="new" translation="edited">Edit own profile</text>
     <text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="edited">Edit own profile picture</text>
     <text id="PRO_EDIT_PASSWORD" development="new" translation="edited">Edit password</text>
@@ -885,7 +875,6 @@
     <text id="PRO_LOCATION_PROFILE_PICTURES_DESC" development="new" translation="edited">Please define where to store profile picture (in the database or in folder adm_my_files). When a change is made, current pictures are not copied to new location. (default: database)</text>
     <text id="PRO_LOGIN_NAME_EXIST" development="new" translation="edited">Selected username already exists.\n\nPlease select another name.</text>
     <text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">Manage profile fields</text>
-    <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="new" translation="edited">You can create and edit profile fields which can be merged in categories.\n%VAR1% All unsaved organization preferences will be lost.</text>
     <text id="PRO_MY_PROFILE" development="new" translation="edited">My profile</text>
     <text id="PRO_MY_PROFILE_DESC" development="new" translation="edited">Own profile can be displayed and edited here.</text>
     <text id="PRO_NEW_PASSWORD" development="new" translation="edited">New password</text>
@@ -968,7 +957,6 @@
     <text id="ROL_ROLE" development="new" translation="edited">Role</text>
     <text id="ROL_ROLE_ADMINISTRATION" development="new" translation="edited">Role administration</text>
     <text id="ROL_ROLE_ADMINISTRATION_DESC" development="new" translation="edited">Roles based on certain groups, courses and departments can be managed here. Role permissions can be defined here, too.</text>
-    <text id="ROL_ROLE_ASSIGNMENT" development="new" translation="edited">Role assignment for "%VAR1% %VAR2%"</text>
     <text id="ROL_ROLE_DELETE" development="new" translation="edited">Deleting role</text>
     <text id="ROL_ROLE_DELETE_DESC" development="new" translation="edited">Would you like to delete role %VAR1% ?\n\nAll memberships are going to be deleted as well.</text>
     <text id="ROL_ROLE_DEPENDENCIES" development="new" translation="edited">A member of a dependent role will become automatically a member of %VAR1%!\n\nWhen this dependency is set all existing members of the dependent role will become a member of %VAR1%. When a dependency is going to be deleted, memberships will remain the same!</text>
@@ -1089,7 +1077,6 @@
     <text id="SYS_EDITED_BY" development="new" translation="edited">Last edited by %VAR1% on %VAR2%</text>
     <text id="SYS_EMAIL" development="new" translation="edited">E-mail</text>
     <text id="SYS_EMAIL_INVALID" development="new" translation="edited">E-mail address in field %VAR1_BOLD% includes invalid characters or is incomplete.</text>
-    <text id="SYS_EMAIL_SEND" development="new" translation="edited">E-mail has been sent to %VAR1_BOLD%.</text>
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Entry visible for multiple organizations</text>
     <text id="SYS_END" development="new" translation="edited" description="End of a date">End</text>
     <text id="SYS_ERROR" development="new" translation="edited">Error</text>
