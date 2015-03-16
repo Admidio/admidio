@@ -1,43 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
-<version id="3.0.0" translator="Stefanie Schima">
-	<text id="LST_COUNTRY_ISO" development="new" translation="edited">The country must be written in code ISO 3166 ALPHA-3 (3 digits)</text>
-	<text id="SYS_COUNTRY_EG" development="new" translation="edited">DEU</text>
-    <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="edited">A config file has been found. A new installation can not be started. If the previous installation was interrupted you can resume with the existing one.</text>
-    <text id="INS_CONTINUE_INSTALLATION" development="new" translation="edited">Continue installation</text>
-    <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="changed" translation="edited">Download configuration file</text>
-    <text id="INS_DOWNLOAD_CONFIGURATION_FILE_DESC" development="new" translation="edited">The configuration %VAR1_BOLD% file could not be saved within the folder %VAR2_BOLD%. Please download the file and copy it into the Admidio root directory %VAR2_BOLD% with a FTP application.\n\nAs soon as the file is copied you can proceed with the installation.</text>
-    <text id="INS_INSTALLATION_EXISTS" development="new" translation="edited">The database already contains an Admidio installation. A new installation can not be started.</text>
-    <text id="INS_NO_INSTALLED_VERSION_FOUND" development="new" translation="edited">Could not find the existing installation. If you have installed an Admidio version 1.x please update to version 2.x first. Then proceed with updating it to version %VAR1%. If your installation is of version 2.x please verify the consistency of your database.</text>
-    <text id="INS_UPDATE_NOT_POSSIBLE" development="new" translation="edited">Database update is not possible.</text>
-    <text id="INS_WEBMASTER_LOGIN" development="new" translation="edited">Webmaster login</text>
-    <text id="INS_WEBMASTER_LOGIN_DESC" development="new" translation="edited">Please insert login credentials for webmasters in the following form. Only webmasters will be able to perform a database update.</text>
-    <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="edited">Inserts a new organization including its master data. The current owner automatically becomes the webmaster and can proceed with the setup. The according organization needs to be selected by user who login to the system.</text>
-    <text id="ORG_DIFFERENT_DATABASE_VERSION" development="new" translation="edited">Differing database version</text>
-    <text id="ORG_NEW_ORGANIZATION_DESC" development="new" translation="edited">Please insert the abbreviation and the official name of the organization / association which you want to add. The following step will create the organization with its master data.</text>
-    <text id="ORG_ORGANIZATION_SUCCESSFULL_ADDED" development="new" translation="edited">Organization %VAR1_BOLD% has been added. Now you can select it on login.\n\nIf you have a separate homepage you need to add the organization to config.php of the according website.</text>
-    <text id="ORG_LAST_UPDATE_STEP" development="new" translation="edited">Last step of update</text>
-    <text id="PHO_SAVE_ORIGINALS" development="new" translation="edited">Save original files</text>
-    <text id="PHO_SAVE_ORIGINALS_DESC" development="new" translation="edited">Uploaded photos can be archived on the server or be provided as download if enough storage capacity is available.</text>
-    <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="edited">Please state a country in which the organization is operates mainly. It will be pre-selected, e.g. during registration or login in order to ease the process. User still have the possibility to change the value as desired. (Default: Germany)</text>
-    <text id="SYS_FILENAME_EMPTY" development="new" translation="edited">No file name specified!</text>
-    <text id="SYS_MANDATORY_FIELDS" development="new" translation="edited">Mandatory fields</text>
-	<text id="SYS_PM" development="new" translation="todo">Private Message</text>
-	<text id="PMS_MESSAGE" development="new" translation="todo">Private Messages</text>
-	<text id="PMS_SEND_PM" development="new" translation="todo">send Private Message</text>
-	<text id="PMS_WAS_SENT_TO" development="new" translation="todo">Message was sent to:</text>
-	<text id="PMS_WAS_NOT_SENT_TO" development="new" translation="todo">Error - Message could not be send:</text>
-    <text id="MAI_ACTIVATE_EMAIL_MODULE" development="new" translation="todo">Activating Private Messaging module</text>
-    <text id="MAI_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="todo">PM module can be deactivated by unchecking the check box. After deactivation, the module will be unavailable in the module overview panel as well. (default: deactivated)</text>
-	<text id="MAI_INTO_TO" development="new" translation="todo">Send in TO field and not BCC</text>
-    <text id="MAI_INTO_TO_DESC" development="new" translation="todo">Setting to send all Emails that are send to more than one person in the field TO instead of BCC.</text>
-	<text id="MAI_MAX_RECEIVER" development="new" translation="todo">Maximum receivers for one mail</text>
-	<text id="MAI_MAX_RECEIVER_DESC" development="new" translation="todo">this number represents the maximum number of receivers you can choose for one mail (a group is also 1 receiver)</text>
-	<text id="MSG_CHAT" development="new" translation="todo">Chat</text>
-	<text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="todo">Activate Chat</text>
-	<text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="todo">Activate a real-time Chat, this chat will be updated every 3 seconds with values from Database. In Database we save max. the last 99 entries. If 100 messages are reached, the first 50 will be deleted</text>
-    <text id="SYS_SELECT_FROM_LIST" development="new" translation="todo">Select from list</text>
-</version>
 <version id="2.4.5" translator="Stefanie Schima">
     <text id="MAI_SENDER_INTO_TO_DESC" development="changed" translation="edited">If an email is send to a role all recipient addresses will be placed in the BCC field. The TO field will then contain "Undisclosed Recipients". If this results in an error you can use this option to fill the recipient addresses into the TO field. The other addresses will remain in the BCC field. (Default: Deactivated)</text>
     <text id="SYS_CSV" development="new" translation="edited">CSV</text>
