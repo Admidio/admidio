@@ -153,12 +153,12 @@ if($gValidLogin == 1)
     // show link for logout
     if($plg_show_icons)
     {
-        echo '<a id="adm_logout_link" class="icon-text-link" href="#"><img 
+        echo '<a id="adm_logout_link" class="icon-text-link" href="'.$g_root_path.'/adm_program/system/logout.php"><img 
             src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_LOGOUT').'" />'.$gL10n->get('SYS_LOGOUT').'</a>';
     }
     else
     {
-        echo '<a id="adm_logout_link" href="#"><img src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_LOGOUT').'" /></a>';
+        echo '<a id="adm_logout_link" href="'.$g_root_path.'/adm_program/system/logout.php"><img src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_LOGOUT').'" /></a>';
     }
 }
 else
