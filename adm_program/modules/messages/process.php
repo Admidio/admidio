@@ -26,9 +26,9 @@
     {
         case('update'):
 		
-			$sql = "SELECT MAX(msg_id2) as max_id
+			$sql = "SELECT MAX(msg_part_id) as max_id
 			  FROM ". TBL_MESSAGES."
-			  where msg_id1 = 0";
+			  where msg_con_id = 0";
 
 			$result = $gDb->query($sql);
 			$row = $gDb->fetch_array($result);
@@ -43,10 +43,10 @@
             {
 			    $log['test'] = '100';
 				
-				$sql = "DELETE FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT' and msg_id1 = 0 and msg_id2 <= 50";
+				$sql = "DELETE FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT' and msg_con_id = 0 and msg_part_id <= 50";
 				$gDb->query($sql);
 				
-				$sql = "UPDATE ". TBL_MESSAGES. " SET msg_id2 = msg_id2 - 50 WHERE msg_type = 'CHAT' and msg_id1 = 0";
+				$sql = "UPDATE ". TBL_MESSAGES. " SET msg_part_id = msg_part_id - 50 WHERE msg_type = 'CHAT' and msg_con_id = 0";
 				$gDb->query($sql);
 				
 				$postLines = $postLines - 50;
@@ -62,12 +62,12 @@
             {
                 $text = array();
 				
-				$sql = "SELECT msg_id2, msg_subject, msg_message, msg_timestamp
+				$sql = "SELECT msg_part_id, msg_subject, msg_message, msg_timestamp
                   FROM ". TBL_MESSAGES. "
                  WHERE msg_type = 'CHAT'
-                   AND msg_id1  = 0
-                   AND msg_id2  > ".$postLines. "
-                 ORDER BY msg_id2";
+                   AND msg_con_id  = 0
+                   AND msg_part_id  > ".$postLines. "
+                 ORDER BY msg_part_id";
 
 				$result = $gDb->query($sql);
 				while($row = $gDb->fetch_array($result))
@@ -91,21 +91,21 @@
 				// write to file for debuging
                 // fwrite(fopen('chat.txt', 'a'), "<span>". $postNickname . "</span>" . $postMessage = str_replace("\n", " ", $postMessage) . "\n"); 
             }
-			$sql = "SELECT MAX(msg_id2) as max_id
+			$sql = "SELECT MAX(msg_part_id) as max_id
 			  FROM ". TBL_MESSAGES."
-			  where msg_id1 = 0";
+			  where msg_con_id = 0";
 
 			$result = $gDb->query($sql);
 			$row = $gDb->fetch_array($result);
 			$MsgId = $row['max_id'] + 1;
 
-			$sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_read) 
+			$sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_con_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
 				VALUES ('CHAT', '0', '".$MsgId."', '".$postNickname."', '', '', '".$postMessage."', CURRENT_TIMESTAMP, '0')";
 
 			$gDb->query($sql); 
             break;
 		case('delete'):
-            $sql = "DELETE FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT' and msg_id1 = 0";
+            $sql = "DELETE FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT' and msg_con_id = 0";
 			$gDb->query($sql);
             break;
     }

@@ -65,7 +65,7 @@ if ($gValidLogin && $getMsgType != 'PM' && strlen($gCurrentUser->getValue('EMAIL
 if ($getMsgId > 0)
 {
     $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '0' 
-            WHERE msg_id2 = 0 and msg_id1 = ".$getMsgId." and msg_usrid2 = ".$gCurrentUser->getValue('usr_id');
+            WHERE msg_part_id = 0 and msg_con_id = ".$getMsgId." and msg_usr_id_receiver = ".$gCurrentUser->getValue('usr_id');
     $gDb->query($sql);
     
     if($getMsgType == 'PM')
@@ -77,11 +77,11 @@ if ($getMsgId > 0)
         $checker = "=";
     }
     
-    $sql = "SELECT msg_id1, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp 
+    $sql = "SELECT msg_con_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp 
                   FROM ". TBL_MESSAGES. "
-                 WHERE msg_id2 ".$checker." 0 AND msg_id1 = ". $getMsgId ."
+                 WHERE msg_part_id ".$checker." 0 AND msg_con_id = ". $getMsgId ."
                  and msg_type = '".$getMsgType."'
-                 ORDER BY msg_id2 DESC";
+                 ORDER BY msg_part_id DESC";
 
     $message_result = $gDb->query($sql);
 
@@ -222,7 +222,7 @@ if ($getMsgType == 'PM')
 		$page->addHtml('<br>');
         while ($row = $gDb->fetch_array($message_result)) {
         
-            if ($row['msg_usrid1'] == $gCurrentUser->getValue('usr_id'))
+            if ($row['msg_usr_id_sender'] == $gCurrentUser->getValue('usr_id'))
             {
                 $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
             }
@@ -259,7 +259,7 @@ else if (isset($message_result))
     {
         while ($row = $gDb->fetch_array($message_result)) 
         {
-            if ($row['msg_usrid1'] == $gCurrentUser->getValue('usr_id'))
+            if ($row['msg_usr_id_sender'] == $gCurrentUser->getValue('usr_id'))
             {
                 $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
             }

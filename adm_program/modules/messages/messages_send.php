@@ -405,35 +405,35 @@ else
     {
         $PMId2 = 1;
 
-        $sql = "SELECT MAX(msg_id1) as max_id
+        $sql = "SELECT MAX(msg_con_id) as max_id
               FROM ". TBL_MESSAGES;
 
         $result = $gDb->query($sql);
         $row = $gDb->fetch_array($result);
         $getMsgId = $row['max_id'] + 1;
 
-        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_read) 
+        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_con_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
             VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '', CURRENT_TIMESTAMP, '1')";
 
         $gDb->query($sql);
     }
     else
     {
-        $sql = "SELECT MAX(msg_id2) as max_id
+        $sql = "SELECT MAX(msg_part_id) as max_id
               FROM ".TBL_MESSAGES." 
-			  where msg_id1 = ".$getMsgId;
+			  where msg_con_id = ".$getMsgId;
 
         $result = $gDb->query($sql);
         $row = $gDb->fetch_array($result);
         $PMId2 = $row['max_id'] + 1;
 
-        $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '1', msg_timestamp = CURRENT_TIMESTAMP, msg_usrid1 = '".$gCurrentUser->getValue('usr_id')."', msg_usrid2 = '".$postTo[0]."'
-                WHERE msg_id2 = 0 and msg_id1 = ".$getMsgId;
+        $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '1', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = '".$gCurrentUser->getValue('usr_id')."', msg_usr_id_receiver = '".$postTo[0]."'
+                WHERE msg_part_id = 0 and msg_con_id = ".$getMsgId;
 
         $gDb->query($sql);
     }
 
-    $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_read) 
+    $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_con_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
             VALUES ('".$getMsgType."', '".$getMsgId."', '".$PMId2."', '', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '".$postBodySQL."', CURRENT_TIMESTAMP, '0')";
 
     if ($gDb->query($sql)) {
@@ -447,14 +447,14 @@ if ($sendResult === TRUE)
     // save mail also to database
     if ($getMsgType != 'PM')
     {
-         $sql = "SELECT MAX(msg_id1) as max_id
+         $sql = "SELECT MAX(msg_con_id) as max_id
           FROM ". TBL_MESSAGES;
 
         $result = $gDb->query($sql);
         $row = $gDb->fetch_array($result);
         $getMsgId = $row['max_id'] + 1;
 
-        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_read) 
+        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_con_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
             VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '', '".$postBodySQL."', CURRENT_TIMESTAMP, '0')";
 
         $gDb->query($sql);    

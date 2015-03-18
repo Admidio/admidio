@@ -37,7 +37,7 @@
             if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
             {
                 $sql = 'SELECT * FROM '. TBL_MESSAGES. '
-                         WHERE ( msg_usrid2 = '. $gCurrentUser->getValue('usr_id') .' and msg_read=1)';
+                         WHERE ( msg_usr_id_receiver = '. $gCurrentUser->getValue('usr_id') .' and msg_read=1)';
                 $result = $gDb->query($sql);
                 $row = $gDb->num_rows($result);
                 if ($row > 0)
