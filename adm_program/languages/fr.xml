@@ -946,7 +946,6 @@
     <text id="SYS_PARTICIPANTS" development="new" translation="edited">Membres</text>
     <text id="SYS_PASSWORD" development="new" translation="edited">Mot de passe</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="edited">Mot de passe oublié</text>
-    <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="edited">En cas d'un mot de passe oublié, le système est capable de générer un nouveau mot de passe et de l'envoyer à votre adresse courriel. \nVeuillez remplir votre adresse courriel dans le champ ci-dessous et cliquez sur "Envoyer nouveau mot de passe".</text>
     <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="edited">Connexion échoué à cause que le mot de passe est incorrect. \n\nVeuillez vérifier votre mot de passe et réessayez.</text>
     <text id="SYS_PHONE" development="new" translation="edited">Téléphone</text>
     <text id="SYS_PHOTO" development="new" translation="edited">Photo</text>

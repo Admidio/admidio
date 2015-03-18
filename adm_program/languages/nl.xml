@@ -1166,7 +1166,6 @@
     <text id="SYS_PARTICIPANTS" development="new" translation="edited">Deelnemers</text>
     <text id="SYS_PASSWORD" development="new" translation="edited">Wachtwoord</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="edited">Wachtwoord vergeten</text>
-    <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="edited">Als u uw wachtwoord vergeten bent, kan het systeem een nieuw wachtwoord naar uw e-mail adres sturen. Vul svp uw e-mail adres in en druk op "Stuur nieuw wachtwoord".</text>
     <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="edited">Inloggen niet gelukt.\n\nControleer uw wachtwoord en probeer opnieuw.</text>
     <text id="SYS_PHONE" development="new" translation="edited">Telefoon</text>    
     <text id="SYS_PHOTO" development="new" translation="edited">Foto</text>

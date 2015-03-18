@@ -1151,7 +1151,6 @@
     <text id="SYS_PARTICIPANTS" development="new" translation="edited">Medlemmer</text>
     <text id="SYS_PASSWORD" development="new" translation="edited">Kodeord</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="edited">Glemt kodeord</text>
-    <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="edited">I tilfælde af glemt kodeord, er systemet i stand til at generere et nyt kodeord og sende det til din e-mail.\nSkriv venligst din e-mail adresse i feltet herunder og klik på "Send nyt kodeord".</text>
     <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="edited">Login afvist på grund af forkert kodeord.\n\nVenligst check dit kodeord og prøv igen.</text>
     <text id="SYS_PHONE" development="new" translation="edited">Telefon</text>    
     <text id="SYS_PHOTO" development="new" translation="edited">Billede</text>

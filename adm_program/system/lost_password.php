@@ -10,7 +10,7 @@
  
 require_once('common.php');
 
-$headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN').'?';
+$headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
 
 // save url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -112,9 +112,10 @@ else
     $lostPasswordMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
     $page->addHtml($lostPasswordMenu->show(false));
 
+    $page->addHtml('<p class="lead">'.$gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION').'</p>');
+
     // show form
     $form = new HtmlForm('lost_password_form', $g_root_path.'/adm_program/system/lost_password.php', $page);
-    $form->addDescription($gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION'));
     $form->addInput('recipient_email', $gL10n->get('SYS_EMAIL'), null, array('maxLength' => 50, 'property' => FIELD_MANDATORY));
 
     // if captchas are enabled then visitors of the website must resolve this

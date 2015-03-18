@@ -1149,7 +1149,6 @@
     <text id="SYS_PARTICIPANTS" development="new" translation="edited">Members</text>
     <text id="SYS_PASSWORD" development="new" translation="edited">Password</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="edited">Password forgotten</text>
-    <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="edited">In case of a forgotten password, the system is able to generate a new password and to send it to your e-mail address.\nPlease fill in your e-mail address in the field below and press "Send new password".</text>
     <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="edited">Login failed due to incorrect password.\n\nPlease check your password and try again.</text>
     <text id="SYS_PHONE" development="new" translation="edited">Phone</text>    
     <text id="SYS_PHOTO" development="new" translation="edited">Photo</text>

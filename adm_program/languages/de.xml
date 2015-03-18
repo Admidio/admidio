@@ -111,6 +111,7 @@
     <text id="SYS_NO_DATA_FOUND" development="new" translation="todo">Es wurden keine Daten gefunden.</text>
     <text id="SYS_NORMAL_PICTURE" development="new" translation="todo">Normalbild</text>
     <text id="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION" development="new" translation="todo">Die Online-Mitgliederverwaltung</text>
+    <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="changed" translation="todo">Solltest du dein Passwort vergessen haben, kann das System ein neues Passwort erstellen und an deine E-Mail-Adresse senden. Gib dazu bitte die E-Mail-Adresse an, unter der du dich in diesem System registriert hast. Das neue Passwort wird dann unverzüglich an diese E-Mail-Adresse gesendet.</text>
 	<text id="SYS_PM" development="new" translation="todo">Private Nachricht</text>
 	<text id="SYS_QUANTITY" development="new" translation="todo">Menge</text>
     <text id="SYS_ROLES" development="new" translation="todo">Rollen</text>
@@ -1252,7 +1253,6 @@
     <text id="SYS_PARTICIPANTS" development="new" translation="todo">Teilnehmer</text>
     <text id="SYS_PASSWORD" development="new" translation="todo">Passwort</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="todo">Passwort vergessen</text>
-    <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="todo">Wenn du dein Passwort vergessen hast, kann das System ein neues Passwort erstellen und an deine E-Mail-Adresse senden.\nGib dazu deine E-Mail-Adresse in das untenstehende Formular ein und klicke auf die Schaltfläche "Neues Passwort zusenden".</text>
     <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="todo">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfe bitte dein Passwort und gib dieses erneut ein.</text>
     <text id="SYS_PHONE" development="new" translation="todo">Telefon</text>    
     <text id="SYS_PHOTO" development="new" translation="todo">Foto</text>

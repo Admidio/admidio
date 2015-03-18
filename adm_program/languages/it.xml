@@ -1154,7 +1154,6 @@
     <text id="SYS_PARTICIPANTS" development="new" translation="edited">Membri</text>
     <text id="SYS_PASSWORD" development="new" translation="edited">Password</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="edited">Password dimenticata</text>
-    <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="edited">In caso di password dimenticata, il sistema è in grado di generare una nuova password e di inviarla al tuo indirizzo e-mail.\nInserisci il tuo indirizzo e-mail nel campo sottostante e premi "Invia nuova password".</text>
     <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="edited">Accesso non riuscito a causa di password errata.\n\nVerifica la tua password e riprova.</text>
     <text id="SYS_PHONE" development="new" translation="edited">Telefono</text>    
     <text id="SYS_PHOTO" development="new" translation="edited">Foto</text>

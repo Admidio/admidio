@@ -218,34 +218,37 @@ else
         // create role object for webmaster
         $roleWebmaster = new TableRoles($gDb, $row['rol_id']);
 
+        $linkText = $gL10n->get('SYS_LOGIN_PROBLEMS');
+
         // Link bei Loginproblemen
         if($gPreferences['enable_password_recovery'] == 1
         && $gPreferences['enable_system_mails'] == 1)
         {
             // neues Passwort zusenden
-            $emailLink = $g_root_path.'/adm_program/system/lost_password.php';
+            $linkUrl  = $g_root_path.'/adm_program/system/lost_password.php';
+            $linkText = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
         }
         elseif($gPreferences['enable_mail_module'] == 1 
         && $roleWebmaster->getValue('rol_mail_this_role') == 3)
         {
             // Mailmodul aufrufen mit Webmaster als Ansprechpartner
-            $emailLink = $g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='. $roleWebmaster->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+            $linkUrl = $g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='. $roleWebmaster->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
         }
         else
         {
             // direkte Mail an den Webmaster ueber einen externen Mailclient
-            $emailLink = 'mailto:'. $gPreferences['email_administrator']. '?subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+            $linkUrl = 'mailto:'. $gPreferences['email_administrator']. '?subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
         }
 
         if($plg_show_icons)
         {
             echo '
-            <a class="icon-text-link" href="'. $emailLink. '"><img 
-                src="'. THEME_PATH. '/icons/email_key.png" alt="'.$gL10n->get('SYS_LOGIN_PROBLEMS').'" />'.$gL10n->get('SYS_LOGIN_PROBLEMS').'</a>';
+            <a class="icon-text-link" href="'. $linkUrl. '"><img 
+                src="'. THEME_PATH. '/icons/email_key.png" alt="'.$linkText.'" />'.$linkText.'</a>';
         }
         else
         {
-            echo '<a href="'. $emailLink. '" '. $plg_link_target. '>'.$gL10n->get('SYS_LOGIN_PROBLEMS').'</a>';
+            echo '<a href="'.$linkUrl.'" '.$plg_link_target.'>'.$linkText.'</a>';
         }
         
     }
