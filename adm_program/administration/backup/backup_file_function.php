@@ -59,7 +59,7 @@ switch($getJob)
         header('Pragma: public');
 		
 		// Datei ausgeben.
-		echo file_get_contents($completePath);
+		echo readfile($completePath);
 		break;
 	
 	case 'delete':

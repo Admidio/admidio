@@ -23,7 +23,7 @@ $userPhoto = $user->getValue('usr_photo');
 if(strlen($userPhoto)==0 || !$gCurrentUser->viewProfile($user))
 {
     header('Content-Type: image/png');
-    echo file_get_contents(THEME_SERVER_PATH. '/images/no_profile_pic.png');
+    echo readfile(THEME_SERVER_PATH. '/images/no_profile_pic.png');
 }
 else
 {

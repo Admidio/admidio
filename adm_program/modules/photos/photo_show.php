@@ -108,7 +108,7 @@ if($getThumbnail)
         else
         {
             header('content-type: image/jpg');
-            echo file_get_contents($ordner.'/thumbnails/'.$getPhotoNr.'.jpg');
+            echo readfile($ordner.'/thumbnails/'.$getPhotoNr.'.jpg');
         }
     }
     else
