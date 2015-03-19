@@ -81,11 +81,12 @@
     <text id="PHO_MAX_PHOTO_SIZE_HEIGHT" development="new" translation="todo">Max. Bildanzeigegröße (Höhe)</text>
     <text id="PHO_NUMBER_OF_ALBUMS_PER_PAGE" development="new" translation="todo">Anzahl Alben pro Seite</text>
     <text id="PHO_PARENT_ALBUM_DESC" development="new" translation="todo">Ein Album kann einem anderen Album untergeordnet sein. Wähle dazu in der Auswahlliste das Elternalbum zum aktuellen Album aus. Willst du das Album auf der obersten Ebene anzeigen, dann wähle %VAR1_BOLD% aus.</text>
+    <text id="PHO_PHOTO_UPLOAD_DESC" development="new" translation="todo">Wähle bitte alle Fotos aus, die du in das Album %VAR1_BOLD% hochladen möchtest.</text>
     <text id="PHO_SAVE_ORIGINALS" development="new" translation="todo">Originale speichern</text>
     <text id="PHO_SAVE_ORIGINALS_DESC" development="new" translation="todo">Steht genug Speicherplatz zur Verfügung, können hochgeladene Bilder auf dem Server archiviert und z.B. zum Download zur Verfügung gestellt werden.</text>
+    <text id="PHO_SELECT_FOTOS" development="new" translation="todo">Fotos auswählen</text>
     <text id="PHO_THUMBNAILS_PER_PAGE" development="changed" translation="todo">Thumbnails pro Seite</text>
     <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="changed" translation="todo">Der angegebene Wert bestimmt wieviele kleine Vorschaubilder auf einer Seite angezeigt werden. Hat ein Album mehr Bilder, so wird automatisch eine Seitennavigation hinzugefügt. (Standard: 16)</text>
-    <text id="PHO_SELECT_FOTOS" development="new" translation="todo">Fotos auswählen</text>
     <text id="PRO_CHANGE_PROFILE_PICTURE" development="changed" translation="todo">Profilbild hochladen</text>
     <text id="PRO_CHOOSE_PHOTO" development="new" translation="todo">Foto auswählen</text>
     <text id="PRO_DELETE_PROFILE_PICTURE" development="changed" translation="todo">Profilbild löschen</text>

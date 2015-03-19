@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * This script imports a bunch of data into a demo database
+ * This script imports a bunch of demo data into a Admidio database
  *
  * Copyright    : © 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -102,7 +102,7 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultVal
 
 // set runtime of script to 2 minutes because of the many work to do
 // but no output of error message because of safe mode
-@set_time_limit(300); 
+@set_time_limit(600); 
 
 echo 'Start with installation ...<br />';
 

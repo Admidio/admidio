@@ -76,15 +76,16 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
         $user = new User($gDb, $gProfileFields, $row['usr_id']);
     
     	// create and save new password and activation id
-        $new_password  = generatePassword();
-        $activation_id = generateActivationId($user->getValue('EMAIL'));
-        $user->setValue('usr_new_password', $new_password);
-        $user->setValue('usr_activation_code', $activation_id);
+        $newPassword  = substr(md5(time()), 0, 8);
+        $activationId = substr(md5(uniqid($user->getValue('EMAIL').time())),0,10);
+
+        $user->setValue('usr_new_password', $newPassword);
+        $user->setValue('usr_activation_code', $activationId);
         
         $sysmail = new SystemMail($gDb);
         $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
-        $sysmail->setVariable(1, $new_password);
-        $sysmail->setVariable(2, $g_root_path.'/adm_program/system/password_activation.php?usr_id='.$user->getValue('usr_id').'&aid='.$activation_id);
+        $sysmail->setVariable(1, $newPassword);
+        $sysmail->setVariable(2, $g_root_path.'/adm_program/system/password_activation.php?usr_id='.$user->getValue('usr_id').'&aid='.$activationId);
         $sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user);
 
         $user->save();
@@ -129,20 +130,5 @@ else
     // add form to html page and show page
     $page->addHtml($form->show(false));
     $page->show();
-}
-
-//************************* Funktionen/Unterprogramme ***********/
-
-function generatePassword()
-{
-    // neues Passwort generieren
-    $password = substr(md5(time()), 0, 8);
-    return $password;
-}
-
-function generateActivationId($text)
-{
-    $aid = substr(md5(uniqid($text.time())),0,10);
-    return $aid;
 }
 ?>
