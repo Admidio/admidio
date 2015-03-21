@@ -267,7 +267,7 @@ else
     $membersAssignmentMenu = new HtmlNavbar('menu_members_assignment', $headline, $page);
     $membersAssignmentMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
     $membersAssignmentMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
-    $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, 'navbar');
+    $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
     $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), 0, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
     $membersAssignmentMenu->addForm($navbarForm->show(false));
     // show module menu

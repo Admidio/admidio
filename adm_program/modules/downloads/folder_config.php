@@ -156,7 +156,7 @@ $folderConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL
 $page->addHtml($folderConfigMenu->show(false));
 
 // show form
-$form = new HtmlForm('adm_form_folder_rights', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page, 'vertical');
+$form = new HtmlForm('adm_form_folder_rights', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page, array('type' => 'vertical'));
 $fieldMode = FIELD_DEFAULT;
 
 if($folder->getValue('fol_fol_id_parent') && $parentFolder->getValue('fol_public') == 0)

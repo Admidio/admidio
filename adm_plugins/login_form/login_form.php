@@ -142,7 +142,7 @@ if($gValidLogin == 1)
     }
 
     // create a static form
-    $form = new HtmlForm('plugin-login-static-form', null, null, 'vertical');
+    $form = new HtmlForm('plugin-login-static-form', null, null, array('type' => 'vertical', 'setFocus' => false));
     $form->addStaticControl('plg_user', $gL10n->get('SYS_MEMBER'), '<a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $gCurrentUser->getValue('usr_id'). '" 
                 '. $plg_link_target. ' title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'. $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'). '</a>');
     $form->addStaticControl('plg_active_since', $gL10n->get('PLG_LOGIN_ACTIVE_SINCE'), $gCurrentSession->getValue('ses_begin', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK'));
@@ -169,7 +169,7 @@ else
         $iconCode  = THEME_PATH. '/icons/key.png';
     }
 
-    $form = new HtmlForm('plugin-login-form', $g_root_path.'/adm_program/system/login_check.php', null, 'vertical');
+    $form = new HtmlForm('plugin-login-form', $g_root_path.'/adm_program/system/login_check.php', null, array('type' => 'vertical', 'setFocus' => false));
     $form->addInput('plg_usr_login_name', $gL10n->get('SYS_USERNAME'), null, array('maxLength' => 35));
     $form->addInput('plg_usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password'));
 

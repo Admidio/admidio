@@ -99,7 +99,7 @@ if($weblinks->getId() == 0)
 	
     $page->addJavascript('$("#cat_id").change(function () { $("#navbar_cat_id_form").submit();});', true);
 	
-    $navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/links/links.php?headline='. $getHeadline, $page, 'navbar');
+    $navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/links/links.php?headline='. $getHeadline, $page, array('type' => 'navbar', 'setFocus' => false));
     $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
     $LinksMenu->addForm($navbarForm->show(false));
 

@@ -184,7 +184,7 @@ if ($getMsgType == 'PM')
     }
 
     // show form
-    $form = new HtmlForm('pm_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, 'default', true);
+    $form = new HtmlForm('pm_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
 
     if ($getUserId == 0)
 	{
