@@ -80,7 +80,7 @@ $page->addHtml($messagesChatMenu->show(false));
 $page->addHtml('<div id="chat-wrap"><div id="chat-area"></div></div>');
 
 // show form
-$form = new HtmlForm('send-message-area', '', $page, 'default', true);
+$form = new HtmlForm('send-message-area', '', $page, array('enableFileUpload' => true));
 
 $form->addMultilineTextInput('sendie', 'Enter Message:', null, 2, array('maxLength' => 100));
 

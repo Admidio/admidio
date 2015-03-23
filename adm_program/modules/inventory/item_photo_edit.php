@@ -174,7 +174,7 @@ if($getMode == 'choose')
     $page->addHtml($profilePhotoMenu->show(false));
 
     // show form
-    $form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/inventory/item_photo_edit.php?mode=upload&amp;inv_id='.$getItemId, $page, 'default', true);
+    $form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/inventory/item_photo_edit.php?mode=upload&amp;inv_id='.$getItemId, $page, array('enableFileUpload' => true));
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="item_photo_show.php?inv_id='.$getItemId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
     $form->addFileUpload('userfile', $gL10n->get('PRO_CHOOSE_PHOTO'), array('helpTextIdLabel' => 'profile_photo_up_help'));
     $form->addSubmitButton('btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'), array('icon' => THEME_PATH.'/icons/photo_upload.png', 'class' => ' col-sm-offset-3'));

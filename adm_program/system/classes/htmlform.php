@@ -46,25 +46,32 @@ class HtmlForm extends HtmlFormBasic
     protected $buttonGroupOpen;     ///< Flag that indicates if a bootstrap button-group is open and should be closed later
     
     /** Constructor creates the form element
-     *  @param $id               Id of the form
-     *  @param $action           Optional action attribute of the form
-     *  @param $htmlPage         Optional a HtmlPage object that will be used to add javascript code 
-     *                           or files to the html output page.
-     *  @param $enableFileUpload Set specific parameters that are necessary for file upload with a form
-     *  @param $type             Set the form type. Every type has some special features:
-     *                           default  : A form that can be used to edit and save data of a database table. The label
-     *                                      and the element have a horizontal orientation.
-     *                           vertical : A form that can be used to edit and save data but has a vertical orientation.
-     *                                      The label is positioned above the form element.
-     *                           navbar   : A form that should be used in a navbar. The form content will
-     *                                      be send with the 'GET' method and this form should not get a default focus.
-     *  @param $class            Optional an additional css classname. The class @b form-horizontal
-     *                           is set as default and need not set with this parameter.
+     *  @param $id        Id of the form
+     *  @param $action    Optional action attribute of the form
+     *  @param $htmlPage  Optional a HtmlPage object that will be used to add javascript code 
+     *                    or files to the html output page.
+     *  @param $options   An array with the following possible entries:
+     *                    @b type       Set the form type. Every type has some special features:
+     *                       default  : A form that can be used to edit and save data of a database table. The label
+     *                                  and the element have a horizontal orientation.
+     *                       vertical : A form that can be used to edit and save data but has a vertical orientation.
+     *                                  The label is positioned above the form element.
+     *                       navbar   : A form that should be used in a navbar. The form content will
+     *                                  be send with the 'GET' method and this form should not get a default focus.
+     *                    @b enableFileUpload Set specific parameters that are necessary for file upload with a form
+     *                    @b setFocus   Default is set to @b true. Set the focus on page load to the first field
+     *                                  of this form.
+     *                    @b class      Optional an additional css classname. The class @b form-horizontal
+     *                                  is set as default and need not set with this parameter.
      */
-    public function __construct($id, $action, $htmlPage = null, $type = 'default', $enableFileUpload = false, $class = null)
-    {        
+    public function __construct($id, $action, $htmlPage = null, $options = array())
+    {
+        // create array with all options
+        $optionsDefault = array('type' => 'default', 'enableFileUpload' => false, 'setFocus' => true, 'class' => null);
+        $optionsAll     = array_replace($optionsDefault, $options);
+        
         // navbar forms should send the data as GET
-        if($type == 'navbar')
+        if($optionsAll['type'] == 'navbar')
         {
             parent::__construct($action, $id, 'get');
         }
@@ -77,7 +84,7 @@ class HtmlForm extends HtmlFormBasic
         $this->flagFieldListOpen     = false;
         $this->countFields           = 0;
         $this->datepickerInitialized = false;
-        $this->type                  = $type;
+        $this->type                  = $optionsAll['type'];
         $this->id                    = $id;
         $this->buttonGroupOpen       = false;
         
@@ -86,24 +93,24 @@ class HtmlForm extends HtmlFormBasic
         
         if($this->type == 'default')
         {
-            $class .= ' form-horizontal form-dialog';
+            $optionsAll['class'] .= ' form-horizontal form-dialog';
         }
         elseif($this->type == 'vertical')
         {
-            $class .= ' form-vertical form-dialog';
+            $optionsAll['class'] .= ' form-vertical form-dialog';
         }
         elseif($this->type == 'navbar')
         {
-            $class .= ' form-horizontal navbar-form navbar-left';
+            $optionsAll['class'] .= ' form-horizontal navbar-form navbar-left';
         }
         
-        if(strlen($class) > 0)
+        if(strlen($optionsAll['class']) > 0)
         {
-            $this->addAttribute('class', $class);            
+            $this->addAttribute('class', $optionsAll['class']);
         }
 		
         // Set specific parameters that are necessary for file upload with a form
-        if($enableFileUpload == true)
+        if($optionsAll['enableFileUpload'] == true)
         {
             $this->addAttribute('enctype', 'multipart/form-data');
         }        
@@ -114,7 +121,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
 		// if its not a navbar form and not a static form then first field of form should get focus
-        if($this->type != 'navbar' && strlen($action) > 0)
+        if($optionsAll['setFocus'] == true)
         {
             if(is_object($htmlPage))
             {
