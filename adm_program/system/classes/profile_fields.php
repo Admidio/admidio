@@ -11,7 +11,7 @@
  */
 /*****************************************************************************
  *
- *  Copyright    : (c) 2004 - 2013 The Admidio Team
+ *  Copyright    : (c) 2004 - 2015 The Admidio Team
  *  Homepage     : http://www.admidio.org
  *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -249,6 +249,12 @@ class ProfileFields
 			&& $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'CHECKBOX')
 			{
 				$value = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
+				
+				// if field has url then create a link
+				if(strlen($this->mProfileFields[$fieldNameIntern]->getValue('usf_url')))
+				{
+					$value = '<a href="'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_url').'" target="_blank">'.$value.'</a>';
+				}
 			}
 		}
 		return $value;
