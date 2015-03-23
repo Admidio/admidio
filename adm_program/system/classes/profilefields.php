@@ -254,7 +254,14 @@ class ProfileFields
 			&& $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'CHECKBOX')
 			{
 				$value = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
-			}
+				
+				// if field has url then create a link
+				if(strlen($this->mProfileFields[$fieldNameIntern]->getValue('usf_url')))
+				{
+					$value = '<a href="'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_url').'" target="_blank">'.$value.'</a>';
+				}
+			}		
+			
 		}
 		return $value;
 	}
