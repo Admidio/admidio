@@ -107,7 +107,7 @@ if($getMode == 'show_list')
     {
         // create array with all column values
         $columnValues = array(
-            '<a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '"><img 
+            '<a href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '"><img 
                 src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" />'. $old_backup_file. '</a>',
             date ('d.m.Y H:i:s', filemtime($backupabsolutepath.$old_backup_file)),
             round(filesize($backupabsolutepath.$old_backup_file)/1024). ' kB',

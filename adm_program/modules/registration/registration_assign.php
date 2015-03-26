@@ -128,7 +128,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
                 $page->addHtml('<hr />');
             }
             $page->addHtml('<div style="margin-left: 20px;">
-				<a class="icon-text-link" href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row->usr_id.'"><img 
+				<a class="btn" href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row->usr_id.'"><img 
                      src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row->first_name.' '.$row->last_name.'</a><br />');
                 if(strlen($row->address) > 0)
                 {
@@ -161,7 +161,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
                         {
                             $page->addHtml('<br />'.$gL10n->get('NWU_REMINDER_SEND_LOGIN').'<br />
 
-                            <a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=6"><img
+                            <a class="btn" href="'.$g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=6"><img
                                 src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('NWU_SEND_LOGIN').'" />'.$gL10n->get('NWU_SEND_LOGIN').'</a>');
                         }
                     }
@@ -170,7 +170,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
                         // Logindaten sind NICHT vorhanden -> diese nun zuordnen
                         $page->addHtml('<br />'.$gL10n->get('NWU_USER_NO_VALID_LOGIN').'<br />
 
-                        <a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=1"><img
+                        <a class="btn" href="'.$g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=1"><img
                             src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_LOGIN').'</a>');
                     }
                 }
@@ -184,7 +184,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
                         // Logindaten sind bereits vorhanden
                         $page->addHtml('<br />'.$gL10n->get('NWU_NO_MEMBERSHIP', $gCurrentOrganization->getValue('org_shortname')).'<br />
 
-                        <a class="icon-text-link" href="'.$link.'"><img src="'.THEME_PATH.'/icons/new_registrations.png" 
+                        <a class="btn" href="'.$link.'"><img src="'.THEME_PATH.'/icons/new_registrations.png" 
                             alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'</a>');
                     }               
                     else
@@ -192,7 +192,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
                         // KEINE Logindaten vorhanden
                         $page->addHtml('<br />'.$gL10n->get('NWU_NO_MEMBERSHIP_NO_LOGIN', $gCurrentOrganization->getValue('org_shortname')).'<br />
                         
-                        <a class="icon-text-link" href="'.$link.'"><img src="'. THEME_PATH. '/icons/new_registrations.png" 
+                        <a class="btn" href="'.$link.'"><img src="'. THEME_PATH. '/icons/new_registrations.png" 
                             alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'</a>');
                     }               
                 }
@@ -207,7 +207,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
         <div style="margin-left: 20px;">
             '. $gL10n->get('SYS_CREATE_NOT_FOUND_USER'). '<br />
             
-            <a class="icon-text-link" href="'.$urlCreateNewUser.'"><img 
+            <a class="btn" href="'.$urlCreateNewUser.'"><img 
 				src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" />'.$gL10n->get('SYS_CREATE_NEW_USER').'</a>
         </div>
     </div>

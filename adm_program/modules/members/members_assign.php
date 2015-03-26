@@ -106,7 +106,7 @@ echo '
                 echo '<hr />';
             }
             echo '<div style="margin-left: 20px;">
-				<a class="icon-text-link" href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'"><img 
+				<a class="btn" href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'"><img 
                      src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row['first_name'].' '.$row['last_name'].'</a><br />';
                 if(strlen($row['address']) > 0)
                 {
@@ -136,7 +136,7 @@ echo '
                     // KEINE Logindaten vorhanden
                     echo '<br />'.$gL10n->get('MEM_NO_MEMBERSHIP', $gCurrentOrganization->getValue('org_shortname')).'<br />
                     
-                    <a class="icon-text-link" href="'.$link.'"><img src="'. THEME_PATH. '/icons/new_registrations.png" 
+                    <a class="btn" href="'.$link.'"><img src="'. THEME_PATH. '/icons/new_registrations.png" 
                         alt="'.$gL10n->get('MEM_ASSIGN_ROLES').'" />'.$gL10n->get('MEM_ASSIGN_ROLES').'</a>';
                 }
             echo '</div>';
@@ -149,7 +149,7 @@ echo '
     <div class="panel-body">
         <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER').'</p>
         
-        <a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $getLastname.'&firstname='. $getFirstname.'&remove_url=1"><img
+        <a class="btn" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $getLastname.'&firstname='. $getFirstname.'&remove_url=1"><img
             src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" />'.$gL10n->get('SYS_CREATE_NEW_USER').'</a>
     </div>
 </div>';

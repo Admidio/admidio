@@ -524,21 +524,21 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
                     // if user has admin rights for photo module then show some functions
                     if ($gCurrentUser->editPhotoRight() && file_exists($ordner))
                     {
-                        $page->addHtml('<div class="btn-group" style="width: 100%;">
-                            <a id="btn_album_upload" class="btn btn-default icon-text-link" style="width: 50%;" data-toggle="modal" data-target="#admidio_modal"
+                        $page->addHtml('<div class="btn-group" role="group" style="width: 100%;">
+                            <a id="btn_album_upload" class="btn btn-default" style="width: 50%;" data-toggle="modal" data-target="#admidio_modal"
                                 href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img 
                                 src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" />'.$gL10n->get('PHO_UPLOAD_PHOTOS').'</a>');
 
                             if($childPhotoAlbum->getValue('pho_locked')==1)
                             {
                                 $page->addHtml('
-                                <a class="btn btn-default icon-text-link" style="width: 50%;" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;locked=0"><img 
+                                <a class="btn btn-default" style="width: 50%;" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;locked=0"><img 
                                     src="'. THEME_PATH. '/icons/key.png"  alt="'.$gL10n->get('PHO_ALBUM_UNLOCK').'" />'.$gL10n->get('PHO_ALBUM_UNLOCK').'</a>');
                             }
                             elseif($childPhotoAlbum->getValue('pho_locked')==0)
                             {
                                 $page->addHtml('
-                                <a class="btn btn-default icon-text-link" style="width: 50%;" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;locked=1"><img 
+                                <a class="btn btn-default" style="width: 50%;" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;locked=1"><img 
                                     src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('PHO_ALBUM_LOCK').'" />'.$gL10n->get('PHO_ALBUM_LOCK').'</a>');
                             }
                         $page->addHtml('</div>');

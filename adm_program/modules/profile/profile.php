@@ -245,9 +245,6 @@ if($gCurrentUser->assignRoles())
 {
     $profileMenu->addItem('menu_item_role_memberships_change', $g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$user->getValue('usr_id').'&amp;inline=1', 
                             $gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE'), 'roles.png', 'right', 'menu_item_extras');
-/*    $page->addHtml('
-    <a class="icon-text-link" id="edit_roles_link" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$user->getValue('usr_id').'&amp;inline=1"><img 
-        src="'.THEME_PATH.'/icons/edit.png" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" alt="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" />'.$gL10n->get('SYS_EDIT').'</a>');*/
 }
 
 if($gCurrentUser->isWebmaster())
@@ -394,7 +391,7 @@ $page->addHtml('
                                 && (strlen($user->getValue('POSTCODE')) > 0 || strlen($user->getValue('CITY')) > 0))
                                 {
                                     $htmlAddress .= '
-                                    <a class="icon-text-link" href="'. $map_url. '" target="_blank"><img src="'. THEME_PATH. '/icons/map.png" 
+                                    <a class="btn" href="'. $map_url. '" target="_blank"><img src="'. THEME_PATH. '/icons/map.png" 
                                         alt="'.$gL10n->get('SYS_MAP').'" />'.$gL10n->get('SYS_MAP').'</a>';
     
                                     // show route link if its not the profile of CurrentUser
@@ -431,19 +428,19 @@ $page->addHtml('
             // Nur berechtigte User duerfen das Profilfoto editieren
             if($gCurrentUser->hasRightEditProfile($user) == true)
             {
-                $page->addHtml('<ul id="profile_picture_links" class="icon-text-link-list icon-text-link-list-vertical">
-                    <li><a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><img
-                            src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a></li>');
+                $page->addHtml('<div id="profile_picture_links" class="btn-group-vertical" role="group">
+                    <a class="btn" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><img
+                        src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a>');
                 //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
                 if((strlen($user->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
                     || file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$user->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1 )
                 {
-                    $page->addHtml('<li><a class="icon-text-link" data-toggle="modal" data-target="#admidio_modal"
+                    $page->addHtml('<a class="btn" data-toggle="modal" data-target="#admidio_modal"
                                     href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
                                     '&amp;database_id='.$user->getValue('usr_id').'"><img src="'. THEME_PATH. '/icons/delete.png" 
-                                    alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</a></li>');
+                                    alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</a>');
                 }
-                $page->addHtml('</ul>');
+                $page->addHtml('</div>');
             }
         $page->addHtml('</div>
     </div>

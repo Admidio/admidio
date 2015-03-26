@@ -540,7 +540,7 @@ class TableFolder extends TableAccess
                 $rootFolderId = $rootFolderRow->fol_id;
 
                 $navigationPrefix = '
-                <li><a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $rootFolderRow->fol_id. '"><img 
+                <li><a class="btn" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $rootFolderRow->fol_id. '"><img 
                     src="'.THEME_PATH.'/icons/application_view_list.png" alt="Downloads" />'.$gL10n->get('DOW_DOWNLOADS').'</a></li>';
 
                 $currentNavigation = $this->getNavigationForDownload($parentId, $currentNavigation);

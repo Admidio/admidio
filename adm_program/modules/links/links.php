@@ -150,10 +150,10 @@ else
                 <div class="panel-body">');
         }
 
-        $page->addHtml('<div class="weblink-item" id="lnk_'.$weblink->getValue('lnk_id').'">');
+        $page->addHtml('<div class="admidio-weblink-item" id="lnk_'.$weblink->getValue('lnk_id').'">');
             // show weblink
             $page->addHtml('
-            <a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $gPreferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
+            <a class="btn" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $gPreferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
                 alt="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" />'.$weblink->getValue('lnk_name').'</a>');
 
             // change and delete only users with rights

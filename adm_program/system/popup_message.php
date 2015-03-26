@@ -80,7 +80,7 @@ switch ($get_type)
             else {
                 var msgOrg = "'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY').'";
                 var msg = msgOrg.replace("%VAR1%",count);
-                $("#admCommentsInvisible_'.$get_database_id_2.' icon-text-link > a:nth-child(2)").html(msg);
+                $("#admCommentsInvisible_'.$get_database_id_2.' btn > a:nth-child(2)").html(msg);
             }   
             ';
         break;

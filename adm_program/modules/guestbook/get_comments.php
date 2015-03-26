@@ -45,8 +45,6 @@ if ($getGbcId > 0)
 
 if (isset($comment_result))
 {
-    echo '<div class="admCommentsBlock" id="comments_'.$getGbcId.'" style="visibility: visible; display: block; text-align: left;">';
-
     $gbComment = new TableGuestbookComment($gDb);
 
     // Jetzt nur noch die Kommentare auflisten
@@ -95,18 +93,14 @@ if (isset($comment_result))
                 if($getModeration == 1)
                 {
                     echo '
-                    <ul class="icon-text-link-list icon-text-link-list-horizontal">
-                        <li>
-                            <a class="icon-text-link" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc_mod&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
-                                $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</a>
-                        </li>
-                        <li>
-                            <a class="icon-text-link" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
-                                $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</a>
-                        </li>
-                    </ul>';
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-default" data-toggle="modal" data-target="#admidio_modal"
+                            href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc_mod&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
+                            $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</a>
+                        <a class="btn btn-default" data-toggle="modal" data-target="#admidio_modal"
+                            href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
+                            $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</a>
+                    </div>';
                 }
             echo '</div>';
 
@@ -123,15 +117,10 @@ if (isset($comment_result))
     {
         // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
         echo '
-        <div class="admCommentLink">
-            <a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$getGbcId.'"><img 
-                src="'. THEME_PATH. '/icons/comment_new.png" alt="'.$gL10n->get('GBO_WRITE_COMMENT').'"
-                title="'.$gL10n->get('GBO_WRITE_COMMENT').'" />'.$gL10n->get('GBO_WRITE_COMMENT').'</a>
-        </div>';
+        <a class="btn" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$getGbcId.'"><img 
+            src="'. THEME_PATH. '/icons/comment_new.png" alt="'.$gL10n->get('GBO_WRITE_COMMENT').'"
+            title="'.$gL10n->get('GBO_WRITE_COMMENT').'" />'.$gL10n->get('GBO_WRITE_COMMENT').'</a>';
     }
-
-    echo'
-    </div>';
 }
 
 ?>

@@ -131,7 +131,7 @@ class Navigation
         if(strlen($url) > 0)
         {
             $html = '
-            <a class="icon-text-link" href="'.$url.'"><img src="'. THEME_PATH. '/icons/back.png" 
+            <a class="btn" href="'.$url.'"><img src="'. THEME_PATH. '/icons/back.png" 
                 alt="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').'</a>';
 
         }

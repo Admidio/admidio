@@ -702,7 +702,7 @@ $page->addHtml('
         <tbody id="mylist_fields_tbody">
             <tr id="table_row_button">
                 <td colspan="4">
-                    <a class="icon-text-link" href="javascript:addColumn()"><img
+                    <a class="btn" href="javascript:addColumn()"><img
                         src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('LST_ADD_ANOTHER_COLUMN').'" />'.$gL10n->get('LST_ADD_ANOTHER_COLUMN').'</a>
                 </td>
             </tr>

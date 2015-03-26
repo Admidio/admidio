@@ -188,7 +188,7 @@ h3 {
     text-align: left;
 }
 
-.alert, .btn-form {
+.alert, .btn-form:not(form.navbar-form) {
     margin-top: 15px;
 }
 
@@ -220,48 +220,36 @@ a:link, a:visited {
     text-decoration: underline;
 }
 
-a:hover, a:active {
-    text-decoration: underline;
-    color: #FF9C00;
-}
-
-/* Show a linklist with icon */
-
-.icon-text-link-list {
-    list-style-type: none;
-    padding: 0px;
-    margin: 25px 0px 25px 0px;
-}
-
-.icon-text-link-list-horizontal li{   
-    padding-right: 15px;   
-    display: inline-block;
-    font-size: 11pt;
-}
-
-.icon-text-link-list-vertical li {
-    margin-top: 7px;
-    display: block;
+a:hover, a:active, a.btn:hover, a.btn:active, a.navbar-link:hover, a.navbar-link:active {
+    text-decoration: underline !important;
+    color: #FF9C00 !important;
 }
 
 /**************************/
 /* Settings for all icons */
 /**************************/
 
-.menu img, .icon-link img, .icon-information, .btn img, .icon-text-link img {
+.menu img, .icon-link img, .icon-information, .btn img {
     border: none;
     vertical-align: text-top;
     margin-left: 3px;
     height: 16px;
 }
 
-.navbar-link img, .icon-text-link img, .btn img, .alert .glyphicon {
+.navbar-link img, .btn img, .alert .glyphicon, .btn, .panel-title a img {
     margin-right: 5px;
 }
 
-.icon-text-link {
-    font-weight: normal;
-    white-space: nowrap;
+.btn-group a.btn {
+    padding: 5px;
+    margin-right: 0px;
+    text-align: center !important;
+}
+
+a.btn {
+    padding-top: 0px;
+    padding-left: 0px;
+    text-align: left !important;
 }
 
 .icon-information {
@@ -303,7 +291,8 @@ a:hover, a:active {
 
 .navbar-brand {
     color: #474b4c !important;
-    padding: 15px 15px 15px 5px;
+    height: 40px;
+    padding: 10px 15px 10px 15px;
 }
 
 .navbar-toggle {
@@ -648,9 +637,17 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     margin-top: 15px;
 }
 
-#div_profile_photo {
-    text-align: right;
+@media (min-width: 768px) {
+    #div_profile_photo {
+        text-align: right;
+    }
+    
+    #div_profile_photo a.btn {
+        padding-right: 0px;
+        text-align: right !important;
+    }
 }
+
 
 @media (max-width: 768px) {
     #div_profile_photo {
@@ -660,10 +657,6 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 
 #profile_photo {
     display: inline;
-}
-
-#profile_picture_links {
-    margin-top: -10px;
 }
 
 .list-roles-assignment li, .list-roles-assignment-pos li {
@@ -702,7 +695,7 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     margin-bottom: 5px;
 }
 
-.weblink-item {
+.admidio-weblink-item {
     padding-top: 15px;
 }
 

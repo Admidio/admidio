@@ -117,15 +117,14 @@ class Menu
 			$html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>';			// Title of the menu
 		}
 
-        $html .= '<ul class="icon-text-link-list icon-text-link-list-vertical admidio-menu'.$cssMenuClass.'" id="menu_'.$this->id.'">';		// Wraps all menu items
+        $html .= '<div class="btn-group-vertical admidio-menu'.$cssMenuClass.'" role="group" id="menu_'.$this->id.'">';		// Wraps all menu items
 		
         // now create each menu item
 		foreach($this->items as $key => $value)
 		{
             $html .= '
-            <li id="lmenu_'.$this->id.'_' .$this->items[$key]['id'].'">
-                <a class="icon-text-link'.$cssFontClass.'" href="'.$this->items[$key]['link'].'"><img src="'.$this->items[$key]['icon'].'"
-                    alt="'.strip_tags($this->items[$key]['text']).'" />'.$this->items[$key]['text'].'</a>';
+            <a id="lmenu_'.$this->id.'_' .$this->items[$key]['id'].'" class="btn '.$cssFontClass.'" href="'.$this->items[$key]['link'].'"><img src="'.$this->items[$key]['icon'].'"
+                alt="'.strip_tags($this->items[$key]['text']).'" />'.$this->items[$key]['text'].'</a>';
 
 			if ($type == 'complex')
 			{
@@ -144,10 +143,9 @@ class Menu
 				
 				$html .= '<div class="admMenuDescription"><small>'.$this->items[$key]['desc'].'</small></div>';
 			}
-            $html .= '</li>';
 		}
 		
-        $html .= '</ul>';												// End Wraps all menu items
+        $html .= '</div>';												// End Wraps all menu items
 
 		if (count($this->items) > 0)
 		{

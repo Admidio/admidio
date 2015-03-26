@@ -67,35 +67,28 @@ $page->addJavascript('
             // RequestObjekt abschicken und Kommentar laden
             $.get("'.$g_root_path.'/adm_program/modules/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.$getModeration.', 
             function(data) {
-                var objectId = "admCommentSection_" + commentId;
-                document.getElementById(objectId).innerHTML = data;
-                toggleComments(commentId);
+                $("#comments_" + commentId).html(data);
             });            
         }
 
         function toggleComments(commentId) {
-            if (document.getElementById("admCommentSection_" + commentId).innerHTML.length == 0)
-            {
+            toggleDiv("admCommentsInvisible_" + commentId);
+            toggleDiv("admCommentsVisible_" + commentId);
+
+            if (document.getElementById("comments_" + commentId).innerHTML.length == 0) {
                 getComments(commentId);
             }
-            else
-            {
-                toggleDiv("admCommentsInvisible_" + commentId);
-                toggleDiv("admCommentsVisible_" + commentId);
-                showHideBlock("admCommentSection_" + commentId, "", "");
+            else {
+                toggleDiv("comments_" + commentId);
             }
         }
 
         function toggleDiv(objectId) {
-            if (document.getElementById(objectId).style.visibility == "hidden")
-            {
-                document.getElementById(objectId).style.visibility = "visible";
-                document.getElementById(objectId).style.display    = "block";
+            if($("#" + objectId).is(":hidden")) {
+                $("#" + objectId).show();
             }
-            else
-            {
-                document.getElementById(objectId).style.visibility = "hidden";
-                document.getElementById(objectId).style.display    = "none";
+            else {
+                $("#" + objectId).hide();
             }
         }
     ');
@@ -282,18 +275,14 @@ else
                 if($getModeration == 1 && $guestbook->getValue('gbo_locked') == 1)
                 {
                     $page->addHtml('
-                    <ul class="icon-text-link-list icon-text-link-list-horizontal">
-                        <li>
-                            <a class="icon-text-link" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo_mod&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
-                                $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</a>
-                        </li>
-                        <li>
-                            <a class="icon-text-link" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
-                                $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</a>
-                        </li>
-                    </ul>');
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-default" data-toggle="modal" data-target="#admidio_modal"
+                            href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo_mod&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
+                            $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</a>
+                        <a class="btn btn-default" data-toggle="modal" data-target="#admidio_modal"
+                            href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
+                            $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</a>
+                    </div>');
                 }
 
                 $conditions = '';
@@ -336,23 +325,18 @@ else
 
                     $gboId = $guestbook->getValue('gbo_id');
 
-                    // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
+                    // this link will be shown when comments where loaded
                     $page->addHtml('
-                    <div id="admCommentsVisible_'. $gboId. '" class="commentLink" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">
-                        <a class="icon-text-link" href="javascript:toggleComments('. $gboId. ')"><img src="'. THEME_PATH. '/icons/comment.png"
-                            alt="'.$gL10n->get('GBO_HIDE_COMMENTS').'" title="'.$gL10n->get('GBO_HIDE_COMMENTS').'" />'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>
-                    </div>');
-
-                    // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
+                    <a id="admCommentsVisible_'. $gboId. '" class="btn" href="javascript:toggleComments('. $gboId. ')" style="display: '. $display_others. ';"><img
+                        src="'. THEME_PATH. '/icons/comment.png" alt="'.$gL10n->get('GBO_HIDE_COMMENTS').'" />'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>');
+                    
+                    // this link will be invisible when comments where loaded
                     $page->addHtml('
-                    <div id="admCommentsInvisible_'. $gboId. '" class="commentLink" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';">
-                        <a class="icon-text-link" class="icon-text-link" href="javascript:toggleComments('. $gboId. ')"><img src="'. THEME_PATH. '/icons/comment.png"
-                            alt="'.$gL10n->get('GBO_SHOW_COMMENTS').'" title="'.$gL10n->get('GBO_SHOW_COMMENTS').'" />'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', $gDb->num_rows($comment_result)).'</a>
-                        <div id="comments_'. $gboId. '" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';"></div>
-                    </div>');
+                    <a id="admCommentsInvisible_'. $gboId. '" class="btn" href="javascript:toggleComments('. $gboId. ')" style="display: '. $display_show_comments. ';"><img 
+                        src="'. THEME_PATH. '/icons/comment.png" alt="'.$gL10n->get('GBO_SHOW_COMMENTS').'" />'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', $gDb->num_rows($comment_result)).'</a>');
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
-                    $page->addHtml('<div id="admCommentSection_'. $gboId. '" class="commentBox" style="display: '. $display_others. ';">');
+                    $page->addHtml('<div id="comments_'. $gboId. '" class="admidio-guestbook-comments">');
                         if($gPreferences['enable_intial_comments_loading'] == 1 || $getModeration == 1)
                         {
                             // Get setzen da diese Datei eigentlich als Aufruf ueber Javascript gedacht ist
@@ -375,10 +359,8 @@ else
                     // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
                     $load_url = $g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$guestbook->getValue('gbo_id');
                     $page->addHtml('
-                    <div class="admCommentLink">
-                        <a class="icon-text-link" href="'.$load_url.'"><img src="'. THEME_PATH. '/icons/comment_new.png"
-                            alt="'.$gL10n->get('GBO_WRITE_COMMENT').'" title="'.$gL10n->get('GBO_WRITE_COMMENT').'" />'.$gL10n->get('GBO_WRITE_COMMENT').'</a>
-                    </div>');
+                    <a class="btn" href="'.$load_url.'"><img src="'. THEME_PATH. '/icons/comment_new.png"
+                        alt="'.$gL10n->get('GBO_WRITE_COMMENT').'" title="'.$gL10n->get('GBO_WRITE_COMMENT').'" />'.$gL10n->get('GBO_WRITE_COMMENT').'</a>');
                 }
 
 

@@ -83,8 +83,7 @@ if(isset($page) && is_object($page))
 global $gDb;
 $gDb->setCurrentDB();
 
-echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
-<div class="admPluginHeader">';
+echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
     if($gValidLogin)
     {
         echo '<h3>'.$gL10n->get('SYS_REGISTERED_AS').'</h3>';
@@ -93,8 +92,6 @@ echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
     {
         echo '<h3>'.$gL10n->get('SYS_LOGIN').'</h3>';
     }
-echo '</div>
-<div class="admPluginBody">';
 
 if($gValidLogin == 1)
 {
@@ -149,17 +146,20 @@ if($gValidLogin == 1)
     $form->addStaticControl('plg_last_login', $gL10n->get('PLG_LOGIN_LAST_LOGIN'), $gCurrentUser->getValue('usr_last_login'));
     $form->addStaticControl('plg_number_of_logins', $gL10n->get('PLG_LOGIN_NUMBER_OF_LOGINS'), $gCurrentUser->getValue('usr_number_login').$htmlUserRank);
     $form->show();
+    
+    echo '<div class="btn-group-vertical" role="group">';
         
     // show link for logout
     if($plg_show_icons)
     {
-        echo '<a id="adm_logout_link" class="icon-text-link" href="'.$g_root_path.'/adm_program/system/logout.php"><img 
+        echo '<a id="adm_logout_link" class="btn" href="'.$g_root_path.'/adm_program/system/logout.php"><img 
             src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_LOGOUT').'" />'.$gL10n->get('SYS_LOGOUT').'</a>';
     }
     else
     {
-        echo '<a id="adm_logout_link" href="'.$g_root_path.'/adm_program/system/logout.php"><img src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_LOGOUT').'" /></a>';
+        echo '<a id="adm_logout_link" href="'.$g_root_path.'/adm_program/system/logout.php">'.$gL10n->get('SYS_LOGOUT').'</a>';
     }
+    echo '</div>';
 }
 else
 {
@@ -188,13 +188,15 @@ else
     $form->addSubmitButton('next_page', $gL10n->get('SYS_LOGIN'), array('icon' => $iconCode));
     $form->show();
     
+    echo '<div class="btn-group-vertical" role="group">';
+    
     // show links for registration and help
     if($plg_show_register_link && $gPreferences['registration_mode'])
     {
         if($plg_show_icons)
         {
             echo '
-            <a class="icon-text-link" href="'. $g_root_path. '/adm_program/modules/registration/registration.php"><img 
+            <a class="btn" href="'. $g_root_path. '/adm_program/modules/registration/registration.php"><img 
                 src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" />'.$gL10n->get('SYS_REGISTRATION').'</a>';
         }
         else
@@ -243,17 +245,17 @@ else
         if($plg_show_icons)
         {
             echo '
-            <a class="icon-text-link" href="'. $linkUrl. '"><img 
+            <a class="btn" href="'. $linkUrl. '"><img 
                 src="'. THEME_PATH. '/icons/email_key.png" alt="'.$linkText.'" />'.$linkText.'</a>';
         }
         else
         {
             echo '<a href="'.$linkUrl.'" '.$plg_link_target.'>'.$linkText.'</a>';
         }
-        
     }
+    echo '</div>';
 }
 
-echo '</div></div>';
+echo '</div>';
 
 ?>

@@ -179,7 +179,7 @@ foreach($listsResult['recordset'] as $row)
         <div class="panel-heading">
             <div class="pull-left">
                 <h4 class="panel-title">
-                    <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_'.$role->getValue('cat_id').'" href="#collapse_'.$role->getValue('rol_id').'">
+                    <a data-toggle="collapse" data-parent="#accordion_'.$role->getValue('cat_id').'" href="#collapse_'.$role->getValue('rol_id').'">
                         '. $role->getValue('rol_name'). '</a></h4>
             </div>
             <div class="pull-right text-right">');

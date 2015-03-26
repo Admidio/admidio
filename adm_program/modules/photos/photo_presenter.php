@@ -127,11 +127,11 @@ if($gPreferences['photo_show_mode'] == 0)
     // in popup mode show buttons for prev, next and close
     $page->addHtml('
     <div class="btn-group">
-        <a class="btn btn-default icon-text-link" href="'.$urlPreviousImage.'"><img 
+        <a class="btn btn-default" href="'.$urlPreviousImage.'"><img 
             src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('PHO_PREVIOUS_PHOTO').'" />'.$gL10n->get('PHO_PREVIOUS_PHOTO').'</a>
-        <a class="btn btn-default icon-text-link" href="javascript:parent.window.close()"><img 
+        <a class="btn btn-default" href="javascript:parent.window.close()"><img 
             src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_CLOSE_WINDOW').'" />'.$gL10n->get('SYS_CLOSE_WINDOW').'</a>
-        <a class="btn btn-default icon-text-link" href="'.$urlNextImage.'"><img 
+        <a class="btn btn-default" href="'.$urlNextImage.'"><img 
             src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('PHO_NEXT_PHOTO').'" />'.$gL10n->get('PHO_NEXT_PHOTO').'</a>
     </div>');
 }

@@ -261,10 +261,8 @@ elseif($getMode == 'upload')
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
     $form->addCustomContent($gL10n->get('PRO_NEW_PICTURE'), '<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'&new_photo=1" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" />');
     $form->addLine();
-    $form->openButtonGroup();
-    $form->addButton('btn_cancel', $gL10n->get('SYS_ABORT'), array('icon' => THEME_PATH.'/icons/error.png'));
     $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => THEME_PATH.'/icons/database_in.png'));
-    $form->closeButtonGroup();
+    $form->addButton('btn_cancel', $gL10n->get('SYS_ABORT'), array('icon' => THEME_PATH.'/icons/error.png'));
 
     // add form to html page and show page
     $page->addHtml($form->show(false));

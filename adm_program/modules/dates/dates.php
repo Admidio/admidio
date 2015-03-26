@@ -415,7 +415,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
 
                         if ($getViewMode == 'html')
                         {
-                            $registerLink = '<a class="btn btn-default icon-text-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" />'.$gL10n->get('DAT_CANCEL').'</a>';
+                            $registerLink = '<a class="btn btn-default" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" />'.$gL10n->get('DAT_CANCEL').'</a>';
                         }
                         else
                         {
@@ -442,7 +442,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
 
                             if ($getViewMode == 'html')
                             {
-                                $registerLink = '<a class="btn btn-default icon-text-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" />'.$gL10n->get('DAT_ATTEND').'</a>';
+                                $registerLink = '<a class="btn btn-default" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" />'.$gL10n->get('DAT_ATTEND').'</a>';
                             }
                             else
                             {
@@ -464,7 +464,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                             
                             if ($getViewMode == 'html')
                             {
-                                $participantLink = '<a class="btn btn-default icon-text-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" />'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</a>';
+                                $participantLink = '<a class="btn btn-default" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" />'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</a>';
                             }
                             else
                             {
@@ -480,7 +480,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
 
                         if ($getViewMode == 'html')
                         {
-                            $mgrpartLink = '<a class="btn btn-default icon-text-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</a>';
+                            $mgrpartLink = '<a class="btn btn-default" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</a>';
                         }
                         else
                         {

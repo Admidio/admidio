@@ -112,42 +112,17 @@ a:hover, a:active {
     color: #FF9C00 !important;
 }
 
-/* Show a linklist with icon */
-
-.icon-text-link-list {
-    list-style-type: none;
-    padding: 0px;
-    margin: 25px 0px 25px 0px;
-}
-
-.icon-text-link-list-horizontal li{   
-    padding-right: 15px;   
-    display: inline-block;
-    font-size: 11pt;
-}
-
-.icon-text-link-list-vertical li {
-    margin-top: 7px;
-    display: block;
-}
-
-
 /* Settings for all icons */
 
-.menu img, .icon-link img, .icon-information, .btn img, .icon-text-link img {
+.menu img, .icon-link img, .icon-information, .btn img {
     border: none;
     vertical-align: text-top;
     margin-left: 3px;
     height: 16px;
 }
 
-.navbar-link img, .icon-text-link img, .btn img, .alert .glyphicon {
+.navbar-link img, .btn img, .alert .glyphicon {
     margin-right: 5px;
-}
-
-.icon-text-link {
-    font-weight: normal;
-    white-space: nowrap;
 }
 
 .icon-information {

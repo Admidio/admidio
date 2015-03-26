@@ -93,12 +93,11 @@ if($plg_show_self == 0 && $gValidLogin)
 $sql = $sql. " ORDER BY ses_usr_id ";
 $result = $gDb->query($sql);
 
-echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
+echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
 if($plg_show_headline==1)
 {
-    echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_ONLINE_HEADLINE').'</h3></div>';
+    echo '<h3>'.$gL10n->get('PLG_ONLINE_HEADLINE').'</h3>';
 }
-echo '<div class="admPluginBody">';
 
 if($gDb->num_rows($result) > 0)
 {
@@ -143,6 +142,6 @@ else
     echo $gL10n->get('PLG_ONLINE_NO_VISITORS_ON_WEBSITE');
 }
 
-echo '</div></div>';
+echo '</div>';
 
 ?>

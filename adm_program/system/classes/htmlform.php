@@ -590,7 +590,7 @@ class HtmlForm extends HtmlFormBasic
             // show button to add new upload field to form
             $this->addHtml('
                 <span id="adm_add_attachment" style="display: block;">
-    				<a class="icon-text-link add-attachement-link"><img
+    				<a class="btn admidio-add-attachement-link"><img
                         src="'. THEME_PATH. '/icons/add.png" alt="'.$optionsAll['multiUploadLabel'].'" />'.$optionsAll['multiUploadLabel'].'</a>
                 </span>');
         }
