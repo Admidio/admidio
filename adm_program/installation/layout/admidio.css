@@ -388,7 +388,7 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     border-top: 2px solid #C1DCE6;
 }
 
-.panel-heading-icon {
+.admidio-panel-heading-icon {
     margin-right: 8px;
     vertical-align: text-top;
     border-width: 0px;

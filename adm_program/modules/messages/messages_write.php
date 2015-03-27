@@ -236,7 +236,7 @@ if ($getMsgType == 'PM')
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-sm-8">
-						<img class="panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
+						<img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
 					</div>
 					<div class="col-sm-4 text-right">' . $row['msg_timestamp'] . 
 					'</div>
@@ -272,7 +272,7 @@ else if (isset($message_result))
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-sm-8">
-                        <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />'.$sentUser.'
+                        <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />'.$sentUser.'
                     </div>
                     <div class="col-sm-4 text-right">'.$row['msg_timestamp']);
 

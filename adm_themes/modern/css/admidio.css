@@ -236,7 +236,7 @@ a:hover, a:active, a.btn:hover, a.btn:active, a.navbar-link:hover, a.navbar-link
     height: 16px;
 }
 
-.navbar-link img, .btn img, .alert .glyphicon, .btn, .panel-title a img {
+.navbar-link img, .btn img, .alert .glyphicon, .btn {
     margin-right: 5px;
 }
 
@@ -542,9 +542,9 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     border-top: 2px solid #C1DCE6;
 }
 
-.panel-heading-icon {
+.admidio-panel-heading-icon {
     margin-right: 8px;
-    vertical-align: text-top;
+    vertical-align: sub;
     border-width: 0px;
 }
 

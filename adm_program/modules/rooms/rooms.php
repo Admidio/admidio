@@ -97,7 +97,7 @@ else
         <div class="panel panel-primary" id="room_'.$room->getValue('room_id').'">
             <div class="panel-heading">
                 <div class="pull-left">
-                    <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/home.png" alt="'. $room->getValue('room_name'). '" />'
+                    <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/home.png" alt="'. $room->getValue('room_name'). '" />'
                      . $room->getValue('room_name').'
                 </div>
                 <div class="pull-right text-right">

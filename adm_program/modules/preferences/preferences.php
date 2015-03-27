@@ -131,7 +131,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_common">
-                            <img src="'.THEME_PATH.'/icons/options.png" alt="'.$gL10n->get('SYS_COMMON').'" title="'.$gL10n->get('SYS_COMMON').'" />'.$gL10n->get('SYS_COMMON').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/options.png" alt="'.$gL10n->get('SYS_COMMON').'" />'.$gL10n->get('SYS_COMMON').'
                         </a>
                     </h4>
                 </div>
@@ -167,7 +167,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_organization">
-                            <img src="'.THEME_PATH.'/icons/chart_organisation.png" alt="'.$gL10n->get('SYS_ORGANIZATION').'" title="'.$gL10n->get('SYS_ORGANIZATION').'" />'.$gL10n->get('SYS_ORGANIZATION').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/chart_organisation.png" alt="'.$gL10n->get('SYS_ORGANIZATION').'" />'.$gL10n->get('SYS_ORGANIZATION').'
                         </a>
                     </h4>
                 </div>
@@ -208,7 +208,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_regional_settings">
-                            <img src="'.THEME_PATH.'/icons/world.png" alt="'.$gL10n->get('ORG_REGIONAL_SETTINGS').'" title="'.$gL10n->get('ORG_REGIONAL_SETTINGS').'" />'.$gL10n->get('ORG_REGIONAL_SETTINGS').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/world.png" alt="'.$gL10n->get('ORG_REGIONAL_SETTINGS').'" />'.$gL10n->get('ORG_REGIONAL_SETTINGS').'
                         </a>
                     </h4>
                 </div>
@@ -234,7 +234,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_registration">
-                            <img src="'.THEME_PATH.'/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" title="'.$gL10n->get('SYS_REGISTRATION').'" />'.$gL10n->get('SYS_REGISTRATION').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" />'.$gL10n->get('SYS_REGISTRATION').'
                         </a>
                     </h4>
                 </div>
@@ -255,7 +255,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_email_dispatch">
-                            <img src="'.THEME_PATH.'/icons/system_mail.png" alt="'.$gL10n->get('SYS_MAIL_DISPATCH').'" title="'.$gL10n->get('SYS_MAIL_DISPATCH').'" />'.$gL10n->get('SYS_MAIL_DISPATCH').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/system_mail.png" alt="'.$gL10n->get('SYS_MAIL_DISPATCH').'" />'.$gL10n->get('SYS_MAIL_DISPATCH').'
                         </a>
                     </h4>
                 </div>
@@ -287,7 +287,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_system_notification">
-                            <img src="'.THEME_PATH.'/icons/system_notification.png" alt="'.$gL10n->get('SYS_SYSTEM_MAILS').'" title="'.$gL10n->get('SYS_SYSTEM_MAILS').'" />'.$gL10n->get('SYS_SYSTEM_MAILS').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/system_notification.png" alt="'.$gL10n->get('SYS_SYSTEM_MAILS').'" />'.$gL10n->get('SYS_SYSTEM_MAILS').'
                         </a>
                     </h4>
                 </div>
@@ -334,7 +334,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_captcha">
-                            <img src="'.THEME_PATH.'/icons/captcha.png" alt="'.$gL10n->get('SYS_CAPTCHA').'" title="'.$gL10n->get('SYS_CAPTCHA').'" />'.$gL10n->get('SYS_CAPTCHA').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/captcha.png" alt="'.$gL10n->get('SYS_CAPTCHA').'" />'.$gL10n->get('SYS_CAPTCHA').'
                         </a>
                     </h4>
                 </div>
@@ -381,7 +381,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_system_informations">
-                            <img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('ORG_SYSTEM_INFOS').'" title="'.$gL10n->get('ORG_SYSTEM_INFOS').'" />'.$gL10n->get('ORG_SYSTEM_INFOS').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('ORG_SYSTEM_INFOS').'" />'.$gL10n->get('ORG_SYSTEM_INFOS').'
                         </a>
                     </h4>
                 </div>
@@ -493,7 +493,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_announcements">
-                            <img src="'.THEME_PATH.'/icons/announcements.png" alt="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" title="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" />'.$gL10n->get('ANN_ANNOUNCEMENTS').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/announcements.png" alt="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" />'.$gL10n->get('ANN_ANNOUNCEMENTS').'
                         </a>
                     </h4>
                 </div>
@@ -513,7 +513,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_user_management">
-                            <img src="'.THEME_PATH.'/icons/user_administration.png" alt="'.$gL10n->get('MEM_USER_MANAGEMENT').'" title="'.$gL10n->get('MEM_USER_MANAGEMENT').'" />'.$gL10n->get('MEM_USER_MANAGEMENT').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/user_administration.png" alt="'.$gL10n->get('MEM_USER_MANAGEMENT').'" />'.$gL10n->get('MEM_USER_MANAGEMENT').'
                         </a>
                     </h4>
                 </div>
@@ -534,7 +534,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_downloads">
-                            <img src="'.THEME_PATH.'/icons/download.png" alt="'.$gL10n->get('DOW_DOWNLOADS').'" title="'.$gL10n->get('DOW_DOWNLOADS').'" />'.$gL10n->get('DOW_DOWNLOADS').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/download.png" alt="'.$gL10n->get('DOW_DOWNLOADS').'" />'.$gL10n->get('DOW_DOWNLOADS').'
                         </a>
                     </h4>
                 </div>
@@ -553,7 +553,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_photos">
-                            <img src="'.THEME_PATH.'/icons/photo.png" alt="'.$gL10n->get('PHO_PHOTOS').'" title="'.$gL10n->get('PHO_PHOTOS').'" />'.$gL10n->get('PHO_PHOTOS').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/photo.png" alt="'.$gL10n->get('PHO_PHOTOS').'" />'.$gL10n->get('PHO_PHOTOS').'
                         </a>
                     </h4>
                 </div>
@@ -583,7 +583,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_guestbook">
-                            <img src="'.THEME_PATH.'/icons/guestbook.png" alt="'.$gL10n->get('GBO_GUESTBOOK').'" title="'.$gL10n->get('GBO_GUESTBOOK').'" />'.$gL10n->get('GBO_GUESTBOOK').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/guestbook.png" alt="'.$gL10n->get('GBO_GUESTBOOK').'" />'.$gL10n->get('GBO_GUESTBOOK').'
                         </a>
                     </h4>
                 </div>
@@ -609,7 +609,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_ecards">
-                            <img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$gL10n->get('ECA_GREETING_CARDS').'" title="'.$gL10n->get('ECA_GREETING_CARDS').'" />'.$gL10n->get('ECA_GREETING_CARDS').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/ecard.png" alt="'.$gL10n->get('ECA_GREETING_CARDS').'" />'.$gL10n->get('ECA_GREETING_CARDS').'
                         </a>
                     </h4>
                 </div>
@@ -636,7 +636,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_lists">
-                            <img src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('LST_LISTS').'" title="'.$gL10n->get('LST_LISTS').'" />'.$gL10n->get('LST_LISTS').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('LST_LISTS').'" />'.$gL10n->get('LST_LISTS').'
                         </a>
                     </h4>
                 </div>
@@ -657,7 +657,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_messages">
-                            <img src="'.THEME_PATH.'/icons/messages.png" alt="'.$gL10n->get('SYS_MESSAGES').'" title="'.$gL10n->get('SYS_MESSAGES').'" />'.$gL10n->get('SYS_MESSAGES').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/messages.png" alt="'.$gL10n->get('SYS_MESSAGES').'" />'.$gL10n->get('SYS_MESSAGES').'
                         </a>
                     </h4>
                 </div>
@@ -686,7 +686,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_profile">
-                            <img src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('PRO_PROFILE').'" title="'.$gL10n->get('PRO_PROFILE').'" />'.$gL10n->get('PRO_PROFILE').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('PRO_PROFILE').'" />'.$gL10n->get('PRO_PROFILE').'
                         </a>
                     </h4>
                 </div>
@@ -720,7 +720,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_events">
-                            <img src="'.THEME_PATH.'/icons/dates.png" alt="'.$gL10n->get('DAT_DATES').'" title="'.$gL10n->get('DAT_DATES').'" />'.$gL10n->get('DAT_DATES').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/dates.png" alt="'.$gL10n->get('DAT_DATES').'" />'.$gL10n->get('DAT_DATES').'
                         </a>
                     </h4>
                 </div>
@@ -755,7 +755,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_links">
-                            <img src="'.THEME_PATH.'/icons/weblinks.png" alt="'.$gL10n->get('LNK_WEBLINKS').'" title="'.$gL10n->get('LNK_WEBLINKS').'" />'.$gL10n->get('LNK_WEBLINKS').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/weblinks.png" alt="'.$gL10n->get('LNK_WEBLINKS').'" />'.$gL10n->get('LNK_WEBLINKS').'
                         </a>
                     </h4>
                 </div>
@@ -782,7 +782,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_inventory">
-                            <img src="'.THEME_PATH.'/icons/inventory.png" alt="'.$gL10n->get('INV_INVENTORY').'" title="'.$gL10n->get('INV_INVENTORY').'" />'.$gL10n->get('INV_INVENTORY').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/inventory.png" alt="'.$gL10n->get('INV_INVENTORY').'" />'.$gL10n->get('INV_INVENTORY').'
                         </a>
                     </h4>
                 </div>

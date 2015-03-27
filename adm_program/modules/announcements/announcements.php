@@ -120,7 +120,7 @@ else
         <div class="panel panel-primary" id="ann_'.$announcement->getValue('ann_id').'">
             <div class="panel-heading">
                 <div class="pull-left">
-                    <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue('ann_headline'). '" />'.
+                    <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue('ann_headline'). '" />'.
                     $announcement->getValue('ann_headline'). '
                 </div>
                 <div class="pull-right text-right">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']));

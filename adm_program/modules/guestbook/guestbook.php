@@ -234,7 +234,7 @@ else
         <div class="panel panel-primary" id="gbo_'.$guestbook->getValue('gbo_id').'">
             <div class="panel-heading">
                 <div class="pull-left">
-                    <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$guestbook->getValue('gbo_name').'" />'.$guestbook->getValue('gbo_name'));
+                    <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$guestbook->getValue('gbo_name').'" />'.$guestbook->getValue('gbo_name'));
 
                     // Falls eine Homepage des Users angegeben wurde, soll der Link angezeigt werden...
                     if (strlen($guestbook->getValue('gbo_homepage')) > 0)

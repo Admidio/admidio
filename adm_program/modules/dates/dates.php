@@ -538,7 +538,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 <div class="panel panel-primary'.$cssClassHighlight.'" id="dat_'.$date->getValue('dat_id').'">
                     <div class="panel-heading">
                         <div class="pull-left">
-                            <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />' .
+                            <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />' .
                             $date->getValue('dat_begin', $gPreferences['system_date']).$endDate.' '.$date->getValue('dat_headline') . '
                         </div>
                         <div class="pull-right text-right">' .
