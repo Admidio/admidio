@@ -115,11 +115,11 @@ if($gPreferences['photo_show_mode'] == 2)
 // Show photo with link to next photo
 if($nextImage <= $photoAlbum->getValue('pho_quantity'))
 {
-	$page->addHtml('<div class="img-presenter"><a href="'.$urlNextImage.'"><img src="'.$urlCurrentImage.'" alt="Foto"></a></div>');
+	$page->addHtml('<div class="admidio-img-presenter"><a href="'.$urlNextImage.'"><img src="'.$urlCurrentImage.'" alt="Foto"></a></div>');
 }
 else
 {
-	$page->addHtml('<div class="img-presenter"><img src="'.$urlCurrentImage.'" alt="'.$gL10n->get('SYS_PHOTO').'" /></div>');
+	$page->addHtml('<div class="admidio-img-presenter"><img src="'.$urlCurrentImage.'" alt="'.$gL10n->get('SYS_PHOTO').'" /></div>');
 }
 
 if($gPreferences['photo_show_mode'] == 0)

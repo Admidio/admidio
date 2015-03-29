@@ -187,14 +187,14 @@ foreach($listsResult['recordset'] as $row)
                 if($gCurrentUser->hasRightSendMailToRole($role->getValue('rol_id')) && $gPreferences['enable_mail_module'] == 1)
                 {
                     $page->addHtml('
-                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='.$role->getValue('rol_id').'"><img
+                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='.$role->getValue('rol_id').'"><img
                         src="'. THEME_PATH. '/icons/email.png"  alt="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>&nbsp;');
                 }
         		
         		// show link to export vCard if user is allowed to see members and the role has members
                 if($row['num_members'] > 0 || $row['num_leader'] > 0)
                 {
-                    $page->addHtml('<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=8&amp;rol_id='. $role->getValue('rol_id').'"><img
+                    $page->addHtml('<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=8&amp;rol_id='. $role->getValue('rol_id').'"><img
                                     src="'. THEME_PATH. '/icons/vcard.png"
                                     alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"
                                     title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'" /></a>');
@@ -204,7 +204,7 @@ foreach($listsResult['recordset'] as $row)
                 if($role->allowedToAssignMembers($gCurrentUser))
                 {
                     $page->addHtml('
-                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$role->getValue('rol_id').'"><img 
+                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$role->getValue('rol_id').'"><img 
                         src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>');
                 }
         
@@ -212,7 +212,7 @@ foreach($listsResult['recordset'] as $row)
                 if($gCurrentUser->manageRoles())
                 {
                     $page->addHtml('
-                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
+                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
                         src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('ROL_EDIT_ROLE').'" title="'.$gL10n->get('ROL_EDIT_ROLE').'" /></a>');
                 }
             $page->addHtml('</div>

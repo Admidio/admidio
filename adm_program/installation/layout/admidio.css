@@ -114,7 +114,7 @@ a:hover, a:active {
 
 /* Settings for all icons */
 
-.menu img, .icon-link img, .icon-information, .btn img {
+.admidio-icon-link img, .admidio-icon-info, .btn img {
     border: none;
     vertical-align: text-top;
     margin-left: 3px;
@@ -125,7 +125,7 @@ a:hover, a:active {
     margin-right: 5px;
 }
 
-.icon-information {
+.admidio-icon-info {
     cursor: help;
     margin-right: 2px;
 }
@@ -214,7 +214,7 @@ form hr {
 }
 
 
-.form-vertical .form-control-static {
+.admidio-form-vertical .form-control-static {
     padding-top: 0px;
 }
 
@@ -222,7 +222,7 @@ form hr {
     padding-bottom: 0px;
 }
 
-.form-vertical label {
+.admidio-form-vertical label {
     margin-bottom: 0px;
 }
 
@@ -296,13 +296,13 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     border-color: #387F87;
 }
 
-.control-mandatory label:after, .control-mandatory-definition span:after {
+.admidio-control-mandatory label:after, .admidio-control-mandatory-def span:after {
     content: url(bullet_red.png);
     white-space: nowrap;
     vertical-align: top;
 }
 
-.control-mandatory-definition {
+.admidio-control-mandatory-def {
     font-size: 9pt;
     margin-top: 5px;
 	margin-bottom: -10px;
@@ -349,12 +349,12 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 
 /* Information block with user and timestamp who created and edited the data */
 
-.info-created-edited {
+.admidio-admidio-info-created-edited {
     font-size: 8pt;
     margin-top: 8px;
 }
 
-.info-created{
+.admidio-info-created{
     display: block;
 }
 
@@ -394,11 +394,7 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     border-width: 0px;
 }
 
-.panel-footer .admCreateEditInformations {
-    margin-top: 0px;
-}
-
-.panel-comment {
+.admidio-panel-comment {
     overflow: hidden; 
     margin: 10px 20px; 
 }
@@ -411,14 +407,14 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     border-bottom: 2px solid #409099;
 }
 
-.group-heading td {
+.admidio-group-heading td {
     color: #515556;
     font-weight: bold;
     letter-spacing: 0.2em;
     border-bottom: 2px solid #a0cbd9;
 }
 
-.group-heading {
+.admidio-group-heading {
   cursor: pointer;
 }
 

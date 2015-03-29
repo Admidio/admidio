@@ -177,7 +177,7 @@ $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
         $form->addCheckbox('usf_mandatory', $gL10n->get('ORG_FIELD_MANDATORY'), $userField->getValue('usf_mandatory'), array('helpTextIdLabel' => 'ORG_FIELD_MANDATORY_DESC', 'icon' => 'asterisk_yellow.png'));
     }
 $form->closeGroupBox();
-$form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'panel-editor');
+$form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
     $form->addEditor('usf_description', null, $userField->getValue('usf_description'), array('height' => '200px'));
 $form->closeGroupBox();
 

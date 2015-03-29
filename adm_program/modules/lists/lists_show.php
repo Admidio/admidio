@@ -441,7 +441,7 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
                     $title = $gL10n->get('SYS_PARTICIPANTS');
                 }
                 
-                $table->addRowByArray(array($title), null, array('class' => 'group-heading'), 1, ($list->countColumns() + 1));
+                $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), 1, ($list->countColumns() + 1));
                 $lastGroupHead = $row['mem_leader'];
             }
         }

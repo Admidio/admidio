@@ -421,7 +421,7 @@ class HtmlTable extends HtmlTableBasic
                             api.column('.$this->groupedColumn.', {page:\'current\'} ).data().each( function ( group, i ) {
                                 if ( last !== group ) {
                                     $(rows).eq( i ).before(
-                                        \'<tr class="group-heading"><td colspan="'.$this->columnCount.'">\'+group+\'</td></tr>\'
+                                        \'<tr class="admidio-group-heading"><td colspan="'.$this->columnCount.'">\'+group+\'</td></tr>\'
                                     );
                  
                                     last = group;
@@ -430,7 +430,7 @@ class HtmlTable extends HtmlTableBasic
                         }';
                     $javascriptGroupFunction = '
                         // Order by the grouping
-                        $("#'.$this->id.' tbody").on( "click", "tr.group-heading", function () {
+                        $("#'.$this->id.' tbody").on( "click", "tr.admidio-group-heading", function () {
                             var currentOrder = table.order()[0];
                             if ( currentOrder[0] === '.$this->groupedColumn.' && currentOrder[1] === "asc" ) {
                                 table.order( [ '.$this->groupedColumn.', "desc" ] ).draw();

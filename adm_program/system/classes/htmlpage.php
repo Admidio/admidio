@@ -315,7 +315,7 @@ class HtmlPage
         {
             $headerContent .= '<script type="text/javascript"><!-- 
                 $(document).ready(function(){
-                    $(".icon-information, .icon-link img, [data-toggle=tooltip]").tooltip();
+                    $(".admidio-icon-info, .admidio-icon-link img, [data-toggle=tooltip]").tooltip();
                     '.$this->javascriptContentExecute.'
                 });
             --></script>';

@@ -229,7 +229,7 @@ a:hover, a:active, a.btn:hover, a.btn:active, a.navbar-link:hover, a.navbar-link
 /* Settings for all icons */
 /**************************/
 
-.menu img, .icon-link img, .icon-information, .btn img {
+.admidio-icon-link img, .admidio-icon-info, .btn img {
     border: none;
     vertical-align: text-top;
     margin-left: 3px;
@@ -252,7 +252,7 @@ a.btn {
     text-align: left !important;
 }
 
-.icon-information {
+.admidio-icon-info {
     cursor: help;
     margin-right: 2px;
 }
@@ -342,7 +342,7 @@ a.btn {
 }
 
 
-.form-vertical .form-control-static {
+.admidio-form-vertical .form-control-static {
     padding-top: 0px;
 }
 
@@ -350,7 +350,7 @@ a.btn {
     padding-bottom: 0px;
 }
 
-.form-vertical label {
+.admidio-form-vertical label {
     margin-bottom: 0px;
 }
 
@@ -430,13 +430,13 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     border-color: #387F87;
 }
 
-.control-mandatory label:after, .control-mandatory-definition span:after {
+.admidio-control-mandatory label:after, .admidio-control-mandatory-def span:after {
     content: url(../icons/bullet_red.png);
     white-space: nowrap;
     vertical-align: top;
 }
 
-.control-mandatory-definition {
+.admidio-control-mandatory-def {
     font-size: 9pt;
     margin-top: 5px;
 	margin-bottom: -10px;
@@ -484,31 +484,31 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 }
 
 /* Panel which includes the ckeditor in a nice way without separate borders */
-.panel-editor .panel-body {
+.admidio-panel-editor .panel-body {
     padding: 0px;
 }
 
-.panel-editor .panel-body .form-group {
+.admidio-panel-editor .panel-body .form-group {
     margin-bottom: 0px;
 }
 
-.panel-editor .panel-body .cke_chrome {
+.admidio-panel-editor .panel-body .cke_chrome {
     border-width: 0px;
 }
 
-.panel-editor .panel-body .cke_bottom, .panel-editor .panel-body .cke_inner {
+.admidio-panel-editor .panel-body .cke_bottom, .admidio-panel-editor .panel-body .cke_inner {
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
 }
 
 /* Information block with user and timestamp who created and edited the data */
 
-.info-created-edited {
+.admidio-admidio-info-created-edited {
     font-size: 8pt;
     margin-top: 8px;
 }
 
-.info-created{
+.admidio-info-created {
     display: block;
 }
 
@@ -548,11 +548,7 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     border-width: 0px;
 }
 
-.panel-footer .admCreateEditInformations {
-    margin-top: 0px;
-}
-
-.panel-comment {
+.admidio-panel-comment {
     overflow: hidden; 
     margin: 10px 20px; 
 }
@@ -571,14 +567,14 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     border-bottom: 2px solid #409099;
 }
 
-.group-heading td {
+.admidio-group-heading td {
     color: #515556;
     font-weight: bold;
     letter-spacing: 0.2em;
     border-bottom: 2px solid #a0cbd9;
 }
 
-.group-heading {
+.admidio-group-heading {
   cursor: pointer;
 }
 
@@ -637,6 +633,8 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     margin-top: 15px;
 }
 
+/* Profile */ 
+
 @media (min-width: 768px) {
     #div_profile_photo {
         text-align: right;
@@ -659,31 +657,29 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     display: inline;
 }
 
-.list-roles-assignment li, .list-roles-assignment-pos li {
+.admidio-list-roles-assign li, .admidio-list-roles-assign-pos li {
     border-width: 0px;
 }
 
-.list-roles-assignment li {
+.admidio-list-roles-assign li {
     padding: 0px 0px 15px 0px;
 }
 
-.list-roles-assignment, .list-roles-assignment-pos {
+.admidio-list-roles-assign, .admidio-list-roles-assign-pos {
     margin-bottom: -5px;
 }
 
-.list-roles-assignment-pos li {
+.admidio-list-roles-assign-pos li {
     padding: 0px 0px 5px 0px;
 }
 
-#password_form .admPasswordInput {
-    width: 85%;
-}
+/* Photos */
 
-.img-presenter {
+.admidio-img-presenter {
     margin-bottom: 10px;
 }
 
-.album-image {
+.admidio-album-thumbnail {
     height: 200px;
 }
 
@@ -695,13 +691,17 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     margin-bottom: 5px;
 }
 
+/* Weblinks */
+
 .admidio-weblink-item {
     padding-top: 15px;
 }
 
-.weblink-description {
+.admidio-weblink-description {
     padding: 5px 0px;
 }
+
+/* Events */
 
 tr.event-highlight, .event-highlight .panel-heading {
     font-weight: bold;

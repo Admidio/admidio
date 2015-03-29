@@ -111,7 +111,7 @@ if($getMode == 'show_list')
                 src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" />'. $old_backup_file. '</a>',
             date ('d.m.Y H:i:s', filemtime($backupabsolutepath.$old_backup_file)),
             round(filesize($backupabsolutepath.$old_backup_file)/1024). ' kB',
-            '<a class="icon-link" data-toggle="modal" data-target="#admidio_modal" 
+            '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" 
                 href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
                 $key.'&amp;name='.urlencode($old_backup_file).'&amp;database_id='.$old_backup_file.'"><img
                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');

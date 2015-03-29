@@ -97,7 +97,7 @@ class HtmlForm extends HtmlFormBasic
         }
         elseif($this->type == 'vertical')
         {
-            $optionsAll['class'] .= ' form-vertical form-dialog';
+            $optionsAll['class'] .= ' admidio-form-vertical form-dialog';
         }
         elseif($this->type == 'navbar')
         {
@@ -330,11 +330,11 @@ class HtmlForm extends HtmlFormBasic
 			// create html for icon
 			if(strpos(admStrToLower($optionsAll['icon']), 'http') === 0 && strValidCharacters($optionsAll['icon'], 'url'))
 			{
-				$htmlIcon = '<img class="icon-information" src="'.$optionsAll['icon'].'" title="'.$label.'" alt="'.$label.'" />';
+				$htmlIcon = '<img class="admidio-icon-info" src="'.$optionsAll['icon'].'" title="'.$label.'" alt="'.$label.'" />';
 			}
 			elseif(admStrIsValidFileName($optionsAll['icon'], true))
 			{
-				$htmlIcon = '<img class="icon-information" src="'.THEME_PATH.'/icons/'.$optionsAll['icon'].'" title="'.$label.'" alt="'.$label.'" />';
+				$htmlIcon = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/'.$optionsAll['icon'].'" title="'.$label.'" alt="'.$label.'" />';
 			}
 		}
         
@@ -1525,7 +1525,7 @@ class HtmlForm extends HtmlFormBasic
         // if necessary set css class for a mandatory element
         if($property == FIELD_MANDATORY)
         {
-			$cssClassMandatory = ' control-mandatory';
+			$cssClassMandatory = ' admidio-control-mandatory';
             $cssClassRow .= $cssClassMandatory;
             $this->flagMandatoryFields = true;
         }
@@ -1545,11 +1545,11 @@ class HtmlForm extends HtmlFormBasic
 			// create html for icon
 			if(strpos(admStrToLower($icon), 'http') === 0 && strValidCharacters($icon, 'url'))
 			{
-				$htmlIcon = '<img class="icon-information" src="'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
+				$htmlIcon = '<img class="admidio-icon-info" src="'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
 			}
 			elseif(admStrIsValidFileName($icon, true))
 			{
-				$htmlIcon = '<img class="icon-information" src="'.THEME_PATH.'/icons/'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
+				$htmlIcon = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
 			}
 		}
         
@@ -1632,7 +1632,7 @@ class HtmlForm extends HtmlFormBasic
         
         if($parameters != null)
         {
-            return '<a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+            return '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                         href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true"><img 
                         src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>';
         }
@@ -1653,7 +1653,7 @@ class HtmlForm extends HtmlFormBasic
 	    // If mandatory fields were set than a notice which marker represents the mandatory will be shown.
         if($this->flagMandatoryFields)
         {
-            $html .= '<div class="control-mandatory-definition"><span>'.$gL10n->get('SYS_MANDATORY_FIELDS').'</span></div>';
+            $html .= '<div class="admidio-control-mandatory-def"><span>'.$gL10n->get('SYS_MANDATORY_FIELDS').'</span></div>';
         }
 		
 		// now get whole form html code

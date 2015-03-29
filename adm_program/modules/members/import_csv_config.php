@@ -117,7 +117,7 @@ $htmlFieldTable = '
                 }
                 $block_id = 'admCategory'. $field->getValue('cat_id');
                 $htmlFieldTable .= '<tbody>
-                    <tr class="group-heading">
+                    <tr class="admidio-group-heading">
                         <td colspan="4">'.$field->getValue('cat_name').'</td>
                     </tr>
                 </tbody>

@@ -268,7 +268,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             $icalIcon = '';
             if($gPreferences['enable_dates_ical'] == 1)
             {
-                $icalIcon = '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=6"><img
+                $icalIcon = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=6"><img
                     src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
             }
 
@@ -281,10 +281,10 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 if($date->editRight() == true)
                 {
                     $copyIcon = '
-                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$getHeadline.'"><img
+                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$getHeadline.'"><img
                         src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>';
                     $editIcon = '
-                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$getHeadline.'"><img
+                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$getHeadline.'"><img
                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
                 }
 
@@ -292,7 +292,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
                 {
                     $deleteIcon = '
-                    <a class="icon-link" data-toggle="modal" data-target="#admidio_modal" 
+                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" 
                         href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
                         $date->getValue('dat_id').'&amp;name='.urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.$date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'"><img
                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
@@ -369,7 +369,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                             $route_url .= ',%20'. $date->getValue('dat_country');
                         }
                         $locationHtml .= '
-                        <a class="icon-link" href="'. $route_url. '" target="_blank"><img
+                        <a class="admidio-icon-link" href="'. $route_url. '" target="_blank"><img
                             src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'" /></a>';
                     }
                 }

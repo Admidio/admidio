@@ -240,7 +240,7 @@ else
                     if (strlen($guestbook->getValue('gbo_homepage')) > 0)
                     {
                         $page->addHtml('
-                        <a class="icon-link" href="'.$guestbook->getValue('gbo_homepage').'" target="_blank"><img src="'. THEME_PATH. '/icons/weblinks.png"
+                        <a class="admidio-icon-link" href="'.$guestbook->getValue('gbo_homepage').'" target="_blank"><img src="'. THEME_PATH. '/icons/weblinks.png"
                             alt="'.$guestbook->getValue('gbo_homepage').'" title="'.$guestbook->getValue('gbo_homepage').'" /></a>');
                     }
 
@@ -248,7 +248,7 @@ else
                     if (strlen($guestbook->getValue('gbo_email')) > 0)
                     {
                         $page->addHtml('
-                        <a class="icon-link" href="mailto:'.$guestbook->getValue('gbo_email').'"><img src="'. THEME_PATH. '/icons/email.png"
+                        <a class="admidio-icon-link" href="mailto:'.$guestbook->getValue('gbo_email').'"><img src="'. THEME_PATH. '/icons/email.png"
                             alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $guestbook->getValue('gbo_email')).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $guestbook->getValue('gbo_email')).'" /></a>');
                     }
                 $page->addHtml('</div>
@@ -258,9 +258,9 @@ else
                     if ($gCurrentUser->editGuestbookRight())
                     {
                         $page->addHtml('
-                        <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $getHeadline. '"><img
+                        <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $getHeadline. '"><img
                             src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-                        <a class="icon-link" data-toggle="modal" data-target="#admidio_modal" 
+                        <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" 
                             href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.
                             $guestbook->getValue('gbo_id').'&amp;database_id='.$guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img 
                             src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');

@@ -160,9 +160,9 @@ else
             if ($gCurrentUser->editWeblinksRight())
             {
                 $page->addHtml('
-                <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$weblink->getValue('lnk_id').'&amp;headline='. $getHeadline. '"><img
+                <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$weblink->getValue('lnk_id').'&amp;headline='. $getHeadline. '"><img
                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-                <a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+                <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                     href="'.$g_root_path.'/adm_program/system/popup_message.php?type=lnk&amp;element_id=lnk_'.
                     $weblink->getValue('lnk_id').'&amp;name='.urlencode($weblink->getValue('lnk_name')).'&amp;database_id='.$weblink->getValue('lnk_id').'"><img 
                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
@@ -171,7 +171,7 @@ else
             // get available description
             if(strlen($weblink->getValue('lnk_description')) > 0)
             {
-                $page->addHtml('<div class="weblink-description">'.$weblink->getValue('lnk_description').'</div>');
+                $page->addHtml('<div class="admidio-weblink-description">'.$weblink->getValue('lnk_description').'</div>');
             }
             
             $page->addHtml('<div class="weblink-counter"><small>'.$gL10n->get('LNK_COUNTER'). ': '.$weblink->getValue('lnk_counter').'</small></div>

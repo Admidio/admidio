@@ -283,7 +283,7 @@ else
     // show icon that leaders have no additional rights
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
     {
-        $htmlLeaderColumn .= '<img class="icon-information" src="'.THEME_PATH.'/icons/info.png"
+        $htmlLeaderColumn .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/info.png"
             alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />';
     }
 
@@ -291,7 +291,7 @@ else
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT 
     || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $htmlLeaderColumn .= '<img class="icon-information" src="'.THEME_PATH.'/icons/profile_edit.png"
+        $htmlLeaderColumn .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/profile_edit.png"
             alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
     }
 
@@ -299,21 +299,21 @@ else
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN 
     || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $htmlLeaderColumn .= '<img class="icon-information" src="'.THEME_PATH.'/icons/roles.png"
+        $htmlLeaderColumn .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/roles.png"
             alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
     }
 
     
     // create array with all column heading values
     $columnHeading = array(
-        '<img class="icon-information"
+        '<img class="admidio-icon-info"
             src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
             title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
         $gL10n->get('SYS_STATUS'),
         $gL10n->get('SYS_MEMBER'),
         $gL10n->get('SYS_LASTNAME'),
         $gL10n->get('SYS_FIRSTNAME'),
-        '<img class="icon-information" src="'. THEME_PATH. '/icons/map.png"
+        '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/map.png"
             alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />',
         $gL10n->get('SYS_ADDRESS'),
         $gL10n->get('SYS_BIRTHDAY'),
@@ -384,7 +384,7 @@ else
 
         if(strlen($addressText) > 0)
         {
-            $htmlAddress = '<img class="icon-information" src="'. THEME_PATH.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
+            $htmlAddress = '<img class="admidio-icon-info" src="'. THEME_PATH.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
         }
         
         //Haekchen setzen ob jemand Leiter ist oder nicht
@@ -408,7 +408,7 @@ else
         
         // create array with all column values
         $columnValues = array(
-            '<img class="icon-information" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
+            '<img class="admidio-icon-info" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
             $memberOfThisOrganization,
             $htmlMemberStatus,
             $user['last_name'],
