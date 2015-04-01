@@ -396,7 +396,7 @@
     <text id="GBO_HIDE_COMMENTS" development="new" translation="edited">Hide comments</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING" development="new" translation="edited">Display comments right away</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING_DESC" development="new" translation="edited">When this option is active and a guestbook page is being loaded, comments on this page will be loaded right away. Otherwise user has to click a hyperlink in order to reveal comments. (default: no)</text>
-    <text id="GBO_MODERATE_ENTRIES" development="new" translation="edited">Moderating %VAR1% entries</text>
+    <text id="GBO_MODERATE_ENTRIES" development="new" translation="edited">Moderate posts</text>
     <text id="GBO_MODERATE_VARS" development="new" translation="edited">Moderating %VAR1%</text>
     <text id="GBO_ONLY_VISITORS" development="new" translation="edited">Visitors only</text>
     <text id="GBO_SHOW_COMMENTS" development="new" translation="edited">Display comments</text>
@@ -838,7 +838,6 @@
     <text id="PRO_LOGIN_NAME_EXIST" development="new" translation="edited">Selected username already exists.\n\nPlease select another name.</text>
     <text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">Manage profile fields</text>
     <text id="PRO_MY_PROFILE" development="new" translation="edited">My profile</text>
-    <text id="PRO_MY_PROFILE_DESC" development="new" translation="edited">Own profile can be displayed and edited here.</text>
     <text id="PRO_NEW_PASSWORD" development="new" translation="edited">New password</text>
     <text id="PRO_NEW_PICTURE" development="new" translation="edited">New profile picture</text>
     <text id="PRO_PASSWORD_CHANGED" development="new" translation="edited">Password has been successfully changed.</text>
@@ -969,7 +968,6 @@
     <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Ajax request error.\nError Details: %VAR1%</text>
     <text id="SYS_ALL" development="new" translation="edited">All</text>
     <text id="SYS_ALSO_VISITORS" development="new" translation="edited">also Visitors</text>
-    <text id="SYS_APPROVE_ENTRY" development="new" translation="edited">Would you like to approve entry %VAR1_BOLD%?</text>
     <text id="SYS_ASSIGN_MEMBERS" development="new" translation="edited">Assigning members</text>
     <text id="SYS_AUTHORIZATION" development="new" translation="edited">Authorization</text>
     <text id="SYS_BACK" development="new" translation="edited">Back</text>
@@ -1043,7 +1041,6 @@
     <text id="SYS_END" development="new" translation="edited" description="End of a date">End</text>
     <text id="SYS_ERROR" development="new" translation="edited">Error</text>
     <text id="SYS_ERROR_DATABASE_ACCESS" development="new" translation="edited">Error occured during database access:\n\n%VAR1%</text>
-    <text id="SYS_ERROR_ENTRY_NOT_DELETED" development="new" translation="edited">An error occurred!\n\nEntry could not be deleted.</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="edited">ERROR 404 - PAGE NOT FOUND!</text>
     <text id="SYS_EXAMPLE" development="new" translation="edited">Example</text>
     <text id="SYS_EXAMPLES" development="new" translation="edited">Examples</text>

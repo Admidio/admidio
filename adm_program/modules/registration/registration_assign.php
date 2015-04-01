@@ -127,9 +127,10 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
             {
                 $page->addHtml('<hr />');
             }
-            $page->addHtml('<div style="margin-left: 20px;">
-				<a class="btn" href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row->usr_id.'"><img 
+            $page->addHtml('<p>
+                <a class="btn" href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row->usr_id.'"><img 
                      src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row->first_name.' '.$row->last_name.'</a><br />');
+                     
                 if(strlen($row->address) > 0)
                 {
                     $page->addHtml($row->address.'<br />');
@@ -149,54 +150,54 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
                         $page->addHtml('<a href="mailto:'.$row->email.'">'.$row->email.'</a><br />');
                     }
                 }
-
-                if(isMember($row->usr_id))
+            $page->addHtml('</p>');
+            
+            if(isMember($row->usr_id))
+            {
+                // gefundene User ist bereits Mitglied dieser Organisation
+                if(strlen($row->usr_login_name) > 0)
                 {
-                    // gefundene User ist bereits Mitglied dieser Organisation
-                    if(strlen($row->usr_login_name) > 0)
+                    // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken                    
+                    $page->addHtml('<p>'.$gL10n->get('NWU_USER_VALID_LOGIN'));
+                    if($gPreferences['enable_system_mails'] == 1)
                     {
-                        // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken                    
-                        $page->addHtml('<br />'.$gL10n->get('NWU_USER_VALID_LOGIN'));
-                        if($gPreferences['enable_system_mails'] == 1)
-                        {
-                            $page->addHtml('<br />'.$gL10n->get('NWU_REMINDER_SEND_LOGIN').'<br />
+                        $page->addHtml('<br />'.$gL10n->get('NWU_REMINDER_SEND_LOGIN').'</p>
 
-                            <a class="btn" href="'.$g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=6"><img
-                                src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('NWU_SEND_LOGIN').'" />'.$gL10n->get('NWU_SEND_LOGIN').'</a>');
-                        }
-                    }
-                    else
-                    {
-                        // Logindaten sind NICHT vorhanden -> diese nun zuordnen
-                        $page->addHtml('<br />'.$gL10n->get('NWU_USER_NO_VALID_LOGIN').'<br />
-
-                        <a class="btn" href="'.$g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=1"><img
-                            src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_LOGIN').'</a>');
+                        <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=6\'"><img
+                            src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('NWU_SEND_LOGIN').'" />'.$gL10n->get('NWU_SEND_LOGIN').'</button>');
                     }
                 }
                 else
                 {
-                    // gefundene User ist noch KEIN Mitglied dieser Organisation
-                    $link = $g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=2';
+                    // Logindaten sind NICHT vorhanden -> diese nun zuordnen
+                    $page->addHtml('<p>'.$gL10n->get('NWU_USER_NO_VALID_LOGIN').'</p>
 
-                    if(strlen($row->usr_login_name) > 0)
-                    {
-                        // Logindaten sind bereits vorhanden
-                        $page->addHtml('<br />'.$gL10n->get('NWU_NO_MEMBERSHIP', $gCurrentOrganization->getValue('org_shortname')).'<br />
-
-                        <a class="btn" href="'.$link.'"><img src="'.THEME_PATH.'/icons/new_registrations.png" 
-                            alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'</a>');
-                    }               
-                    else
-                    {
-                        // KEINE Logindaten vorhanden
-                        $page->addHtml('<br />'.$gL10n->get('NWU_NO_MEMBERSHIP_NO_LOGIN', $gCurrentOrganization->getValue('org_shortname')).'<br />
-                        
-                        <a class="btn" href="'.$link.'"><img src="'. THEME_PATH. '/icons/new_registrations.png" 
-                            alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'</a>');
-                    }               
+                    <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=1\'"><img
+                        src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_LOGIN').'</button>');
                 }
-            $page->addHtml('</div>');
+            }
+            else
+            {
+                // gefundene User ist noch KEIN Mitglied dieser Organisation
+                $link = $g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=2';
+
+                if(strlen($row->usr_login_name) > 0)
+                {
+                    // Logindaten sind bereits vorhanden
+                    $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP', $gCurrentOrganization->getValue('org_shortname')).'</p>
+
+                    <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'.THEME_PATH.'/icons/new_registrations.png" 
+                        alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'</button>');
+                }               
+                else
+                {
+                    // KEINE Logindaten vorhanden
+                    $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP_NO_LOGIN', $gCurrentOrganization->getValue('org_shortname')).'</p>
+                    
+                    <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'. THEME_PATH. '/icons/new_registrations.png" 
+                        alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'</button>');
+                }               
+            }
             $i++;
         }
     $page->addHtml('</div>
@@ -204,12 +205,10 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
 <div class="panel panel-default">
     <div class="panel-heading">'.$gL10n->get('SYS_CREATE_NEW_USER').'</div>
     <div class="panel-body">
-        <div style="margin-left: 20px;">
-            '. $gL10n->get('SYS_CREATE_NOT_FOUND_USER'). '<br />
+        <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER'). '</p>
             
-            <a class="btn" href="'.$urlCreateNewUser.'"><img 
-				src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" />'.$gL10n->get('SYS_CREATE_NEW_USER').'</a>
-        </div>
+        <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$urlCreateNewUser.'\'"><img 
+            src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" />'.$gL10n->get('SYS_CREATE_NEW_USER').'</button>
     </div>
 </div>');
 

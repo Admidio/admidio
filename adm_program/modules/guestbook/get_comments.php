@@ -94,12 +94,10 @@ if (isset($comment_result))
                 {
                     echo '
                     <div class="btn-group" role="group">
-                        <a class="btn btn-default" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc_mod&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
-                            $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</a>
-                        <a class="btn btn-default" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
-                            $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</a>
+                        <button class="btn btn-default" onclick="javascript:callUrlHideElement(\'gbc_'.$gbComment->getValue('gbc_id').'\', \'guestbook_function.php?mode=10&id='.$gbComment->getValue('gbc_id').'\')"><img 
+                            src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</button>
+                        <button class="btn btn-default" onclick="javascript:callUrlHideElement(\'gbc_'.$gbComment->getValue('gbc_id').'\', \'guestbook_function.php?mode=5&id='.$gbComment->getValue('gbc_id').'\')"><img 
+                            src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</button>
                     </div>';
                 }
             echo '</div>';

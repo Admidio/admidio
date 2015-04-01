@@ -512,7 +512,7 @@
     <text id="GBO_HIDE_COMMENTS" development="new" translation="todo">Kommentare ausblenden</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING" development="new" translation="todo">Kommentare direkt anzeigen</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING_DESC" development="new" translation="todo">Wenn diese Option aktiviert ist, werden beim Aufruf der Gästebuchseite die Kommentare direkt geladen und angezeigt. Im anderen Fall muss der Benutzer auf einen Link klicken um die Kommentare zu sehen. (Standard: nein)</text>
-    <text id="GBO_MODERATE_ENTRIES" development="new" translation="todo">%VAR1% Einträge moderieren</text>
+    <text id="GBO_MODERATE_ENTRIES" development="new" translation="todo">Einträge moderieren</text>
     <text id="GBO_MODERATE_VAR" development="new" translation="todo">%VAR1% moderieren</text>
     <text id="GBO_ONLY_VISITORS" development="new" translation="todo">Nur Besucher</text>
     <text id="GBO_SHOW_COMMENTS" development="new" translation="todo">Kommentare anzeigen</text>
@@ -952,7 +952,6 @@
     <text id="PRO_LOGIN_NAME_EXIST" development="new" translation="todo">Der gewählte Benutzername existiert schon.\n\nWähle bitte einen anderen Namen.</text>
     <text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="todo">Profilfelder pflegen</text>
     <text id="PRO_MY_PROFILE" development="new" translation="todo">Mein Profil</text>
-    <text id="PRO_MY_PROFILE_DESC" development="new" translation="todo">Das eigene Benutzerprofil kann hier angeschaut und bearbeitet werden.</text>
     <text id="PRO_NEW_PASSWORD" development="new" translation="todo">Neues Passwort</text>
     <text id="PRO_NEW_PICTURE" development="new" translation="todo">Neues Profilfoto</text>
     <text id="PRO_PASSWORD_CHANGED" development="new" translation="todo">Das Passwort wurde erfolgreich geändert.</text>
@@ -1082,7 +1081,6 @@
     <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: %VAR1%</text>
     <text id="SYS_ALL" development="new" translation="todo">Alle</text>
     <text id="SYS_ALSO_VISITORS" development="new" translation="todo">auch Besucher</text>
-    <text id="SYS_APPROVE_ENTRY" development="new" translation="todo">Wollen Sie den Eintrag %VAR1_BOLD% freischalten?</text>
     <text id="SYS_ASSIGN_MEMBERS" development="new" translation="todo">Mitglieder zuordnen</text>
     <text id="SYS_AUTHORIZATION" development="new" translation="todo">Berechtigungen</text>
     <text id="SYS_BACK" development="new" translation="todo">Zurück</text>
@@ -1155,7 +1153,6 @@
     <text id="SYS_END" description="End of a date" development="new" translation="todo">Ende</text>
     <text id="SYS_ERROR" development="new" translation="todo">Fehler</text>
     <text id="SYS_ERROR_DATABASE_ACCESS" development="new" translation="todo">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n%VAR1%</text>
-    <text id="SYS_ERROR_ENTRY_NOT_DELETED" development="new" translation="todo">Es ist ein Fehler aufgetreten!\n\nDer Eintrag konnte nicht gelöscht werden.</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - Seite nicht gefunden!</text>
     <text id="SYS_EXAMPLE" development="new" translation="todo">Beispiel</text>
     <text id="SYS_EXAMPLES" development="new" translation="todo">Beispiele</text>

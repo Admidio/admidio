@@ -348,7 +348,7 @@ class HtmlTable extends HtmlTableBasic
                 $this->messageNoRowsFound = '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get($messageId).'</div>';
                 break;
             case 'error':
-                $this->messageNoRowsFound = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-remove"></span>'.$gL10n->get($messageId).'</div>';
+                $this->messageNoRowsFound = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-exclamation-sign"></span>'.$gL10n->get($messageId).'</div>';
                 break;
         }
     }

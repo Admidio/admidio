@@ -68,8 +68,6 @@
                                 $gL10n->get('LST_LISTS'), '/icons/lists.png');
             $moduleMenu->addItem('mylist', '/adm_program/modules/lists/mylist.php',
                                 $gL10n->get('LST_MY_LIST'), '/icons/mylist.png');
-            $moduleMenu->addItem('profile', '/adm_program/modules/profile/profile.php',
-                                $gL10n->get('PRO_MY_PROFILE'), '/icons/profile.png');
             
             if( $gPreferences['enable_dates_module'] == 1
             || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))                    

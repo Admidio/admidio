@@ -93,7 +93,7 @@ if($getMode == 'choose_files')
             done: function (e, data) {
                 $.each(data.result.files, function (index, file) {
                     if(typeof file.error != "undefined") {
-                        $("<p/>").html("<div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-remove\"></span>" 
+                        $("<p/>").html("<div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>" 
                             + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
                     }
                     else {

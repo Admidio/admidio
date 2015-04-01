@@ -127,12 +127,12 @@ if($gPreferences['photo_show_mode'] == 0)
     // in popup mode show buttons for prev, next and close
     $page->addHtml('
     <div class="btn-group">
-        <a class="btn btn-default" href="'.$urlPreviousImage.'"><img 
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('PHO_PREVIOUS_PHOTO').'" />'.$gL10n->get('PHO_PREVIOUS_PHOTO').'</a>
-        <a class="btn btn-default" href="javascript:parent.window.close()"><img 
-            src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_CLOSE_WINDOW').'" />'.$gL10n->get('SYS_CLOSE_WINDOW').'</a>
-        <a class="btn btn-default" href="'.$urlNextImage.'"><img 
-            src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('PHO_NEXT_PHOTO').'" />'.$gL10n->get('PHO_NEXT_PHOTO').'</a>
+        <button class="btn btn-default" onclick="window.location.href=\''.$urlPreviousImage.'\'"><img 
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('PHO_PREVIOUS_PHOTO').'" />'.$gL10n->get('PHO_PREVIOUS_PHOTO').'</button>
+        <button class="btn btn-default" onclick="parent.window.close()"><img 
+            src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_CLOSE_WINDOW').'" />'.$gL10n->get('SYS_CLOSE_WINDOW').'</button>
+        <button class="btn btn-default" onclick="window.location.href=\''.$urlNextImage.'\'"><img 
+            src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('PHO_NEXT_PHOTO').'" />'.$gL10n->get('PHO_NEXT_PHOTO').'</button>
     </div>');
 }
 elseif($gPreferences['photo_show_mode'] == 2)

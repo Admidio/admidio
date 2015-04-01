@@ -160,7 +160,7 @@ else
 // if databse version is not set then show notice
 if(strlen($installedDbVersion) == 0)
 {
-	$message = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-remove"></span>
+	$message = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-exclamation-sign"></span>
 				    <strong>'.$gL10n->get('INS_UPDATE_NOT_POSSIBLE').'</strong></div>
 				<p>'.$gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', ADMIDIO_VERSION).'</p>';
     showNotice($message, $g_root_path.'/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
@@ -206,7 +206,7 @@ if($getMode == 1)
 	// if source version smaller then database -> show error
 	else
 	{
-        $message = '<div class="alert alert-danger form-alert"><span class="glyphicon glyphicon-remove"></span>
+        $message = '<div class="alert alert-danger form-alert"><span class="glyphicon glyphicon-exclamation-sign"></span>
                         <strong>'.$gL10n->get('SYS_ERROR').'</strong>
                         <p>'.$gL10n->get('SYS_WEBMASTER_FILESYSTEM_INVALID', $installedDbVersion, ADMIDIO_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>').'</p></div>';
         showNotice($message, $g_root_path.'/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
@@ -262,14 +262,14 @@ elseif($getMode == 2)
             }
             else
             {
-                $message = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-remove"></span>
+                $message = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-exclamation-sign"></span>
                                 <strong>'.$gL10n->get('INS_WEBMASTER_LOGIN_FAILED').'</strong></div>';
                 showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
             }
         }
         catch(AdmException $e)
         {
-            $message = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-remove"></span>
+            $message = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-exclamation-sign"></span>
                             <strong>'.$e->getText().'</strong></div>';
             showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
         }

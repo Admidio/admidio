@@ -180,7 +180,7 @@
     <text id="GBO_HIDE_COMMENTS" development="new" translation="edited">Cacher les commentaires</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING" development="new" translation="edited">Afficher les commentaires immédiatement</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING_DESC" development="new" translation="edited">Lorsque cette option est activé et qu'une page du livre d'or est en cours de chargement, les commentaires sur cette page seront chargés immédiatement. Sinon, l'utilisateur doit cliquer sur un lien hypertexte afin de révéler les commentaires. (par défaut: non)</text>
-    <text id="GBO_MODERATE_ENTRIES" development="new" translation="edited">Modération %VAR1% des entrées</text>
+    <text id="GBO_MODERATE_ENTRIES" development="new" translation="edited">Modération des entrées</text>
     <text id="GBO_MODERATE_VARS" development="new" translation="edited">Modérer %VAR1%</text>
     <text id="GBO_ONLY_VISITORS" development="new" translation="edited">Visiteurs seulement</text>
     <text id="GBO_SHOW_COMMENTS" development="new" translation="edited">Afficher les commentaires</text>
@@ -631,7 +631,6 @@
     <text id="PRO_LOGIN_NAME_EXIST" development="new" translation="edited">Le nom d'utilisateur sélectionné existe déjà. \n\nVeuillez sélectionner un autre nom.</text>
     <text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">Gérer les champs du profil</text>
     <text id="PRO_MY_PROFILE" development="new" translation="edited">Mon profil</text>
-    <text id="PRO_MY_PROFILE_DESC" development="new" translation="edited">Mon profil peut être affiché et édité ici.</text>
     <text id="PRO_NEW_PASSWORD" development="new" translation="edited">Nouveau mot de passe</text>
     <text id="PRO_NEW_PICTURE" development="new" translation="edited">Photo de profil Nouvelle</text>
     <text id="PRO_NO_DEFAULT_ROLE" development="new" translation="edited">Pas de rôle par défaut a été défini dans les préférences de l'organisation. S'il vous plaît contacter le webmestre.</text>
@@ -762,7 +761,6 @@
     <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Erreur requête Ajax Détails nErreur \:.%VAR1%</text>
     <text id="SYS_ALL" development="new" translation="edited">Tous</text> 
     <text id="SYS_ALSO_VISITORS" development="new" translation="edited">Également aux visiteurs</text>
-    <text id="SYS_APPROVE_ENTRY" development="new" translation="edited">Aimeriez-vous approuver l'entrée %VAR1_BOLD%?</text>
     <text id="SYS_ASSIGN_MEMBERS" development="new" translation="edited">Assignation des membres</text>
     <text id="SYS_AUTHORIZATION" development="new" translation="edited">Autorisation</text>
     <text id="SYS_BACK" development="new" translation="edited">Retour</text>
@@ -841,7 +839,6 @@
     <text id="SYS_END" development="new" translation="edited" description="End d'une fin date">Fin</text>
     <text id="SYS_ERROR" development="new" translation="edited">Erreur</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="edited">ERREUR 404 - PAGE INTROUVABLE</text>
-    <text id="SYS_ERROR_ENTRY_NOT_DELETED" development="new" translation="edited">Une erreur s'est produite! \n\nL'entré ne pouvait pas être supprimé.</text>
     <text id="SYS_EXAMPLE" development="new" translation="edited">Exemple</text>
     <text id="SYS_EXAMPLES" development="new" translation="edited">Exemples</text>
     <text id="SYS_FADE_IN" development="new" translation="edited">Fondu</text>

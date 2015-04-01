@@ -63,35 +63,35 @@ if($gPreferences['enable_rss'] == 1)
 };
 
 $page->addJavascript('
-        function getComments(commentId) {
-            // RequestObjekt abschicken und Kommentar laden
-            $.get("'.$g_root_path.'/adm_program/modules/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.$getModeration.', 
-            function(data) {
-                $("#comments_" + commentId).html(data);
-            });            
-        }
+    function getComments(commentId) {
+        // RequestObjekt abschicken und Kommentar laden
+        $.get("'.$g_root_path.'/adm_program/modules/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.$getModeration.', 
+        function(data) {
+            $("#comments_" + commentId).html(data);
+        });            
+    }
 
-        function toggleComments(commentId) {
-            toggleDiv("admCommentsInvisible_" + commentId);
-            toggleDiv("admCommentsVisible_" + commentId);
+    function toggleComments(commentId) {
+        toggleDiv("admCommentsInvisible_" + commentId);
+        toggleDiv("admCommentsVisible_" + commentId);
 
-            if (document.getElementById("comments_" + commentId).innerHTML.length == 0) {
-                getComments(commentId);
-            }
-            else {
-                toggleDiv("comments_" + commentId);
-            }
+        if (document.getElementById("comments_" + commentId).innerHTML.length == 0) {
+            getComments(commentId);
         }
+        else {
+            toggleDiv("comments_" + commentId);
+        }
+    }
 
-        function toggleDiv(objectId) {
-            if($("#" + objectId).is(":hidden")) {
-                $("#" + objectId).show();
-            }
-            else {
-                $("#" + objectId).hide();
-            }
+    function toggleDiv(objectId) {
+        if($("#" + objectId).is(":hidden")) {
+            $("#" + objectId).show();
         }
-    ');
+        else {
+            $("#" + objectId).hide();
+        }
+    }
+');
 
 // add headline and title of module
 if($getModeration == 1)
@@ -193,7 +193,7 @@ if($getModeration == 0 && $gCurrentUser->editGuestbookRight() && $gPreferences['
     if($countLockedEntries > 0)
     {
 		$guestbookMenu->addItem('admMenuItemModerate', $g_root_path.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $getHeadline, 
-								$gL10n->get('GBO_MODERATE_ENTRIES', $countLockedEntries), 'star.png');
+								$gL10n->get('GBO_MODERATE_ENTRIES').'<span class="badge">'.$countLockedEntries.'</span>', 'star.png');
     }
 }
 
@@ -276,12 +276,10 @@ else
                 {
                     $page->addHtml('
                     <div class="btn-group" role="group">
-                        <a class="btn btn-default" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo_mod&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
-                            $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</a>
-                        <a class="btn btn-default" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
-                            $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</a>
+                        <button class="btn btn-default" onclick="javascript:callUrlHideElement(\'gbo_'.$guestbook->getValue('gbo_id').'\', \'guestbook_function.php?mode=9&id='.$guestbook->getValue('gbo_id').'\')"><img 
+                            src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</button>
+                        <button class="btn btn-default" onclick="javascript:callUrlHideElement(\'gbo_'.$guestbook->getValue('gbo_id').'\', \'guestbook_function.php?mode=2&id='.$guestbook->getValue('gbo_id').'\')"><img 
+                            src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</button>
                     </div>');
                 }
 

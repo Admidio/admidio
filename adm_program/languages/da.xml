@@ -396,7 +396,7 @@
     <text id="GBO_HIDE_COMMENTS" development="new" translation="edited">Gem kommentarer</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING" development="new" translation="edited">Vis kommentarer med det samme</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING_DESC" development="new" translation="edited">Når denne indstilling er aktiv så bliver kommentarer vist med det samme efter en side reload. Ellers skal brugerne klikke på et link for at vise kommentarer. (Standard: Nej)</text>
-    <text id="GBO_MODERATE_ENTRIES" development="new" translation="edited">Modererer %VAR1% indlæg</text>
+    <text id="GBO_MODERATE_ENTRIES" development="new" translation="edited">Modererer indlæg</text>
     <text id="GBO_MODERATE_VARS" development="new" translation="edited">Modererer %VAR1%</text>
     <text id="GBO_ONLY_VISITORS" development="new" translation="edited">Kun gæster</text>
     <text id="GBO_SHOW_COMMENTS" development="new" translation="edited">Vis kommentarer</text>
@@ -839,7 +839,6 @@
     <text id="PRO_LOGIN_NAME_EXIST" development="new" translation="edited">Det valgte bruger navn eksisterer allerede.\n\nVælg venligst et andet bruger navn.</text>
     <text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">Rediger profil felter</text>
     <text id="PRO_MY_PROFILE" development="new" translation="edited">Min profil</text>
-    <text id="PRO_MY_PROFILE_DESC" development="new" translation="edited">Egen profil kan vises og redigeres her.</text>
     <text id="PRO_NEW_PASSWORD" development="new" translation="edited">Nyt kodeord</text>
     <text id="PRO_NEW_PICTURE" development="new" translation="edited">Nyt profil billede</text>
     <text id="PRO_PASSWORD_CHANGED" development="new" translation="edited">Kodeordet er blevet ændret.</text>
@@ -970,7 +969,6 @@
     <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Ajax forespørgsels fejl.\nFejl detaljer: %VAR1%</text>
     <text id="SYS_ALL" development="new" translation="edited">Alle</text>
     <text id="SYS_ALSO_VISITORS" development="new" translation="edited">også Gæster</text>
-    <text id="SYS_APPROVE_ENTRY" development="new" translation="edited">Vil du godkende %VAR1_BOLD%?</text>
     <text id="SYS_ASSIGN_MEMBERS" development="new" translation="edited">Tilføjer medlemmer</text>
     <text id="SYS_AUTHORIZATION" development="new" translation="edited">Godkendelse</text>
     <text id="SYS_BACK" development="new" translation="edited">Tilbage</text>

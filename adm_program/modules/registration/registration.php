@@ -67,6 +67,17 @@ $page = new HtmlPage();
 // add headline and title of module
 $page->addHeadline($headline);
 
+if($gCurrentUser->isWebmaster())
+{
+    // create module menu
+    $registrationMenu = new HtmlNavbar('menu_registrations', $headline, $page);
+
+	// show link to system preferences of announcements
+	$registrationMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=registration', 
+								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    $page->addHtml($registrationMenu->show(false));
+}
+
 $table = new HtmlTable('new_user_table', $page, true);
 
 // create array with all column heading values

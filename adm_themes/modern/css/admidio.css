@@ -36,7 +36,6 @@ body {
 
 @media (min-width: 768px) {
     #header-block {
-        margin-bottom: 25px;
         padding: 1.5%;
         background-color: #ffffff; 
         background-repeat: repeat-x;
@@ -109,6 +108,7 @@ body {
     .admidio-container {
         border: 1px solid #7d7d7d;
         border-radius: 15px;
+        margin-bottom: 25px;
         padding: 15px;
     }
 }
@@ -188,7 +188,7 @@ h3 {
     text-align: left;
 }
 
-.alert, .btn-form:not(form.navbar-form) {
+.alert {
     margin-top: 15px;
 }
 
@@ -225,6 +225,12 @@ a:hover, a:active, a.btn:hover, a.btn:active, a.navbar-link:hover, a.navbar-link
     color: #FF9C00 !important;
 }
 
+a.btn {
+    padding-top: 0px;
+    padding-left: 0px;
+    text-align: left !important;
+}
+
 /**************************/
 /* Settings for all icons */
 /**************************/
@@ -238,18 +244,6 @@ a:hover, a:active, a.btn:hover, a.btn:active, a.navbar-link:hover, a.navbar-link
 
 .navbar-link img, .btn img, .alert .glyphicon, .btn {
     margin-right: 5px;
-}
-
-.btn-group a.btn {
-    padding: 5px;
-    margin-right: 0px;
-    text-align: center !important;
-}
-
-a.btn {
-    padding-top: 0px;
-    padding-left: 0px;
-    text-align: left !important;
 }
 
 .admidio-icon-info {
@@ -348,14 +342,16 @@ a.btn {
 
 .form-control-static {
     padding-bottom: 0px;
+    min-height: 0px;
 }
 
 .admidio-form-vertical label {
     margin-bottom: 0px;
 }
 
-.form-group {
+.form-group, input[type="file"] {
     margin-bottom: 10px;
+    padding-top: 0px;
 }
 
 form hr {
@@ -419,6 +415,10 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     margin-right: 0px;
 }
 
+.btn-group .btn {
+    margin-right: 0px;
+}
+
 .btn-primary {
     background-color: #409099;
     border-color: #409099;
@@ -428,6 +428,12 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 .btn-primary:hover, .btn-primary:focus {
     background-color: #387F87;
     border-color: #387F87;
+}
+
+.btn.disabled {
+    background-color: #aaaaaa !important;
+    border-color: #aaaaaa !important;
+    color: #ffffff;
 }
 
 .admidio-control-mandatory label:after, .admidio-control-mandatory-def span:after {
@@ -597,32 +603,6 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 
 .dt-bootstrap {
     margin-bottom: 20px;
-}
-
-/* The module and administration menu on the main page */
-
-.admidio-menu {
-    margin-top: -10px;
-}
-
-.admMenuLargeIcons li .icon-text-link img {
-    width: 32px;
-    height: 32px;
-    vertical-align: middle !important;
-}
-
-.admMenuLargeIcons li .icon-text-link:link, .admMenuLargeIcons li .icon-text-link:visited {
-    color: #409099;
-    text-decoration: none;
-}
-
-.admMenuDescription {
-    margin-left: 38px;
-}
-
-.admMenuSubmenu {
-    display: inline;
-    margin-left: 10px;
 }
 
 /**************************************************/

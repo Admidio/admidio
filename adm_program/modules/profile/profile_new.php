@@ -137,8 +137,6 @@ if(isset($_SESSION['profile_request']))
 
 // create html page object
 $page = new HtmlPage();
-//$page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
-//$page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
 
 // show headline of module
 $page->addHeadline($headline);
@@ -152,7 +150,7 @@ $page->addHtml($profileEditMenu->show(false));
 $form = new HtmlForm('edit_profile_form', $g_root_path.'/adm_program/modules/profile/profile_save.php?user_id='.$getUserId.'&amp;new_user='.$getNewUser, $page);
 
 // *******************************************************************************
-// Schleife ueber alle Kategorien und Felder ausser den Stammdaten
+// Loop over all categories and profile fields except the category 'master data'
 // *******************************************************************************
 
 $category = '';
@@ -195,8 +193,8 @@ foreach($gProfileFields->mProfileFields as $field)
         }
         $category = $field->getValue('cat_name');
 
-        $form->addHtml('<a name="cat-'. $field->getValue('cat_id'). '"></a>');
-        $form->openGroupBox('gb_category_name', $field->getValue('cat_name'));
+        $form->addHtml('<a id="cat-'. $field->getValue('cat_id'). '"></a>');
+        $form->openGroupBox('gb_category_'.$field->getValue('cat_name_intern'), $field->getValue('cat_name'));
                 
         if($field->getValue('cat_name_intern') == 'MASTER_DATA')
         {

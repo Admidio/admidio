@@ -415,11 +415,11 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
 
                         if ($getViewMode == 'html')
                         {
-                            $registerLink = '<a class="btn btn-default" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" />'.$gL10n->get('DAT_CANCEL').'</a>';
+                            $registerLink = '<button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" />'.$gL10n->get('DAT_CANCEL').'</button>';
                         }
                         else
                         {
-                            $registerLink = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" /></a>';
+                            $registerLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" /></a>';
                         }                            
                     }
                     else
@@ -442,11 +442,11 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
 
                             if ($getViewMode == 'html')
                             {
-                                $registerLink = '<a class="btn btn-default" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" />'.$gL10n->get('DAT_ATTEND').'</a>';
+                                $registerLink = '<button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" />'.$gL10n->get('DAT_ATTEND').'</button>';
                             }
                             else
                             {
-                                $registerLink = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" /></a>';
+                                $registerLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" /></a>';
                             }                            
                         }
                         else
@@ -464,11 +464,11 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                             
                             if ($getViewMode == 'html')
                             {
-                                $participantLink = '<a class="btn btn-default" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" />'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</a>';
+                                $participantLink = '<button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" />'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</button>';
                             }
                             else
                             {
-                                $participantLink = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
+                                $participantLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
                             }                            
                         }
                     }
@@ -480,11 +480,11 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
 
                         if ($getViewMode == 'html')
                         {
-                            $mgrpartLink = '<a class="btn btn-default" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</a>';
+                            $mgrpartLink = '<button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</button>';
                         }
                         else
                         {
-                            $mgrpartLink = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" /></a>';
+                            $mgrpartLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" /></a>';
                         }                            
                     }
                 }
@@ -547,8 +547,8 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                     </div>
 
                     <div class="panel-body">
-                        ' . $htmlDateElements . '
-                        <div class="date_description" style="clear: left;">' . $date->getValue('dat_description') . '</div>');
+                        ' . $htmlDateElements . '<br />
+                        <p>' . $date->getValue('dat_description') . '</p>');
                                             
                         if (strlen($registerLink) > 0 || strlen($participantLink) > 0 || strlen($mgrpartLink) > 0)
                         {

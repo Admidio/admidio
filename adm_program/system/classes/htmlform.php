@@ -167,7 +167,7 @@ class HtmlForm extends HtmlFormBasic
             $value = '<img src="'.$optionsAll['icon'].'" alt="'.$text.'" />'.$value;
         }
         $this->addElement('button');
-        $this->addAttribute('class', 'btn btn-default btn-form');
+        $this->addAttribute('class', 'btn btn-default');
         
         if(strlen($optionsAll['onClickText']) > 0)
         {
@@ -546,16 +546,14 @@ class HtmlForm extends HtmlFormBasic
         if($optionsAll['enableMultiUploads'])
         {
             $javascriptCode = '
-        		$(".add-attachement-link").css("cursor", "pointer");
-        		
         		// add new line to add new attachment to this mail
-        		$(".add-attachement-link").click(function () {
+        		$("#btn_add_attachment_'.$id.'").click(function () {
         			newAttachment = document.createElement("input");
         			$(newAttachment).attr("type", "file");
         			$(newAttachment).attr("name", "userfile[]");
         			$(newAttachment).attr("class", "'.$attributes['class'].'");
         			$(newAttachment).hide();
-        			$("#adm_add_attachment").before(newAttachment);
+        			$("#btn_add_attachment_'.$id.'").before(newAttachment);
         			$(newAttachment).show("slow");
         		});';
             
@@ -589,10 +587,8 @@ class HtmlForm extends HtmlFormBasic
         {
             // show button to add new upload field to form
             $this->addHtml('
-                <span id="adm_add_attachment" style="display: block;">
-    				<a class="btn admidio-add-attachement-link"><img
-                        src="'. THEME_PATH. '/icons/add.png" alt="'.$optionsAll['multiUploadLabel'].'" />'.$optionsAll['multiUploadLabel'].'</a>
-                </span>');
+            <button type="button" id="btn_add_attachment_'.$id.'" class="btn btn-default"><img
+                src="'. THEME_PATH. '/icons/add.png" alt="'.$optionsAll['multiUploadLabel'].'" />'.$optionsAll['multiUploadLabel'].'</button>');
         }
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
@@ -629,7 +625,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addInput($id, $label, $value, $options = array())
     {
-        global $gL10n, $gPreferences, $g_root_path;
+        global $gL10n, $gPreferences, $g_root_path, $gDebug;
         
         $attributes = array('class' => 'form-control');
         $this->countElements++;
@@ -674,8 +670,6 @@ class HtmlForm extends HtmlFormBasic
         // add a nice modern datepicker to date inputs
         if($optionsAll['type'] == 'date' || $optionsAll['type'] == 'datetime')
         {
-            $datepickerOptions = '';
-            
             $attributes['data-provide'] = 'datepicker';
             $javascriptCode             = '';
             
@@ -684,9 +678,9 @@ class HtmlForm extends HtmlFormBasic
             {
                 $javascriptCode = '
                     $("input[data-provide=\'datepicker\']").datepicker({
-                        language: "'.$gPreferences['system_language'].'",
+                        language: "'.substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_')).'",
                         format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
-                        '.$datepickerOptions.'todayHighlight: "true",
+                        todayHighlight: "true",
                         autoclose: "true"
                     });';
                 $this->datepickerInitialized = true;
@@ -695,9 +689,18 @@ class HtmlForm extends HtmlFormBasic
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if(is_object($this->htmlPage))
             {
-                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/datepicker3.css');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gPreferences['system_language'].'.js');
+                if($gDebug)
+                {
+                    $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.css');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
+                }
+                else
+                {
+                    $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.min.css');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js');
+                }
+
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/locales/bootstrap-datepicker.'.substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_')).'.min.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
             }
             else
@@ -885,7 +888,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$optionsAll['class'];
         }
         
-        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
+        $this->openControlStructure('', $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
         
         // set one radio button with no value will be set in front of the other array.
         if($optionsAll['showNoValueButton'] == true)
@@ -1407,7 +1410,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // add default css class
-        $optionsAll['class'] .= ' btn-primary btn-form';
+        $optionsAll['class'] .= ' btn-primary';
 
         // now add button to form
         $this->addButton($id, $text, $optionsAll);
@@ -1487,7 +1490,7 @@ class HtmlForm extends HtmlFormBasic
     public function openButtonGroup()
     {
         $this->buttonGroupOpen = true;
-        $this->addHtml('<div class="btn-group">');
+        $this->addHtml('<div class="btn-group" role="group">');
     }
     
     /** Creates a html structure for a form field. This structure contains the label

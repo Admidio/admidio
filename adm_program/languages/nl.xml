@@ -404,7 +404,7 @@
     <text id="GBO_HIDE_COMMENTS" development="new" translation="edited">Verberg reacties</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING" development="new" translation="edited">Toon reactie direct</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING_DESC" development="new" translation="edited">Als deze optie actief is en een pagina uit gastenboek wordt geladen, worden reacties op deze pagina ook direct geladen. Anders moeten gebruikers op link klikken om reacties te tonen. (standaard: nee)</text>
-    <text id="GBO_MODERATE_ENTRIES" development="new" translation="edited">Beheer %VAR1% berichten</text>
+    <text id="GBO_MODERATE_ENTRIES" development="new" translation="edited">Beheer berichten</text>
     <text id="GBO_MODERATE_VARS" development="new" translation="edited">Beheer %VAR1%</text>
     <text id="GBO_ONLY_VISITORS" development="new" translation="edited">Alleen bezoekers</text>
     <text id="GBO_SHOW_COMMENTS" development="new" translation="edited">Toon reacties</text>
@@ -854,7 +854,6 @@
     <text id="PRO_LOGIN_NAME_EXIST" development="new" translation="edited">Deze gebruikersnaam bestaat al.\n\nKies svp een andere gebruikersnaam.</text>
     <text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">Beheer profielvelden</text>
     <text id="PRO_MY_PROFILE" development="new" translation="edited">Mijn profiel</text>
-    <text id="PRO_MY_PROFILE_DESC" development="new" translation="edited">Hier kunt u uw eigen profiel bekijken en wijzigen.</text>
     <text id="PRO_NEW_PASSWORD" development="new" translation="edited">Nieuw wachtwoord</text>
     <text id="PRO_NEW_PICTURE" development="new" translation="edited">Nieuwe profielfoto</text>
     <text id="PRO_NO_DEFAULT_ROLE" development="new" translation="edited">Geen standaard rol geselecteerd in de voorkeuren van organisatie. Neem voor hulp svp contact op met beheerder.</text>
@@ -985,7 +984,6 @@
     <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Ajax foutmelding.\nDetails foutmelding: %VAR1%</text>
     <text id="SYS_ALL" development="new" translation="edited">Iedereen</text>
     <text id="SYS_ALSO_VISITORS" development="new" translation="edited">ook bezoekers</text>
-    <text id="SYS_APPROVE_ENTRY" development="new" translation="edited">Wilt u bericht %VAR1_BOLD% goedkeuren?</text>
     <text id="SYS_ASSIGN_MEMBERS" development="new" translation="edited">Leden toewijzen</text>
     <text id="SYS_AUTHORIZATION" development="new" translation="edited">Rechten</text>
     <text id="SYS_BACK" development="new" translation="edited">Terug</text>
@@ -1059,7 +1057,6 @@
     <text id="SYS_END" development="new" translation="edited" description="Einddatum">Tot</text>
     <text id="SYS_ERROR" development="new" translation="edited">Foutmelding</text>
     <text id="SYS_ERROR_DATABASE_ACCESS" development="new" translation="edited">Foutmelding toegang database:\n\n%VAR1%</text>
-    <text id="SYS_ERROR_ENTRY_NOT_DELETED" development="new" translation="edited">Foutmelding!\n\nBericht kon niet verwijderd worden.</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="edited">Foutmelding 404 - Pagina niet gevonden!</text>
     <text id="SYS_EXAMPLE" development="new" translation="edited">Voorbeeld</text>
     <text id="SYS_EXAMPLES" development="new" translation="edited">Voorbeelden</text>

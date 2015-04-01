@@ -396,7 +396,7 @@
     <text id="GBO_HIDE_COMMENTS" development="new" translation="edited">Nascondi commenti</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING" development="new" translation="edited">Visualizza subito i commenti</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING_DESC" development="new" translation="edited">Quando questa opzione è attiva e la pagina del libro degli ospiti sta per essere caricata, i commneti relativi alla pagina saranno caricati direttamente. In caso contrario, l'utente deve fare clic su un link per vedere i commenti. (predefinito: no)</text>
-    <text id="GBO_MODERATE_ENTRIES" development="new" translation="edited">Moderazione degli inserimenti di %VAR1%</text>
+    <text id="GBO_MODERATE_ENTRIES" development="new" translation="edited">Moderazione degli inserimenti</text>
     <text id="GBO_MODERATE_VARS" development="new" translation="edited">Moderazione di %VAR1%</text>
     <text id="GBO_ONLY_VISITORS" development="new" translation="edited">Solo visitatori</text>
     <text id="GBO_SHOW_COMMENTS" development="new" translation="edited">Visualizza commenti</text>
@@ -837,7 +837,6 @@
     <text id="PRO_LOGIN_NAME_EXIST" development="new" translation="edited">Il nome utente selezionato è già esistente.\n\nSi prega di scegliere un altro nome.</text>
     <text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">Gestisci i campi del profilo</text>
     <text id="PRO_MY_PROFILE" development="new" translation="edited">Il mio profilo</text>
-    <text id="PRO_MY_PROFILE_DESC" development="new" translation="edited">Il proprio profilo può essere visualizzato e modificato qui.</text>
     <text id="PRO_NEW_PASSWORD" development="new" translation="edited">Nuova password</text>
     <text id="PRO_NEW_PICTURE" development="new" translation="edited">Nuova immagine del profilo</text>
     <text id="PRO_PASSWORD_CHANGED" development="new" translation="edited">La password è stata cambiata con successo.</text>
@@ -969,7 +968,6 @@
     <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Errore di richiesta ajax.\nDettagli dell'errore: %VAR1%</text>
     <text id="SYS_ALL" development="new" translation="edited">Tutto</text>
     <text id="SYS_ALSO_VISITORS" development="new" translation="edited">anche i visitatori</text>
-    <text id="SYS_APPROVE_ENTRY" development="new" translation="edited">Vuoi approvare la voce %VAR1_BOLD%?</text>
     <text id="SYS_ASSIGN_MEMBERS" development="new" translation="edited">Assegnazione membri</text>
     <text id="SYS_AUTHORIZATION" development="new" translation="edited">Autorizzazioni</text>
     <text id="SYS_BACK" development="new" translation="edited">Indietro</text>
@@ -1045,7 +1043,6 @@
     <text id="SYS_END" development="new" translation="edited" description="End of a date">Fine</text>
     <text id="SYS_ERROR" development="new" translation="edited">Errore</text>
     <text id="SYS_ERROR_DATABASE_ACCESS" development="new" translation="edited">Errore durante l'accesso al database:\n\n%VAR1%</text>
-    <text id="SYS_ERROR_ENTRY_NOT_DELETED" development="new" translation="edited">Si è verificato un errore!\n\nLa voce non può essere cancellata</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="edited">ERRORE 404 - PAGINA NON TROVATA!</text>
     <text id="SYS_EXAMPLE" development="new" translation="edited">Esempio</text>
     <text id="SYS_EXAMPLES" development="new" translation="edited">Esempi</text>

@@ -119,12 +119,19 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage();
 
-//$page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
-//$page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
+if($gDebug)
+{
+    $page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.css');
+    $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
+}
+else
+{
+    $page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.min.css');
+    $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js');
+}
+
+$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/locales/bootstrap-datepicker.'.substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_')).'.min.js');    
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
-$page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/datepicker3.css');
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gPreferences['system_language'].'.js');
 
 $page->addJavascript('
     var profileJS = new profileJSClass();
@@ -151,7 +158,14 @@ $page->addJavascript('
     $("#menu_item_role_memberships_change").attr("data-toggle", "modal");
     $("#menu_item_role_memberships_change").attr("data-target", "#admidio_modal");
     
-    $(".form-membership-period").submit(function(event) {
+    $("input[data-provide=\'datepicker\']").datepicker({
+                            language: "'.substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_')).'",
+                            format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
+                            todayHighlight: "true",
+                            autoclose: "true"
+                        });
+                    
+    $(".admidio-form-membership-period").submit(function(event) {
         var id = $(this).attr("id");
         var parentId = $("#"+id).parent().parent().attr("id");
         var action = $(this).attr("action");
@@ -173,11 +187,14 @@ $page->addJavascript('
                     $("#"+id+" .form-alert").fadeOut("slow");
                     $("#"+parentId).animate({opacity: 1.0}, 2500);
                     $("#"+parentId).fadeOut("slow");
+                    profileJS.reloadRoleMemberships();
+                    profileJS.reloadFormerRoleMemberships();
+                    profileJS.reloadFutureRoleMemberships();
                 }
                 else {
                     $("#"+id+" .form-alert").attr("class", "alert alert-danger form-alert");
                     $("#"+id+" .form-alert").fadeIn();
-                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
+                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                 }
             }
         });    
@@ -270,7 +287,7 @@ $page->addHtml('
     <div class="panel-body row">
         <div class="col-sm-8">');
             // create a static form
-            $form = new HtmlForm('profile_user_data_form', null);
+            $form = new HtmlForm('profile_master_data_form', null);
             
             // add lastname and firstname 
             if(strlen($user->getValue('GENDER')) > 0
@@ -341,7 +358,7 @@ $page->addHtml('
                                 if(strlen($user->getValue('ADDRESS')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('ADDRESS', 'usf_hidden') == 0))
                                 {
-                                    $address   .= '<div>'.$user->getValue('ADDRESS'). '</div>';
+                                    $address   .= $user->getValue('ADDRESS'). '<br />';
                                     $map_url   .= urlencode($user->getValue('ADDRESS'));
                                     $route_url .= urlencode($user->getValue('ADDRESS'));
                                 }
@@ -349,28 +366,23 @@ $page->addHtml('
                                 if(strlen($user->getValue('POSTCODE')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 0))
                                 {
-                                    $address   .= '<div>'.$user->getValue('POSTCODE');
+                                    $address   .= $user->getValue('POSTCODE');
                                     $map_url   .= ',%20'. urlencode($user->getValue('POSTCODE'));
                                     $route_url .= ',%20'. urlencode($user->getValue('POSTCODE'));
     
-                                    // Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
+                                    // City and postcode should be shown in one line
                                     if(strlen($user->getValue('CITY')) == 0
                                     || ($gCurrentUser->hasRightEditProfile($user) == false && $gProfileFields->getProperty('CITY', 'usf_hidden') == 1))
                                     {
-                                        $address   .= '</div>';
+                                        $address   .= '<br />';
                                     }
                                 }
     
                                 if(strlen($user->getValue('CITY')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('CITY', 'usf_hidden') == 0))
                                 {
-                                    // Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
-                                    if(strlen($user->getValue('POSTCODE')) == 0
-                                    || ($gCurrentUser->hasRightEditProfile($user) == false && $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 1))
-                                    {
-                                        $address   .= '<div>';
-                                    }
-                                    $address   .= ' '. $user->getValue('CITY'). '</div>';
+                                    // City and postcode should be shown in one line
+                                    $address   .= ' '. $user->getValue('CITY'). '<br />';
                                     $map_url   .= ',%20'. urlencode($user->getValue('CITY'));
                                     $route_url .= ',%20'. urlencode($user->getValue('CITY'));
                                 }
@@ -379,7 +391,7 @@ $page->addHtml('
                                 && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('COUNTRY', 'usf_hidden') == 0))
                                 {
                                     $country    = $user->getValue('COUNTRY');
-                                    $address   .= '<div>'.$country. '</div>';
+                                    $address   .= $country. '<br />';
                                     $map_url   .= ',%20'. urlencode($country);
                                     $route_url .= ',%20'. urlencode($country);
                                 }
@@ -472,12 +484,12 @@ foreach($gProfileFields->mProfileFields as $field)
             $category = $field->getValue('cat_name');
 
             $page->addHtml('
-            <div class="panel panel-default" id="'.$field->getValue('cat_name').'_data_panel">
+            <div class="panel panel-default" id="'.$field->getValue('cat_name_intern').'_data_panel">
                 <div class="panel-heading">'.$field->getValue('cat_name').'</div>
                 <div class="panel-body">');
                 
             // create a static form
-            $form = new HtmlForm('profile_user_data_form', null);
+            $form = new HtmlForm('profile_'.$field->getValue('cat_name_intern').'_form', null);
         }
 
         // show html of field, if user has a value for that field or it's a checkbox field
@@ -738,14 +750,14 @@ if($gPreferences['profile_show_extern_roles'] == 1
                 if($showRolesOtherOrganizations == false)
                 {
                     $page->addHtml('
-                    <div class="panel panel-default" id="profile_roles_box_other_orga">
+                    <div class="panel panel-default" id="profile_other_orga_roles_box">
                         <div class="panel-heading">'.
                             $gL10n->get('PRO_ROLE_MEMBERSHIP_OTHER_ORG').'
                             <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" 
                                 href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_VIEW_ROLES_OTHER_ORGAS&amp;inline=true"><img 
                                 src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
                         </div>
-                        <div class="panel-body" id="profile_former_roles_box_body">
+                        <div class="panel-body" id="profile_other_orga_roles_box_body">
                             <ul class="list-group admidio-list-roles-assign">');
 
                     $showRolesOtherOrganizations = true;

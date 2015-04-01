@@ -77,8 +77,6 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage();
 
-$page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
 $page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/datepicker3.css');
 $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
@@ -107,7 +105,7 @@ $page->addJavascript('
     $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
     $("#profile_authorizations_box_body").mouseout(function () { profileJS.deleteShowInfo()});
     
-    $(".form-membership-period").submit(function(event) {
+    $(".admidio-form-membership-period").submit(function(event) {
         var id = $(this).attr("id");
         var parentId = $("#"+id).parent().parent().attr("id");
         var action = $(this).attr("action");
@@ -133,7 +131,7 @@ $page->addJavascript('
                 else {
                     $("#"+id+" .form-alert").attr("class", "alert alert-danger form-alert");
                     $("#"+id+" .form-alert").fadeIn();
-                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
+                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                 }
             }
         });    

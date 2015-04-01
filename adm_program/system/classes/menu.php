@@ -109,43 +109,58 @@ class Menu
 		if ($type == 'complex')
 		{
 			$html .= '<h2 id="head_'.$this->id.'">'.$this->title.'</h2>';			// Title of the menu
-            $cssMenuClass = ' admMenuLargeIcons';
             $cssFontClass = ' h4';
 		}
 		else
 		{
-			$html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>';			// Title of the menu
+			$html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>
+            <div class="btn-group-vertical admidio-menu" role="group" id="menu_'.$this->id.'">';
 		}
-
-        $html .= '<div class="btn-group-vertical admidio-menu'.$cssMenuClass.'" role="group" id="menu_'.$this->id.'">';		// Wraps all menu items
 		
         // now create each menu item
 		foreach($this->items as $key => $value)
 		{
-            $html .= '
-            <a id="lmenu_'.$this->id.'_' .$this->items[$key]['id'].'" class="btn '.$cssFontClass.'" href="'.$this->items[$key]['link'].'"><img src="'.$this->items[$key]['icon'].'"
-                alt="'.strip_tags($this->items[$key]['text']).'" />'.$this->items[$key]['text'].'</a>';
-
 			if ($type == 'complex')
 			{
-				// adding submenus if any
-				if ($this->items[$key]['subitems'])
-				{
-					$separator = '';
-					$html .= '<div class="admMenuSubmenu">&#91; ';
-					foreach($this->items[$key]['subitems'] as $subkey => $subvalue)
-					{
-						$html .= $separator . '<a href="'.$this->items[$key]['subitems'][$subkey]['link'].'">'.$this->items[$key]['subitems'][$subkey]['text'].'</a>';
-						$separator = '&nbsp;| ';
-					}
-					$html .= ' &#93;</div>';
-				}
-				
-				$html .= '<div class="admMenuDescription"><small>'.$this->items[$key]['desc'].'</small></div>';
+                $html .= '
+                <div class="media">
+                    <div class="media-left">
+                        <a id="menu_'.$this->id.'_' .$this->items[$key]['id'].'" href="'.$this->items[$key]['link'].'"><img 
+                            class="media-object" src="'.$this->items[$key]['icon'].'" alt="'.strip_tags($this->items[$key]['text']).'" /></a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><a id="lmenu_'.$this->id.'_' .$this->items[$key]['id'].'" href="'.$this->items[$key]['link'].'">'.$this->items[$key]['text'].'</a></h4>';
+
+                        // adding submenus if any
+                        if ($this->items[$key]['subitems'])
+                        {
+                            $separator = '';
+                            $html .= '<div class="admidio-media-submenu">&#91; ';
+                            foreach($this->items[$key]['subitems'] as $subkey => $subvalue)
+                            {
+                                $html .= $separator . '<a href="'.$this->items[$key]['subitems'][$subkey]['link'].'">'.$this->items[$key]['subitems'][$subkey]['text'].'</a>';
+                                $separator = '&nbsp;| ';
+                            }
+                            $html .= ' &#93;</div>';
+                        }
+                
+                $html .= '
+                        '.$this->items[$key]['desc'].'
+                    </div>
+                </div>';
 			}
+            else
+            {
+                $html .= '
+                <a id="lmenu_'.$this->id.'_' .$this->items[$key]['id'].'" class="btn '.$cssFontClass.'" href="'.$this->items[$key]['link'].'"><img src="'.$this->items[$key]['icon'].'"
+                    alt="'.strip_tags($this->items[$key]['text']).'" />'.$this->items[$key]['text'].'</a>';
+            }
 		}
-		
-        $html .= '</div>';												// End Wraps all menu items
+    
+        if ($type != 'complex')
+        {
+            $html .= '</div>';												// End Wraps all menu items
+        }
 
 		if (count($this->items) > 0)
 		{

@@ -87,7 +87,7 @@ if($getInline == true)
                     else {
                         $("#roles_assignment_form .form-alert").attr("class", "alert alert-danger form-alert");
                         $("#roles_assignment_form .form-alert").fadeIn();
-                        $("#roles_assignment_form .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
+                        $("#roles_assignment_form .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                     }
                 }
             });    
