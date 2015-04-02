@@ -279,6 +279,12 @@ elseif($getMode == 2)
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(300);
 
+    $mainVersion      = substr($installedDbVersion, 0, 1);
+    $subVersion       = substr($installedDbVersion, 2, 1);
+    $microVersion     = substr($installedDbVersion, 4, 1);
+    $microVersion     = $microVersion + 1;
+    $flagNextVersion  = true;
+    
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
     include('db_scripts/preferences.php');
 
@@ -290,12 +296,6 @@ elseif($getMode == 2)
         $gCurrentOrganization->setValue('org_id', $row_orga['org_id']);
         $gCurrentOrganization->setPreferences($orga_preferences, false);
     }
-
-    $mainVersion      = substr($installedDbVersion, 0, 1);
-    $subVersion       = substr($installedDbVersion, 2, 1);
-    $microVersion     = substr($installedDbVersion, 4, 1);
-    $microVersion     = $microVersion + 1;
-    $flagNextVersion = true;
 
 	if($gDbType == 'mysql')
 	{
@@ -316,7 +316,7 @@ elseif($getMode == 2)
             {
                 // until version 3 Admidio had sql and php files where the update statements where stored
                 // these files must be excecuted
-            
+
                 // in der Schleife wird geschaut ob es Scripte fuer eine Microversion (3.Versionsstelle) gibt
                 // Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
                 for($microVersion = $microVersion; $microVersion < 15; $microVersion++)

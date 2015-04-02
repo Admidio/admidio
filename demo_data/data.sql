@@ -465,13 +465,29 @@ INSERT INTO %PREFIX%_user_fields (usf_id, usf_cat_id, usf_type, usf_name_intern,
 (3, 1, 'TEXT', 'ADDRESS', 'SYS_ADDRESS', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
 (4, 1, 'TEXT', 'POSTCODE', 'SYS_POSTCODE', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
 (5, 1, 'TEXT', 'CITY', 'SYS_CITY', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 5, 1, '2012-01-08 11:12:05', NULL, NULL),
-(25, 1, 'DROPDOWN', 'BUNDESLAND', 'Bundesland', NULL, 'Bayern\r\nBaden-Württemberg\r\nBerlin\r\nBrandenburg\r\nBremen\r\nHamburg\r\nHessen\r\nMecklenburg-Vorpommern\r\nNiedersachsen\r\nNRW\r\nRheinland-Pfalz\r\nSaarland\r\nSachsen\r\nSachsen-Anhalt\r\nSchleswig-Holstein\r\nThüringen', NULL, NULL, 0, 0, 0, 0, 6, 1, '2013-11-27T17:50:14', 1, '2013-11-28T16:12:08'),
+(25, 1, 'DROPDOWN', 'BUNDESLAND', 'Bundesland', NULL, 'Bayern
+Baden-Württemberg
+Berlin
+Brandenburg
+Bremen
+Hamburg
+Hessen
+Mecklenburg-Vorpommern
+Niedersachsen
+NRW
+Rheinland-Pfalz
+Saarland
+Sachsen
+Sachsen-Anhalt
+Schleswig-Holstein
+Thüringen', NULL, NULL, 0, 0, 0, 0, 6, 1, '2013-11-27T17:50:14', 1, '2013-11-28T16:12:08'),
 (6, 1, 'TEXT', 'COUNTRY', 'SYS_COUNTRY', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 7, 1, '2012-01-08 11:12:05', NULL, NULL),
 (7, 1, 'TEXT', 'PHONE', 'SYS_PHONE', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 8, 1, '2012-01-08 11:12:05', NULL, NULL),
 (8, 1, 'TEXT', 'MOBILE', 'SYS_MOBILE', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 9, 1, '2012-01-08 11:12:05', NULL, NULL),
 (9, 1, 'TEXT', 'FAX', 'SYS_FAX', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 10, 1, '2012-01-08 11:12:05', NULL, NULL),
 (10, 1, 'DATE', 'BIRTHDAY', 'SYS_BIRTHDAY', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 11, 1, '2012-01-08 11:12:05', NULL, NULL),
-(11, 1, 'RADIO_BUTTON', 'GENDER', 'SYS_GENDER', NULL, 'male.png|SYS_MALE\r\nfemale.png|SYS_FEMALE', NULL, NULL, 0, 0, 0, 0, 12, 1, '2012-01-08 11:12:05', NULL, NULL),
+(11, 1, 'RADIO_BUTTON', 'GENDER', 'SYS_GENDER', NULL, 'male.png|SYS_MALE
+female.png|SYS_FEMALE', NULL, NULL, 0, 0, 0, 0, 12, 1, '2012-01-08 11:12:05', NULL, NULL),
 (12, 1, 'EMAIL', 'EMAIL', 'SYS_EMAIL', NULL, NULL, NULL, NULL, 1, 0, 0, 1, 13, 1, '2012-01-08 11:12:05', NULL, NULL),
 (13, 1, 'URL', 'WEBSITE', 'SYS_WEBSITE', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 14, 1, '2012-01-08 11:12:05', NULL, NULL),
 (14, 2, 'TEXT', 'AOL_INSTANT_MESSENGER', 'INS_AOL_INSTANT_MESSENGER', NULL, NULL, 'aim.png', NULL, 0, 0, 0, 0, 1, 1, '2012-01-08 11:12:07', NULL, NULL),

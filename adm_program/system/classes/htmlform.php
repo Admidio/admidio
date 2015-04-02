@@ -1307,7 +1307,7 @@ class HtmlForm extends HtmlFormBasic
 		}
 		
 		// the sql statement which returns all found categories
-		$sql = 'SELECT DISTINCT cat_id, cat_name, cat_default 
+		$sql = 'SELECT DISTINCT cat_id, cat_name, cat_default, cat_sequence
 		          FROM '.$sqlTables.'
 				 WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
 					   OR cat_org_id IS NULL )

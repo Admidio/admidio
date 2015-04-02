@@ -287,6 +287,7 @@ foreach($gProfileFields->mProfileFields as $field)
             if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name_intern') == 'COUNTRY')
             {
                 $arrListValues = $gL10n->getCountries();
+                $defaultValue  = null;
                 
                 if($user->getValue('usr_id') == 0 && strlen($gPreferences['default_country']) > 0)
                 {

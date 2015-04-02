@@ -108,7 +108,7 @@ else
     $page = new HtmlPage();
     $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
     
-    $page->addJavascript('var profileJS = new profileJSClass();', true);
+    $page->addJavascript('var profileJS = new profileJSClass();');
     
     $page->addHeadline($headline);
 

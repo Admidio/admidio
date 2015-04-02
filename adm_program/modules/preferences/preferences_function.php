@@ -128,7 +128,7 @@ case 1:
                 break;
 
             case 'user_management':
-                $checkboxes = array('user_management_show_all_users');
+                $checkboxes = array('members_show_all_users');
                 break;
 
             case 'downloads':

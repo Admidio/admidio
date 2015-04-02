@@ -27,7 +27,7 @@ if (isset($_POST['admSearchMembers']) && strlen($_POST['admSearchMembers']) > 0)
 $getMembers = admFuncVariableIsValid($_GET, 'members', 'boolean', array('defaultValue' => 1));
 
 // if only active members should be shown then set parameter
-if($gPreferences['user_management_show_all_users'] == 0)
+if($gPreferences['members_show_all_users'] == 0)
 {
     $getMembers = 1;
 }
@@ -150,7 +150,7 @@ if($gPreferences['profile_log_edit_fields'] == 1)
 }
 
 // show checkbox to select all users or only active members
-if($gPreferences['user_management_show_all_users'] == 1)
+if($gPreferences['members_show_all_users'] == 1)
 {
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
     $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), $flagShowMembers, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
@@ -198,7 +198,7 @@ $columnHeading = array(
 $membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
 $membersTable->disableDatatablesColumnsSort(10);
 $membersTable->addRowHeadingByArray($columnHeading);
-$membersTable->setDatatablesRowsPerPage($gPreferences['user_management_members_per_page']);
+$membersTable->setDatatablesRowsPerPage($gPreferences['members_users_per_page']);
 $membersTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 // set alternative order column for member status icons
 $membersTable->setDatatablesAlternativOrderColumns(2, 3);
