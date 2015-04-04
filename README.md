@@ -13,6 +13,7 @@ like member lists, event manager, guestbook, photo album or download area.
 - [Installation](#installation)
 - [Update](#update)
 - [Contributing](#contributing)
+- [Changelog](#changelog)
 - [Donation](#donation)
 - [Copyright and License](#copyright-and-license)
 - [Credits](#credits)
