@@ -30,6 +30,10 @@ like member lists, event manager, guestbook, photo album or download area.
 
 ## Installation
 
+You can install Admidio on your webspace if the script language [PHP](http://php.net/) in version 5.3.7 
+or higher is available. Admidio also needs a [MySql](http://www.mysql.com/) (version 5.0 or higher) or 
+[PostgreSQL](http://www.postgresql.org/) (version 9.0 or higher) database to run.
+
 For a successful installation please follow our [online instructions](http://www.admidio.org/dokuwiki/doku.php?id=en:2.0:installation).
 There we describe step by step the installation process.
 
@@ -69,6 +73,10 @@ is described in [our wiki](http://admidio.org/dokuwiki/doku.php?id=de:entwickler
 So if you find yourself in one of the above points then we invite you
 to join our team and help to improve Admidio to one of the best free
 membership software.
+
+## Changelog
+
+Please visit our [changelog](http://admidio.org/index.php?page=changelog_24) for detail informations about the bugfixes and enhancements in each version.
 
 ## Donation
 
