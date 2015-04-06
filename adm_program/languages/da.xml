@@ -148,7 +148,6 @@
     <text id="DAT_ICAL_DAYS_PAST_DESC" development="new" translation="todo">Denne værdi definerer hvor mange dage bag ud i tiden der skal inkluderes i iCal downloadedt eller abonnementet. (Standard: 30)</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="edited">Aktiver registrering til denne aftale.</text>
     <text id="DAT_VISIBILITY" development="new" translation="edited">Synlighed</text>
-    <text id="ECA_FILL_INPUTS" development="new" translation="edited">Venligst udfyld alle felter\n\nog klik igen %VAR1_BOLD%.</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Din database version er %VAR1%.\n\nEn opdatering til version %VAR2% er påkrævet</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="edited">Database system</text>
     <text id="INS_FACEBOOK" development="new" translation="edited">Facebook</text>
@@ -181,9 +180,6 @@
     <text id="ORG_VALUE_LIST_DESC" development="new" translation="edited">Definer indholdet af drop-down menuer eller valg bokse.  Angiv EN drop-down eller radio button værdi pr. linie.\n\nIstedet for tekst så vil den valgte position på listen blive gemt i profilen. Hvis teksten i en linie skulle ændre sig så vil alle brugere med denne værdi se den nye værdi med det samme. Hvis en menu værdi bliver flyttet til en anden linie, så kan der dukke en anden tekst på i brugerens profil.\n\nHvis det er en radio button, kan en ikon blive vist istedet for et tekst element. For at gøre dette skal du indtaste navnet på en ikon fil i tema folderen (f.eks ok.png) eller du kan bruge en ekstern billede URL (f.eks http://www.example.com/example.jpg). Ved at bruge en lodret streg, kan du tilføje yderligere hjælpsom information sammen med ikonen(f.eks. kvinde.png|kvinde)</text>
     <text id="ORG_SHOW_ORGANIZATION_SELECT" development="new" translation="edited">Vis organisations vælger</text>
     <text id="ORG_SHOW_ORGANIZATION_SELECT_DESC" development="new" translation="edited">Hvis der er flere organisationer gemt i den samme database, så kan Log ind skærmen vise en valg boks med alle tilgængelige organisationer. Brugeren kan så på login skærmen vælge en anden organisation (en anden organisation end den der er defineret i config.php). Brugeren skal selvfølgelig være registreret medlem af den valgte organisation.</text>
-    <text id="ORG_ORGANIZATION_REGIONAL_SETTINGS" development="new" translation="edited">Organisations og regionale indstillinger</text>
-    <text id="PHO_SLIDESHOW_SPEED" development="new" translation="edited">Slide show hastighed</text>
-    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="edited">Definer forsinkelsen i sekunder før næste billede bliver hentet.</text>
     <text id="SYS_CHECKBOX" development="new" translation="edited">Check-boks</text>
     <text id="SYS_CONFIRMATION_OF_INPUT" development="new" translation="edited">Bekræft værdi</text>
     <text id="SYS_CONTACT_DETAILS" development="new" translation="edited">Kontakt information</text>
@@ -220,38 +216,6 @@
     <text id="SYS_LOADING_CONTENT" development="new" translation="edited">Henter indhold...</text>
     <text id="SYS_REGISTRATION_SAVED" development="new" translation="edited">Dine data er blevet gemt.\n\nDu kan logge ind efter de er godkendt. Du vil blive informeret via e-mail når dine data er godkendt.</text>
     <text id="SYS_RSS_FEED_FOR_VAR" development="new" translation="edited">RSS-Feed for %VAR1%</text>
-    <text id="SYS_JANUARY" development="new" translation="edited">Januar</text>
-    <text id="SYS_FEBRUARY" development="new" translation="edited">Februar</text>
-    <text id="SYS_MARCH" development="new" translation="edited">Marts</text>
-    <text id="SYS_APRIL" development="new" translation="edited">April</text>
-    <text id="SYS_MAY" development="new" translation="edited">Maj</text>
-    <text id="SYS_JUNE" development="new" translation="edited">Juni</text>
-    <text id="SYS_JULY" development="new" translation="edited">Juli</text>
-    <text id="SYS_AUGUST" development="new" translation="edited">August</text>
-    <text id="SYS_SEPTEMBER" development="new" translation="edited">September</text>
-    <text id="SYS_OCTOBER" development="new" translation="edited">Oktober</text>
-    <text id="SYS_NOVEMBER" development="new" translation="edited">November</text>
-    <text id="SYS_DECEMBER" development="new" translation="edited">December</text>
-    <text id="SYS_JAN" development="new" translation="edited" description="Abbr. for January">Jan.</text>
-    <text id="SYS_FEB" development="new" translation="edited" description="Abbr. for February">Feb.</text>
-    <text id="SYS_MAR" development="new" translation="edited" description="Abbr. for March">Mar.</text>
-    <text id="SYS_APR" development="new" translation="edited" description="Abbr. for April">Apr.</text>
-    <text id="SYS_MAY" development="new" translation="edited" description="Abbr. for May">Maj.</text>
-    <text id="SYS_JUN" development="new" translation="edited" description="Abbr. for June">Jun.</text>
-    <text id="SYS_JUL" development="new" translation="edited" description="Abbr. for July">Jul.</text>
-    <text id="SYS_AUG" development="new" translation="edited" description="Abbr. for August">Aug.</text>
-    <text id="SYS_SEP" development="new" translation="edited" description="Abbr. for September">Sep.</text>
-    <text id="SYS_OCT" development="new" translation="edited" description="Abbr. for October">Okt.</text>
-    <text id="SYS_NOV" development="new" translation="edited" description="Abbr. for November">Nov.</text>
-    <text id="SYS_DEC" development="new" translation="edited" description="Abbr. for December">Dec.</text>
-    <text id="SYS_MON" development="new" translation="edited" description="Abbr. for Monday">Man.</text>
-    <text id="SYS_TUE" development="new" translation="edited" description="Abbr. for Tuesday">Tir.</text>
-    <text id="SYS_WED" development="new" translation="edited" description="Abbr. for Wednesday">Ons.</text>
-    <text id="SYS_THU" development="new" translation="edited" description="Abbr. for Thursday">Tor.</text>
-    <text id="SYS_FRI" development="new" translation="edited" description="Abbr. for Friday">Fre.</text>
-    <text id="SYS_SAT" development="new" translation="edited" description="Abbr. for Saturday">Lør.</text>
-    <text id="SYS_SUN" development="new" translation="edited" description="Abbr. for Monday">Søn.</text>
-    <text id="SYS_TODAY" development="new" translation="edited">Idag</text>
 </version>
 <version id="2.2.0" translator="Henrik Troels-Hansen">
     <!-- Phrases only in Announcementmodule -->
@@ -303,7 +267,6 @@
     <text id="DAT_DATES" development="new" translation="edited">Aktiviteter</text>
     <text id="DAT_DATES_DESC" development="new" translation="edited">Du kan oprette og redigere aktiviteter her. Andre brugere kan tilmelde sig aktiviteterne.</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="edited">Rediger lokale</text>
-    <text id="DAT_EDIT_ROOMS_DESC" development="new" translation="edited">Oprettelse og redigering af lokale.\n%VAR1% Alle organisations indstillinger som ikke er gemt vil gå tabt.</text>
     <text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">En ny mødedato blev oprettet</text>
     <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1" development="new" translation="edited">En ny mødedato i %VAR1% blev oprettet.\n\nTitel: %VAR2%\nDato: %VAR3%\nKalender: %VAR4%\n</text>
     <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2" development="new" translation="edited">Lokalitet: %VAR1%\nLokale: %VAR2%\nDeltagere: %VAR3%\nOprettet af: %VAR4%\n</text>
@@ -331,8 +294,6 @@
     <text id="DAT_QUOTA_EXCEEDED" development="new" translation="edited">Det samlede antal deltagere i alle roller (hvis kvoter er sat) må ikke være højere end maximum antal deltagere defineret for lokalet.</text>
     <text id="DAT_QUOTA_FOR_ROLE" development="new" translation="edited">Kun en kvote er tilladt for en rolle som kan vise den valgte event.</text>
     <text id="DAT_QUOTA_WITH_MAXIMUM" development="new" translation="edited">Indstilling af kvote er tilladt når antal af deltagere er begrænset.</text>
-    <text id="DAT_SHOW_CALENDAR_SELECTION" development="new" translation="edited">Vis kalender valgs boks</text>
-    <text id="DAT_SHOW_CALENDAR_SELECTION_DESC" development="new" translation="edited">Valg boks for hver enkelt kalender er vist for at give gæster hurtig søgning af events. (standard: ja)</text>
     <text id="DAT_SHOW_MAP_LINK" development="new" translation="edited">Vis link til kort</text>
     <text id="DAT_SHOW_MAP_LINK_DESC" development="new" translation="edited">Når lokation er sat, bruges Google Maps til at vise lokationen og en rute fra egen lokation til denne. (standard: ja)</text>
     <text id="DAT_SHOW_ON_MAP" development="new" translation="edited">Vis på kort</text>
@@ -347,7 +308,6 @@
     <text id="DOW_CHOOSE_FILE" development="new" translation="edited">Vælg fil</text>
     <text id="DOW_COUNTER" development="new" translation="edited">Tæller</text>
     <text id="DOW_CREATE_FOLDER" development="new" translation="edited">Opret folder</text>
-    <text id="DOW_CREATE_FOLDER_DESC" development="new" translation="edited">Opret folder i %VAR1_BOLD%.</text>
     <text id="DOW_DOWNLOADS" development="new" translation="edited">Filer</text>
     <text id="DOW_DOWNLOADS_DESC" development="new" translation="edited">Forskellige data filer og filtyper kan gøres tilgængelige via download. Disse filer kan kategoriseres i foldere med forskellige adgangs rettigheder.</text>
     <text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">En ny fil blev overført</text>
@@ -356,7 +316,6 @@
     <text id="DOW_ENABLE_DOWNLOAD_MODULE_DESC" development="new" translation="edited">Fil/Folder modulet kan deaktiveres her. Efter deaktivering vil det ikke længere vises som modul i oversigten. (standard: ja)</text>
     <text id="DOW_FILE_EXIST" development="new" translation="edited">Filen %VAR1% eksisterer allerede!\n\nVælg en anden fil.</text>
     <text id="DOW_FILE_EXTENSION_INVALID" development="new" translation="edited">Denne filtype er ikke tilladt på denne server.</text>
-    <text id="DOW_FILE_NAME_INVALID" development="new" translation="edited">Det valgte filnavn indeholder ugyldige karakterer!\n\nBrug kun gyldige karakterer i filnavnet.</text>
     <text id="DOW_FILE_NAME_RULES" development="new" translation="edited">Filnavnet bør indikere fil indholdet. Fil navnet påvirker liste rækkefølgen. F.eks. bør fil navne i foldere med sager begynde med (yyyy-mm-tt).</text>
     <text id="DOW_FILE_NOT_EXISTS" development="new" translation="edited">Filen er ikke længere fysisk til stede på serveren. Den bør slettes fra databasen.</text>
     <text id="DOW_FILE_RENAME" development="new" translation="edited">Fil %VAR1% blev omdøbt.</text>
@@ -397,55 +356,19 @@
     <text id="ECA_A_ECARD_FROM" development="new" translation="edited">Postkort sendt af</text>
     <text id="ECA_ACTIVATE_GREETING_CARDS" development="new" translation="edited">Aktiverer postkort modul</text>
     <text id="ECA_ACTIVATE_GREETING_CARDS_DESC" development="new" translation="edited">Postkort modulet kan aktiveres og deaktiveres her. Hvis serveren ikke kan sende e-mails, bedes du deaktivere dette modul. Modulet er kun tilgængeligt for bruger der er logget ind. (Standard: Ja)</text>
-    <text id="ECA_BLEND_IN_SETTINGS" development="new" translation="edited">Vis indstillinger</text>
-    <text id="ECA_BLEND_OUT_SETTINGS" development="new" translation="edited">Gem indstillinger</text>
-    <text id="ECA_CONTENT_LOADING" development="new" translation="edited">Henter indhold - vent venligst!</text>
-    <text id="ECA_EMAIL_LOOKS_INVALID" development="new" translation="edited">E-mail adressen er måske forkert!</text>
-    <text id="ECA_EXTERNAL_RECIPIENT" development="new" translation="edited">Ekstern modtager</text>
-    <text id="ECA_EMAIL_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by number">E-mail adresse(r) på %VAR1%modtager(e)</text>
-    <text id="ECA_EMAIL_OF_SENDER" development="new" translation="edited">Afsenders e-mail adresse</text>
-    <text id="ECA_FIELD_ERROR" development="new" translation="edited">Nogen felter er ikke udfyldt eller er udfyldt forkert. Venligst check dem igen.</text>
-    <text id="ECA_FILL_INPUTS" development="new" translation="edited">Venligst udfyld \nalle data felter og \nklik på 'send'.</text>
-    <text id="ECA_FONT" development="new" translation="edited">Font type indstilinger. (Standard: Comic Sans MS)</text>
-    <text id="ECA_FONT_SIZE" development="new" translation="edited">Font størrelse indstilinger. (Standard: 20) </text>
-    <text id="ECA_FONT_COLOR" development="new" translation="edited">Font farve indstilinger. (Standard: Sort)</text>
     <text id="ECA_GREETING_CARD" development="new" translation="edited">Postkort</text>
     <text id="ECA_GREETING_CARDS" development="new" translation="edited">Postkort</text>
     <text id="ECA_GREETING_CARD_EDIT" development="new" translation="edited">Rediger postkort</text>
-    <text id="ECA_GREETING_CARD_SEND" development="new" translation="edited">Send postkort</text>
-    <text id="ECA_GREETING_CARD_PREVIEW" development="new" translation="edited">Postkort visning</text>
-    <text id="ECA_INPUT_INCORRECT" development="new" translation="edited">De følgende felter som er påkrævet for at sende \npostkortet \ner \nikke udfyldt eller forkert udfyldt:</text>
-    <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="edited">intern modtager</text>
-    <text id="ECA_MAX_CC" development="new" translation="edited">Max. yderligere modtagere</text>
-    <text id="ECA_MAX_CC_DESC" development="new" translation="edited">Deaktiver og sæt maximum antal yderligere modtagere om nødvendigt. (Standard: 10)</text>
     <text id="ECA_MAX_MESSAGE_LENGTH" development="new" translation="edited">Max. antal karakterer i en besked</text>
     <text id="ECA_MAX_MESSAGE_LENGTH_DESC" development="new" translation="edited">Deaktiver muligheden her og definer max. længde af besked om nødvendigt. (Standard: 500 karakterer)</text>
-    <text id="ECA_MESSAGE_TOO_LONG" development="new" translation="edited" description="%VAR1% wird durch die max. Länge ersetzt">Et maximum på %VAR1% karakterer er tilladt!</text>
-    <text id="ECA_MORE_RECIPIENTS" development="new" translation="edited">Flere modtagere</text>
-    <text id="ECA_NAME_OF_SENDER" development="new" translation="edited">Afsenders navn</text> 
-    <text id="ECA_NAME_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by name">Navn på modtager: %VAR1%</text>
     <text id="ECA_NEW_MESSAGE_RECEIVED" development="new" translation="edited">Ny besked modtaget</text>    
-    <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="edited">Ingen bruger med en gyldig e-mail adresse!</text>
-    <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="edited">Ingen yderligere modtagere</text>
     <text id="ECA_NOT_SUCCESSFULLY_SEND" development="new" translation="edited">Dit postkort kunne ikke afsendes!</text>
-    <text id="ECA_OTHER_RECIPIENT" development="new" translation="edited">Andre modtagere</text>
-    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="new" translation="edited">Venligst vælg en gyldig rolle type!</text>
     <text id="ECA_RECIPIENT_EMAIL" development="new" translation="edited">E-mail modtager</text>
     <text id="ECA_RECIPIENT_NAME" development="new" translation="edited">Navn på modtager</text>    
-    <text id="ECA_SCALING_GREETING_CARD" development="new" translation="edited">Postkort billede størrelse (bredde x højde)</text>
-    <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="todo">Dette kan sættes til bredden og højden af det postkort billede der skal skaleres. (Standard: 400 x 250 Pixel) </text>
-    <text id="ECA_SCALING_PREVIEW" development="new" translation="edited">Billede visning (Bredde x højde)</text>
-    <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="edited">Sæt størrelse på visning af billede. (Standard: 250 x 250 Pixel)</text>
-    <text id="ECA_SEND_ERROR" development="new" translation="edited">Der opstod en fejl ved afsendelse af postkort. Venligst prøv igen senere.</text>    
-    <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="edited">Dit postkort bliver sendt til medlemmer af den valgte rolle, hvis de har opgivet en e-mail adresse.\n\nVælg et medlem af en rolle eller hele rollen.</text>
-    <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="edited">%VAR1% karakterer tilbage</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">Dit postkort blev sendt.</text>
     <text id="ECA_TEMPLATE" development="new" translation="edited">Skabelon</text>
     <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Definer standard skabelon. (Standard: standard brev) </text>
-    <text id="ECA_THE_MESSAGE" development="new" translation="edited">En besked</text>
-    <text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" development="new" translation="edited">Til alle rolle medlemmer</text>
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="edited">Vis fuld størrelse billede</text>
-    <text id="ECA_YOUR_MESSAGE" development="new" translation="edited">Din besked</text>
 
     <!-- Phrases only in Guestbookmodule -->
     <text id="GBO_BACK_TO_GUESTBOOK" development="new" translation="edited">Tilbage til gæstebog</text>
@@ -473,7 +396,7 @@
     <text id="GBO_HIDE_COMMENTS" development="new" translation="edited">Gem kommentarer</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING" development="new" translation="edited">Vis kommentarer med det samme</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING_DESC" development="new" translation="edited">Når denne indstilling er aktiv så bliver kommentarer vist med det samme efter en side reload. Ellers skal brugerne klikke på et link for at vise kommentarer. (Standard: Nej)</text>
-    <text id="GBO_MODERATE_ENTRIES" development="new" translation="edited">Modererer %VAR1% indlæg</text>
+    <text id="GBO_MODERATE_ENTRIES" development="new" translation="edited">Modererer indlæg</text>
     <text id="GBO_MODERATE_VARS" development="new" translation="edited">Modererer %VAR1%</text>
     <text id="GBO_ONLY_VISITORS" development="new" translation="edited">Kun gæster</text>
     <text id="GBO_SHOW_COMMENTS" development="new" translation="edited">Vis kommentarer</text>
@@ -503,15 +426,12 @@
     <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Updaterer database</text>
     <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Indtastning af database information</text>
     <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="edited">Oplys database adgangs information her. Tabel prefix kan ændres hvis det er nødvendigt. Ændringerne er IKKE nødvendige hvis flere Admidio installationer bruger den samme database.</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED" development="new" translation="edited">Database opdatering er påkrævet</text>
     <text id="INS_DATABASE_NO_LOGIN" development="new" translation="edited">Den oplyste database adgangs information er ikke korrekt!\n\nCheck og opdater adgangs informationerne eller check om databasen er on-line og tilgængelig.</text>
     <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Opretter database</text>
     <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Organisationens Bestyrelse</text>
     <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Møder kan afholdes her. Lokale skal reserveres på forhånd. Projektor kan frit afbenyttes.</text>
     <text id="INS_DESCRIPTION_MEMBER" development="new" translation="edited">Alle organisations medlemmer</text>
     <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="edited">Gruppe af system administratorer</text>
-    <text id="INS_DOWNLOAD" development="new" translation="edited">Download %VAR1%</text>
-    <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="edited">Download konfigurations fil %VAR1_BOLD% og kopier den til Admidio's rod folder. Du kan også finde %VAR2_BOLD% her.\n\nFortsæt installationen når du har kopieret filen på plads.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Indtast database adgangs information</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">Filen %VAR1_BOLD% kunne ikke åbnes.</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="edited">Folderen %VAR1_BOLD% er ikke skrivbar. Venligst sæt skrive rettigheder for at kunne overføre billeder og filer til fil modulet.</text>
@@ -524,29 +444,19 @@
     <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="new" translation="edited">Installationen blev afsluttet med sucess</text>
     <text id="INS_INTERN" development="new" translation="edited">Intern</text>
     <text id="INS_LANGUAGE_NOT_CHOOSEN" development="new" translation="edited">Der er ikke valgt noget sprog.</text>
-    <text id="INS_LOGIN_OF_WEBMASTER" development="new" translation="edited">Webmaster's adgangs information</text>
-    <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="new" translation="edited">Oplys adgangs informationer for en i en eksisterende organisation. Brug hans/hendes adgangs informationer senere for at kunne logge ind i ny organisation.</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="new" translation="edited">Adgangs informationer for webmaster er ikke fyldestgørende!</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="edited">Forkert log ind. Den oplyste adgangs information eksisterer ikke eller kunne ikke findes i eksisterende organisationer!</text> 
     <text id="INS_MASTER_DATA" development="new" translation="edited">Master data</text>
     <text id="INS_MEMBERSHIP" development="new" translation="edited">Medlemskab</text>
     <text id="INS_MESSENGER" development="new" translation="edited">Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="edited">Ikke alle MySQL database adgangs informationer er blevet oplyst!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="edited">Organisations navn</text>
-    <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="edited">Skriv officiel forkortelse af organisationens navn her, til brug i Admidio.</text>
-    <text id="INS_NAME_OF_NEW_ORGANIZATION" development="new" translation="edited">Skriv officiele forkortelser af organisations navnene her, til brug i Admidio.</text>
-    <text id="INS_NECESSARY_INFORMATION" development="new" translation="edited">På de næste sider skal du oplyse vigtige oplysninger om den ny organisation.</text>
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="edited">Det oplyste organisations navn er ikke komplet!</text>
     <text id="INS_OVERVIEW" development="new" translation="edited">Oversigt</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="edited">De oplyste kodeord er ikke ens.</text>
     <text id="INS_PHONE_LIST" development="new" translation="edited">Telefonliste</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% kræver mindst MySQL version %VAR2%. Venligst opdater din MySQL database eller brug en %VAR3%ældre Admidio version%VAR4% for at sikre kompatabilitet.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% kræver mindst PHP version %VAR2%. Venligst opdater din PHP version eller brug en %VAR3%ældre Admidio version%VAR4% for at sikre kompatabilitet.</text>    
-    <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Tidligere Admidio version</text>
-    <text id="INS_SET_ADMINISTRATOR" development="new" translation="edited">Sæt administrator</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="edited">Opretter organisation</text>
     <text id="INS_SET_UP_ORGANIZATION" development="new" translation="edited">Konfigurer organisation</text>
-    <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="new" translation="edited">Ny organisation %VAR1_BOLD% er blevet oprettet og konfigureret. Log ind nu med system administrator login oplysninger.</text>
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="new" translation="edited">Konfiguration færdig</text>
     <text id="INS_SKYPE" development="new1" translation="edited">Skype</text>
     <text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="edited">Vi vil sætte stor pris på hvis du kunne støtte udviklingen af Admidio med en donation!</text>
@@ -557,13 +467,11 @@
     <text id="INS_TRAINING" development="new" translation="edited">Træning</text>
     <text id="INS_UPDATE" development="new" translation="edited">Opdater</text>
     <text id="INS_UPDATE_DATABASE" development="new" translation="edited">Opdater database</text>
-    <text id="INS_UPDATE_FROM_ADMIDIO_1X" development="new" translation="edited">Indtil nu var det Version 1.x af Admidio der blev benyttet. For at kunne migrere databasen for Admidio %VAR1% succesfuldt, oplys venligst eksakt versions nummer fra tidligere installation.</text>
     <text id="INS_UPDATE_TO_VERSION_SUCCESSFUL" development="new" translation="edited">Admidio databasen er blevet succesfuldt opdateret til version %VAR1%.\nDu kan nu logge ind og bruge Admidio igen.</text>
     <text id="INS_UPDATE_VERSION" development="new" translation="edited">Opdater til version %VAR1%</text>
     <text id="INS_UPDATING_WAS_SUCCESSFUL" development="new" translation="edited">Opdaterings proces afsluttet succesfuldt</text>
     <text id="INS_WARNING_BETA_VERSION" development="new" translation="edited">Dette er en beta version af Admidio.\n\nProduktions brug kan være forbundet med risiko på grund af mulig instabilit og kan resultere i datatab. Bør kun bruges som testmiljø!</text>
     <text id="INS_WARNING_SAFE_MODE" development="new" translation="edited">Safe mode er aktiveret på serveren. Dette kan give problemer med visse funktioner såsom fil overførsler.</text>
-    <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="new" translation="edited">Velkommen! Opret din nye organisation her!</text>
     <text id="INS_WELCOME_TO_INSTALLATION" development="new" translation="edited">Velkommen til installationen af Admidio</text>
     <text id="INS_WELCOME_TEXT" development="new" translation="edited">På de følgende sider vil du blive bedt om at oplyse nødvendig information for at kunne oprette et nyt Admidio system. Du vil blive bedt om at specificere database adgangs informationer til din Admidio installation.</text>
     <text id="INS_YAHOO_MESSENGER" development="new1" translation="edited">Yahoo! Messenger</text>
@@ -595,7 +503,6 @@
     <text id="LST_COLUMN" development="new" translation="todo">Kolonne</text> 
     <text id="LST_ACTIVE_ROLES" development="new" translation="edited">Oversigt over aktive roller</text>
     <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="edited">Tilføj kolonne</text>
-    <text id="LST_CATEGORY_NO_LISTS" development="new" translation="edited">Ingen aktiverede lister tilgængelige.</text>
     <text id="LST_CHANGE_LIST" development="new" translation="edited">Vil du hente og ændre standard liste eller oprette en ny liste?</text>
     <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Vælg en rolle for den valgte liste.</text>
     <text id="LST_CONFIGURATION" development="new" translation="edited">Liste indstilling</text>
@@ -625,7 +532,6 @@
     <text id="LST_LIST_VIEW" development="new" translation="edited">Liste oversigt</text>
     <text id="LST_MAX" development="new" translation="edited">af maximum. %VAR1%</text>
     <text id="LST_MEMBERS_PER_PAGE" development="new" translation="edited">Medlemmer vist pr. side</text>
-    <text id="LST_MEMBERS_PER_PAGE_DESC" development="new" translation="edited">Definér antal af medlemmer vist på en liste side. Sidenummerering forekommer hvis antallet overstiger den definerede værdi. Vis print eksempel og eksport funktionalitet bliver ikke påvirket. Hvis værdien er 0, vil alle medlemmer blive listet og sidenummerering slået fra. (Standard: 20)</text>
     <text id="LST_MEMBER_ASSIGNMENT" development="new" translation="edited">Medlemskabs tildeling</text>
     <text id="LST_MEMBERSHIP_END" development="new" translation="edited">Afslutning af medlemskab</text>
     <text id="LST_MEMBERSHIP_START" development="new" translation="edited">Start på medlemskab</text>
@@ -695,7 +601,6 @@
     <text id="MAI_SENDER_NOT_LOGGED_IN" development="new" translation="edited">(Afsender var logget af. Derfor kan afsenders information være forkert.)</text>
     <text id="MAI_SHOW_CAPTCHA_DESC" development="new" translation="edited">For brugere der er logget ud vil der fremkomme en alphanummerisk tekst når captcha modulet er aktiveret. Den viste tekst skal skrives i det dertil indrettede felt. Det bør forhindre misbrug af formularen fra spammere. (Standard: Ja)</text>
     <text id="MAI_SUBJECT" development="new" translation="edited">Emne</text>
-    <text id="MAI_TO_ROLE" description="E-Mail an die Rolle XY schreiben" development="new" translation="edited">til Rolle %VAR1_BOLD%</text>
 
     <!-- Phrases only in Membersadministration -->
     <text id="MEM_ASSIGN_FIELDS" development="new" translation="edited">Tilføj felter</text>
@@ -730,8 +635,6 @@
     <text id="MEM_ROLE_SELECT_RIGHT" development="new" translation="edited">Du har ikke rettighed til at vælge rollen %VAR1%.\nVælg venligst en anden rolle.</text>
     <text id="MEM_SEND_USERNAME_PASSWORD" development="new" translation="edited">Send e-mail med brugerid og kodeord.</text>
     <text id="MEM_SHOW_ALL_USERS" development="new" translation="edited">Vis alle brugere</text>
-    <text id="MEM_SHOW_MEMBERS" development="new" translation="edited">Kun aktive medlemmer er vist. Klik her for at se alle medlemmer registreret i databasen.</text>
-    <text id="MEM_SHOW_USERS" development="new" translation="edited">Alle medlemmer er vist. klik her for kun at se de aktive medlemmer der er registreret i databasen.</text>
     <text id="MEM_UPDATED_ON" development="new" translation="edited">Opdateret den</text>
     <text id="MEM_USER_DELETE" development="new" translation="edited">Vil du virkelig slette %VAR1_BOLD%?\n\nBrugeren bliver slettet helt fra databasen, så adgang til vedkommendes informationer bliver helt slettet.</text>
     <text id="MEM_USER_MANAGEMENT" development="new" translation="edited">Bruger Administration</text>
@@ -745,7 +648,6 @@
     <text id="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN" development="new" translation="edited">Tildeler medlemskab og login information til valgte bruger.</text>
     <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="edited">Tildeler registrering</text>
     <text id="NWU_DELETE_REGISTRATION" development="new" translation="edited">Sletter registrering</text>
-    <text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="edited">Administrer nye registreringer</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="edited">Nye registreringer af brugere kan listes, godkendes eller afvist her.</text>
     <text id="NWU_NEW_REGISTRATIONS" development="new" translation="edited">Nye registreringer</text>
     <text id="NWU_NO_MEMBERSHIP" development="new" translation="edited">Brugeren er ikke medlem af organisationen %VAR1% men har allerede fået et login tildelt.</text>
@@ -758,23 +660,14 @@
     <text id="NWU_USER_VALID_LOGIN" development="new" translation="edited">Brugeren har allerede gyldig login information.</text>
 
     <!-- Phrases only in Organizationadministration -->
-    <text id="ORG_ACCESS_DATA_ADMIDIO" development="new" translation="edited">Brug adgangs information fra Admidio</text>
-    <text id="ORG_ACCESS_DATA_ADMIDIO_DESC" development="new" translation="edited">I tilfælde af at forum systemet skal anvende samme database som Admidio, kan du markere check boksen for at benytte standard adgangs information istedet for at skulle udfylde det hver gang. (Standard: ikke markeret)</text>
-    <text id="ORG_ACCESS_FORUM_DATABASE" development="new" translation="edited">Adgangs information for forum databasen</text>
-    <text id="ORG_ACCESS_FORUM_DATABASE_DESC" development="new" translation="edited">Hvis du installerer forum i en anden database, så skriv informationen ind herover.</text>
     <text id="ORG_ACCESS_TO_MODULE" development="new" translation="edited">Modul adgang</text>
     <text id="ORG_ACCESS_TO_MODULE_DESC" development="new" translation="edited">Modulet kan deaktiveres eller aktiveres kun for brugere der er logget ind. Hvis modulet kun er tilgængeligt for brugere der er logget ind, så vil det blive skjult for brugere der ikke er logget ind og RSS-Feeds vil være fuldstændigt deaktiveret for begge bruger grupper. (Standard: aktiv)</text>
-    <text id="ORG_ACTIVATE_FORUM" development="new" translation="edited">Aktiver forum</text>
-    <text id="ORG_ACTIVATE_FORUM_DESC" development="new" translation="edited">%VAR1% Admidio har ikke sin egen forum funktionalitet. Du har mulighed for at integrere tredie parts software (For tiden kun phpBB 2.0). (Standard: Nej)</text>
-    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN" development="new" translation="edited">Aktivere interne forums links</text>
-    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN_DESC" development="new" translation="edited">Aktiv: forum bliver vist indenfor Admidio layouttet. (Standard)\nInaktivt: Forum bliver vist i nyt browser vindue.</text>
     <text id="ORG_ADDITIONAL_VARIABLES" development="new" translation="edited">Yderligere variabler</text>
     <text id="ORG_ADMIDIO_THEME" development="new" translation="edited">Admidio-Tema</text>
     <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="edited">Vælg layout for Admidio. Alle temaer gemt i folderen adm_themes bliver vist. (Standard: modern)</text>
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="edited">Avanceret registrering</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="edited">Automatisk logoff efter</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER_DESC" development="new" translation="edited">Sæt tid før systemet automatisk logger en inaktiv bruger af. En bruger er inaktiv når der ikke er hentet sider i en bestemt periode. Dette bliver ignoreret hvis brugeren vælger %VAR1_BOLD%. (Standard: 20 minutter)</text>
-    <text id="ORG_CAPTCHA" development="new" translation="edited">Brug disse indstillinger for captcha.</text>
     <text id="ORG_CAPTCHA_BACKGROUND_COLOR" development="new" translation="edited">Baggrunds farve</text>
     <text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="edited">Vælg baggrunds farve (som hexidecimalt) for captcha koden. (Standard: #FFEFC4)</text>
     <text id="ORG_CAPTCHA_FONT" development="new" translation="edited">Vælg font type for captcha koden. (Standard: Tema font)</text>
@@ -782,13 +675,11 @@
     <text id="ORG_CAPTCHA_PREVIEW" development="new" translation="edited">Captcha eksempel</text>
     <text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="edited">Vis eksempel af captcha. Venligst bemærk at kun gemte værdier forbliver gemte!</text>
     <text id="ORG_CAPTCHA_REGISTRATION" development="new" translation="edited">Når aktiveret vil der vises et billede med en captcha kode eller et simpelt regnestykke til nye brugere. Det er nødvendigt at skrive den rigtige kode eller resultatet for at få lov til at gemme det nyligt rettede indlæg. Captcha er en del af anti-spam løsningen i Admidio. (Standard: Ja)</text>
-    <text id="ORG_CAPTCHA_SIZE" development="new" translation="edited">Definér captcha størrelse.</text>
     <text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="edited">Captcha signatur</text>
     <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="edited">Vælg font størrelse til captcha signaturen. (Standard: 9)</text>
     <text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="edited">Udfyld din foretrukne signatur til captcha. Standard fonten i det valgte tema vil blive benyttet.</text>
     <text id="ORG_CAPTCHA_SIGNS" development="new" translation="edited">Accepterede karakterer</text>
     <text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="edited">Udfyld de accepterede karakterer som denne captcha skal anvende.</text>
-    <text id="ORG_CAPTCHA_SCALING" development="new" translation="edited">Captcha størrelse (Bredde x højde)</text>
     <text id="ORG_CAPTCHA_TYPE" development="new" translation="edited">Captcha type</text>
     <text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="edited">Regnestykke</text>
     <text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="edited">Billede</text>
@@ -806,29 +697,19 @@
     <text id="ORG_ENABLE_CAPTCHA" development="new" translation="edited">Captcha aktivering</text>
     <text id="ORG_ENABLE_RSS_FEEDS" development="new" translation="edited">RSS-Feed aktivering</text>
     <text id="ORG_ENABLE_RSS_FEEDS_DESC" development="new" translation="edited">Admidio kan levere et RSS-Feed for flere moduler (Beskeder, Events/Møder, Gæstebog, Billede galleri og weblinks) på oversigt siden for hvert modul. Abonnement er mulig via browser eller RSS reader. (Standard: Ja)</text>
-    <text id="ORG_EXPORT_ADMIDIO_USER" development="new" translation="edited">Eksport af Admidio bruger(e)</text>
-    <text id="ORG_EXPORT_ADMIDIO_USER_DESC" development="new" translation="edited">Ved næste login vil registrerede brugere automatisk blive oprettet som brugere i forum systemet. (Standard: Ja)</text>
-    <text id="ORG_EXPORT_WEBMASTER_STATUS" development="new" translation="edited">Overfør webmaster status til forum system.</text>
-    <text id="ORG_EXPORT_WEBMASTER_STATUS_DESC" development="new" translation="edited">Eksisterende Admidio webmaster vil automatisk blive registreret i forum systemet som forum administrator. (Standard: Ja)</text>
     <text id="ORG_FAST_REGISTRATION" development="new" translation="edited">Kvik registrering</text>
     <text id="ORG_FIELD_DESCRIPTION" development="new" translation="edited">Definér antal eller ubegrænset yderligere felter. Felterne vil blive vist og kan redigeres i brugerens profil. Disse felter vil også være tilgængelige i egne lister.</text>
     <text id="ORG_FIELD_DISABLED" development="new" translation="edited">Felt for brugere med rettighed til at 'redigere alle brugere' er redigerbart.</text>
     <text id="ORG_FIELD_DISABLED_DESC" development="new" translation="edited">Låste felter i egen profil kan ikke redigeres af brugere. Redigering er kun mulig for brugere med rettighed til at 'redigere alle brugere'.</text>
     <text id="ORG_FIELD_DOWN" development="new" translation="edited">Flyt profil felt ned</text>
-    <text id="ORG_FIELD_EMPTY_AREA" development="new" translation="edited">Feltet %VAR1_BOLD% i %VAR2_BOLD% er tomt.</text>
     <text id="ORG_FIELD_EXIST" development="new" translation="edited">Feltnavnet eksisterer allerede i denne kategori.</text>
     <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Feltet er kun synligt for godkendte brugere (egen profil &amp; rolle autorisation)</text>
-    <text id="ORG_FIELD_HIDDEN_DESC" development="new" translation="edited">Et felt er typisk synligt for alle brugere. Du bør kun deaktivere dette for brugere med bruger redigerings rettigheder. Alle brugere kan se feltet i egen profil.</text>
     <text id="ORG_FIELD_MANDATORY" development="new" translation="edited">Krævet felt der altid skal udfyldes.</text>
     <text id="ORG_FIELD_MANDATORY_DESC" development="new" translation="edited">Mærket (påkrævet) felter skal altid udfyldes. Denne regel gælder for registreringer og for regulære profil ændringer udført af brugerne selv.</text>
     <text id="ORG_FIELD_NOT_DISABLED" development="new" translation="edited">Felt kan rettes af brugeren selv.</text>
     <text id="ORG_FIELD_NOT_HIDDEN" development="new" translation="edited">Felt som er synligt for alle.</text>
     <text id="ORG_FIELD_NOT_MANDATORY" development="new" translation="edited">Feltet er påkrævet. Det skal udfyldes.</text>
     <text id="ORG_FIELD_UP" development="new" translation="edited">Flyt profil felt op</text>
-    <text id="ORG_FORUM_TABLE_PREFIX" development="new" translation="edited">Forum tabel prefix</text>
-    <text id="ORG_FORUM_TABLE_PREFIX_DESC" development="new" translation="edited">Udfyld tabel prefix for databasen til phpBB forum systemmet. Det skal være den samme prefix som du brugte da du installerede phpBB forum systemmet. (f.eks. phpbb)</text>
-    <text id="ORG_FORUM_WIDTH" development="new" translation="edited">Forum bredde</text>
-    <text id="ORG_FORUM_WIDTH_DESC" development="new" translation="edited">%VAR1% BEMÆRK: ændring af dette kan føre til layout fejl konfigurationer. (Standard: 570 pixel)</text>
     <text id="ORG_HOMEPAGE_REGISTERED_USERS" development="new" translation="edited">Denne side vises når en bruger er logget ind. Stien skal angives som en relativ sti til Admidio hoved folder.\n(f.eks.: adm_program/index.php)</text>
     <text id="ORG_HOMEPAGE_VISITORS" development="new" translation="edited">Denne side vises som standard til Admidio gæster. Stien skal angives som en relativ sti til Admidio hoved folder.\n(f.eks.: adm_program/index.php)</text>
     <text id="ORG_LOGIN_AUTOMATICALLY" development="new" translation="edited">Automatisk Login</text>
@@ -856,7 +737,6 @@
     <text id="ORG_TIME_FORMAT" development="new" translation="edited">Tidsformat</text>
     <text id="ORG_TIME_FORMAT_DESC" development="new" translation="edited">Formatet efterkommer standarden i PHP funktionen %VAR1%. (Standard: H:i)</text>
     <text id="ORG_URL" development="new" translation="edited">URL</text>
-    <text id="ORG_USED_FORUM" development="new" translation="edited">Forum i brug</text>
     <text id="ORG_VARIABLE_ACTIVATION_LINK" development="new" translation="edited">Aktiverings link til nyt kodeord</text>
     <text id="ORG_VARIABLE_EMAIL" development="new" translation="edited">Brugers e-mail adresse</text>
     <text id="ORG_VARIABLE_EMAIL_ORGANIZATION" development="new" translation="edited">System e-mail adresse for organisationen</text>
@@ -867,7 +747,6 @@
     <text id="ORG_VARIABLE_SHORTNAME_ORGANIZATION" development="new" translation="edited">Forkortelse af organisations navnet</text>
     <text id="ORG_VARIABLE_URL_ORGANIZATION" development="new" translation="edited">Organisationens hjemmeside URL</text>
     <text id="ORG_VARIABLE_USERNAME" development="new" translation="edited">Brugernavn på brugeren</text>
-    <text id="ORG_WHICH_FORUM_USED" development="new" translation="edited">Hvilket forum skal anvendes?</text>
     
     <!-- Phrases only in Updatecheck -->
     <text id="UPD_ADMIDIO" development="new" translation="edited">Gå til Admidio Opdaterings side</text>
@@ -881,12 +760,10 @@
     <!-- Phrases only in Photomodule -->
     <text id="PHO_ALBUM" development="new" translation="edited">Album</text>
     <text id="PHO_ALBUM_DELETE" development="new" translation="edited">Slet album</text>
-    <text id="PHO_ALBUM_HELP_DESC" development="new" translation="edited">Venligst udfyld alle krævede felter. Felterne 'album' og 'start' er påkrævede felter.\nHvis det er nødvendigt kan du vælge en forældre folder f.eks. 'dag 3' i 'Tunering 2011'. Det er anbefalet at splitte albummet op hvis det indeholder mange billeder.\nGæster vil kun kunne se aktiverede albums. Visnings rettigheder kan sættes og redigeres både før og efter overførslen.\nKlik på 'Gem' når du er færdig.</text>
     <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="edited">Albummet er blokeret og gæsterne kan ikke få det vist. Du kan aktivere det ved at klikke på nøgle symbolet i redigerings feltet.</text>
     <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="edited">Albummet er blevet oprettet / redigeret.</text>
     <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="edited">Album Administration</text>
     <text id="PHO_BACK_TO_ALBUM" development="new" translation="edited">Tilbage til album</text>
-    <text id="PHO_COLORBOX" development="new" translation="edited">ColorBox</text>
     <text id="PHO_CREATE_ALBUM" development="new" translation="edited">Opret album</text>
     <text id="PHO_DISPLAY_PHOTOS" development="new" translation="edited">Hvordan skal billederne vises</text>
     <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="edited">Indstil hvordan billederne skal vises. Vælg popup vindue, JavaScript animeret (ColorBox) eller iHTML metode for at vise billeder på samme side. (Standard: ColorBox)</text>
@@ -894,10 +771,7 @@
     <text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">Et nyt billede album blev oprettet</text>
     <text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">Et nyt billede album på %VAR1% blev oprettet.\n\nTitel: %VAR2%\nOprettet af: %VAR3%\nOprettet den: %VAR4%</text>
     <text id="PHO_FOLDER_NOT_FOUND" development="new" translation="edited">Folderen kunne ikke findes. Blev folderen slettet med FTP eller skal den være utilgængelig, venligst slet folderen i Admidio.\nGæster uden billede administrations rettigheder kan ikke få vist det valgte album.</text>
-    <text id="PHO_MAX_PHOTO_SIZE" development="new" translation="edited">Max. billede størrelse (bredde x højde)</text>
     <text id="PHO_MAX_PHOTO_SIZE_DESC" development="new" translation="edited">Værdien definerer max. størrelse på et billede som kan ses af en bruger. Størrelsen af popup og ColorBox vinduer bliver automatisk justeret. Ideel størrelse bør følge original billede størrelse for at undgå skalering. (Standard: 640 x 400 pixels)</text>
-    <text id="PHO_MULTIUPLOAD" development="new" translation="edited">Masse overførsel</text>
-    <text id="PHO_MULTIUPLOAD_DESC" development="new" translation="edited">Masse overførsel gør det muligt at overføre adskillige billeder på en gang. For at masse overførsler skal fungere så skal Adobe Flash (mindst version 9+) være installeret. Uden flash eller med masse overførsel deaktiveret, så vil en-til-en HTML overførsel blive benyttet automatisk. (Standard: Ja)</text>
     <text id="PHO_NEXT_PHOTO" development="new" translation="edited">Næste billede</text>
     <text id="PHO_NO_ALBUM_CONTENT" development="new" translation="edited">Albummet indeholder ingen billeder.</text>
     <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="edited">Ulovlig side visning eller også så kunne filen ikke overføres.\nFormodentlig på grund af at størrelsen overstiger det definere maximum på %VAR1%B!</text>
@@ -936,8 +810,6 @@
     <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Vis vandmærke</text>
     <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="edited">Teksten vil blive vist i på alle billeder med en lang kant længere end 200 pixels. (Standard: &#169; %VAR1%)</text>
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="edited">Billeder er blevet tilføjet til albummet hvis de vises på denne side.</text>
-    <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="edited">Minibilleder pr. side (rækker x kolonner)</text>
-    <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="edited">Værdien definerer antallet af rækker og kolonner af minibilleder på en side. (Standard: 3 x 5)</text>
     <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Klik på knappen %VAR1_BOLD% for at vælge billede filer fra harddisken til overførsel.</text>
     <text id="PHO_UPLOAD_HELP_2" development="new" translation="edited">Når du bruger processen med at overføre enkelt billeder, så skal du gentage den op til 5 gange, indtil alle felterne er i brug.</text>
     <text id="PHO_UPLOAD_HELP_3" development="new" translation="edited">Klik så på %VAR1_BOLD% og hav lidt tålmodighed.</text>
@@ -950,13 +822,10 @@
     <text id="PRO_ADD_USER" development="new" translation="edited">Tilføj bruger</text>
     <text id="PRO_CANCEL_MEMBERSHIP" development="new" translation="edited">Afslut medlemsskab</text>
     <text id="PRO_CHANGE_DATE" development="new" translation="edited">Rediger dato</text>
-    <text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="edited">Rediger profil billede</text>
     <text id="PRO_CONFIRMATION_CODE" development="new" translation="edited">Turing code</text>
     <text id="PRO_CURRENT_PASSWORD" development="new" translation="edited">Nuværende kodeord</text>
     <text id="PRO_CURRENT_PICTURE" development="new" translation="edited">Nuværende profil billede</text>
     <text id="PRO_DEFAULT_COUNTRY" development="new" translation="edited">Standard land</text>
-    <text id="PRO_DEFAULT_COUNTRY_DESC" development="new" translation="edited">Defineret land vil blive automatisk valgt ved bruger registrering. (default: Danmark)</text>
-    <text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="edited">Slet profil billede</text>
     <text id="PRO_EDIT_MY_PROFILE" development="new" translation="edited">Rediger egen profil</text>
     <text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="edited">Rediger eget profil billede</text>
     <text id="PRO_EDIT_PASSWORD" development="new" translation="edited">Rediger kodeord</text>
@@ -969,9 +838,7 @@
     <text id="PRO_LOCATION_PROFILE_PICTURES_DESC" development="new" translation="edited">Definer hvor profil billeder skal gemmes (i databasen eller i folderen adm_my_files). Hvis du ændrer dette vil de nuværende billeder IKKE blive kopieret til den nye placering. (Standard: database)</text>
     <text id="PRO_LOGIN_NAME_EXIST" development="new" translation="edited">Det valgte bruger navn eksisterer allerede.\n\nVælg venligst et andet bruger navn.</text>
     <text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">Rediger profil felter</text>
-    <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="new" translation="edited">Du kan oprette og redigere profil felter som kan inddeles i kategorier.\n%VAR1% Alle organisations indstillinger som ikke er gemt vil gå tabt.</text>
     <text id="PRO_MY_PROFILE" development="new" translation="edited">Min profil</text>
-    <text id="PRO_MY_PROFILE_DESC" development="new" translation="edited">Egen profil kan vises og redigeres her.</text>
     <text id="PRO_NEW_PASSWORD" development="new" translation="edited">Nyt kodeord</text>
     <text id="PRO_NEW_PICTURE" development="new" translation="edited">Nyt profil billede</text>
     <text id="PRO_PASSWORD_CHANGED" development="new" translation="edited">Kodeordet er blevet ændret.</text>
@@ -993,7 +860,6 @@
     <text id="PRO_RESTRICTIONS_HELP_4" development="new" translation="edited">De overførte filer må ikke overskride størrelsen på %VAR1% MB.</text>
     <text id="PRO_ROLE_MEMBERSHIP_OTHER_ORG" development="new" translation="edited">Rolle medlemskaber i andre organisationer</text>
     <text id="PRO_ROLE_NOT_ASSIGNED" development="new" translation="edited">Data kan ikke gemmes.\nIngen rolle tildelt brugeren.</text>
-    <text id="PRO_SELECT_NEW_PIC_HERE" development="new" translation="edited">Venligst vælg nyt profil billede her</text>
     <text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP" development="new" translation="edited">Vis tidligere rolle medlemskaber</text>
     <text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC" development="new" translation="edited">En boks vil blive vist med alle roller som brugeren er tildelt i den nuværende organisation. Medlemskabets start og slut dato vil blive vist. (Standard: Ja)</text>
     <text id="PRO_SHOW_MAP_LINK" development="new" translation="edited">Vis kort link</text>
@@ -1016,7 +882,6 @@
     <text id="ROL_ALL_GUESTS" development="new" translation="edited">Alle gæster på hjemmesiden</text>
     <text id="ROL_ALL_MEMBERS" development="new" translation="edited">Alle brugere som er logget ind</text>
     <text id="ROL_ANNUALLY" development="new" translation="todo">Årligt</text>
-    <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="edited">Der opstod en fejl!\n\nDen ny dato kunne ikke gemmes.</text>
     <text id="ROL_DELETE_ROLE" development="new" translation="edited">Ved at vælge %VAR1_BOLD% vil alle rolle og alle medlems tildelinger blive slettet. Slette information kan ikke åbnes eller genskabes.</text>
     <text id="ROL_DEPENDENCIES" development="new" translation="edited">Afhængigheder</text>
     <text id="ROL_DEPENDENT" development="new" translation="edited">Afhængig</text>
@@ -1025,7 +890,6 @@
     <text id="ROL_INACTIV_ROLE" development="new" translation="edited">Inaktiv rolle</text>
     <text id="ROL_INACTIV_ROLE_DESC" development="new" translation="edited">Du kan deaktivere en rolle. På den måde vil, medlemskabs informationen blive gemt, og det vil senere være muligt at se hvem der var medlem af den rolle. Men rollen vil ikke længere blive vist i oversigterne.</text>
     <text id="ROL_INACTIV_ROLES" development="new" translation="edited">Inaktive roller</text>
-    <text id="ROL_INDEPENDENT" development="new" translation="edited">Uafhængig</text>
     <text id="ROL_INVISIBLE_ROLES" development="new" translation="edited">Skjulte roller</text>
     <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="edited">Vil du trække rolle tildelingen tilbage %VAR1_BOLD% til nuværende roller?</text>
     <text id="ROL_MEETINGS" development="new" translation="todo">Møder</text>
@@ -1055,7 +919,6 @@
     <text id="ROL_ROLE" development="new" translation="edited">Rolle</text>
     <text id="ROL_ROLE_ADMINISTRATION" development="new" translation="edited">Rolle administration</text>
     <text id="ROL_ROLE_ADMINISTRATION_DESC" development="new" translation="edited">Roller baseret på bestemte grupper, kurser og afdelinger kan administreres her. Rolle rettigheder kan også defineres her.</text>
-    <text id="ROL_ROLE_ASSIGNMENT" development="new" translation="edited">Rolle tildeling for "%VAR1% %VAR2%"</text>
     <text id="ROL_ROLE_DELETE" development="new" translation="edited">Sletter rolle</text>
     <text id="ROL_ROLE_DELETE_DESC" development="new" translation="edited">Vil du slette rolle %VAR1% ?\n\nAlle medlemskaber bliver slettet samtidigt.</text>
     <text id="ROL_ROLE_DEPENDENCIES" development="new" translation="edited">Et medlem af en afhængig rolle bliver automatisk medlem af %VAR1%!\n\nNår denne afhængighed er sat vil alle eksisterende medlemmer af den afhængige rolle automatisk blive medlem af %VAR1%. Når en afhængighed slettes, vil medlemskaber ikke ændres!</text>
@@ -1106,7 +969,6 @@
     <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Ajax forespørgsels fejl.\nFejl detaljer: %VAR1%</text>
     <text id="SYS_ALL" development="new" translation="edited">Alle</text>
     <text id="SYS_ALSO_VISITORS" development="new" translation="edited">også Gæster</text>
-    <text id="SYS_APPROVE_ENTRY" development="new" translation="edited">Vil du godkende %VAR1_BOLD%?</text>
     <text id="SYS_ASSIGN_MEMBERS" development="new" translation="edited">Tilføjer medlemmer</text>
     <text id="SYS_AUTHORIZATION" development="new" translation="edited">Godkendelse</text>
     <text id="SYS_BACK" development="new" translation="edited">Tilbage</text>
@@ -1177,7 +1039,6 @@
     <text id="SYS_EDITED_BY" development="new" translation="edited">Sidst redigeret af %VAR1% den %VAR2%</text>
     <text id="SYS_EMAIL" development="new" translation="edited">E-mail</text>
     <text id="SYS_EMAIL_INVALID" development="new" translation="edited">E-mail adressen i feltet %VAR1_BOLD% mangler eller indeholder ugyldige karakterer.</text>
-    <text id="SYS_EMAIL_SEND" development="new" translation="edited">E-mail er blevet sendt til %VAR1_BOLD%.</text>
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Posten er synlig for flere organisationer</text>    
     <text id="SYS_END" development="new" translation="edited" description="End of a date">Slut</text>
     <text id="SYS_ERROR" development="new" translation="edited">Fejl</text>
@@ -1210,18 +1071,6 @@
       <text id="SYS_FONT_COLOR" development="new" translation="edited">Font-farve</text>
     <text id="SYS_FONT_SIZE" development="new" translation="edited">Font-størrelse</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="edited">Jeg har glemt mit kodeord!</text>
-    <text id="SYS_FORUM" development="new" translation="edited">Forum</text>
-    <text id="SYS_FORUM_LOGIN_DESC" development="new" translation="edited">Du er logget ind som %VAR1_BOLD% i forum systemet %VAR2_BOLD%. Du har %VAR3_BOLD% nye beskeder.</text>
-    <text id="SYS_FORUM_DESC" development="new" translation="edited">Et virtuelt sted at udveksle ideer og erfaringer.</text>
-    <text id="SYS_FORUM_ACCESS_DATA" development="new" translation="edited">Felter med adgangs informaton til forum er enten ikke udfyldt eller udfyldt forkert!</text>
-    <text id="SYS_FORUM_DB_CONNECTION_FAILED" development="new" translation="edited">Forbindelsesfejl til databasen! Check adgangs informationer!</text>
-    <text id="SYS_FORUM_LOGIN_ADMIN" development="new" translation="edited">Dit administrator login på forum %VAR2% er blevet synkroniseret med Admidio brugerid'et.\nVed næste login brug da venligst dit Admidio brugerid og kodeord.\n\nDu er succesfuldt blevet logget ind i forum %VAR2% som bruger %VAR1%.</text>
-    <text id="SYS_FORUM_LOGIN_NEW" development="new" translation="edited">Dit Admidio bruger login information er blevet overflyttet til forum %VAR2%.\nVed næste login brug da venligst dit Admidio brugerid og kodeord.\n\nDu er succesfuldt blevet logget ind Admidio og ind i forum %VAR2% som bruger %VAR1%.</text>
-    <text id="SYS_FORUM_LOGIN_PASSWORD" development="new" translation="edited">Dit kodeord i forum system %VAR2% er blevet omstillet til Admidio's kodeord.\nVed næste login brug da venligst dit Admidio brugerid og kodeord.\n\nDu er succesfuldt blevet logget ind Admidio og ind i forum %VAR2% som bruger %VAR1%</text>
-    <text id="SYS_FORUM_LOGIN_SUCCESSFUL" development="new" translation="edited">Du er nu successfuldt logget ind i Admidio og til forum %VAR2% som bruger %VAR1_BOLD%.</text>
-    <text id="SYS_FORUM_LOGOUT" development="new" translation="edited">Du er nu logget ud af Admidio og forum systemet..</text>
-    <text id="SYS_FORUM_USER_DELETE" development="new" translation="edited">Det valgte bruger navn er blevet slettet i forum og Admidio.</text>
-    <text id="SYS_FORUM_USER_EXIST" development="new" translation="edited">Det valgte bruger navn eksisterer allerede i forum.\n\nVenligst vælg et andet navn.</text>  
     <text id="SYS_FRIDAY" development="new" translation="todo">fredag</text>
     <text id="SYS_GENDER" development="new" translation="edited">Køn</text>
     <text id="SYS_HEADLINE" development="new" translation="edited">Overskrift</text>
@@ -1231,7 +1080,6 @@
     <text id="SYS_HTTP_ERROR" development="new" translation="edited">HTTP fejl (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="edited">Inaktiv</text>
     <text id="SYS_INFO" development="new" translation="edited">Info</text>
-    <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="edited">Installations biblioteket 'adm_install' eksisterer stadig på serveren. Af sikkerhedshensyn skal det slettes!</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="edited">Ugyldig side visning</text>
     <text id="SYS_INVISIBLE" development="new" translation="edited">Usynlig</text>
     <text id="SYS_IO_ERROR" development="new" translation="edited">I/O fejl</text>
@@ -1301,7 +1149,6 @@
     <text id="SYS_PARTICIPANTS" development="new" translation="edited">Medlemmer</text>
     <text id="SYS_PASSWORD" development="new" translation="edited">Kodeord</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="edited">Glemt kodeord</text>
-    <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="edited">I tilfælde af glemt kodeord, er systemet i stand til at generere et nyt kodeord og sende det til din e-mail.\nSkriv venligst din e-mail adresse i feltet herunder og klik på "Send nyt kodeord".</text>
     <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="edited">Login afvist på grund af forkert kodeord.\n\nVenligst check dit kodeord og prøv igen.</text>
     <text id="SYS_PHONE" development="new" translation="edited">Telefon</text>    
     <text id="SYS_PHOTO" development="new" translation="edited">Billede</text>
@@ -1327,7 +1174,6 @@
     <text id="SYS_REMOVE" development="new" translation="edited">Fjern</text>
     <text id="SYS_REMOVE_ROLE" development="new" translation="edited">Fjern rolle</text>
     <text id="SYS_REPEAT" development="new" translation="edited">Gentag</text>
-    <text id="SYS_REPORT" development="new" translation="edited">Rapport</text>
     <text id="SYS_RESTRICTIONS" development="new" translation="edited">Begrænsninger</text>
     <text id="SYS_ROLE" development="new" translation="edited">Rolle</text>
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="edited">Det var ikke muligt at gemme. Maximum antal medlemmer af rollen %VAR1_BOLD% ville overskride den forud definerede begrænsning.</text>
@@ -1350,16 +1196,12 @@
     <text id="SYS_SET_BY" development="new" translation="edited">Sat af</text>
     <text id="SYS_SETTINGS" development="new" translation="edited">Indstillinger</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="edited">Vis kalender</text>
-    <text id="SYS_SHOW_HELP" development="new" translation="edited">Vis hjælp</text>
     <text id="SYS_SHOW_PROFILE" development="new" translation="todo">Vis profil</text>
     <text id="SYS_SHOW_ROUTE" development="new" translation="edited">Vis rute</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="edited">Mindst én bruger med lignende navn (%VAR1_BOLD% ) blev fundet i databasen.</text>
     <text id="SYS_SINCE" development="new" translation="edited">siden %VAR1%</text>
     <text id="SYS_SINCE_TO" development="new" translation="edited">fra %VAR1% til %VAR2%</text>
     <text id="SYS_SIZE" development="new" translation="edited">Størrelse</text>
-    <text id="SYS_SLIDESHOW_CURRENT" development="new" translation="edited">{current} af {total}</text>
-    <text id="SYS_SLIDESHOW_START" development="new" translation="edited">Start lysbillede show</text>
-    <text id="SYS_SLIDESHOW_STOP" development="new" translation="edited">Stop lysbillede show</text>
     <text id="SYS_START" development="new" translation="edited" description="Start of a date">Start</text>
     <text id="SYS_STATUS" development="new" translation="edited">Status</text>
     <text id="SYS_STOP" development="new" translation="edited">Stop</text>

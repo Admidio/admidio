@@ -129,7 +129,7 @@ elseif($getMode == 'html')
                     else {
                         $("#password_form .form-alert").attr("class", "alert alert-danger form-alert");
                         $("#password_form .form-alert").fadeIn();
-                        $("#password_form .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
+                        $("#password_form .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                     }
                 }
             });    

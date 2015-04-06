@@ -19,7 +19,6 @@ if (!$gCurrentUser->editUsers())
 
 echo '
 <script type="text/javascript"><!--
-$(document).ready(function(){
     $("body").on("shown.bs.modal", ".modal", function () { $("#form_members_create_user:first *:input[type!=hidden]:first").focus(); });
 
     $("#form_members_create_user").submit(function(event) {
@@ -44,18 +43,17 @@ $(document).ready(function(){
                 }
                 else {
                     if(data.length > 1000) {
-                        $("#popup_members_new").html(data);
+                        $(".modal-body").html(data);
                     }
                     else {
                         $("#form_members_create_user .form-alert").attr("class", "alert alert-danger form-alert");
                         $("#form_members_create_user .form-alert").fadeIn();
-                        $("#form_members_create_user .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
+                        $("#form_members_create_user .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                     }
                 }
             }
         });    
     });
-});
 //--></script>
 
 <div class="modal-header">

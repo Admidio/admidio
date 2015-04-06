@@ -164,12 +164,11 @@ $result = $gDb->query($sql);
 
 $anz_geb = $gDb->num_rows($result);
 
-echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
+echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
 if($plg_show_headline==1)
 {
-    echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_BIRTHDAY_HEADLINE').'</h3></div>';
+    echo '<h3>'.$gL10n->get('PLG_BIRTHDAY_HEADLINE').'</h3>';
 }
-echo '<div class="admPluginBody">';
 
 if($anz_geb > 0)
 {
@@ -221,14 +220,14 @@ if($anz_geb > 0)
 					if(strlen($row['email']) > 0 && $plg_show_email_extern < 2)
 					{
 						$plg_show_name = $plg_show_name.' 
-						    <a class="icon-link" href="'. $g_root_path. '/adm_program/modules/messages/messages_write.php?usr_id='. $row['usr_id']. '"><img 
+						    <a class="admidio-icon-link" href="'. $g_root_path. '/adm_program/modules/messages/messages_write.php?usr_id='. $row['usr_id']. '"><img 
 							src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
 					}
 				}
 				elseif($plg_show_email_extern == 1 && strlen($row['email']) > 0)
 				{
 					$plg_show_name = $plg_show_name.' 
-						<a class="icon-link" href="mailto:'. $row['email']. '"><img 
+						<a class="admidio-icon-link" href="mailto:'. $row['email']. '"><img 
 						src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
 				}
 
@@ -303,6 +302,6 @@ else
     }
 }
 
-echo '</div></div>';
+echo '</div>';
 
 ?>

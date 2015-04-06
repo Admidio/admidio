@@ -92,7 +92,7 @@ $page->addHtml($downloadUploadMenu->show(false));
 $page->addHtml('<p class="lead">'.$gL10n->get('DOW_UPLOAD_TO_FOLDER', $parentFolderName).'</p>');
 
 // show form
-$form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=1&amp;folder_id='.$getFolderId, $page, 'default', true);
+$form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=1&amp;folder_id='.$getFolderId, $page, array('enableFileUpload' => true));
 $form->addFileUpload('add_files', $gL10n->get('DOW_CHOOSE_FILE'), array('enableMultiUploads' => true, 'multiUploadLabel' => $gL10n->get('DOW_UPLOAD_ANOTHER_FILE')));
 $form->addSubmitButton('btn_upload', $gL10n->get('SYS_UPLOAD'), array('icon' => THEME_PATH.'/icons/page_white_upload.png', 'class' => ' col-sm-offset-3'));
 

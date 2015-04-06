@@ -15,15 +15,13 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-//require_once('roles_functions.php');
 
 // Initialize and check the parameters
 $getItemId = admFuncVariableIsValid($_GET, 'item_id', 'numeric');
 
-$gInventoryFields = new InventoryFields($gDb, $gCurrentOrganization->getValue('org_id'));
-
 // create item object
-$gCurrentItem = new Inventory($gDb, $gInventoryFields, $getItemId);
+$gInventoryFields = new InventoryFields($gDb, $gCurrentOrganization->getValue('org_id'));
+$inventory = new Inventory($gDb, $gInventoryFields, $getItemId);
 
 //Testen ob Recht besteht Profil einzusehn
 if( $gPreferences['enable_inventory_module'] >= 0 && !$gValidLogin)
@@ -35,29 +33,29 @@ if( $gPreferences['enable_inventory_module'] >= 0 && !$gValidLogin)
 // dabei wird der Inhalt richtig formatiert
 function getFieldCode($fieldNameIntern, $item)
 {
-    global $gPreferences, $g_root_path, $gCurrentUser, $gProfileFields, $gL10n;
+    global $gPreferences, $g_root_path, $inventory, $gL10n, $gInventoryFields;
     $html      = array('label' => '', 'value' => '');
     $value     = '';
     $msg_image = '';
 
-    if($gProfileFields->getProperty($fieldNameIntern, 'inf_hidden') == 1)
+    if($gInventoryFields->getProperty($fieldNameIntern, 'inf_hidden') == 1)
     {
         return '';
     }
 
 	// get value of field in html format
-	$value = $gCurrentItem->getValue($fieldNameIntern, 'html');
+	$value = $inventory->getValue($fieldNameIntern, 'html');
 
 	// Icons anzeigen
-    if(strlen($gProfileFields->getProperty($fieldNameIntern, 'inf_icon')) > 0)
+    if(strlen($gInventoryFields->getProperty($fieldNameIntern, 'inf_icon')) > 0)
 	{
-		$value = $gProfileFields->getProperty($fieldNameIntern, 'inf_icon').'&nbsp;&nbsp;'. $value;
+		$value = $gInventoryFields->getProperty($fieldNameIntern, 'inf_icon').'&nbsp;&nbsp;'. $value;
 	}
 
 	// show html of field, if user has a value for that field or it's a checkbox field
-    if(strlen($gCurrentItem->getValue($fieldNameIntern)) > 0 || $gProfileFields->getProperty($fieldNameIntern, 'inf_type') == 'CHECKBOX')
+    if(strlen($inventory->getValue($fieldNameIntern)) > 0 || $gInventoryFields->getProperty($fieldNameIntern, 'inf_type') == 'CHECKBOX')
     {
-        $html['label'] = $gProfileFields->getProperty($fieldNameIntern, 'inf_name');
+        $html['label'] = $gInventoryFields->getProperty($fieldNameIntern, 'inf_name');
         $html['value'] = $value;
     }
 
@@ -67,10 +65,10 @@ function getFieldCode($fieldNameIntern, $item)
 unset($_SESSION['profile_request']);
 
 // set headline
-$headline = $gL10n->get('PRO_PROFILE_FROM', $gCurrentItem->getValue('ITEM_NAME'));
+$headline = $gL10n->get('PRO_PROFILE_FROM', $inventory->getValue('ITEM_NAME'));
 
 // if user id was not set and own profile should be shown then initialize navigation
-if(isset($_GET['user_id']) == false)
+if(isset($_GET['item_id']) == false)
 {
     $gNavigation->clear();
 }
@@ -79,8 +77,6 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage();
 
-$page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
 $page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/datepicker3.css');
 $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
@@ -91,7 +87,7 @@ $page->addJavascript('
     profileJS.deleteRole_ConfirmText 	= "'.$gL10n->get('ROL_MEMBERSHIP_DEL','[rol_name]').'";
     profileJS.deleteFRole_ConfirmText 	= "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL','[rol_name]').'";
     profileJS.setBy_Text				= "'.$gL10n->get('SYS_SET_BY').'";
-    profileJS.usr_id                    = '.$gCurrentItem->getValue('inv_id').';
+    profileJS.inv_id                    = '.$inventory->getValue('inv_id').';
     
     function showHideMembershipInformation(element) {
         id = "#" + element.attr("id") + "_Content"; 
@@ -105,11 +101,11 @@ $page->addJavascript('
     }');
 $page->addJavascript('
     profileJS.init();
-    $(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
+    $(".admidio-icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
     $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
     $("#profile_authorizations_box_body").mouseout(function () { profileJS.deleteShowInfo()});
     
-    $(".form-membership-period").submit(function(event) {
+    $(".admidio-form-membership-period").submit(function(event) {
         var id = $(this).attr("id");
         var parentId = $("#"+id).parent().parent().attr("id");
         var action = $(this).attr("action");
@@ -135,7 +131,7 @@ $page->addJavascript('
                 else {
                     $("#"+id+" .form-alert").attr("class", "alert alert-danger form-alert");
                     $("#"+id+" .form-alert").fadeIn();
-                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
+                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                 }
             }
         });    
@@ -154,7 +150,7 @@ if($gNavigation->count() > 1)
 }
 
 // show link to edit profile
-$profileMenu->addItem('menu_item_new_entry', $g_root_path. '/adm_program/modules/inventory/item_new.php?item_id='.$gCurrentItem->getValue('inv_id'), 
+$profileMenu->addItem('menu_item_new_entry', $g_root_path. '/adm_program/modules/inventory/item_new.php?item_id='.$inventory->getValue('inv_id'), 
 				$gL10n->get('MEM_EDIT_USER'), 'edit.png');
 
 
@@ -195,15 +191,31 @@ $page->addHtml('
                 if($field->getValue('cat_name_intern') == 'MASTER_DATA'
                 && $field->getValue('inv_hidden') == 0 )
                 {
-                    switch($field->getValue('usf_name_intern'))
+                    switch($field->getValue('inf_name_intern'))
                     {
-                        case 'LAST_NAME':
+                        case 'ROOM_ID':
+							$field = getFieldCode($field->getValue('inf_name_intern'), $getItemId);
+							if($gDbType == 'mysql')
+							{
+								$sql = 'SELECT CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') as name FROM '.TBL_ROOMS.' where room_id = ' . $field['value'] ;        
+							}
+							else
+							{
+								$sql = 'SELECT room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' as name FROM '.TBL_ROOMS.' where room_id = ' . $field['value'];
+							}
+							$result = $gDb->query($sql);
+							$row    = $gDb->fetch_array($result);
+							if($gDb->num_rows($result) > 0)
+							{
+								$form->addStaticControl('address', $field['label'], $row['name']);
+							}
+							else
+							{
+								$form->addStaticControl('address', $field['label'], 'room_id ' . $field['value'] . ' not found' );
+							}
+							break;
+							
                         case 'FIRST_NAME':
-                        case 'GENDER':
-                            // don't show these fields in default profile list
-                            break;
-    
-                        case 'ADDRESS':
                             break;
     
                         default:
@@ -224,23 +236,23 @@ $page->addHtml('
             // Profile photo
             // *******************************************************************************
 
-            $page->addHtml('<img id="profile_photo" class="thumbnail" src="profile_photo_show.php?usr_id='.$user->getValue('usr_id').'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
+            $page->addHtml('<img id="profile_photo" class="thumbnail" src="item_photo_show.php?inv_id='.$inventory->getValue('inv_id').'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
 
             // Nur berechtigte User duerfen das Profilfoto editieren
-            if($gCurrentUser->editProfile($user) == true)
+            if($gCurrentUser->editInventory($inventory) == true)
             {
-                $page->addHtml('<ul id="profile_picture_links" class="icon-text-link-list icon-text-link-list-vertical">
-                    <li><a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><img
-                            src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a></li>');
+                $page->addHtml('<div id="profile_picture_links" class="btn-group-vertical" role="group">
+                    <a class="btn" href="'.$g_root_path.'/adm_program/modules/inventory/item_photo_edit.php?inv_id='.$inventory->getValue('inv_id').'"><img
+                            src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a>');
                 //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
-                if((strlen($user->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
-                    || file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$user->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1 )
+                if((strlen($inventory->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
+                    || file_exists(SERVER_PATH. '/adm_my_files/item_photos/'.$inventory->getValue('inv_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1 )
                 {
-                    $page->addHtml('<li><a class="icon-text-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
-                                    '&amp;database_id='.$user->getValue('usr_id').'"><img src="'. THEME_PATH. '/icons/delete.png" 
-                                    alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</a></li>');
+                    $page->addHtml('<a class="btn" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
+                                    '&amp;database_id='.$inventory->getValue('inv_id').'"><img src="'. THEME_PATH. '/icons/delete.png" 
+                                    alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</a>');
                 }
-                $page->addHtml('</ul>');
+                $page->addHtml('</div>');
             }
         $page->addHtml('</div>
     </div>
@@ -256,12 +268,12 @@ foreach($gProfileFields->mProfileFields as $field)
     // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
     // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
     if($field->getValue('cat_name_intern') != 'MASTER_DATA'
-    && (  $gCurrentUser->editProfile($user) == true
-       || ($gCurrentUser->editProfile($user) == false && $field->getValue('usf_hidden') == 0 )))
+    && (  $gCurrentUser->editInventory($inventory) == true
+       || ($gCurrentUser->editInventory($inventory) == false && $field->getValue('inf_hidden') == 0 )))
     {
         // show new category header if new category and field has value or is a checkbox field
         if($category != $field->getValue('cat_name')
-        && (strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 || $field->getValue('usf_type') == 'CHECKBOX'))
+        && (strlen($inventory->getValue($field->getValue('inf_name_intern'))) > 0 || $field->getValue('inf_type') == 'CHECKBOX'))
         {
             if(strlen($category) > 0)
             {
@@ -281,9 +293,9 @@ foreach($gProfileFields->mProfileFields as $field)
         }
 
         // show html of field, if user has a value for that field or it's a checkbox field
-        if(strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 || $field->getValue('usf_type') == 'CHECKBOX')
+        if(strlen($inventory->getValue($field->getValue('inf_name_intern'))) > 0 || $field->getValue('inf_type') == 'CHECKBOX')
         {
-            $field = getFieldCode($field->getValue('usf_name_intern'), $user);
+            $field = getFieldCode($field->getValue('inf_name_intern'), $inventory);
             if(strlen($field['value']) > 0)
             {
                 $form->addStaticControl('address', $field['label'], $field['value']);
@@ -299,121 +311,8 @@ if(strlen($category) > 0)
     $page->addHtml('</div></div>');
 }
 
-    // *******************************************************************************
-    // Authorizations block
-    // *******************************************************************************
-
-    //Array mit allen Berechtigungen
-    $authorizations = Array('rol_assign_roles','rol_approve_users','rol_edit_user',
-                            'rol_mail_to_all','rol_profile','rol_announcements',
-                            'rol_dates','rol_photo','rol_download','rol_guestbook',
-                            'rol_guestbook_comments','rol_weblinks', 'rol_all_lists_view');
-
-    //Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
-    foreach($authorizations as $authorization_db_name)
-    {
-        $sql = 'SELECT rol_name
-                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES.'
-                 WHERE mem_rol_id = rol_id
-                   AND mem_begin <= \''.DATE_NOW.'\'
-                   AND mem_end    > \''.DATE_NOW.'\'
-                   AND mem_usr_id = '.$user->getValue('usr_id').'
-                   AND rol_valid  = 1
-                   AND rol_cat_id = cat_id
-                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                       OR cat_org_id IS NULL )
-                   AND '.$authorization_db_name.' = 1
-                 ORDER BY cat_org_id, cat_sequence, rol_name';
-        $result_role = $gDb->query($sql);
-        $berechtigungs_Herkunft[$authorization_db_name] = NULL;
-
-        while($row = $gDb->fetch_array($result_role))
-        {
-            $berechtigungs_Herkunft[$authorization_db_name] = $berechtigungs_Herkunft[$authorization_db_name].', '.$row['rol_name'];
-        }
-    }
-
-    $page->addHtml('
-    <div class="panel panel-default" id="profile_authorizations_box">
-        <div class="panel-heading">'.$gL10n->get('SYS_AUTHORIZATION').'</div>
-        <div class="panel-body" id="profile_authorizations_box_body">
-            <p>');
-            
-            //checkRolesRight($right)
-            if($user->checkRolesRight('rol_assign_roles') == 1)
-            {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_assign_roles'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/roles.png"
-                alt="'.$gL10n->get('ROL_RIGHT_ASSIGN_ROLES').'" title="'.$gL10n->get('ROL_RIGHT_ASSIGN_ROLES').'" />');
-            }
-            if($user->checkRolesRight('rol_approve_users') == 1)
-            {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_approve_users'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/new_registrations.png"
-                alt="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'" title="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'" />');
-            }
-            if($user->checkRolesRight('rol_edit_user') == 1)
-            {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_edit_user'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/group.png"
-                alt="'.$gL10n->get('ROL_RIGHT_EDIT_USER').'" title="'.$gL10n->get('ROL_RIGHT_EDIT_USER').'" />');
-            }
-
-            if($user->checkRolesRight('rol_mail_to_all') == 1)
-            {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_mail_to_all'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/email.png"
-                alt="'.$gL10n->get('ROL_RIGHT_MAIL_TO_ALL').'" title="'.$gL10n->get('ROL_RIGHT_MAIL_TO_ALL').'" />');
-            }
-            if($user->checkRolesRight('rol_profile') == 1)
-            {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_profile'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/profile.png"
-                alt="'.$gL10n->get('ROL_RIGHT_PROFILE').'" title="'.$gL10n->get('ROL_RIGHT_PROFILE').'" />');
-            }
-            if($user->checkRolesRight('rol_announcements') == 1 && $gPreferences['enable_announcements_module'] > 0)
-            {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_announcements'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/announcements.png"
-                alt="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" title="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" />');
-            }
-            if($user->checkRolesRight('rol_dates') == 1 && $gPreferences['enable_dates_module'] > 0)
-            {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_dates'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/dates.png"
-                alt="'.$gL10n->get('ROL_RIGHT_DATES').'" title="'.$gL10n->get('ROL_RIGHT_DATES').'" />');
-            }
-            if($user->checkRolesRight('rol_photo') == 1 && $gPreferences['enable_photo_module'] > 0)
-            {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_photo'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/photo.png"
-                alt="'.$gL10n->get('ROL_RIGHT_PHOTO').'" title="'.$gL10n->get('ROL_RIGHT_PHOTO').'" />');
-            }
-            if($user->checkRolesRight('rol_download') == 1 && $gPreferences['enable_download_module'] > 0)
-            {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_download'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/download.png"
-                alt="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" title="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" />');
-            }
-            if($user->checkRolesRight('rol_guestbook') == 1 && $gPreferences['enable_guestbook_module'] > 0)
-            {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/guestbook.png"
-                alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" />');
-            }
-            if($user->checkRolesRight('rol_guestbook_comments') == 1 && $gPreferences['enable_guestbook_module'] > 0)
-            {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook_comments'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/comment.png"
-                alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" />');
-            }
-            if($user->checkRolesRight('rol_weblinks') == 1 && $gPreferences['enable_weblinks_module'] > 0)
-            {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_weblinks'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/weblinks.png"
-                alt="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'" title="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'" />');
-            }
-            if($user->checkRolesRight('rol_all_lists_view') == 1)
-            {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_all_lists_view'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/lists.png"
-                alt="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" title="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" />');
-            }
-            $page->addHtml('</p>
-            <div><p class="alert alert-info" id="profile_authorization_content">'.$gL10n->get('SYS_SET_BY').':</p></div>
-        </div>
-    </div>');
-
-
 // show informations about user who creates the recordset and changed it
-$page->addHtml(admFuncShowCreateChangeInfoById($user->getValue('inv_usr_id_create'), $user->getValue('inv_timestamp_create'), $user->getValue('inv_usr_id_change'), $user->getValue('inv_timestamp_change')));
+$page->addHtml(admFuncShowCreateChangeInfoById($inventory->getValue('inv_usr_id_create'), $inventory->getValue('inv_timestamp_create'), $inventory->getValue('inv_usr_id_change'), $inventory->getValue('inv_timestamp_change')));
 
 $page->show();
 ?>

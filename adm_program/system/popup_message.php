@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Popup-Fenster 
+ * Content for modal windows 
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -56,12 +56,7 @@ switch ($get_type)
         break;
     case 'gbo':
         $url = 'guestbook_function.php?mode=2&id='.$get_database_id;
-        break;
-    case 'gbo_mod':
-        $url = 'guestbook_function.php?mode=9&id='.$get_database_id;
-        $icon = 'information_big.png';
-        $text = 'SYS_APPROVE_ENTRY';
-        break;    
+        break;   
     case 'gbc':
         $url = 'guestbook_function.php?mode=5&id='.$get_database_id;
         $callbackSuccess = '
@@ -80,15 +75,10 @@ switch ($get_type)
             else {
                 var msgOrg = "'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY').'";
                 var msg = msgOrg.replace("%VAR1%",count);
-                $("#admCommentsInvisible_'.$get_database_id_2.' icon-text-link > a:nth-child(2)").html(msg);
+                $("#admCommentsInvisible_'.$get_database_id_2.' btn > a:nth-child(2)").html(msg);
             }   
             ';
-        break;
-    case 'gbc_mod':
-        $url = 'guestbook_function.php?mode=10&id='.$get_database_id;
-        $icon = 'information_big.png';
-        $text = 'SYS_APPROVE_ENTRY';
-        break;    
+        break; 
     case 'lnk':
         $url = 'links_function.php?mode=2&lnk_id='.$get_database_id;
         break;
@@ -158,37 +148,6 @@ if(strlen($url) == 0)
 header('Content-type: text/html; charset=utf-8'); 
 
 echo '
-<script type="text/javascript"><!--
-var entryDeleted;
-
-function deleteEntry()
-{
-    entryDeleted = document.getElementById("'.$get_element_id.'");
-
-    // send RequestObjekt and delete entry
-    $.get("'.$url.'", function(data) {
-        if(data == "done") {
-            $("#admidio_modal").modal("hide")
-            $(entryDeleted).fadeOut("slow");
-			'.$callbackSuccess.'
-        }
-        else {
-			// entry could not be deleted, than show content of data or an common error message
-			$("#btn_yes").hide();
-			$("#btn_no").hide();
-			$("#btn_close").attr("class", "btn btn-default");
-			var html = $("#message_text").html();
-			
-			if(data.length > 0) {
-				$("#message_text").html(html + "<br /><div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-remove\">" + data + "</span></div>");
-			} else {
-				$("#message_text").html(html + "<br /><div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-remove\">'.$gL10n->get('SYS_ERROR_ENTRY_NOT_DELETED').'</span></div>");
-			}
-        }
-    });
-}
-//--></script>
-
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h4>
@@ -198,7 +157,7 @@ function deleteEntry()
     <div id="message_text" class="col-xs-10">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
 </div>
 <div class="modal-footer">
-        <button id="btn_yes" class="btn btn-default" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
+        <button id="btn_yes" class="btn btn-default" type="button" onclick="javascript:callUrlHideElement(\''.$get_element_id.'\', \''.$url.'\')"><img src="'. THEME_PATH. '/icons/ok.png" 
             alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;</button>
         <button id="btn_no" class="btn btn-default" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/error.png" 
             alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'</button>

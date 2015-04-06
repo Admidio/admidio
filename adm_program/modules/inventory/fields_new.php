@@ -166,7 +166,7 @@ $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
     $form->addCheckbox('inf_disabled', $gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')), $itemField->getValue('inf_disabled'), array('property' => FIELD_DEFAULT, 'helpTextIdLabel' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'textfield_key.png'));
     $form->addCheckbox('inf_mandatory', $gL10n->get('ORG_FIELD_MANDATORY'), $itemField->getValue('inf_mandatory'), array('property' => FIELD_DEFAULT, 'helpTextIdLabel' => 'ORG_FIELD_MANDATORY_DESC', 'icon' => 'asterisk_yellow.png'));
 $form->closeGroupBox();
-$form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'panel-editor');
+$form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
     $form->addEditor('inf_description', null, $itemField->getValue('inf_description'), array('property' => FIELD_DEFAULT, 'toolbar' => 'AdmidioDefault', 'height' => '200px'));
 $form->closeGroupBox();
 

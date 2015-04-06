@@ -12,10 +12,3 @@
 #plugin_login_form button[type="submit"] {
     margin-bottom: 10px;
 }
-
-/* layout of links with icons */
-
-#plugin_login_form .icon-text-link  {
-    display: block;
-    margin-top: 7px;
-}

@@ -624,7 +624,7 @@ $page->addHtml('
             || ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
             {
                 $page->addHtml('
-                <a class="icon-link" href="javascript:send(\'save\');"><img
+                <a class="admidio-icon-link" href="javascript:send(\'save\');"><img
                     src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('LST_SAVE_CONFIGURATION').'" title="'.$gL10n->get('LST_SAVE_CONFIGURATION').'" /></a>');
             }
 
@@ -643,7 +643,7 @@ $page->addHtml('
                     $icon_text = $gL10n->get('LST_SAVE_CONFIGURATION');
                 }
                 $page->addHtml('
-                <a class="icon-link" href="javascript:send(\'save_as\');"><img
+                <a class="admidio-icon-link" href="javascript:send(\'save_as\');"><img
                     src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$icon_text.'" title="'.$icon_text.'" /></a>');
             }
 
@@ -652,7 +652,7 @@ $page->addHtml('
             || ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
             {
                 $page->addHtml('
-                <a class="icon-link" href="javascript:send(\'delete\');"><img
+                <a class="admidio-icon-link" href="javascript:send(\'delete\');"><img
                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('LST_DELETE_CONFIGURATION').'" title="'.$gL10n->get('LST_DELETE_CONFIGURATION').'" /></a>');
             }
 
@@ -660,7 +660,7 @@ $page->addHtml('
             if($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 0 && strlen($list->getValue('lst_name')) > 0)
             {
                 $page->addHtml('
-                <a class="icon-link" href="javascript:send(\'system\');"><img
+                <a class="admidio-icon-link" href="javascript:send(\'system\');"><img
                     src="'. THEME_PATH. '/icons/list_global.png" alt="'.$gL10n->get('LST_CONFIGURATION_ALL_USERS').'" title="'.$gL10n->get('LST_CONFIGURATION_ALL_USERS').'" /></a>');
             }
             
@@ -668,7 +668,7 @@ $page->addHtml('
             if($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
             {
                 $page->addHtml('
-                <a class="icon-link" href="javascript:send(\'default\');"><img
+                <a class="admidio-icon-link" href="javascript:send(\'default\');"><img
                     src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" title="'.$gL10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" /></a>');
             }
             
@@ -676,7 +676,7 @@ $page->addHtml('
             if($gCurrentUser->isWebmaster())
             {
                 $page->addHtml('
-                <a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+                <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                     href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_config_webmaster&amp;inline=true"><img 
                     src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>');
             }
@@ -693,7 +693,7 @@ $page->addHtml('
                 <th style="width: 37%;">'.$gL10n->get('SYS_CONTENT').'</th>
                 <th style="width: 18%;">'.$gL10n->get('SYS_ORDER').'</th>
                 <th style="width: 25%;">'.$gL10n->get('SYS_CONDITION').'
-                    <a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                         href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true"><img 
                         src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
                 </th>
@@ -702,7 +702,7 @@ $page->addHtml('
         <tbody id="mylist_fields_tbody">
             <tr id="table_row_button">
                 <td colspan="4">
-                    <a class="icon-text-link" href="javascript:addColumn()"><img
+                    <a class="btn" href="javascript:addColumn()"><img
                         src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('LST_ADD_ANOTHER_COLUMN').'" />'.$gL10n->get('LST_ADD_ANOTHER_COLUMN').'</a>
                 </td>
             </tr>

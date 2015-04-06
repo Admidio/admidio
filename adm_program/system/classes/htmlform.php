@@ -46,25 +46,32 @@ class HtmlForm extends HtmlFormBasic
     protected $buttonGroupOpen;     ///< Flag that indicates if a bootstrap button-group is open and should be closed later
     
     /** Constructor creates the form element
-     *  @param $id               Id of the form
-     *  @param $action           Optional action attribute of the form
-     *  @param $htmlPage         Optional a HtmlPage object that will be used to add javascript code 
-     *                           or files to the html output page.
-     *  @param $enableFileUpload Set specific parameters that are necessary for file upload with a form
-     *  @param $type             Set the form type. Every type has some special features:
-     *                           default  : A form that can be used to edit and save data of a database table. The label
-     *                                      and the element have a horizontal orientation.
-     *                           vertical : A form that can be used to edit and save data but has a vertical orientation.
-     *                                      The label is positioned above the form element.
-     *                           navbar   : A form that should be used in a navbar. The form content will
-     *                                      be send with the 'GET' method and this form should not get a default focus.
-     *  @param $class            Optional an additional css classname. The class @b form-horizontal
-     *                           is set as default and need not set with this parameter.
+     *  @param $id        Id of the form
+     *  @param $action    Optional action attribute of the form
+     *  @param $htmlPage  Optional a HtmlPage object that will be used to add javascript code 
+     *                    or files to the html output page.
+     *  @param $options   An array with the following possible entries:
+     *                    @b type       Set the form type. Every type has some special features:
+     *                       default  : A form that can be used to edit and save data of a database table. The label
+     *                                  and the element have a horizontal orientation.
+     *                       vertical : A form that can be used to edit and save data but has a vertical orientation.
+     *                                  The label is positioned above the form element.
+     *                       navbar   : A form that should be used in a navbar. The form content will
+     *                                  be send with the 'GET' method and this form should not get a default focus.
+     *                    @b enableFileUpload Set specific parameters that are necessary for file upload with a form
+     *                    @b setFocus   Default is set to @b true. Set the focus on page load to the first field
+     *                                  of this form.
+     *                    @b class      Optional an additional css classname. The class @b form-horizontal
+     *                                  is set as default and need not set with this parameter.
      */
-    public function __construct($id, $action, $htmlPage = null, $type = 'default', $enableFileUpload = false, $class = null)
-    {        
+    public function __construct($id, $action, $htmlPage = null, $options = array())
+    {
+        // create array with all options
+        $optionsDefault = array('type' => 'default', 'enableFileUpload' => false, 'setFocus' => true, 'class' => null);
+        $optionsAll     = array_replace($optionsDefault, $options);
+        
         // navbar forms should send the data as GET
-        if($type == 'navbar')
+        if($optionsAll['type'] == 'navbar')
         {
             parent::__construct($action, $id, 'get');
         }
@@ -77,7 +84,7 @@ class HtmlForm extends HtmlFormBasic
         $this->flagFieldListOpen     = false;
         $this->countFields           = 0;
         $this->datepickerInitialized = false;
-        $this->type                  = $type;
+        $this->type                  = $optionsAll['type'];
         $this->id                    = $id;
         $this->buttonGroupOpen       = false;
         
@@ -86,24 +93,24 @@ class HtmlForm extends HtmlFormBasic
         
         if($this->type == 'default')
         {
-            $class .= ' form-horizontal form-dialog';
+            $optionsAll['class'] .= ' form-horizontal form-dialog';
         }
         elseif($this->type == 'vertical')
         {
-            $class .= ' form-vertical form-dialog';
+            $optionsAll['class'] .= ' admidio-form-vertical form-dialog';
         }
         elseif($this->type == 'navbar')
         {
-            $class .= ' form-horizontal navbar-form navbar-left';
+            $optionsAll['class'] .= ' form-horizontal navbar-form navbar-left';
         }
         
-        if(strlen($class) > 0)
+        if(strlen($optionsAll['class']) > 0)
         {
-            $this->addAttribute('class', $class);            
+            $this->addAttribute('class', $optionsAll['class']);
         }
 		
         // Set specific parameters that are necessary for file upload with a form
-        if($enableFileUpload == true)
+        if($optionsAll['enableFileUpload'] == true)
         {
             $this->addAttribute('enctype', 'multipart/form-data');
         }        
@@ -114,7 +121,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
 		// if its not a navbar form and not a static form then first field of form should get focus
-        if($this->type != 'navbar' && strlen($action) > 0)
+        if($optionsAll['setFocus'] == true)
         {
             if(is_object($htmlPage))
             {
@@ -160,7 +167,7 @@ class HtmlForm extends HtmlFormBasic
             $value = '<img src="'.$optionsAll['icon'].'" alt="'.$text.'" />'.$value;
         }
         $this->addElement('button');
-        $this->addAttribute('class', 'btn btn-default btn-form');
+        $this->addAttribute('class', 'btn btn-default');
         
         if(strlen($optionsAll['onClickText']) > 0)
         {
@@ -323,11 +330,11 @@ class HtmlForm extends HtmlFormBasic
 			// create html for icon
 			if(strpos(admStrToLower($optionsAll['icon']), 'http') === 0 && strValidCharacters($optionsAll['icon'], 'url'))
 			{
-				$htmlIcon = '<img class="icon-information" src="'.$optionsAll['icon'].'" title="'.$label.'" alt="'.$label.'" />';
+				$htmlIcon = '<img class="admidio-icon-info" src="'.$optionsAll['icon'].'" title="'.$label.'" alt="'.$label.'" />';
 			}
 			elseif(admStrIsValidFileName($optionsAll['icon'], true))
 			{
-				$htmlIcon = '<img class="icon-information" src="'.THEME_PATH.'/icons/'.$optionsAll['icon'].'" title="'.$label.'" alt="'.$label.'" />';
+				$htmlIcon = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/'.$optionsAll['icon'].'" title="'.$label.'" alt="'.$label.'" />';
 			}
 		}
         
@@ -539,16 +546,14 @@ class HtmlForm extends HtmlFormBasic
         if($optionsAll['enableMultiUploads'])
         {
             $javascriptCode = '
-        		$(".add-attachement-link").css("cursor", "pointer");
-        		
         		// add new line to add new attachment to this mail
-        		$(".add-attachement-link").click(function () {
+        		$("#btn_add_attachment_'.$id.'").click(function () {
         			newAttachment = document.createElement("input");
         			$(newAttachment).attr("type", "file");
         			$(newAttachment).attr("name", "userfile[]");
         			$(newAttachment).attr("class", "'.$attributes['class'].'");
         			$(newAttachment).hide();
-        			$("#adm_add_attachment").before(newAttachment);
+        			$("#btn_add_attachment_'.$id.'").before(newAttachment);
         			$(newAttachment).show("slow");
         		});';
             
@@ -582,10 +587,8 @@ class HtmlForm extends HtmlFormBasic
         {
             // show button to add new upload field to form
             $this->addHtml('
-                <span id="adm_add_attachment" style="display: block;">
-    				<a class="icon-text-link add-attachement-link"><img
-                        src="'. THEME_PATH. '/icons/add.png" alt="'.$optionsAll['multiUploadLabel'].'" />'.$optionsAll['multiUploadLabel'].'</a>
-                </span>');
+            <button type="button" id="btn_add_attachment_'.$id.'" class="btn btn-default"><img
+                src="'. THEME_PATH. '/icons/add.png" alt="'.$optionsAll['multiUploadLabel'].'" />'.$optionsAll['multiUploadLabel'].'</button>');
         }
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
@@ -622,7 +625,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addInput($id, $label, $value, $options = array())
     {
-        global $gL10n, $gPreferences, $g_root_path;
+        global $gL10n, $gPreferences, $g_root_path, $gDebug;
         
         $attributes = array('class' => 'form-control');
         $this->countElements++;
@@ -667,8 +670,6 @@ class HtmlForm extends HtmlFormBasic
         // add a nice modern datepicker to date inputs
         if($optionsAll['type'] == 'date' || $optionsAll['type'] == 'datetime')
         {
-            $datepickerOptions = '';
-            
             $attributes['data-provide'] = 'datepicker';
             $javascriptCode             = '';
             
@@ -677,9 +678,9 @@ class HtmlForm extends HtmlFormBasic
             {
                 $javascriptCode = '
                     $("input[data-provide=\'datepicker\']").datepicker({
-                        language: "'.$gPreferences['system_language'].'",
+                        language: "'.substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_')).'",
                         format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
-                        '.$datepickerOptions.'todayHighlight: "true",
+                        todayHighlight: "true",
                         autoclose: "true"
                     });';
                 $this->datepickerInitialized = true;
@@ -688,9 +689,18 @@ class HtmlForm extends HtmlFormBasic
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if(is_object($this->htmlPage))
             {
-                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/datepicker3.css');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gPreferences['system_language'].'.js');
+                if($gDebug)
+                {
+                    $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.css');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
+                }
+                else
+                {
+                    $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.min.css');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js');
+                }
+
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/locales/bootstrap-datepicker.'.substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_')).'.min.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
             }
             else
@@ -878,7 +888,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$optionsAll['class'];
         }
         
-        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
+        $this->openControlStructure('', $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
         
         // set one radio button with no value will be set in front of the other array.
         if($optionsAll['showNoValueButton'] == true)
@@ -1297,7 +1307,7 @@ class HtmlForm extends HtmlFormBasic
 		}
 		
 		// the sql statement which returns all found categories
-		$sql = 'SELECT DISTINCT cat_id, cat_name, cat_default 
+		$sql = 'SELECT DISTINCT cat_id, cat_name, cat_default, cat_sequence
 		          FROM '.$sqlTables.'
 				 WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
 					   OR cat_org_id IS NULL )
@@ -1400,7 +1410,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // add default css class
-        $optionsAll['class'] .= ' btn-primary btn-form';
+        $optionsAll['class'] .= ' btn-primary';
 
         // now add button to form
         $this->addButton($id, $text, $optionsAll);
@@ -1480,7 +1490,7 @@ class HtmlForm extends HtmlFormBasic
     public function openButtonGroup()
     {
         $this->buttonGroupOpen = true;
-        $this->addHtml('<div class="btn-group">');
+        $this->addHtml('<div class="btn-group" role="group">');
     }
     
     /** Creates a html structure for a form field. This structure contains the label
@@ -1518,7 +1528,7 @@ class HtmlForm extends HtmlFormBasic
         // if necessary set css class for a mandatory element
         if($property == FIELD_MANDATORY)
         {
-			$cssClassMandatory = ' control-mandatory';
+			$cssClassMandatory = ' admidio-control-mandatory';
             $cssClassRow .= $cssClassMandatory;
             $this->flagMandatoryFields = true;
         }
@@ -1538,11 +1548,11 @@ class HtmlForm extends HtmlFormBasic
 			// create html for icon
 			if(strpos(admStrToLower($icon), 'http') === 0 && strValidCharacters($icon, 'url'))
 			{
-				$htmlIcon = '<img class="icon-information" src="'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
+				$htmlIcon = '<img class="admidio-icon-info" src="'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
 			}
 			elseif(admStrIsValidFileName($icon, true))
 			{
-				$htmlIcon = '<img class="icon-information" src="'.THEME_PATH.'/icons/'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
+				$htmlIcon = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
 			}
 		}
         
@@ -1625,7 +1635,7 @@ class HtmlForm extends HtmlFormBasic
         
         if($parameters != null)
         {
-            return '<a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+            return '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                         href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true"><img 
                         src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>';
         }
@@ -1646,7 +1656,7 @@ class HtmlForm extends HtmlFormBasic
 	    // If mandatory fields were set than a notice which marker represents the mandatory will be shown.
         if($this->flagMandatoryFields)
         {
-            $html .= '<div class="control-mandatory-definition"><span>'.$gL10n->get('SYS_MANDATORY_FIELDS').'</span></div>';
+            $html .= '<div class="admidio-control-mandatory-def"><span>'.$gL10n->get('SYS_MANDATORY_FIELDS').'</span></div>';
         }
 		
 		// now get whole form html code

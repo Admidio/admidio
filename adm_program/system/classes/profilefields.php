@@ -180,11 +180,11 @@ class ProfileFields
                                 // create html for optionbox entry
                                 if(strpos(admStrToLower($listValueImage), 'http') === 0 && strValidCharacters($listValueImage, 'url'))
                                 {
-                                    $listValue = '<img class="icon-information" src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                    $listValue = '<img class="admidio-icon-info" src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
                                 }
                                 elseif(admStrIsValidFileName($listValueImage, true))
                                 {
-                                    $listValue = '<img class="icon-information" src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                    $listValue = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
                                 }
                             }
                             catch(AdmException $e)
@@ -254,7 +254,14 @@ class ProfileFields
 			&& $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'CHECKBOX')
 			{
 				$value = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
-			}
+				
+				// if field has url then create a link
+				if(strlen($this->mProfileFields[$fieldNameIntern]->getValue('usf_url')))
+				{
+					$value = '<a href="'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_url').'" target="_blank">'.$value.'</a>';
+				}
+			}		
+			
 		}
 		return $value;
 	}

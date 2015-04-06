@@ -189,7 +189,7 @@ elseif($getMode == 4)
             $sysmail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $user);
 
             $gMessage->setForwardUrl($gNavigation->getUrl());
-            $gMessage->show($gL10n->get('SYS_EMAIL_SEND', $user->getValue('EMAIL')));
+            $gMessage->show($gL10n->get('SYS_EMAIL_SEND'));
         }
         catch(AdmException $e)
         {
