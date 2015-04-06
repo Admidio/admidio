@@ -40,7 +40,10 @@ body {
     
 }
 
+
+/**************************************************/
 /* Headlines */
+/**************************************************/
 
 h1, h2, h3, h4, h5 {
     color: #333333;
@@ -48,11 +51,6 @@ h1, h2, h3, h4, h5 {
     margin: 20px 0px 15px 0px;
 }
 
-h1 {
-    font-size: 170%;
-    letter-spacing: 0.1em;
-    border-bottom: 2px solid #409099;
-}
 
 h2 {
     font-size: 130%;
@@ -63,7 +61,48 @@ h3 {
     font-size: 110%;
 }
 
+
+@media (min-width: 768px) {
+    h1 {
+        font-size: 170%;
+        letter-spacing: 0.2em;
+        border-bottom: 2px solid #409099;
+    }
+}
+
+@media (max-width: 768px) {
+    h1, h3 {
+        padding: 15px 5px;
+        border: 1px solid #7d7d7d;
+        border-left: 0px;
+        border-right: 0px;
+        border-color: #7d7d7d;
+        background-color: #96c4cb; 
+        background-repeat: repeat-x;
+        background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	        
+    }
+    
+    h1 {
+        font-size: 18px;
+        font-weight: normal;        
+        margin: 0px -15px 15px -15px;
+    }
+
+    h3 {
+        padding: 10px 5px;
+        margin: 15px -15px;
+    }
+}
+
+/**************************************************/
 /* Other styles */
+/**************************************************/
+
+.ekko-lightbox-nav-overlay a:link, .ekko-lightbox-nav-overlay a:visited,
+.ekko-lightbox-nav-overlay a:hover, .ekko-lightbox-nav-overlay a:active {
+    color: #ffffff;
+    text-decoration: none;
+}
 
 .badge {
     margin-left: 4px;
@@ -77,7 +116,7 @@ h3 {
     text-align: left;
 }
 
-.alert, .btn-form {
+.alert {
     margin-top: 15px;
 }
 
@@ -100,57 +139,42 @@ h3 {
     width: 0;
 }
 
+/**************************************************/
 /* Links */
+/**************************************************/
 
 a:link, a:visited {
     color: #222222;
     text-decoration: underline;
 }
 
-a:hover, a:active {
+a:hover, a:active, a.btn:hover, a.btn:active, a.navbar-link:hover, a.navbar-link:active {
     text-decoration: underline !important;
     color: #FF9C00 !important;
 }
 
-/* Show a linklist with icon */
-
-.icon-text-link-list {
-    list-style-type: none;
-    padding: 0px;
-    margin: 25px 0px 25px 0px;
+a.btn {
+    padding-top: 0px;
+    padding-left: 0px;
+    text-align: left !important;
 }
 
-.icon-text-link-list-horizontal li{   
-    padding-right: 15px;   
-    display: inline-block;
-    font-size: 11pt;
-}
-
-.icon-text-link-list-vertical li {
-    margin-top: 7px;
-    display: block;
-}
-
-
+/**************************/
 /* Settings for all icons */
+/**************************/
 
-.menu img, .icon-link img, .icon-information, .btn img, .icon-text-link img {
+.admidio-icon-link img, .admidio-icon-info, .btn img {
     border: none;
     vertical-align: text-top;
     margin-left: 3px;
     height: 16px;
 }
 
-.navbar-link img, .icon-text-link img, .btn img, .alert .glyphicon {
+.navbar-link img, .btn img, .alert .glyphicon, .btn {
     margin-right: 5px;
 }
 
-.icon-text-link {
-    font-weight: normal;
-    white-space: nowrap;
-}
-
-.icon-information {
+.admidio-icon-info {
     cursor: help;
     margin-right: 2px;
 }
@@ -159,7 +183,9 @@ a:hover, a:active {
     margin: 0px 5px;
 }
 
+/*******************************/
 /* Settings for navigationbars */
+/*******************************/
 
 .navbar {
     min-height: 0px;
@@ -186,8 +212,13 @@ a:hover, a:active {
 }
 
 .navbar-brand {
+    color: #474b4c !important;
     height: 40px;
-    padding-top: 10px;
+    padding: 10px 15px 10px 15px;
+}
+
+.navbar-toggle {
+    margin-right: 5px;
 }
 
 .navbar .checkbox {
@@ -224,35 +255,36 @@ a:hover, a:active {
     text-decoration: none !important;
 }
 
-/* form layout */
-
-form hr {
-    border: 1px solid #bad8e2;
-    width: 100%;
-    margin-bottom: 15px; 
-}
-
+/**************************************************/
 /* Customized layout for forms and their elements */
+/**************************************************/
 
 .form-horizontal .control-label {
     text-align: left;
 }
 
 
-.form-vertical .form-control-static {
+.admidio-form-vertical .form-control-static {
     padding-top: 0px;
 }
 
 .form-control-static {
     padding-bottom: 0px;
+    min-height: 0px;
 }
 
-.form-vertical label {
+.admidio-form-vertical label {
     margin-bottom: 0px;
 }
 
 .form-group {
     margin-bottom: 10px;
+}
+
+form hr {
+    border: 1px solid #bad8e2;
+    width: 100%;
+    margin-bottom: 15px; 
 }
 
 .navbar-form .form-group {
@@ -310,6 +342,10 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     margin-right: 0px;
 }
 
+.btn-group .btn {
+    margin-right: 0px;
+}
+
 .btn-primary {
     background-color: #409099;
     border-color: #409099;
@@ -321,13 +357,19 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     border-color: #387F87;
 }
 
-.control-mandatory label:after, .control-mandatory-definition span:after {
-    content: url(bullet_red.png);
+.btn.disabled {
+    background-color: #aaaaaa !important;
+    border-color: #aaaaaa !important;
+    color: #ffffff;
+}
+
+.admidio-control-mandatory label:after, .admidio-control-mandatory-def span:after {
+    content: url(../icons/bullet_red.png);
     white-space: nowrap;
     vertical-align: top;
 }
 
-.control-mandatory-definition {
+.admidio-control-mandatory-def {
     font-size: 9pt;
     margin-top: 5px;
 	margin-bottom: -10px;
@@ -336,7 +378,9 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     display: inline-block;
 }
 
-/* A simple groupbox to group some elements. This is often used in forms. */
+/********************************************************************************/
+/* A simple groupbox/panel to group some elements. This is often used in forms. */
+/********************************************************************************/
 
 .panel-default {
     border: 1px solid #7d7d7d;
@@ -372,14 +416,32 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     border-radius: 10px !important;
 }
 
+/* Panel which includes the ckeditor in a nice way without separate borders */
+.admidio-panel-editor .panel-body {
+    padding: 0px;
+}
+
+.admidio-panel-editor .panel-body .form-group {
+    margin-bottom: 0px;
+}
+
+.admidio-panel-editor .panel-body .cke_chrome {
+    border-width: 0px;
+}
+
+.admidio-panel-editor .panel-body .cke_bottom, .admidio-panel-editor .panel-body .cke_inner {
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
 /* Information block with user and timestamp who created and edited the data */
 
-.info-created-edited {
+.admidio-admidio-info-created-edited {
     font-size: 8pt;
     margin-top: 8px;
 }
 
-.info-created{
+.admidio-info-created {
     display: block;
 }
 
@@ -413,22 +475,24 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     border-top: 2px solid #C1DCE6;
 }
 
-.panel-heading-icon {
+.admidio-panel-heading-icon {
     margin-right: 8px;
-    vertical-align: text-top;
+    vertical-align: sub;
     border-width: 0px;
 }
 
-.panel-footer .admCreateEditInformations {
-    margin-top: 0px;
-}
-
-.panel-comment {
+.admidio-panel-comment {
     overflow: hidden; 
     margin: 10px 20px; 
 }
 
+/*******************************************************************/
 /* Layout for tables that will be used in lists or download module */
+/*******************************************************************/
+
+@-moz-document url-prefix() {
+  fieldset { display: table-cell; }
+}
 
 .table thead > tr > th {
     color: #333333;
@@ -436,14 +500,14 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     border-bottom: 2px solid #409099;
 }
 
-.group-heading td {
+.admidio-group-heading td {
     color: #515556;
     font-weight: bold;
     letter-spacing: 0.2em;
     border-bottom: 2px solid #a0cbd9;
 }
 
-.group-heading {
+.admidio-group-heading {
   cursor: pointer;
 }
 

@@ -143,7 +143,7 @@ subfolder($photoAlbum->getValue('pho_pho_id_parent'), '', $photoAlbum, $getPhoto
 $form->addSelectBox('pho_pho_id_parent', $gL10n->get('PHO_PARENT_ALBUM'), $photoAlbumsArray, array('property' => FIELD_MANDATORY, 
                     'defaultValue' => $photoAlbum->getValue('pho_pho_id_parent'), 'showContextDependentFirstEntry' => false, 
                     'helpTextIdLabel' => array('PHO_PARENT_ALBUM_DESC', $gL10n->get('PHO_PHOTO_ALBUMS'))));
-$form->addInput('pho_begin', $gL10n->get('SYS_START'), $photoAlbum->getValue('pho_begin'), array('type' => 'date', 'maxLength' => 10));
+$form->addInput('pho_begin', $gL10n->get('SYS_START'), $photoAlbum->getValue('pho_begin'), array('property' => FIELD_MANDATORY, 'type' => 'date', 'maxLength' => 10));
 $form->addInput('pho_end', $gL10n->get('SYS_END'), $photoAlbum->getValue('pho_end'), array('type' => 'date', 'maxLength' => 10));
 $form->addInput('pho_photographers', $gL10n->get('PHO_PHOTOGRAPHER'), $photoAlbum->getValue('pho_photographers'), array('maxLength' => 100));
 $form->addCheckbox('pho_locked', $gL10n->get('PHO_ALBUM_LOCK'), $photoAlbum->getValue('pho_locked'), array('helpTextIdLabel' => 'PHO_ALBUM_LOCK_DESC'));

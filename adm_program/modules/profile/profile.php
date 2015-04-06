@@ -64,7 +64,7 @@ function getFieldCode($fieldNameIntern, $user)
 
 			// ICQ Onlinestatus anzeigen
 			$value = '
-			<a class="icon-link" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
+			<a class="admidio-icon-link" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
 				src="http://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
 				alt="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
 				title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
@@ -76,7 +76,7 @@ function getFieldCode($fieldNameIntern, $user)
 		{
 			// Skype Onlinestatus anzeigen
 			$value = '<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
-			<a class="icon-link" href="skype:'.$user->getValue($fieldNameIntern).'?add"><img
+			<a class="admidio-icon-link" href="skype:'.$user->getValue($fieldNameIntern).'?add"><img
 				src="http://mystatus.skype.com/smallicon/'.$user->getValue($fieldNameIntern).'"
 				title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
 				alt="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
@@ -119,12 +119,19 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage();
 
-//$page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
-//$page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
+if($gDebug)
+{
+    $page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.css');
+    $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
+}
+else
+{
+    $page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.min.css');
+    $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js');
+}
+
+$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/locales/bootstrap-datepicker.'.substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_')).'.min.js');    
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
-$page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/datepicker3.css');
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gPreferences['system_language'].'.js');
 
 $page->addJavascript('
     var profileJS = new profileJSClass();
@@ -151,7 +158,14 @@ $page->addJavascript('
     $("#menu_item_role_memberships_change").attr("data-toggle", "modal");
     $("#menu_item_role_memberships_change").attr("data-target", "#admidio_modal");
     
-    $(".form-membership-period").submit(function(event) {
+    $("input[data-provide=\'datepicker\']").datepicker({
+                            language: "'.substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_')).'",
+                            format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
+                            todayHighlight: "true",
+                            autoclose: "true"
+                        });
+                    
+    $(".admidio-form-membership-period").submit(function(event) {
         var id = $(this).attr("id");
         var parentId = $("#"+id).parent().parent().attr("id");
         var action = $(this).attr("action");
@@ -173,11 +187,14 @@ $page->addJavascript('
                     $("#"+id+" .form-alert").fadeOut("slow");
                     $("#"+parentId).animate({opacity: 1.0}, 2500);
                     $("#"+parentId).fadeOut("slow");
+                    profileJS.reloadRoleMemberships();
+                    profileJS.reloadFormerRoleMemberships();
+                    profileJS.reloadFutureRoleMemberships();
                 }
                 else {
                     $("#"+id+" .form-alert").attr("class", "alert alert-danger form-alert");
                     $("#"+id+" .form-alert").fadeIn();
-                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
+                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                 }
             }
         });    
@@ -245,9 +262,6 @@ if($gCurrentUser->assignRoles())
 {
     $profileMenu->addItem('menu_item_role_memberships_change', $g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$user->getValue('usr_id').'&amp;inline=1', 
                             $gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE'), 'roles.png', 'right', 'menu_item_extras');
-/*    $page->addHtml('
-    <a class="icon-text-link" id="edit_roles_link" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$user->getValue('usr_id').'&amp;inline=1"><img 
-        src="'.THEME_PATH.'/icons/edit.png" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" alt="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" />'.$gL10n->get('SYS_EDIT').'</a>');*/
 }
 
 if($gCurrentUser->isWebmaster())
@@ -273,7 +287,7 @@ $page->addHtml('
     <div class="panel-body row">
         <div class="col-sm-8">');
             // create a static form
-            $form = new HtmlForm('profile_user_data_form', null);
+            $form = new HtmlForm('profile_master_data_form', null);
             
             // add lastname and firstname 
             if(strlen($user->getValue('GENDER')) > 0
@@ -344,7 +358,7 @@ $page->addHtml('
                                 if(strlen($user->getValue('ADDRESS')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('ADDRESS', 'usf_hidden') == 0))
                                 {
-                                    $address   .= '<div>'.$user->getValue('ADDRESS'). '</div>';
+                                    $address   .= $user->getValue('ADDRESS'). '<br />';
                                     $map_url   .= urlencode($user->getValue('ADDRESS'));
                                     $route_url .= urlencode($user->getValue('ADDRESS'));
                                 }
@@ -352,28 +366,23 @@ $page->addHtml('
                                 if(strlen($user->getValue('POSTCODE')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 0))
                                 {
-                                    $address   .= '<div>'.$user->getValue('POSTCODE');
+                                    $address   .= $user->getValue('POSTCODE');
                                     $map_url   .= ',%20'. urlencode($user->getValue('POSTCODE'));
                                     $route_url .= ',%20'. urlencode($user->getValue('POSTCODE'));
     
-                                    // Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
+                                    // City and postcode should be shown in one line
                                     if(strlen($user->getValue('CITY')) == 0
                                     || ($gCurrentUser->hasRightEditProfile($user) == false && $gProfileFields->getProperty('CITY', 'usf_hidden') == 1))
                                     {
-                                        $address   .= '</div>';
+                                        $address   .= '<br />';
                                     }
                                 }
     
                                 if(strlen($user->getValue('CITY')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('CITY', 'usf_hidden') == 0))
                                 {
-                                    // Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
-                                    if(strlen($user->getValue('POSTCODE')) == 0
-                                    || ($gCurrentUser->hasRightEditProfile($user) == false && $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 1))
-                                    {
-                                        $address   .= '<div>';
-                                    }
-                                    $address   .= ' '. $user->getValue('CITY'). '</div>';
+                                    // City and postcode should be shown in one line
+                                    $address   .= ' '. $user->getValue('CITY'). '<br />';
                                     $map_url   .= ',%20'. urlencode($user->getValue('CITY'));
                                     $route_url .= ',%20'. urlencode($user->getValue('CITY'));
                                 }
@@ -382,7 +391,7 @@ $page->addHtml('
                                 && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('COUNTRY', 'usf_hidden') == 0))
                                 {
                                     $country    = $user->getValue('COUNTRY');
-                                    $address   .= '<div>'.$country. '</div>';
+                                    $address   .= $country. '<br />';
                                     $map_url   .= ',%20'. urlencode($country);
                                     $route_url .= ',%20'. urlencode($country);
                                 }
@@ -394,7 +403,7 @@ $page->addHtml('
                                 && (strlen($user->getValue('POSTCODE')) > 0 || strlen($user->getValue('CITY')) > 0))
                                 {
                                     $htmlAddress .= '
-                                    <a class="icon-text-link" href="'. $map_url. '" target="_blank"><img src="'. THEME_PATH. '/icons/map.png" 
+                                    <a class="btn" href="'. $map_url. '" target="_blank"><img src="'. THEME_PATH. '/icons/map.png" 
                                         alt="'.$gL10n->get('SYS_MAP').'" />'.$gL10n->get('SYS_MAP').'</a>';
     
                                     // show route link if its not the profile of CurrentUser
@@ -431,19 +440,19 @@ $page->addHtml('
             // Nur berechtigte User duerfen das Profilfoto editieren
             if($gCurrentUser->hasRightEditProfile($user) == true)
             {
-                $page->addHtml('<ul id="profile_picture_links" class="icon-text-link-list icon-text-link-list-vertical">
-                    <li><a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><img
-                            src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a></li>');
+                $page->addHtml('<div id="profile_picture_links" class="btn-group-vertical" role="group">
+                    <a class="btn" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><img
+                        src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a>');
                 //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
                 if((strlen($user->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
                     || file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$user->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1 )
                 {
-                    $page->addHtml('<li><a class="icon-text-link" data-toggle="modal" data-target="#admidio_modal"
+                    $page->addHtml('<a class="btn" data-toggle="modal" data-target="#admidio_modal"
                                     href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
                                     '&amp;database_id='.$user->getValue('usr_id').'"><img src="'. THEME_PATH. '/icons/delete.png" 
-                                    alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</a></li>');
+                                    alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</a>');
                 }
-                $page->addHtml('</ul>');
+                $page->addHtml('</div>');
             }
         $page->addHtml('</div>
     </div>
@@ -475,12 +484,12 @@ foreach($gProfileFields->mProfileFields as $field)
             $category = $field->getValue('cat_name');
 
             $page->addHtml('
-            <div class="panel panel-default" id="'.$field->getValue('cat_name').'_data_panel">
+            <div class="panel panel-default" id="'.$field->getValue('cat_name_intern').'_data_panel">
                 <div class="panel-heading">'.$field->getValue('cat_name').'</div>
                 <div class="panel-body">');
                 
             // create a static form
-            $form = new HtmlForm('profile_user_data_form', null);
+            $form = new HtmlForm('profile_'.$field->getValue('cat_name_intern').'_form', null);
         }
 
         // show html of field, if user has a value for that field or it's a checkbox field
@@ -547,68 +556,68 @@ if($gPreferences['profile_show_roles'] == 1)
             //checkRolesRight($right)
             if($user->checkRolesRight('rol_assign_roles') == 1)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_assign_roles'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/roles.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_assign_roles'],2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/roles.png"
                 alt="'.$gL10n->get('ROL_RIGHT_ASSIGN_ROLES').'" title="'.$gL10n->get('ROL_RIGHT_ASSIGN_ROLES').'" />');
             }
             if($user->checkRolesRight('rol_approve_users') == 1)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_approve_users'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/new_registrations.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_approve_users'],2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/new_registrations.png"
                 alt="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'" title="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'" />');
             }
             if($user->checkRolesRight('rol_edit_user') == 1)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_edit_user'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/group.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_edit_user'],2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/group.png"
                 alt="'.$gL10n->get('ROL_RIGHT_EDIT_USER').'" title="'.$gL10n->get('ROL_RIGHT_EDIT_USER').'" />');
             }
 
             if($user->checkRolesRight('rol_mail_to_all') == 1)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_mail_to_all'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/email.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_mail_to_all'],2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/email.png"
                 alt="'.$gL10n->get('ROL_RIGHT_MAIL_TO_ALL').'" title="'.$gL10n->get('ROL_RIGHT_MAIL_TO_ALL').'" />');
             }
             if($user->checkRolesRight('rol_profile') == 1)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_profile'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/profile.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_profile'],2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/profile.png"
                 alt="'.$gL10n->get('ROL_RIGHT_PROFILE').'" title="'.$gL10n->get('ROL_RIGHT_PROFILE').'" />');
             }
             if($user->checkRolesRight('rol_announcements') == 1 && $gPreferences['enable_announcements_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_announcements'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/announcements.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_announcements'],2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/announcements.png"
                 alt="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" title="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" />');
             }
             if($user->checkRolesRight('rol_dates') == 1 && $gPreferences['enable_dates_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_dates'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/dates.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_dates'],2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/dates.png"
                 alt="'.$gL10n->get('ROL_RIGHT_DATES').'" title="'.$gL10n->get('ROL_RIGHT_DATES').'" />');
             }
             if($user->checkRolesRight('rol_photo') == 1 && $gPreferences['enable_photo_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_photo'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/photo.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_photo'],2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/photo.png"
                 alt="'.$gL10n->get('ROL_RIGHT_PHOTO').'" title="'.$gL10n->get('ROL_RIGHT_PHOTO').'" />');
             }
             if($user->checkRolesRight('rol_download') == 1 && $gPreferences['enable_download_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_download'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/download.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_download'],2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/download.png"
                 alt="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" title="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" />');
             }
             if($user->checkRolesRight('rol_guestbook') == 1 && $gPreferences['enable_guestbook_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/guestbook.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook'],2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/guestbook.png"
                 alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" />');
             }
             if($user->checkRolesRight('rol_guestbook_comments') == 1 && $gPreferences['enable_guestbook_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook_comments'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/comment.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook_comments'],2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/comment.png"
                 alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" />');
             }
             if($user->checkRolesRight('rol_weblinks') == 1 && $gPreferences['enable_weblinks_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_weblinks'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/weblinks.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_weblinks'],2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/weblinks.png"
                 alt="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'" title="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'" />');
             }
             if($user->checkRolesRight('rol_all_lists_view') == 1)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_all_lists_view'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/lists.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_all_lists_view'],2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/lists.png"
                 alt="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" title="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" />');
             }
             $page->addHtml('</p>
@@ -741,15 +750,15 @@ if($gPreferences['profile_show_extern_roles'] == 1
                 if($showRolesOtherOrganizations == false)
                 {
                     $page->addHtml('
-                    <div class="panel panel-default" id="profile_roles_box_other_orga">
+                    <div class="panel panel-default" id="profile_other_orga_roles_box">
                         <div class="panel-heading">'.
                             $gL10n->get('PRO_ROLE_MEMBERSHIP_OTHER_ORG').'
-                            <a class="icon-link" data-toggle="modal" data-target="#admidio_modal" 
+                            <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" 
                                 href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_VIEW_ROLES_OTHER_ORGAS&amp;inline=true"><img 
                                 src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
                         </div>
-                        <div class="panel-body" id="profile_former_roles_box_body">
-                            <ul class="list-group list-roles-assignment">');
+                        <div class="panel-body" id="profile_other_orga_roles_box_body">
+                            <ul class="list-group admidio-list-roles-assign">');
 
                     $showRolesOtherOrganizations = true;
                 }

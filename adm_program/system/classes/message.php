@@ -163,49 +163,41 @@ class Message
                 
 			if($this->showButtons == true)
 			{
-				$html .= '<ul class="icon-text-link-list icon-text-link-list-horizontal">';
-					if(strlen($this->forwardUrl) > 0)
-					{
-						if($this->showYesNoButtons == true)
-						{
-							$html .= '<li>
-								<button id="admButtonYes" class="admButton" type="button" onclick="self.location.href=\''. $this->forwardUrl. '\'"><img src="'. THEME_PATH. '/icons/ok.png" 
-									alt="'.$gL10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
-							</li>
-							<li>
-								<button id="admButtonNo" class="admButton" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/error.png" 
-									alt="'.$gL10n->get('SYS_NO').'" />&nbsp;'.$gL10n->get('SYS_NO').'</button>
-							</li>';
-						}
-						else
-						{
-							// Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
-							$html .= '<li>
-								<a class="icon-text-link" href="'. $this->forwardUrl. '">'.$gL10n->get('SYS_NEXT').'<img 
-								    src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'" title="'.$gL10n->get('SYS_NEXT').'" /></a>
-							</li>';
-						}
-					}
-					else
-					{
-						// Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen 
-						// bzw. ggf. einen Fenster-Schließen-Button                       
-						if($this->showCloseButton == true)
-						{
-							$html .= '<li>
-								<a class="icon-text-link" href="javascript:window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" 
-								    alt="'.$gL10n->get('SYS_CLOSE').'" title="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</a>
-							</li>';
-						}
-						else
-						{
-							$html .= '<li>
-								<a class="icon-text-link" href="javascript:history.back()"><img src="'. THEME_PATH. '/icons/back.png"
-									 alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').'</a>
-							</li>';
-						}
-					}
-				$html .= '</ul>';
+                if(strlen($this->forwardUrl) > 0)
+                {
+                    if($this->showYesNoButtons == true)
+                    {
+                        $html .= '
+                            <button id="admButtonYes" class="btn" type="button" onclick="self.location.href=\''. $this->forwardUrl. '\'"><img src="'. THEME_PATH. '/icons/ok.png" 
+                                alt="'.$gL10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
+                            <button id="admButtonNo" class="btn" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/error.png" 
+                                alt="'.$gL10n->get('SYS_NO').'" />&nbsp;'.$gL10n->get('SYS_NO').'</button>';
+                    }
+                    else
+                    {
+                        // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
+                        $html .= '
+                            <a class="btn" href="'. $this->forwardUrl. '">'.$gL10n->get('SYS_NEXT').'<img 
+                                src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'" title="'.$gL10n->get('SYS_NEXT').'" /></a>';
+                    }
+                }
+                else
+                {
+                    // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen 
+                    // bzw. ggf. einen Fenster-Schließen-Button                       
+                    if($this->showCloseButton == true)
+                    {
+                        $html .= '
+                            <a class="btn" href="javascript:window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" 
+                                alt="'.$gL10n->get('SYS_CLOSE').'" title="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</a>';
+                    }
+                    else
+                    {
+                        $html .= '
+                            <a class="btn" href="javascript:history.back()"><img src="'. THEME_PATH. '/icons/back.png"
+                                 alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').'</a>';
+                    }
+                }
 			}
 		$html .= '</div>';
         

@@ -27,7 +27,7 @@ if (isset($_POST['admSearchMembers']) && strlen($_POST['admSearchMembers']) > 0)
 $getMembers = admFuncVariableIsValid($_GET, 'members', 'boolean', array('defaultValue' => 1));
 
 // if only active members should be shown then set parameter
-if($gPreferences['user_management_show_all_users'] == 0)
+if($gPreferences['members_show_all_users'] == 0)
 {
     $getMembers = 1;
 }
@@ -150,9 +150,9 @@ if($gPreferences['profile_log_edit_fields'] == 1)
 }
 
 // show checkbox to select all users or only active members
-if($gPreferences['user_management_show_all_users'] == 1)
+if($gPreferences['members_show_all_users'] == 1)
 {
-    $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, 'navbar');
+    $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
     $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), $flagShowMembers, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
     $membersAdministrationMenu->addForm($navbarForm->show(false));
 }
@@ -182,13 +182,13 @@ $membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-con
 // create array with all column heading values
 $columnHeading = array(
     $gL10n->get('SYS_ABR_NO'),
-    '<img class="icon-information" src="'. THEME_PATH. '/icons/profile.png" 
+    '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/profile.png" 
         alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
         title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',        
     $gL10n->get('SYS_STATUS'),
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_USER'),
-    '<img class="icon-information" alt="'.$gL10n->get('SYS_GENDER').'" title="" src="'.THEME_PATH.'/icons/gender.png" data-original-title="'.$gL10n->get('SYS_GENDER').'">',
+    '<img class="admidio-icon-info" alt="'.$gL10n->get('SYS_GENDER').'" title="" src="'.THEME_PATH.'/icons/gender.png" data-original-title="'.$gL10n->get('SYS_GENDER').'">',
     $gL10n->get('SYS_GENDER'),
     $gL10n->get('SYS_BIRTHDAY'),
     $gL10n->get('MEM_UPDATED_ON'),
@@ -198,7 +198,7 @@ $columnHeading = array(
 $membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
 $membersTable->disableDatatablesColumnsSort(10);
 $membersTable->addRowHeadingByArray($columnHeading);
-$membersTable->setDatatablesRowsPerPage($gPreferences['user_management_members_per_page']);
+$membersTable->setDatatablesRowsPerPage($gPreferences['members_users_per_page']);
 $membersTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 // set alternative order column for member status icons
 $membersTable->setDatatablesAlternativOrderColumns(2, 3);
@@ -237,7 +237,7 @@ while($row = $gDb->fetch_array($result_mgl))
     // create array with all column values
     $columnValues = array(
         $irow,
-        '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
+        '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
 	         src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
         $memberOfThisOrganization,
         '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '">'. $row['last_name']. ',&nbsp;'. $row['first_name']. '</a>',
@@ -288,12 +288,12 @@ while($row = $gDb->fetch_array($result_mgl))
 	  && $gPreferences['enable_system_mails'] == 1
 	  && $row['usr_id'] != $gCurrentUser->getValue('usr_id'))
 	{
-        $userAdministration = '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
+        $userAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
 						         src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
     }
 	else
 	{
-		$userAdministration = '&nbsp;<img class="icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+		$userAdministration = '&nbsp;<img class="admidio-icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
 	}
 	
 	if(strlen($row['email']) > 0)
@@ -307,7 +307,7 @@ while($row = $gDb->fetch_array($result_mgl))
 			$mail_link = $g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='. $row['usr_id'];
 		}
 		
-		$userAdministration .= '<a class="icon-link" href="'.$mail_link.'"><img src="'. THEME_PATH. '/icons/email.png"
+		$userAdministration .= '<a class="admidio-icon-link" href="'.$mail_link.'"><img src="'. THEME_PATH. '/icons/email.png"
                                 alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" /></a>';
 	}
 
@@ -315,12 +315,12 @@ while($row = $gDb->fetch_array($result_mgl))
 	// es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
 	if($row['member_this_orga'] > 0 || $row['member_other_orga'] == 0)
 	{
-		$userAdministration .= '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='. $row['usr_id']. '"><img
+		$userAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='. $row['usr_id']. '"><img
 						            src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
 	}
 	else
 	{
-		$userAdministration .= '&nbsp;<img class="icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+		$userAdministration .= '&nbsp;<img class="admidio-icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
 	}
 
 	// Mitglieder entfernen
@@ -328,12 +328,12 @@ while($row = $gDb->fetch_array($result_mgl))
 		|| $row['member_this_orga'] > 0)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
 		&& $row['usr_id'] != $gCurrentUser->getValue('usr_id'))       // das eigene Profil darf keiner entfernen
 	{
-		$userAdministration .= '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
+		$userAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
 			                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
 	}
 	else
 	{
-		$userAdministration .= '&nbsp;<img class="icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+		$userAdministration .= '&nbsp;<img class="admidio-icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
 	}
 	
 	$columnValues[] = $userAdministration;

@@ -21,7 +21,7 @@ require_once('../../system/login_valid.php');
 
 // calculate default date from which the profile fields history should be shown
 $filterDateFrom = new DateTimeExtended(DATE_NOW, 'Y-m-d', 'date');
-$filterDateFrom->modify('-'.$gPreferences['user_management_days_field_history'].' day');
+$filterDateFrom->modify('-'.$gPreferences['members_days_field_history'].' day');
 
 // Initialize and check the parameters
 $getUserId   = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
@@ -150,7 +150,7 @@ $page->addHtml($profileFieldHistoryMenu->show(false));
 
 // create filter menu with input elements for Startdate and Enddate
 $FilterNavbar = new HtmlNavbar('menu_profile_field_history_filter', null, null, 'filter');
-$form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/members/profile_field_history.php?usr_id='.$getUserId, $page, 'navbar');
+$form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/members/profile_field_history.php?usr_id='.$getUserId, $page, array('type' => 'navbar', 'setFocus' => false));
 $form->addInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, array('type' => 'date', 'maxLength' => 10));
 $form->addInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, array('type' => 'date', 'maxLength' => 10));
 $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));

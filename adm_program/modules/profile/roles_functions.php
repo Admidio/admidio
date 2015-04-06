@@ -78,8 +78,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
     $countShowRoles  = 0;
     $member = new TableMembers($gDb);
 	$role   = new TableRoles($gDb);
-    $roleMemHTML = '';
-    $roleMemHTML = '<ul class="list-group list-roles-assignment" id="'.$htmlListId.'">';
+    $roleMemHTML = '<ul class="list-group admidio-list-roles-assign" id="'.$htmlListId.'">';
 
     while($row = $gDb->fetch_array($result_role))
     {
@@ -118,7 +117,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
 			// create list entry for one role
             $roleMemHTML .= '
             <li class="list-group-item" id="role_'. $row['mem_rol_id']. '">
-                <ul class="list-group list-roles-assignment-pos">
+                <ul class="list-group admidio-list-roles-assign-pos">
                     <li class="list-group-item">
                         <span>'.
                             $role->getValue('cat_name'). ' - ';
@@ -159,7 +158,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                                 || ($role->getValue('rol_webmaster') == 0))
                                 {
                                     $roleMemHTML .= '
-                                    <a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                         href="'.$g_root_path.'/adm_program/system/popup_message.php?type='.$deleteMode.'&amp;element_id=role_'.
                                         $role->getValue('rol_id'). '&amp;database_id='.$member->getValue('mem_id').'&amp;name='.urlencode($role->getValue('rol_name')).'"><img
                                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" /></a>';
@@ -167,18 +166,18 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                                 else
                                 {
                                     $roleMemHTML .= '
-                                    <a class="icon-link"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
+                                    <a class="admidio-icon-link"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
                                 }
         
                                 // do not edit webmaster role
                                 if ($row['rol_webmaster'] == 0)
                                 {
-                                    $roleMemHTML .= '<a class="icon-link" style="cursor:pointer;" onclick="profileJS.toggleDetailsOn('.$member->getValue('mem_id').')"><img
+                                    $roleMemHTML .= '<a class="admidio-icon-link" style="cursor:pointer;" onclick="profileJS.toggleDetailsOn('.$member->getValue('mem_id').')"><img
                                         src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('PRO_CHANGE_DATE').'" title="'.$gL10n->get('PRO_CHANGE_DATE').'" /></a>';
                                 }
                                 else
                                 {
-                                    $roleMemHTML .= '<a class="icon-link"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
+                                    $roleMemHTML .= '<a class="admidio-icon-link"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
                                 }
         
                             }
@@ -186,15 +185,15 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                             // only show info if system setting is activated
                             if($gPreferences['system_show_create_edit'] > 0)
                             {
-                                $roleMemHTML .= '<a class="icon-link admMemberInfo" id="member_info_'.$member->getValue('mem_id').'" href="javascript:"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATIONS').'" title="'.$gL10n->get('SYS_INFORMATIONS').'"/></a>';
+                                $roleMemHTML .= '<a class="admidio-icon-link admMemberInfo" id="member_info_'.$member->getValue('mem_id').'" href="javascript:"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATIONS').'" title="'.$gL10n->get('SYS_INFORMATIONS').'"/></a>';
                             }
                         $roleMemHTML .= '</span>
                     </li>
                     <li class="list-group-item" id="membership_period_'.$member->getValue('mem_id').'" style="visibility: hidden; display: none;"><div class="collapse navbar-collapse">';
-                        $form = new HtmlForm('membership_period_form_'.$member->getValue('mem_id'), $g_root_path.'/adm_program/modules/profile/profile_function.php?mode=7&user_id='.$user->getValue('usr_id').'&mem_id='.$row['mem_id'], null, 'navbar', false, 'form-membership-period');
+                        $form = new HtmlForm('membership_period_form_'.$member->getValue('mem_id'), $g_root_path.'/adm_program/modules/profile/profile_function.php?mode=7&amp;user_id='.$user->getValue('usr_id').'&amp;mem_id='.$row['mem_id'], null, array('type' => 'navbar', 'setFocus' => false, 'class' => 'admidio-form-membership-period'));
                         $form->addInput('membership_start_date_'.$member->getValue('mem_id'), $gL10n->get('SYS_START'), $member->getValue('mem_begin', $gPreferences['system_date']), array('type' => 'date', 'maxLength' => 10));
                         $form->addInput('membership_end_date_'.$member->getValue('mem_id'), $gL10n->get('SYS_END'), $member->getValue('mem_end', $gPreferences['system_date']), array('type' => 'date', 'maxLength' => 10));
-                        $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
+                        $form->addSubmitButton('btn_send_'.$member->getValue('mem_id'), $gL10n->get('SYS_OK'));
                         $roleMemHTML .= $form->show(false);
                     $roleMemHTML .= '</div></li>
                     <li class="list-group-item" id="member_info_'.$member->getValue('mem_id').'_Content" style="display: none;">';
@@ -208,10 +207,12 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
     }
     if($countShowRoles == 0)
     {
-        $roleMemHTML .= '<div class="block-padding">'.$gL10n->get('PRO_NO_ROLES_VISIBLE').'</div>';
+        $roleMemHTML = '<div class="block-padding">'.$gL10n->get('PRO_NO_ROLES_VISIBLE').'</div>';
     }
-            
-    $roleMemHTML .= '</ul>';
+    else
+    {
+        $roleMemHTML .= '</ul>';
+    }
 
     if($directOutput)
     {

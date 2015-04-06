@@ -8,17 +8,17 @@
  *
  * Parameters:
  *
- * id:      ID die bearbeitet werden soll
- * mode:     1 - Neue Gaestebucheintrag anlegen
- *           2 - Gaestebucheintrag loeschen
- *           3 - Gaestebucheintrag editieren
- *           4 - Kommentar zu einem Eintrag anlegen
- *           5 - Kommentar eines Gaestebucheintrages loeschen
- *           8 - Kommentar eines Gaestebucheintrages editieren
- *           9 - Gaestebucheintrag moderieren
- *           10 - Gaestebuchkommentar moderieren
- * headline: Ueberschrift, die ueber den Gaestebuch steht
- *           (Default) Gaestebuch
+ * id       : Id of one guestbook entry that should be edited
+ * mode:    1 - Neue Gaestebucheintrag anlegen
+ *          2 - Gaestebucheintrag loeschen
+ *          3 - Gaestebucheintrag editieren
+ *          4 - Kommentar zu einem Eintrag anlegen
+ *          5 - Kommentar eines Gaestebucheintrages loeschen
+ *          8 - Kommentar eines Gaestebucheintrages editieren
+ *          9 - Gaestebucheintrag moderieren
+ *          10 - Gaestebuchkommentar moderieren
+ * headline : Title of the guestbook module. This will be shown in the whole module.
+ *            (Default) GBO_GUESTBOOK
  *
  *****************************************************************************/
 

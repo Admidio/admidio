@@ -83,7 +83,7 @@ $page->addJavascript('
                 else {
                     $("#"+id+" .form-alert").attr("class", "alert alert-danger form-alert");
                     $("#"+id+" .form-alert").fadeIn();
-                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
+                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                 }
             }
         });    
@@ -130,15 +130,15 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_common">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_common">
-                            <img src="'.THEME_PATH.'/icons/options.png" alt="'.$gL10n->get('SYS_COMMON').'" title="'.$gL10n->get('SYS_COMMON').'" />'.$gL10n->get('SYS_COMMON').'
+                        <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_common">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/options.png" alt="'.$gL10n->get('SYS_COMMON').'" />'.$gL10n->get('SYS_COMMON').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_common" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('common_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=common', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('common_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=common', $page, array('class' => 'form-preferences'));
                         
                         // search all available themes in theme folder
                         $themes = admFuncGetDirectoryEntries(SERVER_PATH.'/adm_themes', 'dir');
@@ -166,15 +166,15 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_organization">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_organization">
-                            <img src="'.THEME_PATH.'/icons/chart_organisation.png" alt="'.$gL10n->get('SYS_ORGANIZATION').'" title="'.$gL10n->get('SYS_ORGANIZATION').'" />'.$gL10n->get('SYS_ORGANIZATION').'
+                        <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_organization">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/chart_organisation.png" alt="'.$gL10n->get('SYS_ORGANIZATION').'" />'.$gL10n->get('SYS_ORGANIZATION').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_organization" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('organization_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=organization', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('organization_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=organization', $page, array('class' => 'form-preferences'));
                         $form->addStaticControl('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $form_values['org_shortname'], array('class' => 'form-control-small'));
                         $form->addInput('org_longname', $gL10n->get('SYS_NAME'), $form_values['org_longname'], array('maxLength' => 60, 'property' => FIELD_MANDATORY));
                         $form->addInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $form_values['org_homepage'], array('type' => 'url', 'maxLength' => 60));
@@ -195,7 +195,7 @@ $page->addHtml('
                             $form->addCheckbox('system_organization_select', $gL10n->get('ORG_SHOW_ORGANIZATION_SELECT'), $form_values['system_organization_select'], array('helpTextIdInline' => 'ORG_SHOW_ORGANIZATION_SELECT_DESC'));
                         }
                         
-                        $html = '<a id="add_another_organization" class="icon-text-link" href="'. $g_root_path. '/adm_program/modules/preferences/preferences_function.php?mode=2"><img
+                        $html = '<a id="add_another_organization" class="btn" href="'. $g_root_path. '/adm_program/modules/preferences/preferences_function.php?mode=2"><img
                                     src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'" />'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>';
                         $htmlDesc = $gL10n->get('ORG_ADD_ORGANIZATION_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -207,15 +207,15 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_regional_settings">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_regional_settings">
-                            <img src="'.THEME_PATH.'/icons/world.png" alt="'.$gL10n->get('ORG_REGIONAL_SETTINGS').'" title="'.$gL10n->get('ORG_REGIONAL_SETTINGS').'" />'.$gL10n->get('ORG_REGIONAL_SETTINGS').'
+                        <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_regional_settings">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/world.png" alt="'.$gL10n->get('ORG_REGIONAL_SETTINGS').'" />'.$gL10n->get('ORG_REGIONAL_SETTINGS').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_regional_settings" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('regional_settings_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=regional_settings', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('regional_settings_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=regional_settings', $page, array('class' => 'form-preferences'));
                         $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', 
                                                    array('property' => FIELD_MANDATORY, 'defaultValue' => $form_values['system_language'], 'showContextDependentFirstEntry' => true));
                         $form->addSelectBox('default_country', $gL10n->get('PRO_DEFAULT_COUNTRY'), $gL10n->getCountries(), 
@@ -233,15 +233,15 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_registration">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_registration">
-                            <img src="'.THEME_PATH.'/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" title="'.$gL10n->get('SYS_REGISTRATION').'" />'.$gL10n->get('SYS_REGISTRATION').'
+                        <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_registration">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" />'.$gL10n->get('SYS_REGISTRATION').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_registration" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('registration_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=registration', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('registration_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=registration', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array(0 => $gL10n->get('SYS_DEACTIVATED'), 1 => $gL10n->get('ORG_FAST_REGISTRATION'), 2 => $gL10n->get('ORG_ADVANCED_REGISTRATION'));
                         $form->addSelectBox('registration_mode', $gL10n->get('SYS_REGISTRATION'), $selectBoxEntries, array('defaultValue' => $form_values['registration_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_REGISTRATION_MODE'));
                         $form->addCheckbox('enable_registration_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), $form_values['enable_registration_captcha'], array('helpTextIdInline' => 'ORG_CAPTCHA_REGISTRATION'));
@@ -254,15 +254,15 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_email_dispatch">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_email_dispatch">
-                            <img src="'.THEME_PATH.'/icons/system_mail.png" alt="'.$gL10n->get('SYS_MAIL_DISPATCH').'" title="'.$gL10n->get('SYS_MAIL_DISPATCH').'" />'.$gL10n->get('SYS_MAIL_DISPATCH').'
+                        <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_email_dispatch">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/system_mail.png" alt="'.$gL10n->get('SYS_MAIL_DISPATCH').'" />'.$gL10n->get('SYS_MAIL_DISPATCH').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_email_dispatch" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('email_dispatch_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=email_dispatch', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('email_dispatch_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=email_dispatch', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('phpmail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
                         $form->addSelectBox('mail_send_method', $gL10n->get('MAI_SEND_METHOD'), $selectBoxEntries, array('defaultValue' => $form_values['mail_send_method'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MAI_SEND_METHOD_DESC'));
                         $form->addInput('mail_bcc_count', $gL10n->get('MAI_COUNT_BCC'), $form_values['mail_bcc_count'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'MAI_COUNT_BCC_DESC'));
@@ -286,8 +286,8 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_system_notification">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_system_notification">
-                            <img src="'.THEME_PATH.'/icons/system_notification.png" alt="'.$gL10n->get('SYS_SYSTEM_MAILS').'" title="'.$gL10n->get('SYS_SYSTEM_MAILS').'" />'.$gL10n->get('SYS_SYSTEM_MAILS').'
+                        <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_system_notification">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/system_notification.png" alt="'.$gL10n->get('SYS_SYSTEM_MAILS').'" />'.$gL10n->get('SYS_SYSTEM_MAILS').'
                         </a>
                     </h4>
                 </div>
@@ -295,7 +295,7 @@ $page->addHtml('
                     <div class="panel-body">');
                         // show form
                         $text = new TableText($gDb);
-                        $form = new HtmlForm('system_notification_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=system_notification', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('system_notification_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=system_notification', $page, array('class' => 'form-preferences'));
                         $form->addCheckbox('enable_system_mails', $gL10n->get('ORG_ACTIVATE_SYSTEM_MAILS'), $form_values['enable_system_mails'], array('helpTextIdInline' => 'ORG_ACTIVATE_SYSTEM_MAILS_DESC'));
                         $form->addInput('email_administrator', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $form_values['email_administrator'], array('type' => 'email', 'maxLength' => 50, 'helpTextIdInline' => array('ORG_SYSTEM_MAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST'])));
                         $form->addCheckbox('enable_email_notification', $gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES'), $form_values['enable_email_notification'], array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', '<i>'.$gPreferences['email_administrator'].'</i>')));
@@ -333,15 +333,15 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_captcha">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_captcha">
-                            <img src="'.THEME_PATH.'/icons/captcha.png" alt="'.$gL10n->get('SYS_CAPTCHA').'" title="'.$gL10n->get('SYS_CAPTCHA').'" />'.$gL10n->get('SYS_CAPTCHA').'
+                        <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_captcha">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/captcha.png" alt="'.$gL10n->get('SYS_CAPTCHA').'" />'.$gL10n->get('SYS_CAPTCHA').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_captcha" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('captcha_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=captcha', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('captcha_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=captcha', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'), 'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'));
                         $form->addSelectBox('captcha_type', $gL10n->get('ORG_CAPTCHA_TYPE'), $selectBoxEntries, array('defaultValue' => $form_values['captcha_type'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_TYPE_TEXT'));
                         
@@ -367,7 +367,7 @@ $page->addHtml('
                         {
                             $captcha_parameter = '';
                         }
-                        $html = '<a class="icon-text-link" data-toggle="modal" data-target="#admidio_modal"
+                        $html = '<a class="btn" data-toggle="modal" data-target="#admidio_modal"
                                     href="captcha_preview.php?inline=true'.$captcha_parameter.'"><img
                                     src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('SYS_PREVIEW').'" />'.$gL10n->get('SYS_PREVIEW').'</a>';
                         $form->addCustomContent($gL10n->get('ORG_CAPTCHA_PREVIEW'), $html, array('helpTextIdInline' => 'ORG_CAPTCHA_PREVIEW_TEXT'));
@@ -380,8 +380,8 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_system_informations">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_system_informations">
-                            <img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('ORG_SYSTEM_INFOS').'" title="'.$gL10n->get('ORG_SYSTEM_INFOS').'" />'.$gL10n->get('ORG_SYSTEM_INFOS').'
+                        <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_system_informations">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('ORG_SYSTEM_INFOS').'" />'.$gL10n->get('ORG_SYSTEM_INFOS').'
                         </a>
                     </h4>
                 </div>
@@ -492,15 +492,15 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_announcements">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_announcements">
-                            <img src="'.THEME_PATH.'/icons/announcements.png" alt="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" title="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" />'.$gL10n->get('ANN_ANNOUNCEMENTS').'
+                        <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_announcements">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/announcements.png" alt="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" />'.$gL10n->get('ANN_ANNOUNCEMENTS').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_announcements" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('announcements_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=announcements', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('announcements_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=announcements', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
                         $form->addSelectBox('enable_announcements_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, array('defaultValue' => $form_values['enable_announcements_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC'));
                         $form->addInput('announcements_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['announcements_per_page'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC'));
@@ -512,19 +512,19 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_user_management">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_user_management">
-                            <img src="'.THEME_PATH.'/icons/user_administration.png" alt="'.$gL10n->get('MEM_USER_MANAGEMENT').'" title="'.$gL10n->get('MEM_USER_MANAGEMENT').'" />'.$gL10n->get('MEM_USER_MANAGEMENT').'
+                        <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_user_management">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/user_administration.png" alt="'.$gL10n->get('MEM_USER_MANAGEMENT').'" />'.$gL10n->get('MEM_USER_MANAGEMENT').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_user_management" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('user_management_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=user_management', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('user_management_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=user_management', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
-                        $form->addSelectBox('user_management_members_per_page', $gL10n->get('MEM_USERS_PER_PAGE'), $selectBoxEntries, array('defaultValue' => $form_values['user_management_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MEM_USERS_PER_PAGE_DESC'));
-                        $form->addInput('user_management_days_field_history', $gL10n->get('MEM_DAYS_FIELD_HISTORY'), $form_values['user_management_days_field_history'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'helpTextIdInline' => 'MEM_DAYS_FIELD_HISTORY_DESC'));
-                        $form->addCheckbox('user_management_show_all_users', $gL10n->get('ORG_SHOW_ALL_USERS'), $form_values['user_management_show_all_users'], array('helpTextIdInline' => 'ORG_SHOW_ALL_USERS_DESC'));
+                        $form->addSelectBox('members_users_per_page', $gL10n->get('MEM_USERS_PER_PAGE'), $selectBoxEntries, array('defaultValue' => $form_values['members_users_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MEM_USERS_PER_PAGE_DESC'));
+                        $form->addInput('members_days_field_history', $gL10n->get('MEM_DAYS_FIELD_HISTORY'), $form_values['members_days_field_history'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'helpTextIdInline' => 'MEM_DAYS_FIELD_HISTORY_DESC'));
+                        $form->addCheckbox('members_show_all_users', $gL10n->get('ORG_SHOW_ALL_USERS'), $form_values['members_show_all_users'], array('helpTextIdInline' => 'ORG_SHOW_ALL_USERS_DESC'));
                         $form->addSubmitButton('btn_save_user_management', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
@@ -533,15 +533,15 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_downloads">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_downloads">
-                            <img src="'.THEME_PATH.'/icons/download.png" alt="'.$gL10n->get('DOW_DOWNLOADS').'" title="'.$gL10n->get('DOW_DOWNLOADS').'" />'.$gL10n->get('DOW_DOWNLOADS').'
+                        <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_downloads">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/download.png" alt="'.$gL10n->get('DOW_DOWNLOADS').'" />'.$gL10n->get('DOW_DOWNLOADS').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_downloads" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('downloads_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=downloads', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('downloads_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=downloads', $page, array('class' => 'form-preferences'));
                         $form->addCheckbox('enable_download_module', $gL10n->get('DOW_ENABLE_DOWNLOAD_MODULE'), $form_values['enable_download_module'], array('helpTextIdInline' => 'DOW_ENABLE_DOWNLOAD_MODULE_DESC'));
                         $form->addInput('max_file_upload_size', $gL10n->get('DOW_MAXIMUM_FILE_SIZE').' (KB)', $form_values['max_file_upload_size'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999999, 'step' => 10, 'helpTextIdInline' => 'DOW_MAXIMUM_FILE_SIZE_DESC'));
                         $form->addSubmitButton('btn_save_downloads', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
@@ -552,20 +552,19 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_photos">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_photos">
-                            <img src="'.THEME_PATH.'/icons/photo.png" alt="'.$gL10n->get('PHO_PHOTOS').'" title="'.$gL10n->get('PHO_PHOTOS').'" />'.$gL10n->get('PHO_PHOTOS').'
+                        <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_photos">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/photo.png" alt="'.$gL10n->get('PHO_PHOTOS').'" />'.$gL10n->get('PHO_PHOTOS').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_photos" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('photos_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=photos', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('photos_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=photos', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
                         $form->addSelectBox('enable_photo_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, array('defaultValue' => $form_values['enable_photo_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC'));
                         $selectBoxEntries = array('1' => $gL10n->get('PHO_MODAL_WINDOW'), '2' => $gL10n->get('PHO_SAME_WINDOW'), '0' => $gL10n->get('PHO_POPUP_WINDOW'));
                         $form->addSelectBox('photo_show_mode', $gL10n->get('PHO_DISPLAY_PHOTOS'), $selectBoxEntries, array('defaultValue' => $form_values['photo_show_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'PHO_DISPLAY_PHOTOS_DESC'));
-                        $form->addInput('photo_slideshow_speed', $gL10n->get('PHO_SLIDESHOW_SPEED'), $form_values['photo_slideshow_speed'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'PHO_SLIDESHOW_SPEED_DESC'));
                         $form->addInput('photo_albums_per_page', $gL10n->get('PHO_NUMBER_OF_ALBUMS_PER_PAGE'), $form_values['photo_albums_per_page'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC'));
                         $form->addInput('photo_thumbs_page', $gL10n->get('PHO_THUMBNAILS_PER_PAGE'), $form_values['photo_thumbs_page'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'PHO_THUMBNAILS_PER_PAGE_DESC'));
                         $form->addInput('photo_thumbs_scale', $gL10n->get('PHO_SCALE_THUMBNAILS'), $form_values['photo_thumbs_scale'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'PHO_SCALE_THUMBNAILS_DESC'));
@@ -583,15 +582,15 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_guestbook">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_guestbook">
-                            <img src="'.THEME_PATH.'/icons/guestbook.png" alt="'.$gL10n->get('GBO_GUESTBOOK').'" title="'.$gL10n->get('GBO_GUESTBOOK').'" />'.$gL10n->get('GBO_GUESTBOOK').'
+                        <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_guestbook">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/guestbook.png" alt="'.$gL10n->get('GBO_GUESTBOOK').'" />'.$gL10n->get('GBO_GUESTBOOK').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_guestbook" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('guestbook_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=guestbook', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('guestbook_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=guestbook', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
                         $form->addSelectBox('enable_guestbook_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, array('defaultValue' => $form_values['enable_guestbook_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC'));
                         $form->addInput('guestbook_entries_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['guestbook_entries_per_page'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC'));
@@ -609,15 +608,15 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_ecards">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_ecards">
-                            <img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$gL10n->get('ECA_GREETING_CARDS').'" title="'.$gL10n->get('ECA_GREETING_CARDS').'" />'.$gL10n->get('ECA_GREETING_CARDS').'
+                        <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_ecards">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/ecard.png" alt="'.$gL10n->get('ECA_GREETING_CARDS').'" />'.$gL10n->get('ECA_GREETING_CARDS').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_ecards" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('ecards_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=ecards', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('ecards_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=ecards', $page, array('class' => 'form-preferences'));
                         $form->addCheckbox('enable_ecard_module', $gL10n->get('ECA_ACTIVATE_GREETING_CARDS'), $form_values['enable_ecard_module'], array('helpTextIdInline' => 'ECA_ACTIVATE_GREETING_CARDS_DESC'));
                         $form->addInput('ecard_thumbs_scale', $gL10n->get('PHO_SCALE_THUMBNAILS'), $form_values['ecard_thumbs_scale'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'ECA_SCALE_THUMBNAILS_DESC'));
                         $form->addInput('ecard_card_picture_width', $gL10n->get('PHO_MAX_PHOTO_SIZE_WIDTH'), $form_values['ecard_card_picture_width'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999));
@@ -636,15 +635,15 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_lists">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_lists">
-                            <img src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('LST_LISTS').'" title="'.$gL10n->get('LST_LISTS').'" />'.$gL10n->get('LST_LISTS').'
+                        <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_lists">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('LST_LISTS').'" />'.$gL10n->get('LST_LISTS').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_lists" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('lists_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=lists', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('lists_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=lists', $page, array('class' => 'form-preferences'));
                         $form->addInput('lists_roles_per_page', $gL10n->get('LST_NUMBER_OF_ROLES_PER_PAGE'), $form_values['lists_roles_per_page'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC'));
                         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
                         $form->addSelectBox('lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries, array('defaultValue' => $form_values['lists_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC'));
@@ -657,15 +656,15 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_messages">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_messages">
-                            <img src="'.THEME_PATH.'/icons/messages.png" alt="'.$gL10n->get('SYS_MESSAGES').'" title="'.$gL10n->get('SYS_MESSAGES').'" />'.$gL10n->get('SYS_MESSAGES').'
+                        <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_messages">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/messages.png" alt="'.$gL10n->get('SYS_MESSAGES').'" />'.$gL10n->get('SYS_MESSAGES').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_messages" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('messages_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=messages', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('messages_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=messages', $page, array('class' => 'form-preferences'));
                         $form->addCheckbox('enable_mail_module', $gL10n->get('MAI_ACTIVATE_EMAIL_MODULE'), $form_values['enable_mail_module'], array('helpTextIdInline' => 'MAI_ACTIVATE_EMAIL_MODULE_DESC'));
                         $form->addCheckbox('enable_pm_module', $gL10n->get('MSG_ACTIVATE_PM_MODULE'), $form_values['enable_pm_module'], array('helpTextIdInline' => 'MSG_ACTIVATE_PM_MODULE_DESC'));
 						$form->addCheckbox('enable_chat_module', $gL10n->get('MSG_ACTIVATE_CHAT_MODULE'), $form_values['enable_chat_module'], array('helpTextIdInline' => 'MSG_ACTIVATE_CHAT_MODULE_DESC'));
@@ -686,16 +685,16 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_profile">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_profile">
-                            <img src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('PRO_PROFILE').'" title="'.$gL10n->get('PRO_PROFILE').'" />'.$gL10n->get('PRO_PROFILE').'
+                        <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_profile">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('PRO_PROFILE').'" />'.$gL10n->get('PRO_PROFILE').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_profile" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('profile_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=profile', $page, 'default', false, 'form-preferences');
-                        $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/modules/preferences/fields.php"><img
+                        $form = new HtmlForm('profile_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=profile', $page, array('class' => 'form-preferences'));
+                        $html = '<a class="btn" href="'. $g_root_path. '/adm_program/modules/preferences/fields.php"><img
                                     src="'. THEME_PATH. '/icons/application_form_edit.png" alt="'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'" />'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>';
                         $htmlDesc = $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -720,15 +719,15 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_events">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_events">
-                            <img src="'.THEME_PATH.'/icons/dates.png" alt="'.$gL10n->get('DAT_DATES').'" title="'.$gL10n->get('DAT_DATES').'" />'.$gL10n->get('DAT_DATES').'
+                        <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_events">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/dates.png" alt="'.$gL10n->get('DAT_DATES').'" />'.$gL10n->get('DAT_DATES').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_events" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('events_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=events', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('events_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=events', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
                         $form->addSelectBox('enable_dates_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, array('defaultValue' => $form_values['enable_dates_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC'));
                         $selectBoxEntries = array('html' => $gL10n->get('DAT_VIEW_MODE_DETAIL'), 'compact' => $gL10n->get('DAT_VIEW_MODE_COMPACT'));
@@ -738,12 +737,12 @@ $page->addHtml('
                         $form->addInput('dates_ical_days_past', $gL10n->get('DAT_ICAL_DAYS_PAST'), $form_values['dates_ical_days_past'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'DAT_ICAL_DAYS_PAST_DESC'));
                         $form->addInput('dates_ical_days_future', $gL10n->get('DAT_ICAL_DAYS_FUTURE'), $form_values['dates_ical_days_future'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'DAT_ICAL_DAYS_FUTURE_DESC'));
                         $form->addCheckbox('dates_show_map_link', $gL10n->get('DAT_SHOW_MAP_LINK'), $form_values['dates_show_map_link'], array('helpTextIdInline' => 'DAT_SHOW_MAP_LINK_DESC'));
-                        $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/modules/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'"><img
+                        $html = '<a class="btn" href="'. $g_root_path. '/adm_program/modules/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'"><img
                                     src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_EDIT_CALENDAR_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('DAT_MANAGE_CALENDARS'), $html, array('helpTextIdInline' => $htmlDesc));
                         $form->addCheckbox('dates_show_rooms', $gL10n->get('DAT_ROOM_SELECTABLE'), $form_values['dates_show_rooms'], array('helpTextIdInline' => 'DAT_ROOM_SELECTABLE_DESC'));
-                        $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/modules/rooms/rooms.php"><img
+                        $html = '<a class="btn" href="'. $g_root_path. '/adm_program/modules/rooms/rooms.php"><img
                                     src="'. THEME_PATH. '/icons/home.png" alt="'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_EDIT_ROOMS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('DAT_EDIT_ROOMS'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -755,22 +754,22 @@ $page->addHtml('
             <div class="panel panel-default" id="panel_links">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_links">
-                            <img src="'.THEME_PATH.'/icons/weblinks.png" alt="'.$gL10n->get('LNK_WEBLINKS').'" title="'.$gL10n->get('LNK_WEBLINKS').'" />'.$gL10n->get('LNK_WEBLINKS').'
+                        <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_links">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/weblinks.png" alt="'.$gL10n->get('LNK_WEBLINKS').'" />'.$gL10n->get('LNK_WEBLINKS').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_links" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('links_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=links', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('links_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=links', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
                         $form->addSelectBox('enable_weblinks_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, array('defaultValue' => $form_values['enable_weblinks_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC'));
                         $form->addInput('weblinks_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['weblinks_per_page'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC'));
                         $selectBoxEntries = array('_self' => $gL10n->get('LNK_SAME_WINDOW'), '_blank' => $gL10n->get('LNK_NEW_WINDOW'));
                         $form->addSelectBox('weblinks_target', $gL10n->get('LNK_LINK_TARGET'), $selectBoxEntries, array('defaultValue' => $form_values['weblinks_target'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LNK_LINK_TARGET_DESC'));
                         $form->addInput('weblinks_redirect_seconds', $gL10n->get('LNK_DISPLAY_REDIRECT'), $form_values['weblinks_redirect_seconds'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'LNK_DISPLAY_REDIRECT_DESC'));
-                        $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/modules/categories/categories.php?type=LNK"><img
+                        $html = '<a class="btn" href="'. $g_root_path. '/adm_program/modules/categories/categories.php?type=LNK"><img
                                     src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -782,18 +781,18 @@ $page->addHtml('
 			<div class="panel panel-default" id="panel_links">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_inventory">
-                            <img src="'.THEME_PATH.'/icons/inventory.png" alt="'.$gL10n->get('INV_INVENTORY').'" title="'.$gL10n->get('INV_INVENTORY').'" />'.$gL10n->get('INV_INVENTORY').'
+                        <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_inventory">
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/inventory.png" alt="'.$gL10n->get('INV_INVENTORY').'" />'.$gL10n->get('INV_INVENTORY').'
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_inventory" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('inventory_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=inventory', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('inventory_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=inventory', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
                         $form->addSelectBox('enable_inventory_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, array('defaultValue' => $form_values['enable_inventory_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC'));
-                        $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/modules/rooms/rooms.php"><img
+                        $html = '<a class="btn" href="'. $g_root_path. '/adm_program/modules/rooms/rooms.php"><img
                                     src="'. THEME_PATH. '/icons/home.png" alt="'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_EDIT_ROOMS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('DAT_EDIT_ROOMS'), $html, array('helpTextIdInline' => $htmlDesc));

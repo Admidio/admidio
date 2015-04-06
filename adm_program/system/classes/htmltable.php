@@ -348,7 +348,7 @@ class HtmlTable extends HtmlTableBasic
                 $this->messageNoRowsFound = '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get($messageId).'</div>';
                 break;
             case 'error':
-                $this->messageNoRowsFound = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-remove"></span>'.$gL10n->get($messageId).'</div>';
+                $this->messageNoRowsFound = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-exclamation-sign"></span>'.$gL10n->get($messageId).'</div>';
                 break;
         }
     }
@@ -362,7 +362,7 @@ class HtmlTable extends HtmlTableBasic
 	 */
     public function show($directOutput = true)
     {
-        global $g_root_path;
+        global $g_root_path, $gDebug;
 
         if($this->rowCount == 0)
         {
@@ -384,8 +384,16 @@ class HtmlTable extends HtmlTableBasic
                 $javascriptGroup = '';
                 $javascriptGroupFunction = '';
                 
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.datatables.min.js');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/datatables.bootstrap.js');
+                if($gDebug)
+                {
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.datatables.js');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/datatables.bootstrap.js');
+                }
+                else
+                {
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.datatables.min.js');                    
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/datatables.bootstrap.min.js');
+                }
                 $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/datatables/css/datatables.bootstrap.css');
 
                 if($this->rowCount > 10)
@@ -413,7 +421,7 @@ class HtmlTable extends HtmlTableBasic
                             api.column('.$this->groupedColumn.', {page:\'current\'} ).data().each( function ( group, i ) {
                                 if ( last !== group ) {
                                     $(rows).eq( i ).before(
-                                        \'<tr class="group-heading"><td colspan="'.$this->columnCount.'">\'+group+\'</td></tr>\'
+                                        \'<tr class="admidio-group-heading"><td colspan="'.$this->columnCount.'">\'+group+\'</td></tr>\'
                                     );
                  
                                     last = group;
@@ -422,7 +430,7 @@ class HtmlTable extends HtmlTableBasic
                         }';
                     $javascriptGroupFunction = '
                         // Order by the grouping
-                        $("#'.$this->id.' tbody").on( "click", "tr.group-heading", function () {
+                        $("#'.$this->id.' tbody").on( "click", "tr.admidio-group-heading", function () {
                             var currentOrder = table.order()[0];
                             if ( currentOrder[0] === '.$this->groupedColumn.' && currentOrder[1] === "asc" ) {
                                 table.order( [ '.$this->groupedColumn.', "desc" ] ).draw();

@@ -42,9 +42,9 @@ $orga_preferences = array(
     'announcements_per_page'      => '10',
 
     // User management
-    'user_management_members_per_page'   => '25',
-    'user_management_days_field_history' => '365',
-    'user_management_show_all_users'     => '1',
+    'members_users_per_page'     => '25',
+    'members_days_field_history' => '365',
+    'members_show_all_users'     => '1',
 
     // Downloads
     'enable_download_module' => '1',
@@ -53,7 +53,6 @@ $orga_preferences = array(
     // Photos
     'enable_photo_module'   => '1',
     'photo_show_mode'       => '1',
-    'photo_slideshow_speed' => '5',
     'photo_albums_per_page' => '10',
     'photo_save_scale'      => '640',
     'photo_thumbs_page'     => '16',

@@ -34,6 +34,8 @@ $moduleMenu = new HtmlNavbar('adm_menu_overview', $headline, $page);
 
 if($gValidLogin == 1)
 {
+    // show link to own profile
+    $moduleMenu->addItem('adm_menu_item_my_profile', $g_root_path.'/adm_program/modules/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'), 'profile.png');
     // show logout link
     $moduleMenu->addItem('adm_menu_item_logout', $g_root_path.'/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'), 'door_in.png');
 }
@@ -51,7 +53,7 @@ else
 $page->addHtml($moduleMenu->show(false));
 
 // menu with links to all modules of Admidio
-$moduleMenu = new Menu('modules', $gL10n->get('SYS_MODULES'));
+$moduleMenu = new Menu('index_modules', $gL10n->get('SYS_MODULES'));
 if( $gPreferences['enable_announcements_module'] == 1
 || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
 {
@@ -74,7 +76,7 @@ if($gPreferences['enable_mail_module'] == 1 && $gValidLogin == false)
 if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
 {
     $sql = 'SELECT * FROM '. TBL_MESSAGES. '
-             WHERE ( msg_usrid2 = '. $gCurrentUser->getValue('usr_id') .' and msg_read=1 )';
+             WHERE ( msg_usr_id_receiver = '. $gCurrentUser->getValue('usr_id') .' and msg_read=1 )';
     $result = $gDb->query($sql);
     $row = $gDb->num_rows($result);
     
@@ -112,11 +114,6 @@ $moduleMenu->addSubItem('lists', 'mylist', '/adm_program/modules/lists/mylist.ph
                         $gL10n->get('LST_MY_LIST'));
 $moduleMenu->addSubItem('lists', 'rolinac', '/adm_program/modules/lists/lists.php?active_role=0',
                         $gL10n->get('ROL_INACTIV_ROLE'));
-$moduleMenu->addItem('profile', '/adm_program/modules/profile/profile.php',
-                    $gL10n->get('PRO_MY_PROFILE'), '/icons/profile_big.png',
-                    $gL10n->get('PRO_MY_PROFILE_DESC'));
-$moduleMenu->addSubItem('profile', 'editprof', '/adm_program/modules/profile/profile_new.php?user_id='.$gCurrentUser->getValue('usr_id'),
-                        $gL10n->get('PRO_EDIT_MY_PROFILE'));
 if( $gPreferences['enable_dates_module'] == 1
 || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
 {
@@ -139,7 +136,7 @@ $page->addHtml($moduleMenu->show('complex', false));
 // menu with links to all administration pages of Admidio if the user has the right to administrate
 if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
 {
-    $adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
+    $adminMenu = new Menu('index_administration', $gL10n->get('SYS_ADMINISTRATION'));
     if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
     {
         $adminMenu->addItem('newreg', '/adm_program/modules/registration/registration.php',

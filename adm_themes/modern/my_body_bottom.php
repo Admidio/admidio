@@ -37,7 +37,7 @@
             if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
             {
                 $sql = 'SELECT * FROM '. TBL_MESSAGES. '
-                         WHERE ( msg_usrid2 = '. $gCurrentUser->getValue('usr_id') .' and msg_read=1)';
+                         WHERE ( msg_usr_id_receiver = '. $gCurrentUser->getValue('usr_id') .' and msg_read=1)';
                 $result = $gDb->query($sql);
                 $row = $gDb->num_rows($result);
                 if ($row > 0)
@@ -68,8 +68,6 @@
                                 $gL10n->get('LST_LISTS'), '/icons/lists.png');
             $moduleMenu->addItem('mylist', '/adm_program/modules/lists/mylist.php',
                                 $gL10n->get('LST_MY_LIST'), '/icons/mylist.png');
-            $moduleMenu->addItem('profile', '/adm_program/modules/profile/profile.php',
-                                $gL10n->get('PRO_MY_PROFILE'), '/icons/profile.png');
             
             if( $gPreferences['enable_dates_module'] == 1
             || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))                    

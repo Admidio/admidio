@@ -80,12 +80,11 @@ $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 // set database to admidio, sometimes the user has other database connections at the same time
 $gDb->setCurrentDB();
 
-echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
+echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
 if($plg_show_headline==1)
 {
-    echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_RANDOM_PHOTO_HEADLINE').'</h3></div>';
+    echo '<h3>'.$gL10n->get('PLG_RANDOM_PHOTO_HEADLINE').'</h3>';
 }
-echo '<div class="admPluginBody">';
 
 // Fotoalben Aufrufen
 // Bedingungen: freigegeben,Anzahllimit, Bilder enthalten 
@@ -182,6 +181,6 @@ if($plg_photos_show_link)
     echo'<br /><a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'" target="'.$plg_link_target.'">'.$link_text.'</a>';
 }
 
-echo '</div></div>';
+echo '</div>';
 
 ?>

@@ -65,12 +65,11 @@ $gDb->setCurrentDB();
 //Objekt anlegen
 $plg_announcements = new ModuleAnnouncements();
 
-echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
+echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
 if($plg_show_headline==1)
 {
-    echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE').'</h3></div>';
+    echo '<h3>'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE').'</h3>';
 }
-echo '<div class="admPluginBody">';
 
 if($plg_announcements->getAnnouncementsCount() == 0)
 {
@@ -121,6 +120,6 @@ else
     
     echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ANNOUNCEMENTS').'</a>';
 }
-echo '</div></div>';
+echo '</div>';
 
 ?>

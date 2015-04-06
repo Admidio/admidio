@@ -53,17 +53,17 @@ $headline = $gL10n->get('PHO_UPLOAD_PHOTOS');
 // create photo object or read it from session
 if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
-    $photo_album =& $_SESSION['photo_album'];
-    $photo_album->db =& $gDb;
+    $photoAlbum =& $_SESSION['photo_album'];
+    $photoAlbum->db =& $gDb;
 }
 else
 {
-    $photo_album = new TablePhotos($gDb, $getPhotoId);
-    $_SESSION['photo_album'] =& $photo_album;
+    $photoAlbum = new TablePhotos($gDb, $getPhotoId);
+    $_SESSION['photo_album'] =& $photoAlbum;
 }
 
 // check if album belongs to current organization
-if($photo_album->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
+if($photoAlbum->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -78,15 +78,12 @@ if($getMode == 'choose_files')
     $page = new HtmlPage();
     $page->excludeThemeHtml();
     
-    $page->addCssFile($g_root_path.'/adm_program/libs/jquery-file-upload/css/style.css');
     $page->addCssFile($g_root_path.'/adm_program/libs/jquery-file-upload/css/jquery.fileupload.css');
     $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery-file-upload/js/vendor/jquery.ui.widget.js');
     $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery-file-upload/js/jquery.iframe-transport.js');
     $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery-file-upload/js/jquery.fileupload.js');
     
     $page->addJavascript('
-    /*jslint unparam: true */
-    /*global window, $ */
     $(function () {
         "use strict";
         $("#fileupload").fileupload({
@@ -96,7 +93,7 @@ if($getMode == 'choose_files')
             done: function (e, data) {
                 $.each(data.result.files, function (index, file) {
                     if(typeof file.error != "undefined") {
-                        $("<p/>").html("<div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-remove\"></span>" 
+                        $("<p/>").html("<div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>" 
                             + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
                     }
                     else {
@@ -121,20 +118,17 @@ if($getMode == 'choose_files')
             <h4 class="modal-title">'.$headline.'</h4>
         </div>
         <div class="modal-body">
-            <!-- The fileinput-button span is used to style the file input field as button -->
-            <span class="btn btn-success fileinput-button">
-                <i class="glyphicon glyphicon-plus"></i>
-                <span>'.$gL10n->get('PHO_SELECT_FOTOS').'...</span>
-                <!-- The file input field used as target for the file upload widget -->
+            <p class="lead">'.$gL10n->get('PHO_PHOTO_UPLOAD_DESC', $photoAlbum->getValue('pho_name')).'</p>
+
+            <span class="btn btn-primary fileinput-button"><img 
+                src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" />'.$gL10n->get('PHO_SELECT_FOTOS').'
                 <input id="fileupload" type="file" name="files[]" multiple>
             </span>
             <br>
             <br>
-            <!-- The global progress bar -->
             <div id="progress" class="progress">
                 <div class="progress-bar progress-bar-success"></div>
             </div>
-            <!-- The container for the uploaded files -->
             <div id="files" class="files"></div>
         </div>');
     $page->show();

@@ -56,12 +56,11 @@ $gDb->setCurrentDB();
 // pruefen ob das Modul ueberhaupt aktiviert ist 
 if ($gPreferences['enable_download_module'] == 1) 
 { 
-    echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
+    echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
     if($plg_show_headline==1)
     {
-        echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_DOWNLOADS_HEADLINE').'</h3></div>';
+        echo '<h3>'.$gL10n->get('PLG_DOWNLOADS_HEADLINE').'</h3>';
     }
-    echo '<div class="admPluginBody">';
 
 	// erst pruefen, ob der User auch die entsprechenden Rechte hat 
 	// nun alle relevanten Downloads finden 
@@ -76,6 +75,8 @@ if ($gPreferences['enable_download_module'] == 1)
     if($gDb->num_rows($plg_result_fil) > 0) 
     { 
         $anzahl = 0;
+        echo '<div class="btn-group-vertical" role="group">';
+        
         while($plg_row = $gDb->fetch_object($plg_result_fil)) 
         {        
             try
@@ -103,7 +104,7 @@ if ($gPreferences['enable_download_module'] == 1)
           	$mein_user = new User($gDb, $gProfileFields, $plg_row->fil_usr_id);
 
            	echo '
-            <a class="icon-text-link '.$plg_link_class_downl.'" href="'. $g_root_path. '/adm_program/modules/downloads/get_file.php?file_id='. $plg_row->fil_id. '"><img 
+            <a class="btn '.$plg_link_class_downl.'" href="'. $g_root_path. '/adm_program/modules/downloads/get_file.php?file_id='. $plg_row->fil_id. '"><img 
             	src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/" 
             	title="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/" />'.$plg_row->fil_name.'</a> 
            	<br /><span class="smallFontSize">(&nbsp;'. $plg_row->fil_timestamp. ', '. $mein_user->getValue('FIRST_NAME'). ' '. $mein_user->getValue('LAST_NAME'). '&nbsp;)</span><hr />';
@@ -114,6 +115,8 @@ if ($gPreferences['enable_download_module'] == 1)
            		break; 
            	} 
         } 
+        
+        echo '</div>';
 
      	if ($anzahl == 0) 
         { 
@@ -124,6 +127,6 @@ if ($gPreferences['enable_download_module'] == 1)
     { 
         echo $gL10n->get('PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE');
     } 
-    echo '</div></div>';
+    echo '</div>';
 } 
 ?> 

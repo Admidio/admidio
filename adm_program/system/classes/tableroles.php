@@ -443,21 +443,28 @@ class TableRoles extends TableAccess
         {
             if($this->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION')
             {
-                // pruefen, ob der Benutzer Mitglied einer Rolle ist, die den Termin sehen darf
-                $sql = 'SELECT dtr_rol_id
-                          FROM '.TBL_DATE_ROLE.', '.TBL_DATES.'
-                         WHERE dat_rol_id = '.$this->getValue('rol_id').'
-                           AND dtr_dat_id = dat_id
-                           AND (  dtr_rol_id IS NULL
-                               OR EXISTS (SELECT 1
-                                            FROM '.TBL_MEMBERS.'
-                                           WHERE mem_rol_id = dtr_rol_id
-                                             AND mem_usr_id = '.$gCurrentUser->getValue('usr_id').'))';
-                $this->db->query($sql);
-                
-                if($this->db->num_rows() > 0)
+                if($this->getValue('rol_this_list_view') == 0)
                 {
-                    return true;
+                    return false;
+                }
+                else
+                {
+                    // pruefen, ob der Benutzer Mitglied einer Rolle ist, die den Termin sehen darf
+                    $sql = 'SELECT dtr_rol_id
+                              FROM '.TBL_DATE_ROLE.', '.TBL_DATES.'
+                             WHERE dat_rol_id = '.$this->getValue('rol_id').'
+                               AND dtr_dat_id = dat_id
+                               AND (  dtr_rol_id IS NULL
+                                   OR EXISTS (SELECT 1
+                                                FROM '.TBL_MEMBERS.'
+                                               WHERE mem_rol_id = dtr_rol_id
+                                                 AND mem_usr_id = '.$gCurrentUser->getValue('usr_id').'))';
+                    $this->db->query($sql);
+                    
+                    if($this->db->num_rows() > 0)
+                    {
+                        return true;
+                    }
                 }
             }
             else

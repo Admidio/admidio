@@ -231,7 +231,7 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
     $form->addInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
     $form->addInput('mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
 $form->closeGroupBox();
-$form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'), 'panel-editor');
+$form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'), 'admidio-panel-editor');
     $form->addEditor('ecard_message', null, $message, array('property' => FIELD_MANDATORY, 'toolbar' => 'AdmidioGuestbook'));
 $form->closeGroupBox();
 $form->openButtonGroup();

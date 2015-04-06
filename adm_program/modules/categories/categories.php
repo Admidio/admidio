@@ -105,7 +105,7 @@ $page->addHeadline($headline);
 $htmlIconLoginUser = '&nbsp;';
 if($getType != 'USF')
 {
-    $htmlIconLoginUser = '<img class="icon-information" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" />';
+    $htmlIconLoginUser = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" />';
 }
 
 // create module menu
@@ -127,7 +127,7 @@ $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
     $htmlIconLoginUser,
-    '<img class="icon-information" src="'.THEME_PATH.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" />',
+    '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" />',
     $gL10n->get('SYS_FEATURES')
 );
 $categoriesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
@@ -177,33 +177,33 @@ while($cat_row = $gDb->fetch_array($categoryResult))
     $htmlMoveRow = '&nbsp;';
     if($category->getValue('cat_system') == 0 || $getType != 'USF')
     {
-        $htmlMoveRow = '<a class="icon-link" href="javascript:moveCategory(\'up\', '.$category->getValue('cat_id').')"><img
+        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveCategory(\'up\', '.$category->getValue('cat_id').')"><img
                                 src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', $getTitle).'" title="'.$gL10n->get('CAT_MOVE_UP', $getTitle).'" /></a>
-                           <a class="icon-link" href="javascript:moveCategory(\'down\', '.$category->getValue('cat_id').')"><img
+                           <a class="admidio-icon-link" href="javascript:moveCategory(\'down\', '.$category->getValue('cat_id').')"><img
                                 src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', $getTitle).'" title="'.$gL10n->get('CAT_MOVE_DOWN', $getTitle).'" /></a>';
     }
     
     $htmlHideCategory = '&nbsp;';
     if($category->getValue('cat_hidden') == 1)
     {
-        $htmlHideCategory = '<img class="icon-information" src="'. THEME_PATH. '/icons/user_key.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" />';
+        $htmlHideCategory = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/user_key.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" />';
     }
     
     $htmlDefaultCategory = '&nbsp;';
     if($category->getValue('cat_default') == 1)
     {
-        $htmlDefaultCategory = '<img class="icon-information" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" />';
+        $htmlDefaultCategory = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" />';
     }
 
-    $categoryAdministration = '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
+    $categoryAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
                                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
     if($category->getValue('cat_system') == 1)
     {
-        $categoryAdministration .= '<img class="icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+        $categoryAdministration .= '<img class="admidio-icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
     }
     else
     {
-        $categoryAdministration .= '<a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+        $categoryAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                         href="'.$g_root_path.'/adm_program/system/popup_message.php?type=cat&amp;element_id=row_'.
                                         $category->getValue('cat_id').'&amp;name='.urlencode($category->getValue('cat_name')).'&amp;database_id='.$category->getValue('cat_id').'&amp;database_id_2='.$getType.'"><img
                                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';

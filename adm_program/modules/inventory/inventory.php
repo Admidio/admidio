@@ -44,7 +44,7 @@ $result_mgl  = $gDb->query($sql);
 $page = new HtmlPage();
 
 $page->addJavascript('
-        $(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
+        $(".admidio-icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
 		', true);
 
 $page->addHeadline($headline);
@@ -80,7 +80,7 @@ $columnHeading = array(
 $itemsTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
 $itemsTable->disableDatatablesColumnsSort(5);
 $itemsTable->addRowHeadingByArray($columnHeading);
-$itemsTable->setDatatablesRowsPerPage($gPreferences['user_management_members_per_page']);
+$itemsTable->setDatatablesRowsPerPage($gPreferences['members_users_per_page']);
 $itemsTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 
 $irow = 1;  // count for line in table
@@ -96,7 +96,7 @@ while($row = $gDb->fetch_array($result_mgl))
     $columnValues = array(
         $irow,
         '<a href="'.$g_root_path.'/adm_program/modules/inventory/item.php?item_id='. $row['inv_id']. '">'. $row['item_name']. '</a>',
-		'<a class="icon-link-popup" href="'.$roomLink.'">' . $room->getValue('room_name') . '</a>',
+		'<a class="admidio-icon-link-popup" href="'.$roomLink.'">' . $room->getValue('room_name') . '</a>',
     );
         
 	$columnValues[] = $timestampChange->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
@@ -104,18 +104,18 @@ while($row = $gDb->fetch_array($result_mgl))
     $itemAdministration = '';
 
 	// Link to modify Item
-	$itemAdministration .= '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/inventory/item_new.php?item_id='. $row['inv_id']. '"><img
+	$itemAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/inventory/item_new.php?item_id='. $row['inv_id']. '"><img
 						        src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
 
 	// remove Item
 	if( $gCurrentUser->isWebmaster()) // just Webmaster can remove items
 	{
-		$itemAdministration .= '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/inventory/items_function.php?item_id='.$row['inv_id'].'&amp;mode=6"><img
+		$itemAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/inventory/items_function.php?item_id='.$row['inv_id'].'&amp;mode=6"><img
 			                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
 	}
 	else
 	{
-		$itemAdministration .= '&nbsp;<img class="icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+		$itemAdministration .= '&nbsp;<img class="admidio-icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
 	}
 	
 	$columnValues[] = $itemAdministration;

@@ -11,7 +11,7 @@
  *  @par Examples
  *  @code // create a simple html page with some text
  *  $page = new HtmlPage();
- *  $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.js');
+ *  $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.min.js');
  *  $page->addHeadline('A simple Html page');
  *  $page->addHtml('<strong>This is a simple Html page!</strong>');
  *  $page->show();@endcode
@@ -66,7 +66,7 @@ class HtmlPage
         {
             // if not in debug mode only load the minified files
             $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.min.css');
-            $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.js', 
+            $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.min.js', 
                                     $g_root_path. '/adm_program/system/js/common_functions.js',
                                     $g_root_path.'/adm_program/libs/bootstrap/js/bootstrap.min.js');
         }
@@ -315,7 +315,7 @@ class HtmlPage
         {
             $headerContent .= '<script type="text/javascript"><!-- 
                 $(document).ready(function(){
-                    $(".icon-information, .icon-link img, [data-toggle=tooltip]").tooltip();
+                    $(".admidio-icon-info, .admidio-icon-link img, [data-toggle=tooltip]").tooltip();
                     '.$this->javascriptContentExecute.'
                 });
             --></script>';

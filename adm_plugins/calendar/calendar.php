@@ -295,9 +295,8 @@ if($erster == 0)
 {
     $erster = 7;
 }
-echo '<div id="plgCalendarContent" class="admPluginContent">
-<div class="admPluginHeader"><h3>'.$gL10n->get('DAT_CALENDAR').'</h3></div>
-<div class="admPluginBody">
+echo '<div id="plgCalendarContent" class="admidio-plugin-content">
+<h3>'.$gL10n->get('DAT_CALENDAR').'</h3>
 
 <script type="text/javascript"><!-- 
     if ( typeof gTranslations == "undefined") 
@@ -624,6 +623,6 @@ if($monat.$jahr != date('mY'))
             }
         }); return false;">'.$gL10n->get('PLG_CALENDAR_CURRENT_MONTH').'</a></div>';
 }
-echo '</div></div>';
+echo '</div>';
 
 ?>

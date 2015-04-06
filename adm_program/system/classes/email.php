@@ -108,9 +108,8 @@ class Email extends PHPMailer
              $this->IsMail();    
         }
         
-        
-        //Setzen der Sprache für Fehlermeldungen
-        $this->SetLanguage($gPreferences['system_language']);
+        // set language for error reporting (de_sie should be converted to de)
+        $this->SetLanguage(substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_')));
         $this->CharSet =  $gPreferences['mail_character_encoding'];
     }
     
@@ -356,17 +355,26 @@ class Email extends PHPMailer
 
             foreach($bccArrays as $bccArray)
             {
-                //Alle BCCs entfernen
+                // remove all current bcc recipients from mail
                 $this->ClearBCCs();
                 
                 try
                 {
-                    //Neue BCCs hinzufügen
-                    foreach($bccArray as $bcc)
+                    // if number of bcc recipients = 1 then send the mail directly to the user and not as bcc
+                    if(count($bccArray) == 1)
                     {
-                        $this->AddBCC($bcc['address'], $bcc['name']);
-                    }     
-                    //Mail Versenden
+                        $this->addAddress($bcc['address'], $bcc['name']);
+                    }
+                    else
+                    {
+                        // add all recipients as bcc to the mail
+                        foreach($bccArray as $bcc)
+                        {
+                            $this->AddBCC($bcc['address'], $bcc['name']);
+                        }
+                    }
+                    
+                    // now send mail
                    $this->Send();
                 }
                 catch (phpmailerException $e)
