@@ -16,7 +16,6 @@ require_once('../../system/common.php');
 // check if the call of the page was allowed
 if ($gPreferences['enable_pm_module'] != 1 && $gPreferences['enable_mail_module'] != 1 && $gPreferences['enable_chat_module'] != 1)
 {
-    // message if the sending of messages is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
@@ -31,71 +30,41 @@ $getMsgIdDel = admFuncVariableIsValid($_GET, 'msg_id_del', 'numeric', array('def
 
 if ($getMsgIdDel != 0)
 {
-	$getMsgTyp = admFuncVariableIsValid($_GET, 'msg_typ', 'string');
-	
-	if ($getMsgTyp == 'PM')
-	{
-		//SQL to find all read PM messages
-		$sql = "SELECT CASE WHEN msg_usr_id_sender = ". $gCurrentUser->getValue('usr_id') ." THEN msg_usr_id_receiver ELSE msg_usr_id_sender END AS user
-        FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'PM' and msg_part_id = 0 and msg_con_id = ". $getMsgIdDel ."
-		 ORDER BY msg_con_id DESC";
-		$result = $gDb->query($sql);
-		$row = $gDb->fetch_array($result);
+	$message = new TableMessage($gDb, $getMsgIdDel);
 
-		//SQL to delete PM messages
-		$sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '2', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = '".$gCurrentUser->getValue('usr_id')."', msg_usr_id_receiver = '".$row['user']."'
-         WHERE msg_part_id = 0 and msg_con_id = ".$getMsgIdDel;
-	}
-	else
-	{
-		//SQL to delete EMAIL messages
-	    $sql = "DELETE FROM ". TBL_MESSAGES. "
-         WHERE msg_con_id = ". $getMsgIdDel ." and (msg_usr_id_sender = ". $gCurrentUser->getValue('usr_id') ."
-		 or msg_usr_id_receiver = ". $gCurrentUser->getValue('usr_id') ." )";
-	}
-
-	$gDb->query($sql);
-
+	//Function to delete message
+	$message->delete($gCurrentUser->getValue('usr_id'));
 }
 
 //SQL to find all unread PM messages
-$sql = "SELECT msg_type, msg_con_id, msg_subject, msg_timestamp,
+$sql = "SELECT msg_type, msg_converation_id, msg_subject, msg_timestamp,
 			CASE WHEN msg_usr_id_sender = ". $gCurrentUser->getValue('usr_id') ." THEN msg_usr_id_receiver
 			ELSE msg_usr_id_sender
 			END AS user
         FROM ". TBL_MESSAGES. "
          WHERE msg_type = 'PM' and msg_part_id = 0 and (msg_usr_id_receiver = ". $gCurrentUser->getValue('usr_id') ." and msg_read = 1)
-		 ORDER BY msg_con_id DESC";
+		 ORDER BY msg_converation_id DESC";
 
 $result = $gDb->query($sql);
 
 //SQL to find all read PM messages
-$sql = "SELECT msg_type, msg_con_id, msg_subject, msg_timestamp,
+$sql = "SELECT msg_type, msg_converation_id, msg_subject, msg_timestamp,
 			CASE WHEN msg_usr_id_sender = ". $gCurrentUser->getValue('usr_id') ." THEN msg_usr_id_receiver
 			ELSE msg_usr_id_sender
 			END AS user
         FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'PM' and msg_part_id = 0 and ((msg_usr_id_receiver = ". $gCurrentUser->getValue('usr_id') ." and msg_read = 0)
+         WHERE msg_type = 'PM' and msg_part_id = 0 and ((msg_usr_id_receiver = ". $gCurrentUser->getValue('usr_id') ." and msg_read <> 1)
 		 or msg_usr_id_sender = ". $gCurrentUser->getValue('usr_id') ." and  msg_read < 2)
-		 ORDER BY msg_con_id DESC";
+		 ORDER BY msg_converation_id DESC";
 
 $result1 = $gDb->query($sql);
 
-//SQL to find all ask for deleted PM messages
-$sql = "SELECT msg_type, msg_con_id, msg_subject, msg_timestamp, msg_usr_id_sender AS user
-        FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'PM' and msg_part_id = 0 and msg_usr_id_sender <> ". $gCurrentUser->getValue('usr_id') ." and msg_read = 2
-		 ORDER BY msg_con_id DESC";
-
-$result2 = $gDb->query($sql);
-
 //SQL to find all own Email messages
-$sql = "SELECT msg_type, msg_con_id, msg_subject, msg_timestamp, msg_usr_id_sender AS user
+$sql = "SELECT msg_type, msg_converation_id, msg_subject, msg_timestamp, msg_usr_id_sender AS user
         FROM ". TBL_MESSAGES. "
          WHERE msg_type = 'EMAIL' and (msg_usr_id_sender = ". $gCurrentUser->getValue('usr_id') ."
 		 or msg_usr_id_receiver = ". $gCurrentUser->getValue('usr_id') ." )
-		 ORDER BY msg_con_id DESC";
+		 ORDER BY msg_converation_id DESC";
 
 $resultMail = $gDb->query($sql);
 
@@ -148,10 +117,10 @@ if(isset($resultMail))
     while ($row = $gDb->fetch_array($resultMail)) {
         $user = new User($gDb, $gProfileFields, $row['user']);
 
-		$messageAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/messages/messages.php?msg_id_del='.$row['msg_con_id'].'&amp;msg_typ=MAIL"><img
+		$messageAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/messages/messages.php?msg_id_del='.$row['msg_converation_id'].'"><img
 			                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MSG_REMOVE').'" title="'.$gL10n->get('MSG_REMOVE').'" /></a>';
 
-		$table->addRowByArray(array( '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />' ,$row['msg_subject'], $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $row['msg_timestamp'], $messageAdministration), null, array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages_write.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_con_id']. '\''));
+		$table->addRowByArray(array( '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />' ,$row['msg_subject'], $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $row['msg_timestamp'], $messageAdministration), null, array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages_write.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_converation_id']. '\''));
    }
 }
 
@@ -160,7 +129,10 @@ if(isset($result))
     while ($row = $gDb->fetch_array($result)) {
         $user = new User($gDb, $gProfileFields, $row['user']);
 
-		$table->addRowByArray(array('<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email_answer.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />' ,$row['msg_subject'], $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $row['msg_timestamp'], ' '), null, array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages_write.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_con_id']. '\''));
+		$messageAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/messages/messages.php?msg_id_del='.$row['msg_converation_id'].'"><img
+			                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MSG_REMOVE').'" title="'.$gL10n->get('MSG_REMOVE').'" /></a>';
+
+		$table->addRowByArray(array('<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email_answer.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />' ,$row['msg_subject'], $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $row['msg_timestamp'], $messageAdministration), null, array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages_write.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_converation_id']. '\''));
    }
 }
 
@@ -169,27 +141,10 @@ if(isset($result1))
 	while ($row = $gDb->fetch_array($result1)) {
         $user = new User($gDb, $gProfileFields, $row['user']);
 		
-		$messageAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/messages/messages.php?msg_id_del='.$row['msg_con_id'].'&amp;msg_typ=PM"><img
+		$messageAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/messages/messages.php?msg_id_del='.$row['msg_converation_id'].'"><img
 			                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MSG_REMOVE').'" title="'.$gL10n->get('MSG_REMOVE').'" /></a>';
 
-		$table->addRowByArray(array('<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email_answer.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />' ,$row['msg_subject'], $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $row['msg_timestamp'], $messageAdministration), null, array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages_write.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_con_id']. '\''));
-    }
-}
-
-if(isset($result2))
-{
-	while ($row = $gDb->fetch_array($result2)) {
-        $user = new User($gDb, $gProfileFields, $row['user']);
-		$messageAdministration = '';
-
-	    $messageAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/messages/messages.php?msg_id_del='.$row['msg_con_id'].'&amp;msg_typ=PM_del"><img
-			                     src="'. THEME_PATH. '/icons/close.png" alt="'.$gL10n->get('MSG_REMOVE_CONFIRM').'" title="'.$gL10n->get('MSG_REMOVE_CONFIRM').'" /></a>
-								 <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_con_id']. '"><img
-			                     src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="'.$gL10n->get('MSG_REMOVE_REVERT').'" title="'.$gL10n->get('MSG_REMOVE_REVERT').'" /></a>';
-								 
-								 
-
-		$table->addRowByArray(array('<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email_answer.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />' ,$row['msg_subject'], $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $row['msg_timestamp'], $messageAdministration), null, array('style' => 'cursor: pointer'));
+		$table->addRowByArray(array('<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email_answer.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />' ,$row['msg_subject'], $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $row['msg_timestamp'], $messageAdministration), null, array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages_write.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_converation_id']. '\''));
     }
 }
 

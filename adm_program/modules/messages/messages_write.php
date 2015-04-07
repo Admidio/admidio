@@ -64,9 +64,11 @@ if ($gValidLogin && $getMsgType != 'PM' && strlen($gCurrentUser->getValue('EMAIL
 // Update the read status of the message
 if ($getMsgId > 0)
 {
-    $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '0' 
-            WHERE msg_part_id = 0 and msg_con_id = ".$getMsgId." and msg_usr_id_receiver = ".$gCurrentUser->getValue('usr_id');
-    $gDb->query($sql);
+	$message = new TableMessage($gDb, $getMsgId);
+	
+	// update the read-status
+	$message->setReadValue($gCurrentUser->getValue('usr_id'));
+
     
     if($getMsgType == 'PM')
     {
@@ -77,9 +79,9 @@ if ($getMsgId > 0)
         $checker = "=";
     }
     
-    $sql = "SELECT msg_con_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp 
+    $sql = "SELECT msg_converation_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp 
                   FROM ". TBL_MESSAGES. "
-                 WHERE msg_part_id ".$checker." 0 AND msg_con_id = ". $getMsgId ."
+                 WHERE msg_part_id ".$checker." 0 AND msg_converation_id = ". $getMsgId ."
                  and msg_type = '".$getMsgType."'
                  ORDER BY msg_part_id DESC";
 
@@ -216,7 +218,7 @@ if ($getMsgType == 'PM')
     // add form to html page
     $page->addHtml($form->show(false));
 	
-	    // list history of this PM
+	// list history of this PM
     if(isset($message_result))
     {
 		$page->addHtml('<br>');

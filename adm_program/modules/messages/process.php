@@ -1,5 +1,20 @@
 <?php
-	
+/******************************************************************************
+ * PHP process for the Admidio CHAT
+ *
+ * Copyright    : (c) 2004 - 2015 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Parameters:
+ *
+ * function  - set the function of the call
+ * nickname  - set the nickname for the CHAT entry
+ * message   - set the message for the CHAT entry
+ * state     - gives the number of entries in the list that the user can see
+ * 
+ *****************************************************************************/
+ 
 	require_once('../../system/common.php');
 	
 	// check for valid login
@@ -28,7 +43,7 @@
 		
 			$sql = "SELECT MAX(msg_part_id) as max_id
 			  FROM ". TBL_MESSAGES."
-			  where msg_con_id = 0";
+			  where msg_converation_id = 0";
 
 			$result = $gDb->query($sql);
 			$row = $gDb->fetch_array($result);
@@ -43,10 +58,10 @@
             {
 			    $log['test'] = '100';
 				
-				$sql = "DELETE FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT' and msg_con_id = 0 and msg_part_id <= 50";
+				$sql = "DELETE FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT' and msg_converation_id = 0 and msg_part_id <= 50";
 				$gDb->query($sql);
 				
-				$sql = "UPDATE ". TBL_MESSAGES. " SET msg_part_id = msg_part_id - 50 WHERE msg_type = 'CHAT' and msg_con_id = 0";
+				$sql = "UPDATE ". TBL_MESSAGES. " SET msg_part_id = msg_part_id - 50 WHERE msg_type = 'CHAT' and msg_converation_id = 0";
 				$gDb->query($sql);
 				
 				$postLines = $postLines - 50;
@@ -65,7 +80,7 @@
 				$sql = "SELECT msg_part_id, msg_subject, msg_message, msg_timestamp
                   FROM ". TBL_MESSAGES. "
                  WHERE msg_type = 'CHAT'
-                   AND msg_con_id  = 0
+                   AND msg_converation_id  = 0
                    AND msg_part_id  > ".$postLines. "
                  ORDER BY msg_part_id";
 
@@ -93,19 +108,19 @@
             }
 			$sql = "SELECT MAX(msg_part_id) as max_id
 			  FROM ". TBL_MESSAGES."
-			  where msg_con_id = 0";
+			  where msg_converation_id = 0";
 
 			$result = $gDb->query($sql);
 			$row = $gDb->fetch_array($result);
 			$MsgId = $row['max_id'] + 1;
 
-			$sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_con_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
+			$sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
 				VALUES ('CHAT', '0', '".$MsgId."', '".$postNickname."', '', '', '".$postMessage."', CURRENT_TIMESTAMP, '0')";
 
 			$gDb->query($sql); 
             break;
 		case('delete'):
-            $sql = "DELETE FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT' and msg_con_id = 0";
+            $sql = "DELETE FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT' and msg_converation_id = 0";
 			$gDb->query($sql);
             break;
     }

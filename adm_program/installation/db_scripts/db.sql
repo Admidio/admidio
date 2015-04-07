@@ -458,16 +458,16 @@ create index IDX_MEM_ROL_USR_ID on %PREFIX%_members (mem_rol_id, mem_usr_id);
 CREATE TABLE %PREFIX%_messages
 (
     msg_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
-    msg_con_id                    integer         unsigned NOT NULL,
+    msg_converation_id            integer         unsigned NOT NULL,
     msg_part_id                   integer         NOT NULL DEFAULT 0,
-	msg_type                      varchar(10)     NOT NULL,
+    msg_type                      varchar(10)     NOT NULL,
     msg_subject                   varchar(256)    NOT NULL,
     msg_usr_id_sender             integer         unsigned NOT NULL,
     msg_usr_id_receiver           integer         unsigned,
     msg_message                   text            NOT NULL,
     msg_timestamp                 timestamp       not null default CURRENT_TIMESTAMP,
     msg_read                      smallint        NOT NULL DEFAULT 0,
-	primary key (msg_id)
+    primary key (msg_id)
 )
 engine = InnoDB
 default character set = utf8

@@ -8,7 +8,7 @@
 	<step id="60">CREATE TABLE %PREFIX%_messages
         (
             msg_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
-            msg_con_id                    integer         unsigned NOT NULL,
+            msg_converation_id            integer         unsigned NOT NULL,
             msg_part_id                   integer         NOT NULL DEFAULT 0,
             msg_type                      varchar(10)     NOT NULL,
             msg_subject                   varchar(256)    NOT NULL,

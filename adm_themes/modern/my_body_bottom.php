@@ -36,14 +36,14 @@
             }
             if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
             {
-                $sql = 'SELECT * FROM '. TBL_MESSAGES. '
-                         WHERE ( msg_usr_id_receiver = '. $gCurrentUser->getValue('usr_id') .' and msg_read=1)';
-                $result = $gDb->query($sql);
-                $row = $gDb->num_rows($result);
-                if ($row > 0)
+				// get number of unread messages for user
+				$message = new TableMessage($gDb);
+	            $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
+
+                if ($unread > 0)
                 {
                     $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages.php',
-                                    $gL10n->get('SYS_MESSAGES').'<span class="badge">'.$row.'</span>', '/icons/messages.png');
+                                    $gL10n->get('SYS_MESSAGES').'<span class="badge">'.$unread.'</span>', '/icons/messages.png');
                 }
                 else
                 {
