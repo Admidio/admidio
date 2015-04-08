@@ -12,28 +12,22 @@
 
 class TableMessage extends TableAccess
 {
-	protected $msg_converation_id;
+	protected $msg_id;
 	
 	/** Constuctor that will create an object of a recordset of the table adm_messages. 
 	 *  If the id is set than the specific message will be loaded.
 	 *  @param $db Object of the class database. This should be the default object $gDb.
 	 *  @param $msg_converation_id The recordset of the message with this conversation id will be loaded. If id isn't set than an empty object of the table is created.
 	 */
-    public function __construct(&$db, $msg_converation_id = 0)
-    {
-		$sql = "SELECT msg_id FROM ". TBL_MESSAGES. "
-         WHERE msg_part_id = 0 and msg_converation_id = ". $msg_converation_id;
-		$result = $db->query($sql);
-		$row = $db->fetch_array($result);
-		
-		$this->msg_id     = $row['msg_id'];
-		$this->msg_converation_id = $msg_converation_id;
+    public function __construct(&$db, $msg_id = 0)
+    {		
+		$this->msg_id = $msg_id;
 		
         parent::__construct($db, TBL_MESSAGES, 'msg', $this->msg_id);
     }
 
-	/** Reads the number of all records of this table
-	 *  @return Number of records of this table
+	/** Reads the number of all unread messages of this table
+	 *  @return Number of unread messages of this table
 	 */
     public function countUnreadMessageRecords($usr_id)
     {
@@ -41,6 +35,29 @@ class TableMessage extends TableAccess
         $this->db->query($sql);
         $row = $this->db->fetch_array();
         return $row['count'];
+    }
+	
+	/** Reads the number of all conversations in this table
+	 *  @return Number of conversations in this table
+	 */
+    public function countMessageConversations()
+    {
+		$sql = "SELECT MAX(msg_converation_id) as max_id FROM ". TBL_MESSAGES;
+        $this->db->query($sql);
+        $row = $this->db->fetch_array();
+        return $row['max_id'];
+    }
+	
+	/** Reads the number of all messages in actual conversation
+	 *  @return Number of all messages in actual conversation
+	 */
+    public function countMessageConversationParts()
+    {
+		$sql = "SELECT MAX(msg_part_id) as max_id FROM ".TBL_MESSAGES." 
+			  where msg_converation_id = ".$this->getValue('msg_converation_id');
+        $this->db->query($sql);
+        $row = $this->db->fetch_array();
+        return $row['max_id'];
     }
 	
     /** Set a new value for a column of the database table.
@@ -61,15 +78,25 @@ class TableMessage extends TableAccess
 	
     /** Deletes the selected message with all associated fields. 
 	 *  After that the class will be initialize.
-	 *  @return @b true if no error occurred
+	 *  @return @b 1 if message is deleted or 0 if it is marked for other user to delete
 	 */
     public function delete($usr_id)
     {
+		$return = 0;
 		if($this->getValue('msg_read') == 2)
 		{
 			$sql = "DELETE FROM ".TBL_MESSAGES."
-			 WHERE msg_converation_id = ". $this->msg_converation_id;
+			 WHERE msg_converation_id = ". $this->getValue('msg_converation_id');
 			$this->db->query($sql);
+			$return = 1;
+		}
+		elseif($this->getValue('msg_type') == 'EMAIL')
+		{
+			$sql = "DELETE FROM ". TBL_MESSAGES. "
+			 WHERE msg_type = 'EMAIL' and msg_converation_id = ". $this->getValue('msg_converation_id') ." and (msg_usr_id_sender = ". $usr_id ."
+			 or msg_usr_id_receiver = ". $usr_id ." )";
+			$this->db->query($sql);
+			$return = 1;
 		}
 		
 		$other = $this->getValue('msg_usr_id_sender');
@@ -79,14 +106,10 @@ class TableMessage extends TableAccess
 		}
 		
 		$sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = 2, msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = ".$usr_id.", msg_usr_id_receiver = ".$other."
-         WHERE msg_part_id = 0 and msg_converation_id = ".$this->msg_converation_id;
+         WHERE msg_part_id = 0 and msg_converation_id = ".$this->getValue('msg_converation_id');
 		$this->db->query($sql);
 
-		$sql = "DELETE FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'EMAIL' and msg_converation_id = ". $this->msg_converation_id ." and (msg_usr_id_sender = ". $usr_id ."
-		 or msg_usr_id_receiver = ". $usr_id ." )";
-        $this->db->query($sql);
-
+		return $return;
     } 
 }
 ?>
