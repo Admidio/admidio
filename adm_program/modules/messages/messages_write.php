@@ -64,14 +64,14 @@ if ($gValidLogin && $getMsgType != 'PM' && strlen($gCurrentUser->getValue('EMAIL
 // Update the read status of the message
 if ($getMsgId > 0)
 {
-	$message = new TableMessage($gDb, $getMsgId);
+    $message = new TableMessage($gDb, $getMsgId);
 
-	// update the read-status
-	$message->setReadValue($gCurrentUser->getValue('usr_id'));
-	
-	$msg_converation_id = $message->getValue('msg_converation_id');
+    // update the read-status
+    $message->setReadValue($gCurrentUser->getValue('usr_id'));
+    
+    $msg_converation_id = $message->getValue('msg_converation_id');
     $getMsgType = $message->getValue('msg_type');
-	$getSubject = $message->getValue('msg_subject');
+    $getSubject = $message->getValue('msg_subject');
     
     if($getMsgType == 'PM')
     {
@@ -117,7 +117,7 @@ if ($getMsgType == 'PM')
                        OR cat_org_id IS NULL )
                    AND mem_rol_id = rol_id
                    AND mem_usr_id = usr_id
-				   AND usr_id <> ".$gCurrentUser->getValue('usr_id')."
+                   AND usr_id <> ".$gCurrentUser->getValue('usr_id')."
                    AND usr_valid  = 1
                         AND usr_login_name IS NOT NULL";
 
@@ -126,7 +126,7 @@ if ($getMsgType == 'PM')
     if ($gValidLogin)
     {
         while ($row = $gDb->fetch_array($drop_result))
-		{
+        {
             $list[] = array($row['usr_id'], $row['name'].' (' .$row['usr_login_name'].')', '');
         }
     }
@@ -155,7 +155,7 @@ else
     $headline = $gL10n->get('MAI_SEND_EMAIL');
     if ($getMsgType == 'PM')
     {
-	    $headline = $gL10n->get('PMS_SEND_PM');
+        $headline = $gL10n->get('PMS_SEND_PM');
     }
 }
 
@@ -192,18 +192,18 @@ if ($getMsgType == 'PM')
     $form = new HtmlForm('pm_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
 
     if ($getUserId == 0)
-	{
-	    $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
-	    $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY, 
+    {
+        $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
+        $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY, 
                             'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE'));
-		$form->closeGroupBox();
-		$sendto = '';
+        $form->closeGroupBox();
+        $sendto = '';
     }
-	else
-	{
-	    $form->addInput('msg_to', null, $getUserId, array('type' => 'hidden'));
-		$sendto = ' ' . $gL10n->get('SYS_TO') . ' ' .$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').' ('.$user->getValue('usr_login_name').')';
-	}
+    else
+    {
+        $form->addInput('msg_to', null, $getUserId, array('type' => 'hidden'));
+        $sendto = ' ' . $gL10n->get('SYS_TO') . ' ' .$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').' ('.$user->getValue('usr_login_name').')';
+    }
 
     $form->openGroupBox('gb_pm_message', $gL10n->get('SYS_MESSAGE') . $sendto);
 
@@ -220,11 +220,11 @@ if ($getMsgType == 'PM')
 
     // add form to html page
     $page->addHtml($form->show(false));
-	
-	// list history of this PM
+    
+    // list history of this PM
     if(isset($message_result))
     {
-		$page->addHtml('<br>');
+        $page->addHtml('<br>');
         while ($row = $gDb->fetch_array($message_result)) {
         
             if ($row['msg_usr_id_sender'] == $gCurrentUser->getValue('usr_id'))
@@ -236,21 +236,21 @@ if ($getMsgType == 'PM')
                 $sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
             }
 
-		$page->addHtml('
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<div class="row">
-					<div class="col-sm-8">
-						<img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
-					</div>
-					<div class="col-sm-4 text-right">' . $row['msg_timestamp'] . 
-					'</div>
-				</div>
-			</div>
-			<div class="panel-body">'.
-				nl2br($row['msg_message']).'
-			</div>
-		</div>');
+        $page->addHtml('
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
+                    </div>
+                    <div class="col-sm-4 text-right">' . $row['msg_timestamp'] . 
+                    '</div>
+                </div>
+            </div>
+            <div class="panel-body">'.
+                nl2br($row['msg_message']).'
+            </div>
+        </div>');
 
         }
     }
@@ -407,19 +407,19 @@ else
             $act_group_short = '';
             if ($act_or == 1)
             {
-                $act_group = $gL10n->get('LST_FORMER_MEMBERS');
-                $act_group_short = '('.$gL10n->get('MSG_FORMER_SHORT').')';
+                $act_group = $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_FORMER_MEMBERS') . ')';
+                $act_group_short = '('.$gL10n->get('SYS_FORMER_PL').')';
                 $act_number = '-1';
             }
             else if ($act_or == 2)
             {
-                $act_group = $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
+                $act_group = $gL10n->get('SYS_ROLES'). ' (' . $gL10n->get('LST_ACTIVE_FORMER_MEMBERS') . ')';
                 $act_group_short = '('.$gL10n->get('MSG_ACTIVE_FORMER_SHORT').')';
                 $act_number = '-2';
             }
             else
             {
-                $act_group = $gL10n->get('LST_ACTIVE_MEMBERS');
+                $act_group = $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_ACTIVE_MEMBERS') . ')';
                 $act_number = '';
             }
             
@@ -428,7 +428,7 @@ else
             {
                 if($act_number == '' || $row['former'] > 0)
                 {
-					$list[] = array('groupID: '.$row['rol_id'].$act_number, $row['rol_name'].' '.$act_group_short, $act_group);
+                    $list[] = array('groupID: '.$row['rol_id'].$act_number, $row['rol_name'].' '.$act_group_short, $act_group);
                 }
             }
 
@@ -456,7 +456,7 @@ else
                       ON first_name.usd_usr_id = usr_id
                      AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
                    WHERE mem_usr_id  = usr_id
-				     AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
+                     AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
                      AND usr_valid   = 1
                    GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
                    ORDER BY former, first_name, last_name';        
@@ -464,16 +464,16 @@ else
         $result = $gDb->query($sql);
 
         $next = true;
-		$test = "Aktive Mitglieder";
+        $test = "Aktive Mitglieder";
         
         while ($row = $gDb->fetch_array($result)) {
             if ($row['former'] == 1 && $next == true)
             {
-				$test = "Inactive Mitglieder";
+                $test = "Inactive Mitglieder";
                 $next = false;
             }
 
-			$list[] = array($row['usr_id'], $row['first_name'].' '.$row['last_name']. ' ('.$row['email'].')', $test);
+            $list[] = array($row['usr_id'], $row['first_name'].' '.$row['last_name']. ' ('.$row['email'].')', $test);
         }
 
     }
@@ -490,14 +490,14 @@ else
                  ORDER BY cat_sequence, rol_name ';
 
         $result = $gDb->query($sql);
-		while($row = $gDb->fetch_array($result))
-		{
-			$list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], '');
-		}
-		
+        while($row = $gDb->fetch_array($result))
+        {
+            $list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], '');
+        }
+        
     }
-	
-	$form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY, 
+    
+    $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY, 
                         'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE'));
 
     $form->addLine();

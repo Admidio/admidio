@@ -134,6 +134,9 @@ switch ($get_type)
     case 'usf':
         $url = 'fields_function.php?mode=2&usf_id='.$get_database_id;
         break;
+	case 'msg':
+        $url = 'messages.php?msg_id='.$get_database_id;
+        break;
     default:
         $url = '';
         break;

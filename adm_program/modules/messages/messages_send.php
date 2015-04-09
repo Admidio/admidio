@@ -35,8 +35,8 @@ $message = new TableMessage($gDb, $getMsgId);
 
 if ($getMsgId != 0)
 {
-		$getMsgType = $message->getValue('msg_type');
-		$msg_converation_id = $message->getValue('msg_converation_id');
+        $getMsgType = $message->getValue('msg_type');
+        $msg_converation_id = $message->getValue('msg_converation_id');
 }
 
 // if message not PM it must be Email and then directly check the parameters
@@ -101,15 +101,15 @@ if(!($gCurrentUser->getValue('usr_id')>0 && $gPreferences['mail_delivery_confirm
 if ($getMsgType == 'EMAIL')
 {
 
-	// put values into SESSION
-	$_SESSION['message_request'] = array(
-		'name'          => $postName,
-		'msgfrom'       => $postFrom,
-		'subject'       => $postSubject,
-		'msg_body'      => $postBody,
-		'carbon_copy'   => $postCarbonCopy,
-		'delivery_confirmation' => $postDeliveryConfirmation,
-	);
+    // put values into SESSION
+    $_SESSION['message_request'] = array(
+        'name'          => $postName,
+        'msgfrom'       => $postFrom,
+        'subject'       => $postSubject,
+        'msg_body'      => $postBody,
+        'carbon_copy'   => $postCarbonCopy,
+        'delivery_confirmation' => $postDeliveryConfirmation,
+    );
 
     if (isset($postTo))
     {
@@ -198,7 +198,7 @@ if ($getMsgType == 'EMAIL')
 
                 // Wenn der User eingeloggt ist, wird die UserID im Statement ausgeschlossen, 
                 // damit er die Mail nicht an sich selber schickt.
-				// *******************************************************
+                // *******************************************************
                 if ($gValidLogin)
                 {
                     $sql =$sql. ' AND usr_id <> '. $gCurrentUser->getValue('usr_id');
@@ -231,11 +231,11 @@ if ($getMsgType == 'EMAIL')
             }
             else
             {
-				if(!$gCurrentUser->hasRightViewProfile($value))
-				{
+                if(!$gCurrentUser->hasRightViewProfile($value))
+                {
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
                 }
-				
+                
                 $user = new User($gDb, $gProfileFields, $value);
                 
                 // error if no valid Email for given user ID
@@ -351,18 +351,18 @@ if ($getMsgType == 'EMAIL')
         }
     }
 
-	$sendresult = array_map("unserialize", array_unique(array_map("serialize", $receiver)));
-	$receivers = count($sendresult);
-	foreach ($sendresult as $address)
+    $sendresult = array_map("unserialize", array_unique(array_map("serialize", $receiver)));
+    $receivers = count($sendresult);
+    foreach ($sendresult as $address)
     {
         if ( $gPreferences['mail_into_to'] == 1 || $receivers == 1)
         {
-		    $email->addRecipient($address[0], $address[1]);
+            $email->addRecipient($address[0], $address[1]);
         }
-		else
-		{
-		    $email->addBlindCopy($address[0], $address[1]);
-		}
+        else
+        {
+            $email->addBlindCopy($address[0], $address[1]);
+        }
     }
 
     // add confirmation mail to the sender
@@ -386,12 +386,12 @@ if ($getMsgType == 'EMAIL')
 else
 {
     // if $postTo is not an Array, it is send from the hidden field.
-	if(!is_array($postTo))
-	{
-	    $postTo = array($postTo);
-	}
-	
-	// get user data from Database
+    if(!is_array($postTo))
+    {
+        $postTo = array($postTo);
+    }
+    
+    // get user data from Database
     $user = new User($gDb, $gProfileFields, $postTo[0]);
 
     // check if it is allowed to send to this user    
@@ -470,7 +470,7 @@ if ($sendResult === TRUE)
     // message if sending was OK
     if($gNavigation->count() > 0)
     {
-		$gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
+        $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     }
     else
     {

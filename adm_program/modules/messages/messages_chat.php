@@ -40,19 +40,19 @@ $page->addJavascript('
 
     // kick off chat
     var chat =  new Chat();
-	
+    
     chat.getState();
-	
+    
     $(function() {
         // watch textarea for release of key press [enter]
         $("#sendie").keyup(function(e) {    
             if (e.keyCode == 13) {
-				var text = $(this).val().trim();
-				if (text.length > 0)
+                var text = $(this).val().trim();
+                if (text.length > 0)
                 {
-					chat.send(text, name);    
-				}
-				$(this).val("");
+                    chat.send(text, name);    
+                }
+                $(this).val("");
             }
         });
     });

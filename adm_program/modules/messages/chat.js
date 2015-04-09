@@ -34,12 +34,12 @@ function updateChat(){
             dataType: "json",
             success: function(data){
                 if(data.text)
-				{
+                {
                     for (var i = 0; i < data.text.length; i++)
-					{
+                    {
                         $('#chat-area').append($("<p>"+ data.text[i] +"</p>"));
                     }
-					document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
+                    document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
                 }
                 instanse = false;
                 state = data.state;
