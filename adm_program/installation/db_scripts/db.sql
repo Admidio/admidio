@@ -473,6 +473,8 @@ engine = InnoDB
 default character set = utf8
 collate = utf8_unicode_ci;
 
+create index IDX_MSG_CON_PART_ID on %PREFIX%_messages (msg_converation_id, msg_part_id);
+
 
 /*==============================================================*/
 /* Table: adm_organizations                                     */
@@ -886,6 +888,11 @@ alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR foreign key (mem
 alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CREATE foreign key (mem_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CHANGE foreign key (mem_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_SENDER foreign key (msg_usr_id_sender)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict;
+alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_RECEIVER foreign key (msg_usr_id_receiver)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 alter table %PREFIX%_organizations add constraint %PREFIX%_FK_ORG_ORG_PARENT foreign key (org_org_id_parent)

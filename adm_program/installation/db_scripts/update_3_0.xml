@@ -125,5 +125,8 @@
 	<step id="435" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'ecard_view_width' AND pr1.prf_name LIKE 'ecard_thumbs_scale'</step>
 	<step id="440">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('ecard_view_width', 'ecard_view_height', 'enable_ecard_cc_recipients', 'ecard_cc_recipients', 'photo_upload_mode', 'photo_slideshow_speed')</step>
 	<step id="450">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_inventory boolean not null default '0'</step>
+	<step id="460">create index IDX_MSG_CON_PART_ID on %PREFIX%_messages (msg_converation_id, msg_part_id)</step>
+	<step id="470">alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_SENDER foreign key (msg_usr_id_sender) references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
+	<step id="480">alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_RECEIVER foreign key (msg_usr_id_receiver) references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
 	<step>stop</step>
 </update>
