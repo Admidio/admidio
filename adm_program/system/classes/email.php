@@ -140,7 +140,7 @@ class Email extends PHPMailer
         
         try
         {
-            $this->AddCC($sdress,$name);
+            $this->AddCC($address,$name);
         }
         catch (phpmailerException $e)
         {
