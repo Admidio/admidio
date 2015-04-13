@@ -137,7 +137,7 @@ else
 }
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 $page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
 $page->addJavascript('
@@ -212,13 +212,9 @@ $page->addJavascript('
 		}
 	});', true);
 
-// add headline and title of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$datesMenu = new HtmlNavbar('menu_dates_create', $headline, $page);
+// add back link to module menu
+$datesMenu = $page->getMenu();
 $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($datesMenu->show(false));
 
 // show form
 $form = new HtmlForm('dates_edit_form', $g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode=1', $page);

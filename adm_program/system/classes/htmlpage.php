@@ -31,6 +31,7 @@ class HtmlPage
     protected $javascriptContentExecute; ///< Contains the custom javascript of the current page that should be executed after pageload. This will be added to the header part of the page.
     protected $title;           ///< The title for the html page and the headline for the Admidio content.
     protected $headline;        ///< The main headline for the html page.
+    protected $menu;            ///< An object of the menu of this page
     protected $header;          ///< Additional header that could not be set with the other methods. This content will be add to head of html page without parsing.
     protected $hasNavbar;       ///< Flag if the current page has a navbar.
     protected $containThemeHtml; ///< If set to true then the custom html code of the theme for each page will be included.
@@ -40,20 +41,21 @@ class HtmlPage
     protected $printMode;       ///< A flag that indicates if the page should be styled in print mode then no colors will be shown
     
     /** Constructor creates the page object and initialized all parameters
-     *  @param $title A string that contains the title for the page.
+     *  @param $title A string that contains the title/headline for the page.
      */
     public function __construct($title = '')
     {
         global $g_root_path, $gDebug;
     
         $this->pageContent = '';
-        $this->header = '';
-        $this->title = $title;
-		$this->bodyOnload = '';
+        $this->header      = '';
+        $this->title       = $title;
+        $this->headline    = $title;
+        $this->menu        = new HtmlNavbar('menu_main_script', $title, $this);
         $this->containThemeHtml = true;
-        $this->printMode = false;
-        $this->hasNavbar = false;
-        $this->hasModal  = false;
+        $this->printMode   = false;
+        $this->hasNavbar   = false;
+        $this->hasModal    = false;
         
         if($gDebug)
         {
@@ -101,7 +103,7 @@ class HtmlPage
         }
         
         $this->headline = $headline;
-        $this->addHtml('<h1>'.$headline.'</h1>');
+        $this->menu->setName($headline);
     }
     
     /** Adds any html content to the page. The content will be added in the order
@@ -169,6 +171,14 @@ class HtmlPage
     public function excludeThemeHtml()
     {
         $this->containThemeHtml = false;
+    }
+    
+    /** Returns the menu object of this html page.
+     *  @return Returns the menu object of this html page.
+     */ 
+    public function getMenu()
+    {
+        return $this->menu;
     }
     
     /** Returns the title of the html page.
@@ -348,7 +358,11 @@ class HtmlPage
         </head>
         <body>'.
             $htmlMyBodyTop.'
-            <div class="admContent">'.$this->pageContent.'</div>'.
+            <div class="admContent">
+                <h1>'.$this->headline.'</h1>
+                '.$this->menu->show(false).'
+                '.$this->pageContent.'
+            </div>'.
             $htmlMyBodyBottom.'          
         </body>
         </html>';

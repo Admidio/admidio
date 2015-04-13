@@ -58,15 +58,12 @@ $headline = $weblinks->getHeadline($getHeadline);
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 if($gPreferences['enable_rss'] == 1)
 {
     $page->addRssFile($g_root_path. '/adm_program/modules/links/rss_links.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline));
 };
-
-// add headline and title of module
-$page->addHeadline($headline);
 
 $page->addHtml('<div id="links_overview">');
 
@@ -74,8 +71,8 @@ $page->addHtml('<div id="links_overview">');
 
 if($weblinks->getId() == 0)
 {	
-	// create module menu
-	$LinksMenu = new HtmlNavbar('menu_weblinks', $headline, $page);
+	// get module menu
+	$LinksMenu = $page->getMenu();
 
 	if($gCurrentUser->editWeblinksRight())
 	{
@@ -102,9 +99,6 @@ if($weblinks->getId() == 0)
     $navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/links/links.php?headline='. $getHeadline, $page, array('type' => 'navbar', 'setFocus' => false));
     $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
     $LinksMenu->addForm($navbarForm->show(false));
-
-
-	$page->addHtml($LinksMenu->show(false));
 }
 
 if ($weblinksCount == 0)

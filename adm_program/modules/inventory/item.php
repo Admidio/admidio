@@ -75,7 +75,7 @@ if(isset($_GET['item_id']) == false)
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
 $page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/datepicker3.css');
@@ -137,11 +137,8 @@ $page->addJavascript('
         });    
     });', true);
     
-// add headline and title of module
-$page->addHeadline($headline);
-
-// create module menu
-$profileMenu = new HtmlNavbar('menu_profile', $headline, $page);
+// get module menu
+$profileMenu = $page->getMenu();
 
 // show back link
 if($gNavigation->count() > 1)
@@ -166,8 +163,6 @@ if($gCurrentUser->isWebmaster())
 	$profileMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=profile', 
 						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
 }
-
-$page->addHtml($profileMenu->show(false));
 
 // *******************************************************************************
 // User data block

@@ -129,14 +129,11 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
 }
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
-$page->addHeadline($headline);
-
-// create module menu with back link
-$guestbookCommentCreateMenu = new HtmlNavbar('menu_guestbook_comment_create', $headline, $page);
+// add back link to module menu
+$guestbookCommentCreateMenu = $page->getMenu();
 $guestbookCommentCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($guestbookCommentCreateMenu->show(false));
 
 // show form
 $form = new HtmlForm('guestbook_comment_edit_form', $g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='.$id.'&amp;headline='.$getHeadline.'&amp;mode='.$mode, $page);

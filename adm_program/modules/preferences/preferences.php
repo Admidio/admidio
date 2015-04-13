@@ -40,7 +40,7 @@ foreach($gPreferences as $key => $value)
 }
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 $showOptionValidModules = array('announcements', 'downloads', 'guestbook', 'ecards', 'lists', 'messages', 'photos', 'profile', 'events', 'links', 'user_management');
 
 // open the modules tab if the options of a module should be shown 
@@ -99,18 +99,14 @@ $page->addJavascript('
         return false;
     });    ', true);
 
-// add headline and title of module
-$page->addHeadline($headline);
-
 if(strlen($showOption) > 0)
 {
     // add current url to navigation stack
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
-    // create module menu with back link
-    $preferencesMenu = new HtmlNavbar('menu_dates_create', $headline, $page);
+    // add back link to module menu
+    $preferencesMenu = $page->getMenu();
     $preferencesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-    $page->addHtml($preferencesMenu->show(false));
 }
 else
 {

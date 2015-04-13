@@ -55,16 +55,11 @@ $_SESSION['roles_request'] = $_POST;
 if($getMode == 1)
 {
     // create html page object
-    $page = new HtmlPage();
+    $page = new HtmlPage($gL10n->get('ROL_ROLE_DELETE'));
 
-    // show headline of the script
-    $headline = $gL10n->get('ROL_ROLE_DELETE');
-    $page->addHeadline($headline);
-
-    // create module menu with back link
-    $messageMenu = new HtmlNavbar('menu_message', $headline, $page);
+    // add back link to module menu
+    $messageMenu = $page->getMenu();
     $messageMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-    $page->addHtml($messageMenu->show(false));
 
 	$page->addHtml('
 	<div class="message">

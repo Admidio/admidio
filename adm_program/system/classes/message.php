@@ -134,7 +134,7 @@ class Message
         if($this->inline == false)
         {
             // create html page object
-            $page = new HtmlPage();
+            $page = new HtmlPage($headline);
 
             if($this->includeThemeBody == false)
             {
@@ -147,9 +147,6 @@ class Message
             {
                 $page->addJavascript('window.setTimeout("window.location.href=\''. $this->forwardUrl. '\'", '. $this->timer. ');');
             }
-            
-            // show headline of the script
-            $page->addHeadline($headline);
         }
         else
         {

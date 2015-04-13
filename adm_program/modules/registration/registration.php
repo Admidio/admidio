@@ -62,20 +62,16 @@ if ($member_found == 0)
 }
 
 // create html page object
-$page = new HtmlPage();
-
-// add headline and title of module
-$page->addHeadline($headline);
+$page = new HtmlPage($headline);
 
 if($gCurrentUser->isWebmaster())
 {
-    // create module menu
-    $registrationMenu = new HtmlNavbar('menu_registrations', $headline, $page);
+    // get module menu
+    $registrationMenu = $page->getMenu();
 
 	// show link to system preferences of announcements
 	$registrationMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=registration', 
 								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
-    $page->addHtml($registrationMenu->show(false));
 }
 
 $table = new HtmlTable('new_user_table', $page, true);

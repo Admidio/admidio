@@ -26,18 +26,15 @@ $textRoom = $gL10n->get('SYS_ROOM');
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
-$page->addHeadline($headline);
-
-// create module menu
-$roomsMenu = new HtmlNavbar('menu_rooms', $headline, $page);
+// get module menu
+$roomsMenu = $page->getMenu();
 // show back link
 $roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 // show link to create new room
 $roomsMenu->addItem('menu_item_new_room', $g_root_path.'/adm_program/modules/rooms/rooms_new.php?headline='.$textRoom, 
 							$gL10n->get('SYS_CREATE_VAR', $textRoom), 'add.png');
-$page->addHtml($roomsMenu->show(false));
 
 if($gPreferences['system_show_create_edit'] == 1)
 {

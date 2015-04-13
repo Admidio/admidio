@@ -85,7 +85,7 @@ $childRoles = RoleDependency::getChildRoles($gDb,$getRoleId);
 $childRoleObjects = array();
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 $page->addJavascript('
     checkMaxMemberCount();
@@ -127,13 +127,9 @@ $page->addJavascript('
             }
         }');
 
-// add headline and title of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$rolesEditMenu = new HtmlNavbar('menu_roles_edit', $headline, $page);
+// add back link to module menu
+$rolesEditMenu = $page->getMenu();
 $rolesEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($rolesEditMenu->show(false));
 
 // show form
 $form = new HtmlForm('roles_edit_form', $g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$getRoleId.'&amp;mode=2', $page);

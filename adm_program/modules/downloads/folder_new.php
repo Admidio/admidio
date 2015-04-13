@@ -66,15 +66,11 @@ catch(AdmException $e)
 $parentFolderName = $folder->getValue('fol_name');
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
-// show headline of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$folderNewMenu = new HtmlNavbar('menu_folder_new', $headline, $page);
+// add back link to module menu
+$folderNewMenu = $page->getMenu();
 $folderNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($folderNewMenu->show(false));
 
 $page->addHtml('<p class="lead">'.$gL10n->get('DOW_CREATE_FOLDER_DESC', $parentFolderName).'</p>');
 

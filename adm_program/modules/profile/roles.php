@@ -105,17 +105,14 @@ if($getInline == true)
 else
 {
     // create html page object
-    $page = new HtmlPage();
+    $page = new HtmlPage($headline);
     $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
     
     $page->addJavascript('var profileJS = new profileJSClass();');
     
-    $page->addHeadline($headline);
-
-    // create module menu with back link
-    $rolesMenu = new HtmlNavbar('menu_roles', $headline, $page);
+    // add back link to module menu
+    $rolesMenu = $page->getMenu();
     $rolesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-    $page->addHtml($rolesMenu->show(false));
 }
 
 // show headline of module

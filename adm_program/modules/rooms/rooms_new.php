@@ -56,15 +56,11 @@ if(isset($_SESSION['rooms_request']))
 }
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
-// add headline and title of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$roomsMenu = new HtmlNavbar('menu_rooms_create', $headline, $page);
+// add back link to module menu
+$roomsMenu = $page->getMenu();
 $roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($roomsMenu->show(false));
 
 // show form
 $form = new HtmlForm('rooms_edit_form', $g_root_path.'/adm_program/modules/rooms/rooms_function.php?room_id='.$getRoomId.'&amp;mode=1', $page);

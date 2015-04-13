@@ -134,7 +134,7 @@ if($datesTotalCount != 0)
 }
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($getHeadline);
 
 if($getViewMode == 'html'  || $getViewMode == 'compact')
 {
@@ -165,24 +165,19 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             }
         }');
 
-    // set headline
-    $page->addHeadline($dates->getHeadline($getHeadline));
-
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
     if($gPreferences['dates_viewmode'] == 'compact' && $getViewMode == 'html' && $getId > 0)
     {
-        // create module menu with back link
-        $datesMenu = new HtmlNavbar('menu_dates_list', $getHeadline, $page);
+        // add back link to module menu
+        $datesMenu = $page->getMenu();
         $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-        $page->addHtml($datesMenu->show(false));
     }
 
     //Check if box must be shown, when more dates available
     if($getId == 0 || $gCurrentUser->editDates())
     {
-        // create module menu
-        $DatesMenu = new HtmlNavbar('menu_dates_list', $getHeadline, $page);
-
+        // get module menu
+        $DatesMenu = $page->getMenu();
 
         //Add new event
         if($gCurrentUser->editDates())
@@ -216,8 +211,6 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 $DatesMenu->addItem('admMenuItemCategories', '/adm_program/modules/categories/categories.php?type=DAT&title='.$gL10n->get('DAT_CALENDAR'),
                                     $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png');
             }
-
-            $page->addHtml($DatesMenu->show(false));
         }
 
         // create filter menu with elements for calendar and start-/enddate

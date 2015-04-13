@@ -11,7 +11,7 @@
  *  permanently in the module. The other items are summarized in a submenu.
  *  @par Examples
  *  @code   // create module menu
- *  $myNavbar = new HtmlNavbar('admMenuMyModule');
+ *  $myNavbar = new HtmlNavbar('menu_my_module', 'My module');
  *  
  *  // show link to create new announcement
  *  $myNavbar->addItem('menu_item_new_entry', $g_root_path.'/adm_program/modules/mymodule/mymodule_new.php', 
@@ -150,6 +150,14 @@ class HtmlNavbar
     	    }
 	    }
 	}
+    
+    /** Set the name of the navbar that will be shown when navbar changed to vertical mode on small devices.
+     *  @param $name New name of the navbar.
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
     
 	/** Creates the html output of the module menu. Each added menu item will be displayed.
 	 *  If one item has several subitems than a dropdown button will be created.
