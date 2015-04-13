@@ -30,7 +30,7 @@ $getUserId      = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
 $getSubject     = admFuncVariableIsValid($_GET, 'subject', 'html');
 $getMsgId       = admFuncVariableIsValid($_GET, 'msg_id', 'numeric');
 $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
-$getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy', 'boolean', array('defaultValue' => 1));
+$getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy', 'boolean', array('defaultValue' => 0));
 $getDeliveryConfirmation  = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'boolean');
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
 
@@ -64,9 +64,14 @@ if ($gValidLogin && $getMsgType != 'PM' && strlen($gCurrentUser->getValue('EMAIL
 // Update the read status of the message
 if ($getMsgId > 0)
 {
-    $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '0' 
-            WHERE msg_part_id = 0 and msg_con_id = ".$getMsgId." and msg_usr_id_receiver = ".$gCurrentUser->getValue('usr_id');
-    $gDb->query($sql);
+	$message = new TableMessage($gDb, $getMsgId);
+
+	// update the read-status
+	$message->setReadValue($gCurrentUser->getValue('usr_id'));
+	
+	$msg_converation_id = $message->getValue('msg_converation_id');
+    $getMsgType = $message->getValue('msg_type');
+	$getSubject = $message->getValue('msg_subject');
     
     if($getMsgType == 'PM')
     {
@@ -77,10 +82,9 @@ if ($getMsgId > 0)
         $checker = "=";
     }
     
-    $sql = "SELECT msg_con_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp 
+    $sql = "SELECT msg_converation_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp 
                   FROM ". TBL_MESSAGES. "
-                 WHERE msg_part_id ".$checker." 0 AND msg_con_id = ". $getMsgId ."
-                 and msg_type = '".$getMsgType."'
+                 WHERE msg_part_id ".$checker." 0 AND msg_converation_id = ". $msg_converation_id ."
                  ORDER BY msg_part_id DESC";
 
     $message_result = $gDb->query($sql);
@@ -113,6 +117,7 @@ if ($getMsgType == 'PM')
                        OR cat_org_id IS NULL )
                    AND mem_rol_id = rol_id
                    AND mem_usr_id = usr_id
+				   AND usr_id <> ".$gCurrentUser->getValue('usr_id')."
                    AND usr_valid  = 1
                         AND usr_login_name IS NOT NULL";
 
@@ -216,7 +221,7 @@ if ($getMsgType == 'PM')
     // add form to html page
     $page->addHtml($form->show(false));
 	
-	    // list history of this PM
+	// list history of this PM
     if(isset($message_result))
     {
 		$page->addHtml('<br>');
@@ -451,6 +456,7 @@ else
                       ON first_name.usd_usr_id = usr_id
                      AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
                    WHERE mem_usr_id  = usr_id
+				     AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
                      AND usr_valid   = 1
                    GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
                    ORDER BY former, first_name, last_name';        

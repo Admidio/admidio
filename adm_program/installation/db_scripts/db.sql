@@ -1,7 +1,7 @@
 /******************************************************************************
  * SQL script with database structure
  *
- * Copyright    : (c) 2004 - 2013 The Admidio Team
+ * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -458,20 +458,22 @@ create index IDX_MEM_ROL_USR_ID on %PREFIX%_members (mem_rol_id, mem_usr_id);
 CREATE TABLE %PREFIX%_messages
 (
     msg_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
-    msg_con_id                    integer         unsigned NOT NULL,
+    msg_converation_id            integer         unsigned NOT NULL,
     msg_part_id                   integer         NOT NULL DEFAULT 0,
-	msg_type                      varchar(10)     NOT NULL,
+    msg_type                      varchar(10)     NOT NULL,
     msg_subject                   varchar(256)    NOT NULL,
     msg_usr_id_sender             integer         unsigned NOT NULL,
     msg_usr_id_receiver           integer         unsigned,
     msg_message                   text            NOT NULL,
     msg_timestamp                 timestamp       not null default CURRENT_TIMESTAMP,
     msg_read                      smallint        NOT NULL DEFAULT 0,
-	primary key (msg_id)
+    primary key (msg_id)
 )
 engine = InnoDB
 default character set = utf8
 collate = utf8_unicode_ci;
+
+create index IDX_MSG_CON_PART_ID on %PREFIX%_messages (msg_converation_id, msg_part_id);
 
 
 /*==============================================================*/
@@ -886,6 +888,11 @@ alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR foreign key (mem
 alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CREATE foreign key (mem_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CHANGE foreign key (mem_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_SENDER foreign key (msg_usr_id_sender)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict;
+alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_RECEIVER foreign key (msg_usr_id_receiver)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 alter table %PREFIX%_organizations add constraint %PREFIX%_FK_ORG_ORG_PARENT foreign key (org_org_id_parent)

@@ -17,7 +17,7 @@
  */
 /*****************************************************************************
  *
- *  Copyright    : (c) 2004 - 2013 The Admidio Team
+ *  Copyright    : (c) 2004 - 2015 The Admidio Team
  *  Homepage     : http://www.admidio.org
  *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -92,7 +92,7 @@ class HtmlFormInstallation extends HtmlForm
         <!DOCTYPE html>
         <html>
         <head>
-            <!-- (c) 2004 - 2013 The Admidio Team - http://www.admidio.org -->
+            <!-- (c) 2004 - 2015 The Admidio Team - http://www.admidio.org -->
             
             <meta http-equiv="content-type" content="text/html; charset=utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1">

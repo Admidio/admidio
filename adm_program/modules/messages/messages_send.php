@@ -2,13 +2,13 @@
 /******************************************************************************
  * Check message information and save it
  *
- * Copyright    : (c) 2004 - 2013 The Admidio Team
+ * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
- * msg_id    - set message id for conversations
+ * msg_id    - set message id for conversation
  * msg_type  - set message type
  * 
  *****************************************************************************/
@@ -30,6 +30,14 @@ $postBody        = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postBodySQL     = admFuncVariableIsValid($_POST, 'msg_body', 'string');
 $postDeliveryConfirmation  = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'boolean');
 $postCaptcha     = admFuncVariableIsValid($_POST, 'captcha', 'string');
+
+$message = new TableMessage($gDb, $getMsgId);
+
+if ($getMsgId != 0)
+{
+		$getMsgType = $message->getValue('msg_type');
+		$msg_converation_id = $message->getValue('msg_converation_id');
+}
 
 // if message not PM it must be Email and then directly check the parameters
 if ($getMsgType != 'PM')
@@ -53,7 +61,7 @@ if ($getMsgType != 'PM')
     }
 
     // if Attachmentsize is higher than max_post_size from php.ini, then $_POST is empty.
-    if (empty($_POST))
+    if(empty($_POST))
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
@@ -67,7 +75,7 @@ if ($getMsgType != 'PM')
             else if($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
         }
     }
-    
+
 }
 
 // Stop if pm should be send pm module is disabled
@@ -405,36 +413,25 @@ else
     {
         $PMId2 = 1;
 
-        $sql = "SELECT MAX(msg_con_id) as max_id
-              FROM ". TBL_MESSAGES;
+        $msg_converation_id = $message->countMessageConversations() + 1;
 
-        $result = $gDb->query($sql);
-        $row = $gDb->fetch_array($result);
-        $getMsgId = $row['max_id'] + 1;
-
-        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_con_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
-            VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '', CURRENT_TIMESTAMP, '1')";
+        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
+            VALUES ('".$getMsgType."', '".$msg_converation_id."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '', CURRENT_TIMESTAMP, '1')";
 
         $gDb->query($sql);
     }
     else
     {
-        $sql = "SELECT MAX(msg_part_id) as max_id
-              FROM ".TBL_MESSAGES." 
-			  where msg_con_id = ".$getMsgId;
-
-        $result = $gDb->query($sql);
-        $row = $gDb->fetch_array($result);
-        $PMId2 = $row['max_id'] + 1;
+        $PMId2 = $message->countMessageConversationParts() + 1;
 
         $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '1', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = '".$gCurrentUser->getValue('usr_id')."', msg_usr_id_receiver = '".$postTo[0]."'
-                WHERE msg_part_id = 0 and msg_con_id = ".$getMsgId;
+                WHERE msg_id = ".$msg_converation_id;
 
         $gDb->query($sql);
     }
 
-    $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_con_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
-            VALUES ('".$getMsgType."', '".$getMsgId."', '".$PMId2."', '', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '".$postBodySQL."', CURRENT_TIMESTAMP, '0')";
+    $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
+            VALUES ('".$getMsgType."', '".$msg_converation_id."', '".$PMId2."', '', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '".$postBodySQL."', CURRENT_TIMESTAMP, '0')";
 
     if ($gDb->query($sql)) {
       $sendResult = TRUE;
@@ -447,15 +444,15 @@ if ($sendResult === TRUE)
     // save mail also to database
     if ($getMsgType != 'PM')
     {
-         $sql = "SELECT MAX(msg_con_id) as max_id
+         $sql = "SELECT MAX(msg_converation_id) as max_id
           FROM ". TBL_MESSAGES;
 
         $result = $gDb->query($sql);
         $row = $gDb->fetch_array($result);
-        $getMsgId = $row['max_id'] + 1;
+        $msg_converation_id = $row['max_id'] + 1;
 
-        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_con_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
-            VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '', '".$postBodySQL."', CURRENT_TIMESTAMP, '0')";
+        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
+            VALUES ('".$getMsgType."', '".$msg_converation_id."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '', '".$postBodySQL."', CURRENT_TIMESTAMP, '0')";
 
         $gDb->query($sql);    
     }
