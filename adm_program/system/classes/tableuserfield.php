@@ -155,9 +155,12 @@ class TableUserField extends TableAccess
 			if($this->dbColumns['usf_type'] == 'DROPDOWN'
 			|| $this->dbColumns['usf_type'] == 'RADIO_BUTTON')
 			{
-				$arrListValues = explode("\r\n", $value);
 				$arrListValuesWithKeys = array(); 	// array with list values and keys that represents the internal value
 
+                // first replace windows new line with unix new line and then create an array
+                $valueFormated = str_replace("\r\n","\n", $value);
+                $arrListValues = explode("\n", $valueFormated);
+                
 				foreach($arrListValues as $key => &$listValue)
 				{
 					if($this->dbColumns['usf_type'] == 'RADIO_BUTTON')
