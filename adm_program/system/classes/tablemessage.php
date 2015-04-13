@@ -31,7 +31,7 @@ class TableMessage extends TableAccess
 	 */
     public function countUnreadMessageRecords($usr_id)
     {
-		$sql = 'SELECT COUNT(1) as count FROM '.$this->tableName.' WHERE msg_part_id = 0 and msg_usr_id_receiver = '. $usr_id .' and msg_read = 1';
+		$sql = 'SELECT COUNT(1) as count FROM '.$this->tableName.' WHERE msg_usr_id_receiver = '. $usr_id .' and msg_read = 1';
         $this->db->query($sql);
         $row = $this->db->fetch_array();
         return $row['count'];
@@ -42,7 +42,7 @@ class TableMessage extends TableAccess
 	 */
     public function countMessageConversations()
     {
-		$sql = "SELECT MAX(msg_converation_id) as max_id FROM ". TBL_MESSAGES;
+		$sql = "SELECT MAX(msg_id) as max_id FROM ". TBL_MESSAGES;
         $this->db->query($sql);
         $row = $this->db->fetch_array();
         return $row['max_id'];
@@ -51,10 +51,10 @@ class TableMessage extends TableAccess
 	/** Reads the number of all messages in actual conversation
 	 *  @return Number of all messages in actual conversation
 	 */
-    public function countMessageConversationParts()
+    public function countMessageParts()
     {
-		$sql = "SELECT MAX(msg_part_id) as max_id FROM ".TBL_MESSAGES." 
-			  where msg_converation_id = ".$this->getValue('msg_converation_id');
+		$sql = "SELECT MAX(msc_part_id) as max_id FROM ".TBL_MESSAGES_CONTENT." 
+			  where msc_msg_id = ".$this->getValue('msg_id');
         $this->db->query($sql);
         $row = $this->db->fetch_array();
         return $row['max_id'];
@@ -78,36 +78,36 @@ class TableMessage extends TableAccess
 	
     /** Deletes the selected message with all associated fields. 
 	 *  After that the class will be initialize.
-	 *  @return @b 1 if message is deleted or 0 if it is marked for other user to delete
+	 *  @return @b 'done' if message is deleted or message with additional information if it is marked for other user to delete. On error it is "delete not OK"
 	 */
-    public function delete($usr_id)
+    public function delete($usr_id, $PM_info)
     {
-		$return = 0;
-		if($this->getValue('msg_read') == 2)
+		$return = 'delete not OK';
+		if($this->getValue('msg_read') == 2 || $this->getValue('msg_type') == 'EMAIL')
 		{
+			$sql = "DELETE FROM ".TBL_MESSAGES_CONTENT."
+			 WHERE msc_msg_id = ". $this->getValue('msg_id');
+			$this->db->query($sql);
+			
 			$sql = "DELETE FROM ".TBL_MESSAGES."
-			 WHERE msg_converation_id = ". $this->getValue('msg_converation_id');
+			 WHERE msg_id = ". $this->getValue('msg_id');
 			$this->db->query($sql);
-			$return = 1;
+			$return = 'done';
 		}
-		elseif($this->getValue('msg_type') == 'EMAIL')
+		else
 		{
-			$sql = "DELETE FROM ". TBL_MESSAGES. "
-			 WHERE msg_type = 'EMAIL' and msg_converation_id = ". $this->getValue('msg_converation_id') ." and (msg_usr_id_sender = ". $usr_id ."
-			 or msg_usr_id_receiver = ". $usr_id ." )";
+			$other = $this->getValue('msg_usr_id_sender');
+			if($other == $usr_id)
+			{
+				$other = $this->getValue('msg_usr_id_receiver');
+			}
+			
+			$sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = 2, msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = ".$usr_id.", msg_usr_id_receiver = ".$other."
+			 WHERE msg_id = ".$this->getValue('msg_id');
 			$this->db->query($sql);
-			$return = 1;
+			//$return = $PM_info;
+			$return = 'done';
 		}
-		
-		$other = $this->getValue('msg_usr_id_sender');
-		if($other == $usr_id)
-        {
-			$other = $this->getValue('msg_usr_id_receiver');
-		}
-		
-		$sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = 2, msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = ".$usr_id.", msg_usr_id_receiver = ".$other."
-         WHERE msg_part_id = 0 and msg_converation_id = ".$this->getValue('msg_converation_id');
-		$this->db->query($sql);
 
 		return $return;
     } 

@@ -73,19 +73,10 @@ if ($getMsgId > 0)
     $getMsgType = $message->getValue('msg_type');
     $getSubject = $message->getValue('msg_subject');
     
-    if($getMsgType == 'PM')
-    {
-        $checker = ">";
-    }
-    else
-    {
-        $checker = "=";
-    }
-    
-    $sql = "SELECT msg_converation_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp 
-                  FROM ". TBL_MESSAGES. "
-                 WHERE msg_part_id ".$checker." 0 AND msg_converation_id = ". $msg_converation_id ."
-                 ORDER BY msg_part_id DESC";
+    $sql = "SELECT msc_usr_id, msc_message, msc_timestamp 
+                  FROM ". TBL_MESSAGES_CONTENT. "
+                 WHERE msc_msg_id = ". $getMsgId ."
+                 ORDER BY msc_part_id DESC";
 
     $message_result = $gDb->query($sql);
 
@@ -227,7 +218,7 @@ if ($getMsgType == 'PM')
         $page->addHtml('<br>');
         while ($row = $gDb->fetch_array($message_result)) {
         
-            if ($row['msg_usr_id_sender'] == $gCurrentUser->getValue('usr_id'))
+            if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))
             {
                 $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
             }
@@ -243,12 +234,12 @@ if ($getMsgType == 'PM')
                     <div class="col-sm-8">
                         <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
                     </div>
-                    <div class="col-sm-4 text-right">' . $row['msg_timestamp'] . 
+                    <div class="col-sm-4 text-right">' . $row['msc_timestamp'] . 
                     '</div>
                 </div>
             </div>
             <div class="panel-body">'.
-                nl2br($row['msg_message']).'
+                nl2br($row['msc_message']).'
             </div>
         </div>');
 
@@ -264,7 +255,7 @@ else if (isset($message_result))
     {
         while ($row = $gDb->fetch_array($message_result)) 
         {
-            if ($row['msg_usr_id_sender'] == $gCurrentUser->getValue('usr_id'))
+            if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))
             {
                 $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
             }
@@ -279,13 +270,13 @@ else if (isset($message_result))
                     <div class="col-sm-8">
                         <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />'.$sentUser.'
                     </div>
-                    <div class="col-sm-4 text-right">'.$row['msg_timestamp']);
+                    <div class="col-sm-4 text-right">'.$row['msc_timestamp']);
 
                     $page->addHtml('</div>
                 </div>
             </div>
             <div class="panel-footer">'.
-                htmlspecialchars_decode($row['msg_message']).'
+                htmlspecialchars_decode($row['msc_message']).'
             </div>');
             
         }

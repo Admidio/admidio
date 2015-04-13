@@ -35,8 +35,7 @@ $message = new TableMessage($gDb, $getMsgId);
 
 if ($getMsgId != 0)
 {
-        $getMsgType = $message->getValue('msg_type');
-        $msg_converation_id = $message->getValue('msg_converation_id');
+    $getMsgType = $message->getValue('msg_type');
 }
 
 // if message not PM it must be Email and then directly check the parameters
@@ -100,7 +99,6 @@ if(!($gCurrentUser->getValue('usr_id')>0 && $gPreferences['mail_delivery_confirm
 // check if PM or Email and to steps:
 if ($getMsgType == 'EMAIL')
 {
-
     // put values into SESSION
     $_SESSION['message_request'] = array(
         'name'          => $postName,
@@ -231,19 +229,20 @@ if ($getMsgType == 'EMAIL')
             }
             else
             {
-                if(!$gCurrentUser->hasRightViewProfile($value))
+				// create user object
+				$user = new User($gDb, $gProfileFields, $value);
+
+                if(!$gCurrentUser->hasRightViewProfile($user))
                 {
-                    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+                    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
                 }
-                
-                $user = new User($gDb, $gProfileFields, $value);
-                
+
                 // error if no valid Email for given user ID
                 if (!strValidCharacters($user->getValue('EMAIL'), 'email'))
                 {
                     $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
                 }
-                
+
                 $receiver[] = array($user->getValue('EMAIL'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
             }
         }
@@ -413,25 +412,24 @@ else
     {
         $PMId2 = 1;
 
-        $msg_converation_id = $message->countMessageConversations() + 1;
-
-        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
-            VALUES ('".$getMsgType."', '".$msg_converation_id."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '', CURRENT_TIMESTAMP, '1')";
+        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read) 
+            VALUES ('".$getMsgType."', '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', CURRENT_TIMESTAMP, '1')";
 
         $gDb->query($sql);
+		$getMsgId = mysql_insert_id();
     }
     else
     {
-        $PMId2 = $message->countMessageConversationParts() + 1;
+        $PMId2 = $message->countMessageParts() + 1;
 
         $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '1', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = '".$gCurrentUser->getValue('usr_id')."', msg_usr_id_receiver = '".$postTo[0]."'
-                WHERE msg_id = ".$msg_converation_id;
+                WHERE msg_id = ".$getMsgId;
 
         $gDb->query($sql);
     }
 
-    $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
-            VALUES ('".$getMsgType."', '".$msg_converation_id."', '".$PMId2."', '', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '".$postBodySQL."', CURRENT_TIMESTAMP, '0')";
+    $sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp) 
+            VALUES ('".$getMsgId."', '".$PMId2."', '".$gCurrentUser->getValue('usr_id')."', '".$postBodySQL."', CURRENT_TIMESTAMP)";
 
     if ($gDb->query($sql)) {
       $sendResult = TRUE;
@@ -444,17 +442,16 @@ if ($sendResult === TRUE)
     // save mail also to database
     if ($getMsgType != 'PM')
     {
-         $sql = "SELECT MAX(msg_converation_id) as max_id
-          FROM ". TBL_MESSAGES;
+        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read) 
+            VALUES ('".$getMsgType."', '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '', CURRENT_TIMESTAMP, '0')";
 
-        $result = $gDb->query($sql);
-        $row = $gDb->fetch_array($result);
-        $msg_converation_id = $row['max_id'] + 1;
+        $gDb->query($sql);
+		$getMsgId = mysql_insert_id();
 
-        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
-            VALUES ('".$getMsgType."', '".$msg_converation_id."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '', '".$postBodySQL."', CURRENT_TIMESTAMP, '0')";
+		$sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp) 
+            VALUES ('".$getMsgId."', '".$PMId2."', '".$gCurrentUser->getValue('usr_id')."', '".$postBodySQL."', CURRENT_TIMESTAMP)";
 
-        $gDb->query($sql);    
+        $gDb->query($sql);
     }
 
     // Delete CaptchaCode if send/save was correct

@@ -52,8 +52,8 @@
 	<text id="MSG_PM_SEND" development="new" translation="todo">Die Private Nachricht wurde an %VAR1_BOLD% versendet.</text>
 	<text id="MSG_PM_NOT_SEND" development="new" translation="todo">Die Private Nachricht konnte nicht an %VAR1_BOLD% gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n%VAR2%</text>
 	<text id="MSG_REMOVE" development="new" translation="todo">Nachricht entfernen</text>
-	<text id="MSG_REMOVE_CONFIRM" development="new" translation="todo">Entfernen bestätigen</text>
-	<text id="MSG_REMOVE_REVERT" development="new" translation="todo">Entfernen wiederrufen</text>
+	<text id="MSG_DELETE_DESC" development="new" translation="todo">Soll Nachricht %VAR1_BOLD% nun entfernt werden.</text>
+	<text id="MSG_DELETE_PM" development="new" translation="todo">Da es sich um eine Private Nachricht handeln, wird die Nachricht nur zum löschen markiert und wartet auf eine Aktion des Gesprächspartners</text>
     <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="todo">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der aktuelle Benutzer wird dort automatisch zum Webmaster ernannt und kann die weitere Einrichtung durchführen. Benutzer, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</text>
     <text id="ORG_CAPTCHA_WIDTH" development="new" translation="todo">Captcha-Breite</text>
     <text id="ORG_CAPTCHA_HEIGHT" development="new" translation="todo">Captcha-Höhe</text>

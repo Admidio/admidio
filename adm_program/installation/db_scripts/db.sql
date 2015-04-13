@@ -24,6 +24,7 @@ drop table if exists %PREFIX%_invent cascade;
 drop table if exists %PREFIX%_links cascade;
 drop table if exists %PREFIX%_members cascade;
 drop table if exists %PREFIX%_messages cascade;
+drop table if exists %PREFIX%_messages_content cascade;
 drop table if exists %PREFIX%_photos cascade;
 drop table if exists %PREFIX%_preferences cascade;
 drop table if exists %PREFIX%_registrations cascade;
@@ -454,27 +455,39 @@ create index IDX_MEM_ROL_USR_ID on %PREFIX%_members (mem_rol_id, mem_usr_id);
 /*==============================================================*/
 /* Table: adm_messages                                          */
 /*==============================================================*/
-
 CREATE TABLE %PREFIX%_messages
 (
-    msg_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
-    msg_converation_id            integer         unsigned NOT NULL,
-    msg_part_id                   integer         NOT NULL DEFAULT 0,
-    msg_type                      varchar(10)     NOT NULL,
-    msg_subject                   varchar(256)    NOT NULL,
-    msg_usr_id_sender             integer         unsigned NOT NULL,
-    msg_usr_id_receiver           integer         unsigned,
-    msg_message                   text            NOT NULL,
-    msg_timestamp                 timestamp       not null default CURRENT_TIMESTAMP,
-    msg_read                      smallint        NOT NULL DEFAULT 0,
-    primary key (msg_id)
+	msg_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
+	msg_type                      varchar(10)     NOT NULL,
+	msg_subject                   varchar(256)    NOT NULL,
+	msg_usr_id_sender             integer         unsigned NOT NULL,
+	msg_usr_id_receiver           varchar(256)    NOT NULL,
+	msg_timestamp                 timestamp       NOT NULL default CURRENT_TIMESTAMP,
+	msg_read                      smallint        NOT NULL DEFAULT 0,
+	primary key (msg_id)
 )
 engine = InnoDB
 default character set = utf8
 collate = utf8_unicode_ci;
 
-create index IDX_MSG_CON_PART_ID on %PREFIX%_messages (msg_converation_id, msg_part_id);
+/*==============================================================*/
+/* Table: adm_messages_content                                  */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_messages_content
+(
+	msc_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
+	msc_msg_id                    integer         unsigned NOT NULL,
+	msc_part_id                   integer         unsigned NOT NULL,
+	msc_usr_id                    integer         unsigned,
+	msc_message                   text            NOT NULL,
+	msc_timestamp                 timestamp       NOT NULL default CURRENT_TIMESTAMP,
+	primary key (msc_id)
+)
+engine = InnoDB
+default character set = utf8
+collate = utf8_unicode_ci;
 
+create index IDX_MSC_PART_ID on %PREFIX%_messages_content (msc_part_id);
 
 /*==============================================================*/
 /* Table: adm_organizations                                     */

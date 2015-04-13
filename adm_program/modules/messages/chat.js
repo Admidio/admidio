@@ -5,7 +5,6 @@ Name: Admidio Chat Engine
 var instanse = false;
 var state;
 var mes;
-var file;
 
 function Chat () {
     this.getState = getStateOfChat;
@@ -28,8 +27,7 @@ function updateChat(){
             url: "process.php",
             data: {  
                 'function': 'update',
-                'state': state,
-                'file': file
+                'state': state
             },
             dataType: "json",
             success: function(data){
@@ -48,22 +46,20 @@ function updateChat(){
     }
     else 
     {
-        setTimeout(updateChat, 10000);
+        setTimeout(updateChat, 5000);
      }
 }
 
 //send the message
-function sendChat(message, nickname)
-{       
+function sendChat(message)
+{
     updateChat();
     $.ajax({
         type: "POST",
         url: "process.php",
         data: {  
             'function': 'send',
-            'message': message,
-            'nickname': nickname,
-            'file': file
+            'message': message
         },
         dataType: "json",
         success: function(data){

@@ -136,6 +136,7 @@ switch ($get_type)
         break;
 	case 'msg':
         $url = 'messages.php?msg_id='.$get_database_id;
+		$text = 'MSG_DELETE_DESC';
         break;
     default:
         $url = '';

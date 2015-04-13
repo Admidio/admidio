@@ -76,6 +76,7 @@ define('TBL_USER_DATA',         $g_tbl_praefix. '_user_data');
 define('TBL_USER_FIELDS',       $g_tbl_praefix. '_user_fields');
 define('TBL_USER_LOG',          $g_tbl_praefix. '_user_log');
 define('TBL_MESSAGES',          $g_tbl_praefix. '_messages');
+define('TBL_MESSAGES_CONTENT',  $g_tbl_praefix. '_messages_content');
 define('TBL_INVENT_DATA',       $g_tbl_praefix. '_invent_data');
 define('TBL_INVENT_FIELDS',     $g_tbl_praefix. '_invent_fields');
 define('TBL_INVENT',            $g_tbl_praefix. '_invent');

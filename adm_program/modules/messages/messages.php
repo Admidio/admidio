@@ -33,7 +33,9 @@ if ($getMsgId != 0)
     $delMessage = new TableMessage($gDb, $getMsgId);
 
     //Function to delete message
-    $delete = $delMessage->delete($gCurrentUser->getValue('usr_id'));   
+    $delete = $delMessage->delete($gCurrentUser->getValue('usr_id'), $gL10n->get('MSG_DELETE_PM'));
+	echo $delete;
+    exit();	
 }
 
 //SQL to find all unread PM messages
@@ -42,8 +44,7 @@ $sql = "SELECT msg_id,
             ELSE msg_usr_id_sender
             END AS user
         FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'PM' and msg_part_id = 0 and ((msg_usr_id_receiver = ". $gCurrentUser->getValue('usr_id') ." and msg_read = 1)
-         or msg_usr_id_sender = ". $gCurrentUser->getValue('usr_id') ." and  msg_read = 0)
+         WHERE msg_type = 'PM' and msg_usr_id_receiver = ". $gCurrentUser->getValue('usr_id') ." and msg_read = 1
          ORDER BY msg_id DESC";
 
 $result = $gDb->query($sql);
@@ -54,8 +55,8 @@ $sql = "SELECT msg_id,
             ELSE msg_usr_id_sender
             END AS user
         FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'PM' and msg_part_id = 0 and ((msg_usr_id_receiver = ". $gCurrentUser->getValue('usr_id') ." and msg_read <> 1)
-         or msg_usr_id_sender = ". $gCurrentUser->getValue('usr_id') ." and  msg_read = 1)
+         WHERE msg_type = 'PM' and ((msg_usr_id_receiver = ". $gCurrentUser->getValue('usr_id') ." and msg_read <> 1)
+         or msg_usr_id_sender = ". $gCurrentUser->getValue('usr_id') ." and msg_read < 2)
          ORDER BY msg_id DESC";
 
 $result1 = $gDb->query($sql);
@@ -100,8 +101,11 @@ if ($gPreferences['enable_chat_module'] == 1 )
     $EmailMenu->addItem('admMenuItemNewChat', $g_root_path.'/adm_program/modules/messages/messages_chat.php', $gL10n->get('MSG_CHAT'), '/chat.png');
 }
 
-$EmailMenu->addItem('admMenuItemPreferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=messages', 
+if($gCurrentUser->isWebmaster())
+{
+    $EmailMenu->addItem('admMenuItemPreferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=messages', 
                     $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+}
 
 $page->addHtml($EmailMenu->show(false));
 
