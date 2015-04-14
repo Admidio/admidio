@@ -102,7 +102,7 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultVal
 
 // set runtime of script to 2 minutes because of the many work to do
 // but no output of error message because of safe mode
-@set_time_limit(600); 
+@set_time_limit(600);
 
 echo 'Start with installation ...<br />';
 
@@ -144,7 +144,7 @@ if($gDbType == 'mysql')
 
 $filename = 'db.sql';
 $file     = fopen($filename, 'r')
-			or die('File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.');
+            or die('File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);
@@ -155,8 +155,8 @@ foreach($sql_arr as $sql)
 {
     if(strlen(trim($sql)) > 0)
     {
-		// set prefix for all tables and execute sql statement
-        $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);        
+        // set prefix for all tables and execute sql statement
+        $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
         $db->query($sql);
     }
 }
@@ -175,21 +175,21 @@ foreach($sql_arr as $sql)
 {
     if(strlen(trim($sql)) > 0)
     {
-		// set prefix for all tables and execute sql statement
+        // set prefix for all tables and execute sql statement
         $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
 
         // search for translation strings with the prefix DEMO or SYS and try replace them
-		preg_match_all('/(DEMO_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/' , $sql, $results);
-		
-		foreach($results[0] as $key => $value)
-		{
-			// convert <br /> to a normal line feed
-			$convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/',chr(13).chr(10),$gL10n->get($value));
+        preg_match_all('/(DEMO_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/' , $sql, $results);
 
-			// search for the exact value as a separate word and replace it with the translation
-			// in l10n the single quote is transformed in html entity, but we need the original sql escaped
-			$sql = preg_replace('/\b'.$value.'\b/', $db->escape_string(str_replace('&rsquo;', '\'', $convertedText)), $sql);
-		}
+        foreach($results[0] as $key => $value)
+        {
+            // convert <br /> to a normal line feed
+            $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/',chr(13).chr(10),$gL10n->get($value));
+
+            // search for the exact value as a separate word and replace it with the translation
+            // in l10n the single quote is transformed in html entity, but we need the original sql escaped
+            $sql = preg_replace('/\b'.$value.'\b/', $db->escape_string(str_replace('&rsquo;', '\'', $convertedText)), $sql);
+        }
 
         $db->query($sql);
     }
@@ -202,14 +202,14 @@ include('data_edit.php');
 // in postgresql all sequences must get a new start value because our inserts have given ids
 if($gDbType == 'postgresql')
 {
-	$sql = 'SELECT c.relname FROM pg_class c WHERE c.relkind = \'S\' ';
-	$sqlResult = $db->query($sql);
-	
-	while($row = $db->fetch_array($sqlResult))
-	{
-		$sql = 'SELECT setval(\''.$row['relname'].'\', 1000000)';
-		$db->query($sql);
-	}
+    $sql = 'SELECT c.relname FROM pg_class c WHERE c.relkind = \'S\' ';
+    $sqlResult = $db->query($sql);
+
+    while($row = $db->fetch_array($sqlResult))
+    {
+        $sql = 'SELECT setval(\''.$row['relname'].'\', 1000000)';
+        $db->query($sql);
+    }
 }
 
 // set parameter lang to default language for this installation
@@ -231,7 +231,7 @@ if($db->query('SELECT 1 FROM '.TBL_COMPONENTS, false) == false)
 {
     // in Admidio version 2 the database version was stored in preferences table
     $sql = 'SELECT prf_value FROM '.$g_tbl_praefix.'_preferences
-             WHERE prf_name   = \'db_version\' 
+             WHERE prf_name   = \'db_version\'
                AND prf_org_id = 1';
     $db->query($sql);
     $row  = $db->fetch_array();
