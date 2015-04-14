@@ -112,6 +112,7 @@ if ($getMsgType == 'EMAIL')
     if (isset($postTo))
     {
         $receiver = array();
+        $ReceiverString = "";
 
         // Create new Email Object
         $email = new Email();
@@ -121,17 +122,8 @@ if ($getMsgType == 'EMAIL')
             // check if role or user is given
             if (strpos($value,':') == true) 
             {
-                $groupsplit = explode( ':', $value);
-
-                if (strpos($groupsplit[1],'-') == true)
-                {
-                    $group = explode( '-', $groupsplit[1]);
-                }
-                else
-                {
-                    $group[0] = $groupsplit[1];
-                    $group[1] = 0;
-                }
+                $modulemessages = new ModuleMessages();
+                $group = $modulemessages->msgGroupSplit($value);
 
                 // check if role rights are granted to the User
                 $sql = 'SELECT rol_mail_this_role, rol_name, rol_id 
@@ -229,8 +221,8 @@ if ($getMsgType == 'EMAIL')
             }
             else
             {
-				// create user object
-				$user = new User($gDb, $gProfileFields, $value);
+                // create user object
+                $user = new User($gDb, $gProfileFields, $value);
 
                 if(!$gCurrentUser->hasRightViewProfile($user))
                 {
@@ -245,7 +237,9 @@ if ($getMsgType == 'EMAIL')
 
                 $receiver[] = array($user->getValue('EMAIL'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
             }
+            $ReceiverString .= " | ".$value;
         }
+        $ReceiverString = substr($ReceiverString, 3);
     }
     else
     {
@@ -416,7 +410,7 @@ else
             VALUES ('".$getMsgType."', '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', CURRENT_TIMESTAMP, '1')";
 
         $gDb->query($sql);
-		$getMsgId = mysql_insert_id();
+        $getMsgId = mysql_insert_id();
     }
     else
     {
@@ -443,13 +437,13 @@ if ($sendResult === TRUE)
     if ($getMsgType != 'PM')
     {
         $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read) 
-            VALUES ('".$getMsgType."', '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '', CURRENT_TIMESTAMP, '0')";
+            VALUES ('".$getMsgType."', '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$ReceiverString."', CURRENT_TIMESTAMP, '0')";
 
         $gDb->query($sql);
-		$getMsgId = mysql_insert_id();
+        $getMsgId = mysql_insert_id();
 
-		$sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp) 
-            VALUES ('".$getMsgId."', '".$PMId2."', '".$gCurrentUser->getValue('usr_id')."', '".$postBodySQL."', CURRENT_TIMESTAMP)";
+        $sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp) 
+            VALUES ('".$getMsgId."', '1', '".$gCurrentUser->getValue('usr_id')."', '".$postBodySQL."', CURRENT_TIMESTAMP)";
 
         $gDb->query($sql);
     }

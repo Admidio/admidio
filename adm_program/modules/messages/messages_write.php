@@ -72,6 +72,7 @@ if ($getMsgId > 0)
     $msg_converation_id = $message->getValue('msg_converation_id');
     $getMsgType = $message->getValue('msg_type');
     $getSubject = $message->getValue('msg_subject');
+    $getUserId = $message->getConversationPartner($gCurrentUser->getValue('usr_id'));
     
     $sql = "SELECT msc_usr_id, msc_message, msc_timestamp 
                   FROM ". TBL_MESSAGES_CONTENT. "
@@ -217,7 +218,7 @@ if ($getMsgType == 'PM')
     {
         $page->addHtml('<br>');
         while ($row = $gDb->fetch_array($message_result)) {
-        
+
             if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))
             {
                 $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
@@ -227,21 +228,21 @@ if ($getMsgType == 'PM')
                 $sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
             }
 
-        $page->addHtml('
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
+            $page->addHtml('
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
+                        </div>
+                        <div class="col-sm-4 text-right">' . $row['msc_timestamp'] . 
+                        '</div>
                     </div>
-                    <div class="col-sm-4 text-right">' . $row['msc_timestamp'] . 
-                    '</div>
                 </div>
-            </div>
-            <div class="panel-body">'.
-                nl2br($row['msc_message']).'
-            </div>
-        </div>');
+                <div class="panel-body">'.
+                    nl2br($row['msc_message']).'
+                </div>
+            </div>');
 
         }
     }
