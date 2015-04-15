@@ -75,14 +75,12 @@ else
 
 					  
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 $page->addJavascript('$(".admidio-group-heading").click(function() {showHideBlock($(this).attr("id"));});', true);
 
-$page->addHeadline($headline);
-
-// create module menu
-$rolesMenu = new HtmlNavbar('menu_roles', $headline, $page);
+// get module menu
+$rolesMenu = $page->getMenu();
 
 // define link to create new profile field
 $rolesMenu->addItem('menu_item_new_role', $g_root_path.'/adm_program/modules/roles/roles_new.php', 
@@ -96,8 +94,6 @@ $rolesMenu->addItem('menu_item_inactive_role', $g_root_path.'/adm_program/module
 // define link to show hidden roles
 $rolesMenu->addItem('menu_item_hidden_role', $g_root_path.'/adm_program/modules/roles/roles.php?invisible='.$visibleRolesFlag, 
 							$visibleRolesLinkDescription, $visibleRolesImage);
-							
-$page->addHtml($rolesMenu->show(false));
 
 // Create table
 $table = new HtmlTable('roles_table', $page, true, true);

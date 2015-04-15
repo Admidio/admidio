@@ -138,15 +138,11 @@ if($gDb->num_rows($resultFieldHistory) == 0)
 }
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
-// show headline of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$profileFieldHistoryMenu = new HtmlNavbar('menu_profile_field_history', $headline, $page);
+// add back link to module menu
+$profileFieldHistoryMenu = $page->getMenu();
 $profileFieldHistoryMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($profileFieldHistoryMenu->show(false));
 
 // create filter menu with input elements for Startdate and Enddate
 $FilterNavbar = new HtmlNavbar('menu_profile_field_history_filter', null, null, 'filter');

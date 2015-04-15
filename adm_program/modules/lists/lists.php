@@ -71,7 +71,7 @@ if($getCatId > 0)
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 if($gPreferences['lists_hide_overview_details'] == 0)
 {
@@ -93,10 +93,9 @@ $page->addJavascript('
 
 // add headline and title of module
 $page->addHtml('<div id="lists_overview">');
-$page->addHeadline($headline);
 
-// create module menu
-$ListsMenu = new HtmlNavbar('menu_lists', $headline, $page);
+// get module menu
+$ListsMenu = $page->getMenu();
 
 if($gCurrentUser->manageRoles())
 {
@@ -121,7 +120,6 @@ elseif($gCurrentUser->manageRoles())
 $page->addJavascript('$("#cat_id").change(function() { $("#navbar_cat_id_form").submit();});', true);
 $navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/lists/lists.php?active_role='.$getActiveRole, $page, array('type' => 'navbar', 'setFocus' => false));
 $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
-$ListsMenu->addForm($navbarForm->show(false));
 
 // show module menu
 $page->addHtml($ListsMenu->show(false));

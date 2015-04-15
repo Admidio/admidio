@@ -24,6 +24,12 @@ require_once('../../system/login_valid.php');
 $getItemId = admFuncVariableIsValid($_GET, 'inv_id', 'numeric', array('requireValue' => true));
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'choose', 'validValues' => array('choose', 'save', 'dont_save', 'upload', 'delete')));
 
+// only users with the right to edit inventory could use this script
+if ($gCurrentUser->editInventory() == false)
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+}
+
 // in ajax mode only return simple text on error
 if($getMode == 'delete')
 {
@@ -39,12 +45,6 @@ if (ini_get('file_uploads') != '1')
 // read user data and show error if user doesn't exists
 $gInventoryFields = new InventoryFields($gDb, $gCurrentOrganization->getValue('org_id'));
 $inventory = new Inventory($gDb, $gInventoryFields, $getItemId);
-
-// prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-if($gCurrentUser->editInventory($inventory) == false)
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-}
 
 // bei Ordnerspeicherung pruefen ob der Unterordner in adm_my_files mit entsprechenden Rechten existiert
 if($gPreferences['profile_photo_storage'] == 1)
@@ -163,15 +163,11 @@ if($getMode == 'choose')
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new HtmlPage();
+    $page = new HtmlPage($headline);
     
-    // show headline of module
-    $page->addHeadline($headline);
-
-    // create module menu with back link
-    $profilePhotoMenu = new HtmlNavbar('menu_profile_photo', $headline, $page);
+    // add back link to module menu
+    $profilePhotoMenu = $page->getMenu();
     $profilePhotoMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-    $page->addHtml($profilePhotoMenu->show(false));
 
     // show form
     $form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/inventory/item_photo_edit.php?mode=upload&amp;inv_id='.$getItemId, $page, array('enableFileUpload' => true));
@@ -249,13 +245,10 @@ elseif($getMode == 'upload')
     }
     
     // create html page object
-    $page = new HtmlPage();
+    $page = new HtmlPage($headline);
     $page->addJavascript('$("#btn_cancel").click(function() {
         self.location.href=\''.$g_root_path.'/adm_program/modules/inventory/item_photo_edit.php?mode=dont_save&inv_id='.$getItemId.'\';
     });', true);
-    
-    // show headline of module
-    $page->addHeadline($headline);
 
     // show form
     $form = new HtmlForm('show_new_profile_picture_form', $g_root_path.'/adm_program/modules/inventory/item_photo_edit.php?mode=save&amp;inv_id='.$getItemId, $page);

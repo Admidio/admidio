@@ -97,6 +97,10 @@ body {
         letter-spacing: 0.1em;
         padding: 7px 10px 7px 5px;
     }
+    
+    #adm_menu_item_login, #adm_menu_item_registration {
+        display: none !important;
+    }
 }
 
 .admidio-container {
@@ -110,6 +114,10 @@ body {
         border-radius: 15px;
         margin-bottom: 25px;
         padding: 15px;
+    }
+    
+    .admidio-default-menu-item {
+        display: none !important;
     }
 }
 
@@ -235,14 +243,14 @@ a.btn {
 /* Settings for all icons */
 /**************************/
 
-.admidio-icon-link img, .admidio-icon-info, .btn img {
+.admidio-icon-link img, .admidio-icon-info, .btn img, .dropdown-toggle span {
     border: none;
     vertical-align: text-top;
     margin-left: 3px;
     height: 16px;
 }
 
-.navbar-link img, .btn img, .alert .glyphicon, .btn {
+.navbar-link img, .btn img, .alert .glyphicon, .btn, .dropdown-toggle span {
     margin-right: 5px;
 }
 
@@ -285,8 +293,8 @@ a.btn {
 
 .navbar-brand {
     color: #474b4c !important;
-    height: 40px;
     padding: 10px 15px 10px 15px;
+    line-height: inherit;
 }
 
 .navbar-toggle {

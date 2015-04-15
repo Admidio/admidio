@@ -100,7 +100,7 @@ if ($parentRoleSet == null)
 $roleSet = $folder->getRoleArrayOfFolder();
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 $page->addJavascript('$("#fol_public").click(function() {showBlock("adm_roles_box");});
                       $("#btn_save").click(function () {sendForm();});', true);
@@ -147,13 +147,9 @@ $page->addJavascript('
         $("#adm_form_folder_rights").submit();
     }');
 
-// show headline of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$folderConfigMenu = new HtmlNavbar('menu_folder_config', $headline, $page);
+// add back link to module menu
+$folderConfigMenu = $page->getMenu();
 $folderConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($folderConfigMenu->show(false));
 
 // show form
 $form = new HtmlForm('adm_form_folder_rights', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page, array('type' => 'vertical'));

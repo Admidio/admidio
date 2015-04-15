@@ -43,15 +43,11 @@ else
 }
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
-// add headline and title of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$importMenu = new HtmlNavbar('menu_import', $headline, $page);
+// add back link to module menu
+$importMenu = $page->getMenu();
 $importMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($importMenu->show(false));
 
 // show form
 $form = new HtmlForm('import_users_form', $g_root_path.'/adm_program/modules/members/import_function.php', $page, array('enableFileUpload' => true));

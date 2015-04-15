@@ -22,6 +22,12 @@ $getNewItem   = admFuncVariableIsValid($_GET, 'new_item', 'numeric');
 
 $registrationOrgId = $gCurrentOrganization->getValue('org_id');
 
+// only users with the right to edit inventory could use this script
+if ($gCurrentUser->editInventory() == false)
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+}
+
 // if new_inventory isn't set and no inventory id is set then show dialog to create a inventory
 if($getItemId == 0 && $getNewItem == 0)
 {
@@ -97,19 +103,15 @@ if(isset($_SESSION['profile_request']))
 }
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 $page->addJavascript('
     var profileJS = new profileJSClass();
     profileJS.init();', true);
 
-// show headline of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$profileEditMenu = new HtmlNavbar('menu_item_edit', $headline, $page);
+// add back link to module menu
+$profileEditMenu = $page->getMenu();
 $profileEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($profileEditMenu->show(false));
 
 // create html form
 $form = new HtmlForm('edit_item_form', $g_root_path.'/adm_program/modules/inventory/item_save.php?item_id='.$getItemId.'&amp;new_item='.$getNewItem, $page);

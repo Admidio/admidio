@@ -184,7 +184,7 @@ else
     $resultUser = $gDb->query($sql);
 
     // create html page object
-    $page = new HtmlPage();
+    $page = new HtmlPage($headline);
 
     $javascriptCode = '';
 
@@ -260,18 +260,13 @@ else
 
     $page->addJavascript($javascriptCode, true);
 
-    // add headline and title of module
-    $page->addHeadline($headline);
-
-    // create module menu
-    $membersAssignmentMenu = new HtmlNavbar('menu_members_assignment', $headline, $page);
+    // get module menu
+    $membersAssignmentMenu = $page->getMenu();
     $membersAssignmentMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
     $membersAssignmentMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
     $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), 0, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
     $membersAssignmentMenu->addForm($navbarForm->show(false));
-    // show module menu
-    $page->addHtml($membersAssignmentMenu->show(false));
 
     // create table object
     $table = new HtmlTable('tbl_assign_role_membership', $page, true, true, 'table table-condensed');

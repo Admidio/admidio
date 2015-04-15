@@ -45,9 +45,7 @@ $headline = $gL10n->get('BAC_DATABASE_BACKUP');
 
 
 // create html page object
-$page = new HtmlPage();
-
-$page->addHeadline($headline);
+$page = new HtmlPage($headline);
 
 $backupabsolutepath = $myFilesBackup->getFolder().'/'; // make sure to include trailing slash
 
@@ -79,14 +77,12 @@ if($getMode == 'show_list')
     // sort files (filename/date)
     sort($existingBackupFiles);
     
-    // create module menu
-    $backupMenu = new HtmlNavbar('admMenuBackup', $headline, $page);
+    // get module menu
+    $backupMenu = $page->getMenu();
     
     // show link to create new backup
     $backupMenu->addItem('admMenuItemNewBackup', $g_root_path.'/adm_program/modules/backup/backup.php?mode=create_backup', 
     							$gL10n->get('BAC_START_BACKUP'), 'database_save.png');
-    
-    $page->addHtml($backupMenu->show(false));
     
     //Define table
     $table = new HtmlTable('tableList', $page, true);

@@ -124,7 +124,7 @@ else
 }
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 $page->addJavascript('
     $("#menu_item_create_user").attr("data-toggle", "modal");
@@ -135,10 +135,8 @@ $page->addJavascript('
         window.location.replace("'.$g_root_path.'/adm_program/modules/members/members.php?members='.$flagShowMembers.'");
     });', true);
 
-$page->addHeadline($headline);
-
-// create module menu
-$membersAdministrationMenu = new HtmlNavbar('menu_members_administration', $headline, $page);
+// get module menu
+$membersAdministrationMenu = $page->getMenu();
 
 $membersAdministrationMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
 
@@ -173,8 +171,6 @@ if($gCurrentUser->isWebmaster())
 	$membersAdministrationMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=user_management', 
 						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
 }
-
-$page->addHtml($membersAdministrationMenu->show(false));
 
 //Create table object
 $membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-condensed');

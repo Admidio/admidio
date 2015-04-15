@@ -50,7 +50,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 unset($_SESSION['categories_request']);
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 $page->addJavascript('
 	function moveCategory(direction, catID) {
@@ -100,16 +100,14 @@ $page->addJavascript('
 		}
 	}');
 
-$page->addHeadline($headline);
-
 $htmlIconLoginUser = '&nbsp;';
 if($getType != 'USF')
 {
     $htmlIconLoginUser = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" />';
 }
 
-// create module menu
-$categoriesMenu = new HtmlNavbar('admMenuCategories', $headline, $page);
+// get module menu
+$categoriesMenu = $page->getMenu();
 
 // show back link
 $categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
@@ -117,7 +115,6 @@ $categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10
 // define link to create new category
 $categoriesMenu->addItem('admMenuItemNewCategory', $g_root_path.'/adm_program/modules/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
 							$gL10n->get('SYS_CREATE_VAR', $getTitle), 'add.png');
-$page->addHtml($categoriesMenu->show(false));
 
 //Create table object
 $categoriesOverview = new HtmlTable('tbl_categories', $page, true);

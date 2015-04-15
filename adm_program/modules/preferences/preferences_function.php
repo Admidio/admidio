@@ -261,18 +261,14 @@ case 2:
     $headline = $gL10n->get('INS_ADD_ANOTHER_ORGANIZATION');
 
     // create html page object
-    $page = new HtmlPage();
+    $page = new HtmlPage($headline);
     
     // add current url to navigation stack
     $gNavigation->addUrl(CURRENT_URL, $headline);
     
-    // add headline and title of module
-    $page->addHeadline($headline);
-    
-    // create module menu with back link
-    $organizationNewMenu = new HtmlNavbar('menu_organization_new', $headline, $page);
+    // add back link to module menu
+    $organizationNewMenu = $page->getMenu();
     $organizationNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-    $page->addHtml($organizationNewMenu->show(false));
     
     $page->addHtml('<p class="lead">'.$gL10n->get('ORG_NEW_ORGANIZATION_DESC').'</p>');
 

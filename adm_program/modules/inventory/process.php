@@ -2,11 +2,11 @@
 
 	require_once('../../system/common.php');
 	
-	// check for valid login
-	if (!$gValidLogin)
-	{
-		$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-	}
+    // only users with the right to edit inventory could use this script
+    if ($gCurrentUser->editInventory() == false)
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    }
 
 	$postFunction = admFuncVariableIsValid($_POST, 'function', 'string');
 	$postNickname = admFuncVariableIsValid($_POST, 'nickname', 'string');

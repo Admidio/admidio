@@ -24,13 +24,10 @@ $headline = 'Admidio '.$gL10n->get('SYS_OVERVIEW');
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage();
-
-// show headline of script
-$page->addHeadline($headline);
+$page = new HtmlPage($headline);
 
 // menu of the page
-$moduleMenu = new HtmlNavbar('adm_menu_overview', $headline, $page);
+$moduleMenu = $page->getMenu();
 
 if($gValidLogin == 1)
 {
@@ -50,7 +47,6 @@ else
         $moduleMenu->addItem('adm_menu_item_registration', $g_root_path.'/adm_program/modules/registration/registration.php', $gL10n->get('SYS_REGISTRATION'), 'new_registrations.png');
     }
 }
-$page->addHtml($moduleMenu->show(false));
 
 // menu with links to all modules of Admidio
 $moduleMenu = new Menu('index_modules', $gL10n->get('SYS_MODULES'));

@@ -103,15 +103,11 @@ else
     /*********************HTML_PART*******************************/
 
     // create html page object
-    $page = new HtmlPage();
-    
-    // show headline of module
-    $page->addHeadline($headline);
+    $page = new HtmlPage($headline);
 
-    // create module menu with back link
-    $lostPasswordMenu = new HtmlNavbar('menu_lost_password', $headline, $page);
+    // add back link to module menu
+    $lostPasswordMenu = $page->getMenu();
     $lostPasswordMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-    $page->addHtml($lostPasswordMenu->show(false));
 
     $page->addHtml('<p class="lead">'.$gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION').'</p>');
 

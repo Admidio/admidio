@@ -117,15 +117,11 @@ catch(AdmException $e)
 }
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
-// show headline of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$downloadRenameMenu = new HtmlNavbar('menu_download_rename', $headline, $page);
+// add back link to module menu
+$downloadRenameMenu = $page->getMenu();
 $downloadRenameMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($downloadRenameMenu->show(false));
 
 // create html form
 $form = new HtmlForm('edit_download_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id='.$getFolderId.'&amp;file_id='.$getFileId, $page);

@@ -85,7 +85,7 @@ $childRoles = RoleDependency::getChildRoles($gDb,$getRoleId);
 $childRoleObjects = array();
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 $page->addJavascript('
     checkMaxMemberCount();
@@ -127,13 +127,9 @@ $page->addJavascript('
             }
         }');
 
-// add headline and title of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$rolesEditMenu = new HtmlNavbar('menu_roles_edit', $headline, $page);
+// add back link to module menu
+$rolesEditMenu = $page->getMenu();
 $rolesEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($rolesEditMenu->show(false));
 
 // show form
 $form = new HtmlForm('roles_edit_form', $g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$getRoleId.'&amp;mode=2', $page);
@@ -222,10 +218,10 @@ $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
     {
     	$form->addCheckbox('rol_weblinks', $gL10n->get('ROL_RIGHT_WEBLINKS'), $role->getValue('rol_weblinks'), array('icon' => 'weblinks.png'));
     }
-	if($gPreferences['enable_inventory_module'] > 0)
+	/*if($gPreferences['enable_inventory_module'] > 0)
     {
     	$form->addCheckbox('rol_inventory', $gL10n->get('ROL_RIGHT_INVENTORY'), $role->getValue('rol_inventory'), array('icon' => 'inventory.png'));
-    }
+    }*/
 $form->closeGroupBox();
 $form->openGroupBox('gb_dates_meetings', $gL10n->get('DAT_DATES').' / '.$gL10n->get('ROL_MEETINGS').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');
     $form->addInput('rol_start_date', $gL10n->get('ROL_VALID_FROM'), $role->getValue('rol_start_date'), array('type' => 'date'));
