@@ -773,7 +773,8 @@ $page->addHtml('
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
-            </div>
+            </div>');
+            /*
 			<div class="panel panel-default" id="panel_links">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -797,10 +798,10 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-        </div>
+            */
+        $page->addHtml('</div>
     </div>
-</div>
-');
+</div>');
 
 $page->show();
 

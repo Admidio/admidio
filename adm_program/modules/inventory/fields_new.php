@@ -18,8 +18,8 @@ require_once('../../system/login_valid.php');
 // Initialize and check the parameters
 $getInfId = admFuncVariableIsValid($_GET, 'inf_id', 'numeric');
 
-// nur berechtigte User duerfen die Profilfelder bearbeiten
-if (!$gCurrentUser->isWebmaster())
+// only users with the right to edit inventory could use this script
+if ($gCurrentUser->editInventory() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

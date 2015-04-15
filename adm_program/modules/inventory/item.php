@@ -19,6 +19,12 @@ require_once('../../system/login_valid.php');
 // Initialize and check the parameters
 $getItemId = admFuncVariableIsValid($_GET, 'item_id', 'numeric');
 
+// only users with the right to edit inventory could use this script
+if ($gCurrentUser->editInventory() == false)
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+}
+
 // create item object
 $gInventoryFields = new InventoryFields($gDb, $gCurrentOrganization->getValue('org_id'));
 $inventory = new Inventory($gDb, $gInventoryFields, $getItemId);

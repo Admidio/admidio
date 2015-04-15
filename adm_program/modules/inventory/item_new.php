@@ -22,6 +22,12 @@ $getNewItem   = admFuncVariableIsValid($_GET, 'new_item', 'numeric');
 
 $registrationOrgId = $gCurrentOrganization->getValue('org_id');
 
+// only users with the right to edit inventory could use this script
+if ($gCurrentUser->editInventory() == false)
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+}
+
 // if new_inventory isn't set and no inventory id is set then show dialog to create a inventory
 if($getItemId == 0 && $getNewItem == 0)
 {

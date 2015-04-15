@@ -82,12 +82,6 @@
                 $moduleMenu->addItem('links', '/adm_program/modules/links/links.php',
                                     $gL10n->get('LNK_WEBLINKS'), '/icons/weblinks.png');
             }
-            if( $gPreferences['enable_inventory_module'] == 1
-            || ($gPreferences['enable_inventory_module'] == 2 && $gValidLogin))            
-            {
-                $moduleMenu->addItem('inventory', '/adm_program/modules/inventory/inventory.php',
-                                    $gL10n->get('INV_INVENTORY'), '/icons/inventory.png');
-            }
 
             if($gCurrentUser ->isWebmaster() || $gCurrentUser ->manageRoles() || $gCurrentUser ->approveUsers() || $gCurrentUser ->editUsers())
             {

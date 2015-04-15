@@ -86,6 +86,9 @@ class HtmlPage
         }
     }
     
+    /** Add content to the header segment of a html page.
+     *  @param $header Content for the html header segement.
+     */
     public function addHeader($header)
     {
         $this->header .= $header;
@@ -145,6 +148,123 @@ class HtmlPage
         }
     }
     
+    
+    public function addDefaultMenu()
+    {
+        global $gL10n, $gPreferences, $gValidLogin, $gDb, $gCurrentUser;
+        
+        $this->menu->addItem('menu_item_modules', null, $gL10n->get('SYS_MODULES'), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
+
+        if( $gPreferences['enable_announcements_module'] == 1
+        || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
+        {
+            $this->menu->addItem('menu_item_announcements', '/adm_program/modules/announcements/announcements.php',
+                                $gL10n->get('ANN_ANNOUNCEMENTS'), 'announcements.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
+        }
+        if($gPreferences['enable_download_module'] == 1)
+        {
+            $this->menu->addItem('menu_item_download', '/adm_program/modules/downloads/downloads.php',
+                                $gL10n->get('DOW_DOWNLOADS'), 'download.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
+        }
+        if($gPreferences['enable_mail_module'] == 1 && $gValidLogin == false)
+        {
+            $this->menu->addItem('menu_item_email', '/adm_program/modules/messages/messages_write.php',
+                                $gL10n->get('SYS_EMAIL'), 'email.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
+        }
+
+        if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
+        {
+			// get number of unread messages for user
+			$message = new TableMessage($gDb);
+            $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
+
+            if ($unread > 0)
+            {
+                $this->menu->addItem('menu_item_private_message', '/adm_program/modules/messages/messages.php',
+                                $gL10n->get('SYS_MESSAGES').'<span class="badge">'.$unread.'</span>', 'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
+            }
+            else
+            {
+                $this->menu->addItem('menu_item_private_message', '/adm_program/modules/messages/messages.php',
+                                $gL10n->get('SYS_MESSAGES'), 'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
+            }
+        }
+        if($gPreferences['enable_photo_module'] == 1 
+        || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
+        {
+            $this->menu->addItem('menu_item_photo', '/adm_program/modules/photos/photos.php',
+                                $gL10n->get('PHO_PHOTOS'), 'photo.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
+        }
+        if( $gPreferences['enable_guestbook_module'] == 1
+        || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))            
+        {
+            $this->menu->addItem('menu_item_guestbook', '/adm_program/modules/guestbook/guestbook.php',
+                                $gL10n->get('GBO_GUESTBOOK'), 'guestbook.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
+        }
+        
+        $this->menu->addItem('menu_item_lists', '/adm_program/modules/lists/lists.php',
+                            $gL10n->get('LST_LISTS'), 'lists.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
+        $this->menu->addItem('menu_item_mylist', '/adm_program/modules/lists/mylist.php',
+                            $gL10n->get('LST_MY_LIST'), 'mylist.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
+        
+        if( $gPreferences['enable_dates_module'] == 1
+        || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))                    
+        {
+            $this->menu->addItem('menu_item_dates', '/adm_program/modules/dates/dates.php',
+                                $gL10n->get('DAT_DATES'), 'dates.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
+        }
+
+        if( $gPreferences['enable_weblinks_module'] == 1
+        || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))            
+        {
+            $this->menu->addItem('menu_item_links', '/adm_program/modules/links/links.php',
+                                $gL10n->get('LNK_WEBLINKS'), 'weblinks.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
+        }
+        
+        if($gCurrentUser ->isWebmaster() || $gCurrentUser ->manageRoles() || $gCurrentUser ->approveUsers() || $gCurrentUser ->editUsers())
+        {
+            $this->menu->addItem('menu_item_administration', null, $gL10n->get('SYS_ADMINISTRATION'), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
+            
+            if($gCurrentUser ->approveUsers() && $gPreferences['registration_mode'] > 0)
+            {
+                $this->menu->addItem('menu_item_registration', '/adm_program/modules/registration/registration.php',
+                                    $gL10n->get('NWU_NEW_REGISTRATIONS'), 'new_registrations.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
+            }
+            if($gCurrentUser ->editUsers())
+            {
+                $this->menu->addItem('menu_item_members', '/adm_program/modules/members/members.php',
+                                    $gL10n->get('MEM_USER_MANAGEMENT'), 'user_administration.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
+            }
+            if($gCurrentUser ->manageRoles())
+            {
+                $this->menu->addItem('menu_item_roles', '/adm_program/modules/roles/roles.php',
+                                    $gL10n->get('ROL_ROLE_ADMINISTRATION'), 'roles.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
+            }
+            if($gCurrentUser ->isWebmaster())
+            {
+                $this->menu->addItem('menu_item_backup', '/adm_program/modules/backup/backup.php',
+                                    $gL10n->get('BAC_DATABASE_BACKUP'), 'backup.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
+                $this->menu->addItem('menu_item_options', '/adm_program/modules/preferences/preferences.php',
+                                    $gL10n->get('SYS_SETTINGS'), 'options.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
+            }
+        }
+        
+        if($gValidLogin)
+        {
+            // show link to own profile
+            $this->menu->addItem('menu_item_my_profile', '/adm_program/modules/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'), 'profile.png', 'right', 'navbar', 'admidio-default-menu-item');
+            // show logout link
+            $this->menu->addItem('menu_item_logout', '/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'), 'door_in.png', 'right', 'navbar', 'admidio-default-menu-item');
+        }
+        else
+        {
+            // show registration link
+            $this->menu->addItem('menu_item_registration', '/adm_program/modules/registration/registration.php', $gL10n->get('SYS_REGISTRATION'), 'new_registrations.png', 'right', 'navbar', 'admidio-default-menu-item');
+            // show login link
+            $this->menu->addItem('menu_item_login', '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'), 'key.png', 'right', 'navbar', 'admidio-default-menu-item');
+        }
+    }
+    
     /** Adds a RSS file to the html page.
      *  @param $file  The url with filename of the rss file.
      *  @param $title Optional set a title. This is the name of the feed and
@@ -194,9 +314,6 @@ class HtmlPage
     public function hasNavbar()
     {
         $this->hasNavbar = true;
-        
-        // set css clss to hide headline in mobile mode if navbar is shown
-        $this->pageContent = str_replace('<h1>'.$this->headline.'</h1>', '<h1 class="hidden-xs">'.$this->headline.'</h1>', $this->pageContent);
     }
     
     /** If print mode is set then a print specific css file will be loaded.
@@ -230,6 +347,9 @@ class HtmlPage
         $htmlMyHeader     = '';
         $htmlMyBodyTop    = '';
         $htmlMyBodyBottom = '';
+        
+        // add modules and administration modules to the menu
+        $this->addDefaultMenu();
         
         // add admidio css file at last because there the user can redefine all css
         $this->addCssFile(THEME_PATH.'/css/admidio.css');
@@ -366,6 +486,12 @@ class HtmlPage
             $htmlMyBodyBottom.'          
         </body>
         </html>';
+        
+        if($this->hasNavbar == true)
+        {
+            // set css clss to hide headline in mobile mode if navbar is shown
+            $html = str_replace('<h1>'.$this->headline.'</h1>', '<h1 class="hidden-xs">'.$this->headline.'</h1>', $html);
+        }
 
         // now show the complete html of the page
         if($directOutput)

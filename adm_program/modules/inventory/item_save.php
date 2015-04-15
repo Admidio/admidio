@@ -20,10 +20,10 @@ require_once('../../system/common.php');
 $getItemId  = admFuncVariableIsValid($_GET, 'item_id', 'numeric');
 $getNewItem = admFuncVariableIsValid($_GET, 'new_item', 'numeric');
 
-// if current user has no valid login show error
-if($gValidLogin == false)
+// only users with the right to edit inventory could use this script
+if ($gCurrentUser->editInventory() == false)
 {
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // save form data in session for back navigation
