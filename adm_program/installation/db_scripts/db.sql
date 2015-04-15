@@ -905,8 +905,11 @@ alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CHANGE foreign k
 
 alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_SENDER foreign key (msg_usr_id_sender)
       references %PREFIX%_users (usr_id) on delete restrict on update restrict;
-alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_RECEIVER foreign key (msg_usr_id_receiver)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_MSG_ID foreign key (msc_msg_id) 
+      references %PREFIX%_messages (msg_id) on delete restrict on update restrict
+alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_USR_ID foreign key (msc_usr_id) 
+      references %PREFIX%_users (usr_id) on delete set null on update restrict
 
 alter table %PREFIX%_organizations add constraint %PREFIX%_FK_ORG_ORG_PARENT foreign key (org_org_id_parent)
       references %PREFIX%_organizations (org_id) on delete set null on update restrict;

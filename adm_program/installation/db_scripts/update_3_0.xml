@@ -136,8 +136,8 @@
 	<step id="440">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('ecard_view_width', 'ecard_view_height', 'enable_ecard_cc_recipients', 'ecard_cc_recipients', 'photo_upload_mode', 'photo_slideshow_speed')</step>
 	<step id="450">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_inventory boolean not null default '0'</step>
 	<step id="460">alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_SENDER foreign key (msg_usr_id_sender) references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
-	<step id="470">alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_RECEIVER foreign key (msg_usr_id_receiver) references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
 	<step id="480">create index IDX_MSC_PART_ID on %PREFIX%_messages_content (msc_part_id)</step>
-	<step id="490">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_USR_ID foreign key (msg_usr_id) references %PREFIX%_messages (msg_id) on delete set null on update restrict</step>
+	<step id="500">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_USR_ID foreign key (msc_usr_id) references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+	<step id="510">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_MSG_ID foreign key (msc_msg_id) references %PREFIX%_messages (msg_id) on delete restrict on update restrict</step>
 	<step>stop</step>
 </update>

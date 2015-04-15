@@ -24,6 +24,7 @@ drop table if exists %PREFIX%_invent cascade;
 drop table if exists %PREFIX%_links cascade;
 drop table if exists %PREFIX%_members cascade;
 drop table if exists %PREFIX%_messages cascade;
+drop table if exists %PREFIX%_messages_content cascade;
 drop table if exists %PREFIX%_photos cascade;
 drop table if exists %PREFIX%_preferences cascade;
 drop table if exists %PREFIX%_registrations cascade;
