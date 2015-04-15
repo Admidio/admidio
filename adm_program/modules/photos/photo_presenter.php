@@ -72,11 +72,7 @@ if($nextImage <= $photoAlbum->getValue('pho_quantity'))
 }
 
 // create html page object
-$page = new HtmlPage();
-
-// show module headline
-$headline = $photoAlbum->getValue('pho_name');
-$page->addHeadline($headline);
+$page = new HtmlPage($photoAlbum->getValue('pho_name'));
 
 //wenn Popupmode oder Colorbox, dann normalen Kopf unterdruecken
 if($gPreferences['photo_show_mode'] == 0)
@@ -86,8 +82,8 @@ if($gPreferences['photo_show_mode'] == 0)
 
 if($gPreferences['photo_show_mode'] == 2)
 {	
-    // create module menu
-    $photoPresenterMenu = new HtmlNavbar('menu_photo_presenter', $headline, $page);
+    // get module menu
+    $photoPresenterMenu = $page->getMenu();
 
     // if you have no popup or colorbox then show a button back to the album
 	if($gPreferences['photo_show_mode'] == 2)
@@ -108,8 +104,6 @@ if($gPreferences['photo_show_mode'] == 2)
     	$photoPresenterMenu->addItem('menu_item_next_photo', $urlNextImage,
     	                             $gL10n->get('PHO_NEXT_PHOTO'), 'forward.png');
     }	
-
-	$page->addHtml($photoPresenterMenu->show(false));
 }
 
 // Show photo with link to next photo

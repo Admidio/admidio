@@ -24,6 +24,12 @@ $getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'boolean');
 $image         = null;
 $picpath       = THEME_SERVER_PATH. '/images/no_profile_pic.png';
 
+// only users with the right to edit inventory could use this script
+if ($gCurrentUser->editInventory() == false)
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+}
+
 // read inventory data and show error if inventory doesn't exists
 $gInventoryFields = new InventoryFields($gDb, $gCurrentOrganization->getValue('org_id'));
 $inventory = new Inventory($gDb, $gInventoryFields, $getItemId);
@@ -31,12 +37,6 @@ $inventory = new Inventory($gDb, $gInventoryFields, $getItemId);
 if($inventory->getValue('inv_id') == 0)
 {
 	$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-//Testen ob Recht besteht Profil einzusehn
-if($gCurrentUser->editInventory($inventory) == false)
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 //Foto aus adm_my_files

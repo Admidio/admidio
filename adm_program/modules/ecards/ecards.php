@@ -107,7 +107,7 @@ else
 }
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 $page->addJavascriptFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.min.js');
 
@@ -136,11 +136,8 @@ $page->addJavascript('
 		return false;
 	}); ', true);
 
-// add headline and title of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$ecardMenu = new HtmlNavbar('menu_ecard_form', $headline, $page);
+// add back link to module menu
+$ecardMenu = $page->getMenu();
 $ecardMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 if($gCurrentUser->isWebmaster())
@@ -149,8 +146,6 @@ if($gCurrentUser->isWebmaster())
 	$ecardMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=ecards', 
 								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
-
-$page->addHtml($ecardMenu->show(false));
 
 // show form
 $form = new HtmlForm('ecard_form', 'ecard_send.php', $page);

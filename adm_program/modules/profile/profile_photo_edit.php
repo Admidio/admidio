@@ -162,15 +162,11 @@ if($getMode == 'choose')
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new HtmlPage();
-    
-    // show headline of module
-    $page->addHeadline($headline);
+    $page = new HtmlPage($headline);
 
-    // create module menu with back link
-    $profilePhotoMenu = new HtmlNavbar('menu_profile_photo', $headline, $page);
+    // add back link to module menu
+    $profilePhotoMenu = $page->getMenu();
     $profilePhotoMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-    $page->addHtml($profilePhotoMenu->show(false));
 
     // show form
     $form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?mode=upload&amp;usr_id='.$getUserId, $page, array('enableFileUpload' => true));
@@ -248,13 +244,10 @@ elseif($getMode == 'upload')
     }
     
     // create html page object
-    $page = new HtmlPage();
+    $page = new HtmlPage($headline);
     $page->addJavascript('$("#btn_cancel").click(function() {
         self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?mode=dont_save&usr_id='.$getUserId.'\';
     });', true);
-    
-    // show headline of module
-    $page->addHeadline($headline);
 
     // show form
     $form = new HtmlForm('show_new_profile_picture_form', $g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?mode=save&amp;usr_id='.$getUserId, $page);

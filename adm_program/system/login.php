@@ -29,15 +29,11 @@ $row = $gDb->fetch_array();
 $roleWebmaster = new TableRoles($gDb, $row['rol_id']);
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
-// show headline of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$loginMenu = new HtmlNavbar('menu_login', $headline, $page);
+// add back link to module menu
+$loginMenu = $page->getMenu();
 $loginMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($loginMenu->show(false));
 
 // show form
 $form = new HtmlForm('login_form', $g_root_path.'/adm_program/system/login_check.php', $page);

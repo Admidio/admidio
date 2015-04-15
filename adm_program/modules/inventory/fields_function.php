@@ -24,8 +24,8 @@ $getInfId    = admFuncVariableIsValid($_GET, 'inf_id', 'numeric');
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
 
-// nur berechtigte User duerfen die Item fields bearbeiten
-if (!$gCurrentUser->isWebmaster())
+// only users with the right to edit inventory could use this script
+if ($gCurrentUser->editInventory() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

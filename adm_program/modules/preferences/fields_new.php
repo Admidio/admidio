@@ -85,7 +85,7 @@ if(isset($_SESSION['fields_request']))
 }
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 $page->addJavascript('
 	function setValueList() {
@@ -102,13 +102,9 @@ $page->addJavascript('
     setValueList();
     $("#usf_type").click(function() {setValueList();});', true);
 
-// add headline and title of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$profileFieldsEditMenu = new HtmlNavbar('menu_profile_fields_edit', $headline, $page);
+// add back link to module menu
+$profileFieldsEditMenu = $page->getMenu();
 $profileFieldsEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($profileFieldsEditMenu->show(false));
 
 // show form
 $form = new HtmlForm('profile_fields_edit_form', $g_root_path.'/adm_program/modules/preferences/fields_function.php?usf_id='.$getUsfId.'&amp;mode=1', $page);

@@ -54,15 +54,13 @@ $announcementsCount = $announcements->getDataSetCount();
 $gNavigation->addStartUrl(CURRENT_URL, $getHeadline);
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($getHeadline);
 
 // add rss feed to announcements
 if($gPreferences['enable_rss'] == 1)
 {
     $page->addRssFile($g_root_path.'/adm_program/modules/announcements/rss_announcements.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
 };
-
-$page->addHeadline($getHeadline);
 
 // number of announcements per page
 if($gPreferences['announcements_per_page'] > 0)
@@ -74,8 +72,8 @@ else
     $announcementsPerPage = $announcementsCount;
 }
 
-// create module menu
-$announcementsMenu = new HtmlNavbar('menu_announcements_list', $getHeadline, $page);
+// get module menu
+$announcementsMenu = $page->getMenu();
 
 if($gCurrentUser->editAnnouncements())
 {
@@ -90,8 +88,6 @@ if($gCurrentUser->isWebmaster())
 	$announcementsMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=announcements', 
 								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
-
-$page->addHtml($announcementsMenu->show(false));
 
 if($announcementsCount == 0)
 {

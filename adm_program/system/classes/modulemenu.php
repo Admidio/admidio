@@ -10,7 +10,7 @@
  *  The position of the items is important. Only the first items will display
  *  permanently in the module. The other items are summarized in a submenu.
  *  @par Examples
- *  @code   // create module menu
+ *  @code   // get module menu
  *  $myModuleMenu = new ModuleMenu('admMenuMyModule');
  *  
  *  // show link to create new announcement

@@ -48,8 +48,7 @@ class DBCommon
         if(headers_sent() == false && isset($gPreferences) && defined('THEME_SERVER_PATH'))
         {
             // create html page object
-            $page = new HtmlPage();
-            $page->addHeadline($gL10n->get('SYS_DATABASE_ERROR'));
+            $page = new HtmlPage($gL10n->get('SYS_DATABASE_ERROR'));
         }
         
         // transform the database error to html

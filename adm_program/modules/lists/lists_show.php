@@ -255,8 +255,8 @@ if($getMode != 'csv')
                 window.open("'.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&mode=print&rol_id='.$getRoleId.'&show_members='.$getShowMembers.'", "_blank");
             });', true);
         
-        // create module menu
-        $listsMenu = new HtmlNavbar('menu_lists_list', $headline, $page);
+        // get module menu
+        $listsMenu = $page->getMenu();
 
         $listsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
@@ -286,9 +286,6 @@ if($getMode != 'csv')
                                   'pdfl' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')', 'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')');
         $form->addSelectBox('export_list_to', null, $selectBoxEntries, array('showContextDependentFirstEntry' => false));
         $listsMenu->addForm($form->show(false));
-
-        // show module menu
-        $page->addHtml($listsMenu->show(false));
     }
 
     // Create table object for display

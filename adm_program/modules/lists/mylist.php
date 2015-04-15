@@ -74,7 +74,7 @@ elseif($getListId > 0)
 }
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 $javascriptCode = '
     var listId             = '.$getListId.';
@@ -501,16 +501,12 @@ $page->addJavascript('$(document).ready(function() {
     }
 });', true);
 
-$page->addHeadline($headline);
-
 // if mylist was not called directly then show link to navigate to previous page
 if($gNavigation->count() > 1)
 {
-    // create module menu with back link
-    $myListMenu = new HtmlNavbar('menu_my_list', $headline, $page);
+    // add back link to module menu
+    $myListMenu = $page->getMenu();
     $myListMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-    $page->addHtml($myListMenu->show(false));
-
 }
 
 $page->addHtml(' 

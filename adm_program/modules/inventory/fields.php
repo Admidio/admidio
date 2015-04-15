@@ -11,8 +11,8 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
-// nur berechtigte User duerfen die Profilfelder bearbeiten
-if (!$gCurrentUser->isWebmaster())
+// only users with the right to edit inventory could use this script
+if ($gCurrentUser->editInventory() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -25,7 +25,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 unset($_SESSION['fields_request']);
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 $page->addJavascript('$(".admidio-group-heading").click(function() {showHideBlock($(this).attr("id"));});', true);
 $page->addJavascript('
@@ -76,10 +76,8 @@ $page->addJavascript('
         }
     }');
 
-$page->addHeadline($headline);
-
-// create module menu
-$fieldsMenu = new HtmlNavbar('menu_profile_fields', $headline, $page);
+// get module menu
+$fieldsMenu = $page->getMenu();
 
 // show back link
 $fieldsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
@@ -90,7 +88,6 @@ $fieldsMenu->addItem('menu_item_new_field', $g_root_path.'/adm_program/modules/i
 // define link to maintain categories
 $fieldsMenu->addItem('menu_item_maintain_category', $g_root_path.'/adm_program/modules/categories/categories.php?type=INF', 
 							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
-$page->addHtml($fieldsMenu->show(false));
 
 $sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_INVENT_FIELDS. '
          WHERE cat_type   = \'INF\'

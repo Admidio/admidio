@@ -47,7 +47,7 @@ $weblink->save();
 if ($gPreferences['weblinks_redirect_seconds'] > 0)
 {
     // create html page object
-    $page = new HtmlPage();
+    $page = new HtmlPage($gL10n->get('LNK_REDIRECT'));
 
     // add special header for automatic redirection after x seconds
 	$page->addHeader('<meta http-equiv="refresh" content="'. $gPreferences['weblinks_redirect_seconds'].'; url='.$weblink->getValue('lnk_url').'">');
@@ -60,9 +60,6 @@ if ($gPreferences['weblinks_redirect_seconds'] > 0)
 			}
 		};
 		countDown(true);');
-
-    // show headline of module
-    $page->addHeadline($gL10n->get('LNK_REDIRECT'));
 	
 	// Html des Modules ausgeben
 	$page->addHtml('

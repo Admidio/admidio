@@ -103,15 +103,11 @@ if($member_found == 0)
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
-// add headline and title of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$registrationAssignMenu = new HtmlNavbar('menu_registration_assign', $headline, $page);
+// add back link to module menu
+$registrationAssignMenu = $page->getMenu();
 $registrationAssignMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($registrationAssignMenu->show(false));
 
 $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('LAST_NAME')).'</p>
 

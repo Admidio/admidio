@@ -115,7 +115,7 @@ if($getLocked=='1' || $getLocked=='0')
 /*********************HTML_PART*******************************/
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 // add rss feed to announcements
 if($gPreferences['enable_rss'] == 1)
@@ -164,11 +164,8 @@ if($getPhotoNr > 0)
     $page->addJavascript('$("#img_'.$getPhotoNr.'").trigger("click");', true);
 }
 
-// show module headline
-$page->addHeadline($headline);
-
-// create module menu
-$photosMenu = new HtmlNavbar('menu_photos', $headline, $page);
+// get module menu
+$photosMenu = $page->getMenu();
 
 if($photoAlbum->getValue('pho_id') > 0)
 {
@@ -203,8 +200,6 @@ if($gCurrentUser->isWebmaster())
 	$photosMenu->addItem('menu_item_preferences_photos', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=photos', 
 								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
-
-$page->addHtml($photosMenu->show(false));
 
 //Breadcrump bauen
 $navilink = '';

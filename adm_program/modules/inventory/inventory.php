@@ -12,8 +12,8 @@
 
 require_once('../../system/common.php');
 
-// only legitimate users are allowed to call the inventory management
-if (!$gCurrentUser->editUsers())
+// only users with the right to edit inventory could use this script
+if ($gCurrentUser->editInventory() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -41,16 +41,14 @@ $sql    = 'SELECT inv_id, item_name.ind_value as item_name, room_id.ind_value as
 $result_mgl  = $gDb->query($sql);
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
 $page->addJavascript('
         $(".admidio-icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
 		', true);
 
-$page->addHeadline($headline);
-
-// create module menu
-$itemsAdministrationMenu = new HtmlNavbar('menu_inventory_administration', $headline, $page);
+// get module menu
+$itemsAdministrationMenu = $page->getMenu();
 
 $itemsAdministrationMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/inventory/item_new.php', $gL10n->get('INV_CREATE_ITEM'), 'add.png');
 
@@ -62,8 +60,6 @@ if($gCurrentUser->isWebmaster())
 	// show link to maintain profile fields
 	$itemsAdministrationMenu->addItem('menu_item_maintain_inventory_fields', $g_root_path. '/adm_program/modules/inventory/fields.php', $gL10n->get('PRO_MAINTAIN_ITEM_FIELDS'), 'application_form_edit.png');
 }
-
-$page->addHtml($itemsAdministrationMenu->show(false));
 
 //Create table object
 $itemsTable = new HtmlTable('tbl_invent', $page, true, true, 'table table-condensed');

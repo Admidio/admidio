@@ -157,8 +157,8 @@ $sql = 'SELECT *
          LIMIT '. $guestbook_entries_per_page.' OFFSET '.$getStart;
 $guestbook_result = $gDb->query($sql);
 
-// create module menu
-$guestbookMenu = new HtmlNavbar('menu_guestbook', $getHeadline, $page);
+// get module menu
+$guestbookMenu = $page->getMenu();
 
 if($getGboId == 0 && $getModeration == 0)
 {
@@ -203,9 +203,6 @@ if($gCurrentUser->isWebmaster())
 	$guestbookMenu->addItem('admMenuItemPreferencesGuestbook', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=guestbook', 
 							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
-
-$page->addHtml($guestbookMenu->show(false));
-
 
 if ($gDb->num_rows($guestbook_result) == 0)
 {

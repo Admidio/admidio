@@ -69,10 +69,10 @@ $folderContent = $currentFolder->getFolderContentsForDownload();
 $navigationBar = $currentFolder->getNavigationForDownload();
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
-// create module menu
-$DownloadsMenu = new HtmlNavbar('menu_downloads', $headline, $page);
+// get module menu
+$DownloadsMenu = $page->getMenu();
 
 if ($gCurrentUser->editDownloadRight())
 {
@@ -306,10 +306,6 @@ if ($gCurrentUser->editDownloadRight())
 }
 
 // Output module html to client
-
-$page->addHeadline($headline);
-
-$page->addHtml($DownloadsMenu->show(false));
 
 $page->addHtml($navigationBar);
 

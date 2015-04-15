@@ -77,15 +77,11 @@ else
 }
 
 // create html page object
-$page = new HtmlPage();
+$page = new HtmlPage($headline);
 
-// add headline and title of module
-$page->addHeadline($headline);
-
-// create module menu with back link
-$importCsvConfigMenu = new HtmlNavbar('menu_import_csv_config', $headline, $page);
+// add back link to module menu
+$importCsvConfigMenu = $page->getMenu();
 $importCsvConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-$page->addHtml($importCsvConfigMenu->show(false));
 
 $page->addHtml('<p class="lead">'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>');
 
