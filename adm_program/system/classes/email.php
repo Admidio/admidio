@@ -140,7 +140,7 @@ class Email extends PHPMailer
         
         try
         {
-            $this->AddCC($sdress,$name);
+            $this->AddCC($address,$name);
         }
         catch (phpmailerException $e)
         {
@@ -363,7 +363,7 @@ class Email extends PHPMailer
                     // if number of bcc recipients = 1 then send the mail directly to the user and not as bcc
                     if(count($bccArray) == 1)
                     {
-                        $this->addAddress($bcc['address'], $bcc['name']);
+                        $this->addAddress($bccArray[0]['address'], $bccArray[0]['name']);
                     }
                     else
                     {

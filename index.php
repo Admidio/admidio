@@ -12,13 +12,13 @@ if(file_exists('adm_my_files/config.php'))
 {
     require_once('adm_my_files/config.php');
 
-     // default prefix is set to 'adm' because of compatibility to old versions
+    // default prefix is set to 'adm' because of compatibility to old versions
     if(!isset($g_tbl_praefix))
     {
         $g_tbl_praefix = 'adm';
     }
-    
-     // create database object and establish connection to database
+
+    // create database object and establish connection to database
     if(!isset($gDbType))
     {
         $gDbType = 'mysql';
@@ -37,24 +37,24 @@ if(file_exists('adm_my_files/config.php'))
     {
         header('Location: adm_program/installation/update.php');
     }
-    
-	// if config file exists then show stored homepage
-	require_once('adm_program/system/common.php');
 
-	if(isset($gHomepage))
-	{
-		header('Location: '.$gHomepage);
-	}
-	else
-	{
-		// if parameter gHomepage doesn't exists then show default page
-		header('Location: adm_program/index.php');
-	}
+    // if config file exists then show stored homepage
+    require_once('adm_program/system/common.php');
+
+    if(isset($gHomepage))
+    {
+        header('Location: '.$gHomepage);
+    }
+    else
+    {
+        // if parameter gHomepage doesn't exists then show default page
+        header('Location: adm_program/index.php');
+    }
 }
 else
 {
-	// config file doesn't exists then show installation wizard
-	header('Location: adm_program/installation/index.php');
+    // config file doesn't exists then show installation wizard
+    header('Location: adm_program/installation/index.php');
 }
 
 ?>

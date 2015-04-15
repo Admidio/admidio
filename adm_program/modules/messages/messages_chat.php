@@ -26,11 +26,14 @@ if ($gPreferences['enable_chat_module'] != 1)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
+<<<<<<< HEAD
 $headline = 'Admidio Chat';
 
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
+=======
+>>>>>>> master
 // create html page object
 $page = new HtmlPage($headline);
 
@@ -38,21 +41,31 @@ $page->addJavascriptFile($g_root_path.'/adm_program/modules/messages/chat.js');
 $page->addCssFile(THEME_PATH.'/css/chat.css');
 
 $page->addJavascript('
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
     // kick off chat
     var chat =  new Chat();
-	
+    
     chat.getState();
-	
+    
     $(function() {
         // watch textarea for release of key press [enter]
         $("#sendie").keyup(function(e) {    
             if (e.keyCode == 13) {
-				var text = $(this).val().trim();
-				if (text.length > 0)
+                var text = $(this).val().trim();
+                if (text.length > 0)
                 {
+<<<<<<< HEAD
 					chat.send(text);    
 				}
 				$(this).val("");
+=======
+                    chat.send(text);    
+                }
+                $(this).val("");
+>>>>>>> master
             }
         });
     });

@@ -147,8 +147,11 @@ class ProfileFields
 			elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DROPDOWN'
 			|| $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'RADIO_BUTTON')
 			{
-				$arrListValues = explode("\r\n", $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', 'database'));
 				$arrListValuesWithKeys = array(); 	// array with list values and keys that represents the internal value
+
+                // first replace windows new line with unix new line and then create an array
+                $valueFormated = str_replace("\r\n","\n", $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', 'database'));
+                $arrListValues = explode("\n", $valueFormated);
 
 				foreach($arrListValues as $key => &$listValue)
 				{
