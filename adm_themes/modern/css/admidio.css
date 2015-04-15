@@ -1,5 +1,5 @@
 /******************************************************************************
- * Cascading-Style-Sheets file for Admidio 
+ * Cascading-Style-Sheets file for Admidio
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -12,7 +12,7 @@
 /**************************************************/
 /* Basic Admidio layout classes */
 /**************************************************/
- 
+
 body {
     color: #474b4c;
     margin: auto;
@@ -21,40 +21,40 @@ body {
 
 @media (min-width: 768px) {
     body {
-        padding: 15px 0px;
-        background-color: #96c4cb; 
+        padding: 15px 0;
+        background-color: #96c4cb;
         background-repeat: repeat-x;
-        background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
+        background-image: -moz-linear-gradient(top, #ffffff 0%, #96c4cb 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96c4cb 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96c4cb 95%);
     }
 }
 
 #page {
     text-align: center;
-    margin: 0px auto;
+    margin: 0 auto;
     max-width: 1200px;
 }
 
 @media (min-width: 768px) {
     #header-block {
         padding: 1.5%;
-        background-color: #ffffff; 
+        background-color: #ffffff;
         background-repeat: repeat-x;
-        background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
+        background-image: -moz-linear-gradient(top, #ffffff 0%, #96c4cb 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96c4cb 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96c4cb 95%);
     }
 }
 
 @media (max-width: 768px) {
     #header-block {
-        margin: 0px -15px 0px -15px;
-        background-color: #C1DCE6; 
+        margin: 0 -15px 0 -15px;
+        background-color: #c1dce6;
     }
 }
 
 #page-h1-membership {
-    color: #44939F;
+    color: #44939f;
     font-weight: bold;
     border-bottom: none;
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 @media (min-width: 768px) {
@@ -70,7 +70,7 @@ body {
     position: relative;
     visibility: inherit;
     margin-bottom: -130px;
-    
+
 }
 
 #page-h1-orga {
@@ -78,14 +78,14 @@ body {
     font-weight: bold;
     background-color: #96c4cb;
     background-repeat: repeat-x;
-    background-image: -moz-linear-gradient(top, #55B6C5 0%, #347078 95%); background-image: -webkit-linear-gradient(top, #55B6C5 0%, #347078 95%); background-image: -ms-linear-gradient(top, #55B6C5 0%, #347078 95%);	
+    background-image: -moz-linear-gradient(top, #55b6c5 0%, #347078 95%); background-image: -webkit-linear-gradient(top, #55b6c5 0%, #347078 95%); background-image: -ms-linear-gradient(top, #55b6c5 0%, #347078 95%);
 }
 
 @media (min-width: 768px) {
     #page-h1-orga {
         font-size: 24pt;
         letter-spacing: 0.2em;
-        margin: 0px -3% 25px -3%;
+        margin: 0 -3% 25px -3%;
         padding: 3px 10px 3px 380px;
         border-radius: 5px;
     }
@@ -97,15 +97,15 @@ body {
         letter-spacing: 0.1em;
         padding: 7px 10px 7px 5px;
     }
-    
+
     #adm_menu_item_login, #adm_menu_item_registration {
         display: none !important;
     }
 }
 
 .admidio-container {
-	text-align: left;
-    background-color: #ffffff; 
+    text-align: left;
+    background-color: #ffffff;
 }
 
 @media (min-width: 768px) {
@@ -115,7 +115,7 @@ body {
         margin-bottom: 25px;
         padding: 15px;
     }
-    
+
     .admidio-default-menu-item {
         display: none !important;
     }
@@ -128,7 +128,7 @@ body {
 h1, h2, h3, h4, h5 {
     color: #333333;
     font-weight: bold;
-    margin: 20px 0px 15px 0px;
+    margin: 20px 0 15px 0;
 }
 
 
@@ -154,18 +154,18 @@ h3 {
     h1, h3 {
         padding: 15px 5px;
         border: 1px solid #7d7d7d;
-        border-left: 0px;
-        border-right: 0px;
+        border-left: 0;
+        border-right: 0;
         border-color: #7d7d7d;
-        background-color: #96c4cb; 
+        background-color: #96c4cb;
         background-repeat: repeat-x;
-        background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	        
+        background-image: -moz-linear-gradient(top, #ffffff 0%, #96c4cb 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96c4cb 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96c4cb 95%);
     }
-    
+
     h1 {
         font-size: 18px;
-        font-weight: normal;        
-        margin: 0px -15px 15px -15px;
+        font-weight: normal;
+        margin: 0 -15px 15px -15px;
     }
 
     h3 {
@@ -230,12 +230,12 @@ a:link, a:visited {
 
 a:hover, a:active, a.btn:hover, a.btn:active, a.navbar-link:hover, a.navbar-link:active {
     text-decoration: underline !important;
-    color: #FF9C00 !important;
+    color: #ff9c00 !important;
 }
 
 a.btn {
-    padding-top: 0px;
-    padding-left: 0px;
+    padding-top: 0;
+    padding-left: 0;
     text-align: left !important;
 }
 
@@ -260,7 +260,7 @@ a.btn {
 }
 
 .pagination img {
-    margin: 0px 5px;
+    margin: 0 5px;
 }
 
 /*******************************/
@@ -268,16 +268,16 @@ a.btn {
 /*******************************/
 
 .navbar {
-    min-height: 0px;
+    min-height: 0;
     margin-left: -15px;
     margin-right: -15px;
-    border-radius: 0px;
-    border-left: 0px;
-    border-right: 0px;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
     border-color: #7d7d7d;
-    background-color: #96c4cb; 
+    background-color: #96c4cb;
     background-repeat: repeat-x;
-    background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
+    background-image: -moz-linear-gradient(top, #ffffff 0%, #96c4cb 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96c4cb 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96c4cb 95%);
 }
 
 .nav > li > a {
@@ -303,7 +303,7 @@ a.btn {
 
 .navbar .checkbox {
     padding-top: 2px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .navbar .checkbox input {
@@ -312,12 +312,12 @@ a.btn {
 
 @media (min-width: 768px) {
     .navbar-collapse {
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 0;
+        padding-right: 0;
     }
-    
+
     .navbar-nav > li:first-child > a {
-        padding-left: 0px;
+        padding-left: 0;
     }
 }
 
@@ -345,31 +345,31 @@ a.btn {
 
 
 .admidio-form-vertical .form-control-static {
-    padding-top: 0px;
+    padding-top: 0;
 }
 
 .form-control-static {
-    padding-bottom: 0px;
-    min-height: 0px;
+    padding-bottom: 0;
+    min-height: 0;
 }
 
 .admidio-form-vertical label {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .form-group, input[type="file"] {
     margin-bottom: 10px;
-    padding-top: 0px;
+    padding-top: 0;
 }
 
 form hr {
     border: 1px solid #bad8e2;
     width: 100%;
-    margin-bottom: 15px; 
+    margin-bottom: 15px;
 }
 
 .navbar-form .form-group {
-    margin-left: 0px;
+    margin-left: 0;
     margin-right: 10px;
 }
 
@@ -410,7 +410,7 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 }
 
 .datetime-date-control {
-    display: inline;    
+    display: inline;
 }
 
 .datetime-time-control {
@@ -419,12 +419,12 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 }
 
 .form-horizontal .form-group-editor {
-    margin-left: 0px;
-    margin-right: 0px;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .btn-group .btn {
-    margin-right: 0px;
+    margin-right: 0;
 }
 
 .btn-primary {
@@ -434,8 +434,8 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 }
 
 .btn-primary:hover, .btn-primary:focus {
-    background-color: #387F87;
-    border-color: #387F87;
+    background-color: #387f87;
+    border-color: #387f87;
 }
 
 .btn.disabled {
@@ -453,8 +453,8 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 .admidio-control-mandatory-def {
     font-size: 9pt;
     margin-top: 5px;
-	margin-bottom: -10px;
-	text-align: right;
+    margin-bottom: -10px;
+    text-align: right;
     width: 100%;
     display: inline-block;
 }
@@ -473,13 +473,13 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     letter-spacing: 0.1em;
     border-top-left-radius: 9px;
     border-top-right-radius: 9px;
-    background-color: #96c4cb; 
+    background-color: #96c4cb;
     background-repeat: repeat-x;
-    background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
+    background-image: -moz-linear-gradient(top, #ffffff 0%, #96c4cb 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96c4cb 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96c4cb 95%);
 }
 
 .panel-default.in > .panel-heading {
-    background-image: -moz-linear-gradient(top, #55B6C5 0%, #347078 95%); background-image: -webkit-linear-gradient(top, #55B6C5 0%, #347078 95%); background-image: -ms-linear-gradient(top, #55B6C5 0%, #347078 95%);    
+    background-image: -moz-linear-gradient(top, #55b6c5 0%, #347078 95%); background-image: -webkit-linear-gradient(top, #55b6c5 0%, #347078 95%); background-image: -ms-linear-gradient(top, #55b6c5 0%, #347078 95%);
 }
 
 .panel-heading {
@@ -499,15 +499,15 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 
 /* Panel which includes the ckeditor in a nice way without separate borders */
 .admidio-panel-editor .panel-body {
-    padding: 0px;
+    padding: 0;
 }
 
 .admidio-panel-editor .panel-body .form-group {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .admidio-panel-editor .panel-body .cke_chrome {
-    border-width: 0px;
+    border-width: 0;
 }
 
 .admidio-panel-editor .panel-body .cke_bottom, .admidio-panel-editor .panel-body .cke_inner {
@@ -542,29 +542,29 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     letter-spacing: 0.1em;
     background-color: transparent;
     border-bottom: 2px solid #449ba6;
-    padding: 3px 0px;
+    padding: 3px 0;
 }
 
 .panel-primary > .panel-body {
-    padding: 10px 0px;
+    padding: 10px 0;
 }
 
 
 .panel-primary > .panel-footer {
-    padding: 0px;
+    padding: 0;
     background-color: white;
-    border-top: 2px solid #C1DCE6;
+    border-top: 2px solid #c1dce6;
 }
 
 .admidio-panel-heading-icon {
     margin-right: 8px;
     vertical-align: sub;
-    border-width: 0px;
+    border-width: 0;
 }
 
 .admidio-panel-comment {
-    overflow: hidden; 
-    margin: 10px 20px; 
+    overflow: hidden;
+    margin: 10px 20px;
 }
 
 /*******************************************************************/
@@ -572,7 +572,9 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 /*******************************************************************/
 
 @-moz-document url-prefix() {
-  fieldset { display: table-cell; }
+    fieldset {
+        display: table-cell;
+    }
 }
 
 .table thead > tr > th {
@@ -593,20 +595,20 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 }
 
 .table tbody > tr > td {
-	word-break: break-all;
-	word-wrap: break-word;
+    word-break: break-all;
+    word-wrap: break-word;
 }
 
 .table-hover > tbody > tr:hover > td {
     background-repeat: repeat-x;
     background-color: #a8d9df;
-	background-image: -moz-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
-	background-image: -webkit-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
-	background-image: -ms-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
+    background-image: -moz-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);
+    background-image: -webkit-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);
+    background-image: -ms-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);
 }
 
 .dataTable {
-    border-bottom: 2px solid #C1DCE6;
+    border-bottom: 2px solid #c1dce6;
 }
 
 .dt-bootstrap {
@@ -621,15 +623,15 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     margin-top: 15px;
 }
 
-/* Profile */ 
+/* Profile */
 
 @media (min-width: 768px) {
     #div_profile_photo {
         text-align: right;
     }
-    
+
     #div_profile_photo a.btn {
-        padding-right: 0px;
+        padding-right: 0;
         text-align: right !important;
     }
 }
@@ -646,11 +648,11 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 }
 
 .admidio-list-roles-assign li, .admidio-list-roles-assign-pos li {
-    border-width: 0px;
+    border-width: 0;
 }
 
 .admidio-list-roles-assign li {
-    padding: 0px 0px 15px 0px;
+    padding: 0 0 15px 0;
 }
 
 .admidio-list-roles-assign, .admidio-list-roles-assign-pos {
@@ -658,7 +660,7 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 }
 
 .admidio-list-roles-assign-pos li {
-    padding: 0px 0px 5px 0px;
+    padding: 0 0 5px 0;
 }
 
 /* Photos */
@@ -672,7 +674,7 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 }
 
 .thumbnail:hover {
-    border: 1px solid #FF9C00;
+    border: 1px solid #ff9c00;
 }
 
 .thumbnail {
@@ -686,7 +688,7 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 }
 
 .admidio-weblink-description {
-    padding: 5px 0px;
+    padding: 5px 0;
 }
 
 /* Events */

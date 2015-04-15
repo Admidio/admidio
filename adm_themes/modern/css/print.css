@@ -16,19 +16,19 @@ body {
     background-color: #ffffff;
     background-image: none;
     text-align: center;
-	margin: 20px;
+    margin: 20px;
 }
 
 h1 {
-    border-bottom-width: 0px;
+    border-bottom-width: 0;
 }
 
 .table {
     width: 270mm;
     background-color: #ffffff;
     border: 1px solid #cccccc;
-    padding: 0px;
-    border-spacing: 0px;
+    padding: 0;
+    border-spacing: 0;
     margin: auto;
 }
 
@@ -41,14 +41,14 @@ h1 {
 
 .admidio-group-heading td {
     color: #666666;
-    font-size: 12pt;  
+    font-size: 12pt;
     font-weight: bold;
     letter-spacing: 0.5em;
     background-color: #eeeeee;
     border-bottom: 1px solid #dddddd;
 }
 
-/************************************** 
+/**************************************
  * Style for printview of date module *
  **************************************/
 
@@ -63,7 +63,7 @@ h1 {
     background-color: #eeeeee;
 }
 .odd {
-    background-color: #FFFFFF;
+    background-color: #ffffff;
 }
 /* Settings for highlighted dates */
 .evenHighlight {
@@ -71,17 +71,17 @@ h1 {
     font-weight: bolder;
 }
 .oddHighlight {
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     font-weight: bolder;
 }
 /* Settings for html table */
 .tableDateList {
     margin: auto;
     text-align: center;
-	top: 0px !important;
-	border-collapse: collapse;   
+    top: 0 !important;
+    border-collapse: collapse;
 }
-.tableDateList thead{ 
+.tableDateList thead{
     background-color: #ffffff;
 }
 .tableDateList thead h1 {
@@ -95,33 +95,32 @@ h1 {
 
 }
 .tableDateList th {
-    color:            #000000;
-    font-family:      arial, sans-serif;
-    font-size:        .9em;
+    color: #000000;
+    font-family: arial, sans-serif;
+    font-size: .9em;
     height: 35px;
     background-color: #cccccc;
 }
 .tableDateList tr {
-    font-family:      arial, sans-serif;
+    font-family: arial, sans-serif;
     border: 1px;
-
 }
 .tableDateList td {
-	font-size: .9em;
-	text-align: center;
+    font-size: .9em;
+    text-align: center;
 }
 .tableDateList td .left {
     text-align: left;
 }
-.dateParticipation thead{
+.dateParticipation thead {
     display: none;
 }
 /* Set come columns in tablebody to align: left */
-#style0 :nth-child(5), 
+#style0 :nth-child(5),
 #style0 :nth-child(6),
 #style0 :nth-child(7),
 #style1 :nth-child(5),
 #style1 :nth-child(6),
-#style2 :nth-child(5){
+#style2 :nth-child(5) {
     text-align: left;
 }

@@ -10,14 +10,14 @@
             <?php
 
             include(SERVER_PATH. '/adm_plugins/login_form/login_form.php');
-                        
+
             // prepare the menus here so that the plugins have a chance to modify them
             $moduleMenu = new Menu('modules', $gL10n->get('SYS_MODULES'));
             $adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
-            
+
             $moduleMenu->addItem('overview', '/adm_program/index.php',
                                 $gL10n->get('SYS_OVERVIEW'), '/icons/home.png');
-            
+
             if( $gPreferences['enable_announcements_module'] == 1
             || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
             {
@@ -51,57 +51,57 @@
                                     $gL10n->get('SYS_MESSAGES'), '/icons/messages.png');
                 }
             }
-            if($gPreferences['enable_photo_module'] == 1 
+            if($gPreferences['enable_photo_module'] == 1
             || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
             {
                 $moduleMenu->addItem('photo', '/adm_program/modules/photos/photos.php',
                                     $gL10n->get('PHO_PHOTOS'), '/icons/photo.png');
             }
             if( $gPreferences['enable_guestbook_module'] == 1
-            || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))            
+            || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
             {
                 $moduleMenu->addItem('guestbk', '/adm_program/modules/guestbook/guestbook.php',
                                     $gL10n->get('GBO_GUESTBOOK'), '/icons/guestbook.png');
             }
-            
+
             $moduleMenu->addItem('lists', '/adm_program/modules/lists/lists.php',
                                 $gL10n->get('LST_LISTS'), '/icons/lists.png');
             $moduleMenu->addItem('mylist', '/adm_program/modules/lists/mylist.php',
                                 $gL10n->get('LST_MY_LIST'), '/icons/mylist.png');
-            
+
             if( $gPreferences['enable_dates_module'] == 1
-            || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))                    
+            || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
             {
                 $moduleMenu->addItem('dates', '/adm_program/modules/dates/dates.php',
                                     $gL10n->get('DAT_DATES'), '/icons/dates.png');
             }
 
             if( $gPreferences['enable_weblinks_module'] == 1
-            || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))            
+            || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
             {
                 $moduleMenu->addItem('links', '/adm_program/modules/links/links.php',
                                     $gL10n->get('LNK_WEBLINKS'), '/icons/weblinks.png');
             }
 
-            if($gCurrentUser ->isWebmaster() || $gCurrentUser ->manageRoles() || $gCurrentUser ->approveUsers() || $gCurrentUser ->editUsers())
+            if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
             {
-                
-                if($gCurrentUser ->approveUsers() && $gPreferences['registration_mode'] > 0)
+
+                if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
                 {
                     $adminMenu->addItem('newreg', '/adm_program/modules/registration/registration.php',
                                         $gL10n->get('NWU_NEW_REGISTRATIONS'), '/icons/new_registrations.png');
                 }
-                if($gCurrentUser ->editUsers())
+                if($gCurrentUser->editUsers())
                 {
                     $adminMenu->addItem('usrmgt', '/adm_program/modules/members/members.php',
                                         $gL10n->get('MEM_USER_MANAGEMENT'), '/icons/user_administration.png');
                 }
-                if($gCurrentUser ->manageRoles())
+                if($gCurrentUser->manageRoles())
                 {
                     $adminMenu->addItem('roladm', '/adm_program/modules/roles/roles.php',
                                         $gL10n->get('ROL_ROLE_ADMINISTRATION'), '/icons/roles.png');
                 }
-                if($gCurrentUser ->isWebmaster())
+                if($gCurrentUser->isWebmaster())
                 {
                     $adminMenu->addItem('dbback', '/adm_program/modules/backup/backup.php',
                                         $gL10n->get('BAC_DATABASE_BACKUP'), '/icons/backup.png');
@@ -109,7 +109,7 @@
                                         $gL10n->get('SYS_SETTINGS'), '/icons/options.png');
                 }
             }
-            
+
             $moduleMenu->show();
             $adminMenu->show();
             ?>
