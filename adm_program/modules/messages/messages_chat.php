@@ -26,7 +26,6 @@ if ($gPreferences['enable_chat_module'] != 1)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-$name     = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
 $headline = 'Admidio Chat';
 
 // add current url to navigation stack
@@ -39,9 +38,6 @@ $page->addJavascriptFile($g_root_path.'/adm_program/modules/messages/chat.js');
 $page->addCssFile(THEME_PATH.'/css/chat.css');
 
 $page->addJavascript('
-
-    name =  "'.$name.'";
-
     // kick off chat
     var chat =  new Chat();
 	
@@ -54,7 +50,7 @@ $page->addJavascript('
 				var text = $(this).val().trim();
 				if (text.length > 0)
                 {
-					chat.send(text, name);    
+					chat.send(text);    
 				}
 				$(this).val("");
             }
