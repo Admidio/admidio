@@ -204,8 +204,11 @@ class HtmlPage
         
         $this->menu->addItem('menu_item_lists', '/adm_program/modules/lists/lists.php',
                             $gL10n->get('LST_LISTS'), 'lists.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-        $this->menu->addItem('menu_item_mylist', '/adm_program/modules/lists/mylist.php',
-                            $gL10n->get('LST_MY_LIST'), 'mylist.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
+        if($gValidLogin)
+        {
+            $this->menu->addItem('menu_item_mylist', '/adm_program/modules/lists/mylist.php',
+                                $gL10n->get('LST_MY_LIST'), 'mylist.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
+        }
         
         if( $gPreferences['enable_dates_module'] == 1
         || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))                    

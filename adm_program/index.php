@@ -105,10 +105,13 @@ if( $gPreferences['enable_guestbook_module'] == 1
 $moduleMenu->addItem('lists', '/adm_program/modules/lists/lists.php',
                     $gL10n->get('LST_LISTS'), '/icons/lists_big.png',
                     $gL10n->get('LST_LISTS_DESC'));
-$moduleMenu->addSubItem('lists', 'mylist', '/adm_program/modules/lists/mylist.php',
-                        $gL10n->get('LST_MY_LIST'));
-$moduleMenu->addSubItem('lists', 'rolinac', '/adm_program/modules/lists/lists.php?active_role=0',
-                        $gL10n->get('ROL_INACTIV_ROLE'));
+if($gValidLogin)
+{
+    $moduleMenu->addSubItem('lists', 'mylist', '/adm_program/modules/lists/mylist.php',
+                            $gL10n->get('LST_MY_LIST'));
+    $moduleMenu->addSubItem('lists', 'rolinac', '/adm_program/modules/lists/lists.php?active_role=0',
+                            $gL10n->get('ROL_INACTIV_ROLE'));
+}
 if( $gPreferences['enable_dates_module'] == 1
 || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
 {
