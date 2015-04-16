@@ -156,12 +156,12 @@ while($row_orga = $gDb->fetch_object($result_orga))
     if($gDb->num_rows($result_orga) > 1)
     {
         $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                      VALUES ($row_orga->org_id, 'USF', 'Zusätzliche Daten', 0, 2)";
+                                          VALUES ($row_orga->org_id, 'USF', 'Zusätzliche Daten', 0, 2)";
     }
     else
     {
         $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                      VALUES (NULL, 'USF', 'Zusätzliche Daten', 0, 2)";
+                                          VALUES (NULL, 'USF', 'Zusätzliche Daten', 0, 2)";
     }
     $gDb->query($sql);
     $cat_id_data = $gDb->insert_id();

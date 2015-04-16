@@ -7,11 +7,11 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
- 
+
 //validate old bb-codes before update
 function validate_bbc($table, $idCol, $col)
 {
-    global $gDb;   
+    global $gDb;
     $bbcodes =array(array('o'=>'[b]', 'c'=>'[/b]'),
                     array('o'=>'[i]', 'c'=>'[/i]'),
                     array('o'=>'[u]', 'c'=>'[/u]'),
@@ -21,7 +21,7 @@ function validate_bbc($table, $idCol, $col)
                     array('o'=>'[img', 'c'=>'[/img]'),
                     array('o'=>'[url', 'c'=>'[/url]'),
                     array('o'=>'[email', 'c'=>'[/email]'));
-    
+
     //get all entrys with bb-codes
     $sql = 'SELECT '.$idCol.', '.$col.'
             FROM '.$table. '
@@ -30,17 +30,17 @@ function validate_bbc($table, $idCol, $col)
 
     //walk through all results
     while($row = mysql_fetch_object($result))
-    {  
+    {
         $sql_append = $row->$col;
-        
+
         //once for each bb-code-type
         foreach($bbcodes as $bbcode)
         {
-            //comepare number of opening and closeing tags 
+            //comepare number of opening and closeing tags
             $dif = substr_count($row->$col, $bbcode['o'])-substr_count($row->$col, $bbcode['c']);
             for($x=0; $x<$dif; $x++)
             {
-                $sql_append .= $bbcode['c'];                     
+                $sql_append .= $bbcode['c'];
             }
         }
         //update if nessecary
@@ -49,9 +49,9 @@ function validate_bbc($table, $idCol, $col)
             $sql_update = 'UPDATE '.$table. '
                     SET '.$col.' = \''.$sql_append.'\' WHERE '.$idCol.' = \''.$row->$idCol.'\'';
             $result_update = $gDb->query($sql_update);
-        }      
-                    
-    }                       
+        }
+
+    }
 }
 validate_bbc(TBL_ANNOUNCEMENTS, 'ann_id', 'ann_description');
 validate_bbc(TBL_DATES, 'dat_id', 'dat_description');
@@ -69,15 +69,15 @@ $i = 0;
 
 while($row = mysql_fetch_array($result))
 {
-	$i++;
-	if($row['usf_name_intern'] == $lastNameIntern)
-	{
-		$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name_intern = \''.$row['usf_name_intern'].'_0'.$i.'\'
-		         WHERE usf_id = '.$row['usf_id'];
-		$gDb->query($sql);
-	}
+    $i++;
+    if($row['usf_name_intern'] == $lastNameIntern)
+    {
+        $sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name_intern = \''.$row['usf_name_intern'].'_0'.$i.'\'
+                 WHERE usf_id = '.$row['usf_id'];
+        $gDb->query($sql);
+    }
 
-	$lastNameIntern = $row['usf_name_intern'];
+    $lastNameIntern = $row['usf_name_intern'];
 }
 
 ?>

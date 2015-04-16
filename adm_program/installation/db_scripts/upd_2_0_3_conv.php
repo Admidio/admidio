@@ -11,7 +11,7 @@
 // Reihenfolge der Felder noch einmal komplett neu vergeben
 $last_cat_id = 0;
 $counter     = 0;
-$sql = "SELECT * FROM ". TBL_USER_FIELDS. " 
+$sql = "SELECT * FROM ". TBL_USER_FIELDS. "
          ORDER BY usf_cat_id, usf_sequence ";
 $result_fields = $gDb->query($sql);
 
@@ -26,10 +26,10 @@ while($row_fields = $gDb->fetch_array($result_fields))
     $sql = "UPDATE ". TBL_USER_FIELDS. " SET usf_sequence = ". $counter. "
              WHERE usf_id = ". $row_fields['usf_id'];
     $gDb->query($sql);
-    
+
     $counter++;
-} 
- 
+}
+
 // Reihenfolge der Kategorien noch einmal komplett neu vergeben
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
 $result_orga = $gDb->query($sql);
@@ -38,7 +38,7 @@ while($row_orga = $gDb->fetch_array($result_orga))
 {
     $last_cat_type = "";
     $counter       = 0;
-    $sql = "SELECT * FROM ". TBL_CATEGORIES. " 
+    $sql = "SELECT * FROM ". TBL_CATEGORIES. "
              WHERE (  cat_org_id = ". $row_orga['org_id']. "
                    OR cat_org_id IS NULL )
              ORDER BY cat_type, cat_org_id, cat_sequence ";
@@ -55,9 +55,9 @@ while($row_orga = $gDb->fetch_array($result_orga))
         $sql = "UPDATE ". TBL_CATEGORIES. " SET cat_sequence = ". $counter. "
                  WHERE cat_id = ". $row_cat['cat_id'];
         $gDb->query($sql);
-        
+
         $counter++;
-    } 
+    }
 }
 
 ?>

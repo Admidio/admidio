@@ -10,7 +10,7 @@
 
 // Select your database system for example 'mysql' or 'postgresql'
 $gDbType = '%DB_TYPE%';
- 
+
 // Table prefix for Admidio-Tables in database
 // Example: 'adm'
 $g_tbl_praefix = '%PREFIX%';
@@ -21,7 +21,7 @@ $g_adm_usr = '%USER%';        // User
 $g_adm_pw  = '%PASSWORD%';    // Password
 $g_adm_db  = '%DATABASE%';    // Database
 
-// URL to this Admidio installation 
+// URL to this Admidio installation
 // Example: 'http://www.admidio.org/example'
 $g_root_path = '%ROOT_PATH%';
 
@@ -29,6 +29,6 @@ $g_root_path = '%ROOT_PATH%';
 // This short description must correspond to your input in the installation wizard !!!
 // Example: 'ADMIDIO'
 // Maximun of 10 characters !!!
-$g_organization = '%ORGANIZATION%'; 
+$g_organization = '%ORGANIZATION%';
 
 ?>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
-	<step id="10">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
-	<step id="20">ALTER TABLE %PREFIX%_members ADD COLUMN mem_approved integer unsigned default null</step>
-	<step id="30">ALTER TABLE %PREFIX%_members ADD COLUMN mem_comment varchar(4000)</step>
-	<step id="40">ALTER TABLE %PREFIX%_members ADD COLUMN mem_count_guests integer unsigned not null default '0'</step>
-	<step id="50">UPDATE %PREFIX%_preferences SET prf_value = '25' WHERE prf_name LIKE 'lists_members_per_page'</step>
-	<step id="60">CREATE TABLE %PREFIX%_messages
+    <step id="10">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+    <step id="20">ALTER TABLE %PREFIX%_members ADD COLUMN mem_approved integer unsigned default null</step>
+    <step id="30">ALTER TABLE %PREFIX%_members ADD COLUMN mem_comment varchar(4000)</step>
+    <step id="40">ALTER TABLE %PREFIX%_members ADD COLUMN mem_count_guests integer unsigned not null default '0'</step>
+    <step id="50">UPDATE %PREFIX%_preferences SET prf_value = '25' WHERE prf_name LIKE 'lists_members_per_page'</step>
+    <step id="60">CREATE TABLE %PREFIX%_messages
         (
             msg_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
             msg_type                      varchar(10)     NOT NULL,
@@ -19,11 +19,11 @@
         engine = InnoDB
         default character set = utf8
         collate = utf8_unicode_ci</step>
-	<step id="65">CREATE TABLE %PREFIX%_messages_content
+    <step id="65">CREATE TABLE %PREFIX%_messages_content
         (
             msc_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
             msc_msg_id                    integer         unsigned NOT NULL,
-			msc_part_id                   integer         unsigned NOT NULL,
+            msc_part_id                   integer         unsigned NOT NULL,
             msc_usr_id                    integer         unsigned,
             msc_message                   text            NOT NULL,
             msc_timestamp                 timestamp       NOT NULL default CURRENT_TIMESTAMP,
@@ -33,14 +33,14 @@
         default character set = utf8
         collate = utf8_unicode_ci</step>
     <step id="70">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_name LIKE 'enable_pm_module'</step>
-	<step id="80">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('enable_forum_interface', 'forum_version', 'forum_export_user', 'forum_praefix', 'forum_sqldata_from_admidio', 'forum_db', 'forum_srv', 'forum_usr', 'forum_pw', 'forum_set_admin', 'forum_link_intern', 'forum_width')</step>
-	<step id="90">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('dates_show_calendar_select')</step>
-	<step id="100" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'system_show_all_users' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name LIKE 'members_show_all_users'</step>
-	<step id="105" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'system_show_all_users' AND pr1.prf_name LIKE 'members_show_all_users'</step>
-	<step id="110">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('system_show_all_users')</step>
-	<step id="120" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_name varchar(50) NOT NULL</step>
-	<step id="130" database="postgresql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_name TYPE varchar(50)</step>
-	<step id="160">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
+    <step id="80">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('enable_forum_interface', 'forum_version', 'forum_export_user', 'forum_praefix', 'forum_sqldata_from_admidio', 'forum_db', 'forum_srv', 'forum_usr', 'forum_pw', 'forum_set_admin', 'forum_link_intern', 'forum_width')</step>
+    <step id="90">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('dates_show_calendar_select')</step>
+    <step id="100" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'system_show_all_users' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name LIKE 'members_show_all_users'</step>
+    <step id="105" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'system_show_all_users' AND pr1.prf_name LIKE 'members_show_all_users'</step>
+    <step id="110">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('system_show_all_users')</step>
+    <step id="120" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_name varchar(50) NOT NULL</step>
+    <step id="130" database="postgresql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_name TYPE varchar(50)</step>
+    <step id="160">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
                          VALUES ('MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUCEMENTS', '3.0.0', 0)
                               , ('MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.0.0', 0)
                               , ('MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.0.0', 0)
@@ -57,87 +57,87 @@
                               , ('MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.0.0', 0)
                               , ('MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.0.0', 0)
                               , ('MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.0.0', 0)</step>
-	<step id="170" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_name varchar(100) NOT NULL</step>
-	<step id="180" database="postgresql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_name TYPE varchar(100)</step>
-	<step id="190" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_location varchar(100)</step>
-	<step id="200" database="postgresql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_location TYPE varchar(100)</step>
-	<step id="220">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('photo_thumbs_column', 'photo_thumbs_row')</step>
-	<step id="230" database="mysql">ALTER TABLE %PREFIX%_user_data MODIFY COLUMN usd_value varchar(4000)</step>
-	<step id="240" database="postgresql">ALTER TABLE %PREFIX%_user_data ALTER COLUMN usd_value TYPE varchar(4000)</step>
-	<step id="250" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_description varchar(4000)</step>
-	<step id="260" database="postgresql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_description TYPE varchar(4000)</step>
-	<step id="270" database="mysql">ALTER TABLE %PREFIX%_user_log MODIFY COLUMN usl_value_old varchar(4000)</step>
-	<step id="280" database="postgresql">ALTER TABLE %PREFIX%_user_log ALTER COLUMN usl_value_old TYPE varchar(4000)</step>
-	<step id="290" database="mysql">ALTER TABLE %PREFIX%_user_log MODIFY COLUMN usl_value_new varchar(4000)</step>
-	<step id="300" database="postgresql">ALTER TABLE %PREFIX%_user_log ALTER COLUMN usl_value_new TYPE varchar(4000)</step>
-	<step id="310" database="mysql">ALTER TABLE %PREFIX%_user_fields MODIFY COLUMN usf_icon varchar(2000)</step>
-	<step id="320" database="postgresql">ALTER TABLE %PREFIX%_user_fields ALTER COLUMN usf_icon TYPE varchar(2000)</step>
-	<step id="330" database="mysql">ALTER TABLE %PREFIX%_user_fields MODIFY COLUMN usf_url varchar(2000)</step>
-	<step id="340" database="postgresql">ALTER TABLE %PREFIX%_user_fields ALTER COLUMN usf_url TYPE varchar(2000)</step>
-	<step id="350" database="mysql">ALTER TABLE %PREFIX%_links MODIFY COLUMN lnk_url varchar(2000)</step>
-	<step id="360" database="postgresql">ALTER TABLE %PREFIX%_links ALTER COLUMN lnk_url TYPE varchar(2000)</step>
-	<step id="370">UPDATE %PREFIX%_user_fields SET usf_type = 'DECIMAL' WHERE usf_type = 'NUMERIC'</step>
-	<step id="380">CREATE TABLE IF NOT EXISTS %PREFIX%_invent_fields
-			(
-			   inf_id                         integer       unsigned not null AUTO_INCREMENT,
-			   inf_cat_id                     integer       unsigned not null,
-			   inf_type                       varchar(30)   not null,
-			   inf_name_intern                varchar(110)  not null,
-			   inf_name                       varchar(100)  not null,
-			   inf_description                text,
-			   inf_value_list                 text,
-			   inf_system                     boolean       not null default '0',
-			   inf_disabled                   boolean       not null default '0',
-			   inf_hidden                     boolean       not null default '0',
-			   inf_mandatory                  boolean       not null default '0',
-			   inf_sequence                   smallint      not null,
-			   inf_usr_id_create              integer       unsigned,
-			   inf_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
-			   inf_usr_id_change              integer       unsigned,
-			   inf_timestamp_change           timestamp 	null default null,
-			   primary key (inf_id)
-			)
-			engine = InnoDB auto_increment = 1 default character set = utf8 collate = utf8_unicode_ci;</step>
-	<step id="390">CREATE TABLE IF NOT EXISTS %PREFIX%_invent_data
-			(
-			   ind_id                         integer       unsigned not null AUTO_INCREMENT,
-			   ind_itm_id                     integer       unsigned not null,
-			   ind_inf_id                     integer       unsigned not null,
-			   ind_value                      varchar(255),
-			   primary key (ind_id)
-			)
-			engine = InnoDB auto_increment = 1 default character set = utf8 collate = utf8_unicode_ci;</step>
-	<step id="400">CREATE TABLE IF NOT EXISTS %PREFIX%_invent
-			(
-			   inv_id                         integer       unsigned not null AUTO_INCREMENT,
-			   inv_photo                      blob,
-			   inv_text                       text,
-			   inv_for_loan                   boolean       not null default '0',
-			   inv_last_lent                  timestamp 	null default null,
-			   inv_usr_id_lent                integer 	    unsigned,
-			   inv_lent_until                 timestamp 	null default null,
-			   inv_number_lent                integer       not null default 0,
-			   inv_usr_id_create              integer       unsigned,
-			   inv_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
-			   inv_usr_id_change              integer       unsigned,
-			   inv_timestamp_change           timestamp 	null default null,
-			   inv_valid                      boolean       not null default '0',
-			   primary key (inv_id)
-			)
-			engine = InnoDB auto_increment = 1 default character set = utf8 collate = utf8_unicode_ci;</step>
-	<step id="410">INSERT INTO %PREFIX%_categories (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+    <step id="170" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_name varchar(100) NOT NULL</step>
+    <step id="180" database="postgresql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_name TYPE varchar(100)</step>
+    <step id="190" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_location varchar(100)</step>
+    <step id="200" database="postgresql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_location TYPE varchar(100)</step>
+    <step id="220">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('photo_thumbs_column', 'photo_thumbs_row')</step>
+    <step id="230" database="mysql">ALTER TABLE %PREFIX%_user_data MODIFY COLUMN usd_value varchar(4000)</step>
+    <step id="240" database="postgresql">ALTER TABLE %PREFIX%_user_data ALTER COLUMN usd_value TYPE varchar(4000)</step>
+    <step id="250" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_description varchar(4000)</step>
+    <step id="260" database="postgresql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_description TYPE varchar(4000)</step>
+    <step id="270" database="mysql">ALTER TABLE %PREFIX%_user_log MODIFY COLUMN usl_value_old varchar(4000)</step>
+    <step id="280" database="postgresql">ALTER TABLE %PREFIX%_user_log ALTER COLUMN usl_value_old TYPE varchar(4000)</step>
+    <step id="290" database="mysql">ALTER TABLE %PREFIX%_user_log MODIFY COLUMN usl_value_new varchar(4000)</step>
+    <step id="300" database="postgresql">ALTER TABLE %PREFIX%_user_log ALTER COLUMN usl_value_new TYPE varchar(4000)</step>
+    <step id="310" database="mysql">ALTER TABLE %PREFIX%_user_fields MODIFY COLUMN usf_icon varchar(2000)</step>
+    <step id="320" database="postgresql">ALTER TABLE %PREFIX%_user_fields ALTER COLUMN usf_icon TYPE varchar(2000)</step>
+    <step id="330" database="mysql">ALTER TABLE %PREFIX%_user_fields MODIFY COLUMN usf_url varchar(2000)</step>
+    <step id="340" database="postgresql">ALTER TABLE %PREFIX%_user_fields ALTER COLUMN usf_url TYPE varchar(2000)</step>
+    <step id="350" database="mysql">ALTER TABLE %PREFIX%_links MODIFY COLUMN lnk_url varchar(2000)</step>
+    <step id="360" database="postgresql">ALTER TABLE %PREFIX%_links ALTER COLUMN lnk_url TYPE varchar(2000)</step>
+    <step id="370">UPDATE %PREFIX%_user_fields SET usf_type = 'DECIMAL' WHERE usf_type = 'NUMERIC'</step>
+    <step id="380">CREATE TABLE IF NOT EXISTS %PREFIX%_invent_fields
+            (
+               inf_id                         integer       unsigned not null AUTO_INCREMENT,
+               inf_cat_id                     integer       unsigned not null,
+               inf_type                       varchar(30)   not null,
+               inf_name_intern                varchar(110)  not null,
+               inf_name                       varchar(100)  not null,
+               inf_description                text,
+               inf_value_list                 text,
+               inf_system                     boolean       not null default '0',
+               inf_disabled                   boolean       not null default '0',
+               inf_hidden                     boolean       not null default '0',
+               inf_mandatory                  boolean       not null default '0',
+               inf_sequence                   smallint      not null,
+               inf_usr_id_create              integer       unsigned,
+               inf_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
+               inf_usr_id_change              integer       unsigned,
+               inf_timestamp_change           timestamp     null default null,
+               primary key (inf_id)
+            )
+            engine = InnoDB auto_increment = 1 default character set = utf8 collate = utf8_unicode_ci;</step>
+    <step id="390">CREATE TABLE IF NOT EXISTS %PREFIX%_invent_data
+            (
+               ind_id                         integer       unsigned not null AUTO_INCREMENT,
+               ind_itm_id                     integer       unsigned not null,
+               ind_inf_id                     integer       unsigned not null,
+               ind_value                      varchar(255),
+               primary key (ind_id)
+            )
+            engine = InnoDB auto_increment = 1 default character set = utf8 collate = utf8_unicode_ci;</step>
+    <step id="400">CREATE TABLE IF NOT EXISTS %PREFIX%_invent
+            (
+               inv_id                         integer       unsigned not null AUTO_INCREMENT,
+               inv_photo                      blob,
+               inv_text                       text,
+               inv_for_loan                   boolean       not null default '0',
+               inv_last_lent                  timestamp     null default null,
+               inv_usr_id_lent                integer         unsigned,
+               inv_lent_until                 timestamp     null default null,
+               inv_number_lent                integer       not null default 0,
+               inv_usr_id_create              integer       unsigned,
+               inv_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
+               inv_usr_id_change              integer       unsigned,
+               inv_timestamp_change           timestamp     null default null,
+               inv_valid                      boolean       not null default '0',
+               primary key (inv_id)
+            )
+            engine = InnoDB auto_increment = 1 default character set = utf8 collate = utf8_unicode_ci;</step>
+    <step id="410">INSERT INTO %PREFIX%_categories (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                        VALUES (NULL, 'INF', 'MASTER_DATA', 'SYS_MASTER_DATA', 0, 1, 1, 1, NOW())</step>
-	<step id="420">INSERT INTO %PREFIX%_invent_fields (inf_cat_id, inf_type, inf_name_intern, inf_name, inf_description, inf_system, inf_disabled, inf_mandatory, inf_sequence, inf_usr_id_create, inf_timestamp_create)
-					   VALUES ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'TEXT', 'ITEM_NAME', 'SYS_ITEMNAME', NULL, 1, 1, 1, 1, 1, NOW())
-							, ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'NUMBER', 'ROOM_ID', 'SYS_ROOM', NULL, 1, 1, 1, 2, 1, NOW())
-							, ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'NUMBER', 'PRICE',   'SYS_QUANTITY', NULL, 0, 0, 0, 3, 1, NOW())</step>
-	<step id="430" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'ecard_view_width' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name LIKE 'ecard_thumbs_scale'</step>
-	<step id="435" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'ecard_view_width' AND pr1.prf_name LIKE 'ecard_thumbs_scale'</step>
-	<step id="440">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('ecard_view_width', 'ecard_view_height', 'enable_ecard_cc_recipients', 'ecard_cc_recipients', 'photo_upload_mode', 'photo_slideshow_speed')</step>
-	<step id="450">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_inventory boolean not null default '0'</step>
-	<step id="460">alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_SENDER foreign key (msg_usr_id_sender) references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
-	<step id="480">create index IDX_MSC_PART_ID on %PREFIX%_messages_content (msc_part_id)</step>
-	<step id="500">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_USR_ID foreign key (msc_usr_id) references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
-	<step id="510">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_MSG_ID foreign key (msc_msg_id) references %PREFIX%_messages (msg_id) on delete restrict on update restrict</step>
-	<step>stop</step>
+    <step id="420">INSERT INTO %PREFIX%_invent_fields (inf_cat_id, inf_type, inf_name_intern, inf_name, inf_description, inf_system, inf_disabled, inf_mandatory, inf_sequence, inf_usr_id_create, inf_timestamp_create)
+                       VALUES ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'TEXT', 'ITEM_NAME', 'SYS_ITEMNAME', NULL, 1, 1, 1, 1, 1, NOW())
+                            , ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'NUMBER', 'ROOM_ID', 'SYS_ROOM', NULL, 1, 1, 1, 2, 1, NOW())
+                            , ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'NUMBER', 'PRICE',   'SYS_QUANTITY', NULL, 0, 0, 0, 3, 1, NOW())</step>
+    <step id="430" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'ecard_view_width' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name LIKE 'ecard_thumbs_scale'</step>
+    <step id="435" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'ecard_view_width' AND pr1.prf_name LIKE 'ecard_thumbs_scale'</step>
+    <step id="440">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('ecard_view_width', 'ecard_view_height', 'enable_ecard_cc_recipients', 'ecard_cc_recipients', 'photo_upload_mode', 'photo_slideshow_speed')</step>
+    <step id="450">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_inventory boolean not null default '0'</step>
+    <step id="460">alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_SENDER foreign key (msg_usr_id_sender) references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
+    <step id="480">create index IDX_MSC_PART_ID on %PREFIX%_messages_content (msc_part_id)</step>
+    <step id="500">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_USR_ID foreign key (msc_usr_id) references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="510">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_MSG_ID foreign key (msc_msg_id) references %PREFIX%_messages (msg_id) on delete restrict on update restrict</step>
+    <step>stop</step>
 </update>

@@ -89,7 +89,7 @@ CREATE TABLE %PREFIX%_rooms
     room_timestamp_create           datetime                        not null,
     room_usr_id_change              int(11) unsigned,
     room_timestamp_change           datetime,
-    primary key (room_id)                                                                       
+    primary key (room_id)
 )
 engine = InnoDB
 auto_increment = 1

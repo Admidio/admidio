@@ -31,17 +31,17 @@ ALTER TABLE %PREFIX%_sessions DROP COLUMN ses_session_id_temp;
 ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_device_id varchar(255);
 
 ALTER TABLE %PREFIX%_dates ADD COLUMN dat_highlight boolean not null default '0';
-	  
+
 /*==============================================================*/
 /* Table: adm_registrations                                     */
 /*==============================================================*/
 
 create table %PREFIX%_registrations
 (
-	reg_id                        integer       unsigned not null AUTO_INCREMENT,
+    reg_id                        integer       unsigned not null AUTO_INCREMENT,
     reg_org_id                    integer       unsigned not null,
     reg_usr_id                    integer       unsigned not null,
-	reg_timestamp                 timestamp     not null default CURRENT_TIMESTAMP,
+    reg_timestamp                 timestamp     not null default CURRENT_TIMESTAMP,
     primary key (reg_id)
 )
 engine = InnoDB
@@ -49,7 +49,7 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-	  
+
 alter table %PREFIX%_registrations add CONSTRAINT %PREFIX%_FK_REG_ORG FOREIGN KEY (reg_org_id)
     REFERENCES %PREFIX%_organizations (org_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 alter table %PREFIX%_registrations add CONSTRAINT %PREFIX%_FK_REG_USR FOREIGN KEY (reg_usr_id)
@@ -60,20 +60,20 @@ select org_id, usr_id, usr_timestamp_create
   from %PREFIX%_organizations, %PREFIX%_users
  where usr_reg_org_shortname is not null
    and usr_reg_org_shortname = org_shortname;
-	
+
 -- -----------------------------------------------------
 -- Table %PREFIX%_user_log
 -- -----------------------------------------------------
 CREATE TABLE %PREFIX%_user_log (
-  usl_id                INTEGER                  NOT NULL AUTO_INCREMENT ,
-  usl_usr_id            INTEGER         unsigned NOT NULL ,
-  usl_usf_id            INTEGER         unsigned NOT NULL ,
-  usl_value_old         VARCHAR(255)             NULL ,
-  usl_value_new         VARCHAR(255)             NULL ,
-  usl_usr_id_create     INTEGER         unsigned NULL ,
-  usl_timestamp_create  TIMESTAMP                NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-  usl_comment           VARCHAR(255) NULL ,
-  PRIMARY KEY (usl_id) 
+    usl_id                INTEGER                  NOT NULL AUTO_INCREMENT ,
+    usl_usr_id            INTEGER         unsigned NOT NULL ,
+    usl_usf_id            INTEGER         unsigned NOT NULL ,
+    usl_value_old         VARCHAR(255)             NULL ,
+    usl_value_new         VARCHAR(255)             NULL ,
+    usl_usr_id_create     INTEGER         unsigned NULL ,
+    usl_timestamp_create  TIMESTAMP                NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+    usl_comment           VARCHAR(255) NULL ,
+    PRIMARY KEY (usl_id)
 )
 ENGINE = InnoDB
 auto_increment = 1

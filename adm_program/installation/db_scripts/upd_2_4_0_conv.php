@@ -12,67 +12,67 @@ require_once(SERVER_PATH. '/adm_program/system/classes/tableusers.php');
 
 // drop foreign keys to delete index
 if($gDbType == 'mysql')
-{ 
-	$sql = 'ALTER TABLE '.TBL_USERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_USR_ORG_REG';
-	$gDb->query($sql, false);
-	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_MEM_ROL';
-	$gDb->query($sql, false);
-	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_MEM_USR';
-	$gDb->query($sql, false);
-	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP INDEX IDX_MEM_ROL_USR_ID';
-	$gDb->query($sql, false);
-	$sql = 'ALTER TABLE '.TBL_FOLDER_ROLES.' DROP INDEX FLR_FOL_FK';
-	$gDb->query($sql, false);
-	$sql = 'ALTER TABLE '.TBL_FOLDER_ROLES.' DROP INDEX FLR_ROL_FK';
-	$gDb->query($sql, false);
-	$sql = 'ALTER TABLE '.TBL_ROLE_DEPENDENCIES.' DROP INDEX RLD_ROL_PARENT_FK';
-	$gDb->query($sql, false);
-	$sql = 'ALTER TABLE '.TBL_PREFERENCES.' DROP INDEX PRF_ORG_FK';
-	$gDb->query($sql, false);
-	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP INDEX MEM_ROL_FK';
-	$gDb->query($sql, false);
-	$sql = 'ALTER TABLE '.TBL_USER_DATA.' DROP INDEX USD_USR_FK';
-	$gDb->query($sql, false);
-	$sql = 'ALTER TABLE '.TBL_SESSIONS.' MODIFY COLUMN ses_session_id varchar(255) NOT NULL';
-	$gDb->query($sql, false);
-	$sql = 'UPDATE '.TBL_ROLES.' SET rol_default_registration = 1
-             WHERE rol_id IN (SELECT cast(prf_value as unsigned integer) 
-			                    FROM '.TBL_PREFERENCES.' WHERE prf_name = \'profile_default_role\' )';
-	$gDb->query($sql, false);
-	$sql = 'DELETE FROM '.TBL_PREFERENCES.' WHERE prf_name = \'profile_default_role\'';
-	$gDb->query($sql, false);
+{
+    $sql = 'ALTER TABLE '.TBL_USERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_USR_ORG_REG';
+    $gDb->query($sql, false);
+    $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_MEM_ROL';
+    $gDb->query($sql, false);
+    $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_MEM_USR';
+    $gDb->query($sql, false);
+    $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP INDEX IDX_MEM_ROL_USR_ID';
+    $gDb->query($sql, false);
+    $sql = 'ALTER TABLE '.TBL_FOLDER_ROLES.' DROP INDEX FLR_FOL_FK';
+    $gDb->query($sql, false);
+    $sql = 'ALTER TABLE '.TBL_FOLDER_ROLES.' DROP INDEX FLR_ROL_FK';
+    $gDb->query($sql, false);
+    $sql = 'ALTER TABLE '.TBL_ROLE_DEPENDENCIES.' DROP INDEX RLD_ROL_PARENT_FK';
+    $gDb->query($sql, false);
+    $sql = 'ALTER TABLE '.TBL_PREFERENCES.' DROP INDEX PRF_ORG_FK';
+    $gDb->query($sql, false);
+    $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP INDEX MEM_ROL_FK';
+    $gDb->query($sql, false);
+    $sql = 'ALTER TABLE '.TBL_USER_DATA.' DROP INDEX USD_USR_FK';
+    $gDb->query($sql, false);
+    $sql = 'ALTER TABLE '.TBL_SESSIONS.' MODIFY COLUMN ses_session_id varchar(255) NOT NULL';
+    $gDb->query($sql, false);
+    $sql = 'UPDATE '.TBL_ROLES.' SET rol_default_registration = 1
+             WHERE rol_id IN (SELECT cast(prf_value as unsigned integer)
+                                FROM '.TBL_PREFERENCES.' WHERE prf_name = \'profile_default_role\' )';
+    $gDb->query($sql, false);
+    $sql = 'DELETE FROM '.TBL_PREFERENCES.' WHERE prf_name = \'profile_default_role\'';
+    $gDb->query($sql, false);
 
 }
 else
 {
-	$sql = 'ALTER TABLE '.TBL_USERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_USR_ORG_REG';
-	$gDb->query($sql, false);
-	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_ROL';
-	$gDb->query($sql, false);
-	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_USR';
-	$gDb->query($sql, false);
-	$sql = 'DROP INDEX IDX_MEM_ROL_USR_ID';
-	$gDb->query($sql, false);
-	$sql = 'DROP INDEX FLR_FOL_FK';
-	$gDb->query($sql, false);
-	$sql = 'DROP INDEX FLR_ROL_FK';
-	$gDb->query($sql, false);
-	$sql = 'DROP INDEX RLD_ROL_PARENT_FK';
-	$gDb->query($sql, false);
-	$sql = 'DROP INDEX PRF_ORG_FK';
-	$gDb->query($sql, false);
-	$sql = 'DROP INDEX MEM_ROL_FK';
-	$gDb->query($sql, false);
-	$sql = 'DROP INDEX USD_USR_FK';
-	$gDb->query($sql, false);
-	$sql = 'ALTER TABLE '.TBL_SESSIONS.' ALTER COLUMN ses_session_id SET NOT NULL';
-	$gDb->query($sql, false);
-	$sql = 'UPDATE '.TBL_ROLES.' SET rol_default_registration = 1
-             WHERE rol_id IN (SELECT cast(prf_value as integer) 
-			                    FROM '.TBL_PREFERENCES.' WHERE prf_name = \'profile_default_role\' )';
-	$gDb->query($sql, false);
-	$sql = 'DELETE FROM '.TBL_PREFERENCES.' WHERE prf_name = \'profile_default_role\'';
-	$gDb->query($sql, false);
+    $sql = 'ALTER TABLE '.TBL_USERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_USR_ORG_REG';
+    $gDb->query($sql, false);
+    $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_ROL';
+    $gDb->query($sql, false);
+    $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_USR';
+    $gDb->query($sql, false);
+    $sql = 'DROP INDEX IDX_MEM_ROL_USR_ID';
+    $gDb->query($sql, false);
+    $sql = 'DROP INDEX FLR_FOL_FK';
+    $gDb->query($sql, false);
+    $sql = 'DROP INDEX FLR_ROL_FK';
+    $gDb->query($sql, false);
+    $sql = 'DROP INDEX RLD_ROL_PARENT_FK';
+    $gDb->query($sql, false);
+    $sql = 'DROP INDEX PRF_ORG_FK';
+    $gDb->query($sql, false);
+    $sql = 'DROP INDEX MEM_ROL_FK';
+    $gDb->query($sql, false);
+    $sql = 'DROP INDEX USD_USR_FK';
+    $gDb->query($sql, false);
+    $sql = 'ALTER TABLE '.TBL_SESSIONS.' ALTER COLUMN ses_session_id SET NOT NULL';
+    $gDb->query($sql, false);
+    $sql = 'UPDATE '.TBL_ROLES.' SET rol_default_registration = 1
+             WHERE rol_id IN (SELECT cast(prf_value as integer)
+                                FROM '.TBL_PREFERENCES.' WHERE prf_name = \'profile_default_role\' )';
+    $gDb->query($sql, false);
+    $sql = 'DELETE FROM '.TBL_PREFERENCES.' WHERE prf_name = \'profile_default_role\'';
+    $gDb->query($sql, false);
 }
 
 $sql = 'ALTER TABLE '.TBL_USERS.' DROP COLUMN usr_reg_org_shortname';
@@ -93,7 +93,7 @@ $sql = 'UPDATE '. TBL_ROLES. ' SET rol_webmaster = 1
          WHERE rol_name = \''.$gL10n->get('SYS_WEBMASTER').'\' ';
 $gDb->query($sql);
 
- 
+
  // convert <br /> to a normal line feed
 $emailText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/',chr(13).chr(10),$gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'));
 
@@ -108,14 +108,14 @@ $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name_intern = \'LAST_
 $gDb->query($sql);
 $usfRow = $gDb->fetch_array();
 
-$sql = 'INSERT INTO '. TBL_USER_DATA. ' (usd_usf_id, usd_usr_id, usd_value) 
-                                 VALUES ('.$usfRow['usf_id'].', '.$systemUser->getValue('usr_id').', \''.$gL10n->get('SYS_SYSTEM').'\')';
-$gDb->query($sql);    
+$sql = 'INSERT INTO '. TBL_USER_DATA. ' (usd_usf_id, usd_usr_id, usd_value)
+            VALUES ('.$usfRow['usf_id'].', '.$systemUser->getValue('usr_id').', \''.$gL10n->get('SYS_SYSTEM').'\')';
+$gDb->query($sql);
 
 
 $sql = 'UPDATE '. TBL_MEMBERS. ' SET mem_usr_id_create = '. $systemUser->getValue('usr_id'). '
                                    , mem_timestamp_create = \''.DATETIME_NOW.'\'';
-$gDb->query($sql);    
+$gDb->query($sql);
 
 $sql = 'UPDATE '. TBL_MEMBERS. ' SET mem_usr_id_create = '. $systemUser->getValue('usr_id'). '
                                    , mem_timestamp_create = \''.DATETIME_NOW.'\'';
@@ -128,9 +128,9 @@ $result_orga = $gDb->query($sql);
 
 while($row_orga = $gDb->fetch_array($result_orga))
 {
-	$sql = 'INSERT INTO '. TBL_TEXTS. ' (txt_org_id, txt_name, txt_text)
-								 VALUES ('.$row_orga['org_id'].', \'SYSMAIL_REFUSE_REGISTRATION\', \''.$emailText.'\')';
-	$gDb->query($sql);
+    $sql = 'INSERT INTO '. TBL_TEXTS. ' (txt_org_id, txt_name, txt_text)
+                VALUES ('.$row_orga['org_id'].', \'SYSMAIL_REFUSE_REGISTRATION\', \''.$emailText.'\')';
+    $gDb->query($sql);
 }
 
 //Make all Profilefilds deletable, except FIRSTNAME, LASTNAME, EMAIL

@@ -57,7 +57,6 @@ $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = \'EMAIL\' WHERE usf_n
 $result_orga = $gDb->query($sql);
 $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = \'WEBSITE\', usf_name = \'Webseite\' WHERE usf_name = \'Homepage\' ';
 $result_orga = $gDb->query($sql);
-
 $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = \'AOL_INSTANT_MESSENGER\' WHERE usf_name = \'AIM\' ';
 $result_orga = $gDb->query($sql);
 $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = \'GOOGLE_TALK\' WHERE usf_name = \'Google Talk\' ';
@@ -76,21 +75,21 @@ $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = UPPER(usf_name) WHERE
 $result_orga = $gDb->query($sql);
 
 // E-Mail-Adresse darf jetzt nur noch klein geschrieben werden
-$sql = 'UPDATE '. TBL_USER_DATA. ' SET usd_value = LOWER(usd_value) 
+$sql = 'UPDATE '. TBL_USER_DATA. ' SET usd_value = LOWER(usd_value)
          WHERE usd_value IS NOT NULL
            AND usd_usf_id IN (SELECT usf_id FROM '. TBL_USER_FIELDS. '
                                WHERE usf_type = \'EMAIL\') ';
 $result_orga = $gDb->query($sql);
 
-$sql = 'UPDATE '. TBL_GUESTBOOK. ' SET gbo_email = LOWER(gbo_email) 
+$sql = 'UPDATE '. TBL_GUESTBOOK. ' SET gbo_email = LOWER(gbo_email)
          WHERE gbo_email IS NOT NULL ';
 $result_orga = $gDb->query($sql);
 
-$sql = 'UPDATE '. TBL_GUESTBOOK_COMMENTS. ' SET gbc_email = LOWER(gbc_email) 
+$sql = 'UPDATE '. TBL_GUESTBOOK_COMMENTS. ' SET gbc_email = LOWER(gbc_email)
          WHERE gbc_email IS NOT NULL ';
 $result_orga = $gDb->query($sql);
 
-$sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = LOWER(prf_value) 
+$sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = LOWER(prf_value)
          WHERE prf_name IN (\'email_administrator\', \'mail_sendmail_address\') ';
 $result_orga = $gDb->query($sql);
 
@@ -135,11 +134,11 @@ while($row_orga = $gDb->fetch_array($result_orga))
 
     $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_usr_id_create = '. $row_webmaster['webmaster_id']. '
                                            , usf_timestamp_create = \''.DATETIME_NOW.'\'';
-    $gDb->query($sql);    
+    $gDb->query($sql);
 
     $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_usr_id_create = '. $row_webmaster['webmaster_id']. '
                                           , cat_timestamp_create = \''.DATETIME_NOW.'\'';
-    $gDb->query($sql);    
+    $gDb->query($sql);
 }
 
 // Datenstruktur nach Update anpassen
