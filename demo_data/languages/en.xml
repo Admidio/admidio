@@ -28,6 +28,7 @@
         <text id="DEMO_LNK_SAMPLE_PAGE" development="new" translation="todo">Sample page</text>
         <text id="DEMO_LNK_SAMPLE_PAGE_CONTENT" development="new" translation="todo">On this site there's not much news :(</text>
         <text id="DEMO_LNK_ADMIDIO_CONTENT" development="new" translation="todo">The homepage of the [b]best[/b] open source membership management in the net.</text>
+        <text id="DEMO_LNK_FORUM" development="new" translation="todo">Forum</text>
         <text id="DEMO_LNK_FORUM_CONTENT" development="new" translation="todo">The forum for the online membership management software. Here get's everyone support, who has encountered a problem while installing or setting up Admidio. But also suggestions and tips can be posted here.</text>
         <text id="DEMO_LNK_DOCUMENTATION" development="new" translation="todo">Documentation</text>
         <text id="DEMO_LNK_DOCUMENTATION_CONTENT" development="new" translation="todo">The documentation for Admidio with valuable help and tips.</text>

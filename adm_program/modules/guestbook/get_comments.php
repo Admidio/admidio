@@ -115,9 +115,9 @@ if (isset($comment_result))
     {
         // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
         echo '
-        <a class="btn" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$getGbcId.'"><img 
+        <button type="button" class="btn btn-default" onclick="javascript:window.location.href=\''.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$getGbcId.'\'"><img 
             src="'. THEME_PATH. '/icons/comment_new.png" alt="'.$gL10n->get('GBO_WRITE_COMMENT').'"
-            title="'.$gL10n->get('GBO_WRITE_COMMENT').'" />'.$gL10n->get('GBO_WRITE_COMMENT').'</a>';
+            title="'.$gL10n->get('GBO_WRITE_COMMENT').'" />'.$gL10n->get('GBO_WRITE_COMMENT').'</button>';
     }
 }
 

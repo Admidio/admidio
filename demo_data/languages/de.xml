@@ -28,6 +28,7 @@
         <text id="DEMO_LNK_SAMPLE_PAGE" development="new" translation="todo">Beispielseite</text>
         <text id="DEMO_LNK_SAMPLE_PAGE_CONTENT" development="new" translation="todo">Auf dieser Seite gibt es nicht viele Neuigkeiten :(</text>
         <text id="DEMO_LNK_ADMIDIO_CONTENT" development="new" translation="todo">Die Homepage der [b]besten[/b] Open Source Mitgliederverwaltung im Netz.</text>
+        <text id="DEMO_LNK_FORUM" development="new" translation="todo">Forum</text>
         <text id="DEMO_LNK_FORUM_CONTENT" development="new" translation="todo">Das Forum zur Online-Mitgliederverwaltung. Hier wird jedem geholfen, der auf ein Problem bei der Installation oder Einrichtung von Admidio gestoßen ist. Aber auch Anregungen und Tipps können hier gepostet werden.</text>
         <text id="DEMO_LNK_DOCUMENTATION" development="new" translation="todo">Dokumentation</text>
         <text id="DEMO_LNK_DOCUMENTATION_CONTENT" development="new" translation="todo">Die Dokumentation zu Admidio mit wertvollen Hilfen und Tipps.</text>

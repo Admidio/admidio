@@ -565,7 +565,7 @@ INSERT INTO %PREFIX%_guestbook_comments (gbc_id, gbc_gbo_id, gbc_name, gbc_text,
 INSERT INTO %PREFIX%_links (lnk_id, lnk_cat_id, lnk_name, lnk_description, lnk_url, lnk_counter, lnk_usr_id_create, lnk_timestamp_create, lnk_usr_id_change, lnk_timestamp_change) VALUES
 (1, 7, 'DEMO_LNK_SAMPLE_PAGE', 'DEMO_LNK_SAMPLE_PAGE_CONTENT', 'http://www.example.com', 6, 1, '2012-01-04 22:13:26', 1, '2012-01-05 21:16:32'),
 (2, 9, 'Admidio', 'DEMO_LNK_ADMIDIO_CONTENT', 'http://www.admidio.org', 157, 1, '2012-01-08 11:12:05', NULL, NULL),
-(3, 9, 'SYS_FORUM', 'DEMO_LNK_FORUM_CONTENT', 'http://forum.admidio.org', 46, 1, '2012-01-04 21:15:44', NULL, NULL),
+(3, 9, 'DEMO_LNK_FORUM', 'DEMO_LNK_FORUM_CONTENT', 'http://forum.admidio.org', 46, 1, '2012-01-04 21:15:44', NULL, NULL),
 (4, 9, 'DEMO_LNK_DOCUMENTATION', 'DEMO_LNK_DOCUMENTATION_CONTENT', 'http://www.admidio.org/dokuwiki', 21, 1, '2012-04-05 14:13:23', NULL, NULL);
 
 --
