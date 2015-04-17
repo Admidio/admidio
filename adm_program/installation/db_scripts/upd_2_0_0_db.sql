@@ -97,17 +97,17 @@ ALTER TABLE %PREFIX%_preferences ADD UNIQUE ak_org_id_name (prf_org_id, prf_name
 /*==============================================================*/
 create table %PREFIX%_folders
 (
-   fol_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   fol_org_id                     tinyint(4)                     not null,
-   fol_fol_id_parent              int(11) unsigned,
-   fol_type                       varchar(10)                    not null,
-   fol_name                       varchar(255)                   not null,
-   fol_path                       varchar(255)                   not null,
-   fol_locked                     tinyint (1) unsigned           not null default 0,
-   fol_public                     tinyint (1) unsigned           not null default 0,
-   fol_timestamp                  datetime                       not null,
-   fol_usr_id                     int(11) unsigned,
-   primary key (fol_id)
+    fol_id                         int(11) unsigned               not null AUTO_INCREMENT,
+    fol_org_id                     tinyint(4)                     not null,
+    fol_fol_id_parent              int(11) unsigned,
+    fol_type                       varchar(10)                    not null,
+    fol_name                       varchar(255)                   not null,
+    fol_path                       varchar(255)                   not null,
+    fol_locked                     tinyint (1) unsigned           not null default 0,
+    fol_public                     tinyint (1) unsigned           not null default 0,
+    fol_timestamp                  datetime                       not null,
+    fol_usr_id                     int(11) unsigned,
+    primary key (fol_id)
 )
 engine = InnoDB
 auto_increment = 1;
@@ -130,14 +130,14 @@ alter table %PREFIX%_folders add constraint %PREFIX%_FK_FOL_USR foreign key (fol
 /*==============================================================*/
 create table %PREFIX%_files
 (
-   fil_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   fil_fol_id                     int(11) unsigned               not null,
-   fil_name                       varchar(255)                   not null,
-   fil_locked                     tinyint(1) unsigned            not null default 0,
-   fil_counter                    int,
-   fil_timestamp                  datetime                       not null,
-   fil_usr_id                     int(11) unsigned,
-   primary key (fil_id)
+    fil_id                         int(11) unsigned               not null AUTO_INCREMENT,
+    fil_fol_id                     int(11) unsigned               not null,
+    fil_name                       varchar(255)                   not null,
+    fil_locked                     tinyint(1) unsigned            not null default 0,
+    fil_counter                    int,
+    fil_timestamp                  datetime                       not null,
+    fil_usr_id                     int(11) unsigned,
+    primary key (fil_id)
 )
 engine = InnoDB
 auto_increment = 1;
@@ -157,9 +157,9 @@ alter table %PREFIX%_files add constraint %PREFIX%_FK_FIL_USR foreign key (fil_u
 /*==============================================================*/
 create table %PREFIX%_folder_roles
 (
-   flr_fol_id                     int(11) unsigned               not null,
-   flr_rol_id                     int(11) unsigned               not null,
-   primary key (flr_fol_id, flr_rol_id)
+    flr_fol_id                     int(11) unsigned               not null,
+    flr_rol_id                     int(11) unsigned               not null,
+    primary key (flr_fol_id, flr_rol_id)
 )
 engine = InnoDB;
 
@@ -179,12 +179,12 @@ alter table %PREFIX%_folder_roles add constraint %PREFIX%_FK_FLR_ROL foreign key
 /*==============================================================*/
 create table %PREFIX%_auto_login
 (
-   atl_session_id                 varchar(35)                    not null,
-   atl_org_id                     tinyint(4)                     not null,
-   atl_usr_id                     int(11) unsigned               not null,
-   atl_last_login                 datetime                       not null,
-   atl_ip_address                 varchar(15)                    not null,
-   primary key (atl_session_id)
+    atl_session_id                 varchar(35)                    not null,
+    atl_org_id                     tinyint(4)                     not null,
+    atl_usr_id                     int(11) unsigned               not null,
+    atl_last_login                 datetime                       not null,
+    atl_ip_address                 varchar(15)                    not null,
+    primary key (atl_session_id)
 )
 engine = InnoDB;
 

@@ -7,7 +7,7 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
- 
+
 // Reihenfolge der Kategorien noch einmal komplett neu vergeben
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
 $result_orga = $gDb->query($sql);
@@ -16,7 +16,7 @@ while($row_orga = $gDb->fetch_array($result_orga))
 {
     $last_cat_type = '';
     $counter       = 0;
-    $sql = 'SELECT * FROM '. TBL_CATEGORIES. ' 
+    $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
              WHERE (  cat_org_id = '. $row_orga['org_id']. '
                    OR cat_org_id IS NULL )
              ORDER BY cat_type, cat_org_id, cat_sequence ';
@@ -33,9 +33,9 @@ while($row_orga = $gDb->fetch_array($result_orga))
         $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '. $counter. '
                  WHERE cat_id = '. $row_cat['cat_id'];
         $gDb->query($sql);
-        
+
         $counter++;
-    } 
+    }
 }
 
 ?>

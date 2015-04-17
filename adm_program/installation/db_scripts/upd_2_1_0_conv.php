@@ -184,9 +184,9 @@ while($row_orga = $gDb->fetch_array($result_orga))
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Fax\' ';
     $result = $gDb->query($sql);
     $rowFax = $gDb->fetch_array($result);
-    
+
     // Default-Listen-Konfigurationen anlegen
-    
+
     $sql = 'INSERT INTO '. TBL_LISTS. ' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default)
                  VALUES ('.$row_orga['org_id'].', '.$row_webmaster['webmaster_id'].', \'Adressliste\', \''.DATETIME_NOW.'\', 1, 1)';
     $gDb->query($sql);
@@ -200,7 +200,7 @@ while($row_orga = $gDb->fetch_array($result_orga))
                       , ('.$AdresslisteId.', 5, '.$rowPLZ[0].', null, null)
                       , ('.$AdresslisteId.', 6, '.$rowOrt[0].', null, null)';
     $gDb->query($sql);
-    
+
     $sql = 'INSERT INTO '. TBL_LISTS. ' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default)
                  VALUES ('.$row_orga['org_id'].', '.$row_webmaster['webmaster_id'].', \'Telefonliste\', \''.DATETIME_NOW.'\', 1, 0)';
     $gDb->query($sql);
@@ -214,7 +214,7 @@ while($row_orga = $gDb->fetch_array($result_orga))
                       , ('.$AdresslisteId.', 5, '.$rowEMail[0].', null, null)
                       , ('.$AdresslisteId.', 6, '.$rowFax[0].', null, null)';
     $gDb->query($sql);
-    
+
     $sql = 'INSERT INTO '. TBL_LISTS. ' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default)
                  VALUES ('.$row_orga['org_id'].', '.$row_webmaster['webmaster_id'].', \'Kontaktdaten\', \''.DATETIME_NOW.'\', 1, 0)';
     $gDb->query($sql);
@@ -231,7 +231,7 @@ while($row_orga = $gDb->fetch_array($result_orga))
                       , ('.$AdresslisteId.', 8, '.$rowHandy[0].', null, null)
                       , ('.$AdresslisteId.', 9, '.$rowEMail[0].', null, null)';
     $gDb->query($sql);
-    
+
     $sql = 'INSERT INTO '. TBL_LISTS. ' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default)
                  VALUES ('.$row_orga['org_id'].', '.$row_webmaster['webmaster_id'].', \'Mitgliedschaft\', \''.DATETIME_NOW.'\', 1, 0)';
     $gDb->query($sql);
@@ -283,7 +283,7 @@ $gDb->query($sql);
 
 //Neu Mailrechte installieren
 //1. neue Spalten anlegen
-	//passiert schon in upd_2_1_0_db.sql
+    //passiert schon in upd_2_1_0_db.sql
 
 //2.Webmaster mit globalem Mailsenderecht ausstatten
 $sql = 'UPDATE '. TBL_ROLES. ' SET rol_mail_to_all = \'1\'
@@ -303,14 +303,14 @@ $gDb->query($sql);
 
 //4. Überflüssige Spalten löschen
 $sql = 'ALTER TABLE '. TBL_ROLES. '
-		DROP rol_mail_login,
-		DROP rol_mail_logout';
+        DROP rol_mail_login,
+        DROP rol_mail_logout';
 $gDb->query($sql);
 
 
 //Neues Inventarmodulrecht installieren
 //1. neue Spalte anlegen
-	//passiert schon in upd_2_1_0_db.sql
+    //passiert schon in upd_2_1_0_db.sql
 
 //2.Webmaster mit Inventarverwaltungsrecht ausstatten
 $sql = 'UPDATE '. TBL_ROLES. ' SET rol_inventory = \'1\'
@@ -324,31 +324,31 @@ $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
 $result_orga = $gDb->query($sql);
 while($row_orga = $gDb->fetch_array($result_orga))
 {
-	//erstmal gucken ob die Funktion bisher aktiviert war
-	$sql = 'SELECT prf_value
+    //erstmal gucken ob die Funktion bisher aktiviert war
+    $sql = 'SELECT prf_value
               FROM '. TBL_PREFERENCES. '
              WHERE prf_org_id = '. $row_orga['org_id']. '
                AND prf_name   = \'photo_image_text\' ';
     $result = $gDb->query($sql);
     $row_photo_image_text = $gDb->fetch_array($result);
 
-	//wenn ja
-	if($row_photo_image_text['prf_value'] == 1)
-	{
-		$sql = 'UPDATE '. TBL_PREFERENCES. '
-				SET prf_value = \'© '.$row_orga['org_homepage'].'\'
-       			WHERE prf_org_id = '. $row_orga['org_id']. '
-               	AND prf_name   = \'photo_image_text\' ';
-	}
-	//wenn nicht
-	else
-	{
-		$sql = 'UPDATE '. TBL_PREFERENCES. '
-				SET prf_value = \'\'
-         		WHERE prf_org_id = '. $row_orga['org_id']. '
-               	AND prf_name   = \'photo_image_text\' ';
-	}
-	$gDb->query($sql);
+    //wenn ja
+    if($row_photo_image_text['prf_value'] == 1)
+    {
+        $sql = 'UPDATE '. TBL_PREFERENCES. '
+                SET prf_value = \'© '.$row_orga['org_homepage'].'\'
+                   WHERE prf_org_id = '. $row_orga['org_id']. '
+                   AND prf_name   = \'photo_image_text\' ';
+    }
+    //wenn nicht
+    else
+    {
+        $sql = 'UPDATE '. TBL_PREFERENCES. '
+                SET prf_value = \'\'
+                 WHERE prf_org_id = '. $row_orga['org_id']. '
+                   AND prf_name   = \'photo_image_text\' ';
+    }
+    $gDb->query($sql);
 }
 
 ?>

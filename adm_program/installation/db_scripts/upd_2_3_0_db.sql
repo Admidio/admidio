@@ -20,13 +20,13 @@ RENAME TABLE %PREFIX%_auto_login TO %PREFIX%_auto_login_old;
 
 create table %PREFIX%_auto_login
 (
-   atl_id                         integer       unsigned not null AUTO_INCREMENT,
-   atl_session_id                 varchar(35)   not null,
-   atl_org_id                     integer       unsigned not null,
-   atl_usr_id                     integer       unsigned not null,
-   atl_last_login                 timestamp		null default null,
-   atl_ip_address                 varchar(15)   not null,
-   primary key (atl_id)
+    atl_id                         integer       unsigned not null AUTO_INCREMENT,
+    atl_session_id                 varchar(35)   not null,
+    atl_org_id                     integer       unsigned not null,
+    atl_usr_id                     integer       unsigned not null,
+    atl_last_login                 timestamp     null default null,
+    atl_ip_address                 varchar(15)   not null,
+    primary key (atl_id)
 )
 engine = InnoDB
 default character set = utf8
@@ -61,8 +61,8 @@ ALTER TABLE %PREFIX%_date_role CHANGE COLUMN `dtr_rol_id` `dtr_rol_id` integer u
 
 ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_id` `dat_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_cat_id` `dat_cat_id` integer unsigned not null;
-ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_begin` `dat_begin` timestamp 	null default null;
-ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_end` `dat_end` timestamp 	null default null;
+ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_begin` `dat_begin` timestamp     null default null;
+ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_end` `dat_end` timestamp     null default null;
 ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_usr_id_create` `dat_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_timestamp_create` `dat_timestamp_create` timestamp not null default CURRENT_TIMESTAMP;
 ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_usr_id_change` `dat_usr_id_change` integer unsigned;
@@ -223,8 +223,8 @@ alter table %PREFIX%_sessions add constraint %PREFIX%_FK_SES_ORG foreign key (se
       references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
 alter table %PREFIX%_texts add constraint %PREFIX%_FK_TXT_ORG foreign key (txt_org_id)
       references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
- 
--- manipulate data     
+
+-- manipulate data
 UPDATE %PREFIX%_user_fields SET usf_system = 0, usf_name = 'SYS_GENDER', usf_type = 'RADIO_BUTTON', usf_value_list = 'male.png|SYS_MALE\r\nfemale.png|SYS_FEMALE'
  WHERE usf_name_intern LIKE 'GENDER';
 UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_LASTNAME' WHERE usf_name_intern LIKE 'LAST_NAME';
@@ -239,7 +239,7 @@ UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_FAX' WHERE usf_name_intern LIKE 
 UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_BIRTHDAY' WHERE usf_name_intern LIKE 'BIRTHDAY';
 UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_EMAIL' WHERE usf_name_intern LIKE 'EMAIL';
 UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_WEBSITE' WHERE usf_name_intern LIKE 'WEBSITE';
- 
+
 UPDATE %PREFIX%_preferences SET prf_value = 'da' WHERE prf_name like 'system_language' AND prf_value like 'dk';
 DELETE FROM %PREFIX%_preferences WHERE prf_name like 'captcha_font_size';
 DELETE FROM %PREFIX%_preferences WHERE prf_name like 'enable_bbcode';
@@ -251,7 +251,7 @@ DELETE FROM %PREFIX%_preferences WHERE prf_name like 'ecard_text_color';
 UPDATE %PREFIX%_preferences SET prf_name = 'captcha_font_size' WHERE prf_name like 'captcha_text_size';
 UPDATE %PREFIX%_organizations SET org_homepage = 'http://' || org_homepage WHERE lower( substring( org_homepage, 1, 4 ) ) NOT LIKE 'http';
 
--- replace category name with translation id   
+-- replace category name with translation id
 UPDATE %PREFIX%_categories SET cat_name = 'SYS_MASTER_DATA' WHERE cat_name_intern = 'MASTER_DATA';
 UPDATE %PREFIX%_categories SET cat_name = 'SYS_COMMON', cat_name_intern = 'COMMON' WHERE cat_name_intern IN ('COMMON', 'ALLGEMEIN');
 UPDATE %PREFIX%_categories SET cat_name = 'INS_GROUPS', cat_name_intern = 'GROUPS' WHERE cat_name_intern IN ('GROUPS', 'GRUPPEN');

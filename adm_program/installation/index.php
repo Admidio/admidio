@@ -11,11 +11,11 @@
 // check if installation is necessary
 if(file_exists('../../adm_my_files/config.php'))
 {
-   $page = 'update.php';
+    $page = 'update.php';
 }
 else
 {
-   $page = 'installation.php';
+    $page = 'installation.php';
 }
 
 // redirect to installation or update page

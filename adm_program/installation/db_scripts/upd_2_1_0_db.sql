@@ -92,12 +92,12 @@ RENAME TABLE %PREFIX%_user_data TO %PREFIX%_user_data_old;
 
 create table %PREFIX%_user_data
 (
-   usd_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   usd_usr_id                     int(11) unsigned               not null,
-   usd_usf_id                     int(11) unsigned               not null,
-   usd_value                      varchar(255),
-   primary key (usd_id),
-   unique ak_usr_usf_id (usd_usr_id, usd_usf_id)
+    usd_id                         int(11) unsigned               not null AUTO_INCREMENT,
+    usd_usr_id                     int(11) unsigned               not null,
+    usd_usf_id                     int(11) unsigned               not null,
+    usd_value                      varchar(255),
+    primary key (usd_id),
+    unique ak_usr_usf_id (usd_usr_id, usd_usf_id)
 )
 engine = InnoDB
 auto_increment = 1;
@@ -129,14 +129,14 @@ ALTER TABLE %PREFIX%_files   ADD COLUMN fil_description text AFTER fil_name;
 /*==============================================================*/
 create table %PREFIX%_lists
 (
-   lst_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   lst_org_id                     tinyint(4)                     not null,
-   lst_usr_id                     int(11) unsigned               not null,
-   lst_name                       varchar(255),
-   lst_timestamp                  datetime                       not null,
-   lst_global                     tinyint(1) unsigned            not null default 0,
-   lst_default                    tinyint(1) unsigned            not null default 0,
-   primary key (lst_id)
+    lst_id                         int(11) unsigned               not null AUTO_INCREMENT,
+    lst_org_id                     tinyint(4)                     not null,
+    lst_usr_id                     int(11) unsigned               not null,
+    lst_name                       varchar(255),
+    lst_timestamp                  datetime                       not null,
+    lst_global                     tinyint(1) unsigned            not null default 0,
+    lst_default                    tinyint(1) unsigned            not null default 0,
+    primary key (lst_id)
 )
 engine = InnoDB
 auto_increment = 1;
@@ -152,18 +152,18 @@ alter table %PREFIX%_lists add constraint %PREFIX%_FK_LST_ORG foreign key (lst_o
       references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
 
 /*==============================================================*/
-/* Table: adm_list_columns                                       */
+/* Table: adm_list_columns                                      */
 /*==============================================================*/
 create table %PREFIX%_list_columns
 (
-   lsc_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   lsc_lst_id                     int(11) unsigned               not null,
-   lsc_number                     smallint                       not null,
-   lsc_usf_id                     int(11) unsigned,
-   lsc_special_field              varchar(255),
-   lsc_sort                       varchar(5),
-   lsc_filter                     varchar(255),
-   primary key (lsc_id)
+    lsc_id                         int(11) unsigned               not null AUTO_INCREMENT,
+    lsc_lst_id                     int(11) unsigned               not null,
+    lsc_number                     smallint                       not null,
+    lsc_usf_id                     int(11) unsigned,
+    lsc_special_field              varchar(255),
+    lsc_sort                       varchar(5),
+    lsc_filter                     varchar(255),
+    primary key (lsc_id)
 )
 engine = InnoDB
 auto_increment = 1;

@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
- /** A method to create a simple html page that shows a custom text and a navigation button. 
+ /** A method to create a simple html page that shows a custom text and a navigation button.
   *  This should be used to show notices or errors during installation or update.
   *  @param $message    A (html) message that should be displayed.
   *  @param $url        The url to which the user should be navigated if he clicks the button.
@@ -18,22 +18,22 @@
 function showNotice($message, $url, $buttonText, $buttonIcon, $update = false)
 {
     global $gL10n;
-    
+
     $onClickText = '';
 
     // show dialog with success notification
     $form = new HtmlFormInstallation('installation-form', $url);
-    
+
     if($update)
     {
         $form->setUpdateModus();
     }
-    
+
     if($buttonText == $gL10n->get('INS_UPDATE_DATABASE'))
     {
         $onClickText = $gL10n->get('INS_DATABASE_IS_UPDATED');
     }
-    
+
     $form->setFormDescription($message);
     $form->addSubmitButton('next_page', $buttonText, array('icon' => $buttonIcon, 'onClickText' => $onClickText));
     $form->show();

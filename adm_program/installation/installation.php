@@ -40,15 +40,15 @@ if(isset($g_tbl_praefix) == false)
         $g_tbl_praefix = 'adm';
     }
 }
- 
+
 // embed constants file
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
 if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
 {
-    die('<div style="color: #CC0000;">Error: Your PHP version '.phpversion().' does not fulfill 
-		the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or higher.</div>');
+    die('<div style="color: #CC0000;">Error: Your PHP version '.phpversion().' does not fulfill
+        the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or higher.</div>');
 }
 
 require_once('install_functions.php');
@@ -90,7 +90,7 @@ if(file_exists('../../adm_my_files/config.php') == true)
     $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
     $db->query($sql, false);
     $count = $db->num_rows();
-    
+
     if($count > 0)
     {
         // valid installation exists -> exit installation
@@ -116,14 +116,14 @@ if($getMode == 1)  // (Default) Choose language
     // the possible languages will be read from a xml file
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=2');
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_CHOOSE_LANGUAGE'));
-    $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 
+    $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml',
                                'ISOCODE', 'NAME', array('property' => FIELD_MANDATORY));
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png'));
     $form->show();
 }
 elseif($getMode == 2)  // Welcome to installation
-{   
+{
     // check if a language string was committed
     if(isset($_POST['system_language']) == false || strlen(trim($_POST['system_language'])) == 0)
     {
@@ -134,7 +134,7 @@ elseif($getMode == 2)  // Welcome to installation
         $_SESSION['language'] = $_POST['system_language'];
         $gL10n->setLanguage($_SESSION['language']);
     }
-    
+
     // create the text that should be shown in the form
     $message = $gL10n->get('INS_WELCOME_TEXT');
 
@@ -146,7 +146,7 @@ elseif($getMode == 2)  // Welcome to installation
 
     // if safe mode is used then show a notice to the user
     if(ini_get('safe_mode') == 1)
-    {    
+    {
         $message .= '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_WARNING_SAFE_MODE').'</div>';
     }
 
@@ -169,7 +169,7 @@ elseif($getMode == 3)  // Enter database access information
     }
     else
     {
-		$dbType   = 'mysql';
+        $dbType   = 'mysql';
         $server   = '';
         $user     = '';
         $database = '';
@@ -180,7 +180,7 @@ elseif($getMode == 3)  // Enter database access information
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=4');
     $form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
-    $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), SERVER_PATH.'/adm_program/system/databases.xml', 
+    $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), SERVER_PATH.'/adm_program/system/databases.xml',
                                'IDENTIFIER', 'NAME', array('property' => FIELD_MANDATORY, 'defaultValue' => $dbType));
     $form->addInput('db_server', $gL10n->get('SYS_SERVER'), $server, array('maxLength' => 50, 'property' => FIELD_MANDATORY));
     $form->addInput('db_user', $gL10n->get('SYS_USERNAME'), $user, array('maxLength' => 50, 'property' => FIELD_MANDATORY));
@@ -226,7 +226,7 @@ elseif($getMode == 4)  // Creating organization
         $_SESSION['prefix']   = strStripTags($_POST['db_prefix']);
 
         if(strlen($_SESSION['db_type'])  == 0
-		|| strlen($_SESSION['db_server'])   == 0
+        || strlen($_SESSION['db_server'])   == 0
         || strlen($_SESSION['db_user'])     == 0
         || strlen($_SESSION['db_database']) == 0 )
         {
@@ -244,7 +244,7 @@ elseif($getMode == 4)  // Creating organization
             }
 
             // check database version
-            $message = checkDatabaseVersion($db); 
+            $message = checkDatabaseVersion($db);
             if(strlen($message) > 0)
             {
                 showNotice($message, 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
@@ -287,7 +287,7 @@ elseif($getMode == 5)  // Creating addministrator
         $_SESSION['orga_email']     = strStripTags($_POST['orga_email']);
 
         if(strlen($_SESSION['orga_shortname']) == 0
-        || strlen($_SESSION['orga_longname']) == 0 
+        || strlen($_SESSION['orga_longname']) == 0
         || strlen($_SESSION['orga_email']) == 0 )
         {
             showNotice($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'installation.php?mode=4', $gL10n->get('SYS_BACK'), 'layout/back.png');
@@ -309,7 +309,7 @@ elseif($getMode == 5)  // Creating addministrator
         $userEmail     = '';
         $userLogin     = '';
     }
-    
+
     // create a page to enter all necessary data to create a administrator user
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=6');
     $form->setFormDescription($gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'), $gL10n->get('INS_CREATE_ADMINISTRATOR'));
@@ -358,7 +358,7 @@ elseif($getMode == 6)  // Creating configuration file
     }
 
     // read configuration file structure
-    $filename     = 'config.php';
+    $filename          = 'config.php';
     $configFileHandle  = fopen($filename, 'r');
     $configFileContent = fread($configFileHandle, filesize($filename));
     fclose($configFileHandle);
@@ -368,14 +368,14 @@ elseif($getMode == 6)  // Creating configuration file
     $rootPath = substr($rootPath, 0, strpos($rootPath, '/adm_program'));
     if(!strpos($rootPath, 'http://') && !strpos($rootPath, 'https://'))
     {
-		if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-		{
-			$rootPath = 'https://'. $rootPath;
-		}
-		else
-		{
-			$rootPath = 'http://'. $rootPath;
-		}
+        if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        {
+            $rootPath = 'https://'. $rootPath;
+        }
+        else
+        {
+            $rootPath = 'http://'. $rootPath;
+        }
     }
 
     // replace placeholders in configuration file structure with data of installation wizard
@@ -398,7 +398,7 @@ elseif($getMode == 6)  // Creating configuration file
         // save config file in Admidio folder
         fwrite($configFileHandle, $configFileContent);
         fclose($configFileHandle);
-        
+
         // start installation
         header('Location: installation.php?mode=8');
     }
@@ -425,7 +425,7 @@ elseif($getMode == 7) // Download configuration file
     echo $_SERVER['config_file_content'];
     exit();
 }
-elseif($getMode == 8)	// Start installation
+elseif($getMode == 8) // Start installation
 {
     // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
     if(file_exists('../../adm_my_files/config.php') == false)
@@ -452,7 +452,7 @@ elseif($getMode == 8)	// Start installation
             showNotice($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
     }
-    
+
     // read data from sql script db.sql and execute all statements to the current database
     $filename = 'db_scripts/db.sql';
     $file     = fopen($filename, 'r')
@@ -480,7 +480,7 @@ elseif($getMode == 8)	// Start installation
     $component->setValue('com_name_intern', 'CORE');
     $component->setValue('com_version', ADMIDIO_VERSION);
     $component->setValue('com_beta', BETA_VERSION);
-    $component->setValue('com_update_step', $component->getMaxUpdateStep());    
+    $component->setValue('com_update_step', $component->getMaxUpdateStep());
     $component->save();
 
     // create a hidden system user for internal use
@@ -490,7 +490,7 @@ elseif($getMode == 8)	// Start installation
     $gCurrentUser->setValue('usr_valid', '0');
     $gCurrentUser->setValue('usr_timestamp_create', DATETIME_NOW);
     $gCurrentUser->save(false); // no registered user -> UserIdCreate couldn't be filled
-	$systemUserId = $gCurrentUser->getValue('usr_id');
+    $systemUserId = $gCurrentUser->getValue('usr_id');
 
     // create organization independent categories
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
@@ -507,8 +507,8 @@ elseif($getMode == 8)	// Start installation
                                      VALUES (NULL, \'ROL\', \'CONFIRMATION_OF_PARTICIPATION\', \'SYS_CONFIRMATION_OF_PARTICIPATION\', 1, 0, 1, 5, '.$systemUserId.',\''. DATETIME_NOW.'\')
                                           , (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 0, 3, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
-	
-	// create inventory categories
+
+    // create inventory categories
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                                       VALUES (NULL, \'INF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
@@ -544,16 +544,16 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
                                             , ('.$cat_id_messenger.', \'TEXT\', \'XING\',           \'INS_XING\', \''.$gL10n->get('INS_XING_DESC').'\', \'xing.png\', \'https://www.xing.com/profile/%user_content%\', 0, 7, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                                             , ('.$cat_id_messenger.', \'TEXT\', \'YAHOO_MESSENGER\',\'INS_YAHOO_MESSENGER\', NULL, \'yahoo.png\', NULL, 0, 8, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
-	
+
     // Inventoryfelder anlegen
     $sql = 'INSERT INTO '. TBL_INVENT_FIELDS. ' (inf_cat_id, inf_type, inf_name_intern, inf_name, inf_description, inf_system, inf_disabled, inf_mandatory, inf_sequence, inf_usr_id_create, inf_timestamp_create)
                                        VALUES ('.$cat_id_master_inf.', \'TEXT\', \'ITEM_NAME\', \'SYS_ITEMNAME\', NULL, 1, 1, 1, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                                             , ('.$cat_id_master_inf.', \'NUMBER\', \'ROOM_ID\', \'SYS_ROOM\', NULL, 1, 1, 1, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                                             , ('.$cat_id_master_inf.', \'NUMBER\', \'PRICE\',   \'SYS_QUANTITY\', NULL, 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
-	
-	// now set db specific admidio preferences
-	$db->setDBSpecificAdmidioProperties();
+
+    // now set db specific admidio preferences
+    $db->setDBSpecificAdmidioProperties();
 
     // create new organization
     $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);
@@ -582,7 +582,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
 
     // create default room for room module in database
     $sql = 'INSERT INTO '. TBL_ROOMS. ' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
-                                    VALUES (\''.$gL10n->get('INS_CONFERENCE_ROOM').'\', \''.$gL10n->get('INS_DESCRIPTION_CONFERENCE_ROOM').'\', 
+                                    VALUES (\''.$gL10n->get('INS_CONFERENCE_ROOM').'\', \''.$gL10n->get('INS_DESCRIPTION_CONFERENCE_ROOM').'\',
                                             15, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')';
     $db->query($sql);
 
@@ -598,10 +598,10 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     $systemUser = new User($db, $gProfileFields, $systemUserId);
     $systemUser->setValue('LAST_NAME', $gL10n->get('SYS_SYSTEM'));
     $systemUser->save(false); // no registered user -> UserIdCreate couldn't be filled
-    
+
     // now set current user to system user
     $gCurrentUser->readDataById($systemUserId);
-    
+
     // delete session data
     session_unset();
 
@@ -611,14 +611,14 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     {
         $text = $text. '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files').'</div>';
     }
-    
+
     // show dialog with success notification
     $form = new HtmlFormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
     $form->setFormDescription($text, '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span>
                                         <strong>'.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong></div>');
     $form->openButtonGroup();
-        $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
-        $form->addButton('main_page', $gL10n->get('SYS_LATER'), array('icon' => 'layout/application_view_list.png', 'link' => '../index.php'));
+    $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
+    $form->addButton('main_page', $gL10n->get('SYS_LATER'), array('icon' => 'layout/application_view_list.png', 'link' => '../index.php'));
     $form->closeButtonGroup();
     $form->show();
 }
