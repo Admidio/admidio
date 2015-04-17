@@ -258,7 +258,7 @@ case 2:
         $formValues['orgaEmail']     = '';
     }
 
-    $headline = $gL10n->get('INS_ADD_ANOTHER_ORGANIZATION');
+    $headline = $gL10n->get('INS_ADD_ORGANIZATION');
 
     // create html page object
     $page = new HtmlPage($headline);

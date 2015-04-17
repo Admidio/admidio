@@ -286,6 +286,19 @@ collate = utf8_unicode_ci;
 
 
 /*==============================================================*/
+/* Table: adm_ids                                               */
+/*==============================================================*/
+create table %PREFIX%_ids
+(
+   ids_usr_id                     integer       unsigned not null,
+   ids_reference_id               integer       unsigned not null
+)
+engine = InnoDB
+default character set = utf8
+collate = utf8_unicode_ci;
+
+
+/*==============================================================*/
 /* Table: adm_invent_fields                                     */
 /*==============================================================*/
 create table %PREFIX%_invent_fields
@@ -876,6 +889,9 @@ alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_USR_CREAT
       references %PREFIX%_users (usr_id) on delete restrict on update restrict;
 alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_USR_CHANGE foreign key (gbc_usr_id_change)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
+      
+alter table %PREFIX%_ids add constraint %PREFIX%_FK_IDS_USR_ID foreign key (ids_usr_id) 
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict
 
       alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_CAT foreign key (lnk_cat_id)
       references %PREFIX%_categories (cat_id) on delete restrict on update restrict;

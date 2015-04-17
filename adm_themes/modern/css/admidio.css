@@ -373,6 +373,10 @@ form hr {
     .col-sm-offset-3.btn {
         margin-left: 26%;
     }
+    
+    .form-control-small {
+        width: 50%;
+    }
 }
 
 .form-control:focus, .select2-container-active, .select2-choices, .select2-drop {
@@ -391,10 +395,6 @@ select[multiple] {
 
 .select2-results {
     text-align: left;
-}
-
-.form-control-small {
-    width: 50%;
 }
 
 input[data-provide="datepicker"], input[type="number"], input[type="time"] {

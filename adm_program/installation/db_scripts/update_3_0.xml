@@ -139,5 +139,14 @@
 	<step id="480">create index IDX_MSC_PART_ID on %PREFIX%_messages_content (msc_part_id)</step>
 	<step id="500">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_USR_ID foreign key (msc_usr_id) references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
 	<step id="510">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_MSG_ID foreign key (msc_msg_id) references %PREFIX%_messages (msg_id) on delete restrict on update restrict</step>
+	<step id="520">create table %PREFIX%_ids
+            (
+               ids_usr_id                     integer       unsigned not null,
+               ids_reference_id               integer       unsigned not null
+            )
+            engine = InnoDB
+            default character set = utf8
+            collate = utf8_unicode_ci;</step>
+	<step id="530">alter table %PREFIX%_ids add constraint %PREFIX%_FK_IDS_USR_ID foreign key (ids_usr_id) references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
 	<step>stop</step>
 </update>

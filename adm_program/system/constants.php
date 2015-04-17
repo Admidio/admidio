@@ -58,10 +58,16 @@ define('TBL_FOLDERS',           $g_tbl_praefix. '_folders');
 define('TBL_FOLDER_ROLES',      $g_tbl_praefix. '_folder_roles');
 define('TBL_GUESTBOOK',         $g_tbl_praefix. '_guestbook');
 define('TBL_GUESTBOOK_COMMENTS',$g_tbl_praefix. '_guestbook_comments');
+define('TBL_IDS',               $g_tbl_praefix. '_ids');
+define('TBL_INVENT',            $g_tbl_praefix. '_invent');
+define('TBL_INVENT_DATA',       $g_tbl_praefix. '_invent_data');
+define('TBL_INVENT_FIELDS',     $g_tbl_praefix. '_invent_fields');
 define('TBL_LINKS',             $g_tbl_praefix. '_links');
 define('TBL_LIST_COLUMNS',      $g_tbl_praefix. '_list_columns');
 define('TBL_LISTS',             $g_tbl_praefix. '_lists');
 define('TBL_MEMBERS',           $g_tbl_praefix. '_members');
+define('TBL_MESSAGES',          $g_tbl_praefix. '_messages');
+define('TBL_MESSAGES_CONTENT',  $g_tbl_praefix. '_messages_content');
 define('TBL_ORGANIZATIONS',     $g_tbl_praefix. '_organizations');
 define('TBL_PHOTOS',            $g_tbl_praefix. '_photos');
 define('TBL_PREFERENCES',       $g_tbl_praefix. '_preferences');
@@ -75,11 +81,6 @@ define('TBL_USERS',             $g_tbl_praefix. '_users');
 define('TBL_USER_DATA',         $g_tbl_praefix. '_user_data');
 define('TBL_USER_FIELDS',       $g_tbl_praefix. '_user_fields');
 define('TBL_USER_LOG',          $g_tbl_praefix. '_user_log');
-define('TBL_MESSAGES',          $g_tbl_praefix. '_messages');
-define('TBL_MESSAGES_CONTENT',  $g_tbl_praefix. '_messages_content');
-define('TBL_INVENT_DATA',       $g_tbl_praefix. '_invent_data');
-define('TBL_INVENT_FIELDS',     $g_tbl_praefix. '_invent_fields');
-define('TBL_INVENT',            $g_tbl_praefix. '_invent');
 
 // constants for column rol_leader_rights
 define('ROLE_LEADER_NO_RIGHTS', 0);

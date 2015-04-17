@@ -18,6 +18,7 @@ drop table if exists %PREFIX%_folder_roles cascade;
 drop table if exists %PREFIX%_folders cascade;
 drop table if exists %PREFIX%_guestbook_comments cascade;
 drop table if exists %PREFIX%_guestbook cascade;
+drop table if exists %PREFIX%_ids cascade;
 drop table if exists %PREFIX%_invent_fields cascade;
 drop table if exists %PREFIX%_invent_data cascade;
 drop table if exists %PREFIX%_invent cascade;

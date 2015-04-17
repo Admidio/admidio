@@ -47,6 +47,8 @@ class TableUsers extends TableAccess
 	 */
     public function delete()
     {
+        global $gCurrentUser;
+        
         $this->db->startTransaction();
 
         $sql    = 'UPDATE '. TBL_ANNOUNCEMENTS. ' SET ann_usr_id_create = NULL
@@ -137,6 +139,27 @@ class TableUsers extends TableAccess
         $this->db->query($sql);
 
         $sql    = 'DELETE FROM '. TBL_MEMBERS. ' WHERE mem_usr_id = '. $this->getValue('usr_id');
+        $this->db->query($sql);
+
+        // MySQL couldn't create delete statement with same table in subquery.
+        // Therefore we fill a temporary table with all ids that should be deleted and reference on this table
+        $sql    = 'DELETE FROM '. TBL_IDS. ' WHERE ids_usr_id = '. $gCurrentUser->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql    = 'INSERT INTO '.TBL_IDS.' (ids_usr_id, ids_reference_id)
+                   SELECT '.$gCurrentUser->getValue('usr_id').', msc_msg_id 
+                     FROM '.TBL_MESSAGES_CONTENT.' WHERE msc_usr_id = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+                     
+        $sql    = 'DELETE FROM '. TBL_MESSAGES_CONTENT. '
+                    WHERE msc_msg_id IN (SELECT ids_reference_id FROM '. TBL_IDS. ' WHERE ids_usr_id = '.$gCurrentUser->getValue('usr_id').')';
+        $this->db->query($sql);
+
+        $sql    = 'DELETE FROM '. TBL_MESSAGES. ' 
+                    WHERE msg_id IN (SELECT ids_reference_id FROM '. TBL_IDS. ' WHERE ids_usr_id = '.$gCurrentUser->getValue('usr_id').')';
+        $this->db->query($sql);
+
+        $sql    = 'DELETE FROM '. TBL_IDS. ' WHERE ids_usr_id = '. $gCurrentUser->getValue('usr_id');
         $this->db->query($sql);
 
         $sql    = 'DELETE FROM '. TBL_REGISTRATIONS. ' WHERE reg_usr_id = '. $this->getValue('usr_id');
