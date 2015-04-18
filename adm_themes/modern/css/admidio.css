@@ -32,14 +32,6 @@ body {
     margin-top: 0;
 }
 
-#admidio-logo {
-    top: -10px;
-    position: relative;
-    visibility: inherit;
-    margin-bottom: -130px;
-
-}
-
 #page-h1-orga {
     color: #dbebee;
     font-weight: bold;
@@ -54,7 +46,7 @@ body {
     margin-bottom: 25px;
 }
 
-/* Layout adjustments for small devices */
+/* Layout adjustments for devices > 7" */
 @media (min-width: 768px) {
     body {
         padding: 15px 0px;
@@ -71,16 +63,16 @@ body {
     }
 
     #page-h1-membership {
-        font-size: 18pt;
+        font-size: 14pt;
         letter-spacing: 0.2em;
-        margin-left: 350px;
+        margin-left: 240px;
     }
     
     #page-h1-orga {
-        font-size: 24pt;
+        font-size: 20pt;
         letter-spacing: 0.2em;
         margin: 0 -3% 25px -3%;
-        padding: 3px 10px 3px 380px;
+        padding: 3px 10px 3px 260px;
         border-radius: 5px;
     }
     
@@ -90,13 +82,39 @@ body {
         padding: 15px;
     }
     
+    #admidio-logo {
+        top: -10px;
+        position: relative;
+        visibility: inherit;
+        margin-bottom: -130px;
+        width: 200px;
+    }
+}
+
+@media (min-width: 992px) {    
+    #page-h1-membership {
+        font-size: 18pt;
+        margin-left: 350px;
+    }
+    
+    #page-h1-orga {
+        font-size: 24pt;
+        padding: 3px 10px 3px 380px;
+    }
+
+    #admidio-logo {
+        top: -10px;
+        margin-bottom: -130px;
+        width: 300px;    
+    }
+
     .admidio-default-menu-item {
         display: none !important;
     }
 }
 
-/* Layout adjustments for devices > 7" */
-@media (max-width: 768px) {
+/* Layout adjustments for small devices */
+@media (max-width: 767px) {
     #header-block {
         margin: 0px -15px 0px -15px;
         background-color: #C1DCE6; 
@@ -107,10 +125,13 @@ body {
         letter-spacing: 0.1em;
         padding: 7px 10px 7px 5px;
     }
-    
-    #adm_menu_item_login, #adm_menu_item_registration, #adm_menu_item_my_profile, #adm_menu_item_logout, #plugin_login_form, #plugin_menu {
+}
+
+@media (max-width: 991px) {
+    #adm_menu_item_login, #adm_menu_item_registration, #adm_menu_item_my_profile, 
+    #adm_menu_item_logout, #right-block {
         display: none !important;
-    }
+    }    
 }
 
 /**************************************************/
@@ -133,8 +154,15 @@ h3 {
     font-size: 110%;
 }
 
-
 @media (min-width: 768px) {
+    h1 {
+        font-size: 140%;
+        letter-spacing: 0.2em;
+        border-bottom: 2px solid #409099;
+    }
+}
+
+@media (min-width: 992px) {
     h1 {
         font-size: 170%;
         letter-spacing: 0.2em;
@@ -142,7 +170,7 @@ h3 {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     h1, h3 {
         padding: 15px 5px;
         border: 1px solid #7d7d7d;
@@ -629,7 +657,7 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     #div_profile_photo {
         text-align: left;
     }

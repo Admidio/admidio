@@ -11,5 +11,5 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-9">
+        <div class="col-md-9">
             <div id="left-block" class="admidio-container">
