@@ -84,7 +84,7 @@ if ($getMsgId > 0)
 }
 
 $recept_number = 1;
-if ($gPreferences['mail_max_receiver'] > 0)
+if ($gPreferences['mail_max_receiver'] > 0 and $getMsgType != 'PM')
 {
     $recept_number = $gPreferences['mail_max_receiver'];
 }
@@ -93,8 +93,6 @@ $list = array();
 
 if ($getMsgType == 'PM')
 {
-
-    $recept_number = 1;
 
     $sql = "SELECT usr_id, CONCAT(row1id1.usd_value, ' ', row2id2.usd_value) as name, usr_login_name
                   FROM ".TBL_ROLES.", ".TBL_CATEGORIES.", ".TBL_MEMBERS.", ".TBL_USERS."
@@ -208,79 +206,8 @@ if ($getMsgType == 'PM')
 
     // add form to html page
     $page->addHtml($form->show(false));
-    
-    // list history of this PM
-    if(isset($message_result))
-    {
-        $page->addHtml('<br>');
-        while ($row = $gDb->fetch_array($message_result)) {
-
-            if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))
-            {
-                $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
-            }
-            else
-            {
-                $sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-            }
-
-            $page->addHtml('
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-sm-8">
-                            <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
-                        </div>
-                        <div class="col-sm-4 text-right">' . $row['msc_timestamp'] . 
-                        '</div>
-                    </div>
-                </div>
-                <div class="panel-body">'.
-                    nl2br($row['msc_message']).'
-                </div>
-            </div>');
-
-        }
-    }
-
 }
-else if (isset($message_result))
-{
-    
-    // show email to user
-    if (isset($message_result))
-    {
-        while ($row = $gDb->fetch_array($message_result)) 
-        {
-            if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))
-            {
-                $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
-            }
-            else
-            {
-                $sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-            }
-
-            $page->addHtml('
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />'.$sentUser.'
-                    </div>
-                    <div class="col-sm-4 text-right">'.$row['msc_timestamp']);
-
-                    $page->addHtml('</div>
-                </div>
-            </div>
-            <div class="panel-footer">'.
-                htmlspecialchars_decode($row['msc_message']).'
-            </div>');
-            
-        }
-    }
-    
-}
-else
+elseif (!isset($message_result))
 {
     if ($getUserId > 0)
     {
@@ -549,6 +476,84 @@ else
 
     // add form to html page and show page
     $page->addHtml($form->show(false));
+}
+
+if (isset($message_result))
+{
+    $page->addHtml('<br>');
+	while ($row = $gDb->fetch_array($message_result)) 
+	{
+		if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))
+		{
+			$sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
+		}
+		else
+		{
+			$sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+		}
+		
+		$ReceiverName = '';
+		$message_text = htmlspecialchars_decode($row['msc_message']);
+		if ($getMsgType == 'PM')
+		{
+			// list history of this PM
+			$message_text = nl2br($row['msc_message']);
+		}
+		else
+		{
+			$message = new TableMessage($gDb, $getMsgId);
+			$receivers = $message->getValue('msg_usr_id_receiver');
+			// open some additonal functions for messages
+            $modulemessages = new ModuleMessages();
+			$ReceiverName = "";
+			if (strpos($receivers,'|') == true) 
+			{
+				$reciversplit = explode( '|', $receivers);
+				foreach ($reciversplit as $value) 
+				{
+					if (strpos($value,':') == true) 
+					{
+						$ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($value);
+					}
+					else
+					{
+						$user = new User($gDb, $gProfileFields, $value);
+						$ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+					}
+				}
+			}
+			else
+			{
+				if (strpos($receivers,':') == true) 
+				{
+					$ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($receivers);
+				}
+				else
+				{
+					$user = new User($gDb, $gProfileFields, $receivers);
+					$ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+				}
+			}
+			$ReceiverName = '<div class="panel-footer">'.$gL10n->get('MSG_OPPOSITE').': '.substr($ReceiverName, 2).'</div>';		
+		}
+
+		$page->addHtml('
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-sm-8">
+						<img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
+					</div>
+					<div class="col-sm-4 text-right">' . $row['msc_timestamp'] . 
+					'</div>
+				</div>
+			</div>
+			<div class="panel-body">'.
+				$message_text.'
+			</div>
+		    '.$ReceiverName.'
+		</div>');
+	}
 }
 
 $preload = '';
