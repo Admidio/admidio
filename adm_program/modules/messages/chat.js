@@ -44,10 +44,6 @@ function updateChat(){
             },
         });
     }
-    else 
-    {
-        setTimeout(updateChat, 5000);
-     }
 }
 
 //send the message
@@ -59,7 +55,8 @@ function sendChat(message)
         url: "process.php",
         data: {  
             'function': 'send',
-            'message': message
+            'message': message,
+			'state': state
         },
         dataType: "json",
         success: function(data){

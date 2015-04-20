@@ -46,6 +46,10 @@
             $result = $gDb->query($sql);
             $row = $gDb->fetch_array($result);
             $MsgId = $row['max_id'];
+			if(!$MsgId)
+			{
+				$MsgId = 0;
+			}
             
             if( $MsgId+25 < $postLines)
             {
