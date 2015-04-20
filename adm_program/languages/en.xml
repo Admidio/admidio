@@ -1,5 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
+    <version id="3.0.0" translator="Stefanie Schima">
+        <text id="BAC_ONLY_MYSQL" development="new" translation="edited">The backup module can only be used in combination with a MySQL database.</text>
+        <text id="DAT_EDIT_CALENDAR_DESC" development="new" translation="edited">Here you can create and edit calendars.</text>
+        <text id="DAT_MAINTAIN_CATEGORIES_DESC" development="new" translation="edited">Here you can create and edit categories.</text>
+        <text id="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION" development="new" translation="edited">Switch to calendar management</text>
+        <text id="DAT_EDIT_ROOMS_DESC" development="changed" translation="edited">Here you can create and edit rooms for events.</text>
+        <text id="DOW_CREATE_FOLDER_DESC" development="changed" translation="edited">A new folder will be created in folder %VAR1_BOLD%.</text>
+        <text id="DOW_FILES_UPLOADED" development="new" translation="edited">%VAR1% files have been uploaded successfully.</text>
+        <text id="DOW_UPLOAD_ANOTHER_FILE" development="new" translation="edited">Upload additional file</text>
+        <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">File could not be uploaded or invalid page call.\n\nProbably the maximum file upload size has been exeeded (%VAR1%B for this server).</text>
+        <text id="DOW_UPLOAD_TO_FOLDER" development="new" translation="edited">The file will be uploaded to folder %VAR1_BOLD%.</text>
+        <text id="ECA_LAYOUT" development="new" translation="edited">Layout</text>
+        <text id="ECA_SCALE_THUMBNAILS_DESC" development="new" translation="edited">Here you can define the size to which the longer side of a thumbnail images should be scaled to (Default: 250px).</text>
+        <text id="ECA_MAX_PHOTO_SIZE_DESC" development="new" translation="edited">The defined values indicate the maximum size of an image in the greeting card (Standard: 400 x 250 Pixel).</text>
+        <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="edited">A configuration already exists. A new installation is not possible.\n\nIf an earlier installation has been interrupted it can be continued.</text>
+        <text id="INS_CONTINUE_INSTALLATION" development="new" translation="edited">Continue installation</text>
+        <text id="INS_DELETE_CONFIG_FILE" development="new" translation="edited">The Admidio main directory %VAR1_BOLD% contains a config.php. It has already been moved to the adm_my_files folder. Please delete the file in the main directory.</text>
+        <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="changed" translation="edited">Download configuration file</text>
+        <text id="INS_DOWNLOAD_CONFIGURATION_FILE_DESC" development="new" translation="edited">The configuration file %VAR1_BOLD% could not be saved in folder %VAR2_BOLD%. Please assign write access to the folder (change the file attribute via FTP to 0777 or drwxrwxrwx respectively) or download the configurationen file and copy it into the Admidio directory %VAR3_BOLD% by using a FTP program.\n\nAfter the file has been dropped at this location you can continue with the installation.</text>
+        <text id="INS_INSTALLATION_EXISTS" development="new" translation="edited">The database already contains an Admidio installation. An additional installation is not possible.</text>
+        <text id="INS_NO_INSTALLED_VERSION_FOUND" development="new" translation="edited">Could not find the current installation. If you've used Admidio 1.x update to Admidio 2.x first. Afterwards you can update the version to %VAR1%. If you are already using Admidio 2.x or higher please check the consistency of your database.</text>
+        <text id="INS_UPDATE_NOT_POSSIBLE" development="new" translation="edited">Updating the database is currently not possible!</text>
+        <text id="INS_WEBMASTER_LOGIN" development="new" translation="edited">Web administration login</text>
+        <text id="INS_WEBMASTER_LOGIN_DESC" development="new" translation="edited">Only a web administrator can update the database. Please insert web administrator login credentials.</text>
+        <text id="INS_WEBMASTER_LOGIN_FAILED" development="new" translation="edited">Could not find a user with this login credentials and a web administration role.</text>
+    	<text id="INV_INVENTORY" development="new" translation="edited">Inventory management</text>
+    	<text id="INV_ITEM_MANAGEMENT" development="new" translation="edited">Item management</text>
+    	<text id="INV_CREATE_ITEM" development="new" translation="edited">Create article</text>
+    	<text id="LST_COUNTRY_ISO" development="new" translation="edited">The country needs to be specified as Code ISO 3166 ALPHA-3 (3 characters)</text>
+        <text id="LST_INFOBOX" development="new" translation="edited" description="A small html box that will show additional informations">Info box</text>
+        <text id="LST_MEMBER_STATUS" development="new" translation="edited">Member status</text>
+        <text id="LST_MEMBERS_PER_PAGE_DESC" development="changed" translation="edited">Number of members listed in the HTML view. More members can be listed by using the pagination function. This value won't affect print preview and export functionality (Default: 25).</text>
+    	<text id="MAI_INTO_TO" development="new" translation="edited">Recipients need to be listed in the TO field instead of the BCC field</text>
+        <text id="MAI_INTO_TO_DESC" development="new" translation="edited">All recipients will be listed in the TO field if set accordingly and an email will be received by multiple person. Thus each recipient will see the name and email address of the other recipients. In addition each recipient can reply to all. (Default: deactivated)</text>
+        <text id="MEM_USER_COULD_BE_CREATED" development="new" translation="edited">User could be created.</text>
+        <text id="MEM_DAYS_FIELD_HISTORY" development="new" translation="edited">Default time period for field history (days)</text>
+        <text id="MEM_DAYS_FIELD_HISTORY_DESC" development="new" translation="edited">Changes in profile fields will be listed for the given period of time in days. This is the default filter option which can be changed by the user later on. For huge databases this option is used to limit the change history list. (Default: 365)</text>
+        <text id="MEM_SHOW_USERS_DESC" development="new" translation="edited">Only active members of this organisation will be listed if this option is not set. Otherwise all users of the database will be listed.</text>
+        <text id="MEM_USERS_PER_PAGE" development="new" translation="edited">Number of users per page</text>
+        <text id="MEM_USERS_PER_PAGE_DESC" development="new" translation="edited">Number of users listed on each page. If there are multiple members in this group pages can be turned. (Default: 25)</text>
+        <text id="MAI_MAX_RECEIVER" development="new" translation="edited">Maximum number of mail recipients</text>
+        <text id="MAI_MAX_RECEIVER_DESC" development="new" translation="edited">This value defines the maximum amount of mail recipients. A role counts as one recipient.</text>
+    	<text id="MSG_ACTIVATE_PM_MODULE" development="new" translation="edited">Activate private messages</text>
+        <text id="MSG_ACTIVATE_PM_MODULE_DESC" development="new" translation="edited">This option allows to deactivate private messages. The module will neither be callable nor listed in the overview. (Default: deactivated)</text>
+    	<text id="MSG_CHAT" development="new" translation="edited">Chat</text>
+    	<text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="edited">Activate chat</text>
+    	<text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="edited">Activate chat module. Messages will be fetched dynamically from database every 3 seconds. Only 99 entries will be saved into database. As soon as the 100th entry is to be saved the first 50 entries will be deleted.</text>
+        <text id="MSG_OPPOSITE" development="new" translation="edited">Business partner</text>
+    	<text id="MSG_PM_SEND" development="new" translation="edited">Private message has been send to %VAR1_BOLD%.</text>
+    	<text id="MSG_PM_NOT_SEND" development="new" translation="edited">Private message could not be sent to %VAR1_BOLD%.\n\nFollowing error has occured:\n%VAR2%</text>
+    	<text id="MSG_REMOVE" development="new" translation="edited">Remove message</text>
+    	<text id="MSG_REMOVE_CONFIRM" development="new" translation="edited">Confirm remove</text>
+    	<text id="MSG_REMOVE_REVERT" development="new" translation="edited">Undo remove</text>
+        <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="edited">A new oraganization will be added to the database including its master data. The current user will be announced as web master and can maintain the dataset. User who log in to the system need to select the respectivex organization.</text>
+        <text id="ORG_CAPTCHA_WIDTH" development="new" translation="edited">Captcha width</text>
+        <text id="ORG_CAPTCHA_HEIGHT" development="new" translation="edited">Captcha height</text>
+        <text id="ORG_CAPTCHA_WIDTH_DESC" development="new" translation="edited">Width of the captcha image. Thus characters of the captcha image can be stretched or crimped. (Default: 250)</text>
+        <text id="ORG_CAPTCHA_HEIGHT_DESC" development="new" translation="edited">Height of the captcha image. Thus characters of the captcha image can be stretched or crimped. (Default: 60)</text>
+        <text id="ORG_CREATE_ITEM_FIELD" development="new" translation="edited">Create item field</text>
+        <text id="ORG_DIFFERENT_DATABASE_VERSION" development="new" translation="edited">Different database version</text>
+        <text id="ORG_LAST_UPDATE_STEP" development="new" translation="edited">Last step of update</text>
+        <text id="ORG_FIELD_HIDDEN_DESC" development="changed" translation="edited">Usually a field is visible to everybody who is allowed to view the profile. If this option is deselected only user who are allowed to edit this profile can see the field.</text>
+        <text id="ORG_INVALID_THEME" development="new" translation="edited">Could not find a valid theme.</text>
+        <text id="ORG_NEW_ORGANIZATION" development="new" translation="edited">New organization</text>
+        <text id="ORG_NEW_ORGANIZATION_DESC" development="new" translation="edited">Enter the abbreviation, the official name and the email address for the organization you want to add. The email address should be a general one. It will be used as sender address when sending automatic system notifications.</text>
+        <text id="ORG_NOT_SAVED_SETTINGS_LOST" development="new" translation="edited">When changing the view all unsaved changes will be lost.</text>
+        <text id="ORG_ORGANIZATION_SUCCESSFULL_ADDED" development="new" translation="edited">Organization %VAR1_BOLD% has been added successfully. It is now selectable when logging in.\n\nIf you have a seperate homepage for this organization please add it within the config.php of the seperate homepage.</text>
+        <text id="ORG_REGIONAL_SETTINGS" development="new" translation="edited">Regional settings</text>
+    	<text id="PMS_MESSAGE" development="new" translation="edited">Private messages</text>
+    	<text id="PMS_SEND_PM" development="new" translation="edited">Send private message</text>
+    	<text id="PMS_WAS_SENT_TO" development="new" translation="edited">Message was sent to:</text>
+    	<text id="PMS_WAS_NOT_SENT_TO" development="new" translation="edited">Error - message was not sent to:</text>
+        <text id="PHO_ALBUM_LOCK" development="new" translation="edited">Lock album</text>
+        <text id="PHO_ALBUM_LOCK_DESC" development="new" translation="edited">Locked albums can not be viewed by visitors or members, e.g. you can lock an album as long as all images are uploading.</text>
+        <text id="PHO_ALBUM_UNLOCK" development="new" translation="edited">Unlock album</text>
+        <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="edited">With this option you can define how the images will be displayed within the foto module. This can be done with a modal window which will be opened as seperate browser window. The image preview will stay active in the background. If the image should be displayed in the same window the currenct image preview will be closed. The third option allows to show the image in a popup window which can be used in addition to the image preview. (Default: Modale window)</text>
+        <text id="PHO_MODAL_WINDOW" development="new" translation="edited">Modal window</text>
+        <text id="PHO_MAX_PHOTO_SIZE_WIDTH" development="new" translation="edited">Maximum image size (width)</text>
+        <text id="PHO_MAX_PHOTO_SIZE_HEIGHT" development="new" translation="edited">Maximum image size (height)</text>
+        <text id="PHO_NUMBER_OF_ALBUMS_PER_PAGE" development="new" translation="edited">Number of albums per page</text>
+        <text id="PHO_PARENT_ALBUM_DESC" development="new" translation="edited">One album can be part of another album. Please select a parent album from the selection list. If you want to display the album on the highest leven then select %VAR1_BOLD%.</text>
+        <text id="PHO_PHOTO_UPLOAD_DESC" development="new" translation="edited">Please select the images which you want to upload to album %VAR1_BOLD%.</text>
+        <text id="PHO_SAVE_ORIGINALS" development="new" translation="edited">Save originals</text>
+        <text id="PHO_SAVE_ORIGINALS_DESC" development="new" translation="edited">Images can be archived or provided as download as long as there is enough space available.</text>
+        <text id="PHO_SELECT_FOTOS" development="new" translation="edited">Select image</text>
+        <text id="PHO_THUMBNAILS_PER_PAGE" development="changed" translation="edited">Thumbnails per page</text>
+        <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="changed" translation="edited">This option defines how many thumbnail previews will be displayed on each page. If there are more images in this album a page navigation will be added automatically. (Default: 16)</text>
+        <text id="PRO_CHANGE_PROFILE_PICTURE" development="changed" translation="edited">Upload profile image</text>
+        <text id="PRO_CHOOSE_PHOTO" development="new" translation="edited">Select image</text>
+        <text id="PRO_DELETE_PROFILE_PICTURE" development="changed" translation="edited">Delete profile image</text>
+        <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="edited">Define a country for which this organization mainly operates. It will be preselected when new users are created or register. It eases the data input and can be changed by the user. (Default: Germany)</text>
+        <text id="PRO_EXPORT_VCARD" development="new" translation="edited">Export vCard</text>
+    	<text id="PRO_MAINTAIN_ITEM_FIELDS" development="new" translation="edited">Maintain article fields</text>
+        <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="changed" translation="edited">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.</text>
+        <text id="ROL_RIGHT_INVENTORY" development="new" translation="edited">Article and inventory management</text>
+        <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="edited">Rollenzuordnung für %VAR1% %VAR2%</text>
+        <text id="SYS_APPLY" development="new" translation="edited">Apply</text>
+        <text id="SYS_CATEGORIES" development="new" translation="edited">Categories</text>
+        <text id="SYS_CHARACTERS" development="new" translation="edited">Characters</text>
+    	<text id="SYS_COUNTRY_EG" development="new" translation="edited">GER</text>
+        <text id="SYS_DECIMAL_NUMBER" development="new" translation="edited">Decimal number</text>
+        <text id="SYS_EMAIL_SEND" development="changed" translation="edited">Mail has been send successfully</text>
+        <text id="SYS_FILENAME_EMPTY" development="new" translation="edited">Filename is missing!</text>
+        <text id="SYS_FILTER" development="new" translation="edited">Filter</text>
+        <text id="SYS_FULL_SCREEN" development="new" translation="edited">Full screen</text>
+    	<text id="SYS_ITEMNAME" development="new" translation="edited">Item name</text>
+        <text id="SYS_MANDATORY_FIELDS" development="new" translation="edited">Mandatory fields</text>
+        <text id="SYS_MENU" development="new" translation="edited">Menu</text>
+        <text id="SYS_MESSAGES" development="new" translation="edited">Messages</text>
+        <text id="SYS_NO_DATA_FOUND" development="new" translation="edited">No data found!</text>
+        <text id="SYS_NORMAL_PICTURE" development="new" translation="edited">Normal image</text>
+        <text id="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION" development="new" translation="edited">Online membership administration</text>
+        <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="changed" translation="edited">If you forgot your password the system can generate a new one. Please enter your email address which you used for registration and the new password will be send to this address immediately.</text>
+    	<text id="SYS_PM" development="new" translation="edited">Private message</text>
+    	<text id="SYS_QUANTITY" development="new" translation="edited">Amount</text>
+        <text id="SYS_ROLES" development="new" translation="edited">Roles</text>
+    	<text id="SYS_SELECT_FROM_LIST" development="new" translation="edited">Select from list</text>
+        <text id="SYS_STILL_X_CHARACTERS" development="new" translation="edited">still %VAR1% characters</text>
+        <text id="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION" development="new" translation="edited">Switch to category administration</text>
+    </version>
     <version id="2.4.5" translator="Stefanie Schima">
         <text id="MAI_SENDER_INTO_TO_DESC" development="changed" translation="edited">If an email is send to a role all recipient addresses will be placed in the BCC field. The TO field will then contain "Undisclosed Recipients". If this results in an error you can use this option to fill the recipient addresses into the TO field. The other addresses will remain in the BCC field. (Default: Deactivated)</text>
         <text id="SYS_CSV" development="new" translation="edited">CSV</text>
