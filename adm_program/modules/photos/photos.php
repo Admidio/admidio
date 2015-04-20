@@ -156,7 +156,16 @@ if($gPreferences['photo_show_mode']==1)
 $page->addJavascript('
     $("body").on("hidden.bs.modal", ".modal", function () { $(this).removeData("bs.modal"); location.reload(); });
     $("#menu_item_upload_photo").attr("data-toggle", "modal");
-    $("#menu_item_upload_photo").attr("data-target", "#admidio_modal");', true);
+    $("#menu_item_upload_photo").attr("data-target", "#admidio_modal");
+	$(".admidio-btn-album-upload").click(function(event){
+		$.get("'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id=" + $(this).attr("data-pho-id"),
+			function(response) {
+			    $(".modal-content").html(response);
+			    $("#admidio_modal").modal();
+			}
+		);
+    });
+    ', true);
 
 // if a photo number was committed then simulate a left mouse click
 if($getPhotoNr > 0)
@@ -520,8 +529,8 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
                     if ($gCurrentUser->editPhotoRight() && file_exists($ordner))
                     {
                         $page->addHtml('<div class="btn-group" role="group" style="width: 100%;">
-                            <button id="btn_album_upload" class="btn btn-default" style="width: 50%;" data-toggle="modal" data-target="#admidio_modal"
-                                onclick="window.location.href=\''.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'\'"><img 
+                            <button class="btn btn-default admidio-btn-album-upload" style="width: 50%;" 
+                                data-pho-id="'.$childPhotoAlbum->getValue('pho_id').'" data-toggle="modal" data-target="#admidio_modal"><img 
                                 src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" />'.$gL10n->get('PHO_UPLOAD_PHOTOS').'</button>');
 
                             if($childPhotoAlbum->getValue('pho_locked')==1)

@@ -34,7 +34,8 @@ class HtmlPage
     protected $menu;            ///< An object of the menu of this page
     protected $header;          ///< Additional header that could not be set with the other methods. This content will be add to head of html page without parsing.
     protected $hasNavbar;       ///< Flag if the current page has a navbar.
-    protected $containThemeHtml; ///< If set to true then the custom html code of the theme for each page will be included.
+    protected $showMenu;        ///< If set to true then the menu will be included.
+    protected $showThemeHtml;   ///< If set to true then the custom html code of the theme for each page will be included.
     protected $cssFiles;        ///< An array with all necessary cascading style sheets files for the html page.
     protected $jsFiles;         ///< An array with all necessary javascript files for the html page.
     protected $rssFiles;        ///< An array with all necessary rss files for the html page.
@@ -52,7 +53,8 @@ class HtmlPage
         $this->title       = $title;
         $this->headline    = $title;
         $this->menu        = new HtmlNavbar('menu_main_script', $title, $this);
-        $this->containThemeHtml = true;
+        $this->showMenu    = true;
+        $this->showThemeHtml = true;
         $this->printMode   = false;
         $this->hasNavbar   = false;
         $this->hasModal    = false;
@@ -293,7 +295,7 @@ class HtmlPage
      */
     public function excludeThemeHtml()
     {
-        $this->containThemeHtml = false;
+        $this->showThemeHtml = false;
     }
     
     /** Returns the menu object of this html page.
@@ -310,6 +312,14 @@ class HtmlPage
     public function getTitle()
     {
         return $this->title;
+    }
+    
+    /** Every html page of Admidio contains a menu. If the menu should 
+     *  not be included in the current page, than this method must be called.
+     */
+    public function hideMenu()
+    {
+        $this->showMenu = false;
     }
     
     /** Flag if the current page has a navbar.
@@ -350,9 +360,20 @@ class HtmlPage
         $htmlMyHeader     = '';
         $htmlMyBodyTop    = '';
         $htmlMyBodyBottom = '';
+        $htmlMenu         = '';
+        $htmlHeadline     = '';
         
-        // add modules and administration modules to the menu
-        $this->addDefaultMenu();
+        if($this->showMenu)
+        {
+            // add modules and administration modules to the menu
+            $this->addDefaultMenu();
+            $htmlMenu = $this->menu->show(false);
+        }
+        
+        if(strlen($this->headline) > 0)
+        {
+            $htmlHeadline = '<h1>'.$this->headline.'</h1>';
+        }
         
         // add admidio css file at last because there the user can redefine all css
         $this->addCssFile(THEME_PATH.'/css/admidio.css');
@@ -364,7 +385,7 @@ class HtmlPage
         }
         
         // load content of theme files
-        if($this->containThemeHtml)
+        if($this->showThemeHtml)
         {
             ob_start();
             include(THEME_SERVER_PATH. '/my_header.php');
@@ -482,9 +503,7 @@ class HtmlPage
         <body>'.
             $htmlMyBodyTop.'
             <div class="admContent">
-                <h1>'.$this->headline.'</h1>
-                '.$this->menu->show(false).'
-                '.$this->pageContent.'
+                '.$htmlHeadline.$htmlMenu.$this->pageContent.'
             </div>'.
             $htmlMyBodyBottom.'          
         </body>

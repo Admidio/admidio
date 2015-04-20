@@ -127,7 +127,7 @@ if (isset($folderContent['folders']))
         $folderDescription = '';
         if($nextFolder['fol_description'] != '')
         {
-            $folderDescription = '<a class="admidio-icon-link" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="'.$nextFolder['fol_description'].'" title="'.$nextFolder['fol_description'].'" /></a>';
+            $folderDescription = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/info.png" alt="'.$nextFolder['fol_description'].'" title="'.$nextFolder['fol_description'].'" />';
         }
         // create array with all column values
         $columnValues = array(
@@ -188,7 +188,7 @@ if (isset($folderContent['files']))
         $fileDescription = '';
         if($nextFile['fil_description']!='')
         {
-            $fileDescription = '<span class="admidio-icon-link" ><a class="textTooltip" title="'.$nextFile['fil_description'].'" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="'.$gL10n->get('SYS_FILE').'"/></a></span>';
+            $fileDescription = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/info.png" alt="'.$gL10n->get('SYS_FILE').'" title="'.$nextFile['fil_description'].'" />';
         }
         
         // create array with all column values

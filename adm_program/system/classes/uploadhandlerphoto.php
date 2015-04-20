@@ -11,15 +11,15 @@ class UploadHandlerPhoto extends UploadHandler
     protected function handle_file_upload($uploaded_file, $name, $size, $type, $error,
         $index = null, $content_range = null) 
     {
-        global $photo_album, $gPreferences, $gL10n;
+        global $photoAlbum, $gPreferences, $gL10n;
         
         $file = parent::handle_file_upload($uploaded_file, $name, $size, $type, $error, $index, $content_range);
 
         if(isset($file->error) == false)
         {
             $fileLocation = SERVER_PATH. '/adm_my_files/photos/upload/'.$file->name;
-            $albumFolder  = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
-            $newFotoFileNumber = $photo_album->getValue('pho_quantity') + 1;
+            $albumFolder  = SERVER_PATH. '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
+            $newFotoFileNumber = $photoAlbum->getValue('pho_quantity') + 1;
             
         	// read image size
         	$imageProperties = getimagesize($fileLocation);
@@ -84,8 +84,8 @@ class UploadHandlerPhoto extends UploadHandler
             // if image was successfully saved in filesystem then update image count of album
             if(file_exists($albumFolder.'/'.$newFotoFileNumber.'.jpg'))
             {
-                $photo_album->setValue('pho_quantity', $photo_album->getValue('pho_quantity')+1);
-                $photo_album->save(); 
+                $photoAlbum->setValue('pho_quantity', $photoAlbum->getValue('pho_quantity')+1);
+                $photoAlbum->save(); 
             }
             else
             {
