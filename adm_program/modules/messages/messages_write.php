@@ -565,24 +565,20 @@ if (isset($preload_data))
 
 // add JS code for the drop down to find email addresses and groups
 if(isset($list))
-    {
-    
-        $page->addHtml(
-        '<script>
-
-            $(document).ready(function () {
-                $("#msg_to").select2({
-                    placeholder: "'.$gL10n->get('SYS_SELECT_FROM_LIST').'",
-                    allowClear: true,
-                    maximumSelectionSize: '.$recept_number.',
-                    separator: ";",
-                    closeOnSelect: false
-                });'
-                .$preload.
-            '});
-
-        </script>');
-    }
+{
+	$page->addHtml(
+	'<script>
+		$(document).ready(function () {
+			$("#msg_to").select2({
+				placeholder: "'.$gL10n->get('SYS_SELECT_FROM_LIST').'",
+				allowClear: true,
+				maximumSelectionSize: '.$recept_number.',
+				separator: ";"
+			});'
+			.$preload.
+		'});
+	</script>');
+}
 
 // show page
 $page->show();
