@@ -141,8 +141,16 @@ if(isset($result))
 $result = $modulemessages->msgGetUserUnread($gCurrentUser->getValue('usr_id'));
 if(isset($result))
 {
-    while ($row = $gDb->fetch_array($result)) {
-        $user = new User($gDb, $gProfileFields, $row['user']);
+    while ($row = $gDb->fetch_array($result)) 
+    {
+        if($row['msg_usr_id_sender'] == $gCurrentUser->getValue('usr_id'))
+        {
+            $user = new User($gDb, $gProfileFields, $row['msg_usr_id_receiver']);
+        }
+        else
+        {
+            $user = new User($gDb, $gProfileFields, $row['msg_usr_id_sender']);
+        }
         $ReceiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
         $message = new TableMessage($gDb, $row['msg_id']);
         $key++;
@@ -160,8 +168,17 @@ if(isset($result))
 $result = $modulemessages->msgGetUser($gCurrentUser->getValue('usr_id'));
 if(isset($result))
 {
-    while ($row = $gDb->fetch_array($result)) {
-        $user = new User($gDb, $gProfileFields, $row['user']);
+    while ($row = $gDb->fetch_array($result)) 
+    {
+        if($row['msg_usr_id_sender'] == $gCurrentUser->getValue('usr_id'))
+        {
+            $user = new User($gDb, $gProfileFields, $row['msg_usr_id_receiver']);
+        }
+        else
+        {
+            $user = new User($gDb, $gProfileFields, $row['msg_usr_id_sender']);
+        }
+
         $ReceiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
         $message = new TableMessage($gDb, $row['msg_id']);
         $key++;

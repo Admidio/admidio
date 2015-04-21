@@ -31,7 +31,7 @@ class TableMessage extends TableAccess
      */
     public function countUnreadMessageRecords($usr_id)
     {
-        $sql = 'SELECT COUNT(1) as count FROM '.$this->tableName.' WHERE msg_usr_id_receiver = '. $usr_id .' and msg_read = 1';
+        $sql = 'SELECT COUNT(1) as count FROM '.$this->tableName.' WHERE msg_usr_id_receiver LIKE \''. $usr_id .'\' and msg_read = 1';
         $this->db->query($sql);
         $row = $this->db->fetch_array();
         return $row['count'];
@@ -67,7 +67,7 @@ class TableMessage extends TableAccess
     public function setReadValue($usr_id)
     {
         $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '0' 
-            WHERE msg_id = ".$this->msg_id." and msg_usr_id_receiver = ".$usr_id;
+            WHERE msg_id = ".$this->msg_id." and msg_usr_id_receiver LIKE '".$usr_id."'";
         return $this->db->query($sql);
     }
     
@@ -116,7 +116,7 @@ class TableMessage extends TableAccess
                 $other = $this->getValue('msg_usr_id_receiver');
             }
             
-            $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = 2, msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = ".$usr_id.", msg_usr_id_receiver = ".$other."
+            $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = 2, msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = ".$usr_id.", msg_usr_id_receiver = '".$other."'
              WHERE msg_id = ".$this->getValue('msg_id');
             $this->db->query($sql);
             //$return = $PM_info;

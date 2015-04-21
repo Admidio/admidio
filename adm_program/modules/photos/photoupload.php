@@ -76,7 +76,7 @@ if($getMode == 'choose_files')
     
     // create html page object
     $page = new HtmlPage();
-    $page->excludeThemeHtml();
+    $page->hideThemeHtml();
     $page->hideMenu();
     
     $page->addCssFile($g_root_path.'/adm_program/libs/jquery-file-upload/css/jquery.fileupload.css');

@@ -287,17 +287,6 @@ class HtmlPage
         }
     }
     
-    /** Every html page of Admidio contains three files of the custom theme.
-     *  my_header.php, my_body_top.php and my_body_bottom.php
-     *  With these files the webmaster can contain custom layout to Admidio.
-     *  If these files should not be included in the current page, than
-     *  this method must be called.
-     */
-    public function excludeThemeHtml()
-    {
-        $this->showThemeHtml = false;
-    }
-    
     /** Returns the menu object of this html page.
      *  @return Returns the menu object of this html page.
      */ 
@@ -320,6 +309,17 @@ class HtmlPage
     public function hideMenu()
     {
         $this->showMenu = false;
+    }
+        
+    /** Every html page of Admidio contains three files of the custom theme.
+     *  my_header.php, my_body_top.php and my_body_bottom.php
+     *  With these files the webmaster can contain custom layout to Admidio.
+     *  If these files should not be included in the current page, than
+     *  this method must be called.
+     */
+    public function hideThemeHtml()
+    {
+        $this->showThemeHtml = false;
     }
     
     /** Flag if the current page has a navbar.

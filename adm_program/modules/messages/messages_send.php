@@ -410,13 +410,13 @@ else
             VALUES ('".$getMsgType."', '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', CURRENT_TIMESTAMP, '1')";
 
         $gDb->query($sql);
-        $getMsgId = mysql_insert_id();
+        $getMsgId = $gDb->insert_id();
     }
     else
     {
         $PMId2 = $message->countMessageParts() + 1;
 
-        $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '1', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = '".$gCurrentUser->getValue('usr_id')."', msg_usr_id_receiver = '".$postTo[0]."'
+        $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '1', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = '".$gCurrentUser->getValue('usr_id')."', msg_usr_id_receiver LIKE '".$postTo[0]."'
                 WHERE msg_id = ".$getMsgId;
 
         $gDb->query($sql);
@@ -440,7 +440,7 @@ if ($sendResult === TRUE)
             VALUES ('".$getMsgType."', '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$ReceiverString."', CURRENT_TIMESTAMP, '0')";
 
         $gDb->query($sql);
-        $getMsgId = mysql_insert_id();
+        $getMsgId = $gDb->insert_id();
 
         $sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp) 
             VALUES ('".$getMsgId."', '1', '".$gCurrentUser->getValue('usr_id')."', '".$postBodySQL."', CURRENT_TIMESTAMP)";

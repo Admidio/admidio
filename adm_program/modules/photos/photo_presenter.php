@@ -77,7 +77,7 @@ $page = new HtmlPage($photoAlbum->getValue('pho_name'));
 //wenn Popupmode oder Colorbox, dann normalen Kopf unterdruecken
 if($gPreferences['photo_show_mode'] == 0)
 {                      
-    $page->excludeThemeHtml();
+    $page->hideThemeHtml();
 }
 
 if($gPreferences['photo_show_mode'] == 2)

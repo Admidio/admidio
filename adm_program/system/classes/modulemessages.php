@@ -106,16 +106,15 @@ class ModuleMessages
     
     /** return an array with all unread Messages of the given user.
      */
-    public function msgGetUserUnread($user)
+    public function msgGetUserUnread($userId)
     {    
         global $gDb;
 
-        $sql = "SELECT msg_id,
-            CASE WHEN msg_usr_id_sender = ". $user ." THEN msg_usr_id_receiver
-            ELSE msg_usr_id_sender
-            END AS user
-        FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'PM' and msg_usr_id_receiver = ". $user ." and msg_read = 1
+        $sql = "
+        SELECT msg_id, msg_usr_id_sender, msg_usr_id_receiver
+          FROM ". TBL_MESSAGES. "
+         WHERE msg_type = 'PM' 
+           AND msg_usr_id_receiver LIKE '". $userId ."' and msg_read = 1
          ORDER BY msg_id DESC";
 
         return $gDb->query($sql);
@@ -123,17 +122,16 @@ class ModuleMessages
     
     /** return an array with all unread Messages of the given user.
      */
-    public function msgGetUser($user)
+    public function msgGetUser($userId)
     {    
         global $gDb;
 
-        $sql = "SELECT msg_id,
-            CASE WHEN msg_usr_id_sender = ". $user ." THEN msg_usr_id_receiver
-            ELSE msg_usr_id_sender
-            END AS user
-        FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'PM' and ((msg_usr_id_receiver = ". $user ." and msg_read <> 1)
-         or msg_usr_id_sender = ". $user ." and msg_read < 2)
+        $sql = "
+        SELECT msg_id, msg_usr_id_sender, msg_usr_id_receiver
+          FROM ". TBL_MESSAGES. "
+         WHERE msg_type = 'PM' 
+           AND ( (msg_usr_id_receiver LIKE '". $userId ."' and msg_read <> 1)
+               OR (msg_usr_id_sender = ". $userId ." and msg_read < 2))
          ORDER BY msg_id DESC";
 
         return $gDb->query($sql);

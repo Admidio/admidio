@@ -187,7 +187,8 @@ if($getMode != 'csv')
     {
         // create html page object without the custom theme files
         $page = new HtmlPage();
-        $page->excludeThemeHtml();
+        $page->hideThemeHtml();
+        $page->hideMenu();
         $page->setPrintMode();
                 
         $page->setTitle($title);
@@ -236,7 +237,7 @@ if($getMode != 'csv')
 
         if($getFullScreen == true)
         {
-            $page->excludeThemeHtml();
+            $page->hideThemeHtml();
         }
 
         $page->setTitle($title);
@@ -514,11 +515,12 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
                         $str_csv = $str_csv. $valueQuotes. $listRowNumber. $valueQuotes;
                     }
                 }
-    
-                $content  = '';
+
+                // fill content with data of database
+                $content = $row[$sqlColumnNumber];
 
                 /*****************************************************************/
-                // create field content for each field type and output format
+                // in some cases the content must have a special output format 
                 /*****************************************************************/
                 if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id') && $usf_id!=0)
                 {
@@ -534,6 +536,20 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
                     if ($getMode == 'csv' && $row[$sqlColumnNumber] != NULL)
                     {
                         $content = $gL10n->get('LST_USER_PHOTO');
+                    }
+                }
+                elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX')
+                {
+                    if($getMode != 'html')
+                    {
+                        if($content == 1)
+                        {
+                            $content = $gL10n->get('SYS_YES');
+                        }
+                        else
+                        {
+                            $content = $gL10n->get('SYS_NO');                            
+                        }
                     }
                 }
                 elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DATE'
@@ -557,10 +573,6 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
                         $arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
                         $content       = $arrListValues[$row[$sqlColumnNumber]];
                     }
-                }
-                else 
-                {
-                    $content = $row[$sqlColumnNumber];
                 }
 
                 // format value for csv export

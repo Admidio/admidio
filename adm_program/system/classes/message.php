@@ -135,11 +135,12 @@ class Message
         {
             // create html page object
             $page = new HtmlPage($headline);
+            $page->hideMenu();
 
             if($this->includeThemeBody == false)
             {
                 // dont show custom html of the current theme
-                $page->excludeThemeHtml();
+                $page->hideThemeHtml();
             }
 
             // forward to next page after x seconds
