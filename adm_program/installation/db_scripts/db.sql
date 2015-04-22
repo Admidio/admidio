@@ -41,6 +41,7 @@ drop table if exists %PREFIX%_user_fields cascade;
 drop table if exists %PREFIX%_categories cascade;
 drop table if exists %PREFIX%_users cascade;
 drop table if exists %PREFIX%_organizations cascade;
+drop table if exists %PREFIX%_ids cascade;
 
 
 /*==============================================================*/
@@ -891,9 +892,9 @@ alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_USR_CHANG
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
       
 alter table %PREFIX%_ids add constraint %PREFIX%_FK_IDS_USR_ID foreign key (ids_usr_id) 
-      references %PREFIX%_users (usr_id) on delete restrict on update restrict
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict;
 
-      alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_CAT foreign key (lnk_cat_id)
+alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_CAT foreign key (lnk_cat_id)
       references %PREFIX%_categories (cat_id) on delete restrict on update restrict;
 alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_USR_CREATE foreign key (lnk_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
@@ -923,9 +924,9 @@ alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_SENDER foreign 
       references %PREFIX%_users (usr_id) on delete restrict on update restrict;
 
 alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_MSG_ID foreign key (msc_msg_id)
-      references %PREFIX%_messages (msg_id) on delete restrict on update restrict
+      references %PREFIX%_messages (msg_id) on delete restrict on update restrict;
 alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_USR_ID foreign key (msc_usr_id)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 alter table %PREFIX%_organizations add constraint %PREFIX%_FK_ORG_ORG_PARENT foreign key (org_org_id_parent)
       references %PREFIX%_organizations (org_id) on delete set null on update restrict;
