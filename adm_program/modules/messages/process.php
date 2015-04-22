@@ -34,22 +34,27 @@
     $postLines    = admFuncVariableIsValid($_POST, 'state', 'number');
 
     $log = array();
+	
+	// open some additonal functions for messages
+	$modulemessages = new ModuleMessages();
+	//find ID of the admidio Chat
+	$msg_id = $modulemessages->msgGetChatId();
+	
+	$sql = "SELECT MAX(msc_part_id) as max_id
+              FROM ". TBL_MESSAGES_CONTENT."
+              where msc_msg_id = '".$msg_id."'";
+
+	$result = $gDb->query($sql);
+	$row = $gDb->fetch_array($result);
+	$MsgId = $row['max_id'];
+	if(!$MsgId)
+	{
+		$MsgId = 0;
+	}
 
     switch($postFunction) 
     {
         case('update'):
-        
-            $sql = "SELECT MAX(msc_part_id) as max_id
-              FROM ". TBL_MESSAGES_CONTENT."
-              where msc_msg_id = 0";
-
-            $result = $gDb->query($sql);
-            $row = $gDb->fetch_array($result);
-            $MsgId = $row['max_id'];
-			if(!$MsgId)
-			{
-				$MsgId = 0;
-			}
             
             if( $MsgId+25 < $postLines)
             {
@@ -60,10 +65,10 @@
             {
                 $log['test'] = '100';
                 
-                $sql = "DELETE FROM ". TBL_MESSAGES_CONTENT. " WHERE msc_msg_id = 0 and msc_part_id <= 50";
+                $sql = "DELETE FROM ". TBL_MESSAGES_CONTENT. " WHERE msc_msg_id = '".$msg_id."' and msc_part_id <= 50";
                 $gDb->query($sql);
                 
-                $sql = "UPDATE ". TBL_MESSAGES_CONTENT. " SET msc_part_id = msc_part_id - 50 WHERE msc_msg_id = 0";
+                $sql = "UPDATE ". TBL_MESSAGES_CONTENT. " SET msc_part_id = msc_part_id - 50 WHERE msc_msg_id = '".$msg_id."'";
                 $gDb->query($sql);
                 
                 $postLines = $postLines - 50;
@@ -81,7 +86,7 @@
                 
                 $sql = "SELECT msc_part_id, msc_usr_id, msc_message, msc_timestamp
                   FROM ". TBL_MESSAGES_CONTENT. "
-                 WHERE msc_msg_id  = 0
+                 WHERE msc_msg_id  = '".$msg_id."'
                    AND msc_part_id  > ".$postLines. "
                  ORDER BY msc_part_id";
 
@@ -106,21 +111,25 @@
                        $postMessage = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
                 } 
             }
-            $sql = "SELECT MAX(msc_part_id) as max_id
-              FROM ". TBL_MESSAGES_CONTENT."
-              where msc_msg_id = 0";
+			
+			if($MsgId == 0)
+			{
+				$sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read) 
+				VALUES ('CHAT', 'DUMMY', '1', '".$MsgId."', CURRENT_TIMESTAMP, '0')";
+				$gDb->query($sql);
+                $msg_id = $modulemessages->msgGetChatId();
+			}
 
-            $result = $gDb->query($sql);
-            $row = $gDb->fetch_array($result);
-            $MsgId = $row['max_id'] + 1;
+			$MsgId += 1;
 
             $sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp) 
-                VALUES ('0', '".$MsgId."', '".$gCurrentUser->getValue('usr_id')."', '".$postMessage."', CURRENT_TIMESTAMP)";
+                VALUES ('".$msg_id."', '".$MsgId."', '".$gCurrentUser->getValue('usr_id')."', '".$postMessage."', CURRENT_TIMESTAMP)";
 
             $gDb->query($sql);
+		    $log['state'] = $MsgId;
             break;
         case('delete'):
-            $sql = "DELETE FROM ". TBL_MESSAGES_CONTENT. " WHERE msc_msg_id = 0";
+            $sql = "DELETE FROM ". TBL_MESSAGES_CONTENT. " WHERE msc_msg_id = '".$msg_id."'";
             $gDb->query($sql);
             break;
     }

@@ -136,6 +136,19 @@ class ModuleMessages
 
         return $gDb->query($sql);
     }
+	
+    /** return the message ID of the admidio chat.
+     */
+    public function msgGetChatId()
+    {    
+        global $gDb;
+
+        $sql = "SELECT msg_id FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT'";
+		$result = $gDb->query($sql);
+        $row = $gDb->fetch_array($result);
+		
+		return $row['msg_id'];
+    }
     
 }
 ?>
