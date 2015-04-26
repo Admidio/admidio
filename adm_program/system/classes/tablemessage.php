@@ -92,11 +92,15 @@ class TableMessage extends TableAccess
     
     /** Deletes the selected message with all associated fields. 
      *  After that the class will be initialize.
-     *  @return @b 'done' if message is deleted or message with additional information if it is marked for other user to delete. On error it is "delete not OK"
+     *  @return @b 'done' if message is deleted or message with additional information if it is marked 
+                for other user to delete. On error it is "delete not OK"
      */
-    public function delete($usr_id, $PM_info)
+    public function delete()
     {
+        global $gCurrentUser;
+        
         $return = 'delete not OK';
+        
         if($this->getValue('msg_read') == 2 || $this->getValue('msg_type') == 'EMAIL')
         {
             $sql = "DELETE FROM ".TBL_MESSAGES_CONTENT."
@@ -106,20 +110,22 @@ class TableMessage extends TableAccess
             $sql = "DELETE FROM ".TBL_MESSAGES."
              WHERE msg_id = ". $this->getValue('msg_id');
             $this->db->query($sql);
+            
             $return = 'done';
         }
         else
         {
             $other = $this->getValue('msg_usr_id_sender');
-            if($other == $usr_id)
+            if($other == $gCurrentUser->getValue('usr_id'))
             {
                 $other = $this->getValue('msg_usr_id_receiver');
             }
             
-            $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = 2, msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = ".$usr_id.", msg_usr_id_receiver = '".$other."'
+            $sql = "UPDATE ". TBL_MESSAGES. " SET msg_read = 2, msg_timestamp = CURRENT_TIMESTAMP
+                                                , msg_usr_id_sender = ".$gCurrentUser->getValue('usr_id').", msg_usr_id_receiver = '".$other."'
              WHERE msg_id = ".$this->getValue('msg_id');
             $this->db->query($sql);
-            //$return = $PM_info;
+
             $return = 'done';
         }
 

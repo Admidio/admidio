@@ -33,7 +33,7 @@ if ($getMsgId != 0)
     $delMessage = new TableMessage($gDb, $getMsgId);
 
     //Function to delete message
-    $delete = $delMessage->delete($gCurrentUser->getValue('usr_id'), $gL10n->get('MSG_DELETE_PM'));
+    $delete = $delMessage->delete();
     echo $delete;
     exit();    
 }
@@ -128,7 +128,7 @@ if(isset($result))
         $message = new TableMessage($gDb, $row['msg_id']);
         $key++;
 
-        $messageAdministration = $part1 . $key . '&amp;name=' . $message->getValue('msg_subject') . '&amp;database_id=' . $message->getValue('msg_id') . $part2;
+        $messageAdministration = $part1 . $key . '&amp;name='.urlencode($message->getValue('msg_subject')).'&amp;database_id=' . $message->getValue('msg_id') . $part2;
 
         $table->addRowByArray(array( '<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') .'">
                 <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />' , 
