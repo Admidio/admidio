@@ -481,7 +481,7 @@ else
 {
     if ($getMsgType != 'PM')
     {
-        $gMessage->show($sendResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $sendResult));
+        $gMessage->show($sendResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $gL10n->get('SYS_RECIPIENT') ,$sendResult));
     }
     else
     {

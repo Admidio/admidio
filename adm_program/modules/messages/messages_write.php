@@ -455,11 +455,11 @@ elseif (!isset($message_result))
     // add textfield or ckeditor to form
     if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
     {
-        $form->addEditor('msg_body', null, $form_values['msg_body']);
+        $form->addEditor('msg_body', null, $form_values['msg_body'], array('property' => FIELD_MANDATORY));
     }
     else
     {
-        $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_TEXT'), null, 10);
+        $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_TEXT'), null, 10, array('property' => FIELD_MANDATORY));
     }
 
     $form->closeGroupBox();
