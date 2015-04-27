@@ -37,7 +37,7 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 if(isMember($getUserId) == false
 || strlen($user->getValue('usr_login_name')) == 0
 || ($gCurrentUser->isWebmaster() == false && $gCurrentUser->getValue('usr_id') != $getUserId)
-|| ($gCurrentUser->isWebmaster() == true  && strlen($user->getValue('EMAIL')) > 0 && $gPreferences['enable_system_mails'] == 1)
+|| ($gCurrentUser->isWebmaster() == true  && strlen($user->getValue('EMAIL')) > 0 && $gPreferences['enable_system_mails'] == 1))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -145,7 +145,7 @@ elseif($getMode == 'html')
             $form->addInput('old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));
             $form->addLine();
         }
-        $form->addInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION'));
+        $form->addInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'));
         $form->addInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));
         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
         $form->show();

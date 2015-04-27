@@ -299,7 +299,6 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             $dateElements = array();
             $maxMembers   = '';
             $numMembers   = '';
-            $leadersHtml  = '';
             $locationHtml = '';
 
             if ($date->getValue('dat_all_day') == 0)
@@ -451,7 +450,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                     // Link to participants list
                     if($gValidLogin)
                     {
-                        if ($leadersHtml + $numMembers > 0)
+                        if($numMembers > 0)
                         {
                             $buttonURL = $g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id');
                             
@@ -592,17 +591,13 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 $columnValues[] = $dateBegin.' '.$timeBegin;
                 $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>';
                 
-                $participants = '';
+                $participants = $numMembers .'/'. $maxMembers;
                 
-                if($leadersHtml > 0)
-                {
-                    $participants = $leadersHtml.'+';
-                }
-                $participants = $numMembers .'/'. $maxMembers;                    
-                if($leadersHtml+$numMembers)
+                if($numMembers)
                 {
                     $participants = $participantLink;
                 }
+                
                 $columnValues[] = $participants;
 
                 if(strlen($locationHtml) > 0)

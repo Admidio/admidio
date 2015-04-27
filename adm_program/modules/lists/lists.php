@@ -104,28 +104,19 @@ if($gCurrentUser->manageRoles())
                         $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
 }
 
+$page->addJavascript('$("#cat_id").change(function() { $("#navbar_cat_id_form").submit();});', true);
+$navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/lists/lists.php?active_role='.$getActiveRole, $page, array('type' => 'navbar', 'setFocus' => false));
+$navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
+$ListsMenu->addForm($navbarForm->show(false));
+
 if($gCurrentUser->isWebmaster())
 {
     // show link to system preferences of roles
     $ListsMenu->addItem('admMenuItemPreferencesLists', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=lists', 
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
-elseif($gCurrentUser->manageRoles())
-{
-    // if no calendar selectbox is shown, then show link to edit calendars
-    $DatesMenu->addItem('admMenuItemCategories', '/adm_program/modules/categories/categories.php?type=ROL',
-                        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
-}
-
-$page->addJavascript('$("#cat_id").change(function() { $("#navbar_cat_id_form").submit();});', true);
-$navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/lists/lists.php?active_role='.$getActiveRole, $page, array('type' => 'navbar', 'setFocus' => false));
-$navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
-
-// show module menu
-$page->addHtml($ListsMenu->show(false));
 
 $previousCategoryId   = 0;
-
 
 //Get Lists
 $getStart = $lists->getStartElement();
