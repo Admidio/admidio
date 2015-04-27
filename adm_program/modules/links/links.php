@@ -116,7 +116,7 @@ if ($weblinksCount == 0)
 else
 {
     $getStart = $weblinks->getStartElement();
-    $getWeblinks = $weblinks->getDataSet($getStart);    
+    $weblinksDataSet = $weblinks->getDataSet($getStart);    
     $weblink = new TableWeblink($gDb);
 
     $j = 0;         // counter for fetch_object
@@ -124,69 +124,71 @@ else
     $previous_cat_id = -1;  // previous Cat Id
     $new_category = true;   // maybe new category
     
-    // show all weblinks
-    foreach($getWeblinks['recordset'] as $row)
+    if($weblinksDataSet['numResults'] > 0)
     {
-        // initialize weblink object and read new recordset into this object
-        $weblink->clear();
-        $weblink->setArray($row);
-
-        if ($weblink->getValue('lnk_cat_id') != $previous_cat_id)
+        // show all weblinks
+        foreach($weblinksDataSet['recordset'] as $row)
         {
-            $i = 0;
-            $new_category = true;
-            if ($j>0)
+            // initialize weblink object and read new recordset into this object
+            $weblink->clear();
+            $weblink->setArray($row);
+    
+            if ($weblink->getValue('lnk_cat_id') != $previous_cat_id)
             {
-                $page->addHtml('</div></div>');
+                $i = 0;
+                $new_category = true;
+                if ($j>0)
+                {
+                    $page->addHtml('</div></div>');
+                }
+                $page->addHtml('<div class="panel panel-primary">
+                    <div class="panel-heading">'.$weblink->getValue('cat_name').'</div>
+                    <div class="panel-body">');
             }
-            $page->addHtml('<div class="panel panel-primary">
-                <div class="panel-heading">'.$weblink->getValue('cat_name').'</div>
-                <div class="panel-body">');
-        }
-
-        $page->addHtml('<div class="admidio-weblink-item" id="lnk_'.$weblink->getValue('lnk_id').'">');
-            // show weblink
-            $page->addHtml('
-            <a class="btn" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $gPreferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
-                alt="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" />'.$weblink->getValue('lnk_name').'</a>');
-
-            // change and delete only users with rights
-            if ($gCurrentUser->editWeblinksRight())
-            {
+    
+            $page->addHtml('<div class="admidio-weblink-item" id="lnk_'.$weblink->getValue('lnk_id').'">');
+                // show weblink
                 $page->addHtml('
-                <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$weblink->getValue('lnk_id').'&amp;headline='. $getHeadline. '"><img
-                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-                <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                    href="'.$g_root_path.'/adm_program/system/popup_message.php?type=lnk&amp;element_id=lnk_'.
-                    $weblink->getValue('lnk_id').'&amp;name='.urlencode($weblink->getValue('lnk_name')).'&amp;database_id='.$weblink->getValue('lnk_id').'"><img 
-                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
-            }
+                <a class="btn" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $gPreferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
+                    alt="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" />'.$weblink->getValue('lnk_name').'</a>');
+    
+                // change and delete only users with rights
+                if ($gCurrentUser->editWeblinksRight())
+                {
+                    $page->addHtml('
+                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$weblink->getValue('lnk_id').'&amp;headline='. $getHeadline. '"><img
+                        src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
+                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                        href="'.$g_root_path.'/adm_program/system/popup_message.php?type=lnk&amp;element_id=lnk_'.
+                        $weblink->getValue('lnk_id').'&amp;name='.urlencode($weblink->getValue('lnk_name')).'&amp;database_id='.$weblink->getValue('lnk_id').'"><img 
+                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
+                }
+    
+                // get available description
+                if(strlen($weblink->getValue('lnk_description')) > 0)
+                {
+                    $page->addHtml('<div class="admidio-weblink-description">'.$weblink->getValue('lnk_description').'</div>');
+                }
+                
+                $page->addHtml('<div class="weblink-counter"><small>'.$gL10n->get('LNK_COUNTER'). ': '.$weblink->getValue('lnk_counter').'</small></div>
+    		</div>');
+    
+            $j++;
+            $i++;
+    
+            // set current category to privious
+            $previous_cat_id = $weblink->getValue('lnk_cat_id');
+    
+            $new_category = false;
+        }  // End While-loop
 
-            // get available description
-            if(strlen($weblink->getValue('lnk_description')) > 0)
-            {
-                $page->addHtml('<div class="admidio-weblink-description">'.$weblink->getValue('lnk_description').'</div>');
-            }
-            
-            $page->addHtml('<div class="weblink-counter"><small>'.$gL10n->get('LNK_COUNTER'). ': '.$weblink->getValue('lnk_counter').'</small></div>
-		</div>');
-
-        $j++;
-        $i++;
-
-        // set current category to privious
-        $previous_cat_id = $weblink->getValue('lnk_cat_id');
-
-        $new_category = false;
-    }  // End While-loop
-
-    // No links or 1 link is hidden
-    if ($weblinksCount == 0)
+        $page->addHtml('</div></div>');
+    }
+    else
     {
+        // No links or 1 link is hidden
         $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
     }
-
-    $page->addHtml('</div></div>');
 } // end if at least 1 recordset
 
 $page->addHtml('</div>');

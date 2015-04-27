@@ -1020,7 +1020,7 @@ class HtmlForm extends HtmlFormBasic
 
         $value = reset($values);
         $optionGroup = null;
-        
+
         for($arrayCount = 0; $arrayCount < count($values); $arrayCount++)
         {
             // create entry in html
@@ -1317,11 +1317,20 @@ class HtmlForm extends HtmlFormBasic
 		$result = $databaseObject->query($sql);
 		$countCategories = $databaseObject->num_rows($result);
 		
-		// if only one category exists then select this
-	    if($countCategories == 1 && $optionsAll['defaultValue'] == null)
+		// if only one category exists then select this if not in filter modus
+	    if($countCategories == 1)
 	    {
+    	    // in filter modus selectbox shouldn't be shown with one entry
+    	    if($selectboxModus == 'FILTER_CATEGORIES')
+    	    {
+        	    return null;
+    	    }
+    	    
 	        $row = $databaseObject->fetch_array($result);
-            $optionsAll['defaultValue'] = $row['cat_id'];
+	        if($optionsAll['defaultValue'] == null)
+	        {
+                $optionsAll['defaultValue'] = $row['cat_id'];
+            }
             $categoriesArray['cat_id'] = $row['cat_name'];
         }
         // if several categories exist than select default category
