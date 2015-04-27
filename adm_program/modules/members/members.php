@@ -275,17 +275,27 @@ while($row = $gDb->fetch_array($result_mgl))
 	$columnValues[] = $timestampChange->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
 
     $userAdministration = '';
-	// Link um E-Mail mit neuem Passwort zu zuschicken
-	// nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
+    
+    // Webmasters can change or send password if login is configured and user is member of current organization
 	if($row['member_this_orga'] > 0
-	  && $gCurrentUser->isWebmaster()
-	  && strlen($row['usr_login_name']) > 0
-	  && strlen($row['email']) > 0
-	  && $gPreferences['enable_system_mails'] == 1
-	  && $row['usr_id'] != $gCurrentUser->getValue('usr_id'))
+    && $gCurrentUser->isWebmaster()
+	&& strlen($row['usr_login_name']) > 0
+	&& $row['usr_id'] != $gCurrentUser->getValue('usr_id'))
 	{
-        $userAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
-						         src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
+        if(strlen($row['email']) > 0 && $gPreferences['enable_system_mails'] == 1)
+        {
+            // if email is set and systemmails are activated then webmaster can send a new password to user
+            $userAdministration = '
+            <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
+                src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
+        }
+        else
+        {
+            // if user has no email or send email is disabled then webmaster could set a new password
+            $userAdministration = '
+            <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.$g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $row['usr_id']. '"><img
+                src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>';            
+        }
     }
 	else
 	{

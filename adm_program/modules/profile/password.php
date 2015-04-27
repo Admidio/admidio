@@ -35,8 +35,9 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 
 // only the own password could be individual set. Webmaster could only send a generated password.
 if(isMember($getUserId) == false
+|| strlen($user->getValue('usr_login_name')) == 0
 || ($gCurrentUser->isWebmaster() == false && $gCurrentUser->getValue('usr_id') != $getUserId)
-|| ($gCurrentUser->isWebmaster() == true  && strlen($user->getValue('usr_login_name')) > 0 && strlen($user->getValue('EMAIL')) > 0) && $gPreferences['enable_system_mails'] == 1)
+|| ($gCurrentUser->isWebmaster() == true  && strlen($user->getValue('EMAIL')) > 0 && $gPreferences['enable_system_mails'] == 1)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -45,7 +46,7 @@ if(isMember($getUserId) == false
 if($getMode == 'change')
 {
     /***********************************************************************/
-    /* Formular verarbeiten */
+    /* Handle form input */
     /***********************************************************************/
     if($gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId )
     {
@@ -67,7 +68,7 @@ if($getMode == 'change')
                     $user->setValue('usr_password', $_POST['new_password']);
                     $user->save();
 
-                    // wenn das PW des eingeloggten Users geaendert wird, dann Session-Variablen aktualisieren
+                    // if password of current user changed, then update value in current session
                     if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
                     {
                         $gCurrentUser->setValue('usr_password', $_POST['new_password']);
@@ -103,7 +104,6 @@ elseif($getMode == 'html')
     /* Show password form */
     /***********************************************************************/
 
-    // show headline 
     echo '<script type="text/javascript"><!--
     $(document).ready(function(){
         $("body").on("shown.bs.modal", ".modal", function () { $("#password_form:first *:input[type!=hidden]:first").focus(); });
@@ -115,22 +115,17 @@ elseif($getMode == 'html')
             // disable default form submit
             event.preventDefault();
             
-            $.ajax({
-                type:    "POST",
-                url:     action,
-                data:    $(this).serialize(),
-                success: function(data) {
-                    if(data == "success") {
-                        $("#password_form .form-alert").attr("class", "alert alert-success form-alert");
-                        $("#password_form .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
-                        $("#password_form .form-alert").fadeIn("slow");
-                        setTimeout("$(\"#admidio_modal\").modal(\"hide\");",2000);	
-                    }
-                    else {
-                        $("#password_form .form-alert").attr("class", "alert alert-danger form-alert");
-                        $("#password_form .form-alert").fadeIn();
-                        $("#password_form .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
-                    }
+            $.post(action, $(this).serialize(), function(data) {
+                if(data == "success") {
+                    $("#password_form .form-alert").attr("class", "alert alert-success form-alert");
+                    $("#password_form .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
+                    $("#password_form .form-alert").fadeIn("slow");
+                    setTimeout("$(\"#admidio_modal\").modal(\"hide\");",2000);	
+                }
+                else {
+                    $("#password_form .form-alert").attr("class", "alert alert-danger form-alert");
+                    $("#password_form .form-alert").fadeIn();
+                    $("#password_form .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                 }
             });    
         });
@@ -142,11 +137,14 @@ elseif($getMode == 'html')
         <h4 class="modal-title">'.$gL10n->get('PRO_EDIT_PASSWORD').'</h4>
     </div>
     <div class="modal-body">';
-
         // show form
         $form = new HtmlForm('password_form', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='.$getUserId.'&amp;mode=change');
-        $form->addInput('old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));
-        $form->addLine();
+        if($gCurrentUser->getValue('usr_id') == $getUserId)
+        {
+            // to change own password user must enter the valid old password for verification
+            $form->addInput('old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));
+            $form->addLine();
+        }
         $form->addInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION'));
         $form->addInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));
         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
