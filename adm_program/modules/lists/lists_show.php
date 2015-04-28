@@ -193,6 +193,8 @@ if($getMode != 'csv')
                 
         $page->setTitle($title);
         $page->addHeadline($headline);
+		
+		$table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
     }
     elseif($getMode == 'pdf')
     {
@@ -225,6 +227,16 @@ if($getMode != 'csv')
 
         // add a page
         $pdf->AddPage();
+		
+		// Create table object for display
+		$table = new HtmlTable('adm_lists_table', $pdf, $hoverRows, $datatable, $classTable);
+        $table->addAttribute('border', '1');
+        $table->addTableHeader();
+        $table->addRow();
+        $table->addColumn('', array('colspan' => $list->countColumns() + 1));
+        $table->addAttribute('align', 'center');
+        $table->addData($headline);
+        $table->addRow();
 
     }
     elseif($getMode == 'html')
@@ -287,25 +299,14 @@ if($getMode != 'csv')
                                   'pdfl' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')', 'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')');
         $form->addSelectBox('export_list_to', null, $selectBoxEntries, array('showContextDependentFirstEntry' => false));
         $listsMenu->addForm($form->show(false));
-    }
 
-    // Create table object for display
-    $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
-
-    if($getMode == 'pdf')
-    {
-        $table->addAttribute('border', '1');
-        $table->addTableHeader();
-        $table->addRow();
-        $table->addColumn('', array('colspan' => $list->countColumns() + 1));
-        $table->addAttribute('align', 'center');
-        $table->addData($pdfHtmlHeadline);
-        $table->addRow();
-    }
-    elseif($getMode == 'html')
-    {
+		$table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
         $table->setDatatablesRowsPerPage($gPreferences['lists_members_per_page']);
     }
+	else
+	{
+		$table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
+	}
 }
 
 // initialize array parameters for table and set the first column for the counter
