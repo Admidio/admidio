@@ -673,12 +673,20 @@ class HtmlForm extends HtmlFormBasic
             $attributes['data-provide'] = 'datepicker';
             $javascriptCode             = '';
             
+			if (strpos($gPreferences['system_language'], '_') !== false) 
+			{
+				$lang = substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_'));
+			}
+			else
+			{
+				$lang = substr($gPreferences['system_language'], 0, 2);
+			}
 
             if($this->datepickerInitialized == false)
             {
                 $javascriptCode = '
                     $("input[data-provide=\'datepicker\']").datepicker({
-                        language: "'.substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_')).'",
+                        language: "'.$lang.'",
                         format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
                         todayHighlight: "true",
                         autoclose: "true"
@@ -700,7 +708,7 @@ class HtmlForm extends HtmlFormBasic
                     $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js');
                 }
 
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/locales/bootstrap-datepicker.'.substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_')).'.min.js');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/locales/bootstrap-datepicker.'.$lang.'.min.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
             }
             else

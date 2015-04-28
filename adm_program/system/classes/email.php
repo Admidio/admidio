@@ -109,7 +109,16 @@ class Email extends PHPMailer
         }
         
         // set language for error reporting (de_sie should be converted to de)
-        $this->SetLanguage(substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_')));
+		if (strpos($gPreferences['system_language'], '_') !== false) 
+		{
+			$lang = substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_'));
+		}
+		else
+		{
+			$lang = substr($gPreferences['system_language'], 0, 2);
+		}
+		
+        $this->SetLanguage($lang);
         $this->CharSet =  $gPreferences['mail_character_encoding'];
     }
     
