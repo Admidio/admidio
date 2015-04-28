@@ -434,7 +434,7 @@ else
 if ($sendResult === TRUE)
 {
     // save mail also to database
-    if ($getMsgType != 'PM')
+    if ($getMsgType != 'PM' && $gValidLogin)
     {
         $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read) 
             VALUES ('".$getMsgType."', '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$ReceiverString."', CURRENT_TIMESTAMP, '0')";
