@@ -364,7 +364,7 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 }
 
 .admidio-control-mandatory label:after, .admidio-control-mandatory-def span:after {
-    content: url('../icons/bullet_red.png');
+    content: url('../layout/bullet_red.png');
     white-space: nowrap;
     vertical-align: top;
 }
