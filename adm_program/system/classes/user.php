@@ -965,7 +965,7 @@ class User extends TableUsers
         }
         else
         {
-            throw new AdmException('The profile data of user ', $this->getValue('FIRST_NAME').' '.$this->getValue('LAST_NAME').' could not be saved because you don\'t have the right to do this.');
+            throw new AdmException('The profile data of user '. $this->getValue('FIRST_NAME').' '.$this->getValue('LAST_NAME').' could not be saved because you don\'t have the right to do this.');
         }
     }
 	
