@@ -1669,6 +1669,12 @@ class HtmlForm extends HtmlFormBasic
     {
 		global $gL10n;
 		$html = '';
+		
+		// if there are no elements in the form then return nothing
+		if($this->countElements == 0)
+		{
+    		return null;
+		}
 
 	    // If mandatory fields were set than a notice which marker represents the mandatory will be shown.
         if($this->flagMandatoryFields)
