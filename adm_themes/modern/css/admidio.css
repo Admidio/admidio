@@ -248,8 +248,8 @@ a:link, a:visited {
     text-decoration: underline;
 }
 
-a:hover, a:active, a.btn:hover, a.btn:active, a.navbar-link:hover, a.navbar-link:active {
-    text-decoration: underline !important;
+a:hover, a:active, .nav li a:hover, .nav li a:active, a.btn:hover, a.btn:active {
+    text-decoration: underline;
     color: #ff9c00 !important;
 }
 
