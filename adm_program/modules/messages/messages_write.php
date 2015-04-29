@@ -379,16 +379,16 @@ elseif (!isset($message_result))
         $result = $gDb->query($sql);
 
         $next = true;
-        $test = "Aktive Mitglieder";
+        $active = $gL10n->get('LST_ACTIVE_MEMBERS');
         
         while ($row = $gDb->fetch_array($result)) {
             if ($row['former'] == 1 && $next == true)
             {
-                $test = "Inactive Mitglieder";
+                $active = $gL10n->get('MSG_FORMER_MEMBERS');
                 $next = false;
             }
 
-            $list[] = array($row['usr_id'], $row['first_name'].' '.$row['last_name']. ' ('.$row['email'].')', $test);
+            $list[] = array($row['usr_id'], $row['first_name'].' '.$row['last_name']. ' ('.$row['email'].')', $active);
         }
 
     }
