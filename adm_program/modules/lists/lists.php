@@ -214,7 +214,7 @@ foreach($listsResult['recordset'] as $row)
                 // show combobox with lists if user is allowed to see members and the role has members
                 if($row['num_members'] > 0 || $row['num_leader'] > 0)
                 {                
-                    $form->addSelectBox('admSelectRoleList_'.$role->getValue('rol_id'), $gL10n->get('LST_SHOW_LIST'), $listConfigurations, array());
+                    $form->addSelectBox('admSelectRoleList_'.$role->getValue('rol_id'), $gL10n->get('LST_SHOW_LIST'), $listConfigurations, array('firstEntry' => $gL10n->get('LST_CHOOSE_LIST')));
                 }
         
                 if(strlen($role->getValue('rol_description')) > 0)

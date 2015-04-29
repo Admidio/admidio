@@ -95,7 +95,7 @@
     	<text id="PRO_MAINTAIN_ITEM_FIELDS" development="new" translation="edited">Maintain article fields</text>
         <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="changed" translation="edited">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.</text>
         <text id="ROL_RIGHT_INVENTORY" development="new" translation="edited">Article and inventory management</text>
-        <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="edited">Rollenzuordnung für %VAR1% %VAR2%</text>
+        <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="edited">Role assignment for %VAR1% %VAR2%</text>
         <text id="SYS_APPLY" development="new" translation="edited">Apply</text>
         <text id="SYS_CATEGORIES" development="new" translation="edited">Categories</text>
         <text id="SYS_CHARACTERS" development="new" translation="edited">Characters</text>

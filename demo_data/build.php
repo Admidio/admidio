@@ -25,12 +25,20 @@ elseif(file_exists('../config.php') == true)
 }
 else
 {
-    die('Error: Config file not found!');
+    die('<p style="color: #cc0000">Error: Config file not found!</p>');
 }
 
 include('../adm_program/system/constants.php');
 include('../adm_program/system/function.php');
 include('../adm_program/system/string.php');
+
+// import of demo data must be enabled in config.php
+if(!isset($gImportDemoData) || $gImportDemoData != 1)
+{
+    die('<p style="color: #cc0000">Error: Demo data could not be imported because you have 
+    not set the preference <strong>gImportDemoData</strong> in your configuration file.</p>
+    <p style="color: #cc0000">Please add the following line to your config.php :<br /><i>$gImportDemoData = 1;</i></p>');
+}
 
 // default database type should be MySQL
 if(!isset($gDbType))
@@ -38,7 +46,7 @@ if(!isset($gDbType))
     $gDbType = 'mysql';
 }
 
-// parts of this funtion are from get_backtrace out of phpBB3
+// parts of this function are from get_backtrace out of phpBB3
 // Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
 
 function getBacktrace()
@@ -123,8 +131,8 @@ $b_return = $myFilesFolder->delete($newFolder.'/photos');
 $b_return = $myFilesFolder->copy($newFolder);
 if($b_return == false)
 {
-    echo 'Folder <strong>adm_my_files</strong> is not writeable.<br />
-    No files could be copied to that folder.';
+    echo '<p style="color: #cc0000">Folder <strong>adm_my_files</strong> is not writeable.<br />
+    No files could be copied to that folder.</p>';
     exit();
 }
 echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';
@@ -144,7 +152,7 @@ if($gDbType == 'mysql')
 
 $filename = 'db.sql';
 $file     = fopen($filename, 'r')
-            or die('File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.');
+            or die('<p style="color: #cc0000">File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);
@@ -164,7 +172,7 @@ foreach($sql_arr as $sql)
 
 $filename = 'data.sql';
 $file     = fopen($filename, 'r')
-            or die('File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.');
+            or die('<p style="color: #cc0000">File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);

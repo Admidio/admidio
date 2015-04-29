@@ -30,6 +30,7 @@ if(isset($_GET['mode']) && $_GET['mode'] == 'assign')
 $getMode           = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
 $getRoleId         = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', array('requireValue' => true, 'directOutput' => true));
 $getUserId         = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('directOutput' => true));
+$getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'numeric');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'boolean');
 
 $_SESSION['set_rol_id'] = $getRoleId;
@@ -47,6 +48,19 @@ if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') &&
 if($role->allowedToAssignMembers($gCurrentUser) == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+}
+
+if($getMembersShowAll == 1)
+{
+    $getFilterRoleId = 0;
+}
+
+if($getFilterRoleId > 0)
+{
+    if($gCurrentUser->hasRightViewRole($getFilterRoleId) == false)
+    {
+        $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
+    }
 }
 
 if($getMode == 'assign')
@@ -120,11 +134,19 @@ else
     else
     {
         // Falls gefordert, nur Aufruf von aktiven Mitgliedern der Organisation
+        $roleCondition = '';
+        
+        if($getFilterRoleId > 0)
+        {
+            $roleCondition = ' AND mem_rol_id = '.$getFilterRoleId.' ';
+        }
+        
         $memberCondition = ' EXISTS 
             (SELECT 1
                FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
               WHERE mem_usr_id = usr_id
                 AND mem_rol_id = rol_id
+                    '.$roleCondition.'
                 AND mem_begin <= \''.DATE_NOW.'\'
                 AND mem_end    > \''.DATE_NOW.'\'
                 AND rol_valid  = 1
@@ -198,6 +220,11 @@ else
         $("#menu_item_create_user").attr("data-target", "#admidio_modal");
 
         // change mode of users that should be shown
+        $("#filter_rol_id").click(function(){
+            window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$getRoleId.'&filter_rol_id=" + $("#filter_rol_id").val() + "&mem_show_all=0");
+        });
+        
+        // change mode of users that should be shown
         $("#mem_show_all").click(function(){
             if($("#mem_show_all").is(":checked")) {
                 window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$getRoleId.'&mem_show_all=1");
@@ -231,12 +258,9 @@ else
             }
 
             // change data in database
-            $.ajax({
-                url: "'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?mode=assign&rol_id='.$getRoleId.'&usr_id="+userid,
-                type: "POST",
-                data: "member_"+userid+"="+member_checked+"&leader_"+userid+"="+leader_checked,
-                async: false,
-                success: function(data){
+            $.post("'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?mode=assign&rol_id='.$getRoleId.'&usr_id="+userid,
+                "member_"+userid+"="+member_checked+"&leader_"+userid+"="+leader_checked,
+                function(data){
                     // check if error occurs
                     if(data != "success") {
                         // reset checkbox status
@@ -255,7 +279,7 @@ else
                     }
                     return true;
                 }
-            });
+            );
         });';
 
     $page->addJavascript($javascriptCode, true);
@@ -265,6 +289,14 @@ else
     $membersAssignmentMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
     $membersAssignmentMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
+    $sql = 'SELECT rol_id, rol_name, cat_name FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+             WHERE rol_valid   = 1
+               AND rol_visible = 1
+               AND rol_cat_id  = cat_id
+               AND (  cat_org_id  = '.$gCurrentOrganization->getValue('org_id').'
+                   OR cat_org_id IS NULL )
+             ORDER BY cat_sequence, rol_name';
+    $navbarForm->addSelectBoxFromSql('filter_rol_id', $gL10n->get('SYS_ROLE'), $gDb, $sql, array('defaultValue' => $getFilterRoleId, 'firstEntry' => $gL10n->get('SYS_FILTER')));
     $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), 0, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
     $membersAssignmentMenu->addForm($navbarForm->show(false));
 

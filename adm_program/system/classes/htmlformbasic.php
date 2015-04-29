@@ -198,7 +198,8 @@ class HtmlFormBasic extends HtmlElement
         
         if($disable === true)
         {
-            $this->currentElementAttributes .= ' disabled';
+            $this->addAttribute('disabled', 'disabled');
+            //$this->currentElementAttributes .= ' disabled';
         }
         // add label
         $this->addData($label);

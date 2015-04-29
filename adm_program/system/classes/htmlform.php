@@ -945,7 +945,10 @@ class HtmlForm extends HtmlFormBasic
      *                     an array with all default values could be set.
      *                  @b showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
      *                     If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
-     *                     an emptry entry will be added so you must not select something.
+     *                     an empty entry will be added so you must not select something.
+     *                  @b firstEntry       Here you can define a string that should be shown as firstEntry and will be the 
+     *                     default value if no other value is set. This entry will only be added if @b showContextDependentFirstEntry
+     *                     is set to false!
      *                  @b multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
      *                     where the user could select multiple values from the selectbox. Then an array will be 
      *                     created within the $_POST array.
@@ -970,8 +973,8 @@ class HtmlForm extends HtmlFormBasic
         $this->countElements++;
 
         // create array with all options
-        $optionsDefault = array('property' => FIELD_DEFAULT, 'defaultValue' => '', 'showContextDependentFirstEntry' => true, 'multiselect' => false, 
-                                'helpTextIdLabel' => null, 'helpTextIdInline' => null, 'icon' => null, 'class' => null);
+        $optionsDefault = array('property' => FIELD_DEFAULT, 'defaultValue' => '', 'showContextDependentFirstEntry' => true, 'firstEntry' => null,
+                                'multiselect' => false, 'helpTextIdLabel' => null, 'helpTextIdInline' => null, 'icon' => null, 'class' => null);
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // disable field
@@ -1008,7 +1011,7 @@ class HtmlForm extends HtmlFormBasic
         $this->addSelect($name, $id, $attributes);
 
         // add an additional first entry to the select box and set this as preselected if necessary
-        if($optionsAll['showContextDependentFirstEntry'] == true)
+        if($optionsAll['showContextDependentFirstEntry'] == true || strlen($optionsAll['firstEntry']) > 0)
         {
             $defaultEntry = false;
             if($optionsAll['defaultValue'] == null)
@@ -1016,13 +1019,23 @@ class HtmlForm extends HtmlFormBasic
                 $defaultEntry = true;
             }
     
-            if($optionsAll['property'] == FIELD_MANDATORY)
+            if(strlen($optionsAll['firstEntry']) > 0)
             {
-                $this->addOption(null, '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -', null, $defaultEntry);
+                $this->addOption(null, '- '.$optionsAll['firstEntry'].' -', null, $defaultEntry);                            
             }
             else
             {
-                $this->addOption('', ' ', null, $defaultEntry);            
+                if($optionsAll['showContextDependentFirstEntry'] == true)
+                {
+                    if($optionsAll['property'] == FIELD_MANDATORY)
+                    {
+                        $this->addOption(null, '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -', null, $defaultEntry);
+                    }
+                    else
+                    {
+                        $this->addOption(null, ' ', null, $defaultEntry);            
+                    }
+                }
             }
         }
 
@@ -1139,6 +1152,9 @@ class HtmlForm extends HtmlFormBasic
      *                         @b showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
      *                            If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
      *                            an emptry entry will be added so you must not select something.
+     *                         @b firstEntry       Here you can define a string that should be shown as firstEntry and will be the 
+     *                            default value if no other value is set. This entry will only be added if @b showContextDependentFirstEntry
+     *                            is set to false!
      *                         @b multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
      *                            where the user could select multiple values from the selectbox. Then an array will be 
      *                            created within the $_POST array.
@@ -1199,6 +1215,9 @@ class HtmlForm extends HtmlFormBasic
      *                      @b showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
      *                         If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
      *                         an emptry entry will be added so you must not select something.
+     *                      @b firstEntry       Here you can define a string that should be shown as firstEntry and will be the 
+     *                         default value if no other value is set. This entry will only be added if @b showContextDependentFirstEntry
+     *                         is set to false!
      *                      @b multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
      *                         where the user could select multiple values from the selectbox. Then an array will be 
      *                         created within the $_POST array.
