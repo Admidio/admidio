@@ -201,7 +201,7 @@ while($cat_row = $gDb->fetch_array($categoryResult))
     else
     {
         $categoryAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.$g_root_path.'/adm_program/system/popup_message.php?type=cat&amp;element_id=row_'.
+                                        href="'.$g_root_path.'/adm_program/system/popup_message.php?type='.strtolower($getType).'&amp;element_id=row_'.
                                         $category->getValue('cat_id').'&amp;name='.urlencode($category->getValue('cat_name')).'&amp;database_id='.$category->getValue('cat_id').'&amp;database_id_2='.$getType.'"><img
                                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
     }
