@@ -220,7 +220,7 @@ else
         $("#menu_item_create_user").attr("data-target", "#admidio_modal");
 
         // change mode of users that should be shown
-        $("#filter_rol_id").click(function(){
+        $("#filter_rol_id").change(function(){
             window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$getRoleId.'&filter_rol_id=" + $("#filter_rol_id").val() + "&mem_show_all=0");
         });
         

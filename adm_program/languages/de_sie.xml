@@ -30,6 +30,7 @@
         <text id="INV_INVENTORY" development="new" translation="todo">Inventarverwaltung</text>
         <text id="INV_ITEM_MANAGEMENT" development="new" translation="todo">Artikel verwalten</text>
         <text id="INV_CREATE_ITEM" development="new" translation="todo">Neuer Artikel</text>
+        <text id="LST_CHOOSE_LIST" development="new" translation="todo">Liste auswählen</text>
         <text id="LST_COUNTRY_ISO" development="new" translation="edited">Das Land muss im Code ISO 3166 ALPHA-3 (3 Zeichen) angegeben werden</text>
         <text id="LST_INFOBOX" development="new" translation="todo" description="A small html box that will show additional informations">Infobox</text>
         <text id="LST_MEMBER_STATUS" development="new" translation="todo">Mitgliedsstatus</text>

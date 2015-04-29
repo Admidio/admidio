@@ -30,6 +30,7 @@
     	<text id="INV_INVENTORY" development="new" translation="edited">Inventory management</text>
     	<text id="INV_ITEM_MANAGEMENT" development="new" translation="edited">Item management</text>
     	<text id="INV_CREATE_ITEM" development="new" translation="edited">Create article</text>
+        <text id="LST_CHOOSE_LIST" development="new" translation="todo">Choose list</text>
     	<text id="LST_COUNTRY_ISO" development="new" translation="edited">The country needs to be specified as Code ISO 3166 ALPHA-3 (3 characters)</text>
         <text id="LST_INFOBOX" development="new" translation="edited" description="A small html box that will show additional informations">Info box</text>
         <text id="LST_MEMBER_STATUS" development="new" translation="edited">Member status</text>
