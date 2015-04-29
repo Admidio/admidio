@@ -143,6 +143,19 @@ switch ($get_type)
         break;
 }
 
+// get special Message if call from categories.php
+switch ($get_database_id_2)
+{
+    case 'DAT':
+        $text = 'SYS_DELETE_ENTRY';
+        break;
+    case 'ROL':
+        $text = 'SYS_DELETE_ENTRY';
+        break;
+	default:
+        break;
+}
+
 if(strlen($url) == 0)
 {
     $gMessage->showThemeBody(false);

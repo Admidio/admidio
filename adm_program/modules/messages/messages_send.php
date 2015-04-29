@@ -368,6 +368,45 @@ if ($getMsgType == 'EMAIL')
     $emailTemplate = admReadTemplateFile("template.html");
     $emailTemplate = str_replace("#message#",$postBody,$emailTemplate);
 
+	// add sender and receiver to email if template include the variables
+    $emailTemplate = str_replace("#sender#",$postName,$emailTemplate);
+    if (strpos($emailTemplate,'#receiver#') == true) 
+    {
+        $modulemessages = new ModuleMessages();
+        $ReceiverName = "";
+        if (strpos($ReceiverString,'|') == true) 
+        {
+            $reciversplit = explode( '|', $ReceiverString);
+            foreach ($reciversplit as $value) 
+            {
+                if (strpos($value,':') == true) 
+                {
+                    $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($value);
+                }
+                else
+                {
+                    $user = new User($gDb, $gProfileFields, $value);
+                    $ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                }
+            }
+        }
+        else
+        {
+            if (strpos($row['user'],':') == true) 
+            {
+                $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($ReceiverString);
+            }
+            else
+            {
+                $user = new User($gDb, $gProfileFields, $ReceiverString);
+                $ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+            }
+        }
+        $ReceiverName = substr($ReceiverName, 2);
+        $emailTemplate = str_replace("#receiver#",$ReceiverName,$emailTemplate);
+    }
+
+
     // set Text
     $email->setText($emailTemplate);
 
