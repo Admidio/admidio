@@ -450,7 +450,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                     // Link to participants list
                     if($gValidLogin)
                     {
-                        if($numMembers > 0)
+                        if($row['dat_num_members'] > 0 || $row['dat_num_leaders'] > 0)
                         {
                             $buttonURL = $g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id');
                             
