@@ -360,8 +360,8 @@ else
     // show rows with all organization users
     while($user = $gDb->fetch_array($resultUser))
     {
-        $addressText  = '';
-        $htmlAddress  = '$nbsp;';
+        $addressText  = ' ';
+        $htmlAddress  = '&nbsp;';
         $htmlBirthday = '&nbsp;';
         
         if($user['member_this_orga'] > 0)
@@ -409,7 +409,7 @@ else
             $htmlMemberStatus = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" class="memlist_checkbox memlist_member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>';
         }
 
-        if(strlen($addressText) > 0)
+        if(strlen($addressText) > 1)
         {
             $htmlAddress = '<img class="admidio-icon-info" src="'. THEME_PATH.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
         }
@@ -438,8 +438,8 @@ else
             '<img class="admidio-icon-info" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
             $memberOfThisOrganization,
             $htmlMemberStatus,
-            $user['last_name'],
-            $user['first_name'],
+            '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['last_name'].'</a>',
+            '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['first_name'].'</a>',
             $htmlAddress,
             $addressText,
             $htmlBirthday,
