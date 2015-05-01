@@ -635,10 +635,16 @@ class HtmlForm extends HtmlFormBasic
                                 'property' => FIELD_DEFAULT, 'helpTextIdLabel' => null, 'helpTextIdInline' => null, 'icon' => null, 'class' => null);
         $optionsAll     = array_replace($optionsDefault, $options);
 
-        // set max input length
-        if($optionsAll['type'] == 'text' && $optionsAll['maxLength'] > 0)
+        // set min/max input length
+        if($optionsAll['type'] == 'text' || $optionsAll['type'] == 'password' || $optionsAll['type'] == 'search' ||
+            $optionsAll['type'] == 'email' || $optionsAll['type'] == 'url' || $optionsAll['type'] == 'tel')
         {
-            $attributes['maxlength'] = $optionsAll['maxLength'];
+            $attributes['minlength'] = $optionsAll['minLength'];
+
+            if($optionsAll['maxLength'] > 0)
+            {
+                $attributes['maxlength'] = $optionsAll['maxLength'];
+            }
         }
         elseif($optionsAll['type'] == 'number')
         {
