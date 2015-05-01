@@ -57,7 +57,7 @@ if($gValidLogin == false)
 // if new_user isn't set and no user id is set then show dialog to create a user
 if($getUserId == 0 && $getNewUser == 0)
 {
-	$getNewUser = 1;
+    $getNewUser = 1;
 }
 
 if($getRemoveUrl == 1)
@@ -91,7 +91,7 @@ switch($getNewUser)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
-        
+
         // wurde Nachname und Vorname uebergeben, dann diese bereits vorbelegen
         $user->setValue('LAST_NAME', $getLastname);
         $user->setValue('FIRST_NAME', $getFirstname);
@@ -125,13 +125,13 @@ if(isset($_SESSION['profile_request']))
 
     if(isset($_SESSION['profile_request']['usr_login_name']))
     {
-		$user->setArray(array('usr_login_name' => $_SESSION['profile_request']['usr_login_name']));
+        $user->setArray(array('usr_login_name' => $_SESSION['profile_request']['usr_login_name']));
     }
     if(isset($_SESSION['profile_request']['reg_org_id']))
     {
         $registrationOrgId = $_SESSION['profile_request']['reg_org_id'];
     }
-    
+
     unset($_SESSION['profile_request']);
 }
 
@@ -154,11 +154,11 @@ $category = '';
 foreach($gProfileFields->mProfileFields as $field)
 {
     $show_field = false;
-    
+
     // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
     // E-Mail ist Ausnahme und muss immer angezeigt werden
-    if($getNewUser == 2 
-    && $gPreferences['registration_mode'] == 1 
+    if($getNewUser == 2
+    && $gPreferences['registration_mode'] == 1
     && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') == 'EMAIL'))
     {
         $show_field = true;
@@ -169,7 +169,7 @@ foreach($gProfileFields->mProfileFields as $field)
         // bei der vollstaendigen Registrierung alle Felder anzeigen
         $show_field = true;
     }
-    elseif($getNewUser != 2 
+    elseif($getNewUser != 2
     && ($getUserId == $gCurrentUser->getValue('usr_id') || $gCurrentUser->hasRightEditProfile($user)))
     {
         // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
@@ -191,7 +191,7 @@ foreach($gProfileFields->mProfileFields as $field)
 
         $form->addHtml('<a id="cat-'. $field->getValue('cat_id'). '"></a>');
         $form->openGroupBox('gb_category_'.$field->getValue('cat_name_intern'), $field->getValue('cat_name'));
-                
+
         if($field->getValue('cat_name_intern') == 'MASTER_DATA')
         {
             if($getUserId > 0 || $getNewUser == 2)
@@ -199,7 +199,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 // add username to form
                 $fieldProperty = FIELD_DEFAULT;
                 $fieldHelpId   = null;
-                
+
                 if($gCurrentUser->isWebmaster() == false && $getNewUser == 0)
                 {
                     $fieldProperty = FIELD_DISABLED;
@@ -209,7 +209,7 @@ foreach($gProfileFields->mProfileFields as $field)
                     $fieldProperty = FIELD_MANDATORY;
                     $fieldHelpId   = 'PRO_USERNAME_DESCRIPTION';
                 }
-            
+
                 $form->addInput('usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'), array('maxLength' => 35, 'property' => $fieldProperty, 'helpTextIdLabel' => $fieldHelpId, 'class' => 'form-control-small'));
 
                 if($getNewUser == 2)
@@ -230,15 +230,15 @@ foreach($gProfileFields->mProfileFields as $field)
                     // only show link if user is member of this organization.
                     // Password of own user could be changed.
                     // Webmasters are allowed to change password if no login was configured or no email is set to send a generated password.
-                    if( isMember($user->getValue('usr_id')) 
-                    && (  $gCurrentUser->getValue('usr_id') == $user->getValue('usr_id') 
-                       || (   $gCurrentUser->isWebmaster() 
+                    if( isMember($user->getValue('usr_id'))
+                    && (  $gCurrentUser->getValue('usr_id') == $user->getValue('usr_id')
+                       || (   $gCurrentUser->isWebmaster()
                           && (strlen($user->getValue('usr_login_name')) == 0 || strlen($user->getValue('EMAIL')) == 0))))
                     {
-                        $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '            
+                        $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '
                             <a id="password_link" class="btn" data-toggle="modal" data-target="#admidio_modal"
-                                href="password.php?usr_id='.$getUserId.'"><img src="'. THEME_PATH. '/icons/key.png" 
-                            	alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" />'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
+                                href="password.php?usr_id='.$getUserId.'"><img src="'. THEME_PATH. '/icons/key.png"
+                                alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" />'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
                     }
                 }
                 $form->addLine();
@@ -252,10 +252,10 @@ foreach($gProfileFields->mProfileFields as $field)
         // add profile fields to form
         $fieldProperty = FIELD_DEFAULT;
         $helpId        = null;
-        
+
         if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_disabled') == 1 && $gCurrentUser->editUsers() == false && $getNewUser == 0)
         {
-        	// disable field if this is configured in profile field configuration
+            // disable field if this is configured in profile field configuration
             $fieldProperty = FIELD_DISABLED;
         }
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_mandatory') == 1)
@@ -263,14 +263,14 @@ foreach($gProfileFields->mProfileFields as $field)
             // set mandatory field
             $fieldProperty = FIELD_MANDATORY;
         }
-        
+
         if(strlen($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_description')) > 0)
         {
             $helpId = array('user_field_description', $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name_intern'));
         }
-    
+
         // code for different field types
-        
+
         if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'CHECKBOX')
         {
             $form->addCheckbox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),
@@ -284,7 +284,7 @@ foreach($gProfileFields->mProfileFields as $field)
             {
                 $arrListValues = $gL10n->getCountries();
                 $defaultValue  = null;
-                
+
                 if($user->getValue('usr_id') == 0 && strlen($gPreferences['default_country']) > 0)
                 {
                     $defaultValue = $gPreferences['default_country'];
@@ -298,35 +298,35 @@ foreach($gProfileFields->mProfileFields as $field)
             {
                 $arrListValues = $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_value_list');
                 $defaultValue  = $user->getValue($field->getValue('usf_name_intern'), 'database');
-    		}
+            }
 
-    		$form->addSelectBox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), 
-                $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),  $arrListValues, 
-                array('property' => $fieldProperty, 'defaultValue' => $defaultValue, 'helpTextIdLabel' => $helpId, 
+            $form->addSelectBox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'),
+                $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),  $arrListValues,
+                array('property' => $fieldProperty, 'defaultValue' => $defaultValue, 'helpTextIdLabel' => $helpId,
                 'icon' => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
-    	}
+        }
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'RADIO_BUTTON')
         {
-    		$arrListValues        = $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_value_list');
-    		$showDummyRadioButton = false;
-    		
-    		if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_mandatory') == 0)
-    		{
-        		$showDummyRadioButton = true;
-    		}
-    		
-    		$form->addRadioButton('usf-'.$gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),
-    		    $arrListValues, array('property' => $fieldProperty, 'defaultValue' => $user->getValue($field->getValue('usf_name_intern'), 'database'), 'showNoValueButton' => $showDummyRadioButton, 'helpTextIdLabel' => $helpId, 'icon' => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
+            $arrListValues        = $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_value_list');
+            $showDummyRadioButton = false;
+
+            if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_mandatory') == 0)
+            {
+                $showDummyRadioButton = true;
+            }
+
+            $form->addRadioButton('usf-'.$gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),
+                $arrListValues, array('property' => $fieldProperty, 'defaultValue' => $user->getValue($field->getValue('usf_name_intern'), 'database'), 'showNoValueButton' => $showDummyRadioButton, 'helpTextIdLabel' => $helpId, 'icon' => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
         }
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'TEXT_BIG')
         {
-            $form->addMultilineTextInput('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'), 
+            $form->addMultilineTextInput('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),
                 $user->getValue($field->getValue('usf_name_intern')), 3, array('maxLength' => 4000, 'property' => $fieldProperty, 'helpTextIdLabel' => $helpId, 'icon' =>  $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
         }
         else
         {
             $fieldType = 'text';
-            
+
             if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'DATE')
             {
                 $fieldType = 'date';
@@ -357,8 +357,8 @@ foreach($gProfileFields->mProfileFields as $field)
             {
                 $maxlength = '50';
             }
-    
-            $form->addInput('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'), $user->getValue($field->getValue('usf_name_intern')), 
+
+            $form->addInput('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'), $user->getValue($field->getValue('usf_name_intern')),
                 array('type' => $fieldType, 'maxLength' => $maxlength, 'property' => $fieldProperty, 'helpTextIdLabel' => $helpId, 'icon' => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
         }
     }

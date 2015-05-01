@@ -2,13 +2,13 @@
 /*****************************************************************************/
 /** @class HtmlFormBasic
  *  @brief  Create html form elements
- * 
+ *
  *  This class creates html form elements.
  *  Create an instance of an form element and set the input elements inline .
  *  The class supports setting all form elements and allows you to configure all attributes programatically.
  *  The parsed form object  is returned as string.
- *  
- *  @par Example of an array with further attributes 
+ *
+ *  @par Example of an array with further attributes
  *  @code
  *  $attrArray = array('class' => 'Classname');
  *  @endcode
@@ -63,9 +63,9 @@
  *
  *****************************************************************************/
 
-class HtmlFormBasic extends HtmlElement 
+class HtmlFormBasic extends HtmlElement
 {
-       
+
     /**
      * Constructor creates the element
      *
@@ -75,48 +75,48 @@ class HtmlFormBasic extends HtmlElement
      * @param $event Optional event handler
      * @param $script Optional script or function called from event handler
      */
-     
+
     public function __construct($action = null, $id = null, $method = null, $event = null, $script = null )
-    {        
-        
+    {
+
         parent::__construct('form', '', '', true);
-        
+
         // set action attribute
         if($action != null)
         {
             $this->addAttribute('action', $action);
         }
-        
+
         if($id != null)
         {
             $this->addAttribute('id', $id);
         }
-        
+
         if($method != null)
         {
             $this->addAttribute('method', $method);
         }
-        
+
         if($event != null && $script != null )
         {
             $this->addAttribute($event, $script);
         }
 
     }
-    
+
     /** Add a fieldset.
-     *  @param $id Optional ID 
+     *  @param $id Optional ID
      *  @param $legend Description for optional legend element as string
      */
     public function addFieldSet($id = null, $legend = null)
     {
         $this->addParentElement('fieldset');
-        
+
         if($legend != null)
         {
             $this->addLegend($legend);
         }
-    } 
+    }
 
     /** Add a input field with attribute properties.
      *  @param $type Type of input field e.g. 'text'
@@ -128,52 +128,52 @@ class HtmlFormBasic extends HtmlElement
     public function addSimpleInput($type , $name, $id = null, $value ='', $arrAttributes = null)
     {
         $this->addElement('input', '', '', '',  true);
-        
+
         // set all attributes
         $this->addAttribute('type', $type);
         $this->addAttribute('name', $name);
-        
+
         if($id != null)
         {
             $this->addAttribute('id', $id);
         }
-        
+
         $this->addAttribute('value', $value);
-        
+
         // Check optional attributes in associative array and set all attributes
         if($arrAttributes != null && is_array($arrAttributes))
         {
             $this->setAttributesFromArray($arrAttributes);
         }
-        
+
         $this->addData(' ',true);
-           
+
     }
-    
+
     /** Add a label to the input field.
      *  @param $string Value of the label as string
      */
     public function addLabel($string = '', $refID = null, $attribute = 'for')
     {
         $this->addElement('label');
-        
+
         If($refID != null)
         {
             $this->addAttribute($attribute, $refID);
         }
         $this->addData($string);
     }
-    
-    
+
+
     /** Add a legend element in current fieldset.
-     *  @param $legend Data for the element as string   
+     *  @param $legend Data for the element as string
      */
     public function addLegend($legend)
     {
         $this->addElement('legend', '', '', $legend);
     }
-    
-    
+
+
     /** Add inline element into current division.
      *  @param $value Option value
      *  @param $label Label of the option
@@ -185,17 +185,17 @@ class HtmlFormBasic extends HtmlElement
         $this->addElement('option');
         // set attributes
         $this->addAttribute('value', $value);
-        
+
         if($id != null)
         {
             $this->addAttribute('id', $id);
         }
-        
+
         if($selected === true)
         {
             $this->addAttribute('selected', 'selected');
         }
-        
+
         if($disable === true)
         {
             $this->addAttribute('disabled', 'disabled');
@@ -203,7 +203,7 @@ class HtmlFormBasic extends HtmlElement
         // add label
         $this->addData($label);
     }
-    
+
     /** Add an option group.
      *  @param $label Label of the option group
      *  @param $id Optional Id of the group
@@ -213,27 +213,27 @@ class HtmlFormBasic extends HtmlElement
     public function addOptionGroup($label, $id = null, $arrAttributes = null, $disable = false)
     {
         $this->addParentElement('optgroup');
-        
+
         // set attributes
         $this->addAttribute('label', $label);
-        
+
         if($id != null)
         {
             $this->addAttribute('id', $id);
         }
-        
+
         // Check optional attributes in associative array and set all attributes
         if($arrAttributes != null && is_array($arrAttributes))
         {
             $this->setAttributesFromArray($arrAttributes);
         }
-        
+
         if($disable === true)
         {
             $this->addAttribute('disabled', 'disabled');
         }
     }
-    
+
     /** Add an option group.
      *  @param $lname Name of the select
      *  @param $id Optional Id of the select
@@ -249,7 +249,7 @@ class HtmlFormBasic extends HtmlElement
         {
             $this->addAttribute('id', $id);
         }
-        
+
         // Check optional attributes in associative array and set all attributes
         if($arrAttributes != null && is_array($arrAttributes))
         {
@@ -261,22 +261,22 @@ class HtmlFormBasic extends HtmlElement
             $this->addAttribute('disabled', 'disabled');
         }
     }
-    
+
     /** Adds a button to the form.
      *  @param $name  Name of the button
      *  @param $type  Type attribute (Allowed: submit, reset, button (Default: button))
      *  @param $value Value of the button
      *  @param $id    Optional ID for the button
-     *  @param $link  If set a javascript click event with a page load to this link 
+     *  @param $link  If set a javascript click event with a page load to this link
      *                will be attached to the button.
      */
     public function addSimpleButton($name, $type = 'button', $value, $id = null, $link = null)
     {
         $this->addElement('button');
-        
+
         if(strlen($id) > 0)
         {
-            $this->addAttribute('id', $id);        
+            $this->addAttribute('id', $id);
         }
 
         // if link is set then add a onclick event
@@ -284,12 +284,12 @@ class HtmlFormBasic extends HtmlElement
         {
             $this->addAttribute('onclick', 'self.location.href=\''.$link.'\'');
         }
-        
+
         $this->addAttribute('name', $name);
         $this->addAttribute('type', $type);
         $this->addData($value);
     }
-    
+
     /** Add a text area.
      * @param $name Name of the text area
      * @param $rows Number of rows
@@ -298,36 +298,36 @@ class HtmlFormBasic extends HtmlElement
      * @param $id Optional Id
      * @param $arrAttributes Further attributes as array with key/value pairs
      * @param $disable Disable text area (Default: false)
-     * 
+     *
      */
     public function addTextArea($name, $rows, $cols, $text = '', $id = null, $arrAttributes = null, $disable = false)
     {
         $this->addElement('textarea');
-        
+
         // set attributes
         $this->addAttribute('name', $name);
         $this->addAttribute('rows', $rows);
         $this->addAttribute('cols', $cols);
-        
+
         if($id != null)
         {
             $this->addAttribute('id', $id);
         }
-        
+
         // Check optional attributes in associative array and set all attributes
         if($arrAttributes != null && is_array($arrAttributes))
         {
             $this->setAttributesFromArray($arrAttributes);
         }
-        
+
         if($disable === true)
         {
             $this->addAttribute('disabled', 'disabled');
         }
-        
+
         $this->addData($text);
     }
-    
+
     /**
      *  @par Close current fieldset.
      */
@@ -335,7 +335,7 @@ class HtmlFormBasic extends HtmlElement
     {
         $this->closeParentElement('fieldset');
     }
-    
+
     /**
      *  @par Close current option group.
      */
@@ -343,7 +343,7 @@ class HtmlFormBasic extends HtmlElement
     {
         $this->closeParentElement('optgroup');
     }
-    
+
     /**
      *  @par Close current select.
      */
@@ -351,14 +351,14 @@ class HtmlFormBasic extends HtmlElement
     {
         $this->closeParentElement('select');
     }
-    
-    /** Get the full parsed html form 
+
+    /** Get the full parsed html form
      *  @return Returns the validated html form as string
      */
     public function getHtmlForm()
-    {   
+    {
         return parent::getHtmlElement();
     }
-} 
+}
 
 ?>
