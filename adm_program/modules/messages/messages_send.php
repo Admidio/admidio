@@ -392,7 +392,7 @@ if ($getMsgType == 'EMAIL')
         }
         else
         {
-            if (strpos($row['user'], ':') == true) 
+            if (strpos($ReceiverString, ':') == true) 
             {
                 $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($ReceiverString);
             }
