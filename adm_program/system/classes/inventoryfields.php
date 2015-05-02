@@ -29,7 +29,7 @@ class InventoryFields
 
 	/** constructor that will initialize variables and read the inventory field structure
 	 *  @param $db Database object (should be @b $gDb)
-	 *  @param $organizationId The id of the organization for which the 
+	 *  @param $organizationId The id of the organization for which the
 	 *                         profile field structure should be read
 	 */
     public function __construct(&$db, $organizationId)
@@ -40,7 +40,7 @@ class InventoryFields
 		$this->noValueCheck = false;
 		$this->columnsValueChanged = false;
     }
-	
+
 	/** item data of all inventory fields will be initialized
 	 *  the fields array will not be renewed
 	 */
@@ -50,7 +50,7 @@ class InventoryFields
 		$this->mItemId = 0;
 		$this->columnsValueChanged = false;
 	}
-	
+
 	/** returns for a fieldname intern (inf_name_intern) the value of the column from table adm_user_fields
 	 *  @param $fieldNameIntern Expects the @b inf_name_intern of table @b adm_user_fields
 	 *  @param $column The column name of @b adm_user_field for which you want the value
@@ -70,7 +70,7 @@ class InventoryFields
 		}
         return null;
 	}
-	
+
 	/** returns for field id (usf_id) the value of the column from table adm_user_fields
 	 *  @param $fieldId Expects the @b usf_id of table @b adm_user_fields
 	 *  @param $column The column name of @b adm_user_field for which you want the value
@@ -119,7 +119,7 @@ class InventoryFields
 			{
 				// the value in db is only the position, now search for the text
 				if(strlen($value) > 0)
-				{				    
+				{
 					if($gPreferences['enable_mail_module'] != 1)
 					{
 						$emailLink = 'mailto:'.$value;
@@ -131,7 +131,7 @@ class InventoryFields
     				    {
         				    $value2 = $this->mItemId;
     				    }
-    				    
+
 						$emailLink = $g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='. $value2;
 					}
 					if(strlen($value) > 30)
@@ -140,7 +140,7 @@ class InventoryFields
 					}
 					else
 					{
-						$htmlValue = '<a href="'.$emailLink.'" style="overflow: visible; display: inline;" title="'.$value.'">'.$value.'</a>';;
+						$htmlValue = '<a href="'.$emailLink.'" style="overflow: visible; display: inline;" title="'.$value.'">'.$value.'</a>';
 					}
 				}
 			}
@@ -168,7 +168,7 @@ class InventoryFields
 								$listValueImage = $listValue;
 								$listValueText  = $this->getValue('inf_name');
 							}
-							
+
 							// if text is a translation-id then translate it
 							if(strpos($listValueText, '_') == 3)
 							{
@@ -223,13 +223,13 @@ class InventoryFields
 			{
 				$htmlValue = nl2br($value);
 			}
-		
+
 			// if field has url then create a link
 			if(strlen($this->mInventoryFields[$fieldNameIntern]->getValue('inf_url')))
 			{
 				if($fieldNameIntern == 'FACEBOOK' && is_numeric($value))
 				{
-					// facebook has two different profile urls (id and facebook name), 
+					// facebook has two different profile urls (id and facebook name),
 					// we could only store one way in database (facebook name) and the other (id) is defined here :)
 					$htmlValue = '<a href="http://www.facebook.com/profile.php?id='.$value.'" target="_blank">'.$htmlValue.'</a>';
 				}
@@ -237,11 +237,11 @@ class InventoryFields
 				{
 					$htmlValue = '<a href="'.$this->mInventoryFields[$fieldNameIntern]->getValue('inf_url').'" target="_blank">'.$htmlValue.'</a>';
 				}
-				
+
 				// replace a variable in url with user value
 				if(strpos($this->mInventoryFields[$fieldNameIntern]->getValue('inf_url'), '%user_content%') !== false)
 				{
-					$htmlValue = preg_replace ('/%user_content%/', $value,  $htmlValue);
+					$htmlValue = preg_replace('/%user_content%/', $value, $htmlValue);
 
 				}
 			}
@@ -274,7 +274,7 @@ class InventoryFields
 		// exists a profile field with that name ?
 		// then check if user has a data object for this field and then read value of this object
 		if(array_key_exists($fieldNameIntern, $this->mInventoryFields)
-		&& array_key_exists($this->mInventoryFields[$fieldNameIntern]->getValue('inf_id'), $this->mInventoryData)) 
+		&& array_key_exists($this->mInventoryFields[$fieldNameIntern]->getValue('inf_id'), $this->mInventoryData))
 		{
 			$value = $this->mInventoryData[$this->mInventoryFields[$fieldNameIntern]->getValue('inf_id')]->getValue('ind_value', $format);
 
@@ -291,7 +291,7 @@ class InventoryFields
 					{
 						$dateFormat = $format;
 					}
-					
+
 					// if date field then the current date format must be used
 					$date = new DateTimeExtended($value, 'Y-m-d', 'date');
 					if($date->valid() == false)
@@ -308,7 +308,7 @@ class InventoryFields
 					{
 						$arrListValues = $this->mInventoryFields[$fieldNameIntern]->getValue('inf_value_list');
 						$value = $arrListValues[$value];
-						
+
 					}
 				}
 				elseif($fieldNameIntern == 'COUNTRY' && strlen($value) > 0)
@@ -318,7 +318,7 @@ class InventoryFields
 				}
 			}
 		}
-		
+
 		// get html output for that field type and value
 		if($format == 'html')
 		{
@@ -338,10 +338,10 @@ class InventoryFields
 
 
 	/** Reads the profile fields structure out of database table @b adm_user_fields
-	 *  and adds an object for each field structure to the @b mInventoryFields array. 
-	 *  @param $organizationId The id of the organization for which the profile fields 
+	 *  and adds an object for each field structure to the @b mInventoryFields array.
+	 *  @param $organizationId The id of the organization for which the profile fields
 	 *                         structure should be read.
-	 */ 
+	 */
 	public function readInventoryFields($organizationId)
 	{
 		// first initialize existing data
@@ -365,14 +365,14 @@ class InventoryFields
             $this->mInventoryFields[$row['inf_name_intern']]->setArray($row);
         }
 	}
-	
+
 	/** Reads the user data of all profile fields out of database table @b adm_user_data
-	 *  and adds an object for each field data to the @b mInventoryData array. 
+	 *  and adds an object for each field data to the @b mInventoryData array.
 	 *  If profile fields structure wasn't read, this will be done before.
 	 *  @param $itemId         The id of the user for which the user data should be read.
-	 *  @param $organizationId The id of the organization for which the profile fields 
+	 *  @param $organizationId The id of the organization for which the profile fields
 	 *                         structure should be read if neccessary.
-	 */ 
+	 */
 	public function readInventoryData($itemId, $organizationId)
 	{
 		if(count($this->mInventoryFields) == 0)
@@ -384,7 +384,7 @@ class InventoryFields
 		{
 			// remember the user
 			$this->mItemId = $itemId;
-			
+
 			// read all user data of user
 			$sql = 'SELECT * FROM '.TBL_INVENT_DATA.', '. TBL_INVENT_FIELDS. '
 					 WHERE ind_inf_id = inf_id
@@ -432,7 +432,7 @@ class InventoryFields
 		$this->mItemId = $itemId;
 		$this->mDb->endTransaction();
 	}
-	
+
 	// set value for column usd_value of field
     public function setValue($fieldNameIntern, $fieldValue)
     {
@@ -456,7 +456,7 @@ class InventoryFields
                 if($date->valid() == false)
                 {
                     if($this->noValueCheck != true)
-                    {                        
+                    {
                         return false;
                     }
                 }
@@ -509,7 +509,7 @@ class InventoryFields
                 }
                 // Homepage noch mit http vorbelegen
                 if(strpos(admStrToLower($fieldValue), 'http://')  === false
-                && strpos(admStrToLower($fieldValue), 'https://') === false )
+                && strpos(admStrToLower($fieldValue), 'https://') === false)
                 {
                     $fieldValue = 'http://'. $fieldValue;
                 }
@@ -529,7 +529,7 @@ class InventoryFields
 			$this->mInventoryData[$this->mInventoryFields[$fieldNameIntern]->getValue('inf_id')]->setValue('ind_itm_id', $this->mItemId);
 			$returnCode = $this->mInventoryData[$this->mInventoryFields[$fieldNameIntern]->getValue('inf_id')]->setValue('ind_value', $fieldValue);
 		}
-		
+
 		if($returnCode && $this->mInventoryData[$this->mInventoryFields[$fieldNameIntern]->getValue('inf_id')]->hasColumnsValueChanged())
 		{
             $this->columnsValueChanged = true;

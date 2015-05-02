@@ -53,7 +53,7 @@ function deleteThumbnail(&$photo_album, $pic_nr)
     if(is_numeric($pic_nr))
     {
         //Ordnerpfad zusammensetzen
-        $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id').'/thumbnails/'.$pic_nr.'.jpg';
+        $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/thumbnails/'.$pic_nr.'.jpg';
 		
         //Thumbnail loeschen
         if(file_exists($photo_path))
@@ -73,7 +73,7 @@ function tryDelete($path)
     }
 };
 
-function tryRename($path,$newPath)
+function tryRename($path, $newPath)
 {
     if(file_exists($path))
     {
@@ -94,7 +94,7 @@ function deletePhoto($pho_id, $pic_nr)
         $photo_album = new TablePhotos($gDb, $pho_id);
         
         //Speicherort
-        $album_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id');
+        $album_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
         
         // delete photos
         tryDelete($album_path.'/'.$pic_nr.'.jpg');
@@ -115,7 +115,7 @@ function deletePhoto($pho_id, $pic_nr)
                     tryRename($album_path.'/originals/'.$act_pic_nr.'.jpg', $album_path.'/originals/'.$new_pic_nr.'.jpg');
                     tryRename($album_path.'/originals/'.$act_pic_nr.'.png', $album_path.'/originals/'.$new_pic_nr.'.png');
                     $new_pic_nr++;
-                }                
+                }
             }
             else
             {
@@ -149,13 +149,13 @@ if($getJob == 'rotate')
         deleteThumbnail($photo_album, $getPhotoNr);
         
         //Ordnerpfad zusammensetzen
-        $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id'). '/'. $getPhotoNr. '.jpg';
+        $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id'). '/'. $getPhotoNr. '.jpg';
         
         // Bild drehen
         $image = new Image($photo_path);
         $image->rotate($getDirection);
         $image->delete();
-    }    
+    }
 }
 elseif($getJob == 'delete')
 {

@@ -49,7 +49,7 @@ $memberCondition = '';
 // Create condition if only active members should be shown
 if($getMembers == 1)
 {
-    $memberCondition = ' AND EXISTS 
+    $memberCondition = ' AND EXISTS
         (SELECT 1
            FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
           WHERE mem_usr_id = usr_id
@@ -143,7 +143,7 @@ $membersAdministrationMenu->addItem('menu_item_create_user', $g_root_path.'/adm_
 if($gPreferences['profile_log_edit_fields'] == 1)
 {
 	// show link to view profile field change history
-	$membersAdministrationMenu->addItem('menu_item_change_history', $g_root_path.'/adm_program/modules/members/profile_field_history.php', 
+	$membersAdministrationMenu->addItem('menu_item_change_history', $g_root_path.'/adm_program/modules/members/profile_field_history.php',
 								$gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png');
 }
 
@@ -158,17 +158,17 @@ if($gPreferences['members_show_all_users'] == 1)
 $membersAdministrationMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
 
 // show link to import users
-$membersAdministrationMenu->addItem('menu_item_import_users', $g_root_path.'/adm_program/modules/members/import.php', 
+$membersAdministrationMenu->addItem('menu_item_import_users', $g_root_path.'/adm_program/modules/members/import.php',
 							$gL10n->get('MEM_IMPORT_USERS'), 'database_in.png', 'right', 'menu_item_extras');
 							
 if($gCurrentUser->isWebmaster())
 {
 	// show link to maintain profile fields
-	$membersAdministrationMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php', 
+	$membersAdministrationMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php',
 								$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
 
 	// show link to system preferences of weblinks
-	$membersAdministrationMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=user_management', 
+	$membersAdministrationMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=user_management',
 						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
 }
 
@@ -178,9 +178,9 @@ $membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-con
 // create array with all column heading values
 $columnHeading = array(
     $gL10n->get('SYS_ABR_NO'),
-    '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/profile.png" 
+    '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/profile.png"
         alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
-        title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',        
+        title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
     $gL10n->get('SYS_STATUS'),
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_USER'),
@@ -237,7 +237,7 @@ while($row = $gDb->fetch_array($result_mgl))
 	         src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
         $memberOfThisOrganization,
         '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '">'. $row['last_name']. ',&nbsp;'. $row['first_name']. '</a>',
-    );	
+    );
 	
 	if(strlen($row['usr_login_name']) > 0)
 	{
@@ -294,7 +294,7 @@ while($row = $gDb->fetch_array($result_mgl))
             // if user has no email or send email is disabled then webmaster could set a new password
             $userAdministration = '
             <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.$g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $row['usr_id']. '"><img
-                src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>';            
+                src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>';
         }
     }
 	else
@@ -330,7 +330,7 @@ while($row = $gDb->fetch_array($result_mgl))
 	}
 
 	// Mitglieder entfernen
-	if( (($row['member_other_orga'] == 0 && $gCurrentUser->isWebmaster()) // kein Mitglied einer anderen Orga, dann duerfen Webmaster loeschen
+	if((($row['member_other_orga'] == 0 && $gCurrentUser->isWebmaster()) // kein Mitglied einer anderen Orga, dann duerfen Webmaster loeschen
 		|| $row['member_this_orga'] > 0)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
 		&& $row['usr_id'] != $gCurrentUser->getValue('usr_id'))       // das eigene Profil darf keiner entfernen
 	{

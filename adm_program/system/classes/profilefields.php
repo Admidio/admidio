@@ -29,7 +29,7 @@ class ProfileFields
 
 	/** constructor that will initialize variables and read the profile field structure
 	 *  @param $db Database object (should be @b $gDb)
-	 *  @param $organizationId The id of the organization for which the 
+	 *  @param $organizationId The id of the organization for which the
 	 *                         profile field structure should be read
 	 */
     public function __construct(&$db, $organizationId)
@@ -40,7 +40,7 @@ class ProfileFields
 		$this->noValueCheck = false;
 		$this->columnsValueChanged = false;
     }
-	
+
 	/** user data of all profile fields will be initialized
 	 *  the fields array will not be renewed
 	 */
@@ -50,7 +50,7 @@ class ProfileFields
 		$this->mUserId = 0;
 		$this->columnsValueChanged = false;
 	}
-	
+
 	/** returns for a fieldname intern (usf_name_intern) the value of the column from table adm_user_fields
 	 *  @param $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
 	 *  @param $column The column name of @b adm_user_field for which you want the value
@@ -70,7 +70,7 @@ class ProfileFields
 		}
         return null;
 	}
-	
+
 	/** returns for field id (usf_id) the value of the column from table adm_user_fields
 	 *  @param $fieldId Expects the @b usf_id of table @b adm_user_fields
 	 *  @param $column The column name of @b adm_user_field for which you want the value
@@ -119,7 +119,7 @@ class ProfileFields
 			{
 				// the value in db is only the position, now search for the text
 				if(strlen($value) > 0)
-				{				    
+				{
 					if($gPreferences['enable_mail_module'] != 1)
 					{
 						$emailLink = 'mailto:'.$value;
@@ -131,7 +131,7 @@ class ProfileFields
     				    {
         				    $value2 = $this->mUserId;
     				    }
-    				    
+
 						$emailLink = $g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='. $value2;
 					}
 					if(strlen($value) > 30)
@@ -140,7 +140,7 @@ class ProfileFields
 					}
 					else
 					{
-						$htmlValue = '<a href="'.$emailLink.'" style="overflow: visible; display: inline;" title="'.$value.'">'.$value.'</a>';;
+						$htmlValue = '<a href="'.$emailLink.'" style="overflow: visible; display: inline;" title="'.$value.'">'.$value.'</a>';
 					}
 				}
 			}
@@ -150,7 +150,7 @@ class ProfileFields
 				$arrListValuesWithKeys = array(); 	// array with list values and keys that represents the internal value
 
                 // first replace windows new line with unix new line and then create an array
-                $valueFormated = str_replace("\r\n","\n", $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', 'database'));
+                $valueFormated = str_replace("\r\n", "\n", $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', 'database'));
                 $arrListValues = explode("\n", $valueFormated);
 
 				foreach($arrListValues as $key => &$listValue)
@@ -171,7 +171,7 @@ class ProfileFields
 								$listValueImage = $listValue;
 								$listValueText  = $this->getValue('usf_name');
 							}
-							
+
 							// if text is a translation-id then translate it
 							if(strpos($listValueText, '_') == 3)
 							{
@@ -226,13 +226,13 @@ class ProfileFields
 			{
 				$htmlValue = nl2br($value);
 			}
-		
+
 			// if field has url then create a link
 			if(strlen($this->mProfileFields[$fieldNameIntern]->getValue('usf_url')))
 			{
 				if($fieldNameIntern == 'FACEBOOK' && is_numeric($value))
 				{
-					// facebook has two different profile urls (id and facebook name), 
+					// facebook has two different profile urls (id and facebook name),
 					// we could only store one way in database (facebook name) and the other (id) is defined here :)
 					$htmlValue = '<a href="http://www.facebook.com/profile.php?id='.$value.'" target="_blank">'.$htmlValue.'</a>';
 				}
@@ -240,12 +240,11 @@ class ProfileFields
 				{
 					$htmlValue = '<a href="'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_url').'" target="_blank">'.$htmlValue.'</a>';
 				}
-				
+
 				// replace a variable in url with user value
 				if(strpos($this->mProfileFields[$fieldNameIntern]->getValue('usf_url'), '%user_content%') !== false)
 				{
-					$htmlValue = preg_replace ('/%user_content%/', $value,  $htmlValue);
-
+					$htmlValue = preg_replace('/%user_content%/', $value, $htmlValue);
 				}
 			}
 			$value = $htmlValue;
@@ -257,14 +256,14 @@ class ProfileFields
 			&& $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'CHECKBOX')
 			{
 				$value = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
-				
+
 				// if field has url then create a link
 				if(strlen($this->mProfileFields[$fieldNameIntern]->getValue('usf_url')))
 				{
 					$value = '<a href="'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_url').'" target="_blank">'.$value.'</a>';
 				}
-			}		
-			
+			}
+
 		}
 		return $value;
 	}
@@ -284,7 +283,7 @@ class ProfileFields
 		// exists a profile field with that name ?
 		// then check if user has a data object for this field and then read value of this object
 		if(array_key_exists($fieldNameIntern, $this->mProfileFields)
-		&& array_key_exists($this->mProfileFields[$fieldNameIntern]->getValue('usf_id'), $this->mUserData)) 
+		&& array_key_exists($this->mProfileFields[$fieldNameIntern]->getValue('usf_id'), $this->mUserData))
 		{
 			$value = $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->getValue('usd_value', $format);
 
@@ -301,7 +300,7 @@ class ProfileFields
 					{
 						$dateFormat = $format;
 					}
-					
+
 					// if date field then the current date format must be used
 					$date = new DateTimeExtended($value, 'Y-m-d', 'date');
 					if($date->valid() == false)
@@ -318,7 +317,7 @@ class ProfileFields
 					{
 						$arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list');
 						$value = $arrListValues[$value];
-						
+
 					}
 				}
 				elseif($fieldNameIntern == 'COUNTRY' && strlen($value) > 0)
@@ -328,7 +327,7 @@ class ProfileFields
 				}
 			}
 		}
-		
+
 		// get html output for that field type and value
 		if($format == 'html')
 		{
@@ -348,10 +347,10 @@ class ProfileFields
 
 
 	/** Reads the profile fields structure out of database table @b adm_user_fields
-	 *  and adds an object for each field structure to the @b mProfileFields array. 
-	 *  @param $organizationId The id of the organization for which the profile fields 
+	 *  and adds an object for each field structure to the @b mProfileFields array.
+	 *  @param $organizationId The id of the organization for which the profile fields
 	 *                         structure should be read.
-	 */ 
+	 */
 	public function readProfileFields($organizationId)
 	{
 		// first initialize existing data
@@ -375,14 +374,14 @@ class ProfileFields
             $this->mProfileFields[$row['usf_name_intern']]->setArray($row);
         }
 	}
-	
+
 	/** Reads the user data of all profile fields out of database table @b adm_user_data
-	 *  and adds an object for each field data to the @b mUserData array. 
+	 *  and adds an object for each field data to the @b mUserData array.
 	 *  If profile fields structure wasn't read, this will be done before.
 	 *  @param $userId         The id of the user for which the user data should be read.
-	 *  @param $organizationId The id of the organization for which the profile fields 
+	 *  @param $organizationId The id of the organization for which the profile fields
 	 *                         structure should be read if neccessary.
-	 */ 
+	 */
 	public function readUserData($userId, $organizationId)
 	{
 		if(count($this->mProfileFields) == 0)
@@ -394,7 +393,7 @@ class ProfileFields
 		{
 			// remember the user
 			$this->mUserId = $userId;
-			
+
 			// read all user data of user
 			$sql = 'SELECT * FROM '.TBL_USER_DATA.', '. TBL_USER_FIELDS. '
 					 WHERE usd_usf_id = usf_id
@@ -442,7 +441,7 @@ class ProfileFields
 		$this->mUserId = $userId;
 		$this->mDb->endTransaction();
 	}
-	
+
 	// set value for column usd_value of field
     public function setValue($fieldNameIntern, $fieldValue)
     {
@@ -466,7 +465,7 @@ class ProfileFields
                 if($date->valid() == false)
                 {
                     if($this->noValueCheck != true)
-                    {                        
+                    {
                         return false;
                     }
                 }
@@ -519,7 +518,7 @@ class ProfileFields
                 }
                 // Homepage noch mit http vorbelegen
                 if(strpos(admStrToLower($fieldValue), 'http://')  === false
-                && strpos(admStrToLower($fieldValue), 'https://') === false )
+                && strpos(admStrToLower($fieldValue), 'https://') === false)
                 {
                     $fieldValue = 'http://'. $fieldValue;
                 }
@@ -539,7 +538,7 @@ class ProfileFields
 			$this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->setValue('usd_usr_id', $this->mUserId);
 			$returnCode = $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->setValue('usd_value', $fieldValue);
 		}
-		
+
 		if($returnCode && $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->hasColumnsValueChanged())
 		{
             $this->columnsValueChanged = true;

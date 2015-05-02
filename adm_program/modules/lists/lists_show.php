@@ -210,8 +210,8 @@ if($getMode != 'csv')
         $pdf->setPrintHeader(true);
         $pdf->setPrintFooter(false);
  		// set header and footer fonts
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 		
         // set auto page breaks
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
@@ -275,19 +275,19 @@ if($getMode != 'csv')
 
         if($getFullScreen == true)
         {
-            $listsMenu->addItem('menu_item_normal_picture', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;mode=html&amp;rol_id='.$getRoleId.'&amp;show_members='.$getShowMembers.'&amp;full_screen=0', 
+            $listsMenu->addItem('menu_item_normal_picture', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;mode=html&amp;rol_id='.$getRoleId.'&amp;show_members='.$getShowMembers.'&amp;full_screen=0',
                 $gL10n->get('SYS_NORMAL_PICTURE'), 'arrow_in.png');
         }
         else
         {
-            $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;mode=html&amp;rol_id='.$getRoleId.'&amp;show_members='.$getShowMembers.'&amp;full_screen=1', 
+            $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;mode=html&amp;rol_id='.$getRoleId.'&amp;show_members='.$getShowMembers.'&amp;full_screen=1',
                 $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png');
         }
         
         // link to assign or remove members if you are allowed to do it
         if($role->allowedToAssignMembers($gCurrentUser))
         {
-            $listsMenu->addItem('menu_item_assign_members', $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='. $role->getValue('rol_id'), 
+            $listsMenu->addItem('menu_item_assign_members', $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='. $role->getValue('rol_id'),
                 $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png');
         }
         
@@ -295,7 +295,7 @@ if($getMode != 'csv')
         $listsMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
         
         $form = new HtmlForm('navbar_export_to_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
-        $selectBoxEntries = array('' => $gL10n->get('LST_EXPORT_TO').' ...', 'csv-ms' => $gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')', 'pdf' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')', 
+        $selectBoxEntries = array('' => $gL10n->get('LST_EXPORT_TO').' ...', 'csv-ms' => $gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')', 'pdf' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
                                   'pdfl' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')', 'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')');
         $form->addSelectBox('export_list_to', null, $selectBoxEntries, array('showContextDependentFirstEntry' => false));
         $listsMenu->addForm($form->show(false));
@@ -407,7 +407,7 @@ if($getStart > $role->countLeaders())
 }
 else
 {
-    $listRowNumber = $getStart + 1;    
+    $listRowNumber = $getStart + 1;
 }
 
 $lastGroupHead = -1;             // Merker um Wechsel zwischen Leiter und Mitglieder zu merken
@@ -424,7 +424,7 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
     {
         if($getMode == 'print' || $getMode == 'pdf')
         {
-            // in print preview and pdf we group the role leaders and the members and 
+            // in print preview and pdf we group the role leaders and the members and
             // add a specific header for them
             if($lastGroupHead != $row['mem_leader']
             && ($row['mem_leader'] != 0 || $lastGroupHead != -1))
@@ -454,7 +454,7 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
             }
             else
             {
-                $table->setDatatablesColumnsHide(2);                
+                $table->setDatatablesColumnsHide(2);
             }
         }
 
@@ -487,7 +487,7 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
             || $gProfileFields->getPropertyById($usf_id, 'usf_hidden') == 0)
             {
                 if($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf')
-                {    
+                {
                     if($columnNumber == 1)
                     {
                         // die Laufende Nummer noch davorsetzen
@@ -521,7 +521,7 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
                 $content = $row[$sqlColumnNumber];
 
                 /*****************************************************************/
-                // in some cases the content must have a special output format 
+                // in some cases the content must have a special output format
                 /*****************************************************************/
                 if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id') && $usf_id!=0)
                 {
@@ -549,13 +549,13 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
                         }
                         else
                         {
-                            $content = $gL10n->get('SYS_NO');                            
+                            $content = $gL10n->get('SYS_NO');
                         }
                     }
                 }
                 elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DATE'
                 ||     $column->getValue('lsc_special_field') == 'mem_begin'
-                ||     $column->getValue('lsc_special_field') == 'mem_end') 
+                ||     $column->getValue('lsc_special_field') == 'mem_end')
                 {
                     if(strlen($row[$sqlColumnNumber]) > 0)
                     {
@@ -564,8 +564,8 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
                         $content = $date->format($gPreferences['system_date']);
                     }
                 }
-                elseif( ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
-                      || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON') 
+                elseif(($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
+                      || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON')
                 && $getMode == 'csv')
                 {
                     if(strlen($row[$sqlColumnNumber]) > 0)
@@ -628,7 +628,7 @@ if($getMode == 'csv' || $getMode == 'pdf')
         $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')).'.'.$getMode;
     }
     
-     // for IE the filename must have special chars in hexadecimal 
+     // for IE the filename must have special chars in hexadecimal
     if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
     {
         $filename = urlencode($filename);
@@ -670,10 +670,10 @@ elseif($getMode == 'pdf')
 
     readfile($filename);
     ignore_user_abort(true);
-    unlink($filename);  
+    unlink($filename);
 }
 elseif($getMode == 'html' || $getMode == 'print')
-{    
+{
     // add table list to the page
     $page->addHtml($table->show(false));
 

@@ -38,7 +38,7 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 // Select new Members of the group
 $sql    = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value as last_name,
                   first_name.usd_value as first_name, email.usd_value as email
-             FROM '. TBL_REGISTRATIONS. ', '. TBL_USERS. ' 
+             FROM '. TBL_REGISTRATIONS. ', '. TBL_USERS. '
              LEFT JOIN '. TBL_USER_DATA. ' as last_name
                ON last_name.usd_usr_id = usr_id
               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
@@ -70,7 +70,7 @@ if($gCurrentUser->isWebmaster())
     $registrationMenu = $page->getMenu();
 
 	// show link to system preferences of announcements
-	$registrationMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=registration', 
+	$registrationMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=registration',
 								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
@@ -107,14 +107,14 @@ while($row = $gDb->fetch_array($usr_result))
         $datetimeCreate,
         $row['usr_login_name'],
         $mailLink,
-        '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/registration/registration_assign.php?new_user_id='.$row['usr_id'].'"><img 
+        '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/registration/registration_assign.php?new_user_id='.$row['usr_id'].'"><img
                             src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
             href="'.$g_root_path.'/adm_program/system/popup_message.php?type=nwu&amp;element_id=row_user_'.
-            $row['usr_id'].'&amp;name='.urlencode($row['first_name'].' '.$row['last_name']).'&amp;database_id='.$row['usr_id'].'"><img 
+            $row['usr_id'].'&amp;name='.urlencode($row['first_name'].' '.$row['last_name']).'&amp;database_id='.$row['usr_id'].'"><img
             src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
         
-    $table->addRowByArray($columnValues, 'row_user_'.$row['usr_id']);        
+    $table->addRowByArray($columnValues, 'row_user_'.$row['usr_id']);
 }
 
 $page->addHtml($table->show(false));

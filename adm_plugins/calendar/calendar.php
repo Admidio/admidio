@@ -133,11 +133,11 @@ if(array_key_exists('date_id', $_GET))
     else
     {
         $date_id = $_GET['date_id'];
-        $monat = substr($date_id,0,2);
-        $jahr = substr($date_id,2,4);
+        $monat = substr($date_id, 0, 2);
+        $jahr = substr($date_id, 2, 4);
         $_SESSION['plugin_calendar_last_month'] = $monat.$jahr;
 
-        if($monat == date('m') AND $jahr == date('Y'))
+        if($monat == date('m') and $jahr == date('Y'))
         {
             $heute = date('d');
         }
@@ -146,9 +146,9 @@ if(array_key_exists('date_id', $_GET))
 elseif(isset($_SESSION['plugin_calendar_last_month']))
 {
     // Zuletzt gewählten Monat anzeigen
-    $monat = substr($_SESSION['plugin_calendar_last_month'],0,2);
-    $jahr = substr($_SESSION['plugin_calendar_last_month'],2,4);
-    if($monat == date('m') AND $jahr == date('Y'))
+    $monat = substr($_SESSION['plugin_calendar_last_month'], 0, 2);
+    $jahr = substr($_SESSION['plugin_calendar_last_month'], 2, 4);
+    if($monat == date('m') and $jahr == date('Y'))
     {
         $heute = date('d');
     }
@@ -179,7 +179,7 @@ if($plg_ter_aktiv == 1)
     $plg_organizations = $plg_organizations. $gCurrentOrganization->getValue('org_id');
 	
     // Ermitteln, welche Kalender angezeigt werden sollen
-    if(in_array('all',$plg_kal_cat))
+    if(in_array('all', $plg_kal_cat))
     {
 		// alle Kalender anzeigen
 		$sql_syntax = '';
@@ -192,7 +192,7 @@ if($plg_ter_aktiv == 1)
         {
 			$sql_syntax = $sql_syntax. 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
         }
-        $sql_syntax = substr($sql_syntax,0,-4). ') ';
+        $sql_syntax = substr($sql_syntax, 0, -4). ') ';
     }
 	
     
@@ -233,7 +233,7 @@ if($plg_ter_aktiv == 1)
 		// Name der Standardkalender umsetzen, sonst Name lt. Datenbank
 		if($plg_kal_cat_show == 1)
 		{
-			if(substr($row['cat_name'],3,1)=='_')
+			if(substr($row['cat_name'], 3, 1)=='_')
 			{$calendar_name = $gL10n->get($row['cat_name']);}
 			else
 			{$calendar_name = $row['cat_name'];}
@@ -288,9 +288,9 @@ if($plg_geb_aktiv == 1)
 }
 
 // Kalender erstellen
-$erster = date('w', mktime(0,0,0,$monat,1,$jahr));
-$insgesamt = date('t', mktime(0,0,0,$monat,1,$jahr));
-$monate = explode(',',$gL10n->get('PLG_CALENDAR_MONTH'));
+$erster = date('w', mktime(0, 0, 0, $monat, 1, $jahr));
+$insgesamt = date('t', mktime(0, 0, 0, $monat, 1, $jahr));
+$monate = explode(',', $gL10n->get('PLG_CALENDAR_MONTH'));
 if($erster == 0)
 {
     $erster = 7;
@@ -313,7 +313,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
                 type: 'GET',
                 url: '".$g_root_path."/adm_plugins/$plugin_folder/calendar.php',
                 cache: false,
-                data: 'ajax_change&amp;date_id=".date('mY',mktime(0,0,0,$monat-1,1,$jahr))."',
+                data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $monat-1, 1, $jahr))."',
                 success: function(html){
                     $('#plgCalendarContent').replaceWith(html);
                 }
@@ -323,7 +323,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
                 type: 'GET',
                 url: '".$g_root_path."/adm_plugins/$plugin_folder/calendar.php',
                 cache: false,
-                data: 'ajax_change&amp;date_id=".date('mY',mktime(0,0,0,$monat+1,1,$jahr))."',
+                data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $monat+1, 1, $jahr))."',
                 success: function(html){
                     $('#plgCalendarContent').replaceWith(html);
                 }
@@ -531,12 +531,12 @@ if($i == $ter_aktuell && $i == $geb_aktuell) // Termin und Geburtstag
     {
         echo '<td align="center" class="plgCalendarToday">';
     }
-    else if($rest == 6)
+    elseif($rest == 6)
     {
 		// CSS aus der Linkklassenbestimmung verwenden
 		echo '<td align="center" class="'.$plg_link_class_saturday.'">';
     }
-    else if($rest == 0)
+    elseif($rest == 0)
     {
 		// CSS aus der Linkklassenbestimmung verwenden
 		echo '<td align="center" class="'.$plg_link_class_sunday.'">';
@@ -546,7 +546,7 @@ if($i == $ter_aktuell && $i == $geb_aktuell) // Termin und Geburtstag
 		echo '<td align="center" class="'.$plg_link_class_weekday.'">';
     }
         
-    if($i == $heute OR $i == $ter_aktuell OR $i == $geb_aktuell)
+    if($i == $heute or $i == $ter_aktuell or $i == $geb_aktuell)
     {
         if($i != $ter_aktuell && $i == $geb_aktuell) 
         {
@@ -581,16 +581,16 @@ if($i == $ter_aktuell && $i == $geb_aktuell) // Termin und Geburtstag
                     href="'.$plg_link.'" target="'.$plg_link_target.'">'.$i.'</a>';
             }
 		}
-        else if($i == $heute)
+        elseif($i == $heute)
         {
             echo '<span class="plgCalendarToday">'.$i.'</span>';
         }
     }
-    else if($rest == 6)
+    elseif($rest == 6)
     {
         echo '<span class="plgCalendarSaturday">'.$i.'</span>';
     }
-    else if($rest == 0)
+    elseif($rest == 0)
     {
         echo '<span class="plgCalendarSunday">'.$i.'</span>';
     }

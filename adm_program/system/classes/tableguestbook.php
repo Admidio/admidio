@@ -135,7 +135,7 @@ class TableGuestbook extends TableAccess
                 }
                 // Homepage noch mit http vorbelegen
                 if(strpos(admStrToLower($newValue), 'http://')  === false
-                && strpos(admStrToLower($newValue), 'https://') === false )
+                && strpos(admStrToLower($newValue), 'https://') === false)
                 {
                     $newValue = 'http://'. $newValue;
                 }

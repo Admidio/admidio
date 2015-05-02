@@ -266,15 +266,15 @@ class DateTimeExtended extends DateTime
             {
                 if ($format == 'g' || $format == 'G' || $format == 'h' || $format == 'H') {
                     $this->hour = $value;
-                } else if ($format == 'i') {
+                } elseif ($format == 'i') {
                     $this->minute = $value;
-                } else if ($format == 's') {
+                } elseif ($format == 's') {
                     $this->second = $value;
-                } else if ($format == 'm' || $format == 'n') {
+                } elseif ($format == 'm' || $format == 'n') {
                     $this->month = $value;
-                } else if ($format == 'd' || $format == 'j') {
+                } elseif ($format == 'd' || $format == 'j') {
                     $this->day = $value;
-                } else if ($format == 'Y' || $format == 'y') {
+                } elseif ($format == 'Y' || $format == 'y') {
                     $this->year = $value;
                 }
             }

@@ -196,11 +196,11 @@ class Image
                 {
                     if($direction == 'right')
                     {
-                        imagecopy($photo_rotate, $this->imageResource, $this->imageHeight - $y - 1, $x, $x, $y, 1,1 );
+                        imagecopy($photo_rotate, $this->imageResource, $this->imageHeight - $y - 1, $x, $x, $y, 1, 1);
                     }
                     elseif($direction == 'left')
                     {
-                        imagecopy($photo_rotate, $this->imageResource, $y, $this->imageWidth - $x - 1, $x, $y, 1,1 );
+                        imagecopy($photo_rotate, $this->imageResource, $y, $this->imageWidth - $x - 1, $x, $y, 1, 1);
                     }
                 }
             }

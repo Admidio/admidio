@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung 
+// da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung
 // stehen, wird hier eine Fallunterscheidung gemacht
 // WICHTIG: wird die Multibyte-Funktion nicht genutzt, funktioniert die Umwandlung von Umlauten nicht !!!
 function admStrToLower($string)
@@ -23,7 +23,7 @@ function admStrToLower($string)
     }
 }
  
-// da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung 
+// da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung
 // stehen, wird hier eine Fallunterscheidung gemacht
 // WICHTIG: wird die Multibyte-Funktion nicht genutzt, funktioniert die Umwandlung von Umlauten nicht !!!
 function admStrToUpper($string)
@@ -38,7 +38,7 @@ function admStrToUpper($string)
     }
 }
 
-// removes html, php code and blancs at beginning and end 
+// removes html, php code and blancs at beginning and end
 // of string or all elements of array without ckeditor variables !!!
 function admStrStripTagsSpecial($srcArray)
 {
@@ -62,7 +62,7 @@ function admStrStripTagsSpecial($srcArray)
     return $srcArray;
 }
  
-// removes html, php code and blancs at beginning and end 
+// removes html, php code and blancs at beginning and end
 // of string or all elements of array
 function strStripTags($srcString)
 {
@@ -152,7 +152,7 @@ function strNextLetter($letter, $mode = 0)
 }
 
 /** Check if a string contains only valid characters. Therefore the string is
- *  compared with a hard coded list of valid characters for each datatype. 
+ *  compared with a hard coded list of valid characters for each datatype.
  *  @param $string    The string that should be checked.
  *  @param $checkType The type @b email, @b file, @b noSpecialChar or @b url that
  *                    will be checked. Each type has a different valid character list.
@@ -197,7 +197,7 @@ function strValidCharacters($string, $checkType)
  *  @param $filename       Name of the file that should be checked.
  *  @param $checkExtension If set to @b true then the extension will be checked against a blacklist of extensions:
  *                         php, php3, php4, php5, html, htm, htaccess, htpasswd, pl, js, vbs, asp, cgi, ssi
- *  @return Returns @true if filename contains valid characters. Otherwise an exception is thrown with the 
+ *  @return Returns @true if filename contains valid characters. Otherwise an exception is thrown with the
  *          following values:
  *          SYS_FILENAME_EMPTY : Filename was empty
  *          BAC_FILE_NAME_INVALID : Filename contains invalid characters

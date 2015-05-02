@@ -157,7 +157,7 @@ class HtmlPage
         
         $this->menu->addItem('menu_item_modules', null, $gL10n->get('SYS_MODULES'), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
 
-        if( $gPreferences['enable_announcements_module'] == 1
+        if($gPreferences['enable_announcements_module'] == 1
         || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
         {
             $this->menu->addItem('menu_item_announcements', '/adm_program/modules/announcements/announcements.php',
@@ -197,7 +197,7 @@ class HtmlPage
             $this->menu->addItem('menu_item_photo', '/adm_program/modules/photos/photos.php',
                                 $gL10n->get('PHO_PHOTOS'), 'photo.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
         }
-        if( $gPreferences['enable_guestbook_module'] == 1
+        if($gPreferences['enable_guestbook_module'] == 1
         || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))            
         {
             $this->menu->addItem('menu_item_guestbook', '/adm_program/modules/guestbook/guestbook.php',
@@ -212,14 +212,14 @@ class HtmlPage
                                 $gL10n->get('LST_MY_LIST'), 'mylist.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
         }
         
-        if( $gPreferences['enable_dates_module'] == 1
+        if($gPreferences['enable_dates_module'] == 1
         || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))                    
         {
             $this->menu->addItem('menu_item_dates', '/adm_program/modules/dates/dates.php',
                                 $gL10n->get('DAT_DATES'), 'dates.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
         }
 
-        if( $gPreferences['enable_weblinks_module'] == 1
+        if($gPreferences['enable_weblinks_module'] == 1
         || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))            
         {
             $this->menu->addItem('menu_item_links', '/adm_program/modules/links/links.php',

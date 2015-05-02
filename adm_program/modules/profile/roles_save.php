@@ -42,7 +42,7 @@ if($gCurrentUser->assignRoles() == false)
 $roleCount = 0;
 foreach($_POST as $key=>$value)
 {
-	if(preg_match('/^(role-)[0-9]+$/i',$key))
+	if(preg_match('/^(role-)[0-9]+$/i', $key))
 	{
 		$roleCount++;
     }
@@ -165,10 +165,10 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 // Ergebnisse durchlaufen und Datenbankupdate durchfuehren
 while($row = $gDb->fetch_array($result_rol))
 {
-	// if role is webmaster than only webmaster can add new user, 
+	// if role is webmaster than only webmaster can add new user,
 	// but don't change their own membership, because there must be at least one webmaster
     if($row['rol_webmaster'] == 0
-	|| (  $row['rol_webmaster'] == 1 && $gCurrentUser->isWebmaster() 
+	|| ($row['rol_webmaster'] == 1 && $gCurrentUser->isWebmaster()
 	   && $getUserId != $gCurrentUser->getValue('usr_id')))
     {
         $roleAssign = 0;
@@ -193,7 +193,7 @@ while($row = $gDb->fetch_array($result_rol))
             $tmpRoles = RoleDependency::getParentRoles($gDb, $row['rol_id']);
             foreach($tmpRoles as $tmpRole)
             {
-                if(!in_array($tmpRole,$parentRoles))
+                if(!in_array($tmpRole, $parentRoles))
                 {
                     $parentRoles[] = $tmpRole;
                 }
@@ -214,7 +214,7 @@ while($row = $gDb->fetch_array($result_rol))
 
 // assign all memberships of parent roles
 // this must be done after all roles are assigned so that there aren't overlapping udpates
-if(count($parentRoles) > 0 )
+if(count($parentRoles) > 0)
 {
     foreach($parentRoles as $actRole)
     {
@@ -228,7 +228,7 @@ if($getInline == 0)
 	$gNavigation->deleteLastUrl();
 }
 
-// all active users must renew their user data because maybe their 
+// all active users must renew their user data because maybe their
 // rights have been changed if they where new members of this role
 $gCurrentSession->renewUserObject();
 

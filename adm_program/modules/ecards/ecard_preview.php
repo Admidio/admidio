@@ -16,7 +16,7 @@ require_once('ecard_function.php');
 $gMessage->showThemeBody(false);
 $gMessage->setCloseButton();
 
-if (!isset($_POST) || !array_key_exists('ecard_template',$_POST))
+if (!isset($_POST) || !array_key_exists('ecard_template', $_POST))
 {
 	$gMessage->show($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
 }

@@ -72,7 +72,7 @@ if($getMode == 1 || $getMode == 2)
         $user->save();
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
     	$e->showHtml();
-    }        
+    }
 }
 
 if($getMode == 2)
@@ -103,7 +103,7 @@ if($getMode == 1 || $getMode == 3)
         catch(AdmException $e)
         {
             $e->showHtml();
-        } 
+        }
     }
     else
     {

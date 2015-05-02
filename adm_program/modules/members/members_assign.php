@@ -22,11 +22,11 @@ if (!$gCurrentUser->editUsers())
 
 if(strlen($_POST['lastname']) == 0)
 {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY',$gL10n->get('SYS_LASTNAME')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LASTNAME')));
 }
 if(strlen($_POST['firstname']) == 0)
 {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY',$gL10n->get('SYS_FIRSTNAME')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_FIRSTNAME')));
 }
 
 // Initialize and check the parameters

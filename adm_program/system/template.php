@@ -18,10 +18,10 @@ if ('template.php' == basename($_SERVER['SCRIPT_FILENAME']))
 function admReadTemplateFile($filename) {
 
 if (file_exists(SERVER_PATH. '/adm_my_files/mail_templates/'.$filename)) {
-    $fp = fopen(SERVER_PATH. '/adm_my_files/mail_templates/'.$filename,"r");
+    $fp = fopen(SERVER_PATH. '/adm_my_files/mail_templates/'.$filename, "r");
 	$str = "";
 	while(!feof($fp)) {
-	$str .= fread($fp,1024);
+	$str .= fread($fp, 1024);
 	}
 	return $str;
 } else {

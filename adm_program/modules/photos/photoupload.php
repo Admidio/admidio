@@ -11,7 +11,7 @@
  * mode   : choose_files - (Default) Show a dialog with controls to select photo files to upload
  *          upload_files - Upload the selected files
  * pho_id : Id of album to which the files should be uploaded
- * 
+ *
  *****************************************************************************/
 
 require_once('../../system/common.php');
@@ -94,7 +94,7 @@ if($getMode == 'choose_files')
             done: function (e, data) {
                 $.each(data.result.files, function (index, file) {
                     if(typeof file.error != "undefined") {
-                        $("<p/>").html("<div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>" 
+                        $("<p/>").html("<div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>"
                             + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
                     }
                     else {
@@ -121,7 +121,7 @@ if($getMode == 'choose_files')
         <div class="modal-body">
             <p class="lead">'.$gL10n->get('PHO_PHOTO_UPLOAD_DESC', $photoAlbum->getValue('pho_name')).'</p>
 
-            <span class="btn btn-primary fileinput-button"><img 
+            <span class="btn btn-primary fileinput-button"><img
                 src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" />'.$gL10n->get('PHO_SELECT_FOTOS').'
                 <input id="fileupload" type="file" name="files[]" multiple>
             </span>
@@ -137,10 +137,7 @@ if($getMode == 'choose_files')
 elseif($getMode == 'upload_files')
 {
     // upload files to temp upload folder
-    $uploadHandler = new UploadHandlerPhoto(array('upload_dir' => SERVER_PATH.'/adm_my_files/photos/upload/'
-                                            ,'upload_url' => $g_root_path.'/adm_my_files/photos/upload/'
-                                            ,'image_versions' => array()
-                                            ,'accept_file_types' => '/\.(jpe?g|png)$/i'
+    $uploadHandler = new UploadHandlerPhoto(array('upload_dir' => SERVER_PATH.'/adm_my_files/photos/upload/', 'upload_url' => $g_root_path.'/adm_my_files/photos/upload/', 'image_versions' => array(), 'accept_file_types' => '/\.(jpe?g|png)$/i'
                                             ), true,
                                             array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID')));
 }

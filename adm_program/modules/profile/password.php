@@ -17,7 +17,7 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
-header('Content-type: text/html; charset=utf-8'); 
+header('Content-type: text/html; charset=utf-8');
 
 $gMessage->showThemeBody(false);
  
@@ -48,12 +48,12 @@ if($getMode == 'change')
     /***********************************************************************/
     /* Handle form input */
     /***********************************************************************/
-    if($gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId )
+    if($gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
     {
         $_POST['old_password'] = '';
     }
     
-    if( (strlen($_POST['old_password']) > 0 || $gCurrentUser->isWebmaster() )
+    if((strlen($_POST['old_password']) > 0 || $gCurrentUser->isWebmaster())
     && strlen($_POST['new_password']) > 0
     && strlen($_POST['new_password_confirm']) > 0)
     {
@@ -61,9 +61,9 @@ if($getMode == 'change')
         {
             if ($_POST['new_password'] == $_POST['new_password_confirm'])
             {
-                // check if old password is correct. 
+                // check if old password is correct.
                 // Webmaster could change password of other users without this verification.
-                if($user->checkPassword($_POST['old_password']) || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId )
+                if($user->checkPassword($_POST['old_password']) || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
                 {
                     $user->setValue('usr_password', $_POST['new_password']);
                     $user->save();
@@ -120,14 +120,14 @@ elseif($getMode == 'html')
                     $("#password_form .form-alert").attr("class", "alert alert-success form-alert");
                     $("#password_form .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
                     $("#password_form .form-alert").fadeIn("slow");
-                    setTimeout("$(\"#admidio_modal\").modal(\"hide\");",2000);	
+                    setTimeout("$(\"#admidio_modal\").modal(\"hide\");",2000);
                 }
                 else {
                     $("#password_form .form-alert").attr("class", "alert alert-danger form-alert");
                     $("#password_form .form-alert").fadeIn();
                     $("#password_form .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                 }
-            });    
+            });
         });
     });
     --></script>

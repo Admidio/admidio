@@ -140,15 +140,15 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                         <span class="pull-right text-right">';
                             if($showRoleEndDate == true)
                             {
-                                $roleMemHTML .= $gL10n->get('SYS_SINCE_TO',$member->getValue('mem_begin', $gPreferences['system_date']),$member->getValue('mem_end', $gPreferences['system_date']));
+                                $roleMemHTML .= $gL10n->get('SYS_SINCE_TO', $member->getValue('mem_begin', $gPreferences['system_date']), $member->getValue('mem_end', $gPreferences['system_date']));
                             }
                             elseif($futureMembership == true)
                             {
-                                $roleMemHTML .= $gL10n->get('SYS_FROM',$member->getValue('mem_begin', $gPreferences['system_date']));
+                                $roleMemHTML .= $gL10n->get('SYS_FROM', $member->getValue('mem_begin', $gPreferences['system_date']));
                             }
                             else
                             {
-                                $roleMemHTML .= $gL10n->get('SYS_SINCE',$member->getValue('mem_begin', $gPreferences['system_date']));
+                                $roleMemHTML .= $gL10n->get('SYS_SINCE', $member->getValue('mem_begin', $gPreferences['system_date']));
                             }
         
                             if($role->allowedToAssignMembers($gCurrentUser))

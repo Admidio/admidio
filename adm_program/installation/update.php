@@ -368,7 +368,7 @@ elseif($getMode == 2)
                 // keine Datei mit der Microversion gefunden, dann die Main- oder Subversion hochsetzen,
                 // solange bis die aktuelle Versionsnummer erreicht wurde
                 if($flagNextVersion == false
-                && version_compare($mainVersion. '.'. $subVersion. '.'. $microVersion , ADMIDIO_VERSION) == -1)
+                && version_compare($mainVersion. '.'. $subVersion. '.'. $microVersion, ADMIDIO_VERSION) == -1)
                 {
                     if($subVersion == 4) // we do not have more then 4 subversions with old updater
                     {
@@ -410,7 +410,7 @@ elseif($getMode == 2)
 
     // create an installation unique cookie prefix and remove special characters
     $gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
-    $gCookiePraefix = strtr($gCookiePraefix, ' .,;:','_____');
+    $gCookiePraefix = strtr($gCookiePraefix, ' .,;:', '_____');
 
     // start php session and remove session object with all data, so that
     // all data will be read after the update

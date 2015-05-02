@@ -79,11 +79,11 @@ if($getMode == 1)
         </p>
         
         <button id="btnFormer" type="button" class="btn btn-primary"
-            onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$getUserId.'&mode=2\'"><img 
+            onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$getUserId.'&mode=2\'"><img
             src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_FORMER').'" />&nbsp;'.$gL10n->get('SYS_FORMER').'</button>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <button id="btnDelete" type="button" class="btn btn-primary"
-            onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=3\'"><img 
+            onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=3\'"><img
             src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" />&nbsp;'.$gL10n->get('SYS_DELETE').'</button>
     </div>');
 
@@ -189,7 +189,7 @@ elseif($getMode == 4)
         catch(AdmException $e)
         {
             $e->showText();
-        } 
+        }
     }
 }
 elseif($getMode == 5)
@@ -212,13 +212,13 @@ elseif($getMode == 6)
         // nur Webmaster duerfen dies
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
         $gMessage->setForwardYesNo($g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=3');
-        $gMessage->show($gL10n->get('MEM_USER_DELETE', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')),$gL10n->get('SYS_DELETE'));
+        $gMessage->show($gL10n->get('MEM_USER_DELETE', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')), $gL10n->get('SYS_DELETE'));
     }
     else
     {
         // User kann nur aus dieser Orga entfernt werden
         $gMessage->setForwardYesNo($g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=2');
-        $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')),$gL10n->get('SYS_REMOVE'));
+        $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')), $gL10n->get('SYS_REMOVE'));
     }
 }
 

@@ -85,14 +85,14 @@ if($getMode == 1)
 
     if(strlen($_POST['cat_name']) == 0 && $category->getValue('cat_system') == 0)
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY',$gL10n->get('SYS_NAME')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
     }
 
     $sqlSearchOrga = '';
     
     // Profilfelderkategorien bei einer Orga oder wenn Haekchen gesetzt, immer Orgaunabhaengig anlegen
     // Terminbestaetigungskategorie bleibt auch Orgaunabhaengig
-    if(($getType == 'USF' && (  isset($_POST['show_in_several_organizations']) 
+    if(($getType == 'USF' && (isset($_POST['show_in_several_organizations'])
                               || $gCurrentOrganization->countAllRecords() == 1))
     || ($getType == 'ROL' && $category->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION'))
     {
@@ -113,7 +113,7 @@ if($getMode == 1)
                      FROM '. TBL_CATEGORIES. '
                     WHERE cat_type    = \''. $getType. '\'
                       AND cat_name LIKE \''. $_POST['cat_name']. '\'
-                      AND cat_id     <> '.$getCatId. 
+                      AND cat_id     <> '.$getCatId.
                           $sqlSearchOrga;
         $result = $gDb->query($sql);
         $row    = $gDb->fetch_array($result);
@@ -157,7 +157,7 @@ if($getMode == 1)
 
     // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
     // dann muss die Sequenz fuer den alle Kategorien dieses Typs neu gesetzt werden
-    if(isset($_POST['cat_org_id']) && $_POST['cat_org_id'] <> $cat_org_merker)
+    if(isset($_POST['cat_org_id']) && $_POST['cat_org_id'] != $cat_org_merker)
     {
         $sequenceCategory = new TableCategory($gDb);
         $sequence = 0;

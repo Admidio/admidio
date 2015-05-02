@@ -1,6 +1,6 @@
-﻿<?php
+<?php
 /******************************************************************************
- * Konfigurationsdatei fuer Admidio-Plugin sidebar_downloads 
+ * Konfigurationsdatei fuer Admidio-Plugin sidebar_downloads
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org

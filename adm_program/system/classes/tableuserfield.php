@@ -158,7 +158,7 @@ class TableUserField extends TableAccess
 				$arrListValuesWithKeys = array(); 	// array with list values and keys that represents the internal value
 
                 // first replace windows new line with unix new line and then create an array
-                $valueFormated = str_replace("\r\n","\n", $value);
+                $valueFormated = str_replace("\r\n", "\n", $value);
                 $arrListValues = explode("\n", $valueFormated);
                 
 				foreach($arrListValues as $key => &$listValue)
@@ -355,7 +355,7 @@ class TableUserField extends TableAccess
 			}
 			// Homepage noch mit http vorbelegen
 			if(strpos(admStrToLower($newValue), 'http://')  === false
-			&& strpos(admStrToLower($newValue), 'https://') === false )
+			&& strpos(admStrToLower($newValue), 'https://') === false)
 			{
 				$newValue = 'http://'. $newValue;
 			}

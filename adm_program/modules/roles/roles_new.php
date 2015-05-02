@@ -80,7 +80,7 @@ if(isset($_SESSION['roles_request']))
 }
 
 // holt eine Liste der ausgewaehlten abhaengigen Rolen
-$childRoles = RoleDependency::getChildRoles($gDb,$getRoleId);
+$childRoles = RoleDependency::getChildRoles($gDb, $getRoleId);
 
 $childRoleObjects = array();
 
@@ -143,21 +143,21 @@ $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->ge
         $form->addInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'), array('maxLength' => 100, 'property' => FIELD_MANDATORY));
     }
     $form->addMultilineTextInput('rol_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'), 3, array('maxLength' => 4000));
-    $form->addSelectBoxForCategories('rol_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'EDIT_CATEGORIES', 
+    $form->addSelectBoxForCategories('rol_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'EDIT_CATEGORIES',
                                      array('property' => FIELD_MANDATORY, 'defaultValue' => $role->getValue('rol_cat_id')));
 $form->closeGroupBox();
 $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
     if($gPreferences['enable_mail_module'])
     {
     	$selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('ROL_ONLY_ROLE_MEMBERS'), 2 => $gL10n->get('ROL_ALL_MEMBERS'), 3 => $gL10n->get('ROL_ALL_GUESTS'));
-        $form->addSelectBox('rol_mail_this_role', $gL10n->get('ROL_SEND_MAILS'), $selectBoxEntries, array('defaultValue' => $role->getValue('rol_mail_this_role'), 
+        $form->addSelectBox('rol_mail_this_role', $gL10n->get('ROL_SEND_MAILS'), $selectBoxEntries, array('defaultValue' => $role->getValue('rol_mail_this_role'),
                             'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => array('ROL_RIGHT_MAIL_THIS_ROLE_DESC', $gL10n->get('ROL_RIGHT_MAIL_TO_ALL'))));
     }
 	$selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('ROL_ONLY_ROLE_MEMBERS'), 2 => $gL10n->get('ROL_ALL_MEMBERS'));
-    $form->addSelectBox('rol_this_list_view', $gL10n->get('ROL_SEE_ROLE_MEMBERSHIP'), $selectBoxEntries, array('defaultValue' => $role->getValue('rol_this_list_view'), 
+    $form->addSelectBox('rol_this_list_view', $gL10n->get('ROL_SEE_ROLE_MEMBERSHIP'), $selectBoxEntries, array('defaultValue' => $role->getValue('rol_this_list_view'),
                         'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => array('ROL_RIGHT_THIS_LIST_VIEW_DESC', $gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW'))));
 	$selectBoxEntries = array(0 => $gL10n->get('ROL_NO_ADDITIONAL_RIGHTS'), 1 => $gL10n->get('SYS_ASSIGN_MEMBERS'), 2 => $gL10n->get('SYS_EDIT_MEMBERS'), 3 => $gL10n->get('ROL_ASSIGN_EDIT_MEMBERS'));
-    $form->addSelectBox('rol_leader_rights', $gL10n->get('SYS_LEADER'), $selectBoxEntries, array('defaultValue' => $role->getValue('rol_leader_rights'), 
+    $form->addSelectBox('rol_leader_rights', $gL10n->get('SYS_LEADER'), $selectBoxEntries, array('defaultValue' => $role->getValue('rol_leader_rights'),
                         'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'ROL_LEADER_RIGHTS_DESC'));
     
 	$selectBoxEntries = array(0 => $gL10n->get('ROL_SYSTEM_DEFAULT_LIST'));

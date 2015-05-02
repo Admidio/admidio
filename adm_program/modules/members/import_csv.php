@@ -59,7 +59,7 @@ $importedFields = array();
 $depRoles = array();
 
 // Abhängige Rollen ermitteln
-$depRoles = RoleDependency::getParentRoles($gDb,$_SESSION['rol_id']);
+$depRoles = RoleDependency::getParentRoles($gDb, $_SESSION['rol_id']);
 
 if($firstRowTitle == true)
 {
@@ -230,8 +230,8 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
             }
         }
     
-        if( $rowDuplicateUser['usr_id'] == 0
-        || ($rowDuplicateUser['usr_id']  > 0 && $_SESSION['user_import_mode'] > USER_IMPORT_NOT_EDIT) )
+        if($rowDuplicateUser['usr_id'] == 0
+        || ($rowDuplicateUser['usr_id']  > 0 && $_SESSION['user_import_mode'] > USER_IMPORT_NOT_EDIT))
         {
 			// if user doesn't exists or should be duplicated then count as new user
             if($rowDuplicateUser['usr_id'] == 0 || $_SESSION['user_import_mode'] == USER_IMPORT_DUPLICATE)

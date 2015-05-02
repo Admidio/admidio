@@ -69,7 +69,7 @@ if ($getMode == 1)
 
 		if(strlen($_FILES['userfile']['name'][0]) == 0)
 		{
-			$gMessage->show($gL10n->get('DOW_UPLOAD_POST_EMPTY',ini_get('upload_max_filesize')));
+			$gMessage->show($gL10n->get('DOW_UPLOAD_POST_EMPTY', ini_get('upload_max_filesize')));
 		}
 
         
@@ -83,7 +83,7 @@ if ($getMode == 1)
             //Dateigroesse ueberpruefen Servereinstellungen
             if ($_FILES['userfile']['error'][$currentFileNo] == 1)
             {
-                $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER',ini_get('upload_max_filesize')));
+                $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', ini_get('upload_max_filesize')));
             }
             
             //Dateigroesse ueberpruefen Administratoreinstellungen
@@ -120,10 +120,10 @@ if ($getMode == 1)
                     {
                         //Neue Datei noch in der DB eintragen
                         $newFile = new TableFile($gDb);
-                        $newFile->setValue('fil_fol_id',$targetFolder->getValue('fol_id'));
-                        $newFile->setValue('fil_name',$fileName);
-                        $newFile->setValue('fil_locked',$targetFolder->getValue('fol_locked'));
-                        $newFile->setValue('fil_counter','0');
+                        $newFile->setValue('fil_fol_id', $targetFolder->getValue('fol_id'));
+                        $newFile->setValue('fil_name', $fileName);
+                        $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
+                        $newFile->setValue('fil_counter', '0');
                         $newFile->save();
                         
                         // Benachrichtigungs-Email für neue Einträge        
@@ -135,7 +135,7 @@ if ($getMode == 1)
                     }
                     else
                     {
-                        $gMessage->show($gL10n->get('DOW_FILE_UPLOAD_ERROR',$fileName));
+                        $gMessage->show($gL10n->get('DOW_FILE_UPLOAD_ERROR', $fileName));
                     }
                 }               
             }
@@ -277,7 +277,7 @@ elseif ($getMode == 3)
 //Datei / Ordner umbenennen
 elseif ($getMode == 4)
 {
-    if ( (!$getFileId && !$getFolderId) OR ($getFileId && $getFolderId) )
+    if ((!$getFileId && !$getFolderId) or ($getFileId && $getFolderId))
     {
         //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
         //beides ist auch nicht erlaubt
@@ -312,18 +312,18 @@ elseif ($getMode == 4)
 					$oldName = $file->getValue('fil_name');
 
 					// Datei umbenennen im Filesystem und in der Datenbank
-					if (rename($oldFile,SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
+					if (rename($oldFile, SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
 					{
 						$file->setValue('fil_name', $newFile);
 						$file->setValue('fil_description', $newDescription);
 						$file->save();
 
 						$gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-						$gMessage->show($gL10n->get('DOW_FILE_RENAME',$oldName));
+						$gMessage->show($gL10n->get('DOW_FILE_RENAME', $oldName));
 					}
 					else {
 						$gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-						$gMessage->show($gL10n->get('DOW_FILE_RENAME_ERROR',$oldName));
+						$gMessage->show($gL10n->get('DOW_FILE_RENAME_ERROR', $oldName));
 					}
 				}
 			}
@@ -354,17 +354,17 @@ elseif ($getMode == 4)
 					$oldName = $folder->getValue('fol_name');
 
 					// Ordner umbenennen im Filesystem und in der Datenbank
-					if (rename($oldFolder,SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
+					if (rename($oldFolder, SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
 					{
 						$folder->setValue('fol_description', $newDescription);
 						$folder->rename($newFolder, $folder->getValue('fol_path'));
 
 						$gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-						$gMessage->show($gL10n->get('DOW_FOLDER_RENAME',$oldName));
+						$gMessage->show($gL10n->get('DOW_FOLDER_RENAME', $oldName));
 					}
 					else {
 						$gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-						$gMessage->show($gL10n->get('DOW_FOLDER_RENAME_ERROR',$oldName));
+						$gMessage->show($gL10n->get('DOW_FOLDER_RENAME_ERROR', $oldName));
 					}
 				}
 			}
@@ -394,7 +394,7 @@ elseif ($getMode == 5)
         //Es muss eine FolderId uebergeben werden
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
-    else if ($getFolderId > 0)
+    elseif ($getFolderId > 0)
     {
         try
         {
@@ -448,10 +448,10 @@ elseif ($getMode == 6)
     if (is_file($targetFolder->getCompletePathOfFolder(). '/'. $getName)) {
         //Datei hinzufuegen
         $newFile = new TableFile($gDb);
-        $newFile->setValue('fil_fol_id',$targetFolder->getValue('fol_id'));
-        $newFile->setValue('fil_name',$getName);
-        $newFile->setValue('fil_locked',$targetFolder->getValue('fol_locked'));
-        $newFile->setValue('fil_counter','0');
+        $newFile->setValue('fil_fol_id', $targetFolder->getValue('fol_id'));
+        $newFile->setValue('fil_name', $getName);
+        $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
+        $newFile->setValue('fil_counter', '0');
         $newFile->save();
 
         //Zurueck zur letzten Seite
@@ -460,7 +460,7 @@ elseif ($getMode == 6)
         header($location);
         exit();
     }
-    else if (is_dir($targetFolder->getCompletePathOfFolder(). '/'. $getName)) {
+    elseif (is_dir($targetFolder->getCompletePathOfFolder(). '/'. $getName)) {
 
         //Ordner der DB hinzufuegen
         $newFolder = new TableFolder($gDb);

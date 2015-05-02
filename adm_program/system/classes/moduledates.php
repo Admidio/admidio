@@ -411,7 +411,7 @@ class ModuleDates extends Modules
     /** Check date value to reference and set html output.
      *  If value matches to reference, value is cleared to get an empty string.
      */
-    private function setFormValue ($date, $reference)
+    private function setFormValue($date, $reference)
     {
         $checkedDate = $this->formatDate($date);
         if($checkedDate == $reference || $checkedDate == '1970-01-01')

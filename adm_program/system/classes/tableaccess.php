@@ -186,7 +186,7 @@ class TableAccess
         // if text field and format not 'database' then convert all quotes to html syntax
         if(isset($this->columnsInfos[$columnName]['type'])
 		&& $format != 'database'
-        && (  strpos($this->columnsInfos[$columnName]['type'], 'char') !== false
+        && (strpos($this->columnsInfos[$columnName]['type'], 'char') !== false
            || strpos($this->columnsInfos[$columnName]['type'], 'text') !== false))
         {
             return htmlspecialchars($columnValue, ENT_QUOTES);
@@ -200,7 +200,7 @@ class TableAccess
 			return pack('H*', $columnValue);
         }        // Datum in dem uebergebenen Format bzw. Systemformat zurueckgeben
         elseif(isset($this->columnsInfos[$columnName]['type'])
-        &&  (  strpos($this->columnsInfos[$columnName]['type'], 'timestamp') !== false
+        &&  (strpos($this->columnsInfos[$columnName]['type'], 'timestamp') !== false
             || strpos($this->columnsInfos[$columnName]['type'], 'date') !== false
             || strpos($this->columnsInfos[$columnName]['type'], 'time') !== false))
         {
@@ -414,7 +414,7 @@ class TableAccess
                     global $gCurrentUser;
                     // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
                     if(time() > (strtotime($this->getValue($this->columnPraefix.'_timestamp_create')) + 900)
-                    || $gCurrentUser->getValue('usr_id') != $this->getValue($this->columnPraefix.'_usr_id_create') )
+                    || $gCurrentUser->getValue('usr_id') != $this->getValue($this->columnPraefix.'_usr_id_create'))
                     {
                         $this->setValue($this->columnPraefix.'_timestamp_change', DATETIME_NOW);
                         $this->setValue($this->columnPraefix.'_usr_id_change', $gCurrentUser->getValue('usr_id'));
@@ -583,7 +583,7 @@ class TableAccess
                 }
 
                 elseif($this->columnsInfos[$columnName]['type'] == 'blob'
-                ||     $this->columnsInfos[$columnName]['type'] == 'bytea' )
+                ||     $this->columnsInfos[$columnName]['type'] == 'bytea')
                 {
 	                // PostgreSQL can only store hex values in bytea, so we must decode binary in hex
                 	if($this->columnsInfos[$columnName]['type'] == 'bytea')

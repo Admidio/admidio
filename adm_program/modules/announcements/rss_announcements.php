@@ -42,8 +42,8 @@ $announcements = new ModuleAnnouncements();
 /*** ab hier wird der RSS-Feed zusammengestellt**/
 
 // create RSS feed object with channel information
-$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline, 
-            $gCurrentOrganization->getValue('org_homepage'), 
+$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline,
+            $gCurrentOrganization->getValue('org_homepage'),
             $gL10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', $gCurrentOrganization->getValue('org_longname')),
             $gCurrentOrganization->getValue('org_longname'));
 
@@ -51,7 +51,7 @@ $rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHea
 if($announcements->getDataSetCount()>0)
 {
     $announcement = new TableAnnouncement($gDb);
-    $rows = $announcements->getDataset(0,10);
+    $rows = $announcements->getDataset(0, 10);
     // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
     foreach ($rows['recordset'] as $row)
     {
@@ -64,12 +64,12 @@ if($announcements->getDataSetCount()>0)
         $description = $announcement->getValue('ann_description');
         $link        = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='.$announcement->getValue('ann_id').'&headline='.$getHeadline;
         $author      = $row['create_name'];
-        $pubDate     = date('r',strtotime($announcement->getValue('ann_timestamp_create')));
+        $pubDate     = date('r', strtotime($announcement->getValue('ann_timestamp_create')));
     
         // add entry to RSS feed
         $rss->addItem($title, $description, $link, $author, $pubDate);
     }
-}            
+}
             
 
 // jetzt nur noch den Feed generieren lassen

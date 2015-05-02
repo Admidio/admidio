@@ -325,10 +325,10 @@ class User extends TableUsers
                 // Cookies fuer die Anmeldung setzen und evtl. Ports entfernen
                 $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
 
-                setcookie($gCookiePraefix. '_ID', $gSessionId , $timestamp_expired, '/', $domain, 0);
+                setcookie($gCookiePraefix. '_ID', $gSessionId, $timestamp_expired, '/', $domain, 0);
                 // User-Id und Autologin auch noch als Cookie speichern
                 // vorher allerdings noch serialisieren, damit der Inhalt nicht so einfach ausgelesen werden kann
-                setcookie($gCookiePraefix. '_DATA', $setAutoLogin. ';'. $this->getValue('usr_id') , $timestamp_expired, '/', $domain, 0);
+                setcookie($gCookiePraefix. '_DATA', $setAutoLogin. ';'. $this->getValue('usr_id'), $timestamp_expired, '/', $domain, 0);
 
                 // count logins and update login dates
                 $this->updateLoginData();
@@ -660,8 +660,8 @@ class User extends TableUsers
         }
         if (file_exists(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
         {
-            $img_handle = fopen (SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg', 'rb');
-            $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode(fread ($img_handle, filesize (SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))). "\r\n";
+            $img_handle = fopen(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg', 'rb');
+            $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode(fread($img_handle, filesize(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))). "\r\n";
             fclose($img_handle);
         }
         if (strlen($this->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
@@ -1132,7 +1132,7 @@ class User extends TableUsers
                 // Disabled fields can only be edited by users with the right "edit_users" except on registration.
                 // Here is no need to check hidden fields because we check on save() method that only users who 
                 // can edit the profile are allowed to save and change data.
-                if((  $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 1
+                if(($this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 1
                    && $gCurrentUser->editUsers() == true)
                 || $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 0
                 || ($gCurrentUser->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
@@ -1156,7 +1156,7 @@ class User extends TableUsers
          */
         if($gPreferences['profile_log_edit_fields'] == 1
 		&& $this->getValue('usr_id') != 0 
-		&& strpos($columnName,'usr_') === false 
+		&& strpos($columnName, 'usr_') === false 
 		&& $newFieldValue != $oldFieldValue)
         {
 			$logEntry = new TableAccess($this->db, TBL_USER_LOG, 'usl');

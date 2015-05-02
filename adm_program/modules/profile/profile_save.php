@@ -114,12 +114,12 @@ if($getNewUser == 2)
 // nun alle Profilfelder pruefen
 foreach($gProfileFields->mProfileFields as $field)
 {
-    $post_id = 'usf-'. $field->getValue('usf_id');    
+    $post_id = 'usf-'. $field->getValue('usf_id');
     
 	// check and save only fields that aren't disabled
 	if($gCurrentUser->editUsers() == true || $field->getValue('usf_disabled') == 0 || ($field->getValue('usf_disabled') == 1 && $getNewUser > 0))
 	{
-		if(isset($_POST[$post_id])) 
+		if(isset($_POST[$post_id]))
 		{
 			// Pflichtfelder muessen gefuellt sein
 			// E-Mail bei Registrierung immer !!!
@@ -204,7 +204,7 @@ foreach($gProfileFields->mProfileFields as $field)
 
 if($gCurrentUser->isWebmaster() || $getNewUser > 0)
 {
-    // Loginname darf nur vom Webmaster bzw. bei Neuanlage geaendert werden    
+    // Loginname darf nur vom Webmaster bzw. bei Neuanlage geaendert werden
     if($_POST['usr_login_name'] != $user->getValue('usr_login_name'))
     {
         if(strlen($_POST['usr_login_name']) > 0)
@@ -229,7 +229,7 @@ if($gCurrentUser->isWebmaster() || $getNewUser > 0)
 		{
 			$gMessage->show($gL10n->get('SYS_FIELD_INVALID_CHAR', $gL10n->get('SYS_USERNAME')));
 		}
-    }    
+    }
 }
 
 // falls Registrierung, dann die entsprechenden Felder noch besetzen
@@ -243,10 +243,10 @@ if($getNewUser == 2)
 // muss natuerlich der Code ueberprueft werden
 if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1)
 {
-    if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
+    if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
     {
 		if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-		else if($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+		elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
     }
 }
 

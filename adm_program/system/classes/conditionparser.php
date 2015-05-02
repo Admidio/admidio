@@ -3,10 +3,10 @@
 /** @class ConditionParser
  *  @brief Creates from a custom condition syntax a sql condition
  *
- *  The user can write a condition in a special syntax. This class will parse 
- *  that condition and creates a valid SQL statement which can be used in 
+ *  The user can write a condition in a special syntax. This class will parse
+ *  that condition and creates a valid SQL statement which can be used in
  *  another SQL statement to select data with these conditions.
- *  This class uses AdmExceptions when an error occured. Make sure you catch these 
+ *  This class uses AdmExceptions when an error occured. Make sure you catch these
  *  exeptions when using the class.
  *  @par Examples
  *  @code // create a valid SQL condition out of the special syntax
@@ -44,25 +44,25 @@ class ConditionParser
         // if last char is Y or J then user searches for age
         $last = substr($date, -1);
         $last = admStrToUpper($last);
-        if( $last == 'J' || $last == 'Y') 
+        if($last == 'J' || $last == 'Y')
         {
             $age  = substr($date, 0, -1);
             $date = new DateTimeExtended(date('Y').'-'.date('m').'-'.date('d'), 'Y-m-d', 'date');
             $ageCondition = '';
 
-            
+
             if($operator == '=')
             {
                 // first remove = from destination condition
                 $this->mDestCond = substr($this->mDestCond, 0, strlen($this->mDestCond) - 4);
-                
+
                 // now compute the dates for a valid birthday with that age
                 $date->modify('-'.$age.' years');
                 $dateTo = $date->format('Y-m-d');
-                $date->modify('-1 year'); 
-                $date->modify('+1 day'); 
+                $date->modify('-1 year');
+                $date->modify('+1 day');
                 $dateFrom = $date->format('Y-m-d');
-                
+
                 $ageCondition = ' BETWEEN \''.$dateFrom.'\' AND \''.$dateTo.'\'';
                 $this->mOpenQuotes = false;
             }
@@ -71,7 +71,7 @@ class ConditionParser
                 // search for dates that are older than the age
                 // because the age itself takes 1 year we must add 1 year and 1 day to age
                 $date->modify('-'.($age+1).' years');
-                $date->modify('+1 day'); 
+                $date->modify('+1 day');
                 $ageCondition = $date->format('Y-m-d');
             }
             elseif($operator == '{')
@@ -79,13 +79,13 @@ class ConditionParser
                 // search for dates that are younger than the age
                 // we must add 1 day to the date because the day itself belongs to the age
                 $date->modify('-'.$age.' years');
-                $date->modify('+1 day'); 
+                $date->modify('+1 day');
                 $ageCondition = $date->format('Y-m-d');
             }
-            
+
             return $ageCondition;
         }
-        
+
         // validate date and return it in database format
         if(strlen($date) > 0)
         {
@@ -98,7 +98,7 @@ class ConditionParser
         return $formatDate;
     }
 
-	/** Replace different user conditions with predefined chars that 
+	/** Replace different user conditions with predefined chars that
 	 *  represents a special condition e.g. @b ! represents @b != and @b <>
 	 *  @param $sourceCondition The user condition string
 	 *  @return String with the predefined chars for conditions
@@ -106,14 +106,14 @@ class ConditionParser
     public function makeStandardCondition($sourceCondition)
     {
 		global $gL10n;
-	
+
         $this->mSrcCond = admStrToUpper(trim($sourceCondition));
         $this->mSrcCond = strtr($this->mSrcCond, '*', '%');
 
 		// valid 'not empty' is '#'
         $this->mSrcCond = str_replace(admStrToUpper($gL10n->get('SYS_NOT_EMPTY')), ' # ', $this->mSrcCond);
         $this->mSrcCond = str_replace(' NOT NULL ', ' # ', $this->mSrcCond);
-		
+
 		// valid 'empty' is '_'
         $this->mSrcCond = str_replace(admStrToUpper($gL10n->get('SYS_EMPTY')), ' _ ', $this->mSrcCond);
         $this->mSrcCond = str_replace(' NULL ', ' _ ', $this->mSrcCond);
@@ -149,8 +149,8 @@ class ConditionParser
 
         return $this->mSrcCond;
     }
-   
-	/** Creates from a user defined condition a valid SQL condition 
+
+	/** Creates from a user defined condition a valid SQL condition
 	 *  @param $sourceCondition The user condition string
 	 *  @param $columnName 		The name of the database column for which the condition should be created
 	 *  @param $columnType 		The type of the column. Valid types are @b string, @b int, @b date and @b checkbox
@@ -171,7 +171,7 @@ class ConditionParser
         {
             $this->mSrcCond     = $this->makeStandardCondition($sourceCondition);
             $this->mSrcCondArray = str_split($this->mSrcCond);
-    
+
             // Bedingungen fuer das Feld immer mit UND starten
             if($columnType == 'string')
             {
@@ -195,12 +195,12 @@ class ConditionParser
             {
                 $this->mDestCond = ' AND ( '.$columnName.' ';
             }
-    
+
             // Zeichen fuer Zeichen aus dem Bedingungsstring wird hier verarbeitet
             for($this->mCount = 0; $this->mCount < strlen($this->mSrcCond); $this->mCount++)
             {
                 if($this->mSrcCondArray[$this->mCount] == '&'
-                || $this->mSrcCondArray[$this->mCount] == '|' )
+                || $this->mSrcCondArray[$this->mCount] == '|')
                 {
                     if($bNewCondition)
                     {
@@ -213,7 +213,7 @@ class ConditionParser
                         {
                             $this->mDestCond = $this->mDestCond. ' OR ';
                         }
-    
+
                         // Feldname noch dahinter
                         if($columnType == 'string')
                         {
@@ -223,7 +223,7 @@ class ConditionParser
                         {
                             $this->mDestCond = $this->mDestCond. ' '.$columnName.' ';
                         }
-    
+
                         $bStartCondition = true;
                     }
                 }
@@ -237,35 +237,35 @@ class ConditionParser
                     || $this->mSrcCondArray[$this->mCount] == '{'
                     || $this->mSrcCondArray[$this->mCount] == '}'
                     || $this->mSrcCondArray[$this->mCount] == '['
-                    || $this->mSrcCondArray[$this->mCount] == ']' )
+                    || $this->mSrcCondArray[$this->mCount] == ']')
                     {
                         // save actual operator for later use
                         $operator = $this->mSrcCondArray[$this->mCount];
-                        
+
                         if(!$bStartCondition)
                         {
                             $this->mDestCond = $this->mDestCond. ' AND '.$columnName.' ';
                             $bStartCondition = true;
                         }
-    
+
                         if($this->mSrcCondArray[$this->mCount] == '=')
                         {
-                            if ($columnType == 'string') 
+                            if ($columnType == 'string')
 							{
 								$this->mDestCond = $this->mDestCond. ' LIKE ';
-							} 
-							else 
+							}
+							else
 							{
 								$this->mDestCond = $this->mDestCond. ' = ';
 							}
                         }
                         elseif($this->mSrcCondArray[$this->mCount] == '!')
                         {
-                            if ($columnType == 'string') 
+                            if ($columnType == 'string')
 							{
 								$this->mDestCond = $this->mDestCond. ' NOT LIKE ';
-							} 
-							else 
+							}
+							else
 							{
 								$this->mDestCond = $this->mDestCond. ' <> ';
 							}
@@ -289,41 +289,41 @@ class ConditionParser
                         elseif($this->mSrcCondArray[$this->mCount] == '{')
                         {
                             // bastwe: invert condition on age search
-                            if( $columnType == 'date' 
-                            && (  strstr(admStrToUpper($sourceCondition), 'J') != FALSE 
-                               || strstr(admStrToUpper($sourceCondition), 'Y') != FALSE ))
+                            if($columnType == 'date'
+                            && (strstr(admStrToUpper($sourceCondition), 'J') != FALSE
+                               || strstr(admStrToUpper($sourceCondition), 'Y') != FALSE))
                             {
                                 $this->mDestCond = $this->mDestCond. ' > ';
-                            } 
-                            else 
-                            { 
+                            }
+                            else
+                            {
                                 $this->mDestCond = $this->mDestCond. ' < ';
                             }
                         }
                         elseif($this->mSrcCondArray[$this->mCount] == '}')
                         {
                             // bastwe: invert condition on age search
-                            if( $columnType == 'date' 
-                            && (  strstr(admStrToUpper($sourceCondition), 'J') != FALSE 
-                               || strstr(admStrToUpper($sourceCondition), 'Y') != FALSE ))
+                            if($columnType == 'date'
+                            && (strstr(admStrToUpper($sourceCondition), 'J') != FALSE
+                               || strstr(admStrToUpper($sourceCondition), 'Y') != FALSE))
                             {
                                 $this->mDestCond = $this->mDestCond. ' < ';
-                            } 
-                            else 
-                            { 
+                            }
+                            else
+                            {
                                 $this->mDestCond = $this->mDestCond. ' > ';
                             }
                         }
                         elseif($this->mSrcCondArray[$this->mCount] == '[')
                         {
                             // bastwe: invert condition on age search
-                            if( $columnType == 'date' 
-                            && (  strstr(admStrToUpper($sourceCondition), 'J') != FALSE 
-                               || strstr(admStrToUpper($sourceCondition), 'Y') != FALSE ))
+                            if($columnType == 'date'
+                            && (strstr(admStrToUpper($sourceCondition), 'J') != FALSE
+                               || strstr(admStrToUpper($sourceCondition), 'Y') != FALSE))
                             {
                                 $this->mDestCond = $this->mDestCond. ' >= ';
-                            } 
-                            else 
+                            }
+                            else
                             {
                                 $this->mDestCond = $this->mDestCond. ' <= ';
                             }
@@ -331,13 +331,13 @@ class ConditionParser
                         elseif($this->mSrcCondArray[$this->mCount] == ']')
                         {
                             // bastwe: invert condition on age search
-                            if( $columnType == 'date' 
-                            && (  strstr(admStrToUpper($sourceCondition), 'J') != FALSE 
-                               || strstr(admStrToUpper($sourceCondition), 'Y') != FALSE ))
+                            if($columnType == 'date'
+                            && (strstr(admStrToUpper($sourceCondition), 'J') != FALSE
+                               || strstr(admStrToUpper($sourceCondition), 'Y') != FALSE))
                             {
                                 $this->mDestCond = $this->mDestCond. ' <= ';
-                            } 
-                            else 
+                            }
+                            else
                             {
                                 $this->mDestCond = $this->mDestCond. ' >= ';
                             }
@@ -346,7 +346,7 @@ class ConditionParser
                         {
                             $this->mDestCond = $this->mDestCond. $this->mSrcCondArray[$this->mCount];
                         }
-    
+
                         if($this->mSrcCondArray[$this->mCount] != '_'
                         && $this->mSrcCondArray[$this->mCount] != '#')
                         {
@@ -361,9 +361,9 @@ class ConditionParser
                     {
                         // pruefen, ob ein neues Wort anfaengt
                         if($this->mSrcCondArray[$this->mCount] == ' '
-                        && $bNewCondition == false )
+                        && $bNewCondition == false)
                         {
-                            // if date column than the date will be saved in $date. 
+                            // if date column than the date will be saved in $date.
                             // This variable must then be parsed and changed in a valid database format
                             if($columnType == 'date' && strlen($date) > 0)
                             {
@@ -377,7 +377,7 @@ class ConditionParser
                                 }
                                 $date = '';
                             }
-                            
+
                             if($this->mOpenQuotes == true)
                             {
                                 // allways set quote marks for a value because some fields are a varchar in db
@@ -385,13 +385,13 @@ class ConditionParser
                                 $this->mDestCond = $this->mDestCond. '\' ';
                                 $this->mOpenQuotes = false;
                             }
-                            
+
                             $bNewCondition = true;
                         }
                         elseif($this->mSrcCondArray[$this->mCount] != ' ')
                         {
                             // neues Suchwort, aber noch keine Bedingung
-                            
+
                             if($bNewCondition && !$bStartCondition)
                             {
                                 if($columnType == 'string')
@@ -417,7 +417,7 @@ class ConditionParser
 								}
 								$this->mOpenQuotes = true;
                             }
-    
+
                             // Zeichen an Zielstring dranhaengen
                             if($columnType == 'date')
                             {
@@ -432,15 +432,15 @@ class ConditionParser
                             {
                                 $this->mDestCond = $this->mDestCond. $this->mSrcCondArray[$this->mCount];
                             }
-    
+
                             $bNewCondition   = false;
                             $bStartCondition = false;
                         }
                     }
                 }
             }
-    
-            // if date column than the date will be saved in $date. 
+
+            // if date column than the date will be saved in $date.
             // This variable must then be parsed and changed in a valid database format
             if($columnType == 'date' && strlen($date) > 0)
             {
@@ -460,15 +460,15 @@ class ConditionParser
                 // but should only filled with integer
                 $this->mDestCond = $this->mDestCond. '\' ';
             }
-            
+
             $this->mDestCond = $this->mDestCond. ' ) ';
         }
 
         return $this->mDestCond;
     }
-	
+
 	/** Stores an sql statement that checks if a record in a table does exists or not exists.
-	 *  This must bei a full subselect that starts with SELECT. The statement is used if 
+	 *  This must bei a full subselect that starts with SELECT. The statement is used if
 	 *  a condition with EMTPY or NOT EMPTY is used.
 	 *  @param $sqlStatement String with the full subselect
 	 *  @par Examples

@@ -51,7 +51,7 @@ class FunctionClass
 	// Uebergabe:
 	//      $template_name  .. der Name des Template
 	//      $tmpl_folder    .. der Name des Ordner wo das Template vorhanden ist
-	function getEcardTemplate($template_name,$tmpl_folder) 
+	function getEcardTemplate($template_name, $tmpl_folder) 
 	{
 		$file_data = '';
 		$fpread = @fopen($tmpl_folder.$template_name, 'r');
@@ -61,7 +61,7 @@ class FunctionClass
 		} 
 		else 
 		{
-			while(! feof($fpread) ) 
+			while(! feof($fpread)) 
 			{
 				$file_data .= fgets($fpread, 4096);
 			}
@@ -88,7 +88,7 @@ class FunctionClass
 	//      Bild Daten:             <%ecard_image_width%>       <%ecard_image_height%>      <%ecard_image_name%>
 	//      Nachricht:              <%ecard_message%>
 	*/
-	function parseEcardTemplate($imageName, $ecardMessage, $ecard_data, $recipientName,$recipientEmail) 
+	function parseEcardTemplate($imageName, $ecardMessage, $ecard_data, $recipientName, $recipientEmail) 
 	{
         global $gCurrentUser, $g_root_path;
 
@@ -137,7 +137,7 @@ class FunctionClass
 		// Hier wird die Nachricht ersetzt
 		$pregRepArray["/<%ecard_message%>/"]					= $ecardMessage;
 
-		$ecard_data = preg_replace( array_keys($pregRepArray), array_values($pregRepArray), $ecard_data );
+		$ecard_data = preg_replace(array_keys($pregRepArray), array_values($pregRepArray), $ecard_data);
 
 		return $ecard_data;
 	}
@@ -158,7 +158,7 @@ class FunctionClass
 		$email = new Email();
 		$email->setSender($senderEmail, $senderName);
 		$email->setSubject($this->newMessageReceivedString);
-		$email->addRecipient($recipientEmail,$recipientName);
+		$email->addRecipient($recipientEmail, $recipientName);
 		
 		// alle Bilder werden aus dem Template herausgeholt, damit diese als Anhang verschickt werden koennen
 		if (preg_match_all("/(<img.*src=\")(.*)(\".*>)/Uim", $ecardHtmlData, $matchArray)) 
@@ -192,7 +192,7 @@ class FunctionClass
 					$img_photo_path  = $img_server_path;
 				
 					$image_sized = new Image($photoServerPath);
-					$image_sized->scale($gPreferences['ecard_card_picture_width'],$gPreferences['ecard_card_picture_height']);
+					$image_sized->scale($gPreferences['ecard_card_picture_width'], $gPreferences['ecard_card_picture_height']);
 					$image_sized->copyToFile(null, $img_server_path);
 				}
 	
@@ -208,7 +208,7 @@ class FunctionClass
                     {
                        $returnCode = $e->errorMessage();
                     }
-					$ecardHtmlData = str_replace($matchArray[2][$i],'cid:'.$uid,$ecardHtmlData);
+					$ecardHtmlData = str_replace($matchArray[2][$i], 'cid:'.$uid, $ecardHtmlData);
 				}
 			}
 		}

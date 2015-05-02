@@ -185,7 +185,7 @@ case 1:
 	catch(AdmException $e)
 	{
 		$e->showText();
-	}    
+	}
     // check every checkbox if a value was committed
     // if no value is found then set 0 because 0 will not be committed in a html checkbox element
     foreach($checkboxes as $key => $value)
@@ -292,7 +292,7 @@ case 3:
 
     // form fields are not filled
     if(strlen($_POST['orgaShortName']) == 0
-    || strlen($_POST['orgaLongName']) == 0 )
+    || strlen($_POST['orgaLongName']) == 0)
     {
         $gMessage->show($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'));
     }

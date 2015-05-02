@@ -180,7 +180,7 @@ abstract class HtmlElement {
      */
     public function addAttribute($attribute, $value, $element = null)
     {
-        If($element === null)
+        if($element === null)
         {
             $element = $this->currentElement;
         }
@@ -430,7 +430,7 @@ abstract class HtmlElement {
         $position = '';
         $totalCount = count($this->arrParentElements);
 
-        if($totalCount == 0 )
+        if($totalCount == 0)
         {
             return false;
         }

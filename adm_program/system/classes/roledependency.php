@@ -58,7 +58,7 @@ class RoleDependency
     }
 
     // Rollenabhaengigkeit aus der Datenbank auslesen
-    public function get($childRoleId,$parentRoleId)
+    public function get($childRoleId, $parentRoleId)
     {
 
         $this->clear();

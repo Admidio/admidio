@@ -20,7 +20,7 @@ $getMessageTitle = admFuncVariableIsValid($_GET, 'message_title', 'string', arra
 $getMessageVar1  = admFuncVariableIsValid($_GET, 'message_var1', 'string', array('directOutput' => true));
 $getInlineView   = admFuncVariableIsValid($_GET, 'inline', 'boolean', array('directOutput' => true));
 
-header('Content-type: text/html; charset=utf-8'); 
+header('Content-type: text/html; charset=utf-8');
 
 // show headline
 if($getInlineView)
@@ -169,7 +169,7 @@ switch ($getMessageId)
                 <li>'.$gL10n->get('PHO_UPLOAD_HELP_1', $gL10n->get('SYS_BROWSE')).'</li>
                 <li>'.$gL10n->get('PHO_UPLOAD_HELP_2').'</li>
                 <li>'.$gL10n->get('PHO_UPLOAD_HELP_3', $gL10n->get('PHO_UPLOAD_PHOTOS')).'</li>
-            </ul>  
+            </ul>
             <h3>'.$gL10n->get('SYS_RESTRICTIONS').'</h3>
             <ul>
                 <li>'.$gL10n->get('PHO_RESTRICTIONS_HELP_1').'</li>

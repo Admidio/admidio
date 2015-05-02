@@ -6,9 +6,9 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * 
+ *
  * Based on backupDB Version 1.2.7-201104261502
- * by James Heinrich <info@silisoftware.com>  
+ * by James Heinrich <info@silisoftware.com>
  * available at http://www.silisoftware.com
  *
  *****************************************************************************/
@@ -200,7 +200,7 @@ function bzip2Version() {
 }
 
 // MFA Anpassungen
-function FormattedTimeRemaining($seconds, $precision=1) 
+function FormattedTimeRemaining($seconds, $precision=1)
 {
     global $gL10n;
 

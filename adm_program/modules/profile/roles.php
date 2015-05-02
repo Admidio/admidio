@@ -37,7 +37,7 @@ if($gCurrentUser->assignRoles() == false)
 $user = new User($gDb, $gProfileFields, $getUserId);
 
 // set headline of the script
-$headline = $gL10n->get('ROL_ROLE_ASSIGNMENT',$user->getValue('FIRST_NAME'),$user->getValue('LAST_NAME'));
+$headline = $gL10n->get('ROL_ROLE_ASSIGNMENT', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
 
 if($getInline == 0)
 {
@@ -90,7 +90,7 @@ if($getInline == true)
                         $("#roles_assignment_form .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                     }
                 }
-            });    
+            });
         });
     });
     --></script>
@@ -131,7 +131,7 @@ $table->setColumnAlignByArray(array('center', 'left', 'left', 'left'));
 if($gCurrentUser->manageRoles())
 {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
-    $sql    = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights, 
+    $sql    = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights,
 			            mem_rol_id, mem_usr_id, mem_leader
                     FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                     LEFT JOIN '. TBL_MEMBERS. '
@@ -185,17 +185,17 @@ while($row = $gDb->fetch_array($result))
 
     if($role->getValue('rol_visible') == 1)
     {
-		// if user is assigned to this role 
-		// or if user is created in members.php of list module 
+		// if user is assigned to this role
+		// or if user is created in members.php of list module
 		if($row['mem_usr_id'] > 0 || $role->getValue('rol_id') == $setRoleId)
 		{
 			$memberChecked = ' checked="checked" ';
 		}
 
-		// if role is webmaster than only webmaster can add new user, 
+		// if role is webmaster than only webmaster can add new user,
 		// but don't change their own membership, because there must be at least one webmaster
 		if($role->getValue('rol_webmaster') == 1
-		&& (  !$gCurrentUser->isWebmaster()
+		&& (!$gCurrentUser->isWebmaster()
 		|| ($gCurrentUser->isWebmaster() && $getUserId == $gCurrentUser->getValue('usr_id'))))
 		{
 			$memberDisabled = ' disabled="disabled" ';
@@ -246,7 +246,7 @@ while($row = $gDb->fetch_array($result))
 		}
 
 		// show icon with edit user right if leader has this right
-		if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT 
+		if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
 		|| $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
 		{
 		    $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/profile_edit.png"
@@ -254,7 +254,7 @@ while($row = $gDb->fetch_array($result))
 		}
 
 		// show icon with assign role right if leader has this right
-		if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN 
+		if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN
 		|| $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
 		{
 			$leaderRights .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/roles.png"

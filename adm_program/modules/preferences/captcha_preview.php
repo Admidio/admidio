@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- *   
+ *
  *****************************************************************************/
 
 require_once('../../system/common.php');
@@ -25,12 +25,12 @@ echo '
     	<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />
     	';
     }
-    else if($gPreferences['captcha_type']=='calc')
+    elseif($gPreferences['captcha_type']=='calc')
     {
     	echo '<div style="width: 450px; height: 50px">
     		';
     	$captcha = new Captcha();
-    	echo $captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),$gL10n->get('SYS_CAPTCHA_CALC_PART2'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$gL10n->get('SYS_CAPTCHA_CALC_PART4'));
+    	echo $captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'), $gL10n->get('SYS_CAPTCHA_CALC_PART2'), $gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'), $gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'), $gL10n->get('SYS_CAPTCHA_CALC_PART4'));
     	
     	echo '<br><i>('.$gL10n->get('SYS_CAPTCHA_CALC').': '.$_SESSION['captchacode'].')</i>';
     }

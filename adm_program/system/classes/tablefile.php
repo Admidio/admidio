@@ -82,13 +82,13 @@ class TableFile extends TableAccess
                 $this->clear();
                 throw new AdmException('DOW_FOLDER_NO_RIGHTS');
             }
-            else if (!$gValidLogin && !$this->getValue('fol_public'))
+            elseif (!$gValidLogin && !$this->getValue('fol_public'))
             {
                 //Wenn der Ordner nicht public ist und der Benutzer nicht eingeloggt ist, bekommt er nix zu sehen..
                 $this->clear();
                 throw new AdmException('DOW_FOLDER_NO_RIGHTS');
             }
-            else if (!$gCurrentUser->editDownloadRight() && !$this->getValue('fol_public'))
+            elseif (!$gCurrentUser->editDownloadRight() && !$this->getValue('fol_public'))
             {
                 //Wenn der Ordner nicht public ist und der Benutzer keine Downloadadminrechte hat, muessen die Rechte untersucht werden
                 $sql_rights = 'SELECT count(*)

@@ -158,7 +158,7 @@ class TableDate extends TableAccess
                         "SUMMARY:". str_replace(';', '.', $this->getValue('dat_headline')). "\r\n".
                         "DESCRIPTION:".trim(str_replace("\r\n", "", str_replace(';', '.', $this->getValue('dat_description', 'database')))). "\r\n".
                         "DTSTAMP:".date('Ymd').'T'.date('His')."\r\n".
-                        "LOCATION:". str_replace(';', '.',$this->getValue('dat_location')). "\r\n";
+                        "LOCATION:". str_replace(';', '.', $this->getValue('dat_location')). "\r\n";
         if($this->getValue('dat_all_day') == 1)
         {
             // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein

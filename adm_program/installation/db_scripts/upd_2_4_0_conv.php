@@ -95,7 +95,7 @@ $gDb->query($sql);
 
 
  // convert <br /> to a normal line feed
-$emailText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/',chr(13).chr(10),$gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'));
+$emailText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'));
 
 // create new system user
 $systemUser = new TableUsers($gDb);

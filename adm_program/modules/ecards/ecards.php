@@ -77,9 +77,9 @@ if ($getUserId > 0)
     $user = new User($gDb, $gProfileFields, $getUserId);
 
     // darf auf die User-Id zugegriffen werden
-    if((  $gCurrentUser->editUsers() == false
+    if(($gCurrentUser->editUsers() == false
        && isMember($user->getValue('usr_id')) == false)
-    || strlen($user->getValue('usr_id')) == 0 )
+    || strlen($user->getValue('usr_id')) == 0)
     {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
     }
@@ -163,7 +163,7 @@ $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
     $templates = admFuncGetDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates');
     foreach($templates as $key => $templateName)
     {
-        $templates[$key] = ucfirst(preg_replace('/[_-]/',' ',str_replace('.tpl', '', $templateName)));
+        $templates[$key] = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
     }
     $form->addSelectBox('ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates, array('defaultValue' => $template, 'property' => FIELD_MANDATORY));
 $form->closeGroupBox();

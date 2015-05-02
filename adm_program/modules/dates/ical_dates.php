@@ -55,8 +55,8 @@ $parameter = $dates->getParameters();
 // set mode, viewmode, startdate and enddate manually
 $parameter['mode'] = 2; 
 $parameter['view_mode'] = 'period';
-$parameter['date_from'] = date('Y-m-d',time()-$gPreferences['dates_ical_days_past']*86400);
-$parameter['date_to'] = date('Y-m-d',time()+$gPreferences['dates_ical_days_future']*86400);
+$parameter['date_from'] = date('Y-m-d', time()-$gPreferences['dates_ical_days_past']*86400);
+$parameter['date_to'] = date('Y-m-d', time()+$gPreferences['dates_ical_days_future']*86400);
 
 // read events for output
 $datesResult = $dates->getDataset();

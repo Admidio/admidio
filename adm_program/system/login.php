@@ -67,7 +67,7 @@ if($gPreferences['enable_password_recovery'] == 1
     // neues Passwort zusenden
     $mail_link = $g_root_path.'/adm_program/system/lost_password.php';
 }
-elseif($gPreferences['enable_mail_module'] == 1 
+elseif($gPreferences['enable_mail_module'] == 1
 && $roleWebmaster->getValue('rol_mail_this_role') == 3)
 {
     // Mailmodul aufrufen mit Webmaster als Ansprechpartner

@@ -66,7 +66,7 @@ if($getMode == 1)
     exit();
 }
 // Löschen des Raums
-else if($getMode == 2) 
+elseif($getMode == 2) 
 {
     $sql = 'SELECT * FROM '.TBL_DATES.' WHERE dat_room_id = '.$getRoomId;
     $result = $gDb->query($sql);

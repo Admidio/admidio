@@ -68,10 +68,10 @@ if ($getMsgType != 'PM')
     // Check Captcha if enabled and user logged out
     if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
     {
-        if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($postCaptcha) )
+        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($postCaptcha))
         {
             if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-            else if($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+            elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
         }
     }
 
@@ -120,7 +120,7 @@ if ($getMsgType == 'EMAIL')
         foreach ($postTo as $value)
         {
             // check if role or user is given
-            if (strpos($value,':') == true) 
+            if (strpos($value, ':') == true) 
             {
                 $modulemessages = new ModuleMessages();
                 $group = $modulemessages->msgGroupSplit($value);
@@ -202,7 +202,7 @@ if ($getMsgType == 'EMAIL')
                     if($gPreferences['mail_sender_into_to'] == 1)
                     {
                         // always fill recipient if preference is set to prevent problems with provider
-                        $email->addRecipient($postFrom,$postName);
+                        $email->addRecipient($postFrom, $postName);
                     }
 
                     // all role members will be attached as BCC
@@ -257,15 +257,15 @@ if ($getMsgType == 'EMAIL')
     }
 
     // check sending attributes for user, to be sure that they are correct
-    if ( $gValidLogin 
-    && (  $postFrom != $gCurrentUser->getValue('EMAIL') 
-       || $postName != $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')) )
+    if ($gValidLogin 
+    && ($postFrom != $gCurrentUser->getValue('EMAIL') 
+       || $postName != $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     // set sending address
-    if ($email->setSender($postFrom,$postName))
+    if ($email->setSender($postFrom, $postName))
     {
         // set subject
         if ($email->setSubject($postSubject))
@@ -348,7 +348,7 @@ if ($getMsgType == 'EMAIL')
     $receivers = count($sendresult);
     foreach ($sendresult as $address)
     {
-        if ( $gPreferences['mail_into_to'] == 1 || $receivers == 1)
+        if ($gPreferences['mail_into_to'] == 1 || $receivers == 1)
         {
             $email->addRecipient($address[0], $address[1]);
         }
@@ -366,20 +366,20 @@ if ($getMsgType == 'EMAIL')
 
     // load the template and set the new email body with template
     $emailTemplate = admReadTemplateFile("template.html");
-    $emailTemplate = str_replace("#message#",$postBody,$emailTemplate);
+    $emailTemplate = str_replace("#message#", $postBody, $emailTemplate);
 
 	// add sender and receiver to email if template include the variables
-    $emailTemplate = str_replace("#sender#",$postName,$emailTemplate);
-    if (strpos($emailTemplate,'#receiver#') == true) 
+    $emailTemplate = str_replace("#sender#", $postName, $emailTemplate);
+    if (strpos($emailTemplate, '#receiver#') == true) 
     {
         $modulemessages = new ModuleMessages();
         $ReceiverName = "";
-        if (strpos($ReceiverString,'|') == true) 
+        if (strpos($ReceiverString, '|') == true) 
         {
-            $reciversplit = explode( '|', $ReceiverString);
+            $reciversplit = explode('|', $ReceiverString);
             foreach ($reciversplit as $value) 
             {
-                if (strpos($value,':') == true) 
+                if (strpos($value, ':') == true) 
                 {
                     $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($value);
                 }
@@ -392,7 +392,7 @@ if ($getMsgType == 'EMAIL')
         }
         else
         {
-            if (strpos($row['user'],':') == true) 
+            if (strpos($row['user'], ':') == true) 
             {
                 $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($ReceiverString);
             }
@@ -403,7 +403,7 @@ if ($getMsgType == 'EMAIL')
             }
         }
         $ReceiverName = substr($ReceiverName, 2);
-        $emailTemplate = str_replace("#receiver#",$ReceiverName,$emailTemplate);
+        $emailTemplate = str_replace("#receiver#", $ReceiverName, $emailTemplate);
     }
 
 
@@ -427,7 +427,7 @@ else
     $user = new User($gDb, $gProfileFields, $postTo[0]);
 
     // check if it is allowed to send to this user    
-    if(($gCurrentUser->editUsers() == false && isMember($user->getValue('usr_id')) == false)|| strlen($user->getValue('usr_id')) == 0 )
+    if(($gCurrentUser->editUsers() == false && isMember($user->getValue('usr_id')) == false)|| strlen($user->getValue('usr_id')) == 0)
     {
             $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
     }
@@ -520,7 +520,7 @@ else
 {
     if ($getMsgType != 'PM')
     {
-        $gMessage->show($sendResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $gL10n->get('SYS_RECIPIENT') ,$sendResult));
+        $gMessage->show($sendResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $gL10n->get('SYS_RECIPIENT'), $sendResult));
     }
     else
     {

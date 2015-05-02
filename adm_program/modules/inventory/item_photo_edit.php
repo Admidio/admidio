@@ -68,7 +68,7 @@ if($getMode == 'save')
     
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        // Foto im Dateisystem speichern      
+        // Foto im Dateisystem speichern
 
         //Nachsehen ob fuer den User ein Photo gespeichert war
         if(file_exists(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg'))
@@ -103,7 +103,7 @@ if($getMode == 'save')
     $gNavigation->deleteLastUrl();
     header('Location: '.$g_root_path.'/adm_program/modules/inventory/item.php?item_id='.$getItemId);
     exit();
-}    
+}
 elseif($getMode == 'dont_save')
 {
     /*****************************Foto nicht speichern*************************************/
@@ -147,7 +147,7 @@ elseif($getMode == 'delete')
 }
 
 
-/*****************************Foto hochladen*************************************/    
+/*****************************Foto hochladen*************************************/
 if($getMode == 'choose')
 {
     // set headline
@@ -232,7 +232,7 @@ elseif($getMode == 'upload')
         $gCurrentSession->save();
     }
     
-    //Image-Objekt löschen	
+    //Image-Objekt löschen
     $user_image->delete();
 
     if($getItemId == $gCurrentUser->getValue('inv_id'))

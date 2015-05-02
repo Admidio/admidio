@@ -42,9 +42,9 @@ class Participants
         $this->checkId($rolId);
     }
 
-    public function __destruct ()
+    public function __destruct()
     {
-        unset ($this);
+        unset($this);
     }
 
     /**
@@ -57,7 +57,7 @@ class Participants
         if(is_numeric($rolId) && $this->rolId == -1
             || is_numeric($rolId)
             && $this->rolId == 0
-            && $this->rolId != $rolId )
+            && $this->rolId != $rolId)
         {    
             $this->rolId = $rolId;
             return true;
@@ -105,7 +105,7 @@ class Participants
 
         while ($row = $this->mDb->fetch_array($result))
         {
-            $numParticipants [] = array ('member' => $row['mem_usr_id'], 'leader' => $row['mem_leader']);
+            $numParticipants [] = array('member' => $row['mem_usr_id'], 'leader' => $row['mem_leader']);
         }
 
         // count the number of leaders of the date
@@ -121,7 +121,7 @@ class Participants
         if($this->count == -1 && $this->leader == -1)
         {
         // Then Store the results in class variables.
-        $this->count = count ($numParticipants);
+        $this->count = count($numParticipants);
         $this->leader = $leader;
 
         return $this->count - $this->leader;
@@ -140,7 +140,7 @@ class Participants
             // get data from database
             $this->getCount($rolId);
             // Store the results in class variables.
-            $this->count = count ($numParticipants);
+            $this->count = count($numParticipants);
             $this->leader = $leader;
         }
 
@@ -159,7 +159,7 @@ class Participants
             // get data from database
             $this->getCount($rolId);
             // Store the results in class variables.
-            $this->count = count ($numParticipants);
+            $this->count = count($numParticipants);
             $this->leader = $leader;
         }
 
@@ -202,7 +202,7 @@ class Participants
 
             while ($row = $this->mDb->fetch_array($result))
             {
-                $participants[] = array ('surname' => $row['surname'], 'firstname' => $row['firstname'], 'leader' => $row['mem_leader']);
+                $participants[] = array('surname' => $row['surname'], 'firstname' => $row['firstname'], 'leader' => $row['mem_leader']);
             }
 
             $this->memberDate = $participants;

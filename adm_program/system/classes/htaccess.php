@@ -23,7 +23,7 @@
  *
  *****************************************************************************/
 
-class Htaccess 
+class Htaccess
 {
     protected $folderPath;
     protected $htaccessFileExistsAlready = false;
@@ -34,11 +34,11 @@ class Htaccess
     {
         $this->folderPath = $folderPathParam;
 
-        if (file_exists($this->folderPath)) 
+        if (file_exists($this->folderPath))
         {
             $this->folderExists = true;
 
-            if (file_exists($folderPathParam. '/.htaccess')) 
+            if (file_exists($folderPathParam. '/.htaccess'))
             {
                 $this->htaccessFileExistsAlready = true;
             }
@@ -48,11 +48,11 @@ class Htaccess
     //Schuetzt den uebergebenen Ordner
     public function protectFolder()
     {
-        if ($this->folderExists && !$this->htaccessFileExistsAlready) 
+        if ($this->folderExists && !$this->htaccessFileExistsAlready)
         {
-            $file=fopen($this->folderPath. '/.htaccess','w+');
-            fputs($file,"Order deny,allow\n");
-            fputs($file,"Deny from all\n");
+            $file=fopen($this->folderPath. '/.htaccess', 'w+');
+            fwrite($file, "Order deny,allow\n");
+            fwrite($file, "Deny from all\n");
             fclose($file);
         }
     }
@@ -60,9 +60,9 @@ class Htaccess
     //Entfernt den Ordnerschutz (loeschen der htaccessDatei)
     public function unprotectFolder()
     {
-        if ($this->folderExists && $this->htaccessFileExistsAlready) 
+        if ($this->folderExists && $this->htaccessFileExistsAlready)
         {
-            @unlink($this->folderPath. '/.htaccess','w+');
+            @unlink($this->folderPath. '/.htaccess', 'w+');
         }
     }
 }

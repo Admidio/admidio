@@ -88,7 +88,7 @@ class Organization extends TableAccess
         foreach($systemmailsTexts as $key => $value)
         {
             // convert <br /> to a normal line feed
-            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/',chr(13).chr(10),$value);
+            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $value);
 
             $text->clear();
             $text->setValue('txt_org_id', $this->getValue('org_id'));
@@ -452,7 +452,7 @@ class Organization extends TableAccess
 			}
 			// Homepage noch mit http vorbelegen
 			if(strpos(admStrToLower($newValue), 'http://')  === false
-			&& strpos(admStrToLower($newValue), 'https://') === false )
+			&& strpos(admStrToLower($newValue), 'https://') === false)
 			{
 				$newValue = 'http://'. $newValue;
 			}

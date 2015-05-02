@@ -152,7 +152,7 @@ class ModuleMenu
 	public function getPosition($id)
 	{
 		$keys=array_keys($this->items);
-		$keyfound=array_keys($keys,$id);
+		$keyfound=array_keys($keys, $id);
 		if (count($keyfound)==1)
 		{
 			return $keyfound[0];
@@ -255,7 +255,7 @@ class ModuleMenu
             {
                 $html .= $menuEntry['content'];
             }
-			else if($menuEntry['type'] == 'link')
+			elseif($menuEntry['type'] == 'link')
 			{
 				// if the count of link elements greater equal then the maxMenuLinkItem variable add drop down entry
 				if (count($this->items) > $this->maxMenuLinkItem

@@ -6,9 +6,9 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * 
- * Based on backupDB Version 1.2.7-201104261502 
- * by James Heinrich <info@silisoftware.com>  
+ *
+ * Based on backupDB Version 1.2.7-201104261502
+ * by James Heinrich <info@silisoftware.com>
  * available at http://www.silisoftware.com
  *
  *****************************************************************************/
@@ -25,7 +25,7 @@ if($gCurrentUser->isWebmaster() == false)
 
 // module not available for other databases except MySQL
 if($gDbType != 'mysql')
-{    
+{
     $gMessage->show($gL10n->get('BAC_ONLY_MYSQL'));
 }
 
@@ -78,9 +78,9 @@ unset($tables);
 // create a list with all tables out of the "table defines"
 foreach (get_defined_constants() as $key => $value)
 {
-	if (substr($key,0,strlen('TBL_'))=='TBL_')
+	if (substr($key, 0, strlen('TBL_'))=='TBL_')
 	{
-		$tables[] = $value;	
+		$tables[] = $value;
 	}
 }
 $SelectedTables[$g_adm_db] = $tables;

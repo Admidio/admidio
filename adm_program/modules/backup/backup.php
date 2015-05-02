@@ -10,9 +10,9 @@
  *
  * mode:   show_list     - show list with all created backup files
  *         create_backup - create a new backup from database
- * 
+ *
  * Based uppon backupDB Version 1.2.7-201104261502
- * by James Heinrich <info@silisoftware.com>  
+ * by James Heinrich <info@silisoftware.com>
  * available at http://www.silisoftware.com
  *
  *****************************************************************************/
@@ -30,7 +30,7 @@ if($gCurrentUser->isWebmaster() == false)
 
 // module not available for other databases except MySQL
 if($gDbType != 'mysql')
-{    
+{
     $gMessage->show($gL10n->get('BAC_ONLY_MYSQL'));
 }
 
@@ -57,9 +57,9 @@ if($getMode == 'show_list')
     $gNavigation->addStartUrl(CURRENT_URL, $headline);
     
     // create a list with all valid files in the backup folder
-    if ($handle = opendir($backupabsolutepath)) 
+    if ($handle = opendir($backupabsolutepath))
     {
-        while (false !== ($file = readdir($handle))) 
+        while (false !== ($file = readdir($handle)))
     	{
             try
             {
@@ -71,7 +71,7 @@ if($getMode == 'show_list')
                 $temp = 1;
             }
         }
-        closedir($handle);	
+        closedir($handle);
     }
     
     // sort files (filename/date)
@@ -81,7 +81,7 @@ if($getMode == 'show_list')
     $backupMenu = $page->getMenu();
     
     // show link to create new backup
-    $backupMenu->addItem('admMenuItemNewBackup', $g_root_path.'/adm_program/modules/backup/backup.php?mode=create_backup', 
+    $backupMenu->addItem('admMenuItemNewBackup', $g_root_path.'/adm_program/modules/backup/backup.php?mode=create_backup',
     							$gL10n->get('BAC_START_BACKUP'), 'database_save.png');
     
     //Define table
@@ -103,11 +103,11 @@ if($getMode == 'show_list')
     {
         // create array with all column values
         $columnValues = array(
-            '<a href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '"><img 
+            '<a href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '"><img
                 src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" />'. $old_backup_file. '</a>',
-            date ('d.m.Y H:i:s', filemtime($backupabsolutepath.$old_backup_file)),
+            date('d.m.Y H:i:s', filemtime($backupabsolutepath.$old_backup_file)),
             round(filesize($backupabsolutepath.$old_backup_file)/1024). ' kB',
-            '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" 
+            '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                 href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
                 $key.'&amp;name='.urlencode($old_backup_file).'&amp;database_id='.$old_backup_file.'"><img
                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
@@ -117,7 +117,7 @@ if($getMode == 'show_list')
     }
     
     if(count($existingBackupFiles) > 0)
-    {   
+    {
         $columnValues = array('&nbsp;', $gL10n->get('BAC_SUM'), $backup_size_sum .' kB', '&nbsp;');
         $table->addRowByArray($columnValues);
     }

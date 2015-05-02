@@ -100,7 +100,7 @@ $ListsMenu = $page->getMenu();
 if($gCurrentUser->manageRoles())
 {
     // show link to create new role
-    $ListsMenu->addItem('admMenuItemNewRole', $g_root_path.'/adm_program/modules/roles/roles_new.php', 
+    $ListsMenu->addItem('admMenuItemNewRole', $g_root_path.'/adm_program/modules/roles/roles_new.php',
                         $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
 }
 
@@ -112,7 +112,7 @@ $ListsMenu->addForm($navbarForm->show(false));
 if($gCurrentUser->isWebmaster())
 {
     // show link to system preferences of roles
-    $ListsMenu->addItem('admMenuItemPreferencesLists', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=lists', 
+    $ListsMenu->addItem('admMenuItemPreferencesLists', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=lists',
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
@@ -133,7 +133,7 @@ foreach($listConfigurations as &$rowConfigurations)
     }
     else
     {
-       $rowConfigurations[2] = $gL10n->get('LST_GENERAL_LISTS');                        
+       $rowConfigurations[2] = $gL10n->get('LST_GENERAL_LISTS');
     }
 }
 
@@ -193,7 +193,7 @@ foreach($listsResult['recordset'] as $row)
                 if($role->allowedToAssignMembers($gCurrentUser))
                 {
                     $page->addHtml('
-                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$role->getValue('rol_id').'"><img 
+                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$role->getValue('rol_id').'"><img
                         src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>');
                 }
         
@@ -205,15 +205,15 @@ foreach($listsResult['recordset'] as $row)
                         src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('ROL_EDIT_ROLE').'" title="'.$gL10n->get('ROL_EDIT_ROLE').'" /></a>');
                 }
             $page->addHtml('</div>
-        </div>        
+        </div>
         <div id="collapse_'.$role->getValue('rol_id').'" class="panel-collapse collapse">
-            <div class="panel-body" id="admRoleDetails'.$role->getValue('rol_id').'">');    
+            <div class="panel-body" id="admRoleDetails'.$role->getValue('rol_id').'">');
                 // create a static form
                 $form = new HtmlForm('lists_static_form', null);
 
                 // show combobox with lists if user is allowed to see members and the role has members
                 if($row['num_members'] > 0 || $row['num_leader'] > 0)
-                {                
+                {
                     $form->addSelectBox('admSelectRoleList_'.$role->getValue('rol_id'), $gL10n->get('LST_SHOW_LIST'), $listConfigurations, array('firstEntry' => $gL10n->get('LST_CHOOSE_LIST')));
                 }
         
@@ -228,7 +228,7 @@ foreach($listsResult['recordset'] as $row)
                 }
     
                 if($role->getValue('rol_weekday') > 0
-                || strlen($role->getValue('rol_start_time')) > 0 )
+                || strlen($role->getValue('rol_start_time')) > 0)
                 {
                     if($role->getValue('rol_weekday') > 0)
                     {

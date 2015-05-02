@@ -130,7 +130,7 @@ if ($getUserId > 0)
     // if an User ID is given, we need to check if the actual user is allowed to contact this user  
     if (($gCurrentUser->editUsers() == false
        && isMember($user->getValue('usr_id')) == false)
-    || strlen($user->getValue('usr_id')) == 0 )
+    || strlen($user->getValue('usr_id')) == 0)
     {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
     }
@@ -256,7 +256,7 @@ elseif (!isset($message_result))
 
     // Wenn die letzte URL in der Zuruecknavigation die des Scriptes message_send.php ist,
     // dann soll das Formular gefuellt werden mit den Werten aus der Session
-    if (strpos($gNavigation->getUrl(),'message_send.php') > 0 && isset($_SESSION['message_request']))
+    if (strpos($gNavigation->getUrl(), 'message_send.php') > 0 && isset($_SESSION['message_request']))
     {
         // Das Formular wurde also schon einmal ausgefüllt,
         // da der User hier wieder gelandet ist nach der Mailversand-Seite
@@ -326,7 +326,7 @@ elseif (!isset($message_result))
                 $act_group_short = '('.$gL10n->get('SYS_FORMER_PL').')';
                 $act_number = '-1';
             }
-            else if ($act_or == 2)
+            elseif ($act_or == 2)
             {
                 $act_group = $gL10n->get('SYS_ROLES'). ' (' . $gL10n->get('LST_ACTIVE_FORMER_MEMBERS') . ')';
                 $act_group_short = '('.$gL10n->get('MSG_ACTIVE_FORMER_SHORT').')';
@@ -506,12 +506,12 @@ if (isset($message_result))
 			// open some additonal functions for messages
             $modulemessages = new ModuleMessages();
 			$ReceiverName = "";
-			if (strpos($receivers,'|') == true) 
+			if (strpos($receivers, '|') == true) 
 			{
-				$reciversplit = explode( '|', $receivers);
+				$reciversplit = explode('|', $receivers);
 				foreach ($reciversplit as $value) 
 				{
-					if (strpos($value,':') == true) 
+					if (strpos($value, ':') == true) 
 					{
 						$ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($value);
 					}
@@ -524,7 +524,7 @@ if (isset($message_result))
 			}
 			else
 			{
-				if (strpos($receivers,':') == true) 
+				if (strpos($receivers, ':') == true) 
 				{
 					$ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($receivers);
 				}

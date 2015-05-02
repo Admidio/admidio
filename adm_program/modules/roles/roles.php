@@ -20,7 +20,7 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getInactive  = admFuncVariableIsValid($_GET, 'inactive', 'boolean');
-$getInvisible = admFuncVariableIsValid($_GET, 'invisible', 'boolean'); 
+$getInvisible = admFuncVariableIsValid($_GET, 'invisible', 'boolean');
 
 // only users with the special right are allowed to manage roles
 if(!$gCurrentUser->manageRoles())
@@ -83,16 +83,16 @@ $page->addJavascript('$(".admidio-group-heading").click(function() {showHideBloc
 $rolesMenu = $page->getMenu();
 
 // define link to create new profile field
-$rolesMenu->addItem('menu_item_new_role', $g_root_path.'/adm_program/modules/roles/roles_new.php', 
+$rolesMenu->addItem('menu_item_new_role', $g_root_path.'/adm_program/modules/roles/roles_new.php',
 							$gL10n->get('SYS_CREATE_ROLE'), 'add.png');
 // define link to maintain categories
-$rolesMenu->addItem('menu_item_maintain_category', $g_root_path.'/adm_program/modules/categories/categories.php?type=ROL', 
+$rolesMenu->addItem('menu_item_maintain_category', $g_root_path.'/adm_program/modules/categories/categories.php?type=ROL',
 							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'edit.png');
 // define link to show inactive roles
-$rolesMenu->addItem('menu_item_inactive_role', $g_root_path.'/adm_program/modules/roles/roles.php?inactive='.$activeRolesFlag, 
+$rolesMenu->addItem('menu_item_inactive_role', $g_root_path.'/adm_program/modules/roles/roles.php?inactive='.$activeRolesFlag,
 							$activeRolesLinkDescription, $activeRolesImage);
 // define link to show hidden roles
-$rolesMenu->addItem('menu_item_hidden_role', $g_root_path.'/adm_program/modules/roles/roles.php?invisible='.$visibleRolesFlag, 
+$rolesMenu->addItem('menu_item_hidden_role', $g_root_path.'/adm_program/modules/roles/roles.php?invisible='.$visibleRolesFlag,
 							$visibleRolesLinkDescription, $visibleRolesImage);
 
 // Create table
@@ -107,7 +107,7 @@ $columnHeading = array(
     $gL10n->get('SYS_FEATURES'));
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
 $table->setColumnWidth(3, '40%');
-$table->disableDatatablesColumnsSort(array(3,4,5));
+$table->disableDatatablesColumnsSort(array(3, 4, 5));
 $table->setDatatablesGroupColumn(1);
 $table->addRowHeadingByArray($columnHeading);
 

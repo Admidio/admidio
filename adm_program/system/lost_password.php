@@ -25,10 +25,10 @@ if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_r
 // muss natuerlich der Code ueberprueft werden
 if (! empty($_POST['btnSend']) && !$gValidLogin && $gPreferences['enable_mail_captcha'] == 1 && !empty($_POST['captcha']))
 {
-    if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
+    if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
     {
 		if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-		else if($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+		elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
     }
 }
 if($gValidLogin)
@@ -77,7 +77,7 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
     
     	// create and save new password and activation id
         $newPassword  = substr(md5(time()), 0, 8);
-        $activationId = substr(md5(uniqid($user->getValue('EMAIL').time())),0,10);
+        $activationId = substr(md5(uniqid($user->getValue('EMAIL').time())), 0, 10);
 
         $user->setValue('usr_new_password', $newPassword);
         $user->setValue('usr_activation_code', $activationId);
@@ -91,7 +91,7 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
         $user->save();
     
         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/login.php');
-        $gMessage->show($gL10n->get('SYS_LOSTPW_SEND',$_POST['recipient_email']));
+        $gMessage->show($gL10n->get('SYS_LOSTPW_SEND', $_POST['recipient_email']));
     }
     catch(AdmException $e)
     {

@@ -73,7 +73,7 @@ class TableLists extends TableAccess
         }
         
         // falls nicht explizit auf global = 1 gesetzt wurde, immer auf 0 setzen
-        if($this->getValue('lst_global') <> 1)
+        if($this->getValue('lst_global') != 1)
         {
             $this->setValue('lst_global', 0);
         }

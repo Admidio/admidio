@@ -242,7 +242,7 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
     {
         if($gDbType == 'mysql')
         {
-    	    $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') FROM '.TBL_ROOMS.' ORDER BY room_name';        
+    	    $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') FROM '.TBL_ROOMS.' ORDER BY room_name';
         }
         else
         {
@@ -255,7 +255,7 @@ $form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n
     $form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), $date->getValue('dat_all_day'));
     $form->addInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_MANDATORY));
     $form->addInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_MANDATORY));
-    $form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES', 
+    $form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES',
                                      array('property' => FIELD_MANDATORY, 'defaultValue' => $date->getValue('dat_cat_id')));
 $form->closeGroupBox();
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
@@ -275,7 +275,7 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
     {
         $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
     }
-    $form->addSelectBox('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $roles, array('property' => FIELD_MANDATORY, 
+    $form->addSelectBox('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $roles, array('property' => FIELD_MANDATORY,
                         'defaultValue' => $dateRoles, 'showContextDependentFirstEntry' => false, 'multiselect' => true));
     
     $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), $date->getValue('dat_highlight'));
@@ -291,7 +291,7 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
 	}
     $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE'));
     $form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC'));
-    $form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'), 
+    $form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'),
                     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');

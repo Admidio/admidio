@@ -43,7 +43,7 @@ switch($getJob)
 		//Dateigroese ermitteln
 		$fileSize   = filesize($completePath);
 
-        // for IE the filename must have special chars in hexadecimal 
+        // for IE the filename must have special chars in hexadecimal
         if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
         {
             $getFilename = urlencode($getFilename);
@@ -66,7 +66,7 @@ switch($getJob)
 		// Backupdatei loeschen
 		if(unlink($completePath))
 		{
-			echo 'done'; 
+			echo 'done';
 		}
 		exit();
 		break;

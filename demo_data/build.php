@@ -187,12 +187,12 @@ foreach($sql_arr as $sql)
         $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
 
         // search for translation strings with the prefix DEMO or SYS and try replace them
-        preg_match_all('/(DEMO_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/' , $sql, $results);
+        preg_match_all('/(DEMO_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/', $sql, $results);
 
         foreach($results[0] as $key => $value)
         {
             // convert <br /> to a normal line feed
-            $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/',chr(13).chr(10),$gL10n->get($value));
+            $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));
 
             // search for the exact value as a separate word and replace it with the translation
             // in l10n the single quote is transformed in html entity, but we need the original sql escaped

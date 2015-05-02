@@ -54,14 +54,14 @@ if(isset($_SESSION['mylist_request']))
     unset($_SESSION['mylist_request']);
     $getRoleId = $form_values['rol_id'];
     
-    // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden, 
+    // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden,
     // muessen diese nun direkt angelegt werden
     for($i = $default_column_rows+1; $i > 0; $i++)
     {
         if(isset($form_values['column'.$i]))
         {
-            $default_column_rows++;          
-        }   
+            $default_column_rows++;
+        }
         else
         {
             $i = -1;
@@ -84,7 +84,7 @@ $javascriptCode = '
     
 
     // Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
-    function addColumn() 
+    function addColumn()
     {
         // MySQL erlaubt nur 61 gejointe Tabellen
         if(fieldNumberIntern >= 57)
@@ -107,7 +107,7 @@ $javascriptCode = '
         htmlCboFields = "<select class=\"form-control\" onchange=\"getConditionField(this.id, this.options[this.selectedIndex].text)\" size=\"1\" id=\"column" + fieldNumberShow + "\" class=\"ListProfileField\" name=\"column" + fieldNumberShow + "\">" +
                 "<option value=\"\"></option>";
         for(var counter = 1; counter < arr_user_fields.length; counter++)
-        {   
+        {
             if(category != arr_user_fields[counter]["cat_name"])
             {
                 if(category.length > 0)
@@ -197,7 +197,7 @@ $javascriptCode = '
     }
     
     function createProfileFieldsArray()
-    { 
+    {
         var user_fields = new Array(); ';
     
         // create a multidimensional array for all columns with the necessary data
@@ -206,7 +206,7 @@ $javascriptCode = '
         $posEndOfMasterData = 0;
     
         foreach($gProfileFields->mProfileFields as $field)
-        {    
+        {
             // at the end of category master data save positions for loginname and username
             // they will be added after profile fields loop
             if($oldCategoryNameIntern == 'MASTER_DATA'
@@ -218,7 +218,7 @@ $javascriptCode = '
             
             // add profile field to user field array
             if($field->getValue('usf_hidden') == 0 || $gCurrentUser->editUsers())
-            {   
+            {
                 $javascriptCode .= '
                 user_fields['. $i. '] = new Object();
                 user_fields['. $i. ']["cat_id"]   = "'. $field->getValue('cat_id'). '";
@@ -226,7 +226,7 @@ $javascriptCode = '
                 user_fields['. $i. ']["usf_id"]   = "'. $field->getValue('usf_id'). '";
                 user_fields['. $i. ']["usf_name"] = "'. addslashes($field->getValue('usf_name')). '";
                 user_fields['. $i. ']["usf_name_intern"] = "'. addslashes($field->getValue('usf_name_intern')). '";
-                user_fields['. $i. ']["usf_type"] = "'. $field->getValue('usf_type'). '"; 
+                user_fields['. $i. ']["usf_type"] = "'. $field->getValue('usf_type'). '";
                 user_fields['. $i. ']["usf_value_list"] = new Object();';
                 
                 // get avaiable values for current field type and push to array
@@ -237,7 +237,7 @@ $javascriptCode = '
                     {
                         $javascriptCode .= '
                         user_fields['. $i. ']["usf_value_list"]["'. $key .'"] = "'. $value .'";';
-                    }  
+                    }
                 }
                 else
                 {
@@ -248,7 +248,7 @@ $javascriptCode = '
                 $oldCategoryNameIntern = $field->getValue('cat_name_intern');
                 $i++;
             }
-        }       
+        }
 
         // Add loginname and photo at the end of category master data
         // add new category with start and end date of role membership
@@ -292,7 +292,7 @@ $javascriptCode = '
     }
     
     function createColumnsArray()
-    {   
+    {
         var default_fields = new Array(); ';
 
         if(isset($form_values))
@@ -352,14 +352,14 @@ $javascriptCode = '
     }
 
     function setConditonField(columnId, columnName, fieldNumberIntern)
-    {   
+    {
         html = "<input type=\"text\" class=\"form-control\" id=\"condition" + columnId + "\" name=\"condition" + columnId + "\" maxlength=\"50\" value=\"" + condition + "\" />";
         var key;
 
         for (key in arr_user_fields)
         {
            if(arr_user_fields[key]["usf_name"] == columnName)
-           {    
+           {
                if(arr_user_fields[key]["usf_type"] == "DROPDOWN"
                   || arr_user_fields[key]["usf_type"] == "RADIO_BUTTON")
                {
@@ -410,8 +410,8 @@ $javascriptCode = '
                             "</select>";
                     }
                     else
-                    {           
-                        html += "<option value=\"1\">'.$gL10n->get('SYS_YES').'</option>" + 
+                    {
+                        html += "<option value=\"1\">'.$gL10n->get('SYS_YES').'</option>" +
                                 "<option value=\"0\">'.$gL10n->get('SYS_NO').'</option>" +
                                 "</select>";
                     }
@@ -492,7 +492,7 @@ $javascriptCode = '
         }
     }';
 $page->addJavascript($javascriptCode);
-$page->addJavascript('$(document).ready(function() { 
+$page->addJavascript('$(document).ready(function() {
     $("form:first *:input[type!=hidden]:first").focus();
     $("#btn_show_list").click(function() {send("show");});
     
@@ -509,7 +509,7 @@ if($gNavigation->count() > 1)
     $myListMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 }
 
-$page->addHtml(' 
+$page->addHtml('
 <form id="form_mylist" class="form-horizontal" action="'. $g_root_path. '/adm_program/modules/lists/mylist_prepare.php" method="post">
     <p><b>1.</b> '.$gL10n->get('LST_CHANGE_LIST').'</p>
     <div class="form-group">
@@ -612,7 +612,7 @@ $page->addHtml('
                         }
                     }
                     $page->addHtml('</optgroup>');
-                }           
+                }
             $page->addHtml('</select>');
             
             // Listen speichern darf man speichern, wenn es Eigene sind, Neue oder als Webmaster auch Systemlisten
@@ -673,7 +673,7 @@ $page->addHtml('
             {
                 $page->addHtml('
                 <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                    href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_config_webmaster&amp;inline=true"><img 
+                    href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_config_webmaster&amp;inline=true"><img
                     src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>');
             }
         $page->addHtml('</div>
@@ -690,7 +690,7 @@ $page->addHtml('
                 <th style="width: 18%;">'.$gL10n->get('SYS_ORDER').'</th>
                 <th style="width: 25%;">'.$gL10n->get('SYS_CONDITION').'
                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true"><img 
+                        href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true"><img
                         src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
                 </th>
             </tr>
@@ -743,10 +743,10 @@ $page->addHtml('
     
     <hr />
 
-    <button id="btn_show_list" class="btn btn-primary" type="button"><img 
+    <button id="btn_show_list" class="btn btn-primary" type="button"><img
         src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('LST_SHOW_LIST').'" />&nbsp;'.$gL10n->get('LST_SHOW_LIST').'</button>
 </form>');
 
-$page->show();    
+$page->show();
 
 ?>

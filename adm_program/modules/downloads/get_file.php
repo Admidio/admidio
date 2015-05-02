@@ -52,7 +52,7 @@ if (!file_exists($completePath))
 }
 
 //Downloadcounter inkrementieren
-$file->setValue('fil_counter',$file->getValue('fil_counter') + 1);
+$file->setValue('fil_counter', $file->getValue('fil_counter') + 1);
 $file->save();
 
 

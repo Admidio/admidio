@@ -240,7 +240,7 @@ class Inventory extends TableInventory
                 // Disabled fields can only be edited by users with the right "edit_users" except on registration.
                 // Here is no need to check hidden fields because we check on save() method that only users who 
                 // can edit the profile are allowed to save and change data.
-                if((  $this->mInventoryFieldsData->getProperty($columnName, 'inf_disabled') == 1
+                if(($this->mInventoryFieldsData->getProperty($columnName, 'inf_disabled') == 1
                    && $gCurrentUser->editUsers() == true)
                 || $this->mInventoryFieldsData->getProperty($columnName, 'inf_disabled') == 0
                 || ($gCurrentUser->getValue('inv_id') == 0 && $this->getValue('inv_id') == 0))

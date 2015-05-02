@@ -149,7 +149,7 @@ class Email extends PHPMailer
         
         try
         {
-            $this->AddCC($address,$name);
+            $this->AddCC($address, $name);
         }
         catch (phpmailerException $e)
         {
@@ -169,7 +169,7 @@ class Email extends PHPMailer
     
         try
         {
-            $this->AddAddress($address,$name);
+            $this->AddAddress($address, $name);
         }
         catch (phpmailerException $e)
         {

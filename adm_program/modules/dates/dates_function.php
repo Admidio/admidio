@@ -54,7 +54,7 @@ if($getDateId > 0)
     $date->readDataById($getDateId);
 
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-    if($date->editRight() == false )
+    if($date->editRight() == false)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -170,7 +170,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         {
             $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END'), $gPreferences['system_time']));
         }
-    }   
+    }
     
     // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
     if($startDateTime->getTimestamp() > $endDateTime->getTimestamp())
@@ -215,20 +215,20 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     {
         if($_POST['dat_room_id'] > 0)
         {
-            $sql = 'SELECT COUNT(dat_id) AS is_reserved 
-                      FROM '.TBL_DATES.' 
+            $sql = 'SELECT COUNT(dat_id) AS is_reserved
+                      FROM '.TBL_DATES.'
                      WHERE dat_begin  <= \''.$endDateTime->getDateTimeEnglish().'\'
                        AND dat_end    >= \''.$startDateTime->getDateTimeEnglish().'\'
-                       AND dat_room_id = '.$_POST['dat_room_id'].' 
+                       AND dat_room_id = '.$_POST['dat_room_id'].'
                        AND dat_id     <> '.$getDateId;
             $result = $gDb->query($sql);
             $row = $gDb->fetch_object($result);
-            if($row->is_reserved) 
+            if($row->is_reserved)
             {
                 $gMessage->show($gL10n->get('DAT_ROOM_RESERVED'));
             }
             
-            $date->setValue('dat_room_id',$_POST['dat_room_id']);
+            $date->setValue('dat_room_id', $_POST['dat_room_id']);
             $room = new TableRooms($gDb);
             $room->readDataById($_POST['dat_room_id']);
             $number = intval($room->getValue('room_capacity')) + intval($room->getValue('room_overhang'));
@@ -258,7 +258,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     $return_code = $date->save();
 	
 	if($return_code == 0 && $gPreferences['enable_email_notification'] == 1)
-	{	
+	{
 		// Benachrichtigungs-Email für neue Einträge
 
 		// Daten für Benachrichtigung zusammenstellen
@@ -280,7 +280,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
 		    $zeit = $_POST['date_from_time']. ' - '. $_POST['date_to_time'];
         }
 		
-		$sql_cal = 'SELECT cat_name FROM '.TBL_CATEGORIES.' 
+		$sql_cal = 'SELECT cat_name FROM '.TBL_CATEGORIES.'
                      WHERE cat_id = '.$_POST['dat_cat_id'];
 		$gDb->query($sql_cal);
 		$row_cal  = $gDb->fetch_array();
@@ -318,12 +318,12 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     
     // ----------------------------------------
     // ggf. Rolle fuer Anmeldungen wegschreiben
-    // ----------------------------------------         
+    // ----------------------------------------
 
     if($_POST['date_registration_possible'] == 1 && strlen($date->getValue('dat_rol_id')) == 0)
     {
         // Kategorie fuer Terminbestaetigungen einlesen
-        $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.' 
+        $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.'
                  WHERE cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'';
         $gDb->query($sql);
         $row = $gDb->fetch_array();
@@ -350,7 +350,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         $date->setValue('dat_rol_id', $role->getValue('rol_id'));
         $return_code = $date->save();
         if($return_code < 0)
-        { 
+        {
             $role->delete();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
@@ -380,17 +380,17 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     }
 
 	// check if flag is set that current user wants to participate as leader to the date
-	if(isset($_POST['date_current_user_assigned']) && $_POST['date_current_user_assigned'] == 1 
+	if(isset($_POST['date_current_user_assigned']) && $_POST['date_current_user_assigned'] == 1
 	&& $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')) == false)
 	{
 		// user wants to participate -> add him to date
 		$member = new TableMembers($gDb);
 		$member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'), 1);
 	}
-	elseif(isset($_POST['date_current_user_assigned']) == false 
+	elseif(isset($_POST['date_current_user_assigned']) == false
 	&& $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')) == true)
 	{
-		// user does't want to participate as leader -> remove his participation as leader from the event, 
+		// user does't want to participate as leader -> remove his participation as leader from the event,
 		// dont remove the participation itself!
 		$member = new TableMembers($gDb);
 		$member->readDataByColumns(array('mem_rol_id' => $role->getValue('rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
@@ -417,7 +417,7 @@ elseif($getMode == 2)  // Termin loeschen
     }
 }
 elseif($getMode == 3)  // Benutzer zum Termin anmelden
-{   
+{
     $member = new TableMembers($gDb);
 	$member->startMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
 
@@ -436,7 +436,7 @@ elseif($getMode == 6)  // Termin im iCal-Format exportieren
 {
     $filename = $date->getValue('dat_headline');
     
-    // for IE the filename must have special chars in hexadecimal 
+    // for IE the filename must have special chars in hexadecimal
     if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
     {
         $filename = urlencode($filename);

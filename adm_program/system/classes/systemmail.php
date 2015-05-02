@@ -5,22 +5,22 @@
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * 
+ *
  * Beside the methods of the parent class there are the following additional methods:
  *
  * getMailText($systemMailId, &$user)
- *                  - diese Methode liest den Mailtext aus der DB und ersetzt 
+ *                  - diese Methode liest den Mailtext aus der DB und ersetzt
  *                    vorkommende Platzhalter durch den gewuenschten Inhalt
  *
  * setVariable($number, $value)
  *                  - hier kann der Inhalt fuer zusaetzliche Variablen gesetzt werden
  *
  * sendSystemMail($systemMailId, &$user)
- *                  - diese Methode sendet eine Systemmail nachdem der Mailtext 
+ *                  - diese Methode sendet eine Systemmail nachdem der Mailtext
  *                    ausgelesen und Platzhalter ersetzt wurden
  *
  *****************************************************************************/
- 
+
 class SystemMail extends Email
 {
     private $smTextObject;
@@ -37,44 +37,44 @@ class SystemMail extends Email
         $this->smTextObject = new TableText($this->db);
         parent::__construct();
     }
-    
+
     // diese Methode liest den Mailtext aus der DB und ersetzt vorkommende Platzhalter durch den gewuenschten Inhalt
     // sysmail_id : eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
     // user       : Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
     public function getMailText($systemMailId, &$user)
     {
         global $gPreferences;
-        
+
         // create organization object of the organization the current user is assigned (at registration this can be every organization)
         if(is_object($this->smOrganization) == false || $this->smOrganization->getValue('org_id') != $user->getOrganization())
         {
             $this->smOrganization = new Organization($this->db, $user->getOrganization());
         }
-    
+
         // read email text from text table in database
         if($this->smTextObject->getValue('txt_name') != $systemMailId)
         {
 			$this->smTextObject->readDataByColumns(array('txt_name' => $systemMailId, 'txt_org_id' => $this->smOrganization->getValue('org_id')));
         }
-        
+
         $mailSrcText = $this->smTextObject->getValue('txt_text');
-        
+
         // now replace all parameters in email text
-        $mailSrcText = preg_replace ('/%user_first_name%/', $user->getValue('FIRST_NAME'),  $mailSrcText);
-        $mailSrcText = preg_replace ('/%user_last_name%/',  $user->getValue('LAST_NAME'), $mailSrcText);
-        $mailSrcText = preg_replace ('/%user_login_name%/', $user->getValue('usr_login_name'), $mailSrcText);
-        $mailSrcText = preg_replace ('/%user_email%/', $user->getValue('EMAIL'),   $mailSrcText);
-        $mailSrcText = preg_replace ('/%webmaster_email%/', $gPreferences['email_administrator'],  $mailSrcText);
-        $mailSrcText = preg_replace ('/%organization_short_name%/', $this->smOrganization->getValue('org_shortname'), $mailSrcText);
-        $mailSrcText = preg_replace ('/%organization_long_name%/',  $this->smOrganization->getValue('org_longname'), $mailSrcText);
-        $mailSrcText = preg_replace ('/%organization_homepage%/',   $this->smOrganization->getValue('org_homepage'), $mailSrcText);
-        
+        $mailSrcText = preg_replace('/%user_first_name%/', $user->getValue('FIRST_NAME'),  $mailSrcText);
+        $mailSrcText = preg_replace('/%user_last_name%/',  $user->getValue('LAST_NAME'), $mailSrcText);
+        $mailSrcText = preg_replace('/%user_login_name%/', $user->getValue('usr_login_name'), $mailSrcText);
+        $mailSrcText = preg_replace('/%user_email%/', $user->getValue('EMAIL'),   $mailSrcText);
+        $mailSrcText = preg_replace('/%webmaster_email%/', $gPreferences['email_administrator'],  $mailSrcText);
+        $mailSrcText = preg_replace('/%organization_short_name%/', $this->smOrganization->getValue('org_shortname'), $mailSrcText);
+        $mailSrcText = preg_replace('/%organization_long_name%/',  $this->smOrganization->getValue('org_longname'), $mailSrcText);
+        $mailSrcText = preg_replace('/%organization_homepage%/',   $this->smOrganization->getValue('org_homepage'), $mailSrcText);
+
         // zusaetzliche Variablen ersetzen
         for($i = 1; $i <= count($this->smVariables); $i++)
         {
-            $mailSrcText = preg_replace ('/%variable'.$i.'%/', $this->smVariables[$i],  $mailSrcText);
+            $mailSrcText = preg_replace('/%variable'.$i.'%/', $this->smVariables[$i], $mailSrcText);
         }
-        
+
         // Betreff und Inhalt anhand von Kennzeichnungen splitten oder ggf. Default-Inhalte nehmen
         if(strpos($mailSrcText, '#subject#') !== false)
         {
@@ -84,7 +84,7 @@ class SystemMail extends Email
         {
             $this->smMailHeader = 'Systemmail von '. $this->smOrganization->getValue('org_homepage');
         }
-        
+
         if(strpos($mailSrcText, '#content#') !== false)
         {
             $this->smMailText   = trim(substr($mailSrcText, strpos($mailSrcText, '#content#') + 9));
@@ -96,27 +96,27 @@ class SystemMail extends Email
 
         return $this->smMailText;
     }
-    
+
     // die Methode setzt den Inhalt fuer spezielle Variablen
     public function setVariable($number, $value)
     {
         $this->smVariables[$number] = $value;
     }
-    
+
     // diese Methode sendet eine Systemmail nachdem der Mailtext ausgelesen und Platzhalter ersetzt wurden
     // sysmail_id : eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
-    // user       : Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden    
+    // user       : Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
     public function sendSystemMail($systemMailId, &$user)
     {
         global $gPreferences;
-        
+
         $this->getMailText($systemMailId, $user);
         $this->setSender($gPreferences['email_administrator']);
         $this->setSubject($this->smMailHeader);
         $this->setText($this->smMailText);
 
         $returnMessage = $this->sendEmail();
-        
+
         // if something went wrong then throw an exception with the error message
         if($returnMessage != true)
         {

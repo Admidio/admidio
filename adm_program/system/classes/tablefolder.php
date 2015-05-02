@@ -226,13 +226,13 @@ class TableFolder extends TableAccess
                 $this->clear();
                 throw new AdmException('DOW_FOLDER_NO_RIGHTS');
             }
-            else if (!$gValidLogin && !$this->getValue('fol_public'))
+            elseif (!$gValidLogin && !$this->getValue('fol_public'))
             {
                 //Wenn der Ordner nicht public ist und der Benutzer nicht eingeloggt ist, bekommt er nix zu sehen..
                 $this->clear();
 				throw new AdmException('DOW_FOLDER_NO_RIGHTS');
             }
-            else if (!$gCurrentUser->editDownloadRight() && !$this->getValue('fol_public'))
+            elseif (!$gCurrentUser->editDownloadRight() && !$this->getValue('fol_public'))
             {
                 //Wenn der Ordner nicht public ist und der Benutzer keine DownloadAdminrechte hat, muessen die Rechte untersucht werden
                 $sql_rights = 'SELECT count(*)
@@ -300,12 +300,12 @@ class TableFolder extends TableAccess
             {
                 $addToArray = true;
             }
-            else if ($gCurrentUser->editDownloadRight())
+            elseif ($gCurrentUser->editDownloadRight())
             {
                 //Falls der User editDownloadRechte hat, bekommt er den Ordner natuerlich auch zu sehen
                 $addToArray = true;
             }
-            else if ($gValidLogin)
+            elseif ($gValidLogin)
             {
 
                 //Gucken ob der angemeldete Benutzer Rechte an dem Unterordner hat...
@@ -375,7 +375,7 @@ class TableFolder extends TableAccess
             {
                 $addToArray = true;
             }
-            else if ($gCurrentUser->editDownloadRight())
+            elseif ($gCurrentUser->editDownloadRight())
             {
                 //Falls der User editDownloadRechte hat, bekommt er das File natürlich auch zu sehen
                 $addToArray = true;
@@ -459,7 +459,7 @@ class TableFolder extends TableAccess
                                 }
 
                             }
-                            else if (is_file($this->getCompletePathOfFolder(). '/'. $file)) {
+                            elseif (is_file($this->getCompletePathOfFolder(). '/'. $file)) {
 
                                 $alreadyAdded = false;
 

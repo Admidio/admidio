@@ -76,7 +76,7 @@ class HtmlFormBasic extends HtmlElement
      * @param $script Optional script or function called from event handler
      */
 
-    public function __construct($action = null, $id = null, $method = null, $event = null, $script = null )
+    public function __construct($action = null, $id = null, $method = null, $event = null, $script = null)
     {
 
         parent::__construct('form', '', '', true);
@@ -97,7 +97,7 @@ class HtmlFormBasic extends HtmlElement
             $this->addAttribute('method', $method);
         }
 
-        if($event != null && $script != null )
+        if($event != null && $script != null)
         {
             $this->addAttribute($event, $script);
         }
@@ -125,7 +125,7 @@ class HtmlFormBasic extends HtmlElement
      *  @param $value         Value of the field (Default: empty)
      *  @param $arrAttributes Further attributes as array with key/value pairs
      */
-    public function addSimpleInput($type , $name, $id = null, $value ='', $arrAttributes = null)
+    public function addSimpleInput($type, $name, $id = null, $value ='', $arrAttributes = null)
     {
         $this->addElement('input', '', '', '',  true);
 
@@ -146,7 +146,7 @@ class HtmlFormBasic extends HtmlElement
             $this->setAttributesFromArray($arrAttributes);
         }
 
-        $this->addData(' ',true);
+        $this->addData(' ', true);
 
     }
 
@@ -157,7 +157,7 @@ class HtmlFormBasic extends HtmlElement
     {
         $this->addElement('label');
 
-        If($refID != null)
+        if($refID != null)
         {
             $this->addAttribute($attribute, $refID);
         }

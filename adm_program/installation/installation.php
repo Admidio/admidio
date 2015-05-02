@@ -228,7 +228,7 @@ elseif($getMode == 4)  // Creating organization
         if(strlen($_SESSION['db_type'])  == 0
         || strlen($_SESSION['db_server'])   == 0
         || strlen($_SESSION['db_user'])     == 0
-        || strlen($_SESSION['db_database']) == 0 )
+        || strlen($_SESSION['db_database']) == 0)
         {
             showNotice($gL10n->get('INS_MYSQL_LOGIN_NOT_COMPLETELY'), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
@@ -288,7 +288,7 @@ elseif($getMode == 5)  // Creating addministrator
 
         if(strlen($_SESSION['orga_shortname']) == 0
         || strlen($_SESSION['orga_longname']) == 0
-        || strlen($_SESSION['orga_email']) == 0 )
+        || strlen($_SESSION['orga_email']) == 0)
         {
             showNotice($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'installation.php?mode=4', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
@@ -340,7 +340,7 @@ elseif($getMode == 6)  // Creating configuration file
         || strlen($_SESSION['user_first_name']) == 0
         || strlen($_SESSION['user_email'])     == 0
         || strlen($_SESSION['user_login'])      == 0
-        || strlen($_SESSION['user_password'])   == 0 )
+        || strlen($_SESSION['user_password'])   == 0)
         {
             showNotice($gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'), 'installation.php?mode=5', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
@@ -383,8 +383,8 @@ elseif($getMode == 6)  // Creating configuration file
     $configFileContent = str_replace('%DB_TYPE%', $_SESSION['db_type'], $configFileContent);
     $configFileContent = str_replace('%SERVER%',  $_SESSION['db_server'],  $configFileContent);
     $configFileContent = str_replace('%USER%',    $_SESSION['db_user'],    $configFileContent);
-    $configFileContent = str_replace('%PASSWORD%',$_SESSION['db_password'],$configFileContent);
-    $configFileContent = str_replace('%DATABASE%',$_SESSION['db_database'],$configFileContent);
+    $configFileContent = str_replace('%PASSWORD%', $_SESSION['db_password'], $configFileContent);
+    $configFileContent = str_replace('%DATABASE%', $_SESSION['db_database'], $configFileContent);
     $configFileContent = str_replace('%ROOT_PATH%', $rootPath, $configFileContent);
     $configFileContent = str_replace('%ORGANIZATION%', $_SESSION['orga_shortname'], $configFileContent);
     $_SERVER['config_file_content'] = $configFileContent;

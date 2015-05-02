@@ -257,8 +257,8 @@ class HtmlForm extends HtmlFormBasic
         elseif($type == 'calc')
         {
             $captcha = new Captcha();
-            $this->addHtml($captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),$gL10n->get('SYS_CAPTCHA_CALC_PART2'),
-                                                      $gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$gL10n->get('SYS_CAPTCHA_CALC_PART4')));
+            $this->addHtml($captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'), $gL10n->get('SYS_CAPTCHA_CALC_PART2'),
+                                                      $gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'), $gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'), $gL10n->get('SYS_CAPTCHA_CALC_PART4')));
             $captchaLabel = $gL10n->get('SYS_CAPTCHA_CALC');
             $captchaDescription = 'SYS_CAPTCHA_CALC_DESCRIPTION';
         }
@@ -724,7 +724,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // now create html for the field
-        $this->openControlStructure($id, $label, $optionsAll['property'] , $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
+        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
 
         // if datetime then add a time field behind the date field
         if($optionsAll['type'] == 'datetime')

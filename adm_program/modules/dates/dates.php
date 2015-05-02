@@ -71,7 +71,7 @@ if($getCatId > 0)
 }
 
 // Number of events each page for default view 'html' or 'compact' view
-if($gPreferences['dates_per_page'] > 0 && ( $getViewMode == 'html' || $getViewMode == 'compact'))
+if($gPreferences['dates_per_page'] > 0 && ($getViewMode == 'html' || $getViewMode == 'compact'))
 {
     $datesPerPage = $gPreferences['dates_per_page'];
 }
@@ -96,7 +96,7 @@ if($datesTotalCount != 0)
     // Initialize counter and object instances
     $count = 0;
     $date = new TableDate($gDb);
-    $participants = new Participants ($gDb);
+    $participants = new Participants($gDb);
 
     // New array for the participants of a date
     $memberElements = array();
@@ -183,7 +183,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
         if($gCurrentUser->editDates())
         {
             $DatesMenu->addItem('admMenuItemAdd', $g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$getHeadline,
-                                $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png' );
+                                $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
         }
 
         if($getId == 0)
@@ -192,7 +192,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             if($gPreferences['enable_dates_ical'] == 1)
             {
                 $DatesMenu->addItem('admMenuItemICal', $g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId,
-                                $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png' );
+                                $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png');
             }
 
             // show print button
@@ -285,7 +285,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
                 {
                     $deleteIcon = '
-                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" 
+                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                         href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
                         $date->getValue('dat_id').'&amp;name='.urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.$date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'"><img
                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
@@ -338,7 +338,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
 
                     // if valid login and enough information about address exist - calculate the route
                     if($gValidLogin && strlen($gCurrentUser->getValue('ADDRESS')) > 0
-                    && (  strlen($gCurrentUser->getValue('POSTCODE'))  > 0 || strlen($gCurrentUser->getValue('CITY'))  > 0 ))
+                    && (strlen($gCurrentUser->getValue('POSTCODE'))  > 0 || strlen($gCurrentUser->getValue('CITY'))  > 0))
                     {
                         $route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($gCurrentUser->getValue('ADDRESS'));
                         if(strlen($gCurrentUser->getValue('POSTCODE'))  > 0)
@@ -412,7 +412,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                         else
                         {
                             $registerLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" /></a>';
-                        }                            
+                        }
                     }
                     else
                     {
@@ -439,7 +439,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                             else
                             {
                                 $registerLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" /></a>';
-                            }                            
+                            }
                         }
                         else
                         {
@@ -461,7 +461,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                             else
                             {
                                 $participantLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
-                            }                            
+                            }
                         }
                     }
 
@@ -477,7 +477,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                         else
                         {
                             $mgrpartLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" /></a>';
-                        }                            
+                        }
                     }
                 }
             }
@@ -565,7 +565,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                     $cssClass = 'event-highlight';
                 }
 
-                $objDateBegin = new DateTime ($row['dat_begin']);
+                $objDateBegin = new DateTime($row['dat_begin']);
                 $dateBegin = $objDateBegin->format($gPreferences['system_date']);
                 $timeBegin = '';
                 if ($date->getValue('dat_all_day') == 0)
@@ -581,7 +581,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 
                 if(strlen($registerLink) > 0)
                 {
-                    $columnValues[] = $registerLink;                    
+                    $columnValues[] = $registerLink;
                 }
                 else
                 {
@@ -602,7 +602,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
 
                 if(strlen($locationHtml) > 0)
                 {
-                    $columnValues[] = $locationHtml;                    
+                    $columnValues[] = $locationHtml;
                 }
                 else
                 {
@@ -694,18 +694,18 @@ else
     // Get dates and  configure table bodies if recordsets are found
     $numElement = 1;
     
-    if($datesTotalCount > 0 )
+    if($datesTotalCount > 0)
     {
         foreach($dateElements as $row)
         {
             $buffer = array();
     
             //Convert dates to system format
-            $objDateBegin = new DateTime ($row['dat_begin']);
+            $objDateBegin = new DateTime($row['dat_begin']);
             $dateBegin = $objDateBegin->format($gPreferences['system_date']);
             $dateStartTime = $objDateBegin->format($gPreferences['system_time']);
     
-            $objDateEnd = new DateTime ($row['dat_end']);
+            $objDateEnd = new DateTime($row['dat_end']);
             $dateEnd = $objDateEnd->format($gPreferences['system_date']);
             $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
     
@@ -801,7 +801,7 @@ else
                                                             $buffer['dat_headline'],
                                                             $tableParticipants);
             $numElement++;
-            unset ($buffer);
+            unset($buffer);
         }  // end foreach
     }
     // Create table object
@@ -832,7 +832,7 @@ else
             $datePrint->addColumn($gL10n->get('SYS_NO_ENTRY'), array('colspan' => '9'));
         }
         else
-        {   
+        {
             $datePrint->addColumn($gL10n->get('SYS_NO_ENTRIES'), array('colspan' => '9'));
         }
     }

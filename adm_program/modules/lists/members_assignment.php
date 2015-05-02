@@ -79,7 +79,7 @@ if($getMode == 'assign')
         }
         if(isset($_POST['leader_'.$getUserId]) && $_POST['leader_'.$getUserId]=='true')
         {
-            $membership = 1;    
+            $membership = 1;
             $leadership = 1;
         }
 
@@ -108,7 +108,7 @@ if($getMode == 'assign')
     catch(AdmException $e)
     {
         $e->showText();
-    } 
+    }
 }
 else
 {
@@ -141,7 +141,7 @@ else
             $roleCondition = ' AND mem_rol_id = '.$getFilterRoleId.' ';
         }
         
-        $memberCondition = ' EXISTS 
+        $memberCondition = ' EXISTS
             (SELECT 1
                FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
               WHERE mem_usr_id = usr_id
@@ -236,7 +236,7 @@ else
 
         // if checkbox of user is clicked then change membership
         $("input[type=checkbox].memlist_checkbox").click(function(){
-            var checkbox = $(this);            
+            var checkbox = $(this);
             // get user id
             var row_id = $(this).parent().parent().attr("id");
             var pos = row_id.search("_");
@@ -246,13 +246,13 @@ else
             var leader_checked = $("input[type=checkbox]#leader_"+userid).prop("checked");
 
             //Bei Leiter Checkbox setzten, muss Member mit gesetzt werden
-            if(checkbox.hasClass("memlist_leader") && leader_checked){                
+            if(checkbox.hasClass("memlist_leader") && leader_checked){
                 $("input[type=checkbox]#member_"+userid).prop("checked", true);
                 member_checked = true;
             }
             
             //Bei entfernen der Mitgliedschaft endet auch das Leiterdasein
-            if(checkbox.hasClass("memlist_member") && member_checked==false){                
+            if(checkbox.hasClass("memlist_member") && member_checked==false){
                 $("input[type=checkbox]#leader_"+userid).prop("checked", false);
                 leader_checked = false;
             }
@@ -315,7 +315,7 @@ else
     }
 
     // show icon with edit user right if leader has this right
-    if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT 
+    if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
     || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
         $htmlLeaderColumn .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/profile_edit.png"
@@ -323,7 +323,7 @@ else
     }
 
     // show icon with assign role right if leader has this right
-    if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN 
+    if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN
     || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
         $htmlLeaderColumn .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/roles.png"
@@ -445,7 +445,7 @@ else
             $htmlBirthday,
             $htmlRoleLeader.'<b id="loadindicator_leader_'.$user['usr_id'].'"></b>');
             
-        $table->addRowByArray($columnValues, 'userid_'.$user['usr_id']);        
+        $table->addRowByArray($columnValues, 'userid_'.$user['usr_id']);
     }//End While
 
     $page->addHtml($table->show(false));

@@ -154,7 +154,7 @@ class HtmlList extends HtmlElement
             // Set new item
             $this->addParentElement('li');
     
-            if(strlen($id) > 0 )
+            if(strlen($id) > 0)
             {
                 $this->addAttribute('id', $id);
             }
@@ -169,7 +169,7 @@ class HtmlList extends HtmlElement
             {   
                 $this->addElement('li');
                 
-                    if(strlen($id) > 0 )
+                    if(strlen($id) > 0)
                 {
                     $this->addAttribute('id', $id);
                 }
@@ -182,7 +182,7 @@ class HtmlList extends HtmlElement
                 // handle as parent element maybe a datalist could be nested next
                 $this->addParentElement('li');
                 
-                if(strlen($id) > 0 )
+                if(strlen($id) > 0)
                 {
                     $this->addAttribute('id', $id);
                 }

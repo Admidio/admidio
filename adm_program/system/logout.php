@@ -23,7 +23,7 @@ if(isset($_COOKIE[$gCookiePraefix. '_DATA']))
     setcookie($gCookiePraefix. '_DATA', '', time() - 1000, '/', $domain, 0);
     
     $autoLogin = new AutoLogin($gDb, $gSessionId);
-    $autoLogin->delete(); 
+    $autoLogin->delete();
 }
 
 // if login organization is different to organization of config file then create new session variables

@@ -20,7 +20,7 @@
                 $moduleMenu->addItem('overview', '/adm_program/index.php',
                                     $gL10n->get('SYS_OVERVIEW'), '/icons/home.png');
     
-                if( $gPreferences['enable_announcements_module'] == 1
+                if($gPreferences['enable_announcements_module'] == 1
                 || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
                 {
                     $moduleMenu->addItem('announcements', '/adm_program/modules/announcements/announcements.php',
@@ -59,7 +59,7 @@
                     $moduleMenu->addItem('photo', '/adm_program/modules/photos/photos.php',
                                         $gL10n->get('PHO_PHOTOS'), '/icons/photo.png');
                 }
-                if( $gPreferences['enable_guestbook_module'] == 1
+                if($gPreferences['enable_guestbook_module'] == 1
                 || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
                 {
                     $moduleMenu->addItem('guestbk', '/adm_program/modules/guestbook/guestbook.php',
@@ -75,14 +75,14 @@
                                         $gL10n->get('LST_MY_LIST'), '/icons/mylist.png');
                 }
     
-                if( $gPreferences['enable_dates_module'] == 1
+                if($gPreferences['enable_dates_module'] == 1
                 || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
                 {
                     $moduleMenu->addItem('dates', '/adm_program/modules/dates/dates.php',
                                         $gL10n->get('DAT_DATES'), '/icons/dates.png');
                 }
     
-                if( $gPreferences['enable_weblinks_module'] == 1
+                if($gPreferences['enable_weblinks_module'] == 1
                 || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
                 {
                     $moduleMenu->addItem('links', '/adm_program/modules/links/links.php',

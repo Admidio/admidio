@@ -95,7 +95,7 @@ elseif($getMode == 4)
 	$count_show_roles 	= 0;
 	$result_role 		= getRolesFromDatabase($getUserId);
 	$count_role  		= $gDb->num_rows($result_role);
-	getRoleMemberships('role_list',$user,$result_role,$count_role,true);
+	getRoleMemberships('role_list', $user, $result_role, $count_role, true);
 }
 elseif($getMode == 5) 
 {
@@ -103,7 +103,7 @@ elseif($getMode == 5)
 	$count_show_roles 	= 0;
 	$result_role 		= getFormerRolesFromDatabase($getUserId);
 	$count_role  		= $gDb->num_rows($result_role);
-	getRoleMemberships('former_role_list',$user,$result_role,$count_role,true);
+	getRoleMemberships('former_role_list', $user, $result_role, $count_role, true);
 
 	if($count_role == 0)
 	{
@@ -120,7 +120,7 @@ elseif($getMode == 6)
 	$count_show_roles 	= 0;
 	$result_role 		= getFutureRolesFromDatabase($getUserId);
 	$count_role  		= $gDb->num_rows($result_role);
-	getRoleMemberships('future_role_list',$user,$result_role,$count_role,true);
+	getRoleMemberships('future_role_list', $user, $result_role, $count_role, true);
 
 	if($count_role == 0)
 	{

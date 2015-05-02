@@ -151,7 +151,7 @@ class HtmlDiv extends HtmlElement
         $position = '';
         $totalCount = count($this->arrParentElements);
 
-        if($totalCount == 0 )
+        if($totalCount == 0)
         {
             return false;
         }

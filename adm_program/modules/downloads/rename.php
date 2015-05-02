@@ -50,7 +50,7 @@ if (!$gCurrentUser->editDownloadRight())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-if ( (!$getFileId && !$getFolderId) OR ($getFileId && $getFolderId) )
+if ((!$getFileId && !$getFolderId) or ($getFileId && $getFolderId))
 {
     //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
     //beides ist auch nicht erlaubt

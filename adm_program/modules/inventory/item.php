@@ -30,7 +30,7 @@ $gInventoryFields = new InventoryFields($gDb, $gCurrentOrganization->getValue('o
 $inventory = new Inventory($gDb, $gInventoryFields, $getItemId);
 
 //Testen ob Recht besteht Profil einzusehn
-if( $gPreferences['enable_inventory_module'] >= 0 && !$gValidLogin)
+if($gPreferences['enable_inventory_module'] >= 0 && !$gValidLogin)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -90,8 +90,8 @@ $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js
 
 $page->addJavascript('
     var profileJS = new profileJSClass();
-    profileJS.deleteRole_ConfirmText 	= "'.$gL10n->get('ROL_MEMBERSHIP_DEL','[rol_name]').'";
-    profileJS.deleteFRole_ConfirmText 	= "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL','[rol_name]').'";
+    profileJS.deleteRole_ConfirmText 	= "'.$gL10n->get('ROL_MEMBERSHIP_DEL', '[rol_name]').'";
+    profileJS.deleteFRole_ConfirmText 	= "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
     profileJS.setBy_Text				= "'.$gL10n->get('SYS_SET_BY').'";
     profileJS.inv_id                    = '.$inventory->getValue('inv_id').';
     
@@ -190,7 +190,7 @@ $page->addHtml('
             {
                 // nur Felder der Stammdaten anzeigen
                 if($field->getValue('cat_name_intern') == 'MASTER_DATA'
-                && $field->getValue('inv_hidden') == 0 )
+                && $field->getValue('inv_hidden') == 0)
                 {
                     switch($field->getValue('inf_name_intern'))
                     {
@@ -212,7 +212,7 @@ $page->addHtml('
 							}
 							else
 							{
-								$form->addStaticControl('address', $field['label'], 'room_id ' . $field['value'] . ' not found' );
+								$form->addStaticControl('address', $field['label'], 'room_id ' . $field['value'] . ' not found');
 							}
 							break;
 							
@@ -247,7 +247,7 @@ $page->addHtml('
                             src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a>');
                 //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
                 if((strlen($inventory->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
-                    || file_exists(SERVER_PATH. '/adm_my_files/item_photos/'.$inventory->getValue('inv_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1 )
+                    || file_exists(SERVER_PATH. '/adm_my_files/item_photos/'.$inventory->getValue('inv_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
                 {
                     $page->addHtml('<a class="btn" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
                                     '&amp;database_id='.$inventory->getValue('inv_id').'"><img src="'. THEME_PATH. '/icons/delete.png" 
@@ -269,8 +269,8 @@ foreach($gProfileFields->mProfileFields as $field)
     // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
     // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
     if($field->getValue('cat_name_intern') != 'MASTER_DATA'
-    && (  $gCurrentUser->editInventory($inventory) == true
-       || ($gCurrentUser->editInventory($inventory) == false && $field->getValue('inf_hidden') == 0 )))
+    && ($gCurrentUser->editInventory($inventory) == true
+       || ($gCurrentUser->editInventory($inventory) == false && $field->getValue('inf_hidden') == 0)))
     {
         // show new category header if new category and field has value or is a checkbox field
         if($category != $field->getValue('cat_name')

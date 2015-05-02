@@ -50,7 +50,7 @@ else
 
 // menu with links to all modules of Admidio
 $moduleMenu = new Menu('index_modules', $gL10n->get('SYS_MODULES'));
-if( $gPreferences['enable_announcements_module'] == 1
+if($gPreferences['enable_announcements_module'] == 1
 || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
 {
     $moduleMenu->addItem('announcements', '/adm_program/modules/announcements/announcements.php',
@@ -88,14 +88,14 @@ if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'
                         $gL10n->get('MAI_EMAIL_DESC'));
     }
 }
-if($gPreferences['enable_photo_module'] == 1 
+if($gPreferences['enable_photo_module'] == 1
 || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
 {
     $moduleMenu->addItem('photo', '/adm_program/modules/photos/photos.php',
                         $gL10n->get('PHO_PHOTOS'), '/icons/photo_big.png',
                         $gL10n->get('PHO_PHOTOS_DESC'));
 }
-if( $gPreferences['enable_guestbook_module'] == 1
+if($gPreferences['enable_guestbook_module'] == 1
 || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
 {
     $moduleMenu->addItem('guestbk', '/adm_program/modules/guestbook/guestbook.php',
@@ -112,7 +112,7 @@ if($gValidLogin)
     $moduleMenu->addSubItem('lists', 'rolinac', '/adm_program/modules/lists/lists.php?active_role=0',
                             $gL10n->get('ROL_INACTIV_ROLE'));
 }
-if( $gPreferences['enable_dates_module'] == 1
+if($gPreferences['enable_dates_module'] == 1
 || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
 {
     $moduleMenu->addItem('dates', $g_root_path.'/adm_program/modules/dates/dates.php',
@@ -121,7 +121,7 @@ if( $gPreferences['enable_dates_module'] == 1
     $moduleMenu->addSubItem('dates', 'olddates', '/adm_program/modules/dates/dates.php?mode=old',
                         $gL10n->get('DAT_PREVIOUS_DATES', $gL10n->get('DAT_DATES')));
 }
-if( $gPreferences['enable_weblinks_module'] == 1
+if($gPreferences['enable_weblinks_module'] == 1
 || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
 {
     $moduleMenu->addItem('links', $g_root_path.'/adm_program/modules/links/links.php',

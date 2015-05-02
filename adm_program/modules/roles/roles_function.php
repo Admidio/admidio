@@ -18,7 +18,7 @@
  *         7 - set role invisible
  *         8 - set role visible
  *         9 - return if role has former members ? Return: 1 und 0
- *          
+ *
  *****************************************************************************/
 
 require_once('../../system/common.php');
@@ -28,7 +28,7 @@ require_once('../../system/login_valid.php');
 $getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
 
-// only members who are allowed to create and edit roles should have access to 
+// only members who are allowed to create and edit roles should have access to
 // most of these functions
 if(!$gCurrentUser->manageRoles() && $getMode != 9)
 {
@@ -106,7 +106,7 @@ elseif($getMode == 2)
                       AND rol_cat_id = '. $_POST['rol_cat_id']. '
                       AND rol_id    <> '. $getRoleId. '
                       AND rol_cat_id = cat_id
-                      AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').' 
+                      AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                           OR cat_org_id IS NULL ) ';
         $result = $gDb->query($sql);
         $row    = $gDb->fetch_array($result);
@@ -177,7 +177,7 @@ elseif($getMode == 2)
                 }
 
                 // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
-    			if ($startDate->getTimestamp() > $endDate->getTimestamp()) 
+    			if ($startDate->getTimestamp() > $endDate->getTimestamp())
     			{
     				$gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
     			}
@@ -277,16 +277,16 @@ elseif($getMode == 2)
         $roleDep = new RoleDependency($gDb);
 
         // holt eine Liste der ausgewählten Rolen
-        $dbChildRoles = RoleDependency::getChildRoles($gDb,$getRoleId);
+        $dbChildRoles = RoleDependency::getChildRoles($gDb, $getRoleId);
 
         //entferne alle Rollen die nicht mehr ausgewählt sind
         if($dbChildRoles != -1)
         {
             foreach ($dbChildRoles as $dbChildRole)
             {
-                if(in_array($dbChildRole,$sentChildRoles) == false)
+                if(in_array($dbChildRole, $sentChildRoles) == false)
                 {
-                    $roleDep->get($dbChildRole,$getRoleId);
+                    $roleDep->get($dbChildRole, $getRoleId);
                     $roleDep->delete();
                 }
             }
@@ -297,7 +297,7 @@ elseif($getMode == 2)
         {
             foreach ($sentChildRoles as $sentChildRole)
             {
-                if($dbChildRoles != -1 && in_array($sentChildRole,$dbChildRoles) == false && $sentChildRole > 0)
+                if($dbChildRoles != -1 && in_array($sentChildRole, $dbChildRoles) == false && $sentChildRole > 0)
                 {
                     $roleDep->clear();
                     $roleDep->setChild($sentChildRole);
@@ -312,7 +312,7 @@ elseif($getMode == 2)
     }
     else
     {
-        RoleDependency::removeChildRoles($gDb,$getRoleId);
+        RoleDependency::removeChildRoles($gDb, $getRoleId);
     }
 
     $gNavigation->deleteLastUrl();
@@ -344,7 +344,7 @@ elseif($getMode == 4)
     catch(AdmException $e)
     {
         $e->showHtml();
-    } 
+    }
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_DELETE_DATA'));
@@ -370,7 +370,7 @@ elseif($getMode == 6)
 }
 elseif($getMode == 7)
 {
-    $role->setValue('rol_visible',0);
+    $role->setValue('rol_visible', 0);
     $role->save();
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
@@ -378,7 +378,7 @@ elseif($getMode == 7)
 }
 elseif($getMode == 8)
 {
-    $role->setValue('rol_visible',1);
+    $role->setValue('rol_visible', 1);
     $role->save();
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);

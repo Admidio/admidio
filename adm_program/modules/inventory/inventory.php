@@ -104,7 +104,7 @@ while($row = $gDb->fetch_array($result_mgl))
 						        src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
 
 	// remove Item
-	if( $gCurrentUser->isWebmaster()) // just Webmaster can remove items
+	if($gCurrentUser->isWebmaster()) // just Webmaster can remove items
 	{
 		$itemAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/inventory/items_function.php?item_id='.$row['inv_id'].'&amp;mode=6"><img
 			                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';

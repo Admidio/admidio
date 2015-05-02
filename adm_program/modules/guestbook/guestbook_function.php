@@ -42,7 +42,7 @@ elseif($gPreferences['enable_guestbook_module'] == 2)
 }
 
 // Erst einmal pruefen ob die noetigen Berechtigungen vorhanden sind
-if ($getMode == 2 || $getMode == 3 || $getMode == 4 || $getMode == 5 || $getMode == 8 )
+if ($getMode == 2 || $getMode == 3 || $getMode == 4 || $getMode == 5 || $getMode == 8)
 {
 
     if ($getMode == 4)
@@ -127,10 +127,10 @@ if ($getMode == 1 || $getMode == 3)
     // muss natuerlich der Code ueberprueft werden
     if ($getMode == 1 && !$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
     {
-        if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
+        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
         {
             if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-			else if($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+			elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
         }
     }
 
@@ -312,10 +312,10 @@ elseif($getMode == 4 || $getMode == 8)
     // muss natuerlich der Code ueberprueft werden
     if ($getMode == 4 && !$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
     {
-        if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
+        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
         {
             if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-			else if($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+			elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
         }
     }
 	

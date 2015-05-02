@@ -32,7 +32,7 @@ if ($gPreferences['enable_photo_module'] == 0)
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
-else if ($gPreferences['enable_photo_module'] == 2)
+elseif ($gPreferences['enable_photo_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require('../../system/login_valid.php');
@@ -133,7 +133,7 @@ if($image != NULL)
     // Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
     if (($getMaxWidth > 200) && $gPreferences['photo_image_text'] != '')
     {
-        $font_c = imagecolorallocate($image->imageResource,255,255,255);
+        $font_c = imagecolorallocate($image->imageResource, 255, 255, 255);
         $font_ttf = THEME_SERVER_PATH.'/font.ttf';
         $font_s = $getMaxWidth / 40;
         $font_x = $font_s;

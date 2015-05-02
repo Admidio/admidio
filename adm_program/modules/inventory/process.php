@@ -24,7 +24,7 @@
                 data: $("#template-form").serialize(),
                 success: function(data){
                      $("#responsestatus").val(data);
-                     $("#subscription-confirm").modal("show");    
+                     $("#subscription-confirm").modal("show");
                 }
             });
         });
@@ -32,7 +32,7 @@
 	</script>
 	';
 
-    switch($postFunction) 
+    switch($postFunction)
     {
         case('update'):
 		
@@ -44,7 +44,7 @@
 			$row = $gDb->fetch_array($result);
 			$MsgId = $row['max_id'];
 			
-			if( $MsgId+25 < $postLines)
+			if($MsgId+25 < $postLines)
 			{
 				$postLines = $postLines - 50;
 			}
@@ -86,7 +86,7 @@
 				}
 				
                 $log['state'] = $MsgId;
-                $log['text'] = $text; 
+                $log['text'] = $text;
             }
             break;
          
@@ -94,11 +94,11 @@
             $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
             if(($postMessage) != "\n")
             {
-                if(preg_match($reg_exUrl, $postMessage, $url)) 
+                if(preg_match($reg_exUrl, $postMessage, $url))
                 {
                        $postMessage = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
-                } 
-                fwrite(fopen('chat.txt', 'a'), "<span>". $postNickname . "</span>" . $postMessage = str_replace("\n", " ", $postMessage) . "\n"); 
+                }
+                fwrite(fopen('chat.txt', 'a'), "<span>". $postNickname . "</span>" . $postMessage = str_replace("\n", " ", $postMessage) . "\n");
             }
 			$sql = "SELECT MAX(msg_part_id) as max_id
 			  FROM ". TBL_MESSAGES."
@@ -108,10 +108,10 @@
 			$row = $gDb->fetch_array($result);
 			$MsgId = $row['max_id'] + 1;
 
-			$sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read) 
+			$sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read)
 				VALUES ('CHAT', '0', '".$MsgId."', '".$postNickname."', '', '', '".$postMessage."', CURRENT_TIMESTAMP, '0')";
 
-			$gDb->query($sql); 
+			$gDb->query($sql);
             break;
 		case('delete'):
             $sql = "DELETE FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT' and msg_converation_id = 0";

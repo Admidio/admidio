@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Various common functions 
+ * Various common functions
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -9,7 +9,7 @@
  *****************************************************************************/
 
  /** Autoloading function of class files. This function is automatically called
-  *  by PHP. Therefore the class name must be the same as the file name except 
+  *  by PHP. Therefore the class name must be the same as the file name except
   *  for case sensitive.
   *  @param $className Name of the class for which the file should be loaded
   */
@@ -47,7 +47,7 @@ function hasRole($roleName, $userId = 0)
                   AND mem_end    > \''.DATE_NOW.'\'
                   AND mem_rol_id = rol_id
                   AND rol_name   = \''.$roleName.'\'
-                  AND rol_valid  = 1 
+                  AND rol_valid  = 1
                   AND rol_cat_id = cat_id
                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                       OR cat_org_id IS NULL ) ';
@@ -63,7 +63,7 @@ function hasRole($roleName, $userId = 0)
     }
 }
 
-/** Function checks if the user is a member in a role of the current organization. 
+/** Function checks if the user is a member in a role of the current organization.
  *  @param $userId 	The id of the user who should be checked if he is a member of the current organization
  *  @return Returns @b true if the user is a member
  */
@@ -79,7 +79,7 @@ function isMember($userId)
                       AND mem_begin <= \''.DATE_NOW.'\'
                       AND mem_end    > \''.DATE_NOW.'\'
                       AND mem_rol_id = rol_id
-                      AND rol_valid  = 1 
+                      AND rol_valid  = 1
                       AND rol_cat_id = cat_id
                       AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                           OR cat_org_id IS NULL ) ';
@@ -96,10 +96,10 @@ function isMember($userId)
     return false;
 }
 
-/** Function checks if the user is a group leader in a role of the current organization. 
+/** Function checks if the user is a group leader in a role of the current organization.
  *  If you use the @b roleId parameter you can check if the user is group leader of that role.
  *  @param $userId 	The id of the user who should be checked if he is a group leader
- *  @param $roleId 	If set <> 0 than the function checks if the user is group leader of this role 
+ *  @param $roleId 	If set <> 0 than the function checks if the user is group leader of this role
  *					otherwise it checks if the user is group leader in one role of the current organization
  *  @return Returns @b true if the user is a group leader
  */
@@ -117,7 +117,7 @@ function isGroupLeader($userId, $roleId = 0)
                       AND mem_end    > \''.DATE_NOW.'\'
                       AND mem_leader = 1
                       AND mem_rol_id = rol_id
-                      AND rol_valid  = 1 
+                      AND rol_valid  = 1
                       AND rol_cat_id = cat_id
                       AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                           OR cat_org_id IS NULL ) ';
@@ -151,14 +151,14 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 {
     global $g_root_path, $gL10n;
 
-    if ($num_items == 0 || $per_page == 0 )
+    if ($num_items == 0 || $per_page == 0)
     {
     	return '';
     }
     
-    $total_pages = ceil($num_items/$per_page);    
+    $total_pages = ceil($num_items/$per_page);
 
-    if ( $total_pages <= 1 )
+    if ($total_pages <= 1)
     {
         return '';
     }
@@ -166,30 +166,30 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
     $on_page = floor($start_item / $per_page) + 1;
 
     $page_string = '';
-    if ( $total_pages > 7 )
+    if ($total_pages > 7)
     {
-        $init_page_max = ( $total_pages > 3 ) ? 3 : $total_pages;
+        $init_page_max = ($total_pages > 3) ? 3 : $total_pages;
 
         for($i = 1; $i < $init_page_max + 1; $i++)
         {
-            $page_string .= ( $i == $on_page ) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
+            $page_string .= ($i == $on_page) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . (($i - 1) * $per_page) . '">' . $i . '</a></li>';
         }
 
-        if ( $total_pages > 3 )
+        if ($total_pages > 3)
         {
-            if ( $on_page > 1  && $on_page < $total_pages )
+            if ($on_page > 1  && $on_page < $total_pages)
             {
-                $page_string .= ( $on_page > 5 ) ? ' ... ' : '&nbsp;&nbsp;';
+                $page_string .= ($on_page > 5) ? ' ... ' : '&nbsp;&nbsp;';
 
-                $init_page_min = ( $on_page > 4 ) ? $on_page : 5;
-                $init_page_max = ( $on_page < $total_pages - 4 ) ? $on_page : $total_pages - 4;
+                $init_page_min = ($on_page > 4) ? $on_page : 5;
+                $init_page_max = ($on_page < $total_pages - 4) ? $on_page : $total_pages - 4;
 
                 for($i = $init_page_min - 1; $i < $init_page_max + 2; $i++)
                 {
-                    $page_string .= ($i == $on_page) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
+                    $page_string .= ($i == $on_page) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . (($i - 1) * $per_page) . '">' . $i . '</a></li>';
                 }
 
-                $page_string .= ( $on_page < $total_pages - 4 ) ? ' ... ' : '&nbsp;&nbsp;';
+                $page_string .= ($on_page < $total_pages - 4) ? ' ... ' : '&nbsp;&nbsp;';
             }
             else
             {
@@ -198,7 +198,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 
             for($i = $total_pages - 2; $i < $total_pages + 1; $i++)
             {
-                $page_string .= ( $i == $on_page ) ? '<li class="active"><a href="#">'. $i. '</a></li>'  : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
+                $page_string .= ($i == $on_page) ? '<li class="active"><a href="#">'. $i. '</a></li>'  : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . (($i - 1) * $per_page) . '">' . $i . '</a></li>';
             }
         }
     }
@@ -206,28 +206,28 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
     {
         for($i = 1; $i < $total_pages + 1; $i++)
         {
-            $page_string .= ( $i == $on_page ) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
+            $page_string .= ($i == $on_page) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . (($i - 1) * $per_page) . '">' . $i . '</a></li>';
         }
     }
 
-    if ( $add_prevnext_text )
+    if ($add_prevnext_text)
     {
-        if ( $on_page > 1 )
+        if ($on_page > 1)
         {
-            $page_string = '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ( ( $on_page - 2 ) * $per_page ) . '">'.$gL10n->get('SYS_BACK').'</a></li>' . $page_string;
+            $page_string = '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . (($on_page - 2) * $per_page) . '">'.$gL10n->get('SYS_BACK').'</a></li>' . $page_string;
         }
         else
         {
-            $page_string = '<li class="disabled"><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ( ( $on_page - 2 ) * $per_page ) . '">'.$gL10n->get('SYS_BACK').'</a></li>' . $page_string;            
+            $page_string = '<li class="disabled"><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . (($on_page - 2) * $per_page) . '">'.$gL10n->get('SYS_BACK').'</a></li>' . $page_string;
         }
 
-        if ( $on_page < $total_pages )
+        if ($on_page < $total_pages)
         {
-            $page_string .= '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ( $on_page * $per_page ) . '">'.$gL10n->get('SYS_PAGE_NEXT').'</a></li>';
+            $page_string .= '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ($on_page * $per_page) . '">'.$gL10n->get('SYS_PAGE_NEXT').'</a></li>';
         }
         else
         {
-            $page_string .= '<li class="disabled"><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'='. ( $on_page * $per_page ) . '">'.$gL10n->get('SYS_PAGE_NEXT').'</a></li>';            
+            $page_string .= '<li class="disabled"><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'='. ($on_page * $per_page) . '">'.$gL10n->get('SYS_PAGE_NEXT').'</a></li>';
         }
     }
 
@@ -240,7 +240,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 function admFuncMaxUploadSize()
 {
     $post_max_size = trim(ini_get('post_max_size'));
-    switch(admStrToLower(substr($post_max_size,strlen($post_max_size/1),1)))
+    switch(admStrToLower(substr($post_max_size, strlen($post_max_size/1), 1)))
     {
         case 'g':
             $post_max_size *= 1024;
@@ -250,7 +250,7 @@ function admFuncMaxUploadSize()
             $post_max_size *= 1024;
     }
     $upload_max_filesize = trim(ini_get('upload_max_filesize'));
-    switch(admStrToLower(substr($upload_max_filesize,strlen($upload_max_filesize/1),1)))
+    switch(admStrToLower(substr($upload_max_filesize, strlen($upload_max_filesize/1), 1)))
     {
         case 'g':
             $upload_max_filesize *= 1024;
@@ -261,11 +261,11 @@ function admFuncMaxUploadSize()
     }
     if($upload_max_filesize < $post_max_size)
     {
-        return $upload_max_filesize;    
+        return $upload_max_filesize;
     }
     else
     {
-        return $post_max_size; 
+        return $post_max_size;
     }
 }
 
@@ -283,7 +283,7 @@ function admFuncProcessableImageSize()
     {
        $memory_limit=='128M';
     }
-    switch(admStrToLower(substr($memory_limit,strlen($memory_limit/1),1)))
+    switch(admStrToLower(substr($memory_limit, strlen($memory_limit/1), 1)))
     {
      case 'g':
          $memory_limit *= 1024;
@@ -295,13 +295,13 @@ function admFuncProcessableImageSize()
     //Für jeden Pixel werden 3Byte benötigt (RGB)
     //der Speicher muss doppelt zur Verfügung stehen
     //nach ein paar tests hat sich 2,5Fach als sichrer herausgestellt
-    return $memory_limit/(3*2.5); 
+    return $memory_limit/(3*2.5);
 }
 
 /// Verify the content of an array element if it's the expected datatype
 /** The function is designed to check the content of @b $_GET and @b $_POST elements and should be used at the beginning of a script.
  *  If the value of the defined datatype is not valid then an error will be shown. If no value was set then the parameter will
- *  be initialized. The function can be used with every array and their elements. You can set several flags (like required value, 
+ *  be initialized. The function can be used with every array and their elements. You can set several flags (like required value,
  *  datatype …) that should be checked.
  *  @param $array 	 The array with the element that should be checked
  *  @param $variableName Name of the array element that should be checked
@@ -312,7 +312,7 @@ function admFuncProcessableImageSize()
  *                   @b requireValue 	If set to @b true than a value is required otherwise the function returns an error
  *                   @b validValues 	An array with all values that the variable could have. If another value is found than the function returns an error
  *                   @b directOutput 	If set to @b true the function returns only the error string, if set to false a html message with the error will be returned
- *  @return Returns the value of the element or the error message if a test failed 
+ *  @return Returns the value of the element or the error message if a test failed
  *  @par Examples
  *  @code   // numeric value that would get a default value 0 if not set
  *  $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', array('defaultValue' => 0));
@@ -493,7 +493,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
                 }
                 else
                 {
-                    $htmlCreateName = $userCreate->getValue('usr_login_name');     
+                    $htmlCreateName = $userCreate->getValue('usr_login_name');
                 }
             }
             else
@@ -515,7 +515,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
                 }
                 else
                 {
-                    $htmlEditName = $userEdit->getValue('usr_login_name');     
+                    $htmlEditName = $userEdit->getValue('usr_login_name');
                 }
             }
             else
@@ -541,7 +541,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
  *  @param $timestampCreate Date and time of the moment when the user create the recordset.
  *  @param $userNameEdited  Id of the user last changed the recordset.
  *  @param $timestampEdit   Date and time of the moment when the user last changed the recordset
- *  @param $userIdCreated   Optional the id of the user who create the recordset. 
+ *  @param $userIdCreated   Optional the id of the user who create the recordset.
  *                          If id is set than a link to the user profile will be created
  *  @param $userIdEdited    Optional the id of the user last changed the recordset.
  *                          If id is set than a link to the user profile will be created

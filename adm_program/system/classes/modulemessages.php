@@ -4,7 +4,7 @@
  *  @brief some functions for the messages module
  *
  *  This class adds some functions that are used in the messages module to keep the
- *  code easy to read and short 
+ *  code easy to read and short
 
  *  @par Examples
  *  @code // check the given Array for charecter and split it.
@@ -26,7 +26,7 @@
  *
  *****************************************************************************/
 
-class ModuleMessages 
+class ModuleMessages
 {
     /** Constructor that initialize the class member parameters
      */
@@ -43,7 +43,7 @@ class ModuleMessages
         
         $group = $this->msgGroupSplit($groupstring);
                 
-        $sql = 'SELECT rol_name, rol_id 
+        $sql = 'SELECT rol_name, rol_id
                       FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                      WHERE rol_cat_id    = cat_id
                        AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
@@ -74,12 +74,12 @@ class ModuleMessages
     /** check for Group and give back a array with group ID[0] and if it is active, inactive or both [1].
      */
     public function msgGroupSplit($groupstring)
-    {        
-        $groupsplit = explode( ':', $groupstring);
+    {
+        $groupsplit = explode(':', $groupstring);
 
-        if (strpos($groupsplit[1],'-') == true)
+        if (strpos($groupsplit[1], '-') == true)
         {
-            $group = explode( '-', $groupsplit[1]);
+            $group = explode('-', $groupsplit[1]);
         }
         else
         {
@@ -93,7 +93,7 @@ class ModuleMessages
     /** return an array with all Email-Messages of the given user.
      */
     public function msgGetUserEmails($user)
-    {    
+    {
         global $gDb;
 
         $sql = "SELECT msg_id, msg_usr_id_receiver AS user
@@ -107,13 +107,13 @@ class ModuleMessages
     /** return an array with all unread Messages of the given user.
      */
     public function msgGetUserUnread($userId)
-    {    
+    {
         global $gDb;
 
         $sql = "
         SELECT msg_id, msg_usr_id_sender, msg_usr_id_receiver
           FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'PM' 
+         WHERE msg_type = 'PM'
            AND msg_usr_id_receiver LIKE '". $userId ."' and msg_read = 1
          ORDER BY msg_id DESC";
 
@@ -123,13 +123,13 @@ class ModuleMessages
     /** return an array with all unread Messages of the given user.
      */
     public function msgGetUser($userId)
-    {    
+    {
         global $gDb;
 
         $sql = "
         SELECT msg_id, msg_usr_id_sender, msg_usr_id_receiver
           FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'PM' 
+         WHERE msg_type = 'PM'
            AND ( (msg_usr_id_receiver LIKE '". $userId ."' and msg_read <> 1)
                OR (msg_usr_id_sender = ". $userId ." and msg_read < 2))
          ORDER BY msg_id DESC";
@@ -140,7 +140,7 @@ class ModuleMessages
     /** return the message ID of the admidio chat.
      */
     public function msgGetChatId()
-    {    
+    {
         global $gDb;
 
         $sql = "SELECT msg_id FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT'";

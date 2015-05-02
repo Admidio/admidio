@@ -11,7 +11,7 @@
  * function  - set the function of the call
  * message   - set the message for the CHAT entry
  * state     - gives the number of entries in the list that the user can see
- * 
+ *
  *****************************************************************************/
  
     require_once('../../system/common.php');
@@ -52,11 +52,11 @@
 		$MsgId = 0;
 	}
 
-    switch($postFunction) 
+    switch($postFunction)
     {
         case('update'):
             
-            if( $MsgId+25 < $postLines)
+            if($MsgId+25 < $postLines)
             {
                 $postLines = $postLines - 50;
             }
@@ -98,7 +98,7 @@
                 }
                 
                 $log['state'] = $MsgId;
-                $log['text'] = $text; 
+                $log['text'] = $text;
             }
             break;
          
@@ -106,15 +106,15 @@
             $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
             if(($postMessage) != "\n")
             {
-                if(preg_match($reg_exUrl, $postMessage, $url)) 
+                if(preg_match($reg_exUrl, $postMessage, $url))
                 {
                        $postMessage = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
-                } 
+                }
             }
 			
 			if($MsgId == 0)
 			{
-				$sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read) 
+				$sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
 				VALUES ('CHAT', 'DUMMY', '1', '".$MsgId."', CURRENT_TIMESTAMP, '0')";
 				$gDb->query($sql);
                 $msg_id = $modulemessages->msgGetChatId();
@@ -122,7 +122,7 @@
 
 			$MsgId += 1;
 
-            $sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp) 
+            $sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
                 VALUES ('".$msg_id."', '".$MsgId."', '".$gCurrentUser->getValue('usr_id')."', '".$postMessage."', CURRENT_TIMESTAMP)";
 
             $gDb->query($sql);

@@ -115,7 +115,7 @@ while ($row = $gDb->fetch_array($result))
     $title   = $parents.$photo_album->getValue('pho_name');
     $link    = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='. $photo_album->getValue('pho_id');
     $author  = $row['create_name'];
-	$pubDate = date('r',strtotime($photo_album->getValue('pho_timestamp_create')));
+	$pubDate = date('r', strtotime($photo_album->getValue('pho_timestamp_create')));
 
     //Inhalt zusammensetzen
     $description = $gL10n->get('SYS_DATE').': '.$photo_album->getValue('pho_begin', $gPreferences['system_date']);
@@ -133,7 +133,7 @@ while ($row = $gDb->fetch_array($result))
         $description = $description. '<br /><br />'.$gL10n->get('SYS_PREVIEW').':<br />';
         for($photoNr = $photo_album->getValue('pho_quantity'); $photoNr >= $photo_album->getValue('pho_quantity')-4 && $photoNr > 0; $photoNr--)
         {
-            $photoPath = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$photoNr.'.jpg';
+            $photoPath = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$photoNr.'.jpg';
 
 			// show only photo if that photo exists
             if (file_exists($photoPath))

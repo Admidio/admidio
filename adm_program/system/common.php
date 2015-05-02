@@ -74,7 +74,7 @@ if($gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db) == false)
 
 // create an installation unique cookie prefix and remove special characters
 $gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
-$gCookiePraefix = strtr($gCookiePraefix, ' .,;:','_____');
+$gCookiePraefix = strtr($gCookiePraefix, ' .,;:', '_____');
 
 /*********************************************************************************
  Create and validate sessions, check auto login, read session variables
@@ -150,7 +150,7 @@ else
     	// restore user from auto login session
     	$autoLogin = new AutoLogin($gDb, $gSessionId);
     	$autoLogin->setValidLogin($gCurrentSession, $_COOKIE[$gCookiePraefix. '_DATA']);
-    	$userIdAutoLogin = $autoLogin->getValue('atl_usr_id');    	
+    	$userIdAutoLogin = $autoLogin->getValue('atl_usr_id');
     	
     	// create object of the organization of config file with their preferences
     	if($autoLogin->getValue('atl_org_id') > 0)
@@ -159,7 +159,7 @@ else
         }
         else
         {
-            $gCurrentOrganization = new Organization($gDb, $g_organization);            
+            $gCurrentOrganization = new Organization($gDb, $g_organization);
         }
 	}
 	else
@@ -226,7 +226,7 @@ if($gCurrentSession->getValue('ses_usr_id') > 0)
 {
     if($gCurrentSession->isValidLogin($gCurrentUser->getValue('usr_id')))
     {
-        $gValidLogin = true;    
+        $gValidLogin = true;
     }
     else
     {
@@ -279,7 +279,7 @@ try
 catch(AdmException $e)
 {
     $e->showHtml();
-} 
+}
 
 // set default homepage
 if($gValidLogin)

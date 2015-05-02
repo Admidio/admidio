@@ -45,8 +45,8 @@ $datesResult = $dates->getDataset(0, 10);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // create RSS feed object with channel information
-$rss  = new RSSfeed($gCurrentOrganization->getValue('org_longname'). ' - '. $getHeadline, 
-            $gCurrentOrganization->getValue('org_homepage'), 
+$rss  = new RSSfeed($gCurrentOrganization->getValue('org_longname'). ' - '. $getHeadline,
+            $gCurrentOrganization->getValue('org_homepage'),
             $gL10n->get('DAT_CURRENT_DATES_OF_ORGA', $gCurrentOrganization->getValue('org_longname')),
             $gCurrentOrganization->getValue('org_longname'));
 $date = new TableDate($gDb);
@@ -71,7 +71,7 @@ if($datesResult['numResults'] > 0)
         $title  	 = $title. ' '. $date->getValue('dat_headline');
         $link   	 = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id');
         $author 	 = $row['create_name'];
-        $pubDate 	 = date('r',strtotime($date->getValue('dat_timestamp_create')));
+        $pubDate 	 = date('r', strtotime($date->getValue('dat_timestamp_create')));
     	
     	// add additional informations about the event to the description
     	$descDateTo   = '';

@@ -39,7 +39,7 @@ $new_user = new User($gDb, $gProfileFields, $getNewUserId);
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
 if($gPreferences['system_search_similar'] == 1 && $gDbType == 'mysql')
 {
-    $sql_similar_name = 
+    $sql_similar_name =
     '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $new_user->getValue('LAST_NAME').'\'), 1, 4)
         AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $new_user->getValue('FIRST_NAME').'\'), 1, 4) )
      OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $new_user->getValue('FIRST_NAME').'\'), 1, 4)
@@ -47,7 +47,7 @@ if($gPreferences['system_search_similar'] == 1 && $gDbType == 'mysql')
 }
 else
 {
-    $sql_similar_name = 
+    $sql_similar_name =
     '(  (   last_name.usd_value  LIKE \''. $new_user->getValue('LAST_NAME').'\'
         AND first_name.usd_value LIKE \''. $new_user->getValue('FIRST_NAME').'\')
      OR (   last_name.usd_value  LIKE \''. $new_user->getValue('FIRST_NAME').'\'
@@ -55,7 +55,7 @@ else
 }
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
-$sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name, 
+$sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
                first_name.usd_value as first_name, address.usd_value as address,
                zip_code.usd_value as zip_code, city.usd_value as city,
                email.usd_value as email
@@ -78,7 +78,7 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
           LEFT JOIN '. TBL_USER_DATA. ' as email
             ON email.usd_usr_id = usr_id
            AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
-         WHERE usr_valid = 1 
+         WHERE usr_valid = 1
            AND '.$sql_similar_name;
 $result_usr   = $gDb->query($sql);
 $member_found = $gDb->num_rows($result_usr);
@@ -124,7 +124,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
                 $page->addHtml('<hr />');
             }
             $page->addHtml('<p>
-                <a class="btn" href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row->usr_id.'"><img 
+                <a class="btn" href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row->usr_id.'"><img
                      src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row->first_name.' '.$row->last_name.'</a><br />');
                      
                 if(strlen($row->address) > 0)
@@ -153,7 +153,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
                 // gefundene User ist bereits Mitglied dieser Organisation
                 if(strlen($row->usr_login_name) > 0)
                 {
-                    // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken                    
+                    // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken
                     $page->addHtml('<p>'.$gL10n->get('NWU_USER_VALID_LOGIN'));
                     if($gPreferences['enable_system_mails'] == 1)
                     {
@@ -182,17 +182,17 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
                     // Logindaten sind bereits vorhanden
                     $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP', $gCurrentOrganization->getValue('org_shortname')).'</p>
 
-                    <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'.THEME_PATH.'/icons/new_registrations.png" 
+                    <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'.THEME_PATH.'/icons/new_registrations.png"
                         alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'</button>');
-                }               
+                }
                 else
                 {
                     // KEINE Logindaten vorhanden
                     $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP_NO_LOGIN', $gCurrentOrganization->getValue('org_shortname')).'</p>
                     
-                    <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'. THEME_PATH. '/icons/new_registrations.png" 
+                    <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'. THEME_PATH. '/icons/new_registrations.png"
                         alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'</button>');
-                }               
+                }
             }
             $i++;
         }
@@ -203,7 +203,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
     <div class="panel-body">
         <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER'). '</p>
             
-        <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$urlCreateNewUser.'\'"><img 
+        <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$urlCreateNewUser.'\'"><img
             src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" />'.$gL10n->get('SYS_CREATE_NEW_USER').'</button>
     </div>
 </div>');
