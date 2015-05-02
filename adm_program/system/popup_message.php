@@ -43,7 +43,16 @@ switch ($get_type)
         break;
     case 'cat':
         $url  = 'categories_function.php?cat_id='.$get_database_id.'&mode=2&type='.$get_database_id_2;
-		$text = 'CAT_DELETE_CATEGORY';
+        
+        // get special message for calendars
+        if($get_database_id_2 == 'DAT')
+        {
+            $text = 'SYS_DELETE_ENTRY';
+        }
+        else
+        {
+    		$text = 'CAT_DELETE_CATEGORY';
+        }
         break;
     case 'dat':
         $url = 'dates_function.php?mode=2&dat_id='.$get_database_id;
@@ -140,19 +149,6 @@ switch ($get_type)
         break;
     default:
         $url = '';
-        break;
-}
-
-// get special Message if call from categories.php
-switch ($get_database_id_2)
-{
-    case 'DAT':
-        $text = 'SYS_DELETE_ENTRY';
-        break;
-    case 'ROL':
-        $text = 'SYS_DELETE_ENTRY';
-        break;
-	default:
         break;
 }
 
