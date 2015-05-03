@@ -455,7 +455,7 @@ else
     {
         $PMId2 = $message->countMessageParts() + 1;
 
-        $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '1', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = '".$gCurrentUser->getValue('usr_id')."', msg_usr_id_receiver LIKE '".$postTo[0]."'
+        $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '1', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = '".$gCurrentUser->getValue('usr_id')."', msg_usr_id_receiver = '".$postTo[0]."'
                 WHERE msg_id = ".$getMsgId;
 
         $gDb->query($sql);
