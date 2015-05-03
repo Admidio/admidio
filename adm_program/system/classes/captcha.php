@@ -181,13 +181,12 @@ class Captcha
 
     private function makeCaptcha()
     {
-
         // ein leeres Bild definieren
         $image = imagecreate($this->width, $this->height);
 
         // Hintergrundfarbe setzen...
         $background =  imagecolorallocate($image, $this->backgroundColourR, $this->backgroundColourG, $this->backgroundColourB);
-        ImageFilledRectangle($image, 0, 0, $this->width, $this->height, $background);
+        imagefilledrectangle($image, 0, 0, $this->width, $this->height, $background);
 
         // Gitter in den Hintergrund zeichnen...
         // erst vertikal...
@@ -204,9 +203,7 @@ class Captcha
         }
 
         // Untertitel in das Captcha reinschreiben...
-        ImageTTFText($image, $this->backgroundWritingSize, 0, 15, $this->height-5, imagecolorallocate($image, 0, 0, 0), $this->signature, $this->backgroundWriting);
-
-
+        imagettftext($image, $this->backgroundWritingSize, 0, 15, $this->height-5, imagecolorallocate($image, 0, 0, 0), $this->signature, $this->backgroundWriting);
 
         // Jetzt wird dem Bild der eigentliche CaptchaCode hinzugefuegt...
         $xStartPosition = 15;
@@ -215,16 +212,15 @@ class Captcha
         {
                 $xPosition = intval($xStartPosition + $i * ($this->width / ($this->charCount +1)));
 
-                $text    = substr($this->captchaCode, $i, 1);
-                $color    =  imagecolorallocate($image, $this->backgroundColourR - 125, $this->backgroundColourG - 55, $this->backgroundColourB - 90);
-                ImageTTFText($image, $this->codeSize, 0, $xPosition, 35, $color, $this->font, $text);
+                $text      = substr($this->captchaCode, $i, 1);
+                $color     =  imagecolorallocate($image, $this->backgroundColourR - 125, $this->backgroundColourG - 55, $this->backgroundColourB - 90);
+                imagettftext($image, $this->codeSize, 0, $xPosition, 35, $color, $this->font, $text);
         }
 
         // Jetzt noch das finale Bild ausgeben...
         header('Content-type: image/png');
-        ImagePNG($image);
-        ImageDestroy($image);
-
+        imagepng($image);
+        imagedestroy($image);
     }
 }
 
