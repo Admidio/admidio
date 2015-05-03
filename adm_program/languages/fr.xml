@@ -461,7 +461,7 @@
         <text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="edited">Afficher un aperçu de captcha. S'il vous plaît noter que seules les valeurs enregistrées sont considérées !</text>
         <text id="ORG_CAPTCHA_REGISTRATION" development="new" translation="edited">Après l'activation une image avec un code captcha ou un simple calcul sera affiché pour les nouveaux utilisateurs. Il est nécessaire de remplir le bon code ou le résultat. Le captcha est une partie de solution anti-spam dans Admidio. (par défaut: oui)</text>
         <text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="edited">signature Captcha</text>
-        <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="edited">Sélectionnez la taille de police pour la signature captcha. (par défaut: 9)</text>
+        <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="edited">Sélectionnez la taille de police pour la signature captcha. (par défaut: 11)</text>
         <text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="edited">Remplissez votre signature préférée pour le captcha. Le type de police par défaut du thème courant sera utilisé.</text>
         <text id="ORG_CAPTCHA_SIGNS" development="new" translation="edited">Caractères acceptés</text>
         <text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="edited">Remplissez les caractères acceptés pour le captcha.</text>

@@ -676,7 +676,7 @@
         <text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="edited">Vis eksempel af captcha. Venligst bemærk at kun gemte værdier forbliver gemte!</text>
         <text id="ORG_CAPTCHA_REGISTRATION" development="new" translation="edited">Når aktiveret vil der vises et billede med en captcha kode eller et simpelt regnestykke til nye brugere. Det er nødvendigt at skrive den rigtige kode eller resultatet for at få lov til at gemme det nyligt rettede indlæg. Captcha er en del af anti-spam løsningen i Admidio. (Standard: Ja)</text>
         <text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="edited">Captcha signatur</text>
-        <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="edited">Vælg font størrelse til captcha signaturen. (Standard: 9)</text>
+        <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="edited">Vælg font størrelse til captcha signaturen. (Standard: 11)</text>
         <text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="edited">Udfyld din foretrukne signatur til captcha. Standard fonten i det valgte tema vil blive benyttet.</text>
         <text id="ORG_CAPTCHA_SIGNS" development="new" translation="edited">Accepterede karakterer</text>
         <text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="edited">Udfyld de accepterede karakterer som denne captcha skal anvende.</text>
