@@ -368,7 +368,7 @@ if ($getMsgType == 'EMAIL')
     $emailTemplate = admReadTemplateFile("template.html");
     $emailTemplate = str_replace("#message#", $postBody, $emailTemplate);
 
-	// add sender and receiver to email if template include the variables
+    // add sender and receiver to email if template include the variables
     $emailTemplate = str_replace("#sender#", $postName, $emailTemplate);
     if (strpos($emailTemplate, '#receiver#') == true) 
     {
@@ -435,7 +435,7 @@ else
     // check if receiver of message has valid login
     if(strlen($user->getValue('usr_login_name')) == 0)
     {
-        $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TO')));
     }
 
     // save page in navigation - to have a check for a navigation back.
