@@ -386,7 +386,7 @@ class HtmlTable extends HtmlTableBasic
                 
                 if($gDebug)
                 {
-                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.datatables.js');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.dataTables.js');
                     $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/datatables.bootstrap.js');
                 }
                 else

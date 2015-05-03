@@ -155,7 +155,7 @@ if(isset($result))
         $message = new TableMessage($gDb, $row['msg_id']);
         $key++;
 
-        $messageAdministration = $part1 . $key . '&amp;name=' . $message->getValue('msg_subject') . '&amp;database_id=' . $message->getValue('msg_id') . $part2;
+        $messageAdministration = $part1 . $key . '&amp;name=' . urlencode($message->getValue('msg_subject')) . '&amp;database_id=' . $message->getValue('msg_id') . $part2;
 
         $table->addRowByArray(array('<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') . '">
                 <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email_answer.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />', 
@@ -183,7 +183,7 @@ if(isset($result))
         $message = new TableMessage($gDb, $row['msg_id']);
         $key++;
         
-        $messageAdministration = $part1 . $key . '&amp;name=' . $message->getValue('msg_subject') . '&amp;database_id=' . $message->getValue('msg_id') . $part2;
+        $messageAdministration = $part1 . $key . '&amp;name=' . urlencode($message->getValue('msg_subject')) . '&amp;database_id=' . $message->getValue('msg_id') . $part2;
 
         $table->addRowByArray(array('<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') . '">
                 <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email_answer.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />', 
