@@ -150,7 +150,7 @@ $orga_preferences = array(
     'captcha_height'              => '60',
     'captcha_signs'               => '23456789ABCDEFGHJKLMNPQRSTUVWXYZ',
     'captcha_signature'           => 'POWERED  BY   A D M I D I O . O R G',
-    'captcha_signature_font_size' => '9',
+    'captcha_signature_font_size' => '11',
     'captcha_type'                => 'pic'
  );
 ?>
