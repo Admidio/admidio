@@ -250,7 +250,7 @@ class HtmlForm extends HtmlFormBasic
         $this->openControlStructure('captcha_puzzle', null);
         if($type == 'pic')
         {
-            $this->addHtml('<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&amp;type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />');
+            $this->addHtml('<img src="'.$g_root_path.'/adm_program/system/show_captcha.php?id='.time().'" alt="'.$gL10n->get('SYS_CAPTCHA').'" />');
             $captchaLabel = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
             $captchaDescription = 'SYS_CAPTCHA_DESCRIPTION';
         }

@@ -12,8 +12,8 @@
  * file   : Name of image file that should be shown (without path)
  *
  *****************************************************************************/
+
 require('common.php');
-require('classes/image.php');
 
 // Initialize and check the parameters
 $getModule = admFuncVariableIsValid($_GET, 'module', 'file', array('requireValue' => true, 'directOutput' => true));

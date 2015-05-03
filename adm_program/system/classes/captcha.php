@@ -47,12 +47,6 @@
  *
  *****************************************************************************/
 
-// Nur mit einbinden, falls ein Bildchen erzeugt werden soll (dann gibt es immmer einen Type mit dem Wert 'pic')
- if(array_key_exists('type', $_GET))
-{
-	require_once('../../system/common.php');
-}
-
 class Captcha
 {
     private $font, $signature, $width, $height, $codeSize, $allowedChars;
@@ -232,13 +226,6 @@ class Captcha
         ImageDestroy($image);
 
     }
-}
-
-// Wenn ein Bildchen erzeugt werden soll, wird hier die Klasse initialisiert und die Ausgabe angestossen.
-if(array_key_exists('type', $_GET) && $gPreferences['captcha_type'] == 'pic')
-{
-	$captcha = new Captcha();
-	$captcha->getCaptcha();
 }
 
 ?>

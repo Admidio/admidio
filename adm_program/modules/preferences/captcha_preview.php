@@ -21,14 +21,10 @@ echo '
     {
     	$height = $gPreferences['captcha_height']+25;
     	$width = $gPreferences['captcha_width']+25;
-    	echo '<div style="width: '.$width.'px; height: '.$height.'px">
-    	<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />
-    	';
+    	echo '<img src="'.$g_root_path.'/adm_program/system/show_captcha.php?id='.time().'" alt="'.$gL10n->get('SYS_CAPTCHA').'" />';
     }
     elseif($gPreferences['captcha_type']=='calc')
     {
-    	echo '<div style="width: 450px; height: 50px">
-    		';
     	$captcha = new Captcha();
     	echo $captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'), $gL10n->get('SYS_CAPTCHA_CALC_PART2'), $gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'), $gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'), $gL10n->get('SYS_CAPTCHA_CALC_PART4'));
     	
