@@ -461,8 +461,8 @@ class ProfileFields
             elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DATE')
             {
                 // Datum muss gueltig sein und formatiert werden
-                $date = new DateTimeExtended($fieldValue, $gPreferences['system_date'], 'date');
-                if($date->valid() == false)
+                $date = DateTime::createFromFormat($gPreferences['system_date'], $fieldValue);
+                if($date == false)
                 {
                     if($this->noValueCheck != true)
                     {
@@ -471,7 +471,7 @@ class ProfileFields
                 }
                 else
                 {
-                    $fieldValue = $date->format('Y-m-d');
+                    $fielValue = $date->format('Y-m-d');
                 }
             }
             elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'EMAIL')
