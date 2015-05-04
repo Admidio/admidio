@@ -685,7 +685,7 @@
         <text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="edited">Toon preview van captcha. Let erop dat alleen opgeslagen waarden meegenomen worden!</text>
         <text id="ORG_CAPTCHA_REGISTRATION" development="new" translation="edited">Na activering wordt een afbeelding met captcha code of een simpele rekensom getoond aan nieuwe gebruikers. Het is noodzakelijk dat alles correct wordt ingevuld. Captcha is onderdeel van anti-spam oplossing van Admidio. (standaard: ja)</text>
         <text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="edited">Captcha handtekening</text>
-        <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="edited">Kies font size voor de captcha handtekening. (standaard: 11)</text>
+        <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="edited">Kies font size voor de captcha handtekening. (standaard: 13)</text>
         <text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="edited">Vul handtekening voor de captcha in. Standaard font type van het huidige thema wordt gebruikt.</text>
         <text id="ORG_CAPTCHA_SIGNS" development="new" translation="edited">Geaccepteerde karakters</text>
         <text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="edited">Vul de geaccepteerde karakters in voor de captcha.</text>

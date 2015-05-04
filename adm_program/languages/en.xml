@@ -798,7 +798,7 @@
         <text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="edited">Display preview of the captcha. Please note that only saved values are considered!</text>
         <text id="ORG_CAPTCHA_REGISTRATION" development="new" translation="edited">After activation a picture with a captcha code or a simple calculation will be displayed to new users. It's necessary to fill in the correct code or result to save presently edited entry. The captcha is part of anti-spam solution in Admidio. (default: yes)</text>
         <text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="edited">Captcha signature</text>
-        <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="edited">Select font size for the captcha signature. (default: 11)</text>
+        <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="edited">Select font size for the captcha signature. (default: 13)</text>
         <text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="edited">Fill in your preferred signature for the captcha. Default font type of the current theme will be used.</text>
         <text id="ORG_CAPTCHA_SIGNS" development="new" translation="edited">Accepted characters</text>
         <text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="edited">Fill in the accepted characters for the captcha.</text>
