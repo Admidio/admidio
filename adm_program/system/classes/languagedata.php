@@ -80,9 +80,10 @@ class LanguageData
 		return $this->countries;
 	}
 	
-	/** Returns the ISO code of the language of this object. 
-	 *  @param $referenceLanguage If set to @b true than the ISO code of the reference language will returned.
-	 *  @return Returns the ISO code of the language of this object or the reference language.
+	/** Returns the language code of the language of this object. This is the code that is set within
+     *  Admidio with some specials like de_sie. If you only want the ISO code then call getLanguageIsoCode().
+	 *  @param $referenceLanguage If set to @b true than the language code of the reference language will returned.
+	 *  @return Returns the language code of the language of this object or the reference language.
 	 */
     public function getLanguage($referenceLanguage = false)
     {

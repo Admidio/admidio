@@ -362,7 +362,7 @@ class HtmlTable extends HtmlTableBasic
 	 */
     public function show($directOutput = true)
     {
-        global $g_root_path, $gDebug;
+        global $g_root_path, $gDebug, $gPreferences, $gL10n;
 
         if($this->rowCount == 0)
         {
@@ -388,12 +388,16 @@ class HtmlTable extends HtmlTableBasic
                 {
                     $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.dataTables.js');
                     $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/datatables.bootstrap.js');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/moment/moment.js');
                 }
                 else
                 {
                     $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.datatables.min.js');                    
                     $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/datatables.bootstrap.min.js');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/moment/moment.min.js');
                 }
+                
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/moment/datetime-moment.js');
                 $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/datatables/css/datatables.bootstrap.css');
 
                 if($this->rowCount > 10)
@@ -448,6 +452,9 @@ class HtmlTable extends HtmlTableBasic
                 }
                 
                 $this->htmlPage->addJavascript('
+                    $.fn.dataTable.moment(formatPhpToMoment("'.$gPreferences['system_date'].'"));
+                    $.fn.dataTable.moment(formatPhpToMoment("'.$gPreferences['system_date'].' '.$gPreferences['system_time'].'"));
+                    
                     var table = $("#'.$this->id.'").DataTable( {'.
                         implode(',', $this->datatablesInitParameters).
                         $javascriptGroup.'
