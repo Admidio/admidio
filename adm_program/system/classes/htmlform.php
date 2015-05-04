@@ -1487,7 +1487,29 @@ class HtmlForm extends HtmlFormBasic
             if(is_array($helpTextId))
             {
                 // if text is a translation-id then translate it
-                if(strpos($helpTextId[1], '_') == 3)
+                if(isset($helpTextId[2]) && strpos($helpTextId[2], '_') == 3)
+                {
+                    if(strpos($helpTextId[1], '_') == 3)
+                    {
+                        $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId[0], $gL10n->get($helpTextId[1]), $gL10n->get($helpTextId[2])).'</div>');
+                    }
+                    else
+                    {
+                        $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId[0], $helpTextId[1], $gL10n->get($helpTextId[2])).'</div>');
+                    }
+                }
+                elseif(isset($helpTextId[2]))
+                {
+                    if(strpos($helpTextId[1], '_') == 3)
+                    {
+                        $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId[0], $gL10n->get($helpTextId[1]), $helpTextId[2]).'</div>');
+                    }
+                    else
+                    {
+                        $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId[0], $helpTextId[1], $helpTextId[2]).'</div>');
+                    }
+                }
+                elseif(strpos($helpTextId[1], '_') == 3)
                 {
                     $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId[0], $gL10n->get($helpTextId[1])).'</div>');
                 }
