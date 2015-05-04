@@ -6,11 +6,11 @@
  *  This function is developed, to  read the participants and leaders of dates from database.
  *  Participants and leaders can be counted or be written in an array with surname, firstname and leader-status.
  *  Also the limit of participation can to be calculated.
- *  This class is flexible in usage. It is possible to pass the paramter of the rolId when creating an instance 
+ *  This class is flexible in usage. It is possible to pass the paramter of the rolId when creating an instance
  *  of this object. The Id will be checked and stored in the object. So no parameters are required when calling
  *  a function.
  *  Second possibility is to pass the Id to a function of this object. The stored value in current object will be overwritten.
- *  This is recommended looping an array, for example, with various Id´s. 
+ *  This is recommended looping an array, for example, with various IdÂ´s.
  */
  /******************************************************************************
  *
@@ -27,8 +27,8 @@ class Participants
     private $leader;                ///< The number of leaders of the date in the current object
     private $count;                 ///< Counter of participants of the date in current object.
     private $order;                 ///< SQL order of results. Parameter 'ASC'/'DESC' (Deafault: 'ASC')
-    public  $memberDate;            ///< Array with surname, firstname of all participants of the date in current object.
-    public 	$mDb;				    ///< db object must public because of session handling
+    public $memberDate;             ///< Array with surname, firstname of all participants of the date in current object.
+    public $mDb;				    ///< db object must public because of session handling
 
     /** constructor that will initialize variables and check if $rolId is numeric
      *  else @b FALSE will be returned.
@@ -58,7 +58,7 @@ class Participants
             || is_numeric($rolId)
             && $this->rolId == 0
             && $this->rolId != $rolId)
-        {    
+        {
             $this->rolId = $rolId;
             return true;
         }
@@ -68,7 +68,7 @@ class Participants
             return false;
         }
     }
-    
+
     /**
      *  Initialize all parameters of the object
      */
@@ -78,7 +78,7 @@ class Participants
         $this->leader     =  -1;
         $this->rolId      =  -1;
         $this->order      =  '';
-        $this->memberDate =  ''; 
+        $this->memberDate =  '';
     }
 
     /**
@@ -86,9 +86,9 @@ class Participants
      *  @return Returns the result of counted participants as numeric value in current object. Leaders are not counted!
      */
     public function getCount($rolId = 0)
-    {   
+    {
         if($rolId != 0)
-        { 
+        {
             $this->clear();
             $this->checkId($rolId);
         }
@@ -100,7 +100,7 @@ class Participants
 
         $result = $this->mDb->query($sql);
 
-        // Write all member Id´s and leader status in an array
+        // Write all member IdÂ´s and leader status in an array
         $numParticipants = array();
 
         while ($row = $this->mDb->fetch_array($result))

@@ -124,16 +124,16 @@
 
 abstract class HtmlElement {
 
-    protected   $arrParentElements;             ///< Array with opened child elements 
-    protected   $currentElement;                ///< Internal pointer showing to actual element or child element
-    protected   $currentElementAttributes;      ///< Attributes of the current element
-    protected   $currentElementDataWritten;     ///< Flag if an element is added but the data is not added
-    protected   $htmlString;                    ///< String with prepared html
-    protected   $mainElement;                   ///< String with main element as string
-    protected   $mainElementAttributes;         ///< String with attributes of the main element
-    protected   $nesting;                       ///< Flag enables nesting of main elements, e.g div blocks ( Default : false )
-    protected   $parentFlag;                    ///< Flag for setted parent Element
-    protected   $mainElementWritten;            ///< Flag if the main element was written in the html string
+    protected $arrParentElements;             ///< Array with opened child elements 
+    protected $currentElement;                ///< Internal pointer showing to actual element or child element
+    protected $currentElementAttributes;      ///< Attributes of the current element
+    protected $currentElementDataWritten;     ///< Flag if an element is added but the data is not added
+    protected $htmlString;                    ///< String with prepared html
+    protected $mainElement;                   ///< String with main element as string
+    protected $mainElementAttributes;         ///< String with attributes of the main element
+    protected $nesting;                       ///< Flag enables nesting of main elements, e.g div blocks ( Default : false )
+    protected $parentFlag;                    ///< Flag for setted parent Element
+    protected $mainElementWritten;            ///< Flag if the main element was written in the html string
     
     /**
      * Constructor initializing all class variables

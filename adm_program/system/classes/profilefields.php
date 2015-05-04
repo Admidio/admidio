@@ -19,13 +19,13 @@
 
 class ProfileFields
 {
-    public    $mProfileFields = array();///< Array with all user fields objects
-    public    $mUserData = array();		///< Array with all user data objects
+    public $mProfileFields = array();   ///< Array with all user fields objects
+    public $mUserData = array();		///< Array with all user data objects
 
 	protected $mUserId;					///< UserId of the current user of this object
-	public 	  $mDb;						///< db object must public because of session handling
+	public $mDb;						///< db object must public because of session handling
     protected $noValueCheck;    		///< if true, than no value will be checked if method setValue is called
-    public    $columnsValueChanged;     ///< flag if a value of one field had changed
+    public $columnsValueChanged;        ///< flag if a value of one field had changed
 
 	/** constructor that will initialize variables and read the profile field structure
 	 *  @param $db Database object (should be @b $gDb)

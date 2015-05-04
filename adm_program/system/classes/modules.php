@@ -4,11 +4,11 @@
  *  @brief  This @b abstract @b class defines a parameter set for modules
  *
  *  This abstract class sets the parameters used in Admidio modules.
- *  The class gets a copy of the $_GET Array and validates the values 
+ *  The class gets a copy of the $_GET Array and validates the values
  *  with Admidio function admFuncVariableIsValid();
  *  Values are set to default if no parameters are submitted.
  *  The class also defines a daterange and returns the daterange as array with English format and current System format.
- *  If no values are available the daterange is set by default: date_from = DATE_NOW; date_to = 9999-12-31 
+ *  If no values are available the daterange is set by default: date_from = DATE_NOW; date_to = 9999-12-31
  *  The class provides methods to return all single Variables and arrays or returns an Array with all setted parameters
  *  The returned array contains following settings:
  *  @par Return parameter array:
@@ -27,7 +27,7 @@
  *                                          [english] (date_from => 'string', date_to => 'string'),
  *                                          [sytem] (date_from => 'string', date_to => 'string'))
  *                                       );
- *  @endcode                               
+ *  @endcode
  */
 /*****************************************************************************
  *
@@ -37,13 +37,13 @@
  *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
- 
+
 abstract class Modules
 {
     const HEADLINE = '';            ///< Constant for language parameter set in modul classes
-    
+
     protected $activeRole;          ///< Boolean 0/1 for active role
-    public    $arrParameter;        ///< Array with validated parameters 
+    public $arrParameter;           ///< Array with validated parameters
     protected $headline;            ///< String with headline expression
     protected $catId;               ///< ID as integer for choosen category
     protected $id;                  ///< ID as integer to choose record
@@ -54,17 +54,17 @@ abstract class Modules
     protected $properties;          ///< Array Clone of $_GET Array
     protected $validModes;          ///< Array with valid modes ( Deafault: "Default" )
     protected $parameters;          ///< Array with all parameters of the module that were added to this class.
-    
+
     abstract public function getDataSet($startElement=0, $limit=NULL);
     abstract public function getDataSetCount();
-    
+
     /** Constuctor that will create an object of a parameter set needed in modules to get the recordsets.
      *  Initialize parameters
      */
     public function __construct()
     {
         $parameters = array();
-    
+
         $this->activeRole           = '';
         $this->arrParameters        = array();
         $this->catId                = 0;
@@ -76,7 +76,7 @@ abstract class Modules
         $this->properties           = $_GET;
         $this->start                = '';
         $this->validModes           = array('Default');
-        
+
         // Set parameters
         $this->setActiveRole();
         $this->setCatId();
@@ -85,7 +85,7 @@ abstract class Modules
         $this->setOrder();
         $this->setStartElement();
     }
-    
+
     /**
      *  Return boolean for active role
      *  @return Returns boolean for active role
@@ -94,16 +94,16 @@ abstract class Modules
     {
         return $this->activeRole;
     }
-    
+
     /**
      *  Return category ID
-     *  @return Returns the category ID 
+     *  @return Returns the category ID
      */
     public function getCatId()
     {
         return $this->catId;
     }
-    
+
     /**
      *  Return the daterange
      *  @return Returns daterange as array with English format and system format
@@ -112,7 +112,7 @@ abstract class Modules
     {
         return $this->daterange;
     }
-    
+
     /**
      *  Return ID
      *  @return Returns the ID of the record
@@ -121,7 +121,7 @@ abstract class Modules
     {
         return $this->id;
     }
-    
+
     /**
      *  Return mode
      *  @return Returns mode as string
@@ -130,7 +130,7 @@ abstract class Modules
     {
         return $this->mode;
     }
-    
+
     /**
      *  Return mode
      *  @return Returns order as string
@@ -139,10 +139,10 @@ abstract class Modules
     {
         return $this->order;
     }
-    
+
     /** Returns a module parameter from the class
-     *  @param $parameterName  The name of the parameter whose value should be returned. 
-     *  @return Returns the parameter value of the 
+     *  @param $parameterName  The name of the parameter whose value should be returned.
+     *  @return Returns the parameter value of the
      */
     public function getParameter($parameterName)
     {
@@ -151,9 +151,9 @@ abstract class Modules
             return $this->parameters[$parameterName];
         }
         return null;
-    }    
+    }
 
-    
+
     /**
      *  Return start element
      *  @return Returns Integer value for the start element
@@ -162,13 +162,13 @@ abstract class Modules
     {
         return $this->start;
     }
-    
+
     /**
      *  Return parameter set as Array
-     *  @return Returns an Array with all needed parameters as Key/Value pair 
+     *  @return Returns an Array with all needed parameters as Key/Value pair
      */
     public function getParameters()
-    {    
+    {
         // Set Array
         $this->arrParameter['active_role']          = $this->activeRole;
         $this->arrParameter['cat_id']               = $this->catId;
@@ -180,7 +180,7 @@ abstract class Modules
         $this->arrParameter['startelement']         = $this->start;
         return $this->arrParameter;
     }
-    
+
     /**
      *  Set active role
      *
@@ -190,7 +190,7 @@ abstract class Modules
     {
         $this->activeRole = admFuncVariableIsValid($this->properties, 'active_role', 'boolean', array('defaultValue' => 1));
     }
-     
+
     /**
      *  Set category ID
      *
@@ -202,7 +202,7 @@ abstract class Modules
         // check optional user parameter and make secure. Otherwise set default value
         //$this->catId = admFuncVariableIsValid($this->properties, 'cat_id', 'numeric', 0);
     }
-    
+
     /**
      *  Set ID
      */
@@ -211,10 +211,10 @@ abstract class Modules
         // check optional user parameter and make secure. Otherwise set default value
         $this->id = admFuncVariableIsValid($this->properties, 'id', 'numeric');
     }
-    
+
     /**
-     *  Set mode 
-     * 
+     *  Set mode
+     *
      *  @par If user string is set in $_GET Array the string is validated by Admidio function and set as mode in the modules. Otherwise mode is set to default
      */
     protected function setMode()
@@ -222,7 +222,7 @@ abstract class Modules
         // check optional user parameter and make secure. Otherwise set default value
         //$this->mode = admFuncVariableIsValid($this->properties, 'mode', 'string', $this->validModes[0], false, $this->validModes);
     }
-    
+
     /**
      *  Set order
      *
@@ -232,18 +232,18 @@ abstract class Modules
     {
         // check optional user parameter and make secure. Otherwise set default value
         $this->order = admFuncVariableIsValid($this->properties, 'order', 'string', array('defaultValue' => 'ASC', 'validValues' => array('ASC', 'DESC')));
-    }    
-    
+    }
+
     /** add a module parameter to the class
-     *  @param $parameterName  The name of the parameter that should be added. 
-     *  @param $parameterValue The value of the parameter that should be added. 
+     *  @param $parameterName  The name of the parameter that should be added.
+     *  @param $parameterValue The value of the parameter that should be added.
      */
     public function setParameter($parameterName, $parameterValue)
     {
         if(strlen($parameterName) > 0)
         {
             $this->parameters[$parameterName] = $parameterValue;
-            
+
             if($parameterName == 'cat_id')
             {
                 $this->catId = $parameterValue;
@@ -254,7 +254,7 @@ abstract class Modules
             }
         }
     }
-    
+
     /**
      *  Set startelement
      *

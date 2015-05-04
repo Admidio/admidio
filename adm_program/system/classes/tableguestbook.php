@@ -79,7 +79,7 @@ class TableGuestbook extends TableAccess
     }
     
     // guestbook entry will be published, if moderate mode is set
-    function moderate()
+    public function moderate()
     {
         // unlock entry
         $this->setValue('gbo_locked', '0');

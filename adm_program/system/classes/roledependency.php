@@ -10,18 +10,18 @@
 
 class RoleDependency
 {
-    var $db;
+    public $db;
 
-    var $roleIdParent;
-    var $roleIdChild;
-    var $comment;
-    var $usr_id;
-    var $timestamp;
+    public $roleIdParent;
+    public $roleIdChild;
+    public $comment;
+    public $usr_id;
+    public $timestamp;
 
-    var $roleIdParentOrig;
-    var $roleIdChildOrig;
+    public $roleIdParentOrig;
+    public $roleIdChildOrig;
 
-    var $persisted;
+    public $persisted;
 
 
     // Konstruktor
@@ -34,11 +34,11 @@ class RoleDependency
     // alle Klassenvariablen wieder zuruecksetzen
     public function clear()
     {
-        $this->roleIdParent      = 0;
-        $this->roleIdChild       = 0;
-        $this->comment             = '';
-        $this->usr_id              = 0;
-        $this->timestamp           = '';
+        $this->roleIdParent     = 0;
+        $this->roleIdChild      = 0;
+        $this->comment          = '';
+        $this->usr_id           = 0;
+        $this->timestamp        = '';
 
         $this->roleIdParentOrig = 0;
         $this->roleIdChildOrig  = 0;
@@ -92,8 +92,8 @@ class RoleDependency
             $this->clear();
         }
     }
-    
-    static public function getChildRoles(&$db, $parentId)
+
+    public static function getChildRoles(&$db, $parentId)
     {
         $allChildIds = array();
 
@@ -114,8 +114,8 @@ class RoleDependency
         }
         return $allChildIds;
     }
- 
-    static public function getParentRoles(&$db, $childId)
+
+    public static function getParentRoles(&$db, $childId)
     {
         $allParentIds = array();
 
@@ -136,12 +136,12 @@ class RoleDependency
         }
         return $allParentIds;
     }
- 
+
     public function insert($login_user_id)
     {
         if(!$this->isEmpty() && $login_user_id > 0 && is_numeric($login_user_id))
         {
-            $sql = 'INSERT INTO '. TBL_ROLE_DEPENDENCIES. ' 
+            $sql = 'INSERT INTO '. TBL_ROLE_DEPENDENCIES. '
                                 (rld_rol_id_parent,rld_rol_id_child,rld_comment,rld_usr_id,rld_timestamp)
                          VALUES ('.$this->roleIdParent.', '.$this->roleIdChild.', \''.$this->comment.'\', '.$login_user_id.', \''.DATETIME_NOW.'\') ';
             $this->db->query($sql);
@@ -163,7 +163,7 @@ class RoleDependency
         }
     }
 
-    static public function removeChildRoles(&$db, $parentId)
+    public static function removeChildRoles(&$db, $parentId)
     {
         if($parentId > 0 && is_numeric($parentId))
         {
@@ -199,7 +199,7 @@ class RoleDependency
         }
         return -1;
     }
-    
+
     // Es muss die ID des eingeloggten Users uebergeben werden,
     // damit die Aenderung protokolliert werden kann
     public function update($login_user_id)

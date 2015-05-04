@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*****************************************************************************/
 /** @class TableAccess
  *  @brief Controls read and write access to datbase tables
@@ -7,7 +7,7 @@
  *  You create an object for a special table and than you are able to read
  *  a special record, manipulate him and write him back. Also new records can
  *  be created with this class. The advantage of this class is that you are
- *  independent from SQL. You can use @c getValue, @c setValue, @c readData 
+ *  independent from SQL. You can use @c getValue, @c setValue, @c readData
  *  and @c save to handle the record.
  *  @par Examples
  *  @code // create an object for table adm_roles of role 4711
@@ -30,18 +30,18 @@
 
 class TableAccess
 {
-	private   $additionalTables;	///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
+	private $additionalTables;	    ///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
     protected $tableName;			///< Name of the database table of this object. This must be the table name with the installation specific praefix e.g. @b demo_users
     protected $columnPraefix;		///< The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
     protected $keyColumnName;		///< Name of the unique autoincrement index column of the database table
-    public    $db;					///< Database object to handle the communication with the database. This must be public because of session handling.
-    
+    public $db;					    ///< Database object to handle the communication with the database. This must be public because of session handling.
+
     protected $new_record;          // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
     protected $columnsValueChanged; ///< Flag will be set to true if data in array dbColumns was changed
     public $dbColumns = array();    // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
     public $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
-    
-	/** Constuctor that will create an object of a recordset of the specified table. 
+
+	/** Constuctor that will create an object of a recordset of the specified table.
 	 *  If the id is set than this recordset will be loaded.
 	 *  @param $db 				Object of the class database. This should be the default object @b $gDb.
 	 *  @param $tableName 		The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
@@ -55,7 +55,7 @@ class TableAccess
         $this->columnPraefix = $columnPraefix;
 
         // if a id is commited, then read data out of database
-        if((is_numeric($id) == false && strlen($id) > 0) 
+        if((is_numeric($id) == false && strlen($id) > 0)
         || (is_numeric($id) == true  && $id > 0))
         {
             $this->readDataById($id);
@@ -65,7 +65,7 @@ class TableAccess
             $this->clear();
         }
     }
-    
+
     /** Initializes all class parameters and deletes all read data.
 	 *  Also the database structure of the assiciated table will be
 	 *  read and stored in the arrays @b dbColumns and @b columnsInfos
@@ -91,7 +91,7 @@ class TableAccess
         {
             // alle Spalten der Tabelle ins Array einlesen und auf leer setzen
 			$columnProperties = $this->db->showColumns($this->tableName);
-			
+
 			foreach($columnProperties as $key => $value)
 			{
                 $this->dbColumns[$key] = '';
@@ -100,7 +100,7 @@ class TableAccess
                 $this->columnsInfos[$key]['null']    = $value['null'];
                 $this->columnsInfos[$key]['key']     = $value['key'];
                 $this->columnsInfos[$key]['serial']  = $value['serial'];
-                
+
                 if($value['serial'] == 1)
                 {
                     $this->keyColumnName = $key;
@@ -109,7 +109,7 @@ class TableAccess
         }
     }
 
-	/** Adds a table with the connected fields to a member array. This table will be add to the 
+	/** Adds a table with the connected fields to a member array. This table will be add to the
 	 *  select statement if data is read and the connected record is avaiable in this class.
 	 *  The connected table must have a foreign key in the class table.
 	 *  @param $table 						Database table name that should be connected. This can be the define of the table.
@@ -125,11 +125,11 @@ class TableAccess
 	 */
 	protected function connectAdditionalTable($table, $columnNameAdditionalTable, $columnNameClassTable)
 	{
-		$this->additionalTables[] = array('table' => $table, 
-										  'columnNameAdditionalTable' => $columnNameAdditionalTable, 
+		$this->additionalTables[] = array('table' => $table,
+										  'columnNameAdditionalTable' => $columnNameAdditionalTable,
 										  'columnNameClassTable' => $columnNameClassTable);
 	}
-    
+
 	/** Reads the number of all records of this table
 	 *  @return Number of records of this table
 	 */
@@ -148,7 +148,7 @@ class TableAccess
     {
 		if(strlen($this->dbColumns[$this->keyColumnName]) > 0)
 		{
-			$sql    = 'DELETE FROM '.$this->tableName.' 
+			$sql    = 'DELETE FROM '.$this->tableName.'
 						WHERE '.$this->keyColumnName.' = \''. $this->dbColumns[$this->keyColumnName]. '\'';
 			$this->db->query($sql);
 		}
@@ -164,12 +164,12 @@ class TableAccess
      *                 		For text columns the format can be @b database that would return the original database value without any transformations
      *  @return Returns the value of the database column.
      *          If the value was manipulated before with @b setValue than the manipulated value is returned.
-     */ 
+     */
     public function getValue($columnName, $format = '')
     {
         global $gPreferences;
         $columnValue = '';
-        
+
         if(isset($this->dbColumns[$columnName]))
         {
             // wenn Schluesselfeld leer ist, dann 0 zurueckgeben
@@ -240,17 +240,17 @@ class TableAccess
             return $columnValue;
         }
     }
-    
+
     /** If a column of the row in this object has changed throw setValue then this method
      *  will return @b true otherwise @false
-     *  @return Returns @b true if at least one value of one column has changed 
+     *  @return Returns @b true if at least one value of one column has changed
      *          after the recordset was loaded otherwise @b false
      */
     public function hasColumnsValueChanged()
     {
         return $this->columnsValueChanged;
     }
-	
+
 	/** If the recordset is new and wasn't read from database or was not stored in database
 	 *  then this method will return true otherwise false
 	 *  @return Returns @b true if record is not stored in database
@@ -280,23 +280,23 @@ class TableAccess
 			}
 		}
 
-		// if condition starts with AND then remove this 
+		// if condition starts with AND then remove this
 		if(strpos(strtoupper($sqlWhereCondition), 'AND') < 2)
 		{
 			$sqlWhereCondition = substr($sqlWhereCondition, 4);
 		}
-        
+
         if(strlen($sqlWhereCondition) > 0)
         {
             $sql = 'SELECT * FROM '.$this->tableName.$sqlAdditionalTables.'
                      WHERE '.$sqlWhereCondition;
             $result = $this->db->query($sql);
-    
-			if($this->db->num_rows($result) == 1)			
+
+			if($this->db->num_rows($result) == 1)
 			{
 				$row = $this->db->fetch_array($result, 'ASSOC');
 				$this->new_record = false;
-				
+
 				// Daten in das Klassenarray schieben
 				foreach($row as $key => $value)
 				{
@@ -318,7 +318,7 @@ class TableAccess
         }
         return false;
     }
-	
+
 	/** Reads a record out of the table in database selected by the unique id column in the table.
 	 *  Per default all columns of the default table will be read and stored in the object.
 	 *  @param $id Unique id of id column of the table.
@@ -333,16 +333,16 @@ class TableAccess
         if(strlen($id) > 0 && $id != '0')
         {
             $sqlWhereCondition = ' AND '.$this->keyColumnName.' = \''.$id.'\' ';
-		
+
 			// call method to read data out of database
 			return $this->readData($sqlWhereCondition);
         }
 		return false;
 	}
-	
+
 	/** Reads a record out of the table in database selected by different columns in the table.
 	 *  The columns are commited with an array where every element index is the column name and the value is the column value.
-	 *  The columns and values must be selected so that they identify only one record. 
+	 *  The columns and values must be selected so that they identify only one record.
 	 *  If the sql will find more than one record the method returns @b false.
 	 *  Per default all columns of the default table will be read and stored in the object.
 	 *  @param $columnArray An array where every element index is the column name and the value is the column value
@@ -367,23 +367,23 @@ class TableAccess
 			{
 				$sqlWhereCondition .= ' AND '.$columnName.' = \''.$columnValue.'\' ';
 			}
-		
+
 			// call method to read data out of database
 			$returnCode = $this->readData($sqlWhereCondition);
-			
+
 			// save the array fields in the object
 			if($returnCode == false)
 			{
 				foreach($columnArray as $columnName => $columnValue)
 				{
 					$this->setValue($columnName, $columnValue);
-				}				
+				}
 			}
         }
 		return $returnCode;
 	}
-    
-	/** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 
+
+	/** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
 	 *  a new record or if only an update is neccessary. The update statement will only update
 	 *  the changed columns. If the table has columns for creator or editor than these column
 	 *  with their timestamp will be updated.
@@ -395,13 +395,13 @@ class TableAccess
         if($this->columnsValueChanged || strlen($this->dbColumns[$this->keyColumnName]) == 0)
         {
             // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
-            $item_connection = '';                
+            $item_connection = '';
             $sql_field_list  = '';
             $sql_value_list  = '';
 
             if($updateFingerPrint)
             {
-                // besitzt die Tabelle Felder zum Speichern des Erstellers und der letzten Aenderung, 
+                // besitzt die Tabelle Felder zum Speichern des Erstellers und der letzten Aenderung,
                 // dann diese hier automatisiert fuellen
                 if($this->new_record && isset($this->dbColumns[$this->columnPraefix.'_usr_id_create']))
                 {
@@ -422,13 +422,13 @@ class TableAccess
                 }
             }
 
-            // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
+            // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen
             foreach($this->dbColumns as $key => $value)
             {
                 // Auto-Increment-Felder duerfen nicht im Insert/Update erscheinen
                 // Felder anderer Tabellen auch nicht
                 if(strpos($key, $this->columnPraefix. '_') === 0
-                && $this->columnsInfos[$key]['serial'] == 0) 
+                && $this->columnsInfos[$key]['serial'] == 0)
                 {
                     if($this->columnsInfos[$key]['changed'] == true)
                     {
@@ -446,7 +446,7 @@ class TableAccess
                                 }
                                 else
                                 {
-                                    // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen, 
+                                    // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen,
                                     // damit sie auf jeden Fall da sind
                                     $value = stripslashes($value);
                                     $value = addslashes($value);
@@ -469,7 +469,7 @@ class TableAccess
                             }
                             else
                             {
-                                // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen, 
+                                // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen,
                                 // damit sie auf jeden Fall da sind
                                 $value = stripslashes($value);
                                 $value = addslashes($value);
@@ -498,11 +498,11 @@ class TableAccess
             }
             else
             {
-                $sql = 'UPDATE '.$this->tableName.' SET '.$sql_field_list.' 
+                $sql = 'UPDATE '.$this->tableName.' SET '.$sql_field_list.'
                          WHERE '.$this->keyColumnName.' = \''. $this->dbColumns[$this->keyColumnName]. '\'';
                 $this->db->query($sql);
             }
-            
+
             $this->columnsValueChanged = false;
             return true;
         }
@@ -516,14 +516,14 @@ class TableAccess
 	 *  table and want to use an table object for each recordset. So you don't have to do an
 	 *  separate sql read for each record. This is a performant way to fill the object with
 	 *  the neccessary data.
-	 *  @param $fieldArray An array with all fields and their values of the table. If the 
+	 *  @param $fieldArray An array with all fields and their values of the table. If the
 	 *   	   object has more connected tables than you should add the fields of these tables, too.
 	 *  @par Examples
 	 *  @code   // read all announcements with their categories
 	 *  $sql = 'SELECT * FROM adm_announcements, adm_categories WHERE ann_cat_id = cat_id';
 	 *  $result = $gDb->query($sql);
 	 *  $announcement = new TableAnnouncements($gDb);
-	 *  
+	 *
 	 *  while ($row = $gDb->fetch_array(result))
      *  {
 	 *      // add each recordset to an object without a separate sql within the object
@@ -546,9 +546,9 @@ class TableAccess
      *  The value is only saved in the object. You must call the method @b save to store the new value to the database
      *  @param $columnName	The name of the database column whose value should get a new value
      *  @param $newValue 	The new value that should be stored in the database field
-     *  @param $checkValue 	The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @param $checkValue 	The value will be checked if it's valid. If set to @b false than the value will not be checked.
      *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
-     */ 
+     */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         $return_code = false;
@@ -574,7 +574,7 @@ class TableAccess
                         $newValue = '';
                     }
                 }
-                
+
                 // Strings
                 elseif(strpos($this->columnsInfos[$columnName]['type'], 'char') !== false
                 ||     strpos($this->columnsInfos[$columnName]['type'], 'text') !== false)
@@ -615,6 +615,6 @@ class TableAccess
             }
         }
         return $return_code;
-    } 
+    }
 }
 ?>

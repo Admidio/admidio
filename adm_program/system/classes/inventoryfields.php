@@ -19,13 +19,13 @@
 
 class InventoryFields
 {
-    public    $mInventoryFields = array();	///< Array with all inventory fields objects
-    public    $mInventoryData = array();	///< Array with all inventory data objects
+    public $mInventoryFields = array();	///< Array with all inventory fields objects
+    public $mInventoryData = array();	///< Array with all inventory data objects
 
 	protected $mItemId;			        ///< ItemId of the current item of this object
-	public 	  $mDb;						///< db object must public because of session handling
+	public $mDb;						///< db object must public because of session handling
     protected $noValueCheck;    		///< if true, than no value will be checked if method setValue is called
-    public    $columnsValueChanged;     ///< flag if a value of one field had changed
+    public $columnsValueChanged;        ///< flag if a value of one field had changed
 
 	/** constructor that will initialize variables and read the inventory field structure
 	 *  @param $db Database object (should be @b $gDb)

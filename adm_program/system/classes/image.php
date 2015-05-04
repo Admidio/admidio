@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * 
+ *
  * Folgende Methoden stehen zur Verfuegung:
  *
  * setImageFromPath($pathAndFilename)
@@ -14,7 +14,7 @@
  *                  - liest das Bild aus einem String ein und wird intern als PNG-Bild
  *                    weiter verarbeitet und ausgegeben
  * copyToFile($imageResource = null, $pathAndFilename = "", $quality = 95)
- *                  - kopiert die uebergebene Bildresource in die uebergebene Datei bzw. der 
+ *                  - kopiert die uebergebene Bildresource in die uebergebene Datei bzw. der
  *                    hinterlegten Datei des Objekts
  * copyToBrowser($imageResource = null, $quality = 95)
  *                  - gibt das Bild direkt aus, so dass es im Browser dargestellt werden kann
@@ -32,11 +32,11 @@
 class Image
 {
     private $imagePath;
-    private $imageType     = null;
-    public  $imageResource = false;
-    public  $imageWidth    = 0;
-    public  $imageHeight   = 0;
-    
+    private $imageType    = null;
+    public $imageResource = false;
+    public $imageWidth    = 0;
+    public $imageHeight   = 0;
+
     public function __construct($pathAndFilename = '')
     {
         if(strlen($pathAndFilename) > 0)
@@ -71,7 +71,7 @@ class Image
     {
         $this->imageResource = imagecreatefromstring($imageData);
         if($this->imageResource !== false)
-        {        
+        {
             $this->imageWidth    = imagesx($this->imageResource);
             $this->imageHeight   = imagesy($this->imageResource);
             $this->imageType     = IMAGETYPE_PNG;
@@ -81,8 +81,8 @@ class Image
         {
             return false;
         }
-    } 
-    
+    }
+
     private function createResource($pathAndFilename)
     {
         switch ($this->imageType)
@@ -95,15 +95,15 @@ class Image
                 $this->imageResource = imagecreatefrompng($pathAndFilename);
                 break;
         }
-        
+
         if($this->imageResource !== false)
         {
             return true;
         }
-        return false;      
+        return false;
     }
-    
-    // Methode kopiert die uebergebene Bildresource in die uebergebene Datei bzw. der 
+
+    // Methode kopiert die uebergebene Bildresource in die uebergebene Datei bzw. der
     // hinterlegten Datei des Objekts
     // Optional: - eine andere Bild-Resource kann uebergeben werden
     //           - ein andere Datei kann zur Ausgabe angegeben werden
@@ -112,7 +112,7 @@ class Image
     public function copyToFile($imageResource = null, $pathAndFilename = '', $quality = 95)
     {
         $returnValue = false;
-        
+
         if(strlen($pathAndFilename) == 0)
         {
             $pathAndFilename = $this->imagePath;
@@ -121,7 +121,7 @@ class Image
         {
             $imageResource = $this->imageResource;
         }
-        
+
         switch ($this->imageType)
         {
             case IMAGETYPE_JPEG:
@@ -132,10 +132,10 @@ class Image
                 $returnValue = imagepng($imageResource, $pathAndFilename);
                 break;
         }
-        
+
         return $returnValue;
     }
-    
+
     // Methode gibt das Bild direkt aus, so dass es im Browser dargestellt werden kann
     // Optional: - eine andere Bild-Resource kann uebergeben werden
     //           - die Qualitaet kann fuer jpeg-Dateien veraendert werden
@@ -145,7 +145,7 @@ class Image
         {
             $imageResource = $this->imageResource;
         }
-        
+
         switch ($this->imageType)
         {
             case IMAGETYPE_JPEG:
@@ -156,8 +156,8 @@ class Image
                 echo imagepng($imageResource);
                 break;
         }
-    }     
-    
+    }
+
     // gibt den Mime-Type (image/png) des Bildes zurueck
     public function getMimeType()
     {
@@ -212,14 +212,14 @@ class Image
             imagedestroy($photo_rotate);
         }
     }
-    
+
     // Methode skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
     // die andere Seite wird dann entsprechend dem Seitenverhaeltnis zurueckgerechnet
     public function scaleLargerSide($newMaxSize)
     {
         // Errechnung Seitenverhaeltnis
         $seitenverhaeltnis = $this->imageWidth / $this->imageHeight;
-            
+
         if($this->imageWidth >= $this->imageHeight)
         {
             // x-Seite soll scalliert werden
@@ -278,7 +278,7 @@ class Image
             // copy image data to a new image with the new given size
             imagecopyresampled($resizedUserPhoto, $this->imageResource, 0, 0, 0, 0, $newXSize, $newYSize, $this->imageWidth, $this->imageHeight);
             imagedestroy($this->imageResource);
-            
+
             // update the class parameters to new image data
             $this->imageResource = $resizedUserPhoto;
             $this->imageWidht    = $newXSize;

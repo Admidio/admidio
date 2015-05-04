@@ -16,7 +16,7 @@ class FunctionClass
 	public $greetingCardFrom			= '';
 	public $greetingCardString			= '';
 
-	function __construct($gL10n)
+	public function __construct($gL10n)
 	{
 		$this->nameRecipientString 			= $gL10n->get('ECA_RECIPIENT_NAME');
 		$this->emailRecipientString 		= $gL10n->get('ECA_RECIPIENT_EMAIL');
@@ -28,7 +28,7 @@ class FunctionClass
 		$this->emailString					= $gL10n->get('SYS_EMAIL');	
 	}
 	
-	function getFileNames($directory) 
+	public function getFileNames($directory) 
 	{
 		$array_files    = array();
 		$i              = 0;
@@ -51,7 +51,7 @@ class FunctionClass
 	// Uebergabe:
 	//      $template_name  .. der Name des Template
 	//      $tmpl_folder    .. der Name des Ordner wo das Template vorhanden ist
-	function getEcardTemplate($template_name, $tmpl_folder) 
+	public function getEcardTemplate($template_name, $tmpl_folder) 
 	{
 		$file_data = '';
 		$fpread = @fopen($tmpl_folder.$template_name, 'r');
@@ -88,7 +88,7 @@ class FunctionClass
 	//      Bild Daten:             <%ecard_image_width%>       <%ecard_image_height%>      <%ecard_image_name%>
 	//      Nachricht:              <%ecard_message%>
 	*/
-	function parseEcardTemplate($imageName, $ecardMessage, $ecard_data, $recipientName, $recipientEmail) 
+	public function parseEcardTemplate($imageName, $ecardMessage, $ecard_data, $recipientName, $recipientEmail) 
 	{
         global $gCurrentUser, $g_root_path;
 
@@ -149,7 +149,7 @@ class FunctionClass
 	//      $recipientName    .. der Name des Empfaengers
 	//      $recipientEmail   .. die Email des Empfaengers
 	//		$photoServerPath  .. der Pfad wo die Bilder in der Grußkarte am Server liegen
-	function sendEcard($senderName, $senderEmail, $ecardHtmlData, $recipientName, $recipientEmail, $photoServerPath) 
+	public function sendEcard($senderName, $senderEmail, $ecardHtmlData, $recipientName, $recipientEmail, $photoServerPath) 
 	{
 		global $gPreferences;
 		$img_photo_path = '';
