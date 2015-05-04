@@ -402,14 +402,14 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
 	elseif($datatype == 'date')
 	{
 		// check if date is a valid Admidio date format
-		$objAdmidioDate = new DateTimeExtended($array[$variableName], $gPreferences['system_date'], 'date');
+        $objAdmidioDate = DateTime::createFromFormat($gPreferences['system_date'], $array[$variableName]);
 		
-		if($objAdmidioDate->valid() == false)
+		if($objAdmidioDate == false)
 		{
 			// check if date has english format
-			$objEnglishDate = new DateTimeExtended($array[$variableName], 'Y-m-d', 'date');
+            $objEnglishDate = DateTime::createFromFormat('Y-m-d', $array[$variableName]);
 			
-			if($objEnglishDate->valid() == false)
+			if($objEnglishDate == false)
 			{
 				$errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT', $variableName);
 			}
