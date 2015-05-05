@@ -67,8 +67,7 @@ class Email extends PHPMailer
     public function __construct()
     {
         //Übername Einstellungen    
-        global $gPreferences;
-        global $gDebug;
+        global $gL10n, $gPreferences, $gDebug;
                 
         //Wir zeigen richtige Fehlermeldungen an
         $this->exceptions = TRUE;
@@ -108,17 +107,8 @@ class Email extends PHPMailer
              $this->IsMail();    
         }
         
-        // set language for error reporting (de_sie should be converted to de)
-		if (strpos($gPreferences['system_language'], '_') !== false) 
-		{
-			$lang = substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_'));
-		}
-		else
-		{
-			$lang = substr($gPreferences['system_language'], 0, 2);
-		}
-		
-        $this->SetLanguage($lang);
+        // set language for error reporting
+        $this->SetLanguage($gL10n->getLanguageIsoCode());
         $this->CharSet =  $gPreferences['mail_character_encoding'];
     }
     

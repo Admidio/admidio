@@ -58,7 +58,7 @@ class HtmlTable extends HtmlTableBasic
      */
     public function __construct($id, $htmlPage = null, $hoverRows = true, $datatables = false, $class = '')
     {
-        global $g_root_path, $gPreferences, $gL10n;
+        global $g_root_path, $gL10n;
 
         if(strlen($class) == 0)
         {
@@ -89,7 +89,7 @@ class HtmlTable extends HtmlTableBasic
         {
             $this->addAttribute('width', '100%');
 
-            $this->datatablesInitParameters[] = '"language": {"url": "'.$g_root_path.'/adm_program/libs/datatables/language/datatables.'.$gPreferences['system_language'].'.lang"}';
+            $this->datatablesInitParameters[] = '"language": {"url": "'.$g_root_path.'/adm_program/libs/datatables/language/datatables.'.$gL10n->getLanguageIsoCode().'.lang"}';
         }
         
         if(is_object($htmlPage))

@@ -425,7 +425,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addEditor($id, $label, $value, $options = array())
     {
-        global $gPreferences, $g_root_path;
+        global $gPreferences, $g_root_path, $gL10n;
 
         $this->countElements++;
         $attributes = array('class' => 'editor');
@@ -454,7 +454,7 @@ class HtmlForm extends HtmlFormBasic
 
         $javascriptCode = 'CKEDITOR.replace("'.$id.'", {
             toolbar: "'.$optionsAll['toolbar'].'",
-            language: "'.$gPreferences['system_language'].'",
+            language: "'.$gL10n->getLanguageIsoCode().'",
             uiColor: "'.$gPreferences['system_js_editor_color'].'",
             filebrowserImageUploadUrl: "'.$g_root_path.'/adm_program/system/ckeditor_upload_handler.php"
         });';
@@ -679,20 +679,11 @@ class HtmlForm extends HtmlFormBasic
             $attributes['data-provide'] = 'datepicker';
             $javascriptCode             = '';
 
-            if (strpos($gPreferences['system_language'], '_') !== false)
-            {
-                $lang = substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_'));
-            }
-            else
-            {
-                $lang = substr($gPreferences['system_language'], 0, 2);
-            }
-
             if($this->datepickerInitialized == false)
             {
                 $javascriptCode = '
                     $("input[data-provide=\'datepicker\']").datepicker({
-                        language: "'.$lang.'",
+                        language: "'.$gL10n->getLanguageIsoCode().'",
                         format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
                         todayHighlight: "true",
                         autoclose: "true"
@@ -972,7 +963,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addSelectBox($id, $label, $values, $options = array())
     {
-        global $gL10n, $g_root_path, $gPreferences;
+        global $gL10n, $g_root_path;
 
         $attributes = array('class' => 'form-control');
         $name       = $id;
@@ -1117,7 +1108,7 @@ class HtmlForm extends HtmlFormBasic
                 $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/select2.css');
                 $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/select2-bootstrap.css');
                 $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/select2.min.js');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/select2_locale_'.$gPreferences['system_language'].'.js');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/select2_locale_'.$gL10n->getLanguageIsoCode().'.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
             }
             else

@@ -87,7 +87,7 @@ public function openChannel()
 
 public function addChannelInfos()
 {
-	global $gPreferences;
+	global $gL10n;
 
     foreach (array('title', 'link', 'description', 'copyright') as $field)
     {
@@ -96,7 +96,7 @@ public function addChannelInfos()
             echo "<${field}>". htmlspecialchars($this->channel[$field], ENT_QUOTES). "</${field}>\n";
         }
     }
-    echo "<language>".$gPreferences['system_language']."</language>\n";
+    echo "<language>".$gL10n->getLanguageIsoCode()."</language>\n";
     echo "<generator>Admidio RSS-Class</generator>\n\n";
     echo "<pubDate>". date('r'). "</pubDate>\n\n";
 }

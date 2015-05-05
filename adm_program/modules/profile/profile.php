@@ -130,16 +130,7 @@ else
     $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js');
 }
 
-if (strpos($gPreferences['system_language'], '_') !== false)
-{
-	$lang = substr($gPreferences['system_language'], 0, strpos($gPreferences['system_language'], '_'));
-}
-else
-{
-	$lang = substr($gPreferences['system_language'], 0, 2);
-}
-
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/locales/bootstrap-datepicker.'.$lang.'.min.js');
+$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/locales/bootstrap-datepicker.'.$gL10n->getLanguageIsoCode().'.min.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
 
 $page->addJavascript('
@@ -168,7 +159,7 @@ $page->addJavascript('
     $("#menu_item_role_memberships_change").attr("data-target", "#admidio_modal");
     
     $("input[data-provide=\'datepicker\']").datepicker({
-                            language: "'.$lang.'",
+                            language: "'.$gL10n->getLanguageIsoCode().'",
                             format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
                             todayHighlight: "true",
                             autoclose: "true"

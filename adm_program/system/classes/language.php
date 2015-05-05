@@ -213,7 +213,7 @@ class Language
 		
 	/** Returns the ISO code of the language of this object. 
 	 *  @param $referenceLanguage If set to @b true than the ISO code of the reference language will returned.
-	 *  @return Returns the ISO code of the language of this object or the reference language.
+	 *  @return Returns the ISO code of the language of this object or the reference language e.g. @b de or @b en.
 	 */
     public function getLanguageIsoCode($referenceLanguage = false)
     {
