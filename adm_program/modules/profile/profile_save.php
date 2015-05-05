@@ -251,30 +251,13 @@ if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1)
 }
 
 /*------------------------------------------------------------*/
-// Benutzerdaten in Datenbank schreiben
+// Save user data to database
 /*------------------------------------------------------------*/
 $gDb->startTransaction();
 
 try
 {
-    // save changes; if it's a new registration than caught exception if email couldn't send
-
-    if($user->getValue('usr_id') == 0)
-    {
-        // der User wird gerade angelegt und die ID kann erst danach in das Create-Feld gesetzt werden
-        $user->save();
-    
-        if($getNewUser == 1)
-        {
-            $user->setValue('usr_usr_id_create', $gCurrentUser->getValue('usr_id'));
-        }
-        else
-        {
-            $user->setValue('usr_usr_id_create', $user->getValue('usr_id'));
-        }
-    }
-
-    $ret_code = $user->save();
+    $user->save();
 }
 catch(AdmException $e)
 {

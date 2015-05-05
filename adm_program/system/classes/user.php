@@ -938,11 +938,19 @@ class User extends TableUsers
     {
         global $gCurrentSession, $gCurrentUser;
         $fields_changed = $this->columnsValueChanged;
-        
+        $updateCreateUserId = false;
+
         // if current user is new or is allowed to edit this user than save data
         if($this->getValue('usr_id') == 0 || $gCurrentUser->hasRightEditProfile($this))
         {
             $this->db->startTransaction();
+            
+            // if new user then set create id
+            if($this->getValue('usr_id') == 0 && $gCurrentUser->getValue('usr_id') == 0)
+            {
+                $updateCreateUserId = true;
+                $updateFingerPrint  = false;
+            }
 
             // if value of a field changed then update timestamp of user object
             if($this->mProfileFieldsData->columnsValueChanged)
@@ -951,6 +959,14 @@ class User extends TableUsers
             }
 
             parent::save($updateFingerPrint);
+            
+            // if this was an registration then set this user id to create user id
+            if($updateCreateUserId)
+            {
+                $this->setValue('usr_timestamp_create', DATETIME_NOW);
+                $this->setValue('usr_usr_id_create', $this->getValue('usr_id'));
+                parent::save($updateFingerPrint);            
+            }
             
             // save data of all user fields
             $this->mProfileFieldsData->saveUserData($this->getValue('usr_id'));
