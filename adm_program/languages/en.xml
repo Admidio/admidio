@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
     <version id="3.0.0" translator="Stefanie Schima">
+        <text id="MAI_EMAIL_SEND_TO_RECEIVER" development="new" translation="todo">%VAR1% sent to the receivers: %VAR3% from %VAR2% the following E-Mail:</text>
 		<text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Former members</text>
 		<text id="MSG_ACTIVE_FORMER_SHORT" development="new" translation="todo">Active and former</text>
         <text id="BAC_ONLY_MYSQL" development="new" translation="edited">The backup module can only be used in combination with a MySQL database.</text>

@@ -370,41 +370,42 @@ if ($getMsgType == 'EMAIL')
 
     // add sender and receiver to email if template include the variables
     $emailTemplate = str_replace("#sender#", $postName, $emailTemplate);
-    if (strpos($emailTemplate, '#receiver#') == true) 
+
+    $modulemessages = new ModuleMessages();
+    $ReceiverName = "";
+    if (strpos($ReceiverString, '|') == true) 
     {
-        $modulemessages = new ModuleMessages();
-        $ReceiverName = "";
-        if (strpos($ReceiverString, '|') == true) 
+        $reciversplit = explode('|', $ReceiverString);
+        foreach ($reciversplit as $value) 
         {
-            $reciversplit = explode('|', $ReceiverString);
-            foreach ($reciversplit as $value) 
+            if (strpos($value, ':') == true) 
             {
-                if (strpos($value, ':') == true) 
-                {
-                    $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($value);
-                }
-                else
-                {
-                    $user = new User($gDb, $gProfileFields, $value);
-                    $ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-                }
-            }
-        }
-        else
-        {
-            if (strpos($ReceiverString, ':') == true) 
-            {
-                $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($ReceiverString);
+                $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($value);
             }
             else
             {
-                $user = new User($gDb, $gProfileFields, $ReceiverString);
+                $user = new User($gDb, $gProfileFields, $value);
                 $ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
             }
         }
-        $ReceiverName = substr($ReceiverName, 2);
-        $emailTemplate = str_replace("#receiver#", $ReceiverName, $emailTemplate);
     }
+    else
+    {
+        if (strpos($ReceiverString, ':') == true) 
+        {
+            $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($ReceiverString);
+        }
+        else
+        {
+            $user = new User($gDb, $gProfileFields, $ReceiverString);
+            $ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+        }
+    }
+    $ReceiverName = substr($ReceiverName, 2);
+    $emailTemplate = str_replace("#receiver#", $ReceiverName, $emailTemplate);
+    
+    // prepare body of email with note of sender and homepage
+    $email->setSenderInText($postName, $postFrom, $ReceiverName);
 
 
     // set Text
