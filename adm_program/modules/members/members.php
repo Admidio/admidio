@@ -245,7 +245,7 @@ while($row = $gDb->fetch_array($result_mgl))
     }
     else
     {
-        $columnValues[] = '&nbsp;';
+        $columnValues[] = '';
     }
 
 	if(strlen($row['gender']) > 0)
@@ -257,7 +257,7 @@ while($row = $gDb->fetch_array($result_mgl))
     }
     else
     {
-        $columnValues[] = '&nbsp;';
+        $columnValues[] = '';
         $columnValues[] = '0';
     }
 
@@ -269,7 +269,7 @@ while($row = $gDb->fetch_array($result_mgl))
     }
     else
     {
-        $columnValues[] = '&nbsp;';
+        $columnValues[] = '';
     }
         
 	$columnValues[] = $timestampChange->format($gPreferences['system_date'].' '.$gPreferences['system_time']);

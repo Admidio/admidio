@@ -584,16 +584,7 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
                 // create output in html layout
                 else
                 {
-                    $content = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $row['usr_id']);
-                    // if empty string pass a whitespace
-                    if(strlen($content) > 0)
-                    {
-                        $columnValues[] = $content;
-                    }
-                    else
-                    {
-                        $columnValues[] = '&nbsp;';
-                    }
+                    $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $row['usr_id']);
                 }
             }
         }

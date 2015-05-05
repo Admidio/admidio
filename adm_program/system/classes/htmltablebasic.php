@@ -190,11 +190,8 @@ class HtmlTableBasic extends HtmlElement {
             $this->setAttributesFromArray($arrAttributes);
         }
 
-        if($data != '')
-        {
-            $this->addData($data);
-            $this->columnCount ++;
-        }
+        $this->addData($data);
+        $this->columnCount ++;
     }
 
     /**
