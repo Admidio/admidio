@@ -8,9 +8,9 @@
  *
  *****************************************************************************/
 
-if ('constants.php' == basename($_SERVER['SCRIPT_FILENAME']))
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'constants.php')
 {
-    die('This page may not be called directly !');
+    die('This page may not be called directly!');
 }
 
 // !!! Please do not edit these version numbers !!!
@@ -30,14 +30,14 @@ else
 
 // different paths
 define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1));
-if(strpos($_SERVER['SCRIPT_FILENAME'], '/adm_') !== false && isset($g_root_path) == true)
+if(strpos($_SERVER['SCRIPT_FILENAME'], '/adm_') !== false && isset($g_root_path))
 {
     // current called url (only this way possible, because SSL-Proxies couldn't be read with _SERVER parameter)
     define('CURRENT_URL', $g_root_path. substr($_SERVER['SCRIPT_FILENAME'], strrpos($_SERVER['SCRIPT_FILENAME'], '/adm_')). '?'. $_SERVER['QUERY_STRING']);
 }
 else
 {
-    define('CURRENT_URL', "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
+    define('CURRENT_URL', 'http://'. $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
 }
 
 // default timezone so that there are no errors in php5 until Admidio supports timezones

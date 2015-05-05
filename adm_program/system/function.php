@@ -8,34 +8,34 @@
  *
  *****************************************************************************/
 
- /** Autoloading function of class files. This function is automatically called
-  *  by PHP. Therefore the class name must be the same as the file name except
-  *  for case sensitive.
-  *  @param $className Name of the class for which the file should be loaded
-  */
- function __autoload($className)
- {
+/** Autoloading function of class files. This function is automatically called
+ *  by PHP. Therefore the class name must be the same as the file name except
+ *  for case sensitive.
+ *  @param $className Name of the class for which the file should be loaded
+ */
+function __autoload($className)
+{
     $fileName = SERVER_PATH. '/adm_program/system/classes/'.strtolower($className).'.php';
     require_once($fileName);
- }
- 
- 
+}
+
+
 /** Function checks if the user is a member of the role.
  *  If @b userId is not set than this will be checked for the current user
- *  @param $rolName	The name of the role where the membership of the user should be checked
- *  @param $userId 	The id of the user who should be checked if he is a member of the role.
- *  				If @userId is not set than this will be checked for the current user
+ *  @param $rolName The name of the role where the membership of the user should be checked
+ *  @param $userId  The id of the user who should be checked if he is a member of the role.
+ *                  If @userId is not set than this will be checked for the current user
  *  @return Returns @b true if the user is a member of the role
  */
 function hasRole($roleName, $userId = 0)
 {
     global $gCurrentUser, $gCurrentOrganization, $gDb;
 
-    if($userId == 0)
+    if($userId === 0)
     {
         $userId = $gCurrentUser->getValue('usr_id');
     }
-    elseif(is_numeric($userId) == false)
+    elseif(!is_numeric($userId))
     {
         return -1;
     }
@@ -53,7 +53,7 @@ function hasRole($roleName, $userId = 0)
                       OR cat_org_id IS NULL ) ';
     $result = $gDb->query($sql);
 
-    if($gDb->num_rows($result) == 1)
+    if($gDb->num_rows($result) === 1)
     {
         return 1;
     }
@@ -64,13 +64,13 @@ function hasRole($roleName, $userId = 0)
 }
 
 /** Function checks if the user is a member in a role of the current organization.
- *  @param $userId 	The id of the user who should be checked if he is a member of the current organization
+ *  @param $userId  The id of the user who should be checked if he is a member of the current organization
  *  @return Returns @b true if the user is a member
  */
 function isMember($userId)
 {
     global $gCurrentOrganization, $gDb;
-    
+
     if(is_numeric($userId) && $userId > 0)
     {
         $sql    = 'SELECT COUNT(*)
@@ -98,16 +98,16 @@ function isMember($userId)
 
 /** Function checks if the user is a group leader in a role of the current organization.
  *  If you use the @b roleId parameter you can check if the user is group leader of that role.
- *  @param $userId 	The id of the user who should be checked if he is a group leader
- *  @param $roleId 	If set <> 0 than the function checks if the user is group leader of this role
- *					otherwise it checks if the user is group leader in one role of the current organization
+ *  @param $userId  The id of the user who should be checked if he is a group leader
+ *  @param $roleId  If set <> 0 than the function checks if the user is group leader of this role
+ *                  otherwise it checks if the user is group leader in one role of the current organization
  *  @return Returns @b true if the user is a group leader
  */
 function isGroupLeader($userId, $roleId = 0)
 {
     global $gCurrentOrganization, $gDb;
 
-    if(is_numeric($userId) && $userId >  0
+    if(is_numeric($userId) && $userId > 0
     && is_numeric($roleId))
     {
         $sql    = 'SELECT mem_id
@@ -123,7 +123,7 @@ function isGroupLeader($userId, $roleId = 0)
                           OR cat_org_id IS NULL ) ';
         if ($roleId > 0)
         {
-            $sql .= '  AND mem_rol_id = '.$roleId;
+            $sql .= ' AND mem_rol_id = '.$roleId;
         }
         $result = $gDb->query($sql);
 
@@ -151,11 +151,11 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 {
     global $g_root_path, $gL10n;
 
-    if ($num_items == 0 || $per_page == 0)
+    if ($num_items === 0 || $per_page === 0)
     {
-    	return '';
+        return '';
     }
-    
+
     $total_pages = ceil($num_items/$per_page);
 
     if ($total_pages <= 1)
@@ -274,14 +274,14 @@ function admFuncProcessableImageSize()
 {
     $memory_limit = trim(ini_get('memory_limit'));
     //falls in php.ini nicht gesetzt
-    if($memory_limit=='')
+    if($memory_limit == '')
     {
-       $memory_limit=='8M';
+        $memory_limit == '8M';
     }
     //falls in php.ini abgeschaltet
-    if($memory_limit==-1)
+    if($memory_limit == -1)
     {
-       $memory_limit=='128M';
+        $memory_limit == '128M';
     }
     switch(admStrToLower(substr($memory_limit, strlen($memory_limit/1), 1)))
     {
@@ -303,15 +303,15 @@ function admFuncProcessableImageSize()
  *  If the value of the defined datatype is not valid then an error will be shown. If no value was set then the parameter will
  *  be initialized. The function can be used with every array and their elements. You can set several flags (like required value,
  *  datatype …) that should be checked.
- *  @param $array 	 The array with the element that should be checked
+ *  @param $array    The array with the element that should be checked
  *  @param $variableName Name of the array element that should be checked
  *  @param $datatype The datatype like @b string, @b numeric, @b boolean, @b html, @b date or @b file that is expected and which will be checked.
- *					 Datatype @b date expects a date that has the Admidio default format from the preferences or the english date format @b Y-m-d
+ *                   Datatype @b date expects a date that has the Admidio default format from the preferences or the english date format @b Y-m-d
  *  @param $options  An array with the following possible entries:
- *                   @b defaultValue 	A value that will be set if the variable has no value
- *                   @b requireValue 	If set to @b true than a value is required otherwise the function returns an error
- *                   @b validValues 	An array with all values that the variable could have. If another value is found than the function returns an error
- *                   @b directOutput 	If set to @b true the function returns only the error string, if set to false a html message with the error will be returned
+ *                   @b defaultValue    A value that will be set if the variable has no value
+ *                   @b requireValue    If set to @b true than a value is required otherwise the function returns an error
+ *                   @b validValues     An array with all values that the variable could have. If another value is found than the function returns an error
+ *                   @b directOutput    If set to @b true the function returns only the error string, if set to false a html message with the error will be returned
  *  @return Returns the value of the element or the error message if a test failed
  *  @par Examples
  *  @code   // numeric value that would get a default value 0 if not set
@@ -325,126 +325,125 @@ function admFuncProcessableImageSize()
  */
 function admFuncVariableIsValid($array, $variableName, $datatype, $options = array()) // $defaultValue = null, $requireValue = false, $validValues = null, $directOutput = false)
 {
-	global $gL10n, $gMessage, $gPreferences;
-	
+    global $gL10n, $gMessage, $gPreferences;
+
     // create array with all options
     $optionsDefault = array('defaultValue' => null, 'requireValue' => false, 'validValues' => null, 'directOutput' => null);
     $optionsAll     = array_replace($optionsDefault, $options);
-	
-	$errorMessage = '';
-	$datatype = admStrToLower($datatype);
 
-	// set default value for each datatype if no value is given and no value was required
-	if(isset($array[$variableName]) == false || strlen($array[$variableName]) == 0)
-	{
-    	if($optionsAll['requireValue'] == true)
-    	{
-        	// if value is required an no value is given then show error
+    $errorMessage = '';
+    $datatype = admStrToLower($datatype);
+
+    // set default value for each datatype if no value is given and no value was required
+    if(!isset($array[$variableName]) || $array[$variableName] === '')
+    {
+        if($optionsAll['requireValue'])
+        {
+            // if value is required an no value is given then show error
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-    	}
-    	elseif(strlen($optionsAll['defaultValue']) > 0)
-    	{
+        }
+        elseif($optionsAll['defaultValue'] !== '')
+        {
             // if a default value was set then take this value
-        	$array[$variableName] = $optionsAll['defaultValue'];
-    	}
-    	else
-    	{
+            $array[$variableName] = $optionsAll['defaultValue'];
+        }
+        else
+        {
             // no value set then initialize the parameter
-    	    if($datatype == 'boolean' || $datatype == 'numeric')
-    	    {
-        	    $array[$variableName] = 0;
-    	    }
-    	    elseif($datatype == 'string' || $datatype == 'html')
-    	    {
-        	    $array[$variableName] = '';
-    	    }
-    	    elseif($datatype == 'date')
-    	    {
-        	    $array[$variableName] = '';
-    	    }
-    	    
-    	    return $array[$variableName];
-    	}
-	}
+            if($datatype == 'boolean' || $datatype == 'numeric')
+            {
+                $array[$variableName] = 0;
+            }
+            elseif($datatype == 'string' || $datatype == 'html')
+            {
+                $array[$variableName] = '';
+            }
+            elseif($datatype == 'date')
+            {
+                $array[$variableName] = '';
+            }
 
-	if($datatype == 'boolean')
-	{
-		// boolean type must be 0 or 1 otherwise throw error
-		// do not check with in_array because this function don't work properly
-		if($array[$variableName] != '0' && $array[$variableName] != '1'
+            return $array[$variableName];
+        }
+    }
+
+    if($datatype == 'boolean')
+    {
+        // boolean type must be 0 or 1 otherwise throw error
+        // do not check with in_array because this function don't work properly
+        if($array[$variableName] != '0' && $array[$variableName] != '1'
         && $array[$variableName] != 'false' && $array[$variableName] != 'true')
-		{
+        {
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-		}
-	}
-	elseif($optionsAll['validValues'] != null)
-	{
-		// check if parameter has a valid value
-		// do a strict check with in_array because the function don't work properly
-		if(in_array(admStrToUpper($array[$variableName]), $optionsAll['validValues'], true) == false
-		&& in_array(admStrToLower($array[$variableName]), $optionsAll['validValues'], true) == false)
-		{
+        }
+    }
+    elseif($optionsAll['validValues'] !== null)
+    {
+        // check if parameter has a valid value
+        // do a strict check with in_array because the function don't work properly
+        if(!in_array(admStrToUpper($array[$variableName]), $optionsAll['validValues'], true)
+        && !in_array(admStrToLower($array[$variableName]), $optionsAll['validValues'], true))
+        {
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-		}
-	}
+        }
+    }
 
     if($datatype == 'file')
     {
-		try
-		{
-			admStrIsValidFileName($array[$variableName]);
-		}
-		catch(AdmException $e)
-		{
-			$errorMessage = $e->getText();
-		}
+        try
+        {
+            admStrIsValidFileName($array[$variableName]);
+        }
+        catch(AdmException $e)
+        {
+            $errorMessage = $e->getText();
+        }
     }
-	elseif($datatype == 'date')
-	{
-		// check if date is a valid Admidio date format
+    elseif($datatype == 'date')
+    {
+        // check if date is a valid Admidio date format
         $objAdmidioDate = DateTime::createFromFormat($gPreferences['system_date'], $array[$variableName]);
-		
-		if($objAdmidioDate == false)
-		{
-			// check if date has english format
+
+        if(!$objAdmidioDate)
+        {
+            // check if date has english format
             $objEnglishDate = DateTime::createFromFormat('Y-m-d', $array[$variableName]);
-			
-			if($objEnglishDate == false)
-			{
-				$errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT', $variableName);
-			}
-		}
-	}
-	elseif($datatype == 'numeric')
-	{
-		// numeric datatype should only contain numbers
-		if (is_numeric($array[$variableName]) == false)
-		{
+
+            if(!$objEnglishDate)
+            {
+                $errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT', $variableName);
+            }
+        }
+    }
+    elseif($datatype == 'numeric')
+    {
+        // numeric datatype should only contain numbers
+        if (!is_numeric($array[$variableName]))
+        {
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-		}
-	}
-	elseif($datatype == 'string')
-	{
-		$array[$variableName] = strStripTags(htmlspecialchars($array[$variableName], ENT_COMPAT, 'UTF-8'));
-	}
-    
+        }
+    }
+    elseif($datatype == 'string')
+    {
+        $array[$variableName] = strStripTags(htmlspecialchars($array[$variableName], ENT_COMPAT, 'UTF-8'));
+    }
+
     elseif($datatype == 'html')
     {
         // check html string vor invalid tags and scripts
         $array[$variableName] = htmLawed(stripslashes($array[$variableName]), array('safe' => 1));
     }
-    
+
     // wurde kein Fehler entdeckt, dann den Inhalt der Variablen zurueckgeben
-    if(strlen($errorMessage) == 0)
+    if($errorMessage === '')
     {
         return $array[$variableName];
     }
-
-	if(strlen($errorMessage) > 0)
-	{
+    else
+    {
         if(isset($gMessage))
         {
-            if($optionsAll['directOutput'] == true)
+            if($optionsAll['directOutput'])
             {
                $gMessage->showTextOnly(true);
             }
@@ -456,9 +455,9 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
             echo $errorMessage;
             exit();
         }
-	}
-	
-	return null;
+    }
+
+    return null;
 }
 
 /** Creates a html fragment with information about user and time when the recordset was created
@@ -473,20 +472,20 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
 function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $userIdEdited, $timestampEdited)
 {
     global $gDb, $gProfileFields, $gL10n, $gPreferences;
-    
+
     // only show info if system setting is activated
     if($gPreferences['system_show_create_edit'] > 0)
     {
         $htmlCreateName = '';
         $htmlEditName   = '';
-    
+
         // compose name of user who create the recordset
-        if(strlen($timestampCreate) > 0)
+        if($timestampCreate !== '')
         {
             if($userIdCreated > 0)
             {
                 $userCreate = new User($gDb, $gProfileFields, $userIdCreated);
-                
+
                 if($gPreferences['system_show_create_edit'] == 1)
                 {
                     $htmlCreateName = $userCreate->getValue('FIRST_NAME'). ' '. $userCreate->getValue('LAST_NAME');
@@ -501,14 +500,14 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
                 $htmlCreateName = $gL10n->get('SYS_DELETED_USER');
             }
         }
-        
+
         // compose name of user who edit the recordset
-        if(strlen($timestampEdited) > 0)
+        if($timestampEdited !== '')
         {
             if($userIdEdited > 0)
             {
                 $userEdit = new User($gDb, $gProfileFields, $userIdEdited);
-                
+
                 if($gPreferences['system_show_create_edit'] == 1)
                 {
                     $htmlEditName = $userEdit->getValue('FIRST_NAME'). ' '. $userEdit->getValue('LAST_NAME');
@@ -523,14 +522,14 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
                 $htmlEditName = $gL10n->get('SYS_DELETED_USER');
             }
         }
-    
-        if(strlen($htmlCreateName) > 0 || strlen($htmlEditName) > 0)
+
+        if($htmlCreateName !== '' || $htmlEditName !== '')
         {
             // get html output from other function
             return admFuncShowCreateChangeInfoByName($htmlCreateName, $timestampCreate, $htmlEditName, $timestampEdited, $userIdCreated, $userIdEdited);
         }
     }
-    
+
     return '';
 }
 
@@ -557,37 +556,37 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
     if($gPreferences['system_show_create_edit'] > 0)
     {
         // compose name of user who create the recordset
-        if(strlen($timestampCreate) > 0)
+        if($timestampCreate !== '')
         {
             $userNameCreated = trim($userNameCreated);
-            
-            if(strlen($userNameCreated) == 0)
+
+            if($userNameCreated === '')
             {
                 $userNameCreated = $gL10n->get('SYS_DELETED_USER');
             }
-    
+
             // if valid login and a user id is given than create a link to the profile of this user
-            if($gValidLogin == true && $userIdCreated > 0 && $userNameCreated != $gL10n->get('SYS_SYSTEM'))
+            if($gValidLogin && $userIdCreated > 0 && $userNameCreated != $gL10n->get('SYS_SYSTEM'))
             {
                 $userNameCreated = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.
                                     $userIdCreated.'">'.$userNameCreated.'</a>';
             }
-            
+
             $html .= '<span class="admidio-info-created">'.$gL10n->get('SYS_CREATED_BY', $userNameCreated, $timestampCreate).'</span>';
         }
-    
+
         // compose name of user who edit the recordset
-        if(strlen($timestampEdited) > 0)
+        if($timestampEdited !== '')
         {
             $userNameEdited = trim($userNameEdited);
-        
-            if(strlen($userNameEdited) == 0)
+
+            if($userNameEdited === '')
             {
                 $userNameEdited = $gL10n->get('SYS_DELETED_USER');
             }
 
             // if valid login and a user id is given than create a link to the profile of this user
-            if($gValidLogin == true && $userIdEdited > 0 && $userNameEdited != $gL10n->get('SYS_SYSTEM'))
+            if($gValidLogin && $userIdEdited > 0 && $userNameEdited != $gL10n->get('SYS_SYSTEM'))
             {
                 $userNameEdited = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.
                                     $userIdEdited.'">'.$userNameEdited.'</a>';
@@ -595,8 +594,8 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
 
             $html .= '<span class="info-edited">'.$gL10n->get('SYS_LAST_EDITED_BY', $userNameEdited, $timestampEdited).'</span>';
         }
-    
-        if(strlen($html) > 0)
+
+        if($html !== '')
         {
             $html = '<div class="admidio-admidio-info-created-edited">'.$html.'</div>';
         }
@@ -609,7 +608,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
  */
 function admFuncGetFilenameExtension($filename)
 {
-    return strtolower(strrchr($filename, "."));
+    return strtolower(strrchr($filename, '.'));
 }
 /** Returns the name of a given filename without extension
  * @param $filname given filename
@@ -617,7 +616,7 @@ function admFuncGetFilenameExtension($filename)
  */
 function admFuncGetFilenameWithoutExtension($filename)
 {
-    return str_replace(strrchr($filename, "."), '', $filename);
+    return str_replace(strrchr($filename, '.'), '', $filename);
 }
 
 /** Search all files or directories in the specified directory.
@@ -628,15 +627,15 @@ function admFuncGetFilenameWithoutExtension($filename)
 function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 {
     $array_files = array();
-    
+
     if($curdir = opendir($directory))
     {
         while($filename = readdir($curdir))
         {
             if(strpos($filename, '.') !== 0)
             {
-                if(($searchType == 'file' && is_file($directory.'/'.$filename) == true)
-                || ($searchType == 'dir'  && is_dir($directory.'/'.$filename) == true))
+                if(($searchType === 'file' && is_file($directory.'/'.$filename))
+                || ($searchType === 'dir'  && is_dir($directory.'/'.$filename)))
                 {
                     $array_files[$filename] = $filename;
                 }

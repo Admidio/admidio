@@ -22,7 +22,7 @@ function admStrToLower($string)
         return strtolower($string);
     }
 }
- 
+
 // da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung
 // stehen, wird hier eine Fallunterscheidung gemacht
 // WICHTIG: wird die Multibyte-Funktion nicht genutzt, funktioniert die Umwandlung von Umlauten nicht !!!
@@ -44,24 +44,24 @@ function admStrStripTagsSpecial($srcArray)
 {
     foreach($srcArray as $key => $value)
     {
-        if($key != 'ecard_message' // ckeditor-variable
-        && $key != 'ann_description'
-        && $key != 'dat_description'
-        && $key != 'gbc_text'
-        && $key != 'gbo_text'
-        && $key != 'lnk_description'
-        && $key != 'msg_body'
-        && $key != 'plugin_CKEditor'
-        && $key != 'room_description'
-        && $key != 'usf_description'
-		&& $key != 'mail_smtp_password')
+        if($key !== 'ecard_message' // ckeditor-variable
+        && $key !== 'ann_description'
+        && $key !== 'dat_description'
+        && $key !== 'gbc_text'
+        && $key !== 'gbo_text'
+        && $key !== 'lnk_description'
+        && $key !== 'msg_body'
+        && $key !== 'plugin_CKEditor'
+        && $key !== 'room_description'
+        && $key !== 'usf_description'
+        && $key !== 'mail_smtp_password')
         {
             $srcArray[$key] = strStripTags($value);
         }
     }
     return $srcArray;
 }
- 
+
 // removes html, php code and blancs at beginning and end
 // of string or all elements of array
 function strStripTags($srcString)
@@ -160,36 +160,36 @@ function strNextLetter($letter, $mode = 0)
  */
 function strValidCharacters($string, $checkType)
 {
-    if(strlen(trim($string)) > 0)
-	{
-		switch($checkType)
-		{
-			case 'email':
-				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß.-_@';
-				break;
-			case 'file':
-				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß$&!?.-_+ ';
-				break;
-			case 'noSpecialChar': // eine einfache E-Mail-Adresse sollte dennoch moeglich sein (Benutzername)
-				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789.-_+@';
-				break;
-			case 'url':
-				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß.-_:/#?=%&!';
-				break;
-		}
-		
-        // check if string contains only valid characters
-        if(strspn(admStrToLower($string), $validChars) == strlen($string))
+    if(trim($string) !== '')
+    {
+        switch($checkType)
         {
-			if($checkType == 'email')
-			{
-				// check structure of email address
-				return preg_match('/^[^@]+@[^@]+\.[^@]{2,}$/', trim($string));
-			}
-			return true;
+            case 'email':
+                $validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß.-_@';
+                break;
+            case 'file':
+                $validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß$&!?.-_+ ';
+                break;
+            case 'noSpecialChar': // eine einfache E-Mail-Adresse sollte dennoch moeglich sein (Benutzername)
+                $validChars = 'abcdefghijklmnopqrstuvwxyz0123456789.-_+@';
+                break;
+            case 'url':
+                $validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß.-_:/#?=%&!';
+                break;
         }
-	}
-	return false;
+
+        // check if string contains only valid characters
+        if(strspn(admStrToLower($string), $validChars) === strlen($string))
+        {
+            if($checkType === 'email')
+            {
+                // check structure of email address
+                return preg_match('/^[^@]+@[^@]+\.[^@]{2,}$/', trim($string));
+            }
+            return true;
+        }
+    }
+    return false;
 }
 
 /** Check if a filename contains invalid characters. The characters will be checked with strValidCharacters.
@@ -206,35 +206,35 @@ function strValidCharacters($string, $checkType)
 function admStrIsValidFileName($filename, $checkExtension = false)
 {
     // If the filename was not empty
-    if(strlen(trim($filename)) > 0)
+    if(trim($filename) !== '')
     {
-		// filename should only contains valid characters
+        // filename should only contains valid characters
         if(strValidCharacters($filename, 'file')
-		&& strpos($filename, '..') === false
-		&& substr($filename, 0, 1) != '.')
-		{
-			if($checkExtension)
-			{
-				// check if the extension is not blacklisted
-				$extensionBlacklist = array('php', 'php3', 'php4', 'php5', 'html', 'htm', 'htaccess', 'htpasswd', 'pl',
-								            'js', 'vbs', 'asp', 'cgi', 'ssi');
-				$fileExtension  = substr($filename, strrpos($filename, '.')+1);
+        && strpos($filename, '..') === false
+        && substr($filename, 0, 1) != '.')
+        {
+            if($checkExtension)
+            {
+                // check if the extension is not blacklisted
+                $extensionBlacklist = array('php', 'php3', 'php4', 'php5', 'html', 'htm', 'htaccess', 'htpasswd', 'pl',
+                                            'js', 'vbs', 'asp', 'cgi', 'ssi');
+                $fileExtension = substr($filename, strrpos($filename, '.')+1);
 
-				if(in_array(strtolower($fileExtension), $extensionBlacklist))
-				{
-					throw new AdmException('DOW_FILE_EXTENSION_INVALID');
-				}
-			}
-			return 1;
-		}
-		else
-		{
-			throw new AdmException('BAC_FILE_NAME_INVALID');
-		}
+                if(in_array(strtolower($fileExtension), $extensionBlacklist, true))
+                {
+                    throw new AdmException('DOW_FILE_EXTENSION_INVALID');
+                }
+            }
+            return 1;
+        }
+        else
+        {
+            throw new AdmException('BAC_FILE_NAME_INVALID');
+        }
     }
     else
     {
-		throw new AdmException('SYS_FILENAME_EMPTY');
+        throw new AdmException('SYS_FILENAME_EMPTY');
     }
 }
 

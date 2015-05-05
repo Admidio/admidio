@@ -19,7 +19,7 @@ $organizationId = $gCurrentOrganization->getValue('org_id');
 
 // Filter parameters
 // parameters could be from login dialog or login plugin !!!
-if(isset($_POST['usr_login_name']) && strlen($_POST['usr_login_name']) > 0)
+if(isset($_POST['usr_login_name']) && $_POST['usr_login_name'] !== '')
 {
     $loginname = $_POST['usr_login_name'];
     $password  = $_POST['usr_password'];
@@ -29,12 +29,12 @@ if(isset($_POST['usr_login_name']) && strlen($_POST['usr_login_name']) > 0)
     {
         $bAutoLogin = true;
     }
-	
-	// if user can choose organization then save the selection
-	if(isset($_POST['org_id']) && is_numeric($_POST['org_id']) && $_POST['org_id'] > 0)
-	{
-		$organizationId = $_POST['org_id'];
-	}
+
+    // if user can choose organization then save the selection
+    if(isset($_POST['org_id']) && is_numeric($_POST['org_id']) && $_POST['org_id'] > 0)
+    {
+        $organizationId = $_POST['org_id'];
+    }
 }
 
 if(isset($_POST['plg_usr_login_name']) && strlen($_POST['plg_usr_login_name']) > 0)
@@ -48,19 +48,19 @@ if(isset($_POST['plg_usr_login_name']) && strlen($_POST['plg_usr_login_name']) >
         $bAutoLogin = true;
     }
 
-	// if user can choose organization then save the selection
-	if(isset($_POST['plg_org_id']) && is_numeric($_POST['plg_org_id']) && $_POST['plg_org_id'] > 0)
-	{
-		$organizationId = $_POST['plg_org_id'];
-	}
+    // if user can choose organization then save the selection
+    if(isset($_POST['plg_org_id']) && is_numeric($_POST['plg_org_id']) && $_POST['plg_org_id'] > 0)
+    {
+        $organizationId = $_POST['plg_org_id'];
+    }
 }
 
-if(strlen($loginname) == 0)
+if($loginname === '')
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME')));
 }
 
-if(strlen($password) == 0)
+if($password === '')
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
 }
@@ -84,42 +84,42 @@ $result = $gDb->query($sql);
 $userFound = $gDb->num_rows($result);
 $userRow   = $gDb->fetch_array($result);
 
-if ($userFound == 1)
+if ($userFound === 1)
 {
-	// if login organization is different to organization of config file then create new session variables
-	if($organizationId != $gCurrentOrganization->getValue('org_id'))
-	{
-		// read organization of config file with their preferences
-		$gCurrentOrganization->readDataById($organizationId);
-		$gPreferences = $gCurrentOrganization->getPreferences();
-		
-		// read new profile field structure for this organization
-		$gProfileFields->readProfileFields($organizationId);
-		
-		// save new organization id to session
-		$gCurrentSession->setValue('ses_org_id', $organizationId);
-		$gCurrentSession->save();
-	}
-    
+    // if login organization is different to organization of config file then create new session variables
+    if($organizationId != $gCurrentOrganization->getValue('org_id'))
+    {
+        // read organization of config file with their preferences
+        $gCurrentOrganization->readDataById($organizationId);
+        $gPreferences = $gCurrentOrganization->getPreferences();
+
+        // read new profile field structure for this organization
+        $gProfileFields->readProfileFields($organizationId);
+
+        // save new organization id to session
+        $gCurrentSession->setValue('ses_org_id', $organizationId);
+        $gCurrentSession->save();
+    }
+
     try
     {
         // create user object
         $gCurrentUser = new User($gDb, $gProfileFields, $userRow['usr_id']);
 
-        if($gCurrentUser->checkLogin($password, $bAutoLogin) == true)
+        if($gCurrentUser->checkLogin($password, $bAutoLogin))
         {
             // show successful login message
             $login_message = 'SYS_LOGIN_SUCCESSFUL';
 
             // bei einer Beta-Version noch einen Hinweis ausgeben !
-            if(BETA_VERSION > 0 && $gDebug == false)
+            if(BETA_VERSION > 0 && !$gDebug)
             {
                 $login_message = 'SYS_BETA_VERSION';
             }
 
             // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf
             // die Startseite verweisen
-            if(isset($_SESSION['login_forward_url']) == false)
+            if(!isset($_SESSION['login_forward_url']))
             {
                 $_SESSION['login_forward_url'] = $g_root_path. '/'. $gPreferences['homepage_login'];
             }
@@ -138,16 +138,16 @@ if ($userFound == 1)
 }
 else
 {
-	// now check if login is not released or doesn't exists
+    // now check if login is not released or doesn't exists
     $sql    = 'SELECT usr_id
                  FROM '. TBL_USERS. ', '.TBL_REGISTRATIONS.'
                 WHERE usr_login_name LIKE \''. $loginname. '\'
                   AND usr_valid  = 0
-				  AND reg_usr_id = usr_id
-				  AND reg_org_id = '.$gCurrentOrganization->getValue('org_id');
+                  AND reg_usr_id = usr_id
+                  AND reg_org_id = '.$gCurrentOrganization->getValue('org_id');
     $result = $gDb->query($sql);
 
-    if($gDb->num_rows($result) == 1)
+    if($gDb->num_rows($result) === 1)
     {
         $gMessage->show($gL10n->get('SYS_LOGIN_NOT_ACTIVATED'));
     }

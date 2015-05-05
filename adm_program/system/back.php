@@ -1,7 +1,7 @@
 <?php
 /******************************************************************************
  * This script should be linked to back buttons in forms. It will search for the
- * last url that should be shown. The script uses the navigation class to handle 
+ * last url that should be shown. The script uses the navigation class to handle
  * the url stack.
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
@@ -19,10 +19,10 @@ $gNavigation->deleteLastUrl();
 $nextUrl = $gNavigation->getUrl();
 
 // if no page was found then show the default homepage
-if(strlen($nextUrl) == 0)
+if($nextUrl === '')
 {
     $nextUrl = $gHomepage;
 }
 header('Location: '.$nextUrl);
- 
+
 ?>

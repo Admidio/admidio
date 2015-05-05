@@ -11,8 +11,7 @@
 // if config file doesn't exists, than show installation dialog
 if(!file_exists('../adm_my_files/config.php'))
 {
-    $location = 'Location: installation/index.php';
-    header($location);
+    header('Location: installation/index.php');
     exit();
 }
 
@@ -29,7 +28,7 @@ $page = new HtmlPage($headline);
 // menu of the page
 $moduleMenu = $page->getMenu();
 
-if($gValidLogin == 1)
+if($gValidLogin)
 {
     // show link to own profile
     $moduleMenu->addItem('adm_menu_item_my_profile', $g_root_path.'/adm_program/modules/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'), 'profile.png');
@@ -63,7 +62,7 @@ if($gPreferences['enable_download_module'] == 1)
                         $gL10n->get('DOW_DOWNLOADS'), '/icons/download_big.png',
                         $gL10n->get('DOW_DOWNLOADS_DESC'));
 }
-if($gPreferences['enable_mail_module'] == 1 && $gValidLogin == false)
+if($gPreferences['enable_mail_module'] == 1 && !$gValidLogin)
 {
     $moduleMenu->addItem('email', '/adm_program/modules/messages/messages_write.php',
                         $gL10n->get('SYS_EMAIL'), '/icons/email_big.png',
@@ -155,7 +154,7 @@ if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser
                             $gL10n->get('ROL_ROLE_ADMINISTRATION'), '/icons/roles_big.png',
                             $gL10n->get('ROL_ROLE_ADMINISTRATION_DESC'));
     }
-    
+
     if($gCurrentUser->isWebmaster())
     {
         $adminMenu->addItem('dbback', '/adm_program/modules/backup/backup.php',

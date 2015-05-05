@@ -11,22 +11,21 @@
  *
  *****************************************************************************/
 
-if ('login_valid.php' == basename($_SERVER['SCRIPT_FILENAME']))
+if (basename($_SERVER['SCRIPT_FILENAME']) ==='login_valid.php')
 {
     die('This page may not be called directly !');
 }
 
-if($gValidLogin == false)
+if(!$gValidLogin)
 {
-    if(isset($_SESSION['login_forward_url']) == false)
+    if(!isset($_SESSION['login_forward_url']))
     {
         // aufgerufene URL merken, damit diese nach dem Einloggen sofort aufgerufen werden kann
         $_SESSION['login_forward_url'] = CURRENT_URL;
     }
-    
+
     // User nicht eingeloggt -> Loginseite aufrufen
-    $location = 'Location: '.$g_root_path.'/adm_program/system/login.php';
-    header($location);
+    header('Location: '.$g_root_path.'/adm_program/system/login.php');
     exit();
 }
 

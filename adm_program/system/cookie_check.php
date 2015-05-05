@@ -18,7 +18,7 @@ require_once('common.php');
 $getMessageCode = admFuncVariableIsValid($_GET, 'message_code', 'string', array('requireValue' => true));
 
 // check if cookie is set
-if(isset($_COOKIE[$gCookiePraefix. '_ID']) == false)
+if(!isset($_COOKIE[$gCookiePraefix. '_ID']))
 {
     unset($_SESSION['login_forward_url']);
     $gMessage->setForwardUrl($gHomepage);
@@ -28,7 +28,7 @@ else
 {
     // remove login page of URL stack
     $gNavigation->deleteLastUrl();
-    
+
     $show_time = 2000;
 
     if($getMessageCode != 'SYS_LOGIN_SUCCESSFUL')
@@ -36,9 +36,9 @@ else
         // Wenn es eine andere Meldung, als eine Standard-Meldung ist, dem User mehr Zeit zum lesen lassen
         $show_time = 0;
     }
-    
+
     // pruefen ob eine Weiterleitungsseite gesetzt wurde, anonsten auf die Startseite verweisen
-    if(isset($_SESSION['login_forward_url']) == false || strlen($_SESSION['login_forward_url']) == 0)
+    if(!isset($_SESSION['login_forward_url']) || $_SESSION['login_forward_url'] === '')
     {
         $_SESSION['login_forward_url'] = $gHomepage;
     }
