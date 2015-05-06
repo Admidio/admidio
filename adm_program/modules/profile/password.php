@@ -13,14 +13,14 @@
  *           change : Change password in database
  *
  *****************************************************************************/
- 
+
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 header('Content-type: text/html; charset=utf-8');
 
 $gMessage->showThemeBody(false);
- 
+
 // Initialize and check the parameters
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('requireValue' => true));
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'change')));
@@ -52,7 +52,7 @@ if($getMode == 'change')
     {
         $_POST['old_password'] = '';
     }
-    
+
     if((strlen($_POST['old_password']) > 0 || $gCurrentUser->isWebmaster())
     && strlen($_POST['new_password']) > 0
     && strlen($_POST['new_password_confirm']) > 0)
@@ -107,14 +107,14 @@ elseif($getMode == 'html')
     echo '<script type="text/javascript"><!--
     $(document).ready(function(){
         $("body").on("shown.bs.modal", ".modal", function () { $("#password_form:first *:input[type!=hidden]:first").focus(); });
-        
+
         $("#password_form").submit(function(event) {
             var action = $(this).attr("action");
             $("#password_form .form-alert").hide();
-        
+
             // disable default form submit
             event.preventDefault();
-            
+
             $.post(action, $(this).serialize(), function(data) {
                 if(data == "success") {
                     $("#password_form .form-alert").attr("class", "alert alert-success form-alert");
@@ -145,8 +145,8 @@ elseif($getMode == 'html')
             $form->addInput('old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));
             $form->addLine();
         }
-        $form->addInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'));
-        $form->addInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));
+        $form->addInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'minLength' => 6, 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'));
+        $form->addInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'minLength' => 6));
         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
         $form->show();
     echo '</div>';
