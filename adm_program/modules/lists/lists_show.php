@@ -193,8 +193,8 @@ if($getMode != 'csv')
                 
         $page->setTitle($title);
         $page->addHeadline($headline);
-		
-		$table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
+        
+        $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
     }
     elseif($getMode == 'pdf')
     {
@@ -209,10 +209,10 @@ if($getMode != 'csv')
         // remove default header/footer
         $pdf->setPrintHeader(true);
         $pdf->setPrintFooter(false);
- 		// set header and footer fonts
+         // set header and footer fonts
         $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-		
+        
         // set auto page breaks
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
         $pdf->SetMargins(10, 20, 10);
@@ -221,15 +221,15 @@ if($getMode != 'csv')
 
         //headline for PDF
         $pdf->SetHeaderData('', '', $headline, '');
-		
+        
         // set font
         $pdf->SetFont('times', '', 10);
 
         // add a page
         $pdf->AddPage();
-		
-		// Create table object for display
-		$table = new HtmlTable('adm_lists_table', $pdf, $hoverRows, $datatable, $classTable);
+        
+        // Create table object for display
+        $table = new HtmlTable('adm_lists_table', $pdf, $hoverRows, $datatable, $classTable);
         $table->addAttribute('border', '1');
         $table->addTableHeader();
         $table->addRow();
@@ -259,8 +259,10 @@ if($getMode != 'csv')
         $page->addJavascript('
             $("#export_list_to").change(function () {
                 if($(this).val().length > 1) {
+                    var result = $(this).val();
+                    $(this).prop("selectedIndex",0);
                     self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
-                        "lst_id='. $getListId. '&rol_id='. $getRoleId. '&mode=" + $(this).val() + "&show_members='.$getShowMembers.'";
+                        "lst_id='. $getListId. '&rol_id='. $getRoleId. '&mode=" + result + "&show_members='.$getShowMembers.'";
                 }
             });
             
@@ -300,13 +302,13 @@ if($getMode != 'csv')
         $form->addSelectBox('export_list_to', null, $selectBoxEntries, array('showContextDependentFirstEntry' => false));
         $listsMenu->addForm($form->show(false));
 
-		$table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
+        $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
         $table->setDatatablesRowsPerPage($gPreferences['lists_members_per_page']);
     }
-	else
-	{
-		$table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
-	}
+    else
+    {
+        $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
+    }
 }
 
 // initialize array parameters for table and set the first column for the counter
