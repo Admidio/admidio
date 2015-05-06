@@ -14,9 +14,9 @@
  *  @code
  *  // Example content arrays
  *  $dataArray = array('Data 1', 'Data 2', 'Data 3');
- *  @endcode 
+ *  @endcode
  *  @par Example_1: @b unorderedlist
- *  @code 
+ *  @code
  *  // create as parent instance
  *  parent::HtmlElement('ul','class', 'unordered');  // Parameters( element, attribute, value, nesting (true/false ))
  *  // we want to have further attributes for the element and set an id, for example
@@ -53,7 +53,7 @@
  *  echo $htmlList;
  *  @endcode
  *  @par Example_2 Nested Div Elements using nesting mode
- *  @code 
+ *  @code
  *  // Creating block elements with nested divs.
  *  // Example using nesting mode for html elements
  *  // Setting mode to true you are allowed to set the main element ('div' in this example) further times
@@ -124,58 +124,50 @@
 
 abstract class HtmlElement {
 
-    protected $arrParentElements;             ///< Array with opened child elements 
-    protected $currentElement;                ///< Internal pointer showing to actual element or child element
-    protected $currentElementAttributes;      ///< Attributes of the current element
-    protected $currentElementDataWritten;     ///< Flag if an element is added but the data is not added
-    protected $htmlString;                    ///< String with prepared html
-    protected $mainElement;                   ///< String with main element as string
-    protected $mainElementAttributes;         ///< String with attributes of the main element
-    protected $nesting;                       ///< Flag enables nesting of main elements, e.g div blocks ( Default : false )
-    protected $parentFlag;                    ///< Flag for setted parent Element
-    protected $mainElementWritten;            ///< Flag if the main element was written in the html string
-    
+    protected $arrParentElements;         ///< Array with opened child elements
+    protected $currentElement;            ///< Internal pointer showing to actual element or child element
+    protected $currentElementAttributes;  ///< Attributes of the current element
+    protected $currentElementDataWritten; ///< Flag if an element is added but the data is not added
+    protected $htmlString;                ///< String with prepared html
+    protected $mainElement;               ///< String with main element as string
+    protected $mainElementAttributes;     ///< String with attributes of the main element
+    protected $nesting;                   ///< Flag enables nesting of main elements, e.g div blocks ( Default : false )
+    protected $parentFlag;                ///< Flag for setted parent Element
+    protected $mainElementWritten;        ///< Flag if the main element was written in the html string
+
     /**
      * Constructor initializing all class variables
-     * 
+     *
      * @param $element The html element to be defined
      * @param $attribute The Attribute for the html element
      * @param $value Value of the attribute
      * @param $nesting Enables nesting of main elements ( Default: False )
      */
     public function __construct($element = '', $attribute = '', $value = '', $nesting = false)
-    {        
+    {
         $this->mainElementAttributes = array();
 
-        if($attribute != '')
+        if($attribute !== '')
         {
             $this->mainElementAttributes[$attribute] = $value;
         }
-        
-        if($nesting === false)
-        {
-            $this->nesting = false;
-        }
-        else
-        {
-            $this->nesting = true;
-        }
-        
+
+        $this->nesting                   = $nesting;
         $this->mainElement               = $element;
         $this->currentElement            = $element;
         $this->currentElementAttributes  = array();
         $this->htmlString                = '';
         $this->parentFlag                = 0;
         $this->arrParentElements         = array();
-        $this->mainElementWritten          = false;
+        $this->mainElementWritten        = false;
         $this->currentElementDataWritten = true;
     }
-    
-    /** Add attributes to the selected element. If that attribute is already added 
+
+    /** Add attributes to the selected element. If that attribute is already added
      *  than the new value will be attached to the current value.
      *  @param $attribute Name of the html attribute
      *  @param $value Value of the attribute
-     *  @param $element Optional the element for which the attribute should be set, 
+     *  @param $element Optional the element for which the attribute should be set,
      *                  if this is not the current element
      */
     public function addAttribute($attribute, $value, $element = null)
@@ -185,9 +177,9 @@ abstract class HtmlElement {
             $element = $this->currentElement;
         }
 
-        if($element == $this->mainElement)
+        if($element === $this->mainElement)
         {
-            if(is_array($this->mainElementAttributes) && array_key_exists($attribute, $this->mainElementAttributes) == true)
+            if(is_array($this->mainElementAttributes) && array_key_exists($attribute, $this->mainElementAttributes) === true)
             {
                 $this->mainElementAttributes[$attribute] = $this->mainElementAttributes[$attribute].' '.$value;
             }
@@ -198,7 +190,7 @@ abstract class HtmlElement {
         }
         else
         {
-            if(is_array($this->currentElementAttributes) && array_key_exists($attribute, $this->currentElementAttributes) == true)
+            if(is_array($this->currentElementAttributes) && array_key_exists($attribute, $this->currentElementAttributes) === true)
             {
                 $this->currentElementAttributes[$attribute] = $this->currentElementAttributes[$attribute].' '.$value;
             }
@@ -208,9 +200,9 @@ abstract class HtmlElement {
             }
         }
     }
-    
+
     /** Set attributes from associative array.
-     *  @param $array An array that contains all attribute names as array key 
+     *  @param $array An array that contains all attribute names as array key
      *                and all attribute content as array value
      */
     protected function setAttributesFromArray($array)
@@ -223,8 +215,8 @@ abstract class HtmlElement {
             }
         }
         return false;
-    }    
-    
+    }
+
     /**
      *  Add data to current element
      *
@@ -270,7 +262,7 @@ abstract class HtmlElement {
      * The method determines that the element has @b no @b own @b child @b elements and has a closing tag.
      * If you need a parent element like a \<div\> with some \<p\> elements, use method addParentElement(); instead and then add the paragraph elements.
      * If nesting mode is active you are allowed to set the main element called with object instance again. Dafault: false
-     * 
+     *
      *
      * @param $childElement valid child tags for element object
      * @param $data content values can be passed as string, array, bidimensional Array and assoc. Array. ( Default: no data )
@@ -278,25 +270,25 @@ abstract class HtmlElement {
      */
     public function addElement($childElement, $attribute = '', $value = '',  $data = '', $selfClosing = false)
     {
-        // if previous current element was not written to html string and the same child element is set 
+        // if previous current element was not written to html string and the same child element is set
         // than this could be a call of parent class so do not reinitialize the current element
-        if($this->currentElementDataWritten == true || $childElement != $this->currentElement)
+        if($this->currentElementDataWritten === true || $childElement !== $this->currentElement)
         {
             $this->currentElementDataWritten = false;
-            
-            if($attribute != '' || $value != '')
+
+            if($attribute !== '' || $value !== '')
             {
                 $this->addAttribute($attribute, $value);
             }
             // check if parent element is set, then write first the tag and attributes for the previous element
-            if($this->parentFlag == true)
+            if($this->parentFlag === true)
             {
                 // Main element attributes are set in own variable, so in nesting mode main element can be set again
-                if($this->currentElement == $this->mainElement)
+                if($this->currentElement === $this->mainElement)
                 {
                     $this->currentElementAttributes = $this->mainElementAttributes;
                 }
-                
+
                 $this->htmlString .= '<' .$this->currentElement . $this->getElementAttributesString() . '>';
                 $this->currentElement = $childElement;
                 $this->currentElementAttributes = array();
@@ -304,14 +296,14 @@ abstract class HtmlElement {
             }
 
             // If first child is set start writing the html beginning with main element and attributes
-            if($this->currentElement == $this->mainElement && $this->mainElement != '' && $this->mainElementWritten == false)
+            if($this->currentElement === $this->mainElement && $this->mainElement !== '' && $this->mainElementWritten === false)
             {
                 $this->htmlString .= '<' .$this->mainElement.$this->getMainElementAttributesString().'>';
                 $this->mainElementWritten = true;
             }
 
             // If nesting is enabled, main element can be set again
-            if($childElement == $this->mainElement && $this->nesting === true)
+            if($childElement === $this->mainElement && $this->nesting === true)
             {
                 // now set as current position
                 $this->currentElement = $childElement;
@@ -319,7 +311,7 @@ abstract class HtmlElement {
                 $this->currentElementAttributes = array();
             }
 
-            if($childElement != $this->mainElement)
+            if($childElement !== $this->mainElement)
             {
                 // now set as current position
                 $this->currentElement = $childElement;
@@ -328,21 +320,21 @@ abstract class HtmlElement {
             }
 
             // add content if exists
-            if($data != '')
+            if($data !== '')
             {
                 $this->addData($data, $selfClosing);
             }
         }
     }
-    
-    /** Add any string to the html output. If the main element wasn't written to the 
+
+    /** Add any string to the html output. If the main element wasn't written to the
      *  html string than this will be done before your string will be added.
      *  @param $string Text as string in current string position
      */
     public function addHtml($string = '')
     {
         // If first child is set start writing the html beginning with main element and attributes
-        if($this->currentElement == $this->mainElement && $this->mainElement != '' && $this->mainElementWritten == false)
+        if($this->currentElement === $this->mainElement && $this->mainElement !== '' && $this->mainElementWritten === false)
         {
             $this->htmlString .= '<' .$this->mainElement.$this->getMainElementAttributesString().'>';
             $this->mainElementWritten = true;
@@ -364,29 +356,29 @@ abstract class HtmlElement {
      * @param $value Value for the attribute
      */
     public function addParentElement($parentElement, $attribute = '', $value = '')
-    {   
+    {
         // Only possible for child elements of the main element or nesting mode is active!
-        if($this->currentElement != $this->mainElement || $this->nesting === true)
-        {   
+        if($this->currentElement !== $this->mainElement || $this->nesting === true)
+        {
             // check if already parent element is set, then write first the tag and attributes for the previous element
-            if($this->parentFlag == true)
+            if($this->parentFlag === true)
             {
                 $this->htmlString .= '<' .$this->currentElement . $this->getElementAttributesString() . '>';
                 //$this->currentElementAttributes = array();
             }
             else
-            {   
+            {
                 // set Flag
                 $this->parentFlag = true;
-   
-                if($this->currentElement == $this->mainElement && $this->nesting === true && $this->mainElementWritten == false)
+
+                if($this->currentElement === $this->mainElement && $this->nesting === true && $this->mainElementWritten === false)
                 {
                     $this->htmlString .= '<' .$this->currentElement . $this->getMainElementAttributesString() . '>';
                     $this->mainElementAttributes = array();
                 }
             }
 
-            if(!in_array($parentElement, $this->arrParentElements))
+            if(!in_array($parentElement, $this->arrParentElements, true))
             {
                 // If currently not defined and element has own child elements then log in array to define endtags later
                 $this->arrParentElements[] = $parentElement;
@@ -404,23 +396,23 @@ abstract class HtmlElement {
             }
             // set parent element to current element
             $this->currentElement = $parentElement;
-			// initialize attributes because parent element should not get attributes of previous element
-			$this->currentElementAttributes = array();
+            // initialize attributes because parent element should not get attributes of previous element
+            $this->currentElementAttributes = array();
 
             // save attribute for parent element
-            if($attribute != '' || $value != '')
+            if($attribute !== '' || $value !== '')
             {
                 $this->addAttribute($attribute, $value);
             }
             //$this->mainElementAttributes = array();
         }
     }
-    
+
     /**
      * @par Close parent element.
      * This method sets the endtag of the selected element and removes the entry from log array.
      * If nesting mode is not used, the methods looks for the entry in the array and determines that all setted elements after the selected element must be closed as well.
-     * All end tags to position are closed automatically starting with last setted element tag. 
+     * All end tags to position are closed automatically starting with last setted element tag.
      *
      * @param $parentElement Parent element to be closed
      */
@@ -430,7 +422,7 @@ abstract class HtmlElement {
         $position = '';
         $totalCount = count($this->arrParentElements);
 
-        if($totalCount == 0)
+        if($totalCount === 0)
         {
             return false;
         }
@@ -440,14 +432,14 @@ abstract class HtmlElement {
             // find position in log array
             for($i = 0; $i < $totalCount-1; $i++)
             {
-                if($this->arrParentElements[$i] == $parentElement)
+                if($this->arrParentElements[$i] === $parentElement)
                 {
                     $position = $i;
                 }
             }
 
             // if last position set Endtag in string and remove from array
-            if($position == $totalCount)
+            if($position === $totalCount)
             {
                 $this->htmlString .= '</' . $this->arrParentElements[$totalCount] . '>';
                 unset($this->arrParentElements[$position]);
@@ -470,37 +462,37 @@ abstract class HtmlElement {
         }
         $this->arrParentElements = array_values($this->arrParentElements);
     }
-    
-    /** Create a valid html compatible string with all attributes and their values of the 
+
+    /** Create a valid html compatible string with all attributes and their values of the
      *  last added element.
      *  @return Returns a string with all attributes and values.
      */
     private function getElementAttributesString()
     {
         $string = '';
-        
+
         foreach($this->currentElementAttributes as $key => $value)
         {
             $string .= ' '.$key.'="'.$value.'" ';
         }
-        
+
         return $string;
     }
 
-    
-    /** Create a valid html compatible string with all attributes and their values of the 
+
+    /** Create a valid html compatible string with all attributes and their values of the
      *  main element.
      *  @return Returns a string with all attributes and values.
      */
     private function getMainElementAttributesString()
     {
         $string = '';
-        
+
         foreach($this->mainElementAttributes as $key => $value)
         {
             $string .= ' '.$key.'="'.$value.'" ';
         }
-        
+
         return $string;
     }
 
@@ -512,10 +504,10 @@ abstract class HtmlElement {
     public function getHtmlElement()
     {
         $this->htmlString .= '</' . $this->mainElement . '>';
-        
+
         return  $this->htmlString;
     }
-    
+
     /**
      *  Prepare html of data added from content arrays
      *  @param: $data Array with content for child elements
@@ -526,10 +518,10 @@ abstract class HtmlElement {
     {
         $startTag = '';
         $endTag   = '';
-        
-        if(isset($data)) 
+
+        if(isset($data))
         {
-            $count = 0; 
+            $count = 0;
             // no selfclosing element
             if($selfClosing === false)
             {
@@ -542,31 +534,31 @@ abstract class HtmlElement {
                 $endTag   = '/>';
             }
             // count entries
-            $numberEntries = count($data); 
+            $numberEntries = count($data);
             // count 1 level deeper.
             $nextLevel = count($data[0]);
-            if($nextLevel > 1) 
+            if($nextLevel > 1)
             {
                 // bidimensional or assoc. array
-                for ($i = 0; $i < count($data); $i++) 
+                for ($i = 0; $i < $numberEntries; $i++)
                 {
 
-                    foreach ($data[$i] as $col => $value) 
+                    foreach ($data[$i] as $col => $value)
                     {
                         $this->htmlString .= $startTag . $value . $endTag;
-                    } 
-                } 
-            } 
-            else 
+                    }
+                }
+            }
+            else
             {
                 // single array
-                foreach ($data as $col) 
+                foreach ($data as $col)
                 {
                     $this->htmlString .= $startTag . $col . $endTag;
-                } 
-            } 
-        } 
+                }
+            }
+        }
         return false;
-    } 
-} 
+    }
+}
 ?>
