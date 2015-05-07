@@ -13,13 +13,13 @@
 
                 // prepare the menus here so that the plugins have a chance to modify them
                 echo '<div id="plugin_menu" class="admidio-plugin-content">';
-                
+
                 $moduleMenu = new Menu('modules', $gL10n->get('SYS_MODULES'));
                 $adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
-    
+
                 $moduleMenu->addItem('overview', '/adm_program/index.php',
                                     $gL10n->get('SYS_OVERVIEW'), '/icons/home.png');
-    
+
                 if($gPreferences['enable_announcements_module'] == 1
                 || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
                 {
@@ -41,7 +41,7 @@
     				// get number of unread messages for user
     				$message = new TableMessage($gDb);
     	            $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
-    
+
                     if ($unread > 0)
                     {
                         $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages.php',
@@ -65,7 +65,7 @@
                     $moduleMenu->addItem('guestbk', '/adm_program/modules/guestbook/guestbook.php',
                                         $gL10n->get('GBO_GUESTBOOK'), '/icons/guestbook.png');
                 }
-    
+
                 $moduleMenu->addItem('lists', '/adm_program/modules/lists/lists.php',
                                     $gL10n->get('LST_LISTS'), '/icons/lists.png');
 
@@ -74,24 +74,24 @@
                     $moduleMenu->addItem('mylist', '/adm_program/modules/lists/mylist.php',
                                         $gL10n->get('LST_MY_LIST'), '/icons/mylist.png');
                 }
-    
+
                 if($gPreferences['enable_dates_module'] == 1
                 || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
                 {
                     $moduleMenu->addItem('dates', '/adm_program/modules/dates/dates.php',
                                         $gL10n->get('DAT_DATES'), '/icons/dates.png');
                 }
-    
+
                 if($gPreferences['enable_weblinks_module'] == 1
                 || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
                 {
                     $moduleMenu->addItem('links', '/adm_program/modules/links/links.php',
                                         $gL10n->get('LNK_WEBLINKS'), '/icons/weblinks.png');
                 }
-    
+
                 if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
                 {
-    
+
                     if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
                     {
                         $adminMenu->addItem('newreg', '/adm_program/modules/registration/registration.php',
@@ -115,7 +115,7 @@
                                             $gL10n->get('SYS_SETTINGS'), '/icons/options.png');
                     }
                 }
-    
+
                 $moduleMenu->show();
                 $adminMenu->show();
                 ?>
@@ -130,5 +130,5 @@
     <a href="http://www.admidio.org"><img
     src="<?php echo THEME_PATH; ?>/images/admidio_logo_20.png" style="border: 0px; vertical-align: bottom;"
      alt="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>" title="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>" /></a>
-    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2015&nbsp;&nbsp;<?php echo $gL10n->get('SYS_ADMIDIO_TEAM'); ?></span>
+    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2015&nbsp;&nbsp;<?php echo $gL10n->get('SYS_ADMIDIO_TEAM'); ?>&nbsp;&nbsp;v<?php echo ADMIDIO_VERSION_TEXT; ?></span>
 </p>

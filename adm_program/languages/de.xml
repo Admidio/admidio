@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
     <version id="3.0.0" translator="Markus Faßbender">
+        <text id="MAI_EMAIL_SEND_TO_RECEIVER" development="new" translation="todo">%VAR1% hat an die folgenden Empfänger: %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
 	    <text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Ehemalige Mitglieder</text>
         <text id="MSG_ACTIVE_FORMER_SHORT" development="new" translation="todo">Aktive und ehemalige</text>
         <text id="BAC_ONLY_MYSQL" development="new" translation="todo">Das Backupmodul kann nur bei einer MySQL-Datenbank genutzt werden.</text>
@@ -442,7 +443,7 @@
         <text id="DOW_FILE_NOT_EXISTS" development="new" translation="todo">Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.</text>
         <text id="DOW_FILE_RENAME" development="new" translation="todo">Die Datei %VAR1% wurde umbenannt.</text>
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="todo">Beim Umbenennen der Datei %VAR1% ist ein Fehler aufgetreten.</text>
-        <text id="DOW_FILE_TO_LARGE" development="new" translation="todo">Die hochgeladene Datei übersteigt die zulässige Dateigröße von %VAR1% KB.</text>
+        <text id="DOW_FILE_TO_LARGE" development="new" translation="todo">Die hochgeladene Datei übersteigt die zulässige Dateigröße von %VAR1% kB.</text>
         <text id="DOW_FILE_TYPE" development="new" translation="todo">Dateityp</text>
         <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="todo">Beim Hochladen der Datei %VAR1% ist ein unbekannter Fehler aufgetreten.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="todo">Die Datei %VAR1_BOLD% wurde hochgeladen.</text>
@@ -455,7 +456,7 @@
         <text id="DOW_FOLDER_RENAME" development="new" translation="todo">Der Ordner %VAR1% wurde umbenannt.</text>
         <text id="DOW_FOLDER_RENAME_ERROR" development="new" translation="todo">Beim Umbenennen des Ordners %VAR1% ist ein Fehler aufgetreten.</text>
         <text id="DOW_MAXIMUM_FILE_SIZE" development="new" translation="todo">Maximale Dateigröße</text>
-        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="todo">Benutzer können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 3072KB)</text>
+        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="todo">Benutzer können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 3072kB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="todo">Neuer Dateiname</text>
         <text id="DOW_NEW_NAME" development="new" translation="todo">Neuer Name</text>
         <text id="DOW_NO_ACCESS" development="new" translation="todo">Kein Zugriff</text>
@@ -698,7 +699,7 @@
         <text id="MAI_ADD_ATTACHEMENT" development="new" translation="todo">Anhang hinzufügen</text>
         <text id="MAI_ATTACHEMENT" development="new" translation="todo">Anhang</text>
         <text id="MAI_ATTACHMENT_SIZE" development="new" translation="todo">Maximale Dateigröße für Anhänge</text>
-        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="todo">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich. (Standard:1024KB)</text>
+        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="todo">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich. (Standard:1024kB)</text>
         <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="todo">Dein Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</text>
         <text id="MAI_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
         <text id="MAI_CHOOSE_ROLE" development="new" translation="todo">Bitte wähle eine Rolle als Adressat der E-Mail aus!</text>

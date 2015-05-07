@@ -34,9 +34,9 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
     $gMessage->show($gL10n->get('SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY', $gHomepage));
 }
 
-//maximaler Fileupload fuer das Downloadmodul muss groesser 0 sein
-if ($gPreferences['max_file_upload_size'] == 0) {
-
+// upload only possible if upload filesize > 0
+if ($gPreferences['max_file_upload_size'] == 0) 
+{
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 

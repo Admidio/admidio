@@ -110,6 +110,7 @@ and sharing great software.
 - [jQuery-File-Upload](https://blueimp.github.io/jQuery-File-Upload/): jQuery file upload plugin
 - [Bootstrap-Datepicker](https://github.com/eternicode/bootstrap-datepicker): Datepicker for bootstrap 3
 - [Lightbox](http://ashleydw.github.io/lightbox/): Lightbox for bootstrap 3
+- [Moment](http://momentjs.com/): Parse, validate, manipulate, and display dates in JavaScript
 - [James Heinrich](http://www.silisoftware.com): backupDB
 - [htmLawed](http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/): PHP code to purify & filter HTML
 - [phpass](http://www.openwall.com/phpass/): Portable PHP password hashing framework

@@ -37,4 +37,9 @@ $g_root_path = 'http://www.your-website.de/admidio';
 // Maximun of 10 characters !!!
 $g_organization = 'Shortcut';
 
+// If this flag is set = 1 then you must enter your loginname and password 
+// for an update of the Admidio database to a new version of Admidio.
+// For a more comfortable and easy update you can set this preference = 0.
+$gLoginForUpdate = 1;
+
 ?>

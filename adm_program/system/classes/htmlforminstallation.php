@@ -121,7 +121,7 @@ class HtmlFormInstallation extends HtmlForm
                     {
                         $html .= '<h3>'.$this->descriptionTitle.'</h3>';
                     }
-                    $html .= $this->descriptionText;
+                    $html .= '<p>'.$this->descriptionText.'</p>';
                 }
                 // now show the configured form
                 $html .= parent::show(false);

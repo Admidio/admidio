@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
     <version id="3.0.0" translator="Stefanie Schima">
+        <text id="MAI_EMAIL_SEND_TO_RECEIVER" development="new" translation="todo">%VAR1% sent to the receivers: %VAR3% from %VAR2% the following E-Mail:</text>
 		<text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Former members</text>
 		<text id="MSG_ACTIVE_FORMER_SHORT" development="new" translation="todo">Active and former</text>
         <text id="BAC_ONLY_MYSQL" development="new" translation="edited">The backup module can only be used in combination with a MySQL database.</text>
@@ -445,7 +446,7 @@
         <text id="DOW_FILE_NOT_EXISTS" development="new" translation="edited">The file is physically not available anymore on the server. It should be deleted from the database.</text>
         <text id="DOW_FILE_RENAME" development="new" translation="edited">File %VAR1% was renamed.</text>
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="edited">An error occurred while file %VAR1% was renamed.</text>
-        <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">Uploaded files size is greater than allowed (maximum file size: %VAR1% KB).</text>
+        <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">Uploaded files size is greater than allowed (maximum file size: %VAR1% kB).</text>
         <text id="DOW_FILE_TYPE" development="new" translation="edited">File type</text>
         <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="edited">Unidentified error occurred while file %VAR1% was being uploaded.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="edited">File %VAR1_BOLD% was uploaded.</text>
@@ -458,7 +459,7 @@
         <text id="DOW_FOLDER_RENAME" development="new" translation="edited">Folder %VAR1% was renamed.</text>
         <text id="DOW_FOLDER_RENAME_ERROR" development="new" translation="edited">An error occurred while folder %VAR1% was renamed.</text>
         <text id="DOW_MAXIMUM_FILE_SIZE" development="new" translation="edited">Maximum file size</text>
-        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Users are only allowed to upload files of smaller size than displayed here. In case of 0 upload is deactivated. (default: 3072KB)</text>
+        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Users are only allowed to upload files of smaller size than displayed here. In case of 0 upload is deactivated. (default: 3072kB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="edited">New file name</text>
         <text id="DOW_NEW_NAME" development="new" translation="edited">New name</text>
         <text id="DOW_NO_ACCESS" development="new" translation="edited">Access denied</text>
@@ -705,7 +706,7 @@
         <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Attach file</text>
         <text id="MAI_ATTACHEMENT" development="new" translation="edited">Attachment</text>
         <text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Maximum size of e-mail attachments</text>
-        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Users are able to attach files of smaller size than the value defined here. When value is 0, attachments can not be sent. (default: 1024KB)</text>
+        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Users are able to attach files of smaller size than the value defined here. When value is 0, attachments can not be sent. (default: 1024kB)</text>
         <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">E-mail attachment upload error.\nFile size is most likely to large!</text>
         <text id="MAI_CAPTCHA_DESC" development="new" translation="edited">When option is activated, logged in users will receive a picture with a captcha code or a simple calculation. It's necessary to fill in the correct code or result to send the mail. The captcha is part of antispam solution in Admidio. (default: yes)</text>
         <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Please select a role as recipient of the e-mail!</text>

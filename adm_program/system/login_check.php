@@ -112,7 +112,7 @@ if ($userFound === 1)
             $login_message = 'SYS_LOGIN_SUCCESSFUL';
 
             // bei einer Beta-Version noch einen Hinweis ausgeben !
-            if(BETA_VERSION > 0 && !$gDebug)
+            if(ADMIDIO_VERSION_BETA > 0 && $gDebug === false)
             {
                 $login_message = 'SYS_BETA_VERSION';
             }

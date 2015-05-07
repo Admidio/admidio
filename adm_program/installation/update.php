@@ -179,7 +179,7 @@ if($getMode == 1)
         $form->setUpdateModus();
         $form->setFormDescription('<h3>'.$gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', $installedDbVersion, ADMIDIO_VERSION_TEXT).'</h3>');
 
-        if($gDebug == false)
+        if(isset($gLoginForUpdate) == false || $gLoginForUpdate == 1)
         {
             $form->addDescription($gL10n->get('INS_WEBMASTER_LOGIN_DESC'));
             $form->addInput('login_name', $gL10n->get('SYS_USERNAME'), null, array('maxLength' => 35, 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
@@ -187,7 +187,7 @@ if($getMode == 1)
         }
 
         // if this is a beta version then show a warning message
-        if(BETA_VERSION > 0)
+        if(ADMIDIO_VERSION_BETA > 0)
         {
             $form->addDescription('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>
                             '.$gL10n->get('INS_WARNING_BETA_VERSION').'</div>');
@@ -218,7 +218,7 @@ elseif($getMode == 2)
     /* execute update script for database */
     /**************************************/
 
-    if($gDebug == false)
+    if(isset($gLoginForUpdate) == false || $gLoginForUpdate == 1)
     {
         try
         {

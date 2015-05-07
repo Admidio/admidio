@@ -23,12 +23,12 @@ session_name('admidio_php_session_id');
 session_start();
 
 // if config file already exists then load file with their variables
-if(file_exists('../../adm_my_files/config.php') == true)
+if(file_exists('../../adm_my_files/config.php') === true)
 {
     require_once('../../adm_my_files/config.php');
 }
 
-if(isset($g_tbl_praefix) == false)
+if(isset($g_tbl_praefix) === false)
 {
     if(isset($_SESSION['prefix']))
     {
@@ -45,7 +45,7 @@ if(isset($g_tbl_praefix) == false)
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
-if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
+if(version_compare(phpversion(), MIN_PHP_VERSION) === -1)
 {
     die('<div style="color: #CC0000;">Error: Your PHP version '.phpversion().' does not fulfill
         the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or higher.</div>');
@@ -139,7 +139,7 @@ elseif($getMode == 2)  // Welcome to installation
     $message = $gL10n->get('INS_WELCOME_TEXT');
 
     // if this is a beta version then show a notice to the user
-    if(BETA_VERSION > 0)
+    if(ADMIDIO_VERSION_BETA > 0)
     {
         $message .= '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_WARNING_BETA_VERSION').'</div>';
     }
@@ -387,11 +387,11 @@ elseif($getMode == 6)  // Creating configuration file
     $configFileContent = str_replace('%DATABASE%', $_SESSION['db_database'], $configFileContent);
     $configFileContent = str_replace('%ROOT_PATH%', $rootPath, $configFileContent);
     $configFileContent = str_replace('%ORGANIZATION%', $_SESSION['orga_shortname'], $configFileContent);
-    $_SERVER['config_file_content'] = $configFileContent;
+    $_SESSION['config_file_content'] = $configFileContent;
 
     // now save new configuration file in Admidio folder if user has write access to this folder
     $filename   = '../../adm_my_files/config.php';
-    $configFileHandle = fopen($filename, 'a');
+    $configFileHandle = @fopen($filename, 'a');
 
     if($configFileHandle)
     {
@@ -407,22 +407,22 @@ elseif($getMode == 6)  // Creating configuration file
         // if user doesn't has write access then create a page with a download link for the config file
         $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=8');
         $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', $rootPath.'/adm_my_files', 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
-        $form->addHtml('
-            <a class="btn btn-default" href="installation.php?mode=7"><img src="layout/page_white_download.png"
-                alt="'.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE').'" />'.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE').'</a>');
+        $form->openButtonGroup();
+        $form->addButton('download_config', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'), array('icon' => 'layout/page_white_download.png', 'link' => 'installation.php?mode=7'));
         $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
+        $form->closeButtonGroup();
         $form->show();
     }
 }
 elseif($getMode == 7) // Download configuration file
 {
     $filename   = 'config.php';
-    $fileLength = strlen($_SERVER['config_file_content']);
+    $fileLength = strlen($_SESSION['config_file_content']);
 
     header('Content-Type: text/plain; charset=utf-8');
     header('Content-Length: '.$fileLength);
     header('Content-Disposition: attachment; filename="'.$filename.'"');
-    echo $_SERVER['config_file_content'];
+    echo $_SESSION['config_file_content'];
     exit();
 }
 elseif($getMode == 8) // Start installation
@@ -479,7 +479,7 @@ elseif($getMode == 8) // Start installation
     $component->setValue('com_name', 'Admidio Core');
     $component->setValue('com_name_intern', 'CORE');
     $component->setValue('com_version', ADMIDIO_VERSION);
-    $component->setValue('com_beta', BETA_VERSION);
+    $component->setValue('com_beta', (string)ADMIDIO_VERSION_BETA);
     $component->setValue('com_update_step', $component->getMaxUpdateStep());
     $component->save();
 

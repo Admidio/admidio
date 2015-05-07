@@ -275,6 +275,35 @@ class Email extends PHPMailer
     {
         $this->emListRecipients = true;
     }
+	
+	// write a short text with sender informations in text of email
+    public function setSenderInText($senderName, $senderEmail, $receivers)
+    {
+        global $gL10n, $gValidLogin, $gCurrentOrganization;
+        
+        if($this->emSendAsHTML)
+        {
+            $senderCode = '<a href="mailto:'.$senderEmail.'">'.$senderName.'</a>';
+        }
+        else
+        {
+            $senderCode = $senderName.' ('.$senderEmail.')';
+        }
+		
+		$senderText = $gL10n->get('MAI_EMAIL_SEND_TO_RECEIVER', $senderCode, $gCurrentOrganization->getValue('org_homepage'), $receivers);
+        
+        if($gValidLogin == false)
+        {
+            $senderText = $senderText."\r\n".$gL10n->get('MAI_SENDER_NOT_LOGGED_IN');
+        }
+    
+        $senderText = $senderText."\r\n".
+        '*****************************************************************************************************************************'.
+        "\r\n"."\r\n";
+        
+        $this->emText = $this->emText.$senderText;
+        $this->emHtmlText = $this->emHtmlText.nl2br($senderText);
+    }
     
     // method change email header so that client will interpret mail as html mail
     public function sendDataAsHtml()
