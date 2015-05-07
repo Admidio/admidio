@@ -45,7 +45,7 @@ function callUrlHideElement(elementId, url) {
     // send RequestObjekt and delete entry
     $.get(url, function(data) {
         if(data == "done") {
-            $("#admidio_modal").modal("hide")
+            $("#admidio_modal").modal("hide");
             $(entryDeleted).fadeOut("slow");
 			'.$callbackSuccess.'
         }
