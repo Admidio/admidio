@@ -80,8 +80,12 @@ if ($gCurrentUser->editDownloadRight())
     $DownloadsMenu->addItem('admMenuItemCreateFolder', $g_root_path.'/adm_program/modules/downloads/folder_new.php?folder_id='.$getFolderId,
                         $gL10n->get('DOW_CREATE_FOLDER'), 'folder_create.png');
 
-    $DownloadsMenu->addItem('admMenuItemAddFile', $g_root_path.'/adm_program/modules/downloads/upload.php?folder_id='.$getFolderId,
-                        $gL10n->get('DOW_UPLOAD_FILE'), 'page_white_upload.png');
+    // upload only possible if upload filesize > 0
+    if ($gPreferences['max_file_upload_size'] > 0) 
+    {
+        $DownloadsMenu->addItem('admMenuItemAddFile', $g_root_path.'/adm_program/modules/downloads/upload.php?folder_id='.$getFolderId,
+                            $gL10n->get('DOW_UPLOAD_FILE'), 'page_white_upload.png');
+    }
 
     $DownloadsMenu->addItem('admMenuItemConfigFolder', $g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$getFolderId,
                         $gL10n->get('SYS_AUTHORIZATION'), 'lock.png');
