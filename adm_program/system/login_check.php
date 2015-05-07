@@ -29,12 +29,12 @@ if(isset($_POST['usr_login_name']) && strlen($_POST['usr_login_name']) > 0)
     {
         $bAutoLogin = true;
     }
-	
-	// if user can choose organization then save the selection
-	if(isset($_POST['org_id']) && is_numeric($_POST['org_id']) && $_POST['org_id'] > 0)
-	{
-		$organizationId = $_POST['org_id'];
-	}
+
+    // if user can choose organization then save the selection
+    if(isset($_POST['org_id']) && is_numeric($_POST['org_id']) && $_POST['org_id'] > 0)
+    {
+        $organizationId = $_POST['org_id'];
+    }
 }
 
 if(isset($_POST['plg_usr_login_name']) && strlen($_POST['plg_usr_login_name']) > 0)
@@ -48,11 +48,11 @@ if(isset($_POST['plg_usr_login_name']) && strlen($_POST['plg_usr_login_name']) >
         $bAutoLogin = true;
     }
 
-	// if user can choose organization then save the selection
-	if(isset($_POST['plg_org_id']) && is_numeric($_POST['plg_org_id']) && $_POST['plg_org_id'] > 0)
-	{
-		$organizationId = $_POST['plg_org_id'];
-	}
+    // if user can choose organization then save the selection
+    if(isset($_POST['plg_org_id']) && is_numeric($_POST['plg_org_id']) && $_POST['plg_org_id'] > 0)
+    {
+        $organizationId = $_POST['plg_org_id'];
+    }
 }
 
 if(strlen($loginname) == 0)
@@ -86,21 +86,21 @@ $userRow   = $gDb->fetch_array($result);
 
 if ($userFound == 1)
 {
-	// if login organization is different to organization of config file then create new session variables
-	if($organizationId != $gCurrentOrganization->getValue('org_id'))
-	{
-		// read organization of config file with their preferences
-		$gCurrentOrganization->readDataById($organizationId);
-		$gPreferences = $gCurrentOrganization->getPreferences();
-		
-		// read new profile field structure for this organization
-		$gProfileFields->readProfileFields($organizationId);
-		
-		// save new organization id to session
-		$gCurrentSession->setValue('ses_org_id', $organizationId);
-		$gCurrentSession->save();
-	}
-    
+    // if login organization is different to organization of config file then create new session variables
+    if($organizationId != $gCurrentOrganization->getValue('org_id'))
+    {
+        // read organization of config file with their preferences
+        $gCurrentOrganization->readDataById($organizationId);
+        $gPreferences = $gCurrentOrganization->getPreferences();
+
+        // read new profile field structure for this organization
+        $gProfileFields->readProfileFields($organizationId);
+
+        // save new organization id to session
+        $gCurrentSession->setValue('ses_org_id', $organizationId);
+        $gCurrentSession->save();
+    }
+
     try
     {
         // create user object
@@ -112,7 +112,7 @@ if ($userFound == 1)
             $login_message = 'SYS_LOGIN_SUCCESSFUL';
 
             // bei einer Beta-Version noch einen Hinweis ausgeben !
-            if(BETA_VERSION > 0 && $gDebug == false)
+            if(ADMIDIO_VERSION_BETA > 0 && $gDebug == false)
             {
                 $login_message = 'SYS_BETA_VERSION';
             }
@@ -138,13 +138,13 @@ if ($userFound == 1)
 }
 else
 {
-	// now check if login is not released or doesn't exists
+    // now check if login is not released or doesn't exists
     $sql    = 'SELECT usr_id
                  FROM '. TBL_USERS. ', '.TBL_REGISTRATIONS.'
                 WHERE usr_login_name LIKE \''. $loginname. '\'
                   AND usr_valid  = 0
-				  AND reg_usr_id = usr_id
-				  AND reg_org_id = '.$gCurrentOrganization->getValue('org_id');
+                  AND reg_usr_id = usr_id
+                  AND reg_org_id = '.$gCurrentOrganization->getValue('org_id');
     $result = $gDb->query($sql);
 
     if($gDb->num_rows($result) == 1)

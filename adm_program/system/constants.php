@@ -8,19 +8,23 @@
  *
  *****************************************************************************/
 
-if ('constants.php' == basename($_SERVER['SCRIPT_FILENAME']))
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'constants.php')
 {
     die('This page may not be called directly !');
 }
 
 // !!! Please do not edit these version numbers !!!
-define('ADMIDIO_VERSION', '3.0.0');
-define('BETA_VERSION', '1');
 define('MIN_PHP_VERSION', '5.3.7');
 
-if(BETA_VERSION > 0)
+define('ADMIDIO_VERSION_MAIN', 3);
+define('ADMIDIO_VERSION_MINOR', 0);
+define('ADMIDIO_VERSION_PATCH', 0);
+define('ADMIDIO_VERSION_BETA', 1);
+define('ADMIDIO_VERSION', ADMIDIO_VERSION_MAIN . '.' . ADMIDIO_VERSION_MINOR . '.' . ADMIDIO_VERSION_PATCH);
+
+if(ADMIDIO_VERSION_BETA > 0)
 {
-    define('ADMIDIO_VERSION_TEXT', ADMIDIO_VERSION.' Beta '.BETA_VERSION);
+    define('ADMIDIO_VERSION_TEXT', ADMIDIO_VERSION . ' Beta ' . ADMIDIO_VERSION_BETA);
 }
 else
 {
@@ -30,14 +34,14 @@ else
 
 // different paths
 define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1));
-if(strpos($_SERVER['SCRIPT_FILENAME'], '/adm_') !== false && isset($g_root_path) == true)
+if(isset($g_root_path) === true && strpos($_SERVER['SCRIPT_FILENAME'], '/adm_') !== false)
 {
     // current called url (only this way possible, because SSL-Proxies couldn't be read with _SERVER parameter)
     define('CURRENT_URL', $g_root_path. substr($_SERVER['SCRIPT_FILENAME'], strrpos($_SERVER['SCRIPT_FILENAME'], '/adm_')). '?'. $_SERVER['QUERY_STRING']);
 }
 else
 {
-    define('CURRENT_URL', "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
+    define('CURRENT_URL', 'http://'. $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
 }
 
 // default timezone so that there are no errors in php5 until Admidio supports timezones

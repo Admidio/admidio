@@ -29,7 +29,7 @@
 
 class Component extends TableAccess
 {
-	/** Constuctor that will create an object of a recordset of the table adm_component. 
+	/** Constuctor that will create an object of a recordset of the table adm_component.
 	 *  If the id is set than the specific component will be loaded.
 	 *  @param $db Object of the class database. This should be the default object $gDb.
 	 *  @param $com_id The recordset of the component with this id will be loaded. If com_id isn't set than an empty object of the table is created.
@@ -50,11 +50,11 @@ class Component extends TableAccess
     {
         global $g_root_path;
 
-        if(version_compare($this->getValue('com_version'), ADMIDIO_VERSION) != 0 || version_compare($this->getValue('com_beta'), BETA_VERSION) != 0)
+        if(version_compare($this->getValue('com_version'), ADMIDIO_VERSION) !== 0 || version_compare($this->getValue('com_beta'), ADMIDIO_VERSION_BETA) !== 0)
         {
             $arrDbVersion         = explode('.', $this->getValue('com_version').'.'.$this->getValue('com_beta'));
-            $arrFileSystemVersion = explode('.', ADMIDIO_VERSION.'.'.BETA_VERSION);
-            
+            $arrFileSystemVersion = explode('.', ADMIDIO_VERSION.'.'.ADMIDIO_VERSION_BETA);
+
             if($webmaster == true)
             {
                 // if webmaster and db version is less than file system version then show notice
@@ -82,7 +82,7 @@ class Component extends TableAccess
                 {
                     throw new AdmException('SYS_DATABASE_INVALID', $this->getValue('com_version'), ADMIDIO_VERSION, '<a href="mailto:'.$emailAdministrator.'">', '</a>');
                 }
-                // if main version and subversion are equal 
+                // if main version and subversion are equal
                 // but subsub db version is less then subsub file version show notice
                 elseif($arrDbVersion[0] == $arrFileSystemVersion[0]
                 &&     $arrDbVersion[1] == $arrFileSystemVersion[1]

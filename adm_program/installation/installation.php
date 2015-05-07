@@ -23,12 +23,12 @@ session_name('admidio_php_session_id');
 session_start();
 
 // if config file already exists then load file with their variables
-if(file_exists('../../adm_my_files/config.php') == true)
+if(file_exists('../../adm_my_files/config.php') === true)
 {
     require_once('../../adm_my_files/config.php');
 }
 
-if(isset($g_tbl_praefix) == false)
+if(isset($g_tbl_praefix) === false)
 {
     if(isset($_SESSION['prefix']))
     {
@@ -45,7 +45,7 @@ if(isset($g_tbl_praefix) == false)
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
-if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
+if(version_compare(phpversion(), MIN_PHP_VERSION) === -1)
 {
     die('<div style="color: #CC0000;">Error: Your PHP version '.phpversion().' does not fulfill
         the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or higher.</div>');
@@ -139,7 +139,7 @@ elseif($getMode == 2)  // Welcome to installation
     $message = $gL10n->get('INS_WELCOME_TEXT');
 
     // if this is a beta version then show a notice to the user
-    if(BETA_VERSION > 0)
+    if(ADMIDIO_VERSION_BETA > 0)
     {
         $message .= '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_WARNING_BETA_VERSION').'</div>';
     }
@@ -479,7 +479,7 @@ elseif($getMode == 8) // Start installation
     $component->setValue('com_name', 'Admidio Core');
     $component->setValue('com_name_intern', 'CORE');
     $component->setValue('com_version', ADMIDIO_VERSION);
-    $component->setValue('com_beta', BETA_VERSION);
+    $component->setValue('com_beta', (string)ADMIDIO_VERSION_BETA);
     $component->setValue('com_update_step', $component->getMaxUpdateStep());
     $component->save();
 
