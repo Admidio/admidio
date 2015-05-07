@@ -387,11 +387,11 @@ elseif($getMode == 6)  // Creating configuration file
     $configFileContent = str_replace('%DATABASE%', $_SESSION['db_database'], $configFileContent);
     $configFileContent = str_replace('%ROOT_PATH%', $rootPath, $configFileContent);
     $configFileContent = str_replace('%ORGANIZATION%', $_SESSION['orga_shortname'], $configFileContent);
-    $_SERVER['config_file_content'] = $configFileContent;
+    $_SESSION['config_file_content'] = $configFileContent;
 
     // now save new configuration file in Admidio folder if user has write access to this folder
     $filename   = '../../adm_my_files/config.php';
-    $configFileHandle = fopen($filename, 'a');
+    $configFileHandle = @fopen($filename, 'a');
 
     if($configFileHandle)
     {
@@ -407,22 +407,22 @@ elseif($getMode == 6)  // Creating configuration file
         // if user doesn't has write access then create a page with a download link for the config file
         $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=8');
         $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', $rootPath.'/adm_my_files', 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
-        $form->addHtml('
-            <a class="btn btn-default" href="installation.php?mode=7"><img src="layout/page_white_download.png"
-                alt="'.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE').'" />'.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE').'</a>');
+        $form->openButtonGroup();
+        $form->addButton('download_config', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'), array('icon' => 'layout/page_white_download.png', 'link' => 'installation.php?mode=7'));
         $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
+        $form->closeButtonGroup();
         $form->show();
     }
 }
 elseif($getMode == 7) // Download configuration file
 {
     $filename   = 'config.php';
-    $fileLength = strlen($_SERVER['config_file_content']);
+    $fileLength = strlen($_SESSION['config_file_content']);
 
     header('Content-Type: text/plain; charset=utf-8');
     header('Content-Length: '.$fileLength);
     header('Content-Disposition: attachment; filename="'.$filename.'"');
-    echo $_SERVER['config_file_content'];
+    echo $_SESSION['config_file_content'];
     exit();
 }
 elseif($getMode == 8) // Start installation
