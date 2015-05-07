@@ -443,7 +443,7 @@
         <text id="DOW_FILE_NOT_EXISTS" development="new" translation="edited">Il file non è più fisicamente disponibile sul server. Esso andrebbe cancellato dal database.</text>
         <text id="DOW_FILE_RENAME" development="new" translation="edited">Il file %VAR1% è stato rinominato.</text>
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="edited">Si è verificato un errore mentre il file %VAR1% è stato rinominato.</text>
-        <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">La grandezza dei file caricati è più grande di quella consentita (massima grandezza del file: %VAR1% KB).</text>
+        <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">La grandezza dei file caricati è più grande di quella consentita (massima grandezza del file: %VAR1% kB).</text>
         <text id="DOW_FILE_TYPE" development="new" translation="edited">Tipo di file</text>
         <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="edited">Si è verificato un errore indefinito mentre il file %VAR1% era in corso di caricamento.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="edited">Il file %VAR1_BOLD% è stato caricato.</text>
@@ -456,7 +456,7 @@
         <text id="DOW_FOLDER_RENAME" development="new" translation="edited">La cartella %VAR1% è stata rinominata.</text>
         <text id="DOW_FOLDER_RENAME_ERROR" development="new" translation="edited">Si è verificato un errore mentre la cartella %VAR1% è stata rinominata.</text>
         <text id="DOW_MAXIMUM_FILE_SIZE" development="new" translation="edited">Massima grandezza del file</text>
-        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Agli utenti è consentito caricare file di grandezza minore di quella visualizzata qui. Se è 0 il caricamento è disattivato. (predefinito: 3072KB)</text>
+        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Agli utenti è consentito caricare file di grandezza minore di quella visualizzata qui. Se è 0 il caricamento è disattivato. (predefinito: 3072kB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="edited">Nuovo nome del file</text>
         <text id="DOW_NEW_NAME" development="new" translation="edited">Nuovo nome</text>
         <text id="DOW_NO_ACCESS" development="new" translation="edited">Accesso negato</text>
@@ -702,7 +702,7 @@
         <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Allega file</text>
         <text id="MAI_ATTACHEMENT" development="new" translation="edited">Allegati:</text>
         <text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Grandezza massima degli allegati email</text>
-        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Gli utenti possono allegare file di grandezza più piccola del valore definito qui. Quando il valore è 0, gli allegati non possono essere inviati. (predefinito: 1024KB)</text>
+        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Gli utenti possono allegare file di grandezza più piccola del valore definito qui. Quando il valore è 0, gli allegati non possono essere inviati. (predefinito: 1024kB)</text>
         <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">Errore nel caricamento dell'allegato all'email.\nLa misura del file probabilmente è troppo grande!</text>
         <text id="MAI_CAPTCHA_DESC" development="new" translation="edited">Quando l'opzione è attivata, gli utenti registrati riceveranno un'immagine con un codice captcha o con un semplice calcolo. Questa dovrà essere riempita con il codice corretto o con il risultato del calcolo perché l'email sia inviata. Il captcha è parte della soluzione anticpam di Admidio. (predefinito: sì)</text>
         <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Per favore seleziona un ruolo come destinatario dell'email!</text>

@@ -119,7 +119,7 @@
         <text id="DOW_FOLDER_RENAME" development="new" translation="edited">Le dossier %VAR1% a été renommé.</text>
         <text id="DOW_FOLDER_RENAME_ERROR" development="new" translation="edited">Une erreur c'est produite quand le dossier %VAR1% a été renommé..</text>
         <text id="DOW_MAXIMUM_FILE_SIZE" development="new" translation="edited">Taille maximum des fichiers</text>
-        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Les utilisateurs ne sont pas autorisés à télécharger des fichiers de plus petite taille que celles affichées ici. 0 pour désactiver le téléchargement. (defaut: 4000KB)</text>
+        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Les utilisateurs ne sont pas autorisés à télécharger des fichiers de plus petite taille que celles affichées ici. 0 pour désactiver le téléchargement. (defaut: 4000kB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="edited">Nouveau nom de fichier</text>
         <text id="DOW_NEW_NAME" development="new" translation="edited">Nouveau nom</text>
         <text id="DOW_NO_ACCESS" development="new" translation="edited">Accès refusé</text>
