@@ -2,8 +2,8 @@
 <language id="en">
     <version id="3.0.0" translator="Stefanie Schima">
         <text id="MAI_EMAIL_SEND_TO_RECEIVER" development="new" translation="todo">%VAR1% sent to the receivers: %VAR3% from %VAR2% the following E-Mail:</text>
-		<text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Former members</text>
-		<text id="MSG_ACTIVE_FORMER_SHORT" development="new" translation="todo">Active and former</text>
+        <text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Former members</text>
+        <text id="MSG_ACTIVE_FORMER_SHORT" development="new" translation="todo">Active and former</text>
         <text id="BAC_ONLY_MYSQL" development="new" translation="edited">The backup module can only be used in combination with a MySQL database.</text>
         <text id="DAT_EDIT_CALENDAR_DESC" development="new" translation="edited">Here you can create and edit calendars.</text>
         <text id="DAT_MAINTAIN_CATEGORIES_DESC" development="new" translation="edited">Here you can create and edit categories.</text>
@@ -28,15 +28,15 @@
         <text id="INS_WEBMASTER_LOGIN" development="new" translation="edited">Web administration login</text>
         <text id="INS_WEBMASTER_LOGIN_DESC" development="new" translation="edited">Only a web administrator can update the database. Please insert web administrator login credentials.</text>
         <text id="INS_WEBMASTER_LOGIN_FAILED" development="new" translation="edited">Could not find a user with this login credentials and a web administration role.</text>
-    	<text id="INV_INVENTORY" development="new" translation="edited">Inventory management</text>
-    	<text id="INV_ITEM_MANAGEMENT" development="new" translation="edited">Item management</text>
-    	<text id="INV_CREATE_ITEM" development="new" translation="edited">Create article</text>
+        <text id="INV_INVENTORY" development="new" translation="edited">Inventory management</text>
+        <text id="INV_ITEM_MANAGEMENT" development="new" translation="edited">Item management</text>
+        <text id="INV_CREATE_ITEM" development="new" translation="edited">Create article</text>
         <text id="LST_CHOOSE_LIST" development="new" translation="todo">Choose list</text>
-    	<text id="LST_COUNTRY_ISO" development="new" translation="edited">The country needs to be specified as Code ISO 3166 ALPHA-3 (3 characters)</text>
+        <text id="LST_COUNTRY_ISO" development="new" translation="edited">The country needs to be specified as Code ISO 3166 ALPHA-3 (3 characters)</text>
         <text id="LST_INFOBOX" development="new" translation="edited" description="A small html box that will show additional informations">Info box</text>
         <text id="LST_MEMBER_STATUS" development="new" translation="edited">Member status</text>
         <text id="LST_MEMBERS_PER_PAGE_DESC" development="changed" translation="edited">Number of members listed in the HTML view. More members can be listed by using the pagination function. This value won't affect print preview and export functionality (Default: 25).</text>
-    	<text id="MAI_INTO_TO" development="new" translation="edited">Recipients need to be listed in the TO field instead of the BCC field</text>
+        <text id="MAI_INTO_TO" development="new" translation="edited">Recipients need to be listed in the TO field instead of the BCC field</text>
         <text id="MAI_INTO_TO_DESC" development="new" translation="edited">All recipients will be listed in the TO field if set accordingly and an email will be received by multiple person. Thus each recipient will see the name and email address of the other recipients. In addition each recipient can reply to all. (Default: deactivated)</text>
         <text id="MEM_USER_COULD_BE_CREATED" development="new" translation="edited">User could be created.</text>
         <text id="MEM_DAYS_FIELD_HISTORY" development="new" translation="edited">Default time period for field history (days)</text>
@@ -46,17 +46,17 @@
         <text id="MEM_USERS_PER_PAGE_DESC" development="new" translation="edited">Number of users listed on each page. If there are multiple members in this group pages can be turned. (Default: 25)</text>
         <text id="MAI_MAX_RECEIVER" development="new" translation="edited">Maximum number of mail recipients</text>
         <text id="MAI_MAX_RECEIVER_DESC" development="new" translation="edited">This value defines the maximum amount of mail recipients. A role counts as one recipient.</text>
-    	<text id="MSG_ACTIVATE_PM_MODULE" development="new" translation="edited">Activate private messages</text>
+        <text id="MSG_ACTIVATE_PM_MODULE" development="new" translation="edited">Activate private messages</text>
         <text id="MSG_ACTIVATE_PM_MODULE_DESC" development="new" translation="edited">This option allows to deactivate private messages. The module will neither be callable nor listed in the overview. (Default: deactivated)</text>
-    	<text id="MSG_CHAT" development="new" translation="edited">Chat</text>
-    	<text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="edited">Activate chat</text>
-    	<text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="edited">Activate chat module. Messages will be fetched dynamically from database every 3 seconds. Only 99 entries will be saved into database. As soon as the 100th entry is to be saved the first 50 entries will be deleted.</text>
+        <text id="MSG_CHAT" development="new" translation="edited">Chat</text>
+        <text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="edited">Activate chat</text>
+        <text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="edited">Activate chat module. Messages will be fetched dynamically from database every 3 seconds. Only 99 entries will be saved into database. As soon as the 100th entry is to be saved the first 50 entries will be deleted.</text>
         <text id="MSG_OPPOSITE" development="new" translation="edited">Business partner</text>
-    	<text id="MSG_PM_SEND" development="new" translation="edited">Private message has been send to %VAR1_BOLD%.</text>
-    	<text id="MSG_PM_NOT_SEND" development="new" translation="edited">Private message could not be sent to %VAR1_BOLD%.\n\nFollowing error has occured:\n%VAR2%</text>
-    	<text id="MSG_REMOVE" development="new" translation="edited">Remove message</text>
-    	<text id="MSG_REMOVE_CONFIRM" development="new" translation="edited">Confirm remove</text>
-    	<text id="MSG_REMOVE_REVERT" development="new" translation="edited">Undo remove</text>
+        <text id="MSG_PM_SEND" development="new" translation="edited">Private message has been send to %VAR1_BOLD%.</text>
+        <text id="MSG_PM_NOT_SEND" development="new" translation="edited">Private message could not be sent to %VAR1_BOLD%.\n\nFollowing error has occured:\n%VAR2%</text>
+        <text id="MSG_REMOVE" development="new" translation="edited">Remove message</text>
+        <text id="MSG_REMOVE_CONFIRM" development="new" translation="edited">Confirm remove</text>
+        <text id="MSG_REMOVE_REVERT" development="new" translation="edited">Undo remove</text>
         <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="edited">A new oraganization will be added to the database including its master data. The current user will be announced as web master and can maintain the dataset. User who log in to the system need to select the respectivex organization.</text>
         <text id="ORG_CAPTCHA_WIDTH" development="new" translation="edited">Captcha width</text>
         <text id="ORG_CAPTCHA_HEIGHT" development="new" translation="edited">Captcha height</text>
@@ -72,10 +72,10 @@
         <text id="ORG_NOT_SAVED_SETTINGS_LOST" development="new" translation="edited">When changing the view all unsaved changes will be lost.</text>
         <text id="ORG_ORGANIZATION_SUCCESSFULL_ADDED" development="new" translation="edited">Organization %VAR1_BOLD% has been added successfully. It is now selectable when logging in.\n\nIf you have a seperate homepage for this organization please add it within the config.php of the seperate homepage.</text>
         <text id="ORG_REGIONAL_SETTINGS" development="new" translation="edited">Regional settings</text>
-    	<text id="PMS_MESSAGE" development="new" translation="edited">Private messages</text>
-    	<text id="PMS_SEND_PM" development="new" translation="edited">Send private message</text>
-    	<text id="PMS_WAS_SENT_TO" development="new" translation="edited">Message was sent to:</text>
-    	<text id="PMS_WAS_NOT_SENT_TO" development="new" translation="edited">Error - message was not sent to:</text>
+        <text id="PMS_MESSAGE" development="new" translation="edited">Private messages</text>
+        <text id="PMS_SEND_PM" development="new" translation="edited">Send private message</text>
+        <text id="PMS_WAS_SENT_TO" development="new" translation="edited">Message was sent to:</text>
+        <text id="PMS_WAS_NOT_SENT_TO" development="new" translation="edited">Error - message was not sent to:</text>
         <text id="PHO_ALBUM_LOCK" development="new" translation="edited">Lock album</text>
         <text id="PHO_ALBUM_LOCK_DESC" development="new" translation="edited">Locked albums can not be viewed by visitors or members, e.g. you can lock an album as long as all images are uploading.</text>
         <text id="PHO_ALBUM_UNLOCK" development="new" translation="edited">Unlock album</text>
@@ -96,20 +96,20 @@
         <text id="PRO_DELETE_PROFILE_PICTURE" development="changed" translation="edited">Delete profile image</text>
         <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="edited">Define a country for which this organization mainly operates. It will be preselected when new users are created or register. It eases the data input and can be changed by the user. (Default: Germany)</text>
         <text id="PRO_EXPORT_VCARD" development="new" translation="edited">Export vCard</text>
-    	<text id="PRO_MAINTAIN_ITEM_FIELDS" development="new" translation="edited">Maintain article fields</text>
+        <text id="PRO_MAINTAIN_ITEM_FIELDS" development="new" translation="edited">Maintain article fields</text>
         <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="changed" translation="edited">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.</text>
         <text id="ROL_RIGHT_INVENTORY" development="new" translation="edited">Article and inventory management</text>
         <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="edited">Role assignment for %VAR1% %VAR2%</text>
         <text id="SYS_APPLY" development="new" translation="edited">Apply</text>
         <text id="SYS_CATEGORIES" development="new" translation="edited">Categories</text>
         <text id="SYS_CHARACTERS" development="new" translation="edited">Characters</text>
-    	<text id="SYS_COUNTRY_EG" development="new" translation="edited">GER</text>
+        <text id="SYS_COUNTRY_EG" development="new" translation="edited">GER</text>
         <text id="SYS_DECIMAL_NUMBER" development="new" translation="edited">Decimal number</text>
         <text id="SYS_EMAIL_SEND" development="changed" translation="edited">Mail has been send successfully</text>
         <text id="SYS_FILENAME_EMPTY" development="new" translation="edited">Filename is missing!</text>
         <text id="SYS_FILTER" development="new" translation="edited">Filter</text>
         <text id="SYS_FULL_SCREEN" development="new" translation="edited">Full screen</text>
-    	<text id="SYS_ITEMNAME" development="new" translation="edited">Item name</text>
+        <text id="SYS_ITEMNAME" development="new" translation="edited">Item name</text>
         <text id="SYS_MANDATORY_FIELDS" development="new" translation="edited">Mandatory fields</text>
         <text id="SYS_MENU" development="new" translation="edited">Menu</text>
         <text id="SYS_MESSAGES" development="new" translation="edited">Messages</text>
@@ -117,10 +117,10 @@
         <text id="SYS_NORMAL_PICTURE" development="new" translation="edited">Normal image</text>
         <text id="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION" development="new" translation="edited">Online membership administration</text>
         <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="changed" translation="edited">If you forgot your password the system can generate a new one. Please enter your email address which you used for registration and the new password will be send to this address immediately.</text>
-    	<text id="SYS_PM" development="new" translation="edited">Private message</text>
-    	<text id="SYS_QUANTITY" development="new" translation="edited">Amount</text>
+        <text id="SYS_PM" development="new" translation="edited">Private message</text>
+        <text id="SYS_QUANTITY" development="new" translation="edited">Amount</text>
         <text id="SYS_ROLES" development="new" translation="edited">Roles</text>
-    	<text id="SYS_SELECT_FROM_LIST" development="new" translation="edited">Select from list</text>
+        <text id="SYS_SELECT_FROM_LIST" development="new" translation="edited">Select from list</text>
         <text id="SYS_STILL_X_CHARACTERS" development="new" translation="edited">still %VAR1% characters</text>
         <text id="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION" development="new" translation="edited">Switch to category administration</text>
     </version>

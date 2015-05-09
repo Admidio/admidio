@@ -2,7 +2,7 @@
 <language id="de">
     <version id="3.0.0" translator="Markus Faßbender">
         <text id="MAI_EMAIL_SEND_TO_RECEIVER" development="new" translation="todo">%VAR1% hat an die folgenden Empfänger: %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
-	    <text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Ehemalige Mitglieder</text>
+        <text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Ehemalige Mitglieder</text>
         <text id="MSG_ACTIVE_FORMER_SHORT" development="new" translation="todo">Aktive und ehemalige</text>
         <text id="BAC_ONLY_MYSQL" development="new" translation="todo">Das Backupmodul kann nur bei einer MySQL-Datenbank genutzt werden.</text>
         <text id="DAT_EDIT_CALENDAR_DESC" development="new" translation="todo">Hier können Kalender angelegt und bearbeitet werden.</text>
