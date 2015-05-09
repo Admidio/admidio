@@ -11,7 +11,7 @@
  * lnk_id    - ID of the weblink that should be redirected
  *
  *****************************************************************************/
- 
+
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
@@ -36,7 +36,7 @@ $weblink = new TableWeblink($gDb, $getLinkId);
 if(strlen($weblink->getValue('lnk_url')) == 0
 || ($gValidLogin == false && $weblink->getValue('cat_hidden') == 1))
 {
-	$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // Wenn Link gültig ist, Counter um eine Position erhöhen
@@ -50,21 +50,21 @@ if ($gPreferences['weblinks_redirect_seconds'] > 0)
     $page = new HtmlPage($gL10n->get('LNK_REDIRECT'));
 
     // add special header for automatic redirection after x seconds
-	$page->addHeader('<meta http-equiv="refresh" content="'. $gPreferences['weblinks_redirect_seconds'].'; url='.$weblink->getValue('lnk_url').'">');
+    $page->addHeader('<meta http-equiv="refresh" content="'. $gPreferences['weblinks_redirect_seconds'].'; url='.$weblink->getValue('lnk_url').'">');
 
-	//Counter zählt die sekunden bis zur Weiterleitung runter
-	$page->addJavascript('
-		function countDown(init) {
-			if (init || --document.getElementById("counter").firstChild.nodeValue > 0 ) {
-				window.setTimeout( "countDown()" , 1000 );
-			}
-		};
-		countDown(true);');
-	
-	// Html des Modules ausgeben
-	$page->addHtml('
-    <p class="lead">'.$gL10n->get('LNK_REDIRECT_DESC', $gCurrentOrganization->getValue('org_longname'), 
-        '<span id="counter">'.$gPreferences['weblinks_redirect_seconds'].'</span>', '<strong>'.$weblink->getValue('lnk_name').'</strong> ('.$weblink->getValue('lnk_url').')', 
+    //Counter zählt die sekunden bis zur Weiterleitung runter
+    $page->addJavascript('
+        function countDown(init) {
+            if (init || --document.getElementById("counter").firstChild.nodeValue > 0 ) {
+                window.setTimeout( "countDown()" , 1000 );
+            }
+        };
+        countDown(true);');
+
+    // Html des Modules ausgeben
+    $page->addHtml('
+    <p class="lead">'.$gL10n->get('LNK_REDIRECT_DESC', $gCurrentOrganization->getValue('org_longname'),
+        '<span id="counter">'.$gPreferences['weblinks_redirect_seconds'].'</span>', '<strong>'.$weblink->getValue('lnk_name').'</strong> ('.$weblink->getValue('lnk_url').')',
         '<a href="'.$weblink->getValue('lnk_url').'" target="_self">hier</a>').'
     </p>');
 
@@ -73,7 +73,7 @@ if ($gPreferences['weblinks_redirect_seconds'] > 0)
 }
 else
 {
-	header('Location:'.$weblink->getValue('lnk_url'));
+    header('Location:'.$weblink->getValue('lnk_url'));
 }
 
 ?>

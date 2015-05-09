@@ -18,7 +18,7 @@ $gMessage->setCloseButton();
 
 if (!isset($_POST) || !array_key_exists('ecard_template', $_POST))
 {
-	$gMessage->show($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
+    $gMessage->show($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
 }
 
 // Initialize and check the parameters
@@ -43,7 +43,7 @@ $ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName, THEME_SERVER
 
 if(strlen($ecardDataToParse) == 0) 
 {
-	$gMessage->show($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
+    $gMessage->show($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
 }
 
 echo '

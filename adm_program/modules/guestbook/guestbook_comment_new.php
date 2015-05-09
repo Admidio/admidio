@@ -96,7 +96,7 @@ if(isset($_SESSION['guestbook_comment_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-	$guestbook_comment->setArray($_SESSION['guestbook_comment_request']);
+    $guestbook_comment->setArray($_SESSION['guestbook_comment_request']);
     unset($_SESSION['guestbook_comment_request']);
 }
 

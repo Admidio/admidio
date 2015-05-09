@@ -28,12 +28,12 @@ class Participants
     private $count;                 ///< Counter of participants of the date in current object.
     private $order;                 ///< SQL order of results. Parameter 'ASC'/'DESC' (Deafault: 'ASC')
     public $memberDate;             ///< Array with surname, firstname of all participants of the date in current object.
-    public $mDb;				    ///< db object must public because of session handling
+    public $mDb;                    ///< db object must public because of session handling
 
     /** constructor that will initialize variables and check if $rolId is numeric
      *  else @b FALSE will be returned.
-	 *  @param $db Database object (should be @b $gDb)
-	 *  @param $rolId The Role ID of a date
+     *  @param $db Database object (should be @b $gDb)
+     *  @param $rolId The Role ID of a date
      */
     public function __construct(&$db, $rolId = 0)
     {

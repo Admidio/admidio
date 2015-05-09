@@ -62,32 +62,32 @@ if($datesResult['numResults'] > 0)
         $date->clear();
         $date->setArray($row);
     
-    	// set data for attributes of this entry
+        // set data for attributes of this entry
         $title = $date->getValue('dat_begin', $gPreferences['system_date']);
         if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
         {
             $title = $title. ' - '. $date->getValue('dat_end', $gPreferences['system_date']);
         }
-        $title  	 = $title. ' '. $date->getValue('dat_headline');
-        $link   	 = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id');
-        $author 	 = $row['create_name'];
-        $pubDate 	 = date('r', strtotime($date->getValue('dat_timestamp_create')));
-    	
-    	// add additional informations about the event to the description
-    	$descDateTo   = '';
-    	$descDateFrom = $date->getValue('dat_begin', $gPreferences['system_date']);
-		$description  = $descDateFrom;
+        $title     = $title. ' '. $date->getValue('dat_headline');
+        $link     = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id');
+        $author     = $row['create_name'];
+        $pubDate     = date('r', strtotime($date->getValue('dat_timestamp_create')));
+        
+        // add additional informations about the event to the description
+        $descDateTo   = '';
+        $descDateFrom = $date->getValue('dat_begin', $gPreferences['system_date']);
+        $description  = $descDateFrom;
     
         if ($date->getValue('dat_all_day') == 0)
         {
-    		$descDateFrom = $descDateFrom. ' '. $date->getValue('dat_begin', $gPreferences['system_time']).' '.$gL10n->get('SYS_CLOCK');
+            $descDateFrom = $descDateFrom. ' '. $date->getValue('dat_begin', $gPreferences['system_time']).' '.$gL10n->get('SYS_CLOCK');
             
             if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
             {
                 $descDateTo = $date->getValue('dat_end', $gPreferences['system_date']). ' ';
             }
             $descDateTo  = $descDateTo. ' '. $date->getValue('dat_end', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK');
-    		$description = $gL10n->get('SYS_DATE_FROM_TO', $descDateFrom, $descDateTo);
+            $description = $gL10n->get('SYS_DATE_FROM_TO', $descDateFrom, $descDateTo);
         }
         else
         {

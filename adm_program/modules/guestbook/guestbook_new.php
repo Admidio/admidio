@@ -50,7 +50,7 @@ $guestbook = new TableGuestbook($gDb);
 
 if($getGboId > 0)
 {
-	// Falls ein Eintrag bearbeitet werden soll muss geprueft weden ob die Rechte gesetzt sind...
+    // Falls ein Eintrag bearbeitet werden soll muss geprueft weden ob die Rechte gesetzt sind...
     require('../../system/login_valid.php');
 
     if (!$gCurrentUser->editGuestbookRight())
@@ -80,7 +80,7 @@ if(isset($_SESSION['guestbook_entry_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-	$guestbook->setArray($_SESSION['guestbook_entry_request']);
+    $guestbook->setArray($_SESSION['guestbook_entry_request']);
     unset($_SESSION['guestbook_entry_request']);
 }
 

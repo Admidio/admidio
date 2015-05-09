@@ -542,7 +542,6 @@ abstract class HtmlElement {
                 // bidimensional or assoc. array
                 for ($i = 0; $i < $numberEntries; $i++)
                 {
-
                     foreach ($data[$i] as $col => $value)
                     {
                         $this->htmlString .= $startTag . $value . $endTag;

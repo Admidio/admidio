@@ -127,19 +127,19 @@
             engine = InnoDB auto_increment = 1 default character set = utf8 collate = utf8_unicode_ci;</step>
     <step id="410">INSERT INTO %PREFIX%_categories (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                        VALUES (NULL, 'INF', 'MASTER_DATA', 'SYS_MASTER_DATA', 0, 1, 1, 1, NOW())</step>
-	<step id="420">INSERT INTO %PREFIX%_invent_fields (inf_cat_id, inf_type, inf_name_intern, inf_name, inf_description, inf_system, inf_disabled, inf_mandatory, inf_sequence, inf_usr_id_create, inf_timestamp_create)
-					   VALUES ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'TEXT', 'ITEM_NAME', 'SYS_ITEMNAME', NULL, 1, 1, 1, 1, 1, NOW())
-							, ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'NUMBER', 'ROOM_ID', 'SYS_ROOM', NULL, 1, 1, 1, 2, 1, NOW())
-							, ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'NUMBER', 'PRICE',   'SYS_QUANTITY', NULL, 0, 0, 0, 3, 1, NOW())</step>
-	<step id="430" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'ecard_view_width' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name LIKE 'ecard_thumbs_scale'</step>
-	<step id="435" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'ecard_view_width' AND pr1.prf_name LIKE 'ecard_thumbs_scale'</step>
-	<step id="440">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('ecard_view_width', 'ecard_view_height', 'enable_ecard_cc_recipients', 'ecard_cc_recipients', 'photo_upload_mode', 'photo_slideshow_speed')</step>
-	<step id="450">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_inventory boolean not null default '0'</step>
-	<step id="460">alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_SENDER foreign key (msg_usr_id_sender) references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
-	<step id="480">create index IDX_MSC_PART_ID on %PREFIX%_messages_content (msc_part_id)</step>
-	<step id="500">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_USR_ID foreign key (msc_usr_id) references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
-	<step id="510">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_MSG_ID foreign key (msc_msg_id) references %PREFIX%_messages (msg_id) on delete restrict on update restrict</step>
-	<step id="520">create table %PREFIX%_ids
+    <step id="420">INSERT INTO %PREFIX%_invent_fields (inf_cat_id, inf_type, inf_name_intern, inf_name, inf_description, inf_system, inf_disabled, inf_mandatory, inf_sequence, inf_usr_id_create, inf_timestamp_create)
+                       VALUES ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'TEXT', 'ITEM_NAME', 'SYS_ITEMNAME', NULL, 1, 1, 1, 1, 1, NOW())
+                            , ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'NUMBER', 'ROOM_ID', 'SYS_ROOM', NULL, 1, 1, 1, 2, 1, NOW())
+                            , ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'NUMBER', 'PRICE',   'SYS_QUANTITY', NULL, 0, 0, 0, 3, 1, NOW())</step>
+    <step id="430" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'ecard_view_width' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name LIKE 'ecard_thumbs_scale'</step>
+    <step id="435" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'ecard_view_width' AND pr1.prf_name LIKE 'ecard_thumbs_scale'</step>
+    <step id="440">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('ecard_view_width', 'ecard_view_height', 'enable_ecard_cc_recipients', 'ecard_cc_recipients', 'photo_upload_mode', 'photo_slideshow_speed')</step>
+    <step id="450">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_inventory boolean not null default '0'</step>
+    <step id="460">alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_SENDER foreign key (msg_usr_id_sender) references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
+    <step id="480">create index IDX_MSC_PART_ID on %PREFIX%_messages_content (msc_part_id)</step>
+    <step id="500">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_USR_ID foreign key (msc_usr_id) references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="510">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_MSG_ID foreign key (msc_msg_id) references %PREFIX%_messages (msg_id) on delete restrict on update restrict</step>
+    <step id="520">create table %PREFIX%_ids
             (
                ids_usr_id                     integer       unsigned not null,
                ids_reference_id               integer       unsigned not null
@@ -147,7 +147,7 @@
             engine = InnoDB
             default character set = utf8
             collate = utf8_unicode_ci;</step>
-	<step id="530">alter table %PREFIX%_ids add constraint %PREFIX%_FK_IDS_USR_ID foreign key (ids_usr_id) references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
+    <step id="530">alter table %PREFIX%_ids add constraint %PREFIX%_FK_IDS_USR_ID foreign key (ids_usr_id) references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
     <step id="540">UPDATE %PREFIX%_preferences SET prf_value = '13' WHERE prf_name LIKE 'captcha_signature_font_size' AND prf_value LIKE '9'</step>
-	<step>stop</step>
+    <step>stop</step>
 </update>

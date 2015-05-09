@@ -37,18 +37,18 @@ if($getInfId > 0)
 {
     $itemField->readDataById($getInfId);
     
-	// check if profile field belongs to actual organization
+    // check if profile field belongs to actual organization
     if($itemField->getValue('cat_org_id') >  0
     && $itemField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
-	
-	// if system profile field then set usf_type to default
-	if($itemField->getValue('inf_system') == 1)
-	{
-		$_POST['inf_type'] = $itemField->getValue('inf_type');
-	}
+    
+    // if system profile field then set usf_type to default
+    if($itemField->getValue('inf_system') == 1)
+    {
+        $_POST['inf_type'] = $itemField->getValue('inf_type');
+    }
 }
 
 if($getMode == 1)
@@ -108,7 +108,7 @@ if($getMode == 1)
     {
         $_POST['inf_mandatory'] = 0;
     }
-	
+    
     // make html in description secure
     $_POST['inf_description'] = admFuncVariableIsValid($_POST, 'inf_description', 'html');
 
@@ -132,9 +132,9 @@ if($getMode == 1)
     $gNavigation->deleteLastUrl();
     unset($_SESSION['fields_request']);
 
-	// zu den Organisationseinstellungen zurueck
-	$gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-	$gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+    // zu den Organisationseinstellungen zurueck
+    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
+    $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
 elseif($getMode == 2)
 {

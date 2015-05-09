@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title><%ecard_greeting_card_string%></title>
 <style type="text/css">
-	*{ font-family:<%ecard_font%>; }
+    *{ font-family:<%ecard_font%>; }
 </style>
 </head>
 <body>
@@ -31,7 +31,7 @@
                     </tr>
                   </tbody>
                 </table>
-        	  </td>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -45,14 +45,14 @@
   <table align="center" border="0" cellpadding="0" cellspacing="0" style="min-height:300px;">
    <tbody><tr>
     <td id="card_form" colspan="2" style="border: 1px solid rgb(0, 0, 0); padding: 10px; ">
-		<table border="0" cellpadding="0" cellspacing="0">
-	 <tbody><tr>
-	  <td style="vertical-align: top; height:90%; ">
-	  <table  border="0" cellpadding="0" style="height:270px; min-height:400px; width:400px; " cellspacing="2">
-	   <tbody>
+        <table border="0" cellpadding="0" cellspacing="0">
+     <tbody><tr>
+      <td style="vertical-align: top; height:90%; ">
+      <table  border="0" cellpadding="0" style="height:270px; min-height:400px; width:400px; " cellspacing="2">
+       <tbody>
        <tr>
-	    <td><%ecard_greeting_card_from%>: <b><a href="<%g_root_path%>/adm_program/modules/messages/messages_write.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
-	   </tr>
+        <td><%ecard_greeting_card_from%>: <b><a href="<%g_root_path%>/adm_program/modules/messages/messages_write.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
+       </tr>
        <tr>
          <td style="height:10px;"></td>
        </tr>
@@ -62,15 +62,15 @@
           <div style="vertical-align:middle;"><%ecard_message%></div>
        </div>
        </td></tr>
-	   	  </tbody></table>
+             </tbody></table>
        </td>
-	  <td style="width: 8px; vertical-align:bottom; min-height:300px;">
-	       <a href="http://www.admidio.org"><img src="<%theme_root_path%>/images/ownertext.png" width="30px" style="border:0px;" alt="Admidio"></a>
-	  </td>	  
-	  <td style="background: rgb(0, 0, 0); width:1px;"><br></td>
-	  <td style="width: 8px;">&nbsp;</td>
-	  <td style="vertical-align: top;height:100%;" >
-	   <table  border="0" cellpadding="0" cellspacing="2" style="height:100%">
+      <td style="width: 8px; vertical-align:bottom; min-height:300px;">
+           <a href="http://www.admidio.org"><img src="<%theme_root_path%>/images/ownertext.png" width="30px" style="border:0px;" alt="Admidio"></a>
+      </td>
+      <td style="background: rgb(0, 0, 0); width:1px;"><br></td>
+      <td style="width: 8px;">&nbsp;</td>
+      <td style="vertical-align: top;height:100%;" >
+       <table  border="0" cellpadding="0" cellspacing="2" style="height:100%">
            <tbody>
                <tr style="vertical-align:top; margin:5px 5px 5px 5px;">
                 <td>
@@ -90,23 +90,23 @@
                              <td style="padding-left:5px;"><%ecard_reciepient_name%></td>
                          </tr>
                          <tr style="height:1px;">
-                         	<td><hr style="border: 1px solid black;"></td>
-                         	<td><hr style="border: 1px solid black;"></td>
+                             <td><hr style="border: 1px solid black;"></td>
+                             <td><hr style="border: 1px solid black;"></td>
                          </tr>
                          <tr>
                              <td><b><%ecard_email_string%>:</b></td>
                              <td  style="padding-left:5px;"><%ecard_reciepient_email%></td>
                          </tr>
                          <tr style="height:1px;">
-                         	<td><hr style="border: 1px solid black;"></td>
-                         	<td><hr style="border: 1px solid black;"></td>
+                             <td><hr style="border: 1px solid black;"></td>
+                             <td><hr style="border: 1px solid black;"></td>
                          </tr>
                      </table>
                    </td>
                </tr>
            </tbody>
        </table>
-	</td>
+    </td>
    </tr>
   </tbody></table>
 </td>

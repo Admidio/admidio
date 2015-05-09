@@ -43,51 +43,51 @@ function getFieldCode($fieldNameIntern, $user)
         return '';
     }
 
-	// get value of field in html format
-	$value = $user->getValue($fieldNameIntern, 'html');
+    // get value of field in html format
+    $value = $user->getValue($fieldNameIntern, 'html');
 
-	// if birthday then show age
-	if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'BIRTHDAY')
-	{
+    // if birthday then show age
+    if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'BIRTHDAY')
+    {
         $birthday = new DateTimeExtended($user->getValue($fieldNameIntern, 'Y.m.d'), 'Y.m.d', 'date');
-		$value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' '.$gL10n->get('PRO_YEARS').')';
-	}
+        $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' '.$gL10n->get('PRO_YEARS').')';
+    }
 
-	// Icons der Messenger anzeigen
-	if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'ICQ')
-	{
-		if(strlen($user->getValue($fieldNameIntern)) > 0)
-		{
-			// Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
-			preg_match_all('/\d+/', $user->getValue($fieldNameIntern), $matches);
-			$icq_number = implode("", reset($matches));
+    // Icons der Messenger anzeigen
+    if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'ICQ')
+    {
+        if(strlen($user->getValue($fieldNameIntern)) > 0)
+        {
+            // Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
+            preg_match_all('/\d+/', $user->getValue($fieldNameIntern), $matches);
+            $icq_number = implode("", reset($matches));
 
-			// ICQ Onlinestatus anzeigen
-			$value = '
-			<a class="admidio-icon-link" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
-				src="http://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
-				alt="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
-				title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
-		}
-	}
-	elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'SKYPE')
-	{
-		if(strlen($user->getValue($fieldNameIntern)) > 0)
-		{
-			// Skype Onlinestatus anzeigen
-			$value = '<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
-			<a class="admidio-icon-link" href="skype:'.$user->getValue($fieldNameIntern).'?add"><img
-				src="http://mystatus.skype.com/smallicon/'.$user->getValue($fieldNameIntern).'"
-				title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
-				alt="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
-		}
-	}
-	elseif(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_icon')) > 0)
-	{
-		$value = $gProfileFields->getProperty($fieldNameIntern, 'usf_icon').'&nbsp;&nbsp;'. $value;
-	}
+            // ICQ Onlinestatus anzeigen
+            $value = '
+            <a class="admidio-icon-link" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
+                src="http://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
+                alt="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
+                title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
+        }
+    }
+    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'SKYPE')
+    {
+        if(strlen($user->getValue($fieldNameIntern)) > 0)
+        {
+            // Skype Onlinestatus anzeigen
+            $value = '<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
+            <a class="admidio-icon-link" href="skype:'.$user->getValue($fieldNameIntern).'?add"><img
+                src="http://mystatus.skype.com/smallicon/'.$user->getValue($fieldNameIntern).'"
+                title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
+                alt="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
+        }
+    }
+    elseif(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_icon')) > 0)
+    {
+        $value = $gProfileFields->getProperty($fieldNameIntern, 'usf_icon').'&nbsp;&nbsp;'. $value;
+    }
 
-	// show html of field, if user has a value for that field or it's a checkbox field
+    // show html of field, if user has a value for that field or it's a checkbox field
     if(strlen($user->getValue($fieldNameIntern)) > 0 || $gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'CHECKBOX')
     {
         $html['label'] = $gProfileFields->getProperty($fieldNameIntern, 'usf_name');
@@ -135,11 +135,11 @@ $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js')
 
 $page->addJavascript('
     var profileJS = new profileJSClass();
-    profileJS.deleteRole_ConfirmText 	= "'.$gL10n->get('ROL_MEMBERSHIP_DEL', '[rol_name]').'";
-    profileJS.deleteFRole_ConfirmText 	= "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
-    profileJS.setBy_Text				= "'.$gL10n->get('SYS_SET_BY').'";
-    profileJS.usr_id                    = '.$user->getValue('usr_id').';
-    
+    profileJS.deleteRole_ConfirmText  = "'.$gL10n->get('ROL_MEMBERSHIP_DEL', '[rol_name]').'";
+    profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
+    profileJS.setBy_Text              = "'.$gL10n->get('SYS_SET_BY').'";
+    profileJS.usr_id                  = '.$user->getValue('usr_id').';
+
     function showHideMembershipInformation(element) {
         id = "#" + element.attr("id") + "_Content";
 
@@ -157,23 +157,23 @@ $page->addJavascript('
     $("#menu_item_password").attr("data-target", "#admidio_modal");
     $("#menu_item_role_memberships_change").attr("data-toggle", "modal");
     $("#menu_item_role_memberships_change").attr("data-target", "#admidio_modal");
-    
+
     $("input[data-provide=\'datepicker\']").datepicker({
                             language: "'.$gL10n->getLanguageIsoCode().'",
                             format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
                             todayHighlight: "true",
                             autoclose: "true"
                         });
-                    
+
     $(".admidio-form-membership-period").submit(function(event) {
         var id = $(this).attr("id");
         var parentId = $("#"+id).parent().parent().attr("id");
         var action = $(this).attr("action");
         $("#"+id+" .form-alert").hide();
-    
+
         // disable default form submit
         event.preventDefault();
-        
+
         $.ajax({
             type:    "GET",
             url:     action,
@@ -212,39 +212,39 @@ if($gNavigation->count() > 1)
 // if user has right then show link to edit profile
 if($gCurrentUser->hasRightEditProfile($user))
 {
-	$profileMenu->addItem('menu_item_new_entry', $g_root_path. '/adm_program/modules/profile/profile_new.php?user_id='.$user->getValue('usr_id'),
-						$gL10n->get('PRO_EDIT_PROFILE'), 'edit.png');
+    $profileMenu->addItem('menu_item_new_entry', $g_root_path. '/adm_program/modules/profile/profile_new.php?user_id='.$user->getValue('usr_id'),
+                        $gL10n->get('PRO_EDIT_PROFILE'), 'edit.png');
 }
 
 // Password of own user could be changed
 if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
 {
-	$profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $user->getValue('usr_id'),
-						$gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
+    $profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $user->getValue('usr_id'),
+                        $gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
 }
 elseif($gCurrentUser->isWebmaster() && isMember($user->getValue('usr_id'))
 && strlen($user->getValue('usr_login_name')) > 0)
 {
     // Webmasters can change or send password if login is configured and user is member of current organization
-    
+
     if(strlen($user->getValue('EMAIL')) > 0 && $gPreferences['enable_system_mails'] == 1)
     {
         // if email is set and systemmails are activated then webmaster can send a new password to user
-    	$profileMenu->addItem('menu_item_send_password', $g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$user->getValue('usr_id').'&amp;mode=5',
-    						$gL10n->get('ORG_SEND_NEW_PASSWORD'), 'key.png');
+        $profileMenu->addItem('menu_item_send_password', $g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$user->getValue('usr_id').'&amp;mode=5',
+                            $gL10n->get('ORG_SEND_NEW_PASSWORD'), 'key.png');
     }
     else
     {
         // if user has no email or send email is disabled then webmaster could set a new password
-    	$profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $user->getValue('usr_id'),
-    						$gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
+        $profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $user->getValue('usr_id'),
+                            $gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
     }
 }
 
 // show link to view profile field change history
 if($gPreferences['profile_log_edit_fields'] == 1)
 {
-	$profileMenu->addItem('menu_item_change_history', $g_root_path. '/adm_program/modules/members/profile_field_history.php?usr_id='. $user->getValue('usr_id'),
+    $profileMenu->addItem('menu_item_change_history', $g_root_path. '/adm_program/modules/members/profile_field_history.php?usr_id='. $user->getValue('usr_id'),
                         $gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png');
 }
 
@@ -263,13 +263,13 @@ if($gCurrentUser->assignRoles())
 
 if($gCurrentUser->isWebmaster())
 {
-	// show link to maintain profile fields
-	$profileMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php',
-								$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
+    // show link to maintain profile fields
+    $profileMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php',
+                                $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
 
-	// show link to system preferences of weblinks
-	$profileMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=profile',
-						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
+    // show link to system preferences of weblinks
+    $profileMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=profile',
+                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
 }
 
 // *******************************************************************************
@@ -283,7 +283,7 @@ $page->addHtml('
         <div class="col-sm-8">');
             // create a static form
             $form = new HtmlForm('profile_master_data_form', null);
-            
+
             // add lastname and firstname
             if(strlen($user->getValue('GENDER')) > 0
             && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('GENDER', 'usf_hidden') == 0))
@@ -295,7 +295,7 @@ $page->addHtml('
             {
                 $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
             }
-            
+
             // add loginname
             if(strlen($user->getValue('usr_login_name')) > 0)
             {
@@ -312,11 +312,11 @@ $page->addHtml('
             {
                 $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), $gL10n->get('SYS_NOT_REGISTERED'));
             }
-    
+
             $bAddressOutput = false;    // Merker, ob die Adresse schon angezeigt wurde
-    
+
             // Schleife ueber alle Felder der Stammdaten
-    
+
             foreach($gProfileFields->mProfileFields as $field)
             {
                 // nur Felder der Stammdaten anzeigen
@@ -330,7 +330,7 @@ $page->addHtml('
                         case 'GENDER':
                             // don't show these fields in default profile list
                             break;
-    
+
                         case 'ADDRESS':
                         case 'POSTCODE':
                         case 'CITY':
@@ -349,7 +349,7 @@ $page->addHtml('
                                     ',%20'. urlencode($gCurrentUser->getValue('CITY')).
                                     ',%20'. urlencode($gCurrentUser->getValue('COUNTRY')).
                                     '&amp;daddr=';
-    
+
                                 if(strlen($user->getValue('ADDRESS')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('ADDRESS', 'usf_hidden') == 0))
                                 {
@@ -357,14 +357,14 @@ $page->addHtml('
                                     $map_url   .= urlencode($user->getValue('ADDRESS'));
                                     $route_url .= urlencode($user->getValue('ADDRESS'));
                                 }
-    
+
                                 if(strlen($user->getValue('POSTCODE')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 0))
                                 {
                                     $address   .= $user->getValue('POSTCODE');
                                     $map_url   .= ',%20'. urlencode($user->getValue('POSTCODE'));
                                     $route_url .= ',%20'. urlencode($user->getValue('POSTCODE'));
-    
+
                                     // City and postcode should be shown in one line
                                     if(strlen($user->getValue('CITY')) == 0
                                     || ($gCurrentUser->hasRightEditProfile($user) == false && $gProfileFields->getProperty('CITY', 'usf_hidden') == 1))
@@ -372,7 +372,7 @@ $page->addHtml('
                                         $address   .= '<br />';
                                     }
                                 }
-    
+
                                 if(strlen($user->getValue('CITY')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('CITY', 'usf_hidden') == 0))
                                 {
@@ -381,7 +381,7 @@ $page->addHtml('
                                     $map_url   .= ',%20'. urlencode($user->getValue('CITY'));
                                     $route_url .= ',%20'. urlencode($user->getValue('CITY'));
                                 }
-    
+
                                 if(strlen($user->getValue('COUNTRY')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('COUNTRY', 'usf_hidden') == 0))
                                 {
@@ -390,9 +390,9 @@ $page->addHtml('
                                     $map_url   .= ',%20'. urlencode($country);
                                     $route_url .= ',%20'. urlencode($country);
                                 }
-    
+
                                 $htmlAddress .= $address;
-    
+
                                 // show route or address link if function is enabled and user has filled address or city
                                 if($gPreferences['profile_show_map_link'] && strlen($user->getValue('ADDRESS')) > 0
                                 && (strlen($user->getValue('POSTCODE')) > 0 || strlen($user->getValue('CITY')) > 0))
@@ -400,18 +400,18 @@ $page->addHtml('
                                     $htmlAddress .= '
                                     <a class="btn" href="'. $map_url. '" target="_blank"><img src="'. THEME_PATH. '/icons/map.png"
                                         alt="'.$gL10n->get('SYS_MAP').'" />'.$gL10n->get('SYS_MAP').'</a>';
-    
+
                                     // show route link if its not the profile of CurrentUser
                                     if($gCurrentUser->getValue('usr_id') != $user->getValue('usr_id'))
                                     {
                                         $htmlAddress .= ' - <a href="'.$route_url.'" target="_blank">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
                                     }
                                 }
-    
+
                                 $form->addStaticControl('address', $gL10n->get('SYS_ADDRESS'), $htmlAddress);
                             }
                             break;
-    
+
                         default:
                             $field = getFieldCode($field->getValue('usf_name_intern'), $user);
                             if(strlen($field['value']) > 0)
@@ -425,7 +425,7 @@ $page->addHtml('
             $page->addHtml($form->show(false));
         $page->addHtml('</div>
         <div class="col-sm-4" id="div_profile_photo">');
-        
+
             // *******************************************************************************
             // Profile photo
             // *******************************************************************************
@@ -452,7 +452,7 @@ $page->addHtml('
         $page->addHtml('</div>
     </div>
 </div>');
-            
+
 // *******************************************************************************
 // Loop over all categories and profile fields except the master data
 // *******************************************************************************
@@ -482,7 +482,7 @@ foreach($gProfileFields->mProfileFields as $field)
             <div class="panel panel-default" id="'.$field->getValue('cat_name_intern').'_data_panel">
                 <div class="panel-heading">'.$field->getValue('cat_name').'</div>
                 <div class="panel-body">');
-                
+
             // create a static form
             $form = new HtmlForm('profile_'.$field->getValue('cat_name_intern').'_form', null);
         }
@@ -547,7 +547,7 @@ if($gPreferences['profile_show_roles'] == 1)
         <div class="panel-heading">'.$gL10n->get('SYS_AUTHORIZATION').'</div>
         <div class="panel-body" id="profile_authorizations_box_body">
             <p>');
-            
+
             //checkRolesRight($right)
             if($user->checkRolesRight('rol_assign_roles') == 1)
             {
@@ -639,7 +639,7 @@ if($gPreferences['profile_show_roles'] == 1)
             '.getRoleMemberships('role_list', $user, $result_role, $count_role, false).'
         </div>
     </div>');
-    
+
     // *******************************************************************************
     // block with future memberships
     // *******************************************************************************
@@ -657,7 +657,7 @@ if($gPreferences['profile_show_roles'] == 1)
     {
         $page->addHtml('<script type="text/javascript">profileJS.futureRoleCount="'.$count_role.'";</script>');
     }
-    
+
     $page->addHtml('
     <div class="panel panel-default" id="profile_future_roles_box" '.$visible.'>
         <div class="panel-heading">'.$gL10n->get('PRO_FUTURE_ROLE_MEMBERSHIP').'</div>
@@ -688,7 +688,7 @@ if($gPreferences['profile_show_former_roles'] == 1)
     {
         $page->addHtml('<script type="text/javascript">profileJS.formerRoleCount="'.$count_role.'";</script>');
     }
-    
+
     $page->addHtml('
     <div class="panel panel-default" id="profile_former_roles_box" '.$visible.'>
         <div class="panel-heading">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'</div>
@@ -726,7 +726,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
         $showRolesOtherOrganizations = false;
         $actualOrganization = 0;
         $role = new TableRoles($gDb);
-        
+
         while($row = $gDb->fetch_array($result_role))
         {
             // if roles of new organization than read the rights of this organization
@@ -741,7 +741,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
             {
                 $role->clear();
                 $role->setArray($row);
-                
+
                 if($showRolesOtherOrganizations == false)
                 {
                     $page->addHtml('
@@ -757,14 +757,14 @@ if($gPreferences['profile_show_extern_roles'] == 1
 
                     $showRolesOtherOrganizations = true;
                 }
-                
+
                 $startDate = new DateTimeExtended($row['mem_begin'], 'Y-m-d', 'date');
                 // jede einzelne Rolle anzeigen
                 $page->addHtml('
                 <li class="list-group-item">
                     <span>'.
                         $row['org_shortname'].' - '.$role->getValue('cat_name').' - '.$role->getValue('rol_name'));
-                        
+
                         if($row['mem_leader'] == 1)
                         {
                             $page->addHtml(' - '.$gL10n->get('SYS_LEADER'));
@@ -775,9 +775,9 @@ if($gPreferences['profile_show_extern_roles'] == 1
                 </li>');
             }
         }
-        
+
         $gCurrentUser->setOrganization($gCurrentOrganization->getValue('org_id'));
-        
+
         if($showRolesOtherOrganizations == true)
         {
             $page->addHtml('</ul></div></div>');

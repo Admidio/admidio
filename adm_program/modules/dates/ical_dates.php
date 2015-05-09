@@ -95,7 +95,7 @@ if($parameter['mode'] == 2)
     header('Content-Type: text/calendar; charset=utf-8');
     header('Content-Disposition: attachment; filename="'. $getHeadline. '.ics"');
     
-	// neccessary for IE, because without it the download with SSL has problems
+    // neccessary for IE, because without it the download with SSL has problems
     header('Cache-Control: private');
     header('Pragma: public');
 }    

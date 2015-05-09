@@ -67,59 +67,59 @@ foreach($gInventoryFields->mInventoryFields as $field)
 {
     $post_id = 'inf-'. $field->getValue('inf_id');    
     
-	// check and save only fields that aren't disabled
-	if($gCurrentUser->editUsers() == true || $field->getValue('inf_disabled') == 0 || ($field->getValue('inf_disabled') == 1 && $getNewItem > 0))
-	{
-		if(isset($_POST[$post_id])) 
-		{
-			// Pflichtfelder muessen gefuellt sein
-			// E-Mail bei Registrierung immer !!!
-			if($field->getValue('inf_mandatory') == 1 && strlen($_POST[$post_id]) == 0)
-			{
-				$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('inf_name')));
-			}
+    // check and save only fields that aren't disabled
+    if($gCurrentUser->editUsers() == true || $field->getValue('inf_disabled') == 0 || ($field->getValue('inf_disabled') == 1 && $getNewItem > 0))
+    {
+        if(isset($_POST[$post_id])) 
+        {
+            // Pflichtfelder muessen gefuellt sein
+            // E-Mail bei Registrierung immer !!!
+            if($field->getValue('inf_mandatory') == 1 && strlen($_POST[$post_id]) == 0)
+            {
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('inf_name')));
+            }
 
-			// Wert aus Feld in das User-Klassenobjekt schreiben
-			$returnCode = $inventory->setValue($field->getValue('inf_name_intern'), $_POST[$post_id]);
-			
-			// Ausgabe der Fehlermeldung je nach Datentyp
-			if($returnCode == false)
-			{
-				if($field->getValue('inf_type') == 'CHECKBOX')
-				{
-					$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-				}
-				elseif($field->getValue('inf_type') == 'DATE')
-				{
-					$gMessage->show($gL10n->get('SYS_DATE_INVALID', $field->getValue('inf_name'), $gPreferences['system_date']));
-				}
-				elseif($field->getValue('inf_type') == 'EMAIL')
-				{
-					$gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $field->getValue('inf_name')));
-				}
-				elseif($field->getValue('inf_type') == 'NUMBER' || $field->getValue('inf_type') == 'DECIMAL_NUMBER')
-				{
-					$gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('inf_name')));
-				}
-				elseif($field->getValue('inf_type') == 'URL')
-				{
-					$gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $field->getValue('inf_name')));
-				}
-			}
-		}
-		else
-		{
-			// Checkboxen uebergeben bei 0 keinen Wert, deshalb diesen hier setzen
-			if($field->getValue('inf_type') == 'CHECKBOX')
-			{
-				$inventory->setValue($field->getValue('inf_name_intern'), '0');
-			}
-			elseif($field->getValue('inf_mandatory') == 1)
-			{
-				$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('inf_name')));
-			}
-		}
-	}
+            // Wert aus Feld in das User-Klassenobjekt schreiben
+            $returnCode = $inventory->setValue($field->getValue('inf_name_intern'), $_POST[$post_id]);
+            
+            // Ausgabe der Fehlermeldung je nach Datentyp
+            if($returnCode == false)
+            {
+                if($field->getValue('inf_type') == 'CHECKBOX')
+                {
+                    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+                }
+                elseif($field->getValue('inf_type') == 'DATE')
+                {
+                    $gMessage->show($gL10n->get('SYS_DATE_INVALID', $field->getValue('inf_name'), $gPreferences['system_date']));
+                }
+                elseif($field->getValue('inf_type') == 'EMAIL')
+                {
+                    $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $field->getValue('inf_name')));
+                }
+                elseif($field->getValue('inf_type') == 'NUMBER' || $field->getValue('inf_type') == 'DECIMAL_NUMBER')
+                {
+                    $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('inf_name')));
+                }
+                elseif($field->getValue('inf_type') == 'URL')
+                {
+                    $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $field->getValue('inf_name')));
+                }
+            }
+        }
+        else
+        {
+            // Checkboxen uebergeben bei 0 keinen Wert, deshalb diesen hier setzen
+            if($field->getValue('inf_type') == 'CHECKBOX')
+            {
+                $inventory->setValue($field->getValue('inf_name_intern'), '0');
+            }
+            elseif($field->getValue('inf_mandatory') == 1)
+            {
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('inf_name')));
+            }
+        }
+    }
 }
 
 /*------------------------------------------------------------*/
@@ -153,7 +153,7 @@ catch(AdmException $e)
     unset($_SESSION['profile_request']);
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
     $gNavigation->deleteLastUrl();
-	$e->showHtml();
+    $e->showHtml();
 }
 
 $gDb->endTransaction();
@@ -166,9 +166,9 @@ $gNavigation->deleteLastUrl();
 /*------------------------------------------------------------*/
 
 if($getNewItem == 1)
-{	
-	$gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
-	$gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+{    
+    $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
+    $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
 else
 {

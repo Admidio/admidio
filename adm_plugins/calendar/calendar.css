@@ -11,16 +11,16 @@
  *****************************************************************************/
 
 #plgCalendarTable {
-	width:			100%;
-	font-size:		10px;
-	color:			#000000;
+    width: 100%;
+    font-size: 10px;
+    color: #000000;
 }
 
 #plgCalendarTable td {
-	text-align:		center;
-	font-size: 		10px;
-	line-height:	14pt;
-	width:			14%;
+    text-align: center;
+    font-size: 10px;
+    line-height: 14pt;
+    width: 14%;
 }
 
 /* ********************************************************** */
@@ -31,12 +31,12 @@
 #plgCalendarTable td a.date:visited,
 #plgCalendarTable td a.date:active,
 #plgCalendarTable td a.date:hover {
-	display:		block;
-	line-height:	14pt;
-	background:		#FF9C00;
-	color:          #000000;
-	font-weight:	bold;
-	text-decoration:none;
+    display: block;
+    line-height: 14pt;
+    background: #FF9C00;
+    color: #000000;
+    font-weight: bold;
+    text-decoration:none;
 }
 
 /* ********************************************************** */
@@ -47,12 +47,12 @@
 #plgCalendarTable td a.geb:visited,
 #plgCalendarTable td a.geb:active,
 #plgCalendarTable td a.geb:hover {
-	display:		block;
-	line-height:	14pt;
-	background:		#82C226;
-	color:          #000000;
-	font-weight:	bold;
-	text-decoration:none;
+    display: block;
+    line-height: 14pt;
+    background: #82C226;
+    color: #000000;
+    font-weight: bold;
+    text-decoration:none;
 }
 
 /* ********************************************************** */
@@ -63,37 +63,37 @@
 #plgCalendarTable td a.merge:visited,
 #plgCalendarTable td a.merge:active,
 #plgCalendarTable td a.merge:hover {
-	display:		block;
-	line-height:	14pt;
-	background:		#F1A86E;
-	color:          #000000;
-	font-weight:	bold;
-	text-decoration:none;
+    display: block;
+    line-height: 14pt;
+    background: #F1A86E;
+    color: #000000;
+    font-weight: bold;
+    text-decoration:none;
 }
 
 #plgCalendarTable th a:link,
 #plgCalendarTable th a:visited,
 #plgCalendarTable th a:active,
 #plgCalendarTable th a:hover {
-    border:			1px #CCCCCC solid;
-	display:		block;
-	line-height:	14pt;
-	background:		transparent;
-	color:          #449BA6;
-	text-decoration:none;
+    border: 1px #CCCCCC solid;
+    display: block;
+    line-height: 14pt;
+    background: transparent;
+    color: #449BA6;
+    text-decoration:none;
 }
 
 #plgCalendarTable th a:hover {
-    border:			1px #CCCCCC solid;
-	background:		#449BA6;
-	color:			#000000;
+    border: 1px #CCCCCC solid;
+    background: #449BA6;
+    color: #000000;
 }
 
 #plgCalendarTable th.plgCalendarHeader {
-	color:			#449BA6;
-	background:		transparent;
-	font-size:		10pt;
-	line-height:	20pt;
+    color: #449BA6;
+    background: transparent;
+    font-size: 10pt;
+    line-height: 20pt;
 }
 
 /* ********************************************************** */
@@ -101,23 +101,23 @@
 /* ********************************************************** */
 
 #plgCalendarTable td.plgCalendarWeekday {
-    border:			1px #CCCCCC solid;
-	background:		#ffffff;
-	font-size:		10px;
+    border: 1px #CCCCCC solid;
+    background: #ffffff;
+    font-size: 10px;
 }
 
 #plgCalendarTable td.plgCalendarWeekdaySaturday {
-    border:			1px #CCCCCC solid;
-	color:			#0000CC;
+    border: 1px #CCCCCC solid;
+    color: #0000CC;
 }
 
 #plgCalendarTable td.plgCalendarWeekdaySunday {
-    border:			1px #CCCCCC solid;
-	color:			#C90000;
+    border: 1px #CCCCCC solid;
+    color: #C90000;
 }
 
 #plgCalendarTable td.plgCalendarToday {
-    border:			2px #449BA6 solid;
+    border: 2px #449BA6 solid;
 }
 
 /* **************************************************************** */
@@ -126,20 +126,20 @@
 /* Die CSS-Definition betrifft die Tabellengrunddefintion           */
 /* **************************************************************** */
 #plgCalendarTable td.plgCalendarDay {
-    border:			1px #999999 solid;
-	background:		transparent;
+    border: 1px #999999 solid;
+    background: transparent;
 }
 #plgCalendarTable td.plgCalendarBirthDay {
-    border:			1px #999999 solid;
-	background:		transparent;
+    border: 1px #999999 solid;
+    background: transparent;
 }
 #plgCalendarTable td.plgCalendarDateDay {
-    border:			1px #999999 solid;
-	background:		transparent;
+    border: 1px #999999 solid;
+    background: transparent;
 }
 #plgCalendarTable td.plgCalendarMergeDay {
-    border:			1px #999999 solid;
-	background:		transparent;
+    border: 1px #999999 solid;
+    background: transparent;
 }
 
 /* **************************************************************** */
@@ -148,29 +148,29 @@
 /* Die CSS-Definition betrifft die Tabellengrunddefintion           */
 /* **************************************************************** */
 #plgCalendarTable td.plgCalendarSaturday {
-    border:			1px #999999 solid;
-    background:		transparent;
-	color:			#0000CC;
+    border: 1px #999999 solid;
+    background: transparent;
+    color: #0000CC;
 }
 #plgCalendarTable td.plgCalendarBirthSaturday {
-    border:			1px #999999 solid;
-	background:		transparent;
-	font-size:		10px;
-	color:			#0000CC;
+    border: 1px #999999 solid;
+    background: transparent;
+    font-size: 10px;
+    color: #0000CC;
 
 }
 #plgCalendarTable td.plgCalendarDateSaturday {
-    border:			1px #999999 solid;
-	background:		transparent;
-	font-size:		10px;
-	color:			#0000CC;
+    border: 1px #999999 solid;
+    background: transparent;
+    font-size: 10px;
+    color: #0000CC;
 
 }
 #plgCalendarTable td.plgCalendarMergeSaturday {
-    border:			1px #999999 solid;
-	background:		transparent;
-	font-size:		10px;
-	color:			#0000CC;
+    border: 1px #999999 solid;
+    background: transparent;
+    font-size: 10px;
+    color: #0000CC;
 
 }
 
@@ -180,35 +180,35 @@
 /* Die CSS-Definition betrifft die Tabellengrunddefintion           */
 /* **************************************************************** */
 #plgCalendarTable td.plgCalendarSunday {
-    border:			1px #999999 solid;
-    background:		transparent;
-	color:			#C90000;
+    border: 1px #999999 solid;
+    background: transparent;
+    color: #C90000;
 }
 #plgCalendarTable td.plgCalendarBirthSunday {
-    border:			1px #999999 solid;
-    background:		transparent;
-	color:			#C90000;
+    border: 1px #999999 solid;
+    background: transparent;
+    color: #C90000;
 }
 #plgCalendarTable td.plgCalendarDateSunday {
-    border:			1px #999999 solid;
-    background:		transparent;
-	color:			#C90000;
+    border: 1px #999999 solid;
+    background: transparent;
+    color: #C90000;
 }
 #plgCalendarTable td.plgCalendarMergeSunday {
-    border:			1px #999999 solid;
-    background:		transparent;
-	color:			#C90000;
+    border: 1px #999999 solid;
+    background: transparent;
+    color: #C90000;
 }
 
 
 #plgCalendarTable .plgCalendarMSG {
-	font-family:	Arial;
-	font-size:		10pt;
-	color:			#000000;
+    font-family: Arial;
+    font-size: 10pt;
+    color: #000000;
 }
 
 #plgCalendarReset {
-    font-size:8pt;
-    line-height:12pt;
-    text-align:center;
+    font-size: 8pt;
+    line-height: 12pt;
+    text-align: center;
 }

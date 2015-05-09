@@ -12,8 +12,8 @@
  * photo_nr  : Nummer des Bildes, das angezeigt werden soll
  * max_width : maximale Breite auf die das Bild skaliert werden kann
  * max_height: maximale Hoehe auf die das Bild skaliert werden kann
- * thumb	 : ist thumb == 1 wird ein Thumnail in der Größe der
- *				Voreinstellung zurückgegeben 
+ * thumb     : ist thumb == 1 wird ein Thumnail in der Größe der
+ *             Voreinstellung zurückgegeben
  *
  *****************************************************************************/
 
@@ -80,14 +80,14 @@ if($getThumbnail)
         {
             //Ermittlung der Original Bildgroesse
             $bildgroesse = getimagesize($ordner.'/thumbnails/'.$getPhotoNr.'.jpg');
-            
+
             $thumb_length = $bildgroesse[1];
             if($bildgroesse[0]>$bildgroesse[1])
             {
                 $thumb_length = $bildgroesse[0];
             }
         }
-        
+
         //Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
         //Wenn nicht anlegen
         if(!file_exists($ordner.'/thumbnails/'.$getPhotoNr.'.jpg') || $thumb_length !=$gPreferences['photo_thumbs_scale'])

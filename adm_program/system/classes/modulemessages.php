@@ -32,7 +32,7 @@ class ModuleMessages
      */
     public function __construct()
     {
-        
+
     }
 
     /** check for Group and give back a string with groupname and if it is active, inactive or both.
@@ -40,9 +40,9 @@ class ModuleMessages
     public function msgGroupNameSplit($groupstring)
     {
         global $gCurrentOrganization, $gL10n, $gDb;
-        
+
         $group = $this->msgGroupSplit($groupstring);
-                
+
         $sql = 'SELECT rol_name, rol_id
                       FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                      WHERE rol_cat_id    = cat_id
@@ -67,10 +67,10 @@ class ModuleMessages
             // only active members
             $ReceiverNameLong = $row['rol_name'] . ' (' .$gL10n->get('LST_ACTIVE_MEMBERS') . ')';
         }
-        
+
         return $ReceiverNameLong;
     }
-    
+
     /** check for Group and give back a array with group ID[0] and if it is active, inactive or both [1].
      */
     public function msgGroupSplit($groupstring)
@@ -86,10 +86,10 @@ class ModuleMessages
             $group[0] = $groupsplit[1];
             $group[1] = 0;
         }
-        
+
         return $group;
     }
-    
+
     /** return an array with all Email-Messages of the given user.
      */
     public function msgGetUserEmails($user)
@@ -103,7 +103,7 @@ class ModuleMessages
 
         return $gDb->query($sql);
     }
-    
+
     /** return an array with all unread Messages of the given user.
      */
     public function msgGetUserUnread($userId)
@@ -119,7 +119,7 @@ class ModuleMessages
 
         return $gDb->query($sql);
     }
-    
+
     /** return an array with all unread Messages of the given user.
      */
     public function msgGetUser($userId)
@@ -136,7 +136,7 @@ class ModuleMessages
 
         return $gDb->query($sql);
     }
-	
+
     /** return the message ID of the admidio chat.
      */
     public function msgGetChatId()
@@ -144,11 +144,11 @@ class ModuleMessages
         global $gDb;
 
         $sql = "SELECT msg_id FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT'";
-		$result = $gDb->query($sql);
+        $result = $gDb->query($sql);
         $row = $gDb->fetch_array($result);
-		
-		return $row['msg_id'];
+
+        return $row['msg_id'];
     }
-    
+
 }
 ?>

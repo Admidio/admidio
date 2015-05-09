@@ -44,12 +44,12 @@ if(!isset($_POST['reg_org_id']))
 if($getNewUser == 2 || $getNewUser == 3)
 {
     // create user registration object and set requested organization
-	$user = new UserRegistration($gDb, $gProfileFields, $getUserId);
-	$user->setOrganization($_POST['reg_org_id']);
+    $user = new UserRegistration($gDb, $gProfileFields, $getUserId);
+    $user->setOrganization($_POST['reg_org_id']);
 }
 else
 {
-	$user = new User($gDb, $gProfileFields, $getUserId);
+    $user = new User($gDb, $gProfileFields, $getUserId);
 }
 
 // pruefen, ob Modul aufgerufen werden darf
@@ -116,90 +116,90 @@ foreach($gProfileFields->mProfileFields as $field)
 {
     $post_id = 'usf-'. $field->getValue('usf_id');
     
-	// check and save only fields that aren't disabled
-	if($gCurrentUser->editUsers() == true || $field->getValue('usf_disabled') == 0 || ($field->getValue('usf_disabled') == 1 && $getNewUser > 0))
-	{
-		if(isset($_POST[$post_id]))
-		{
-			// Pflichtfelder muessen gefuellt sein
-			// E-Mail bei Registrierung immer !!!
-			if(($field->getValue('usf_mandatory') == 1 && strlen($_POST[$post_id]) == 0)
-			|| ($getNewUser == 2 && $field->getValue('usf_name_intern') == 'EMAIL' && strlen($_POST[$post_id]) == 0))
-			{
-				$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
-			}
-			
-			// if social network then extract username from url
-			if($field->getValue('usf_name_intern') == 'FACEBOOK'
-			|| $field->getValue('usf_name_intern') == 'GOOGLE_PLUS'
-			|| $field->getValue('usf_name_intern') == 'TWITTER'
-			|| $field->getValue('usf_name_intern') == 'XING')
-			{
-				if(strValidCharacters($_POST[$post_id], 'url')
-    			&& strpos($_POST[$post_id], '/') !== false)
-				{
-					if(strrpos($_POST[$post_id], '/profile.php?id=') > 0)
-					{
-						// extract facebook id (not facebook unique name) from url
-						$_POST[$post_id] = substr($_POST[$post_id], strrpos($_POST[$post_id], '/profile.php?id=') + 16);
-					}
-					else
-					{
-						if(strrpos($_POST[$post_id], '/posts') > 0)
-						{
-							$_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '/posts'));
-						}
-						
-						$_POST[$post_id] = substr($_POST[$post_id], strrpos($_POST[$post_id], '/') + 1);
-						if(strrpos($_POST[$post_id], '?') > 0)
-						{
-						   $_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '?'));
-						}
-					}
-				}
-			}
+    // check and save only fields that aren't disabled
+    if($gCurrentUser->editUsers() == true || $field->getValue('usf_disabled') == 0 || ($field->getValue('usf_disabled') == 1 && $getNewUser > 0))
+    {
+        if(isset($_POST[$post_id]))
+        {
+            // Pflichtfelder muessen gefuellt sein
+            // E-Mail bei Registrierung immer !!!
+            if(($field->getValue('usf_mandatory') == 1 && strlen($_POST[$post_id]) == 0)
+            || ($getNewUser == 2 && $field->getValue('usf_name_intern') == 'EMAIL' && strlen($_POST[$post_id]) == 0))
+            {
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
+            }
+            
+            // if social network then extract username from url
+            if($field->getValue('usf_name_intern') == 'FACEBOOK'
+            || $field->getValue('usf_name_intern') == 'GOOGLE_PLUS'
+            || $field->getValue('usf_name_intern') == 'TWITTER'
+            || $field->getValue('usf_name_intern') == 'XING')
+            {
+                if(strValidCharacters($_POST[$post_id], 'url')
+                && strpos($_POST[$post_id], '/') !== false)
+                {
+                    if(strrpos($_POST[$post_id], '/profile.php?id=') > 0)
+                    {
+                        // extract facebook id (not facebook unique name) from url
+                        $_POST[$post_id] = substr($_POST[$post_id], strrpos($_POST[$post_id], '/profile.php?id=') + 16);
+                    }
+                    else
+                    {
+                        if(strrpos($_POST[$post_id], '/posts') > 0)
+                        {
+                            $_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '/posts'));
+                        }
+                        
+                        $_POST[$post_id] = substr($_POST[$post_id], strrpos($_POST[$post_id], '/') + 1);
+                        if(strrpos($_POST[$post_id], '?') > 0)
+                        {
+                           $_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '?'));
+                        }
+                    }
+                }
+            }
 
-			// Wert aus Feld in das User-Klassenobjekt schreiben
-			$returnCode = $user->setValue($field->getValue('usf_name_intern'), $_POST[$post_id]);
-			
-			// Ausgabe der Fehlermeldung je nach Datentyp
-			if($returnCode == false)
-			{
-				if($field->getValue('usf_type') == 'CHECKBOX')
-				{
-					$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-				}
-				elseif($field->getValue('usf_type') == 'DATE')
-				{
-					$gMessage->show($gL10n->get('SYS_DATE_INVALID', $field->getValue('usf_name'), $gPreferences['system_date']));
-				}
-				elseif($field->getValue('usf_type') == 'EMAIL')
-				{
-					$gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
-				}
-				elseif($field->getValue('usf_type') == 'NUMBER' || $field->getValue('usf_type') == 'DECIMAL_NUMBER')
-				{
-					$gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
-				}
-				elseif($field->getValue('usf_type') == 'URL')
-				{
-					$gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $field->getValue('usf_name')));
-				}
-			}
-		}
-		else
-		{
-			// Checkboxen uebergeben bei 0 keinen Wert, deshalb diesen hier setzen
-			if($field->getValue('usf_type') == 'CHECKBOX')
-			{
-				$user->setValue($field->getValue('usf_name_intern'), '0');
-			}
-			elseif($field->getValue('usf_mandatory') == 1)
-			{
-				$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
-			}
-		}
-	}
+            // Wert aus Feld in das User-Klassenobjekt schreiben
+            $returnCode = $user->setValue($field->getValue('usf_name_intern'), $_POST[$post_id]);
+            
+            // Ausgabe der Fehlermeldung je nach Datentyp
+            if($returnCode == false)
+            {
+                if($field->getValue('usf_type') == 'CHECKBOX')
+                {
+                    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+                }
+                elseif($field->getValue('usf_type') == 'DATE')
+                {
+                    $gMessage->show($gL10n->get('SYS_DATE_INVALID', $field->getValue('usf_name'), $gPreferences['system_date']));
+                }
+                elseif($field->getValue('usf_type') == 'EMAIL')
+                {
+                    $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
+                }
+                elseif($field->getValue('usf_type') == 'NUMBER' || $field->getValue('usf_type') == 'DECIMAL_NUMBER')
+                {
+                    $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
+                }
+                elseif($field->getValue('usf_type') == 'URL')
+                {
+                    $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $field->getValue('usf_name')));
+                }
+            }
+        }
+        else
+        {
+            // Checkboxen uebergeben bei 0 keinen Wert, deshalb diesen hier setzen
+            if($field->getValue('usf_type') == 'CHECKBOX')
+            {
+                $user->setValue($field->getValue('usf_name_intern'), '0');
+            }
+            elseif($field->getValue('usf_mandatory') == 1)
+            {
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
+            }
+        }
+    }
 }
 
 if($gCurrentUser->isWebmaster() || $getNewUser > 0)
@@ -226,9 +226,9 @@ if($gCurrentUser->isWebmaster() || $getNewUser > 0)
         }
 
         if(!$user->setValue('usr_login_name', $_POST['usr_login_name']))
-		{
-			$gMessage->show($gL10n->get('SYS_FIELD_INVALID_CHAR', $gL10n->get('SYS_USERNAME')));
-		}
+        {
+            $gMessage->show($gL10n->get('SYS_FIELD_INVALID_CHAR', $gL10n->get('SYS_USERNAME')));
+        }
     }
 }
 
@@ -245,8 +245,8 @@ if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1)
 {
     if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
     {
-		if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-		elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+        if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
+        elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
     }
 }
 
@@ -264,7 +264,7 @@ catch(AdmException $e)
     unset($_SESSION['profile_request']);
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
     $gNavigation->deleteLastUrl();
-	$e->showHtml();
+    $e->showHtml();
 }
 
 $gDb->endTransaction();
@@ -284,42 +284,42 @@ $gNavigation->deleteLastUrl();
 
 if($getNewUser == 1 || $getNewUser == 3)
 {
-	// assign a registration or create a new user
+    // assign a registration or create a new user
 
-	if($getNewUser == 3)
-	{
+    if($getNewUser == 3)
+    {
         try
         {
-    		// accept a registration, assign neccessary roles and send a notification email
-    		$user->acceptRegistration();
-    		$messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
+            // accept a registration, assign neccessary roles and send a notification email
+            $user->acceptRegistration();
+            $messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
         }
         catch(AdmException $e)
         {
             $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
-        	$e->showHtml();
+            $e->showHtml();
         }
-	}
-	else
-	{
-		// a new user is created with the user management module
-		// then the user must get the neccessary roles
-		$user->assignDefaultRoles();
-		$messageId = 'SYS_SAVE_DATA';
-	}
-	
-	// if current user has the right to assign roles then show roles dialog
-	// otherwise go to previous url (default roles are assigned automatically)
-	if($gCurrentUser->assignRoles())
-	{
-		header('Location: roles.php?usr_id='. $user->getValue('usr_id'). '&new_user='.$getNewUser);
-		exit();
-	}
-	else
-	{
-		$gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
-		$gMessage->show($gL10n->get($messageId));
-	}
+    }
+    else
+    {
+        // a new user is created with the user management module
+        // then the user must get the neccessary roles
+        $user->assignDefaultRoles();
+        $messageId = 'SYS_SAVE_DATA';
+    }
+    
+    // if current user has the right to assign roles then show roles dialog
+    // otherwise go to previous url (default roles are assigned automatically)
+    if($gCurrentUser->assignRoles())
+    {
+        header('Location: roles.php?usr_id='. $user->getValue('usr_id'). '&new_user='.$getNewUser);
+        exit();
+    }
+    else
+    {
+        $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
+        $gMessage->show($gL10n->get($messageId));
+    }
 }
 elseif($getNewUser == 2)
 {

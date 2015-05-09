@@ -77,7 +77,7 @@ if($getMode == 'new' || $getMode == 'change')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('PHO_ALBUM')));
     }
-	
+    
     //Beginn
     if(strlen($_POST['pho_begin']) > 0)
     {
@@ -153,14 +153,14 @@ if($getMode == 'new' || $getMode == 'change')
             $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
             $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
         }
-		
-		if(strlen($error['text']) == 0)
-		{ 
-			// Benachrichtigungs-Email für neue Einträge
-		    $notification = new Email();
+        
+        if(strlen($error['text']) == 0)
+        { 
+            // Benachrichtigungs-Email für neue Einträge
+            $notification = new Email();
             $message = $gL10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['pho_name'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
-            $notification->adminNotfication($gL10n->get('PHO_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));		
-		}
+            $notification->adminNotfication($gL10n->get('PHO_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));        
+        }
         
         $getPhotoId = $photo_album->getValue('pho_id');
     }//if
@@ -202,7 +202,7 @@ if($getMode == 'new' || $getMode == 'change')
 
 elseif($getMode == 'delete')
 {
-	// Album loeschen
+    // Album loeschen
     if($photo_album->delete())
     {
         echo 'done'; 

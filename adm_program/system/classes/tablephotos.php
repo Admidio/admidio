@@ -11,9 +11,9 @@
  *
  * Beside the methods of the parent class there are the following additional methods:
  *
- * countImages($pho_id = 0)    - Rekursive Funktion gibt die Anzahl aller Bilder 
+ * countImages($pho_id = 0)    - Rekursive Funktion gibt die Anzahl aller Bilder
  *                               inkl. der Unteralben zurueck
- * shuffleImage($pho_id = 0)   - Rekursive Funktion zum Auswaehlen eines 
+ * shuffleImage($pho_id = 0)   - Rekursive Funktion zum Auswaehlen eines
  *                               Beispielbildes aus einem moeglichst hohen Album
  * createFolder()      - erzeugt den entsprechenden Ordner unter adm_my_files/photos
  * deleteInDatabase($photo_id) - Rekursive Funktion die die uebergebene Veranstaltung
@@ -26,16 +26,16 @@
 class TablePhotos extends TableAccess
 {
     protected $hasChildAlbums; ///< Flag if this album has child albums
-    
-	/** Constuctor that will create an object of a recordset of the table adm_photos. 
-	 *  If the id is set than the specific photo album will be loaded.
-	 *  @param $db Object of the class database. This should be the default object $gDb.
-	 *  @param $pho_id The recordset of the photo album with this id will be loaded. If id isn't set than an empty object of the table is created.
-	 */
+
+    /** Constuctor that will create an object of a recordset of the table adm_photos.
+     *  If the id is set than the specific photo album will be loaded.
+     *  @param $db Object of the class database. This should be the default object $gDb.
+     *  @param $pho_id The recordset of the photo album with this id will be loaded. If id isn't set than an empty object of the table is created.
+     */
     public function __construct(&$db, $photo_id = 0)
     {
         parent::__construct($db, TBL_PHOTOS, 'pho', $photo_id);
-        
+
         $hasChildAlbums = null;
     }
 
@@ -80,7 +80,7 @@ class TablePhotos extends TableAccess
             $error['path'] = $myFilesPhotos->errorPath;
             return $error;
         }
-        
+
         // nun den Ordner fuer die Veranstaltung anlegen
         $folderName = $this->getValue('pho_begin', 'Y-m-d'). '_'. $this->getValue('pho_id');
         if($myFilesPhotos->createFolder($folderName, true) == false)
@@ -91,10 +91,10 @@ class TablePhotos extends TableAccess
         return $error;
     }
 
-	/** Deletes the selected photo album and all sub photo albums. 
-	 *  After that the class will be initialize.
-	 *  @return @b true if no error occured
-	 */
+    /** Deletes the selected photo album and all sub photo albums.
+     *  After that the class will be initialize.
+     *  @return @b true if no error occured
+     */
     public function delete()
     {
         if($this->deleteInDatabase($this->getValue('pho_id')))
@@ -102,20 +102,20 @@ class TablePhotos extends TableAccess
             return parent::delete();
         }
         return false;
-    }    
+    }
 
     // Rekursive Funktion die die uebergebene Veranstaltung und alle
     // Unterveranstaltungen loescht
     public function deleteInDatabase($photo_id)
     {
         $return_code = true;
-		$this->db->startTransaction();
-    
+        $this->db->startTransaction();
+
         // erst einmal rekursiv zur tiefsten Tochterveranstaltung gehen
         $sql     = 'SELECT pho_id FROM '. TBL_PHOTOS. '
                      WHERE pho_pho_id_parent = '.$photo_id;
         $result1 = $this->db->query($sql);
-        
+
         while($row = $this->db->fetch_array($result1))
         {
             if($return_code)
@@ -129,7 +129,7 @@ class TablePhotos extends TableAccess
         {
             //Ordnerpfad zusammensetzen
             $folder = SERVER_PATH. '/adm_my_files/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$photo_id;
-            
+
             // aktuellen Ordner incl. Unterordner und Dateien loeschen, falls er existiert
             if(file_exists($folder))
             {
@@ -141,17 +141,17 @@ class TablePhotos extends TableAccess
 
             if($return_code)
             {
-                // Veranstaltung jetzt in DB loeschen            
+                // Veranstaltung jetzt in DB loeschen
                 $sql = 'DELETE FROM '. TBL_PHOTOS. '
                          WHERE pho_id = '.$photo_id;
                 $this->db->query($sql);
             }
         }
-        
-		$this->db->endTransaction();
+
+        $this->db->endTransaction();
         return $return_code;
     }
-    
+
     /* Check if this album has one or more child albums.
      * @return Return @b true if child albums exists.
      */
@@ -162,9 +162,9 @@ class TablePhotos extends TableAccess
             $sql     = 'SELECT COUNT(1) FROM '. TBL_PHOTOS. '
                          WHERE pho_pho_id_parent = '.$this->getValue('pho_id');
             $this->db->query($sql);
-            
+
             $row = $this->db->fetch_array();
-            
+
             if($row[0] > 0)
             {
                 $this->hasChildAlbums = true;
@@ -174,21 +174,21 @@ class TablePhotos extends TableAccess
                 $this->hasChildAlbums = false;
             }
         }
-        
+
         return $this->hasChildAlbums;
     }
-    
-	/** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 
-	 *  a new record or if only an update is neccessary. The update statement will only update
-	 *  the changed columns. If the table has columns for creator or editor than these column
-	 *  with their timestamp will be updated.
-	 *  The current organization will be set per default.
-	 *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
-	 */	
+
+    /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     *  a new record or if only an update is neccessary. The update statement will only update
+     *  the changed columns. If the table has columns for creator or editor than these column
+     *  with their timestamp will be updated.
+     *  The current organization will be set per default.
+     *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     */
     public function save($updateFingerPrint = true)
     {
         global $gCurrentOrganization;
-        
+
         if($this->new_record)
         {
             $this->setValue('pho_org_shortname', $gCurrentOrganization->getValue('org_shortname'));
@@ -215,9 +215,9 @@ class TablePhotos extends TableAccess
                 $shuffle_image['shuffle_img_nr'] = mt_rand(1, $this->getValue('pho_quantity'));
             }
         }
-        
+
         if($shuffle_image['shuffle_img_nr'] == 0)
-        {   
+        {
             // kein Bild vorhanden, dann in einem Unteralbum suchen
             $sql = 'SELECT *
                       FROM '. TBL_PHOTOS. '
@@ -225,7 +225,7 @@ class TablePhotos extends TableAccess
                        AND pho_locked = 0
                      ORDER BY pho_quantity DESC';
             $result_child = $this->db->query($sql);
-            
+
             while($pho_row = $this->db->fetch_array($result_child))
             {
                 if($shuffle_image['shuffle_img_nr'] == 0)

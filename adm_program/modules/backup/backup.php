@@ -60,7 +60,7 @@ if($getMode == 'show_list')
     if ($handle = opendir($backupabsolutepath))
     {
         while (false !== ($file = readdir($handle)))
-    	{
+        {
             try
             {
                 admStrIsValidFileName($file, true);
@@ -82,7 +82,7 @@ if($getMode == 'show_list')
     
     // show link to create new backup
     $backupMenu->addItem('admMenuItemNewBackup', $g_root_path.'/adm_program/modules/backup/backup.php?mode=create_backup',
-    							$gL10n->get('BAC_START_BACKUP'), 'database_save.png');
+                                $gL10n->get('BAC_START_BACKUP'), 'database_save.png');
     
     //Define table
     $table = new HtmlTable('tableList', $page, true);
@@ -96,9 +96,9 @@ if($getMode == 'show_list')
         $gL10n->get('SYS_DELETE'));
     $table->setColumnAlignByArray(array('left', 'left', 'right', 'center'));
     $table->addRowHeadingByArray($columnHeading);
-    	
+        
     $backup_size_sum = 0;
-    	
+        
     foreach($existingBackupFiles as $key => $old_backup_file)
     {
         // create array with all column values
@@ -113,7 +113,7 @@ if($getMode == 'show_list')
                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
         $table->addRowByArray($columnValues, 'row_file_'.$key);
     
-    	$backup_size_sum = $backup_size_sum + round(filesize($backupabsolutepath.$old_backup_file)/1024);
+        $backup_size_sum = $backup_size_sum + round(filesize($backupabsolutepath.$old_backup_file)/1024);
     }
     
     if(count($existingBackupFiles) > 0)

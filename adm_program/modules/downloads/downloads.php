@@ -44,7 +44,7 @@ try
 }
 catch(AdmException $e)
 {
-	$e->showHtml();
+    $e->showHtml();
 }
 
 // set headline of the script
@@ -93,9 +93,9 @@ if ($gCurrentUser->editDownloadRight())
 
 if($gCurrentUser->isWebmaster())
 {
-	// show link to system preferences of weblinks
-	$DownloadsMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=downloads', 
-						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    // show link to system preferences of weblinks
+    $DownloadsMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=downloads', 
+                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
 //Create table object

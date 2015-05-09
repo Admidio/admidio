@@ -37,18 +37,18 @@ if($getUsfId > 0)
 {
     $userField->readDataById($getUsfId);
     
-	// check if profile field belongs to actual organization
+    // check if profile field belongs to actual organization
     if($userField->getValue('cat_org_id') >  0
     && $userField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
-	
-	// if system profile field then set usf_type to default
-	if($userField->getValue('usf_system') == 1)
-	{
-		$_POST['usf_type'] = $userField->getValue('usf_type');
-	}
+    
+    // if system profile field then set usf_type to default
+    if($userField->getValue('usf_system') == 1)
+    {
+        $_POST['usf_type'] = $userField->getValue('usf_type');
+    }
 }
 
 if($getMode == 1)
@@ -75,7 +75,7 @@ if($getMode == 1)
     }
 
     if(($_POST['usf_type'] == 'DROPDOWN' || $_POST['usf_type'] == 'RADIO_BUTTON')
-	&& strlen($_POST['usf_value_list']) == 0)
+    && strlen($_POST['usf_value_list']) == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_VALUE_LIST')));
     }
@@ -121,7 +121,7 @@ if($getMode == 1)
     {
         $_POST['usf_mandatory'] = 0;
     }
-	
+    
     // make html in description secure
     $_POST['usf_description'] = admFuncVariableIsValid($_POST, 'usf_description', 'html');
 
@@ -131,13 +131,13 @@ if($getMode == 1)
         if(strpos($key, 'usf_') === 0)
         {
             if($userField->setValue($key, $value) == false)
-			{
-				// Daten wurden nicht uebernommen, Hinweis ausgeben
-				if($key == 'usf_url')
-				{
-					$gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('ORG_URL')));
-				}
-			}
+            {
+                // Daten wurden nicht uebernommen, Hinweis ausgeben
+                if($key == 'usf_url')
+                {
+                    $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('ORG_URL')));
+                }
+            }
         }
     }
     
@@ -152,9 +152,9 @@ if($getMode == 1)
     $gNavigation->deleteLastUrl();
     unset($_SESSION['fields_request']);
 
-	// zu den Organisationseinstellungen zurueck
-	$gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-	$gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+    // zu den Organisationseinstellungen zurueck
+    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
+    $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
 elseif($getMode == 2)
 {

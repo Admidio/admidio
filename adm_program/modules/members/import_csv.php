@@ -93,10 +93,10 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
                     $importedFields[$field->getValue('usf_id')] = $field->getValue('usf_name_intern');
                 }
 
-				if($field->getValue('usf_name_intern') == 'COUNTRY')
-				{
-					$user->setValue($field->getValue('usf_name_intern'), $gL10n->getCountryByName($columnValue));
-				}
+                if($field->getValue('usf_name_intern') == 'COUNTRY')
+                {
+                    $user->setValue($field->getValue('usf_name_intern'), $gL10n->getCountryByName($columnValue));
+                }
                 elseif($field->getValue('usf_type') == 'CHECKBOX')
                 {
                     if($columnValueToLower == 'j'
@@ -119,24 +119,24 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
                 elseif($field->getValue('usf_type') == 'DROPDOWN'
                     || $field->getValue('usf_type') == 'RADIO_BUTTON')
                 {
-					// save position of combobox
-					$arrListValues = $field->getValue('usf_value_list', 'text');
-					$position = 1;
+                    // save position of combobox
+                    $arrListValues = $field->getValue('usf_value_list', 'text');
+                    $position = 1;
 
-					foreach($arrListValues as $key => $value)
-					{
-						if(strcmp(admStrToLower($columnValue), admStrToLower(trim($arrListValues[$position]))) == 0)
-						{
-							// if col_value is text than save position if text is equal to text of position
-							$user->setValue($field->getValue('usf_name_intern'), $position);
-						}
-						elseif(is_numeric($columnValue) && !is_numeric($arrListValues[$position]) && $columnValue > 0 && $columnValue < 1000)
-						{
-							// if col_value is numeric than save position if col_value is equal to position
-							$user->setValue($field->getValue('usf_name_intern'), $columnValue);
-						}
-						$position++;
-					}
+                    foreach($arrListValues as $key => $value)
+                    {
+                        if(strcmp(admStrToLower($columnValue), admStrToLower(trim($arrListValues[$position]))) == 0)
+                        {
+                            // if col_value is text than save position if text is equal to text of position
+                            $user->setValue($field->getValue('usf_name_intern'), $position);
+                        }
+                        elseif(is_numeric($columnValue) && !is_numeric($arrListValues[$position]) && $columnValue > 0 && $columnValue < 1000)
+                        {
+                            // if col_value is numeric than save position if col_value is equal to position
+                            $user->setValue($field->getValue('usf_name_intern'), $columnValue);
+                        }
+                        $position++;
+                    }
                 }
                 elseif($field->getValue('usf_type') == 'EMAIL')
                 {
@@ -204,26 +204,26 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
                 {
                     if($duplicate_user->getValue($field_name_intern) != $user->getValue($field_name_intern))
                     {
-						if($gProfileFields->getProperty($field_name_intern, 'usf_type') == 'DATE')
-						{
-							// the date must be formated
-							$duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, $gPreferences['system_date']));
-						}
-						elseif($field_name_intern == 'COUNTRY')
-						{
-							// we need the iso-code and not the name of the country
-							$duplicate_user->setValue($field_name_intern, $gL10n->getCountryByName($user->getValue($field_name_intern)));
-						}
-		                elseif($gProfileFields->getProperty($field_name_intern, 'usf_type') == 'DROPDOWN'
-		                    || $gProfileFields->getProperty($field_name_intern, 'usf_type') == 'RADIO_BUTTON')
-		                {
-		                	// get number and not value of entry
-							$duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, 'database'));
-		                }
-						else
-						{
-							$duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern));
-						}
+                        if($gProfileFields->getProperty($field_name_intern, 'usf_type') == 'DATE')
+                        {
+                            // the date must be formated
+                            $duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, $gPreferences['system_date']));
+                        }
+                        elseif($field_name_intern == 'COUNTRY')
+                        {
+                            // we need the iso-code and not the name of the country
+                            $duplicate_user->setValue($field_name_intern, $gL10n->getCountryByName($user->getValue($field_name_intern)));
+                        }
+                        elseif($gProfileFields->getProperty($field_name_intern, 'usf_type') == 'DROPDOWN'
+                            || $gProfileFields->getProperty($field_name_intern, 'usf_type') == 'RADIO_BUTTON')
+                        {
+                            // get number and not value of entry
+                            $duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, 'database'));
+                        }
+                        else
+                        {
+                            $duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern));
+                        }
                     }
                 }
                 $user = $duplicate_user;
@@ -233,12 +233,12 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
         if($rowDuplicateUser['usr_id'] == 0
         || ($rowDuplicateUser['usr_id']  > 0 && $_SESSION['user_import_mode'] > USER_IMPORT_NOT_EDIT))
         {
-			// if user doesn't exists or should be duplicated then count as new user
+            // if user doesn't exists or should be duplicated then count as new user
             if($rowDuplicateUser['usr_id'] == 0 || $_SESSION['user_import_mode'] == USER_IMPORT_DUPLICATE)
             {
                 $countImportNewUser++;
             }
-			// existing users count as edited if mode is displace or complete
+            // existing users count as edited if mode is displace or complete
             elseif($rowDuplicateUser['usr_id']  > 0 && $user->columnsValueChanged())
             {
                 $countImportEditUser++;

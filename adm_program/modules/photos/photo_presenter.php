@@ -76,44 +76,44 @@ $page = new HtmlPage($photoAlbum->getValue('pho_name'));
 
 //wenn Popupmode oder Colorbox, dann normalen Kopf unterdruecken
 if($gPreferences['photo_show_mode'] == 0)
-{                      
+{
     $page->hideThemeHtml();
 }
 
 if($gPreferences['photo_show_mode'] == 2)
-{	
+{
     // get module menu
     $photoPresenterMenu = $page->getMenu();
 
     // if you have no popup or colorbox then show a button back to the album
-	if($gPreferences['photo_show_mode'] == 2)
-	{   
-    	$photoPresenterMenu->addItem('menu_item_back_to_album', $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId,
-    	                             $gL10n->get('PHO_BACK_TO_ALBUM'), 'application_view_tile.png');
-	}
-
-	// show link to navigate to next and previous photos
-	if($previousImage > 0)
-	{
-    	$photoPresenterMenu->addItem('menu_item_previous_photo', $urlPreviousImage,
-    	                             $gL10n->get('PHO_PREVIOUS_PHOTO'), 'back.png');
+    if($gPreferences['photo_show_mode'] == 2)
+    {
+        $photoPresenterMenu->addItem('menu_item_back_to_album', $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId,
+                                     $gL10n->get('PHO_BACK_TO_ALBUM'), 'application_view_tile.png');
     }
-    
-	if($nextImage <= $photoAlbum->getValue('pho_quantity'))
-	{
-    	$photoPresenterMenu->addItem('menu_item_next_photo', $urlNextImage,
-    	                             $gL10n->get('PHO_NEXT_PHOTO'), 'forward.png');
-    }	
+
+    // show link to navigate to next and previous photos
+    if($previousImage > 0)
+    {
+        $photoPresenterMenu->addItem('menu_item_previous_photo', $urlPreviousImage,
+                                     $gL10n->get('PHO_PREVIOUS_PHOTO'), 'back.png');
+    }
+
+    if($nextImage <= $photoAlbum->getValue('pho_quantity'))
+    {
+        $photoPresenterMenu->addItem('menu_item_next_photo', $urlNextImage,
+                                     $gL10n->get('PHO_NEXT_PHOTO'), 'forward.png');
+    }
 }
 
 // Show photo with link to next photo
 if($nextImage <= $photoAlbum->getValue('pho_quantity'))
 {
-	$page->addHtml('<div class="admidio-img-presenter"><a href="'.$urlNextImage.'"><img src="'.$urlCurrentImage.'" alt="Foto"></a></div>');
+    $page->addHtml('<div class="admidio-img-presenter"><a href="'.$urlNextImage.'"><img src="'.$urlCurrentImage.'" alt="Foto"></a></div>');
 }
 else
 {
-	$page->addHtml('<div class="admidio-img-presenter"><img src="'.$urlCurrentImage.'" alt="'.$gL10n->get('SYS_PHOTO').'" /></div>');
+    $page->addHtml('<div class="admidio-img-presenter"><img src="'.$urlCurrentImage.'" alt="'.$gL10n->get('SYS_PHOTO').'" /></div>');
 }
 
 if($gPreferences['photo_show_mode'] == 0)
@@ -121,11 +121,11 @@ if($gPreferences['photo_show_mode'] == 0)
     // in popup mode show buttons for prev, next and close
     $page->addHtml('
     <div class="btn-group">
-        <button class="btn btn-default" onclick="window.location.href=\''.$urlPreviousImage.'\'"><img 
+        <button class="btn btn-default" onclick="window.location.href=\''.$urlPreviousImage.'\'"><img
             src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('PHO_PREVIOUS_PHOTO').'" />'.$gL10n->get('PHO_PREVIOUS_PHOTO').'</button>
-        <button class="btn btn-default" onclick="parent.window.close()"><img 
+        <button class="btn btn-default" onclick="parent.window.close()"><img
             src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_CLOSE_WINDOW').'" />'.$gL10n->get('SYS_CLOSE_WINDOW').'</button>
-        <button class="btn btn-default" onclick="window.location.href=\''.$urlNextImage.'\'"><img 
+        <button class="btn btn-default" onclick="window.location.href=\''.$urlNextImage.'\'"><img
             src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('PHO_NEXT_PHOTO').'" />'.$gL10n->get('PHO_NEXT_PHOTO').'</button>
     </div>');
 }
@@ -133,24 +133,24 @@ elseif($gPreferences['photo_show_mode'] == 2)
 {
     // if no popup mode then show additional album informations
     $datePeriod = $photoAlbum->getValue('pho_begin', $gPreferences['system_date']);
-    
-	if($photoAlbum->getValue('pho_end') != $photoAlbum->getValue('pho_begin')
-	&& strlen($photoAlbum->getValue('pho_end')) > 0)
-	{
-		$datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gPreferences['system_date']);
-	}
-    
-	$page->addHtml('
-	<div class="row">
-	    <div class="col-sm-2 col-xs-4">'.$gL10n->get('SYS_DATE').'</div>
-	    <div class="col-sm-4 col-xs-8"><strong>'.$datePeriod.'</strong></div>
+
+    if($photoAlbum->getValue('pho_end') != $photoAlbum->getValue('pho_begin')
+    && strlen($photoAlbum->getValue('pho_end')) > 0)
+    {
+        $datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gPreferences['system_date']);
+    }
+
+    $page->addHtml('
+    <div class="row">
+        <div class="col-sm-2 col-xs-4">'.$gL10n->get('SYS_DATE').'</div>
+        <div class="col-sm-4 col-xs-8"><strong>'.$datePeriod.'</strong></div>
     </div>
-	<div class="row">
-	    <div class="col-sm-2 col-xs-4">'.$gL10n->get('PHO_PHOTOGRAPHER').'</div>
-	    <div class="col-sm-4 col-xs-8"><strong>'.$photoAlbum->getValue('pho_photographers').'</strong></div>
-	</div>');
+    <div class="row">
+        <div class="col-sm-2 col-xs-4">'.$gL10n->get('PHO_PHOTOGRAPHER').'</div>
+        <div class="col-sm-4 col-xs-8"><strong>'.$photoAlbum->getValue('pho_photographers').'</strong></div>
+    </div>');
 }
-	
+
 // show html of complete page
 $page->show();
 

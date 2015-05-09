@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Mit dieser Klasse koennen Ordner leichter verwaltet werden. Das rekursive Verschieben, 
+ * Mit dieser Klasse koennen Ordner leichter verwaltet werden. Das rekursive Verschieben,
  * Kopieren, Loeschen uvw. wird unterstuetzt.
  *
  * The following functions are available:
@@ -15,11 +15,11 @@
  * getFolder()           - Ordner zurueckgeben
  * createFolder($newFolder, $writeable)     - den Ordner ggf. mit Schreibrechten erstellen
  * copy($destinationFolder, $sourceFolder = '')
- *                       - kopiert den kompletten Ordner mit allen Unterordnern und 
+ *                       - kopiert den kompletten Ordner mit allen Unterordnern und
  *                         Dateien in einen neuen Pfad
  * delete($folder = '')  - der Ordner wird mit allen Unterordnern / Dateien geloescht
  * move($destinationFolder, $sourceFolder = '')
- *                       - verschiebt den kompletten Ordner mit allen Unterordnern 
+ *                       - verschiebt den kompletten Ordner mit allen Unterordnern
  *                         und Dateien in einen neuen Pfad
  *
  *****************************************************************************/
@@ -36,7 +36,7 @@ class Folder
             $this->folderWithPath = $folderWithPath;
         }
     }
-    
+
     // Ordner mit zugehoerigem Pfad setzen
     public function setFolder($folderWithPath = '')
     {
@@ -45,18 +45,18 @@ class Folder
             $this->folderWithPath = $folderWithPath;
         }
     }
-    
+
     // Ordner zurueckgeben
     public function getFolder()
     {
         return $this->folderWithPath;
     }
-    
+
     // den Ordner der Klasse mit Schreibrechten erstellen
     public function createFolder($newFolder, $writeable)
     {
-		$newPath = $this->folderWithPath. '/'. $newFolder;
-		$retCode = true;
+        $newPath = $this->folderWithPath. '/'. $newFolder;
+        $retCode = true;
 
         // existiert der Ordner noch nicht, dann diesen anlegen
         if(file_exists($newPath) == false)
@@ -81,7 +81,7 @@ class Folder
         }
         return $retCode;
     }
-    
+
     // kopiert den kompletten Ordner mit allen Unterordnern und Dateien in einen neuen Pfad
     // destinationFolder : das neue Zielverzeichnis
     // sourceFolder      : der zu kopierende Ordner, falls nicht gefuellt wird der Ordner aus der Klasse genommen
@@ -92,14 +92,14 @@ class Folder
             $sourceFolder = $this->folderWithPath;
         }
 
-		// erst einmal vom Zielpfad den letzten Ordner absplitten, damit dieser angelegt werden kann
-		$newFolder = substr($destinationFolder, strrpos($destinationFolder, '/') + 1);
-		$newPath   = substr($destinationFolder, 0, strrpos($destinationFolder, '/'));
-		
+        // erst einmal vom Zielpfad den letzten Ordner absplitten, damit dieser angelegt werden kann
+        $newFolder = substr($destinationFolder, strrpos($destinationFolder, '/') + 1);
+        $newPath   = substr($destinationFolder, 0, strrpos($destinationFolder, '/'));
+
         // nun erst einmal den Zielordner erstellen
         $this->setFolder($newPath);
         $b_return = $this->createFolder($newFolder, true);
-        
+
         if($b_return == true)
         {
             $dh  = @opendir($sourceFolder);
@@ -139,8 +139,8 @@ class Folder
 
         return true;
     }
-        
-    /* Deletes the current folder recursive with all files and subfolders. 
+
+    /* Deletes the current folder recursive with all files and subfolders.
      * @param $folder            Name of a folder that should be deleted. Default is always the current folder
      * @param $onlyDeleteContent If set to @b true then only files and folders in the current
      *                           folder will be deleted. The current folder will not be deleted.
@@ -151,7 +151,7 @@ class Folder
         {
             $folder = $this->folderWithPath;
         }
-        
+
         $dh  = @opendir($folder);
         if($dh)
         {
@@ -192,17 +192,17 @@ class Folder
         }
         return true;
     }
-    
+
     // verschiebt den kompletten Ordner mit allen Unterordnern und Dateien in einen neuen Pfad
     // destinationFolder : das neue Zielverzeichnis
-    // sourceFolder      : der zu verschiebende Ordner, falls nicht gefuellt wird der Ordner aus der Klasse genommen    
+    // sourceFolder      : der zu verschiebende Ordner, falls nicht gefuellt wird der Ordner aus der Klasse genommen
     public function move($destinationFolder, $sourceFolder = '')
     {
         if(strlen($sourceFolder) == 0)
         {
             $sourceFolder = $this->folderWithPath;
         }
-        
+
         // erst den kompletten Ordner kopieren und danach im erfolgsfall loeschen
         if($this->copy($destinationFolder, $sourceFolder) == true)
         {

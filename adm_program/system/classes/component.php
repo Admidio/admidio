@@ -29,11 +29,11 @@
 
 class Component extends TableAccess
 {
-	/** Constuctor that will create an object of a recordset of the table adm_component.
-	 *  If the id is set than the specific component will be loaded.
-	 *  @param $db Object of the class database. This should be the default object $gDb.
-	 *  @param $com_id The recordset of the component with this id will be loaded. If com_id isn't set than an empty object of the table is created.
-	 */
+    /** Constuctor that will create an object of a recordset of the table adm_component.
+     *  If the id is set than the specific component will be loaded.
+     *  @param $db Object of the class database. This should be the default object $gDb.
+     *  @param $com_id The recordset of the component with this id will be loaded. If com_id isn't set than an empty object of the table is created.
+     */
     public function __construct(&$db, $com_id = 0)
     {
         parent::__construct($db, TBL_COMPONENTS, 'com', $com_id);
@@ -50,9 +50,17 @@ class Component extends TableAccess
     {
         global $g_root_path;
 
-        if(version_compare($this->getValue('com_version'), ADMIDIO_VERSION) !== 0 || version_compare($this->getValue('com_beta'), ADMIDIO_VERSION_BETA) !== 0)
+        $dbVersion = $this->getValue('com_version');
+        $dbVersionBeta = $this->getValue('com_beta');
+        $dbVersionText = $dbVersion;
+        if($dbVersionBeta > 0)
         {
-            $arrDbVersion         = explode('.', $this->getValue('com_version').'.'.$this->getValue('com_beta'));
+            $dbVersionText .= ' Beta '.$dbVersionBeta;
+        }
+
+        if(version_compare($dbVersion, ADMIDIO_VERSION) !== 0 || version_compare($dbVersionBeta, ADMIDIO_VERSION_BETA) !== 0)
+        {
+            $arrDbVersion         = explode('.', $dbVersion.'.'.$dbVersionBeta);
             $arrFileSystemVersion = explode('.', ADMIDIO_VERSION.'.'.ADMIDIO_VERSION_BETA);
 
             if($webmaster == true)
@@ -63,7 +71,7 @@ class Component extends TableAccess
                 || $arrDbVersion[2] < $arrFileSystemVersion[2]
                 || $arrDbVersion[3] < $arrFileSystemVersion[3])
                 {
-                    throw new AdmException('SYS_WEBMASTER_DATABASE_INVALID', $this->getValue('com_version'), ADMIDIO_VERSION, '<a href="'.$g_root_path.'/adm_program/installation/update.php">', '</a>');
+                    throw new AdmException('SYS_WEBMASTER_DATABASE_INVALID', $dbVersionText, ADMIDIO_VERSION_TEXT, '<a href="'.$g_root_path.'/adm_program/installation/update.php">', '</a>');
                 }
                 // if webmaster and file system version is less than db version then show notice
                 elseif($arrDbVersion[0] > $arrFileSystemVersion[0]
@@ -71,7 +79,7 @@ class Component extends TableAccess
                     || $arrDbVersion[2] > $arrFileSystemVersion[2]
                     || $arrDbVersion[3] > $arrFileSystemVersion[3])
                 {
-                    throw new AdmException('SYS_WEBMASTER_FILESYSTEM_INVALID', $this->getValue('com_version'), ADMIDIO_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
+                    throw new AdmException('SYS_WEBMASTER_FILESYSTEM_INVALID', $dbVersionText, ADMIDIO_VERSION_TEXT, '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
                 }
             }
             else
@@ -80,7 +88,7 @@ class Component extends TableAccess
                 if($arrDbVersion[0] != $arrFileSystemVersion[0]
                 || $arrDbVersion[1] != $arrFileSystemVersion[1])
                 {
-                    throw new AdmException('SYS_DATABASE_INVALID', $this->getValue('com_version'), ADMIDIO_VERSION, '<a href="mailto:'.$emailAdministrator.'">', '</a>');
+                    throw new AdmException('SYS_DATABASE_INVALID', $dbVersionText, ADMIDIO_VERSION_TEXT, '<a href="mailto:'.$emailAdministrator.'">', '</a>');
                 }
                 // if main version and subversion are equal
                 // but subsub db version is less then subsub file version show notice
@@ -88,7 +96,7 @@ class Component extends TableAccess
                 &&     $arrDbVersion[1] == $arrFileSystemVersion[1]
                 &&     $arrDbVersion[2]  < $arrFileSystemVersion[2])
                 {
-                    throw new AdmException('SYS_DATABASE_INVALID', $this->getValue('com_version'), ADMIDIO_VERSION, '<a href="mailto:'.$emailAdministrator.'">', '</a>');
+                    throw new AdmException('SYS_DATABASE_INVALID', $dbVersionText, ADMIDIO_VERSION_TEXT, '<a href="mailto:'.$emailAdministrator.'">', '</a>');
                 }
             }
         }

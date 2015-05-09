@@ -290,9 +290,9 @@ class Image
      */
     public function delete()
     {
-    	imagedestroy($this->imageResource);
-    	$this->imageResource = null;
-    	$this->imagePath = '';
+        imagedestroy($this->imageResource);
+        $this->imageResource = null;
+        $this->imagePath = '';
     }
 }
 ?>

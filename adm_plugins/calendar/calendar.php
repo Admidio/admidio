@@ -16,7 +16,7 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
- 
+
 // create path to plugin
 $plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
 $plugin_file_pos   = strpos(__FILE__, 'calendar.php');
@@ -91,15 +91,15 @@ if(isset($plg_link_url) == false || ($plg_link_url) =='')
 
 if(isset($plg_link_class_geb) == false || ($plg_link_class_geb) =='')
 {
-	$plg_link_class_geb = 'geb';
+    $plg_link_class_geb = 'geb';
 }
 if(isset($plg_link_class_date) == false || ($plg_link_class_date) =='')
 {
-	$plg_link_class_date = 'date';
+    $plg_link_class_date = 'date';
 }
 if(isset($plg_link_class_merge) == false || ($plg_link_class_merge) =='')
 {
-	$plg_link_class_date = 'merge';
+    $plg_link_class_date = 'merge';
 }
 
 // /////////////////////////////////////////////////////// //
@@ -107,16 +107,16 @@ if(isset($plg_link_class_merge) == false || ($plg_link_class_merge) =='')
 // /////////////////////////////////////////////////////// //
 if(isset($plg_rolle_sql) == 'all' || ($plg_rolle_sql) == '')
 {
-	$rol_sql = 'is not null';
+    $rol_sql = 'is not null';
 }
 else
 {
-	$rol_sql = 'in '.$plg_rolle_sql;
+    $rol_sql = 'in '.$plg_rolle_sql;
 }
 
 // Sprachdatei des Plugins einbinden
 $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
-	
+
 // Nun noch einige Variablen initialisieren
 
 $geb_link = '';
@@ -171,31 +171,31 @@ if($plg_ter_aktiv == 1)
     // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
     $plg_organizations = '';
     $plg_arr_orgas = $gCurrentOrganization->getOrganizationsInRelationship(true, true);
-    
+
     foreach($plg_arr_orgas as $key => $value)
     {
-    	$plg_organizations = $plg_organizations. $key. ', ';
+        $plg_organizations = $plg_organizations. $key. ', ';
     }
     $plg_organizations = $plg_organizations. $gCurrentOrganization->getValue('org_id');
-	
+
     // Ermitteln, welche Kalender angezeigt werden sollen
     if(in_array('all', $plg_kal_cat))
     {
-		// alle Kalender anzeigen
-		$sql_syntax = '';
+        // alle Kalender anzeigen
+        $sql_syntax = '';
     }
     else
     {
-		// nur bestimmte Kalender anzeigen
+        // nur bestimmte Kalender anzeigen
         $sql_syntax = ' AND cat_type = \'DAT\' AND ( ';
         for($i=0;$i<count($plg_kal_cat);$i++)
         {
-			$sql_syntax = $sql_syntax. 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
+            $sql_syntax = $sql_syntax. 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
         }
         $sql_syntax = substr($sql_syntax, 0, -4). ') ';
     }
-	
-    
+
+
     // Dummy-Zähler für Schleifen definieren
     $ter = 1;
     $ter_anzahl = 0;
@@ -210,14 +210,14 @@ if($plg_ter_aktiv == 1)
     {
         $login_sql = 'AND dtr_rol_id IS NULL';
     }
-    $sql = 'SELECT DISTINCT dat_id, dat_cat_id, cat_name, dat_begin, dat_all_day, dat_location, dat_headline 
+    $sql = 'SELECT DISTINCT dat_id, dat_cat_id, cat_name, dat_begin, dat_all_day, dat_location, dat_headline
             FROM '. TBL_DATE_ROLE.', '. TBL_DATES. ', '.TBL_CATEGORIES.'
             WHERE dat_id = dtr_dat_id
                 '.$login_sql.'
                 AND DATE_FORMAT(dat_begin, \'%Y-%m\') = \''.$sql_dat.'\'
                 '.$sql_syntax.'
             AND dat_cat_id = cat_id
-			ORDER BY dat_begin ASC';
+            ORDER BY dat_begin ASC';
     $result = $gDb->query($sql);
 
     while($row = $gDb->fetch_array($result))
@@ -229,17 +229,17 @@ if($plg_ter_aktiv == 1)
         $termin_ganztags[$ter] = $row['dat_all_day'];
         $termin_ort[$ter]      = $row['dat_location'];
         $termin_titel[$ter]    = $row['dat_headline'];
-		
-		// Name der Standardkalender umsetzen, sonst Name lt. Datenbank
-		if($plg_kal_cat_show == 1)
-		{
-			if(substr($row['cat_name'], 3, 1)=='_')
-			{$calendar_name = $gL10n->get($row['cat_name']);}
-			else
-			{$calendar_name = $row['cat_name'];}
-			$termin_titel[$ter]= $calendar_name. ': '. $termin_titel[$ter];
-		}
-		
+
+        // Name der Standardkalender umsetzen, sonst Name lt. Datenbank
+        if($plg_kal_cat_show == 1)
+        {
+            if(substr($row['cat_name'], 3, 1)=='_')
+            {$calendar_name = $gL10n->get($row['cat_name']);}
+            else
+            {$calendar_name = $row['cat_name'];}
+            $termin_titel[$ter]= $calendar_name. ': '. $termin_titel[$ter];
+        }
+
         $ter++;
     }
 }
@@ -251,10 +251,10 @@ if($plg_geb_aktiv == 1)
     $geb = 1;
     $geb_anzahl = 0;
     $geb_aktuell = 0;
-    
+
     // Datenbankabfrage nach Geburtstagen im Monat
-    $sql = 'SELECT DISTINCT 
-                   usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, 
+    $sql = 'SELECT DISTINCT
+                   usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name,
                    birthday.usd_value AS birthday
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
               JOIN '. TBL_USER_DATA. ' AS birthday ON birthday.usd_usr_id = usr_id
@@ -272,10 +272,10 @@ if($plg_geb_aktiv == 1)
                AND mem_end    > \''.DATE_NOW.'\'
                AND usr_valid  = 1
              ORDER BY Month(birthday.usd_value) ASC, DayOfMonth(birthday.usd_value) ASC, last_name, first_name';
-    
+
     $result = $gDb->query($sql);
     $anz_geb = $gDb->num_rows($result);
-    
+
     while($row = $gDb->fetch_array($result))
     {
         $birthdayDate   = new DateTimeExtended($row['birthday'], 'Y-m-d', 'date');
@@ -298,8 +298,8 @@ if($erster == 0)
 echo '<div id="plgCalendarContent" class="admidio-plugin-content">
 <h3>'.$gL10n->get('DAT_CALENDAR').'</h3>
 
-<script type="text/javascript"><!-- 
-    if ( typeof gTranslations == "undefined") 
+<script type="text/javascript"><!--
+    if ( typeof gTranslations == "undefined")
     {
         var gTranslations = new Array("'.$gL10n->get('SYS_MON').'","'.$gL10n->get('SYS_TUE').'","'.$gL10n->get('SYS_WED').'","'.$gL10n->get('SYS_THU').'","'.$gL10n->get('SYS_FRI').'","'.$gL10n->get('SYS_SAT').'","'.$gL10n->get('SYS_SUN').'","'.$gL10n->get('SYS_TODAY').'","'.$gL10n->get('SYS_LOADING_CONTENT').'");
     }
@@ -409,9 +409,9 @@ while($i<=$insgesamt)
             }
             if($ter_anzahl >> 0)
             {
-				// Link_Target auf Termin-Vorgabe einstellen 
-				$plg_link_target = $plg_link_target_termin;
-				
+                // Link_Target auf Termin-Vorgabe einstellen
+                $plg_link_target = $plg_link_target_termin;
+
                 if($i <= 9)
                 {
                     $plg_link = $plg_link_url.'?date='.$jahr.$monat.'0'. $i;
@@ -434,7 +434,7 @@ while($i<=$insgesamt)
             }
         }
     }
-    
+
     // Geburtstagsanzeige generieren
     if($plg_geb_aktiv == 1)
     {
@@ -483,9 +483,9 @@ while($i<=$insgesamt)
             }
         }
     }
-	
-	// Hier erfolgt nun die Bestimmung der Linkklasse
-// Dabei werden 3 Linkklassen verwendet: 
+
+    // Hier erfolgt nun die Bestimmung der Linkklasse
+// Dabei werden 3 Linkklassen verwendet:
 // geb (Geburtstage), date (Termine) und merge (gleichzeitig Geburtstage und Termine
 
 // Zuerst Vorbelegung der Wochentagsklassen
@@ -494,38 +494,38 @@ $plg_link_class_sunday = 'plgCalendarSunday';
 $plg_link_class_weekday = 'plgCalendarDay';
 
 if($i != $ter_aktuell && $i == $geb_aktuell) // Geburstag aber kein Termin
-	{
-		$plg_link_class = 'geb';
-		$plg_link_class_saturday = 'plgCalendarBirthSaturday';
-		$plg_link_class_sunday = 'plgCalendarBirthSunday';
-		$plg_link_class_weekday = 'plgCalendarBirthDay';
+    {
+        $plg_link_class = 'geb';
+        $plg_link_class_saturday = 'plgCalendarBirthSaturday';
+        $plg_link_class_sunday = 'plgCalendarBirthSunday';
+        $plg_link_class_weekday = 'plgCalendarBirthDay';
 
-	}
+    }
 
 if($i == $ter_aktuell && $i!= $geb_aktuell) // Termin aber kein Geburtstag
-	{
-		$plg_link_class = 'date';
-		$plg_link_class_saturday = 'plgCalendarDateSaturday';
-		$plg_link_class_sunday = 'plgCalendarDateSunday';
-		$plg_link_class_weekday = 'plgCalendarDateDay';
-		
-	}
+    {
+        $plg_link_class = 'date';
+        $plg_link_class_saturday = 'plgCalendarDateSaturday';
+        $plg_link_class_sunday = 'plgCalendarDateSunday';
+        $plg_link_class_weekday = 'plgCalendarDateDay';
+
+    }
 if($i == $ter_aktuell && $i == $geb_aktuell) // Termin und Geburtstag
-	{
-		$plg_link_class = 'merge';
-		$plg_link_class_saturday = 'plgCalendarMergeSaturday';
-		$plg_link_class_sunday = 'plgCalendarMergeSunday';
-		$plg_link_class_weekday = 'plgCalendarMergeDay';
-	
-	}
+    {
+        $plg_link_class = 'merge';
+        $plg_link_class_saturday = 'plgCalendarMergeSaturday';
+        $plg_link_class_sunday = 'plgCalendarMergeSunday';
+        $plg_link_class_weekday = 'plgCalendarMergeDay';
+
+    }
 // Ende der Linklassenbestimmung
-	
+
     if ($boolNewStart)
-	{
-		echo '<tr>
-		';
-		$boolNewStart = false;
-	}
+    {
+        echo '<tr>
+        ';
+        $boolNewStart = false;
+    }
     $rest = ($i+$erster-1)%7;
     if($i == $heute)
     {
@@ -533,29 +533,29 @@ if($i == $ter_aktuell && $i == $geb_aktuell) // Termin und Geburtstag
     }
     elseif($rest == 6)
     {
-		// CSS aus der Linkklassenbestimmung verwenden
-		echo '<td align="center" class="'.$plg_link_class_saturday.'">';
+        // CSS aus der Linkklassenbestimmung verwenden
+        echo '<td align="center" class="'.$plg_link_class_saturday.'">';
     }
     elseif($rest == 0)
     {
-		// CSS aus der Linkklassenbestimmung verwenden
-		echo '<td align="center" class="'.$plg_link_class_sunday.'">';
+        // CSS aus der Linkklassenbestimmung verwenden
+        echo '<td align="center" class="'.$plg_link_class_sunday.'">';
     }
     else
     {
-		echo '<td align="center" class="'.$plg_link_class_weekday.'">';
+        echo '<td align="center" class="'.$plg_link_class_weekday.'">';
     }
-        
+
     if($i == $heute or $i == $ter_aktuell or $i == $geb_aktuell)
     {
-        if($i != $ter_aktuell && $i == $geb_aktuell) 
+        if($i != $ter_aktuell && $i == $geb_aktuell)
         {
-			// Link-URL bei Geburtstag durch # abschalten
+            // Link-URL bei Geburtstag durch # abschalten
             $plg_link = '#';
-			// Link_Target für Geburtstagvorgabe einstellen
-			$plg_link_target = $plg_link_target_geb;
+            // Link_Target für Geburtstagvorgabe einstellen
+            $plg_link_target = $plg_link_target_geb;
         }
-		
+
         if($i == $ter_aktuell || $i == $geb_aktuell)
         {
             if($plg_ajaxbox == 1)
@@ -563,11 +563,11 @@ if($i == $ter_aktuell && $i == $geb_aktuell) // Termin und Geburtstag
                 if($ter_link != '' && $geb_link != '')
                 {
                     $geb_link = '&'. $geb_link;
-				}
-				
+                }
+
                 // plg_link_class bestimmt das Erscheinungsbild des jeweiligen Links
-                echo '<a class="'.$plg_link_class.'" href="'.$plg_link.'" target="'.$plg_link_target.'" 
-                    onmouseover="ajax_showTooltip(event,\''.htmlspecialchars(addcslashes($g_root_path.'/adm_plugins/'.$plugin_folder.'/calendar_msg.php?'.$ter_link.$geb_link, "'")).'\',this)" 
+                echo '<a class="'.$plg_link_class.'" href="'.$plg_link.'" target="'.$plg_link_target.'"
+                    onmouseover="ajax_showTooltip(event,\''.htmlspecialchars(addcslashes($g_root_path.'/adm_plugins/'.$plugin_folder.'/calendar_msg.php?'.$ter_link.$geb_link, "'")).'\',this)"
                     onmouseout="ajax_hideTooltip()">'.$i.'</a>';
             }
             else
@@ -576,11 +576,11 @@ if($i == $ter_aktuell && $i == $geb_aktuell) // Termin und Geburtstag
                 {
                     $geb_title = ', '. $geb_title;
                 }
-				
-                echo '<a class="'.$plg_link_class.'" href="'.$plg_link.'" title="'.$ter_title.$geb_title.'" 
+
+                echo '<a class="'.$plg_link_class.'" href="'.$plg_link.'" title="'.$ter_title.$geb_title.'"
                     href="'.$plg_link.'" target="'.$plg_link_target.'">'.$i.'</a>';
             }
-		}
+        }
         elseif($i == $heute)
         {
             echo '<span class="plgCalendarToday">'.$i.'</span>';
@@ -602,8 +602,8 @@ if($i == $ter_aktuell && $i == $geb_aktuell) // Termin und Geburtstag
     if($rest == 0 || $i == $insgesamt)
     {
         echo '</tr>
-		';
-		$boolNewStart = true;
+        ';
+        $boolNewStart = true;
     }
     $i++;
     $ter_anzahl = 0;

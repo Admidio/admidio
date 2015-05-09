@@ -68,13 +68,13 @@ if ($getMsgId > 0)
 
     // update the read-status
     $message->setReadValue($gCurrentUser->getValue('usr_id'));
-    
+
     $msg_converation_id = $message->getValue('msg_converation_id');
     $getMsgType = $message->getValue('msg_type');
     $getSubject = $message->getValue('msg_subject');
     $getUserId = $message->getConversationPartner($gCurrentUser->getValue('usr_id'));
-    
-    $sql = "SELECT msc_usr_id, msc_message, msc_timestamp 
+
+    $sql = "SELECT msc_usr_id, msc_message, msc_timestamp
                   FROM ". TBL_MESSAGES_CONTENT. "
                  WHERE msc_msg_id = ". $getMsgId ."
                  ORDER BY msc_part_id DESC";
@@ -112,7 +112,7 @@ if ($getMsgType == 'PM')
                         AND usr_login_name IS NOT NULL";
 
     $drop_result = $gDb->query($sql);
-    
+
     if ($gValidLogin)
     {
         while ($row = $gDb->fetch_array($drop_result))
@@ -127,7 +127,7 @@ if ($getUserId > 0)
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
     $user = new User($gDb, $gProfileFields, $getUserId);
 
-    // if an User ID is given, we need to check if the actual user is allowed to contact this user  
+    // if an User ID is given, we need to check if the actual user is allowed to contact this user
     if (($gCurrentUser->editUsers() == false
        && isMember($user->getValue('usr_id')) == false)
     || strlen($user->getValue('usr_id')) == 0)
@@ -180,7 +180,7 @@ if ($getMsgType == 'PM')
     if ($getUserId == 0)
     {
         $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
-        $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY, 
+        $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY,
                             'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE'));
         $form->closeGroupBox();
         $sendto = '';
@@ -225,7 +225,7 @@ elseif (!isset($message_result))
 
         $sqlConditions = ' AND rol_id = '.$getRoleId;
 
-        $sql = 'SELECT rol_mail_this_role, rol_name, rol_id, 
+        $sql = 'SELECT rol_mail_this_role, rol_name, rol_id,
                        (SELECT COUNT(1)
                           FROM '.TBL_MEMBERS.'
                          WHERE mem_rol_id = rol_id
@@ -282,11 +282,11 @@ elseif (!isset($message_result))
     {
         $formParam .= 'subject='.$getSubject.'&';
     }
-    
+
     // show form
     $form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
     $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
-    
+
     if ($getUserId > 0)
     {
         // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
@@ -297,7 +297,7 @@ elseif (!isset($message_result))
         // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
         $preload_data = '{ id: "groupID: ' .$rollenID. '", text: "' .$rollenName. '", locked: true}';
     }
-    
+
     // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
     if ($gValidLogin)
     {
@@ -314,7 +314,7 @@ elseif (!isset($message_result))
                    AND rol_cat_id  = cat_id
                    AND cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                  ORDER BY cat_sequence, rol_name ';
-        
+
         // add a selectbox where you can choose to which groups (active, former) you want to send the mail
         for ($act_or = 0; $act_or <= 2; $act_or++)
         {
@@ -337,9 +337,9 @@ elseif (!isset($message_result))
                 $act_group = $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_ACTIVE_MEMBERS') . ')';
                 $act_number = '';
             }
-            
+
             $result = $gDb->query($sql);
-            while ($row = $gDb->fetch_array($result)) 
+            while ($row = $gDb->fetch_array($result))
             {
                 if($act_number == '' || $row['former'] > 0)
                 {
@@ -348,10 +348,10 @@ elseif (!isset($message_result))
             }
 
         }
-        
+
         // select Users
-        
-        $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name, 
+
+        $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
                                  email.usd_value as email, (SELECT count(1)
                          FROM '.TBL_MEMBERS.' as temp
                         WHERE mem_usr_id = usr_id
@@ -374,13 +374,13 @@ elseif (!isset($message_result))
                      AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
                      AND usr_valid   = 1
                    GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
-                   ORDER BY former, first_name, last_name';        
+                   ORDER BY former, first_name, last_name';
 
         $result = $gDb->query($sql);
 
         $next = true;
         $active = $gL10n->get('LST_ACTIVE_MEMBERS');
-        
+
         while ($row = $gDb->fetch_array($result)) {
             if ($row['former'] == 1 && $next == true)
             {
@@ -396,7 +396,7 @@ elseif (!isset($message_result))
     {
         $recept_number = 1;
         // list all roles where guests could send mails to
-        $sql = 'SELECT rol_id, rol_name, cat_name 
+        $sql = 'SELECT rol_id, rol_name, cat_name
                   FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                  WHERE rol_mail_this_role = 3
                    AND rol_valid  = 1
@@ -409,10 +409,10 @@ elseif (!isset($message_result))
         {
             $list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], '');
         }
-        
+
     }
-    
-    $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY, 
+
+    $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY,
                         'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE'));
 
     $form->addLine();
@@ -448,7 +448,7 @@ elseif (!isset($message_result))
     // Nur eingeloggte User duerfen Attachments anhaengen...
     if (($gValidLogin) && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
     {
-        $form->addFileUpload('btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'), array('enableMultiUploads' => true, 'multiUploadLabel' => $gL10n->get('MAI_ADD_ATTACHEMENT'), 
+        $form->addFileUpload('btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'), array('enableMultiUploads' => true, 'multiUploadLabel' => $gL10n->get('MAI_ADD_ATTACHEMENT'),
             'hideUploadField' => true, 'helpTextIdLabel' => array('MAI_MAX_ATTACHMENT_SIZE', Email::getMaxAttachementSize('mb'))));
     }
 
@@ -481,79 +481,79 @@ elseif (!isset($message_result))
 if (isset($message_result))
 {
     $page->addHtml('<br>');
-	while ($row = $gDb->fetch_array($message_result)) 
-	{
-		if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))
-		{
-			$sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
-		}
-		else
-		{
-			$sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-		}
-		
-		$ReceiverName = '';
-		$message_text = htmlspecialchars_decode($row['msc_message']);
-		if ($getMsgType == 'PM')
-		{
-			// list history of this PM
-			$message_text = nl2br($row['msc_message']);
-		}
-		else
-		{
-			$message = new TableMessage($gDb, $getMsgId);
-			$receivers = $message->getValue('msg_usr_id_receiver');
-			// open some additonal functions for messages
-            $modulemessages = new ModuleMessages();
-			$ReceiverName = "";
-			if (strpos($receivers, '|') == true) 
-			{
-				$reciversplit = explode('|', $receivers);
-				foreach ($reciversplit as $value) 
-				{
-					if (strpos($value, ':') == true) 
-					{
-						$ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($value);
-					}
-					else
-					{
-						$user = new User($gDb, $gProfileFields, $value);
-						$ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-					}
-				}
-			}
-			else
-			{
-				if (strpos($receivers, ':') == true) 
-				{
-					$ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($receivers);
-				}
-				else
-				{
-					$user = new User($gDb, $gProfileFields, $receivers);
-					$ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-				}
-			}
-			$ReceiverName = '<div class="panel-footer">'.$gL10n->get('MSG_OPPOSITE').': '.substr($ReceiverName, 2).'</div>';		
-		}
+    while ($row = $gDb->fetch_array($message_result))
+    {
+        if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))
+        {
+            $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
+        }
+        else
+        {
+            $sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+        }
 
-		$page->addHtml('
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<div class="row">
-					<div class="col-sm-8">
-						<img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
-					</div>
-					<div class="col-sm-4 text-right">' . $row['msc_timestamp'] . 
-					'</div>
-				</div>
-			</div>
-			<div class="panel-body">'.
-				$message_text.'
-			</div>
-		    '.$ReceiverName.'
-		</div>');
-	}
+        $ReceiverName = '';
+        $message_text = htmlspecialchars_decode($row['msc_message']);
+        if ($getMsgType == 'PM')
+        {
+            // list history of this PM
+            $message_text = nl2br($row['msc_message']);
+        }
+        else
+        {
+            $message = new TableMessage($gDb, $getMsgId);
+            $receivers = $message->getValue('msg_usr_id_receiver');
+            // open some additonal functions for messages
+            $modulemessages = new ModuleMessages();
+            $ReceiverName = "";
+            if (strpos($receivers, '|') == true)
+            {
+                $reciversplit = explode('|', $receivers);
+                foreach ($reciversplit as $value)
+                {
+                    if (strpos($value, ':') == true)
+                    {
+                        $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($value);
+                    }
+                    else
+                    {
+                        $user = new User($gDb, $gProfileFields, $value);
+                        $ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                    }
+                }
+            }
+            else
+            {
+                if (strpos($receivers, ':') == true)
+                {
+                    $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($receivers);
+                }
+                else
+                {
+                    $user = new User($gDb, $gProfileFields, $receivers);
+                    $ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                }
+            }
+            $ReceiverName = '<div class="panel-footer">'.$gL10n->get('MSG_OPPOSITE').': '.substr($ReceiverName, 2).'</div>';
+        }
+
+        $page->addHtml('
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
+                    </div>
+                    <div class="col-sm-4 text-right">' . $row['msc_timestamp'] .
+                    '</div>
+                </div>
+            </div>
+            <div class="panel-body">'.
+                $message_text.'
+            </div>
+            '.$ReceiverName.'
+        </div>');
+    }
 }
 
 $preload = '';
@@ -566,18 +566,18 @@ if (isset($preload_data))
 // add JS code for the drop down to find email addresses and groups
 if(isset($list))
 {
-	$page->addHtml(
-	'<script>
-		$(document).ready(function () {
-			$("#msg_to").select2({
-				placeholder: "'.$gL10n->get('SYS_SELECT_FROM_LIST').'",
-				allowClear: true,
-				maximumSelectionSize: '.$recept_number.',
-				separator: ";"
-			});'
-			.$preload.
-		'});
-	</script>');
+    $page->addHtml(
+    '<script>
+        $(document).ready(function () {
+            $("#msg_to").select2({
+                placeholder: "'.$gL10n->get('SYS_SELECT_FROM_LIST').'",
+                allowClear: true,
+                maximumSelectionSize: '.$recept_number.',
+                separator: ";"
+            });'
+            .$preload.
+        '});
+    </script>');
 }
 
 // show page

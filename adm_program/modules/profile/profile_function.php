@@ -42,34 +42,34 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 
 if($getMode == 1)
 {
-	// Export vCard of user
+    // Export vCard of user
 
     $filename = $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME');
-    
-    // for IE the filename must have special chars in hexadecimal 
+
+    // for IE the filename must have special chars in hexadecimal
     if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
     {
         $filename = urlencode($filename);
     }
-    
+
     header('Content-Type: text/x-vcard; charset=iso-8859-1');
     header('Content-Disposition: attachment; filename="'.$filename.'.vcf"');
-    
-    // neccessary for IE, because without it the download with SSL has problems
-	header('Cache-Control: private');
-	header('Pragma: public');
 
-	// create vcard and check if user is allowed to edit profile, so he can see more data
+    // neccessary for IE, because without it the download with SSL has problems
+    header('Cache-Control: private');
+    header('Pragma: public');
+
+    // create vcard and check if user is allowed to edit profile, so he can see more data
     echo $user->getVCard($gCurrentUser->hasRightEditProfile($user));
 }
 elseif($getMode == 2)
 {
     // Cancel membership of role
-	$member = new TableMembers($gDb, $getMemberId);
-	$role   = new TableRoles($gDb, $member->getValue('mem_rol_id'));
+    $member = new TableMembers($gDb, $getMemberId);
+    $role   = new TableRoles($gDb, $member->getValue('mem_rol_id'));
 
-	// if user has the right then cancel membership
-	if($role->allowedToAssignMembers($gCurrentUser))
+    // if user has the right then cancel membership
+    if($role->allowedToAssignMembers($gCurrentUser))
     {
         $member->stopMembership();
 
@@ -89,107 +89,107 @@ elseif($getMode == 3)
         echo 'done';
     }
 }
-elseif($getMode == 4) 
+elseif($getMode == 4)
 {
-	// reload role memberships
-	$count_show_roles 	= 0;
-	$result_role 		= getRolesFromDatabase($getUserId);
-	$count_role  		= $gDb->num_rows($result_role);
-	getRoleMemberships('role_list', $user, $result_role, $count_role, true);
+    // reload role memberships
+    $count_show_roles    = 0;
+    $result_role        = getRolesFromDatabase($getUserId);
+    $count_role        = $gDb->num_rows($result_role);
+    getRoleMemberships('role_list', $user, $result_role, $count_role, true);
 }
-elseif($getMode == 5) 
+elseif($getMode == 5)
 {
-	// reload former role memberships
-	$count_show_roles 	= 0;
-	$result_role 		= getFormerRolesFromDatabase($getUserId);
-	$count_role  		= $gDb->num_rows($result_role);
-	getRoleMemberships('former_role_list', $user, $result_role, $count_role, true);
+    // reload former role memberships
+    $count_show_roles    = 0;
+    $result_role        = getFormerRolesFromDatabase($getUserId);
+    $count_role        = $gDb->num_rows($result_role);
+    getRoleMemberships('former_role_list', $user, $result_role, $count_role, true);
 
-	if($count_role == 0)
-	{
-		echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'none\' })</script>';
-	}
-	else
-	{
-		echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'block\' })</script>';
-	}
+    if($count_role == 0)
+    {
+        echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'none\' })</script>';
+    }
+    else
+    {
+        echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'block\' })</script>';
+    }
 }
 elseif($getMode == 6)
 {
-	// reload future role memberships
-	$count_show_roles 	= 0;
-	$result_role 		= getFutureRolesFromDatabase($getUserId);
-	$count_role  		= $gDb->num_rows($result_role);
-	getRoleMemberships('future_role_list', $user, $result_role, $count_role, true);
+    // reload future role memberships
+    $count_show_roles    = 0;
+    $result_role        = getFutureRolesFromDatabase($getUserId);
+    $count_role        = $gDb->num_rows($result_role);
+    getRoleMemberships('future_role_list', $user, $result_role, $count_role, true);
 
-	if($count_role == 0)
-	{
-		echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'none\' })</script>';
-	}
-	else
-	{
-		echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'block\' })</script>';
-	}
+    if($count_role == 0)
+    {
+        echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'none\' })</script>';
+    }
+    else
+    {
+        echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'block\' })</script>';
+    }
 }
 elseif($getMode == 7)
 {
-	// save membership date changes
+    // save membership date changes
     $getMembershipStart = admFuncVariableIsValid($_GET, 'membership_start_date_'.$getMemberId, 'date', array('requireValue' => true));
     $getMembershipEnd   = admFuncVariableIsValid($_GET, 'membership_end_date_'.$getMemberId, 'date', array('requireValue' => true));
 
-	$member = new TableMembers($gDb, $getMemberId);
-	$role   = new TableRoles($gDb, $member->getValue('mem_rol_id'));
+    $member = new TableMembers($gDb, $getMemberId);
+    $role   = new TableRoles($gDb, $member->getValue('mem_rol_id'));
 
-	// check if user has the right to edit this membership
-	if($role->allowedToAssignMembers($gCurrentUser) == false)
-	{
-		die($gL10n->get('SYS_NO_RIGHTS'));
-	}
-	
-	$formatedStartDate = '';
-	$formatedEndDate   = '';
-	
-	//Check das Beginn Datum
-	$startDate = new DateTimeExtended($getMembershipStart, $gPreferences['system_date'], 'date');
-	if($startDate->valid())
-	{
-		// Datum formatiert zurueckschreiben
-		$formatedStartDate = $startDate->format('Y-m-d');
-	}
-	else
-	{
-		die($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
-	}
+    // check if user has the right to edit this membership
+    if($role->allowedToAssignMembers($gCurrentUser) == false)
+    {
+        die($gL10n->get('SYS_NO_RIGHTS'));
+    }
 
-	//Falls gesetzt wird das Enddatum gecheckt
-	if(strlen($getMembershipEnd) > 0) 
-	{
-		$endDate = new DateTimeExtended($getMembershipEnd, $gPreferences['system_date'], 'date');
-		if($endDate->valid())
-		{
-			// Datum formatiert zurueckschreiben
-			$formatedEndDate = $endDate->format('Y-m-d');
-		}
-		else
-		{
-			die($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
-		}
+    $formatedStartDate = '';
+    $formatedEndDate   = '';
 
-		// Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
-		if ($startDate->getTimestamp() > $endDate->getTimestamp()) 
-		{
-			die($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
-		}
-	}
-	else 
-	{
-		$formatedEndDate = '9999-12-31';
-	}
-	
-	// save role membership
-	$user->editRoleMembership($getMemberId, $formatedStartDate, $formatedEndDate);
+    //Check das Beginn Datum
+    $startDate = new DateTimeExtended($getMembershipStart, $gPreferences['system_date'], 'date');
+    if($startDate->valid())
+    {
+        // Datum formatiert zurueckschreiben
+        $formatedStartDate = $startDate->format('Y-m-d');
+    }
+    else
+    {
+        die($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
+    }
 
-	echo 'success';
+    //Falls gesetzt wird das Enddatum gecheckt
+    if(strlen($getMembershipEnd) > 0)
+    {
+        $endDate = new DateTimeExtended($getMembershipEnd, $gPreferences['system_date'], 'date');
+        if($endDate->valid())
+        {
+            // Datum formatiert zurueckschreiben
+            $formatedEndDate = $endDate->format('Y-m-d');
+        }
+        else
+        {
+            die($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
+        }
+
+        // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
+        if ($startDate->getTimestamp() > $endDate->getTimestamp())
+        {
+            die($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+        }
+    }
+    else
+    {
+        $formatedEndDate = '9999-12-31';
+    }
+
+    // save role membership
+    $user->editRoleMembership($getMemberId, $formatedStartDate, $formatedEndDate);
+
+    echo 'success';
 }
 elseif ($getMode == 8)
 {
@@ -199,37 +199,37 @@ elseif ($getMode == 8)
         // create filename of organization name and role name
         $role     = new TableRoles($gDb, $getRoleId);
         $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.vcf';
-        
-        // for IE the filename must have special chars in hexadecimal 
+
+        // for IE the filename must have special chars in hexadecimal
         if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
         {
             $filename = urlencode($filename);
         }
-        
+
         header('Content-Type: text/x-vcard; charset=iso-8859-1');
         header('Content-Disposition: attachment; filename="'.$filename.'"');
-        
+
         // neccessary for IE, because without it the download with SSL has problems
-    	header('Cache-Control: private');
-    	header('Pragma: public');
-    
-    	// Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-        $sql    =  'SELECT 
-    	                bm.mem_usr_id
-                    FROM 
-    				    '. TBL_MEMBERS. ' bm
+        header('Cache-Control: private');
+        header('Pragma: public');
+
+        // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
+        $sql    =  'SELECT
+                        bm.mem_usr_id
+                    FROM
+                        '. TBL_MEMBERS. ' bm
                     WHERE
-                        bm.mem_rol_id = '.$getRoleId.' 
-    					AND bm.mem_begin <= \''.DATE_NOW.'\' 
-    					AND bm.mem_end > \''.DATE_NOW.'\'';
-    	
+                        bm.mem_rol_id = '.$getRoleId.'
+                        AND bm.mem_begin <= \''.DATE_NOW.'\'
+                        AND bm.mem_end > \''.DATE_NOW.'\'';
+
         $result   = $gDb->query($sql);
-    
+
         while($row = $gDb->fetch_array($result))
         {
            // create user object
            $user = new User($gDb, $gProfileFields, $row['mem_usr_id']);
-    	   // create vcard and check if user is allowed to edit profile, so he can see more data
+           // create vcard and check if user is allowed to edit profile, so he can see more data
            echo $user->getVCard($gCurrentUser->hasRightEditProfile($user));
         }
     }

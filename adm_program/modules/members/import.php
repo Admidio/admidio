@@ -37,9 +37,9 @@ if(isset($_SESSION['import_request']))
 }
 else
 {
-	$form_values['user_import_mode'] = 1;
-	$form_values['import_coding']    = 'iso-8859-1';
-	$form_values['import_role_id']   = 0;
+    $form_values['user_import_mode'] = 1;
+    $form_values['import_coding']    = 'iso-8859-1';
+    $form_values['import_role_id']   = 0;
 }
 
 // create html page object
@@ -62,13 +62,13 @@ $condition = '';
 
 if($gCurrentUser->manageRoles() == false)
 {
-	// keine Rollen mit Rollenzuordnungsrecht anzeigen
-	$condition .= ' AND rol_assign_roles = 0 ';
+    // keine Rollen mit Rollenzuordnungsrecht anzeigen
+    $condition .= ' AND rol_assign_roles = 0 ';
 }
 if($gCurrentUser->isWebmaster() == false)
 {
-	// Webmasterrolle nicht anzeigen
-	$condition .= ' AND rol_webmaster = 0 ';
+    // Webmasterrolle nicht anzeigen
+    $condition .= ' AND rol_webmaster = 0 ';
 }
 
 $sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '

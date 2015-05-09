@@ -61,15 +61,15 @@ if($getMode == 1)
     $messageMenu = $page->getMenu();
     $messageMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
-	$page->addHtml('
-	<div class="message">
-		<p class="lead">
+    $page->addHtml('
+    <div class="message">
+        <p class="lead">
                 <img src="'. THEME_PATH. '/icons/roles_gray.png" alt="'.$gL10n->get('ROL_INACTIV_ROLE').'" />
                 '.$gL10n->get('ROL_INACTIV_ROLE_DESC').'<br /><br />
                 <img src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" />
                 '.$gL10n->get('ROL_HINT_DELETE_ROLE', $gL10n->get('SYS_DELETE')).'
         </p>
-        
+
         <button id="btn_inactive" type="button" class="btn btn-primary"
             onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$getRoleId.'&mode=3\'"><img
             src="'. THEME_PATH. '/icons/roles_gray.png" alt="'.$gL10n->get('ROL_INACTIV_ROLE').'" />&nbsp;'.$gL10n->get('ROL_INACTIV_ROLE').'</button>
@@ -132,7 +132,7 @@ elseif($getMode == 2)
                        ,'rol_approve_users'
                        ,'rol_announcements'
                        ,'rol_dates'
-					   ,'rol_default_registration'
+                       ,'rol_default_registration'
                        ,'rol_photo'
                        ,'rol_download'
                        ,'rol_guestbook'
@@ -140,9 +140,9 @@ elseif($getMode == 2)
                        ,'rol_edit_user'
                        ,'rol_weblinks'
                        ,'rol_all_lists_view'
-					   ,'rol_mail_to_all'
+                       ,'rol_mail_to_all'
                        ,'rol_profile'
-					   ,'rol_inventory');
+                       ,'rol_inventory');
 
     foreach($checkboxes as $key => $value)
     {
@@ -177,10 +177,10 @@ elseif($getMode == 2)
                 }
 
                 // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
-    			if ($startDate->getTimestamp() > $endDate->getTimestamp())
-    			{
-    				$gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
-    			}
+                if ($startDate->getTimestamp() > $endDate->getTimestamp())
+                {
+                    $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+                }
             }
             else
             {
@@ -231,7 +231,7 @@ elseif($getMode == 2)
     if($getRoleId > 0 && $_POST['rol_max_members'] != $role->getValue('rol_max_members'))
     {
         // Zaehlen wieviele Leute die Rolle bereits haben, ohne Leiter
-		$role->setValue('rol_max_members', $_POST['rol_max_members']);
+        $role->setValue('rol_max_members', $_POST['rol_max_members']);
         $num_free_places = $role->countVacancies();
 
         if($num_free_places < 0)
@@ -246,12 +246,12 @@ elseif($getMode == 2)
         if(strpos($key, 'rol_') === 0)
         {
             $returnCode = $role->setValue($key, $value);
-			
-			// at least one role must have this flag otherwise show error
-			if($returnCode == false && $key == 'rol_default_registration')
-			{
-				$gMessage->show($gL10n->get('ROL_NO_DEFAULT_ROLE', $gL10n->get('ROL_DEFAULT_REGISTRATION')));
-			}
+
+            // at least one role must have this flag otherwise show error
+            if($returnCode == false && $key == 'rol_default_registration')
+            {
+                $gMessage->show($gL10n->get('ROL_NO_DEFAULT_ROLE', $gL10n->get('ROL_DEFAULT_REGISTRATION')));
+            }
         }
     }
 
@@ -273,7 +273,7 @@ elseif($getMode == 2)
     if(array_key_exists('dependent_roles', $_POST))
     {
         $sentChildRoles = $_POST['dependent_roles'];
-        
+
         $roleDep = new RoleDependency($gDb);
 
         // holt eine Liste der ausgewählten Rolen

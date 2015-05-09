@@ -64,21 +64,21 @@ if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0))
         if(strpos($key, 'lnk_') === 0)
         {
             if($link->setValue($key, $value) == false)
-			{
-				// Daten wurden nicht uebernommen, Hinweis ausgeben
-				if($key == 'lnk_url')
-				{
-					$gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE')));
-				}
-			}
+            {
+                // Daten wurden nicht uebernommen, Hinweis ausgeben
+                if($key == 'lnk_url')
+                {
+                    $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE')));
+                }
+            }
         }
     }
-	
-	// Link-Counter auf 0 setzen
-	if ($getMode == 1)
-	{
-		$link->setValue('lnk_counter', '0');
-	}
+    
+    // Link-Counter auf 0 setzen
+    if ($getMode == 1)
+    {
+        $link->setValue('lnk_counter', '0');
+    }
     
     // Daten in Datenbank schreiben
     $return_code = $link->save();
@@ -87,14 +87,14 @@ if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
-	
-	if($return_code == 0 && $getMode == 1)
-	{
-		// Benachrichtigungs-Email für neue Einträge        
+    
+    if($return_code == 0 && $getMode == 1)
+    {
+        // Benachrichtigungs-Email für neue Einträge        
         $message = $gL10n->get('LNK_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));           
         $notification = new Email();
-        $notification->adminNotfication($gL10n->get('LNK_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));	
-	}
+        $notification->adminNotfication($gL10n->get('LNK_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));    
+    }
 
     unset($_SESSION['links_request']);
     $gNavigation->deleteLastUrl();

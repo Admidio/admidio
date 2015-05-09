@@ -34,7 +34,7 @@ $roomsMenu = $page->getMenu();
 $roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 // show link to create new room
 $roomsMenu->addItem('menu_item_new_room', $g_root_path.'/adm_program/modules/rooms/rooms_new.php?headline='.$textRoom, 
-							$gL10n->get('SYS_CREATE_VAR', $textRoom), 'add.png');
+                            $gL10n->get('SYS_CREATE_VAR', $textRoom), 'add.png');
 
 if($gPreferences['system_show_create_edit'] == 1)
 {
@@ -78,7 +78,7 @@ $rooms_result = $gDb->query($sql);
 if($gDb->num_rows($rooms_result) == 0)
 {
     // Keine Räume gefunden
-	$page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
+    $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
 }
 else
 {

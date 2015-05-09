@@ -22,10 +22,10 @@ require_once('../../system/login_valid.php');
 $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', array('requireValue' => true));
 $getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
 $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', array('requireValue' => true));
-$showPage	= admFuncVariableIsValid($_GET, 'show_page', 'numeric', array('defaultValue' => 1));
+$showPage    = admFuncVariableIsValid($_GET, 'show_page', 'numeric', array('defaultValue' => 1));
 
 // Initialisierung lokaler Variablen
-$funcClass 	 = new FunctionClass($gL10n);
+$funcClass     = new FunctionClass($gL10n);
 $templates   = $funcClass->getFileNames(THEME_SERVER_PATH. '/ecard_templates/');
 $template    = THEME_SERVER_PATH. '/ecard_templates/';
 $headline    = $gL10n->get('ECA_GREETING_CARD_EDIT');
@@ -62,7 +62,7 @@ else
 if($getPhotoId > 0 && $photo_album->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-}  
+}
 
 if ($gValidLogin && strlen($gCurrentUser->getValue('EMAIL')) == 0)
 {
@@ -93,7 +93,7 @@ if ($getUserId > 0)
 
 if(isset($_SESSION['ecard_request']))
 {
-    // if user is returned to this form after he submit it, 
+    // if user is returned to this form after he submit it,
     // then try to restore all values that he has entered before
     $template   = $_SESSION['ecard_request']['ecard_template'];
     $recipients = $_SESSION['ecard_request']['ecard_recipients'];
@@ -112,29 +112,29 @@ $page = new HtmlPage($headline);
 $page->addJavascriptFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.min.js');
 
 $page->addJavascript('
-    $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) { event.preventDefault(); $(this).ekkoLightbox(); }); 
+    $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) { event.preventDefault(); $(this).ekkoLightbox(); });
 
     $("#admidio_modal").on("show.bs.modal", function () {
         $(this).find(".modal-dialog").css({width: "800px"});
     });
 
-	$("#btn_ecard_preview").click(function(event){
-		event.preventDefault();
-		$("#ecard_form input[id=\'submit_action\']").val("preview");
-		$("#ecard_form textarea[name=\'ecard_message\']").text( CKEDITOR.instances.ecard_message.getData() );	
+    $("#btn_ecard_preview").click(function(event){
+        event.preventDefault();
+        $("#ecard_form input[id=\'submit_action\']").val("preview");
+        $("#ecard_form textarea[name=\'ecard_message\']").text( CKEDITOR.instances.ecard_message.getData() );
 
-		$.ajax({ // create an AJAX call...
-			data: $("#ecard_form").serialize(), // get the form data
-			type: "POST", // GET or POST
-			url: "ecard_preview.php", // the file to call
-			success: function(response) { // on success..
-			    $(".modal-content").html(response);
-			    $("#admidio_modal").modal();
-			}
-		});
+        $.ajax({ // create an AJAX call...
+            data: $("#ecard_form").serialize(), // get the form data
+            type: "POST", // GET or POST
+            url: "ecard_preview.php", // the file to call
+            success: function(response) { // on success..
+                $(".modal-content").html(response);
+                $("#admidio_modal").modal();
+            }
+        });
 
-		return false;
-	}); ', true);
+        return false;
+    }); ', true);
 
 // add back link to module menu
 $ecardMenu = $page->getMenu();
@@ -142,9 +142,9 @@ $ecardMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->ge
 
 if($gCurrentUser->isWebmaster())
 {
-	// show link to system preferences of announcements
-	$ecardMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=ecards', 
-								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    // show link to system preferences of announcements
+    $ecardMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=ecards',
+                                $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
 // show form
@@ -156,8 +156,8 @@ $form->addInput('photo_nr', null, $getPhotoNr, array('type' => 'hidden'));
 $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
     $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
         <a data-toggle="lightbox" data-type="image" data-title="'.$gL10n->get('SYS_PREVIEW').'"
-            href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img 
-            src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_thumbs_scale'].'&amp;max_height='.$gPreferences['ecard_thumbs_scale'].'" 
+            href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img
+            src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_thumbs_scale'].'&amp;max_height='.$gPreferences['ecard_thumbs_scale'].'"
             class="imageFrame" alt="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'" />
         </a>');
     $templates = admFuncGetDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates');
@@ -173,8 +173,8 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
     // list all roles where login users could send mails to
     $arrayMailRoles = $gCurrentUser->getAllMailRoles();
-    
-    $sql = 'SELECT rol_id, rol_name 
+
+    $sql = 'SELECT rol_id, rol_name
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
              WHERE rol_id IN ('.implode(',', $arrayMailRoles).')
                AND rol_cat_id = cat_id
@@ -191,7 +191,7 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
     $arrayRoles = array_merge($arrayMailRoles, $gCurrentUser->getAllVisibleRoles());
     $arrayUniqueRoles = array_unique($arrayRoles);
 
-    $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name, 
+    $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
                      email.usd_value as email
                 FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
                 JOIN '. TBL_USER_DATA. ' as email
@@ -209,18 +209,18 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
                WHERE mem_usr_id  = usr_id
                  AND mem_rol_id IN ('.implode(',', $arrayUniqueRoles).')
                  AND mem_begin <= \''.DATE_NOW.'\'
-                 AND mem_end    > \''.DATE_NOW.'\'                
+                 AND mem_end    > \''.DATE_NOW.'\'
                  AND usr_valid   = 1
             GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
-            ORDER BY first_name, last_name';        
+            ORDER BY first_name, last_name';
     $result = $gDb->query($sql);
 
-    while ($row = $gDb->fetch_array($result)) 
+    while ($row = $gDb->fetch_array($result))
     {
         $list[] = array($row['usr_id'], $row['first_name'].' '.$row['last_name']. ' ('.$row['email'].')', $gL10n->get('SYS_MEMBERS'));
     }
-        
-	$form->addSelectBox('ecard_recipients', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY, 
+
+    $form->addSelectBox('ecard_recipients', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY,
                         'defaultValue' => $recipients, 'showContextDependentFirstEntry' => false, 'multiselect' => true));
     $form->addLine();
     $form->addInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));

@@ -79,17 +79,17 @@ if($gPreferences['lists_hide_overview_details'] == 0)
 }
 
 $page->addJavascript('
-	$(".panel-collapse select").change(function () {
-		elementId = $(this).attr("id");
-		roleId    = elementId.substr(elementId.search(/_/)+1);
+    $(".panel-collapse select").change(function () {
+        elementId = $(this).attr("id");
+        roleId    = elementId.substr(elementId.search(/_/)+1);
 
-		if($(this).val() == "mylist") {
-			self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + roleId + "&active_role='.$getActiveRole.'";
-		}
-		else {
-			self.location.href = gRootPath + "/adm_program/modules/lists/lists_show.php?mode=html&lst_id=" + $(this).val() + "&rol_id=" + roleId;
-		}
-	});', true);
+        if($(this).val() == "mylist") {
+            self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + roleId + "&active_role='.$getActiveRole.'";
+        }
+        else {
+            self.location.href = gRootPath + "/adm_program/modules/lists/lists_show.php?mode=html&lst_id=" + $(this).val() + "&rol_id=" + roleId;
+        }
+    });', true);
 
 // add headline and title of module
 $page->addHtml('<div id="lists_overview">');
@@ -147,7 +147,7 @@ foreach($listsResult['recordset'] as $row)
 {
     //Put data to Roleobject
     $role->setArray($row);
-    
+
     //if category is different than previous, close old and open new one
     if($previousCategoryId != $role->getValue('cat_id'))
     {
@@ -179,8 +179,8 @@ foreach($listsResult['recordset'] as $row)
                     <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='.$role->getValue('rol_id').'"><img
                         src="'. THEME_PATH. '/icons/email.png"  alt="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>&nbsp;');
                 }
-        		
-        		// show link to export vCard if user is allowed to see members and the role has members
+
+                // show link to export vCard if user is allowed to see members and the role has members
                 if($row['num_members'] > 0 || $row['num_leader'] > 0)
                 {
                     $page->addHtml('<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=8&amp;rol_id='. $role->getValue('rol_id').'"><img
@@ -188,7 +188,7 @@ foreach($listsResult['recordset'] as $row)
                                     alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"
                                     title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'" /></a>');
                 }
-        
+
                 // link to assign or remove members if you are allowed to do it
                 if($role->allowedToAssignMembers($gCurrentUser))
                 {
@@ -196,7 +196,7 @@ foreach($listsResult['recordset'] as $row)
                     <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$role->getValue('rol_id').'"><img
                         src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>');
                 }
-        
+
                 // edit roles of you are allowed to assign roles
                 if($gCurrentUser->manageRoles())
                 {
@@ -216,17 +216,17 @@ foreach($listsResult['recordset'] as $row)
                 {
                     $form->addSelectBox('admSelectRoleList_'.$role->getValue('rol_id'), $gL10n->get('LST_SHOW_LIST'), $listConfigurations, array('firstEntry' => $gL10n->get('LST_CHOOSE_LIST')));
                 }
-        
+
                 if(strlen($role->getValue('rol_description')) > 0)
                 {
                     $form->addStaticControl('list_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'));
                 }
-        
+
                 if(strlen($role->getValue('rol_start_date')) > 0)
                 {
                     $form->addStaticControl('list_date_from_to', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])));
                 }
-    
+
                 if($role->getValue('rol_weekday') > 0
                 || strlen($role->getValue('rol_start_time')) > 0)
                 {
@@ -240,13 +240,13 @@ foreach($listsResult['recordset'] as $row)
                     }
                     $form->addStaticControl('list_date', $gL10n->get('DAT_DATE'), $html);
                 }
-    
+
                 //Treffpunkt
                 if(strlen($role->getValue('rol_location')) > 0)
                 {
                     $form->addStaticControl('list_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'));
                 }
-    
+
                 // add count of participants to role
                 $html = $row['num_members'];
                 if($role->getValue('rol_max_members') > 0)
@@ -264,29 +264,29 @@ foreach($listsResult['recordset'] as $row)
                     {
                         $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
                     }
-                    
+
                     $html .= '&nbsp;&nbsp;(<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '&amp;show_members=1">'.$row['num_former'].' '.$textFormerMembers.'</a>) ';
                 }
                 $form->addStaticControl('list_participants', $gL10n->get('SYS_PARTICIPANTS'), $html);
-        
+
                 //Leiter
                 if($row['num_leader']>0)
                 {
                     $form->addStaticControl('list_leader', $gL10n->get('SYS_LEADER'), $row['num_leader']);
                 }
-        
+
                 //Beitrag
                 if(strlen($role->getValue('rol_cost')) > 0)
                 {
                     $form->addStaticControl('list_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost').' '.$gPreferences['system_currency']);
                 }
-        
+
                 //Beitragszeitraum
                 if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
                 {
                     $form->addStaticControl('list_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), $role->getCostPeriods($role->getValue('rol_cost_period')));
                 }
-                
+
                 $page->addHtml($form->show(false));
             $page->addHtml('</div>
         </div>

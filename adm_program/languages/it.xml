@@ -25,15 +25,15 @@
         <text id="INS_WEBMASTER_LOGIN" development="new" translation="edited">Login di amministrazione</text>
         <text id="INS_WEBMASTER_LOGIN_DESC" development="new" translation="edited">Solo un amministratore può aggiornare il database. Per favore inserisci le credenziali di login dell'amministratore.</text>
         <text id="INS_WEBMASTER_LOGIN_FAILED" development="new" translation="edited">Non è stato possibile trovare un utente con queste credenziali di login e un ruolo di amministratore.</text>
-    	<text id="INV_INVENTORY" development="new" translation="edited">Gestione scorte</text>
-    	<text id="INV_ITEM_MANAGEMENT" development="new" translation="edited">Gestione articoli</text>
-    	<text id="INV_CREATE_ITEM" development="new" translation="edited">Crea articolo</text>
+        <text id="INV_INVENTORY" development="new" translation="edited">Gestione scorte</text>
+        <text id="INV_ITEM_MANAGEMENT" development="new" translation="edited">Gestione articoli</text>
+        <text id="INV_CREATE_ITEM" development="new" translation="edited">Crea articolo</text>
         <text id="LST_CHOOSE_LIST" development="new" translation="todo">Scegli lista</text>
-    	<text id="LST_COUNTRY_ISO" development="new" translation="edited">Il paese necessita che sia specificato il Codice ISO 3166 ALPHA-3 (3 caratteri)</text>
-        <text id="LST_INFOBOX" development="new" translation="edited" description="A s	mall html box that will show additional informations">Spazio informazioni</text>
+        <text id="LST_COUNTRY_ISO" development="new" translation="edited">Il paese necessita che sia specificato il Codice ISO 3166 ALPHA-3 (3 caratteri)</text>
+        <text id="LST_INFOBOX" development="new" translation="edited" description="A s    mall html box that will show additional informations">Spazio informazioni</text>
         <text id="LST_MEMBER_STATUS" development="new" translation="edited">Stato del membro</text>
         <text id="LST_MEMBERS_PER_PAGE_DESC" development="changed" translation="edited">Numero dei membri elencati nella vista HTML. Più membri possono essere elencati usando la funzione impaginazione. Questo valore non influirà sull'anteprima di stampa e sulle funzionalità di esportazione (Predefinito: 25).</text>
-    	<text id="MAI_INTO_TO" development="new" translation="edited">I destinatari devono essere elencati nel campo TO invece che nel campo BCC</text>
+        <text id="MAI_INTO_TO" development="new" translation="edited">I destinatari devono essere elencati nel campo TO invece che nel campo BCC</text>
         <text id="MAI_INTO_TO_DESC" development="new" translation="edited">Tutti i destinatari saranno elencati nel campo TO se impostato in questo modo e una email sarà ricevuta da più persone. In questo modo ogni destinatario vedrà il nome e l'indirizzo di posta elettronica degli altri destinatari. Inoltre, ogni destinatario potrà rispondere a tutti. (Predefinito: disattivato)</text>
         <text id="MEM_USER_COULD_BE_CREATED" development="new" translation="edited">L'utente potrebbe essere creato.</text>
         <text id="MEM_DAYS_FIELD_HISTORY" development="new" translation="edited">Periodo di tempo predefinito per la storia del campo (in giorni)</text>
@@ -43,17 +43,17 @@
         <text id="MEM_USERS_PER_PAGE_DESC" development="new" translation="edited">Numero di utenti elencati su ogni pagina. Se ci sono più membri in questo gruppo le relative pagine possono essere attivate. (Predefinito: 25)</text>
         <text id="MAI_MAX_RECEIVER" development="new" translation="edited">Numero massimo dei destinatari dell'email</text>
         <text id="MAI_MAX_RECEIVER_DESC" development="new" translation="edited">Questo valore definisce il numero massimo dei destinatari dell'email. Il ruolo vale come un solo destinatario.</text>
-    	<text id="MSG_ACTIVATE_PM_MODULE" development="new" translation="edited">Attiva i messaggi privati</text>
+        <text id="MSG_ACTIVATE_PM_MODULE" development="new" translation="edited">Attiva i messaggi privati</text>
         <text id="MSG_ACTIVATE_PM_MODULE_DESC" development="new" translation="edited">Questa opzione consente di disattivare i messaggi privati. Il modulo non sarà richiamabile né comparirà nella panoramica. (Predefinita: disattivata)</text>
-    	<text id="MSG_CHAT" development="new" translation="edited">Chat</text>
-    	<text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="edited">Attiva chat</text>
-    	<text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="edited">Attiva il modulo della chat. I messaggi saranno inseriti dinamicamente nel database ogni 3 secondi. Solo 99 voci saranno salvate nel database. A partire dal salvataggio della centesima voce le prime 50 voci saranno cancellate.</text>
+        <text id="MSG_CHAT" development="new" translation="edited">Chat</text>
+        <text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="edited">Attiva chat</text>
+        <text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="edited">Attiva il modulo della chat. I messaggi saranno inseriti dinamicamente nel database ogni 3 secondi. Solo 99 voci saranno salvate nel database. A partire dal salvataggio della centesima voce le prime 50 voci saranno cancellate.</text>
         <text id="MSG_OPPOSITE" development="new" translation="edited">Business partner</text>
-    	<text id="MSG_PM_SEND" development="new" translation="edited">In messaggio privato è stato inviato a %VAR1_BOLD%.</text>
-    	<text id="MSG_PM_NOT_SEND" development="new" translation="edited">Il messaggio privato non può essere inviato a %VAR1_BOLD%.\n\nSi è verificato il seguente errore:\n%VAR2%</text>
-    	<text id="MSG_REMOVE" development="new" translation="edited">Rimuovi il messaggio</text>
-    	<text id="MSG_REMOVE_CONFIRM" development="new" translation="edited">Conferma rimozione</text>
-    	<text id="MSG_REMOVE_REVERT" development="new" translation="edited">Anulla rimozione</text>
+        <text id="MSG_PM_SEND" development="new" translation="edited">In messaggio privato è stato inviato a %VAR1_BOLD%.</text>
+        <text id="MSG_PM_NOT_SEND" development="new" translation="edited">Il messaggio privato non può essere inviato a %VAR1_BOLD%.\n\nSi è verificato il seguente errore:\n%VAR2%</text>
+        <text id="MSG_REMOVE" development="new" translation="edited">Rimuovi il messaggio</text>
+        <text id="MSG_REMOVE_CONFIRM" development="new" translation="edited">Conferma rimozione</text>
+        <text id="MSG_REMOVE_REVERT" development="new" translation="edited">Anulla rimozione</text>
         <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="edited">Una nuova organizzazione sarà aggiunta al database includento i dati master. L'utente corrente sarà annunciato come amministratore e potrà gestire i dati. L'utente che accederà al sistema dovrà selezionare l'organizzazione desiderata.</text>
         <text id="ORG_CAPTCHA_WIDTH" development="new" translation="edited">Larghezza captcha</text>
         <text id="ORG_CAPTCHA_HEIGHT" development="new" translation="edited">Altezza captcha</text>
@@ -69,10 +69,10 @@
         <text id="ORG_NOT_SAVED_SETTINGS_LOST" development="new" translation="edited">Cambiando la vista tutte le modifiche non salvate andranno perse.</text>
         <text id="ORG_ORGANIZATION_SUCCESSFULL_ADDED" development="new" translation="edited">L'organizzazione %VAR1_BOLD% è stata aggiunta con successo. Essa è ora selezionabile quando viene effettuato l'accesso.\n\nSe hai previsto una home page diversa per questa organizzazione per favore aggiungila come home page separata nel file config.php.</text>
         <text id="ORG_REGIONAL_SETTINGS" development="new" translation="edited">Impostazioni locali</text>
-    	<text id="PMS_MESSAGE" development="new" translation="edited">Messaggi privati</text>
-    	<text id="PMS_SEND_PM" development="new" translation="edited">Invia messaggio privato</text>
-    	<text id="PMS_WAS_SENT_TO" development="new" translation="edited">Il messaggio è stato inviato a:</text>
-    	<text id="PMS_WAS_NOT_SENT_TO" development="new" translation="edited">Errore - Il messaggio non è stato inviato a:</text>
+        <text id="PMS_MESSAGE" development="new" translation="edited">Messaggi privati</text>
+        <text id="PMS_SEND_PM" development="new" translation="edited">Invia messaggio privato</text>
+        <text id="PMS_WAS_SENT_TO" development="new" translation="edited">Il messaggio è stato inviato a:</text>
+        <text id="PMS_WAS_NOT_SENT_TO" development="new" translation="edited">Errore - Il messaggio non è stato inviato a:</text>
         <text id="PHO_ALBUM_LOCK" development="new" translation="edited">Blocca album</text>
         <text id="PHO_ALBUM_LOCK_DESC" development="new" translation="edited">Gli album bloccati non possono essere visti dai visitatori o dai membri, es. puoi bloccare un album solo se tutte le immagini sono state caricate.</text>
         <text id="PHO_ALBUM_UNLOCK" development="new" translation="edited">Sblocca album</text>
@@ -93,20 +93,20 @@
         <text id="PRO_DELETE_PROFILE_PICTURE" development="changed" translation="edited">Cancella immagine del profilo</text>
         <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="edited">Definisci un paese nel quale questa organizzazione opera prevalentemente. Esso sarà preselezionato quando saranno creati o si registreranno nuovi utenti. Esso semplifica l'inserimento dei dati e può essere modificato dall'utente. (Predefinito: Germania)</text>
         <text id="PRO_EXPORT_VCARD" development="new" translation="edited">Esporta vCard</text>
-    	<text id="PRO_MAINTAIN_ITEM_FIELDS" development="new" translation="edited">Mantieni i campi dell'articolo</text>
+        <text id="PRO_MAINTAIN_ITEM_FIELDS" development="new" translation="edited">Mantieni i campi dell'articolo</text>
         <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="changed" translation="edited">Nella manutenzione dei campi del profilo essi possono essere creati e modificati. Essi possono poi essere raggruppati in categorie.</text>
         <text id="ROL_RIGHT_INVENTORY" development="new" translation="edited">Gestione degli articoli e delle scorte</text>
         <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="edited">Mappatura del ruolo %VAR1% %VAR2%</text>
         <text id="SYS_APPLY" development="new" translation="edited">Applica</text>
         <text id="SYS_CATEGORIES" development="new" translation="edited">Categorie</text>
         <text id="SYS_CHARACTERS" development="new" translation="edited">Caratteri</text>
-    	<text id="SYS_COUNTRY_EG" development="new" translation="edited">GER</text>
+        <text id="SYS_COUNTRY_EG" development="new" translation="edited">GER</text>
         <text id="SYS_DECIMAL_NUMBER" development="new" translation="edited">Numero decimale</text>
         <text id="SYS_EMAIL_SEND" development="changed" translation="edited">La mail è stata inviata con successo</text>
         <text id="SYS_FILENAME_EMPTY" development="new" translation="edited">Il nome del file manca!</text>
         <text id="SYS_FILTER" development="new" translation="edited">Filtro</text>
         <text id="SYS_FULL_SCREEN" development="new" translation="edited">Schermo intero</text>
-    	<text id="SYS_ITEMNAME" development="new" translation="edited">Nome dell'elemento</text>
+        <text id="SYS_ITEMNAME" development="new" translation="edited">Nome dell'elemento</text>
         <text id="SYS_MANDATORY_FIELDS" development="new" translation="edited">Campi obbligatori</text>
         <text id="SYS_MENU" development="new" translation="edited">Menù</text>
         <text id="SYS_MESSAGES" development="new" translation="edited">Messaggi</text>
@@ -114,10 +114,10 @@
         <text id="SYS_NORMAL_PICTURE" development="new" translation="edited">Immagine normale</text>
         <text id="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION" development="new" translation="edited">Amministrazione online della membership</text>
         <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="changed" translation="edited">Se hai dimenticato la password il sistema ne può generare una nuova. Per favore inserisci il tuo indirizzo email che hai usato per la registrazione e la nuova password ti sarà inviata a questo indirizzo immediatamente.</text>
-    	<text id="SYS_PM" development="new" translation="edited">Messaggio privato</text>
-    	<text id="SYS_QUANTITY" development="new" translation="edited">Importo</text>
+        <text id="SYS_PM" development="new" translation="edited">Messaggio privato</text>
+        <text id="SYS_QUANTITY" development="new" translation="edited">Importo</text>
         <text id="SYS_ROLES" development="new" translation="edited">Ruoli</text>
-    	<text id="SYS_SELECT_FROM_LIST" development="new" translation="edited">Seleziona dalla lista</text>
+        <text id="SYS_SELECT_FROM_LIST" development="new" translation="edited">Seleziona dalla lista</text>
         <text id="SYS_STILL_X_CHARACTERS" development="new" translation="edited">ancora %VAR1% caratteri</text>
         <text id="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION" development="new" translation="edited">Passa all'amministrazione delle categorie</text>
     </version>

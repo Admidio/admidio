@@ -113,7 +113,7 @@ try
 }
 catch(AdmException $e)
 {
-	$e->showHtml();
+    $e->showHtml();
 }
 
 // create html page object

@@ -86,18 +86,18 @@ $member_found = $gDb->num_rows($result_usr);
 // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
 if($gCurrentUser->editUsers())
 {
-	$urlCreateNewUser = $g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=3&user_id='.$getNewUserId;
+    $urlCreateNewUser = $g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=3&user_id='.$getNewUserId;
 }
 else
 {
-	$urlCreateNewUser = $g_root_path.'/adm_program/modules/registration/registration_function.php?mode=5&new_user_id='.$getNewUserId;
+    $urlCreateNewUser = $g_root_path.'/adm_program/modules/registration/registration_function.php?mode=5&new_user_id='.$getNewUserId;
 }
 
 if($member_found == 0)
 {
     // if user doesn't exists than show profile or auto assign roles
-	header('Location: '.$urlCreateNewUser);
-	exit();
+    header('Location: '.$urlCreateNewUser);
+    exit();
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);

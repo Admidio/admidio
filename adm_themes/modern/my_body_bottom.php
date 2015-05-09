@@ -38,9 +38,9 @@
                 }
                 if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
                 {
-    				// get number of unread messages for user
-    				$message = new TableMessage($gDb);
-    	            $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
+                    // get number of unread messages for user
+                    $message = new TableMessage($gDb);
+                    $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
 
                     if ($unread > 0)
                     {
@@ -130,5 +130,5 @@
     <a href="http://www.admidio.org"><img
     src="<?php echo THEME_PATH; ?>/images/admidio_logo_20.png" style="border: 0px; vertical-align: bottom;"
      alt="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>" title="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>" /></a>
-    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2015&nbsp;&nbsp;<?php echo $gL10n->get('SYS_ADMIDIO_TEAM'); ?>&nbsp;&nbsp;v<?php echo ADMIDIO_VERSION_TEXT; ?></span>
+    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2015&nbsp;&nbsp;<?php echo $gL10n->get('SYS_ADMIDIO_TEAM'); ?></span>
 </p>

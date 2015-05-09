@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de_sie">
-	<version id="1.8.1">
-	    <text id="PLG_CALENDAR_MONTH" development="new" translation="todo">Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember</text>
-		<text id="PLG_CALENDAR_MONDAY_SHORT" development="new" translation="todo">Mo</text>
-		<text id="PLG_CALENDAR_TUESDAY_SHORT" development="new" translation="todo">Di</text>
-		<text id="PLG_CALENDAR_WEDNESDAY_SHORT" development="new" translation="todo">Mi</text>
-		<text id="PLG_CALENDAR_THURSDAY_SHORT" development="new" translation="todo">Do</text>
-		<text id="PLG_CALENDAR_FRIDAY_SHORT" development="new" translation="todo">Fr</text>
-		<text id="PLG_CALENDAR_SATURDAY_SHORT" development="new" translation="todo">Sa</text>
-		<text id="PLG_CALENDAR_SUNDAY_SHORT" development="new" translation="todo">So</text>
-		<text id="PLG_CALENDAR_MORE" development="new" translation="todo"> (... weitere)</text>
-		<text id="PLG_CALENDAR_CURRENT_MONTH" development="new" translation="todo">Aktueller Monat</text>
-		<text id="PLG_CALENDAR_FULLTIME" development="new" translation="todo">(ganztägiger Termin)</text>
-	</version>
+    <version id="1.8.1">
+        <text id="PLG_CALENDAR_MONTH" development="new" translation="todo">Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember</text>
+        <text id="PLG_CALENDAR_MONDAY_SHORT" development="new" translation="todo">Mo</text>
+        <text id="PLG_CALENDAR_TUESDAY_SHORT" development="new" translation="todo">Di</text>
+        <text id="PLG_CALENDAR_WEDNESDAY_SHORT" development="new" translation="todo">Mi</text>
+        <text id="PLG_CALENDAR_THURSDAY_SHORT" development="new" translation="todo">Do</text>
+        <text id="PLG_CALENDAR_FRIDAY_SHORT" development="new" translation="todo">Fr</text>
+        <text id="PLG_CALENDAR_SATURDAY_SHORT" development="new" translation="todo">Sa</text>
+        <text id="PLG_CALENDAR_SUNDAY_SHORT" development="new" translation="todo">So</text>
+        <text id="PLG_CALENDAR_MORE" development="new" translation="todo"> (... weitere)</text>
+        <text id="PLG_CALENDAR_CURRENT_MONTH" development="new" translation="todo">Aktueller Monat</text>
+        <text id="PLG_CALENDAR_FULLTIME" development="new" translation="todo">(ganztägiger Termin)</text>
+    </version>
 </language>

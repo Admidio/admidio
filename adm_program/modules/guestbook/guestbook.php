@@ -42,7 +42,7 @@ $getModeration = admFuncVariableIsValid($_GET, 'moderation', 'boolean');
 
 if($getModeration == 1 && $gCurrentUser->editGuestbookRight() == false)
 {
-	$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // Navigation faengt hier im Modul an, wenn keine Eintrag direkt aufgerufen wird
@@ -162,21 +162,21 @@ $guestbookMenu = $page->getMenu();
 
 if($getGboId == 0 && $getModeration == 0)
 {
-	// show link to create new guestbook entry
-	$guestbookMenu->addItem('admMenuItemNewEntry', $g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?headline='. $getHeadline, 
-							$gL10n->get('GBO_CREATE_ENTRY'), 'add.png');
+    // show link to create new guestbook entry
+    $guestbookMenu->addItem('admMenuItemNewEntry', $g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?headline='. $getHeadline, 
+                            $gL10n->get('GBO_CREATE_ENTRY'), 'add.png');
 }
 
 if($getGboId > 0 || $getModeration == 1)
 {
-	// show link to navigate back to guestbook
-	$guestbookMenu->addItem('admMenuItemNavigateBack', $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline, 
-							$gL10n->get('GBO_BACK_TO_GUESTBOOK'), 'back.png');
+    // show link to navigate back to guestbook
+    $guestbookMenu->addItem('admMenuItemNavigateBack', $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline, 
+                            $gL10n->get('GBO_BACK_TO_GUESTBOOK'), 'back.png');
 }
 
 if($getModeration == 0 && $gCurrentUser->editGuestbookRight() && $gPreferences['enable_guestbook_moderation'] > 0)
 {
-	// show link to moderation with number of entries that must be moderated
+    // show link to moderation with number of entries that must be moderated
     $sql = 'SELECT (SELECT count(1) FROM '. TBL_GUESTBOOK. '
                      WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        AND gbo_locked = 1) AS count_locked_guestbook,
@@ -192,16 +192,16 @@ if($getModeration == 0 && $gCurrentUser->editGuestbookRight() && $gPreferences['
     
     if($countLockedEntries > 0)
     {
-		$guestbookMenu->addItem('admMenuItemModerate', $g_root_path.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $getHeadline, 
-								$gL10n->get('GBO_MODERATE_ENTRIES').'<span class="badge">'.$countLockedEntries.'</span>', 'star.png');
+        $guestbookMenu->addItem('admMenuItemModerate', $g_root_path.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $getHeadline, 
+                                $gL10n->get('GBO_MODERATE_ENTRIES').'<span class="badge">'.$countLockedEntries.'</span>', 'star.png');
     }
 }
 
 if($gCurrentUser->isWebmaster())
 {
-	// show link to system preferences of announcements
-	$guestbookMenu->addItem('admMenuItemPreferencesGuestbook', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=guestbook', 
-							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    // show link to system preferences of announcements
+    $guestbookMenu->addItem('admMenuItemPreferencesGuestbook', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=guestbook', 
+                            $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
 if ($gDb->num_rows($guestbook_result) == 0)

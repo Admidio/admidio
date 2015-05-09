@@ -70,32 +70,32 @@ $page->addHtml('<div id="links_overview">');
 // show icon links and navigation
 
 if($weblinks->getId() == 0)
-{	
-	// get module menu
-	$LinksMenu = $page->getMenu();
+{
+    // get module menu
+    $LinksMenu = $page->getMenu();
 
-	if($gCurrentUser->editWeblinksRight())
-	{
-		// show link to create new announcement
-		$LinksMenu->addItem('menu_item_new_link', $g_root_path.'/adm_program/modules/links/links_new.php?headline='. $getHeadline, 
-							$gL10n->get('LNK_CREATE_LINK'), 'add.png');
-	}
-	
-	if($gCurrentUser->isWebmaster())
-	{
-		// show link to system preferences of weblinks
-		$LinksMenu->addItem('menu_items_links_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=links', 
-							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
-	}
-	elseif($gCurrentUser->editWeblinksRight())
-	{
-		// show link to maintain categories
-		$LinksMenu->addItem('menu_item_maintain_categories', $g_root_path.'/adm_program/modules/categories/categories.php?type=LNK&title='. $getHeadline, 
-							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');    	
-	}
-	
+    if($gCurrentUser->editWeblinksRight())
+    {
+        // show link to create new announcement
+        $LinksMenu->addItem('menu_item_new_link', $g_root_path.'/adm_program/modules/links/links_new.php?headline='. $getHeadline,
+                            $gL10n->get('LNK_CREATE_LINK'), 'add.png');
+    }
+
+    if($gCurrentUser->isWebmaster())
+    {
+        // show link to system preferences of weblinks
+        $LinksMenu->addItem('menu_items_links_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=links',
+                            $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    }
+    elseif($gCurrentUser->editWeblinksRight())
+    {
+        // show link to maintain categories
+        $LinksMenu->addItem('menu_item_maintain_categories', $g_root_path.'/adm_program/modules/categories/categories.php?type=LNK&title='. $getHeadline,
+                            $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
+    }
+
     $page->addJavascript('$("#cat_id").change(function () { $("#navbar_cat_id_form").submit();});', true);
-	
+
     $navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/links/links.php?headline='. $getHeadline, $page, array('type' => 'navbar', 'setFocus' => false));
     $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
     $LinksMenu->addForm($navbarForm->show(false));
@@ -116,14 +116,14 @@ if ($weblinksCount == 0)
 else
 {
     $getStart = $weblinks->getStartElement();
-    $weblinksDataSet = $weblinks->getDataSet($getStart);    
+    $weblinksDataSet = $weblinks->getDataSet($getStart);
     $weblink = new TableWeblink($gDb);
 
     $j = 0;         // counter for fetch_object
     $i = 0;         // counter for links in category
     $previous_cat_id = -1;  // previous Cat Id
     $new_category = true;   // maybe new category
-    
+
     if($weblinksDataSet['numResults'] > 0)
     {
         // show all weblinks
@@ -132,7 +132,7 @@ else
             // initialize weblink object and read new recordset into this object
             $weblink->clear();
             $weblink->setArray($row);
-    
+
             if ($weblink->getValue('lnk_cat_id') != $previous_cat_id)
             {
                 $i = 0;
@@ -145,13 +145,13 @@ else
                     <div class="panel-heading">'.$weblink->getValue('cat_name').'</div>
                     <div class="panel-body">');
             }
-    
+
             $page->addHtml('<div class="admidio-weblink-item" id="lnk_'.$weblink->getValue('lnk_id').'">');
                 // show weblink
                 $page->addHtml('
                 <a class="btn" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $gPreferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
                     alt="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" />'.$weblink->getValue('lnk_name').'</a>');
-    
+
                 // change and delete only users with rights
                 if ($gCurrentUser->editWeblinksRight())
                 {
@@ -160,25 +160,25 @@ else
                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                         href="'.$g_root_path.'/adm_program/system/popup_message.php?type=lnk&amp;element_id=lnk_'.
-                        $weblink->getValue('lnk_id').'&amp;name='.urlencode($weblink->getValue('lnk_name')).'&amp;database_id='.$weblink->getValue('lnk_id').'"><img 
+                        $weblink->getValue('lnk_id').'&amp;name='.urlencode($weblink->getValue('lnk_name')).'&amp;database_id='.$weblink->getValue('lnk_id').'"><img
                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
                 }
-    
+
                 // get available description
                 if(strlen($weblink->getValue('lnk_description')) > 0)
                 {
                     $page->addHtml('<div class="admidio-weblink-description">'.$weblink->getValue('lnk_description').'</div>');
                 }
-                
+
                 $page->addHtml('<div class="weblink-counter"><small>'.$gL10n->get('LNK_COUNTER'). ': '.$weblink->getValue('lnk_counter').'</small></div>
-    		</div>');
-    
+            </div>');
+
             $j++;
             $i++;
-    
+
             // set current category to privious
             $previous_cat_id = $weblink->getValue('lnk_cat_id');
-    
+
             $new_category = false;
         }  // End While-loop
 
