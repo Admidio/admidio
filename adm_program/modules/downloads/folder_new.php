@@ -60,7 +60,7 @@ try
 }
 catch(AdmException $e)
 {
-	$e->showHtml();
+    $e->showHtml();
 }
 
 $parentFolderName = $folder->getValue('fol_name');

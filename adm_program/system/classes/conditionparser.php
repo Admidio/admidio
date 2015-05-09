@@ -24,18 +24,18 @@
 
 class ConditionParser
 {
-    private $mSrcCond;				///< The source condition with the user specific condition
-    private $mDestCond;				///< The destination string with the valid sql statement
-    private $mSrcCondArray;	        ///< An array from the string @b mSrcCond where every char is one array element
+    private $mSrcCond;              ///< The source condition with the user specific condition
+    private $mDestCond;             ///< The destination string with the valid sql statement
+    private $mSrcCondArray;         ///< An array from the string @b mSrcCond where every char is one array element
     private $mCount;                ///< Actual index in array @b mSrcCondArray
-	private $mNotExistsSql = '';    ///< Stores the sql statement if a record should not exists when user wants to exclude a column
-	private $mOpenQuotes = false;   ///< Flag if there is a open quote in this condition that must be closed before the next condition will be parsed
+    private $mNotExistsSql = '';    ///< Stores the sql statement if a record should not exists when user wants to exclude a column
+    private $mOpenQuotes = false;   ///< Flag if there is a open quote in this condition that must be closed before the next condition will be parsed
 
-	/** Creates a valid date format @b YYYY-MM-DD for the SQL statement
-	 *  @param $date     The unformated date from user input e.g. @b 12.04.2012
-	 *  @param $operator The actual operator for the @b date parameter
-	 *  @return String with a SQL valid date format @b YYYY-MM-DD
-	 */
+    /** Creates a valid date format @b YYYY-MM-DD for the SQL statement
+     *  @param $date     The unformated date from user input e.g. @b 12.04.2012
+     *  @param $operator The actual operator for the @b date parameter
+     *  @return String with a SQL valid date format @b YYYY-MM-DD
+     */
     private function getFormatDate($date, $operator)
     {
         global $gPreferences;
@@ -98,23 +98,23 @@ class ConditionParser
         return $formatDate;
     }
 
-	/** Replace different user conditions with predefined chars that
-	 *  represents a special condition e.g. @b ! represents @b != and @b <>
-	 *  @param $sourceCondition The user condition string
-	 *  @return String with the predefined chars for conditions
-	 */
+    /** Replace different user conditions with predefined chars that
+     *  represents a special condition e.g. @b ! represents @b != and @b <>
+     *  @param $sourceCondition The user condition string
+     *  @return String with the predefined chars for conditions
+     */
     public function makeStandardCondition($sourceCondition)
     {
-		global $gL10n;
+        global $gL10n;
 
         $this->mSrcCond = admStrToUpper(trim($sourceCondition));
         $this->mSrcCond = strtr($this->mSrcCond, '*', '%');
 
-		// valid 'not empty' is '#'
+        // valid 'not empty' is '#'
         $this->mSrcCond = str_replace(admStrToUpper($gL10n->get('SYS_NOT_EMPTY')), ' # ', $this->mSrcCond);
         $this->mSrcCond = str_replace(' NOT NULL ', ' # ', $this->mSrcCond);
 
-		// valid 'empty' is '_'
+        // valid 'empty' is '_'
         $this->mSrcCond = str_replace(admStrToUpper($gL10n->get('SYS_EMPTY')), ' _ ', $this->mSrcCond);
         $this->mSrcCond = str_replace(' NULL ', ' _ ', $this->mSrcCond);
 
@@ -150,13 +150,13 @@ class ConditionParser
         return $this->mSrcCond;
     }
 
-	/** Creates from a user defined condition a valid SQL condition
-	 *  @param $sourceCondition The user condition string
-	 *  @param $columnName 		The name of the database column for which the condition should be created
-	 *  @param $columnType 		The type of the column. Valid types are @b string, @b int, @b date and @b checkbox
-	 *  @param $fieldName       The name of the profile field. This is used for error output to the end user
-	 *  @return Returns a valid SQL string with the condition for that column
-	 */
+    /** Creates from a user defined condition a valid SQL condition
+     *  @param $sourceCondition The user condition string
+     *  @param $columnName      The name of the database column for which the condition should be created
+     *  @param $columnType      The type of the column. Valid types are @b string, @b int, @b date and @b checkbox
+     *  @param $fieldName       The name of the profile field. This is used for error output to the end user
+     *  @return Returns a valid SQL string with the condition for that column
+     */
     public function makeSqlStatement($sourceCondition, $columnName, $columnType, $fieldName)
     {
         $bStartCondition   = true;   // gibt an, dass eine neue Bedingung angefangen wurde
@@ -175,7 +175,7 @@ class ConditionParser
             // Bedingungen fuer das Feld immer mit UND starten
             if($columnType == 'string')
             {
-				$this->mDestCond = ' AND ( UPPER('.$columnName.') ';
+                $this->mDestCond = ' AND ( UPPER('.$columnName.') ';
             }
             elseif($columnType == 'checkbox')
             {
@@ -251,40 +251,40 @@ class ConditionParser
                         if($this->mSrcCondArray[$this->mCount] == '=')
                         {
                             if ($columnType == 'string')
-							{
-								$this->mDestCond = $this->mDestCond. ' LIKE ';
-							}
-							else
-							{
-								$this->mDestCond = $this->mDestCond. ' = ';
-							}
+                            {
+                                $this->mDestCond = $this->mDestCond. ' LIKE ';
+                            }
+                            else
+                            {
+                                $this->mDestCond = $this->mDestCond. ' = ';
+                            }
                         }
                         elseif($this->mSrcCondArray[$this->mCount] == '!')
                         {
                             if ($columnType == 'string')
-							{
-								$this->mDestCond = $this->mDestCond. ' NOT LIKE ';
-							}
-							else
-							{
-								$this->mDestCond = $this->mDestCond. ' <> ';
-							}
+                            {
+                                $this->mDestCond = $this->mDestCond. ' NOT LIKE ';
+                            }
+                            else
+                            {
+                                $this->mDestCond = $this->mDestCond. ' <> ';
+                            }
                         }
                         elseif($this->mSrcCondArray[$this->mCount] == '_')
                         {
                             $this->mDestCond = $this->mDestCond. ' IS NULL ';
-							if(strlen($this->mNotExistsSql) > 0)
-							{
-								$this->mDestCond = $this->mDestCond. ' OR NOT EXISTS ('.$this->mNotExistsSql.') ';
-							}
+                            if(strlen($this->mNotExistsSql) > 0)
+                            {
+                                $this->mDestCond = $this->mDestCond. ' OR NOT EXISTS ('.$this->mNotExistsSql.') ';
+                            }
                         }
                         elseif($this->mSrcCondArray[$this->mCount] == '#')
                         {
                             $this->mDestCond = $this->mDestCond. ' IS NOT NULL ';
-							if(strlen($this->mNotExistsSql) > 0)
-							{
-								$this->mDestCond = $this->mDestCond. ' OR EXISTS ('.$this->mNotExistsSql.') ';
-							}
+                            if(strlen($this->mNotExistsSql) > 0)
+                            {
+                                $this->mDestCond = $this->mDestCond. ' OR EXISTS ('.$this->mNotExistsSql.') ';
+                            }
                         }
                         elseif($this->mSrcCondArray[$this->mCount] == '{')
                         {
@@ -373,7 +373,7 @@ class ConditionParser
                                 }
                                 else
                                 {
-									throw new AdmException('LST_NOT_VALID_DATE_FORMAT', $fieldName);
+                                    throw new AdmException('LST_NOT_VALID_DATE_FORMAT', $fieldName);
                                 }
                                 $date = '';
                             }
@@ -406,16 +406,16 @@ class ConditionParser
                             }
                             elseif($bNewCondition && !$bStartOperand)
                             {
-								// first condition of these column
-								if($columnType == 'string')
-								{
-									$this->mDestCond = $this->mDestCond. ' LIKE \'';
-								}
-								else
-								{
-									$this->mDestCond = $this->mDestCond. ' = \'';
-								}
-								$this->mOpenQuotes = true;
+                                // first condition of these column
+                                if($columnType == 'string')
+                                {
+                                    $this->mDestCond = $this->mDestCond. ' LIKE \'';
+                                }
+                                else
+                                {
+                                    $this->mDestCond = $this->mDestCond. ' = \'';
+                                }
+                                $this->mOpenQuotes = true;
                             }
 
                             // Zeichen an Zielstring dranhaengen
@@ -423,11 +423,11 @@ class ConditionParser
                             {
                                 $date = $date. $this->mSrcCondArray[$this->mCount];
                             }
-							elseif($columnType == 'int' && is_numeric($this->mSrcCondArray[$this->mCount]) == false)
-							{
-								// if numeric field than only numeric characters are allowed
-								throw new AdmException('LST_NOT_NUMERIC', $fieldName);
-							}
+                            elseif($columnType == 'int' && is_numeric($this->mSrcCondArray[$this->mCount]) == false)
+                            {
+                                // if numeric field than only numeric characters are allowed
+                                throw new AdmException('LST_NOT_NUMERIC', $fieldName);
+                            }
                             else
                             {
                                 $this->mDestCond = $this->mDestCond. $this->mSrcCondArray[$this->mCount];
@@ -450,7 +450,7 @@ class ConditionParser
                 }
                 else
                 {
-					throw new AdmException('LST_NOT_VALID_DATE_FORMAT', $fieldName);
+                    throw new AdmException('LST_NOT_VALID_DATE_FORMAT', $fieldName);
                 }
             }
 
@@ -467,16 +467,16 @@ class ConditionParser
         return $this->mDestCond;
     }
 
-	/** Stores an sql statement that checks if a record in a table does exists or not exists.
-	 *  This must bei a full subselect that starts with SELECT. The statement is used if
-	 *  a condition with EMTPY or NOT EMPTY is used.
-	 *  @param $sqlStatement String with the full subselect
-	 *  @par Examples
-	 *  @code $parser->setNotExistsStatement('SELECT 1 FROM adm_user_data WHERE usd_usr_id = 1 AND usd_usf_id = 9'); @endcode
-	 */
-	public function setNotExistsStatement($sqlStatement)
-	{
-		$this->mNotExistsSql = $sqlStatement;
-	}
+    /** Stores an sql statement that checks if a record in a table does exists or not exists.
+     *  This must bei a full subselect that starts with SELECT. The statement is used if
+     *  a condition with EMTPY or NOT EMPTY is used.
+     *  @param $sqlStatement String with the full subselect
+     *  @par Examples
+     *  @code $parser->setNotExistsStatement('SELECT 1 FROM adm_user_data WHERE usd_usr_id = 1 AND usd_usf_id = 9'); @endcode
+     */
+    public function setNotExistsStatement($sqlStatement)
+    {
+        $this->mNotExistsSql = $sqlStatement;
+    }
 }
 ?>

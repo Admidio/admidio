@@ -49,16 +49,16 @@ function getFieldCode($fieldNameIntern, $item)
         return '';
     }
 
-	// get value of field in html format
-	$value = $inventory->getValue($fieldNameIntern, 'html');
+    // get value of field in html format
+    $value = $inventory->getValue($fieldNameIntern, 'html');
 
-	// Icons anzeigen
+    // Icons anzeigen
     if(strlen($gInventoryFields->getProperty($fieldNameIntern, 'inf_icon')) > 0)
-	{
-		$value = $gInventoryFields->getProperty($fieldNameIntern, 'inf_icon').'&nbsp;&nbsp;'. $value;
-	}
+    {
+        $value = $gInventoryFields->getProperty($fieldNameIntern, 'inf_icon').'&nbsp;&nbsp;'. $value;
+    }
 
-	// show html of field, if user has a value for that field or it's a checkbox field
+    // show html of field, if user has a value for that field or it's a checkbox field
     if(strlen($inventory->getValue($fieldNameIntern)) > 0 || $gInventoryFields->getProperty($fieldNameIntern, 'inf_type') == 'CHECKBOX')
     {
         $html['label'] = $gInventoryFields->getProperty($fieldNameIntern, 'inf_name');
@@ -90,13 +90,13 @@ $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js
 
 $page->addJavascript('
     var profileJS = new profileJSClass();
-    profileJS.deleteRole_ConfirmText 	= "'.$gL10n->get('ROL_MEMBERSHIP_DEL', '[rol_name]').'";
-    profileJS.deleteFRole_ConfirmText 	= "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
-    profileJS.setBy_Text				= "'.$gL10n->get('SYS_SET_BY').'";
+    profileJS.deleteRole_ConfirmText    = "'.$gL10n->get('ROL_MEMBERSHIP_DEL', '[rol_name]').'";
+    profileJS.deleteFRole_ConfirmText   = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
+    profileJS.setBy_Text                = "'.$gL10n->get('SYS_SET_BY').'";
     profileJS.inv_id                    = '.$inventory->getValue('inv_id').';
-    
+
     function showHideMembershipInformation(element) {
-        id = "#" + element.attr("id") + "_Content"; 
+        id = "#" + element.attr("id") + "_Content";
 
         if($(id).css("display") == "none") {
             $(id).show("fast");
@@ -110,16 +110,16 @@ $page->addJavascript('
     $(".admidio-icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
     $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
     $("#profile_authorizations_box_body").mouseout(function () { profileJS.deleteShowInfo()});
-    
+
     $(".admidio-form-membership-period").submit(function(event) {
         var id = $(this).attr("id");
         var parentId = $("#"+id).parent().parent().attr("id");
         var action = $(this).attr("action");
         $("#"+id+" .form-alert").hide();
-    
+
         // disable default form submit
         event.preventDefault();
-        
+
         $.ajax({
             type:    "GET",
             url:     action,
@@ -140,9 +140,9 @@ $page->addJavascript('
                     $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                 }
             }
-        });    
+        });
     });', true);
-    
+
 // get module menu
 $profileMenu = $page->getMenu();
 
@@ -153,21 +153,21 @@ if($gNavigation->count() > 1)
 }
 
 // show link to edit profile
-$profileMenu->addItem('menu_item_new_entry', $g_root_path. '/adm_program/modules/inventory/item_new.php?item_id='.$inventory->getValue('inv_id'), 
-				$gL10n->get('MEM_EDIT_USER'), 'edit.png');
+$profileMenu->addItem('menu_item_new_entry', $g_root_path. '/adm_program/modules/inventory/item_new.php?item_id='.$inventory->getValue('inv_id'),
+                $gL10n->get('MEM_EDIT_USER'), 'edit.png');
 
 
 $profileMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
 
 if($gCurrentUser->isWebmaster())
 {
-	// show link to maintain profile fields
-	$profileMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php', 
-								$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
+    // show link to maintain profile fields
+    $profileMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php',
+                                $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
 
-	// show link to system preferences of weblinks
-	$profileMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=profile', 
-						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
+    // show link to system preferences of weblinks
+    $profileMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=profile',
+                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
 }
 
 // *******************************************************************************
@@ -176,14 +176,14 @@ if($gCurrentUser->isWebmaster())
 
 $page->addHtml('
 <div class="panel panel-default" id="user_data_panel">
-    <div class="panel-heading">'.$gL10n->get('SYS_MASTER_DATA').'</div>        
+    <div class="panel-heading">'.$gL10n->get('SYS_MASTER_DATA').'</div>
     <div class="panel-body row">
         <div class="col-sm-8">');
             // create a static form
             $form = new HtmlForm('profile_user_data_form', null);
-    
+
             $bAddressOutput = false;    // Merker, ob die Adresse schon angezeigt wurde
-    
+
             // Schleife ueber alle Felder der Stammdaten
 
             foreach($gInventoryFields->mInventoryFields as $field)
@@ -195,30 +195,30 @@ $page->addHtml('
                     switch($field->getValue('inf_name_intern'))
                     {
                         case 'ROOM_ID':
-							$field = getFieldCode($field->getValue('inf_name_intern'), $getItemId);
-							if($gDbType == 'mysql')
-							{
-								$sql = 'SELECT CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') as name FROM '.TBL_ROOMS.' where room_id = ' . $field['value'] ;        
-							}
-							else
-							{
-								$sql = 'SELECT room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' as name FROM '.TBL_ROOMS.' where room_id = ' . $field['value'];
-							}
-							$result = $gDb->query($sql);
-							$row    = $gDb->fetch_array($result);
-							if($gDb->num_rows($result) > 0)
-							{
-								$form->addStaticControl('address', $field['label'], $row['name']);
-							}
-							else
-							{
-								$form->addStaticControl('address', $field['label'], 'room_id ' . $field['value'] . ' not found');
-							}
-							break;
-							
+                            $field = getFieldCode($field->getValue('inf_name_intern'), $getItemId);
+                            if($gDbType == 'mysql')
+                            {
+                                $sql = 'SELECT CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') as name FROM '.TBL_ROOMS.' where room_id = ' . $field['value'] ;
+                            }
+                            else
+                            {
+                                $sql = 'SELECT room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' as name FROM '.TBL_ROOMS.' where room_id = ' . $field['value'];
+                            }
+                            $result = $gDb->query($sql);
+                            $row    = $gDb->fetch_array($result);
+                            if($gDb->num_rows($result) > 0)
+                            {
+                                $form->addStaticControl('address', $field['label'], $row['name']);
+                            }
+                            else
+                            {
+                                $form->addStaticControl('address', $field['label'], 'room_id ' . $field['value'] . ' not found');
+                            }
+                            break;
+
                         case 'FIRST_NAME':
                             break;
-    
+
                         default:
                             $field = getFieldCode($field->getValue('inf_name_intern'), $getItemId);
                             if(strlen($field['value']) > 0)
@@ -232,7 +232,7 @@ $page->addHtml('
             $page->addHtml($form->show(false));
         $page->addHtml('</div>
         <div class="col-sm-4 text-right">');
-        
+
             // *******************************************************************************
             // Profile photo
             // *******************************************************************************
@@ -250,7 +250,7 @@ $page->addHtml('
                     || file_exists(SERVER_PATH. '/adm_my_files/item_photos/'.$inventory->getValue('inv_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
                 {
                     $page->addHtml('<a class="btn" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
-                                    '&amp;database_id='.$inventory->getValue('inv_id').'"><img src="'. THEME_PATH. '/icons/delete.png" 
+                                    '&amp;database_id='.$inventory->getValue('inv_id').'"><img src="'. THEME_PATH. '/icons/delete.png"
                                     alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</a>');
                 }
                 $page->addHtml('</div>');
@@ -258,7 +258,7 @@ $page->addHtml('
         $page->addHtml('</div>
     </div>
 </div>');
-            
+
 // *******************************************************************************
 // Loop over all categories and profile fields except the master data
 // *******************************************************************************
@@ -288,7 +288,7 @@ foreach($gProfileFields->mProfileFields as $field)
             <div class="panel panel-default" id="'.$field->getValue('cat_name').'_data_panel">
                 <div class="panel-heading">'.$field->getValue('cat_name').'</div>
                 <div class="panel-body">');
-                
+
             // create a static form
             $form = new HtmlForm('profile_user_data_form', null);
         }

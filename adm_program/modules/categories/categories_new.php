@@ -30,19 +30,19 @@ $getTitle = admFuncVariableIsValid($_GET, 'title', 'string', array('defaultValue
 // Modus und Rechte pruefen
 if($getType == 'ROL' && $gCurrentUser->manageRoles() == false)
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 elseif($getType == 'LNK' && $gCurrentUser->editWeblinksRight() == false)
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 elseif($getType == 'USF' && $gCurrentUser->editUsers() == false)
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 elseif($getType == 'DAT' && $gCurrentUser->editDates() == false)
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // set headline of the script
@@ -76,11 +76,11 @@ if(isset($_SESSION['categories_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-	$category->setArray($_SESSION['categories_request']);
-	if(isset($_SESSION['categories_request']['show_in_several_organizations']) == false)
-	{
-	   $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
-	}
+    $category->setArray($_SESSION['categories_request']);
+    if(isset($_SESSION['categories_request']['show_in_several_organizations']) == false)
+    {
+       $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
+    }
     unset($_SESSION['categories_request']);
 }
 

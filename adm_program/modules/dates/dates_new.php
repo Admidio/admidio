@@ -63,23 +63,23 @@ if(isset($_SESSION['dates_request']))
     $_SESSION['dates_request']['dat_begin'] = $_SESSION['dates_request']['date_from'].' '.$_SESSION['dates_request']['date_from_time'];
     $_SESSION['dates_request']['dat_end']   = $_SESSION['dates_request']['date_to'].' '.$_SESSION['dates_request']['date_to_time'];
 
-	$date->setArray($_SESSION['dates_request']);
+    $date->setArray($_SESSION['dates_request']);
 
     // get the selected roles for visibility
     $dateRoles = $_SESSION['dates_request']['date_roles'];
-    
-	// check if a registration to this event is possible
+
+    // check if a registration to this event is possible
     if(array_key_exists('date_registration_possible', $_SESSION['dates_request']))
     {
         $dateRegistrationPossible = $_SESSION['dates_request']['date_registration_possible'];
     }
-	
-	// check if current user is assigned to this date
+
+    // check if current user is assigned to this date
     if(array_key_exists('date_current_user_assigned', $_SESSION['dates_request']))
     {
         $dateCurrentUserAssigned = $_SESSION['dates_request']['date_current_user_assigned'];
     }
-    
+
     unset($_SESSION['dates_request']);
 }
 else
@@ -90,7 +90,7 @@ else
         // bei neuem Termin Datum mit aktuellen Daten vorbelegen
         $date->setValue('dat_begin', date('Y-m-d H:00:00', time()+3600));
         $date->setValue('dat_end', date('Y-m-d H:00:00', time()+7200));
-    
+
         if($getCopy == false)
         {
             // a new event will be visible for all users per default
@@ -104,36 +104,36 @@ else
 
         // get the saved roles for visibility
         $dateRoles = $date->getVisibleRoles();
-        
+
         if($getCopy)
         {
             $date->setValue('dat_id', 0);
             $getDateId = 0;
         }
-        
+
         // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
         if($date->editRight() == false)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
     }
-	
-	// check if a registration to this event is possible
-	if($date->getValue('dat_rol_id') > 0)
-	{
-		$dateRegistrationPossible = 1;
-	}
-	// check if current user is assigned to this date
-	$dateCurrentUserAssigned = $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id'));
+
+    // check if a registration to this event is possible
+    if($date->getValue('dat_rol_id') > 0)
+    {
+        $dateRegistrationPossible = 1;
+    }
+    // check if current user is assigned to this date
+    $dateCurrentUserAssigned = $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id'));
 }
 
 if($date->getValue('dat_rol_id') > 0)
 {
-	$dateRoleID = $date->getValue('dat_rol_id');
+    $dateRoleID = $date->getValue('dat_rol_id');
 }
 else
 {
-	$dateRoleID = '0';
+    $dateRoleID = '0';
 }
 
 // create html page object
@@ -143,26 +143,26 @@ $page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js'
 $page->addJavascript('
     // Funktion blendet Zeitfelder ein/aus
     function setAllDay() {
-		if ($("#dat_all_day:checked").val() !== undefined) {
-			$("#date_from_time").hide();
-			$("#date_to_time").hide();
+        if ($("#dat_all_day:checked").val() !== undefined) {
+            $("#date_from_time").hide();
+            $("#date_to_time").hide();
         }
         else {
-			$("#date_from_time").show("slow");
-			$("#date_to_time").show("slow");
+            $("#date_from_time").show("slow");
+            $("#date_to_time").show("slow");
         }
     }
-	
-	function setDateParticipation() {
-		if ($("#date_registration_possible:checked").val() !== undefined) {
-			$("#date_current_user_assigned_group").show("slow");
-			$("#dat_max_members_group").show("slow");
-		}
-		else {
-			$("#date_current_user_assigned_group").hide();
-			$("#dat_max_members_group").hide();
-		}
-	}
+
+    function setDateParticipation() {
+        if ($("#date_registration_possible:checked").val() !== undefined) {
+            $("#date_current_user_assigned_group").show("slow");
+            $("#dat_max_members_group").show("slow");
+        }
+        else {
+            $("#date_current_user_assigned_group").hide();
+            $("#dat_max_members_group").hide();
+        }
+    }
 
     // Funktion belegt das Datum-bis entsprechend dem Datum-Von
     function setDateTo() {
@@ -173,44 +173,44 @@ $page->addJavascript('
             $("#date_to").val($("#date_from").val());
         }
     }
-	
-	function setLocationCountry() {
-		if($("#dat_location").val().length > 0) {
-			$("#dat_country_group").show();
-			$("#dat_country").focus();
-		}
-		else {
-			$("#dat_country_group").hide();
-		}
-	}');
-	
+
+    function setLocationCountry() {
+        if($("#dat_location").val().length > 0) {
+            $("#dat_country_group").show();
+            $("#dat_country").focus();
+        }
+        else {
+            $("#dat_country_group").hide();
+        }
+    }');
+
 $page->addJavascript('
-	var dateRoleID = '.$dateRoleID.';
-	
+    var dateRoleID = '.$dateRoleID.';
+
     setAllDay();
-	setDateParticipation();
-	setLocationCountry();
-	
-	$("#date_registration_possible").click(function() {setDateParticipation();});
-	$("#dat_all_day").click(function() {setAllDay();});
-	$("#dat_location").change(function() {setLocationCountry();});
-	$("#date_from").change(function() {setDateTo();});
-	
-	// if date participation should be removed than ask user
-	$("#btn_save").click(function (event) {
-		if(dateRoleID > 0 && $("#date_registration_possible").is(":checked") == false) {
-			var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
-			if(msg_result) {
-				$("#dates_edit_form").submit();
-			}
+    setDateParticipation();
+    setLocationCountry();
+
+    $("#date_registration_possible").click(function() {setDateParticipation();});
+    $("#dat_all_day").click(function() {setAllDay();});
+    $("#dat_location").change(function() {setLocationCountry();});
+    $("#date_from").change(function() {setDateTo();});
+
+    // if date participation should be removed than ask user
+    $("#btn_save").click(function (event) {
+        if(dateRoleID > 0 && $("#date_registration_possible").is(":checked") == false) {
+            var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
+            if(msg_result) {
+                $("#dates_edit_form").submit();
+            }
             else  {
                 event.preventDefault();
             }
-		}
-		else {
-			$("#dates_edit_form").submit();
-		}
-	});', true);
+        }
+        else {
+            $("#dates_edit_form").submit();
+        }
+    });', true);
 
 // add back link to module menu
 $datesMenu = $page->getMenu();
@@ -220,33 +220,33 @@ $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->ge
 $form = new HtmlForm('dates_edit_form', $g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode=1', $page);
 $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
     $form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'), array('maxLength' => 100, 'property' => FIELD_MANDATORY));
-    
+
     // if a map link should be shown in the event then show help text and a field where the user could choose the country
     if($gPreferences['dates_show_map_link'] == true)
     {
         $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50, 'helpTextIdLabel' => 'DAT_LOCATION_LINK'));
-    
-    	if(strlen($date->getValue('dat_country')) == 0 && $getDateId == 0)
-    	{
-    		$date->setValue('dat_country', $gPreferences['default_country']);
-    	}
+
+        if(strlen($date->getValue('dat_country')) == 0 && $getDateId == 0)
+        {
+            $date->setValue('dat_country', $gPreferences['default_country']);
+        }
         $form->addSelectBox('dat_country', $gL10n->get('SYS_COUNTRY'), $gL10n->getCountries(), array('defaultValue' => $date->getValue('dat_country', 'database')));
     }
     else
     {
         $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50));
     }
-    
+
     // if room selection is activated then show a selectbox with all rooms
     if($gPreferences['dates_show_rooms'] == true)
     {
         if($gDbType == 'mysql')
         {
-    	    $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') FROM '.TBL_ROOMS.' ORDER BY room_name';
+            $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') FROM '.TBL_ROOMS.' ORDER BY room_name';
         }
         else
         {
-    	    $sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' FROM '.TBL_ROOMS.' ORDER BY room_name';
+            $sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' FROM '.TBL_ROOMS.' ORDER BY room_name';
         }
         $form->addSelectBoxFromSql('dat_room_id', $gL10n->get('SYS_ROOM'), $gDb, $sql, array('defaultValue' => $date->getValue('dat_room_id')));
     }
@@ -277,18 +277,18 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
     }
     $form->addSelectBox('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $roles, array('property' => FIELD_MANDATORY,
                         'defaultValue' => $dateRoles, 'showContextDependentFirstEntry' => false, 'multiselect' => true));
-    
+
     $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), $date->getValue('dat_highlight'));
-    
+
     // if current organization has a parent organization or is child organizations then show option to set this announcement to global
-	if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->hasChildOrganizations())
-	{
+    if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->hasChildOrganizations())
+    {
         // show all organizations where this organization is mother or child organization
         $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
         $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
 
         $form->addCheckbox('dat_global', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $date->getValue('dat_global'), array('helpTextIdLabel' => array('SYS_DATA_GLOBAL', $organizations)));
-	}
+    }
     $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE'));
     $form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC'));
     $form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'),

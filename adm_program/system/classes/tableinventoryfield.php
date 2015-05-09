@@ -13,30 +13,30 @@
 
 class TableInventoryField extends TableAccess
 {
-	/** Constuctor that will create an object of a recordset of the table adm_invent_fields. 
-	 *  If the id is set than the specific item field will be loaded.
-	 *  @param $db Object of the class database. This should be the default object $gDb.
-	 *  @param $inf_id The recordset of the item field with this id will be loaded. If id isn't set than an empty object of the table is created.
-	 */
+    /** Constuctor that will create an object of a recordset of the table adm_invent_fields.
+     *  If the id is set than the specific item field will be loaded.
+     *  @param $db Object of the class database. This should be the default object $gDb.
+     *  @param $inf_id The recordset of the item field with this id will be loaded. If id isn't set than an empty object of the table is created.
+     */
     public function __construct(&$db, $inf_id = 0)
     {
-		// read also data of assigned category
-		$this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'inf_cat_id');
+        // read also data of assigned category
+        $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'inf_cat_id');
 
         parent::__construct($db, TBL_INVENT_FIELDS, 'inf', $inf_id);
     }
-    
-	/** Deletes the selected field and all references in other tables. Also 
-	 *  the gap in sequence will be closed. After that the class will be initialize.
-	 *  @return @b true if no error occured
-	 */
+
+    /** Deletes the selected field and all references in other tables. Also
+     *  the gap in sequence will be closed. After that the class will be initialize.
+     *  @return @b true if no error occured
+     */
     public function delete()
     {
-        
-		$this->db->startTransaction();
-		
+
+        $this->db->startTransaction();
+
         // close gap in sequence
-        $sql = 'UPDATE '. TBL_INVENT_FIELDS. ' SET inf_sequence = inf_sequence - 1 
+        $sql = 'UPDATE '. TBL_INVENT_FIELDS. ' SET inf_sequence = inf_sequence - 1
                  WHERE inf_cat_id   = '. $this->getValue('inf_cat_id'). '
                    AND inf_sequence > '. $this->getValue('inf_sequence');
         $this->db->query($sql);
@@ -46,9 +46,9 @@ class TableInventoryField extends TableAccess
         $this->db->query($sql);
 
         $return = parent::delete();
-		
-		$this->db->endTransaction();
-		return $return;
+
+        $this->db->endTransaction();
+        return $return;
     }
 
     // diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
@@ -63,7 +63,7 @@ class TableInventoryField extends TableAccess
         }
         $sql = 'SELECT inf_id FROM '.TBL_INVENT_FIELDS.' WHERE inf_name_intern = \''.$newNameIntern.'\'';
         $this->db->query($sql);
-        
+
         if($this->db->num_rows() > 0)
         {
             $index++;
@@ -71,7 +71,7 @@ class TableInventoryField extends TableAccess
         }
         return $newNameIntern;
     }
-	
+
     /** Get the value of a column of the database table.
      *  If the value was manipulated before with @b setValue than the manipulated value is returned.
      *  @param $columnName The name of the database column whose value should be read
@@ -82,128 +82,128 @@ class TableInventoryField extends TableAccess
      *                 For text columns the format can be @b database that would be the database value without any transformations
      *  @return Returns the value of the database column.
      *          If the value was manipulated before with @b setValue than the manipulated value is returned.
-     */ 
+     */
     public function getValue($columnName, $format = '')
     {
-		global $gL10n;
+        global $gL10n;
 
-		if($columnName == 'inf_description')
+        if($columnName == 'inf_description')
         {
-			if(isset($this->dbColumns['inf_description']) == false)
-			{
-				$value = '';
-			}
-			elseif($format == 'database')
-			{
-				$value = html_entity_decode(strStripTags($this->dbColumns['inf_description']), ENT_QUOTES, 'UTF-8');
-			}
-			else
-			{
-				$value = $this->dbColumns['inf_description'];
-			}
+            if(isset($this->dbColumns['inf_description']) == false)
+            {
+                $value = '';
+            }
+            elseif($format == 'database')
+            {
+                $value = html_entity_decode(strStripTags($this->dbColumns['inf_description']), ENT_QUOTES, 'UTF-8');
+            }
+            else
+            {
+                $value = $this->dbColumns['inf_description'];
+            }
         }
-		elseif($columnName == 'inf_name_intern')
-		{
-			// internal name should be read with no conversion
-			$value = parent::getValue($columnName, 'database');
-		}
+        elseif($columnName == 'inf_name_intern')
+        {
+            // internal name should be read with no conversion
+            $value = parent::getValue($columnName, 'database');
+        }
         else
         {
             $value = parent::getValue($columnName, $format);
         }
-		
-		if(($columnName == 'inf_name' || $columnName == 'cat_name')
-		&& $format != 'database')
-		{
-			// if text is a translation-id then translate it
-			if(strpos($value, '_') == 3)
-			{
-				$value = $gL10n->get(admStrToUpper($value));
-			}
-		}
-		elseif($columnName == 'inf_value_list' && $format != 'database')
-		{
-			if($this->dbColumns['inf_type'] == 'DROPDOWN'
-			|| $this->dbColumns['inf_type'] == 'RADIO_BUTTON')
-			{
-				$arrListValues = explode("\r\n", $value);
-				$arrListValuesWithKeys = array(); 	// array with list values and keys that represents the internal value
 
-				foreach($arrListValues as $key => &$listValue)
-				{
-					if($this->dbColumns['inf_type'] == 'RADIO_BUTTON')
-					{
-						// if value is imagefile or imageurl then show image
-						if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
-						{
-							// if there is imagefile and text separated by | then explode them
-							if(strpos($listValue, '|') > 0)
-							{
-								$listValueImage = substr($listValue, 0, strpos($listValue, '|'));
-								$listValueText  = substr($listValue, strpos($listValue, '|') + 1);
-							}
-							else
-							{
-								$listValueImage = $listValue;
-								$listValueText  = $this->getValue('inf_name');
-							}
-							
-							// if text is a translation-id then translate it
-							if(strpos($listValueText, '_') == 3)
-							{
-								$listValueText = $gL10n->get(admStrToUpper($listValueText));
-							}
+        if(($columnName == 'inf_name' || $columnName == 'cat_name')
+        && $format != 'database')
+        {
+            // if text is a translation-id then translate it
+            if(strpos($value, '_') == 3)
+            {
+                $value = $gL10n->get(admStrToUpper($value));
+            }
+        }
+        elseif($columnName == 'inf_value_list' && $format != 'database')
+        {
+            if($this->dbColumns['inf_type'] == 'DROPDOWN'
+            || $this->dbColumns['inf_type'] == 'RADIO_BUTTON')
+            {
+                $arrListValues = explode("\r\n", $value);
+                $arrListValuesWithKeys = array();     // array with list values and keys that represents the internal value
 
-							if($format == 'text')
-							{
-								// if no image is wanted then return the text part or only the position of the entry
-								if(strpos($listValue, '|') > 0)
-								{
-									$listValue = $listValueText;
-								}
-								else
-								{
-									$listValue = $key + 1;
-								}
-							}
-							else
-							{
-								try
-								{
-									// create html for optionbox entry
-									if(strpos(admStrToLower($listValueImage), 'http') === 0 && strValidCharacters($listValueImage, 'url'))
-									{
-										$listValue = '<img class="admidio-icon-info" src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
-									}
-									elseif(admStrIsValidFileName($listValueImage, true))
-									{
-										$listValue = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
-									}
-								}
-								catch(AdmException $e)
-								{
-									$e->showText();
-								}
-							}
-						}
-					}
+                foreach($arrListValues as $key => &$listValue)
+                {
+                    if($this->dbColumns['inf_type'] == 'RADIO_BUTTON')
+                    {
+                        // if value is imagefile or imageurl then show image
+                        if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
+                        {
+                            // if there is imagefile and text separated by | then explode them
+                            if(strpos($listValue, '|') > 0)
+                            {
+                                $listValueImage = substr($listValue, 0, strpos($listValue, '|'));
+                                $listValueText  = substr($listValue, strpos($listValue, '|') + 1);
+                            }
+                            else
+                            {
+                                $listValueImage = $listValue;
+                                $listValueText  = $this->getValue('inf_name');
+                            }
 
-					// if text is a translation-id then translate it
-					if(strpos($listValue, '_') == 3)
-					{
-						$listValue = $gL10n->get(admStrToUpper($listValue));
-					}
+                            // if text is a translation-id then translate it
+                            if(strpos($listValueText, '_') == 3)
+                            {
+                                $listValueText = $gL10n->get(admStrToUpper($listValueText));
+                            }
 
-					// save values in new array that starts with key = 1
-					$arrListValuesWithKeys[++$key] = $listValue;
-				}
-				$value = $arrListValuesWithKeys;
-			}
-		}
+                            if($format == 'text')
+                            {
+                                // if no image is wanted then return the text part or only the position of the entry
+                                if(strpos($listValue, '|') > 0)
+                                {
+                                    $listValue = $listValueText;
+                                }
+                                else
+                                {
+                                    $listValue = $key + 1;
+                                }
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    // create html for optionbox entry
+                                    if(strpos(admStrToLower($listValueImage), 'http') === 0 && strValidCharacters($listValueImage, 'url'))
+                                    {
+                                        $listValue = '<img class="admidio-icon-info" src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                    }
+                                    elseif(admStrIsValidFileName($listValueImage, true))
+                                    {
+                                        $listValue = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                    }
+                                }
+                                catch(AdmException $e)
+                                {
+                                    $e->showText();
+                                }
+                            }
+                        }
+                    }
+
+                    // if text is a translation-id then translate it
+                    if(strpos($listValue, '_') == 3)
+                    {
+                        $listValue = $gL10n->get(admStrToUpper($listValue));
+                    }
+
+                    // save values in new array that starts with key = 1
+                    $arrListValuesWithKeys[++$key] = $listValue;
+                }
+                $value = $arrListValuesWithKeys;
+            }
+        }
 
         return $value;
     }
-    
+
     // das Feld wird um eine Position in der Reihenfolge verschoben
     public function moveSequence($mode)
     {
@@ -230,23 +230,23 @@ class TableInventoryField extends TableAccess
         }
     }
 
-	/** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 
-	 *  a new record or if only an update is neccessary. The update statement will only update
-	 *  the changed columns. If the table has columns for creator or editor than these column
-	 *  with their timestamp will be updated.
-	 *  For new records the name intern will be set per default.
-	 *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
-	 */
+    /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     *  a new record or if only an update is neccessary. The update statement will only update
+     *  the changed columns. If the table has columns for creator or editor than these column
+     *  with their timestamp will be updated.
+     *  For new records the name intern will be set per default.
+     *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     */
     public function save($updateFingerPrint = true)
     {
         $fields_changed = $this->columnsValueChanged;
-        
-		// if new field than generate new name intern, otherwise no change will be made
-		if($this->new_record == true)
+
+        // if new field than generate new name intern, otherwise no change will be made
+        if($this->new_record == true)
         {
             $this->setValue('inf_name_intern', $this->getNewNameIntern($this->getValue('inf_name', 'database'), 1));
         }
-        
+
         parent::save($updateFingerPrint);
     }
 
@@ -255,14 +255,14 @@ class TableInventoryField extends TableAccess
      *  The value is only saved in the object. You must call the method @b save to store the new value to the database
      *  @param $columnName The name of the database column whose value should get a new value
      *  @param $newValue The new value that should be stored in the database field
-     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
      *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
-     */ 
+     */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         // name, category and type couldn't be edited if it's a system field
         if(($columnName == 'inf_name' || $columnName == 'inf_cat_id' || $columnName == 'inf_type')
-		&& $this->getValue('inf_system') == 1)
+        && $this->getValue('inf_system') == 1)
         {
             return false;
         }
@@ -282,7 +282,7 @@ class TableInventoryField extends TableAccess
         {
             return parent::setValue($columnName, $newValue, false);
         }
-		
+
         return parent::setValue($columnName, $newValue, $checkValue);
     }
 }

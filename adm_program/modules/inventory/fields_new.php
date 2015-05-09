@@ -11,7 +11,7 @@
  * inf_id : profile field id that should be edited
  *
  ****************************************************************************/
- 
+
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
@@ -42,17 +42,17 @@ $itemField = new TableInventoryField($gDb);
 if($getInfId > 0)
 {
     $itemField->readDataById($getInfId);
-    
-	// hidden must be 0, if the flag should be set
-	if($itemField->getValue('inf_hidden') == 1)
-	{
-		$itemField->setValue('inf_hidden', 0);
-	}
-	else
-	{
-		$itemField->setValue('inf_hidden', 1);
-	}
-	
+
+    // hidden must be 0, if the flag should be set
+    if($itemField->getValue('inf_hidden') == 1)
+    {
+        $itemField->setValue('inf_hidden', 0);
+    }
+    else
+    {
+        $itemField->setValue('inf_hidden', 1);
+    }
+
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert
     if($itemField->getValue('cat_org_id') >  0
     && $itemField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
@@ -68,19 +68,19 @@ else
 
 if(isset($_SESSION['fields_request']))
 {
-	// hidden must be 0, if the flag should be set
-	if($_SESSION['fields_request']['inf_hidden'] == 1)
-	{
-		$_SESSION['fields_request']['inf_hidden'] = 0;
-	}
-	else
-	{
-		$_SESSION['fields_request']['inf_hidden'] = 1;
-	}
+    // hidden must be 0, if the flag should be set
+    if($_SESSION['fields_request']['inf_hidden'] == 1)
+    {
+        $_SESSION['fields_request']['inf_hidden'] = 0;
+    }
+    else
+    {
+        $_SESSION['fields_request']['inf_hidden'] = 1;
+    }
 
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-	$itemField->setArray($_SESSION['fields_request']);
+    $itemField->setArray($_SESSION['fields_request']);
     unset($_SESSION['fields_request']);
 }
 
@@ -88,17 +88,17 @@ if(isset($_SESSION['fields_request']))
 $page = new HtmlPage($headline);
 
 $page->addJavascript('
-	function setValueList() {
-		if($("#inf_type").val() == "DROPDOWN" || $("#inf_type").val() == "RADIO_BUTTON") {
-			$("#inf_value_list_group").show("slow");
+    function setValueList() {
+        if($("#inf_type").val() == "DROPDOWN" || $("#inf_type").val() == "RADIO_BUTTON") {
+            $("#inf_value_list_group").show("slow");
             $("#inf_value_list").attr("required", "required");
-		}
-		else {
+        }
+        else {
             $("#inf_value_list").removeAttr("required");
-			$("#inf_value_list_group").hide();
-		}
-	}
-    
+            $("#inf_value_list_group").hide();
+        }
+    }
+
     setValueList();
     $("#inf_type").click(function() {setValueList();});', true);
 
@@ -117,13 +117,13 @@ $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
     {
         $form->addInput('inf_name', $gL10n->get('SYS_NAME'), $itemField->getValue('inf_name', 'database'), array('maxLength' => 100, 'property' => FIELD_MANDATORY));
     }
-    
+
     // show internal field name for information
     if($getInfId > 0)
     {
         $form->addInput('inf_name_intern', $gL10n->get('SYS_INTERNAL_NAME'), $itemField->getValue('inf_name_intern'),  array('maxLength' => 100, 'property' => FIELD_DISABLED, 'helpTextIdLabel' => 'SYS_INTERNAL_NAME_DESC'));
     }
-    
+
     if($itemField->getValue('inf_system') == 1)
     {
         $form->addInput('inf_cat_id', $gL10n->get('SYS_CATEGORY'), $itemField->getValue('cat_name'),  array('maxLength' => 100, 'property' => FIELD_DISABLED));
@@ -135,7 +135,7 @@ $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
     $itemFieldText = array('CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
-	                       'DATE'     => $gL10n->get('SYS_DATE'),
+                           'DATE'     => $gL10n->get('SYS_DATE'),
                            'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
                            'EMAIL'    => $gL10n->get('SYS_EMAIL'),
                            'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
@@ -155,7 +155,7 @@ $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
         // fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
         $form->addSelectBox('inf_type', $gL10n->get('ORG_DATATYPE'), $itemFieldText, array( 'property' => FIELD_MANDATORY, 'defaultValue' => $itemField->getValue('inf_type')));
     }
-	$form->addMultilineTextInput('inf_value_list', $gL10n->get('ORG_VALUE_LIST'), $itemField->getValue('inf_value_list', 'database'), 6, array('property' => FIELD_MANDATORY, 'helpTextIdLabel' => 'ORG_VALUE_LIST_DESC'));
+    $form->addMultilineTextInput('inf_value_list', $gL10n->get('ORG_VALUE_LIST'), $itemField->getValue('inf_value_list', 'database'), 6, array('property' => FIELD_MANDATORY, 'helpTextIdLabel' => 'ORG_VALUE_LIST_DESC'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
     $form->addCheckbox('inf_hidden', $gL10n->get('ORG_FIELD_NOT_HIDDEN'), $itemField->getValue('inf_hidden'), array('property' => FIELD_DEFAULT, 'helpTextIdLabel' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'eye.png'));

@@ -28,7 +28,7 @@ if(strlen($userPhoto)==0 || !$gCurrentUser->hasRightViewProfile($user))
 }
 else
 {
-	header('Content-Type: image/jpeg');
+    header('Content-Type: image/jpeg');
     echo $userPhoto;
 }
 

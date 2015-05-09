@@ -48,7 +48,7 @@ switch ($getMessageId)
         $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
         echo $gL10n->get(strtoupper($getMessageId), $organizations);
         break;
-    
+
     case 'room_detail':
         if(is_numeric($getMessageVar1))
         {
@@ -77,7 +77,7 @@ switch ($getMessageId)
         echo $gProfileFields->getProperty($getMessageVar1, 'usf_description');
         break;
 
-	// Eigene Listen
+    // Eigene Listen
 
     case 'mylist_condition':
         echo '<p>'.$gL10n->get('LST_MYLIST_CONDITION_DESC').'</p>
@@ -146,12 +146,12 @@ switch ($getMessageId)
                     <td><b>'.$gL10n->get('SYS_NOT_EMPTY').'</b></td>
                     <td>'.$gL10n->get('LST_NOT_EMPTY_EXAMPLE_DESC').'</td>
                  </tr>
-				 <tr>
+                 <tr>
                     <td>'.$gL10n->get('SYS_COUNTRY').'</td>
                     <td><b>'.$gL10n->get('SYS_COUNTRY_EG').'</b></td>
                     <td>'.$gL10n->get('LST_COUNTRY_ISO').'</td>
                  </tr>
-                </tbody
+                </tbody>
               </table>';
         break;
 
@@ -164,7 +164,7 @@ switch ($getMessageId)
 
     //Fotomodulhifen
 
-   case 'photo_up_help':
+    case 'photo_up_help':
         echo '<ul>
                 <li>'.$gL10n->get('PHO_UPLOAD_HELP_1', $gL10n->get('SYS_BROWSE')).'</li>
                 <li>'.$gL10n->get('PHO_UPLOAD_HELP_2').'</li>
@@ -201,10 +201,10 @@ switch ($getMessageId)
         $msg_var1 = '';
         if(strlen($getMessageVar1) > 0)
         {
-			if(strpos($getMessageVar1, '_') == 3)
-			{
-				$msg_var1 = $gL10n->get($getMessageVar1);
-			}
+            if(strpos($getMessageVar1, '_') == 3)
+            {
+                $msg_var1 = $gL10n->get($getMessageVar1);
+            }
             else
             {
                 $msg_var1 = $getMessageVar1;

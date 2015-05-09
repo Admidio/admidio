@@ -7,7 +7,7 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
- 
+
 require_once('common.php');
 
 $headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
@@ -27,21 +27,21 @@ if (! empty($_POST['btnSend']) && !$gValidLogin && $gPreferences['enable_mail_ca
 {
     if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
     {
-		if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-		elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+        if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
+        elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
     }
 }
 if($gValidLogin)
 {
     $gMessage->setForwardUrl($g_root_path.'/adm_program/', 2000);
-    $gMessage->show($gL10n->get('SYS_LOSTPW_AREADY_LOGGED_ID'));   
+    $gMessage->show($gL10n->get('SYS_LOSTPW_AREADY_LOGGED_ID'));
 }
 
 if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
 {
     try
     {
-    	// search for user with the email address that have a valid login and membership to a role
+        // search for user with the email address that have a valid login and membership to a role
         $sql = 'SELECT usr_id
                   FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
                   JOIN '. TBL_USER_DATA. ' as email
@@ -57,31 +57,31 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
                    AND mem_end    > \''.DATE_NOW.'\'
                    AND mem_usr_id = usr_id
                    AND usr_valid  = 1
-    			   AND LENGTH(usr_login_name) > 0 
-    			 GROUP BY usr_id';   
+                   AND LENGTH(usr_login_name) > 0
+                 GROUP BY usr_id';
         $result = $gDb->query($sql);
-    	$count  = $gDb->num_rows();
-    
-    	// show error if no user found or more than one user found
+        $count  = $gDb->num_rows();
+
+        // show error if no user found or more than one user found
         if($count == 0)
         {
-            $gMessage->show($gL10n->get('SYS_LOSTPW_EMAIL_ERROR', $_POST['recipient_email']));    
+            $gMessage->show($gL10n->get('SYS_LOSTPW_EMAIL_ERROR', $_POST['recipient_email']));
         }
-    	elseif($count > 1)
-    	{
-            $gMessage->show($gL10n->get('SYS_LOSTPW_SEVERAL_EMAIL', $_POST['recipient_email']));    
-    	}
-    
+        elseif($count > 1)
+        {
+            $gMessage->show($gL10n->get('SYS_LOSTPW_SEVERAL_EMAIL', $_POST['recipient_email']));
+        }
+
         $row  = $gDb->fetch_array($result);
         $user = new User($gDb, $gProfileFields, $row['usr_id']);
-    
-    	// create and save new password and activation id
+
+        // create and save new password and activation id
         $newPassword  = substr(md5(time()), 0, 8);
         $activationId = substr(md5(uniqid($user->getValue('EMAIL').time())), 0, 10);
 
         $user->setValue('usr_new_password', $newPassword);
         $user->setValue('usr_activation_code', $activationId);
-        
+
         $sysmail = new SystemMail($gDb);
         $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
         $sysmail->setVariable(1, $newPassword);
@@ -89,14 +89,14 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
         $sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user);
 
         $user->save();
-    
+
         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/login.php');
         $gMessage->show($gL10n->get('SYS_LOSTPW_SEND', $_POST['recipient_email']));
     }
     catch(AdmException $e)
     {
         $e->showHtml();
-    } 
+    }
 }
 else
 {

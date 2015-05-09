@@ -17,11 +17,11 @@
 
 class TableAnnouncement extends TableAccess
 {
-	/** Constuctor that will create an object of a recordset of the table adm_announcements. 
-	 *  If the id is set than the specific announcement will be loaded.
-	 *  @param $db Object of the class database. This should be the default object $gDb.
-	 *  @param $ann_id The recordset of the announcement with this id will be loaded. If id isn't set than an empty object of the table is created.
-	 */
+    /** Constuctor that will create an object of a recordset of the table adm_announcements. 
+     *  If the id is set than the specific announcement will be loaded.
+     *  @param $db Object of the class database. This should be the default object $gDb.
+     *  @param $ann_id The recordset of the announcement with this id will be loaded. If id isn't set than an empty object of the table is created.
+     */
     public function __construct(&$db, $ann_id = 0)
     {
         parent::__construct($db, TBL_ANNOUNCEMENTS, 'ann', $ann_id);
@@ -59,19 +59,19 @@ class TableAnnouncement extends TableAccess
     {
         if($columnName == 'ann_description')
         {
-			if(isset($this->dbColumns['ann_description']) == false)
-			{
-				$value = '';
-			}
+            if(isset($this->dbColumns['ann_description']) == false)
+            {
+                $value = '';
+            }
 
-			elseif($format == 'database')
-			{
-				$value = html_entity_decode(strStripTags($this->dbColumns['ann_description']), ENT_QUOTES, 'UTF-8');
-			}
-			else
-			{
-				$value = $this->dbColumns['ann_description'];
-			}
+            elseif($format == 'database')
+            {
+                $value = html_entity_decode(strStripTags($this->dbColumns['ann_description']), ENT_QUOTES, 'UTF-8');
+            }
+            else
+            {
+                $value = $this->dbColumns['ann_description'];
+            }
         }
         else
         {
@@ -81,13 +81,13 @@ class TableAnnouncement extends TableAccess
         return $value;
     }
 
-	/** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 
-	 *  a new record or if only an update is neccessary. The update statement will only update
-	 *  the changed columns. If the table has columns for creator or editor than these column
-	 *  with their timestamp will be updated.
-	 *  The current organization will be set per default.
-	 *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
-	 */
+    /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 
+     *  a new record or if only an update is neccessary. The update statement will only update
+     *  the changed columns. If the table has columns for creator or editor than these column
+     *  with their timestamp will be updated.
+     *  The current organization will be set per default.
+     *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     */
     public function save($updateFingerPrint = true)
     {
         global $gCurrentOrganization;

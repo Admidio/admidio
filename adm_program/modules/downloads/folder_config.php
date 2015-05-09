@@ -50,13 +50,13 @@ try
 }
 catch(AdmException $e)
 {
-	$e->showHtml();
+    $e->showHtml();
 }
 
 //Parentordner holen
 $parentRoleSet = null;
 
-if ($folder->getValue('fol_fol_id_parent')) 
+if ($folder->getValue('fol_fol_id_parent'))
 {
     try
     {
@@ -66,7 +66,7 @@ if ($folder->getValue('fol_fol_id_parent'))
     }
     catch(AdmException $e)
     {
-    	$e->showHtml();
+        $e->showHtml();
     }
 
     //Rollen des uebergeordneten Ordners holen
@@ -74,26 +74,26 @@ if ($folder->getValue('fol_fol_id_parent'))
 
 }
 
-if ($parentRoleSet == null) 
+if ($parentRoleSet == null)
 {
-	//wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
-	//alle aus der DB aus lesen
-	$sql_roles = 'SELECT *
-					 FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-					WHERE rol_valid  = 1
-					  AND rol_system = 0
-					  AND rol_cat_id = cat_id
-					  AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-					ORDER BY rol_name';
-	$result_roles = $gDb->query($sql_roles);
+    //wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
+    //alle aus der DB aus lesen
+    $sql_roles = 'SELECT *
+                     FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                    WHERE rol_valid  = 1
+                      AND rol_system = 0
+                      AND rol_cat_id = cat_id
+                      AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                    ORDER BY rol_name';
+    $result_roles = $gDb->query($sql_roles);
 
-	while($row_roles = $gDb->fetch_object($result_roles))
-	{
-		//Jede Rolle wird nun dem Array hinzugefuegt
-		$parentRoleSet[] = array(
-							'rol_id'        => $row_roles->rol_id,
-							'rol_name'      => $row_roles->rol_name);
-	}
+    while($row_roles = $gDb->fetch_object($result_roles))
+    {
+        //Jede Rolle wird nun dem Array hinzugefuegt
+        $parentRoleSet[] = array(
+                            'rol_id'        => $row_roles->rol_id,
+                            'rol_name'      => $row_roles->rol_name);
+    }
 }
 
 //aktuelles Rollenset des Ordners holen
@@ -174,11 +174,11 @@ $htmlRoleSelection = '
     <div class="col-sm-5 form-group">
         <label for="adm_denied_roles"><img class="admidio-icon-info" src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DOW_NO_ACCESS').'" title="'.$gL10n->get('DOW_NO_ACCESS').'" />'.$gL10n->get('DOW_NO_ACCESS').'</label>
         <select id="adm_denied_roles" name="DeniedRoles" class="form-control" multiple="multiple" size="8" style="max-width: 300px;">';
-        for($i=0; $i < count($parentRoleSet); $i++) 
+        for($i=0; $i < count($parentRoleSet); $i++)
         {
             $nextRole = $parentRoleSet[$i];
 
-            if ($roleSet == null || in_array($nextRole, $roleSet) == false) 
+            if ($roleSet == null || in_array($nextRole, $roleSet) == false)
             {
                 $htmlRoleSelection .= '<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>';
             }
@@ -191,7 +191,7 @@ $htmlRoleSelection = '
         <br /><br /><br />
         <a class="admidio-icon-link" href="javascript:removeRoles()"><img
             src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_REMOVE_ROLE').'" title="'.$gL10n->get('SYS_REMOVE_ROLE').'" /></a>
-        <a class="admidio-icon-link" href="javascript:addRoles()"><img 
+        <a class="admidio-icon-link" href="javascript:addRoles()"><img
             src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_ADD_ROLE').'" title="'.$gL10n->get('SYS_ADD_ROLE').'" /></a>
     </div>
     <div class="col-sm-5 form-group">

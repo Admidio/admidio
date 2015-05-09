@@ -15,117 +15,117 @@
  *              : or full URL with http or https protocol
  *      - $desc : (optional) long description of the menu item
  *
- *****************************************************************************/ 
+ *****************************************************************************/
 
 class Menu
 {
-	// constructor
-	public function __construct($id, $title)
-	{
-		global $g_root_path;
-		$this->id		= $id;
-		$this->title	= $title;
-		$this->items	= array();
-		$this->root_path= $g_root_path;
-	}
-	
-	private function mkItem($id, $link, $text, $icon, $desc='')
-	{
-		// add root path to link unless the full URL is given
-		if (preg_match('/^http(s?):\/\//', $link)==0)
-		{
-			$link = $this->root_path . $link;
-		}
-		// add THEME_PATH to images unless the full URL is given
-		if (preg_match('/^http(s?):\/\//', $icon)==0)
-		{
-			$icon = THEME_PATH . $icon;
-		}
-		return array('id'=>$id, 'link'=>$link, 'text'=>$text, 'icon'=>$icon, 'desc'=>$desc, 'subitems'=>array());
-	}
+    // constructor
+    public function __construct($id, $title)
+    {
+        global $g_root_path;
+        $this->id        = $id;
+        $this->title     = $title;
+        $this->items     = array();
+        $this->root_path = $g_root_path;
+    }
 
-	public function addItem($id, $link, $text, $icon, $desc='')
-	{
-		$this->items[$id] = $this->mkItem($id, $link, $text, $icon, $desc);
-	}
-	
-	public function addSubItem($parentId, $id, $link, $text)
-	{
-		// add root path to link unless the full URL is given
-		if (preg_match('/^http(s?):\/\//', $link)==0)
-		{
-			$link = $this->root_path . $link;
-		}
-		$this->items[$parentId]['subitems'][$id] = array('link'=>$link, 'text'=>$text);
-	}
-	
-	// gets the position of a given ID in the menu
-	public function getPosition($id)
-	{
-		$keys=array_keys($this->items);
-		$keyfound=array_keys($keys, $id);
-		if (count($keyfound)==1)
-		{
-			return $keyfound[0];
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	// inserts a new menu entry before the named position
-	public function insertItem($position, $id, $link, $text, $icon, $desc='')
-	{
-		if (!is_numeric($position))
-		{
-			return false;
-		}
-		else
-		{
-			$head = array_slice($this->items, 0, $position);
-			$insert=array($id=>$this->mkItem($id, $link, $text, $icon, $desc));
-			$tail = array_slice($this->items, $position);
-			$this->items = array_merge($head, $insert, $tail);
-			return true;
-		}
-	}
-	
+    private function mkItem($id, $link, $text, $icon, $desc='')
+    {
+        // add root path to link unless the full URL is given
+        if (preg_match('/^http(s?):\/\//', $link)==0)
+        {
+            $link = $this->root_path . $link;
+        }
+        // add THEME_PATH to images unless the full URL is given
+        if (preg_match('/^http(s?):\/\//', $icon)==0)
+        {
+            $icon = THEME_PATH . $icon;
+        }
+        return array('id'=>$id, 'link'=>$link, 'text'=>$text, 'icon'=>$icon, 'desc'=>$desc, 'subitems'=>array());
+    }
+
+    public function addItem($id, $link, $text, $icon, $desc='')
+    {
+        $this->items[$id] = $this->mkItem($id, $link, $text, $icon, $desc);
+    }
+
+    public function addSubItem($parentId, $id, $link, $text)
+    {
+        // add root path to link unless the full URL is given
+        if (preg_match('/^http(s?):\/\//', $link)==0)
+        {
+            $link = $this->root_path . $link;
+        }
+        $this->items[$parentId]['subitems'][$id] = array('link'=>$link, 'text'=>$text);
+    }
+
+    // gets the position of a given ID in the menu
+    public function getPosition($id)
+    {
+        $keys=array_keys($this->items);
+        $keyfound=array_keys($keys, $id);
+        if (count($keyfound)==1)
+        {
+            return $keyfound[0];
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    // inserts a new menu entry before the named position
+    public function insertItem($position, $id, $link, $text, $icon, $desc='')
+    {
+        if (!is_numeric($position))
+        {
+            return false;
+        }
+        else
+        {
+            $head = array_slice($this->items, 0, $position);
+            $insert=array($id=>$this->mkItem($id, $link, $text, $icon, $desc));
+            $tail = array_slice($this->items, $position);
+            $this->items = array_merge($head, $insert, $tail);
+            return true;
+        }
+    }
+
     /** Create the html menu from the internal array that must be filled before.
-     *  You have the option to create a simple menu with icon and link or 
+     *  You have the option to create a simple menu with icon and link or
      *  a more complex menu with submenu and description text.
-     *  @param $type         Create a @b simple menu as default. If you set the param to @b complex 
+     *  @param $type         Create a @b simple menu as default. If you set the param to @b complex
      *                       then you will create a menu with submenus and description
      *  @param $directOutput If set to @b true (default) the form html will be directly send
      *                       to the browser. If set to @b false the html will be returned.
      *  @return If $directOutput is set to @b false this method will return the html code of the form.
      */
-	public function show($type='simple', $directOutput = true)
-	{
+    public function show($type='simple', $directOutput = true)
+    {
         $html         = '';
         $cssMenuClass = '';
         $cssFontClass = '';
 
-		if ($type == 'complex')
-		{
-			$html .= '<h2 id="head_'.$this->id.'">'.$this->title.'</h2>';			// Title of the menu
+        if ($type == 'complex')
+        {
+            $html .= '<h2 id="head_'.$this->id.'">'.$this->title.'</h2>';            // Title of the menu
             $cssFontClass = ' h4';
-		}
-		else
-		{
-			$html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>
+        }
+        else
+        {
+            $html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>
             <div class="btn-group-vertical admidio-menu" role="group" id="menu_'.$this->id.'">';
-		}
-		
+        }
+
         // now create each menu item
-		foreach($this->items as $key => $value)
-		{
-			if ($type == 'complex')
-			{
+        foreach($this->items as $key => $value)
+        {
+            if ($type == 'complex')
+            {
                 $html .= '
                 <div class="media">
                     <div class="media-left">
-                        <a id="menu_'.$this->id.'_' .$this->items[$key]['id'].'" href="'.$this->items[$key]['link'].'"><img 
+                        <a id="menu_'.$this->id.'_' .$this->items[$key]['id'].'" href="'.$this->items[$key]['link'].'"><img
                             class="media-object" src="'.$this->items[$key]['icon'].'" alt="'.strip_tags($this->items[$key]['text']).'" /></a>
                     </div>
                     <div class="media-body">
@@ -143,27 +143,27 @@ class Menu
                             }
                             $html .= ' &#93;</div>';
                         }
-                
+
                 $html .= '
                         '.$this->items[$key]['desc'].'
                     </div>
                 </div>';
-			}
+            }
             else
             {
                 $html .= '
                 <a id="lmenu_'.$this->id.'_' .$this->items[$key]['id'].'" class="btn '.$cssFontClass.'" href="'.$this->items[$key]['link'].'"><img src="'.$this->items[$key]['icon'].'"
                     alt="'.strip_tags($this->items[$key]['text']).'" />'.$this->items[$key]['text'].'</a>';
             }
-		}
-    
-        if ($type != 'complex')
-        {
-            $html .= '</div>';												// End Wraps all menu items
         }
 
-		if (count($this->items) > 0)
-		{
+        if ($type != 'complex')
+        {
+            $html .= '</div>'; // End Wraps all menu items
+        }
+
+        if (count($this->items) > 0)
+        {
             if($directOutput)
             {
                 echo $html;
@@ -172,7 +172,7 @@ class Menu
             {
                 return $html;
             }
-		}
-	}	
+        }
+    }
 }
 ?>

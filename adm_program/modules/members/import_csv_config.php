@@ -64,16 +64,16 @@ if(isset($_SESSION['import_csv_request']))
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
     $form_values = $_SESSION['import_csv_request'];
     unset($_SESSION['import_csv_request']);
-	if(isset($form['first_row']) == false)
-	{
-		$form_values['first_row'] = 0;
-	}
+    if(isset($form['first_row']) == false)
+    {
+        $form_values['first_row'] = 0;
+    }
 }
 else
 {
-	$form_values['first_row'] = 1;
-	$form_values['import_coding']    = 'iso-8859-1';
-	$form_values['import_role_id']   = 0;
+    $form_values['first_row'] = 1;
+    $form_values['import_coding']    = 'iso-8859-1';
+    $form_values['import_role_id']   = 0;
 }
 
 // create html page object
@@ -131,30 +131,30 @@ $htmlFieldTable = '
                     $htmlFieldTable .= '</label></td>
                 <td>
                     <select class="form-control" size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: 90%;">';
-						if(isset($form_values['usf-'.$field->getValue('usf_id')]) && $form_values['usf-'. $field->getValue('usf_id')] > 0)
-						{
-							$htmlFieldTable .= '<option value=""></option>';
-						}
-						else
-						{
-							$htmlFieldTable .= '<option value="" selected="selected"></option>';
-						}
+                        if(isset($form_values['usf-'.$field->getValue('usf_id')]) && $form_values['usf-'. $field->getValue('usf_id')] > 0)
+                        {
+                            $htmlFieldTable .= '<option value=""></option>';
+                        }
+                        else
+                        {
+                            $htmlFieldTable .= '<option value="" selected="selected"></option>';
+                        }
 
                         // Alle Spalten aus der Datei in Combobox auflisten
                         foreach($arrayCsvColumns as $col_key => $col_value)
                         {
                             $col_value = trim(strip_tags(str_replace('"', '', $col_value)));
 
-							if(isset($form_values['usf-'. $field->getValue('usf_id')]) 
-							&& strlen($form_values['usf-'. $field->getValue('usf_id')]) > 0
-							&& $form_values['usf-'. $field->getValue('usf_id')] == $col_key)
-							{
-								$htmlFieldTable .= '<option value="'.$col_key.'" selected="selected">'.$col_value.'</option>';
-							}
-							else
-							{
-								$htmlFieldTable .= '<option value="'.$col_key.'">'.$col_value.'</option>';
-							}
+                            if(isset($form_values['usf-'. $field->getValue('usf_id')]) 
+                            && strlen($form_values['usf-'. $field->getValue('usf_id')]) > 0
+                            && $form_values['usf-'. $field->getValue('usf_id')] == $col_key)
+                            {
+                                $htmlFieldTable .= '<option value="'.$col_key.'" selected="selected">'.$col_value.'</option>';
+                            }
+                            else
+                            {
+                                $htmlFieldTable .= '<option value="'.$col_key.'">'.$col_value.'</option>';
+                            }
                         }
                     $htmlFieldTable .= '</select>
                 </td>

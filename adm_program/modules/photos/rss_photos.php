@@ -61,7 +61,7 @@ else
     $additionalTables = '
       LEFT JOIN '. TBL_USERS .' cre_username
         ON cre_username.usr_id = pho_usr_id_create ';
-} 
+}
 
 //read albums from database
 $sql = 'SELECT pho.*, '.$additionalFields.'
@@ -78,8 +78,8 @@ $photo_album = new TablePhotos($gDb);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // create RSS feed object with channel information
-$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline, 
-            $gCurrentOrganization->getValue('org_homepage'), 
+$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline,
+            $gCurrentOrganization->getValue('org_homepage'),
             $gL10n->get('PHO_RECENT_ALBUMS_OF_ORGA', $gCurrentOrganization->getValue('org_longname')),
             $gCurrentOrganization->getValue('org_longname'));
 
@@ -92,7 +92,7 @@ while ($row = $gDb->fetch_array($result))
 
     // set data for attributes of this entry
 
-    // read folder structure to put them together and write to title 
+    // read folder structure to put them together and write to title
     $parents = '';
     $pho_parent_id = $photo_album->getValue('pho_pho_id_parent');
 
@@ -115,7 +115,7 @@ while ($row = $gDb->fetch_array($result))
     $title   = $parents.$photo_album->getValue('pho_name');
     $link    = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='. $photo_album->getValue('pho_id');
     $author  = $row['create_name'];
-	$pubDate = date('r', strtotime($photo_album->getValue('pho_timestamp_create')));
+    $pubDate = date('r', strtotime($photo_album->getValue('pho_timestamp_create')));
 
     //Inhalt zusammensetzen
     $description = $gL10n->get('SYS_DATE').': '.$photo_album->getValue('pho_begin', $gPreferences['system_date']);
@@ -127,7 +127,7 @@ while ($row = $gDb->fetch_array($result))
     $description = $description. '<br /> '.$gL10n->get('PHO_PHOTOS').': '.$photo_album->countImages();
     $description = $description. '<br />'.$gL10n->get('PHO_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers');
 
-	// show the last five photos as examples
+    // show the last five photos as examples
     if($photo_album->getValue('pho_quantity') >0)
     {
         $description = $description. '<br /><br />'.$gL10n->get('SYS_PREVIEW').':<br />';
@@ -135,13 +135,13 @@ while ($row = $gDb->fetch_array($result))
         {
             $photoPath = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$photoNr.'.jpg';
 
-			// show only photo if that photo exists
+            // show only photo if that photo exists
             if (file_exists($photoPath))
             {
-                $description = $description. 
-					'<a href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.'"><img 
-					 src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.
-					 '&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=1" border="0" /></a>&nbsp;';
+                $description = $description.
+                    '<a href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.'"><img
+                     src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.
+                     '&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=1" border="0" /></a>&nbsp;';
             }
         }
     }

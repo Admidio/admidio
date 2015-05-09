@@ -28,8 +28,8 @@ $getDirection = admFuncVariableIsValid($_GET, 'direction', 'string', array('vali
 
 if ($gPreferences['enable_photo_module'] == 0)
 {
-	// das Modul ist deaktiviert
-	$gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // das Modul ist deaktiviert
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 //nur von eigentlicher OragHompage erreichbar
@@ -42,7 +42,7 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
 if (!$gCurrentUser->editPhotoRight())
 {
-	$gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
 }
 
 //Loeschen eines Thumbnails
@@ -54,7 +54,7 @@ function deleteThumbnail(&$photo_album, $pic_nr)
     {
         //Ordnerpfad zusammensetzen
         $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/thumbnails/'.$pic_nr.'.jpg';
-		
+        
         //Thumbnail loeschen
         if(file_exists($photo_path))
         {

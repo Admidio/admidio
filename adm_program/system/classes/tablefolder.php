@@ -25,15 +25,15 @@ class TableFolder extends TableAccess
 {
     protected $folderPath;
 
-	/** Constuctor that will create an object of a recordset of the table adm_folders. 
-	 *  If the id is set than the specific folder will be loaded.
-	 *  @param $db Object of the class database. This should be the default object $gDb.
-	 *  @param $folderId The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
-	 */
+    /** Constuctor that will create an object of a recordset of the table adm_folders.
+     *  If the id is set than the specific folder will be loaded.
+     *  @param $db Object of the class database. This should be the default object $gDb.
+     *  @param $folderId The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
+     */
     public function __construct(&$db, $folderId = 0)
     {
         parent::__construct($db, TBL_FOLDERS, 'fol', $folderId);
-        
+
         $this->folderPath = new Folder();
     }
 
@@ -54,15 +54,15 @@ class TableFolder extends TableAccess
         return $error;
     }
 
-	/** Deletes the selected record of the table and all references in other tables. 
-     *  Also all files, subfolders and the selected folder will be deleted in the file system. 
-	 *  After that the class will be initialize.
-	 *  @return @b true if no error occured
-	 */
+    /** Deletes the selected record of the table and all references in other tables.
+     *  Also all files, subfolders and the selected folder will be deleted in the file system.
+     *  After that the class will be initialize.
+     *  @return @b true if no error occured
+     */
     public function delete($folderId = 0)
     {
-		$returnCode = true;
-	
+        $returnCode = true;
+
         if ($folderId == 0)
         {
             $folderId = $this->getValue('fol_id');
@@ -73,8 +73,8 @@ class TableFolder extends TableAccess
             $folderPath = $this->getCompletePathOfFolder();
 
         }
-		
-		$this->db->startTransaction();
+
+        $this->db->startTransaction();
 
         //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
         $sql_subfolders = 'SELECT *
@@ -117,10 +117,10 @@ class TableFolder extends TableAccess
             $returnCode = parent::delete();
         }
 
-		$this->db->endTransaction();
-		return $returnCode;
+        $this->db->endTransaction();
+        return $returnCode;
     }
-	
+
     // Setzt das Lockedflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
     // und allen darin enthaltenen Unterordnern und Dateien rekursiv
     public function editLockedFlagOnFolder($locked_flag, $folderId = 0)
@@ -130,8 +130,8 @@ class TableFolder extends TableAccess
             $folderId = $this->getValue('fol_id');
             $this->setValue('fol_locked', $locked_flag);
         }
-		
-		$this->db->startTransaction();
+
+        $this->db->startTransaction();
 
         //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
         $sql_subfolders = 'SELECT *
@@ -156,10 +156,10 @@ class TableFolder extends TableAccess
                           SET fil_locked = \''.$locked_flag.'\'
                         WHERE fil_fol_id = '.$folderId;
         $this->db->query($sql_update);
-		
-		$this->db->endTransaction();
+
+        $this->db->endTransaction();
     }
-	
+
     // Setzt das Publicflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
     // und all seinen Unterordnern rekursiv
     public function editPublicFlagOnFolder($public_flag, $folderId = 0)
@@ -189,24 +189,24 @@ class TableFolder extends TableAccess
         $this->db->query($sql_update);
 
     }
-	
-	/** Reads the folder recordset from database table @b adm_folders and throws an
-	 *  AdmException if the user has no right to see the folder or the folder id doesn't exists.
-	 *  @param $folderId The id of the folder. If the id is 0 then the root folder will be shown.
-	 *  @return Returns @b true if everything is ok otherwise an AdmException is thrown.
-	 */
+
+    /** Reads the folder recordset from database table @b adm_folders and throws an
+     *  AdmException if the user has no right to see the folder or the folder id doesn't exists.
+     *  @param $folderId The id of the folder. If the id is 0 then the root folder will be shown.
+     *  @return Returns @b true if everything is ok otherwise an AdmException is thrown.
+     */
     public function getFolderForDownload($folderId)
     {
         global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
-		
-        if ($folderId > 0) 
+
+        if ($folderId > 0)
         {
             $condition = '     fol_id     = '.$folderId.'
                            AND fol_type   = \'DOWNLOAD\'
                            AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
             parent::readData($condition);
         }
-        else 
+        else
         {
             $condition = '     fol_name   = \'download\'
                            AND fol_type   = \'DOWNLOAD\'
@@ -230,7 +230,7 @@ class TableFolder extends TableAccess
             {
                 //Wenn der Ordner nicht public ist und der Benutzer nicht eingeloggt ist, bekommt er nix zu sehen..
                 $this->clear();
-				throw new AdmException('DOW_FOLDER_NO_RIGHTS');
+                throw new AdmException('DOW_FOLDER_NO_RIGHTS');
             }
             elseif (!$gCurrentUser->editDownloadRight() && !$this->getValue('fol_public'))
             {
@@ -251,17 +251,17 @@ class TableFolder extends TableAccess
                 if ($row_count == 0)
                 {
                     $this->clear();
-					throw new AdmException('DOW_FOLDER_NO_RIGHTS');
+                    throw new AdmException('DOW_FOLDER_NO_RIGHTS');
                 }
 
-				return true;
+                return true;
             }
-			else
-			{
-				return true;
-			}
+            else
+            {
+                return true;
+            }
         }
-		throw new AdmException('DOW_FOLDER_NOT_FOUND', $folderId);
+        throw new AdmException('DOW_FOLDER_NOT_FOUND', $folderId);
     }
 
 
@@ -330,20 +330,20 @@ class TableFolder extends TableAccess
             }
 
             //Jetzt noch pruefen ob der Ordner physikalisch vorhanden ist
-            if (file_exists(SERVER_PATH. $row_folders->fol_path. '/'. $row_folders->fol_name)) 
+            if (file_exists(SERVER_PATH. $row_folders->fol_path. '/'. $row_folders->fol_name))
             {
                 $folderExists = true;
             }
-            else 
+            else
             {
                 $folderExists = false;
 
-                if ($gCurrentUser->editDownloadRight()) 
+                if ($gCurrentUser->editDownloadRight())
                 {
                     //falls der Ordner physikalisch nicht existiert wird er nur im Falle von AdminRechten dem Array hinzugefuegt
                     $addToArray = true;
                 }
-                else 
+                else
                 {
                     $addToArray = false;
                 }
@@ -540,7 +540,7 @@ class TableFolder extends TableAccess
                 $rootFolderId = $rootFolderRow->fol_id;
 
                 $navigationPrefix = '
-                <li><a class="btn" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $rootFolderRow->fol_id. '"><img 
+                <li><a class="btn" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $rootFolderRow->fol_id. '"><img
                     src="'.THEME_PATH.'/icons/application_view_list.png" alt="Downloads" />'.$gL10n->get('DOW_DOWNLOADS').'</a></li>';
 
                 $currentNavigation = $this->getNavigationForDownload($parentId, $currentNavigation);
@@ -560,8 +560,8 @@ class TableFolder extends TableAccess
             $result_currentFolder = $this->db->query($sql_currentFolder);
             $currentFolderRow = $this->db->fetch_object($result_currentFolder);
 
-            if ($currentFolderRow->fol_fol_id_parent) 
-			{
+            if ($currentFolderRow->fol_fol_id_parent)
+            {
                 $currentNavigation = '<li><a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='.
                                        $currentFolderRow->fol_id. '">'. $currentFolderRow->fol_name. '</a></li>'. $currentNavigation;
 
@@ -569,14 +569,14 @@ class TableFolder extends TableAccess
                 //naechster Aufruf mit ParentFolder
                 return $this->getNavigationForDownload($currentFolderRow->fol_fol_id_parent, $currentNavigation);
             }
-            else 
-			{
+            else
+            {
                 return $currentNavigation;
             }
         }
 
-        if ($originalCall) 
-		{
+        if ($originalCall)
+        {
             $link = '
             <ol class="breadcrumb">'.
                 $navigationPrefix.
@@ -619,14 +619,14 @@ class TableFolder extends TableAccess
      *                 For text columns the format can be @b database that would return the original database value without any transformations
      *  @return Returns the value of the database column.
      *          If the value was manipulated before with @b setValue than the manipulated value is returned.
-     */ 
+     */
     public function getValue($columnName, $format = '')
     {
         $value = parent::getValue($columnName, $format);
-        
+
         if($columnName == 'fol_name')
         {
-            // Konvertiert HTML-Auszeichnungen zurück in Buchstaben 
+            // Konvertiert HTML-Auszeichnungen zurück in Buchstaben
             $value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
         }
         return $value;
@@ -636,14 +636,14 @@ class TableFolder extends TableAccess
     //und sorgt dafür das bei allen Unterordnern der Pfad angepasst wird
     public function rename($newName, $newPath, $folderId = 0)
     {
-		if ($folderId == 0)
-		{
-			$folderId = $this->getValue('fol_id');
-			$this->setValue('fol_name', $newName);
-			$this->save();
-		}
+        if ($folderId == 0)
+        {
+            $folderId = $this->getValue('fol_id');
+            $this->setValue('fol_name', $newName);
+            $this->save();
+        }
 
-		$this->db->startTransaction();
+        $this->db->startTransaction();
 
         //Den neuen Pfad in der DB setzen fuer die aktuelle folder_id...
         $sql_update = 'UPDATE '. TBL_FOLDERS. '
@@ -664,16 +664,16 @@ class TableFolder extends TableAccess
             $this->rename($row_subfolders->fol_name, $newPath. '/'. $newName, $row_subfolders->fol_id);
         }
 
-		$this->db->endTransaction();
+        $this->db->endTransaction();
     }
-	
-	/** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 
-	 *  a new record or if only an update is neccessary. The update statement will only update
-	 *  the changed columns. If the table has columns for creator or editor than these column
-	 *  with their timestamp will be updated.
-	 *  For new records the user, organization and timestamp will be set per default.
-	 *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
-	 */
+
+    /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     *  a new record or if only an update is neccessary. The update statement will only update
+     *  the changed columns. If the table has columns for creator or editor than these column
+     *  with their timestamp will be updated.
+     *  For new records the user, organization and timestamp will be set per default.
+     *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     */
     public function save($updateFingerPrint = true)
     {
         global $gCurrentOrganization, $gCurrentUser;
@@ -686,7 +686,7 @@ class TableFolder extends TableAccess
         }
         parent::save($updateFingerPrint);
     }
-	
+
     // Setzt Berechtigungen fuer Rollen auf einer vorhandenen Ordnerinstanz
     // und all seinen Unterordnern rekursiv
     public function setRolesOnFolder($rolesArray, $folderId = 0)
@@ -696,8 +696,8 @@ class TableFolder extends TableAccess
             $folderId = $this->getValue('fol_id');
         }
 
-		$this->db->startTransaction();
-	
+        $this->db->startTransaction();
+
         //Alle Unterordner auslesen, die im uebergebenen Ordner enthalten sind
         $sql_subfolders = 'SELECT *
                               FROM '. TBL_FOLDERS. '
@@ -724,7 +724,7 @@ class TableFolder extends TableAccess
             }
         }
 
-		$this->db->endTransaction();
+        $this->db->endTransaction();
     }
 }
 ?>

@@ -117,11 +117,11 @@ if ($getMode == 1 || $getMode == 3)
     // Der Inhalt des Formulars wird nun in der Session gespeichert...
     $_SESSION['guestbook_entry_request'] = $_POST;
 
-	// if login then fill name with login user
-	if($gCurrentUser->getValue('usr_id') > 0)
-	{
-		$_POST['gbo_name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
-	}
+    // if login then fill name with login user
+    if($gCurrentUser->getValue('usr_id') > 0)
+    {
+        $_POST['gbo_name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
+    }
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
@@ -130,7 +130,7 @@ if ($getMode == 1 || $getMode == 3)
         if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
         {
             if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-			elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+            elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
         }
     }
 
@@ -143,17 +143,17 @@ if ($getMode == 1 || $getMode == 3)
         if(strpos($key, 'gbo_') === 0)
         {
             if(!$guestbook->setValue($key, $value))
-			{
-				// Daten wurden nicht uebernommen, Hinweis ausgeben
-				if($key == 'gbo_email')
-				{
-					$gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
-				}
-				elseif($key == 'gbo_homepage')
-				{
-					$gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE')));
-				}
-			}
+            {
+                // Daten wurden nicht uebernommen, Hinweis ausgeben
+                if($key == 'gbo_email')
+                {
+                    $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
+                }
+                elseif($key == 'gbo_homepage')
+                {
+                    $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE')));
+                }
+            }
         }
     }
 
@@ -190,7 +190,7 @@ if ($getMode == 1 || $getMode == 3)
             }
         }
         
-    	// Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
+        // Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
         if(($gPreferences['enable_guestbook_moderation'] == 1 && $gValidLogin == false)
         || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
         {
@@ -204,31 +204,31 @@ if ($getMode == 1 || $getMode == 3)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
-		
-		if($return_code == 0)
-		{	
-			// Benachrichtigungs-Email für neue Einträge
-			if(!$gValidLogin)
-			{
-				$gbo_name  = $_POST['gbo_name'];
-				$gbo_email = $_POST['gbo_email'];
-				$gbo_text  = $_POST['gbo_text'];
-			}
-			else
-			{
-				$gbo_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
-				$gbo_email = $gCurrentUser->getValue('EMAIL');
-				$gbo_text  = $_POST['gbo_text'];
-			}
-			$sender_name = $gbo_name;
-			if(!strValidCharacters($gbo_email, 'email'))
-			{
-				$gbo_email = $gPreferences['email_administrator'];
-				$sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
-			}         
+        
+        if($return_code == 0)
+        {    
+            // Benachrichtigungs-Email für neue Einträge
+            if(!$gValidLogin)
+            {
+                $gbo_name  = $_POST['gbo_name'];
+                $gbo_email = $_POST['gbo_email'];
+                $gbo_text  = $_POST['gbo_text'];
+            }
+            else
+            {
+                $gbo_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+                $gbo_email = $gCurrentUser->getValue('EMAIL');
+                $gbo_text  = $_POST['gbo_text'];
+            }
+            $sender_name = $gbo_name;
+            if(!strValidCharacters($gbo_email, 'email'))
+            {
+                $gbo_email = $gPreferences['email_administrator'];
+                $sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
+            }         
             $notification = new Email();
             $notification->adminNotfication($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gbo_text, $gbo_name, date($gPreferences['system_date'], time())), $sender_name, $gbo_email);
-		}
+        }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
         unset($_SESSION['guestbook_entry_request']);
@@ -302,11 +302,11 @@ elseif($getMode == 4 || $getMode == 8)
     // Der Inhalt des Formulars wird nun in der Session gespeichert...
     $_SESSION['guestbook_comment_request'] = $_POST;
 
-	// if login then fill name with login user
-	if($gCurrentUser->getValue('usr_id') > 0)
-	{
-		$_POST['gbc_name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
-	}
+    // if login then fill name with login user
+    if($gCurrentUser->getValue('usr_id') > 0)
+    {
+        $_POST['gbc_name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
+    }
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
@@ -315,10 +315,10 @@ elseif($getMode == 4 || $getMode == 8)
         if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
         {
             if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-			elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+            elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
         }
     }
-	
+    
     // make html in description secure
     $_POST['gbc_text'] = admFuncVariableIsValid($_POST, 'gbc_text', 'html');
 
@@ -328,13 +328,13 @@ elseif($getMode == 4 || $getMode == 8)
         if(strpos($key, 'gbc_') === 0)
         {
             if(!$guestbook_comment->setValue($key, $value))
-			{
-				// Daten wurden nicht uebernommen, Hinweis ausgeben
-				if($key == 'gbc_email')
-				{
-					$gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
-				}
-			}
+            {
+                // Daten wurden nicht uebernommen, Hinweis ausgeben
+                if($key == 'gbc_email')
+                {
+                    $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
+                }
+            }
         }
     }
     
@@ -375,7 +375,7 @@ elseif($getMode == 4 || $getMode == 8)
             }
         }
         
-    	// Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
+        // Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
         if(($gPreferences['enable_guestbook_moderation'] == 1 && $gValidLogin == false)
         || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
         {
@@ -389,31 +389,31 @@ elseif($getMode == 4 || $getMode == 8)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
-		
-		if($return_code == 0)
-		{	
-			// Benachrichtigungs-Email für neue Einträge
-			if(!$gValidLogin)
-			{
-				$gbc_name  = $guestbook_comment->getValue('gbc_name');
-				$gbc_email = $guestbook_comment->getValue('gbc_email');
-			}
-			else
-			{
-				$gbc_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
-				$gbc_email = $gCurrentUser->getValue('EMAIL');
-			}
-			$sender_name = $gbc_name;
-			if(strlen($gbc_email) == 0)
-			{
-				$gbc_email = $gPreferences['email_administrator'];
-				$sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
-			}
+        
+        if($return_code == 0)
+        {    
+            // Benachrichtigungs-Email für neue Einträge
+            if(!$gValidLogin)
+            {
+                $gbc_name  = $guestbook_comment->getValue('gbc_name');
+                $gbc_email = $guestbook_comment->getValue('gbc_email');
+            }
+            else
+            {
+                $gbc_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+                $gbc_email = $gCurrentUser->getValue('EMAIL');
+            }
+            $sender_name = $gbc_name;
+            if(strlen($gbc_email) == 0)
+            {
+                $gbc_email = $gPreferences['email_administrator'];
+                $sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
+            }
             $message = $gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $guestbook_comment->getValue('gbc_text'), $gbc_name, date($gPreferences['system_date'], time()));           
             $notification = new Email();
             $notification->adminNotfication($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message, $sender_name, $gbc_email);    
 
-		}
+        }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
         unset($_SESSION['guestbook_comment_request']);

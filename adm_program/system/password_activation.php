@@ -11,7 +11,7 @@
  * aid      ..  Activation id for confirmation of new password
  * usr_id   ..  Id of the user who wants a new password
  *****************************************************************************/
- 
+
 require_once('common.php');
 
 // Initialize and check the parameters
@@ -28,16 +28,16 @@ $user = new TableUsers($gDb, $getUserId);
 
 if($user->getValue('usr_activation_code') == $getActivationId)
 {
-	// das neue Passwort aktivieren
-	$user->setValue('usr_password', $user->getValue('usr_new_password'));
-	$user->setValue('usr_new_password', '');
-	$user->setValue('usr_activation_code', '');
-	$user->save();
-	
-	$gMessage->setForwardUrl($g_root_path.'/adm_program/system/login.php', 2000);
-	$gMessage->show($gL10n->get('SYS_PWACT_PW_SAVED'));
+    // das neue Passwort aktivieren
+    $user->setValue('usr_password', $user->getValue('usr_new_password'));
+    $user->setValue('usr_new_password', '');
+    $user->setValue('usr_activation_code', '');
+    $user->save();
+
+    $gMessage->setForwardUrl($g_root_path.'/adm_program/system/login.php', 2000);
+    $gMessage->show($gL10n->get('SYS_PWACT_PW_SAVED'));
 }
 else
 {
-	$gMessage->show($gL10n->get('SYS_PWACT_CODE_INVALID'));
+    $gMessage->show($gL10n->get('SYS_PWACT_CODE_INVALID'));
 }

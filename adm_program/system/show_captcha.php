@@ -17,8 +17,8 @@ require('common.php');
 // creates a small picture that shows random characters
 if($gPreferences['captcha_type'] == 'pic')
 {
-	$captcha = new Captcha();
-	$captcha->getCaptcha();
+    $captcha = new Captcha();
+    $captcha->getCaptcha();
 }
 
 ?>

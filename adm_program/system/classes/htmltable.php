@@ -1,12 +1,12 @@
-<?php 
+<?php
 /*****************************************************************************/
 /** @class HtmlTable
  *  @brief Creates an Admidio specific table with special methods
  *
  *  This class inherits the common HtmlTableBasic class and extends their elements
- *  with custom Admidio table methods. The class should be used to create the 
+ *  with custom Admidio table methods. The class should be used to create the
  *  html part of all Admidio tables. It has simple methods to add complete rows with
- *  their column values to the table. It's also possible to add the jQuery plugin Datatables 
+ *  their column values to the table. It's also possible to add the jQuery plugin Datatables
  *  to each table. Therefore you only need to set a flag when creating the object.
  *  @par Examples
  *  @code // create a simple table with one input field and a button
@@ -46,9 +46,9 @@ class HtmlTable extends HtmlTableBasic
 
     /** Constructor creates the table element
      *  @param $id         Id of the table
-     *  @param $htmlPage   Optional a HtmlPage object that will be used to add javascript code 
+     *  @param $htmlPage   Optional a HtmlPage object that will be used to add javascript code
      *                     or files to the html output page.
-     *  @param $hoverRows  If set to @b true then the active selected row will be marked with 
+     *  @param $hoverRows  If set to @b true then the active selected row will be marked with
      *                     special css code
      *  @param $datatables If set to @b true then the jQuery plugin Datatables will be
      *                     used to create the table. Then column sort, search within the
@@ -64,14 +64,14 @@ class HtmlTable extends HtmlTableBasic
         {
             $class = 'table';
         }
-        
+
         if($hoverRows == true)
         {
             $class .= ' table-hover';
         }
-        
+
         parent::__construct($id, $class);
-        
+
         // initialize class member parameters
         $this->messageNoRowsFound = $gL10n->get('SYS_NO_DATA_FOUND');
         $this->id            = $id;
@@ -83,7 +83,7 @@ class HtmlTable extends HtmlTableBasic
         $this->orderColumns  = array();
         $this->datatablesColumnDefs    = array();
 
-        // when using DataTables we must set the width attribute so that all columns will change 
+        // when using DataTables we must set the width attribute so that all columns will change
         // dynamic their width if the browser window size change.
         if($datatables == true)
         {
@@ -91,7 +91,7 @@ class HtmlTable extends HtmlTableBasic
 
             $this->datatablesInitParameters[] = '"language": {"url": "'.$g_root_path.'/adm_program/libs/datatables/language/datatables.'.$gL10n->getLanguageIsoCode().'.lang"}';
         }
-        
+
         if(is_object($htmlPage))
         {
             $this->htmlPage =& $htmlPage;
@@ -116,18 +116,18 @@ class HtmlTable extends HtmlTableBasic
 
         $this->addTableHeader();
         $this->addRow(null, $arrAttributes, 'th');
-        
+
         // now add each column to the row
         foreach($arrayColumnValues as $key => $value)
         {
             $columnAttributes = array();
-            
+
             // set colspan if parameters are set
             if(($key + 1) == $startColspan && $colspan > 0)
             {
                 $columnAttributes['colspan'] = $colspan;
             }
-            
+
             if(is_array($this->columnAlign))
             {
                 $columnAttributes['style'] = 'text-align: '.$this->columnAlign[$key];
@@ -136,7 +136,7 @@ class HtmlTable extends HtmlTableBasic
             // now add column to row
             $this->addColumn($value, $columnAttributes, 'th');
         }
-        
+
         $this->columnCount = count($arrayColumnValues);
     }
 
@@ -155,26 +155,26 @@ class HtmlTable extends HtmlTableBasic
         {
             $arrAttributes['id'] = $id;
         }
-        
+
         // if body area wasn't defined until now then do it
         if($this->tbody == -1)
         {
             $this->addTableBody();
         }
-        
+
         $this->addRow(null, $arrAttributes);
-        
+
         // now add each column to the row
         foreach($arrayColumnValues as $key => $value)
         {
             $columnAttributes = array();
-            
+
             // set colspan if parameters are set
             if(($key + 1) == $startColspan && $colspan > 0)
             {
                 $columnAttributes['colspan'] = $colspan;
             }
-            
+
             if(is_array($this->columnAlign))
             {
                 $columnAttributes['style'] = 'text-align: '.$this->columnAlign[$key];
@@ -183,13 +183,13 @@ class HtmlTable extends HtmlTableBasic
             // now add column to row
             $this->addColumn($value, $columnAttributes, 'td');
         }
-        
+
         $this->columnCount = count($arrayColumnValues);
     }
-    
-    /** Disable the sort function for some columns. This is useful if a sorting of the column doesn't make sense 
+
+    /** Disable the sort function for some columns. This is useful if a sorting of the column doesn't make sense
      *  because it only show function icons or something equal.
-     *  @param $arrayColumnsSort An array which contain the columns where the sort should be disabled. 
+     *  @param $arrayColumnsSort An array which contain the columns where the sort should be disabled.
      *                           The columns of the table starts with 1 (not 0).
      */
     public function disableDatatablesColumnsSort($arrayColumnsSort)
@@ -206,8 +206,8 @@ class HtmlTable extends HtmlTableBasic
         {
             $this->datatablesColumnDefs[] = '{ "orderable":false, "targets":'.($arrayColumnsSort-1).' }';
         }
-    }  
-    
+    }
+
     /** Return the number of the column which should be grouped when using the
      *  jQuery plugin DataTables.
      *  @return Return the number of the column.
@@ -216,7 +216,7 @@ class HtmlTable extends HtmlTableBasic
     {
         return $this->groupedColumn;
     }
-        
+
     /** Set the align for each column of the current table. This method must be called
      *  before a row is added to the table. Each entry of the array represents a column.
      *  @param $arrayColumnAlign An array which contains the align for each column of the table.
@@ -225,10 +225,10 @@ class HtmlTable extends HtmlTableBasic
     public function setColumnAlignByArray($arrayColumnAlign)
     {
         $this->columnAlign = $arrayColumnAlign;
-    } 
-    
+    }
+
     /** This method will set for a selected column other columns that should be used to order the datatables.
-     *  For example if you will click the name column than you could set the columns lastname and firstname 
+     *  For example if you will click the name column than you could set the columns lastname and firstname
      *  as alternative order columns and the table will be ordered by lastname and firstname.
      *  @param $selectedColumn    This is the column the user clicked to be sorted.
      *  @param $arrayOrderColumns This are the columns the table will internal be sorted. If you have more
@@ -251,7 +251,7 @@ class HtmlTable extends HtmlTableBasic
             $this->datatablesColumnDefs[] = '{ "targets": ['.($selectedColumn-1).'], "orderData": ['.($arrayOrderColumns-1).'] }';
         }
     }
-    
+
     /** Hide some columns for the user. This is useful if you want to use the column for ordering but
      *  won't show the content if this column.
      *  @param $arrayColumnsHide An array which contain the columns that should be hidden. The columns
@@ -271,26 +271,26 @@ class HtmlTable extends HtmlTableBasic
         {
             $this->datatablesColumnDefs[] = '{ "visible":false, "targets":'.($arrayColumnsHide-1).' }';
         }
-    }  
-    
+    }
+
     /** Specify a column that should be used to group data. Everytime the value of this column
      *  changed then a new subheader row will be created with the name of the new value.
-     *  @param $columnNumber Number of the column that should be grouped. The first column 
+     *  @param $columnNumber Number of the column that should be grouped. The first column
      *                       starts with 1. The columns were set with the method @b addRowByArray.
      */
     public function setDatatablesGroupColumn($columnNumber)
     {
         $this->groupedColumn = $columnNumber - 1;
-        
-        // grouped column must be first order column  
+
+        // grouped column must be first order column
         array_unshift($this->orderColumns, '['.$this->groupedColumn.', "asc"]');
         // hide the grouped column
         $this->datatablesColumnDefs[] = '{ "visible":false, "targets":'.$this->groupedColumn.' }';
     }
-    
+
     /** Set the order of the columns which should be used to sort the rows.
      *  @param $arrayOrderColumns An array which could contain the columns that should be
-     *                            ascending ordered or contain arrays where each array 
+     *                            ascending ordered or contain arrays where each array
      *                            contain the column and the sorting 'asc' or 'desc'. The columns
      *                            of the table starts with 1 (not 0).
      *                            Optional this could also only be a numeric value than the
@@ -320,7 +320,7 @@ class HtmlTable extends HtmlTableBasic
             }
         }
     }
-    
+
     /** Set the number of rows that should be displayed on one page if the jQuery plugin
      *  DataTables is used.
      *  @param $numberRows Number of rows that should be displayed on one page.
@@ -329,16 +329,16 @@ class HtmlTable extends HtmlTableBasic
     {
         $this->rowsPerPage = $numberRows;
     }
-    
+
     /** Set a text id of the translation files that should be shown if table has no rows.
      *  @param $messageId Text id of the translation file.
-     *  @param $messageType As @b default the text will be shown. If @b warning or @b error 
+     *  @param $messageType As @b default the text will be shown. If @b warning or @b error
      *                      is set then a box in yellow or red with the message will be shown.
      */
     public function setMessageIfNoRowsFound($messageId, $messageType = 'default')
     {
         global $gL10n;
-        
+
         switch($messageType)
         {
             case 'default':
@@ -352,14 +352,14 @@ class HtmlTable extends HtmlTableBasic
                 break;
         }
     }
-    
-	/** This method send the whole html code of the table to the browser. If the jQuery plugin DataTables
-	 *  is activated then the javascript for that plugin will be added. Call this method if you
-	 *  have finished your form layout. If table has no rows then a message will be shown.
+
+    /** This method send the whole html code of the table to the browser. If the jQuery plugin DataTables
+     *  is activated then the javascript for that plugin will be added. Call this method if you
+     *  have finished your form layout. If table has no rows then a message will be shown.
      *  @param $directOutput If set to @b true (default) the table html will be directly send
      *                       to the browser. If set to @b false the html will be returned.
      *  @return If $directOutput is set to @b false this method will return the html code of the table.
-	 */
+     */
     public function show($directOutput = true)
     {
         global $g_root_path, $gDebug, $gPreferences, $gL10n;
@@ -383,7 +383,7 @@ class HtmlTable extends HtmlTableBasic
             {
                 $javascriptGroup = '';
                 $javascriptGroupFunction = '';
-                
+
                 if($gDebug)
                 {
                     $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.dataTables.js');
@@ -392,11 +392,11 @@ class HtmlTable extends HtmlTableBasic
                 }
                 else
                 {
-                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.datatables.min.js');                    
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.datatables.min.js');
                     $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/datatables.bootstrap.min.js');
                     $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/moment/moment.min.js');
                 }
-                
+
                 $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/moment/datetime-moment.js');
                 $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/datatables/css/datatables.bootstrap.css');
 
@@ -410,7 +410,7 @@ class HtmlTable extends HtmlTableBasic
                     // disable page length menu
                     $this->datatablesInitParameters[] = '"paging": false';
                 }
-                
+
                 // set order columns
                 $this->datatablesInitParameters[] = '"order": ['.implode(',', $this->orderColumns).']';
 
@@ -421,13 +421,13 @@ class HtmlTable extends HtmlTableBasic
                             var api  = this.api();
                             var rows = api.rows( {page:\'current\'} ).nodes();
                             var last = null;
-                 
+
                             api.column('.$this->groupedColumn.', {page:\'current\'} ).data().each( function ( group, i ) {
                                 if ( last !== group ) {
                                     $(rows).eq( i ).before(
                                         \'<tr class="admidio-group-heading"><td colspan="'.$this->columnCount.'">\'+group+\'</td></tr>\'
                                     );
-                 
+
                                     last = group;
                                 }
                             } );
@@ -442,7 +442,7 @@ class HtmlTable extends HtmlTableBasic
                             else {
                                 table.order( [ '.$this->groupedColumn.', "asc" ] ).draw();
                             }
-                        } );';                
+                        } );';
                 }
 
                 // if columnDefs were defined then create a comma separated string with all elements of the array
@@ -451,18 +451,18 @@ class HtmlTable extends HtmlTableBasic
                     $this->datatablesInitParameters[] = '"columnDefs": ['.implode(',', $this->datatablesColumnDefs).']';
                 }
 
-                
+
                 $this->htmlPage->addJavascript('
                     $.fn.dataTable.moment(formatPhpToMoment("'.$gPreferences['system_date'].'"));
                     $.fn.dataTable.moment(formatPhpToMoment("'.$gPreferences['system_date'].' '.$gPreferences['system_time'].'"));
-                    
+
                     var admidioTable = $("#'.$this->id.'").DataTable( {'.
                         implode(',', $this->datatablesInitParameters).
                         $javascriptGroup.'
                     });
                     '.$javascriptGroupFunction, true);
             }
-        
+
             if($directOutput)
             {
                 echo $this->getHtmlTable();

@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Content for modal windows 
+ * Content for modal windows
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -43,7 +43,7 @@ switch ($get_type)
         break;
     case 'cat':
         $url  = 'categories_function.php?cat_id='.$get_database_id.'&mode=2&type='.$get_database_id_2;
-        
+
         // get special message for calendars
         if($get_database_id_2 == 'DAT')
         {
@@ -51,7 +51,7 @@ switch ($get_type)
         }
         else
         {
-    		$text = 'CAT_DELETE_CATEGORY';
+            $text = 'CAT_DELETE_CATEGORY';
         }
         break;
     case 'dat':
@@ -65,15 +65,15 @@ switch ($get_type)
         break;
     case 'gbo':
         $url = 'guestbook_function.php?mode=2&id='.$get_database_id;
-        break;   
+        break;
     case 'gbc':
         $url = 'guestbook_function.php?mode=5&id='.$get_database_id;
         $callbackSuccess = '
             $("#gbc_'.$get_database_id.'").remove();
             $("#comments_'.$get_database_id_2.' > br").remove();
-            
+
             var count = 0;
-            $("#comments_'.$get_database_id_2.' > .groupBox").each( function(index, value) { 
+            $("#comments_'.$get_database_id_2.' > .groupBox").each( function(index, value) {
                 count++;
             });
 
@@ -85,9 +85,9 @@ switch ($get_type)
                 var msgOrg = "'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY').'";
                 var msg = msgOrg.replace("%VAR1%",count);
                 $("#admCommentsInvisible_'.$get_database_id_2.' btn > a:nth-child(2)").html(msg);
-            }   
+            }
             ';
-        break; 
+        break;
     case 'lnk':
         $url = 'links_function.php?mode=2&lnk_id='.$get_database_id;
         break;
@@ -112,29 +112,29 @@ switch ($get_type)
     case 'pro_role':
         $url = 'profile_function.php?mode=2&mem_id='.$get_database_id;
         $callbackSuccess = 'if(profileJS) {
-						profileJS.formerRoleCount++;
-						profileJS.reloadFormerRoleMemberships();
-					};';
+                        profileJS.formerRoleCount++;
+                        profileJS.reloadFormerRoleMemberships();
+                    };';
         $text = 'ROL_MEMBERSHIP_DEL';
         break;
     case 'pro_future':
         $url = 'profile_function.php?mode=3&mem_id='.$get_database_id;
         $callbackSuccess = 'if(profileJS) {
-						profileJS.futureRoleCount--;
-						if(profileJS.futureRoleCount == 0) {
-							$("#profile_future_roles_box").fadeOut("slow");
-						}
-					};';
+                        profileJS.futureRoleCount--;
+                        if(profileJS.futureRoleCount == 0) {
+                            $("#profile_future_roles_box").fadeOut("slow");
+                        }
+                    };';
         $text = 'ROL_LINK_MEMBERSHIP_DEL';
         break;
     case 'pro_former':
         $url = 'profile_function.php?mode=3&mem_id='.$get_database_id;
         $callbackSuccess = 'if(profileJS) {
-						profileJS.formerRoleCount--;
-						if(profileJS.formerRoleCount == 0) {
-							$("#profile_former_roles_box").fadeOut("slow");
-						}
-					};';
+                        profileJS.formerRoleCount--;
+                        if(profileJS.formerRoleCount == 0) {
+                            $("#profile_former_roles_box").fadeOut("slow");
+                        }
+                    };';
         $text = 'ROL_LINK_MEMBERSHIP_DEL';
         break;
     case 'room':
@@ -143,9 +143,9 @@ switch ($get_type)
     case 'usf':
         $url = 'fields_function.php?mode=2&usf_id='.$get_database_id;
         break;
-	case 'msg':
+    case 'msg':
         $url = 'messages.php?msg_id='.$get_database_id;
-		$text = 'MSG_DELETE_DESC';
+        $text = 'MSG_DELETE_DESC';
         break;
     default:
         $url = '';
@@ -158,7 +158,7 @@ if(strlen($url) == 0)
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-header('Content-type: text/html; charset=utf-8'); 
+header('Content-type: text/html; charset=utf-8');
 
 echo '
 <div class="modal-header">
@@ -170,11 +170,11 @@ echo '
     <div id="message_text" class="col-xs-10">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
 </div>
 <div class="modal-footer">
-        <button id="btn_yes" class="btn btn-default" type="button" onclick="javascript:callUrlHideElement(\''.$get_element_id.'\', \''.$url.'\')"><img src="'. THEME_PATH. '/icons/ok.png" 
+        <button id="btn_yes" class="btn btn-default" type="button" onclick="javascript:callUrlHideElement(\''.$get_element_id.'\', \''.$url.'\')"><img src="'. THEME_PATH. '/icons/ok.png"
             alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;</button>
-        <button id="btn_no" class="btn btn-default" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/error.png" 
+        <button id="btn_no" class="btn btn-default" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/error.png"
             alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'</button>
-        <button id="btn_close" class="btn btn-default hidden" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/close.png" 
+        <button id="btn_close" class="btn btn-default hidden" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/close.png"
             alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</button>
 </div>';
 ?>

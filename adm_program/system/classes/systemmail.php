@@ -54,7 +54,7 @@ class SystemMail extends Email
         // read email text from text table in database
         if($this->smTextObject->getValue('txt_name') != $systemMailId)
         {
-			$this->smTextObject->readDataByColumns(array('txt_name' => $systemMailId, 'txt_org_id' => $this->smOrganization->getValue('org_id')));
+            $this->smTextObject->readDataByColumns(array('txt_name' => $systemMailId, 'txt_org_id' => $this->smOrganization->getValue('org_id')));
         }
 
         $mailSrcText = $this->smTextObject->getValue('txt_text');

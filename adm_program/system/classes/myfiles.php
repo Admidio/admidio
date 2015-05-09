@@ -21,28 +21,28 @@
 
 class MyFiles extends Folder
 {
-    protected $module;		// name of the module and name of the folder in adm_my_files
-	protected $modulePath;	// absolute path of the module
-	protected $currentPath;	// absolute path that is set with setSubFolder
-	protected $webPath;		// the path starts with adm_my_file
+    protected $module;      // name of the module and name of the folder in adm_my_files
+    protected $modulePath;  // absolute path of the module
+    protected $currentPath; // absolute path that is set with setSubFolder
+    protected $webPath;     // the path starts with adm_my_file
     public $errorText, $errorPath;
 
-	// module name should be the folder name in adm_my_files for this module
+    // module name should be the folder name in adm_my_files for this module
     // Example: 'PHOTOS' , 'BACKUP', 'DOWNLOAD'
     public function __construct($module)
     {
-		global $g_root_path;
+        global $g_root_path;
         $this->module = $module;
         $this->modulePath   = SERVER_PATH. '/adm_my_files/'. strtolower($module);
         $this->currentPath  = SERVER_PATH. '/adm_my_files/'. strtolower($module);
-		$this->webPath      = $g_root_path. '/adm_my_files';
+        $this->webPath      = $g_root_path. '/adm_my_files';
     }
 
-	// method checks if adm_my_files folder has all necessary rights
-	// the method is designed to make as little as possible checks
+    // method checks if adm_my_files folder has all necessary rights
+    // the method is designed to make as little as possible checks
     // Return: true/false - if false than check the parameters $errorText, $errorPath
     public function checkSettings()
-    { 
+    {
         if(is_writeable($this->modulePath) == false)
         {
             if(file_exists($this->modulePath) == false)
@@ -75,7 +75,7 @@ class MyFiles extends Folder
                 // create module folder
                 if(@mkdir($this->modulePath, 0777))
                 {
-					// create htaccess file for folder adm_my_files if necessary
+                    // create htaccess file for folder adm_my_files if necessary
                     if (file_exists(SERVER_PATH. '/adm_my_files/.htaccess') == false)
                     {
                         $protection = new Htaccess(SERVER_PATH. '/adm_my_files');
@@ -103,35 +103,35 @@ class MyFiles extends Folder
         }
 
         $this->setFolder($this->modulePath);
-        return true;      
+        return true;
     }
-	
-	// returns the current path
-	public function getServerPath()
-	{
-		return $this->currentPath;
-	}
 
-	// open a folder in the current module folder
-	// if that folder doesn't exists than it will be created
+    // returns the current path
+    public function getServerPath()
+    {
+        return $this->currentPath;
+    }
+
+    // open a folder in the current module folder
+    // if that folder doesn't exists than it will be created
     public function setSubFolder($folder)
     {
-		if(admStrIsValidFileName($folder))
-		{
-			$tempPath = $this->modulePath. '/'. $folder;
-			if(is_writeable($tempPath) == false)
-			{
-				if(file_exists($tempPath) == false)
-				{
-					// create folder
-					if(@mkdir($tempPath, 0777) == false)
-					{
-						$this->errorText = 'SYS_FOLDER_NOT_CREATED';
-						$this->errorPath = $this->webPath.'/'.$folder;
-						return 0;
-					}
-				}
-			}
+        if(admStrIsValidFileName($folder))
+        {
+            $tempPath = $this->modulePath. '/'. $folder;
+            if(is_writeable($tempPath) == false)
+            {
+                if(file_exists($tempPath) == false)
+                {
+                    // create folder
+                    if(@mkdir($tempPath, 0777) == false)
+                    {
+                        $this->errorText = 'SYS_FOLDER_NOT_CREATED';
+                        $this->errorPath = $this->webPath.'/'.$folder;
+                        return 0;
+                    }
+                }
+            }
 
             if(is_writeable($tempPath) == false)
             {
@@ -143,10 +143,10 @@ class MyFiles extends Folder
                     return 0;
                 }
             }
-			$this->currentPath = $tempPath;
-			$this->webPath     = $this->webPath.'/'.$folder;
-			return 1;
-		}
+            $this->currentPath = $tempPath;
+            $this->webPath     = $this->webPath.'/'.$folder;
+            return 1;
+        }
     }
 }
 ?>

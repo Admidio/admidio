@@ -21,7 +21,7 @@ $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
 if(isset($_COOKIE[$gCookiePraefix. '_DATA']))
 {
     setcookie($gCookiePraefix. '_DATA', '', time() - 1000, '/', $domain, 0);
-    
+
     $autoLogin = new AutoLogin($gDb, $gSessionId);
     $autoLogin->delete();
 }
@@ -29,12 +29,12 @@ if(isset($_COOKIE[$gCookiePraefix. '_DATA']))
 // if login organization is different to organization of config file then create new session variables
 if($g_organization != $gCurrentOrganization->getValue('org_shortname'))
 {
-	// read organization of config file with their preferences
+    // read organization of config file with their preferences
     $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
     $gPreferences = $gCurrentOrganization->getPreferences();
-	
-	// read new profile field structure for this organization
-	$gProfileFields->readProfileFields($gCurrentOrganization->getValue('org_id'));
+
+    // read new profile field structure for this organization
+    $gProfileFields->readProfileFields($gCurrentOrganization->getValue('org_id'));
 }
 
 // clear data from object of current user

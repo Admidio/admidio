@@ -58,16 +58,16 @@ if($gPreferences['profile_photo_storage'] == 1)
 
 if($user->getValue('usr_id') == 0)
 {
-	$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if($getMode == 'save')
 {
     /*****************************Foto speichern*************************************/
-    
+
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        // Foto im Dateisystem speichern      
+        // Foto im Dateisystem speichern
 
         //Nachsehen ob fuer den User ein Photo gespeichert war
         if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
@@ -76,7 +76,7 @@ if($getMode == 'save')
             {
                 unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
             }
-            
+
             rename(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg', SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
         }
     }
@@ -97,12 +97,12 @@ if($getMode == 'save')
             $gCurrentSession->renewUserObject($getUserId);
         }
     }
-    
+
     // zur Ausgangsseite zurueck
     $gNavigation->deleteLastUrl();
     header('Location: '.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$getUserId);
     exit();
-}    
+}
 elseif($getMode == 'dont_save')
 {
     /*****************************Foto nicht speichern*************************************/
@@ -146,7 +146,7 @@ elseif($getMode == 'delete')
 }
 
 
-/*****************************Foto hochladen*************************************/    
+/*****************************Foto hochladen*************************************/
 if($getMode == 'choose')
 {
     // set headline
@@ -158,7 +158,7 @@ if($getMode == 'choose')
     {
         $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
     }
-    
+
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
@@ -181,7 +181,7 @@ if($getMode == 'choose')
 elseif($getMode == 'upload')
 {
     /*****************************Foto zwischenspeichern bestaetigen***********************************/
-    
+
     //Dateigroesse
     if ($_FILES['userfile']['error'][0]==1)
     {
@@ -205,14 +205,14 @@ elseif($getMode == 'upload')
     $image_dimensions = $image_properties[0]*$image_properties[1];
     if($image_dimensions > admFuncProcessableImageSize())
     {
-    	$gMessage->show($gL10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', round(admFuncProcessableImageSize()/1000000, 2)));
+        $gMessage->show($gL10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', round(admFuncProcessableImageSize()/1000000, 2)));
     }
-	
+
     // Foto auf entsprechende Groesse anpassen
     $user_image = new Image($_FILES['userfile']['tmp_name'][0]);
     $user_image->setImageType('jpeg');
     $user_image->scale(130, 170);
-    
+
     //Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
@@ -225,13 +225,13 @@ elseif($getMode == 'upload')
         $user_image->copyToFile(null, ($_FILES['userfile']['tmp_name'][0]));
         // Foto aus PHP-Temp-Ordner einlesen
         $user_image_data = fread(fopen($_FILES['userfile']['tmp_name'][0], 'r'), $_FILES['userfile']['size'][0]);
-        
+
         // Zwischenspeichern des neuen Fotos in der Session
         $gCurrentSession->setValue('ses_binary', $user_image_data);
         $gCurrentSession->save();
     }
-    
-    //Image-Objekt löschen	
+
+    //Image-Objekt löschen
     $user_image->delete();
 
     if($getUserId == $gCurrentUser->getValue('usr_id'))
@@ -242,7 +242,7 @@ elseif($getMode == 'upload')
     {
         $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
     }
-    
+
     // create html page object
     $page = new HtmlPage($headline);
     $page->addJavascript('$("#btn_cancel").click(function() {

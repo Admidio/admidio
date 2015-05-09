@@ -31,7 +31,7 @@ if ($gCurrentUser->editInventory() == false)
 // if new_inventory isn't set and no inventory id is set then show dialog to create a inventory
 if($getItemId == 0 && $getNewItem == 0)
 {
-	$getNewItem = 1;
+    $getNewItem = 1;
 }
 
 // set headline of the script
@@ -92,7 +92,7 @@ if(isset($_SESSION['profile_request']))
 
     if(isset($_SESSION['profile_request']['usr_login_name']))
     {
-		$inventory->setArray(array('usr_login_name' => $_SESSION['profile_request']['usr_login_name']));
+        $inventory->setArray(array('usr_login_name' => $_SESSION['profile_request']['usr_login_name']));
     }
     if(isset($_SESSION['profile_request']['reg_org_id']))
     {
@@ -168,7 +168,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
         
         if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_disabled') == 1 && $gCurrentUser->editUsers() == false && $getNewUser == 0)
         {
-        	// disable field if this is configured in profile field configuration
+            // disable field if this is configured in profile field configuration
             $fieldProperty = FIELD_DISABLED;
         }
         elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_mandatory') == 1)
@@ -195,43 +195,43 @@ foreach($gInventoryFields->mInventoryFields as $field)
             // set array with values and set default value
             if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name_intern') == 'ROOM_ID')
             {
-				if($gDbType == 'mysql')
-				{
-					$sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') FROM '.TBL_ROOMS.' ORDER BY room_name';        
-				}
-				else
-				{
-					$sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' FROM '.TBL_ROOMS.' ORDER BY room_name';
-				}
-				$defaultValue = '';
-				if($getNewItem == 0)
-				{
-					$defaultValue = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id');
-				}
+                if($gDbType == 'mysql')
+                {
+                    $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') FROM '.TBL_ROOMS.' ORDER BY room_name';        
+                }
+                else
+                {
+                    $sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' FROM '.TBL_ROOMS.' ORDER BY room_name';
+                }
+                $defaultValue = '';
+                if($getNewItem == 0)
+                {
+                    $defaultValue = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id');
+                }
 
-				$form->addSelectBoxFromSql('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),  $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'), $gDb, $sql, array('property' => $fieldProperty, 'showContextDependentFirstEntry' => true, 'defaultValue' => $defaultValue));
+                $form->addSelectBoxFromSql('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),  $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'), $gDb, $sql, array('property' => $fieldProperty, 'showContextDependentFirstEntry' => true, 'defaultValue' => $defaultValue));
             }
             else
             {
                 $arrListValues = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_value_list');
                 $defaultValue  = $inventory->getValue($field->getValue('inf_name_intern'), 'database');
-		        $form->addSelectBox('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'), 
-    		                        $arrListValues, $fieldProperty, $defaultValue, true, $helpId, null, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
-    		}
+                $form->addSelectBox('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'), 
+                                    $arrListValues, $fieldProperty, $defaultValue, true, $helpId, null, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
+            }
 
-    	}
+        }
         elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'RADIO_BUTTON')
         {
-    		$arrListValues        = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_value_list');
-    		$showDummyRadioButton = false;
-    		
-    		if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_mandatory') == 0)
-    		{
-        		$showDummyRadioButton = true;
-    		}
-    		
-    		$form->addRadioButton('inf-'.$gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
-    		    $arrListValues, $fieldProperty, $inventory->getValue($field->getValue('inf_name_intern'), 'database'), $showDummyRadioButton, $helpId, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
+            $arrListValues        = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_value_list');
+            $showDummyRadioButton = false;
+            
+            if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_mandatory') == 0)
+            {
+                $showDummyRadioButton = true;
+            }
+            
+            $form->addRadioButton('inf-'.$gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
+                $arrListValues, $fieldProperty, $inventory->getValue($field->getValue('inf_name_intern'), 'database'), $showDummyRadioButton, $helpId, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
         }
         elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'TEXT_BIG')
         {

@@ -20,18 +20,18 @@ require_once(SERVER_PATH. '/adm_program/libs/phpass/passwordhash.php');
 
 class TableUsers extends TableAccess
 {
-	/** Constuctor that will create an object of a recordset of the table adm_users. 
-	 *  If the id is set than the specific user will be loaded.
-	 *  @param $db Object of the class database. This should be the default object $gDb.
-	 *  @param $userId The recordset of the user with this id will be loaded. If id isn't set than an empty object of the table is created.
-	 */
+    /** Constuctor that will create an object of a recordset of the table adm_users.
+     *  If the id is set than the specific user will be loaded.
+     *  @param $db Object of the class database. This should be the default object $gDb.
+     *  @param $userId The recordset of the user with this id will be loaded. If id isn't set than an empty object of the table is created.
+     */
     public function __construct(&$db, $userId = 0)
     {
         parent::__construct($db, TBL_USERS, 'usr', $userId);
     }
 
     /** Additional to the parent method the user will be set @b valid per default.
-	 */
+     */
     public function clear()
     {
         parent::clear();
@@ -41,14 +41,14 @@ class TableUsers extends TableAccess
         $this->columnsValueChanged = false;
     }
 
-	/** Deletes the selected user of the table and all the many references in other tables. 
-	 *  After that the class will be initialize.
-	 *  @return @b true if no error occured
-	 */
+    /** Deletes the selected user of the table and all the many references in other tables.
+     *  After that the class will be initialize.
+     *  @return @b true if no error occured
+     */
     public function delete()
     {
         global $gCurrentUser;
-        
+
         $this->db->startTransaction();
 
         $sql    = 'UPDATE '. TBL_ANNOUNCEMENTS. ' SET ann_usr_id_create = NULL
@@ -147,15 +147,15 @@ class TableUsers extends TableAccess
         $this->db->query($sql);
 
         $sql    = 'INSERT INTO '.TBL_IDS.' (ids_usr_id, ids_reference_id)
-                   SELECT '.$gCurrentUser->getValue('usr_id').', msc_msg_id 
+                   SELECT '.$gCurrentUser->getValue('usr_id').', msc_msg_id
                      FROM '.TBL_MESSAGES_CONTENT.' WHERE msc_usr_id = '.$this->getValue('usr_id');
         $this->db->query($sql);
-                     
+
         $sql    = 'DELETE FROM '. TBL_MESSAGES_CONTENT. '
                     WHERE msc_msg_id IN (SELECT ids_reference_id FROM '. TBL_IDS. ' WHERE ids_usr_id = '.$gCurrentUser->getValue('usr_id').')';
         $this->db->query($sql);
 
-        $sql    = 'DELETE FROM '. TBL_MESSAGES. ' 
+        $sql    = 'DELETE FROM '. TBL_MESSAGES. '
                     WHERE msg_id IN (SELECT ids_reference_id FROM '. TBL_IDS. ' WHERE ids_usr_id = '.$gCurrentUser->getValue('usr_id').')';
         $this->db->query($sql);
 
@@ -187,9 +187,9 @@ class TableUsers extends TableAccess
      *  The value is only saved in the object. You must call the method @b save to store the new value to the database
      *  @param $columnName The name of the database column whose value should get a new value
      *  @param $newValue The new value that should be stored in the database field
-     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
      *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
-     */ 
+     */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         // encode Passwort with phpAss
@@ -199,18 +199,18 @@ class TableUsers extends TableAccess
             $passwordHasher = new PasswordHash(9, true); // only use private hash because of compatibility
             $newValue       = $passwordHasher->HashPassword($newValue);
         }
-		// username should not contain special characters
-		elseif($columnName == 'usr_login_name')
-		{
-			if (strlen($newValue) > 0 && strValidCharacters($newValue, 'noSpecialChar') == false)
-			{
-				return false;
-			}
-		}
+        // username should not contain special characters
+        elseif($columnName == 'usr_login_name')
+        {
+            if (strlen($newValue) > 0 && strValidCharacters($newValue, 'noSpecialChar') == false)
+            {
+                return false;
+            }
+        }
 
         return parent::setValue($columnName, $newValue, $checkValue);
     }
-	
+
     // Anzahl Logins hochsetzen, Datum aktualisieren und ungueltige Logins zuruecksetzen
     public function updateLoginData()
     {

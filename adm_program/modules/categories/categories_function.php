@@ -35,19 +35,19 @@ $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validV
 // Modus und Rechte pruefen
 if($getType == 'ROL' && $gCurrentUser->manageRoles() == false)
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 elseif($getType == 'LNK' && $gCurrentUser->editWeblinksRight() == false)
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 elseif($getType == 'USF' && $gCurrentUser->editUsers() == false)
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 elseif($getType == 'DAT' && $gCurrentUser->editDates() == false)
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // create category object
@@ -63,12 +63,12 @@ if($getCatId > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
-	
-	// if system category then set cat_name to default
-	if($category->getValue('cat_system') == 1)
-	{
-		$_POST['cat_name'] = $category->getValue('cat_name');
-	}
+    
+    // if system category then set cat_name to default
+    if($category->getValue('cat_system') == 1)
+    {
+        $_POST['cat_name'] = $category->getValue('cat_name');
+    }
 }
 else
 {
@@ -123,18 +123,18 @@ if($getMode == 1)
             $gMessage->show($gL10n->get('CAT_CATEGORY_EXIST'));
         }
     }
-	
-	// bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
-	// falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
-	$checkboxes = array('cat_hidden','cat_default');
+    
+    // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
+    // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
+    $checkboxes = array('cat_hidden','cat_default');
 
-	foreach($checkboxes as $key => $value)
-	{
-		if(isset($_POST[$value]) == false || $_POST[$value] != 1)
-		{
-			$_POST[$value] = 0;
-		}
-	}
+    foreach($checkboxes as $key => $value)
+    {
+        if(isset($_POST[$value]) == false || $_POST[$value] != 1)
+        {
+            $_POST[$value] = 0;
+        }
+    }
 
     // POST Variablen in das UserField-Objekt schreiben
     foreach($_POST as $key => $value)
@@ -191,17 +191,17 @@ if($getMode == 1)
 elseif($getMode == 2)
 {
     // delete category
-	try
-	{
-		if($category->delete())
-		{
-			echo 'done';
-		}
-	}
-	catch(AdmException $e)
-	{
-		$e->showText();
-	}
+    try
+    {
+        if($category->delete())
+        {
+            echo 'done';
+        }
+    }
+    catch(AdmException $e)
+    {
+        $e->showText();
+    }
 }
 elseif($getMode == 4)
 {

@@ -11,7 +11,7 @@
  *
  * Erweiterung: Matthias Roberg
  * Die Klasse kann nach Vorgabe auch eine einfache Rechenaufgabe als Captcha
- * erzeugen. Diese wird als reiner Text ausgegeben und ist somit für
+ * erzeugen. Diese wird als reiner Text ausgegeben und ist somit fÃ¼r
  * barriere-freie Seiten geeignet. Der u.g. Ablauf bleibt dabei gleich.
  *
  *
@@ -52,37 +52,43 @@ class Captcha
     private $font, $signature, $width, $height, $codeSize, $allowedChars;
     private $backgroundColourR, $backgroundColourG, $backgroundColourB;
     private $backgroundWriting, $backgroundWritingSize;
-	private $text_part1,$text_part2,$text_part3_third,$text_part3_half,$text_part4;
+    private $text_part1,$text_part2,$text_part3_third,$text_part3_half,$text_part4;
 
     public function __construct()
     {
-		global $gPreferences;
-		
+        global $gPreferences;
+
         // Hier wird jetzt die Schriftart festgelegt. (Standard: Theme)
-		if($gPreferences['captcha_fonts'] == 'Theme')
-			{$this->font = THEME_SERVER_PATH. '/font.ttf';}
-		else
-			{$this->font = SERVER_PATH .'/adm_program/system/fonts/'.$gPreferences['captcha_fonts'];}
-		
-		// Hier wird die Schriftart für die Bildunterschrift festgelegt. (Standard: Theme, nicht wechselbar)
-		$this->signature = THEME_SERVER_PATH. '/font.ttf';
-		
+        if($gPreferences['captcha_fonts'] == 'Theme')
+            {$this->font = THEME_SERVER_PATH. '/font.ttf';}
+        else
+            {$this->font = SERVER_PATH .'/adm_program/system/fonts/'.$gPreferences['captcha_fonts'];}
+
+        // Hier wird die Schriftart fÃ¼r die Bildunterschrift festgelegt. (Standard: Theme, nicht wechselbar)
+        $this->signature = THEME_SERVER_PATH. '/font.ttf';
+
         // Nun die Bildgroesse des Captchas festlegen
         $this->width = $gPreferences['captcha_width'];
         $this->height = $gPreferences['captcha_height'];
 
         // Hier wird die Hintergrundfarbe festgelegt. Einzelne RGB-Werte (Umwandlung aus Hex-Wert)
-		$color = $gPreferences['captcha_background_color'];
-		if($color[0] == '#')
-			{$color = substr($color, 1);}
-		if(strlen($color) == 6)
-			{list($r, $g, $b) = array($color[0].$color[1],$color[2].$color[3],$color[4].$color[5]);}
-		elseif(strlen($color) == 3)
-			{list($r, $g, $b) = array($color[0].$color[0], $color[1].$color[1], $color[2].$color[2]);}
-		$this->backgroundColourR = hexdec($r);
-		$this->backgroundColourG = hexdec($g);
-		$this->backgroundColourB = hexdec($b);
-        
+        $color = $gPreferences['captcha_background_color'];
+        if($color[0] == '#')
+        {
+            $color = substr($color, 1);
+        }
+        if(strlen($color) == 6)
+        {
+            list($r, $g, $b) = array($color[0].$color[1],$color[2].$color[3],$color[4].$color[5]);
+        }
+        elseif(strlen($color) == 3)
+        {
+            list($r, $g, $b) = array($color[0].$color[0], $color[1].$color[1], $color[2].$color[2]);
+        }
+        $this->backgroundColourR = hexdec($r);
+        $this->backgroundColourG = hexdec($g);
+        $this->backgroundColourB = hexdec($b);
+
         // Hier wird die Schriftgroesse des CaptchaCodes festgelegt.
         $this->codeSize = $gPreferences['captcha_font_size'];
 
@@ -97,67 +103,67 @@ class Captcha
 
     public function getCaptcha()
     {
-		// erst einmal einen Code generieren
-			$this->generateNewCaptchaCode();
+        // erst einmal einen Code generieren
+        $this->generateNewCaptchaCode();
 
-			// und hier wird das Captcha generiert und ausgegeben
-			$this->makeCaptcha();
+        // und hier wird das Captcha generiert und ausgegeben
+        $this->makeCaptcha();
     }
-	
-	public function getCaptchaCalc($text_part1, $text_part2, $text_part3_third, $text_part3_half, $text_part4)
+
+    public function getCaptchaCalc($text_part1, $text_part2, $text_part3_third, $text_part3_half, $text_part4)
     {
-		// Zuweisung der Einstiegsvariablen
-		$number = array(rand(40, 60),rand(20, 40),rand(1, 20));
-		$operator_value = array();
-		$result = $number[0];
-		
-		// Rechenaufgabe erstellen
-		for($count=1;$count<=2;$count++)
-		{
-			$operator = rand(1, 2);
-			if($operator == 1)
-			{
-				$result = $result+$number[$count];
-				$operator_value[$count-1] = '+';
-			}
-			if($operator == 2)
-			{
-				$result = $result-$number[$count];
-				$operator_value[$count-1] = '-';
-			}
-			if($count==2 && $result<1)
-			{
-				$count=1;
-				$result = $number[0];
-			}
-		}
-		
-		// Individualwert dazurechen
-		$ready = 0;
-		while($ready < 1)
-		{
-			$number[3] = rand(20, 100);
-			if(is_int($number[3]/3))
-			{
-				$operator_value[2] = $text_part3_third;
-				$result = $result+($number[3]/3);
-				$ready = 1;
-			}
-			elseif(is_int($number[3]/2))
-			{
-				$operator_value[2] = $text_part3_half;
-				$result = $result+($number[3]/2);
-				$ready = 1;
-			}
-		}
-		
-		// Lösung in der Session speichern
+        // Zuweisung der Einstiegsvariablen
+        $number = array(rand(40, 60),rand(20, 40),rand(1, 20));
+        $operator_value = array();
+        $result = $number[0];
+
+        // Rechenaufgabe erstellen
+        for($count=1;$count<=2;$count++)
+        {
+            $operator = rand(1, 2);
+            if($operator == 1)
+            {
+                $result = $result+$number[$count];
+                $operator_value[$count-1] = '+';
+            }
+            if($operator == 2)
+            {
+                $result = $result-$number[$count];
+                $operator_value[$count-1] = '-';
+            }
+            if($count==2 && $result<1)
+            {
+                $count=1;
+                $result = $number[0];
+            }
+        }
+
+        // Individualwert dazurechen
+        $ready = 0;
+        while($ready < 1)
+        {
+            $number[3] = rand(20, 100);
+            if(is_int($number[3]/3))
+            {
+                $operator_value[2] = $text_part3_third;
+                $result = $result+($number[3]/3);
+                $ready = 1;
+            }
+            elseif(is_int($number[3]/2))
+            {
+                $operator_value[2] = $text_part3_half;
+                $result = $result+($number[3]/2);
+                $ready = 1;
+            }
+        }
+
+        // LÃ¶sung in der Session speichern
         $_SESSION['captchacode'] = $result;
-		
-		// Aufgabe ausgeben
-		return $text_part1.' '.$number[0].$operator_value[0].$number[1].$operator_value[1].$number[2].' '.$text_part2.' '.$operator_value[2].' '.$number[3].' '.$text_part4;
-		//echo "<br>= $result (".$_SESSION['captchacode'].")";
-    }	
+
+        // Aufgabe ausgeben
+        return $text_part1.' '.$number[0].$operator_value[0].$number[1].$operator_value[1].$number[2].' '.$text_part2.' '.$operator_value[2].' '.$number[3].' '.$text_part4;
+        //echo "<br>= $result (".$_SESSION['captchacode'].")";
+    }
 
 
     private function generateNewCaptchaCode()
@@ -210,11 +216,11 @@ class Captcha
 
         for ($i=0; $i < $this->charCount; $i++)
         {
-                $xPosition = intval($xStartPosition + $i * ($this->width / ($this->charCount +1)));
+            $xPosition = intval($xStartPosition + $i * ($this->width / ($this->charCount +1)));
 
-                $text      = substr($this->captchaCode, $i, 1);
-                $color     =  imagecolorallocate($image, $this->backgroundColourR - 125, $this->backgroundColourG - 55, $this->backgroundColourB - 90);
-                imagettftext($image, $this->codeSize, 0, $xPosition, 35, $color, $this->font, $text);
+            $text      = substr($this->captchaCode, $i, 1);
+            $color     =  imagecolorallocate($image, $this->backgroundColourR - 125, $this->backgroundColourG - 55, $this->backgroundColourB - 90);
+            imagettftext($image, $this->codeSize, 0, $xPosition, 35, $color, $this->font, $text);
         }
 
         // Jetzt noch das finale Bild ausgeben...

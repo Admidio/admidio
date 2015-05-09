@@ -67,7 +67,7 @@ $page->addJavascript('
 
         // disable default form submit
         event.preventDefault();
-        
+
         $.ajax({
             type:    "POST",
             url:     action,
@@ -88,7 +88,7 @@ $page->addJavascript('
             }
         });
     });
-    
+
     $("#link_check_for_update").click(function() {
         $("#admidio_version_content").empty();
         $("#admidio_version_content").prepend("<img src=\''.THEME_PATH.'/icons/loader_inline.gif\' id=\'loadindicator\'/>").show();
@@ -135,7 +135,7 @@ $page->addHtml('
                     <div class="panel-body">');
                         // show form
                         $form = new HtmlForm('common_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=common', $page, array('class' => 'form-preferences'));
-                        
+
                         // search all available themes in theme folder
                         $themes = admFuncGetDirectoryEntries(SERVER_PATH.'/adm_themes', 'dir');
                         $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, array('property' => FIELD_MANDATORY, 'defaultValue' => $form_values['theme'], 'helpTextIdInline' => 'ORG_ADMIDIO_THEME_DESC'));
@@ -174,15 +174,15 @@ $page->addHtml('
                         $form->addStaticControl('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $form_values['org_shortname'], array('class' => 'form-control-small'));
                         $form->addInput('org_longname', $gL10n->get('SYS_NAME'), $form_values['org_longname'], array('maxLength' => 60, 'property' => FIELD_MANDATORY));
                         $form->addInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $form_values['org_homepage'], array('type' => 'url', 'maxLength' => 60));
-                            
+
                         //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
                         if($gCurrentOrganization->hasChildOrganizations() == false)
                         {
                             $sql = 'SELECT org_id, org_longname FROM '. TBL_ORGANIZATIONS.'
                                      WHERE org_id <> '. $gCurrentOrganization->getValue('org_id'). '
-				                       AND org_org_id_parent is NULL
-				                     ORDER BY org_longname ASC, org_shortname ASC';
-				            $form->addSelectBoxFromSql('org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sql, array('defaultValue' => $form_values['org_org_id_parent'],
+                                       AND org_org_id_parent is NULL
+                                     ORDER BY org_longname ASC, org_shortname ASC';
+                            $form->addSelectBoxFromSql('org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sql, array('defaultValue' => $form_values['org_org_id_parent'],
                                                        'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_PARENT_ORGANIZATION_DESC'));
                         }
 
@@ -190,7 +190,7 @@ $page->addHtml('
                         {
                             $form->addCheckbox('system_organization_select', $gL10n->get('ORG_SHOW_ORGANIZATION_SELECT'), $form_values['system_organization_select'], array('helpTextIdInline' => 'ORG_SHOW_ORGANIZATION_SELECT_DESC'));
                         }
-                        
+
                         $html = '<a id="add_another_organization" class="btn" href="'. $g_root_path. '/adm_program/modules/preferences/preferences_function.php?mode=2"><img
                                     src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'" />'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>';
                         $htmlDesc = $gL10n->get('ORG_ADD_ORGANIZATION_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
@@ -305,7 +305,7 @@ $page->addHtml('
                             <strong>%organization_short_name%</strong> - '.$gL10n->get('ORG_VARIABLE_SHORTNAME_ORGANIZATION').'<br />
                             <strong>%organization_long_name%</strong> - '.$gL10n->get('ORG_VARIABLE_NAME_ORGANIZATION').'<br />
                             <strong>%organization_homepage%</strong> - '.$gL10n->get('ORG_VARIABLE_URL_ORGANIZATION').'</p>');
-                            
+
                         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_WEBMASTER', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
                         $form->addMultilineTextInput('SYSMAIL_REGISTRATION_WEBMASTER', $gL10n->get('ORG_NOTIFY_WEBMASTER'), $text->getValue('txt_text'), 7);
                         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_USER', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
@@ -320,7 +320,7 @@ $page->addHtml('
                             $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br />
                             <strong>%variable1%</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD').'<br />
                             <strong>%variable2%</strong> - '.$gL10n->get('ORG_VARIABLE_ACTIVATION_LINK')));
-                        
+
                         $form->addSubmitButton('btn_save_system_notification', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
@@ -340,7 +340,7 @@ $page->addHtml('
                         $form = new HtmlForm('captcha_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=captcha', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'), 'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'));
                         $form->addSelectBox('captcha_type', $gL10n->get('ORG_CAPTCHA_TYPE'), $selectBoxEntries, array('defaultValue' => $form_values['captcha_type'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_TYPE_TEXT'));
-                        
+
                         $fonts = admFuncGetDirectoryEntries('../../system/fonts/');
                         $fonts['Theme'] = 'Theme';
                         asort($fonts);
@@ -389,7 +389,7 @@ $page->addHtml('
                                     <a id="link_check_for_update" href="#link_check_for_update" title="'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'">'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'</a>
                                  </span>';
                         $form->addCustomContent($gL10n->get('SYS_ADMIDIO_VERSION'), $html);
-                        
+
                         // if database version is different to file version, then show database version
                         if(strcmp(ADMIDIO_VERSION, $gSystemComponent->getValue('com_version')) != 0)
                         {
@@ -416,7 +416,7 @@ $page->addHtml('
                             $html = '<span class="text-success"><strong>'.$gDb->getVersion().'</strong></span>';
                         }
                         $form->addCustomContent($gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
-                        
+
                         if(ini_get('safe_mode') == 1)
                         {
                             $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_ON').'</strong></span> &rarr; '.$gL10n->get('SYS_SAFE_MODE_PROBLEM');
@@ -426,7 +426,7 @@ $page->addHtml('
                             $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_OFF').'</strong></span>';
                         }
                         $form->addCustomContent($gL10n->get('SYS_SAFE_MODE'), $html);
-                        
+
                         if(ini_get('post_max_size')!='')
                         {
                             $form->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), ini_get('post_max_size'));
@@ -454,7 +454,7 @@ $page->addHtml('
                             $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_OFF').'</strong></span>';
                         }
                         $form->addCustomContent($gL10n->get('SYS_FILE_UPLOADS'), $html);
-        
+
                         if(ini_get('upload_max_filesize')!='')
                         {
                             $form->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), ini_get('upload_max_filesize'));
@@ -663,10 +663,10 @@ $page->addHtml('
                         $form = new HtmlForm('messages_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=messages', $page, array('class' => 'form-preferences'));
                         $form->addCheckbox('enable_mail_module', $gL10n->get('MAI_ACTIVATE_EMAIL_MODULE'), $form_values['enable_mail_module'], array('helpTextIdInline' => 'MAI_ACTIVATE_EMAIL_MODULE_DESC'));
                         $form->addCheckbox('enable_pm_module', $gL10n->get('MSG_ACTIVATE_PM_MODULE'), $form_values['enable_pm_module'], array('helpTextIdInline' => 'MSG_ACTIVATE_PM_MODULE_DESC'));
-						$form->addCheckbox('enable_chat_module', $gL10n->get('MSG_ACTIVATE_CHAT_MODULE'), $form_values['enable_chat_module'], array('helpTextIdInline' => 'MSG_ACTIVATE_CHAT_MODULE_DESC'));
+                        $form->addCheckbox('enable_chat_module', $gL10n->get('MSG_ACTIVATE_CHAT_MODULE'), $form_values['enable_chat_module'], array('helpTextIdInline' => 'MSG_ACTIVATE_CHAT_MODULE_DESC'));
                         $form->addCheckbox('enable_mail_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), $form_values['enable_mail_captcha'], array('helpTextIdInline' => 'MAI_SHOW_CAPTCHA_DESC'));
-						$form->addInput('mail_max_receiver', $gL10n->get('MAI_MAX_RECEIVER'), $form_values['mail_max_receiver'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'MAI_MAX_RECEIVER_DESC'));
-						$form->addCheckbox('mail_into_to', $gL10n->get('MAI_INTO_TO'), $form_values['mail_into_to'], array('helpTextIdInline' => 'MAI_INTO_TO_DESC'));
+                        $form->addInput('mail_max_receiver', $gL10n->get('MAI_MAX_RECEIVER'), $form_values['mail_max_receiver'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'MAI_MAX_RECEIVER_DESC'));
+                        $form->addCheckbox('mail_into_to', $gL10n->get('MAI_INTO_TO'), $form_values['mail_into_to'], array('helpTextIdInline' => 'MAI_INTO_TO_DESC'));
                         $form->addInput('max_email_attachment_size', $gL10n->get('MAI_ATTACHMENT_SIZE').' (KB)', $form_values['max_email_attachment_size'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999, 'helpTextIdInline' => 'MAI_ATTACHMENT_SIZE_DESC'));
                         $form->addInput('mail_sendmail_address', $gL10n->get('MAI_SENDER_EMAIL'), $form_values['mail_sendmail_address'], array('maxLength' => 50, 'helpTextIdInline' => array('MAI_SENDER_EMAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST'])));
                         $form->addInput('mail_sendmail_name', $gL10n->get('MAI_SENDER_NAME'), $form_values['mail_sendmail_name'], array('maxLength' => 50, 'helpTextIdInline' => 'MAI_SENDER_NAME_DESC'));
@@ -775,7 +775,7 @@ $page->addHtml('
                 </div>
             </div>');
             /*
-			<div class="panel panel-default" id="panel_links">
+            <div class="panel panel-default" id="panel_links">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_inventory">

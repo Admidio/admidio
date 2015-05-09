@@ -84,10 +84,10 @@ $fieldsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->g
 
 // define link to create new profile field
 $fieldsMenu->addItem('menu_item_new_field', $g_root_path.'/adm_program/modules/preferences/fields_new.php', 
-							$gL10n->get('ORG_CREATE_PROFILE_FIELD'), 'add.png');
+                            $gL10n->get('ORG_CREATE_PROFILE_FIELD'), 'add.png');
 // define link to maintain categories
 $fieldsMenu->addItem('menu_item_maintain_category', $g_root_path.'/adm_program/modules/categories/categories.php?type=USF', 
-							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
+                            $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
 
 $sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_USER_FIELDS. '
          WHERE cat_type   = \'USF\'

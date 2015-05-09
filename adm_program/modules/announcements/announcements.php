@@ -77,16 +77,16 @@ $announcementsMenu = $page->getMenu();
 
 if($gCurrentUser->editAnnouncements())
 {
-	// show link to create new announcement
-	$announcementsMenu->addItem('menu_item_new_announcement', $g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline, 
-								$gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
+    // show link to create new announcement
+    $announcementsMenu->addItem('menu_item_new_announcement', $g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline, 
+                                $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
 }
 
 if($gCurrentUser->isWebmaster())
 {
-	// show link to system preferences of announcements
-	$announcementsMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=announcements', 
-								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    // show link to system preferences of announcements
+    $announcementsMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=announcements', 
+                                $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
 if($announcementsCount == 0)

@@ -198,15 +198,15 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     {
         $_POST['dat_room_id'] = 0;
     }
-	
-	if(is_numeric($_POST['dat_max_members']) == false)
-	{
-		$_POST['dat_max_members'] = 0;
-	}
+    
+    if(is_numeric($_POST['dat_max_members']) == false)
+    {
+        $_POST['dat_max_members'] = 0;
+    }
     
     // make html in description secure
     $_POST['dat_description'] = admFuncVariableIsValid($_POST, 'dat_description', 'html');
-	
+    
     // ------------------------------------------------
     // Prüfen ob gewaehlter Raum bereits zu dem Termin reserviert ist
     // ------------------------------------------------
@@ -237,8 +237,8 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
             {
                 $date->setValue('dat_max_members', $_POST['dat_max_members']);
             }
-			// Raumname für Benachrichtigung
-			$raum = $room->getValue('room_name');
+            // Raumname für Benachrichtigung
+            $raum = $room->getValue('room_name');
         }
     }
 
@@ -256,65 +256,65 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     
     // save event in database
     $return_code = $date->save();
-	
-	if($return_code == 0 && $gPreferences['enable_email_notification'] == 1)
-	{
-		// Benachrichtigungs-Email für neue Einträge
+    
+    if($return_code == 0 && $gPreferences['enable_email_notification'] == 1)
+    {
+        // Benachrichtigungs-Email für neue Einträge
 
-		// Daten für Benachrichtigung zusammenstellen
-		if($_POST['date_from'] == $_POST['date_to'])
-		{
-    		$datum = $_POST['date_from'];
+        // Daten für Benachrichtigung zusammenstellen
+        if($_POST['date_from'] == $_POST['date_to'])
+        {
+            $datum = $_POST['date_from'];
         }
-		else
-		{
-    		$datum = $_POST['date_from']. ' - '.$_POST['date_to'];
+        else
+        {
+            $datum = $_POST['date_from']. ' - '.$_POST['date_to'];
         }
-		
-		if($_POST['dat_all_day']!=0)
-		{
-		    $zeit = $gL10n->get('DAT_ALL_DAY');
+        
+        if($_POST['dat_all_day']!=0)
+        {
+            $zeit = $gL10n->get('DAT_ALL_DAY');
         }
-		else
-		{
-		    $zeit = $_POST['date_from_time']. ' - '. $_POST['date_to_time'];
+        else
+        {
+            $zeit = $_POST['date_from_time']. ' - '. $_POST['date_to_time'];
         }
-		
-		$sql_cal = 'SELECT cat_name FROM '.TBL_CATEGORIES.'
+        
+        $sql_cal = 'SELECT cat_name FROM '.TBL_CATEGORIES.'
                      WHERE cat_id = '.$_POST['dat_cat_id'];
-		$gDb->query($sql_cal);
-		$row_cal  = $gDb->fetch_array();
-		$calendar = $row_cal['cat_name'];
-		
-		if(strlen($_POST['dat_location']) > 0)
-		{
-		    $ort = $_POST['dat_location'];
+        $gDb->query($sql_cal);
+        $row_cal  = $gDb->fetch_array();
+        $calendar = $row_cal['cat_name'];
+        
+        if(strlen($_POST['dat_location']) > 0)
+        {
+            $ort = $_POST['dat_location'];
         }
-		else
-		{
-		    $ort = 'n/a';
+        else
+        {
+            $ort = 'n/a';
         }
-		
-		if($_POST['dat_room_id'] == 0)
-		{
-		    $raum = 'n/a';}
-		
-		if(strlen($_POST['dat_max_members']) > 0)
-		{
-		    $teilnehmer = $_POST['dat_max_members'];
+        
+        if($_POST['dat_room_id'] == 0)
+        {
+            $raum = 'n/a';}
+        
+        if(strlen($_POST['dat_max_members']) > 0)
+        {
+            $teilnehmer = $_POST['dat_max_members'];
         }
-		else
-		{
-		    $teilnehmer = 'n/a';
+        else
+        {
+            $teilnehmer = 'n/a';
         }
-		
-		$message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum. ' ('. $zeit. ')', $calendar)
+        
+        $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum. ' ('. $zeit. ')', $calendar)
                   .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
                   .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date($gPreferences['system_date'], time()));
         
         $notification = new Email();
         $notification->adminNotfication($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
-	}
+    }
     
     // ----------------------------------------
     // ggf. Rolle fuer Anmeldungen wegschreiben
@@ -333,9 +333,9 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         $role->setValue('rol_cat_id', $row['cat_id']);
         $role->setValue('rol_name', $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$date->getValue('dat_id'));
         $role->setValue('rol_description', $date->getValue('dat_headline'));
-        $role->setValue('rol_this_list_view', '1');	// role members are allowed to view lists
+        $role->setValue('rol_this_list_view', '1');    // role members are allowed to view lists
         $role->setValue('rol_visible', '0');
-        $role->setValue('rol_leader_rights', ROLE_LEADER_MEMBERS_ASSIGN);	// leaders are allowed to add or remove participations
+        $role->setValue('rol_leader_rights', ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participations
         $role->setValue('rol_max_members', $_POST['dat_max_members']);
         
         // save role in database
@@ -357,12 +357,12 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     }
     elseif($_POST['date_registration_possible'] == 0 && $date->getValue('dat_rol_id') > 0)
     {
-    	// date participation was deselected -> delete flag in event and than delete role
+        // date participation was deselected -> delete flag in event and than delete role
         $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
         $date->setValue('dat_rol_id', '');
         $date->save();
         $role->delete();
-	}
+    }
     elseif($_POST['date_registration_possible'] == 1 && $date->getValue('dat_rol_id') > 0)
     {
         // if event exists and you could register to this event then we must check
@@ -379,24 +379,24 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         }
     }
 
-	// check if flag is set that current user wants to participate as leader to the date
-	if(isset($_POST['date_current_user_assigned']) && $_POST['date_current_user_assigned'] == 1
-	&& $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')) == false)
-	{
-		// user wants to participate -> add him to date
-		$member = new TableMembers($gDb);
-		$member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'), 1);
-	}
-	elseif(isset($_POST['date_current_user_assigned']) == false
-	&& $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')) == true)
-	{
-		// user does't want to participate as leader -> remove his participation as leader from the event,
-		// dont remove the participation itself!
-		$member = new TableMembers($gDb);
-		$member->readDataByColumns(array('mem_rol_id' => $role->getValue('rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
-		$member->setValue('mem_leader', 0);
-		$member->save();
-	}
+    // check if flag is set that current user wants to participate as leader to the date
+    if(isset($_POST['date_current_user_assigned']) && $_POST['date_current_user_assigned'] == 1
+    && $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')) == false)
+    {
+        // user wants to participate -> add him to date
+        $member = new TableMembers($gDb);
+        $member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'), 1);
+    }
+    elseif(isset($_POST['date_current_user_assigned']) == false
+    && $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')) == true)
+    {
+        // user does't want to participate as leader -> remove his participation as leader from the event,
+        // dont remove the participation itself!
+        $member = new TableMembers($gDb);
+        $member->readDataByColumns(array('mem_rol_id' => $role->getValue('rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
+        $member->setValue('mem_leader', 0);
+        $member->save();
+    }
 
     unset($_SESSION['dates_request']);
     $gNavigation->deleteLastUrl();
@@ -419,7 +419,7 @@ elseif($getMode == 2)  // Termin loeschen
 elseif($getMode == 3)  // Benutzer zum Termin anmelden
 {
     $member = new TableMembers($gDb);
-	$member->startMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
+    $member->startMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
@@ -427,7 +427,7 @@ elseif($getMode == 3)  // Benutzer zum Termin anmelden
 elseif($getMode == 4)  // Benutzer vom Termin abmelden
 {
     $member = new TableMembers($gDb);
-	$member->deleteMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
+    $member->deleteMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
@@ -446,8 +446,8 @@ elseif($getMode == 6)  // Termin im iCal-Format exportieren
     header('Content-Disposition: attachment; filename="'. $filename. '.ics"');
     
     // neccessary for IE, because without it the download with SSL has problems
-	header('Cache-Control: private');
-	header('Pragma: public');
+    header('Cache-Control: private');
+    header('Pragma: public');
 
     echo $date->getIcal($_SERVER['HTTP_HOST']);
     exit();

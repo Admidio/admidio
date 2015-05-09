@@ -1,4 +1,4 @@
-/* 
+/*
 Name: Admidio Chat Engine
 */
 
@@ -14,7 +14,7 @@ function Chat () {
 
 //gets the state of the chat
 function getStateOfChat(){
-    state = 0;   
+    state = 0;
 }
 
 //Updates the chat
@@ -25,7 +25,7 @@ function updateChat(){
         $.ajax({
             type: "POST",
             url: "process.php",
-            data: {  
+            data: {
                 'function': 'update',
                 'state': state
             },
@@ -53,10 +53,10 @@ function sendChat(message)
     $.ajax({
         type: "POST",
         url: "process.php",
-        data: {  
+        data: {
             'function': 'send',
             'message': message,
-			'state': state
+            'state': state
         },
         dataType: "json",
         success: function(data){

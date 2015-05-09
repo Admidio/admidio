@@ -12,18 +12,18 @@ if ('template.php' == basename($_SERVER['SCRIPT_FILENAME']))
 {
     die('This page may not be called directly !');
 }
- 
+
 // Function to Read a file
 // and store all data into a variable
 function admReadTemplateFile($filename) {
 
 if (file_exists(SERVER_PATH. '/adm_my_files/mail_templates/'.$filename)) {
     $fp = fopen(SERVER_PATH. '/adm_my_files/mail_templates/'.$filename, "r");
-	$str = "";
-	while(!feof($fp)) {
-	$str .= fread($fp, 1024);
-	}
-	return $str;
+    $str = "";
+    while(!feof($fp)) {
+        $str .= fread($fp, 1024);
+    }
+    return $str;
 } else {
     return '#message#';
 }

@@ -48,10 +48,10 @@ $icon_file_extension = array(
     'mp3'   => 'page_white_music.png',
     'wav'   => 'page_white_music.png',
     'wma'   => 'page_white_music.png',
-	'odt'   => 'page_white_openoffice.png',
-	'ods'   => 'page_white_openoffice.png',
-	'odp'   => 'page_white_openoffice.png',
-	'odg'   => 'page_white_openoffice.png',
-	'odf'   => 'page_white_openoffice.png'	
- );
+    'odt'   => 'page_white_openoffice.png',
+    'ods'   => 'page_white_openoffice.png',
+    'odp'   => 'page_white_openoffice.png',
+    'odg'   => 'page_white_openoffice.png',
+    'odf'   => 'page_white_openoffice.png'
+);
 ?>

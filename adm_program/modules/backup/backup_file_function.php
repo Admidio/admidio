@@ -39,9 +39,9 @@ if(!file_exists($completePath))
 
 switch($getJob)
 {
-	case 'get_file':
-		//Dateigroese ermitteln
-		$fileSize   = filesize($completePath);
+    case 'get_file':
+        //Dateigroese ermitteln
+        $fileSize   = filesize($completePath);
 
         // for IE the filename must have special chars in hexadecimal
         if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
@@ -49,25 +49,25 @@ switch($getJob)
             $getFilename = urlencode($getFilename);
         }
 
-		// Passenden Datentyp erzeugen.
-		header('Content-Type: application/octet-stream');
-		header('Content-Length: '.$fileSize);
-		header('Content-Disposition: attachment; filename="'.$getFilename.'"');
+        // Passenden Datentyp erzeugen.
+        header('Content-Type: application/octet-stream');
+        header('Content-Length: '.$fileSize);
+        header('Content-Disposition: attachment; filename="'.$getFilename.'"');
     
-    	// neccessary for IE, because without it the download with SSL has problems
+        // neccessary for IE, because without it the download with SSL has problems
         header('Cache-Control: private');
         header('Pragma: public');
-		
-		// Datei ausgeben.
-		echo readfile($completePath);
-		break;
-	
-	case 'delete':
-		// Backupdatei loeschen
-		if(unlink($completePath))
-		{
-			echo 'done';
-		}
-		exit();
-		break;
+        
+        // Datei ausgeben.
+        echo readfile($completePath);
+        break;
+    
+    case 'delete':
+        // Backupdatei loeschen
+        if(unlink($completePath))
+        {
+            echo 'done';
+        }
+        exit();
+        break;
 }

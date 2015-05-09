@@ -15,18 +15,18 @@
 
 class TableInventory extends TableAccess
 {
-	/** Constuctor that will create an object of a recordset of the table adm_invent. 
-	 *  If the id is set than the specific item will be loaded.
-	 *  @param $db Object of the class database. This should be the default object $gDb.
-	 *  @param $itemId The recordset of the item with this id will be loaded. If id isn't set than an empty object of the table is created.
-	 */
+    /** Constuctor that will create an object of a recordset of the table adm_invent.
+     *  If the id is set than the specific item will be loaded.
+     *  @param $db Object of the class database. This should be the default object $gDb.
+     *  @param $itemId The recordset of the item with this id will be loaded. If id isn't set than an empty object of the table is created.
+     */
     public function __construct(&$db, $itemId = 0)
     {
         parent::__construct($db, TBL_INVENT, 'inv', $itemId);
     }
 
     /** Additional to the parent method the item will be set @b valid per default.
-	 */
+     */
     public function clear()
     {
         parent::clear();
@@ -36,10 +36,10 @@ class TableInventory extends TableAccess
         $this->columnsValueChanged = false;
     }
 
-	/** Deletes the selected item of the table and all the many references in other tables. 
-	 *  After that the class will be initialize.
-	 *  @return @b true if no error occured
-	 */
+    /** Deletes the selected item of the table and all the many references in other tables.
+     *  After that the class will be initialize.
+     *  @return @b true if no error occured
+     */
     public function delete()
     {
         $this->db->startTransaction();

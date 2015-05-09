@@ -38,23 +38,23 @@ unset($_SESSION['roles_request']);
 
 // per default show active and visible roles
 $sqlRolesStatus   = ' AND rol_valid   = \'1\'
-					  AND rol_visible = \'1\' ';
+                      AND rol_visible = \'1\' ';
 
 if($getInactive == true)
 {
     $activeRolesLinkDescription = $gL10n->get('ROL_ACTIV_ROLES');
     $listDescription  = $gL10n->get('ROL_INACTIV_ROLES');
     $activeRolesImage = 'roles.png';
-	$activeRolesFlag  = '0';
-	// in inactive mode show visible and invisible inactive roles
-	$sqlRolesStatus   = ' AND rol_valid   = \'0\' ';
+    $activeRolesFlag  = '0';
+    // in inactive mode show visible and invisible inactive roles
+    $sqlRolesStatus   = ' AND rol_valid   = \'0\' ';
 }
 else
 {
     $activeRolesLinkDescription = $gL10n->get('ROL_INACTIV_ROLES');
     $listDescription  = $gL10n->get('ROL_ACTIV_ROLES');
     $activeRolesImage = 'roles_gray.png';
-	$activeRolesFlag  = '1';
+    $activeRolesFlag  = '1';
 }
 
 if($getInvisible == true)
@@ -62,18 +62,18 @@ if($getInvisible == true)
     $visibleRolesLinkDescription = $gL10n->get('ROL_VISIBLE_ROLES');
     $listDescription   = $gL10n->get('ROL_INVISIBLE_ROLES');
     $visibleRolesImage = 'light_on.png';
-	$visibleRolesFlag  = '0';
-	// in invisible mode show active and inactive invisible roles
-	$sqlRolesStatus   = ' AND rol_visible = \'0\' ';
+    $visibleRolesFlag  = '0';
+    // in invisible mode show active and inactive invisible roles
+    $sqlRolesStatus   = ' AND rol_visible = \'0\' ';
 }
 else
 {
     $visibleRolesLinkDescription = $gL10n->get('ROL_INVISIBLE_ROLES');
     $visibleRolesImage = 'light_off.png';
-	$visibleRolesFlag  = '1';
+    $visibleRolesFlag  = '1';
 }
 
-					  
+
 // create html page object
 $page = new HtmlPage($headline);
 
@@ -84,16 +84,16 @@ $rolesMenu = $page->getMenu();
 
 // define link to create new profile field
 $rolesMenu->addItem('menu_item_new_role', $g_root_path.'/adm_program/modules/roles/roles_new.php',
-							$gL10n->get('SYS_CREATE_ROLE'), 'add.png');
+                            $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
 // define link to maintain categories
 $rolesMenu->addItem('menu_item_maintain_category', $g_root_path.'/adm_program/modules/categories/categories.php?type=ROL',
-							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'edit.png');
+                            $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'edit.png');
 // define link to show inactive roles
 $rolesMenu->addItem('menu_item_inactive_role', $g_root_path.'/adm_program/modules/roles/roles.php?inactive='.$activeRolesFlag,
-							$activeRolesLinkDescription, $activeRolesImage);
+                            $activeRolesLinkDescription, $activeRolesImage);
 // define link to show hidden roles
 $rolesMenu->addItem('menu_item_hidden_role', $g_root_path.'/adm_program/modules/roles/roles.php?invisible='.$visibleRolesFlag,
-							$visibleRolesLinkDescription, $visibleRolesImage);
+                            $visibleRolesLinkDescription, $visibleRolesImage);
 
 // Create table
 $table = new HtmlTable('roles_table', $page, true, true);
@@ -117,7 +117,7 @@ $cat_id = '';
 $sql    = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
             WHERE rol_cat_id  = cat_id
                 AND cat_type    = \'ROL\'
-				    '.$sqlRolesStatus.'
+                    '.$sqlRolesStatus.'
                 AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                      OR cat_org_id IS NULL )
             ORDER BY cat_sequence ASC, rol_name ASC ';
@@ -136,13 +136,13 @@ while($row = $gDb->fetch_array($rol_result))
     $role->setArray($row);
 
     $categoryName = $role->getValue('cat_name');
-    
+
     if($role->getValue('cat_hidden') == 1)
     {
         $categoryName .= '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/user_key.png"
                              alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $gL10n->get('SYS_ROLE')).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $gL10n->get('SYS_ROLE')).'" />';
     }
-    
+
     if($role->getValue('rol_assign_roles') == 1)
     {
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/roles.png"
@@ -193,7 +193,7 @@ while($row = $gDb->fetch_array($rol_result))
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/guestbook.png"
                             alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" />';
     }
-    // If allowed to write anonymous guestbook entries, then we don´t need to set rights for the roles
+    // If allowed to write anonymous guestbook entries, then we donÂ´t need to set rights for the roles
     if($role->getValue('rol_guestbook_comments') == 1  && $gPreferences['enable_guestbook_module'] > 0 && $gPreferences['enable_gbook_comments4all'] == false)
     {
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/comment.png"
@@ -219,7 +219,7 @@ while($row = $gDb->fetch_array($rol_result))
     {
         $assignRoles= '&nbsp;';
     }
-    
+
     if($role->getValue("rol_this_list_view") == 1)
     {
         $listView .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/list_role.png"
@@ -250,7 +250,7 @@ while($row = $gDb->fetch_array($rol_result))
     {
         $listView = '&nbsp;';
     }
-    
+
     $linkAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$role->getValue("rol_id").'"><img
                                 src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('ROL_SHOW_MEMBERS').'" title="'.$gL10n->get('ROL_SHOW_MEMBERS').'" /></a>';
 
@@ -264,7 +264,7 @@ while($row = $gDb->fetch_array($rol_result))
         $linkAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$role->getValue('rol_id').'"><img
                                     src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>';
     }
-    
+
     $linkAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=8&amp;rol_id='. $role->getValue('rol_id').'"><img
                 src="'. THEME_PATH. '/icons/vcard.png"
                 alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"

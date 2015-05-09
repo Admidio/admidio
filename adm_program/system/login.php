@@ -18,10 +18,10 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // read id of webmaster role
 $sql = 'SELECT rol_id FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
          WHERE rol_name LIKE \''.$gL10n->get('SYS_WEBMASTER').'\'
-		   AND rol_webmaster = 1
-		   AND rol_cat_id = cat_id
-		   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
-			   OR cat_org_id IS NULL ) ';
+           AND rol_webmaster = 1
+           AND rol_cat_id = cat_id
+           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
+               OR cat_org_id IS NULL ) ';
 $gDb->query($sql);
 $row = $gDb->fetch_array();
 

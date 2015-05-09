@@ -37,7 +37,7 @@ class ListConfiguration extends TableLists
             $this->readColumns();
         }
     }
-    
+
     // fuegt eine neue Spalte dem Spaltenarray hinzu
     public function addColumn($number, $field, $sort = '', $filter = '')
     {
@@ -70,11 +70,11 @@ class ListConfiguration extends TableLists
         }
         return false;
     }
-	
+
     public function clear()
     {
         $this->columns = array();
-    
+
         parent::clear();
     }
 
@@ -86,18 +86,18 @@ class ListConfiguration extends TableLists
 
     public function delete()
     {
-		$this->db->startTransaction();
-		
+        $this->db->startTransaction();
+
         // first delete all columns
         foreach($this->columns as $number => $listColumn)
         {
             $listColumn->delete();
         }
-    
+
         $return = parent::delete();
-		
-		$this->db->endTransaction();
-		return $return;
+
+        $this->db->endTransaction();
+        return $return;
     }
 
     // entfernt die entsprechende Spalte aus der Konfiguration
@@ -131,11 +131,11 @@ class ListConfiguration extends TableLists
             }
         }
     }
-    
+
     /** Returns the column object with the corresponding number.
      *  If that column doesn't exists the method try to repair the
      *  column list. If that won't help then @b null will be returned.
-     *  @param $number The internal number of the column. 
+     *  @param $number The internal number of the column.
      *                 This will be the position of the column in the list.
      *  @return Returns a TableAccess object of the database table @b adm_list_columns.
      */
@@ -159,7 +159,7 @@ class ListConfiguration extends TableLists
             }
         }
     }
-    
+
     // gibt das passende SQL-Statement zu der Liste zurueck
     // role_ids : Array ueber alle Rollen-IDs, von denen Mitglieder in der Liste angezeigt werden sollen
     // member_status : 0 - Nur aktive Rollenmitglieder
@@ -175,25 +175,25 @@ class ListConfiguration extends TableLists
         $sqlOrderBy = '';
         $sqlRoleIds = '';
         $sqlMemberStatus = '';
-    
+
         foreach($this->columns as $number => $listColumn)
         {
             // Spalte anhaengen
-            if(strlen($sqlSelect) > 0) 
+            if(strlen($sqlSelect) > 0)
             {
                 $sqlSelect = $sqlSelect. ', ';
             }
-            
+
             if($listColumn->getValue('lsc_usf_id') > 0)
             {
                 // dynamisches Profilfeld
                 $tableAlias = 'row'. $listColumn->getValue('lsc_number'). 'id'. $listColumn->getValue('lsc_usf_id');
-                
+
                 // JOIN - Syntax erstellen
                 $sqlJoin = $sqlJoin. ' LEFT JOIN '. TBL_USER_DATA .' '.$tableAlias.'
                                            ON '.$tableAlias.'.usd_usr_id = usr_id
                                           AND '.$tableAlias.'.usd_usf_id = '.$listColumn->getValue('lsc_usf_id');
-                
+
                 // hierbei wird die usf_id als Tabellen-Alias benutzt und vorangestellt
                 $dbColumnName = $tableAlias.'.usd_value';
             }
@@ -211,14 +211,14 @@ class ListConfiguration extends TableLists
             // create a valid sort
             if(strlen($listColumn->getValue('lsc_sort')) > 0)
             {
-                if(strlen($sqlOrderBy) > 0) 
-                {  
+                if(strlen($sqlOrderBy) > 0)
+                {
                     $sqlOrderBy = $sqlOrderBy. ', ';
                 }
 
                 if($userFieldType == 'NUMBER' || $userFieldType == 'DECIMAL_NUMBER')
                 {
-                    // if a field has numeric values then there must be a cast because database 
+                    // if a field has numeric values then there must be a cast because database
                     // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
                     if($gDbType == 'postgresql')
                     {
@@ -238,32 +238,32 @@ class ListConfiguration extends TableLists
             }
 
 
-			// Handle the conditions for the columns
+            // Handle the conditions for the columns
             if(strlen($listColumn->getValue('lsc_filter')) > 0)
             {
                 $value = $listColumn->getValue('lsc_filter');
 
-				// custom profile field
+                // custom profile field
                 if($listColumn->getValue('lsc_usf_id') > 0)
                 {
                     if($userFieldType == 'CHECKBOX')
                     {
                         $type = 'checkbox';
 
-						// 'yes' or 'no' will be replaced with 1 or 0, so that you can compare it with the database value
-						$arrCheckboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
-						$arrCheckboxKeys   = array(1, 0, 1, 0);
-						$value = str_replace(array_map('admStrToLower', $arrCheckboxValues), $arrCheckboxKeys, admStrToLower($value));
+                        // 'yes' or 'no' will be replaced with 1 or 0, so that you can compare it with the database value
+                        $arrCheckboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
+                        $arrCheckboxKeys   = array(1, 0, 1, 0);
+                        $value = str_replace(array_map('admStrToLower', $arrCheckboxValues), $arrCheckboxKeys, admStrToLower($value));
                     }
                     elseif($userFieldType == 'DROPDOWN'
-					||     $userFieldType == 'RADIO_BUTTON')
-					{
-						$type = 'int';
+                    ||     $userFieldType == 'RADIO_BUTTON')
+                    {
+                        $type = 'int';
 
-						// replace all field values with their internal numbers
-						$arrListValues = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_value_list', 'text');
+                        // replace all field values with their internal numbers
+                        $arrListValues = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_value_list', 'text');
                         $value = array_search(admStrToLower($value), array_map('admStrToLower', $arrListValues));
-					}
+                    }
                     elseif($userFieldType == 'NUMBER'
                     ||     $userFieldType == 'DECIMAL_NUMBER')
                     {
@@ -278,7 +278,7 @@ class ListConfiguration extends TableLists
                         $type = 'string';
                     }
                 }
-                elseif($listColumn->getValue('lsc_special_field') == 'mem_begin' 
+                elseif($listColumn->getValue('lsc_special_field') == 'mem_begin'
                 || $listColumn->getValue('lsc_special_field') == 'mem_begin')
                 {
                     $type = 'date';
@@ -291,15 +291,15 @@ class ListConfiguration extends TableLists
                 {
                     $type = '';
                 }
-                
+
                 // Bedingungen aus dem Bedingungsfeld als SQL darstellen
                 $parser    = new ConditionParser;
-				$parser->setNotExistsStatement('SELECT 1 FROM '.TBL_USER_DATA.' '.$tableAlias.'s
-												 WHERE '.$tableAlias.'s.usd_usr_id = usr_id
-												   AND '.$tableAlias.'s.usd_usf_id = '.$listColumn->getValue('lsc_usf_id'));
+                $parser->setNotExistsStatement('SELECT 1 FROM '.TBL_USER_DATA.' '.$tableAlias.'s
+                                                 WHERE '.$tableAlias.'s.usd_usr_id = usr_id
+                                                   AND '.$tableAlias.'s.usd_usf_id = '.$listColumn->getValue('lsc_usf_id'));
                 $condition = $parser->makeSqlStatement($value, $dbColumnName, $type, $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name'));
-				$sqlWhere = $sqlWhere. $condition;
-            }        
+                $sqlWhere = $sqlWhere. $condition;
+            }
         }
 
         // Rollen-IDs zusammensetzen
@@ -307,8 +307,8 @@ class ListConfiguration extends TableLists
         {
             if(is_numeric($key))
             {
-                if(strlen($sqlRoleIds) > 0) 
-                {  
+                if(strlen($sqlRoleIds) > 0)
+                {
                     $sqlRoleIds = $sqlRoleIds. ', ';
                 }
                 $sqlRoleIds = $sqlRoleIds. $value;
@@ -338,13 +338,13 @@ class ListConfiguration extends TableLists
                        '.$sqlMemberStatus.'
                    AND mem_usr_id = usr_id
                    AND usr_valid  = 1
-                       '.$sqlWhere.' 
+                       '.$sqlWhere.'
                  ORDER BY mem_leader DESC ';
         if(strlen($sqlOrderBy) > 0)
         {
             $sql = $sql. ', '. $sqlOrderBy;
         }
-        
+
         return $sql;
     }
 
@@ -355,14 +355,14 @@ class ListConfiguration extends TableLists
                  WHERE lsc_lst_id = '. $this->getValue('lst_id'). '
                  ORDER BY lsc_number ASC ';
         $lsc_result   = $this->db->query($sql);
-        
+
         while($lsc_row = $this->db->fetch_array($lsc_result))
         {
             $this->columns[$lsc_row['lsc_number']] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
             $this->columns[$lsc_row['lsc_number']]->setArray($lsc_row);
         }
     }
-    
+
     /** The method will clear all column data of this object and restore all
      *  columns from the database. Then the column number will be renewed for all columns.
      *  This is in some cases a neccessary fix if a column number was lost.
@@ -373,7 +373,7 @@ class ListConfiguration extends TableLists
         $this->columns = array();
         $this->readColumns();
         $newColumnNumber = 1;
-        
+
         // check for every column if the number is expected otherwise set new number
         foreach($this->columns as $number => $listColumn)
         {
@@ -384,18 +384,18 @@ class ListConfiguration extends TableLists
             }
             $newColumnNumber++;
         }
-        
+
         // now restore columns with new numbers
         $this->columns = array();
-        $this->readColumns();        
+        $this->readColumns();
     }
 
     public function save($updateFingerPrint = true)
     {
-		$this->db->startTransaction();
-		
+        $this->db->startTransaction();
+
         parent::save($updateFingerPrint);
-        
+
         // jetzt noch die einzelnen Spalten sichern
         foreach($this->columns as $number => $listColumn)
         {
@@ -405,8 +405,8 @@ class ListConfiguration extends TableLists
             }
             $listColumn->save($updateFingerPrint);
         }
-		
-		$this->db->endTransaction();
+
+        $this->db->endTransaction();
     }
 }
 ?>

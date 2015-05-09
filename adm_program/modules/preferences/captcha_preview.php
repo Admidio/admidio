@@ -19,16 +19,16 @@ echo '
 
     if($gPreferences['captcha_type'] == 'pic')
     {
-    	$height = $gPreferences['captcha_height']+25;
-    	$width = $gPreferences['captcha_width']+25;
-    	echo '<img src="'.$g_root_path.'/adm_program/system/show_captcha.php?id='.time().'" alt="'.$gL10n->get('SYS_CAPTCHA').'" />';
+        $height = $gPreferences['captcha_height']+25;
+        $width = $gPreferences['captcha_width']+25;
+        echo '<img src="'.$g_root_path.'/adm_program/system/show_captcha.php?id='.time().'" alt="'.$gL10n->get('SYS_CAPTCHA').'" />';
     }
     elseif($gPreferences['captcha_type']=='calc')
     {
-    	$captcha = new Captcha();
-    	echo $captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'), $gL10n->get('SYS_CAPTCHA_CALC_PART2'), $gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'), $gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'), $gL10n->get('SYS_CAPTCHA_CALC_PART4'));
-    	
-    	echo '<br><i>('.$gL10n->get('SYS_CAPTCHA_CALC').': '.$_SESSION['captchacode'].')</i>';
+        $captcha = new Captcha();
+        echo $captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'), $gL10n->get('SYS_CAPTCHA_CALC_PART2'), $gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'), $gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'), $gL10n->get('SYS_CAPTCHA_CALC_PART4'));
+        
+        echo '<br><i>('.$gL10n->get('SYS_CAPTCHA_CALC').': '.$_SESSION['captchacode'].')</i>';
     }
     
 echo '</div>';

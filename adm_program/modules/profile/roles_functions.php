@@ -16,7 +16,7 @@ if ('roles_functions.php' == basename($_SERVER['SCRIPT_FILENAME']))
 // get all memberships where the user is assigned
 function getRolesFromDatabase($user_id)
 {
-	global $gDb, $gCurrentOrganization;
+    global $gDb, $gCurrentOrganization;
 
     $sql = 'SELECT *
               FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
@@ -37,8 +37,8 @@ function getRolesFromDatabase($user_id)
 function getFutureRolesFromDatabase($user_id)
 {
     global $gDb, $gCurrentOrganization;
-	
-	$sql = 'SELECT *
+    
+    $sql = 'SELECT *
               FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
              WHERE mem_rol_id  = rol_id
                AND mem_begin   > \''.DATE_NOW.'\'
@@ -55,8 +55,8 @@ function getFutureRolesFromDatabase($user_id)
 // get all memberships where the user was assigned
 function getFormerRolesFromDatabase($user_id)
 {
-	global $gDb, $gCurrentOrganization;
-	
+    global $gDb, $gCurrentOrganization;
+    
     $sql    = 'SELECT *
                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                 WHERE mem_rol_id  = rol_id
@@ -77,7 +77,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
     
     $countShowRoles  = 0;
     $member = new TableMembers($gDb);
-	$role   = new TableRoles($gDb);
+    $role   = new TableRoles($gDb);
     $roleMemHTML = '<ul class="list-group admidio-list-roles-assign" id="'.$htmlListId.'">';
 
     while($row = $gDb->fetch_array($result_role))
@@ -91,30 +91,30 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
 
             $member->clear();
             $member->setArray($row);
-			$role->clear();
-			$role->setArray($row);
+            $role->clear();
+            $role->setArray($row);
             
-			// if membership will not end, then don't show end date
-			if(strcmp($member->getValue('mem_end', 'Y-m-d'), '9999-12-31') != 0)
+            // if membership will not end, then don't show end date
+            if(strcmp($member->getValue('mem_end', 'Y-m-d'), '9999-12-31') != 0)
             {
-               	$showRoleEndDate = true;
+                   $showRoleEndDate = true;
             }
 
-			// check if membership ends in the past
-			if(strcmp(DATE_NOW, $member->getValue('mem_end', 'Y-m-d')) > 0)
+            // check if membership ends in the past
+            if(strcmp(DATE_NOW, $member->getValue('mem_end', 'Y-m-d')) > 0)
             {
-               	$formerMembership = true;
-    	        $deleteMode = 'pro_former';
+                   $formerMembership = true;
+                $deleteMode = 'pro_former';
             }
 
-			// check if membership starts in the future
-			if(strcmp($member->getValue('mem_begin', 'Y-m-d'), DATE_NOW) > 0)
-			{
-				$futureMembership = true;
-	            $deleteMode = 'pro_future';
-			}
+            // check if membership starts in the future
+            if(strcmp($member->getValue('mem_begin', 'Y-m-d'), DATE_NOW) > 0)
+            {
+                $futureMembership = true;
+                $deleteMode = 'pro_future';
+            }
 
-			// create list entry for one role
+            // create list entry for one role
             $roleMemHTML .= '
             <li class="list-group-item" id="role_'. $row['mem_rol_id']. '">
                 <ul class="list-group admidio-list-roles-assign-pos">
@@ -221,7 +221,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
     }
     else
     {
-        return $roleMemHTML;	
+        return $roleMemHTML;    
     }
 }
 

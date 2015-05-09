@@ -7,7 +7,7 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
- 
+
 require_once('../../system/common.php');
 
 // check if module is active
@@ -49,8 +49,8 @@ $sql    = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value as 
                ON email.usd_usr_id = usr_id
               AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
             WHERE usr_valid = 0
-			  AND reg_usr_id = usr_id
-			  AND reg_org_id = '.$gCurrentOrganization->getValue('org_id').'
+              AND reg_usr_id = usr_id
+              AND reg_org_id = '.$gCurrentOrganization->getValue('org_id').'
             ORDER BY last_name, first_name ';
 $usr_result   = $gDb->query($sql);
 $member_found = $gDb->num_rows($usr_result);
@@ -69,9 +69,9 @@ if($gCurrentUser->isWebmaster())
     // get module menu
     $registrationMenu = $page->getMenu();
 
-	// show link to system preferences of announcements
-	$registrationMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=registration',
-								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    // show link to system preferences of announcements
+    $registrationMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=registration',
+                                $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
 $table = new HtmlTable('new_user_table', $page, true);
@@ -113,7 +113,7 @@ while($row = $gDb->fetch_array($usr_result))
             href="'.$g_root_path.'/adm_program/system/popup_message.php?type=nwu&amp;element_id=row_user_'.
             $row['usr_id'].'&amp;name='.urlencode($row['first_name'].' '.$row['last_name']).'&amp;database_id='.$row['usr_id'].'"><img
             src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
-        
+
     $table->addRowByArray($columnValues, 'row_user_'.$row['usr_id']);
 }
 

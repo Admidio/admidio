@@ -28,19 +28,19 @@ $getTitle = admFuncVariableIsValid($_GET, 'title', 'string', array('defaultValue
 // Modus und Rechte pruefen
 if($getType == 'ROL' && $gCurrentUser->manageRoles() == false)
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 elseif($getType == 'LNK' && $gCurrentUser->editWeblinksRight() == false)
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 elseif($getType == 'USF' && $gCurrentUser->editUsers() == false)
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 elseif($getType == 'DAT' && $gCurrentUser->editDates() == false)
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // set module headline
@@ -53,52 +53,52 @@ unset($_SESSION['categories_request']);
 $page = new HtmlPage($headline);
 
 $page->addJavascript('
-	function moveCategory(direction, catID) {
-		var actRow = document.getElementById("row_" + catID);
-		var childs = actRow.parentNode.childNodes;
-		var prevNode    = null;
-		var nextNode    = null;
-		var actRowCount = 0;
-		var actSequence = 0;
-		var secondSequence = 0;
+    function moveCategory(direction, catID) {
+        var actRow = document.getElementById("row_" + catID);
+        var childs = actRow.parentNode.childNodes;
+        var prevNode    = null;
+        var nextNode    = null;
+        var actRowCount = 0;
+        var actSequence = 0;
+        var secondSequence = 0;
 
-		// erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
-		for(i=0;i < childs.length; i++) {
-			if(childs[i].tagName == "TR") {
-				actRowCount++;
-				if(actSequence > 0 && nextNode == null) {
-					nextNode = childs[i];
-				}
+        // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
+        for(i=0;i < childs.length; i++) {
+            if(childs[i].tagName == "TR") {
+                actRowCount++;
+                if(actSequence > 0 && nextNode == null) {
+                    nextNode = childs[i];
+                }
 
-				if(childs[i].id == "row_" + catID) {
-					actSequence = actRowCount;
-				}
+                if(childs[i].id == "row_" + catID) {
+                    actSequence = actRowCount;
+                }
 
-				if(actSequence == 0) {
-					prevNode = childs[i];
-				}
-			}
-		}
+                if(actSequence == 0) {
+                    prevNode = childs[i];
+                }
+            }
+        }
 
-		// entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
-		if(direction == "up") {
-			if(prevNode != null) {
-				actRow.parentNode.insertBefore(actRow, prevNode);
-				secondSequence = actSequence - 1;
-			}
-		}
-		else {
-			if(nextNode != null) {
-				actRow.parentNode.insertBefore(nextNode, actRow);
-				secondSequence = actSequence + 1;
-			}
-		}
+        // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
+        if(direction == "up") {
+            if(prevNode != null) {
+                actRow.parentNode.insertBefore(actRow, prevNode);
+                secondSequence = actSequence - 1;
+            }
+        }
+        else {
+            if(nextNode != null) {
+                actRow.parentNode.insertBefore(nextNode, actRow);
+                secondSequence = actSequence + 1;
+            }
+        }
 
-		if(secondSequence > 0) {
-			// Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-			$.get(gRootPath + "/adm_program/modules/categories/categories_function.php?cat_id=" + catID + "&type='. $getType. '&mode=4&sequence=" + direction);
-		}
-	}');
+        if(secondSequence > 0) {
+            // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
+            $.get(gRootPath + "/adm_program/modules/categories/categories_function.php?cat_id=" + catID + "&type='. $getType. '&mode=4&sequence=" + direction);
+        }
+    }');
 
 $htmlIconLoginUser = '&nbsp;';
 if($getType != 'USF')
@@ -114,7 +114,7 @@ $categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10
 
 // define link to create new category
 $categoriesMenu->addItem('admMenuItemNewCategory', $g_root_path.'/adm_program/modules/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
-							$gL10n->get('SYS_CREATE_VAR', $getTitle), 'add.png');
+                            $gL10n->get('SYS_CREATE_VAR', $getTitle), 'add.png');
 
 //Create table object
 $categoriesOverview = new HtmlTable('tbl_categories', $page, true);
@@ -135,7 +135,7 @@ $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
                 OR cat_org_id IS NULL )
             AND cat_type   = \''.$getType.'\'
             ORDER BY cat_sequence ASC ';
-            
+
 $categoryResult = $gDb->query($sql);
 $flagTbodyWritten = false;
 $flagTbodyAllOrgasWritten = false;
@@ -146,7 +146,7 @@ $category = new TableCategory($gDb);
 while($cat_row = $gDb->fetch_array($categoryResult))
 {
     $category->clear();
-	$category->setArray($cat_row);
+    $category->setArray($cat_row);
 
     if($category->getValue('cat_system') == 1 && $getType == 'USF')
     {
@@ -155,7 +155,7 @@ while($cat_row = $gDb->fetch_array($categoryResult))
     }
     elseif($category->getValue('cat_org_id') == 0 && $getType == 'USF')
     {
-        // Kategorien über alle Organisationen kommen immer zuerst
+        // Kategorien Ã¼ber alle Organisationen kommen immer zuerst
         if($flagTbodyAllOrgasWritten == false)
         {
             $flagTbodyAllOrgasWritten = true;
@@ -170,7 +170,7 @@ while($cat_row = $gDb->fetch_array($categoryResult))
             $categoriesOverview->addTableBody('id', 'cat_list');
         }
     }
-        
+
     $htmlMoveRow = '&nbsp;';
     if($category->getValue('cat_system') == 0 || $getType != 'USF')
     {
@@ -179,13 +179,13 @@ while($cat_row = $gDb->fetch_array($categoryResult))
                            <a class="admidio-icon-link" href="javascript:moveCategory(\'down\', '.$category->getValue('cat_id').')"><img
                                 src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', $getTitle).'" title="'.$gL10n->get('CAT_MOVE_DOWN', $getTitle).'" /></a>';
     }
-    
+
     $htmlHideCategory = '&nbsp;';
     if($category->getValue('cat_hidden') == 1)
     {
         $htmlHideCategory = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/user_key.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" />';
     }
-    
+
     $htmlDefaultCategory = '&nbsp;';
     if($category->getValue('cat_default') == 1)
     {
@@ -205,7 +205,7 @@ while($cat_row = $gDb->fetch_array($categoryResult))
                                         $category->getValue('cat_id').'&amp;name='.urlencode($category->getValue('cat_name')).'&amp;database_id='.$category->getValue('cat_id').'&amp;database_id_2='.$getType.'"><img
                                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
     }
-    
+
     // create array with all column values
     $columnValues = array(
         '<a href="'.$g_root_path.'/adm_program/modules/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'">'. $category->getValue('cat_name'). '</a>',

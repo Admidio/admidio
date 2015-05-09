@@ -51,7 +51,7 @@ if(isset($_SESSION['rooms_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-	$room->setArray($_SESSION['rooms_request']);
+    $room->setArray($_SESSION['rooms_request']);
     unset($_SESSION['rooms_request']);
 }
 

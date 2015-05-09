@@ -85,15 +85,15 @@ if($getMode == 1)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
-	else
-	{
-	    if($getAnnId == 0)
+    else
+    {
+        if($getAnnId == 0)
         {
-    	    $message = $gL10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
-    	    $notification = new Email();
-    	    $notification->adminNotfication($gL10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+            $message = $gL10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
+            $notification = new Email();
+            $notification->adminNotfication($gL10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
         }
-	}
+    }
     
     unset($_SESSION['announcements_request']);
     $gNavigation->deleteLastUrl();

@@ -15,7 +15,7 @@ $postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', arr
 $postPhotoId      = admFuncVariableIsValid($_POST, 'photo_id', 'numeric', array('requireValue' => true));
 $postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr', 'numeric', array('requireValue' => true));
 
-$funcClass 		 = new FunctionClass($gL10n);
+$funcClass         = new FunctionClass($gL10n);
 $photoAlbum      = new TablePhotos($gDb, $postPhotoId);
 $imageUrl        = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$postPhotoId.'&photo_nr='.$postPhotoNr.'&max_width='.$gPreferences['ecard_card_picture_width'].'&max_height='.$gPreferences['ecard_card_picture_height'];
 $imageServerPath = SERVER_PATH. '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$postPhotoId.'/'.$postPhotoNr.'.jpg';
@@ -32,10 +32,10 @@ if ($gPreferences['enable_ecard_module'] != 1)
 // pruefen ob User eingeloggt ist
 if(!$gValidLogin)
 {
-	$gMessage($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-$senderName	 = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+$senderName     = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
 $senderEmail = $gCurrentUser->getValue('EMAIL');
 
 if(isset($_POST['ecard_recipients']) == false || is_array($_POST['ecard_recipients'] == false))

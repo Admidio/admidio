@@ -10,17 +10,17 @@
 
 class Database
 {
-	// method creates the interface to the relevant database
+    // method creates the interface to the relevant database
     public static function createDatabaseObject($dbType)
     {
         switch ($dbType)
         {
-			case 'mysql':
-				return new DBMySQL();
-				
-			case 'postgresql':
-				return new DBPostgreSQL();
-                
+            case 'mysql':
+                return new DBMySQL();
+
+            case 'postgresql':
+                return new DBPostgreSQL();
+
             default:
                 return false;
         }

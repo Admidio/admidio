@@ -14,7 +14,7 @@
  *            2 - (not relevant)
  *            3 - Edit roles of a registration
  * inline   : 0 - Ausgaben werden als eigene Seite angezeigt
- *			  1 - nur "body" HTML Code
+ *            1 - nur "body" HTML Code
  *
  *****************************************************************************/
 
@@ -42,23 +42,23 @@ if($gCurrentUser->assignRoles() == false)
 $roleCount = 0;
 foreach($_POST as $key=>$value)
 {
-	if(preg_match('/^(role-)[0-9]+$/i', $key))
-	{
-		$roleCount++;
+    if(preg_match('/^(role-)[0-9]+$/i', $key))
+    {
+        $roleCount++;
     }
 }
 
 // if no role is selected than show notice
 if($roleCount == 0)
 {
-	if($getInline == 0)
-	{
-		die($gMessage->show($gL10n->get('PRO_ROLE_NOT_ASSIGNED')));
-	}
-	else
-	{
-		die($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
-	}
+    if($getInline == 0)
+    {
+        die($gMessage->show($gL10n->get('PRO_ROLE_NOT_ASSIGNED')));
+    }
+    else
+    {
+        die($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
+    }
 }
 
 if($gCurrentUser->manageRoles())
@@ -93,7 +93,7 @@ else
                   AND bm.mem_end     > \''.DATE_NOW.'\'
                   AND bm.mem_leader  = 1
                   AND rol_id         = bm.mem_rol_id
-				  AND rol_leader_rights IN (1,3)
+                  AND rol_leader_rights IN (1,3)
                   AND rol_valid      = 1
                   AND rol_visible    = 1
                   AND rol_cat_id     = cat_id
@@ -141,14 +141,14 @@ while($row = $gDb->fetch_array($result_rol))
             && isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == false
             && isset($_POST['role-'.$row['rol_id']])   && $_POST['role-'.$row['rol_id']]   == true)
             {
-				if($getInline == 0)
-				{
-                	$gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']));
-				}
-				else
-				{
-					echo $gL10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']);
-				}
+                if($getInline == 0)
+                {
+                    $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']));
+                }
+                else
+                {
+                    echo $gL10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']);
+                }
             }
         }
     }
@@ -165,11 +165,11 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 // Ergebnisse durchlaufen und Datenbankupdate durchfuehren
 while($row = $gDb->fetch_array($result_rol))
 {
-	// if role is webmaster than only webmaster can add new user,
-	// but don't change their own membership, because there must be at least one webmaster
+    // if role is webmaster than only webmaster can add new user,
+    // but don't change their own membership, because there must be at least one webmaster
     if($row['rol_webmaster'] == 0
-	|| ($row['rol_webmaster'] == 1 && $gCurrentUser->isWebmaster()
-	   && $getUserId != $gCurrentUser->getValue('usr_id')))
+    || ($row['rol_webmaster'] == 1 && $gCurrentUser->isWebmaster()
+       && $getUserId != $gCurrentUser->getValue('usr_id')))
     {
         $roleAssign = 0;
         if(isset($_POST['role-'.$row['rol_id']]) && $_POST['role-'.$row['rol_id']] == 1)
@@ -186,7 +186,7 @@ while($row = $gDb->fetch_array($result_rol))
         // update role membership
         if($roleAssign == 1)
         {
-			$user->setRoleMembership($row['rol_id'], DATE_NOW, '9999-12-31', $roleLeader);
+            $user->setRoleMembership($row['rol_id'], DATE_NOW, '9999-12-31', $roleLeader);
             $count_assigned++;
 
             // find the parent roles and assign user to parent roles
@@ -218,14 +218,14 @@ if(count($parentRoles) > 0)
 {
     foreach($parentRoles as $actRole)
     {
-		$user->setRoleMembership($actRole, DATE_NOW, '9999-12-31');
+        $user->setRoleMembership($actRole, DATE_NOW, '9999-12-31');
     }
 }
 
 // if role selection was a separate page then delete this page from the navigation stack
 if($getInline == 0)
 {
-	$gNavigation->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
 }
 
 // all active users must renew their user data because maybe their
@@ -236,14 +236,14 @@ $gCurrentSession->renewUserObject();
 if($getNewUser > 0 && $count_assigned == 0)
 {
     // Neuem User wurden keine Rollen zugewiesen
-	if($getInline == 0)
-	{
-    	$gMessage->show($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
-	}
-	else
-	{
-		echo $gL10n->get('PRO_ROLE_NOT_ASSIGNED');
-	}
+    if($getInline == 0)
+    {
+        $gMessage->show($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
+    }
+    else
+    {
+        echo $gL10n->get('PRO_ROLE_NOT_ASSIGNED');
+    }
 }
 
 // zur Ausgangsseite zurueck
@@ -255,19 +255,19 @@ if(strpos($gNavigation->getUrl(), 'new_user_assign.php') > 0)
 
 if($getInline == true)
 {
-	echo 'success';
+    echo 'success';
 }
 else
 {
     if($getNewUser == 3)
     {
-    	$messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
+        $messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
     }
     else
     {
-    	$messageId = 'SYS_SAVE_DATA';
+        $messageId = 'SYS_SAVE_DATA';
     }
 
-	$gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-	$gMessage->show($gL10n->get($messageId));
+    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
+    $gMessage->show($gL10n->get($messageId));
 }

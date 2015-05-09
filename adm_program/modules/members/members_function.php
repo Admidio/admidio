@@ -69,15 +69,15 @@ if($getMode == 1)
     $messageMenu = $page->getMenu();
     $messageMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
-	$page->addHtml('
-	<div class="message">
-		<p class="lead">
+    $page->addHtml('
+    <div class="message">
+        <p class="lead">
             <img src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_FORMER').'" />
             '.$gL10n->get('MEM_MAKE_FORMER').'<br /><br />
             <img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" />
             '.$gL10n->get('MEM_REMOVE_USER_DESC', $gL10n->get('SYS_DELETE')).'
         </p>
-        
+
         <button id="btnFormer" type="button" class="btn btn-primary"
             onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$getUserId.'&mode=2\'"><img
             src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_FORMER').'" />&nbsp;'.$gL10n->get('SYS_FORMER').'</button>
@@ -108,7 +108,7 @@ elseif($getMode == 2)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
-    
+
     $member = new TableMembers($gDb);
 
     $sql = 'SELECT mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
@@ -136,13 +136,13 @@ elseif($getMode == 2)
 elseif($getMode == 3)
 {
     // User aus der Datenbank loeschen
-    
+
     // nur Webmaster duerfen dies
     if($gCurrentUser->isWebmaster() == false)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
-    
+
     // User darf in keiner anderen Orga aktiv sein
     // kein Suizid ermoeglichen
     if($other_orga > 0
@@ -152,7 +152,7 @@ elseif($getMode == 3)
     }
 
     $phrase = $gL10n->get('SYS_DELETE_DATA');
-    
+
     // User aus der Admidio Datenbank loeschen
     $user->delete();
 }
@@ -176,7 +176,7 @@ elseif($getMode == 4)
             $password = substr(md5(time()), 0, 8);
             $user->setValue('usr_password', $password);
             $user->save();
-    
+
             // Mail an den User mit den Loginaten schicken
             $sysmail = new SystemMail($gDb);
             $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));

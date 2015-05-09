@@ -59,7 +59,7 @@ if($gPreferences['profile_photo_storage'] == 1)
 
 if($inventory->getValue('inv_id') == 0)
 {
-	$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if($getMode == 'save')
@@ -206,9 +206,9 @@ elseif($getMode == 'upload')
     $image_dimensions = $image_properties[0]*$image_properties[1];
     if($image_dimensions > admFuncProcessableImageSize())
     {
-    	$gMessage->show($gL10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', round(admFuncProcessableImageSize()/1000000, 2)));
+        $gMessage->show($gL10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', round(admFuncProcessableImageSize()/1000000, 2)));
     }
-	
+    
     // Foto auf entsprechende Groesse anpassen
     $user_image = new Image($_FILES['userfile']['tmp_name'][0]);
     $user_image->setImageType('jpeg');

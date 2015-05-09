@@ -11,7 +11,7 @@
  * usf_id : profile field id that should be edited
  *
  ****************************************************************************/
- 
+
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
@@ -42,17 +42,17 @@ $userField = new TableUserField($gDb);
 if($getUsfId > 0)
 {
     $userField->readDataById($getUsfId);
-    
-	// hidden must be 0, if the flag should be set
-	if($userField->getValue('usf_hidden') == 1)
-	{
-		$userField->setValue('usf_hidden', 0);
-	}
-	else
-	{
-		$userField->setValue('usf_hidden', 1);
-	}
-    
+
+    // hidden must be 0, if the flag should be set
+    if($userField->getValue('usf_hidden') == 1)
+    {
+        $userField->setValue('usf_hidden', 0);
+    }
+    else
+    {
+        $userField->setValue('usf_hidden', 1);
+    }
+
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert
     if($userField->getValue('cat_org_id') >  0
     && $userField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
@@ -68,19 +68,19 @@ else
 
 if(isset($_SESSION['fields_request']))
 {
-	// hidden must be 0, if the flag should be set
-	if($_SESSION['fields_request']['usf_hidden'] == 1)
-	{
-		$_SESSION['fields_request']['usf_hidden'] = 0;
-	}
-	else
-	{
-		$_SESSION['fields_request']['usf_hidden'] = 1;
-	}
+    // hidden must be 0, if the flag should be set
+    if($_SESSION['fields_request']['usf_hidden'] == 1)
+    {
+        $_SESSION['fields_request']['usf_hidden'] = 0;
+    }
+    else
+    {
+        $_SESSION['fields_request']['usf_hidden'] = 1;
+    }
 
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-	$userField->setArray($_SESSION['fields_request']);
+    $userField->setArray($_SESSION['fields_request']);
     unset($_SESSION['fields_request']);
 }
 
@@ -88,17 +88,17 @@ if(isset($_SESSION['fields_request']))
 $page = new HtmlPage($headline);
 
 $page->addJavascript('
-	function setValueList() {
-		if($("#usf_type").val() == "DROPDOWN" || $("#usf_type").val() == "RADIO_BUTTON") {
-			$("#usf_value_list_group").show("slow");
+    function setValueList() {
+        if($("#usf_type").val() == "DROPDOWN" || $("#usf_type").val() == "RADIO_BUTTON") {
+            $("#usf_value_list_group").show("slow");
             $("#usf_value_list").attr("required", "required");
-		}
-		else {
+        }
+        else {
             $("#usf_value_list").removeAttr("required");
-			$("#usf_value_list_group").hide();
-		}
-	}
-    
+            $("#usf_value_list_group").hide();
+        }
+    }
+
     setValueList();
     $("#usf_type").click(function() {setValueList();});', true);
 
@@ -117,20 +117,20 @@ $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
     {
         $form->addInput('usf_name', $gL10n->get('SYS_NAME'), $userField->getValue('usf_name', 'database'), array('maxLength' => 100, 'property' => FIELD_MANDATORY));
     }
-    
+
     // show internal field name for information
     if($getUsfId > 0)
     {
         $form->addInput('usf_name_intern', $gL10n->get('SYS_INTERNAL_NAME'), $userField->getValue('usf_name_intern'), array('maxLength' => 100, 'property' => FIELD_DISABLED, 'helpTextIdLabel' => 'SYS_INTERNAL_NAME_DESC'));
     }
-    
+
     if($userField->getValue('usf_system') == 1)
     {
         $form->addInput('usf_cat_id', $gL10n->get('SYS_CATEGORY'), $userField->getValue('cat_name'), array('maxLength' => 100, 'property' => FIELD_DISABLED));
     }
     else
     {
-        $form->addSelectBoxForCategories('usf_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'USF', 'EDIT_CATEGORIES', 
+        $form->addSelectBoxForCategories('usf_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'USF', 'EDIT_CATEGORIES',
                                          array('property' => FIELD_MANDATORY, 'defaultValue' => $userField->getValue('usf_cat_id')));
     }
 $form->closeGroupBox();
@@ -163,9 +163,9 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
     $form->addCheckbox('usf_hidden', $gL10n->get('ORG_FIELD_NOT_HIDDEN'), $userField->getValue('usf_hidden'), array('helpTextIdLabel' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'eye.png'));
     $form->addCheckbox('usf_disabled', $gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')), $userField->getValue('usf_disabled'), array('helpTextIdLabel' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'textfield_key.png'));
-    
+
     if($userField->getValue('usf_name_intern') == 'LAST_NAME' || $userField->getValue('usf_name_intern') == 'FIRST_NAME')
-	{
+    {
         $form->addCheckbox('usf_mandatory', $gL10n->get('ORG_FIELD_MANDATORY'), $userField->getValue('usf_mandatory'), array('helpTextIdLabel' => 'ORG_FIELD_MANDATORY_DESC', 'icon' => 'asterisk_yellow.png'));
     }
     else

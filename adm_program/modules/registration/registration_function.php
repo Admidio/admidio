@@ -71,7 +71,7 @@ if($getMode == 1 || $getMode == 2)
         // so save user data and then show error
         $user->save();
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
-    	$e->showHtml();
+        $e->showHtml();
     }
 }
 
@@ -119,37 +119,37 @@ elseif($getMode == 4)
     }
     catch(AdmException $e)
     {
-    	$e->showText();
+        $e->showText();
     }
 
-	// return successful delete for XMLHttpRequest
+    // return successful delete for XMLHttpRequest
     echo 'done';
 }
 elseif($getMode == 5)
 {
     try
     {
-    	// accept a registration, assign neccessary roles and send a notification email
-    	$registrationUser->acceptRegistration();
+        // accept a registration, assign neccessary roles and send a notification email
+        $registrationUser->acceptRegistration();
     }
     catch(AdmException $e)
     {
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
-    	$e->showHtml();
+        $e->showHtml();
     }
-	
-	// if current user has the right to assign roles then show roles dialog
-	// otherwise go to previous url (default roles are assigned automatically)
-	if($gCurrentUser->manageRoles())
-	{
-		header('Location: roles.php?new_user=3&usr_id='. $registrationUser->getValue('usr_id'));
-		exit();
-	}
-	else
-	{
-		$gMessage->setForwardUrl($gNavigation->getPreviousUrl());
-		$gMessage->show($gL10n->get('PRO_ASSIGN_REGISTRATION_SUCCESSFUL'));
-	}
+    
+    // if current user has the right to assign roles then show roles dialog
+    // otherwise go to previous url (default roles are assigned automatically)
+    if($gCurrentUser->manageRoles())
+    {
+        header('Location: roles.php?new_user=3&usr_id='. $registrationUser->getValue('usr_id'));
+        exit();
+    }
+    else
+    {
+        $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
+        $gMessage->show($gL10n->get('PRO_ASSIGN_REGISTRATION_SUCCESSFUL'));
+    }
 }
 elseif($getMode == 6)
 {
@@ -163,7 +163,7 @@ elseif($getMode == 6)
     catch(AdmException $e)
     {
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
-    	$e->showHtml();
+        $e->showHtml();
     }
 
     // Zugangsdaten neu verschicken

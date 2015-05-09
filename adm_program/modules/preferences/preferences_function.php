@@ -39,27 +39,27 @@ switch($getMode)
 {
 case 1:
     $checkboxes = array();
-    
+
     try
     {
         // first check the fields of the submitted form
-        
+
         switch($getForm)
         {
             case 'common':
                 $checkboxes = array('enable_rss','enable_auto_login','enable_password_recovery','system_js_editor_enabled','system_search_similar');
-                
+
                 if(admStrIsValidFileName($_POST['theme']) == false
                 || file_exists(SERVER_PATH. '/adm_themes/'.$_POST['theme'].'/index.html') == false)
                 {
                     $gMessage->show($gL10n->get('ORG_INVALID_THEME'));
                 }
-            
+
                 if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
                 {
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER')));
                 }
-                
+
                 if(isset($_POST['enable_auto_login']) == false && $gPreferences['enable_auto_login'] == 1)
                 {
                     // if auto login was deactivated than delete all saved logins
@@ -95,7 +95,7 @@ case 1:
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_TIME_FORMAT')));
                 }
                 break;
-                
+
             case 'registration':
                 $checkboxes = array('enable_registration_captcha', 'enable_registration_admin_mail');
                 break;
@@ -103,7 +103,7 @@ case 1:
             case 'email_dispatch':
                 $checkboxes = array('mail_sender_into_to', 'mail_smtp_auth');
                 break;
-                
+
             case 'system_notification':
                 $checkboxes = array('enable_system_mails', 'enable_email_notification');
 
@@ -123,7 +123,7 @@ case 1:
 
             case 'captcha':
                 break;
-                
+
             case 'announcements':
                 break;
 
@@ -142,7 +142,7 @@ case 1:
             case 'lists':
                 $checkboxes = array('lists_hide_overview_details');
                 break;
-            
+
             case 'messages':
                 $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_pm_module', 'enable_mail_captcha', 'mail_html_registered_users', 'mail_into_to');
 
@@ -174,18 +174,18 @@ case 1:
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('LNK_DISPLAY_REDIRECT')));
                 }
                 break;
-			
+
             case 'inventory':
                 break;
-            
+
             default:
                 $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         }
     }
-	catch(AdmException $e)
-	{
-		$e->showText();
-	}
+    catch(AdmException $e)
+    {
+        $e->showText();
+    }
     // check every checkbox if a value was committed
     // if no value is found then set 0 because 0 will not be committed in a html checkbox element
     foreach($checkboxes as $key => $value)
@@ -195,7 +195,7 @@ case 1:
             $_POST[$value] = 0;
         }
     }
-    
+
     // then update the database with the new values
 
     foreach($_POST as $key => $value)
@@ -205,7 +205,7 @@ case 1:
         {
             if(strpos($key, 'org_') === 0)
             {
-				$gCurrentOrganization->setValue($key, $value);
+                $gCurrentOrganization->setValue($key, $value);
             }
             elseif(strpos($key, 'SYSMAIL_') === 0)
             {
@@ -227,12 +227,12 @@ case 1:
             }
         }
     }
-	
+
     // alle Daten nun speichern
-	$gCurrentOrganization->save();
-	
-	$gCurrentOrganization->setPreferences($gPreferences);
-	
+    $gCurrentOrganization->save();
+
+    $gCurrentOrganization->setPreferences($gPreferences);
+
     // refresh language if neccessary
     if($gL10n->getLanguage() != $gPreferences['system_language'])
     {
@@ -244,7 +244,7 @@ case 1:
 
     echo 'success';
     break;
-    
+
 case 2:
     if(isset($_SESSION['add_organization_request']))
     {
@@ -262,14 +262,14 @@ case 2:
 
     // create html page object
     $page = new HtmlPage($headline);
-    
+
     // add current url to navigation stack
     $gNavigation->addUrl(CURRENT_URL, $headline);
-    
+
     // add back link to module menu
     $organizationNewMenu = $page->getMenu();
     $organizationNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-    
+
     $page->addHtml('<p class="lead">'.$gL10n->get('ORG_NEW_ORGANIZATION_DESC').'</p>');
 
     // show form
@@ -278,12 +278,12 @@ case 2:
     $form->addInput('orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'], array('maxLength' => 50, 'property' => FIELD_MANDATORY));
     $form->addInput('orgaEmail', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $formValues['orgaEmail'], array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_MANDATORY));
     $form->addSubmitButton('btn_foward', $gL10n->get('INS_SET_UP_ORGANIZATION'), array('icon' => THEME_PATH.'/icons/database_in.png', 'class' => ' col-sm-offset-3'));
-    
+
     // add form to html page and show page
     $page->addHtml($form->show(false));
     $page->show();
     break;
-    
+
 case 3:
     /******************************************************/
     /* Create basic data for new organization in database */
@@ -316,7 +316,7 @@ case 3:
     $newOrganization->setValue('org_shortname', $_POST['orgaShortName']);
     $newOrganization->setValue('org_homepage', $_SERVER['HTTP_HOST']);
     $newOrganization->save();
-    
+
     // write all preferences from preferences.php in table adm_preferences
     require_once('../../installation/db_scripts/preferences.php');
 
@@ -327,37 +327,37 @@ case 3:
     $newOrganization->setPreferences($orga_preferences, false);
     $newOrganization->createBasicData($gCurrentUser->getValue('usr_id'));
 
-	// if installation of second organization than show organization select at login
-	if($gCurrentOrganization->countAllRecords() == 2)
-	{
-		$sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = 1
-				 WHERE prf_name = \'system_organization_select\' ';
-		$gDb->query($sql);
-	}
+    // if installation of second organization than show organization select at login
+    if($gCurrentOrganization->countAllRecords() == 2)
+    {
+        $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = 1
+                 WHERE prf_name = \'system_organization_select\' ';
+        $gDb->query($sql);
+    }
 
     $gDb->endTransaction();
-    
+
     // create html page object
     $page = new HtmlPage();
-    
+
     // add headline and title of module
     $page->addHeadline($gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
-    
+
     $page->addHtml('<p class="lead">'.$gL10n->get('ORG_ORGANIZATION_SUCCESSFULL_ADDED', $_POST['orgaLongName']).'</p>');
 
     // show form
     $form = new HtmlForm('add_new_organization_form', $g_root_path.'/adm_program/modules/preferences/preferences.php', $page);
     $form->addSubmitButton('btn_foward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_PATH.'/icons/forward.png'));
-    
+
     // add form to html page and show page
     $page->addHtml($form->show(false));
     $page->show();
 
-    
+
     // clean up
     unset($_SESSION['add_organization_request']);
     break;
-    
+
 case 4:
     // show php info page
     echo phpinfo();
