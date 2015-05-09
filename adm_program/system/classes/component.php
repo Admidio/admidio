@@ -52,7 +52,11 @@ class Component extends TableAccess
 
         $dbVersion = $this->getValue('com_version');
         $dbVersionBeta = $this->getValue('com_beta');
-        $dbVersionText = $dbVersion.' Beta '.$dbVersionBeta;
+        $dbVersionText = $dbVersion;
+        if($dbVersionBeta > 0)
+        {
+            $dbVersionText .= ' Beta '.$dbVersionBeta;
+        }
 
         if(version_compare($dbVersion, ADMIDIO_VERSION) !== 0 || version_compare($dbVersionBeta, ADMIDIO_VERSION_BETA) !== 0)
         {
