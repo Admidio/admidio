@@ -471,14 +471,14 @@ create index IDX_MEM_ROL_USR_ID on %PREFIX%_members (mem_rol_id, mem_usr_id);
 /*==============================================================*/
 CREATE TABLE %PREFIX%_messages
 (
-	msg_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
-	msg_type                      varchar(10)     NOT NULL,
-	msg_subject                   varchar(256)    NOT NULL,
-	msg_usr_id_sender             integer         unsigned NOT NULL,
-	msg_usr_id_receiver           varchar(256)    NOT NULL,
-	msg_timestamp                 timestamp       NOT NULL default CURRENT_TIMESTAMP,
-	msg_read                      smallint        NOT NULL DEFAULT 0,
-	primary key (msg_id)
+    msg_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
+    msg_type                      varchar(10)     NOT NULL,
+    msg_subject                   varchar(256)    NOT NULL,
+    msg_usr_id_sender             integer         unsigned NOT NULL,
+    msg_usr_id_receiver           varchar(256)    NOT NULL,
+    msg_timestamp                 timestamp       NOT NULL default CURRENT_TIMESTAMP,
+    msg_read                      smallint        NOT NULL DEFAULT 0,
+    primary key (msg_id)
 )
 engine = InnoDB
 default character set = utf8
@@ -489,13 +489,13 @@ collate = utf8_unicode_ci;
 /*==============================================================*/
 CREATE TABLE %PREFIX%_messages_content
 (
-	msc_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
-	msc_msg_id                    integer         unsigned NOT NULL,
-	msc_part_id                   integer         unsigned NOT NULL,
-	msc_usr_id                    integer         unsigned,
-	msc_message                   text            NOT NULL,
-	msc_timestamp                 timestamp       NOT NULL default CURRENT_TIMESTAMP,
-	primary key (msc_id)
+    msc_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
+    msc_msg_id                    integer         unsigned NOT NULL,
+    msc_part_id                   integer         unsigned NOT NULL,
+    msc_usr_id                    integer         unsigned,
+    msc_message                   text            NOT NULL,
+    msc_timestamp                 timestamp       NOT NULL default CURRENT_TIMESTAMP,
+    primary key (msc_id)
 )
 engine = InnoDB
 default character set = utf8
@@ -890,8 +890,8 @@ alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_USR_CREAT
       references %PREFIX%_users (usr_id) on delete restrict on update restrict;
 alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_USR_CHANGE foreign key (gbc_usr_id_change)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
-      
-alter table %PREFIX%_ids add constraint %PREFIX%_FK_IDS_USR_ID foreign key (ids_usr_id) 
+
+alter table %PREFIX%_ids add constraint %PREFIX%_FK_IDS_USR_ID foreign key (ids_usr_id)
       references %PREFIX%_users (usr_id) on delete restrict on update restrict;
 
 alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_CAT foreign key (lnk_cat_id)

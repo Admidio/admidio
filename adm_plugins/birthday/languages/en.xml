@@ -3,16 +3,16 @@
     <version id="1.2.3">
         <text id="PLG_BIRTHDAY_HEADLINE" development="new" translation="todo">Birthdays</text>
     </version>
-	<version id="1.1.0">
-		<text id="PLG_BIRTHDAY_FUTURE" development="new" translation="edited">%VAR1% will be %VAR3% years old in %VAR2% days, on the %VAR4%</text>
-		<text id="PLG_BIRTHDAY_MAN_VAR" development="new" translation="edited">Mr. %VAR1%</text>
-		<text id="PLG_BIRTHDAY_MORE_USERS" development="new" translation="edited">Number of users with birthday today: %VAR1%</text>
-		<text id="PLG_BIRTHDAY_NO_USER" development="new" translation="todo">No user has birthday today.</text>
-		<text id="PLG_BIRTHDAY_ONE_USER" development="new" translation="todo">One user has birthday today!</text>
-		<text id="PLG_BIRTHDAY_PAST" development="new" translation="todo">%VAR1% became %VAR3% years old %VAR2% days before, on the %VAR4%</text>
-		<text id="PLG_BIRTHDAY_TODAY" development="new" translation="todo">%VAR1% will be today %VAR2%</text>
-		<text id="PLG_BIRTHDAY_TOMORROW" development="new" translation="todo">%VAR1% will be tomorrow %VAR3% years old, on the %VAR4%</text>
-		<text id="PLG_BIRTHDAY_WOMAN_VAR" development="new" translation="todo">Ms. %VAR1%</text>
-		<text id="PLG_BIRTHDAY_YESTERDAY" development="new" translation="todo">%VAR1% became %VAR3% years old on the %VAR4%</text>
-	</version>
+    <version id="1.1.0">
+        <text id="PLG_BIRTHDAY_FUTURE" development="new" translation="edited">%VAR1% will be %VAR3% years old in %VAR2% days, on the %VAR4%</text>
+        <text id="PLG_BIRTHDAY_MAN_VAR" development="new" translation="edited">Mr. %VAR1%</text>
+        <text id="PLG_BIRTHDAY_MORE_USERS" development="new" translation="edited">Number of users with birthday today: %VAR1%</text>
+        <text id="PLG_BIRTHDAY_NO_USER" development="new" translation="todo">No user has birthday today.</text>
+        <text id="PLG_BIRTHDAY_ONE_USER" development="new" translation="todo">One user has birthday today!</text>
+        <text id="PLG_BIRTHDAY_PAST" development="new" translation="todo">%VAR1% became %VAR3% years old %VAR2% days before, on the %VAR4%</text>
+        <text id="PLG_BIRTHDAY_TODAY" development="new" translation="todo">%VAR1% will be today %VAR2%</text>
+        <text id="PLG_BIRTHDAY_TOMORROW" development="new" translation="todo">%VAR1% will be tomorrow %VAR3% years old, on the %VAR4%</text>
+        <text id="PLG_BIRTHDAY_WOMAN_VAR" development="new" translation="todo">Ms. %VAR1%</text>
+        <text id="PLG_BIRTHDAY_YESTERDAY" development="new" translation="todo">%VAR1% became %VAR3% years old on the %VAR4%</text>
+    </version>
 </language>
