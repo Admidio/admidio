@@ -1164,7 +1164,7 @@ class User extends TableUsers
         }
 
         $newFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
-		
+
         /*  Nicht alle Aenderungen werden geloggt. Ausnahmen:
          *  usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
          *  Felder, die mit usr_ beginnen, werden nicht geloggt
@@ -1173,7 +1173,7 @@ class User extends TableUsers
         if($gPreferences['profile_log_edit_fields'] == 1
 		&& $this->getValue('usr_id') != 0 
 		&& strpos($columnName, 'usr_') === false 
-		&& $newFieldValue != $oldFieldValue)
+		&& $newFieldValue !== $oldFieldValue)
         {
 			$logEntry = new TableAccess($this->db, TBL_USER_LOG, 'usl');
 			$logEntry->setValue('usl_usr_id', $this->getValue('usr_id'));

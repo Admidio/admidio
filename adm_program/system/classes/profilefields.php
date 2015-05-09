@@ -471,7 +471,7 @@ class ProfileFields
                 }
                 else
                 {
-                    $fielValue = $date->format('Y-m-d');
+                    $fieldValue = $date->format('Y-m-d');
                 }
             }
             elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'EMAIL')
