@@ -48,7 +48,7 @@ class LanguageData
      */
     public function __construct($language, $languagePath = '')
     {
-        if(strlen($languagePath) == 0)
+        if($languagePath === '')
         {
             $this->addLanguagePath(SERVER_PATH. '/adm_program/languages');
         }
@@ -66,7 +66,7 @@ class LanguageData
      */
     public function addLanguagePath($path)
     {
-        if(array_key_exists($path, $this->languageFilePath) == false && strlen($path) > 0)
+        if(array_key_exists($path, $this->languageFilePath) == false && $path !== '')
         {
             $this->languageFilePath[] = $path;
         }

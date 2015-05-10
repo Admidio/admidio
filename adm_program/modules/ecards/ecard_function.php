@@ -197,7 +197,7 @@ class FunctionClass
                 }
 
                 // Bild als Anhang an die Mail haengen
-                if($img_name != 'none.jpg' && strlen($img_name) > 0)
+                if($img_name != 'none.jpg' && $img_name !== '')
                 {
                     $uid = md5(uniqid($img_name.time()));
                     try

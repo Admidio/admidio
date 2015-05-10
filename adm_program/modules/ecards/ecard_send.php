@@ -52,7 +52,7 @@ if(strlen($_POST['ecard_message']) == 0)
 $ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName, $template);
 
 // if template was not found then show error
-if(strlen($ecardDataToParse) == 0) 
+if($ecardDataToParse === '')
 {
     $gMessage($gL10n->get('SYS_MODULE_DISABLED'));
 }
@@ -128,7 +128,7 @@ if(count($arrayUsers) > 0)
         if($ecardSendResult == true)
         {
             $user = new User($gDb, $gProfileFields, $userId);
-            
+
             // create and send ecard
             $ecardHtmlData   = $funcClass->parseEcardTemplate($imageUrl, $_POST['ecard_message'], $ecardDataToParse, $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $user->getValue('EMAIL'));
             $ecardSendResult = $funcClass->sendEcard($senderName, $senderEmail, $ecardHtmlData, $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $user->getValue('EMAIL'), $imageServerPath);

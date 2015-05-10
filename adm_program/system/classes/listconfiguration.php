@@ -43,7 +43,7 @@ class ListConfiguration extends TableLists
     {
         // MySQL kann nicht mehr als 61 Tabellen joinen
         // Uebergaben muessen sinnvoll gefuellt sein
-        if(count($this->columns) < 57 && $number > 0 && strlen($field) > 0)
+        if(count($this->columns) < 57 && $number > 0 && $field !== '')
         {
             // falls Spalte noch nicht existiert, dann Objekt anlegen
             if(isset($this->columns[$number]) == false)
@@ -179,7 +179,7 @@ class ListConfiguration extends TableLists
         foreach($this->columns as $number => $listColumn)
         {
             // Spalte anhaengen
-            if(strlen($sqlSelect) > 0)
+            if($sqlSelect !== '')
             {
                 $sqlSelect = $sqlSelect. ', ';
             }
@@ -211,7 +211,7 @@ class ListConfiguration extends TableLists
             // create a valid sort
             if(strlen($listColumn->getValue('lsc_sort')) > 0)
             {
-                if(strlen($sqlOrderBy) > 0)
+                if($sqlOrderBy !== '')
                 {
                     $sqlOrderBy = $sqlOrderBy. ', ';
                 }
@@ -307,7 +307,7 @@ class ListConfiguration extends TableLists
         {
             if(is_numeric($key))
             {
-                if(strlen($sqlRoleIds) > 0)
+                if($sqlRoleIds !== '')
                 {
                     $sqlRoleIds = $sqlRoleIds. ', ';
                 }
@@ -340,7 +340,7 @@ class ListConfiguration extends TableLists
                    AND usr_valid  = 1
                        '.$sqlWhere.'
                  ORDER BY mem_leader DESC ';
-        if(strlen($sqlOrderBy) > 0)
+        if($sqlOrderBy !== '')
         {
             $sql = $sql. ', '. $sqlOrderBy;
         }

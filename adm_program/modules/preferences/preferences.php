@@ -99,7 +99,7 @@ $page->addJavascript('
         return false;
     });    ', true);
 
-if(strlen($showOption) > 0)
+if($showOption !== '')
 {
     // add current url to navigation stack
     $gNavigation->addUrl(CURRENT_URL, $headline);

@@ -182,7 +182,7 @@ foreach($gProfileFields->mProfileFields as $field)
     if($category != $field->getValue('cat_name')
     && $show_field == true)
     {
-        if(strlen($category) > 0)
+        if($category !== '')
         {
             // div-Container admGroupBoxBody und admGroupBox schliessen
             $form->closeGroupBox();

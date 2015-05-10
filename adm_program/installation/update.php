@@ -36,7 +36,7 @@ else
     exit();
 }
 
-if(strlen($g_tbl_praefix) == 0)
+if($g_tbl_praefix === '')
 {
     // default praefix is "adm" because of compatibility to older versions
     $g_tbl_praefix = 'adm';
@@ -122,7 +122,7 @@ if(file_exists('../../config.php') == true && file_exists('../../adm_my_files/co
 // check database version
 $message = checkDatabaseVersion($gDb);
 
-if(strlen($message) > 0)
+if($message !== '')
 {
     showNotice($message, $g_root_path.'/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
 }
@@ -158,7 +158,7 @@ else
 }
 
 // if databse version is not set then show notice
-if(strlen($installedDbVersion) == 0)
+if($installedDbVersion === '')
 {
     $message = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-exclamation-sign"></span>
                     <strong>'.$gL10n->get('INS_UPDATE_NOT_POSSIBLE').'</strong></div>

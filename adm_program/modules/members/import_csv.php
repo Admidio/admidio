@@ -111,7 +111,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
                     || $columnValueToLower == admStrToLower($gL10n->get('SYS_NO'))
                     || $columnValueToLower == 'no'
                     || $columnValueToLower  == '0'
-                    || strlen($columnValue) == 0)
+                    || $columnValue === '')
                     {
                         $user->setValue($field->getValue('usf_name_intern'), '0');
                     }
@@ -187,7 +187,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
         {
             $duplicate_user = new User($gDb, $gProfileFields, $rowDuplicateUser['usr_id']);
         }
-    
+
         if($rowDuplicateUser['usr_id'] > 0)
         {
             if($_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
@@ -195,7 +195,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
                 // delete all user data of profile fields
                 $duplicate_user->deleteUserFieldData();
             }
-    
+
             if($_SESSION['user_import_mode'] == USER_IMPORT_COMPLETE
             || $_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
             {
@@ -229,7 +229,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
                 $user = $duplicate_user;
             }
         }
-    
+
         if($rowDuplicateUser['usr_id'] == 0
         || ($rowDuplicateUser['usr_id']  > 0 && $_SESSION['user_import_mode'] > USER_IMPORT_NOT_EDIT))
         {
@@ -243,23 +243,23 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
             {
                 $countImportEditUser++;
             }
-        
+
             // save user data
-            $user->save();            
+            $user->save();
 
             // assign role membership to user
             if($user->setRoleMembership($_SESSION['rol_id']))
             {
                 $countImportEditRole++;
             }
-            
+
             // assign dependent role memberships to user
             foreach($depRoles as $depRole)
             {
                 $user->setRoleMembership($depRole);
             }
-            
-            
+
+
         }
     }
 

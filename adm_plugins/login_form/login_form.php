@@ -99,7 +99,7 @@ if($gValidLogin == 1)
     <script type="text/javascript">
         $(document).ready(function() {
             $("#adm_logout_link").click(function() {';
-                if(strlen($plg_link_target) > 0 && strpos($plg_link_target, '_') === false)
+                if($plg_link_target !== '' && strpos($plg_link_target, '_') === false)
                 {
                     echo '
                     parent.'. $plg_link_target. '.location.href = \''. $g_root_path. '/adm_program/system/logout.php\';
@@ -132,7 +132,7 @@ if($gValidLogin == 1)
             $rankTitle = next($plg_rank);
         }
 
-        if(strlen($currentUserRankTitle) > 0)
+        if($currentUserRankTitle !== '')
         {
             $htmlUserRank = ' ('.$currentUserRankTitle.')';
         }

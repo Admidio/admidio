@@ -260,7 +260,7 @@ class User extends TableUsers
 
             }
 
-            if(strlen($right) == 0 || $this->roles_rights[$right] == 1)
+            if($right === '' || $this->roles_rights[$right] == 1)
             {
                 return true;
             }
@@ -271,13 +271,13 @@ class User extends TableUsers
     /**
      * Check if a valid password is set for the user and return true if the correct password
      * was set. Optional the current session could be updated to a valid login session.
-     * @param string $password   The password for the current user. This should not be encoded.
-     * @param bool $setAutoLogin If set to true then this login will be stored in AutoLogin table
-     *                           and the user doesn't need to login another time with this browser.
-     *                           To use this functionality @b $updateSessionCookies must be set to true.
-     * @param bool $updateSessionCookies The current session will be updated to a valid login.
-     *                                   If set to false then the login is only valid for the current script.
-     * @return bool Return true if the correct password for this user was given to this method.
+     * @param  string       $password             The password for the current user. This should not be encoded.
+     * @param  bool         $setAutoLogin         If set to true then this login will be stored in AutoLogin table
+     *                                            and the user doesn't need to login another time with this browser.
+     *                                            To use this functionality @b $updateSessionCookies must be set to true.
+     * @param  bool         $updateSessionCookies The current session will be updated to a valid login.
+     *                                            If set to false then the login is only valid for the current script.
+     * @return bool         Return true if the correct password for this user was given to this method.
      * @throws AdmException SYS_LOGIN_FAILED
      * @throws AdmException SYS_LOGIN_FAILED
      * @throws AdmException SYS_PASSWORD_UNKNOWN
@@ -312,7 +312,7 @@ class User extends TableUsers
 
                 // falls bereits ein Autologin existiert (Doppelanmeldung an 1 Browser),
                 // dann kein Neues anlegen, da dies zu 'Duplicate Key' fuehrt
-                if(strlen($autoLogin->getValue('atl_usr_id')) == 0)
+                if($autoLogin->getValue('atl_usr_id') === '')
                 {
                     $autoLogin->setValue('atl_session_id', $gSessionId);
                     $autoLogin->setValue('atl_usr_id', $this->getValue('usr_id'));
@@ -429,7 +429,7 @@ class User extends TableUsers
 
         $member = new TableMembers($this->db, $memberId);
 
-        if(strlen($startDate) == 0 || strlen($startDate) == 0)
+        if($startDate === '' || $startDate === '')
         {
             return false;
         }
@@ -502,7 +502,7 @@ class User extends TableUsers
             // save membership to database
             $member->setValue('mem_begin', $minStartDate);
             $member->setValue('mem_end', $maxEndDate);
-            if(strlen($leader) > 0)
+            if($leader !== '')
             {
                 $member->setValue('mem_leader', $leader);
             }
@@ -1023,7 +1023,7 @@ class User extends TableUsers
 
         $member = new TableMembers($this->db);
 
-        if(strlen($startDate) == 0 || strlen($startDate) == 0)
+        if($startDate === '' || $startDate === '')
         {
             return false;
         }
@@ -1111,7 +1111,7 @@ class User extends TableUsers
             $member->setValue('mem_usr_id', $this->getValue('usr_id'));
             $member->setValue('mem_begin', $minStartDate);
             $member->setValue('mem_end', $maxEndDate);
-            if(strlen($leader) > 0)
+            if($leader !== '')
             {
                 $member->setValue('mem_leader', $leader);
             }

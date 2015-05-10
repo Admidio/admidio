@@ -90,12 +90,12 @@ if ($getMode == 1 || $getMode == 2 || $getMode == 4)
             $list->deleteColumn($number, true);
         }
     }
-    
-    if(strlen($getName) > 0)
+
+    if($getName !== '')
     {
         $list->setValue('lst_name', $getName);
     }
-    
+
     if($getMode == 4 && $gCurrentUser->isWebmaster())
     {
         $list->setValue('lst_global', 1);
@@ -104,16 +104,16 @@ if ($getMode == 1 || $getMode == 2 || $getMode == 4)
     {
         $list->setValue('lst_global', 0);
     }
-    
+
     $list->save();
-    
+
     if($getMode == 1 || $getMode == 4)
     {
         // wieder zur eigenen Liste zurueck
         header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'). '&rol_id='. $_POST['rol_id']. '&show_members='.$_POST['show_members']);
         exit();
     }
-    
+
     // anzuzeigende Rollen in Array schreiben und in Session merken
     $role_ids = array();
     $role_ids[] = $_POST['rol_id'];

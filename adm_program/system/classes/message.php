@@ -69,8 +69,8 @@ class Message
      * Set a URL to which the user should be directed if he confirmed the message.
      * It's possible to set a timer after that the page of the url will be
      * automatically displayed without user inteaction.
-     * @param string $url The full url to which the user should be directed.
-     * @param int $timer  Optional a timer in millisec after the user will be automatically redirected to the $url.
+     * @param string $url   The full url to which the user should be directed.
+     * @param int    $timer Optional a timer in millisec after the user will be automatically redirected to the $url.
      */
     public function setForwardUrl($url, $timer = 0)
     {
@@ -100,7 +100,7 @@ class Message
 
     /**
      * Create a html page if necessary and show the message with the configured buttons.
-     * @param string $content The message text that should be shown. The content could have html.
+     * @param  string  $content The message text that should be shown. The content could have html.
      * @param $headline Optional a headline for the message. Default will be SYS_NOTE.
      * @return Returns the complete html page with the message.
      */

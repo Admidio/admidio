@@ -146,7 +146,7 @@ abstract class Modules
      */
     public function getParameter($parameterName)
     {
-        if(strlen($parameterName) > 0 && is_array($this->parameters) && array_key_exists($parameterName, $this->parameters))
+        if($parameterName !== '' && is_array($this->parameters) && array_key_exists($parameterName, $this->parameters))
         {
             return $this->parameters[$parameterName];
         }
@@ -240,7 +240,7 @@ abstract class Modules
      */
     public function setParameter($parameterName, $parameterValue)
     {
-        if(strlen($parameterName) > 0)
+        if($parameterName !== '')
         {
             $this->parameters[$parameterName] = $parameterValue;
 

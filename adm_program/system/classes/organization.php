@@ -443,7 +443,7 @@ class Organization extends TableAccess
         {
             return false;
         }
-        elseif($columnName == 'org_homepage' && strlen($newValue) > 0)
+        elseif($columnName == 'org_homepage' && $newValue !== '')
         {
             // Homepage darf nur gueltige Zeichen enthalten
             if (!strValidCharacters($newValue, 'url'))

@@ -39,8 +39,8 @@ class Session extends TableAccess
      * If the id is set than the specific session will be loaded.
      * @param object $db Object of the class database. This should be the default object $gDb.
      * @param $session The recordset of the session with this id will be loaded.
-     *                 The session can be the table id or the alphanumeric session id.
-     *                 If id isn't set than an empty object of the table is created.
+     *                   The session can be the table id or the alphanumeric session id.
+     *                   If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$db, $session = 0)
     {
@@ -81,7 +81,7 @@ class Session extends TableAccess
      * has a database object than this could be renewed if the object name of the database
      * object is @b db or @b mDb. This is necessary because the old database connection is
      * not longer valid.
-     * @param string $objectName Internal unique name of the object. The name was set with the method @b addObject
+     * @param  string $objectName Internal unique name of the object. The name was set with the method @b addObject
      * @return object Returns the reference to the object
      */
     public function &getObject($objectName)
@@ -106,8 +106,8 @@ class Session extends TableAccess
 
     /**
      * Checks if the object with this name exists in the object array of this class.
-     * @param string $objectName Internal unique name of the object. The name was set with the method @b addObject
-     * @return bool Returns @b true if the object exits otherwise @b false
+     * @param  string $objectName Internal unique name of the object. The name was set with the method @b addObject
+     * @return bool   Returns @b true if the object exits otherwise @b false
      */
     public function hasObject($objectName)
     {
@@ -121,7 +121,7 @@ class Session extends TableAccess
     /**
      * Check if the current session has a valid user login. Therefore the user id must be stored
      * within the session and the timestamps must be valid
-     * @param int $userId The user id must be stored in this session and will be checked if valid.
+     * @param  int  $userId The user id must be stored in this session and will be checked if valid.
      * @return bool Returns @b true if the user has a valid session login otherwise @b false;
      */
     public function isValidLogin($userId)

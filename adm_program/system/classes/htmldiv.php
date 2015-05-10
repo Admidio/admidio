@@ -2,12 +2,12 @@
 /*****************************************************************************/
 /** @class HtmlDiv
  *  @brief  Create html div elements
- * 
+ *
  *  This class creates html div elements.
  *  Create an instance of an div element and nest the inline elements.
  *  The class supports nesting of several div elements and allows you to configure all attributes programatically.
  *  The parsed div object with inline elements is returned as string.
- *  
+ *
  *  @par Example: Creating a div element
  *  @code
  *   $testArray = array('Test_1', 'Test_2','Test_3');
@@ -48,36 +48,36 @@
  *
  *****************************************************************************/
 
-class HtmlDiv extends HtmlElement 
+class HtmlDiv extends HtmlElement
 {
-    
+
     protected $level; ///< Integer value for the depth of nested div elements starting with level 1 for the main element
-    
+
     /**
      * Constructor creates the element
      *
      * @param $id Id of the main div
      * @param $class Class name of the main div
      */
-     
+
     public function __construct($id = '', $class = '')
-    {        
-        
+    {
+
         parent::__construct('div', '', '', true);
-        
-        if(strlen($id) > 0)
+
+        if($id !== '')
         {
             $this->addAttribute('id', $id);
         }
-        
-        if(strlen($class) > 0)
+
+        if($class !== '')
         {
             $this->addAttribute('class', $class);
         }
-        
+
         // set div level to 1
         $this->level = 1;
-    } 
+    }
 
     /**
      *  @par Add a datalist (dl).
@@ -86,21 +86,21 @@ class HtmlDiv extends HtmlElement
      *  @param $class Class Attribute
      */
     public function addDivElement($id = null, $class = null)
-    {   
+    {
         // Div elements do not need having child elements an can be nested straight forward.
-        // For this exception in html we have to take care that the flag of the parent class is always reseted, otherwise the 
+        // For this exception in html we have to take care that the flag of the parent class is always reseted, otherwise the
         // attributes are not parsed, because parent class htmlElement()  determines that the attributes of the
         // parent element are already parsed if flag has value 1 and the next element is a child with optional attributes and closing tag.
         // So we must overwrite the protected parent variable
         $this->parentFlag = 0;
         // Define new div element
         $this->addParentElement('div');
-        
+
         if($id != null)
         {
             $this->addAttribute('id', $id);
         }
-        
+
         if($class != null)
         {
             $this->addAttribute('class', $class);
@@ -108,11 +108,11 @@ class HtmlDiv extends HtmlElement
         // raise level
         $this->level ++;
     }
-    
+
     /**
      *  @par Add inline element into current division.
      *
-     *  @param $element The inline element 
+     *  @param $element The inline element
      *  @param $id Id Attribute
      *  @param $class Class Attribute
      *  @param $data Data of the element (optional)
@@ -120,17 +120,17 @@ class HtmlDiv extends HtmlElement
     public function addInline($element, $id = null, $class = null, $data = null)
     {
         $this->addElement($element);
-        
+
         if($id != null)
         {
             $this->addAttribute('id', $id);
         }
-        
+
         if($class != null)
         {
             $this->addAttribute('class', $class);
         }
-        
+
         if($data != null)
         {
             $this->addData($data);
@@ -189,15 +189,15 @@ class HtmlDiv extends HtmlElement
             // set new level
             $this->level --;
         }
-    }    
-    
+    }
+
     /**
      * Get the parsed html division (div)
      *
      * @return Returns the validated html div as string
      */
     public function getHtmlDiv()
-    {   
+    {
         // first check if open div elements exists and set all endtags if needed
         for($this->level; $this->level > 2; $this->level --)
         {
@@ -205,6 +205,6 @@ class HtmlDiv extends HtmlElement
         }
         return parent::getHtmlElement();
     }
-} 
+}
 
 ?>

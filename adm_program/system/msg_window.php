@@ -199,7 +199,7 @@ switch ($getMessageId)
         // im Standardfall wird mit der ID der Text aus der Sprachdatei gelesen
         // falls die Textvariable gefuellt ist, pruefen ob dies auch eine ID aus der Sprachdatei ist
         $msg_var1 = '';
-        if(strlen($getMessageVar1) > 0)
+        if($getMessageVar1 !== '')
         {
             if(strpos($getMessageVar1, '_') === 3)
             {

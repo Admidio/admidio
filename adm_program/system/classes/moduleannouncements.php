@@ -70,7 +70,7 @@
  *          )
  *  )
  *  @endcode
- */ 
+ */
 /******************************************************************************
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
@@ -78,33 +78,33 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  ******************************************************************************/
-  
+
 class ModuleAnnouncements extends Modules
-{    
+{
     protected $getConditions;   ///< String with SQL condition
-    
+
     /**
      * Get number of available announcements
      * @Return Returns the total count and push it in the array
      */
     public function getDataSetCount()
-    {     
+    {
         global $gCurrentOrganization;
         global $gDb;
-        
-        $sql = 'SELECT COUNT(1) as count 
+
+        $sql = 'SELECT COUNT(1) as count
                   FROM '. TBL_ANNOUNCEMENTS. '
                  WHERE (  ann_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname'). '\'
                     OR (   ann_global   = 1
                    AND ann_org_shortname IN ('.$gCurrentOrganization->getFamilySQL(true).') ))
                        '.$this->getConditions.'';
         $result = $gDb->query($sql);
-        $row    = $gDb->fetch_array($result);             
+        $row    = $gDb->fetch_array($result);
         return $row['count'];
     }
 
     /**
-     * Get all records and push it to the array 
+     * Get all records and push it to the array
      * @return Returns the Array with results, recordsets and validated parameters from $_GET Array
      */
     public function getDataSet($startElement=0, $limit=NULL)
@@ -113,24 +113,24 @@ class ModuleAnnouncements extends Modules
         global $gPreferences;
         global $gProfileFields;
         global $gDb;
-        
-        //Parameter        
+
+        //Parameter
         if($limit == NULL)
         {
             $announcementsPerPage = $gPreferences['announcements_per_page'];
         }
-        
+
         //Bedingungen
         if($this->getParameter('id') > 0)
         {
             $this->getConditions = 'AND ann_id ='. $this->getParameter('id');
         }
-        // Search announcements to date 
+        // Search announcements to date
         elseif(strlen($this->getParameter('dateStartFormatEnglish')) > 0)
         {
             $this->getConditions = 'AND ann_timestamp_create BETWEEN \''.$this->getParameter('dateStartFormatEnglish').' 00:00:00\' AND \''.$this->getParameter('dateEndFormatEnglish').' 23:59:59\'';
         }
-        
+
         if($gPreferences['system_show_create_edit'] == 1)
         {
             // show firstname and lastname of create and last change user
@@ -162,7 +162,7 @@ class ModuleAnnouncements extends Modules
               LEFT JOIN '. TBL_USERS .' cha_username
                 ON cha_username.usr_id = ann_usr_id_change ';
         }
-                               
+
         //read announcements from database
         $sql = 'SELECT ann.*, '.$additionalFields.'
                   FROM '. TBL_ANNOUNCEMENTS. ' ann
@@ -170,60 +170,60 @@ class ModuleAnnouncements extends Modules
                  WHERE (  ann_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname'). '\'
                     OR (   ann_global   = 1
                    AND ann_org_shortname IN ('.$gCurrentOrganization->getFamilySQL(true).') ))
-                       '.$this->getConditions.' 
+                       '.$this->getConditions.'
                  ORDER BY ann_timestamp_create DESC';
 
         // Check if limit was set
         if($limit > 0)
         {
             $sql .= ' LIMIT '.$limit;
-        }               
+        }
         if($startElement != 0)
         {
             $sql .= ' OFFSET '.$startElement;
-        }  
+        }
 
         $result = $gDb->query($sql);
 
-        //array for results       
+        //array for results
         $announcements= array('numResults'=>$gDb->num_rows($result), 'limit' => $limit, 'totalCount'=>$this->getDataSetCount());
-        
+
         //Ergebnisse auf Array pushen
         while($row = $gDb->fetch_array($result))
-        {       
-            $announcements['recordset'][] = $row; 
+        {
+            $announcements['recordset'][] = $row;
         }
-       
+
         // Push parameter to array
         $announcements['parameter'] = $this->getParameters();
         return $announcements;
-    }  
-    
+    }
+
     /** Set a date range in which the dates should be searched. The method will fill
-     *  4 parameters @b dateStartFormatEnglish, @b dateStartFormatEnglish, 
+     *  4 parameters @b dateStartFormatEnglish, @b dateStartFormatEnglish,
      *  @b dateEndFormatEnglish and @b dateEndFormatAdmidio that could be read with
      *  getParameter and could be used in the script.
      *  @param $dateRangeStart A date in english or Admidio format that will be the start date of the range.
      *  @param $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
-     *  @return Returns false if invalid date format is submitted 
+     *  @return Returns false if invalid date format is submitted
      */
     public function setDateRange($dateRangeStart, $dateRangeEnd)
     {
         global $gPreferences;
 
-        if(strlen($dateRangeStart) == 0)
+        if($dateRangeStart === '')
         {
             $dateRangeStart  = '1970-01-01';
             $dateRangeEnd    = DATE_NOW;
         }
-            
+
         // Create date object and format date_from in English format and sytem format and push to daterange array
         $objDate = new DateTimeExtended($dateRangeStart, 'Y-m-d', 'date');
         if($objDate->valid())
         {
             $this->setParameter('dateStartFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
             $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
-        }                                             
+        }
         else
         {
             // check if date_from  has system format
@@ -262,7 +262,7 @@ class ModuleAnnouncements extends Modules
                 return false;
             }
         }
-        
+
     }
-}      
+}
 ?>

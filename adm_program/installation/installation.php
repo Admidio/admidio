@@ -247,7 +247,7 @@ elseif($getMode == 4)  // Creating organization
 
             // check database version
             $message = checkDatabaseVersion($db);
-            if(strlen($message) > 0)
+            if($message !== '')
             {
                 showNotice($message, 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
             }

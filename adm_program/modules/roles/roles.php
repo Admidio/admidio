@@ -215,7 +215,7 @@ while($row = $gDb->fetch_array($rol_result))
                             alt="'.$gL10n->get('ROL_RIGHT_INVENTORY').'" title="'.$gL10n->get('ROL_RIGHT_INVENTORY').'" />';
     }
     // if no assigned roles
-    if(strlen($assignRoles) == 0)
+    if($assignRoles === '')
     {
         $assignRoles= '&nbsp;';
     }
@@ -246,7 +246,7 @@ while($row = $gDb->fetch_array($rol_result))
                         alt="'.$gL10n->get('ROL_SEND_MAIL_GUESTS').'" title="'.$gL10n->get('ROL_SEND_MAIL_GUESTS').'" />';
     }
     // if no matches for list view
-    if(strlen($listView) == 0)
+    if($listView === '')
     {
         $listView = '&nbsp;';
     }

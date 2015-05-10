@@ -31,7 +31,7 @@ class Folder
     public function __construct($folderWithPath = '')
     {
         $this->folderWithPath = '';
-        if(strlen($folderWithPath) > 0 && is_dir($folderWithPath))
+        if($folderWithPath !== '' && is_dir($folderWithPath))
         {
             $this->folderWithPath = $folderWithPath;
         }
@@ -40,7 +40,7 @@ class Folder
     // Ordner mit zugehoerigem Pfad setzen
     public function setFolder($folderWithPath = '')
     {
-        if(strlen($folderWithPath) > 0 && is_dir($folderWithPath))
+        if($folderWithPath !== '' && is_dir($folderWithPath))
         {
             $this->folderWithPath = $folderWithPath;
         }
@@ -87,7 +87,7 @@ class Folder
     // sourceFolder      : der zu kopierende Ordner, falls nicht gefuellt wird der Ordner aus der Klasse genommen
     public function copy($destinationFolder, $sourceFolder = '')
     {
-        if(strlen($sourceFolder) == 0)
+        if($sourceFolder === '')
         {
             $sourceFolder = $this->folderWithPath;
         }
@@ -147,7 +147,7 @@ class Folder
      */
     public function delete($folder = '', $onlyDeleteContent = false)
     {
-        if(strlen($folder) == 0)
+        if($folder === '')
         {
             $folder = $this->folderWithPath;
         }
@@ -198,7 +198,7 @@ class Folder
     // sourceFolder      : der zu verschiebende Ordner, falls nicht gefuellt wird der Ordner aus der Klasse genommen
     public function move($destinationFolder, $sourceFolder = '')
     {
-        if(strlen($sourceFolder) == 0)
+        if($sourceFolder === '')
         {
             $sourceFolder = $this->folderWithPath;
         }

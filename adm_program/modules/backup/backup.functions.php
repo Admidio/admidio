@@ -23,7 +23,7 @@ if (!function_exists('getmicrotime')) {
 // begin: (from phpthumb.functions.php)
 function FunctionIsDisabled($function) {
     static $DisabledFunctions = null;
-    if (is_null($DisabledFunctions)) {
+    if ($DisabledFunctions === null) {
         $disable_functions_local  = explode(',',     @ini_get('disable_functions'));
         $disable_functions_global = explode(',', @get_cfg_var('disable_functions'));
         foreach ($disable_functions_local as $key => $value) {
@@ -163,7 +163,7 @@ function version_compare_replacement($version1, $version2, $operator='') {
 
 function MySQLdumpVersion() {
     static $version = null;
-    if (is_null($version)) {
+    if ($version === null) {
         $version = false;
         $execdversion = SafeExec('mysqldump --version');
         if (preg_match('#^mysqldump +Ver ([0-9\\.]+)#i', $execdversion, $matches)) {
@@ -175,7 +175,7 @@ function MySQLdumpVersion() {
 
 function gzipVersion() {
     static $version = null;
-    if (is_null($version)) {
+    if ($version === null) {
         $version = false;
         $execdversion = SafeExec('gzip --version');
         if (preg_match('#^gzip ([0-9\\.]+)#i', $execdversion, $matches)) {
@@ -187,7 +187,7 @@ function gzipVersion() {
 
 function bzip2Version() {
     static $version = null;
-    if (is_null($version)) {
+    if ($version === null) {
         $version = false;
         $execdversion = SafeExec('bzip2 --version 2>&1');
         if (preg_match('#^bzip2(.*) Version ([0-9\\.]+)#i', $execdversion, $matches)) {
@@ -237,7 +237,7 @@ function FileSizeNiceDisplay($filesize, $precision=2) {
 function OutputInformation($id, $dhtml, $text='') {
     global $DHTMLenabled;
     if ($DHTMLenabled) {
-        if (!is_null($dhtml)) {
+        if (!$dhtml === null) {
             if ($id) {
                 echo '<script type="text/javascript">if (document.getElementById("'.$id.'")) document.getElementById("'.$id.'").innerHTML="'.str_replace('</', '<\\/', $dhtml).'"</script>';
             } else {

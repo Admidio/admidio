@@ -122,7 +122,7 @@ class HtmlNavbar
         }
 
         // add THEME_PATH to images unless the full URL is given
-        if(strlen($icon) > 0 && preg_match('/^http(s?):\/\//', $icon) == 0)
+        if($icon !== '' && preg_match('/^http(s?):\/\//', $icon) == 0)
         {
             $icon = THEME_PATH.'/icons/'.$icon;
         }

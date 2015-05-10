@@ -102,12 +102,12 @@ $htmlFieldTable = '
         $category = '';
 
         // jedes Benutzerfeld aus der Datenbank auflisten
-        
+
         foreach($gProfileFields->mProfileFields as $field)
         {
             if($category != $field->getValue('cat_id'))
             {
-                if(strlen($category) > 0)
+                if($category !== '')
                 {
                     $htmlFieldTable .= '</tbody>';
                 }
@@ -120,7 +120,7 @@ $htmlFieldTable = '
                 <tbody id="'.$block_id.'">';
 
                 $category = $field->getValue('cat_id');
-            }             
+            }
             $htmlFieldTable .= '<tr>
                 <td><label for="usf-'. $field->getValue('usf_id'). '">'.$field->getValue('usf_name');
                     // Lastname und first name are mandatory fields
@@ -145,7 +145,7 @@ $htmlFieldTable = '
                         {
                             $col_value = trim(strip_tags(str_replace('"', '', $col_value)));
 
-                            if(isset($form_values['usf-'. $field->getValue('usf_id')]) 
+                            if(isset($form_values['usf-'. $field->getValue('usf_id')])
                             && strlen($form_values['usf-'. $field->getValue('usf_id')]) > 0
                             && $form_values['usf-'. $field->getValue('usf_id')] == $col_key)
                             {

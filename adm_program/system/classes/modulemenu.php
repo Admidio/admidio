@@ -272,7 +272,7 @@ class ModuleMenu
 
         $html .= '</ul>';
 
-        if(strlen($formHtml) > 0)
+        if($formHtml !== '')
         {
             $html .= $formHtml;
         }

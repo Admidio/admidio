@@ -1,8 +1,8 @@
-<?php 
+<?php
 /*****************************************************************************/
 /** @class ModuleLists
  *  @brief Class manages lists viewable for user
- * 
+ *
  *  This class reads all available recordsets from table lists.
  *  and returns an Array with results, recordsets and validated parameters from $_GET Array.
  *  @par Returned Array
@@ -19,8 +19,8 @@
  *                           [rol_id] => 2
  *                           [1] => 3
  *                           [rol_cat_id] => 3
- *                           [2] => 
- *                           [rol_lst_id] => 
+ *                           [2] =>
+ *                           [rol_lst_id] =>
  *                           [3] => Mitglieder
  *                           [rol_name] => Mitglieder
  *                           [4] => Alle Mitglieder der Organisation
@@ -59,24 +59,24 @@
  *                           [rol_default_registration] => 1
  *                           [21] => 1
  *                           [rol_leader_rights] => 1
- *                           [22] => 
- *                           [rol_start_date] => 
- *                           [23] => 
- *                           [rol_start_time] => 
- *                           [24] => 
- *                           [rol_end_date] => 
- *                           [25] => 
- *                           [rol_end_time] => 
+ *                           [22] =>
+ *                           [rol_start_date] =>
+ *                           [23] =>
+ *                           [rol_start_time] =>
+ *                           [24] =>
+ *                           [rol_end_date] =>
+ *                           [25] =>
+ *                           [rol_end_time] =>
  *                           [26] => 0
  *                           [rol_weekday] => 0
- *                           [27] => 
- *                           [rol_location] => 
- *                           [28] => 
- *                           [rol_max_members] => 
- *                           [29] => 
- *                           [rol_cost] => 
- *                           [30] => 
- *                           [rol_cost_period] => 
+ *                           [27] =>
+ *                           [rol_location] =>
+ *                           [28] =>
+ *                           [rol_max_members] =>
+ *                           [29] =>
+ *                           [rol_cost] =>
+ *                           [30] =>
+ *                           [rol_cost_period] =>
  *                           [31] => 1
  *                           [rol_usr_id_create] => 1
  *                           [32] => 2008-05-03 16:26:36
@@ -115,10 +115,10 @@
  *                           [cat_usr_id_create] => 1
  *                           [49] => 2012-01-08 11:12:05
  *                           [cat_timestamp_create] => 2012-01-08 11:12:05
- *                           [50] => 
- *                           [cat_usr_id_change] => 
- *                           [51] => 
- *                           [cat_timestamp_change] => 
+ *                           [50] =>
+ *                           [cat_usr_id_change] =>
+ *                           [51] =>
+ *                           [cat_timestamp_change] =>
  *                           [52] => 145
  *                           [num_members] => 145
  *                           [53] => 0
@@ -126,14 +126,14 @@
  *                           [54] => 5
  *                           [num_former] => 5
  *                       )
- *       
+ *
  *           [parameter] => Array
  *               (
  *                   [active_role] => 1
  *                   [calendar-selection] => 1
  *                   [cat_id] => 0
  *                   [category-selection] => 1
- *                   [date] => 
+ *                   [date] =>
  *                   [daterange] => Array
  *                       (
  *                           [english] => Array
@@ -147,9 +147,9 @@
  *                                   [start_date] => 24.09.2013
  *                                   [end_date] => 31.12.9999
  *                               )
- *       
+ *
  *                       )
- *       
+ *
  *                   [headline] => Übersicht der aktiven Rollen
  *                   [id] => 0
  *                   [mode] => Default
@@ -167,27 +167,27 @@
  *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
-  
+
 class ModuleLists extends Modules
 {
     private $memberStatus;
-    
-    /** 
+
+    /**
      *  creates an new ModuleLists object
-     */              
+     */
     public function __construct()
-    {   
+    {
         global $gL10n;
         // define constant for headline
         define('HEADLINE', $gL10n->get('LST_ACTIVE_ROLES'));
 
         // get parent instance with all parameters from $_GET Array
         parent::__construct();
-        
+
         $this->setMemberStatus();
     }
-    
-    
+
+
     /** Evaluates memberStatus an returns appropriate SQL conditions
      * @return string SQL for member status
      */
@@ -196,7 +196,7 @@ class ModuleLists extends Modules
         switch ($this->memberStatus)
         {
             case 'active':
-            default:    
+            default:
                 $sql = ' AND mem_begin <= \''.DATE_NOW.'\'
                          AND mem_end   >= \''.DATE_NOW.'\' ';
                 break;
@@ -206,23 +206,23 @@ class ModuleLists extends Modules
             case 'both':
                 $sql ='';
                 break;
-        }            
+        }
         return $sql;
     }
-    
+
     /** returns SQL condition
      *  @return SQL condition for category id
-     * 
+     *
      */
     private function getCategorySql()
     {
         if($this->catId > 0)
         {
-           return ' AND cat_id  = '.$this->catId;   
+           return ' AND cat_id  = '.$this->catId;
         }
         return '';
     }
-    
+
     /** assembles SQL roles visible for current user
      *  @return string SQL condition visible for current user
      */
@@ -231,7 +231,7 @@ class ModuleLists extends Modules
         global $gCurrentUser;
         // create a list with all rol_ids that the user is allowed to view
         $visibleRoles = implode(',', $gCurrentUser->getAllVisibleRoles());
-        if(strlen($visibleRoles) > 0)
+        if($visibleRoles !== '')
         {
             return ' AND rol_id IN ('.$visibleRoles.')';
         }
@@ -240,7 +240,7 @@ class ModuleLists extends Modules
             return ' AND rol_id = 0 ';
         }
     }
-    
+
     /** Function returns a set of lists with corresponding informations
      *  @param $startElement Start element of result. First (and default) is 0.
      *  @param $limit Number of elements returned max. Default NULL will take number from peferences.
@@ -252,34 +252,34 @@ class ModuleLists extends Modules
         global $gPreferences;
         global $gDb;
         global $gValidLogin;
-        
-         //Parameter        
+
+         //Parameter
         if($limit == NULL)
         {
             // Roles per page
             $limit = $gPreferences['lists_roles_per_page'];
         }
-        
+
         //assemble conditions
         $sql_conditions = $this->getCategorySql().$this->getVisibleRolesSql();
-        
+
         //provoke empty result for not logged in users
         if($gValidLogin == false)
         {
             $sql_conditions .= ' AND cat_hidden = 0 ';
         }
-               
-        $sql = 'SELECT rol.*, cat.*, 
-               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem 
+
+        $sql = 'SELECT rol.*, cat.*,
+               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem
                  WHERE mem.mem_rol_id = rol.rol_id '.$this->getMemberStatusSql().' AND mem_leader = 0) as num_members,
-               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem 
+               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem
                  WHERE mem.mem_rol_id = rol.rol_id '.$this->getMemberStatusSql().' AND mem_leader = 1) as num_leader,
-               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem 
+               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem
                  WHERE mem.mem_rol_id = rol.rol_id AND mem_end < \''. DATE_NOW.'\') as num_former
           FROM '. TBL_ROLES. ' rol, '. TBL_CATEGORIES. ' cat
          WHERE rol_valid   = '.$this->activeRole.'
            AND rol_visible = 1
-           AND rol_cat_id = cat_id 
+           AND rol_cat_id = cat_id
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )
                '.$sql_conditions.'
@@ -289,14 +289,14 @@ class ModuleLists extends Modules
         if($limit > 0)
         {
             $sql .= ' LIMIT '.$limit;
-        }               
+        }
         if($startElement != 0)
         {
             $sql .= ' OFFSET '.$startElement;
         }
 
         $result = $gDb->query($sql);
-        
+
         $lists= array('numResults'=>$gDb->num_rows($result), 'limit' => $limit, 'totalCount'=>$this->getDataSetCount());
         while($row = $gDb->fetch_array($result))
         {
@@ -306,21 +306,21 @@ class ModuleLists extends Modules
         if(!isset($lists['recordset']))
         {
             $lists['recordset'] = array();
-        }        
+        }
         // Push parameter to array
-        $lists['parameter'] = $this->getParameters();        
+        $lists['parameter'] = $this->getParameters();
         return $lists;
     }
-    
+
     /** Function to get total number of lists limited by current conditions.
-     *  @return int Number of lists. 
+     *  @return int Number of lists.
      */
     public function getDataSetCount()
     {
         global $gCurrentOrganization;
         global $gDb;
         global $gValidLogin;
-        
+
         //assemble conditions
         $sql_conditions = $this->getCategorySql().$this->getVisibleRolesSql();
         //provoke empty result for not logged in users
@@ -328,23 +328,23 @@ class ModuleLists extends Modules
         {
             $sql_conditions= ' AND cat_hidden = 0 ';
         }
-        
-        $sql = 'SELECT COUNT(*) AS numrows 
+
+        $sql = 'SELECT COUNT(*) AS numrows
           FROM '. TBL_ROLES. ' rol, '. TBL_CATEGORIES. ' cat
          WHERE rol_valid   = '.$this->activeRole.'
            AND rol_visible = 1
-           AND rol_cat_id = cat_id 
+           AND rol_cat_id = cat_id
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )
                '.$sql_conditions;
 
         $result = $gDb->query($sql);
         $row = $gDb->fetch_array($result);
-        
+
         return $row['numrows'];
     }
-    
-    /** Function to get list configurations accessible by current user 
+
+    /** Function to get list configurations accessible by current user
      *  @return array with accessible list configurations
      */
     public function getListConfigurations()
@@ -352,7 +352,7 @@ class ModuleLists extends Modules
         global $gCurrentOrganization;
         global $gCurrentUser;
         global $gDb;
-        
+
         $sql = 'SELECT lst_id, lst_name, lst_global FROM '. TBL_LISTS. '
                  WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                    AND (  lst_usr_id = '. $gCurrentUser->getValue('usr_id'). '
@@ -364,10 +364,10 @@ class ModuleLists extends Modules
         while($row = $gDb->fetch_array($result))
         {
             $configurations[] = array($row['lst_id'], $row['lst_name'], $row['lst_global']);
-        }        
+        }
         return $configurations;
     }
-    
+
     /** Sets the status of role members to be shown
      *  @param string status active(default), inactive, both
      */
@@ -386,6 +386,6 @@ class ModuleLists extends Modules
                 $this->memberStatus = 'both';
                 break;
         }
-    }           
+    }
 }
 ?>

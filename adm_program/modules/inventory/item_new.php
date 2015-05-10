@@ -98,7 +98,7 @@ if(isset($_SESSION['profile_request']))
     {
         $registrationOrgId = $_SESSION['profile_request']['reg_org_id'];
     }
-    
+
     unset($_SESSION['profile_request']);
 }
 
@@ -129,7 +129,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
     // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
     if($category != $field->getValue('cat_name'))
     {
-        if(strlen($category) > 0)
+        if($category !== '')
         {
             // div-Container admGroupBoxBody und admGroupBox schliessen
             $form->closeGroupBox();
@@ -138,7 +138,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
 
         $form->addHtml('<a name="cat-'. $field->getValue('cat_id'). '"></a>');
         $form->openGroupBox('gb_category_name', $field->getValue('cat_name'));
-                
+
         if($field->getValue('cat_name_intern') == 'MASTER_DATA')
         {
             if($getItemId > 0)
@@ -146,7 +146,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
                 // add inventoryname to form
                 $fieldProperty = FIELD_DEFAULT;
                 $fieldHelpId   = null;
-                
+
                 if($gCurrentUser->isWebmaster() == false && $getNewItem == 0)
                 {
                     $fieldProperty = FIELD_DISABLED;
@@ -165,7 +165,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
         // add profile fields to form
         $fieldProperty = FIELD_DEFAULT;
         $helpId        = null;
-        
+
         if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_disabled') == 1 && $gCurrentUser->editUsers() == false && $getNewUser == 0)
         {
             // disable field if this is configured in profile field configuration
@@ -176,14 +176,14 @@ foreach($gInventoryFields->mInventoryFields as $field)
             // set mandatory field
             $fieldProperty = FIELD_MANDATORY;
         }
-        
+
         if(strlen($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_description')) > 0)
         {
             $helpId = array('item_field_description', $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name_intern'));
         }
-    
+
         // code for different field types
-        
+
         if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'CHECKBOX')
         {
             $form->addCheckbox('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
@@ -197,7 +197,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
             {
                 if($gDbType == 'mysql')
                 {
-                    $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') FROM '.TBL_ROOMS.' ORDER BY room_name';        
+                    $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') FROM '.TBL_ROOMS.' ORDER BY room_name';
                 }
                 else
                 {
@@ -215,7 +215,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
             {
                 $arrListValues = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_value_list');
                 $defaultValue  = $inventory->getValue($field->getValue('inf_name_intern'), 'database');
-                $form->addSelectBox('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'), 
+                $form->addSelectBox('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                                     $arrListValues, $fieldProperty, $defaultValue, true, $helpId, null, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
             }
 
@@ -224,24 +224,24 @@ foreach($gInventoryFields->mInventoryFields as $field)
         {
             $arrListValues        = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_value_list');
             $showDummyRadioButton = false;
-            
+
             if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_mandatory') == 0)
             {
                 $showDummyRadioButton = true;
             }
-            
+
             $form->addRadioButton('inf-'.$gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                 $arrListValues, $fieldProperty, $inventory->getValue($field->getValue('inf_name_intern'), 'database'), $showDummyRadioButton, $helpId, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
         }
         elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'TEXT_BIG')
         {
-            $form->addMultilineTextInput('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'), 
+            $form->addMultilineTextInput('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                 $inventory->getValue($field->getValue('inf_name_intern')), 3, 4000, $fieldProperty, $helpId, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
         }
         else
         {
             $fieldType = 'text';
-            
+
             if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'DATE')
             {
                 $fieldType = 'date';
@@ -272,7 +272,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
             {
                 $maxlength = '50';
             }
-    
+
             $form->addInput('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                 $inventory->getValue($field->getValue('inf_name_intern')), array('type' => $fieldType, 'maxlength' => $maxlength, 'property' => $fieldProperty, 'helpTextIdInline' => $helpId, 'class' => $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon')));
         }

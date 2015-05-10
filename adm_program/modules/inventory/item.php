@@ -276,7 +276,7 @@ foreach($gProfileFields->mProfileFields as $field)
         if($category != $field->getValue('cat_name')
         && (strlen($inventory->getValue($field->getValue('inf_name_intern'))) > 0 || $field->getValue('inf_type') == 'CHECKBOX'))
         {
-            if(strlen($category) > 0)
+            if($category !== '')
             {
                 // new category then show last form and close div container
                 $page->addHtml($form->show(false));
@@ -305,7 +305,7 @@ foreach($gProfileFields->mProfileFields as $field)
     }
 }
 
-if(strlen($category) > 0)
+if($category !== '')
 {
     // new category then show last form and close div container
     $page->addHtml($form->show(false));

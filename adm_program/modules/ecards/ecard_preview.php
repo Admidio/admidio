@@ -7,7 +7,7 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *****************************************************************************/
 
-// preview will be called before form is send, so there are now POST parameters available 
+// preview will be called before form is send, so there are now POST parameters available
 // then show nothing. Second call is with POST parameters then show preview
 require_once('../../system/common.php');
 require_once('ecard_function.php');
@@ -41,7 +41,7 @@ $funcClass = new FunctionClass($gL10n);
 // read content of template file
 $ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName, THEME_SERVER_PATH. '/ecard_templates/');
 
-if(strlen($ecardDataToParse) == 0) 
+if($ecardDataToParse === '')
 {
     $gMessage->show($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
 }
@@ -55,6 +55,6 @@ echo '
 
     // show output of parsed template
     echo $funcClass->parseEcardTemplate($imageUrl, $ecardMessage, $ecardDataToParse, $nameRecipient, $emailRecipient);
-    
+
 echo '</div>';
 ?>

@@ -87,7 +87,7 @@ class ConditionParser
         }
 
         // validate date and return it in database format
-        if(strlen($date) > 0)
+        if($date !== '')
         {
             $date = new DateTimeExtended($date, $gPreferences['system_date'], 'date');
             if($date->valid())
@@ -167,7 +167,7 @@ class ConditionParser
         $operator          = '=';    // saves the actual operator, if no operator is set then = will be default
         $this->mDestCond   = '';
 
-        if(strlen($sourceCondition) > 0 && strlen($columnName) > 0 && strlen($columnType) > 0)
+        if($sourceCondition !== '' && $columnName !== '' && $columnType !== '')
         {
             $this->mSrcCond     = $this->makeStandardCondition($sourceCondition);
             $this->mSrcCondArray = str_split($this->mSrcCond);
@@ -365,7 +365,7 @@ class ConditionParser
                         {
                             // if date column than the date will be saved in $date.
                             // This variable must then be parsed and changed in a valid database format
-                            if($columnType == 'date' && strlen($date) > 0)
+                            if($columnType == 'date' && $date !== '')
                             {
                                 if(strlen($this->getFormatDate($date, $operator)) > 0)
                                 {
@@ -442,7 +442,7 @@ class ConditionParser
 
             // if date column than the date will be saved in $date.
             // This variable must then be parsed and changed in a valid database format
-            if($columnType == 'date' && strlen($date) > 0)
+            if($columnType == 'date' && $date !== '')
             {
                 if(strlen($this->getFormatDate($date, $operator)) > 0)
                 {

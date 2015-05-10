@@ -32,7 +32,7 @@ class Component extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_component.
      * If the id is set than the specific component will be loaded.
-     * @param object $db Object of the class database. This should be the default object $gDb.
+     * @param object     $db     Object of the class database. This should be the default object $gDb.
      * @param int|string $com_id The recordset of the component with this id will be loaded.
      *                           If com_id isn't set than an empty object of the table is created.
      */
@@ -45,9 +45,9 @@ class Component extends TableAccess
      * Check version of component in database against the version of the file system.
      * There will be different messages shown if versions aren't equal. If user has a current
      * login and is webmaster than there will be links to the next step to do.
-     * @param bool $webmaster            Flag if the current user is a webmaster. This should be 0 or 1
-     * @param string $emailAdministrator The email address of the administrator.
-     * @return void Nothing will be returned. If the versions aren't equal a message will be shown.
+     * @param  bool         $webmaster          Flag if the current user is a webmaster. This should be 0 or 1
+     * @param  string       $emailAdministrator The email address of the administrator.
+     * @return void         Nothing will be returned. If the versions aren't equal a message will be shown.
      * @throws AdmException SYS_WEBMASTER_DATABASE_INVALID
      * @throws AdmException SYS_WEBMASTER_FILESYSTEM_INVALID
      * @throws AdmException SYS_DATABASE_INVALID

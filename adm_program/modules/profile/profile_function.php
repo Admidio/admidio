@@ -162,7 +162,7 @@ elseif($getMode == 7)
     }
 
     //Falls gesetzt wird das Enddatum gecheckt
-    if(strlen($getMembershipEnd) > 0)
+    if($getMembershipEnd !== '')
     {
         $endDate = new DateTimeExtended($getMembershipEnd, $gPreferences['system_date'], 'date');
         if($endDate->valid())

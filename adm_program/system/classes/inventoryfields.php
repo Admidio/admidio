@@ -98,7 +98,7 @@ class InventoryFields
     {
         global $gPreferences, $g_root_path, $gL10n;
 
-        if(strlen($value) > 0
+        if($value !== ''
         && array_key_exists($fieldNameIntern, $this->mInventoryFields) == true)
         {
             // create html for each field type
@@ -118,7 +118,7 @@ class InventoryFields
             elseif($this->mInventoryFields[$fieldNameIntern]->getValue('inf_type') == 'EMAIL')
             {
                 // the value in db is only the position, now search for the text
-                if(strlen($value) > 0)
+                if($value !== '')
                 {
                     if($gPreferences['enable_mail_module'] != 1)
                     {
@@ -127,7 +127,7 @@ class InventoryFields
                     else
                     {
                         // set value2 to user id because we need a second parameter in the link to mail module
-                        if(strlen($value2) == 0)
+                        if($value2 === '')
                         {
                             $value2 = $this->mItemId;
                         }
@@ -207,7 +207,7 @@ class InventoryFields
             }
             elseif($this->mInventoryFields[$fieldNameIntern]->getValue('inf_type') == 'URL')
             {
-                if(strlen($value) > 0)
+                if($value !== '')
                 {
                     if(strlen($value) > 35)
                     {
@@ -280,10 +280,10 @@ class InventoryFields
 
             if($format != 'database')
             {
-                if($this->mInventoryFields[$fieldNameIntern]->getValue('inf_type') == 'DATE' && strlen($value) > 0)
+                if($this->mInventoryFields[$fieldNameIntern]->getValue('inf_type') == 'DATE' && $value !== '')
                 {
                     // if no format or html is set then show date format from Admidio settings
-                    if(strlen($format) == 0 || $format == 'html')
+                    if($format === '' || $format == 'html')
                     {
                         $dateFormat = $gPreferences['system_date'];
                     }
@@ -311,7 +311,7 @@ class InventoryFields
 
                     }
                 }
-                elseif($fieldNameIntern == 'COUNTRY' && strlen($value) > 0)
+                elseif($fieldNameIntern == 'COUNTRY' && $value !== '')
                 {
                     // read the language name of the country
                     $value = $gL10n->getCountryByCode($value);
@@ -439,7 +439,7 @@ class InventoryFields
         global $gPreferences;
         $returnCode = false;
 
-        if(strlen($fieldValue) > 0)
+        if($fieldValue !== '')
         {
             if($this->mInventoryFields[$fieldNameIntern]->getValue('inf_type') == 'CHECKBOX')
             {
@@ -522,7 +522,7 @@ class InventoryFields
         {
             $returnCode = $this->mInventoryData[$this->mInventoryFields[$fieldNameIntern]->getValue('inf_id')]->setValue('ind_value', $fieldValue);
         }
-        elseif(isset($this->mInventoryFields[$fieldNameIntern]) == true && strlen($fieldValue) > 0)
+        elseif(isset($this->mInventoryFields[$fieldNameIntern]) == true && $fieldValue !== '')
         {
             $this->mInventoryData[$this->mInventoryFields[$fieldNameIntern]->getValue('inf_id')] = new TableAccess($this->mDb, TBL_INVENT_DATA, 'ind');
             $this->mInventoryData[$this->mInventoryFields[$fieldNameIntern]->getValue('inf_id')]->setValue('ind_inf_id', $this->mInventoryFields[$fieldNameIntern]->getValue('inf_id'));

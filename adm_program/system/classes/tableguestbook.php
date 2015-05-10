@@ -115,7 +115,7 @@ class TableGuestbook extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if(strlen($newValue) > 0)
+        if($newValue !== '')
         {
             if($columnName == 'gbo_email')
             {

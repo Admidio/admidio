@@ -2,12 +2,12 @@
 /*****************************************************************************/
 /** @class HtmlList
  *  @brief  Create html lists
- * 
+ *
  *  This class creates html list elements.
  *  Create a list object for ordered, unordered or data list an add the list items.
  *  The class supports data lists and lists and combination of nested lists and data lists.
  *  The parsed list object is returned as string.
- *  
+ *
  *  @par Example 1: Creating datalist
  *  @code
  *  // Get instance
@@ -24,7 +24,7 @@
  *  @code
  *  // Get Instance
  *  $list = new HtmlList('ol', 'id_ol', 'class');
- *  // Set type Attribute 
+ *  // Set type Attribute
  *  $list->addAttribute('type', 'square');
  *  // Define a list element with ID "Item_0" and data "Listdata_1" as string
  *  $list->addListItem('Item_0', 'Listdata_1');
@@ -54,32 +54,32 @@
  *
  *****************************************************************************/
 
-class HtmlList extends HtmlElement 
+class HtmlList extends HtmlElement
 {
-    
+
     /**
      * Constructor creates the element
      *
-     * @param $list List element ( ul/ol Default: ul) 
+     * @param $list List element ( ul/ol Default: ul)
      * @param $id Id of the list
      * @param $class Class name of the list
      */
-     
+
     public function __construct($list = 'ul', $id = '', $class = '')
-    {        
-        
+    {
+
         parent::__construct($list, '', '', true);
-        
-        if(strlen($id) > 0)
+
+        if($id !== '')
         {
             $this->addAttribute('id', $id);
         }
-        
-        if(strlen($class) > 0)
+
+        if($class !== '')
         {
             $this->addAttribute('class', $class);
         }
-    } 
+    }
 
     /**
      *  @par Add datalist (dl).
@@ -96,24 +96,24 @@ class HtmlList extends HtmlElement
             $this->closeParentElement('dl');
         }
         $this->addParentElement('dl');
-        
-        if(strlen($id) > 0)
+
+        if($id !== '')
         {
             $this->addAttribute('id', $id);
         }
-        
+
         if($term != null && $description != null)
         {
             $this->addDataListItems($term, $description);
 
         }
     }
-    
+
     /**
      *  @par Add term and description to datalist (dl).
      *
      *  @param $term Term as string for datalist
-     *  @param $description Description as string for data 
+     *  @param $description Description as string for data
      */
     public function addDataListItems($term = null, $description = null)
     {
@@ -121,7 +121,7 @@ class HtmlList extends HtmlElement
         {
             // Arrays are not supported in datalists
             if(!is_array($term) && !is_array($description))
-            { 
+            {
                 $this->addElement('dt', '', '', $term);
                 $this->addElement('dd', '', '', $description);
             }
@@ -133,7 +133,7 @@ class HtmlList extends HtmlElement
         }
         return false;
     }
-    
+
     /**
      *  @par Add list item (li).
      *
@@ -150,15 +150,15 @@ class HtmlList extends HtmlElement
             {
                 $this->closeParentElement('li');
             }
-    
+
             // Set new item
             $this->addParentElement('li');
-    
-            if(strlen($id) > 0)
+
+            if($id !== '')
             {
                 $this->addAttribute('id', $id);
             }
-                 
+
             // Define datalist with term and data as description
             $this->addDataList('', $term, $data);
             $this->closeParentElement('li');
@@ -166,14 +166,14 @@ class HtmlList extends HtmlElement
         else
         {
             if($data != null)
-            {   
+            {
                 $this->addElement('li');
-                
-                    if(strlen($id) > 0)
+
+                    if($id !== '')
                 {
                     $this->addAttribute('id', $id);
                 }
-                
+
                 $this->addData($data);
             }
             else
@@ -181,16 +181,16 @@ class HtmlList extends HtmlElement
                 $this->closeParentElement('li');
                 // handle as parent element maybe a datalist could be nested next
                 $this->addParentElement('li');
-                
-                if(strlen($id) > 0)
+
+                if($id !== '')
                 {
                     $this->addAttribute('id', $id);
                 }
 
-            }    
-        }           
+            }
+        }
     }
-    
+
     /**
      * Get the parsed html list
      *
@@ -202,6 +202,6 @@ class HtmlList extends HtmlElement
         return parent::getHtmlElement();
     }
 
-} 
+}
 
 ?>

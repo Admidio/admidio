@@ -244,7 +244,7 @@ class Email extends PHPMailer
      */
     public function setSubject($subject)
     {
-        if (strlen($subject) > 0)
+        if ($subject !== '')
         {
             $this->Subject = stripslashes($subject);
             return true;

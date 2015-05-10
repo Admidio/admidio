@@ -119,11 +119,11 @@ class TableAccess
      * @param string $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
      * @par Examples
      * @code  // Constructor of adm_dates object where the category (calendar) is connected
-     * public function __construct(&$db, $dat_id = 0)
-     * {
-     *     $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'dat_cat_id');
-     *     parent::__construct($db, TBL_DATES, 'dat', $dat_id);
-     * } @endcode
+     *                                          public function __construct(&$db, $dat_id = 0)
+     *                                          {
+     *                                          $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'dat_cat_id');
+     *                                          parent::__construct($db, TBL_DATES, 'dat', $dat_id);
+     *                                          } @endcode
      */
     protected function connectAdditionalTable($table, $columnNameAdditionalTable, $columnNameClassTable)
     {
@@ -164,11 +164,11 @@ class TableAccess
     /**
      * Get the value of a column of the database table.
      * If the value was manipulated before with @b setValue than the manipulated value is returned.
-     * @param string $columnName The name of the database column whose value should be read
-     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                           For text columns the format can be @b database that would return the original database value without any transformations
-     * @return mixed Returns the value of the database column.
-     *         If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @param  string $columnName The name of the database column whose value should be read
+     * @param  string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                            For text columns the format can be @b database that would return the original database value without any transformations
+     * @return mixed  Returns the value of the database column.
+     *                           If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
@@ -275,8 +275,8 @@ class TableAccess
      * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param string $sqlWhereCondition Conditions for the table to select one record
-     * @return bool Returns @b true if one record is found
+     * @param  string $sqlWhereCondition Conditions for the table to select one record
+     * @return bool   Returns @b true if one record is found
      */
     protected function readData($sqlWhereCondition)
     {
@@ -298,7 +298,7 @@ class TableAccess
             $sqlWhereCondition = substr($sqlWhereCondition, 4);
         }
 
-        if(strlen($sqlWhereCondition) > 0)
+        if($sqlWhereCondition !== '')
         {
             $sql = 'SELECT * FROM '.$this->tableName.$sqlAdditionalTables.'
                      WHERE '.$sqlWhereCondition;
@@ -312,7 +312,7 @@ class TableAccess
                 // Daten in das Klassenarray schieben
                 foreach($row as $key => $value)
                 {
-                    if(is_null($value))
+                    if($value === null)
                     {
                         $this->dbColumns[$key] = '';
                     }
@@ -359,12 +359,12 @@ class TableAccess
      * The columns and values must be selected so that they identify only one record.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param array $columnArray An array where every element index is the column name and the value is the column value
-     * @return bool Returns @b true if one record is found
+     * @param  array $columnArray An array where every element index is the column name and the value is the column value
+     * @return bool  Returns @b true if one record is found
      * @par Examples
      * @code  // reads data not be mem_id but with combination of role and user id
-     * $member = new TableAccess($gDb, TBL_MEMBERS, 'rol');
-     * $member->readDataByColumn(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId)); @endcode
+     *                           $member = new TableAccess($gDb, TBL_MEMBERS, 'rol');
+     *                           $member->readDataByColumn(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId)); @endcode
      */
     public function readDataByColumns($columnArray)
     {
@@ -402,7 +402,7 @@ class TableAccess
      * a new record or if only an update is neccessary. The update statement will only update
      * the changed columns. If the table has columns for creator or editor than these column
      * with their timestamp will be updated.
-     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @param  bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
@@ -471,7 +471,7 @@ class TableAccess
                     else
                     {
                         // Daten fuer ein Update aufbereiten
-                        if($value === '' || is_null($value))
+                        if($value === '' || $value === null)
                         {
                             $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' = NULL ';
                         }
@@ -531,12 +531,12 @@ class TableAccess
      * separate sql read for each record. This is a performant way to fill the object with
      * the neccessary data.
      * @param array $fieldArray An array with all fields and their values of the table. If the
-     *              object has more connected tables than you should add the fields of these tables, too.
+     *                          object has more connected tables than you should add the fields of these tables, too.
      * @par Examples
      * @code   // read all announcements with their categories
-     * $sql = 'SELECT * FROM adm_announcements, adm_categories WHERE ann_cat_id = cat_id';
-     * $result = $gDb->query($sql);
-     * $announcement = new TableAnnouncements($gDb);
+     *                          $sql = 'SELECT * FROM adm_announcements, adm_categories WHERE ann_cat_id = cat_id';
+     *                          $result = $gDb->query($sql);
+     *                          $announcement = new TableAnnouncements($gDb);
      *
      * while ($row = $gDb->fetch_array(result))
      * {
@@ -559,10 +559,10 @@ class TableAccess
     /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
-     * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed $newValue    The new value that should be stored in the database field
-     * @param bool $checkValue   The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @param  string $columnName The name of the database column whose value should get a new value
+     * @param  mixed  $newValue   The new value that should be stored in the database field
+     * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @return bool   Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {

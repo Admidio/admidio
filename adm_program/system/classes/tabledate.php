@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Diese Klasse dient dazu ein Terminobjekt zu erstellen. 
+ * Diese Klasse dient dazu ein Terminobjekt zu erstellen.
  * Ein Termin kann ueber diese Klasse in der Datenbank verwaltet werden
  *
  * Beside the methods of the parent class there are the following additional methods:
@@ -20,8 +20,8 @@ class TableDate extends TableAccess
 {
     protected $visibleRoles = array();
     protected $changeVisibleRoles;
-    
-    /** Constuctor that will create an object of a recordset of the table adm_dates. 
+
+    /** Constuctor that will create an object of a recordset of the table adm_dates.
      *  If the id is set than the specific date will be loaded.
      *  @param $db Object of the class database. This should be the default object $gDb.
      *  @param $dat_id The recordset of the date with this id will be loaded. If id isn't set than an empty object of the table is created.
@@ -43,8 +43,8 @@ class TableDate extends TableAccess
         $this->visibleRoles = array();
         $this->changeVisibleRoles = false;
     }
-        
-    /** Deletes the selected record of the table and all references in other tables. 
+
+    /** Deletes the selected record of the table and all references in other tables.
      *  After that the class will be initialize.
      *  @return @b true if no error occured
      */
@@ -62,19 +62,19 @@ class TableDate extends TableAccess
         {
             $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id = '.$this->getValue('dat_rol_id');
             $this->db->query($sql);
-            
+
             $sql = 'DELETE FROM '.TBL_ROLES.' WHERE rol_id = '.$this->getValue('dat_rol_id');
             $this->db->query($sql);
         }
 
         $this->db->endTransaction();
-    }    
-    
+    }
+
     // prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
     public function editRight()
     {
         global $gCurrentOrganization;
-        
+
         // Termine der eigenen Orga darf bearbeitet werden
         if($this->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
         {
@@ -86,7 +86,7 @@ class TableDate extends TableAccess
         {
             return true;
         }
-    
+
         return false;
     }
 
@@ -94,18 +94,18 @@ class TableDate extends TableAccess
     public function getIcal($domain)
     {
         $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';
-        
+
         $ical = $this->getIcalHeader().
                 $this->getIcalVEvent($domain).
                 $this->getIcalFooter();
         return $ical;
     }
-    
+
     //gibt den Kopf eines iCalCalenders aus
     public function getIcalHeader()
     {
-        $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';                            
-        
+        $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';
+
         $icalHeader =   "BEGIN:VCALENDAR\r\n".
                         "METHOD:PUBLISH\r\n".
                         "PRODID:". $prodid. "\r\n".
@@ -129,31 +129,31 @@ class TableDate extends TableAccess
                         "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3"."\r\n".
                         "END:DAYLIGHT"."\r\n".
                         "END:VTIMEZONE"."\r\n";
-                        
+
         return $icalHeader;
     }
-    
+
     //gibt den Fuß eines iCalCalenders aus
     public function getIcalFooter()
-    {      
+    {
         $icalFooter = "END:VCALENDAR";
-        
+
         return $icalFooter;
     }
-    
-    //gibt einen einzelnen Termin im iCal-Format zurück 
+
+    //gibt einen einzelnen Termin im iCal-Format zurück
     public function getIcalVEvent($domain)
     {
         $uid = $this->getValue('dat_timestamp_create', 'ymdThis') . '+' . $this->getValue('dat_usr_id_create') . '@' . $domain;
-        
+
         $icalVEevent =  "BEGIN:VEVENT\r\n".
                         "CREATED:". $this->getValue('dat_timestamp_create', 'Ymd').'T'.$this->getValue('dat_timestamp_create', 'His')."\r\n";
         if($this->getValue('dat_timestamp_change') != NULL)
         {
             $icalVEevent .= "LAST-MODIFIED:". $this->getValue('dat_timestamp_change', 'Ymd').'T'.$this->getValue('dat_timestamp_change', 'His')."\r\n";
         }
-                    
-        //Semicolons herausfiltern             
+
+        //Semicolons herausfiltern
         $icalVEevent .=  "UID:". $uid. "\r\n".
                         "SUMMARY:". str_replace(';', '.', $this->getValue('dat_headline')). "\r\n".
                         "DESCRIPTION:".trim(str_replace("\r\n", "", str_replace(';', '.', $this->getValue('dat_description', 'database')))). "\r\n".
@@ -172,7 +172,7 @@ class TableDate extends TableAccess
                             "DTEND;TZID=".date_default_timezone_get().":". $this->getValue('dat_end', 'Ymd')."T".$this->getValue('dat_end', 'His')."\r\n";
         }
         $icalVEevent .= "END:VEVENT\r\n";
-        
+
         return $icalVEevent;
     }
 
@@ -183,18 +183,18 @@ class TableDate extends TableAccess
      *                 For text columns the format can be @b database that would return the original database value without any transformations
      *  @return Returns the value of the database column.
      *          If the value was manipulated before with @b setValue than the manipulated value is returned.
-     */ 
+     */
     public function getValue($columnName, $format = '')
     {
         global $gL10n;
 
         if($columnName == 'dat_end' && $this->dbColumns['dat_all_day'] == 1)
         {
-            if(strlen($format) == 0)
+            if($format === '')
             {
                 $format = 'Y-m-d';
             }
-            
+
             // bei ganztaegigen Terminen wird das Enddatum immer 1 Tag zurueckgesetzt
             list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $this->dbColumns['dat_end']);
             $value = date($format, mktime($hour, $minute, $second, $month, $day, $year) - 86400);
@@ -221,7 +221,7 @@ class TableDate extends TableAccess
 
         if($format != 'database')
         {
-            if($columnName == 'dat_country' && strlen($value) > 0)
+            if($columnName == 'dat_country' && $value !== '')
             {
                 // beim Land die sprachabhaengige Bezeichnung auslesen
                 global $gL10n;
@@ -265,7 +265,7 @@ class TableDate extends TableAccess
         return $this->visibleRoles;
     }
 
-    /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 
+    /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
      *  a new record or if only an update is neccessary. The update statement will only update
      *  the changed columns. If the table has columns for creator or editor than these column
      *  with their timestamp will be updated.
@@ -314,9 +314,9 @@ class TableDate extends TableAccess
      *  The value is only saved in the object. You must call the method @b save to store the new value to the database
      *  @param $columnName The name of the database column whose value should get a new value
      *  @param $newValue The new value that should be stored in the database field
-     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
      *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
-     */ 
+     */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         if($columnName == 'dat_end' && $this->getValue('dat_all_day') == 1)

@@ -119,7 +119,7 @@ class TableMembers extends TableAccess
             }
 
             // Leiter sollte nicht ueberschrieben werden, wenn nicht uebergeben wird
-            if(strlen($leader) == 0)
+            if($leader === '')
             {
                 if($this->new_record == true)
                 {

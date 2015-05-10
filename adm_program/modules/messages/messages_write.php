@@ -136,7 +136,7 @@ if ($getUserId > 0)
     }
 }
 
-if (strlen($getSubject) > 0)
+if ($getSubject !== '')
 {
     $headline = $gL10n->get('MAI_SUBJECT').': '.$getSubject;
 }
@@ -193,7 +193,7 @@ if ($getMsgType == 'PM')
 
     $form->openGroupBox('gb_pm_message', $gL10n->get('SYS_MESSAGE') . $sendto);
 
-    if(strlen($getSubject) == 0)
+    if($getSubject === '')
     {
         $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), '', array('maxLength' => 77, 'property' => FIELD_MANDATORY));
     }
@@ -278,7 +278,7 @@ elseif (!isset($message_result))
     $formParam = '';
 
     // if subject was set as param then send this subject to next script
-    if (strlen($getSubject) > 0)
+    if ($getSubject !== '')
     {
         $formParam .= 'subject='.$getSubject.'&';
     }

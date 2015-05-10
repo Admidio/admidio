@@ -82,11 +82,11 @@ if ($getMode == 1 || $getMode == 2 || $getMode == 3 || $getMode == 9)
 {
     // Gaestebuchobjekt anlegen
     $guestbook = new TableGuestbook($gDb);
-    
+
     if($getGboId > 0)
     {
         $guestbook->readDataById($getGboId);
-        
+
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
         if($guestbook->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
         {
@@ -98,11 +98,11 @@ else
 {
     // Gaestebuchobjekt anlegen
     $guestbook_comment = new TableGuestbookComment($gDb);
-    
+
     if($getGboId > 0 && $getMode != 4)
     {
         $guestbook_comment->readDataById($getGboId);
-        
+
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
         if($guestbook_comment->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
         {
@@ -160,11 +160,11 @@ if ($getMode == 1 || $getMode == 3)
     if (strlen($guestbook->getValue('gbo_name')) > 0 && strlen($guestbook->getValue('gbo_text'))  > 0)
     {
         // Gaestebucheintrag speichern
-        
+
         if($gValidLogin)
         {
             if(strlen($guestbook->getValue('gbo_name')) == 0)
-            { 
+            {
                 // Falls der User eingeloggt ist, wird die aktuelle UserId und der korrekte Name mitabgespeichert...
                 $guestbook->setValue('gbo_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));
             }
@@ -189,24 +189,24 @@ if ($getMode == 1 || $getMode == 3)
                 }
             }
         }
-        
+
         // Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
         if(($gPreferences['enable_guestbook_moderation'] == 1 && $gValidLogin == false)
         || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
         {
             $guestbook->setValue('gbo_locked', '1');
         }
-        
+
         // Daten in Datenbank schreiben
         $return_code = $guestbook->save();
-    
+
         if($return_code < 0)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
-        
+
         if($return_code == 0)
-        {    
+        {
             // Benachrichtigungs-Email für neue Einträge
             if(!$gValidLogin)
             {
@@ -225,7 +225,7 @@ if ($getMode == 1 || $getMode == 3)
             {
                 $gbo_email = $gPreferences['email_administrator'];
                 $sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
-            }         
+            }
             $notification = new Email();
             $notification->adminNotfication($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gbo_text, $gbo_name, date($gPreferences['system_date'], time())), $sender_name, $gbo_email);
         }
@@ -239,7 +239,7 @@ if ($getMode == 1 || $getMode == 3)
         {
             unset($_SESSION['captchacode']);
         }
-        
+
         $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline;
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
@@ -318,7 +318,7 @@ elseif($getMode == 4 || $getMode == 8)
             elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
         }
     }
-    
+
     // make html in description secure
     $_POST['gbc_text'] = admFuncVariableIsValid($_POST, 'gbc_text', 'html');
 
@@ -337,7 +337,7 @@ elseif($getMode == 4 || $getMode == 8)
             }
         }
     }
-    
+
     if($getMode == 4)
     {
         $guestbook_comment->setValue('gbc_gbo_id', $getGboId);
@@ -346,7 +346,7 @@ elseif($getMode == 4 || $getMode == 8)
     if (strlen($guestbook_comment->getValue('gbc_name')) > 0 && strlen($guestbook_comment->getValue('gbc_text'))  > 0)
     {
         // Gaestebuchkommentar speichern
-        
+
         if($gValidLogin)
         {
             if(strlen($guestbook_comment->getValue('gbc_name')) == 0)
@@ -374,24 +374,24 @@ elseif($getMode == 4 || $getMode == 8)
                 }
             }
         }
-        
+
         // Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
         if(($gPreferences['enable_guestbook_moderation'] == 1 && $gValidLogin == false)
         || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
         {
             $guestbook_comment->setValue('gbc_locked', '1');
         }
-        
+
         // Daten in Datenbank schreiben
         $return_code = $guestbook_comment->save();
-    
+
         if($return_code < 0)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
-        
+
         if($return_code == 0)
-        {    
+        {
             // Benachrichtigungs-Email für neue Einträge
             if(!$gValidLogin)
             {
@@ -404,14 +404,14 @@ elseif($getMode == 4 || $getMode == 8)
                 $gbc_email = $gCurrentUser->getValue('EMAIL');
             }
             $sender_name = $gbc_name;
-            if(strlen($gbc_email) == 0)
+            if($gbc_email === '')
             {
                 $gbc_email = $gPreferences['email_administrator'];
                 $sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
             }
-            $message = $gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $guestbook_comment->getValue('gbc_text'), $gbc_name, date($gPreferences['system_date'], time()));           
+            $message = $gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $guestbook_comment->getValue('gbc_text'), $gbc_name, date($gPreferences['system_date'], time()));
             $notification = new Email();
-            $notification->adminNotfication($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message, $sender_name, $gbc_email);    
+            $notification->adminNotfication($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message, $sender_name, $gbc_email);
 
         }
 

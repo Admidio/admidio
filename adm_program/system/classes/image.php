@@ -39,7 +39,7 @@ class Image
 
     public function __construct($pathAndFilename = '')
     {
-        if(strlen($pathAndFilename) > 0)
+        if($pathAndFilename !== '')
         {
             $this->setImageFromPath($pathAndFilename);
         }
@@ -113,7 +113,7 @@ class Image
     {
         $returnValue = false;
 
-        if(strlen($pathAndFilename) == 0)
+        if($pathAndFilename === '')
         {
             $pathAndFilename = $this->imagePath;
         }

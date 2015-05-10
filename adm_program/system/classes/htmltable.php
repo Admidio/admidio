@@ -60,7 +60,7 @@ class HtmlTable extends HtmlTableBasic
     {
         global $g_root_path, $gL10n;
 
-        if(strlen($class) == 0)
+        if($class === '')
         {
             $class = 'table';
         }

@@ -121,7 +121,7 @@ if($plgDatesResult['numResults'] > 0)
             {
                 $plg_html_end_date .= ' '. $plg_date->getValue('dat_end', $gPreferences['system_time']);
             }
-            if(strlen($plg_html_end_date) > 0)
+            if($plg_html_end_date !== '')
             {
                 $plg_html_end_date = ' - '. $plg_html_end_date;
             }

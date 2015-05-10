@@ -346,7 +346,7 @@ class TableUserField extends TableAccess
         {
             return parent::setValue($columnName, $newValue, false);
         }
-        elseif($columnName == 'usf_url' && strlen($newValue) > 0)
+        elseif($columnName == 'usf_url' && $newValue !== '')
         {
             // Homepage darf nur gueltige Zeichen enthalten
             if (!strValidCharacters($newValue, 'url'))

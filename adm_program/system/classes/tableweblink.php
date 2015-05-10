@@ -79,7 +79,7 @@ class TableWeblink extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($columnName == 'lnk_url' && strlen($newValue) > 0)
+        if($columnName == 'lnk_url' && $newValue !== '')
         {
             // Homepage darf nur gueltige Zeichen enthalten
             if (!strValidCharacters($newValue, 'url'))

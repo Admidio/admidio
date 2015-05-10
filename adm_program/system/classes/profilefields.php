@@ -97,7 +97,7 @@ class ProfileFields
     {
         global $gPreferences, $g_root_path, $gL10n;
 
-        if(strlen($value) > 0
+        if($value !== ''
         && array_key_exists($fieldNameIntern, $this->mProfileFields) == true)
         {
             // create html for each field type
@@ -117,7 +117,7 @@ class ProfileFields
             elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'EMAIL')
             {
                 // the value in db is only the position, now search for the text
-                if(strlen($value) > 0)
+                if($value !== '')
                 {
                     if($gPreferences['enable_mail_module'] != 1)
                     {
@@ -126,7 +126,7 @@ class ProfileFields
                     else
                     {
                         // set value2 to user id because we need a second parameter in the link to mail module
-                        if(strlen($value2) == 0)
+                        if($value2 === '')
                         {
                             $value2 = $this->mUserId;
                         }
@@ -209,7 +209,7 @@ class ProfileFields
             }
             elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'URL')
             {
-                if(strlen($value) > 0)
+                if($value !== '')
                 {
                     if(strlen($value) > 35)
                     {
@@ -288,10 +288,10 @@ class ProfileFields
 
             if($format != 'database')
             {
-                if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DATE' && strlen($value) > 0)
+                if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DATE' && $value !== '')
                 {
                     // if no format or html is set then show date format from Admidio settings
-                    if(strlen($format) == 0 || $format == 'html')
+                    if($format === '' || $format == 'html')
                     {
                         $dateFormat = $gPreferences['system_date'];
                     }
@@ -319,7 +319,7 @@ class ProfileFields
 
                     }
                 }
-                elseif($fieldNameIntern == 'COUNTRY' && strlen($value) > 0)
+                elseif($fieldNameIntern == 'COUNTRY' && $value !== '')
                 {
                     // read the language name of the country
                     $value = $gL10n->getCountryByCode($value);
@@ -447,7 +447,7 @@ class ProfileFields
         global $gPreferences;
         $returnCode = false;
 
-        if(strlen($fieldValue) > 0)
+        if($fieldValue !== '')
         {
             if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'CHECKBOX')
             {
@@ -530,7 +530,7 @@ class ProfileFields
         {
             $returnCode = $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->setValue('usd_value', $fieldValue);
         }
-        elseif(isset($this->mProfileFields[$fieldNameIntern]) == true && strlen($fieldValue) > 0)
+        elseif(isset($this->mProfileFields[$fieldNameIntern]) == true && $fieldValue !== '')
         {
             $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')] = new TableAccess($this->mDb, TBL_USER_DATA, 'usd');
             $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->setValue('usd_usf_id', $this->mProfileFields[$fieldNameIntern]->getValue('usf_id'));

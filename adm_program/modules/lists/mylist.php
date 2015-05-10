@@ -53,7 +53,7 @@ if(isset($_SESSION['mylist_request']))
     $form_values = strStripSlashesDeep($_SESSION['mylist_request']);
     unset($_SESSION['mylist_request']);
     $getRoleId = $form_values['rol_id'];
-    
+
     // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden,
     // muessen diese nun direkt angelegt werden
     for($i = $default_column_rows+1; $i > 0; $i++)
@@ -81,7 +81,7 @@ $javascriptCode = '
     var fieldNumberIntern  = 0;
     var arr_user_fields    = createProfileFieldsArray();
     var arr_default_fields = createColumnsArray();
-    
+
 
     // Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
     function addColumn()
@@ -92,7 +92,7 @@ $javascriptCode = '
             alert("'.$gL10n->get('LST_NO_MORE_COLUMN').'");
             return;
         }
-        
+
         var category = "";
         var fieldNumberShow  = fieldNumberIntern + 1;
         var table = document.getElementById("mylist_fields_tbody");
@@ -101,7 +101,7 @@ $javascriptCode = '
         //$(newTableRow).css("display", "none"); // ausgebaut wg. Kompatibilitaetsproblemen im IE8
         var newCellCount = newTableRow.insertCell(-1);
         newCellCount.innerHTML = (fieldNumberShow) + ".&nbsp;'.$gL10n->get('LST_COLUMN').'&nbsp;:";
-        
+
         // neue Spalte zur Auswahl des Profilfeldes
         var newCellField = newTableRow.insertCell(-1);
         htmlCboFields = "<select class=\"form-control\" onchange=\"getConditionField(this.id, this.options[this.selectedIndex].text)\" size=\"1\" id=\"column" + fieldNumberShow + "\" class=\"ListProfileField\" name=\"column" + fieldNumberShow + "\">" +
@@ -126,7 +126,7 @@ $javascriptCode = '
             {
                 selected = " selected=\"selected\" ";
             }
-            
+
             // bei gespeicherten Listen das entsprechende Profilfeld selektieren
             // und den Feldnamen dem Listenarray hinzufügen
             if(arr_default_fields[fieldNumberIntern])
@@ -141,11 +141,11 @@ $javascriptCode = '
         }
         htmlCboFields += "</select>";
         newCellField.innerHTML = htmlCboFields;
-        
+
         // neue Spalte zur Einstellung der Sortierung
         var selectAsc  = "";
         var selectDesc = "";
-        
+
         if(arr_default_fields[fieldNumberIntern])
         {
             if(arr_default_fields[fieldNumberIntern]["sort"] == "ASC")
@@ -161,20 +161,20 @@ $javascriptCode = '
         {
             selectAsc = " selected=\"selected\" ";
         }
-        
+
         var newCellOrder = newTableRow.insertCell(-1);
         newCellOrder.innerHTML = "<select class=\"form-control\" size=\"1\" id=\"sort" + fieldNumberShow + "\" name=\"sort" + fieldNumberShow + "\">" +
                 "<option value=\"\">&nbsp;</option>" +
                 "<option value=\"ASC\" " + selectAsc + ">'.$gL10n->get('LST_A_TO_Z').'</option>" +
                 "<option value=\"DESC\" " + selectDesc + ">'.$gL10n->get('LST_Z_TO_A').'</option>" +
             "</select>";
-        
+
         // neue Spalte fuer Bedingungen
         condition = "";
         if(arr_default_fields[fieldNumberIntern])
         {
             var fieldName = arr_default_fields[fieldNumberIntern]["usf_name"];
-            
+
             if(arr_default_fields[fieldNumberIntern]["condition"])
             {
                 condition = arr_default_fields[fieldNumberIntern]["condition"];
@@ -186,25 +186,25 @@ $javascriptCode = '
         {
             var fieldName = "";
         }
-                   
+
         htmlFormCondition = setConditonField("column" + (fieldNumberIntern + 1), fieldName, fieldNumberIntern);
         var newCellConditions = newTableRow.insertCell(-1);
         newCellConditions.setAttribute("id", "condition" + (fieldNumberIntern + 1));
         newCellConditions.innerHTML = htmlFormCondition;
-        
+
         $(newTableRow).fadeIn("slow");
         fieldNumberIntern++;
     }
-    
+
     function createProfileFieldsArray()
     {
         var user_fields = new Array(); ';
-    
+
         // create a multidimensional array for all columns with the necessary data
         $i = 1;
         $oldCategoryNameIntern = '';
         $posEndOfMasterData = 0;
-    
+
         foreach($gProfileFields->mProfileFields as $field)
         {
             // at the end of category master data save positions for loginname and username
@@ -215,7 +215,7 @@ $javascriptCode = '
                 $posEndOfMasterData = $i;
                 $i = $i + 2;
             }
-            
+
             // add profile field to user field array
             if($field->getValue('usf_hidden') == 0 || $gCurrentUser->editUsers())
             {
@@ -228,7 +228,7 @@ $javascriptCode = '
                 user_fields['. $i. ']["usf_name_intern"] = "'. addslashes($field->getValue('usf_name_intern')). '";
                 user_fields['. $i. ']["usf_type"] = "'. $field->getValue('usf_type'). '";
                 user_fields['. $i. ']["usf_value_list"] = new Object();';
-                
+
                 // get avaiable values for current field type and push to array
                 if($field->getValue('usf_type') == 'DROPDOWN'
                     || $field->getValue('usf_type') == 'RADIO_BUTTON')
@@ -244,7 +244,7 @@ $javascriptCode = '
                     $javascriptCode .= '
                     user_fields['. $i. ']["usf_value_list"] = "";';
                 }
-                
+
                 $oldCategoryNameIntern = $field->getValue('cat_name_intern');
                 $i++;
             }
@@ -271,14 +271,14 @@ $javascriptCode = '
         user_fields['. ($posEndOfMasterData+1). ']["usf_id"]   = "usr_photo";
         user_fields['. ($posEndOfMasterData+1). ']["usf_name"] = "'.$gL10n->get('PHO_PHOTO').'";
         user_fields['. ($posEndOfMasterData+1). ']["usf_name_intern"] = "'.$gL10n->get('PHO_PHOTO').'";
-                
+
         user_fields['. $i. '] = new Object();
         user_fields['. $i. ']["cat_id"]   = -1;
         user_fields['. $i. ']["cat_name"] = "'.$gL10n->get('LST_ROLE_INFORMATION').'";
         user_fields['. $i. ']["usf_id"]   = "mem_begin";
         user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('LST_MEMBERSHIP_START').'";
         user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('LST_MEMBERSHIP_START').'";';
-        
+
         $i++;
         $javascriptCode .= '
         user_fields['. $i. '] = new Object();
@@ -287,10 +287,10 @@ $javascriptCode = '
         user_fields['. $i. ']["usf_id"]   = "mem_end";
         user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('LST_MEMBERSHIP_END').'";
         user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('LST_MEMBERSHIP_END').'";
-        
+
         return user_fields;
     }
-    
+
     function createColumnsArray()
     {
         var default_fields = new Array(); ';
@@ -306,7 +306,7 @@ $javascriptCode = '
                 default_fields['. $act_field_count. ']["usf_id"]    = "'. $form_values['column'. $act_field_count]. '";
                 default_fields['. $act_field_count. ']["sort"]      = "'. $form_values['sort'. $act_field_count]. '";
                 default_fields['. $act_field_count. ']["condition"] = "'. $form_values['condition'. $act_field_count]. '";';
-                
+
                 $act_field_count++;
             }
             if($act_field_count > $default_column_rows)
@@ -382,14 +382,14 @@ $javascriptCode = '
                         "</select>";
                     }
                 }
-                
+
                 if(arr_user_fields[key]["usf_type"] == "CHECKBOX")
                 {
                     html = "<select size=\"1\" id=\"condition" + columnId + "\" name=\"condition" + columnId + "\">" +
                     "<option value=\"\">&nbsp;</option>";
-                    
+
                     selected = "";
-                    
+
                     if(arr_default_fields[fieldNumberIntern])
                     {
 
@@ -420,7 +420,7 @@ $javascriptCode = '
         }
         return html;
     }
-    
+
     function loadList()
     {
         var listId = $("#lists_config").val();
@@ -495,7 +495,7 @@ $page->addJavascript($javascriptCode);
 $page->addJavascript('$(document).ready(function() {
     $("form:first *:input[type!=hidden]:first").focus();
     $("#btn_show_list").click(function() {send("show");});
-    
+
     for(var counter = 0; counter < '. $default_column_rows. '; counter++) {
         addColumn();
     }
@@ -534,7 +534,7 @@ $page->addHtml('
                                OR lst_global = 1)
                          ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC ';
                 $lst_result = $gDb->query($sql);
-                
+
                 if($gDb->num_rows() > 0)
                 {
                     $list_global_flag = '';
@@ -544,12 +544,12 @@ $page->addHtml('
                     $tableListGlobalFlag = null;
                     $tableListNameFlag   = null;
                     $tableList = new TableLists($gDb);
-                    
+
                     while($row = $gDb->fetch_array($lst_result))
                     {
                         $tableList->clear();
                         $tableList->setArray($row);
-                    
+
                         // maximal nur die letzten 5 Konfigurationen ohne Namen speichern
                         if(strlen($tableList->getValue('lst_name')) == 0)
                         {
@@ -566,7 +566,7 @@ $page->addHtml('
                         {
                             // erst mal schauen, ob eine neue Gruppe von Konfigurationen angefangen hat
                             if($tableList->getValue('lst_global') != $tableListGlobalFlag
-                            || ($tableList->getValue('lst_name')  != $tableListNameFlag && strlen($tableListNameFlag) == 0))
+                            || ($tableList->getValue('lst_name')  != $tableListNameFlag && $tableListNameFlag === ''))
                             {
                                 if($optgroup_flag == 1)
                                 {
@@ -587,7 +587,7 @@ $page->addHtml('
                                 $tableListGlobalFlag = $tableList->getValue('lst_global');
                                 $tableListNameFlag   = $tableList->getValue('lst_name');
                             }
-                            
+
                             // auf die Konfiguration selektieren, die uebergeben wurde
                             if($getListId == $tableList->getValue('lst_id'))
                             {
@@ -614,7 +614,7 @@ $page->addHtml('
                     $page->addHtml('</optgroup>');
                 }
             $page->addHtml('</select>');
-            
+
             // Listen speichern darf man speichern, wenn es Eigene sind, Neue oder als Webmaster auch Systemlisten
             if(($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
             || ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
@@ -659,7 +659,7 @@ $page->addHtml('
                 <a class="admidio-icon-link" href="javascript:send(\'system\');"><img
                     src="'. THEME_PATH. '/icons/list_global.png" alt="'.$gL10n->get('LST_CONFIGURATION_ALL_USERS').'" title="'.$gL10n->get('LST_CONFIGURATION_ALL_USERS').'" /></a>');
             }
-            
+
             // eine Systemkonfiguration kann vom Webmaster zur Default-Liste gemacht werden
             if($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
             {
@@ -667,7 +667,7 @@ $page->addHtml('
                 <a class="admidio-icon-link" href="javascript:send(\'default\');"><img
                     src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" title="'.$gL10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" /></a>');
             }
-            
+
             // Hinweistext fuer Webmaster
             if($gCurrentUser->isWebmaster())
             {
@@ -678,7 +678,7 @@ $page->addHtml('
             }
         $page->addHtml('</div>
     </div>
-    
+
     <p><b>2.</b> '.$gL10n->get('LST_SET_COLUMNS').'</p>
 
     <div class="table-responsive">
@@ -705,9 +705,9 @@ $page->addHtml('
         </tbody>
     </table>
     </div>
-        
+
     <p><b>3.</b> '.$gL10n->get('LST_CHOOSE_ROLE').'</p>
-    
+
     <div class="form-group">
         <label class="col-sm-3 control-label" for="rol_id">'.$gL10n->get('SYS_ROLE').'</label>
         <div class="col-sm-9">');
@@ -740,7 +740,7 @@ $page->addHtml('
             }
         $page->addHtml('</div>
     </div>
-    
+
     <hr />
 
     <button id="btn_show_list" class="btn btn-primary" type="button"><img

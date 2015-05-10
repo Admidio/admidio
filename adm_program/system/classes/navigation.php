@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*****************************************************************************/
 /** @class Navigation
  *  @brief Handle the navigation within a module and could create a html navigation bar
@@ -14,7 +14,7 @@
  *
  *  // add a new url from another page within the same module
  *  $gNavigation->addUrl('http://www.example.com/addentry.php', 'Add Entry');
- * 
+ *
  *  // optional you can now create the html navigation bar
  *  $gNavigation->getHtml();
  *
@@ -44,13 +44,13 @@ class Navigation
         $this->count = 0;
     }
 
-    /** Initialize the stack and adds a new url to the navigation stack. 
-     *  If a html navigation bar should be created later than you should fill 
+    /** Initialize the stack and adds a new url to the navigation stack.
+     *  If a html navigation bar should be created later than you should fill
      *  the text and maybe the icon.
      *  @param $url  The url that should be added to the navigation stack.
-     *  @param $text A text that should be shown in the html navigation stack and 
+     *  @param $text A text that should be shown in the html navigation stack and
      *               would be linked with the $url.
-     *  @param $icon A url to the icon that should be shown in the html navigation stack 
+     *  @param $icon A url to the icon that should be shown in the html navigation stack
      *               together with the text and would be linked with the $url.
      */
     public function addStartUrl($url, $text = null, $icon = null)
@@ -58,15 +58,15 @@ class Navigation
         $this->clear();
         $this->addUrl($url, $text, $icon);
     }
-    
+
     /** Add a new url to the navigation stack. If a html navigation bar should be
      *  created later than you should fill the text and maybe the icon. Before the
-     *  url will be added to the stack the method checks if the current url was 
+     *  url will be added to the stack the method checks if the current url was
      *  already added to the url.
      *  @param $url  The url that should be added to the navigation stack.
-     *  @param $text A text that should be shown in the html navigation stack and 
+     *  @param $text A text that should be shown in the html navigation stack and
      *               would be linked with the $url.
-     *  @param $icon A url to the icon that should be shown in the html navigation stack 
+     *  @param $icon A url to the icon that should be shown in the html navigation stack
      *               together with the text and would be linked with the $url.
      */
     public function addUrl($url, $text = null, $icon = null)
@@ -95,7 +95,7 @@ class Navigation
         $this->urlStack = array();
         $this->count = 0;
     }
-    
+
     /** Number of urls that a currently in the stack
      */
     public function count()
@@ -113,8 +113,8 @@ class Navigation
             unset($this->urlStack[$this->count]);
         }
     }
-    
-    
+
+
     /** Returns html code that contain a link back to the previous url.
      *  @param $id Optional you could set an id for the back link
      *  @return Returns html code of the navigation back link.
@@ -123,27 +123,27 @@ class Navigation
     {
         global $gL10n;
         $html = '';
-        
+
         // now get the "new" last url from the stack. This should be the last page
         $url = $this->getPreviousUrl();
 
         // if no page was found then show the default homepage
-        if(strlen($url) > 0)
+        if($url !== '')
         {
             $html = '
-            <a class="btn" href="'.$url.'"><img src="'. THEME_PATH. '/icons/back.png" 
+            <a class="btn" href="'.$url.'"><img src="'. THEME_PATH. '/icons/back.png"
                 alt="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').'</a>';
 
         }
-        
+
         // if entries where found then add div element
-        if(strlen($html) > 0)
+        if($html !== '')
         {
             $html = '<div id="'.$id.'" class="admNavigation admNavigationBack">'.$html.'</div>';
         }
         return $html;
     }
-    
+
     /** Returns html code that contain links to all previous added
      *  urls from the stack. The output will look like:@n
      *  FirstPage > SecondPage > ThirdPage ...@n
@@ -154,17 +154,17 @@ class Navigation
     public function getHtmlNavigationBar($id = 'adm-navigation-bar')
     {
         $html = '';
-        
+
         for($i = 0; $i < $this->count; $i++)
         {
             if(strlen($this->urlStack[$i]['text']) > 0)
             {
                 $html .= '<a href="'.$this->urlStack[$i]['url'].'">'.$this->urlStack[$i]['text'].'</a>';
             }
-        }   
-        
+        }
+
         // if entries where found then add div element
-        if(strlen($html) > 0)
+        if($html !== '')
         {
             $html = '<div id="'.$id.'" class="admNavigation admNavigationBar">'.$html.'</div>';
         }
@@ -200,7 +200,7 @@ class Navigation
         {
             return null;
         }
-        
+
     }
 }
 ?>
