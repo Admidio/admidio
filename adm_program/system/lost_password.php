@@ -88,6 +88,7 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
         $sysmail->setVariable(2, $g_root_path.'/adm_program/system/password_activation.php?usr_id='.$user->getValue('usr_id').'&aid='.$activationId);
         $sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user);
 
+        $user->saveChangesWithoutRights();
         $user->save();
 
         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/login.php');
