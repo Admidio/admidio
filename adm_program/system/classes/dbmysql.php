@@ -172,10 +172,10 @@ class DBMySQL extends DBCommon
      *  then this statement will be written to the error log. If it's a @b SELECT statement
      *  then also the number of rows will be logged. If an error occured the script will
      *  be terminated and the error with a backtrace will be send to the browser.
-     *  @param $sql A string with the sql statement that should be executed in database.
-     *  @param $throwError Default will be @b true and if an error the script will be terminated and
-     *                     occured the error with a backtrace will be send to the browser. If set to
-     *                     @b false no error will be shown and the script will be continued.
+     *  @param string $sql A string with the sql statement that should be executed in database.
+     *  @param bool $throwError Default will be @b true and if an error the script will be terminated and
+     *                          occured the error with a backtrace will be send to the browser. If set to
+     *                          @b false no error will be shown and the script will be continued.
      *  @return For @b SELECT statements a result resource will be returned and otherwise @b true.
      *          If an error occured then @b false will be returned of the script was not terminated.
      */

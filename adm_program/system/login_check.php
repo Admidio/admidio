@@ -19,37 +19,35 @@ $organizationId = $gCurrentOrganization->getValue('org_id');
 
 // Filter parameters
 // parameters could be from login dialog or login plugin !!!
-if(isset($_POST['usr_login_name']) && $_POST['usr_login_name'] !== '')
+if(array_key_exists('usr_login_name', $_POST) && $_POST['usr_login_name'] !== '')
 {
     $loginname = $_POST['usr_login_name'];
     $password  = $_POST['usr_password'];
 
-    if($gPreferences['enable_auto_login'] == 1
-    && isset($_POST['auto_login']) && $_POST['auto_login'] == 1)
+    if($gPreferences['enable_auto_login'] == 1 && array_key_exists('auto_login', $_POST) && $_POST['auto_login'] == 1)
     {
         $bAutoLogin = true;
     }
 
     // if user can choose organization then save the selection
-    if(isset($_POST['org_id']) && is_numeric($_POST['org_id']) && $_POST['org_id'] > 0)
+    if(array_key_exists('org_id', $_POST) && is_numeric($_POST['org_id']) && $_POST['org_id'] > 0)
     {
         $organizationId = $_POST['org_id'];
     }
 }
 
-if(isset($_POST['plg_usr_login_name']) && strlen($_POST['plg_usr_login_name']) > 0)
+if(array_key_exists('plg_usr_login_name', $_POST) && $_POST['plg_usr_login_name'] !== '')
 {
     $loginname = $_POST['plg_usr_login_name'];
     $password  = $_POST['plg_usr_password'];
 
-    if($gPreferences['enable_auto_login'] == 1
-    && isset($_POST['plg_auto_login']) && $_POST['plg_auto_login'] == 1)
+    if($gPreferences['enable_auto_login'] == 1 && array_key_exists('plg_auto_login', $_POST) && $_POST['plg_auto_login'] == 1)
     {
         $bAutoLogin = true;
     }
 
     // if user can choose organization then save the selection
-    if(isset($_POST['plg_org_id']) && is_numeric($_POST['plg_org_id']) && $_POST['plg_org_id'] > 0)
+    if(array_key_exists('plg_org_id', $_POST) && is_numeric($_POST['plg_org_id']) && $_POST['plg_org_id'] > 0)
     {
         $organizationId = $_POST['plg_org_id'];
     }
@@ -68,17 +66,17 @@ if($password === '')
 // check name and password
 // user must have membership of one role of the organization
 
-$sql    = 'SELECT DISTINCT usr_id
-             FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-            WHERE UPPER(usr_login_name) LIKE UPPER(\''.$loginname.'\')
-              AND usr_valid      = 1
-              AND mem_usr_id     = usr_id
-              AND mem_rol_id     = rol_id
-              AND mem_begin     <= \''.DATE_NOW.'\'
-              AND mem_end        > \''.DATE_NOW.'\'
-              AND rol_valid      = 1
-              AND rol_cat_id     = cat_id
-              AND cat_org_id     = '.$organizationId;
+$sql = 'SELECT DISTINCT usr_id
+          FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+         WHERE UPPER(usr_login_name) LIKE UPPER(\''.$loginname.'\')
+           AND usr_valid      = 1
+           AND mem_usr_id     = usr_id
+           AND mem_rol_id     = rol_id
+           AND mem_begin     <= \''.DATE_NOW.'\'
+           AND mem_end        > \''.DATE_NOW.'\'
+           AND rol_valid      = 1
+           AND rol_cat_id     = cat_id
+           AND cat_org_id     = '.$organizationId;
 $result = $gDb->query($sql);
 
 $userFound = $gDb->num_rows($result);
@@ -112,21 +110,20 @@ if ($userFound === 1)
             $login_message = 'SYS_LOGIN_SUCCESSFUL';
 
             // bei einer Beta-Version noch einen Hinweis ausgeben !
-            if(ADMIDIO_VERSION_BETA > 0 && $gDebug === false)
+            if(ADMIDIO_VERSION_BETA > 0 && !$gDebug)
             {
                 $login_message = 'SYS_BETA_VERSION';
             }
 
-            // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf
-            // die Startseite verweisen
-            if(!isset($_SESSION['login_forward_url']))
+            // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf die Startseite verweisen
+            if(!array_key_exists('login_forward_url', $_SESSION))
             {
-                $_SESSION['login_forward_url'] = $g_root_path. '/'. $gPreferences['homepage_login'];
+                $_SESSION['login_forward_url'] = $g_root_path . '/' . $gPreferences['homepage_login'];
             }
 
             // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
             // ob der Browser Cookies setzen darf -> sonst kein Login moeglich
-            $location = 'Location: '.$g_root_path.'/adm_program/system/cookie_check.php?message_code='.$login_message;
+            $location = 'Location: ' . $g_root_path . '/adm_program/system/cookie_check.php?message_code=' . $login_message;
             header($location);
             exit();
         }
@@ -139,12 +136,12 @@ if ($userFound === 1)
 else
 {
     // now check if login is not released or doesn't exists
-    $sql    = 'SELECT usr_id
-                 FROM '. TBL_USERS. ', '.TBL_REGISTRATIONS.'
-                WHERE usr_login_name LIKE \''. $loginname. '\'
-                  AND usr_valid  = 0
-                  AND reg_usr_id = usr_id
-                  AND reg_org_id = '.$gCurrentOrganization->getValue('org_id');
+    $sql = 'SELECT usr_id
+              FROM '. TBL_USERS. ', '.TBL_REGISTRATIONS.'
+             WHERE usr_login_name LIKE \''. $loginname. '\'
+               AND usr_valid  = 0
+               AND reg_usr_id = usr_id
+               AND reg_org_id = '.$gCurrentOrganization->getValue('org_id');
     $result = $gDb->query($sql);
 
     if($gDb->num_rows($result) === 1)

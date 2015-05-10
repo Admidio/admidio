@@ -124,14 +124,14 @@ function strNextLetter($letter, $mode = 0)
     $aBig   = ord('A');
     $zBig   = ord('Z');
 
-    if ($ascii == $aSmall || $ascii == $zSmall || $ascii == $aBig || $ascii == $zBig)
+    if ($ascii === $aSmall || $ascii === $zSmall || $ascii === $aBig || $ascii === $zBig)
     {
-        if (($ascii == $aSmall || $ascii == $aBig) && $mode == 0)
+        if (($ascii === $aSmall || $ascii === $aBig) && $mode == 0)
         {
             $ascii++;
         }
 
-        if (($ascii == $zSmall || $ascii == $zBig) && $mode == 1)
+        if (($ascii === $zSmall || $ascii === $zBig) && $mode == 1)
         {
             $ascii--;
         }
@@ -151,12 +151,13 @@ function strNextLetter($letter, $mode = 0)
     return chr($ascii);
 }
 
-/** Check if a string contains only valid characters. Therefore the string is
- *  compared with a hard coded list of valid characters for each datatype.
- *  @param $string    The string that should be checked.
- *  @param $checkType The type @b email, @b file, @b noSpecialChar or @b url that
- *                    will be checked. Each type has a different valid character list.
- *  @return Returns @b true if all characters of @b string match the internal character list.
+/**
+ * Check if a string contains only valid characters. Therefore the string is
+ * compared with a hard coded list of valid characters for each datatype.
+ * @param string $string    The string that should be checked.
+ * @param string $checkType The type @b email, @b file, @b noSpecialChar or @b url that will be checked.
+ *                          Each type has a different valid character list.
+ * @return bool Returns @b true if all characters of @b string match the internal character list.
  */
 function strValidCharacters($string, $checkType)
 {
@@ -176,6 +177,8 @@ function strValidCharacters($string, $checkType)
             case 'url':
                 $validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß.-_:/#?=%&!';
                 break;
+            default:
+                return false;
         }
 
         // check if string contains only valid characters
@@ -192,16 +195,16 @@ function strValidCharacters($string, $checkType)
     return false;
 }
 
-/** Check if a filename contains invalid characters. The characters will be checked with strValidCharacters.
- *  In addition the function checks if the name contains .. or a . at the beginning.
- *  @param $filename       Name of the file that should be checked.
- *  @param $checkExtension If set to @b true then the extension will be checked against a blacklist of extensions:
- *                         php, php3, php4, php5, html, htm, htaccess, htpasswd, pl, js, vbs, asp, cgi, ssi
- *  @return Returns @true if filename contains valid characters. Otherwise an exception is thrown with the
- *          following values:
- *          SYS_FILENAME_EMPTY : Filename was empty
- *          BAC_FILE_NAME_INVALID : Filename contains invalid characters
- *          DOW_FILE_EXTENSION_INVALID : Filename contains invalid extension
+/**
+ * Check if a filename contains invalid characters. The characters will be checked with strValidCharacters.
+ * In addition the function checks if the name contains .. or a . at the beginning.
+ * @param string $filename     Name of the file that should be checked.
+ * @param bool $checkExtension If set to @b true then the extension will be checked against a blacklist of extensions:
+ *                             php, php3, php4, php5, html, htm, htaccess, htpasswd, pl, js, vbs, asp, cgi, ssi
+ * @return true Returns @true if filename contains valid characters. Otherwise an AdmException is thrown
+ * @throws AdmException SYS_FILENAME_EMPTY : Filename was empty
+ * @throws AdmException BAC_FILE_NAME_INVALID : Filename contains invalid characters
+ * @throws AdmException DOW_FILE_EXTENSION_INVALID : Filename contains invalid extension
  */
 function admStrIsValidFileName($filename, $checkExtension = false)
 {
@@ -211,21 +214,21 @@ function admStrIsValidFileName($filename, $checkExtension = false)
         // filename should only contains valid characters
         if(strValidCharacters($filename, 'file')
         && strpos($filename, '..') === false
-        && substr($filename, 0, 1) != '.')
+        && substr($filename, 0, 1) !== '.')
         {
             if($checkExtension)
             {
                 // check if the extension is not blacklisted
                 $extensionBlacklist = array('php', 'php3', 'php4', 'php5', 'html', 'htm', 'htaccess', 'htpasswd', 'pl',
                                             'js', 'vbs', 'asp', 'cgi', 'ssi');
-                $fileExtension = substr($filename, strrpos($filename, '.')+1);
+                $fileExtension = substr($filename, strrpos($filename, '.') + 1);
 
                 if(in_array(strtolower($fileExtension), $extensionBlacklist, true))
                 {
                     throw new AdmException('DOW_FILE_EXTENSION_INVALID');
                 }
             }
-            return 1;
+            return true;
         }
         else
         {

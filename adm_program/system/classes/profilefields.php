@@ -28,9 +28,8 @@ class ProfileFields
     public $columnsValueChanged;        ///< flag if a value of one field had changed
 
     /** constructor that will initialize variables and read the profile field structure
-     *  @param $db Database object (should be @b $gDb)
-     *  @param $organizationId The id of the organization for which the
-     *                         profile field structure should be read
+     *  @param object $db Database object (should be @b $gDb)
+     *  @param $organizationId The id of the organization for which the profile field structure should be read
      */
     public function __construct(&$db, $organizationId)
     {

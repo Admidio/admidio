@@ -27,7 +27,7 @@ class AutoLogin extends TableAccess
 {
     /** Constuctor that will create an object of a recordset of the table adm_auto_login.
      *  If the id is set than the specific auto login will be loaded.
-     *  @param $db Object of the class database. This should be the default object $gDb.
+     *  @param object $db Object of the class database. This should be the default object $gDb.
      *  @param $session The recordset of the auto login with this session will be loaded. If session isn't set than an empty object of the table is created.
      */
     public function __construct(&$db, $session = 0)
@@ -79,8 +79,8 @@ class AutoLogin extends TableAccess
      *  database table @b adm_auto_login. If cookie data is ok then the
      *  user id will be set in the current session. Now there is a valid login
      *  for this user.
-     *  @param $session    The Session object of the current Admidio session.
-     *  @param $cookieData The data of the cookie @b ADMIDIO_DATA.
+     *  @param object $session The Session object of the current Admidio session.
+     *  @param $cookieData     The data of the cookie @b ADMIDIO_DATA.
      */
     public function setValidLogin($session, $cookieData)
     {

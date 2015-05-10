@@ -36,18 +36,19 @@
 
 class AdmException extends Exception
 {
-    /** Constructor that will @b rollback an open database translation
-     *  @param $message Translation @b id that should be shown when exception is catched
-     *  @param $param1  Optional parameter for language string of translation id
-     *  @param $param2  Another optional parameter for language string of translation id
-     *  @param $param3  Another optional parameter for language string of translation id
-     *  @param $param4  Another optional parameter for language string of translation id
+    /**
+     * Constructor that will @b rollback an open database translation
+     * @param string $message Translation @b id that should be shown when exception is catched
+     * @param string $param1  Optional parameter for language string of translation id
+     * @param string $param2  Another optional parameter for language string of translation id
+     * @param string $param3  Another optional parameter for language string of translation id
+     * @param string $param4  Another optional parameter for language string of translation id
      */
-    public function __construct($message, $param1='', $param2='', $param3='', $param4='')
+    public function __construct($message, $param1 = '', $param2 = '', $param3 = '', $param4 = '')
     {
         global $gDb;
 
-        $gDb->EndTransaction(true);
+        $gDb->endTransaction();
 
         // save param in class parameters
         $this->param1 = $param1;
@@ -59,8 +60,9 @@ class AdmException extends Exception
         parent::__construct($message, 0);
     }
 
-    /** Simply return the plain translated error text without any markup.
-     *  @return Returns only a string with the exception text
+    /**
+     * Simply return the plain translated error text without any markup.
+     * @return string Returns only a string with the exception text
      */
     public function getText()
     {
@@ -69,15 +71,16 @@ class AdmException extends Exception
         return $gL10n->get($this->message, $this->param1, $this->param2, $this->param3, $this->param4);
     }
 
-    /** Set a new Admidio message id with their parameters. This method should be used
-     *  if during the exception processing a new better message should be set.
-     *  @param $message Translation @b id that should be shown when exception is catched
-     *  @param $param1  Optional parameter for language string of translation id
-     *  @param $param2  Another optional parameter for language string of translation id
-     *  @param $param3  Another optional parameter for language string of translation id
-     *  @param $param4  Another optional parameter for language string of translation id
+    /**
+     * Set a new Admidio message id with their parameters. This method should be used
+     * if during the exception processing a new better message should be set.
+     * @param string $message Translation @b id that should be shown when exception is catched
+     * @param string $param1  Optional parameter for language string of translation id
+     * @param string $param2  Another optional parameter for language string of translation id
+     * @param string $param3  Another optional parameter for language string of translation id
+     * @param string $param4  Another optional parameter for language string of translation id
      */
-    public function setNewMessage($message, $param1='', $param2='', $param3='', $param4='')
+    public function setNewMessage($message, $param1 = '', $param2 = '', $param3 = '', $param4 = '')
     {
         $this->message = $message;
 
@@ -88,8 +91,9 @@ class AdmException extends Exception
         $this->param4 = $param4;
     }
 
-    /** Show html message window with translated message
-     *  @return Returns a html formated message with the exception text
+    /**
+     * Show html message window with translated message
+     * @return string Returns a html formated message with the exception text
      */
     public function showHtml()
     {
@@ -98,8 +102,7 @@ class AdmException extends Exception
         return $gMessage->show($this->getText());
     }
 
-    /** Simply return the plain translated error text without any markup and stop the script.
-     */
+    /** Simply return the plain translated error text without any markup and stop the script. */
     public function showText()
     {
         echo $this->getText();

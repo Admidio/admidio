@@ -42,9 +42,10 @@ class Language
     private $xmlLanguageObjects = array();  ///< An array with all SimpleXML object of the language from all paths that are set in @b $languageData.
     private $xmlReferenceLanguageObjects = array(); ///< An array with all SimpleXML object of the reference language from all paths that are set in @b $languageData.
 
-    /** Adds a language data object to this class. The object contains all necessary
-     *  language data that is stored in the PHP session.
-     *  @param $languageDataObject An object of the class @b LanguageData.
+    /**
+     * Adds a language data object to this class. The object contains all necessary
+     * language data that is stored in the PHP session.
+     * @param object $languageDataObject An object of the class @b LanguageData.
      */
     public function addLanguageData(&$languageDataObject)
     {
@@ -54,31 +55,33 @@ class Language
         }
     }
 
-    /** Adds a new path of language files to the array with all language paths where Admidio
-     *  should search for language files.
-     *  @param $path Server path where Admidio should search for language files.
+    /**
+     * Adds a new path of language files to the array with all language paths where Admidio
+     * should search for language files.
+     * @param string $path Server path where Admidio should search for language files.
      */
     public function addLanguagePath($path)
     {
         $this->languageData->addLanguagePath($path);
     }
 
-    /** Reads a text string out of a language xml file that is identified
-     *  with a unique text id e.g. SYS_COMMON. If the text contains placeholders
-     *  than you must set more parameters to replace them.
-     *  @param $textId Unique text id of the text that should be read e.g. SYS_COMMON
-     *  @param $param1,$param2... The function accepts an undefined number of values which will be used to replace
-     *                            the placeholder in the text.
-     *                            $param1 will replace @b %%VAR1% or @b %%VAR1_BOLD%,
-     *                            $param2 will replace @b %%VAR2% or @b %%VAR2_BOLD% etc.
-     *  @return Returns the text string with replaced placeholders of the text id.
-     *  @par Examples
-     *  @code // display a text without placeholders
-     *  echo $gL10n->get('SYS_NUMBER');
+    /**
+     * Reads a text string out of a language xml file that is identified
+     * with a unique text id e.g. SYS_COMMON. If the text contains placeholders
+     * than you must set more parameters to replace them.
+     * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @param $param1,$param2... The function accepts an undefined number of values which will be used to replace
+     *                           the placeholder in the text.
+     *                           $param1 will replace @b %%VAR1% or @b %%VAR1_BOLD%,
+     *                           $param2 will replace @b %%VAR2% or @b %%VAR2_BOLD% etc.
+     * @return string Returns the text string with replaced placeholders of the text id.
+     * @par Examples
+     * @code // display a text without placeholders
+     * echo $gL10n->get('SYS_NUMBER');
      *
-     *  // display a text with placeholders for individual content
-     *  echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Webmaster');
-     *  @endcode
+     * // display a text with placeholders for individual content
+     * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Webmaster');
+     * @endcode
      */
     public function get($textId)
     {
@@ -90,31 +93,31 @@ class Language
         $text   = '';
 
         // first read text from cache if it exists there
-        if(isset($this->languageData->textCache[$textId]))
+        if(array_key_exists($textId, $this->languageData->textCache))
         {
             $text = $this->languageData->textCache[$textId];
         }
         else
         {
             // if text is a translation-id then translate it
-            if(strpos($textId, '_') == 3)
+            if(strpos($textId, '_') === 3)
             {
                 // search for text id in every SimpleXMLElement (language file) of the object array
                 foreach($this->languageData->getLanguagePaths() as $languagePath)
                 {
-                    if(strlen($text) == 0)
+                    if($text === '')
                     {
                         $text = $this->searchLanguageText($this->xmlLanguageObjects, $languagePath, $this->languageData->getLanguage(), $textId);
                     }
                 }
 
                 // if text id wasn't found than search for it in reference language
-                if(strlen($text) == 0)
+                if($text === '')
                 {
                     // search for text id in every SimpleXMLElement (language file) of the object array
                     foreach($this->languageData->getLanguagePaths() as $languagePath)
                     {
-                        if(strlen($text) == 0)
+                        if($text === '')
                         {
                             $text = $this->searchLanguageText($this->xmlReferenceLanguageObjects, $languagePath, $this->languageData->getLanguage(true), $textId);
                         }
@@ -123,7 +126,7 @@ class Language
             }
         }
 
-        if(strlen($text) > 0)
+        if($text !== '')
         {
             // replace placeholder with value of parameters
             $paramCount = func_num_args();
@@ -140,7 +143,7 @@ class Language
         }
 
         // no text found then write #undefined text#
-        if(strlen($text) == 0)
+        if($text === '')
         {
             $text = '#'.$textId.'#';
         }
@@ -148,14 +151,15 @@ class Language
         return $text;
     }
 
-    /** Returns an array with all countries and their ISO codes
-     *  @return Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+    /**
+     * Returns an array with all countries and their ISO codes
+     * @return array Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
     public function getCountries()
     {
         $countries = $this->languageData->getCountriesArray();
 
-        if(count($countries) == 0)
+        if(count($countries) === 0)
         {
             // set path to language file of countries
             if(file_exists(SERVER_PATH.'/adm_program/languages/countries_'.$this->languageData->getLanguage().'.xml'))
@@ -176,7 +180,8 @@ class Language
             xml_parse_into_struct($p, $data, $vals, $index);
             xml_parser_free($p);
 
-            for($i = 0; $i < count($index['ISOCODE']); $i++)
+            $iMax = count($index['ISOCODE']);
+            for($i = 0; $i < $iMax; $i++)
             {
                 $countries[$vals[$index['ISOCODE'][$i]]['value']] = $vals[$index['NAME'][$i]]['value'];
             }
@@ -185,47 +190,50 @@ class Language
         return $this->languageData->getCountriesArray();
     }
 
-    /** Returns the name of the country in the language of this object. The country will be
-     *  identified by the ISO code e.g. 'DEU' or 'GBR' ...
-     *  @param $isoCode The three digits ISO code of the country where the name should be returned.
-     *  @return Return the name of the country in the language of this object.
+    /**
+     * Returns the name of the country in the language of this object. The country will be
+     * identified by the ISO code e.g. 'DEU' or 'GBR' ...
+     * @param string $isoCode The three digits ISO code of the country where the name should be returned.
+     * @return string Return the name of the country in the language of this object.
      */
     public function getCountryByCode($isoCode)
     {
         $countries = $this->languageData->getCountriesArray();
 
-        if(count($countries) == 0)
+        if(count($countries) === 0)
         {
             $countries = $this->getCountries();
         }
         return $countries[$isoCode];
     }
 
-    /** Returns the three digits ISO code of the country. The country will be identified
-     *  by the name in the language of this object
-     *  @param $country The name of the country in the language of this object.
-     *  @return Return the three digits ISO code of the country.
+    /**
+     * Returns the three digits ISO code of the country. The country will be identified
+     * by the name in the language of this object
+     * @param string $country The name of the country in the language of this object.
+     * @return string Return the three digits ISO code of the country.
      */
     public function getCountryByName($country)
     {
         $countries = $this->languageData->getCountriesArray();
 
-        if(count($countries) == 0)
+        if(count($countries) === 0)
         {
             $countries = $this->getCountries();
         }
-        return array_search($country, $countries);
+        return array_search($country, $countries, true);
     }
 
-    /** Returns the ISO code of the language of this object.
-     *  @param $referenceLanguage If set to @b true than the ISO code of the reference language will returned.
-     *  @return Returns the ISO code of the language of this object or the reference language e.g. @b de or @b en.
+    /**
+     * Returns the ISO code of the language of this object.
+     * @param bool $referenceLanguage If set to @b true than the ISO code of the reference language will returned.
+     * @return Returns the ISO code of the language of this object or the reference language e.g. @b de or @b en.
      */
     public function getLanguageIsoCode($referenceLanguage = false)
     {
         $language = $this->languageData->getLanguage($referenceLanguage);
 
-        if($language == 'de_sie')
+        if($language === 'de_sie')
         {
             return 'de';
         }
@@ -235,10 +243,11 @@ class Language
         }
     }
 
-    /** Returns the language code of the language of this object. This is the code that is set within
-     *  Admidio with some specials like de_sie. If you only want the ISO code then call getLanguageIsoCode().
-     *  @param $referenceLanguage If set to @b true than the language code of the reference language will returned.
-     *  @return Returns the language code of the language of this object or the reference language.
+    /**
+     * Returns the language code of the language of this object. This is the code that is set within
+     * Admidio with some specials like de_sie. If you only want the ISO code then call getLanguageIsoCode().
+     * @param bool $referenceLanguage If set to @b true than the language code of the reference language will returned.
+     * @return Returns the language code of the language of this object or the reference language.
      */
     public function getLanguage($referenceLanguage = false)
     {
@@ -246,20 +255,22 @@ class Language
     }
 
 
-    /** Creates an array with all languages that are possible in Admidio.
-     *  The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)
-     *  @return Return an array with all available languages.
+    /**
+     * Creates an array with all languages that are possible in Admidio.
+     * The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)
+     * @return array Return an array with all available languages.
      */
     public function getAvaiableLanguages()
     {
-        if(count($this->languages) == 0)
+        if(count($this->languages) === 0)
         {
             $data = implode('', file(SERVER_PATH.'/adm_program/languages/languages.xml'));
             $p = xml_parser_create();
             xml_parse_into_struct($p, $data, $vals, $index);
             xml_parser_free($p);
 
-            for($i = 0; $i < count($index['ISOCODE']); $i++)
+            $iMax = count($index['ISOCODE']);
+            for($i = 0; $i < $iMax; $i++)
             {
                 $this->languages[$vals[$index['ISOCODE'][$i]]['value']] = $vals[$index['NAME'][$i]]['value'];
             }
@@ -267,19 +278,19 @@ class Language
         return $this->languages;
     }
 
-    /** Search for text id in a language xml file and return the text. If no text was found than
-     *  nothing is returned.
-     *  @param $objectArray  The reference to an array where every SimpleXMLElement of each language path is stored
-     *  @param $languagePath The path in which the different language xml files are.
-     *  @param $language     The ISO code of the language in which the text will be searched
-     *  @param $textId       The id of the text that will be searched in the file.
-     *  @return Return the text in the language or nothing if text id wasn't found.
+    /**
+     * Search for text id in a language xml file and return the text. If no text was found than nothing is returned.
+     * @param array $objectArray         The reference to an array where every SimpleXMLElement of each language path is stored
+     * @param string $languagePath The path in which the different language xml files are.
+     * @param string $language     The ISO code of the language in which the text will be searched
+     * @param $textId              The id of the text that will be searched in the file.
+     * @return Return the text in the language or nothing if text id wasn't found.
      */
     public function searchLanguageText(&$objectArray, $languagePath, $language, $textId)
     {
         // if not exists create a SimpleXMLElement of the language file in the language path
         // and add it to the array of language objects
-        if(array_key_exists($languagePath, $objectArray) == false)
+        if(!array_key_exists($languagePath, $objectArray))
         {
             $languageFile = $languagePath.'/'.$language.'.xml';
 
@@ -292,7 +303,7 @@ class Language
         if(is_object($objectArray[$languagePath]))
         {
             // text not in cache -> read from xml file
-            $node   = $objectArray[$languagePath]->xpath("/language/version/text[@id='".$textId."']");
+            $node = $objectArray[$languagePath]->xpath("/language/version/text[@id='".$textId."']");
             if($node != false)
             {
                 // set line break with html
@@ -306,12 +317,13 @@ class Language
         return '';
     }
 
-    /** Set a language to this object. If there was a language before than initialize the cache
-     *  @param $language ISO code of the language that should be set to this object.
+    /**
+     * Set a language to this object. If there was a language before than initialize the cache
+     * @param string $language ISO code of the language that should be set to this object.
      */
     public function setLanguage($language)
     {
-        if($language != $this->languageData->getLanguage())
+        if($language !== $this->languageData->getLanguage())
         {
             // initialize data
             $this->xmlLanguageObjects = array();

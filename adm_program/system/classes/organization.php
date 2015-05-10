@@ -30,7 +30,7 @@ class Organization extends TableAccess
 
     /** Constuctor that will create an object of a recordset of the table adm_organizations.
      *  If the id is set than the specific organization will be loaded.
-     *  @param $db           Object of the class database. This should be the default object $gDb.
+     *  @param object $db    Object of the class database. This should be the default object $gDb.
      *  @param $organization The recordset of the organization with this id will be loaded.
      *                       The organization can be the table id or the organization shortname.
      *                       If id isn't set than an empty object of the table is created.

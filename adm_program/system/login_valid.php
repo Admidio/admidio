@@ -11,7 +11,7 @@
  *
  *****************************************************************************/
 
-if (basename($_SERVER['SCRIPT_FILENAME']) ==='login_valid.php')
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'login_valid.php')
 {
     die('This page may not be called directly !');
 }

@@ -43,12 +43,13 @@ class User extends TableUsers
     protected $organizationId;                  ///< the organization for which the rights are read, could be changed with method @b setOrganization
     protected $assignRoles;                     ///< Flag if the user has the right to assign at least one role
 
-    /** Constuctor that will create an object of a recordset of the users table.
-     *  If the id is set than this recordset will be loaded.
-     *  @param $db            Object of the class database. This could be the default object @b $gDb.
-     *  @param $userFields    An object of the ProfileFields class with the profile field structure
-     *                        of the current organization. This could be the default object @b $gProfileFields.
-     *  @param $userId        The id of the user who should be loaded. If id isn't set than an empty object with no specific user is created.
+    /**
+     * Constuctor that will create an object of a recordset of the users table.
+     * If the id is set than this recordset will be loaded.
+     * @param object $db         Object of the class database. This could be the default object @b $gDb.
+     * @param object $userFields An object of the ProfileFields class with the profile field structure
+     *                           of the current organization. This could be the default object @b $gProfileFields.
+     * @param $userId            The id of the user who should be loaded. If id isn't set than an empty object with no specific user is created.
      */
     public function __construct(&$db, $userFields, $userId = 0)
     {
@@ -267,15 +268,19 @@ class User extends TableUsers
         return 0;
     }
 
-    /** Check if a valid password is set for the user and return true if the correct password
-     *  was set. Optional the current session could be updated to a valid login session.
-     *  @param $password     The password for the current user. This should not be encoded.
-     *  @param $setAutoLogin If set to true then this login will be stored in AutoLogin table
-     *                       and the user doesn't need to login another time with this browser.
-     *                       To use this functionality @b $updateSessionCookies must be set to true.
-     *  @param $updateSessionCookies The current session will be updated to a valid login.
-     *                       If set to false then the login is only valid for the current script.
-     *  @return Return true if the correct password for this user was given to this method.
+    /**
+     * Check if a valid password is set for the user and return true if the correct password
+     * was set. Optional the current session could be updated to a valid login session.
+     * @param string $password   The password for the current user. This should not be encoded.
+     * @param bool $setAutoLogin If set to true then this login will be stored in AutoLogin table
+     *                           and the user doesn't need to login another time with this browser.
+     *                           To use this functionality @b $updateSessionCookies must be set to true.
+     * @param bool $updateSessionCookies The current session will be updated to a valid login.
+     *                                   If set to false then the login is only valid for the current script.
+     * @return bool Return true if the correct password for this user was given to this method.
+     * @throws AdmException SYS_LOGIN_FAILED
+     * @throws AdmException SYS_LOGIN_FAILED
+     * @throws AdmException SYS_PASSWORD_UNKNOWN
      */
     public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true)
     {
@@ -879,8 +884,9 @@ class User extends TableUsers
         }
     }
 
-    /** Checks if the user is assigned to the role @b Webmaster
-     *  @return Returns @b true if the user is a member of the role @b Webmaster
+    /**
+     * Checks if the user is assigned to the role @b Webmaster
+     * @return bool Returns @b true if the user is a member of the role @b Webmaster
      */
     public function isWebmaster()
     {

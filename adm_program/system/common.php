@@ -15,8 +15,8 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'common.php')
 }
 
 // embed config and constants file
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/adm_my_files/config.php');
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/adm_program/system/constants.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_my_files/config.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/constants.php');
 
 // if there is no debug flag in config.php than set debug to false
 if(!isset($gDebug) || $gDebug !== 1)
@@ -27,9 +27,9 @@ if(!isset($gDebug) || $gDebug !== 1)
 if($gDebug)
 {
     // write actual script with parameters in log file
-    error_log("--------------------------------------------------------------------------------\n".
-              $_SERVER['SCRIPT_FILENAME']. "\n? ". $_SERVER['QUERY_STRING']);
-    error_log('memory_used::'.memory_get_usage());
+    error_log('--------------------------------------------------------------------------------\n' .
+              $_SERVER['SCRIPT_FILENAME'] . '\n? ' . $_SERVER['QUERY_STRING']);
+    error_log('memory_used::' . memory_get_usage());
 }
 
  // default prefix is set to 'adm' because of compatibility to old versions
@@ -39,9 +39,9 @@ if($g_tbl_praefix === '')
 }
 
 // includes WITHOUT database connections
-require_once(SERVER_PATH. '/adm_program/libs/htmlawed/htmlawed.php');
-require_once(SERVER_PATH. '/adm_program/system/function.php');
-require_once(SERVER_PATH. '/adm_program/system/string.php');
+require_once(SERVER_PATH . '/adm_program/libs/htmlawed/htmlawed.php');
+require_once(SERVER_PATH . '/adm_program/system/function.php');
+require_once(SERVER_PATH . '/adm_program/system/string.php');
 
 // remove HMTL & PHP-Code from all parameters
 $_GET    = admStrStripTagsSpecial($_GET);
@@ -73,7 +73,7 @@ if(!$gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db))
 }
 
 // create an installation unique cookie prefix and remove special characters
-$gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
+$gCookiePraefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;
 $gCookiePraefix = strtr($gCookiePraefix, ' .,;:', '_____');
 
 /*********************************************************************************
@@ -83,14 +83,14 @@ $gCookiePraefix = strtr($gCookiePraefix, ' .,;:', '_____');
 // start PHP session
 if(!headers_sent())
 {
-    session_name($gCookiePraefix. '_PHP_ID');
+    session_name($gCookiePraefix . '_PHP_ID');
     session_start();
 }
 
 // determine session id
-if(isset($_COOKIE[$gCookiePraefix. '_ID']))
+if(array_key_exists($gCookiePraefix . '_ID', $_COOKIE))
 {
-    $gSessionId = $_COOKIE[$gCookiePraefix. '_ID'];
+    $gSessionId = $_COOKIE[$gCookiePraefix . '_ID'];
 }
 else
 {
@@ -104,7 +104,7 @@ $userIdAutoLogin = 0;
 $gL10n = new Language();
 
 // Session handling
-if(isset($_SESSION['gCurrentSession']))
+if(array_key_exists('gCurrentSession', $_SESSION))
 {
     // read session object from PHP session
     $gCurrentSession       = $_SESSION['gCurrentSession'];
@@ -123,8 +123,8 @@ if(isset($_SESSION['gCurrentSession']))
     $time_gap = time() - strtotime($gCurrentSession->getValue('ses_timestamp', 'Y-m-d H:i:s'));
 
     // if cookie ADMIDIO_DATA is set and last user activity is longer ago, then create auto login if possible
-    if(isset($_COOKIE[$gCookiePraefix. '_DATA'])
-    && $gCurrentSession->hasObject('gCurrentUser') && $time_gap > $gPreferences['logout_minutes'] * 60)
+    if(array_key_exists($gCookiePraefix . '_DATA', $_COOKIE) && $time_gap > $gPreferences['logout_minutes'] * 60
+    && $gCurrentSession->hasObject('gCurrentUser'))
     {
         // restore user from auto login session
         $autoLogin = new AutoLogin($gDb, $gSessionId);
@@ -145,11 +145,11 @@ else
 
     // if cookie ADMIDIO_DATA is set then there could be an auto login
     // the auto login must be done here because after that the corresponding organization must be set
-    if(isset($_COOKIE[$gCookiePraefix. '_DATA']))
+    if(array_key_exists($gCookiePraefix . '_DATA', $_COOKIE))
     {
         // restore user from auto login session
         $autoLogin = new AutoLogin($gDb, $gSessionId);
-        $autoLogin->setValidLogin($gCurrentSession, $_COOKIE[$gCookiePraefix. '_DATA']);
+        $autoLogin->setValidLogin($gCurrentSession, $_COOKIE[$gCookiePraefix . '_DATA']);
         $userIdAutoLogin = $autoLogin->getValue('atl_usr_id');
 
         // create object of the organization of config file with their preferences
@@ -168,7 +168,7 @@ else
         $gCurrentOrganization = new Organization($gDb, $g_organization);
     }
 
-    if($gCurrentOrganization->getValue('org_id') == 0)
+    if($gCurrentOrganization->getValue('org_id') === 0)
     {
         // organization not found
         die('<div style="color: #CC0000;">Error: The organization of the config.php could not be found in the database!</div>');
@@ -195,7 +195,7 @@ if($gCurrentSession->hasObject('gCurrentUser'))
     $gCurrentUser->mProfileFieldsData->mDb =& $gDb;
 
     // checks if user in database session is the same as in php session
-    if($gCurrentUser->getValue('usr_id') != $gCurrentSession->getValue('ses_usr_id'))
+    if($gCurrentUser->getValue('usr_id') !== $gCurrentSession->getValue('ses_usr_id'))
     {
         $gCurrentUser->clear();
         $gCurrentSession->setValue('ses_usr_id', '');
@@ -213,7 +213,8 @@ else
 }
 
 // check if organization or user object must be renewed if data was changed by other users
-if($gCurrentSession->getValue('ses_renew') == 1 || $gCurrentSession->getValue('ses_renew') == 3)
+$sesRenew = $gCurrentSession->getValue('ses_renew');
+if($sesRenew === 1 || $sesRenew === 3)
 {
     // read new field structure in object and than create new user object with new field structure
     $gProfileFields->readProfileFields($gCurrentOrganization->getValue('org_id'));
@@ -249,12 +250,12 @@ if($userIdAutoLogin > 0 && $gCurrentUser->getValue('usr_id'))
 /********************************************************************************/
 
 // set default theme if no theme was set
-if(!isset($gPreferences['theme']))
+if(!array_key_exists('theme', $gPreferences))
 {
     $gPreferences['theme'] = 'modern';
 }
-define('THEME_SERVER_PATH', SERVER_PATH. '/adm_themes/'. $gPreferences['theme']);
-define('THEME_PATH', $g_root_path. '/adm_themes/'. $gPreferences['theme']);
+define('THEME_SERVER_PATH', SERVER_PATH . '/adm_themes/' . $gPreferences['theme']);
+define('THEME_PATH', $g_root_path . '/adm_themes/' . $gPreferences['theme']);
 
 // Create message object which can be called if a message should be shown
 $gMessage = new Message();
@@ -284,11 +285,11 @@ catch(AdmException $e)
 // set default homepage
 if($gValidLogin)
 {
-    $gHomepage = $g_root_path. '/'. $gPreferences['homepage_login'];
+    $gHomepage = $g_root_path . '/' . $gPreferences['homepage_login'];
 }
 else
 {
-    $gHomepage = $g_root_path. '/'. $gPreferences['homepage_logout'];
+    $gHomepage = $g_root_path . '/' . $gPreferences['homepage_logout'];
 }
 
 ?>
