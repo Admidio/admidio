@@ -96,28 +96,24 @@ class Language
         }
         else
         {
-            // if text is a translation-id then translate it
-            if(strpos($textId, '_') == 3)
+            // search for text id in every SimpleXMLElement (language file) of the object array
+            foreach($this->languageData->getLanguagePaths() as $languagePath)
+            {
+                if(strlen($text) == 0)
+                {
+                    $text = $this->searchLanguageText($this->xmlLanguageObjects, $languagePath, $this->languageData->getLanguage(), $textId);
+                }
+            }
+
+            // if text id wasn't found than search for it in reference language
+            if(strlen($text) == 0)
             {
                 // search for text id in every SimpleXMLElement (language file) of the object array
                 foreach($this->languageData->getLanguagePaths() as $languagePath)
                 {
                     if(strlen($text) == 0)
                     {
-                        $text = $this->searchLanguageText($this->xmlLanguageObjects, $languagePath, $this->languageData->getLanguage(), $textId);
-                    }
-                }
-
-                // if text id wasn't found than search for it in reference language
-                if(strlen($text) == 0)
-                {
-                    // search for text id in every SimpleXMLElement (language file) of the object array
-                    foreach($this->languageData->getLanguagePaths() as $languagePath)
-                    {
-                        if(strlen($text) == 0)
-                        {
-                            $text = $this->searchLanguageText($this->xmlReferenceLanguageObjects, $languagePath, $this->languageData->getLanguage(true), $textId);
-                        }
+                        $text = $this->searchLanguageText($this->xmlReferenceLanguageObjects, $languagePath, $this->languageData->getLanguage(true), $textId);
                     }
                 }
             }
