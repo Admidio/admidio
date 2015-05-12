@@ -42,6 +42,7 @@ class User extends TableUsers
     protected $rolesMembershipLeader = array(); ///< Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
     protected $organizationId;                  ///< the organization for which the rights are read, could be changed with method @b setOrganization
     protected $assignRoles;                     ///< Flag if the user has the right to assign at least one role
+    protected $saveChangesWithoutRights;        ///< If this flag is set then a user can save changes to the user if he hasn't the necessary rights
 
     /**
      * Constuctor that will create an object of a recordset of the users table.
@@ -383,6 +384,7 @@ class User extends TableUsers
 
         // initialize rights arrays
         $this->renewRoleData();
+        $this->saveChangesWithoutRights = false;
     }
 
     // returns true if a column of user table or profile fields has changed
@@ -947,7 +949,7 @@ class User extends TableUsers
         $updateCreateUserId = false;
 
         // if current user is new or is allowed to edit this user than save data
-        if($this->getValue('usr_id') == 0 || $gCurrentUser->hasRightEditProfile($this))
+        if($this->getValue('usr_id') == 0 || $gCurrentUser->hasRightEditProfile($this) || $this->saveChangesWithoutRights)
         {
             $this->db->startTransaction();
 
@@ -989,6 +991,13 @@ class User extends TableUsers
         {
             throw new AdmException('The profile data of user '. $this->getValue('FIRST_NAME').' '.$this->getValue('LAST_NAME').' could not be saved because you don\'t have the right to do this.');
         }
+    }
+    
+    /** If this method is set then a user can save changes to the user if he hasn't the necessary rights
+     */
+    public function saveChangesWithoutRights()
+    {
+        $this->saveChangesWithoutRights = true;
     }
 
     /** Set the id of the organization which should be used in this user object.

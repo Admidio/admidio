@@ -233,9 +233,8 @@ if($getMode != 'csv')
         $table->addAttribute('border', '1');
         $table->addTableHeader();
         $table->addRow();
-        $table->addColumn('', array('colspan' => $list->countColumns() + 1));
         $table->addAttribute('align', 'center');
-        $table->addData($headline);
+        $table->addColumn($headline, array('colspan' => $list->countColumns() + 1));
         $table->addRow();
 
     }
@@ -656,14 +655,14 @@ elseif($getMode == 'pdf')
     $pdf->writeHTML($table->getHtmlTable(), true, false, true, false, '');
     
     //Save PDF to file
-    $pdf->Output($filename, 'F');
+    $pdf->Output(SERVER_PATH. '/adm_my_files/'.$filename, 'F');
     
     //Redirect
     header('Content-Type: application/pdf');
 
-    readfile($filename);
+    readfile(SERVER_PATH. '/adm_my_files/'.$filename);
     ignore_user_abort(true);
-    unlink($filename);
+    unlink(SERVER_PATH. '/adm_my_files/'.$filename);
 }
 elseif($getMode == 'html' || $getMode == 'print')
 {

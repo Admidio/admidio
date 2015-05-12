@@ -68,7 +68,15 @@ class AdmException extends Exception
     {
         global $gL10n;
 
-        return $gL10n->get($this->message, $this->param1, $this->param2, $this->param3, $this->param4);
+        // if text is a translation-id then translate it
+        if(strpos($this->message, '_') == 3)
+        {
+            return $gL10n->get($this->message, $this->param1, $this->param2, $this->param3, $this->param4);
+        }
+        else
+        {
+            return $this->message;
+        }
     }
 
     /**

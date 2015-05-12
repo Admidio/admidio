@@ -76,13 +76,13 @@ $DownloadsMenu = $page->getMenu();
 
 if ($gCurrentUser->editDownloadRight())
 {
-    // show links for upload, create folder and folder configuration
-    $DownloadsMenu->addItem('admMenuItemCreateFolder', $g_root_path.'/adm_program/modules/downloads/folder_new.php?folder_id='.$getFolderId,
-                        $gL10n->get('DOW_CREATE_FOLDER'), 'folder_create.png');
-
     // upload only possible if upload filesize > 0
     if ($gPreferences['max_file_upload_size'] > 0) 
     {
+        // show links for upload, create folder and folder configuration
+        $DownloadsMenu->addItem('admMenuItemCreateFolder', $g_root_path.'/adm_program/modules/downloads/folder_new.php?folder_id='.$getFolderId,
+                            $gL10n->get('DOW_CREATE_FOLDER'), 'folder_create.png');
+
         $DownloadsMenu->addItem('admMenuItemAddFile', $g_root_path.'/adm_program/modules/downloads/upload.php?folder_id='.$getFolderId,
                             $gL10n->get('DOW_UPLOAD_FILE'), 'page_white_upload.png');
     }
