@@ -94,13 +94,13 @@ $list = array();
 if ($getMsgType == 'PM')
 {
 
-    $sql = "SELECT usr_id, CONCAT(row1id1.usd_value, ' ', row2id2.usd_value) as name, usr_login_name
+    $sql = "SELECT usr_id, CONCAT(LAST_NAME.usd_value, ' ', FIRST_NAME.usd_value) as name, usr_login_name
                   FROM ".TBL_ROLES.", ".TBL_CATEGORIES.", ".TBL_MEMBERS.", ".TBL_USERS."
-                        LEFT JOIN ".TBL_USER_DATA." row1id1
-                                           ON row1id1.usd_usr_id = usr_id
-                                          AND row1id1.usd_usf_id = 1 LEFT JOIN ".TBL_USER_DATA." row2id2
-                                           ON row2id2.usd_usr_id = usr_id
-                                          AND row2id2.usd_usf_id = 2
+                        LEFT JOIN ".TBL_USER_DATA." LAST_NAME
+                                           ON LAST_NAME.usd_usr_id = usr_id
+                                          AND LAST_NAME.usd_usf_id = 1 LEFT JOIN ".TBL_USER_DATA." FIRST_NAME
+                                           ON FIRST_NAME.usd_usr_id = usr_id
+                                          AND FIRST_NAME.usd_usf_id = 2
                  WHERE rol_id IN (2)
                    AND rol_cat_id = cat_id
                    AND ( cat_org_id = 1
@@ -109,7 +109,7 @@ if ($getMsgType == 'PM')
                    AND mem_usr_id = usr_id
                    AND usr_id <> ".$gCurrentUser->getValue('usr_id')."
                    AND usr_valid  = 1
-                        AND usr_login_name IS NOT NULL";
+                   AND usr_login_name IS NOT NULL";
 
     $drop_result = $gDb->query($sql);
 
@@ -223,8 +223,6 @@ elseif (!isset($message_result))
     {
         // wird eine bestimmte Rolle aufgerufen, dann pruefen, ob die Rechte dazu vorhanden sind
 
-        $sqlConditions = ' AND rol_id = '.$getRoleId;
-
         $sql = 'SELECT rol_mail_this_role, rol_name, rol_id,
                        (SELECT COUNT(1)
                           FROM '.TBL_MEMBERS.'
@@ -234,8 +232,7 @@ elseif (!isset($message_result))
                   FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                  WHERE rol_cat_id    = cat_id
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
-                       OR cat_org_id IS NULL)'.
-                       $sqlConditions;
+                       OR cat_org_id IS NULL) AND rol_id = '.$getRoleId;
         $result = $gDb->query($sql);
         $row    = $gDb->fetch_array($result);
 
@@ -388,7 +385,7 @@ elseif (!isset($message_result))
                 $next = false;
             }
 
-            $list[] = array($row['usr_id'], $row['first_name'].' '.$row['last_name']. ' ('.$row['email'].')', $active);
+            $list[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $active);
         }
 
     }

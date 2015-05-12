@@ -43,10 +43,12 @@ $dateCurrentUserAssigned  = 0;
 if($getDateId > 0)
 {
     $headline = $gL10n->get('SYS_EDIT_VAR', $getHeadline);
+	$mode = 5;
 }
 else
 {
     $headline = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
+	$mode = 1;
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -217,7 +219,7 @@ $datesMenu = $page->getMenu();
 $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('dates_edit_form', $g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode=1', $page);
+$form = new HtmlForm('dates_edit_form', $g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode='.$mode, $page);
 $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
     $form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'), array('maxLength' => 100, 'property' => FIELD_MANDATORY));
 
