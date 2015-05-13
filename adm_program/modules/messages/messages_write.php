@@ -534,6 +534,7 @@ if (isset($message_result))
             $ReceiverName = '<div class="panel-footer">'.$gL10n->get('MSG_OPPOSITE').': '.substr($ReceiverName, 2).'</div>';
         }
 
+        $date = new DateTimeExtended($row['msc_timestamp'], 'Y-m-d H:i:s');
         $page->addHtml('
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -541,7 +542,7 @@ if (isset($message_result))
                     <div class="col-sm-8">
                         <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
                     </div>
-                    <div class="col-sm-4 text-right">' . $row['msc_timestamp'] .
+                    <div class="col-sm-4 text-right">' . $date->format($gPreferences['system_date'].' '.$gPreferences['system_time']) .
                     '</div>
                 </div>
             </div>

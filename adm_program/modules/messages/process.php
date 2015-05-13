@@ -94,7 +94,8 @@
                 while($row = $gDb->fetch_array($result))
                 {
                     $user = new User($gDb, $gProfileFields, $row['msc_usr_id']);
-                    $text[] = '<time>'.date("d.m - H:i", strtotime($row['msc_timestamp'])).'</time><span>'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'</span>'.$row['msc_message'];
+					$date = new DateTimeExtended($row['msc_timestamp'], 'Y-m-d H:i:s');
+                    $text[] = '<time>'.$date->format($gPreferences['system_date'].' '.$gPreferences['system_time']).'</time><span>'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'</span>'.$row['msc_message'];
                 }
 
                 $log['state'] = $MsgId;
