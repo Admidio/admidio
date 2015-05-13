@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
     <version id="3.0.0" translator="Stefanie Schima">
+        <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="edited">A date was changed</text>
+        <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1" development="new" translation="edited">A date at %VAR1% was changed.\n\nTitle: %VAR2%\nDate: %VAR3%\nCalendar: %VAR4%\n</text>
+        <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2" development="new" translation="edited">Location: %VAR1%\nRoom: %VAR2%\nParticipants: %VAR3%\nChanged by: %VAR4%\n</text>
+        <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3" development="new" translation="edited">Changed at: %VAR1%</text>
         <text id="MAI_EMAIL_SEND_TO_RECEIVER" development="new" translation="todo">%VAR1% sent to the receivers: %VAR3% from %VAR2% the following E-Mail:</text>
         <text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Former members</text>
         <text id="MSG_ACTIVE_FORMER_SHORT" development="new" translation="todo">Active and former</text>

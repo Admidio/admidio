@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
     <version id="3.0.0" translator="Markus Faßbender">
-        <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="todo">Ein neuer Termin wurde geändert</text>
+        <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="todo">Ein Termin wurde geändert</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1" development="new" translation="todo">Es wurde ein Termin bei %VAR1% geändert.\n\nTitel: %VAR2%\nDatum: %VAR3%\nKalender: %VAR4%\n</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2" development="new" translation="todo">Ort: %VAR1%\nRaum: %VAR2%\nTeilnehmer: %VAR3%\nGeändert von: %VAR4%\n</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3" development="new" translation="todo">Geändert am: %VAR1%</text>
