@@ -157,12 +157,18 @@ else
     }
 }
 
+// if a beta was installed then create the version string with Beta version
+if($installedDbBetaVersion > 0)
+{
+    $installedDbVersion = $installedDbVersion . ' Beta ' . $installedDbBetaVersion;
+}
+
 // if databse version is not set then show notice
 if(strlen($installedDbVersion) == 0)
 {
     $message = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-exclamation-sign"></span>
                     <strong>'.$gL10n->get('INS_UPDATE_NOT_POSSIBLE').'</strong></div>
-                <p>'.$gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', ADMIDIO_VERSION).'</p>';
+                <p>'.$gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', ADMIDIO_VERSION_TEXT).'</p>';
     showNotice($message, $g_root_path.'/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
 }
 
@@ -171,8 +177,8 @@ if($getMode == 1)
 {
     // if database version is smaller then source version -> update
     // if database version is equal to source but beta has a differnce -> update
-    if(version_compare($installedDbVersion, ADMIDIO_VERSION) < 0
-    ||(version_compare($installedDbVersion, ADMIDIO_VERSION) == 0 && $maxUpdateStep > $currentUpdateStep))
+    if(version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT) < 0
+    ||(version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT) == 0 && $maxUpdateStep > $currentUpdateStep))
     {
         // create a page with the notice that the installation must be configured on the next pages
         $form = new HtmlFormInstallation('update_login_form', 'update.php?mode=2');
@@ -196,7 +202,7 @@ if($getMode == 1)
         $form->show();
     }
     // if versions are equal > no update
-    elseif(version_compare($installedDbVersion, ADMIDIO_VERSION) == 0 && $maxUpdateStep == $currentUpdateStep)
+    elseif(version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT) == 0 && $maxUpdateStep == $currentUpdateStep)
     {
         $message = '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span>
                         <strong>'.$gL10n->get('INS_DATABASE_IS_UP_TO_DATE').'</strong></div>
@@ -208,7 +214,7 @@ if($getMode == 1)
     {
         $message = '<div class="alert alert-danger form-alert"><span class="glyphicon glyphicon-exclamation-sign"></span>
                         <strong>'.$gL10n->get('SYS_ERROR').'</strong>
-                        <p>'.$gL10n->get('SYS_WEBMASTER_FILESYSTEM_INVALID', $installedDbVersion, ADMIDIO_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>').'</p></div>';
+                        <p>'.$gL10n->get('SYS_WEBMASTER_FILESYSTEM_INVALID', $installedDbVersion, ADMIDIO_VERSION_TEXT, '<a href="http://www.admidio.org/index.php?page=download">', '</a>').'</p></div>';
         showNotice($message, $g_root_path.'/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
     }
 }

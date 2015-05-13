@@ -114,10 +114,10 @@ $columnHeading = array(
 if ($gCurrentUser->editDownloadRight())
 {
     $columnHeading[] = $gL10n->get('SYS_FEATURES');
+    $downloadOverview->disableDatatablesColumnsSort(7);
 }
 
 $downloadOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right', 'right', 'right'));
-$downloadOverview->disableDatatablesColumnsSort(7);
 $downloadOverview->addRowHeadingByArray($columnHeading);
 $downloadOverview->setMessageIfNoRowsFound('DOW_FOLDER_NO_FILES', 'warning');
 
@@ -137,11 +137,11 @@ if (isset($folderContent['folders']))
         $columnValues = array(
             1, // Type folder
             '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">
-                                        <img src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').'" title="'.$gL10n->get('SYS_FOLDER').'" /></a>',
+                <img src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').'" title="'.$gL10n->get('SYS_FOLDER').'" /></a>',
             '<a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">'. $nextFolder['fol_name']. '</a>'.$folderDescription,
-            '&nbsp;',
-            '&nbsp;',
-            '&nbsp;'
+            '',
+            '',
+            ''
         );
 
         if ($gCurrentUser->editDownloadRight())
