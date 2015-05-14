@@ -13,7 +13,7 @@ require_once('ecard_function.php');
 // Initialize and check the parameters
 $postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', array('requireValue' => true));
 $postPhotoId      = admFuncVariableIsValid($_POST, 'photo_id', 'numeric', array('requireValue' => true));
-$postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr', 'numeric', array('requireValue' => true));
+$postPhotoNr= admFuncVariableIsValid($_POST, 'photo_nr', 'numeric', array('requireValue' => true));
 
 $funcClass         = new FunctionClass($gL10n);
 $photoAlbum      = new TablePhotos($gDb, $postPhotoId);
@@ -35,7 +35,7 @@ if(!$gValidLogin)
     $gMessage($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-$senderName     = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+$senderName  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
 $senderEmail = $gCurrentUser->getValue('EMAIL');
 
 if(isset($_POST['ecard_recipients']) == false || is_array($_POST['ecard_recipients'] == false))
