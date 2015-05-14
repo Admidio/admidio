@@ -117,6 +117,7 @@
         <text id="SYS_MANDATORY_FIELDS" development="new" translation="edited">Mandatory fields</text>
         <text id="SYS_MENU" development="new" translation="edited">Menu</text>
         <text id="SYS_MESSAGES" development="new" translation="edited">Messages</text>
+        <text id="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" development="new" translation="edited">This module can only be accessed from the organization that is deposited in the config.php. This is the organization % VAR1%.</text>
         <text id="SYS_NO_DATA_FOUND" development="new" translation="edited">No data found!</text>
         <text id="SYS_NORMAL_PICTURE" development="new" translation="edited">Normal image</text>
         <text id="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION" development="new" translation="edited">Online membership administration</text>
@@ -247,7 +248,6 @@
         <text id="SYS_FROM" development="new" translation="edited">from %VAR1%</text>
         <text id="SYS_INFORMATIONS" development="new" translation="edited">information</text>
         <text id="SYS_MAIL_DISPATCH" development="new" translation="edited">Email dispatch</text>
-        <text id="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" development="new" translation="edited">This module can only be accessed from the homepage of the organization chosen at login (% VAR1%).</text>
         <text id="SYS_MODULE_PREFERENCES" development="new" translation="edited">Module settings</text>
         <text id="SYS_MORE_FEATURES" development="new" translation="edited">Additional functions</text>
         <text id="SYS_NEW_VALUE" development="new" translation="edited">New value</text>

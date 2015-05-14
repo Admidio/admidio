@@ -31,13 +31,6 @@ elseif($gPreferences['enable_photo_module'] == 2)
     require_once('../../system/login_valid.php');
 }
 
-//nur von eigentlicher OragHompage erreichbar
-if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) != 0)
-{
-    // das Modul ist deaktiviert
-    $gMessage->show($gL10n->get('SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY', $gHomepage));
-}
-
 //erfassen des Albums falls noch nicht in Session gespeichert
 if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {

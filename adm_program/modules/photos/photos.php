@@ -31,13 +31,6 @@ elseif ($gPreferences['enable_photo_module'] == 2)
     require_once('../../system/login_valid.php');
 }
 
-//nur von eigentlicher OragHompage erreichbar
-if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) != 0)
-{
-    // das Modul ist deaktiviert
-    $gMessage->show($gL10n->get('SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY', $gHomepage));
-}
-
 // Initialize and check the parameters
 $getPhotoId  = admFuncVariableIsValid($_GET, 'pho_id', 'numeric');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
