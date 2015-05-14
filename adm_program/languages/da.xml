@@ -1,5 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="da">
+    <version id="3.0.0" translator="Henrik Troels-Hansen">
+	    <text id="MAI_EMAIL_SEND_TO_RECEIVER" development="new" translation="todo">%VAR1% sendt til modtagerne: %VAR3% fra %VAR2% den følgende e-mail:</text>
+        <text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Tidligere medlemmer</text>
+        <text id="MSG_ACTIVE_FORMER_SHORT" development="new" translation="todo">Aktive og tidligere</text>
+        <text id="BAC_ONLY_MYSQL" development="new" translation="edited">Backup modulet kan kun anvendes sammen med en MySQL database.</text>
+        <text id="DAT_EDIT_CALENDAR_DESC" development="new" translation="edited">Her kan du oprette og redigere kalendre.</text>
+        <text id="DAT_MAINTAIN_CATEGORIES_DESC" development="new" translation="edited">Her kan du oprette og redigere ketegorier.</text>
+        <text id="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION" development="new" translation="edited">Skift til kalender administration</text>
+        <text id="DAT_EDIT_ROOMS_DESC" development="changed" translation="edited">Her kan du oprette og redigere lokaler til aktiviteter.</text>
+        <text id="DOW_CREATE_FOLDER_DESC" development="changed" translation="edited">En ny folder vil blive oprettet i folderen %VAR1_BOLD%.</text>
+        <text id="DOW_FILES_UPLOADED" development="new" translation="edited">%VAR1% filer er blevet uploadet.</text>
+        <text id="DOW_UPLOAD_ANOTHER_FILE" development="new" translation="edited">Upload yderligere filer</text>
+        <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Filen kunne ikke uploades eller der er sket et forkert side kald.\n\nDen maksimale fil upload størrelse er nok overskredet (%VAR1%B for denne server).</text>
+        <text id="DOW_UPLOAD_TO_FOLDER" development="new" translation="edited">Filen vil blive uploaded til folderen %VAR1_BOLD%.</text>
+        <text id="ECA_LAYOUT" development="new" translation="edited">Layout</text>
+        <text id="ECA_SCALE_THUMBNAILS_DESC" development="new" translation="edited">Her kan du definere størrelsen på den lange side af thumbnail billeder og hvad de scaleres til (Standard: 250px).</text>
+        <text id="ECA_MAX_PHOTO_SIZE_DESC" development="new" translation="edited">Den definerede værdi indikerer maximum størrelsen på et billede i postkortet (Standard: 400 x 250 Pixel).</text>
+        <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="edited">Der findes allerede en konfiguration. En ny installation er ikke mulig.\n\nHvis en tidligere installation er blevet afbrudt kan den fortsættes.</text>
+        <text id="INS_CONTINUE_INSTALLATION" development="new" translation="edited">Fortsæt installation</text>
+        <text id="INS_DELETE_CONFIG_FILE" development="new" translation="edited">Admidio's hoved bibliotek %VAR1_BOLD% indeholder en config.php. Den er allerede blevet kopieret til adm_my_files folderen. Venligst slet den fra hoved biblioteket.</text>
+        <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="changed" translation="edited">Hent konfigurations fil</text>
+        <text id="INS_DOWNLOAD_CONFIGURATION_FILE_DESC" development="new" translation="edited">Konfigurations filen %VAR1_BOLD% kunne ikke gemmes i folderen %VAR2_BOLD%. Venligst arranger skrive rettigheder til den folder (ret fil rettigheder via ftp program til 0777 eller drwxrwxrwx) eller download konfigurations filen og kopier den ind i Admidio folderen %VAR3_BOLD% ved hjælp af et FTP program.\n\nEfter filen er blevet uploaded til denne folder så kan du fortsætte installationen.</text>
+        <text id="INS_INSTALLATION_EXISTS" development="new" translation="edited">Databasen indeholder allerede en Admidio installation. Endnu en installation er ikke mulig.</text>
+        <text id="INS_NO_INSTALLED_VERSION_FOUND" development="new" translation="edited">Kunne ikke finde den nuværende installation. Hvis du bruger Admidio 1.x, skal du updatere til version 2.x først. Herefter kan du opdatere til version %VAR1%. Hvis du allerede bruger Admidio 2.x eller højere skal du checke forbindelsen til samt integriteten af din database.</text>
+        <text id="INS_UPDATE_NOT_POSSIBLE" development="new" translation="edited">Opdatering af databasen er ikke mulig lige nu!</text>
+        <text id="INS_WEBMASTER_LOGIN" development="new" translation="edited">Web administration login</text>
+        <text id="INS_WEBMASTER_LOGIN_DESC" development="new" translation="edited">Kun en web administrator kan opdatere databasen. Venligst anvend web administrator login oplysninger.</text>
+        <text id="INS_WEBMASTER_LOGIN_FAILED" development="new" translation="edited">Kunne ikke finde en bruger med disse login oplysninger og en web administrator rolle.</text>
+    	<text id="INV_INVENTORY" development="new" translation="edited">Inventar administration</text>
+    	<text id="INV_ITEM_MANAGEMENT" development="new" translation="edited">Artikel administration</text>
+    	<text id="INV_CREATE_ITEM" development="new" translation="edited">Opret artikel</text>
+    	<text id="LST_COUNTRY_ISO" development="new" translation="edited">Landekoden skal overholde standarden Code ISO 3166 ALPHA-3 (3 karakterer)</text>
+        <text id="LST_INFOBOX" development="new" translation="edited" description="En lille html boks som vil vise yderligere informationer">Info boks</text>
+        <text id="LST_MEMBER_STATUS" development="new" translation="edited">Medlems status</text>
+        <text id="LST_MEMBERS_PER_PAGE_DESC" development="changed" translation="edited">Antal medlemmer som vises i HTML visningen. Flere medlemmer kan vises ved at bruge side opdelings funktionen. Denne værdi vil ikke påvirke print visning eller eksport funktionalitet (Standard: 25).</text>
+    	<text id="MAI_INTO_TO" development="new" translation="edited">Modtagere skal placeres i TIL feltet istedet for i BCC feltet</text>
+        <text id="MAI_INTO_TO_DESC" development="new" translation="edited">Alle modtagere vil blive vist i TIL feltet hvis aktiveret og en e-mail vil blive modtaget af alle modtagere. Alle modtagere kan se navn og e-mail adresse på alle andre modtagere. Samtidigt så kan enhver modtager svare til alle andre modtagere. (Standard: deaktiveret)</text>
+        <text id="MEM_USER_COULD_BE_CREATED" development="new" translation="edited">Bruger kunne oprettes.</text>
+        <text id="MEM_DAYS_FIELD_HISTORY" development="new" translation="edited">Standard periode for felt historik (dage)</text>
+        <text id="MEM_DAYS_FIELD_HISTORY_DESC" development="new" translation="edited">Ændringer i profil felter vil blive vist i en given periode målt i dage. Dette er standard filteret, som kan ændres af brugeren på et senere tidspunkt. For store databaser er denne mulighed brugt til at begrænse ændrings historikken. (Standard: 365)</text>
+        <text id="MEM_SHOW_USERS_DESC" development="new" translation="edited">Kun aktive medlemmer af denne organisation vil blive vist hvis denne indstilling ikke er sat. Ellers vil alle brugere i databasen blive vist.</text>
+        <text id="MEM_USERS_PER_PAGE" development="new" translation="edited">Antal brugere pr. side</text>
+        <text id="MEM_USERS_PER_PAGE_DESC" development="new" translation="edited">Antal brugere vist på hver side. Hvis der er flere medlemmer i denne gruppe så kan siderne vendes. (Standard: 25)</text>
+        <text id="MAI_MAX_RECEIVER" development="new" translation="edited">Maximum antal mail modtagere</text>
+        <text id="MAI_MAX_RECEIVER_DESC" development="new" translation="edited">Denne værdi beskriver maximum antallet af samtidige mail modtagere. En rolle tæller kun som én modtager.</text>
+    	<text id="MSG_ACTIVATE_PM_MODULE" development="new" translation="edited">Aktiver private beskeder</text>
+        <text id="MSG_ACTIVATE_PM_MODULE_DESC" development="new" translation="edited">Denne indstilling tillader deaktivering af private meddelelser. Dette modul vil ikke være tilgængeligt eller vist i oversigten. (Standard: deaktiveret)</text>
+    	<text id="MSG_CHAT" development="new" translation="edited">Chat</text>
+    	<text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="edited">Aktiver chat</text>
+		<text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="edited">Aktiver chat modul. Chat beskeder vil blive hentet dynamisk fra databasen hvert 3 sekund. Kun 99 beskeder vil blive gemt i databasen. Når besked nr. 100 gemmes så slettes de første 50 beskeder.</text>
+         <text id="MSG_OPPOSITE" development="new" translation="edited">Forretnings partner</text>
+      	<text id="MSG_PM_SEND" development="new" translation="edited">En privat besked er sendt til %VAR1_BOLD%.</text>
+     	<text id="MSG_PM_NOT_SEND" development="new" translation="edited">Privat besked kunne ikke sendes til %VAR1_BOLD%.\n\nFølgende fejl er opstået:\n%VAR2%</text>
+     	<text id="MSG_REMOVE" development="new" translation="edited">Slet besked</text>
+     	<text id="MSG_REMOVE_CONFIRM" development="new" translation="edited">Bekræft sletning</text>
+     	<text id="MSG_REMOVE_REVERT" development="new" translation="edited">Gendan slettet besked</text>
+         <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="edited">En ny organisation vil blive tilføjet til databasen inklusiv dens master data. Den nuværende bruger vil blive webmaster og kan vedligeholde datasættet. Brugere der logge ind skal vælge den relevante organisation.</text>
+         <text id="ORG_CAPTCHA_WIDTH" development="new" translation="edited">Captcha bredde</text>
+         <text id="ORG_CAPTCHA_HEIGHT" development="new" translation="edited">Captcha højde</text>
+         <text id="ORG_CAPTCHA_WIDTH_DESC" development="new" translation="edited">Bredde på captcha billede. Så karakterer i captcha billedet kan blive strukket eller skrumpet. (Standard: 250)</text>
+         <text id="ORG_CAPTCHA_HEIGHT_DESC" development="new" translation="edited">Højde på captcha billede. Så karakterer i captcha billedet kan blive strukket eller skrumpet. (Standard: 60)</text>
+         <text id="ORG_CREATE_ITEM_FIELD" development="new" translation="edited">Opret emne felt</text>
+         <text id="ORG_DIFFERENT_DATABASE_VERSION" development="new" translation="edited">Anden database version</text>
+         <text id="ORG_LAST_UPDATE_STEP" development="new" translation="edited">Sidste trin af opdateringen</text>
+         <text id="ORG_FIELD_HIDDEN_DESC" development="changed" translation="edited">Sædvanligvis er et felt synligt for alle brugere som har tilladelse til at se profilen. Hvis denne indstilling er valgt fra så er det kun brugere med tilladelse til at redigere profilen der kan se dette felt.</text>
+         <text id="ORG_INVALID_THEME" development="new" translation="edited">Kunne ikke finde et gyldigt tema.</text>
+         <text id="ORG_NEW_ORGANIZATION" development="new" translation="edited">Ny organisation</text>
+         <text id="ORG_NEW_ORGANIZATION_DESC" development="new" translation="edited">Indtast en forkortelse, det officiellle navn samt en e-mail adresse til organisationen du til tilføje. E-mail adressen skal være en generel e-mail adresse. Den vil blive brugt som afsender e-mail adresse når der sendes automatiske system e-mails og notifikationer.</text>
+         <text id="ORG_NOT_SAVED_SETTINGS_LOST" development="new" translation="edited">Ved ændringer i visningen vil alle ikke gemte ændringer være tabt.</text>
+         <text id="ORG_ORGANIZATION_SUCCESSFULL_ADDED" development="new" translation="edited">Organisationen %VAR1_BOLD% er blevet tilføjet. Den er nu til at vælge ved login.\n\nHvis du har en separat hjemmeside til denne organisation, venligst tilføj den til config.php filen.</text>
+         <text id="ORG_REGIONAL_SETTINGS" development="new" translation="edited">Regionale indstillinger</text>
+    	<text id="PMS_MESSAGE" development="new" translation="edited">Private beskder</text>
+    	<text id="PMS_SEND_PM" development="new" translation="edited">Send privat besked</text>
+    	<text id="PMS_WAS_SENT_TO" development="new" translation="edited">Beskeden blev sendt til:</text>
+    	<text id="PMS_WAS_NOT_SENT_TO" development="new" translation="edited">Fejl - beskeden blev ikke sendt til:</text>
+        <text id="PHO_ALBUM_LOCK" development="new" translation="edited">Lås album</text>
+        <text id="PHO_ALBUM_LOCK_DESC" development="new" translation="edited">Låste albummer kan ikke ses af gæster eller medlemmer, f.eks. kan du låse et album imens alle billeder er ved at blive lagt op.</text>
+        <text id="PHO_ALBUM_UNLOCK" development="new" translation="edited">Lås album op</text>
+        <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="edited">Med denne indstilling kan du definere hvordan billeder vil blive vist inde i fotomodulet. Dette kan gøres med et ekstra vindue der lukkes op i et separat browser vindue. Billed oversigten vil være aktiv i baggrunden. Hvis billedet skal vises i det samme vindue som billed oversigten vil oversigten blive lukket. Den tredie mulighed er at tillade et popup billede som bliver vist samtidigt med billede oversigten. (Standard: Nyt vindue)</text>
+        <text id="PHO_MODAL_WINDOW" development="new" translation="edited">Ekstra vindue</text>
+        <text id="PHO_MAX_PHOTO_SIZE_WIDTH" development="new" translation="edited">Maximum billede størrelse (bredde)</text>
+        <text id="PHO_MAX_PHOTO_SIZE_HEIGHT" development="new" translation="edited">Maximum billede størrelse (højde)</text>
+        <text id="PHO_NUMBER_OF_ALBUMS_PER_PAGE" development="new" translation="edited">Antal albums pr. side</text>
+        <text id="PHO_PARENT_ALBUM_DESC" development="new" translation="edited">Et album kan være en del af et andet album. Vælg venligst et forældre album fra listen. Hvis du vil vise albummet i højeste niveau så skal du vælge %VAR1_BOLD%.</text>
+        <text id="PHO_PHOTO_UPLOAD_DESC" development="new" translation="edited">Vælg venligst de billeder du vil uploade til albummet %VAR1_BOLD%.</text>
+        <text id="PHO_SAVE_ORIGINALS" development="new" translation="edited">Bevar originaler</text>
+        <text id="PHO_SAVE_ORIGINALS_DESC" development="new" translation="edited">Billeder kan blive arkiveret eller tilbudt som downloads så længe der er plads nok tilgængeligt.</text>
+        <text id="PHO_SELECT_FOTOS" development="new" translation="edited">Vælg billede</text>
+        <text id="PHO_THUMBNAILS_PER_PAGE" development="changed" translation="edited">Thumbnails pr. side</text>
+        <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="changed" translation="edited">Denne indstilling definerer hvor mange thumbnail billeder der vil blive vist pr. side. Hvis der er flere billeder i albummet, vil der automatisk blive tilføjet side navigation. (Standard: 16)</text>
+        <text id="PRO_CHANGE_PROFILE_PICTURE" development="changed" translation="edited">Upload profil billede</text>
+        <text id="PRO_CHOOSE_PHOTO" development="new" translation="edited">Vælg billede</text>
+        <text id="PRO_DELETE_PROFILE_PICTURE" development="changed" translation="edited">Slet profil billede</text>
+        <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="edited">Definer et land fra hvilket denne organisation hovedsagligt opererer. Det vil så blive forvalgt når nye brugere oprettes eller registrerer sig. Det letter data indtastningen og kan ændres af brugeren efterfølgende. (Standard: Tyskland)</text>
+        <text id="PRO_EXPORT_VCARD" development="new" translation="edited">Eksporter vCard</text>
+    	<text id="PRO_MAINTAIN_ITEM_FIELDS" development="new" translation="edited">Vedligehold artikel felter</text>
+        <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="changed" translation="edited">I profil felt vedligehold kan profil felter tilføjes og redigeres. De kan efterfølgende placeres i samme kategorier.</text>
+        <text id="ROL_RIGHT_INVENTORY" development="new" translation="edited">Artikel og inventar administration</text>
+        <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="edited">Rollefordeling for %VAR1% %VAR2%</text>
+        <text id="SYS_APPLY" development="new" translation="edited">Udfør</text>
+        <text id="SYS_CATEGORIES" development="new" translation="edited">Kategorier</text>
+        <text id="SYS_CHARACTERS" development="new" translation="edited">Karakterer</text>
+    	<text id="SYS_COUNTRY_EG" development="new" translation="edited">GER</text>
+        <text id="SYS_DECIMAL_NUMBER" development="new" translation="edited">Decimal nummer</text>
+        <text id="SYS_EMAIL_SEND" development="changed" translation="edited">Mailen er afsendt</text>
+        <text id="SYS_FILENAME_EMPTY" development="new" translation="edited">Filnavn mangler!</text>
+        <text id="SYS_FILTER" development="new" translation="edited">Filter</text>
+        <text id="SYS_FULL_SCREEN" development="new" translation="edited">Fuld skærm</text>
+    	<text id="SYS_ITEMNAME" development="new" translation="edited">Emne navn</text>
+        <text id="SYS_MANDATORY_FIELDS" development="new" translation="edited">Krævede felter</text>
+        <text id="SYS_MENU" development="new" translation="edited">Menu</text>
+        <text id="SYS_MESSAGES" development="new" translation="edited">Beskeder<text>
+        <text id="SYS_NO_DATA_FOUND" development="new" translation="edited">Ingen data fundet!</text>
+        <text id="SYS_NORMAL_PICTURE" development="new" translation="edited">Normalt billede</text>
+        <text id="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION" development="new" translation="edited">Online medlemsskabs administration</text>
+        <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="changed" translation="edited">Hvis du har mistet dit kodeord, så kan systemet generere et nyt. Venligst indtast den e-mail adresse som du brugte ved registreringen, så bliver den nye kode sendt dertil med det samme.</text>
+    	<text id="SYS_PM" development="new" translation="edited">Privat Besked</text>
+    	<text id="SYS_QUANTITY" development="new" translation="edited">Mængde</text>
+        <text id="SYS_ROLES" development="new" translation="edited">Roller</text>
+    	<text id="SYS_SELECT_FROM_LIST" development="new" translation="edited">Vælg fra liste</text>
+        <text id="SYS_STILL_X_CHARACTERS" development="new" translation="edited">still %VAR1% karakterer</text>
+        <text id="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION" development="new" translation="edited">Skift til kategori administration</text>
+    </version>
     <version id="2.4.5" translator="Henrik Troels-Hansen">
         <text id="MAI_SENDER_INTO_TO_DESC" development="changed" translation="edited">Hvis en e-mail er sendt til en rolle, vil alle modtager adresser blive placeret i BCC feltet. Til feltet vil så indeholde ordet "Undisclosed Recipients". Hvis dette resulterer i en fejl, så kan du benytte dig af muligheden for at flytte adresserne til til-feltet. De andre adresser vil forblive i BCC feltet. (Standard: Deaktiveret)</text>
         <text id="SYS_CSV" development="new" translation="edited">CSV</text>
@@ -1247,3 +1370,4 @@
         <text id="SYS_YES" development="new" translation="edited">Ja</text>
     </version>
 </language>
+
