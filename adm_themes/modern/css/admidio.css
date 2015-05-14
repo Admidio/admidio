@@ -498,6 +498,11 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     background-image: -moz-linear-gradient(top, #ffffff 0%, #96c4cb 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96c4cb 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96c4cb 95%);
 }
 
+.tab-pane > .panel-group > .panel-default > .panel-heading {
+    border-bottom-left-radius: 9px;
+    border-bottom-right-radius: 9px;
+}
+
 .panel-default.in > .panel-heading {
     background-image: -moz-linear-gradient(top, #55b6c5 0%, #347078 95%); background-image: -webkit-linear-gradient(top, #55b6c5 0%, #347078 95%); background-image: -ms-linear-gradient(top, #55b6c5 0%, #347078 95%);
 }
