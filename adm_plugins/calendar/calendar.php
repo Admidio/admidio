@@ -282,7 +282,7 @@ if($plg_geb_aktiv == 1)
         $geb_day[$geb]  = $birthdayDate->format('d');
         $geb_year[$geb] = $birthdayDate->format('Y');
         $alter[$geb]    = $jahr-$geb_year[$geb];
-        $geb_name[$geb] = $row['first_name']. ' '. $row['last_name'];
+        $geb_name[$geb] = $row['last_name']. ' '. $row['first_name'];
         $geb++;
     }
 }

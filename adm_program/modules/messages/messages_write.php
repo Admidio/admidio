@@ -109,7 +109,8 @@ if ($getMsgType == 'PM')
                    AND mem_usr_id = usr_id
                    AND usr_id <> ".$gCurrentUser->getValue('usr_id')."
                    AND usr_valid  = 1
-                   AND usr_login_name IS NOT NULL";
+                   AND usr_login_name IS NOT NULL
+                  ORDER BY LAST_NAME.usd_value, FIRST_NAME.usd_value";
 
     $drop_result = $gDb->query($sql);
 
@@ -371,7 +372,7 @@ elseif (!isset($message_result))
                      AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
                      AND usr_valid   = 1
                    GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
-                   ORDER BY former, first_name, last_name';
+                   ORDER BY former, last_name, first_name';
 
         $result = $gDb->query($sql);
 

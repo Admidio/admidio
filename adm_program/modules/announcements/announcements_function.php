@@ -89,9 +89,9 @@ if($getMode == 1)
     {
         if($getAnnId == 0)
         {
-            $message = $gL10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
+            $message = $gL10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('LAST_NAME').' '.$gCurrentUser->getValue('FIRST_NAME'), date($gPreferences['system_date'], time()));
             $notification = new Email();
-            $notification->adminNotfication($gL10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+            $notification->adminNotfication($gL10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('LAST_NAME').' '.$gCurrentUser->getValue('FIRST_NAME'), $gCurrentUser->getValue('EMAIL'));
         }
     }
     
