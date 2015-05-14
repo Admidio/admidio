@@ -34,6 +34,11 @@ $getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy', 'boolean', array(
 $getDeliveryConfirmation  = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'boolean');
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
 
+if ($getMsgId > 0)
+{
+    $message = new TableMessage($gDb, $getMsgId);
+    $getMsgType = $message->getValue('msg_type');
+}
 
 // check if the call of the page was allowed by settings
 if ($gPreferences['enable_mail_module'] != 1 && $getMsgType != 'PM')
@@ -64,13 +69,9 @@ if ($gValidLogin && $getMsgType != 'PM' && strlen($gCurrentUser->getValue('EMAIL
 // Update the read status of the message
 if ($getMsgId > 0)
 {
-    $message = new TableMessage($gDb, $getMsgId);
-
     // update the read-status
     $message->setReadValue($gCurrentUser->getValue('usr_id'));
 
-    $msg_converation_id = $message->getValue('msg_converation_id');
-    $getMsgType = $message->getValue('msg_type');
     $getSubject = $message->getValue('msg_subject');
     $getUserId = $message->getConversationPartner($gCurrentUser->getValue('usr_id'));
 
@@ -80,7 +81,6 @@ if ($getMsgId > 0)
                  ORDER BY msc_part_id DESC";
 
     $message_result = $gDb->query($sql);
-
 }
 
 $recept_number = 1;
