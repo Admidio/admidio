@@ -43,12 +43,12 @@ $dateCurrentUserAssigned  = 0;
 if($getDateId > 0)
 {
     $headline = $gL10n->get('SYS_EDIT_VAR', $getHeadline);
-	$mode = 5;
+    $mode = 5;
 }
 else
 {
     $headline = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
-	$mode = 1;
+    $mode = 1;
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
