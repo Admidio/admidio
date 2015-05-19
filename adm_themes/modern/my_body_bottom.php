@@ -9,7 +9,7 @@
             <div id="right-block" class="admidio-container">
             <?php
 
-                include(SERVER_PATH. '/adm_plugins/login_form/login_form.php');
+                include(SERVER_PATH . '/adm_plugins/login_form/login_form.php');
 
                 // prepare the menus here so that the plugins have a chance to modify them
                 echo '<div id="plugin_menu" class="admidio-plugin-content">';
@@ -18,23 +18,23 @@
                 $adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
 
                 $moduleMenu->addItem('overview', '/adm_program/index.php',
-                                    $gL10n->get('SYS_OVERVIEW'), '/icons/home.png');
+                                     $gL10n->get('SYS_OVERVIEW'), '/icons/home.png');
 
                 if($gPreferences['enable_announcements_module'] == 1
                 || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
                 {
                     $moduleMenu->addItem('announcements', '/adm_program/modules/announcements/announcements.php',
-                                        $gL10n->get('ANN_ANNOUNCEMENTS'), '/icons/announcements.png');
+                                         $gL10n->get('ANN_ANNOUNCEMENTS'), '/icons/announcements.png');
                 }
                 if($gPreferences['enable_download_module'] == 1)
                 {
                     $moduleMenu->addItem('download', '/adm_program/modules/downloads/downloads.php',
-                                        $gL10n->get('DOW_DOWNLOADS'), '/icons/download.png');
+                                         $gL10n->get('DOW_DOWNLOADS'), '/icons/download.png');
                 }
-                if($gPreferences['enable_mail_module'] == 1 && $gValidLogin == false)
+                if($gPreferences['enable_mail_module'] == 1 && !$gValidLogin)
                 {
                     $moduleMenu->addItem('email', '/adm_program/modules/messages/messages_write.php',
-                                        $gL10n->get('SYS_EMAIL'), '/icons/email.png');
+                                         $gL10n->get('SYS_EMAIL'), '/icons/email.png');
                 }
                 if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
                 {
@@ -42,54 +42,56 @@
                     $message = new TableMessage($gDb);
                     $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
 
-                    if ($unread > 0)
+                    if($unread > 0)
                     {
                         $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages.php',
-                                        $gL10n->get('SYS_MESSAGES').'<span class="badge">'.$unread.'</span>', '/icons/messages.png');
+                                             $gL10n->get('SYS_MESSAGES') . '<span class="badge">'.$unread.'</span>',
+                                             '/icons/messages.png');
                     }
                     else
                     {
                         $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages.php',
-                                        $gL10n->get('SYS_MESSAGES'), '/icons/messages.png');
+                                             $gL10n->get('SYS_MESSAGES'), '/icons/messages.png');
                     }
                 }
                 if($gPreferences['enable_photo_module'] == 1
                 || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
                 {
                     $moduleMenu->addItem('photo', '/adm_program/modules/photos/photos.php',
-                                        $gL10n->get('PHO_PHOTOS'), '/icons/photo.png');
+                                         $gL10n->get('PHO_PHOTOS'), '/icons/photo.png');
                 }
                 if($gPreferences['enable_guestbook_module'] == 1
                 || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
                 {
                     $moduleMenu->addItem('guestbk', '/adm_program/modules/guestbook/guestbook.php',
-                                        $gL10n->get('GBO_GUESTBOOK'), '/icons/guestbook.png');
+                                         $gL10n->get('GBO_GUESTBOOK'), '/icons/guestbook.png');
                 }
 
                 $moduleMenu->addItem('lists', '/adm_program/modules/lists/lists.php',
-                                    $gL10n->get('LST_LISTS'), '/icons/lists.png');
+                                     $gL10n->get('LST_LISTS'), '/icons/lists.png');
 
                 if($gValidLogin)
                 {
                     $moduleMenu->addItem('mylist', '/adm_program/modules/lists/mylist.php',
-                                        $gL10n->get('LST_MY_LIST'), '/icons/mylist.png');
+                                         $gL10n->get('LST_MY_LIST'), '/icons/mylist.png');
                 }
 
                 if($gPreferences['enable_dates_module'] == 1
                 || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
                 {
                     $moduleMenu->addItem('dates', '/adm_program/modules/dates/dates.php',
-                                        $gL10n->get('DAT_DATES'), '/icons/dates.png');
+                                         $gL10n->get('DAT_DATES'), '/icons/dates.png');
                 }
 
                 if($gPreferences['enable_weblinks_module'] == 1
                 || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
                 {
                     $moduleMenu->addItem('links', '/adm_program/modules/links/links.php',
-                                        $gL10n->get('LNK_WEBLINKS'), '/icons/weblinks.png');
+                                         $gL10n->get('LNK_WEBLINKS'), '/icons/weblinks.png');
                 }
 
-                if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
+                if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles()
+                || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
                 {
 
                     if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
@@ -127,8 +129,11 @@
 
 
 <p id="copyright">
-    <a href="http://www.admidio.org"><img
-    src="<?php echo THEME_PATH; ?>/images/admidio_logo_20.png" style="border: 0px; vertical-align: bottom;"
-     alt="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>" title="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>" /></a>
+    <a href="http://www.admidio.org/">
+        <img src="<?php echo THEME_PATH; ?>/images/admidio_logo_20.png"
+             alt="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>"
+             title="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>"
+             style="border: 0; vertical-align: bottom;" />
+    </a>
     <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2015&nbsp;&nbsp;<?php echo $gL10n->get('SYS_ADMIDIO_TEAM'); ?></span>
 </p>
