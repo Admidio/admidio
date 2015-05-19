@@ -13,8 +13,7 @@
 
 body {
     color: #000000;
-    background-color: #ffffff;
-    background-image: none;
+    background: #ffffff none;
     text-align: center;
     margin: 20px;
 }
