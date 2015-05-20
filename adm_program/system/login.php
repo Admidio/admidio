@@ -21,7 +21,7 @@ $sql = 'SELECT rol_id FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
            AND rol_webmaster = 1
            AND rol_cat_id = cat_id
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
-               OR cat_org_id IS NULL ) ';
+               OR cat_org_id IS NULL )';
 $gDb->query($sql);
 $row = $gDb->fetch_array();
 
@@ -43,7 +43,8 @@ $form->addInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' 
 if($gPreferences['system_organization_select'] == 1)
 {
     $sql = 'SELECT org_id, org_longname FROM '.TBL_ORGANIZATIONS.' ORDER BY org_longname ASC, org_shortname ASC';
-    $form->addSelectBoxFromSql('org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, array('property' => FIELD_MANDATORY, 'defaultValue' => $gCurrentOrganization->getValue('org_id')));
+    $form->addSelectBoxFromSql('org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
+        array('property' => FIELD_MANDATORY, 'defaultValue' => $gCurrentOrganization->getValue('org_id')));
 }
 
 if($gPreferences['enable_auto_login'] == 1)
@@ -61,22 +62,20 @@ if($gPreferences['registration_mode'] > 0)
 }
 
 // Link bei Loginproblemen
-if($gPreferences['enable_password_recovery'] == 1
-&& $gPreferences['enable_system_mails'] == 1)
+if($gPreferences['enable_password_recovery'] == 1 && $gPreferences['enable_system_mails'] == 1)
 {
     // neues Passwort zusenden
     $mail_link = $g_root_path.'/adm_program/system/lost_password.php';
 }
-elseif($gPreferences['enable_mail_module'] == 1
-&& $roleWebmaster->getValue('rol_mail_this_role') == 3)
+elseif($gPreferences['enable_mail_module'] == 1 && $roleWebmaster->getValue('rol_mail_this_role') == 3)
 {
     // Mailmodul aufrufen mit Webmaster als Ansprechpartner
-    $mail_link = $g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='. $roleWebmaster->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+    $mail_link = $g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='.$roleWebmaster->getValue('rol_id').'&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
 }
 else
 {
     // direkte Mail an den Webmaster ueber einen externen Mailclient
-    $mail_link = 'mailto:'. $gPreferences['email_administrator']. '?subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+    $mail_link = 'mailto:'.$gPreferences['email_administrator'].'?subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
 }
 
 $page->addHtml('<div id="login_forgot_password_link">

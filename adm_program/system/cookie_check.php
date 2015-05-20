@@ -18,7 +18,7 @@ require_once('common.php');
 $getMessageCode = admFuncVariableIsValid($_GET, 'message_code', 'string', array('requireValue' => true));
 
 // check if cookie is set
-if(!isset($_COOKIE[$gCookiePraefix. '_ID']))
+if(!isset($_COOKIE[$gCookiePraefix . '_ID']))
 {
     unset($_SESSION['login_forward_url']);
     $gMessage->setForwardUrl($gHomepage);
@@ -31,7 +31,7 @@ else
 
     $show_time = 2000;
 
-    if($getMessageCode != 'SYS_LOGIN_SUCCESSFUL')
+    if($getMessageCode !== 'SYS_LOGIN_SUCCESSFUL')
     {
         // Wenn es eine andere Meldung, als eine Standard-Meldung ist, dem User mehr Zeit zum lesen lassen
         $show_time = 0;

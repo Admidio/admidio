@@ -111,10 +111,11 @@ class HtmlPage
         $this->menu->setName($headline);
     }
 
-    /** Adds any html content to the page. The content will be added in the order
-     *  you call this method. The first call will place the content at the top of
-     *  the page. The second call below the first etc.
-     *  @param $html A valid html code that will be added to the page.
+    /**
+     * Adds any html content to the page. The content will be added in the order
+     * you call this method. The first call will place the content at the top of
+     * the page. The second call below the first etc.
+     * @param string $html A valid html code that will be added to the page.
      */
     public function addHtml($html)
     {

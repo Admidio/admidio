@@ -17,8 +17,10 @@
 require_once('common.php');
 require_once('login_valid.php');
 
-$getCKEditor        = admFuncVariableIsValid($_GET, 'CKEditor', 'string', array('requireValue' => true, 'directOutput' => true));
-$getCKEditorFuncNum = admFuncVariableIsValid($_GET, 'CKEditorFuncNum', 'string', array('requireValue' => true, 'directOutput' => true));
+$getCKEditor        = admFuncVariableIsValid($_GET, 'CKEditor', 'string',
+                                             array('requireValue' => true, 'directOutput' => true));
+$getCKEditorFuncNum = admFuncVariableIsValid($_GET, 'CKEditorFuncNum', 'string',
+                                             array('requireValue' => true, 'directOutput' => true));
 $getlangCode        = admFuncVariableIsValid($_GET, 'langCode', 'string', array('directOutput' => true));
 
 $message = '';
@@ -70,23 +72,29 @@ try
             if(file_exists($serverUrl))
             {
                 // if file exists than create a random number and append it to the filename
-                $serverUrl = $myFilesProfilePhotos->getServerPath().'/'.substr($localFile, 0, strrpos($localFile, '.')).'_'.rand().substr($localFile, strrpos($localFile, '.'));
+                $serverUrl = $myFilesProfilePhotos->getServerPath() . '/' .
+                    substr($localFile, 0, strrpos($localFile, '.')) . '_' .
+                    rand().substr($localFile, strrpos($localFile, '.'));
             }
             $htmlUrl = $g_root_path.'/adm_program/system/show_image.php?module='.$folderName.'&file='.$localFile;
             move_uploaded_file($_FILES['upload']['tmp_name'], $serverUrl);
         }
         else
         {
-            $message = strStripTags($gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+            $message = strStripTags($gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath,
+                '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
         }
     }
     else
     {
-        $message = strStripTags($$gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+        $message = strStripTags($gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath,
+            '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
     }
 
     // now call CKEditor function and send photo data
-    echo '<html><body><script type="text/javascript">window.parent.CKEDITOR.tools.callFunction('.$getCKEditorFuncNum.', "'.$htmlUrl.'","'.$message.'");</script></body></html>';
+    echo '<html><body><script type="text/javascript">
+            window.parent.CKEDITOR.tools.callFunction('.$getCKEditorFuncNum.', "'.$htmlUrl.'","'.$message.'");
+        </script></body></html>';
 }
 catch(AdmException $e)
 {

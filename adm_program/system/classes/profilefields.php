@@ -50,10 +50,12 @@ class ProfileFields
         $this->columnsValueChanged = false;
     }
 
-    /** returns for a fieldname intern (usf_name_intern) the value of the column from table adm_user_fields
-     *  @param $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
-     *  @param $column The column name of @b adm_user_field for which you want the value
-     *  @param $format Optional the format (is neccessary for timestamps)
+    /**
+     * returns for a fieldname intern (usf_name_intern) the value of the column from table adm_user_fields
+     * @param string $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
+     * @param string $column          The column name of @b adm_user_field for which you want the value
+     * @param string $format          Optional the format (is neccessary for timestamps)
+     * @return mixed
      */
     public function getProperty($fieldNameIntern, $column, $format = '')
     {

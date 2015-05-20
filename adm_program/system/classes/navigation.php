@@ -1,5 +1,12 @@
 <?php
-/*****************************************************************************/
+/*****************************************************************************
+ *
+ *  Copyright    : (c) 2004 - 2015 The Admidio Team
+ *  Homepage     : http://www.admidio.org
+ *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ *****************************************************************************/
+
 /** @class Navigation
  *  @brief Handle the navigation within a module and could create a html navigation bar
  *
@@ -24,34 +31,28 @@
  *  @code // show a navigation bar in your html code
  *  ... <br /><?php echo $gNavigation->getHtmlNavigationBar('id-my-navigation'); ?><br /> ...@endcode
  */
-/*****************************************************************************
- *
- *  Copyright    : (c) 2004 - 2015 The Admidio Team
- *  Homepage     : http://www.admidio.org
- *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- *
- *****************************************************************************/
-
 class Navigation
 {
     private $urlStack = array();
     private $count;
 
-    /** Construktur will initialize the local parameters
+    /**
+     * Constructor will initialize the local parameters
      */
     public function __construct()
     {
         $this->count = 0;
     }
 
-    /** Initialize the stack and adds a new url to the navigation stack.
-     *  If a html navigation bar should be created later than you should fill
-     *  the text and maybe the icon.
-     *  @param $url  The url that should be added to the navigation stack.
-     *  @param $text A text that should be shown in the html navigation stack and
-     *               would be linked with the $url.
-     *  @param $icon A url to the icon that should be shown in the html navigation stack
-     *               together with the text and would be linked with the $url.
+    /**
+     * Initialize the stack and adds a new url to the navigation stack.
+     * If a html navigation bar should be created later than you should fill the text and maybe the icon.
+     * @param string $url       The url that should be added to the navigation stack.
+     * @param string|null $text A text that should be shown in the html navigation stack and
+     *                          would be linked with the $url.
+     * @param string|null $icon A url to the icon that should be shown in the html navigation stack
+     *                          together with the text and would be linked with the $url.
+     * @return void
      */
     public function addStartUrl($url, $text = null, $icon = null)
     {
@@ -59,15 +60,16 @@ class Navigation
         $this->addUrl($url, $text, $icon);
     }
 
-    /** Add a new url to the navigation stack. If a html navigation bar should be
-     *  created later than you should fill the text and maybe the icon. Before the
-     *  url will be added to the stack the method checks if the current url was
-     *  already added to the url.
-     *  @param $url  The url that should be added to the navigation stack.
-     *  @param $text A text that should be shown in the html navigation stack and
-     *               would be linked with the $url.
-     *  @param $icon A url to the icon that should be shown in the html navigation stack
-     *               together with the text and would be linked with the $url.
+    /**
+     * Add a new url to the navigation stack. If a html navigation bar should be created later
+     * than you should fill the text and maybe the icon. Before the url will be added to the stack
+     * the method checks if the current url was already added to the url.
+     * @param string $url       The url that should be added to the navigation stack.
+     * @param string|null $text A text that should be shown in the html navigation stack and
+     *                          would be linked with the $url.
+     * @param string|null $icon A url to the icon that should be shown in the html navigation stack
+     *                          together with the text and would be linked with the $url.
+     * @return void
      */
     public function addUrl($url, $text = null, $icon = null)
     {
@@ -88,7 +90,9 @@ class Navigation
         }
     }
 
-    /** Initialize the url stack and set the internal counter to 0
+    /**
+     * Initialize the url stack and set the internal counter to 0
+     * @return void
      */
     public function clear()
     {
@@ -96,14 +100,18 @@ class Navigation
         $this->count = 0;
     }
 
-    /** Number of urls that a currently in the stack
+    /**
+     * Number of urls that a currently in the stack
+     * @return int
      */
     public function count()
     {
         return $this->count;
     }
 
-    /** Removes the last url from the stack.
+    /**
+     * Removes the last url from the stack.
+     * @return void
      */
     public function deleteLastUrl()
     {
@@ -115,9 +123,10 @@ class Navigation
     }
 
 
-    /** Returns html code that contain a link back to the previous url.
-     *  @param $id Optional you could set an id for the back link
-     *  @return Returns html code of the navigation back link.
+    /**
+     * Returns html code that contain a link back to the previous url.
+     * @param string $id Optional you could set an id for the back link
+     * @return string Returns html code of the navigation back link.
      */
     public function getHtmlBackButton($id = 'adm-navigation-back')
     {
@@ -144,12 +153,12 @@ class Navigation
         return $html;
     }
 
-    /** Returns html code that contain links to all previous added
-     *  urls from the stack. The output will look like:@n
-     *  FirstPage > SecondPage > ThirdPage ...@n
-     *  The last page of this list is always the current page.
-     *  @param $id Optional you could set an id for the navigation bar
-     *  @return Returns html code of the navigation bar.
+    /**
+     * Returns html code that contain links to all previous added urls from the stack.
+     * The output will look like: @n FirstPage > SecondPage > ThirdPage ...@n
+     * The last page of this list is always the current page.
+     * @param string $id Optional you could set an id for the navigation bar
+     * @return string Returns html code of the navigation bar.
      */
     public function getHtmlNavigationBar($id = 'adm-navigation-bar')
     {
@@ -171,8 +180,9 @@ class Navigation
         return $html;
     }
 
-    /** Get the previous url from the stack. This is
-     *  not the last url that was added to the stack!
+    /**
+     * Get the previous url from the stack. This is not the last url that was added to the stack!
+     * @return string
      */
     public function getPreviousUrl()
     {
@@ -188,7 +198,9 @@ class Navigation
         return $this->urlStack[$url_count]['url'];
     }
 
-    /** Get the last added url from the stack.
+    /**
+     * Get the last added url from the stack.
+     * @return string|null
      */
     public function getUrl()
     {

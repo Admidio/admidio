@@ -572,19 +572,20 @@ class User extends TableUsers
         return $this->rolesMembership;
     }
 
-    /** Get the value of a column of the database table if the column has the praefix @b usr_
-     *  otherwise the value of the profile field of the table adm_user_data will be returned.
-     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
-     *  @param $columnName The name of the database column whose value should be read or the internal unique profile field name
-     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                 For text columns the format can be @b database that would return the original database value without any transformations
-     *  @return Returns the value of the database column or the value of adm_user_fields
-     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
-     *  @par Examples
-     *  @code  // reads data of adm_users column
-     *  $loginname = $gCurrentUser->getValue('usr_login_name');
-     *  // reads data of adm_user_fields
-     *  $email = $gCurrentUser->getValue('EMAIL'); @endcode
+    /**
+     * Get the value of a column of the database table if the column has the praefix @b usr_
+     * otherwise the value of the profile field of the table adm_user_data will be returned.
+     * If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @param string $columnName The name of the database column whose value should be read or the internal unique profile field name
+     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                           For text columns the format can be @b database that would return the original database value without any transformations
+     * @return mixed Returns the value of the database column or the value of adm_user_fields
+     *         If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @par Examples
+     * @code  // reads data of adm_users column
+     * $loginname = $gCurrentUser->getValue('usr_login_name');
+     * // reads data of adm_user_fields
+     * $email = $gCurrentUser->getValue('EMAIL'); @endcode
      */
     public function getValue($columnName, $format = '')
     {
@@ -992,7 +993,7 @@ class User extends TableUsers
             throw new AdmException('The profile data of user '. $this->getValue('FIRST_NAME').' '.$this->getValue('LAST_NAME').' could not be saved because you don\'t have the right to do this.');
         }
     }
-    
+
     /** If this method is set then a user can save changes to the user if he hasn't the necessary rights
      */
     public function saveChangesWithoutRights()
@@ -1136,10 +1137,10 @@ class User extends TableUsers
      *  otherwise the value of the profile field of the table adm_user_data will set.
      *  If the user log is activated than the change of the value will be logged in @b adm_user_log.
      *  The value is only saved in the object. You must call the method @b save to store the new value to the database
-     *  @param $columnName The name of the database column whose value should get a new value or the internal unique profile field name
-     *  @param $newValue The new value that should be stored in the database field
-     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+     *  @param string $columnName The name of the database column whose value should get a new value or the internal unique profile field name
+     *  @param mixed $newValue    The new value that should be stored in the database field
+     *  @param bool $checkValue   The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     *  @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      *  @par Examples
      *  @code  // set data of adm_users column
      *  $gCurrentUser->getValue('usr_login_name', 'Admidio');
