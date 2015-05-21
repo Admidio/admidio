@@ -191,8 +191,21 @@ foreach($sql_arr as $sql)
 
         foreach($results[0] as $key => $value)
         {
+<<<<<<< HEAD
+            // if it's a string of a systemmail then html linefeeds must be replaced
+            if(strpos($value, 'SYS_SYSMAIL') === false)
+            {
+                $convertedText = $gL10n->get($value);
+            }
+            else
+            {
+                // convert <br /> to a normal line feed
+                $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));
+            }
+=======
             // convert <br /> to a normal line feed
             $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));
+>>>>>>> origin/master
 
             // search for the exact value as a separate word and replace it with the translation
             // in l10n the single quote is transformed in html entity, but we need the original sql escaped
@@ -231,6 +244,16 @@ if($gDbType == 'mysql')
     $sql = 'SET foreign_key_checks = 1 ';
     $db->query($sql);
 }
+
+// create an installation unique cookie prefix and remove special characters
+$gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
+$gCookiePraefix = strtr($gCookiePraefix, ' .,;:', '_____');
+
+// start php session and remove session object with all data, so that
+// all data will be read after the update
+session_name($gCookiePraefix. '_PHP_ID');
+session_start();
+unset($_SESSION['gCurrentSession']);
 
 echo 'Installation successful !<br />';
 
