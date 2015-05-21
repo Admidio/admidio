@@ -151,7 +151,7 @@
         <text id="ECA_RECIPIENT_NAME" development="new" translation="edited">Nom du destinataire</text>
         <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">Votre carte de voeux a été envoyé.</text>
         <text id="ECA_TEMPLATE" development="new" translation="edited">Modèle standard. (par défaut: Lettre standard)</text>
-        <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Définir un modèle standard. (par défaut: Lettre standard)</text>
+        <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Définir un modèle standard. (par défaut: Postcard)</text>
         <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="edited">Afficher la grandeur réelle</text>
 
         <!-- Phrases only in Guestbookmodule -->
@@ -521,7 +521,6 @@
         <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">Informations système</text>
         <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="edited">Adresse courriel du système</text>
         <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="edited">Saisissez l'adresse courriel d'un administrateur. Cette adresse sera utilisée comme adresse d'expéditeur pour les messages système et des confirmations d'inscription. (Par défaut: webmaster@%VAR1%)</text>
-        <text id="ORG_SYSTEM_MAIL_TEXTS" development="new" translation="edited">System de messages textes</text>
         <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="new" translation="edited">S'il vous plaît, veuillez individualiser tous les messages du système ici. Les textes doivent comporter des paragraphes (sujet et contenu) qui sont identifiés par des titres comme contenu # et # # # sujet.\n\nCahque message peut avoir de l'espace libre pour les messages en cours.</text>
         <text id="ORG_TIME_FORMAT" development="new" translation="edited">Format du temps</text>
         <text id="ORG_TIME_FORMAT_DESC" development="new" translation="edited">Format respecté %VAR1 fonction PHP. (Par défaut: H: i)</text>
@@ -580,7 +579,6 @@
         <text id="PHO_PHOTO_ROTATE_LEFT" development="new" translation="edited">Faire pivoter la photo à gauche</text>
         <text id="PHO_PHOTO_ROTATE_RIGHT" development="new" translation="edited">Faire pivoter la photo à droite</text>
         <text id="PHO_PHOTO_SEND_ECARD" development="new" translation="edited">Envoyer la photo comme carte de voeux</text>
-        <text id="PHO_PHOTO_UPLOAD_SUCCESS" development="new" translation="edited">Téléchargement de la photo réussi</text>
         <text id="PHO_PHOTO" development="new" translation="edited">Photo</text>
         <text id="PHO_PHOTOGRAPHER" development="new" translation="edited">Photos de</text>
         <text id="PHO_PHOTOS" development="new" translation="edited">Photos</text>

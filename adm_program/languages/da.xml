@@ -109,9 +109,9 @@
         <text id="SYS_FILTER" development="new" translation="edited">Filter</text>
         <text id="SYS_FULL_SCREEN" development="new" translation="edited">Fuld skærm</text>
     	<text id="SYS_ITEMNAME" development="new" translation="edited">Emne navn</text>
-        <text id="SYS_MANDATORY_FIELDS" development="new" translation="edited">Krævede felter</text>
+        <text id="SYS_REQUIRED_FIELDS" development="new" translation="edited">Krævede felter</text>
         <text id="SYS_MENU" development="new" translation="edited">Menu</text>
-        <text id="SYS_MESSAGES" development="new" translation="edited">Beskeder<text>
+        <text id="SYS_MESSAGES" development="new" translation="edited">Beskeder</text>
         <text id="SYS_NO_DATA_FOUND" development="new" translation="edited">Ingen data fundet!</text>
         <text id="SYS_NORMAL_PICTURE" development="new" translation="edited">Normalt billede</text>
         <text id="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION" development="new" translation="edited">Online medlemsskabs administration</text>
@@ -208,7 +208,6 @@
         <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="changed" translation="edited">Dette felt skal indeholde e-mail adressen på en administrator, da den vil blive brugt som afsender adresse for system beskeder, som f.eks. registrerings bekræftelser. (Standard: webmaster @% VAR1%)</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="changed" translation="edited">Besked om nye poster</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="changed" translation="edited">Denne funktion bliver brugt til at aktivere system beskeder for nye poster inde i moduler. Det anvendes som en monitorerings funktion inde i Admidio. Så administratoren kan blive gjort opmærksom på når nye poster bliver tilføjet inde i et modul (kun NYE poster vil blive taget i betragtning). Disse system beskeder vil blive sendt til e-mail adressen %VAR1%. (Standard: Nej)</text>
-        <text id="ORG_SYSTEM_MAIL_TEXTS" development="changed" translation="edited">System besked tekster</text>
         <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="changed" translation="edited">Her kan du ændre teksten til hver enkelt system besked. Teksterne er delt i to dele(emne og indhold) og er identificeret med #subject# og #content#. Indholdet i hver sektion kommer lige efter overskriften.\n\nI hver mail kan de følgende wildcards bruges. Disse vil blive erstattet af indhold når systemet køres.</text>
         <text id="PRO_ASSIGN_REGISTRATION_SUCCESSFUL" development="new" translation="edited">Registrering er blevet bekræftet. Brugeren kan nu logge på systemet.</text>
         <text id="PRO_FUTURE_ROLE_MEMBERSHIP" development="new" translation="edited">Fremtidige rolle medlemskaber</text>
@@ -341,7 +340,6 @@
         <text id="SYS_RSS_FEED_FOR_VAR" development="new" translation="edited">RSS-Feed for %VAR1%</text>
     </version>
     <version id="2.2.0" translator="Henrik Troels-Hansen">
-        <!-- Phrases only in Announcementmodule -->
         <text id="ANN_ANNOUNCEMENT" development="new" translation="edited">Meddelelse</text>
         <text id="ANN_ANNOUNCEMENTS" development="new" translation="edited">Meddelelser</text>
         <text id="ANN_ANNOUNCEMENTS_DESC" development="new" translation="edited">Vis eller rediger meddelelser, nyheder og anden information.</text>
@@ -368,14 +366,12 @@
         <text id="BAC_SUM" development="new" translation="edited">Total</text>
         <text id="BAC_SECONDS_VAR" development="new" translation="edited">%VAR1% sekunder</text>
 
-        <!-- Phrases only in Category-Administration 6 items-->
         <text id="CAT_CATEGORY_EXIST" development="new" translation="edited">Kategori navn eksisterer allerede i den valgte organisation.</text>
         <text id="CAT_CATEGORY_GLOBAL" development="new" translation="edited">Hvis aktiveret, profil felter af kategorier vil blive vist og kan redigeres i profil visningen af følgende organisationer:\n\n%VAR1_BOLD%\n\n Venligst deaktiver hvis felterne kun skal vises i din organisation.</text>
         <text id="CAT_CATEGORY_NOT_DELETE" development="new" translation="edited">Du kan ikke slette alle kategorier for et modul.\nOpret første nye kategori for det valgte modul.</text>
         <text id="CAT_MOVE_DOWN" development="new" translation="edited">Flyt ned %VAR1%</text>
         <text id="CAT_MOVE_UP" development="new" translation="edited">Flyt op %VAR1%</text>
 
-        <!-- Phrases only in Datesmodule - 49 items -->
         <text id="DAT_ADD_DATE_TO_CALENDAR" development="new" translation="edited">Tilføj aktivitet til kalender</text>
         <text id="DAT_ADD_ROLE" development="new" translation="edited">Tilføj rolle</text>
         <text id="DAT_ALL_DAY" development="new" translation="edited">Hele dagen</text>
@@ -424,7 +420,6 @@
         <text id="DAT_SWITCH_TO_ROOM_ADMINISTRATION" development="new" translation="edited">Åbn lokale administration</text>
         <text id="DAT_VISIBLE_TO" development="new" translation="edited">Synlig for</text>
 
-        <!-- Phrases only in Downloadsmodule - 50 items -->
         <text id="DOW_ACCESS_ALLOWED" development="new" translation="edited">Adgang tilladt</text>
         <text id="DOW_ADD_TO_DATABASE" development="new" translation="edited">Tilføj til database</text>
         <text id="DOW_ADDITIONAL_FILES" development="new" translation="edited">Denne listes opgave er at give et overblik over filer og foldere som ikke er importeret ind i databasen endnu. Tilføj dem her. Adgangs rettigheder vil blive kopieret fra den valgte folder.</text>
@@ -474,8 +469,6 @@
         <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="edited">Overfør fil til folder %VAR1_BOLD%</text>
         <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Ulovlig side visning eller også så kunne filen ikke overføres.\nFil størrelsen har muligvis overskredet den tilladte server definerede størrelse på %VAR1%B!</text>
 
-
-        <!-- Phrases only in Ecardsmodule -->
         <text id="ECA_A_ECARD_FROM" development="new" translation="edited">Postkort sendt af</text>
         <text id="ECA_ACTIVATE_GREETING_CARDS" development="new" translation="edited">Aktiverer postkort modul</text>
         <text id="ECA_ACTIVATE_GREETING_CARDS_DESC" development="new" translation="edited">Postkort modulet kan aktiveres og deaktiveres her. Hvis serveren ikke kan sende e-mails, bedes du deaktivere dette modul. Modulet er kun tilgængeligt for bruger der er logget ind. (Standard: Ja)</text>
@@ -490,10 +483,9 @@
         <text id="ECA_RECIPIENT_NAME" development="new" translation="edited">Navn på modtager</text>
         <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">Dit postkort blev sendt.</text>
         <text id="ECA_TEMPLATE" development="new" translation="edited">Skabelon</text>
-        <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Definer standard skabelon. (Standard: standard brev) </text>
+        <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Definer standard skabelon. (Standard: Postcard) </text>
         <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="edited">Vis fuld størrelse billede</text>
 
-        <!-- Phrases only in Guestbookmodule -->
         <text id="GBO_BACK_TO_GUESTBOOK" development="new" translation="edited">Tilbage til gæstebog</text>
         <text id="GBO_CAPTCHA_DESC" development="new" translation="edited">Hvis denne indstilling er aktiveret så vil brugere der ikke er logget ind få et billede med en CAPTCHA kode eller et simpelt regnestykke. Det er nødvendigt at udfylde koden eller resultatet korrekt eller for at gemme gæstebogs indlægget. CAPTCHA er en del af antispam løsningen i Admidio. (Standard: Ja)</text>
         <text id="GBO_COMMENT_BY" development="new" translation="edited">Kommentar til %VAR1%</text>
@@ -526,7 +518,6 @@
         <text id="GBO_SHOW_COMMENTS_ON_ENTRY" development="new" translation="edited">Vis %VAR1% Kommentar(er) for dette gæstebogs indlæg</text>
         <text id="GBO_WRITE_COMMENT" development="new" translation="edited">Skriv kommentar</text>
 
-        <!-- Phrases only in Installation -->
         <text id="INS_ADD_ANOTHER_ORGANIZATION" development="new" translation="edited">Tilføj en anden organisation</text>
         <text id="INS_ADD_ORGANIZATION" development="new" translation="edited">Tilføj organisation</text>
         <text id="INS_ADDIDIONAL_DATA" development="new" translation="edited">Yderligere information</text>
@@ -599,7 +590,6 @@
         <text id="INS_WELCOME_TEXT" development="new" translation="edited">På de følgende sider vil du blive bedt om at oplyse nødvendig information for at kunne oprette et nyt Admidio system. Du vil blive bedt om at specificere database adgangs informationer til din Admidio installation.</text>
         <text id="INS_YAHOO_MESSENGER" development="new1" translation="edited">Yahoo! Messenger</text>
 
-        <!-- Phrases only in Linkmodule -->
         <text id="LNK_COUNTER" development="new" translation="edited">Hits</text>
         <text id="LNK_CREATE_LINK" development="new" translation="edited">Opret nyt link</text>
         <text id="LNK_DISPLAY_REDIRECT" development="new" translation="edited">Vis viderestilling</text>
@@ -614,12 +604,11 @@
         <text id="LNK_LINKS_FROM" development="new" translation="edited">Links fra %VAR1%</text>
         <text id="LNK_NEW_WINDOW" development="new" translation="edited">Nyt vindue</text>
         <text id="LNK_REDIRECT" development="new" translation="edited">Viderestil</text>
-        <text id="LNK_REDIRECT_DESC" development="new" translation="edited">Du forlader nu %VAR1_BOLD% og vil blive viderestillet automatisk til %VAR3% indenfor %VAR2% sekunder.\n\nHvis den automatiske viderestilling ikke virker, så kan du klikke --> %VAR4%!</text>
+        <text id="LNK_REDIRECT_DESC" development="new" translation="edited">Du forlader nu %VAR1_BOLD% og vil blive viderestillet automatisk til %VAR3% indenfor %VAR2% sekunder.\n\nHvis den automatiske viderestilling ikke virker, så kan du klikke %VAR4%!</text>
         <text id="LNK_SAME_WINDOW" development="new" translation="edited">Samme vindue</text>
         <text id="LNK_WEBLINKS" development="new" translation="edited">Links</text>
         <text id="LNK_WEBLINKS_DESC" development="new" translation="edited">Opret og organiser interessante links.</text>
 
-        <!-- Phrases only in Listsmodule -->
         <text id="LST_A_TO_Z" development="new" translation="edited">A til Z</text>
         <text id="LST_ACTIVE_FORMER_MEMBERS" development="new" translation="edited">Aktive og tidligere medlemmer</text>
         <text id="LST_ACTIVE_MEMBERS" development="new" translation="edited">Aktive Medlemmer</text>
@@ -700,7 +689,6 @@
         <text id="LST_WANT_CONFIGURATION_FOR_ALL_USERS" development="new" translation="edited">Vil du gerne gøre den valgte liste konfiguration tilgængelig for alle brugere?</text>
         <text id="LST_Z_TO_A" development="new" translation="edited">Z til A</text>
 
-        <!-- Phrases only in Mailmodule -->
         <text id="MAI_ACTIVATE_EMAIL_MODULE" development="new" translation="edited">Aktiver e-mail modul</text>
         <text id="MAI_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="edited">E-mail modulet kan dekativeres ved at fjerne mærket i checkboksen. Efter deaktivation, vil modulet heller ikke være at finde i modul oversigten. Hvis serveren ikke understøtter afsendelse af e-mails så bedes du venligst deaktivere modulet. (Standrd: aktivt)</text>
         <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Vedhæft fil</text>
@@ -725,7 +713,6 @@
         <text id="MAI_SHOW_CAPTCHA_DESC" development="new" translation="edited">For brugere der er logget ud vil der fremkomme en alphanummerisk tekst når captcha modulet er aktiveret. Den viste tekst skal skrives i det dertil indrettede felt. Det bør forhindre misbrug af formularen fra spammere. (Standard: Ja)</text>
         <text id="MAI_SUBJECT" development="new" translation="edited">Emne</text>
 
-        <!-- Phrases only in Membersadministration -->
         <text id="MEM_ASSIGN_FIELDS" development="new" translation="edited">Tilføj felter</text>
         <text id="MEM_ASSIGN_FIELDS_DESC" development="new" translation="edited">Forbind et database felt til et matchende felt i import filen.\n\nPå venstre side kan du se alle de typer af database felter som er i databasen, og til højre kan du finde alle kolonner i den valgte importfil. Du kan lade felter være tomme hvis du ikke har matchende felter i din import fil.</text>
         <text id="MEM_ASSIGN_ROLE" development="new" translation="edited">Tildel rolle</text>
@@ -763,7 +750,6 @@
         <text id="MEM_USER_MANAGEMENT" development="new" translation="edited">Bruger Administration</text>
         <text id="MEM_USER_MANAGEMENT_DESC" development="new" translation="edited">Vis og organiser alle aktive og tidligere medlemmer her. Nye brugere kan oprettes eller importeres fra CSV fil.</text>
 
-        <!-- Phrases only in New-User-Registration -->
         <text id="NWU_ASSIGN_LOGIN" development="new" translation="edited">Tildeling af login information</text>
         <text id="NWU_ASSIGN_LOGIN_SUCCESSFUL" development="new" translation="edited">Login information er blevet tildelt.</text>
         <text id="NWU_ASSIGN_LOGIN_EMAIL" development="new" translation="edited">Login information er blevet tildelt og brugeren adviseret via e-mail.</text>
@@ -782,7 +768,6 @@
         <text id="NWU_USER_NO_VALID_LOGIN" development="new" translation="edited">Bruger har intet login endnu.\nVil du tildele informationen fra den valgte registrering til brugeren?</text>
         <text id="NWU_USER_VALID_LOGIN" development="new" translation="edited">Brugeren har allerede gyldig login information.</text>
 
-        <!-- Phrases only in Organizationadministration -->
         <text id="ORG_ACCESS_TO_MODULE" development="new" translation="edited">Modul adgang</text>
         <text id="ORG_ACCESS_TO_MODULE_DESC" development="new" translation="edited">Modulet kan deaktiveres eller aktiveres kun for brugere der er logget ind. Hvis modulet kun er tilgængeligt for brugere der er logget ind, så vil det blive skjult for brugere der ikke er logget ind og RSS-Feeds vil være fuldstændigt deaktiveret for begge bruger grupper. (Standard: aktiv)</text>
         <text id="ORG_ADDITIONAL_VARIABLES" development="new" translation="edited">Yderligere variabler</text>
@@ -871,7 +856,6 @@
         <text id="ORG_VARIABLE_URL_ORGANIZATION" development="new" translation="edited">Organisationens hjemmeside URL</text>
         <text id="ORG_VARIABLE_USERNAME" development="new" translation="edited">Brugernavn på brugeren</text>
 
-        <!-- Phrases only in Updatecheck -->
         <text id="UPD_ADMIDIO" development="new" translation="edited">Gå til Admidio Opdaterings side</text>
         <text id="UPD_CONNECTION_ERROR" development="new" translation="edited">Forbindelse til Admidio opdaterings side kunne ikke etableres. Check din internetforbindelse og prøv igen senere. Du kan også checke %VAR1% hjemmesiden for manuelle opdateringer.</text>
         <text id="UPD_NEW" development="new" translation="edited">En ny stabil version er tilgængelig!</text>
@@ -880,7 +864,6 @@
         <text id="UPD_NO_NEW" development="new" translation="edited">Du bruger lige nu %VAR1% versionen af Admidio!</text>
         <text id="UPD_TITLE" development="new" translation="edited">Opdaterings check</text>
 
-        <!-- Phrases only in Photomodule -->
         <text id="PHO_ALBUM" development="new" translation="edited">Album</text>
         <text id="PHO_ALBUM_DELETE" development="new" translation="edited">Slet album</text>
         <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="edited">Albummet er blokeret og gæsterne kan ikke få det vist. Du kan aktivere det ved at klikke på nøgle symbolet i redigerings feltet.</text>
@@ -911,7 +894,6 @@
         <text id="PHO_PHOTO_ROTATE_LEFT" development="new" translation="edited">Rotér billede mod venstre</text>
         <text id="PHO_PHOTO_ROTATE_RIGHT" development="new" translation="edited">Rotér billede mod højre</text>
         <text id="PHO_PHOTO_SEND_ECARD" development="new" translation="edited">Send billede som postkort</text>
-        <text id="PHO_PHOTO_UPLOAD_SUCCESS" development="new" translation="edited">Billedet blev overført</text>
         <text id="PHO_PHOTO" development="new" translation="edited">Billede</text>
         <text id="PHO_PHOTOGRAPHER" development="new" translation="edited">Billeder af</text>
         <text id="PHO_PHOTOS" development="new" translation="edited">Billeder</text>
@@ -940,7 +922,6 @@
         <text id="PHO_UPLOAD_PHOTOS" development="new" translation="edited">Overfør billede</text>
         <text id="PHO_WANT_DELETE_PHOTO" development="new" translation="edited">Det valgte billede bliver slettet. Er du sikker?</text>
 
-        <!-- Phrases only in Profilemodule -->
         <text id="PRO_ACCEPT_NEW_PICTURE" development="new" translation="edited">Bekræft nyt profil bilede</text>
         <text id="PRO_ADD_USER" development="new" translation="edited">Tilføj bruger</text>
         <text id="PRO_CANCEL_MEMBERSHIP" development="new" translation="edited">Afslut medlemsskab</text>
@@ -1000,7 +981,6 @@
         <text id="PRO_WANT_DELETE_PHOTO" development="new" translation="edited">Vil du slette det valgte billede?</text>
         <text id="PRO_YEARS" development="new" translation="todo">År</text>
 
-        <!-- Phrases only in Rolesmodule -->
         <text id="ROL_ACTIV_ROLES" development="new" translation="edited">Aktive roller</text>
         <text id="ROL_ALL_GUESTS" development="new" translation="edited">Alle gæster på hjemmesiden</text>
         <text id="ROL_ALL_MEMBERS" development="new" translation="edited">Alle brugere som er logget ind</text>
@@ -1068,15 +1048,12 @@
         <text id="ROL_WEEKDAY" development="new" translation="edited">Ugedag</text>
         <text id="ROL_WITHOUT_LEADER" development="new" translation="edited">Ingen leder</text>
 
-
-        <!-- Phrases only in Roommodule -->
         <text id="ROO_CAPACITY" development="new" translation="edited">Kapacitet</text>
         <text id="ROO_OVERHANG" development="new" translation="edited">Overbooking</text>
         <text id="ROO_ROOM_MANAGEMENT" development="new" translation="edited">Lokale administration</text>
         <text id="ROO_SEATING" development="new" translation="edited">sæder</text>
         <text id="ROO_STANDING" development="new" translation="edited">stå plads</text>
 
-        <!-- System-Phrases for use in every module -->
         <text id="SYS_ABORT" development="new" translation="edited">Afbryd</text>
         <text id="SYS_ABR_NO" development="new" translation="edited" description="Abbreviation for Number">Nr.</text>
         <text id="SYS_ACTIVE" development="new" translation="edited">Aktiv</text>
@@ -1370,4 +1347,3 @@
         <text id="SYS_YES" development="new" translation="edited">Ja</text>
     </version>
 </language>
-

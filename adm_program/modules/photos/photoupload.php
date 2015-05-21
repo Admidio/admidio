@@ -78,6 +78,8 @@ if($getMode == 'choose_files')
     $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery-file-upload/js/jquery.fileupload.js');
     
     $page->addJavascript('
+    var countErrorFiles = 0;
+    
     $(function () {
         "use strict";
         $("#fileupload").fileupload({
@@ -87,11 +89,14 @@ if($getMode == 'choose_files')
             done: function (e, data) {
                 $.each(data.result.files, function (index, file) {
                     if(typeof file.error != "undefined") {
-                        $("<p/>").html("<div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>"
+                        $("<p/>").html("<div class=\"alert alert-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>"
                             + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
+                        countErrorFiles++;
                     }
                     else {
-                        $("<p/>").text(file.name).appendTo("#files");
+                        var message = "'.$gL10n->get('PHO_FILE_UPLOADED').'";
+                        var newMessage = message.replace("%VAR1%", "<strong>" + file.name + "</strong>");
+                        $("<p/>").html(newMessage).appendTo("#files");
                     }
                 });
             },
@@ -101,6 +106,14 @@ if($getMode == 'choose_files')
                     "width",
                     progress + "%"
                 );
+            },
+            stop: function (e, data) {
+                if(countErrorFiles == 0) {
+                    $("<p/>").html("<div class=\"alert alert-success\"><span class=\"glyphicon glyphicon-ok\"></span>'.$gL10n->get('PHO_PHOTO_UPLOAD_SUCCESSFUL').'</div>").appendTo("#files");
+                }
+                else {
+                    $("<p/>").html("<div class=\"alert alert-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>'.$gL10n->get('PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL').'</div>").appendTo("#files");
+                }
             }
         }).prop("disabled", !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : "disabled");
