@@ -181,7 +181,7 @@ if ($getMsgType == 'PM')
     if ($getUserId == 0)
     {
         $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
-        $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY,
+        $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_REQUIRED,
                             'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE'));
         $form->closeGroupBox();
         $sendto = '';
@@ -196,10 +196,10 @@ if ($getMsgType == 'PM')
 
     if(strlen($getSubject) == 0)
     {
-        $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), '', array('maxLength' => 77, 'property' => FIELD_MANDATORY));
+        $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), '', array('maxLength' => 77, 'property' => FIELD_REQUIRED));
     }
 
-    $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_PM'), null, 10, array('maxLength' => 254, 'property' => FIELD_MANDATORY));
+    $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_PM'), null, 10, array('maxLength' => 254, 'property' => FIELD_REQUIRED));
 
     $form->closeGroupBox();
 
@@ -410,7 +410,7 @@ elseif (!isset($message_result))
 
     }
 
-    $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY,
+    $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_REQUIRED,
                         'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE'));
 
     $form->addLine();
@@ -422,8 +422,8 @@ elseif (!isset($message_result))
     }
     else
     {
-        $form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $form_values['name'], array('maxLength' => 50, 'property' => FIELD_MANDATORY));
-        $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $form_values['mailfrom'], array('maxLength' => 50, 'property' => FIELD_MANDATORY));
+        $form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $form_values['name'], array('maxLength' => 50, 'property' => FIELD_REQUIRED));
+        $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $form_values['mailfrom'], array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     }
 
     // show option to send a copy to your email address only for registered users because of spam abuse
@@ -441,7 +441,7 @@ elseif (!isset($message_result))
     $form->closeGroupBox();
 
     $form->openGroupBox('gb_mail_message', $gL10n->get('SYS_MESSAGE'));
-    $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $form_values['subject'], array('maxLength' => 77, 'property' => FIELD_MANDATORY));
+    $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $form_values['subject'], array('maxLength' => 77, 'property' => FIELD_REQUIRED));
 
     // Nur eingeloggte User duerfen Attachments anhaengen...
     if (($gValidLogin) && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
@@ -453,11 +453,11 @@ elseif (!isset($message_result))
     // add textfield or ckeditor to form
     if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
     {
-        $form->addEditor('msg_body', null, $form_values['msg_body'], array('property' => FIELD_MANDATORY));
+        $form->addEditor('msg_body', null, $form_values['msg_body'], array('property' => FIELD_REQUIRED));
     }
     else
     {
-        $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_TEXT'), null, 10, array('property' => FIELD_MANDATORY));
+        $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_TEXT'), null, 10, array('property' => FIELD_REQUIRED));
     }
 
     $form->closeGroupBox();

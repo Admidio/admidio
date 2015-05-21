@@ -711,8 +711,8 @@
         <text id="ORG_FIELD_DOWN" development="new" translation="edited">Verplaats profielveld naar beneden</text>
         <text id="ORG_FIELD_EXIST" development="new" translation="edited">Er bestaat in deze categorie al een veld met dezelfde naam.</text>
         <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Veld is alleen zichtbaar voor geautoriseerde gebruikers (eigen prfiel &amp; rol autorisatie)</text>
-        <text id="ORG_FIELD_MANDATORY" development="new" translation="edited">Verplichte velden moeten altijd ingevuld worden.</text>
-        <text id="ORG_FIELD_MANDATORY_DESC" development="new" translation="edited">Aangevinkte (verplichte) velden moeten altijd ingevuld worden. Dit geldt voor registratie en wijzigingen van het profiel door gebruiker.</text>
+        <text id="ORG_FIELD_REQUIRED" development="new" translation="edited">Verplichte velden moeten altijd ingevuld worden.</text>
+        <text id="ORG_FIELD_REQUIRED_DESC" development="new" translation="edited">Aangevinkte (verplichte) velden moeten altijd ingevuld worden. Dit geldt voor registratie en wijzigingen van het profiel door gebruiker.</text>
         <text id="ORG_FIELD_NOT_DISABLED" development="new" translation="edited">Veld kan door gebruiker zelf bewerkt worden.</text>
         <text id="ORG_FIELD_NOT_HIDDEN" development="new" translation="edited">Veld is zichtbaar voor alle gebruikers.</text>
         <text id="ORG_FIELD_NOT_MANDATORY" development="new" translation="edited">Veld is verplicht. Het moet ingevuld worden.</text>

@@ -832,8 +832,8 @@
         <text id="ORG_FIELD_DOWN" development="new" translation="edited">Move profile field down</text>
         <text id="ORG_FIELD_EXIST" development="new" translation="edited">Field with same name already exists in this category.</text>
         <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Field viewable for authorized users only (own profile &amp; role authorization)</text>
-        <text id="ORG_FIELD_MANDATORY" development="new" translation="edited">Mandatory field that has to be filled in always.</text>
-        <text id="ORG_FIELD_MANDATORY_DESC" development="new" translation="edited">Flagged (mandatory) fields always have to be filled in. This rule applies for registrations and for regular profile changes performed by users.</text>
+        <text id="ORG_FIELD_REQUIRED" development="new" translation="edited">Mandatory field that has to be filled in always.</text>
+        <text id="ORG_FIELD_REQUIRED_DESC" development="new" translation="edited">Flagged (mandatory) fields always have to be filled in. This rule applies for registrations and for regular profile changes performed by users.</text>
         <text id="ORG_FIELD_NOT_DISABLED" development="new" translation="edited">Field can be edited by users themselves.</text>
         <text id="ORG_FIELD_NOT_HIDDEN" development="new" translation="edited">Field to see for all users.</text>
         <text id="ORG_FIELD_NOT_MANDATORY" development="new" translation="edited">Field is mandatory. It must be filled in.</text>

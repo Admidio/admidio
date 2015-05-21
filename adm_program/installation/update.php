@@ -188,8 +188,8 @@ if($getMode == 1)
         if(isset($gLoginForUpdate) == false || $gLoginForUpdate == 1)
         {
             $form->addDescription($gL10n->get('INS_WEBMASTER_LOGIN_DESC'));
-            $form->addInput('login_name', $gL10n->get('SYS_USERNAME'), null, array('maxLength' => 35, 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
-            $form->addInput('password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
+            $form->addInput('login_name', $gL10n->get('SYS_USERNAME'), null, array('maxLength' => 35, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
+            $form->addInput('password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
         }
 
         // if this is a beta version then show a warning message

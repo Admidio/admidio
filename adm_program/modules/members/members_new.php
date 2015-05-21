@@ -64,8 +64,8 @@ echo '
     <p class="lead">'.$gL10n->get('MEM_INPUT_FIRSTNAME_LASTNAME').'</p>';
 
     $form = new HtmlForm('form_members_create_user', $g_root_path.'/adm_program/modules/members/members_assign.php');
-    $form->addInput('lastname', $gL10n->get('SYS_LASTNAME'), null, array('maxLength' => 100, 'property' => FIELD_MANDATORY));
-    $form->addInput('firstname', $gL10n->get('SYS_FIRSTNAME'), null, array('maxLength' => 100, 'property' => FIELD_MANDATORY));
+    $form->addInput('lastname', $gL10n->get('SYS_LASTNAME'), null, array('maxLength' => 100, 'property' => FIELD_REQUIRED));
+    $form->addInput('firstname', $gL10n->get('SYS_FIRSTNAME'), null, array('maxLength' => 100, 'property' => FIELD_REQUIRED));
     $form->addSubmitButton('btn_add', $gL10n->get('MEM_CREATE_USER'), array('icon' => THEME_PATH.'/icons/add.png', 'class' => ' col-sm-offset-3'));
     $form->show();
 echo '</div>';

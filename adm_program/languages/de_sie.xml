@@ -825,8 +825,8 @@
         <text id="ORG_FIELD_DOWN" development="new" translation="todo">Profilfeld nach unten verschieben</text>
         <text id="ORG_FIELD_EXIST" development="new" translation="todo">Es existiert bereits ein Feld in dieser Kategorie mit demselben Namen.</text>
         <text id="ORG_FIELD_HIDDEN" development="new" translation="todo">Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar</text>
-        <text id="ORG_FIELD_MANDATORY" development="new" translation="todo">Pflichtfeld, muss immer ausgefüllt werden</text>
-        <text id="ORG_FIELD_MANDATORY_DESC" development="new" translation="todo">Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden. Dies gilt für die Registrierung, aber auch bei der gewöhnlichen Profildatenbearbeitung.</text>
+        <text id="ORG_FIELD_REQUIRED" development="new" translation="todo">Pflichtfeld, muss immer ausgefüllt werden</text>
+        <text id="ORG_FIELD_REQUIRED_DESC" development="new" translation="todo">Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden. Dies gilt für die Registrierung, aber auch bei der gewöhnlichen Profildatenbearbeitung.</text>
         <text id="ORG_FIELD_NOT_DISABLED" development="new" translation="todo">Feld kann durch Benutzer selbst bearbeitet werden</text>
         <text id="ORG_FIELD_NOT_HIDDEN" development="new" translation="todo">Feld für alle Benutzer sichtbar</text>
         <text id="ORG_FIELD_NOT_MANDATORY" development="new" translation="todo">Feld muss nicht zwingend ausgefüllt werden</text>

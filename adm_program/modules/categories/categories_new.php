@@ -95,7 +95,7 @@ $categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $
 $form = new HtmlForm('categories_edit_form', $g_root_path.'/adm_program/modules/categories/categories_function.php?cat_id='.$getCatId.'&amp;type='. $getType. '&amp;mode=1', $page);
 
 // systemcategories should not be renamed
-$fieldPropertyCatName = FIELD_MANDATORY;
+$fieldPropertyCatName = FIELD_REQUIRED;
 if($category->getValue('cat_system') == 1)
 {
     $fieldPropertyCatName = FIELD_DISABLED;

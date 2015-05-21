@@ -142,11 +142,11 @@ elseif($getMode == 'html')
         if($gCurrentUser->getValue('usr_id') == $getUserId)
         {
             // to change own password user must enter the valid old password for verification
-            $form->addInput('old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));
+            $form->addInput('old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED));
             $form->addLine();
         }
-        $form->addInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'minLength' => 6, 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'));
-        $form->addInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'minLength' => 6));
+        $form->addInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 6, 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'));
+        $form->addInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 6));
         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
         $form->show();
     echo '</div>';

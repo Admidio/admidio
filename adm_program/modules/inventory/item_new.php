@@ -153,7 +153,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
                 }
                 elseif($getNewItem > 0)
                 {
-                    $fieldProperty = FIELD_MANDATORY;
+                    $fieldProperty = FIELD_REQUIRED;
                     $fieldHelpId   = 'PRO_inventoryNAME_DESCRIPTION';
                 }
 
@@ -174,7 +174,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
         elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_mandatory') == 1)
         {
             // set mandatory field
-            $fieldProperty = FIELD_MANDATORY;
+            $fieldProperty = FIELD_REQUIRED;
         }
         
         if(strlen($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_description')) > 0)
