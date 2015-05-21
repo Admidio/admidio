@@ -54,7 +54,7 @@ class InventoryFields
     /** returns for a fieldname intern (inf_name_intern) the value of the column from table adm_user_fields
      *  @param $fieldNameIntern Expects the @b inf_name_intern of table @b adm_user_fields
      *  @param $column The column name of @b adm_user_field for which you want the value
-     *  @param $format Optional the format (is neccessary for timestamps)
+     *  @param $format Optional the format (is necessary for timestamps)
      */
     public function getProperty($fieldNameIntern, $column, $format = '')
     {
@@ -74,7 +74,7 @@ class InventoryFields
     /** returns for field id (usf_id) the value of the column from table adm_user_fields
      *  @param $fieldId Expects the @b usf_id of table @b adm_user_fields
      *  @param $column The column name of @b adm_user_field for which you want the value
-     *  @param $format Optional the format (is neccessary for timestamps)
+     *  @param $format Optional the format (is necessary for timestamps)
      */
     public function getPropertyById($fieldId, $column, $format = '')
     {
@@ -371,7 +371,7 @@ class InventoryFields
      *  If profile fields structure wasn't read, this will be done before.
      *  @param $itemId         The id of the user for which the user data should be read.
      *  @param $organizationId The id of the organization for which the profile fields
-     *                         structure should be read if neccessary.
+     *                         structure should be read if necessary.
      */
     public function readInventoryData($itemId, $organizationId)
     {
@@ -403,7 +403,7 @@ class InventoryFields
     }
 
     // save data of every user field
-    // itemId : id is neccessary if new user, that id was not known before
+    // itemId : id is necessary if new user, that id was not known before
     public function saveInventoryData($itemId)
     {
         $this->mDb->startTransaction();

@@ -454,7 +454,7 @@ elseif($getMode == 6)  // Termin im iCal-Format exportieren
     header('Content-Type: text/calendar; charset=utf-8');
     header('Content-Disposition: attachment; filename="'. $filename. '.ics"');
 
-    // neccessary for IE, because without it the download with SSL has problems
+    // necessary for IE, because without it the download with SSL has problems
     header('Cache-Control: private');
     header('Pragma: public');
 

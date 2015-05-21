@@ -298,7 +298,7 @@ if($listsResult['numResults'] >0)
     $page->addHtml('</div></div></div>');
 }
 
-// If neccessary show links to navigate to next and previous recordsets of the query
+// If necessary show links to navigate to next and previous recordsets of the query
 $base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='.$getCatId.'&active_role='.$getActiveRole;
 $page->addHtml(admFuncGeneratePagination($base_url, $numberOfRoles, $gPreferences['lists_roles_per_page'], $getStart, TRUE));
 

@@ -15,8 +15,7 @@
  */
 function __autoload($className)
 {
-    $fileName = SERVER_PATH. '/adm_program/system/classes/'.strtolower($className).'.php';
-    require_once($fileName);
+    require_once(SERVER_PATH.'/adm_program/system/classes/'.strtolower($className).'.php');
 }
 
 
@@ -153,7 +152,7 @@ function isGroupLeader($userId, $roleId = 0)
  */
 function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true, $scriptParameterNameStart = 'start')
 {
-    global $g_root_path, $gL10n;
+    global $gL10n;
 
     if ($num_items === 0 || $per_page === 0)
     {
@@ -176,7 +175,14 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 
         for($i = 1; $i < $init_page_max + 1; $i++)
         {
-            $page_string .= ($i === $on_page) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . (($i - 1) * $per_page) . '">' . $i . '</a></li>';
+            if ($i === $on_page)
+            {
+                $page_string .= '<li class="active"><a href="#">'.$i.'</a></li>';
+            }
+            else
+            {
+                $page_string .= '<li><a href="'.$base_url.'&amp;'.$scriptParameterNameStart.'='.(($i - 1) * $per_page).'">'.$i.'</a></li>';
+            }
         }
 
         if ($total_pages > 3)
@@ -190,7 +196,14 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 
                 for($i = $init_page_min - 1; $i < $init_page_max + 2; $i++)
                 {
-                    $page_string .= ($i == $on_page) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . (($i - 1) * $per_page) . '">' . $i . '</a></li>';
+                    if ($i === $on_page)
+                    {
+                        $page_string .= '<li class="active"><a href="#">'.$i.'</a></li>';
+                    }
+                    else
+                    {
+                        $page_string .= '<li><a href="'.$base_url.'&amp;'.$scriptParameterNameStart.'='.(($i - 1) * $per_page).'">'.$i.'</a></li>';
+                    }
                 }
 
                 $page_string .= ($on_page < $total_pages - 4) ? ' ... ' : '&nbsp;&nbsp;';
@@ -202,7 +215,14 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 
             for($i = $total_pages - 2; $i < $total_pages + 1; $i++)
             {
-                $page_string .= ($i == $on_page) ? '<li class="active"><a href="#">'. $i. '</a></li>'  : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . (($i - 1) * $per_page) . '">' . $i . '</a></li>';
+                if ($i === $on_page)
+                {
+                    $page_string .= '<li class="active"><a href="#">'.$i.'</a></li>';
+                }
+                else
+                {
+                    $page_string .= '<li><a href="'.$base_url.'&amp;'.$scriptParameterNameStart.'='.(($i - 1) * $per_page).'">'.$i.'</a></li>';
+                }
             }
         }
     }
@@ -210,7 +230,14 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
     {
         for($i = 1; $i < $total_pages + 1; $i++)
         {
-            $page_string .= ($i == $on_page) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . (($i - 1) * $per_page) . '">' . $i . '</a></li>';
+            if ($i === $on_page)
+            {
+                $page_string .= '<li class="active"><a href="#">'.$i.'</a></li>';
+            }
+            else
+            {
+                $page_string .= '<li><a href="'.$base_url.'&amp;'.$scriptParameterNameStart.'='.(($i - 1) * $per_page).'">'.$i.'</a></li>';
+            }
         }
     }
 
@@ -284,14 +311,14 @@ function admFuncProcessableImageSize()
 {
     $memory_limit = trim(ini_get('memory_limit'));
     //falls in php.ini nicht gesetzt
-    if($memory_limit === '')
+    if(!$memory_limit || $memory_limit === '')
     {
-        $memory_limit == '8M';
+        $memory_limit = '8M';
     }
     //falls in php.ini abgeschaltet
     if($memory_limit == -1)
     {
-        $memory_limit == '128M';
+        $memory_limit = '128M';
     }
     switch(admStrToLower(substr($memory_limit, strlen($memory_limit/1), 1)))
     {
@@ -480,7 +507,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
 
 /**
  * Creates a html fragment with information about user and time when the recordset was created
- * and when it was at last edited. Therefore all neccessary data must be set in the function
+ * and when it was at last edited. Therefore all necessary data must be set in the function
  * parameters. If userid is not set then the function will show @b deleted @b user.
  * @param int $userIdCreated      Id of the user who create the recordset.
  * @param string $timestampCreate Date and time of the moment when the user create the recordset.
@@ -545,7 +572,8 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
         if($htmlCreateName !== '' || $htmlEditName !== '')
         {
             // get html output from other function
-            return admFuncShowCreateChangeInfoByName($htmlCreateName, $timestampCreate, $htmlEditName, $timestampEdited, $userIdCreated, $userIdEdited);
+            return admFuncShowCreateChangeInfoByName($htmlCreateName, $timestampCreate, $htmlEditName,
+                                                     $timestampEdited, $userIdCreated, $userIdEdited);
         }
     }
 
@@ -554,7 +582,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
 
 /**
  * Creates a html fragment with information about user and time when the recordset was created
- * and when it was at last edited. Therefore all neccessary data must be set in the function
+ * and when it was at last edited. Therefore all necessary data must be set in the function
  * parameters. If user name is not set then the function will show @b deleted @b user.
  * @param string $userNameCreated Id of the user who create the recordset.
  * @param string $timestampCreate Date and time of the moment when the user create the recordset.
@@ -568,7 +596,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
  */
 function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $userNameEdited, $timestampEdited, $userIdCreated = 0, $userIdEdited = 0)
 {
-    global $gDb, $gProfileFields, $gL10n, $gValidLogin, $g_root_path, $gPreferences;
+    global $gL10n, $gValidLogin, $g_root_path, $gPreferences;
 
     $html = '';
 
@@ -653,9 +681,11 @@ function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 {
     $array_files = array();
 
-    if($curdir = opendir($directory))
+    $curdir = opendir($directory);
+    if($curdir)
     {
-        while($filename = readdir($curdir))
+        $filename = readdir($curdir);
+        while($filename)
         {
             if(strpos($filename, '.') !== 0)
             {

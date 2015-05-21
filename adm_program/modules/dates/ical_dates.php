@@ -53,7 +53,7 @@ $dates = new ModuleDates();
 // get parameters fom $_GET Array stored in class
 $parameter = $dates->getParameters();
 // set mode, viewmode, startdate and enddate manually
-$parameter['mode'] = 2; 
+$parameter['mode'] = 2;
 $parameter['view_mode'] = 'period';
 $parameter['date_from'] = date('Y-m-d', time()-$gPreferences['dates_ical_days_past']*86400);
 $parameter['date_to'] = date('Y-m-d', time()+$gPreferences['dates_ical_days_future']*86400);
@@ -86,7 +86,7 @@ $iCal .= $date->getIcalFooter();
 
 if($parameter['mode'] == 2)
 {
-    // for IE the filename must have special chars in hexadecimal 
+    // for IE the filename must have special chars in hexadecimal
     if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
     {
         $getHeadline = urlencode($getHeadline);
@@ -94,10 +94,10 @@ if($parameter['mode'] == 2)
 
     header('Content-Type: text/calendar; charset=utf-8');
     header('Content-Disposition: attachment; filename="'. $getHeadline. '.ics"');
-    
-    // neccessary for IE, because without it the download with SSL has problems
+
+    // necessary for IE, because without it the download with SSL has problems
     header('Cache-Control: private');
     header('Pragma: public');
-}    
+}
 echo $iCal;
 ?>

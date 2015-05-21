@@ -102,7 +102,7 @@ class UserRegistration extends User
      *  than delete user because he has no use for the system. After that
      *  a notification email is send to the user. If the user is valid than only
      *  the registration will be deleted!
-     *  @return @b true if no error occured
+     *  @return @b true if no error occurred
      */
     public function delete()
     {

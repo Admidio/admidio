@@ -16,21 +16,23 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/libs/phpass/passwordhash.php');
+require_once(SERVER_PATH.'/adm_program/libs/phpass/passwordhash.php');
 
 class TableUsers extends TableAccess
 {
-    /** Constuctor that will create an object of a recordset of the table adm_users.
-     *  If the id is set than the specific user will be loaded.
-     *  @param $db Object of the class database. This should be the default object $gDb.
-     *  @param $userId The recordset of the user with this id will be loaded. If id isn't set than an empty object of the table is created.
+    /**
+     * Constuctor that will create an object of a recordset of the table adm_users.
+     * If the id is set than the specific user will be loaded.
+     * @param object $db     Object of the class database. This should be the default object $gDb.
+     * @param int    $userId The recordset of the user with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$db, $userId = 0)
     {
         parent::__construct($db, TBL_USERS, 'usr', $userId);
     }
 
-    /** Additional to the parent method the user will be set @b valid per default.
+    /**
+     * Additional to the parent method the user will be set @b valid per default.
      */
     public function clear()
     {
@@ -41,9 +43,10 @@ class TableUsers extends TableAccess
         $this->columnsValueChanged = false;
     }
 
-    /** Deletes the selected user of the table and all the many references in other tables.
-     *  After that the class will be initialize.
-     *  @return @b true if no error occured
+    /**
+     * Deletes the selected user of the table and all the many references in other tables.
+     * After that the class will be initialize.
+     * @return true|void @b true if no error occurred
      */
     public function delete()
     {
@@ -186,10 +189,10 @@ class TableUsers extends TableAccess
     /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
-     * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed $newValue    The new value that should be stored in the database field
-     * @param bool $checkValue   The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @param  string $columnName The name of the database column whose value should get a new value
+     * @param  mixed  $newValue   The new value that should be stored in the database field
+     * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @return bool   Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
@@ -212,7 +215,10 @@ class TableUsers extends TableAccess
         return parent::setValue($columnName, $newValue, $checkValue);
     }
 
-    // Anzahl Logins hochsetzen, Datum aktualisieren und ungueltige Logins zuruecksetzen
+    /**
+     * Anzahl Logins hochsetzen, Datum aktualisieren und ungueltige Logins zuruecksetzen
+     * @return void
+     */
     public function updateLoginData()
     {
         $this->setValue('usr_last_login',   $this->getValue('usr_actual_login', 'Y-m-d H:i:s'));

@@ -620,7 +620,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
         }
     }
 
-    // If neccessary show links to navigate to next and previous recordsets of the query
+    // If necessary show links to navigate to next and previous recordsets of the query
     $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode='.$getViewMode;
     $page->addHtml(admFuncGeneratePagination($base_url, $datesTotalCount, $datesResult['limit'], $getStart, TRUE));
     $page->show();

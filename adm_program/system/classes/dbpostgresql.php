@@ -168,14 +168,14 @@ class DBPostgreSQL extends DBCommon
 
     /** Send a sql statement to the database that will be executed. If debug mode is set
      *  then this statement will be written to the error log. If it's a @b SELECT statement
-     *  then also the number of rows will be logged. If an error occured the script will
+     *  then also the number of rows will be logged. If an error occurred the script will
      *  be terminated and the error with a backtrace will be send to the browser.
      *  @param string $sql A string with the sql statement that should be executed in database.
      *  @param bool $throwError Default will be @b true and if an error the script will be terminated and
-     *                          occured the error with a backtrace will be send to the browser. If set to
+     *                          occurred the error with a backtrace will be send to the browser. If set to
      *                          @b false no error will be shown and the script will be continued.
      *  @return For @b SELECT statements a result resource will be returned and otherwise @b true.
-     *          If an error occured then @b false will be returned of the script was not terminated.
+     *          If an error occurred then @b false will be returned of the script was not terminated.
      */
     public function query($sql, $throwError = true)
     {

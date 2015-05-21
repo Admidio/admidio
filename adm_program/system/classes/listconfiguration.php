@@ -365,7 +365,7 @@ class ListConfiguration extends TableLists
 
     /** The method will clear all column data of this object and restore all
      *  columns from the database. Then the column number will be renewed for all columns.
-     *  This is in some cases a neccessary fix if a column number was lost.
+     *  This is in some cases a necessary fix if a column number was lost.
      */
     public function repair()
     {

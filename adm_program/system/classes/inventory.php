@@ -159,7 +159,7 @@ class Inventory extends TableInventory
     }
 
     /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     *  a new record or if only an update is neccessary. The update statement will only update
+     *  a new record or if only an update is necessary. The update statement will only update
      *  the changed columns. If the table has columns for creator or editor than these column
      *  with their timestamp will be updated.
      *  First save recordset and then save all user fields. After that the session of this got a renew for the user object.

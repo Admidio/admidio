@@ -28,27 +28,29 @@ class DateTimeExtended extends DateTime
     private $year, $month, $day, $hour, $minute, $second;
     protected $format; ///< The format of the date of this element. The syntax is similar to PHP date()
 
-    // es muss das Datum und das dazugehoerige Format uebergeben werden
-    // date : String mit dem Datum
-    // format : das zum Datum passende Format (Schreibweise aus date())
-    // type   : 'datetime', 'date' oder 'time'
+    /**
+     * es muss das Datum und das dazugehoerige Format uebergeben werden
+     * @param string $date   String mit dem Datum
+     * @param string $format das zum Datum passende Format (Schreibweise aus date())
+     * @param string $type   'datetime', 'date' oder 'time'
+     */
     public function __construct($date, $format, $type = 'datetime')
     {
         $this->weekdays = array();
-        $this->year   = 0;
-        $this->month  = 0;
-        $this->day    = 0;
-        $this->hour   = 0;
-        $this->minute = 0;
-        $this->second = 0;
-        $this->format = $format;
+        $this->year     = 0;
+        $this->month    = 0;
+        $this->day      = 0;
+        $this->hour     = 0;
+        $this->minute   = 0;
+        $this->second   = 0;
+        $this->format   = $format;
 
         // je nach Type das Format erweitern, da nur Datetime verarbeitet werden kann
-        if($type == 'date')
+        if($type === 'date')
         {
             $this->setDateTime($date.' 01:00:00', $format.' h:i:s');
         }
-        elseif($type == 'time')
+        elseif($type === 'time')
         {
             $this->setDateTime('2000-01-01 '.$date, 'Y-m-d '.$format);
         }

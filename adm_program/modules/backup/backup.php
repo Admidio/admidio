@@ -34,7 +34,7 @@ if($gDbType != 'mysql')
     $gMessage->show($gL10n->get('BAC_ONLY_MYSQL'));
 }
 
-// check backup path in adm_my_files and create it if neccessary
+// check backup path in adm_my_files and create it if necessary
 $myFilesBackup = new MyFiles('BACKUP');
 if($myFilesBackup->checkSettings() == false)
 {
@@ -52,10 +52,10 @@ $backupabsolutepath = $myFilesBackup->getFolder().'/'; // make sure to include t
 if($getMode == 'show_list')
 {
     $existingBackupFiles = array();
-    
+
     // start navigation of this module here
     $gNavigation->addStartUrl(CURRENT_URL, $headline);
-    
+
     // create a list with all valid files in the backup folder
     if ($handle = opendir($backupabsolutepath))
     {
@@ -73,21 +73,21 @@ if($getMode == 'show_list')
         }
         closedir($handle);
     }
-    
+
     // sort files (filename/date)
     sort($existingBackupFiles);
-    
+
     // get module menu
     $backupMenu = $page->getMenu();
-    
+
     // show link to create new backup
     $backupMenu->addItem('admMenuItemNewBackup', $g_root_path.'/adm_program/modules/backup/backup.php?mode=create_backup',
                                 $gL10n->get('BAC_START_BACKUP'), 'database_save.png');
-    
+
     //Define table
     $table = new HtmlTable('tableList', $page, true);
     $table->setMessageIfNoRowsFound('BAC_NO_BACKUP_FILE_EXISTS');
-    
+
     // create array with all column heading values
     $columnHeading = array(
         $gL10n->get('BAC_BACKUP_FILE'),
@@ -96,9 +96,9 @@ if($getMode == 'show_list')
         $gL10n->get('SYS_DELETE'));
     $table->setColumnAlignByArray(array('left', 'left', 'right', 'center'));
     $table->addRowHeadingByArray($columnHeading);
-        
+
     $backup_size_sum = 0;
-        
+
     foreach($existingBackupFiles as $key => $old_backup_file)
     {
         // create array with all column values
@@ -112,16 +112,16 @@ if($getMode == 'show_list')
                 $key.'&amp;name='.urlencode($old_backup_file).'&amp;database_id='.$old_backup_file.'"><img
                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
         $table->addRowByArray($columnValues, 'row_file_'.$key);
-    
+
         $backup_size_sum = $backup_size_sum + round(filesize($backupabsolutepath.$old_backup_file)/1024);
     }
-    
+
     if(count($existingBackupFiles) > 0)
     {
         $columnValues = array('&nbsp;', $gL10n->get('BAC_SUM'), $backup_size_sum .' kB', '&nbsp;');
         $table->addRowByArray($columnValues);
     }
-    
+
     $page->addHtml($table->show(false));
 }
 elseif($getMode == 'create_backup')
@@ -130,7 +130,7 @@ elseif($getMode == 'create_backup')
     include(SERVER_PATH. '/adm_program/modules/backup/backup_script.php');
     $page->addHtml(ob_get_contents());
     ob_end_clean();
-    
+
     // show button with link to backup list
     $form = new HtmlForm('show_backup_list_form', $g_root_path.'/adm_program/modules/backup/backup.php', $page);
     $form->addSubmitButton('btn_update_overview', $gL10n->get('BAC_BACK_TO_BACKUP_PAGE'), array('icon' => THEME_PATH.'/icons/back.png'));

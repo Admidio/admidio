@@ -50,7 +50,7 @@ public function __construct($title, $link, $description, $copyright)
     $this->feed='http://'. $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
 }
 
-/** Add rss item to the current feed with all neccessary information about the item
+/** Add rss item to the current feed with all necessary information about the item
  *  @param $title       Headline of this item
  *  @param $description The main content of the item which can contain html
  *  @param $link        Link to this entry on the homepage

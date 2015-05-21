@@ -8,9 +8,13 @@
  *
  *****************************************************************************/
 
-// da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung
-// stehen, wird hier eine Fallunterscheidung gemacht
-// WICHTIG: wird die Multibyte-Funktion nicht genutzt, funktioniert die Umwandlung von Umlauten nicht !!!
+/**
+ * In case the multibyte functions are not supported, we fallback to a no-multibyte function
+ * IMPORTANT: If the fallback is used, the conversion of umlauts not work!
+ * admStrToLower\(([\w$\[\]()]+)\) -> mb_strtolower($1, 'UTF-8')
+ * @param string $string
+ * @return string
+ */
 function admStrToLower($string)
 {
     if(function_exists('mb_strtolower'))
@@ -23,12 +27,15 @@ function admStrToLower($string)
     }
 }
 
-// da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung
-// stehen, wird hier eine Fallunterscheidung gemacht
-// WICHTIG: wird die Multibyte-Funktion nicht genutzt, funktioniert die Umwandlung von Umlauten nicht !!!
+/**
+ * In case the multibyte functions are not supported, we fallback to a no-multibyte function
+ * IMPORTANT: If the fallback is used, the conversion of umlauts not work!
+ * @param string $string
+ * @return string
+*/
 function admStrToUpper($string)
 {
-    if(function_exists('mb_strtolower'))
+    if(function_exists('mb_strtoupper'))
     {
         return mb_strtoupper($string, 'UTF-8');
     }
@@ -38,8 +45,12 @@ function admStrToUpper($string)
     }
 }
 
-// removes html, php code and blancs at beginning and end
-// of string or all elements of array without ckeditor variables !!!
+/**
+ * removes html, php code and blancs at beginning and end
+ * of string or all elements of array without ckeditor variables !!!
+ * @param string[] $srcArray
+ * @return string[]
+*/
 function admStrStripTagsSpecial($srcArray)
 {
     foreach($srcArray as $key => $value)
@@ -59,86 +70,107 @@ function admStrStripTagsSpecial($srcArray)
             $srcArray[$key] = strStripTags($value);
         }
     }
+
     return $srcArray;
 }
 
-// removes html, php code and blancs at beginning and end
-// of string or all elements of array
-function strStripTags($srcString)
+/**
+ * removes html, php code and whitespaces at beginning and end of string or all elements of array
+ * @param string|string[] $value
+ * @return string|string[]
+*/
+function strStripTags($value)
 {
-    if(is_array($srcString))
+    if(is_array($value))
     {
         // call function for every array element
-        $srcString = array_map('strStripTags', $srcString);
+        $value = array_map('strStripTags', $value);
     }
     else
     {
-        // remove blancs at beginning and end
-        $srcString = trim($srcString);
+        // remove whitespaces at beginning and end
+        $value = trim($value);
         // removes html and php code
-        $srcString = strip_tags($srcString);
+        $value = strip_tags($value);
     }
 
-    return $srcString;
+    return $value;
 }
 
-// fuegt Quotes einem mittels addslashes() gequoteten Array und String hinzu
+/**
+ * fuegt Quotes einem mittels addslashes() gequoteten Array und String hinzu
+ * @param string|string[] $value
+ * @return string|string[]
+*/
 function strAddSlashesDeep($value)
 {
     if(is_array($value))
     {
+        // call function for every array element
         $value = array_map('strAddSlashesDeep', $value);
     }
     else
     {
         $value = addslashes($value);
     }
+
     return $value;
 }
 
-// Entfernt Quotes aus einem mittels addslashes() gequoteten Array und String
+/**
+ * Entfernt Quotes aus einem mittels addslashes() gequoteten Array und String
+ * @param string|string[] $value
+ * @return string|string[]
+*/
 function strStripSlashesDeep($value)
 {
     if(is_array($value))
     {
+        // call function for every array element
         $value = array_map('strStripSlashesDeep', $value);
     }
     else
     {
         $value = stripslashes($value);
     }
+
     return $value;
 }
 
-// ermittelt den vorherigen oder nächsten Buchstaben im Alphabet
-// mode = 0  -> naechster Buchstabe
-// mode = 1  -> vorheriger Buchstabe
-//
-// Bsp.:   g -> h      g -> f
-
-function strNextLetter($letter, $mode = 0)
+/**
+ * Determines the previous or next letter in the alphabet
+ *
+ * reverse = false -> naechster Buchstabe
+ * reverse = true -> vorheriger Buchstabe
+ * Example:   g -> h      g -> f
+ *
+ * @param string $letter
+ * @param bool $reverse
+ * @return string
+*/
+function strNextLetter($letter, $reverse = false)
 {
-    $ascii  = ord($letter);
-    $aSmall = ord('a');
-    $zSmall = ord('z');
-    $aBig   = ord('A');
-    $zBig   = ord('Z');
+    $ascii      = ord($letter);
+    $aLowerCase = ord('a');
+    $zLowerCase = ord('z');
+    $aUpperCase = ord('A');
+    $zUpperCase = ord('Z');
 
-    if ($ascii === $aSmall || $ascii === $zSmall || $ascii === $aBig || $ascii === $zBig)
+    if ($ascii === $aLowerCase || $ascii === $zLowerCase || $ascii === $aUpperCase || $ascii === $zUpperCase)
     {
-        if (($ascii === $aSmall || $ascii === $aBig) && $mode == 0)
+        if (!$reverse && ($ascii === $aLowerCase || $ascii === $aUpperCase))
         {
             $ascii++;
         }
 
-        if (($ascii === $zSmall || $ascii === $zBig) && $mode == 1)
+        if ($reverse && ($ascii === $zLowerCase || $ascii === $zUpperCase))
         {
             $ascii--;
         }
     }
     else
     {
-        if ($mode == 1)
+        if ($reverse)
         {
             $ascii--;
         }
@@ -163,7 +195,7 @@ function strValidCharacters($string, $checkType)
 {
     if(trim($string) !== '')
     {
-        switch($checkType)
+        switch ($checkType)
         {
             case 'email':
                 $validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß.-_@';
@@ -184,12 +216,16 @@ function strValidCharacters($string, $checkType)
         // check if string contains only valid characters
         if(strspn(admStrToLower($string), $validChars) === strlen($string))
         {
-            if($checkType === 'email')
+            switch ($checkType)
             {
-                // check structure of email address
-                return preg_match('/^[^@]+@[^@]+\.[^@]{2,}$/', trim($string));
+                case 'email':
+                    return filter_var(trim($string), FILTER_VALIDATE_EMAIL) !== false
+                        && preg_match('/^[^@]+@[^@]+\.[^@]{2,}$/', trim($string));
+                case 'url':
+                    return filter_var(trim($string), FILTER_VALIDATE_URL) !== false;
+                default:
+                    return true;
             }
-            return true;
         }
     }
     return false;
@@ -201,20 +237,18 @@ function strValidCharacters($string, $checkType)
  * @param string $filename     Name of the file that should be checked.
  * @param bool $checkExtension If set to @b true then the extension will be checked against a blacklist of extensions:
  *                             php, php3, php4, php5, html, htm, htaccess, htpasswd, pl, js, vbs, asp, cgi, ssi
- * @return true Returns @true if filename contains valid characters. Otherwise an AdmException is thrown
+ * @return true Returns @true if filename contains only valid characters. Otherwise an AdmException is thrown
  * @throws AdmException SYS_FILENAME_EMPTY : Filename was empty
- * @throws AdmException BAC_FILE_NAME_INVALID : Filename contains invalid characters
- * @throws AdmException DOW_FILE_EXTENSION_INVALID : Filename contains invalid extension
+ *                      BAC_FILE_NAME_INVALID : Filename contains invalid characters
+ *                      DOW_FILE_EXTENSION_INVALID : Filename contains invalid extension
  */
 function admStrIsValidFileName($filename, $checkExtension = false)
 {
     // If the filename was not empty
     if(trim($filename) !== '')
     {
-        // filename should only contains valid characters
-        if(strValidCharacters($filename, 'file')
-        && strpos($filename, '..') === false
-        && substr($filename, 0, 1) !== '.')
+        // filename should only contains valid characters and don't start with a dot
+        if(strValidCharacters($filename, 'file') && substr($filename, 0, 1) !== '.')
         {
             if($checkExtension)
             {

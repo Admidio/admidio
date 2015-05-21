@@ -38,7 +38,7 @@ class TableInventory extends TableAccess
 
     /** Deletes the selected item of the table and all the many references in other tables.
      *  After that the class will be initialize.
-     *  @return @b true if no error occured
+     *  @return @b true if no error occurred
      */
     public function delete()
     {

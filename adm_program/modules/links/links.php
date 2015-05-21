@@ -193,7 +193,7 @@ else
 
 $page->addHtml('</div>');
 
-// If neccessary show links to navigate to next and previous recordsets of the query
+// If necessary show links to navigate to next and previous recordsets of the query
 $baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $getHeadline;
 $page->addHtml(admFuncGeneratePagination($baseUrl, $weblinksCount, $weblinksPerPage, $weblinks->getStartElement(), TRUE));
 

@@ -52,9 +52,9 @@ class ProfileFields
 
     /**
      * returns for a fieldname intern (usf_name_intern) the value of the column from table adm_user_fields
-     * @param string $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
-     * @param string $column          The column name of @b adm_user_field for which you want the value
-     * @param string $format          Optional the format (is neccessary for timestamps)
+     * @param  string $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
+     * @param  string $column          The column name of @b adm_user_field for which you want the value
+     * @param  string $format          Optional the format (is necessary for timestamps)
      * @return mixed
      */
     public function getProperty($fieldNameIntern, $column, $format = '')
@@ -75,7 +75,7 @@ class ProfileFields
     /** returns for field id (usf_id) the value of the column from table adm_user_fields
      *  @param $fieldId Expects the @b usf_id of table @b adm_user_fields
      *  @param $column The column name of @b adm_user_field for which you want the value
-     *  @param $format Optional the format (is neccessary for timestamps)
+     *  @param $format Optional the format (is necessary for timestamps)
      */
     public function getPropertyById($fieldId, $column, $format = '')
     {
@@ -381,7 +381,7 @@ class ProfileFields
      *  If profile fields structure wasn't read, this will be done before.
      *  @param $userId         The id of the user for which the user data should be read.
      *  @param $organizationId The id of the organization for which the profile fields
-     *                         structure should be read if neccessary.
+     *                         structure should be read if necessary.
      */
     public function readUserData($userId, $organizationId)
     {
@@ -413,7 +413,7 @@ class ProfileFields
     }
 
     // save data of every user field
-    // userId : id is neccessary if new user, that id was not known before
+    // userId : id is necessary if new user, that id was not known before
     public function saveUserData($userId)
     {
         $this->mDb->startTransaction();

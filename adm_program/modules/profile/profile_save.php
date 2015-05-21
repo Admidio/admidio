@@ -115,7 +115,7 @@ if($getNewUser == 2)
 foreach($gProfileFields->mProfileFields as $field)
 {
     $post_id = 'usf-'. $field->getValue('usf_id');
-    
+
     // check and save only fields that aren't disabled
     if($gCurrentUser->editUsers() == true || $field->getValue('usf_disabled') == 0 || ($field->getValue('usf_disabled') == 1 && $getNewUser > 0))
     {
@@ -128,7 +128,7 @@ foreach($gProfileFields->mProfileFields as $field)
             {
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
             }
-            
+
             // if social network then extract username from url
             if($field->getValue('usf_name_intern') == 'FACEBOOK'
             || $field->getValue('usf_name_intern') == 'GOOGLE_PLUS'
@@ -149,7 +149,7 @@ foreach($gProfileFields->mProfileFields as $field)
                         {
                             $_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '/posts'));
                         }
-                        
+
                         $_POST[$post_id] = substr($_POST[$post_id], strrpos($_POST[$post_id], '/') + 1);
                         if(strrpos($_POST[$post_id], '?') > 0)
                         {
@@ -161,7 +161,7 @@ foreach($gProfileFields->mProfileFields as $field)
 
             // Wert aus Feld in das User-Klassenobjekt schreiben
             $returnCode = $user->setValue($field->getValue('usf_name_intern'), $_POST[$post_id]);
-            
+
             // Ausgabe der Fehlermeldung je nach Datentyp
             if($returnCode == false)
             {
@@ -290,7 +290,7 @@ if($getNewUser == 1 || $getNewUser == 3)
     {
         try
         {
-            // accept a registration, assign neccessary roles and send a notification email
+            // accept a registration, assign necessary roles and send a notification email
             $user->acceptRegistration();
             $messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
         }
@@ -303,11 +303,11 @@ if($getNewUser == 1 || $getNewUser == 3)
     else
     {
         // a new user is created with the user management module
-        // then the user must get the neccessary roles
+        // then the user must get the necessary roles
         $user->assignDefaultRoles();
         $messageId = 'SYS_SAVE_DATA';
     }
-    
+
     // if current user has the right to assign roles then show roles dialog
     // otherwise go to previous url (default roles are assigned automatically)
     if($gCurrentUser->assignRoles())

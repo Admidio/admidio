@@ -53,15 +53,15 @@ switch($getJob)
         header('Content-Type: application/octet-stream');
         header('Content-Length: '.$fileSize);
         header('Content-Disposition: attachment; filename="'.$getFilename.'"');
-    
-        // neccessary for IE, because without it the download with SSL has problems
+
+        // necessary for IE, because without it the download with SSL has problems
         header('Cache-Control: private');
         header('Pragma: public');
-        
+
         // Datei ausgeben.
         echo readfile($completePath);
         break;
-    
+
     case 'delete':
         // Backupdatei loeschen
         if(unlink($completePath))

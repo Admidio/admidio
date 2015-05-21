@@ -45,7 +45,7 @@ switch ($get_type)
         $url  = 'categories_function.php?cat_id='.$get_database_id.'&mode=2&type='.$get_database_id_2;
 
         // get special message for calendars
-        if($get_database_id_2 == 'DAT')
+        if($get_database_id_2 === 'DAT')
         {
             $text = 'SYS_DELETE_ENTRY';
         }
@@ -170,7 +170,7 @@ echo '
     <div id="message_text" class="col-xs-10">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
 </div>
 <div class="modal-footer">
-        <button id="btn_yes" class="btn btn-default" type="button" onclick="javascript:callUrlHideElement(\''.$get_element_id.'\', \''.$url.'\')"><img src="'. THEME_PATH. '/icons/ok.png"
+        <button id="btn_yes" class="btn btn-default" type="button" onclick="callUrlHideElement(\''.$get_element_id.'\', \''.$url.'\')"><img src="'. THEME_PATH. '/icons/ok.png"
             alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;</button>
         <button id="btn_no" class="btn btn-default" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/error.png"
             alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'</button>

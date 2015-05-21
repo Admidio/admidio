@@ -1,5 +1,12 @@
 <?php
-/*****************************************************************************/
+/*****************************************************************************
+ *
+ *  Copyright    : (c) 2004 - 2015 The Admidio Team
+ *  Homepage     : http://www.admidio.org
+ *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ *****************************************************************************/
+
 /** @class TableAccess
  *  @brief Controls read and write access to datbase tables
  *
@@ -20,14 +27,6 @@
  *  $role->setValue('rol_max_members', $maxMembers);
  *  $role->save(); @endcode
  */
-/*****************************************************************************
- *
- *  Copyright    : (c) 2004 - 2015 The Admidio Team
- *  Homepage     : http://www.admidio.org
- *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- *
- *****************************************************************************/
-
 class TableAccess
 {
     private $additionalTables;      ///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
@@ -44,10 +43,10 @@ class TableAccess
     /**
      * Constuctor that will create an object of a recordset of the specified table.
      * If the id is set than this recordset will be loaded.
-     * @param object $db            Object of the class database. This should be the default object @b $gDb.
-     * @param string $tableName     The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
-     * @param string $columnPraefix The praefix of each column of that table. E.g. for table @b adm_roles this is @b rol
-     * @param $id                   The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+     * @param object     $db            Object of the class database. This should be the default object @b $gDb.
+     * @param string     $tableName     The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
+     * @param string     $columnPraefix The praefix of each column of that table. E.g. for table @b adm_roles this is @b rol
+     * @param string|int $id            The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$db, $tableName, $columnPraefix, $id = '')
     {
@@ -70,10 +69,10 @@ class TableAccess
      * Initializes all class parameters and deletes all read data.
      * Also the database structure of the assiciated table will be
      * read and stored in the arrays @b dbColumns and @b columnsInfos
+     * @return void
      */
     public function clear()
     {
-        $columnProperties   = array();
         $this->columnsValueChanged = false;
         $this->new_record   = true;
         $this->record_count = -1;
@@ -114,9 +113,10 @@ class TableAccess
      * Adds a table with the connected fields to a member array. This table will be add to the
      * select statement if data is read and the connected record is avaiable in this class.
      * The connected table must have a foreign key in the class table.
-     * @param string $table                     Database table name that should be connected. This can be the define of the table.
-     * @param string $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
-     * @param string $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
+     * @param  string $table                     Database table name that should be connected. This can be the define of the table.
+     * @param  string $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
+     * @param  string $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
+     * @return void
      * @par Examples
      * @code  // Constructor of adm_dates object where the category (calendar) is connected
      *                                          public function __construct(&$db, $dat_id = 0)
@@ -146,7 +146,7 @@ class TableAccess
 
     /**
      * Deletes the selected record of the table and initializes the class
-     * @return bool @b true if no error occured
+     * @return true|void @b true if no error occurred
      */
     public function delete()
     {
@@ -334,8 +334,8 @@ class TableAccess
     /**
      * Reads a record out of the table in database selected by the unique id column in the table.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param $id Unique id of id column of the table.
-     * @return bool Returns @b true if one record is found
+     * @param  int|string $id Unique id of id column of the table.
+     * @return bool       Returns @b true if one record is found
      */
     public function readDataById($id)
     {
@@ -399,10 +399,10 @@ class TableAccess
 
     /**
      * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     * a new record or if only an update is neccessary. The update statement will only update
-     * the changed columns. If the table has columns for creator or editor than these column
-     * with their timestamp will be updated.
-     * @param  bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * a new record or if only an update is necessary. The update statement will only update the changed columns.
+     * If the table has columns for creator or editor than these column with their timestamp will be updated.
+     * @param  bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
+     *                                 if table has columns like @b usr_id_create or @b usr_id_changed
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
@@ -529,9 +529,10 @@ class TableAccess
      * but without a separate SQL. This method is useful if you have several recordsets of the
      * table and want to use an table object for each recordset. So you don't have to do an
      * separate sql read for each record. This is a performant way to fill the object with
-     * the neccessary data.
-     * @param array $fieldArray An array with all fields and their values of the table. If the
-     *                          object has more connected tables than you should add the fields of these tables, too.
+     * the necessary data.
+     * @param  array $fieldArray An array with all fields and their values of the table. If the
+     *                           object has more connected tables than you should add the fields of these tables, too.
+     * @return void
      * @par Examples
      * @code   // read all announcements with their categories
      *                          $sql = 'SELECT * FROM adm_announcements, adm_categories WHERE ann_cat_id = cat_id';
@@ -566,8 +567,6 @@ class TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        $return_code = false;
-
         if(array_key_exists($columnName, $this->dbColumns))
         {
             // Allgemeine Plausibilitaets-Checks anhand des Feldtyps
@@ -618,18 +617,19 @@ class TableAccess
 
             if(array_key_exists($columnName, $this->dbColumns))
             {
-                $return_code = true;
 
                 // only mark as "changed" if the value is different (use binary safe function!)
                 if(strcmp($newValue, $this->dbColumns[$columnName]) !== 0)
                 {
                     $this->dbColumns[$columnName] = $newValue;
-                    $this->columnsValueChanged    = true;
+                    $this->columnsValueChanged = true;
                     $this->columnsInfos[$columnName]['changed'] = true;
                 }
+
+                return true;
             }
         }
-        return $return_code;
+        return false;
     }
 }
 ?>

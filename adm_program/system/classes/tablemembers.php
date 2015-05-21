@@ -70,7 +70,7 @@ class TableMembers extends TableAccess
     }
 
     /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     *  a new record or if only an update is neccessary. The update statement will only update
+     *  a new record or if only an update is necessary. The update statement will only update
      *  the changed columns. If the table has columns for creator or editor than these column
      *  with their timestamp will be updated.
      *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
@@ -82,7 +82,7 @@ class TableMembers extends TableAccess
 
         $returnStatus = parent::save($updateFingerPrint);
 
-        if($returnStatus == true && is_object($gCurrentSession))
+        if($returnStatus && is_object($gCurrentSession))
         {
             // renew user object of the affected user because of edited role assignment
             $gCurrentSession->renewUserObject($this->getValue('mem_usr_id'));
@@ -92,7 +92,7 @@ class TableMembers extends TableAccess
     }
 
     /** Starts a membership for the assigned role and user from now until 31.12.9999.
-     *  An existing membership will be extended if neccessary. If the user is the
+     *  An existing membership will be extended if necessary. If the user is the
      *  current user then initiate a refresh of his role cache.
      *  @param $roleId Assign the membership to this role
      *  @param $userId The user who should get a member of the role.

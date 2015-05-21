@@ -129,7 +129,7 @@ elseif($getMode == 5)
 {
     try
     {
-        // accept a registration, assign neccessary roles and send a notification email
+        // accept a registration, assign necessary roles and send a notification email
         $registrationUser->acceptRegistration();
     }
     catch(AdmException $e)
@@ -137,7 +137,7 @@ elseif($getMode == 5)
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
         $e->showHtml();
     }
-    
+
     // if current user has the right to assign roles then show roles dialog
     // otherwise go to previous url (default roles are assigned automatically)
     if($gCurrentUser->manageRoles())
@@ -154,7 +154,7 @@ elseif($getMode == 5)
 elseif($getMode == 6)
 {
     // Der User existiert schon und besitzt auch ein Login
-    
+
     try
     {
         // delete registration

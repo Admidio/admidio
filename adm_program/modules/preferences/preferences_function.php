@@ -233,7 +233,7 @@ case 1:
 
     $gCurrentOrganization->setPreferences($gPreferences);
 
-    // refresh language if neccessary
+    // refresh language if necessary
     if($gL10n->getLanguage() != $gPreferences['system_language'])
     {
         $gL10n->setLanguage($gPreferences['system_language']);

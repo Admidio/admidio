@@ -53,7 +53,7 @@
         <text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="edited">Activate chat module. Messages will be fetched dynamically from database every 3 seconds. Only 99 entries will be saved into database. As soon as the 100th entry is to be saved the first 50 entries will be deleted.</text>
         <text id="MSG_OPPOSITE" development="new" translation="edited">Business partner</text>
         <text id="MSG_PM_SEND" development="new" translation="edited">Private message has been send to %VAR1_BOLD%.</text>
-        <text id="MSG_PM_NOT_SEND" development="new" translation="edited">Private message could not be sent to %VAR1_BOLD%.\n\nFollowing error has occured:\n%VAR2%</text>
+        <text id="MSG_PM_NOT_SEND" development="new" translation="edited">Private message could not be sent to %VAR1_BOLD%.\n\nFollowing error has occurred:\n%VAR2%</text>
         <text id="MSG_REMOVE" development="new" translation="edited">Remove message</text>
         <text id="MSG_REMOVE_CONFIRM" development="new" translation="edited">Confirm remove</text>
         <text id="MSG_REMOVE_REVERT" development="new" translation="edited">Undo remove</text>
@@ -1164,7 +1164,7 @@
         <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Entry visible for multiple organizations</text>
         <text id="SYS_END" development="new" translation="edited" description="End of a date">End</text>
         <text id="SYS_ERROR" development="new" translation="edited">Error</text>
-        <text id="SYS_ERROR_DATABASE_ACCESS" development="new" translation="edited">Error occured during database access:\n\n%VAR1%</text>
+        <text id="SYS_ERROR_DATABASE_ACCESS" development="new" translation="edited">Error occurred during database access:\n\n%VAR1%</text>
         <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="edited">ERROR 404 - PAGE NOT FOUND!</text>
         <text id="SYS_EXAMPLE" development="new" translation="edited">Example</text>
         <text id="SYS_EXAMPLES" development="new" translation="edited">Examples</text>
@@ -1224,7 +1224,7 @@
         <text id="SYS_LOSTPW_AREADY_LOGGED_ID" development="new" translation="edited">You already signed in. Therefore you must already have the correct password!</text>
         <text id="SYS_LOSTPW_EMAIL_ERROR" development="new" translation="edited">E-mail address %VAR1% could not be found in the system!</text>
         <text id="SYS_LOSTPW_SEND" development="new" translation="edited">New password has been sent to e-mail address %VAR1%!</text>
-        <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="edited">An error occured when sending the e-mail to recipients %VAR1%!\nPlease try again later!</text>
+        <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="edited">An error occurred when sending the e-mail to recipients %VAR1%!\nPlease try again later!</text>
         <text id="SYS_MAP" development="new" translation="edited">Map</text>
         <text id="SYS_MAINTAIN_CATEGORIES" development="new" translation="edited">Manage categories</text>
         <text id="SYS_MALE" development="new" translation="edited">Male</text>

@@ -47,11 +47,11 @@ class Navigation
     /**
      * Initialize the stack and adds a new url to the navigation stack.
      * If a html navigation bar should be created later than you should fill the text and maybe the icon.
-     * @param string $url       The url that should be added to the navigation stack.
-     * @param string|null $text A text that should be shown in the html navigation stack and
-     *                          would be linked with the $url.
-     * @param string|null $icon A url to the icon that should be shown in the html navigation stack
-     *                          together with the text and would be linked with the $url.
+     * @param  string      $url  The url that should be added to the navigation stack.
+     * @param  string|null $text A text that should be shown in the html navigation stack and
+     *                           would be linked with the $url.
+     * @param  string|null $icon A url to the icon that should be shown in the html navigation stack
+     *                           together with the text and would be linked with the $url.
      * @return void
      */
     public function addStartUrl($url, $text = null, $icon = null)
@@ -64,11 +64,11 @@ class Navigation
      * Add a new url to the navigation stack. If a html navigation bar should be created later
      * than you should fill the text and maybe the icon. Before the url will be added to the stack
      * the method checks if the current url was already added to the url.
-     * @param string $url       The url that should be added to the navigation stack.
-     * @param string|null $text A text that should be shown in the html navigation stack and
-     *                          would be linked with the $url.
-     * @param string|null $icon A url to the icon that should be shown in the html navigation stack
-     *                          together with the text and would be linked with the $url.
+     * @param  string      $url  The url that should be added to the navigation stack.
+     * @param  string|null $text A text that should be shown in the html navigation stack and
+     *                           would be linked with the $url.
+     * @param  string|null $icon A url to the icon that should be shown in the html navigation stack
+     *                           together with the text and would be linked with the $url.
      * @return void
      */
     public function addUrl($url, $text = null, $icon = null)
@@ -125,7 +125,7 @@ class Navigation
 
     /**
      * Returns html code that contain a link back to the previous url.
-     * @param string $id Optional you could set an id for the back link
+     * @param  string $id Optional you could set an id for the back link
      * @return string Returns html code of the navigation back link.
      */
     public function getHtmlBackButton($id = 'adm-navigation-back')
@@ -157,7 +157,7 @@ class Navigation
      * Returns html code that contain links to all previous added urls from the stack.
      * The output will look like: @n FirstPage > SecondPage > ThirdPage ...@n
      * The last page of this list is always the current page.
-     * @param string $id Optional you could set an id for the navigation bar
+     * @param  string $id Optional you could set an id for the navigation bar
      * @return string Returns html code of the navigation bar.
      */
     public function getHtmlNavigationBar($id = 'adm-navigation-bar')

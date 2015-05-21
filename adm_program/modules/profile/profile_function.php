@@ -55,7 +55,7 @@ if($getMode == 1)
     header('Content-Type: text/x-vcard; charset=iso-8859-1');
     header('Content-Disposition: attachment; filename="'.$filename.'.vcf"');
 
-    // neccessary for IE, because without it the download with SSL has problems
+    // necessary for IE, because without it the download with SSL has problems
     header('Cache-Control: private');
     header('Pragma: public');
 
@@ -209,7 +209,7 @@ elseif ($getMode == 8)
         header('Content-Type: text/x-vcard; charset=iso-8859-1');
         header('Content-Disposition: attachment; filename="'.$filename.'"');
 
-        // neccessary for IE, because without it the download with SSL has problems
+        // necessary for IE, because without it the download with SSL has problems
         header('Cache-Control: private');
         header('Pragma: public');
 

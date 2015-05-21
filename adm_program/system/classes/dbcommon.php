@@ -25,9 +25,9 @@ class DBCommon
     protected $transactions = 0;
     protected $dbStructure; // array with arrays of every table with their structure
 
-    /** Display the error code and error message to the user if a database error occured.
+    /** Display the error code and error message to the user if a database error occurred.
      *  The error must be read by the child method. This method will call a backtrace so
-     *  you see the script and specific line in which the error occured.
+     *  you see the script and specific line in which the error occurred.
      *  @param $code    The database error code that will be displayed.
      *  @param $message The database error message that will be displayed.
      *  @return Will exit the script and returns a html output with the error informations.

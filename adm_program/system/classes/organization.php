@@ -49,7 +49,7 @@ class Organization extends TableAccess
         }
     }
 
-    /** Initialize all neccessary data of this object.
+    /** Initialize all necessary data of this object.
      */
     public function clear()
     {

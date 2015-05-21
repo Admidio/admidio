@@ -6,7 +6,7 @@
  *  The user can write a condition in a special syntax. This class will parse
  *  that condition and creates a valid SQL statement which can be used in
  *  another SQL statement to select data with these conditions.
- *  This class uses AdmExceptions when an error occured. Make sure you catch these
+ *  This class uses AdmExceptions when an error occurred. Make sure you catch these
  *  exeptions when using the class.
  *  @par Examples
  *  @code // create a valid SQL condition out of the special syntax

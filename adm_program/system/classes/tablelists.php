@@ -29,7 +29,7 @@ class TableLists extends TableAccess
 
     /** Deletes the selected list with all associated fields.
      *  After that the class will be initialize.
-     *  @return @b true if no error occured
+     *  @return @b true if no error occurred
      */
     public function delete()
     {
@@ -46,7 +46,7 @@ class TableLists extends TableAccess
     }
 
     /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     *  a new record or if only an update is neccessary. The update statement will only update
+     *  a new record or if only an update is necessary. The update statement will only update
      *  the changed columns. If the table has columns for creator or editor than these column
      *  with their timestamp will be updated.
      *  Per default the organization, user and timestamp will be set.

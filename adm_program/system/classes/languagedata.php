@@ -39,7 +39,7 @@ class LanguageData
     private $referenceLanguage = 'en';   ///< The ISO code of the default language that should be read if in the current language the text id is not translated
     private $countries = array();        ///< Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
 
-    /** Creates an object that stores all neccessary language data
+    /** Creates an object that stores all necessary language data
      *  and can be handled in session. Therefore the language must be set
      *  and optional a path where the language files are stored.
      *  @param $language     The ISO code of the language for which the texts should be read e.g. @b 'de'

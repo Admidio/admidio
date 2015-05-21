@@ -57,7 +57,7 @@ class TableFolder extends TableAccess
     /** Deletes the selected record of the table and all references in other tables.
      *  Also all files, subfolders and the selected folder will be deleted in the file system.
      *  After that the class will be initialize.
-     *  @return @b true if no error occured
+     *  @return @b true if no error occurred
      */
     public function delete($folderId = 0)
     {
@@ -668,7 +668,7 @@ class TableFolder extends TableAccess
     }
 
     /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     *  a new record or if only an update is neccessary. The update statement will only update
+     *  a new record or if only an update is necessary. The update statement will only update
      *  the changed columns. If the table has columns for creator or editor than these column
      *  with their timestamp will be updated.
      *  For new records the user, organization and timestamp will be set per default.

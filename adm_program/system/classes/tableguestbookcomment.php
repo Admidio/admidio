@@ -72,7 +72,7 @@ class TableGuestbookComment extends TableAccess
     }
 
     /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     *  a new record or if only an update is neccessary. The update statement will only update
+     *  a new record or if only an update is necessary. The update statement will only update
      *  the changed columns. If the table has columns for creator or editor than these column
      *  with their timestamp will be updated.
      *  For new records the organization and ip address will be set per default.

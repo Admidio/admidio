@@ -100,7 +100,7 @@ $gDb->query($sql);
 $row = $gDb->fetch_array();
 $countChanges = $row['count'];
 
-// create select statement with all neccessary data
+// create select statement with all necessary data
 $sql = 'SELECT usl_usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, usl_usf_id, usl_value_old, usl_value_new,
                usl_usr_id_create, create_last_name.usd_value as create_last_name, create_first_name.usd_value as create_first_name, usl_timestamp_create
           FROM '.TBL_USER_LOG.'
