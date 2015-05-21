@@ -169,7 +169,8 @@ else
         $iconCode  = THEME_PATH. '/icons/key.png';
     }
 
-    $form = new HtmlForm('plugin-login-form', $g_root_path.'/adm_program/system/login_check.php', null, array('type' => 'vertical', 'setFocus' => false));
+    $form = new HtmlForm('plugin-login-form', $g_root_path.'/adm_program/system/login_check.php', null, 
+                         array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false));
     $form->addInput('plg_usr_login_name', $gL10n->get('SYS_USERNAME'), null, array('property' => FIELD_MANDATORY, 'maxLength' => 35));
     $form->addInput('plg_usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));
 

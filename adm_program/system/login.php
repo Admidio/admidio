@@ -36,7 +36,7 @@ $loginMenu = $page->getMenu();
 $loginMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('login_form', $g_root_path.'/adm_program/system/login_check.php', $page);
+$form = new HtmlForm('login_form', $g_root_path.'/adm_program/system/login_check.php', $page, array('showRequiredFields' => false));
 $form->addInput('usr_login_name', $gL10n->get('SYS_USERNAME'), null, array('maxLength' => 35, 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
 $form->addInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
 // show selectbox with all organizations of database
