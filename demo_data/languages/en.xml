@@ -7,10 +7,10 @@
         <text id="DEMO_ANN_NEW_JERSEYS" development="new" translation="todo">New jerseys</text>
         <text id="DEMO_ANN_NEW_JERSEYS_CONTENT" development="new" translation="todo">Starting next season, there are new jerseys for all active players. These can be picked up before the first training at the trainer.</text>
         <text id="DEMO_ANN_AEROBICS_COURSE" development="new" translation="todo">Aerobics course</text>
-        <text id="DEMO_ANN_AEROBICS_COURSE_CONTENT" development="new" translation="todo">During the holidays we offer a [i]aerobic course[/i] to all interested members.\r\n\r\nRegistrations are accepted on our [b]homepage[/b] or in our [b]office[/b].</text>
+        <text id="DEMO_ANN_AEROBICS_COURSE_CONTENT" development="new" translation="todo">During the holidays we offer a [i]aerobic course[/i] to all interested members.\n\nRegistrations are accepted on our [b]homepage[/b] or in our [b]office[/b].</text>
         <text id="DEMO_DAT_YOUTH_TRAINING" development="new" translation="todo">Youth training 1</text>
         <text id="DEMO_DAT_YOUTH_TRAINING_LOCATION" development="new" translation="todo">Sports field Norwich</text>
-        <text id="DEMO_DAT_YOUTH_TRAINING_CONTENT" development="new" translation="todo">Today we will put the focus on physical fitness and stamina.\r\n\r\nPlease appear all in time with running shoes on the sports field!</text>
+        <text id="DEMO_DAT_YOUTH_TRAINING_CONTENT" development="new" translation="todo">Today we will put the focus on physical fitness and stamina.\n\nPlease appear all in time with running shoes on the sports field!</text>
         <text id="DEMO_DAT_BARBECUE" development="new" translation="todo">Barbecue</text>
         <text id="DEMO_DAT_BARBECUE_CONTENT" development="new" translation="todo">Today we have our barbecue. In addition to crisp sausages, chops and bacon, there are also various salads.</text>
         <text id="DEMO_DAT_TRAINER_COURSE" development="new" translation="todo">Trainer course</text>
@@ -21,10 +21,10 @@
         <text id="DEMO_DAT_COMPUTER_COURSE_CONTENT" development="new" translation="todo">The focus of this course lies with the Office products.</text>
         <text id="DEMO_DAT_TRIP_AMSTERDAM" development="new" translation="todo">Trip to Amsterdam</text>
         <text id="DEMO_DAT_TRIP_AMSTERDAM_LOCATION" development="new" translation="todo">Amsterdam Gracht</text>
-        <text id="DEMO_DAT_TRIP_AMSTERDAM_CONTENT" development="new" translation="todo">On this hopefully sunny day it goes to Amsterdam.\r\n\r\nA canal cruise and a shopping trip are planned.</text>
-        <text id="DEMO_GBO_WEBMASTER_WELCOME" development="new" translation="todo">Welcome to the guestbook of the demo area.\r\n\r\nHere you can play around and test the capabilities of Admidio.\r\n\r\nWe hope you enjoy it and that we can convince you of this great program.</text>
+        <text id="DEMO_DAT_TRIP_AMSTERDAM_CONTENT" development="new" translation="todo">On this hopefully sunny day it goes to Amsterdam.\n\nA canal cruise and a shopping trip are planned.</text>
+        <text id="DEMO_GBO_WEBMASTER_WELCOME" development="new" translation="todo">Welcome to the guestbook of the demo area.\n\nHere you can play around and test the capabilities of Admidio.\n\nWe hope you enjoy it and that we can convince you of this great program.</text>
         <text id="DEMO_GBO_GUEST_ENTRY1" development="new" translation="todo">Then I'm going to look at the program.</text>
-        <text id="DEMO_GBO_WEBMASTER_COMMENT1" development="new" translation="todo">For more information about the program look in the [a href="http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index"]documentation[/a].\r\n\r\nFor questions and suggestions just visit our [a href="http://forum.admidio.org"]forum[/a].</text>
+        <text id="DEMO_GBO_WEBMASTER_COMMENT1" development="new" translation="todo">For more information about the program look in the [a href="http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index"]documentation[/a].\n\nFor questions and suggestions just visit our [a href="http://forum.admidio.org"]forum[/a].</text>
         <text id="DEMO_LNK_SAMPLE_PAGE" development="new" translation="todo">Sample page</text>
         <text id="DEMO_LNK_SAMPLE_PAGE_CONTENT" development="new" translation="todo">On this site there's not much news :(</text>
         <text id="DEMO_LNK_ADMIDIO_CONTENT" development="new" translation="todo">The homepage of the [b]best[/b] open source membership management in the net.</text>
