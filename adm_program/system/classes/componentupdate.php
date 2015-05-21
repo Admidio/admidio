@@ -196,10 +196,16 @@ class ComponentUpdate extends Component
                     $flagNextVersion = true;
                 }
 
-                // save current version to component
-                $this->setValue('com_version', $mainVersion.'.'.$subVersion.'.0');
+                // save current version to system component
+                $this->setValue('com_version', ADMIDIO_VERSION);
                 $this->setValue('com_beta', ADMIDIO_VERSION_BETA);
                 $this->save();
+                
+                // save current version to all modules
+                $sql = 'UPDATE '.TBL_COMPONENTS.' SET com_version = \''.ADMIDIO_VERSION.'\'
+                                                    , com_beta    = \''.ADMIDIO_VERSION_BETA.'\'
+                         WHERE com_type LIKE \'MODULE\' ';
+                $this->db->query($sql);
             }
 
             // reset subversion because we want to start update for next main version with subversion 0

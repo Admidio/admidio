@@ -233,9 +233,6 @@ class Organization extends TableAccess
         $formerList->addColumn(4, 'mem_begin');
         $formerList->addColumn(5, 'mem_end', 'DESC');
         $formerList->save();
-
-        // create object with current inventory field structure
-        $gInventoryFields = new InventoryFields($this->db, $this->getValue('org_id'));
     }
 
     /** Create a comma separated list with all organization ids of children,
