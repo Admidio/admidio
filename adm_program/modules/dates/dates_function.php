@@ -309,19 +309,23 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
             $teilnehmer = 'n/a';
         }
 
-        $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum. ' ('. $zeit. ')', $calendar)
-                  .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
-                  .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', date($gPreferences['system_date'], time()));
-
         $notification = new Email();
 
         if($getMode == 1)
         {
-            $notification->adminNotfication($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+            $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum. ' ('. $zeit. ')', $calendar)
+                .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
+                .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date($gPreferences['system_date'], time()));
+            $notification->adminNotfication($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message,
+                $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
         }
         else
         {
-            $notification->adminNotfication($gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+            $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum. ' ('. $zeit. ')', $calendar)
+                .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
+                .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', date($gPreferences['system_date'], time()));
+            $notification->adminNotfication($gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'), $message,
+                $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
         }
     }
 
@@ -380,7 +384,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         $roleName = $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$date->getValue('dat_id');
 
         if($role->getValue('rol_max_members') != $date->getValue('dat_max_members')
-        || $role->getValue('role_name'        != $roleName))
+        || $role->getValue('role_name' != $roleName))
         {
             $role->setValue('rol_name', $roleName);
             $role->setValue('rol_max_members', $date->getValue('dat_max_members'));
@@ -418,7 +422,7 @@ elseif($getMode == 2)  // Termin loeschen
     // Termin loeschen, wenn dieser zur aktuellen Orga gehoert
     if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
     {
-         //member bzw. Teilnahme/Rolle löschen
+        // member bzw. Teilnahme/Rolle löschen
         $date->delete();
 
         // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest

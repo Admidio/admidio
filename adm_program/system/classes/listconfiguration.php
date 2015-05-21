@@ -292,11 +292,17 @@ class ListConfiguration extends TableLists
                     $type = '';
                 }
 
-                // Bedingungen aus dem Bedingungsfeld als SQL darstellen
                 $parser    = new ConditionParser;
-                $parser->setNotExistsStatement('SELECT 1 FROM '.TBL_USER_DATA.' '.$tableAlias.'s
-                                                 WHERE '.$tableAlias.'s.usd_usr_id = usr_id
-                                                   AND '.$tableAlias.'s.usd_usf_id = '.$listColumn->getValue('lsc_usf_id'));
+                
+                // if profile field then add not exists condition
+                if($listColumn->getValue('lsc_usf_id') > 0)
+                {
+                    $parser->setNotExistsStatement('SELECT 1 FROM '.TBL_USER_DATA.' '.$tableAlias.'s
+                                                     WHERE '.$tableAlias.'s.usd_usr_id = usr_id
+                                                       AND '.$tableAlias.'s.usd_usf_id = '.$listColumn->getValue('lsc_usf_id'));
+                }
+                
+                // now transform condition into SQL
                 $condition = $parser->makeSqlStatement($value, $dbColumnName, $type, $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name'));
                 $sqlWhere = $sqlWhere. $condition;
             }

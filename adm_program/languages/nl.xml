@@ -89,7 +89,6 @@
         <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="changed" translation="edited">Dit veld dient een e-mailadres te bevatten van een administrator daar het gebruikt zal worden als afzender van de systeem meldingen, vb. voor bevestiging van registratie. (Standaard: webmaster@%VAR1%)</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="changed" translation="edited">Meldingen van nieuwe inzendingen</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="changed" translation="edited">Hier kunnen systeem waarschuwingen worden ingeschakeld voor nieuwe vermeldingen in de modules. Het wordt gebruikt als een controlerende functie binnen Admidio. De beheerder heeft de mogelijkheid om te worden geïnformeerd over nieuwe vermeldingen in de modules via e-mail (alleen nieuwe items worden in aanmerking genomen). Een systeem waarschuwing zal worden verstuurd naar het e-mailadres %VAR1%. (Standaard: Nee)</text>
-        <text id="ORG_SYSTEM_MAIL_TEXTS" development="changed" translation="edited">Systeem waarschuwing teksten</text>
         <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="changed" translation="edited">Hier kunnen alle systeem berichten aangepast worden. De berichten zijn onderverdeeld in 2 stukken (onderwerp en inhoud) en worden geïndentificeerd bij #subject# en #content#. Deze worden gevolgd door de inhoud van deze velden.\n\nDe volgende wildcards kunnen worden gebruikt in elke e-mail. Zij zullen worden vervangen door de desbetreffende inhoud bij het uitvoeren</text>
         <text id="PRO_ASSIGN_REGISTRATION_SUCCESSFUL" development="new" translation="edited"> Registratie werd bevestig. De gebruiker kan nu aanloggen in het systeem.</text>
         <text id="PRO_FUTURE_ROLE_MEMBERSHIP" development="new" translation="edited">Toekomstige rol lidmaatschappen</text>
@@ -747,8 +746,6 @@
         <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="edited">Vul e-mail adres van beheerder in. Dit adres wordt gebruikt als afzender van systeemberichten en bevestiging van registratie. (standaard: webmaster@%VAR1%)</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="new" translation="edited">Notificatie voor nieuwe berichten</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="new" translation="edited">U kunt hier e-mail notificatie voor nieuwe module berichten activeren. De beheerder zal via e-mail geinformeerd worden. Het notificatie bericht zal gestuurd worden naar %VAR1%. (standaard: nee)</text>
-        <text id="ORG_SYSTEM_MAIL_TEXTS" development="new" translation="edited">Systeemberichten</text>
-        <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="new" translation="edited">Bepaal svp hier de inhoud van alle systeemberichten. Berichten hebben 2 delen (onderwerp &amp; inhoud) die geidentificeerd worden door titels #subject# en #content#. Inhoudelijke delen volgen na deze titels.\n\nElk bericht heeft ruimte voor de volgende variabelen</text>
         <text id="ORG_TIME_FORMAT" development="new" translation="edited">Formaat tijd</text>
         <text id="ORG_TIME_FORMAT_DESC" development="new" translation="edited">Formaat voldoet aan PHP functie %VAR1%. (standaard: H:i)</text>
         <text id="ORG_URL" development="new" translation="edited">URL</text>
@@ -803,7 +800,6 @@
         <text id="PHO_PHOTO_ROTATE_LEFT" development="new" translation="edited">Foto naar links draaien</text>
         <text id="PHO_PHOTO_ROTATE_RIGHT" development="new" translation="edited">Foto naar rechts draaien</text>
         <text id="PHO_PHOTO_SEND_ECARD" development="new" translation="edited">Stuur foto als Ecard</text>
-        <text id="PHO_PHOTO_UPLOAD_SUCCESS" development="new" translation="edited">Uploaden foto gelukt</text>
         <text id="PHO_PHOTO" development="new" translation="edited">Foto</text>
         <text id="PHO_PHOTOGRAPHER" development="new" translation="edited">Foto's van</text>
         <text id="PHO_PHOTOS" development="new" translation="edited">Foto's</text>

@@ -165,7 +165,7 @@ $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
     {
         $templates[$key] = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
     }
-    $form->addSelectBox('ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates, array('defaultValue' => $template, 'property' => FIELD_MANDATORY));
+    $form->addSelectBox('ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates, array('defaultValue' => $template, 'property' => FIELD_MANDATORY, 'showContextDependentFirstEntry' => false));
 $form->closeGroupBox();
 $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 

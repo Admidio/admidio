@@ -14,11 +14,11 @@ require_once('ecard_function.php');
 
 //$gMessage->showTextOnly(true);
 $gMessage->showThemeBody(false);
-$gMessage->setCloseButton();
+$gMessage->showInModaleWindow();
 
-if (!isset($_POST) || !array_key_exists('ecard_template', $_POST))
+if(strlen($_POST['ecard_template']) == 0)
 {
-    $gMessage->show($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ECA_TEMPLATE')));
 }
 
 // Initialize and check the parameters

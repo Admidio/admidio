@@ -28,6 +28,7 @@ class UploadHandlerPhoto extends UploadHandler
             if($imageDimensions > admFuncProcessableImageSize())
             {
                 $file->error = $gL10n->get('PHO_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('MEGA_PIXEL');
+                return $file;
             }
 
             // check mime type and set file extension
@@ -42,6 +43,7 @@ class UploadHandlerPhoto extends UploadHandler
             else
             {
                 $file->error = $gL10n->get('PHO_PHOTO_FORMAT_INVALID');
+                return $file;
             }
 
             // create image object and scale image to defined size of preferences

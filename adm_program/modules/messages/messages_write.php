@@ -34,6 +34,11 @@ $getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy', 'boolean', array(
 $getDeliveryConfirmation  = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'boolean');
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
 
+if ($getMsgId > 0)
+{
+    $message = new TableMessage($gDb, $getMsgId);
+    $getMsgType = $message->getValue('msg_type');
+}
 
 // check if the call of the page was allowed by settings
 if ($gPreferences['enable_mail_module'] != 1 && $getMsgType != 'PM')
@@ -64,13 +69,9 @@ if ($gValidLogin && $getMsgType != 'PM' && strlen($gCurrentUser->getValue('EMAIL
 // Update the read status of the message
 if ($getMsgId > 0)
 {
-    $message = new TableMessage($gDb, $getMsgId);
-
     // update the read-status
     $message->setReadValue($gCurrentUser->getValue('usr_id'));
 
-    $msg_converation_id = $message->getValue('msg_converation_id');
-    $getMsgType = $message->getValue('msg_type');
     $getSubject = $message->getValue('msg_subject');
     $getUserId = $message->getConversationPartner($gCurrentUser->getValue('usr_id'));
 
@@ -80,7 +81,6 @@ if ($getMsgId > 0)
                  ORDER BY msc_part_id DESC";
 
     $message_result = $gDb->query($sql);
-
 }
 
 $recept_number = 1;
@@ -109,7 +109,8 @@ if ($getMsgType == 'PM')
                    AND mem_usr_id = usr_id
                    AND usr_id <> ".$gCurrentUser->getValue('usr_id')."
                    AND usr_valid  = 1
-                   AND usr_login_name IS NOT NULL";
+                   AND usr_login_name IS NOT NULL
+                  ORDER BY LAST_NAME.usd_value, FIRST_NAME.usd_value";
 
     $drop_result = $gDb->query($sql);
 
@@ -371,7 +372,7 @@ elseif (!isset($message_result))
                      AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
                      AND usr_valid   = 1
                    GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
-                   ORDER BY former, first_name, last_name';
+                   ORDER BY former, last_name, first_name';
 
         $result = $gDb->query($sql);
 
@@ -534,6 +535,7 @@ if (isset($message_result))
             $ReceiverName = '<div class="panel-footer">'.$gL10n->get('MSG_OPPOSITE').': '.substr($ReceiverName, 2).'</div>';
         }
 
+        $date = new DateTimeExtended($row['msc_timestamp'], 'Y-m-d H:i:s');
         $page->addHtml('
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -541,7 +543,7 @@ if (isset($message_result))
                     <div class="col-sm-8">
                         <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
                     </div>
-                    <div class="col-sm-4 text-right">' . $row['msc_timestamp'] .
+                    <div class="col-sm-4 text-right">' . $date->format($gPreferences['system_date'].' '.$gPreferences['system_time']) .
                     '</div>
                 </div>
             </div>

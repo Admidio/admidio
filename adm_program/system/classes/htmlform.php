@@ -36,38 +36,42 @@ define('FIELD_READONLY', 3);
 
 class HtmlForm extends HtmlFormBasic
 {
-    protected $flagMandatoryFields;   ///< Flag if this form has mandatory fields. Then a notice must be written at the end of the form
-    protected $flagFieldListOpen;     ///< Flag if a field list was created. This must be closed later
-    protected $htmlPage;              ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
-    protected $countElements;         ///< Number of elements in this form
+    protected $flagRequiredFields;  ///< Flag if this form has required fields. Then a notice must be written at the end of the form
+    protected $flagFieldListOpen;   ///< Flag if a field list was created. This must be closed later
+    protected $showRequiredFields;  ///< Flag if required fields should get a special css class to make them more visible to the user.
+    protected $htmlPage;            ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
+    protected $countElements;       ///< Number of elements in this form
     protected $datepickerInitialized; ///< Flag if datepicker is already initialized
-    protected $type;                  ///< Form type. Possible values are @b default, @b vertical or @b navbar.
-    protected $id;                    ///< Id of the form
-    protected $buttonGroupOpen;       ///< Flag that indicates if a bootstrap button-group is open and should be closed later
+    protected $type;                ///< Form type. Possible values are @b default, @b vertical or @b navbar.
+    protected $id;                  ///< Id of the form
+    protected $buttonGroupOpen;     ///< Flag that indicates if a bootstrap button-group is open and should be closed later
 
-    /**
-     * Constructor creates the form element
-     * @param string      $id       Id of the form
-     * @param string|null $action   Optional action attribute of the form
-     * @param object|null $htmlPage Optional a HtmlPage object that will be used to add javascript code or files to the html output page.
-     * @param array       $options  An array with the following possible entries:
-     * @b type       Set the form type. Every type has some special features:
-     *                              default  : A form that can be used to edit and save data of a database table. The label
-     *                              and the element have a horizontal orientation.
-     *                              vertical : A form that can be used to edit and save data but has a vertical orientation.
-     *                              The label is positioned above the form element.
-     *                              navbar   : A form that should be used in a navbar. The form content will
-     *                              be send with the 'GET' method and this form should not get a default focus.
-     * @b enableFileUpload Set specific parameters that are necessary for file upload with a form
-     * @b setFocus   Default is set to @b true. Set the focus on page load to the first field
-     *                              of this form.
-     * @b class      Optional an additional css classname. The class @b form-horizontal
-     *                              is set as default and need not set with this parameter.
+    /** Constructor creates the form element
+     *  @param string      $id       Id of the form
+     *  @param string|null $action   Optional action attribute of the form
+     *  @param object|null $htmlPage Optional a HtmlPage object that will be used to add javascript code or files to the html output page.
+     *  @param array       $options  An array with the following possible entries:
+     *                    @b type       Set the form type. Every type has some special features:
+     *                       default  : A form that can be used to edit and save data of a database table. The label
+     *                                  and the element have a horizontal orientation.
+     *                       vertical : A form that can be used to edit and save data but has a vertical orientation.
+     *                                  The label is positioned above the form element.
+     *                       navbar   : A form that should be used in a navbar. The form content will
+     *                                  be send with the 'GET' method and this form should not get a default focus.
+     *                    @b enableFileUpload Set specific parameters that are necessary for file upload with a form
+     *                    @b showRequiredFields If this is set to @b true (default) then every required field got a special
+     *                                  css class and also the form got a @b div that explains the required layout.
+     *                                  If this is set to @b false then only the html flag @b required will be set.
+     *                    @b setFocus   Default is set to @b true. Set the focus on page load to the first field
+     *                                  of this form.
+     *                    @b class      Optional an additional css classname. The class @b form-horizontal
+     *                                  is set as default and need not set with this parameter.
      */
     public function __construct($id, $action, $htmlPage = null, $options = array())
     {
         // create array with all options
-        $optionsDefault = array('type' => 'default', 'enableFileUpload' => false, 'setFocus' => true, 'class' => null);
+        $optionsDefault = array('type' => 'default', 'enableFileUpload' => false, 'showRequiredFields' => true,
+                                'setFocus' => true, 'class' => null);
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // navbar forms should send the data as GET
@@ -80,8 +84,9 @@ class HtmlForm extends HtmlFormBasic
             parent::__construct($action, $id, 'post');
         }
 
-        $this->flagMandatoryFields   = false;
+        $this->flagRequiredFields    = false;
         $this->flagFieldListOpen     = false;
+        $this->showRequiredFields    = $optionsAll['showRequiredFields'];
         $this->countFields           = 0;
         $this->datepickerInitialized = false;
         $this->type                  = $optionsAll['type'];
@@ -970,7 +975,11 @@ class HtmlForm extends HtmlFormBasic
 
         $attributes = array('class' => 'form-control');
         $name       = $id;
-        $this->countElements++;
+
+        if(count($values) > 0)
+        {
+            $this->countElements++;
+        }
 
         // create array with all options
         $optionsDefault = array('property' => FIELD_DEFAULT, 'defaultValue' => '', 'showContextDependentFirstEntry' => true, 'firstEntry' => null,
@@ -1588,11 +1597,11 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // if necessary set css class for a mandatory element
-        if($property === FIELD_MANDATORY)
+        if($property === FIELD_MANDATORY && $this->showRequiredFields)
         {
-            $cssClassMandatory = ' admidio-control-mandatory';
+            $cssClassMandatory = ' admidio-form-group-required';
             $cssClassRow .= $cssClassMandatory;
-            $this->flagMandatoryFields = true;
+            $this->flagRequiredFields = true;
         }
 
         if($id !== '')
@@ -1721,10 +1730,10 @@ class HtmlForm extends HtmlFormBasic
             return null;
         }
 
-        // If mandatory fields were set than a notice which marker represents the mandatory will be shown.
-        if($this->flagMandatoryFields)
+        // If required fields were set than a notice which marker represents the required fields will be shown.
+        if($this->flagRequiredFields && $this->showRequiredFields)
         {
-            $html .= '<div class="admidio-control-mandatory-def"><span>'.$gL10n->get('SYS_MANDATORY_FIELDS').'</span></div>';
+            $html .= '<div class="admidio-form-required-notice"><span>'.$gL10n->get('SYS_REQUIRED_FIELDS').'</span></div>';
         }
 
         // now get whole form html code

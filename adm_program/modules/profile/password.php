@@ -37,7 +37,7 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 if(isMember($getUserId) == false
 || strlen($user->getValue('usr_login_name')) == 0
 || ($gCurrentUser->isWebmaster() == false && $gCurrentUser->getValue('usr_id') != $getUserId)
-|| ($gCurrentUser->isWebmaster() == true  && strlen($user->getValue('EMAIL')) > 0 && $gPreferences['enable_system_mails'] == 1))
+|| ($gCurrentUser->isWebmaster() == true  && strlen($user->getValue('EMAIL')) == 0 && $gPreferences['enable_system_mails'] == 1))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

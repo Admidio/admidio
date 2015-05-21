@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
     <version id="3.0.0" translator="Stefanie Schima">
+        <text id="PHO_PHOTO_UPLOAD_SUCCESSFUL" development="new" translation="todo">All photos were successfully uploaded.\n\nYou can close the dialog now.</text>
+        <text id="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL" development="new" translation="todo">Not all photos were successfully uploaded.</text>
+        <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="edited">A date was changed</text>
+        <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1" development="new" translation="edited">A date at %VAR1% was changed.\n\nTitle: %VAR2%\nDate: %VAR3%\nCalendar: %VAR4%\n</text>
+        <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2" development="new" translation="edited">Location: %VAR1%\nRoom: %VAR2%\nParticipants: %VAR3%\nChanged by: %VAR4%\n</text>
+        <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3" development="new" translation="edited">Changed at: %VAR1%</text>
         <text id="MAI_EMAIL_SEND_TO_RECEIVER" development="new" translation="todo">%VAR1% sent to the receivers: %VAR3% from %VAR2% the following E-Mail:</text>
         <text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Former members</text>
         <text id="MSG_ACTIVE_FORMER_SHORT" development="new" translation="todo">Active and former</text>
@@ -84,7 +90,7 @@
         <text id="PHO_MAX_PHOTO_SIZE_WIDTH" development="new" translation="edited">Maximum image size (width)</text>
         <text id="PHO_MAX_PHOTO_SIZE_HEIGHT" development="new" translation="edited">Maximum image size (height)</text>
         <text id="PHO_NUMBER_OF_ALBUMS_PER_PAGE" development="new" translation="edited">Number of albums per page</text>
-        <text id="PHO_PARENT_ALBUM_DESC" development="new" translation="edited">One album can be part of another album. Please select a parent album from the selection list. If you want to display the album on the highest leven then select %VAR1_BOLD%.</text>
+        <text id="PHO_PARENT_ALBUM_DESC" development="new" translation="edited">One album can be part of another album. Please select a parent album from the selection list. If you want to display the album on the highest level then select %VAR1_BOLD%.</text>
         <text id="PHO_PHOTO_UPLOAD_DESC" development="new" translation="edited">Please select the images which you want to upload to album %VAR1_BOLD%.</text>
         <text id="PHO_SAVE_ORIGINALS" development="new" translation="edited">Save originals</text>
         <text id="PHO_SAVE_ORIGINALS_DESC" development="new" translation="edited">Images can be archived or provided as download as long as there is enough space available.</text>
@@ -97,7 +103,7 @@
         <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="edited">Define a country for which this organization mainly operates. It will be preselected when new users are created or register. It eases the data input and can be changed by the user. (Default: Germany)</text>
         <text id="PRO_EXPORT_VCARD" development="new" translation="edited">Export vCard</text>
         <text id="PRO_MAINTAIN_ITEM_FIELDS" development="new" translation="edited">Maintain article fields</text>
-        <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="changed" translation="edited">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.</text>
+        <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="changed" translation="edited">You can create and edit profile fields which can be merged in categories.</text>
         <text id="ROL_RIGHT_INVENTORY" development="new" translation="edited">Article and inventory management</text>
         <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="edited">Role assignment for %VAR1% %VAR2%</text>
         <text id="SYS_APPLY" development="new" translation="edited">Apply</text>
@@ -110,9 +116,10 @@
         <text id="SYS_FILTER" development="new" translation="edited">Filter</text>
         <text id="SYS_FULL_SCREEN" development="new" translation="edited">Full screen</text>
         <text id="SYS_ITEMNAME" development="new" translation="edited">Item name</text>
-        <text id="SYS_MANDATORY_FIELDS" development="new" translation="edited">Mandatory fields</text>
+        <text id="SYS_REQUIRED_FIELDS" development="new" translation="edited">Required fields</text>
         <text id="SYS_MENU" development="new" translation="edited">Menu</text>
         <text id="SYS_MESSAGES" development="new" translation="edited">Messages</text>
+        <text id="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" development="new" translation="edited">This module can only be accessed from the organization that is deposited in the config.php. This is the organization % VAR1%.</text>
         <text id="SYS_NO_DATA_FOUND" development="new" translation="edited">No data found!</text>
         <text id="SYS_NORMAL_PICTURE" development="new" translation="edited">Normal image</text>
         <text id="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION" development="new" translation="edited">Online membership administration</text>
@@ -209,7 +216,6 @@
         <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="changed" translation="edited">This field should contain the email address of an administrator as it will be used as sender address of system notifications, e.g. for registration confirmation. (Default: webmaster @% VAR1%)</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="changed" translation="edited">Notification for new entries</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="changed" translation="edited">This function is used to enable the system notification for new entries within the modules. It is used as a monitoring function within Admidio. Thus the administrator can be notified by e-mail when new entries are added within a module (only new entries will be considered). The system notifications will be sent to the email address %VAR1%. (Default: no)</text>
-        <text id="ORG_SYSTEM_MAIL_TEXTS" development="changed" translation="edited">System notifications texts</text>
         <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="changed" translation="edited">Here you can amend the text of each system notification. The texts are divided into two parts (subject and content) and are identified by #subject# and #content#. The content for each section follows it.\n\nIn each mail the following wildcards can be used. They will be replaced with the corresponding content at runtime</text>
         <text id="PRO_ASSIGN_REGISTRATION_SUCCESSFUL" development="new" translation="edited"> Registration has been confirmed. The user can now log on to the system.</text>
         <text id="PRO_FUTURE_ROLE_MEMBERSHIP" development="new" translation="edited">Future role memberships</text>
@@ -243,7 +249,6 @@
         <text id="SYS_FROM" development="new" translation="edited">from %VAR1%</text>
         <text id="SYS_INFORMATIONS" development="new" translation="edited">information</text>
         <text id="SYS_MAIL_DISPATCH" development="new" translation="edited">Email dispatch</text>
-        <text id="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" development="new" translation="edited">This module can only be accessed from the homepage of the organization chosen at login (% VAR1%).</text>
         <text id="SYS_MODULE_PREFERENCES" development="new" translation="edited">Module settings</text>
         <text id="SYS_MORE_FEATURES" development="new" translation="edited">Additional functions</text>
         <text id="SYS_NEW_VALUE" development="new" translation="edited">New value</text>
@@ -491,7 +496,7 @@
         <text id="ECA_RECIPIENT_NAME" development="new" translation="edited">Name of recipient</text>
         <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">Your greeting card was send.</text>
         <text id="ECA_TEMPLATE" development="new" translation="edited">Template</text>
-        <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Define standard template. (default.: standard letter) </text>
+        <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Define standard template. (default: Postcard) </text>
         <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="edited">Show full size picture</text>
 
         <!-- Phrases only in Guestbookmodule -->
@@ -911,7 +916,6 @@
         <text id="PHO_PHOTO_ROTATE_LEFT" development="new" translation="edited">Rotate photo left</text>
         <text id="PHO_PHOTO_ROTATE_RIGHT" development="new" translation="edited">Rotate photo right</text>
         <text id="PHO_PHOTO_SEND_ECARD" development="new" translation="edited">Send photo as greeting card</text>
-        <text id="PHO_PHOTO_UPLOAD_SUCCESS" development="new" translation="edited">Photo upload successful</text>
         <text id="PHO_PHOTO" development="new" translation="edited">Photo</text>
         <text id="PHO_PHOTOGRAPHER" development="new" translation="edited">Photos of</text>
         <text id="PHO_PHOTOS" development="new" translation="edited">Photos</text>

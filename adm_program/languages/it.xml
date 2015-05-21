@@ -107,7 +107,7 @@
         <text id="SYS_FILTER" development="new" translation="edited">Filtro</text>
         <text id="SYS_FULL_SCREEN" development="new" translation="edited">Schermo intero</text>
         <text id="SYS_ITEMNAME" development="new" translation="edited">Nome dell'elemento</text>
-        <text id="SYS_MANDATORY_FIELDS" development="new" translation="edited">Campi obbligatori</text>
+        <text id="SYS_REQUIRED_FIELDS" development="new" translation="edited">Campi obbligatori</text>
         <text id="SYS_MENU" development="new" translation="edited">Menù</text>
         <text id="SYS_MESSAGES" development="new" translation="edited">Messaggi</text>
         <text id="SYS_NO_DATA_FOUND" development="new" translation="edited">Nessun dato trovato!</text>
@@ -206,7 +206,6 @@
         <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="changed" translation="edited">Questo campo contiene l'indirizzo email dell'amministratore e sarà usato come indirizzo del mittente nelle notifiche di sistema, Es. per la conferma della registrazione. (Default: webmaster @% VAR1%)</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="changed" translation="edited">Notifica per nuovi inserimenti</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="changed" translation="edited">Questa funzionalità è usata per abilitare le notifiche di sistema per nuovi inserimenti all'interno dei moduli. E' usata come funzionalità di monitoraggio all'interno di Admidio. Così l'amministratore riceverà notifica via e-mail quando nuovi inserimenti saranno aggiunti all'interno di un modulo (solo i nuovi inserimenti saranno considerati). Le notifiche di sistema saranno inviate all'indirizzo email %VAR1%. (Default: No)</text>
-        <text id="ORG_SYSTEM_MAIL_TEXTS" development="changed" translation="edited">Testi delle notifiche di sistema</text>
         <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="changed" translation="edited">Qui è possibile definire i testi di ogni notifica di sistema. I testi sono divisi in due parti (soggetto e contenuto) e sono identificati da #subject# e #content#. Il contenuto di ogni sezione segue la sezione stessa.\n\nIn in ogni mail possono essere usati i seguenti caratteri jolly. Essi saranno sostituiti con il corrispondente contenuto in fase di esecuzione</text>
         <text id="PRO_ASSIGN_REGISTRATION_SUCCESSFUL" development="new" translation="edited"> La registrazione è stata confermata. L'utente può ora accedere al sistema.</text>
         <text id="PRO_FUTURE_ROLE_MEMBERSHIP" development="new" translation="edited">Ruolo futuro nella membership</text>
@@ -488,7 +487,7 @@
         <text id="ECA_RECIPIENT_NAME" development="new" translation="edited">Nome del contenitore</text>
         <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">La tua cartolina è stata inviata.</text>
         <text id="ECA_TEMPLATE" development="new" translation="edited">Modello</text>
-        <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Definisci il modello standard. (predefinito: lettera standard) </text>
+        <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Definisci il modello standard. (predefinito: Postcard) </text>
         <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="edited">Mostra l'immagine a misura piena</text>
 
         <!-- Phrases only in Guestbookmodule -->
@@ -907,7 +906,6 @@
         <text id="PHO_PHOTO_ROTATE_LEFT" development="new" translation="edited">Ruota foto a sinistra</text>
         <text id="PHO_PHOTO_ROTATE_RIGHT" development="new" translation="edited">Ruota foto a destra</text>
         <text id="PHO_PHOTO_SEND_ECARD" development="new" translation="edited">Invia foto come cartolina</text>
-        <text id="PHO_PHOTO_UPLOAD_SUCCESS" development="new" translation="edited">Foto caricata con successo</text>
         <text id="PHO_PHOTO" development="new" translation="edited">Foto</text>
         <text id="PHO_PHOTOGRAPHER" development="new" translation="edited">Foto di</text>
         <text id="PHO_PHOTOS" development="new" translation="edited">Foto</text>

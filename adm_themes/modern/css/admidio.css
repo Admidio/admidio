@@ -500,14 +500,14 @@ input[type="time"] {
     color: #ffffff;
 }
 
-.admidio-control-mandatory label:after,
-.admidio-control-mandatory-def span:after {
+.admidio-form-group-required label:after,
+.admidio-form-required-notice span:after {
     content: url('../icons/bullet_red.png');
     white-space: nowrap;
     vertical-align: top;
 }
 
-.admidio-control-mandatory-def {
+.admidio-form-required-notice {
     font-size: 9pt;
     margin-top: 5px;
     margin-bottom: -10px;
@@ -533,6 +533,11 @@ input[type="time"] {
     background-color: #96c4cb;
     background: -webkit-linear-gradient(top, #ffffff 0%, #96c4cb 95%);
     background: linear-gradient(to bottom, #ffffff 0%, #96c4cb 95%);
+}
+
+.tab-pane > .panel-group > .panel-default > .panel-heading {
+    border-bottom-left-radius: 9px;
+    border-bottom-right-radius: 9px;
 }
 
 .panel-default.in > .panel-heading {

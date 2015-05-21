@@ -108,7 +108,7 @@ $starttime = getmicrotime();
             $fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION_TEXT.' (http://www.admidio.org)'.LINE_TERMINATOR;
             $fileheaderline .= '-- '.$gL10n->get('BAC_BACKUP_FROM', date('d.m.Y'), date('G:i:s')).LINE_TERMINATOR.LINE_TERMINATOR;
             $fileheaderline .= '-- '.$gL10n->get('SYS_DATABASE').': '.$g_adm_db.LINE_TERMINATOR.LINE_TERMINATOR;
-            $fileheaderline .= '-- '.$gL10n->get('SYS_USER').': '.$gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME').LINE_TERMINATOR.LINE_TERMINATOR;
+            $fileheaderline .= '-- '.$gL10n->get('SYS_USER').': '.$gCurrentUser->getValue('LAST_NAME'). ' '. $gCurrentUser->getValue('FIRST_NAME').LINE_TERMINATOR.LINE_TERMINATOR;
             $fileheaderline .= 'SET FOREIGN_KEY_CHECKS=0;'.LINE_TERMINATOR.LINE_TERMINATOR;
             if (OUTPUT_COMPRESSION_TYPE == 'bzip2') {
                 bzwrite($bp, $fileheaderline, strlen($fileheaderline));

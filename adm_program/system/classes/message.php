@@ -40,7 +40,7 @@ class Message
 
     private $showButtons;       // Buttons werden angezeigt
     private $showYesNoButtons;  // Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
-    private $showCloseButton;   // Anstelle von Weiter wird ein Schliessen-Buttons angezeigt
+    private $modalWindowMode;   ///< If this is set to true than the message will be show with html of the bootstrap modal window
 
     /** Constructor that initialize the class member parameters */
     public function __construct()
@@ -48,9 +48,9 @@ class Message
         $this->inline           = false;
         $this->showButtons      = true;
         $this->showYesNoButtons = false;
-        $this->showCloseButton  = false;
         $this->includeThemeBody = true;
         $this->showTextOnly     = false;
+        $this->modalWindowMode  = false;
     }
 
     /** No button will be shown in the message window. */
@@ -59,10 +59,13 @@ class Message
         $this->showButtons = false;
     }
 
-    /** Adds a Close button to the message page. This is only useful if the message is shown as a popup window. */
-    public function setCloseButton()
+    /**
+     * If this is set to true than the message will be show with html of the bootstrap modal window.
+     */
+    public function showInModaleWindow()
     {
-        $this->showCloseButton = true;
+        $this->modalWindowMode = true;
+        $this->inline = true;
     }
 
     /**
@@ -147,55 +150,75 @@ class Message
                 $page->addJavascript('window.setTimeout("window.location.href=\''. $this->forwardUrl. '\'", '. $this->timer. ');');
             }
         }
-        else
+        elseif(!$this->modalWindowMode)
         {
             header('Content-type: text/html; charset=utf-8');
             $html .= '<h1>'.$headline.'</h1>';
         }
 
-        $html .= '
-        <div class="message">
-            <p class="lead">'. $content.'</p>';
+        // create html for buttons
+        $htmlButtons = '';
 
-            if($this->showButtons)
+        if($this->showButtons)
+        {
+            if($this->forwardUrl !== '')
             {
-                if($this->forwardUrl !== '')
+                if($this->showYesNoButtons)
                 {
-                    if($this->showYesNoButtons)
-                    {
-                        $html .= '
-                            <button id="admButtonYes" class="btn" type="button" onclick="self.location.href=\''. $this->forwardUrl. '\'"><img src="'. THEME_PATH. '/icons/ok.png"
-                                alt="'.$gL10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
-                            <button id="admButtonNo" class="btn" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/error.png"
-                                alt="'.$gL10n->get('SYS_NO').'" />&nbsp;'.$gL10n->get('SYS_NO').'</button>';
-                    }
-                    else
-                    {
-                        // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
-                        $html .= '
-                            <a class="btn" href="'. $this->forwardUrl. '">'.$gL10n->get('SYS_NEXT').'<img
-                                src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'" title="'.$gL10n->get('SYS_NEXT').'" /></a>';
-                    }
+                    $htmlButtons .= '
+                        <button id="admButtonYes" class="btn" type="button" onclick="self.location.href=\''. $this->forwardUrl. '\'">
+                            <img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_YES').'" />
+                            &nbsp;&nbsp;'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;
+                        </button>
+                        <button id="admButtonNo" class="btn" type="button" onclick="history.back()">
+                            <img src="'. THEME_PATH. '/icons/error.png" alt="'.$gL10n->get('SYS_NO').'" />
+                            &nbsp;'.$gL10n->get('SYS_NO').'
+                        </button>';
                 }
                 else
                 {
-                    // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen
-                    // bzw. ggf. einen Fenster-Schließen-Button
-                    if($this->showCloseButton)
-                    {
-                        $html .= '
-                            <a class="btn" href="javascript:window.close()"><img src="'. THEME_PATH. '/icons/door_in.png"
-                                alt="'.$gL10n->get('SYS_CLOSE').'" title="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</a>';
-                    }
-                    else
-                    {
-                        $html .= '
-                            <a class="btn" href="javascript:history.back()"><img src="'. THEME_PATH. '/icons/back.png"
-                                 alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').'</a>';
-                    }
+                    // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
+                    $htmlButtons .= '
+                        <a class="btn" href="'. $this->forwardUrl. '">'.$gL10n->get('SYS_NEXT').'
+                            <img src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'"
+                                title="'.$gL10n->get('SYS_NEXT').'" />
+                        </a>';
                 }
             }
-        $html .= '</div>';
+            else
+            {
+                // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen
+                // bzw. ggf. einen Fenster-Schließen-Button
+                if(!$this->modalWindowMode)
+                {
+                    $htmlButtons .= '
+                        <a class="btn" href="javascript:history.back()">
+                            <img src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'"
+                            title="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').
+                        '</a>';
+                }
+            }
+        }
+
+
+        if($this->modalWindowMode)
+        {
+            $html .= '
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">'.$headline.'</h4>
+            </div>
+            <div class="modal-body">'.$content.'</div>
+            <div class="modal-footer">'.$htmlButtons.'</div>';
+        }
+        else
+        {
+            $html .= '
+            <div class="message">
+                <p class="lead">'. $content.'</p>
+                '.$htmlButtons.'
+            </div>';
+        }
 
         if($this->showTextOnly)
         {
