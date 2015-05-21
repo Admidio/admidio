@@ -139,6 +139,10 @@ case 1:
                 $checkboxes = array('enable_guestbook_captcha', 'enable_gbook_comments4all', 'enable_intial_comments_loading');
                 break;
 
+            case 'ecards':
+                $checkboxes = array('enable_ecard_module');
+                break;
+
             case 'lists':
                 $checkboxes = array('lists_hide_overview_details');
                 break;
@@ -320,8 +324,9 @@ case 3:
     // write all preferences from preferences.php in table adm_preferences
     require_once('../../installation/db_scripts/preferences.php');
 
-    // set the administrator email adress to the email of the current user
+    // set some specific preferences whose values came from user input of the installation wizard
     $orga_preferences['email_administrator'] = $_POST['orgaEmail'];
+    $orga_preferences['system_language']     = $gPreferences['system_language'];
 
     // create all necessary data for this organization
     $newOrganization->setPreferences($orga_preferences, false);

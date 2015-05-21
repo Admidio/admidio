@@ -37,6 +37,35 @@ $orga_preferences = array(
     'enable_registration_captcha'    => '1',
     'enable_registration_admin_mail' => '1',
 
+    // E-mail dispatch
+    'mail_send_method'              => 'phpmail',
+    'mail_bcc_count'                => '50',
+    'mail_sender_into_to'           => '0',
+    'mail_character_encoding'       => 'utf-8',
+    'mail_smtp_host'                => '',
+    'mail_smtp_auth'                => '1',
+    'mail_smtp_port'                => '25',
+    'mail_smtp_secure'              => '',
+    'mail_smtp_authentication_type' => 'LOGIN',
+    'mail_smtp_user'                => '',
+    'mail_smtp_password'            => '',
+
+    // System notifications
+    'enable_system_mails'       => '1',
+    'email_administrator'       => 'webmaster@'. $_SERVER['HTTP_HOST'],
+    'enable_email_notification' => '0',
+
+    // Captcha
+    'captcha_background_color'    => '#FFEFC4',
+    'captcha_font_size'           => '20',
+    'captcha_fonts'               => 'Theme',
+    'captcha_width'               => '250',
+    'captcha_height'              => '60',
+    'captcha_signs'               => '23456789ABCDEFGHJKLMNPQRSTUVWXYZ',
+    'captcha_signature'           => 'POWERED  BY   A D M I D I O . O R G',
+    'captcha_signature_font_size' => '13',
+    'captcha_type'                => 'pic',
+    
     // Announcements
     'enable_announcements_module' => '1',
     'announcements_per_page'      => '10',
@@ -59,7 +88,6 @@ $orga_preferences = array(
     'photo_thumbs_scale'     => '160',
     'photo_show_width'       => '640',
     'photo_show_height'      => '400',
-    'photo_image_text'       => '1',
     'photo_image_text'       => '© '.$_SERVER['HTTP_HOST'],
     'photo_keep_original'    => '0',
     'photo_download_enabled' => '0',
@@ -77,42 +105,26 @@ $orga_preferences = array(
     'lists_roles_per_page'        => '10',
     'lists_members_per_page'      => '25',
     'lists_hide_overview_details' => '0',
-
-    // Mail
-    'enable_mail_module'            => '1',
-    'enable_mail_captcha'           => '1',
-    'mail_max_receiver'             => '1',
-    'max_email_attachment_size'     => '1024',
-    'mail_bcc_count'                => '50',
-    'mail_character_encoding'       => 'utf-8',
-    'mail_html_registered_users'    => '1',
-    'mail_into_to'                  => '0',
-    'mail_sender_into_to'           => '0',
-    'mail_sendmail_address'         => '',
-    'mail_sendmail_name'            => '',
-    'mail_send_method'              => 'phpmail',
-    'mail_smtp_host'                => '',
-    'mail_smtp_auth'                => '1',
-    'mail_smtp_port'                => '25',
-    'mail_smtp_secure'              => '',
-    'mail_smtp_authentication_type' => 'LOGIN',
-    'mail_smtp_user'                => '',
-    'mail_smtp_password'            => '',
-    'mail_delivery_confirmation'    => '0',
-
-    // Systemmails
-    'enable_system_mails'       => '1',
-    'enable_pm_module'          => '1',
-    'enable_chat_module'        => '0',
-    'email_administrator'       => 'webmaster@'. $_SERVER['HTTP_HOST'],
-    'enable_email_notification' => '0',
+    
+    // Messages
+    'enable_mail_module'          => '1',
+    'enable_pm_module'            => '1',
+    'enable_chat_module'          => '0',
+    'enable_mail_captcha'         => '1',
+    'mail_max_receiver'           => '1',
+    'mail_into_to'                => '0',
+    'max_email_attachment_size'   => '1024',
+    'mail_sendmail_address'       => '',
+    'mail_sendmail_name'          => '',
+    'mail_html_registered_users'  => '1',
+    'mail_delivery_confirmation'  => '0',
 
     // E-Cards
-    'enable_ecard_module'           => '1',
-    'ecard_thumbs_scale'            => '250',
-    'ecard_card_picture_width'      => '400',
-    'ecard_card_picture_height'     => '250',
-    'ecard_template'                => 'postcard.tpl',
+    'enable_ecard_module'         => '1',
+    'ecard_thumbs_scale'          => '250',
+    'ecard_card_picture_width'    => '400',
+    'ecard_card_picture_height'   => '250',
+    'ecard_template'              => 'postcard.tpl',
 
     // Profile
     'default_country'           => 'DEU',
@@ -140,17 +152,6 @@ $orga_preferences = array(
     'weblinks_target'           => '_blank',
 
     // Inventory
-    'enable_inventory_module'   => '1',
-
-    // Captcha
-    'captcha_background_color'    => '#FFEFC4',
-    'captcha_font_size'           => '20',
-    'captcha_fonts'               => 'Theme',
-    'captcha_width'               => '250',
-    'captcha_height'              => '60',
-    'captcha_signs'               => '23456789ABCDEFGHJKLMNPQRSTUVWXYZ',
-    'captcha_signature'           => 'POWERED  BY   A D M I D I O . O R G',
-    'captcha_signature_font_size' => '13',
-    'captcha_type'                => 'pic'
+    'enable_inventory_module'   => '0'
  );
 ?>
