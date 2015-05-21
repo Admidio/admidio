@@ -35,7 +35,7 @@ include('../adm_program/system/string.php');
 // import of demo data must be enabled in config.php
 if(!isset($gImportDemoData) || $gImportDemoData != 1)
 {
-    die('<p style="color: #cc0000">Error: Demo data could not be imported because you have 
+    die('<p style="color: #cc0000">Error: Demo data could not be imported because you have
     not set the preference <strong>gImportDemoData</strong> in your configuration file.</p>
     <p style="color: #cc0000">Please add the following line to your config.php :<br /><i>$gImportDemoData = 1;</i></p>');
 }
@@ -191,7 +191,6 @@ foreach($sql_arr as $sql)
 
         foreach($results[0] as $key => $value)
         {
-<<<<<<< HEAD
             // if it's a string of a systemmail then html linefeeds must be replaced
             if(strpos($value, 'SYS_SYSMAIL') === false)
             {
@@ -202,10 +201,6 @@ foreach($sql_arr as $sql)
                 // convert <br /> to a normal line feed
                 $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));
             }
-=======
-            // convert <br /> to a normal line feed
-            $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));
->>>>>>> origin/master
 
             // search for the exact value as a separate word and replace it with the translation
             // in l10n the single quote is transformed in html entity, but we need the original sql escaped
