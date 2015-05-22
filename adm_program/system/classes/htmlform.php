@@ -30,7 +30,7 @@
 
 // constants for field property
 define('FIELD_DEFAULT', 0);
-define('FIELD_MANDATORY', 1);
+define('FIELD_REQUIRED', 1);
 define('FIELD_DISABLED', 2);
 define('FIELD_READONLY', 3);
 
@@ -271,7 +271,7 @@ class HtmlForm extends HtmlFormBasic
         $this->closeControlStructure();
 
         // now add a row with a text field where the user can write the solution for the puzzle
-        $this->addInput($id, $captchaLabel, null, array('property' => FIELD_MANDATORY, 'helpTextIdLabel' => $captchaDescription, 'class' => 'form-control-small'));
+        $this->addInput($id, $captchaLabel, null, array('property' => FIELD_REQUIRED, 'helpTextIdLabel' => $captchaDescription, 'class' => 'form-control-small'));
     }
 
     /** Add a new checkbox with a label to the form.
@@ -282,7 +282,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $options An array with the following possible entries:
      *                  @b property With this param you can set the following properties:
      *                       @b FIELD_DEFAULT The field can accept an input.
-     *                       @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                       @b FIELD_REQUIRED The field will be marked as a mandatory field where the user must insert a value.
      *                       @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *                  @b helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                       If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
@@ -314,7 +314,7 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['disabled'] = 'disabled';
         }
-        elseif($optionsAll['property'] == FIELD_MANDATORY)
+        elseif($optionsAll['property'] == FIELD_REQUIRED)
         {
             $attributes['required'] = 'required';
         }
@@ -411,7 +411,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $options An array with the following possible entries:
      *                  @b property   With this param you can set the following properties:
      *                     @b FIELD_DEFAULT The field can accept an input.
-     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_REQUIRED The field will be marked as a mandatory field where the user must insert a value.
      *                  @b toolbar    Optional set a predefined toolbar for the editor. Possible values are
      *                     @b AdmidioDefault, @b AdmidioGuestbook and @b AdmidioPlugin_WC
      *                  @b height     Optional set the height in pixel of the editor. The default will be 300px.
@@ -447,7 +447,7 @@ class HtmlForm extends HtmlFormBasic
             $this->type = 'vertical';
         }
 
-        if ($optionsAll['property'] == FIELD_MANDATORY)
+        if ($optionsAll['property'] == FIELD_REQUIRED)
         {
             $attributes['required'] = 'required';
         }
@@ -498,7 +498,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $options An array with the following possible entries:
      *                  @b property With this parameter you can set the following properties:
      *                        @b FIELD_DEFAULT The field can accept an input.
-     *                        @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                        @b FIELD_REQUIRED The field will be marked as a mandatory field where the user must insert a value.
      *                        @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *                  @b maxUploadSize The size in byte that could be maximum uploaded.
      *                        The default will be $gPreferences['max_file_upload_size'] * 1024.
@@ -536,7 +536,7 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['disabled'] = 'disabled';
         }
-        elseif($optionsAll['property'] == FIELD_MANDATORY)
+        elseif($optionsAll['property'] == FIELD_REQUIRED)
         {
             $attributes['required'] = 'required';
         }
@@ -614,7 +614,7 @@ class HtmlForm extends HtmlFormBasic
      *                               E.g. if steps is set to 5 then only values 5, 10, 15 ... are allowed
      *                  @b property   With this param you can set the following properties:
      *                     @b FIELD_DEFAULT The field can accept an input.
-     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_REQUIRED The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *                     @b FIELD_READONLY The field will be readable but not changeable.
      *                  @b helpTextIdLabel    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
@@ -668,7 +668,7 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['readonly'] = 'readonly';
         }
-        elseif($optionsAll['property'] == FIELD_MANDATORY)
+        elseif($optionsAll['property'] == FIELD_REQUIRED)
         {
             $attributes['required'] = 'required';
         }
@@ -770,7 +770,7 @@ class HtmlForm extends HtmlFormBasic
      *                     then show a counter how many characters still available
      *                  @b property   With this param you can set the following properties:
      *                     @b FIELD_DEFAULT The field can accept an input.
-     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_REQUIRED The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *                  @b helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                     If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
@@ -801,7 +801,7 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['disabled'] = 'disabled';
         }
-        elseif($optionsAll['property'] == FIELD_MANDATORY)
+        elseif($optionsAll['property'] == FIELD_REQUIRED)
         {
             $attributes['required'] = 'required';
         }
@@ -860,7 +860,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $options An array with the following possible entries:
      *                  @b property     With this param you can set the following properties:
      *                       @b FIELD_DEFAULT The field can accept an input.
-     *                       @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                       @b FIELD_REQUIRED The field will be marked as a mandatory field where the user must insert a value.
      *                       @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *                  @b defaultValue This is the value of that radio button that is preselected.
      *                  @b showNoValueButton If set to true than one radio with no value will be set in front of the other array.
@@ -888,7 +888,7 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['disabled'] = 'disabled';
         }
-        elseif($optionsAll['property'] == FIELD_MANDATORY)
+        elseif($optionsAll['property'] == FIELD_REQUIRED)
         {
             $attributes['required'] = 'required';
         }
@@ -942,12 +942,12 @@ class HtmlForm extends HtmlFormBasic
      *  @param $options An array with the following possible entries:
      *                  @b property   With this param you can set the following properties:
      *                     @b FIELD_DEFAULT The field can accept an input.
-     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_REQUIRED The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *                  @b defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
      *                     an array with all default values could be set.
      *                  @b showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
-     *                     If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
+     *                     If FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
      *                     an empty entry will be added so you must not select something.
      *                  @b firstEntry       Here you can define a string that should be shown as firstEntry and will be the
      *                     default value if no other value is set. This entry will only be added if @b showContextDependentFirstEntry
@@ -990,7 +990,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['disabled'] = 'disabled';
         }
         // multiselect couldn't handle the required property
-        elseif($optionsAll['property'] == FIELD_MANDATORY && $optionsAll['multiselect'] == false)
+        elseif($optionsAll['property'] == FIELD_REQUIRED && $optionsAll['multiselect'] == false)
         {
             $attributes['required'] = 'required';
         }
@@ -1034,7 +1034,7 @@ class HtmlForm extends HtmlFormBasic
             {
                 if($optionsAll['showContextDependentFirstEntry'] == true)
                 {
-                    if($optionsAll['property'] == FIELD_MANDATORY)
+                    if($optionsAll['property'] == FIELD_REQUIRED)
                     {
                         $this->addOption(null, '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -', null, $defaultEntry);
                     }
@@ -1152,12 +1152,12 @@ class HtmlForm extends HtmlFormBasic
      *  @param $options        An array with the following possible entries:
      *                         @b property         With this param you can set the following properties:
      *                            @b FIELD_DEFAULT The field can accept an input.
-     *                            @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                            @b FIELD_REQUIRED The field will be marked as a mandatory field where the user must insert a value.
      *                            @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *                         @b defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
      *                            an array with all default values could be set.
      *                         @b showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
-     *                            If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
+     *                            If FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
      *                            an emptry entry will be added so you must not select something.
      *                         @b firstEntry       Here you can define a string that should be shown as firstEntry and will be the
      *                            default value if no other value is set. This entry will only be added if @b showContextDependentFirstEntry
@@ -1215,12 +1215,12 @@ class HtmlForm extends HtmlFormBasic
      *  @param $options     An array with the following possible entries:
      *                      @b property    With this param you can set the following properties:
      *                         @b FIELD_DEFAULT The field can accept an input.
-     *                         @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                         @b FIELD_REQUIRED The field will be marked as a mandatory field where the user must insert a value.
      *                         @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *                      @b defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
      *                         an array with all default values could be set.
      *                      @b showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
-     *                         If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
+     *                         If FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
      *                         an emptry entry will be added so you must not select something.
      *                      @b firstEntry       Here you can define a string that should be shown as firstEntry and will be the
      *                         default value if no other value is set. This entry will only be added if @b showContextDependentFirstEntry
@@ -1272,7 +1272,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $options        An array with the following possible entries:
      *                         @b property   With this param you can set the following properties:
      *                            @b FIELD_DEFAULT The field can accept an input.
-     *                            @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                            @b FIELD_REQUIRED The field will be marked as a mandatory field where the user must insert a value.
      *                            @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *                         @b defaultValue       Id of category that should be selected per default.
      *                         @b helpTextIdLabel    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
@@ -1565,7 +1565,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $label     The label of the field. This string should already be translated.
      *  @param $property   With this param you can set the following properties:
      *                     @b FIELD_DEFAULT The field can accept an input.
-     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_REQUIRED The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
@@ -1591,7 +1591,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // if necessary set css class for a mandatory element
-        if($property == FIELD_MANDATORY && $this->showRequiredFields == true)
+        if($property == FIELD_REQUIRED && $this->showRequiredFields == true)
         {
             $cssClassMandatory = ' admidio-form-group-required';
             $cssClassRow .= $cssClassMandatory;
