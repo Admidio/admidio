@@ -13,19 +13,19 @@
  *****************************************************************************/
 
 // embed config file
-if(file_exists('../adm_my_files/config.php') == true)
+if(file_exists('../adm_my_files/config.php'))
 {
     // search in path of version 3.x
     require_once('../adm_my_files/config.php');
 }
-elseif(file_exists('../config.php') == true)
+elseif(file_exists('../config.php'))
 {
     // search in path of version 1.x and 2.x
     include('../config.php');
 }
 else
 {
-    die('<p style="color: #cc0000">Error: Config file not found!</p>');
+    die('<p style="color: #cc0000;">Error: Config file not found!</p>');
 }
 
 include('../adm_program/system/constants.php');
@@ -35,9 +35,9 @@ include('../adm_program/system/string.php');
 // import of demo data must be enabled in config.php
 if(!isset($gImportDemoData) || $gImportDemoData != 1)
 {
-    die('<p style="color: #cc0000">Error: Demo data could not be imported because you have
+    die('<p style="color: #cc0000;">Error: Demo data could not be imported because you have
     not set the preference <strong>gImportDemoData</strong> in your configuration file.</p>
-    <p style="color: #cc0000">Please add the following line to your config.php :<br /><i>$gImportDemoData = 1;</i></p>');
+    <p style="color: #cc0000;">Please add the following line to your config.php :<br /><i>$gImportDemoData = 1;</i></p>');
 }
 
 // default database type should be MySQL
@@ -102,6 +102,7 @@ function getBacktrace()
         $output .= '<b>CALL:</b> ' . htmlentities($trace['class'] . $trace['type'] . $trace['function']) . '(' . ((sizeof($args)) ? implode(', ', $args) : '') . ')<br />';
     }
     $output .= '</div>';
+
     return $output;
 }
 
@@ -129,9 +130,9 @@ $b_return = $myFilesFolder->delete($newFolder.'/backup');
 $b_return = $myFilesFolder->delete($newFolder.'/download');
 $b_return = $myFilesFolder->delete($newFolder.'/photos');
 $b_return = $myFilesFolder->copy($newFolder);
-if($b_return == false)
+if(!$b_return)
 {
-    echo '<p style="color: #cc0000">Folder <strong>adm_my_files</strong> is not writeable.<br />
+    echo '<p style="color: #cc0000;">Folder <strong>adm_my_files</strong> is not writable.<br />
     No files could be copied to that folder.</p>';
     exit();
 }
@@ -142,7 +143,7 @@ $db = Database::createDatabaseObject($gDbType);
 $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
 
-if($gDbType == 'mysql')
+if($gDbType === 'mysql')
 {
     // disable foreign key checks for mysql, so tables can easily deleted
     $sql = 'SET foreign_key_checks = 0 ';
@@ -152,7 +153,7 @@ if($gDbType == 'mysql')
 
 $filename = 'db.sql';
 $file     = fopen($filename, 'r')
-            or die('<p style="color: #cc0000">File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
+            or die('<p style="color: #cc0000;">File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);
@@ -161,7 +162,7 @@ echo 'Read file db.sql ...<br />';
 
 foreach($sql_arr as $sql)
 {
-    if(strlen(trim($sql)) > 0)
+    if(trim($sql) !== '')
     {
         // set prefix for all tables and execute sql statement
         $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
@@ -172,7 +173,7 @@ foreach($sql_arr as $sql)
 
 $filename = 'data.sql';
 $file     = fopen($filename, 'r')
-            or die('<p style="color: #cc0000">File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
+            or die('<p style="color: #cc0000;">File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);
@@ -216,12 +217,13 @@ echo 'Edit data of database ...<br />';
 include('data_edit.php');
 
 // in postgresql all sequences must get a new start value because our inserts have given ids
-if($gDbType == 'postgresql')
+if($gDbType === 'postgresql')
 {
     $sql = 'SELECT c.relname FROM pg_class c WHERE c.relkind = \'S\' ';
     $sqlResult = $db->query($sql);
 
-    while($row = $db->fetch_array($sqlResult))
+    $row = $db->fetch_array($sqlResult);
+    while($row)
     {
         $sql = 'SELECT setval(\''.$row['relname'].'\', 1000000)';
         $db->query($sql);
@@ -230,10 +232,10 @@ if($gDbType == 'postgresql')
 
 // set parameter lang to default language for this installation
 $sql = 'UPDATE '.$g_tbl_praefix.'_preferences SET prf_value = \''.$getLanguage.'\'
-         WHERE prf_name   = \'system_language\' ';
+         WHERE prf_name = \'system_language\' ';
 $db->query($sql);
 
-if($gDbType == 'mysql')
+if($gDbType === 'mysql')
 {
     // activate foreign key checks, so database is consistant
     $sql = 'SET foreign_key_checks = 1 ';
@@ -253,7 +255,7 @@ unset($_SESSION['gCurrentSession']);
 echo 'Installation successful !<br />';
 
 // read installed database version
-if($db->query('SELECT 1 FROM '.TBL_COMPONENTS, false) == false)
+if(!$db->query('SELECT 1 FROM '.TBL_COMPONENTS, false))
 {
     // in Admidio version 2 the database version was stored in preferences table
     $sql = 'SELECT prf_value FROM '.$g_tbl_praefix.'_preferences

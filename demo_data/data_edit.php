@@ -8,6 +8,10 @@
  *
  *****************************************************************************/
 
+/**
+ * @param int $days
+ * @return string
+ */
 function addDaysToDate($days)
 {
     $time = time() + (60*60*24*$days);
