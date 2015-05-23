@@ -1365,7 +1365,16 @@ class HtmlForm extends HtmlFormBasic
             {
                 $optionsAll['defaultValue'] = $row['cat_id'];
             }
-            $categoriesArray['cat_id'] = $row['cat_name'];
+
+			// if text is a translation-id then translate it
+			if(strpos($row['cat_name'], '_') == 3)
+			{
+				$categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
+			}
+            else
+            {
+                $categoriesArray[$row['cat_id']] = $row['cat_name'];
+            }
         }
         // if several categories exist than select default category
         elseif($countCategories > 1)
@@ -1377,7 +1386,15 @@ class HtmlForm extends HtmlFormBasic
 
             while($row = $databaseObject->fetch_array($result))
             {
-                $categoriesArray[$row['cat_id']] = $row['cat_name'];
+    			// if text is a translation-id then translate it
+    			if(strpos($row['cat_name'], '_') == 3)
+    			{
+    				$categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
+    			}
+                else
+                {
+                    $categoriesArray[$row['cat_id']] = $row['cat_name'];
+                }
 
                 if($row['cat_default'] == 1 && $optionsAll['defaultValue'] == null)
                 {
