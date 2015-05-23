@@ -106,7 +106,7 @@ if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
 }
 else
 {
-    $headline = $gL10n->get('PRO_PROFILE_FROM', $user->getValue('LAST_NAME'), $user->getValue('FIRST_NAME'));
+    $headline = $gL10n->get('PRO_PROFILE_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
 }
 
 // if user id was not set and own profile should be shown then initialize navigation
@@ -289,19 +289,21 @@ $page->addHtml('
             && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('GENDER', 'usf_hidden') == 0))
             {
                 // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
-                $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('LAST_NAME'). ' '. $user->getValue('FIRST_NAME').' '.$user->getValue('GENDER', 'html'));
+                $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME').' '.$user->getValue('GENDER', 'html'));
             }
             else
             {
-                $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('LAST_NAME'). ' '. $user->getValue('FIRST_NAME'));
+                $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
             }
 
             // add loginname
             if(strlen($user->getValue('usr_login_name')) > 0)
             {
-                if ($user->getValue('usr_id') != $gCurrentUser->getValue('usr_id'))
+                if ($user->getValue('usr_id') != $gCurrentUser->getValue('usr_id') && $gPreferences['enable_pm_module'] == 1)
                 {
-                    $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), '<a href='.$g_root_path.'/adm_program/modules/messages/messages_write.php?msg_type=PM&usr_id='.$user->getValue('usr_id').'>'.$user->getValue('usr_login_name').'</a>');
+                    $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'),
+                        '<img src="'.THEME_PATH.'/icons/pm.png" alt="'.$gL10n->get('PMS_SEND_PM').'" /> 
+                        <a href='.$g_root_path.'/adm_program/modules/messages/messages_write.php?msg_type=PM&usr_id='.$user->getValue('usr_id').'>'.$user->getValue('usr_login_name').'</a>');
                 }
                 else
                 {
