@@ -146,7 +146,6 @@ elseif($getMode == 'delete')
     exit();
 }
 
-
 /*****************************Foto hochladen*************************************/
 if($getMode == 'choose')
 {

@@ -292,8 +292,8 @@ class ListConfiguration extends TableLists
                     $type = '';
                 }
 
-                $parser    = new ConditionParser;
-                
+                $parser = new ConditionParser();
+
                 // if profile field then add not exists condition
                 if($listColumn->getValue('lsc_usf_id') > 0)
                 {
@@ -301,7 +301,7 @@ class ListConfiguration extends TableLists
                                                      WHERE '.$tableAlias.'s.usd_usr_id = usr_id
                                                        AND '.$tableAlias.'s.usd_usf_id = '.$listColumn->getValue('lsc_usf_id'));
                 }
-                
+
                 // now transform condition into SQL
                 $condition = $parser->makeSqlStatement($value, $dbColumnName, $type, $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name'));
                 $sqlWhere = $sqlWhere. $condition;

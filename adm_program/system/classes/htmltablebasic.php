@@ -133,15 +133,15 @@ class HtmlTableBasic extends HtmlElement {
      */
     public function __construct($id = '', $class = '', $border = 0)
     {
-        $this->border       = (is_numeric($border))? $border : 0;
+        $this->border      = (is_numeric($border)) ? $border : 0;
         $this->lineChange  = '';
-        $this->columsWidth  = array();
-        $this->changeclass  = '';
-        $this->thead        = -1;
-        $this->tfoot        = -1;
-        $this->tbody        = -1;
-        $this->columnCount  = 0;
-        $this->rowCount     = 0;
+        $this->columsWidth = array();
+        $this->changeclass = '';
+        $this->thead       = -1;
+        $this->tfoot       = -1;
+        $this->tbody       = -1;
+        $this->columnCount = 0;
+        $this->rowCount    = 0;
 
         parent::__construct('table', '', '', true);
 
@@ -377,7 +377,7 @@ class HtmlTableBasic extends HtmlElement {
         }
 
         $this->addParentElement('tbody');
-        $this->tbody = 1 ;
+        $this->tbody = 1;
         if($attribute != '' && $value != '')
         {
             $this->addAttribute($attribute, $value);
@@ -409,7 +409,7 @@ class HtmlTableBasic extends HtmlElement {
         {
             $this->closeParentElement('thead');
             $this->addParentElement('tfoot');
-            $this->tfoot = 1 ;
+            $this->tfoot = 1;
 
             if($attribute != '' && $value != '')
             {
@@ -440,7 +440,7 @@ class HtmlTableBasic extends HtmlElement {
         if($this->thead != 1)
         {
             $this->addParentElement('thead');
-            $this->thead = 1 ;
+            $this->thead = 1;
 
             if($attribute != '' && $value != '')
             {
