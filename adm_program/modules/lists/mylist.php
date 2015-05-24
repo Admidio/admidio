@@ -708,7 +708,7 @@ $page->addHtml('
         
     <p><b>3.</b> '.$gL10n->get('LST_CHOOSE_ROLE').'</p>
     
-    <div class="form-group">
+    <div class="form-group admidio-form-group-required">
         <label class="col-sm-3 control-label" for="rol_id">'.$gL10n->get('SYS_ROLE').'</label>
         <div class="col-sm-9">');
             // Combobox mit allen Rollen ausgeben, ggf. nur die inaktiven Rollen anzeigen
@@ -720,7 +720,7 @@ $page->addHtml('
             $page->addHtml(FormElements::generateRoleSelectBox($getRoleId, 'rol_id', $role_select_box_mode));
         $page->addHtml('</div>
     </div>
-    <div class="form-group">
+    <div class="form-group admidio-form-group-required">
         <label class="col-sm-3 control-label" for="show_members">'.$gL10n->get('LST_MEMBER_STATUS').'</label>
         <div class="col-sm-9">');
             // Auswahlbox, ob aktive oder ehemalige Mitglieder angezeigt werden sollen
