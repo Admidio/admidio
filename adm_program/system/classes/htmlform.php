@@ -735,7 +735,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class']    .= ' datetime-date-control';
             $this->addSimpleInput('text', $id, $id, $dateValue, $attributes);
             $attributes['class']    .= ' datetime-time-control';
-            $attributes['maxlength'] = '5';
+            $attributes['maxlength'] = '8';
             $attributes['data-provide'] = '';
             $this->addSimpleInput('text', $id.'_time', $id.'_time', $timeValue, $attributes);
         }
