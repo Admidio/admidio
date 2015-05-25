@@ -303,7 +303,7 @@ elseif($getMode == 4 || $getMode == 8)
     $_SESSION['guestbook_comment_request'] = $_POST;
 
     // if login then fill name with login user
-    if($gCurrentUser->getValue('usr_id') > 0)
+    if($getMode == 4 && $gCurrentUser->getValue('usr_id') > 0)
     {
         $_POST['gbc_name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
     }
