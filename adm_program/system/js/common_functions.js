@@ -38,16 +38,23 @@ var entryDeleted;
  *  the element will be hidden otherwise the data will be shown in an error block.
  *  @param elementId This is the id of a html element that should be hidden.
  *  @param url       This is the url that will be called.
+ *  @param callbackFunction A name of a function that should be called if the return was positive.
  */
-function callUrlHideElement(elementId, url) {
+function callUrlHideElement(elementId, url, callbackFunction = "") {
     entryDeleted = document.getElementById(elementId);
+    var fn = window[callbackFunction];
 
     // send RequestObjekt and delete entry
     $.get(url, function(data) {
         if(data == "done") {
             $("#admidio_modal").modal("hide");
-            $(entryDeleted).fadeOut("slow");
-            '.$callbackSuccess.'
+            
+            if(typeof fn === "function") {
+                $(entryDeleted).fadeOut("slow", fn());
+            }
+            else {
+                $(entryDeleted).fadeOut("slow");                
+            }
         }
         else {
             // entry could not be deleted, than show content of data or an common error message

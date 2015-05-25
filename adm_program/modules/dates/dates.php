@@ -744,7 +744,7 @@ else
                 $memberCount = 1;
                 $totalMemberCount = count($memberElements[$row['dat_rol_id']]);
     
-                foreach(($memberElements[$row['dat_rol_id']]) as $memberDate)
+                foreach($memberElements[$row['dat_rol_id']] as $memberDate)
                 {
                     // If last entry close table row
                     if($memberCount < $totalMemberCount)

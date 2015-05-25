@@ -149,6 +149,38 @@ $page->addJavascript('
         else {
             $(id).hide("fast");
         }
+    }
+    
+    function callbackProfilePhoto() {
+        var img_src = $("#profile_photo").attr("src");
+        var timestamp = new Date().getTime();
+        $("#btn_delete_photo").hide();
+        $("#profile_photo").attr("src",img_src+"&"+timestamp);
+    }
+    
+    function callbackRoles() {
+        if(profileJS) {
+            profileJS.formerRoleCount++;
+            profileJS.reloadFormerRoleMemberships();
+        };
+    }
+
+    function callbackFormerRoles() {
+        if(profileJS) {
+            profileJS.formerRoleCount--;
+            if(profileJS.formerRoleCount == 0) {
+                $("#profile_former_roles_box").fadeOut("slow");
+            }
+        };
+    }
+
+    function callbackFutureRoles() {
+        if(profileJS) {
+            profileJS.futureRoleCount--;
+            if(profileJS.futureRoleCount == 0) {
+                $("#profile_future_roles_box").fadeOut("slow");
+            }
+        };
     }');
 $page->addJavascript('
     $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
@@ -444,7 +476,7 @@ $page->addHtml('
                 if((strlen($user->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
                     || file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$user->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
                 {
-                    $page->addHtml('<a class="btn" data-toggle="modal" data-target="#admidio_modal"
+                    $page->addHtml('<a id="btn_delete_photo" class="btn" data-toggle="modal" data-target="#admidio_modal"
                                     href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
                                     '&amp;database_id='.$user->getValue('usr_id').'"><img src="'. THEME_PATH. '/icons/delete.png"
                                     alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</a>');
