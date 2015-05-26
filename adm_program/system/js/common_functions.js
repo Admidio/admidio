@@ -40,7 +40,8 @@ var entryDeleted;
  *  @param url       This is the url that will be called.
  *  @param callbackFunction A name of a function that should be called if the return was positive.
  */
-function callUrlHideElement(elementId, url, callbackFunction = "") {
+function callUrlHideElement(elementId, url, callbackFunction) {
+	callbackFunction = typeof callbackFunction !== 'undefined' ?  callbackFunction : "";
     entryDeleted = document.getElementById(elementId);
     var fn = window[callbackFunction];
 
