@@ -173,6 +173,7 @@ $page->addJavascript('
 
         if(dateFrom.getTime() > dateTo.getTime()) {
             $("#date_to").val($("#date_from").val());
+            $("#date_to").datepicker("update");
         }
     }
 
