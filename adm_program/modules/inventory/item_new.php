@@ -256,7 +256,6 @@ foreach($gInventoryFields->mInventoryFields as $field)
             elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'URL')
             {
                 // maximal browser compatible url length will be 2000 characters
-                $fieldType = 'url';
                 $maxlength = '2000';
             }
             elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'NUMBER')

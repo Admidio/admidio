@@ -341,7 +341,6 @@ foreach($gProfileFields->mProfileFields as $field)
             elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'URL')
             {
                 // maximal browser compatible url length will be 2000 characters
-                $fieldType = 'url';
                 $maxlength = '2000';
             }
             elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'NUMBER')

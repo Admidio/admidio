@@ -133,7 +133,7 @@ else
     $form->addInput('gbo_name', $gL10n->get('SYS_NAME'), $guestbook->getValue('gbo_name'), array('maxLength' => 60, 'property' => FIELD_REQUIRED));
 }
 $form->addInput('gbo_email', $gL10n->get('SYS_EMAIL'), $guestbook->getValue('gbo_email'), array('type' => 'email', 'maxLength' => 50));
-$form->addInput('gbo_homepage', $gL10n->get('SYS_WEBSITE'), $guestbook->getValue('gbo_homepage'), array('type' => 'url', 'maxLength' => 50));
+$form->addInput('gbo_homepage', $gL10n->get('SYS_WEBSITE'), $guestbook->getValue('gbo_homepage'), array('maxLength' => 50));
 $form->addEditor('gbo_text', $gL10n->get('SYS_MESSAGE'), $guestbook->getValue('gbo_text'), array('property' => FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook'));
 
 // if captchas are enabled then visitors of the website must resolve this
