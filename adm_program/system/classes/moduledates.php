@@ -341,12 +341,14 @@ class ModuleDates extends Modules
 
         if(strlen($dateRangeStart) == 0)
         {
+            $yearEnd = date('Y') + 10;
+            
             //set date_from and date_to regarding to current mode
             switch($this->mode)
             {
                 case 'actual':
                     $dateRangeStart  = DATE_NOW;
-                    $dateRangeEnd    = '9999-12-31';
+                    $dateRangeEnd    = $yearEnd.'-12-31';
                     break;
                 case 'old':
                     $dateRangeStart  = '1970-01-01';
@@ -355,57 +357,48 @@ class ModuleDates extends Modules
                     break;
                 case 'all':
                     $dateRangeStart  = '1970-01-01';
-                    $dateRangeEnd    = '9999-12-31';
+                    $dateRangeEnd    = $yearEnd.'-12-31';
                     break;
             }
         }
             
         // Create date object and format date_from in English format and sytem format and push to daterange array
-        $objDate = new DateTimeExtended($dateRangeStart, 'Y-m-d', 'date');
-        if($objDate->valid())
-        {
-            $this->setParameter('dateStartFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
-            $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
-        }                                             
-        else
+        $objDate = DateTime::createFromFormat ('Y-m-d', $dateRangeStart);
+        
+        if($objDate === false)
         {
             // check if date_from  has system format
-            $objDate = new DateTimeExtended($dateRangeStart, $gPreferences['system_date'], 'date');
+            $objDate = DateTime::createFromFormat ($gPreferences['system_date'], $dateRangeStart);
+        }                                             
 
-            if($objDate->valid())
-            {
-                $this->setParameter('dateStartFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
-                $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
-            }
-            else
-            {
-                return false;
-            }
+        if(is_object($objDate))
+        {
+            $this->setParameter('dateStartFormatEnglish', $objDate->format('Y-m-d'));
+            $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
+        }
+        else
+        {
+            return false;
         }
 
         // Create date object and format date_to in English format and sytem format and push to daterange array
-        $objDate = new DateTimeExtended($dateRangeEnd, 'Y-m-d', 'date');
-        if($objDate->valid())
+        $objDate = DateTime::createFromFormat ('Y-m-d', $dateRangeEnd);
+        
+        if($objDate === false)
         {
-            $this->setParameter('dateEndFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
+            // check if date_from  has system format
+            $objDate = DateTime::createFromFormat ($gPreferences['system_date'], $dateRangeEnd);
+        }
+
+        if(is_object($objDate))
+        {
+            $this->setParameter('dateEndFormatEnglish', $objDate->format('Y-m-d'));
             $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));
         }
         else
         {
-            // check if date_from  has system format
-            $objDate = new DateTimeExtended($dateRangeEnd, $gPreferences['system_date'], 'date');
-
-            if($objDate->valid())
-            {
-                $this->setParameter('dateEndFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
-                $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
-        
     }
     
     /** Check date value to reference and set html output.
