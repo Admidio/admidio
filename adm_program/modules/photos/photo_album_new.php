@@ -76,39 +76,30 @@ function subfolder($parent_id, $vorschub, $photoAlbum, $pho_id)
     global $gDb, $gCurrentOrganization, $photoAlbumsArray;
     
     $vorschub = $vorschub.'&nbsp;&nbsp;&nbsp;';
-    $pho_id_condition = '';
+    $sqlConditionParentId = '';
     $parentPhotoAlbum = new TablePhotos($gDb);
 
     //Erfassen des auszugebenden Albums
     if($parent_id > 0)
     {
-        $pho_id_condition .= ' AND pho_pho_id_parent = \''.$parent_id.'\' ';
+        $sqlConditionParentId .= ' AND pho_pho_id_parent = \''.$parent_id.'\' ';
     }
     else
     {
-        $pho_id_condition .= ' AND pho_pho_id_parent IS NULL ';
+        $sqlConditionParentId .= ' AND pho_pho_id_parent IS NULL ';
     }
 
     $sql = 'SELECT *
               FROM '. TBL_PHOTOS. '
              WHERE pho_id <> '. $photoAlbum->getValue('pho_id').
-                   $pho_id_condition
-                   .' AND pho_org_shortname LIKE \''.$gCurrentOrganization->getValue('org_shortname').'\'';
+                   $sqlConditionParentId.'
+               AND pho_org_shortname LIKE \''.$gCurrentOrganization->getValue('org_shortname').'\'';
     $result_child = $gDb->query($sql);
 
     while($adm_photo_child = $gDb->fetch_array($result_child))
     {
-        $selected = '';
-        
         $parentPhotoAlbum->clear();
         $parentPhotoAlbum->setArray($adm_photo_child);
-        
-        //Wenn die Elternveranstaltung von pho_id dann selected
-        if(($parentPhotoAlbum->getValue('pho_id') == $photoAlbum->getValue('pho_pho_id_parent'))
-        ||  $parentPhotoAlbum->getValue('pho_id') == $pho_id)
-        {
-            $selected = 'selected="selected"';
-        }
         
         // add entry to array of all photo albums
         $photoAlbumsArray[$parentPhotoAlbum->getValue('pho_id')] = 
@@ -125,12 +116,21 @@ $page = new HtmlPage($headline);
 $photoAlbumMenu = $page->getMenu();
 $photoAlbumMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
+if($getMode == 'new')
+{
+    $parentAlbumId = $getPhotoId;
+}
+else
+{
+    $parentAlbumId = $photoAlbum->getValue('pho_pho_id_parent');
+}
+
 // show form
 $form = new HtmlForm('photo_album_edit_form', $g_root_path.'/adm_program/modules/photos/photo_album_function.php?pho_id='.$getPhotoId.'&amp;mode='.$getMode, $page);
 $form->addInput('pho_name', $gL10n->get('PHO_ALBUM'), $photoAlbum->getValue('pho_name'), array('property' => FIELD_REQUIRED, 'maxLength' => 50));
-subfolder($photoAlbum->getValue('pho_pho_id_parent'), '', $photoAlbum, $getPhotoId);
+subfolder(null, '', $photoAlbum, $getPhotoId);
 $form->addSelectBox('pho_pho_id_parent', $gL10n->get('PHO_PARENT_ALBUM'), $photoAlbumsArray, array('property' => FIELD_REQUIRED, 
-                    'defaultValue' => $photoAlbum->getValue('pho_pho_id_parent'), 'showContextDependentFirstEntry' => false, 
+                    'defaultValue' => $parentAlbumId, 'showContextDependentFirstEntry' => false, 
                     'helpTextIdLabel' => array('PHO_PARENT_ALBUM_DESC', $gL10n->get('PHO_PHOTO_ALBUMS'))));
 $form->addInput('pho_begin', $gL10n->get('SYS_START'), $photoAlbum->getValue('pho_begin'), array('property' => FIELD_REQUIRED, 'type' => 'date', 'maxLength' => 10));
 $form->addInput('pho_end', $gL10n->get('SYS_END'), $photoAlbum->getValue('pho_end'), array('type' => 'date', 'maxLength' => 10));
