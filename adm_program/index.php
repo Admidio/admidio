@@ -25,35 +25,36 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage($headline);
 
-// menu of the page
-$moduleMenu = $page->getMenu();
+// main menu of the page
+$mainMenu = $page->getMenu();
 
 if($gValidLogin)
 {
     // show link to own profile
-    $moduleMenu->addItem('adm_menu_item_my_profile', $g_root_path.'/adm_program/modules/profile/profile.php',
-                         $gL10n->get('PRO_MY_PROFILE'), 'profile.png');
+    $mainMenu->addItem('adm_menu_item_my_profile', $g_root_path.'/adm_program/modules/profile/profile.php',
+                       $gL10n->get('PRO_MY_PROFILE'), 'profile.png');
     // show logout link
-    $moduleMenu->addItem('adm_menu_item_logout', $g_root_path.'/adm_program/system/logout.php',
-                         $gL10n->get('SYS_LOGOUT'), 'door_in.png');
+    $mainMenu->addItem('adm_menu_item_logout', $g_root_path.'/adm_program/system/logout.php',
+                       $gL10n->get('SYS_LOGOUT'), 'door_in.png');
 }
 else
 {
     // show login link
-    $moduleMenu->addItem('adm_menu_item_login', $g_root_path.'/adm_program/system/login.php',
-                         $gL10n->get('SYS_LOGIN'), 'key.png');
+    $mainMenu->addItem('adm_menu_item_login', $g_root_path.'/adm_program/system/login.php',
+                       $gL10n->get('SYS_LOGIN'), 'key.png');
 
     if($gPreferences['registration_mode'] > 0)
     {
         // show registration link
-        $moduleMenu->addItem('adm_menu_item_registration',
-                             $g_root_path.'/adm_program/modules/registration/registration.php',
-                             $gL10n->get('SYS_REGISTRATION'), 'new_registrations.png');
+        $mainMenu->addItem('adm_menu_item_registration',
+                           $g_root_path.'/adm_program/modules/registration/registration.php',
+                           $gL10n->get('SYS_REGISTRATION'), 'new_registrations.png');
     }
 }
 
 // menu with links to all modules of Admidio
 $moduleMenu = new Menu('index_modules', $gL10n->get('SYS_MODULES'));
+
 if($gPreferences['enable_announcements_module'] == 1
 || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
 {
@@ -133,13 +134,14 @@ if($gPreferences['enable_weblinks_module'] == 1
                          $gL10n->get('LNK_WEBLINKS_DESC'));
 }
 
-$page->addHtml($moduleMenu->show('complex', false));
+$page->addHtml($moduleMenu->show(true));
 
 // menu with links to all administration pages of Admidio if the user has the right to administrate
 if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles()
 || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
 {
     $adminMenu = new Menu('index_administration', $gL10n->get('SYS_ADMINISTRATION'));
+
     if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
     {
         $adminMenu->addItem('newreg', '/adm_program/modules/registration/registration.php',
@@ -170,7 +172,8 @@ if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles()
                             $gL10n->get('SYS_SETTINGS'), '/icons/options_big.png',
                             $gL10n->get('ORG_ORGANIZATION_PROPERTIES_DESC'));
     }
-    $page->addHtml($adminMenu->show('complex', false));
+
+    $page->addHtml($adminMenu->show(true));
 }
 
 $page->show();

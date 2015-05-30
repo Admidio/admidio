@@ -19,17 +19,30 @@
 
 class Menu
 {
-    // constructor
+    /**
+     * constructor
+     * @param string $id
+     * @param string $title
+     */
     public function __construct($id, $title)
     {
         global $g_root_path;
+
         $this->id        = $id;
         $this->title     = $title;
         $this->items     = array();
         $this->root_path = $g_root_path;
     }
 
-    private function mkItem($id, $link, $text, $icon, $desc='')
+    /**
+     * @param string $id
+     * @param string $link
+     * @param string $text
+     * @param string $icon
+     * @param string string $desc
+     * @return array
+     */
+    private function mkItem($id, $link, $text, $icon, $desc = '')
     {
         // add root path to link unless the full URL is given
         if (preg_match('/^http(s?):\/\//', $link) === 0)
@@ -41,14 +54,28 @@ class Menu
         {
             $icon = THEME_PATH . $icon;
         }
+
         return array('id'=>$id, 'link'=>$link, 'text'=>$text, 'icon'=>$icon, 'desc'=>$desc, 'subitems'=>array());
     }
 
-    public function addItem($id, $link, $text, $icon, $desc='')
+    /**
+     * @param string $id
+     * @param string $link
+     * @param string $text
+     * @param string $icon
+     * @param string $desc
+     */
+    public function addItem($id, $link, $text, $icon, $desc = '')
     {
         $this->items[$id] = $this->mkItem($id, $link, $text, $icon, $desc);
     }
 
+    /**
+     * @param string $parentId
+     * @param string $id
+     * @param string $link
+     * @param string $text
+     */
     public function addSubItem($parentId, $id, $link, $text)
     {
         // add root path to link unless the full URL is given
@@ -56,26 +83,34 @@ class Menu
         {
             $link = $this->root_path . $link;
         }
+
         $this->items[$parentId]['subitems'][$id] = array('link'=>$link, 'text'=>$text);
     }
 
-    // gets the position of a given ID in the menu
+    /**
+     * gets the position of a given ID in the menu
+     * @param string $id
+     * @return int|false
+     */
     public function getPosition($id)
     {
         $keys = array_keys($this->items);
-        $keyfound = array_keys($keys, $id);
-        if (count($keyfound) === 1)
-        {
-            return $keyfound[0];
-        }
-        else
-        {
-            return false;
-        }
+        $key = array_search($id, $keys, true);
+
+        return $key;
     }
 
-    // inserts a new menu entry before the named position
-    public function insertItem($position, $id, $link, $text, $icon, $desc='')
+    /**
+     * inserts a new menu entry before the named position
+     * @param int $position
+     * @param string $id
+     * @param string $link
+     * @param string $text
+     * @param string $icon
+     * @param string $desc
+     * @return bool
+     */
+    public function insertItem($position, $id, $link, $text, $icon, $desc = '')
     {
         if (!is_numeric($position))
         {
@@ -83,99 +118,91 @@ class Menu
         }
         else
         {
-            $head = array_slice($this->items, 0, $position);
-            $insert = array($id=>$this->mkItem($id, $link, $text, $icon, $desc));
-            $tail = array_slice($this->items, $position);
-            $this->items = array_merge($head, $insert, $tail);
+            $insert = array($id => $this->mkItem($id, $link, $text, $icon, $desc));
+            $this->items = array_splice($this->items, $position, 0, $insert);
+
             return true;
         }
     }
 
-    /** Create the html menu from the internal array that must be filled before.
-     *  You have the option to create a simple menu with icon and link or
-     *  a more complex menu with submenu and description text.
-     *  @param string $type       Create a @b simple menu as default. If you set the param to @b complex
-     *                            then you will create a menu with submenus and description
-     *  @param bool $directOutput If set to @b true (default) the form html will be directly send to the browser.
-     *                            If set to @b false the html will be returned.
-     *  @return void|string       If $directOutput is set to @b false this method will return the html code of the form.
+    /**
+     * Create the html menu from the internal array that must be filled before.
+     * You have the option to create a simple menu with icon and link or
+     * a more complex menu with submenu and description text.
+     * @param bool $complex Create a @b simple menu as default. If you set the param to @b true
+     *                      then you will create a menu with submenus and description
+     * @return string       Return the html code of the form.
      */
-    public function show($type = 'simple', $directOutput = true)
+    public function show($complex = false)
     {
-        $html         = '';
-        $cssMenuClass = '';
-        $cssFontClass = '';
+        $html = '';
 
-        if ($type === 'complex')
+        if ($complex)
         {
-            $html .= '<h2 id="head_'.$this->id.'">'.$this->title.'</h2>'; // Title of the menu
-            $cssFontClass = ' h4';
+            $html .= '<h2 id="head_'.$this->id.'">'.$this->title.'</h2>';
         }
         else
         {
-            $html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>
-            <div class="btn-group-vertical admidio-menu" role="group" id="menu_'.$this->id.'">';
+            $html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>';
+            $html .= '<div class="btn-group-vertical admidio-menu" role="group" id="menu_'.$this->id.'">';
         }
 
         // now create each menu item
         foreach($this->items as $key => $value)
         {
-            if ($type === 'complex')
+            if ($complex)
             {
                 $html .= '
-                <div class="media">
-                    <div class="media-left">
-                        <a id="menu_'.$this->id.'_' .$this->items[$key]['id'].'" href="'.$this->items[$key]['link'].'">
-                            <img class="media-object" src="'.$this->items[$key]['icon'].'" alt="'.strip_tags($this->items[$key]['text']).'" />
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">
-                            <a id="lmenu_'.$this->id.'_' .$this->items[$key]['id'].'" href="'.$this->items[$key]['link'].'">'.$this->items[$key]['text'].'</a>
-                        </h4>';
+                    <div class="media">
+                        <div class="media-left">
+                            <a id="menu_'.$this->id.'_' .$this->items[$key]['id'].'" href="'.$this->items[$key]['link'].'">
+                                <img class="media-object" src="'.$this->items[$key]['icon'].'" alt="'.strip_tags($this->items[$key]['text']).'" />
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">
+                                <a id="lmenu_'.$this->id.'_' .$this->items[$key]['id'].'" href="'.$this->items[$key]['link'].'">'.$this->items[$key]['text'].'</a>
+                            </h4>';
 
-                        // adding submenus if any
-                        if ($this->items[$key]['subitems'])
-                        {
-                            $separator = '';
-                            $html .= '<div class="admidio-media-submenu">&#91; ';
-                            foreach($this->items[$key]['subitems'] as $subkey => $subvalue)
-                            {
-                                $html .= $separator . '<a href="'.$this->items[$key]['subitems'][$subkey]['link'].'">'.$this->items[$key]['subitems'][$subkey]['text'].'</a>';
-                                $separator = '&nbsp;| ';
-                            }
-                            $html .= ' &#93;</div>';
-                        }
+                // adding submenus if any
+                if ($this->items[$key]['subitems'])
+                {
+                    $html .= '<div class="admidio-media-submenu">&#91; ';
+                    $separator = '';
 
-                $html .= '
-                        '.$this->items[$key]['desc'].'
-                    </div>
-                </div>';
+                    foreach($this->items[$key]['subitems'] as $subkey => $subvalue)
+                    {
+                        $html .= $separator . '<a href="'.$this->items[$key]['subitems'][$subkey]['link'].'">'.$this->items[$key]['subitems'][$subkey]['text'].'</a>';
+                        $separator = '&nbsp;| ';
+                    }
+
+                    $html .= ' &#93;</div>';
+                }
+
+                $html .= $this->items[$key]['desc'];
+                $html .= '</div></div>';
             }
             else
             {
                 $html .= '
-                <a id="lmenu_'.$this->id.'_' .$this->items[$key]['id'].'" class="btn '.$cssFontClass.'" href="'.$this->items[$key]['link'].'">
+                <a id="lmenu_'.$this->id.'_' .$this->items[$key]['id'].'" class="btn " href="'.$this->items[$key]['link'].'">
                     <img src="'.$this->items[$key]['icon'].'" alt="'.strip_tags($this->items[$key]['text']).'" />'.$this->items[$key]['text'].'
                 </a>';
             }
         }
 
-        if ($type !== 'complex')
+        if (!$complex)
         {
             $html .= '</div>'; // End Wraps all menu items
         }
 
         if (count($this->items) > 0)
         {
-            if($directOutput)
-            {
-                echo $html;
-            }
-            else
-            {
-                return $html;
-            }
+            return $html;
+        }
+        else
+        {
+            return '';
         }
     }
 }
