@@ -173,7 +173,7 @@ $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
     {
         $selectBoxEntries[$row['lst_id']] = $row['lst_name'];
     }
-    $form->addSelectBox('rol_lst_id', $gL10n->get('ROL_DEFAULT_LIST'), $selectBoxEntries, array('defaultValue' => $role->getValue('rol_lst_id'), 'helpTextIdLabel' => 'ROL_DEFAULT_LIST_DESC'));
+    $form->addSelectBox('rol_lst_id', $gL10n->get('ROL_DEFAULT_LIST'), $selectBoxEntries, array('defaultValue' => $role->getValue('rol_lst_id'), 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'ROL_DEFAULT_LIST_DESC'));
     $form->addCheckbox('rol_default_registration', $gL10n->get('ROL_DEFAULT_REGISTRATION'), $role->getValue('rol_default_registration'), array('helpTextIdLabel' => 'ROL_DEFAULT_REGISTRATION_DESC'));
     $form->addInput('rol_max_members', $gL10n->get('SYS_MAX_PARTICIPANTS').'<br />('.$gL10n->get('ROL_WITHOUT_LEADER').')', $role->getValue('rol_max_members'), array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999));
     $form->addInput('rol_cost', $gL10n->get('SYS_CONTRIBUTION').' '.$gPreferences['system_currency'], $role->getValue('rol_cost'), array('maxLength' => 6, 'class' => 'form-control-small'));
