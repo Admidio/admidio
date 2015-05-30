@@ -683,6 +683,7 @@ class HtmlForm extends HtmlFormBasic
         if($optionsAll['type'] == 'date' || $optionsAll['type'] == 'datetime')
         {
             $attributes['data-provide'] = 'datepicker';
+            $attributes['placeholder']  = DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']);
             $javascriptCode             = '';
 
             if($this->datepickerInitialized == false)
