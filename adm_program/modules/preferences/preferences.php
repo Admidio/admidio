@@ -644,6 +644,10 @@ $page->addHtml('
                         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
                         $form->addSelectBox('lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries, array('defaultValue' => $form_values['lists_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC'));
                         $form->addCheckbox('lists_hide_overview_details', $gL10n->get('LST_HIDE_DETAILS'), $form_values['lists_hide_overview_details'], array('helpTextIdInline' => 'LST_HIDE_DETAILS_DESC'));
+                        $html = '<a class="btn" href="'. $g_root_path. '/adm_program/modules/categories/categories.php?type=ROL"><img
+                                    src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
+                        $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+                        $form->addCustomContent($gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, array('helpTextIdInline' => $htmlDesc));
                         $form->addSubmitButton('btn_save_lists', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
@@ -775,7 +779,7 @@ $page->addHtml('
                 </div>
             </div>');
             /*
-            <div class="panel panel-default" id="panel_links">
+            <div class="panel panel-default" id="panel_inventory">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_inventory">

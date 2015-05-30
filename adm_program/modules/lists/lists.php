@@ -81,6 +81,13 @@ if($gCurrentUser->manageRoles())
                         $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
 }
 
+if($gCurrentUser->manageRoles() && !$gCurrentUser->isWebmaster())
+{
+    // show link to maintain categories
+    $LinksMenu->addItem('menu_item_maintain_categories', $g_root_path.'/adm_program/modules/categories/categories.php?type=ROL&title='. $getHeadline,
+                        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
+}
+
 $page->addJavascript('$("#cat_id").change(function() { $("#navbar_cat_id_form").submit();});', true);
 $navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/lists/lists.php?active_role='.$getActiveRole, $page, array('type' => 'navbar', 'setFocus' => false));
 $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
