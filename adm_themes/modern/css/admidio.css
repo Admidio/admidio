@@ -720,5 +720,9 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 
 tr.event-highlight, .event-highlight .panel-heading {
     font-weight: bold;
-    color: #409099;
+    color: #ff9c00;
+}
+
+.panel-primary.event-highlight > .panel-heading {
+    border-bottom: 2px solid #ff9c00;
 }
