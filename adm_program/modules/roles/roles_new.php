@@ -140,11 +140,11 @@ $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->ge
     }
     else
     {
-        $form->addInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'), array('maxLength' => 100, 'property' => FIELD_MANDATORY));
+        $form->addInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'), array('maxLength' => 100, 'property' => FIELD_REQUIRED));
     }
     $form->addMultilineTextInput('rol_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'), 3, array('maxLength' => 4000));
     $form->addSelectBoxForCategories('rol_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'EDIT_CATEGORIES',
-                                     array('property' => FIELD_MANDATORY, 'defaultValue' => $role->getValue('rol_cat_id')));
+                                     array('property' => FIELD_REQUIRED, 'defaultValue' => $role->getValue('rol_cat_id')));
 $form->closeGroupBox();
 $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
     if($gPreferences['enable_mail_module'])
@@ -173,7 +173,7 @@ $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
     {
         $selectBoxEntries[$row['lst_id']] = $row['lst_name'];
     }
-    $form->addSelectBox('rol_lst_id', $gL10n->get('ROL_DEFAULT_LIST'), $selectBoxEntries, array('defaultValue' => $role->getValue('rol_lst_id'), 'helpTextIdLabel' => 'ROL_DEFAULT_LIST_DESC'));
+    $form->addSelectBox('rol_lst_id', $gL10n->get('ROL_DEFAULT_LIST'), $selectBoxEntries, array('defaultValue' => $role->getValue('rol_lst_id'), 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'ROL_DEFAULT_LIST_DESC'));
     $form->addCheckbox('rol_default_registration', $gL10n->get('ROL_DEFAULT_REGISTRATION'), $role->getValue('rol_default_registration'), array('helpTextIdLabel' => 'ROL_DEFAULT_REGISTRATION_DESC'));
     $form->addInput('rol_max_members', $gL10n->get('SYS_MAX_PARTICIPANTS').'<br />('.$gL10n->get('ROL_WITHOUT_LEADER').')', $role->getValue('rol_max_members'), array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999));
     $form->addInput('rol_cost', $gL10n->get('SYS_CONTRIBUTION').' '.$gPreferences['system_currency'], $role->getValue('rol_cost'), array('maxLength' => 6, 'class' => 'form-control-small'));

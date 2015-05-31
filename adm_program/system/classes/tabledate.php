@@ -58,11 +58,12 @@ class TableDate extends TableAccess
         $sql = 'DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
         $result = $this->db->query($sql);
 
-        parent::delete();
-
         // haben diesem Termin Mitglieder zugesagt, so muessen diese Zusagen noch geloescht werden
         if($this->getValue('dat_rol_id') > 0)
         {
+            $sql = 'UPDATE '.TBL_DATES.' SET dat_rol_id = NULL WHERE dat_id = '.$this->getValue('dat_id');
+            $this->db->query($sql);
+
             $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id = '.$this->getValue('dat_rol_id');
             $this->db->query($sql);
 
@@ -70,6 +71,7 @@ class TableDate extends TableAccess
             $this->db->query($sql);
         }
 
+        parent::delete();
         $result = $this->db->endTransaction();
 
         return $result;

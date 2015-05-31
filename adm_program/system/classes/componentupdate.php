@@ -75,6 +75,18 @@ class ComponentUpdate extends Component
             {
                 $executeSql = false;
             }
+            
+            // if a method of this class was set in the update step
+            // then call this function and don't execute a SQL statement
+            if(strpos($xmlNode[0], 'ComponentUpdate') !== false)
+            {
+                $executeSql = false;
+                
+                // get the method name
+                $function = substr($xmlNode[0], strpos($xmlNode[0], '::')+2);
+                // now call the method
+                $this->{$function}();
+            }
 
             if($executeSql == true)
             {
@@ -210,6 +222,23 @@ class ComponentUpdate extends Component
 
             // reset subversion because we want to start update for next main version with subversion 0
             $initialSubVersion = 0;
+        }
+    }
+    
+    /** This method deletes all roles that belongs to still deleted dates.
+     */
+    public function updateStepDeleteDateRoles()
+    {
+        $sql = 'select rol_id from '.TBL_CATEGORIES.', '.TBL_ROLES.' 
+                 where cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\' 
+                   and rol_cat_id = cat_id 
+                   and not exists (select 1 from '.TBL_DATES.' where dat_rol_id = rol_id)';
+        $result = $this->db->query($sql);
+        
+        while($row = $this->db->fetch_array($result))
+        {
+            $role = new TableRoles($this->db, $row['rol_id']);
+            $role->delete();
         }
     }
 }

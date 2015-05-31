@@ -114,7 +114,7 @@ if($datesTotalCount != 0)
         }
 
         // count members and leaders of the date role and push the result to the array
-        if($date->getValue('dat_rol_id') != null)
+        if($date->getValue('dat_rol_id') !== null)
         {
             $datesResult['recordset'][$count]['dat_num_members'] = $participants->getCount($date->getValue('dat_rol_id'));
             $datesResult['recordset'][$count]['dat_num_leaders'] = $participants->getNumLeaders($date->getValue('dat_rol_id'));
@@ -499,7 +499,7 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
                 // Change css if date is highlighted
                 if($row['dat_highlight'] == 1)
                 {
-                    $cssClassHighlight = ' event-highlight';
+                    $cssClassHighlight = ' admidio-event-highlight';
                 }
 
                 // Output of elements
@@ -535,32 +535,37 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
                 }
 
                 $page->addHtml('
-                <div class="panel panel-primary'.$cssClassHighlight.'" id="dat_'.$date->getValue('dat_id').'">
-                    <div class="panel-heading">
-                        <div class="pull-left">
-                            <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />' .
-                            $date->getValue('dat_begin', $gPreferences['system_date']).$endDate.' '.$date->getValue('dat_headline') . '
+                    <div class="panel panel-primary'.$cssClassHighlight.'" id="dat_'.$date->getValue('dat_id').'">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />' .
+                                $date->getValue('dat_begin', $gPreferences['system_date']).$endDate.' '.$date->getValue('dat_headline') . '
+                            </div>
+                            <div class="pull-right text-right">' .
+                                $icalIcon . $copyIcon . $editIcon . $deleteIcon . '
+                            </div>
                         </div>
-                        <div class="pull-right text-right">' .
-                            $icalIcon . $copyIcon . $editIcon . $deleteIcon . '
-                        </div>
+
+                        <div class="panel-body">
+                            ' . $htmlDateElements . '<br />
+                            <p>' . $date->getValue('dat_description') . '</p>');
+
+                if ($registerLink !== '' || $participantLink !== '' || $mgrpartLink !== '')
+                {
+                    $page->addHtml('<div class="btn-group">'.$registerLink.$participantLink.$mgrpartLink.'</div>');
+                }
+                $page->addHtml('
                     </div>
-
-                    <div class="panel-body">
-                        ' . $htmlDateElements . '<br />
-                        <p>' . $date->getValue('dat_description') . '</p>');
-
-                        if ($registerLink !== '' || $participantLink !== '' || $mgrpartLink !== '')
-                        {
-                            $page->addHtml('<div class="btn-group">'.$registerLink.$participantLink.$mgrpartLink.'</div>');
-                        }
-                    $page->addHtml('</div>
                     <div class="panel-footer">'.
                         // show information about user who created the recordset and changed it
-                        admFuncShowCreateChangeInfoByName($row['create_name'], $date->getValue('dat_timestamp_create'),
-                           $row['change_name'], $date->getValue('dat_timestamp_change'), $date->getValue('dat_usr_id_create'), $date->getValue('dat_usr_id_change')).'
-                    </div>
-                </div>');
+                        admFuncShowCreateChangeInfoByName($row['create_name'],
+                                                          $date->getValue('dat_timestamp_create'),
+                                                          $row['change_name'],
+                                                          $date->getValue('dat_timestamp_change'),
+                                                          $date->getValue('dat_usr_id_create'),
+                                                          $date->getValue('dat_usr_id_change')).'
+                        </div>
+                    </div>');
             }
             else
             {
@@ -570,7 +575,7 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
                 $cssClass = '';
                 if($row['dat_highlight'])
                 {
-                    $cssClass = 'event-highlight';
+                    $cssClass = 'admidio-event-highlight';
                 }
 
                 $objDateBegin = new DateTime($row['dat_begin']);
@@ -658,13 +663,14 @@ else
     }
 
     // Define header and footer content for the html table
-    $tableHead = '<h1>'.$dates->getHeadline($getHeadline).'</h1>
-                    <h3>'.$gL10n->get('SYS_START').':&nbsp;'.$dates->getParameter('dateStartFormatAdmidio'). ' - ' .$gL10n->get('SYS_END').':&nbsp;'.$dates->getParameter('dateEndFormatAdmidio').
-                        '<span class="form" style="margin-left: 40px;">'.
-                        // Selectbox for table content
-                        FormElements::generateDynamicSelectBox($selectBoxEntries, $defaultEntry = '0', $fieldId = 'admSelectBox', $createFirstEntry = false).'
-                        </span>
-                    </h3>';
+    $tableHead = '
+        <h1>'.$dates->getHeadline($getHeadline).'</h1>
+        <h3>'.$gL10n->get('SYS_START').':&nbsp;'.$dates->getParameter('dateStartFormatAdmidio'). ' - ' .$gL10n->get('SYS_END').':&nbsp;'.$dates->getParameter('dateEndFormatAdmidio').
+            '<span class="form" style="margin-left: 40px;">'.
+                // Selectbox for table content
+                FormElements::generateDynamicSelectBox($selectBoxEntries, $defaultEntry = '0', $fieldId = 'admSelectBox', $createFirstEntry = false).'
+            </span>
+        </h3>';
 
     $tableFooter = '<i>provided by Admidio</i>
                     <i style="font-size: 0.6em;">'.date($gPreferences['system_date'].' '.$gPreferences['system_time']).'</i>';
@@ -678,8 +684,7 @@ else
                             $gL10n->get('SYS_LOCATION'),
                             $gL10n->get('DAT_ROOM_INFORMATIONS'),
                             $gL10n->get('SYS_LEADER'),
-                            $gL10n->get('SYS_PARTICIPANTS')
-                            );
+                            $gL10n->get('SYS_PARTICIPANTS'));
 
     $bodyHeadline_2 = array($gL10n->get('SYS_START'),
                             $gL10n->get('SYS_END'),
@@ -752,7 +757,7 @@ else
                 $memberCount = 1;
                 $totalMemberCount = count($memberElements[$row['dat_rol_id']]);
 
-                foreach(($memberElements[$row['dat_rol_id']]) as $memberDate)
+                foreach($memberElements[$row['dat_rol_id']] as $memberDate)
                 {
                     // If last entry close table row
                     if($memberCount < $totalMemberCount)
@@ -907,30 +912,30 @@ else
     // Create table
     $tableDatePrint = $datePrint->getHtmlTable();
 
-echo'
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
-    <head>
-        <!-- (c) 2004 - 2015 The Admidio Team - http://www.admidio.org -->
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>'.$gCurrentOrganization->getValue('org_longname').' - Terminliste </title>
-        <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="'.THEME_PATH.'/css/print.css" />
+    echo '
+        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
+        <head>
+            <!-- (c) 2004 - 2015 The Admidio Team - http://www.admidio.org -->
+            <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+            <title>'.$gCurrentOrganization->getValue('org_longname').' - Terminliste </title>
+            <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.min.js"></script>
+            <link rel="stylesheet" type="text/css" href="'.THEME_PATH.'/css/print.css" />
 
-    <script type="text/javascript">
+        <script type="text/javascript">
 
-        $(document).ready(function(){
-            $("#admSelectBox").change(function(){
-                $("#" + "style" + this.value).show().siblings("tbody").hide();
-            });
-            <!-- Trigger -->
-            $("#admSelectBox").change();
-        })
-    </script>
-    </head>
-        <body>
-            '.$tableDatePrint.'
-        </body>
-    </html>';
+            $(document).ready(function(){
+                $("#admSelectBox").change(function(){
+                    $("#" + "style" + this.value).show().siblings("tbody").hide();
+                });
+                <!-- Trigger -->
+                $("#admSelectBox").change();
+            })
+        </script>
+        </head>
+            <body>
+                '.$tableDatePrint.'
+            </body>
+        </html>';
 }
 ?>

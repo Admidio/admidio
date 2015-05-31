@@ -760,8 +760,12 @@ input[type="time"] {
 
 /* Events */
 
-tr.event-highlight,
-.event-highlight .panel-heading {
+tr.admidio-event-highlight,
+.admidio-event-highlight .panel-heading {
     font-weight: bold;
-    color: #409099;
+    color: #ff9c00;
+}
+
+.panel-primary.admidio-event-highlight > .panel-heading {
+    border-bottom: 2px solid #ff9c00;
 }

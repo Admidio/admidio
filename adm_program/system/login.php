@@ -37,14 +37,18 @@ $loginMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->ge
 
 // show form
 $form = new HtmlForm('login_form', $g_root_path.'/adm_program/system/login_check.php', $page, array('showRequiredFields' => false));
-$form->addInput('usr_login_name', $gL10n->get('SYS_USERNAME'), null, array('maxLength' => 35, 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
-$form->addInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
+
+$form->addInput('usr_login_name', $gL10n->get('SYS_USERNAME'), null,
+                array('maxLength' => 35, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
+$form->addInput('usr_password', $gL10n->get('SYS_PASSWORD'), null,
+                array('type' => 'password', 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
+
 // show selectbox with all organizations of database
 if($gPreferences['system_organization_select'] == 1)
 {
     $sql = 'SELECT org_id, org_longname FROM '.TBL_ORGANIZATIONS.' ORDER BY org_longname ASC, org_shortname ASC';
     $form->addSelectBoxFromSql('org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
-        array('property' => FIELD_MANDATORY, 'defaultValue' => $gCurrentOrganization->getValue('org_id')));
+                               array('property' => FIELD_REQUIRED, 'defaultValue' => $gCurrentOrganization->getValue('org_id')));
 }
 
 if($gPreferences['enable_auto_login'] == 1)

@@ -143,5 +143,6 @@
             collate = utf8_unicode_ci;</step>
     <step id="530">alter table %PREFIX%_ids add constraint %PREFIX%_FK_IDS_USR_ID foreign key (ids_usr_id) references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
     <step id="540">UPDATE %PREFIX%_preferences SET prf_value = '13' WHERE prf_name LIKE 'captcha_signature_font_size' AND prf_value LIKE '9'</step>
+    <step id="550">ComponentUpdate::updateStepDeleteDateRoles</step>
     <step>stop</step>
 </update>

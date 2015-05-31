@@ -153,7 +153,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
                 }
                 elseif($getNewItem > 0)
                 {
-                    $fieldProperty = FIELD_MANDATORY;
+                    $fieldProperty = FIELD_REQUIRED;
                     $fieldHelpId   = 'PRO_inventoryNAME_DESCRIPTION';
                 }
 
@@ -174,7 +174,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
         elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_mandatory') == 1)
         {
             // set mandatory field
-            $fieldProperty = FIELD_MANDATORY;
+            $fieldProperty = FIELD_REQUIRED;
         }
 
         if(strlen($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_description')) > 0)
@@ -256,7 +256,6 @@ foreach($gInventoryFields->mInventoryFields as $field)
             elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'URL')
             {
                 // maximal browser compatible url length will be 2000 characters
-                $fieldType = 'url';
                 $maxlength = '2000';
             }
             elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'NUMBER')

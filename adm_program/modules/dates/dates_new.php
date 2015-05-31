@@ -173,6 +173,7 @@ $page->addJavascript('
 
         if(dateFrom.getTime() > dateTo.getTime()) {
             $("#date_to").val($("#date_from").val());
+            $("#date_to").datepicker("update");
         }
     }
 
@@ -221,7 +222,7 @@ $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->ge
 // show form
 $form = new HtmlForm('dates_edit_form', $g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode='.$mode, $page);
 $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
-    $form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'), array('maxLength' => 100, 'property' => FIELD_MANDATORY));
+    $form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'), array('maxLength' => 100, 'property' => FIELD_REQUIRED));
 
     // if a map link should be shown in the event then show help text and a field where the user could choose the country
     if($gPreferences['dates_show_map_link'] == true)
@@ -255,10 +256,10 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
 $form->closeGroupBox();
 $form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n->get('DAT_CALENDAR'));
     $form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), $date->getValue('dat_all_day'));
-    $form->addInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_MANDATORY));
-    $form->addInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_MANDATORY));
+    $form->addInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_REQUIRED));
+    $form->addInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_REQUIRED));
     $form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES',
-                                     array('property' => FIELD_MANDATORY, 'defaultValue' => $date->getValue('dat_cat_id')));
+                                     array('property' => FIELD_REQUIRED, 'defaultValue' => $date->getValue('dat_cat_id')));
 $form->closeGroupBox();
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
     // add a multiselectbox to the form where the user can choose all roles that should see this event
@@ -277,7 +278,7 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
     {
         $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
     }
-    $form->addSelectBox('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $roles, array('property' => FIELD_MANDATORY,
+    $form->addSelectBox('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $roles, array('property' => FIELD_REQUIRED,
                         'defaultValue' => $dateRoles, 'showContextDependentFirstEntry' => false, 'multiselect' => true));
 
     $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), $date->getValue('dat_highlight'));

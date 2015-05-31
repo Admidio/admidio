@@ -115,7 +115,7 @@ $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
     }
     else
     {
-        $form->addInput('inf_name', $gL10n->get('SYS_NAME'), $itemField->getValue('inf_name', 'database'), array('maxLength' => 100, 'property' => FIELD_MANDATORY));
+        $form->addInput('inf_name', $gL10n->get('SYS_NAME'), $itemField->getValue('inf_name', 'database'), array('maxLength' => 100, 'property' => FIELD_REQUIRED));
     }
 
     // show internal field name for information
@@ -130,7 +130,7 @@ $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
     }
     else
     {
-        $form->addSelectBoxForCategories('inf_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'INF', 'EDIT_CATEGORIES', array( 'property' => FIELD_MANDATORY, 'defaultValue' => $itemField->getValue('cat_name')));
+        $form->addSelectBoxForCategories('inf_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'INF', 'EDIT_CATEGORIES', array( 'property' => FIELD_REQUIRED, 'defaultValue' => $itemField->getValue('cat_name')));
     }
 $form->closeGroupBox();
 $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
@@ -153,14 +153,14 @@ $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
     else
     {
         // fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
-        $form->addSelectBox('inf_type', $gL10n->get('ORG_DATATYPE'), $itemFieldText, array( 'property' => FIELD_MANDATORY, 'defaultValue' => $itemField->getValue('inf_type')));
+        $form->addSelectBox('inf_type', $gL10n->get('ORG_DATATYPE'), $itemFieldText, array( 'property' => FIELD_REQUIRED, 'defaultValue' => $itemField->getValue('inf_type')));
     }
-    $form->addMultilineTextInput('inf_value_list', $gL10n->get('ORG_VALUE_LIST'), $itemField->getValue('inf_value_list', 'database'), 6, array('property' => FIELD_MANDATORY, 'helpTextIdLabel' => 'ORG_VALUE_LIST_DESC'));
+    $form->addMultilineTextInput('inf_value_list', $gL10n->get('ORG_VALUE_LIST'), $itemField->getValue('inf_value_list', 'database'), 6, array('property' => FIELD_REQUIRED, 'helpTextIdLabel' => 'ORG_VALUE_LIST_DESC'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
     $form->addCheckbox('inf_hidden', $gL10n->get('ORG_FIELD_NOT_HIDDEN'), $itemField->getValue('inf_hidden'), array('property' => FIELD_DEFAULT, 'helpTextIdLabel' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'eye.png'));
     $form->addCheckbox('inf_disabled', $gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')), $itemField->getValue('inf_disabled'), array('property' => FIELD_DEFAULT, 'helpTextIdLabel' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'textfield_key.png'));
-    $form->addCheckbox('inf_mandatory', $gL10n->get('ORG_FIELD_MANDATORY'), $itemField->getValue('inf_mandatory'), array('property' => FIELD_DEFAULT, 'helpTextIdLabel' => 'ORG_FIELD_MANDATORY_DESC', 'icon' => 'asterisk_yellow.png'));
+    $form->addCheckbox('inf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), $itemField->getValue('inf_mandatory'), array('property' => FIELD_DEFAULT, 'helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'asterisk_yellow.png'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
     $form->addEditor('inf_description', null, $itemField->getValue('inf_description'), array('property' => FIELD_DEFAULT, 'toolbar' => 'AdmidioDefault', 'height' => '200px'));

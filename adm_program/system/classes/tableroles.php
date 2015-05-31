@@ -231,9 +231,12 @@ class TableRoles extends TableAccess
 
             $this->db->endTransaction();
 
-            // all active users must renew their user data because maybe their
-            // rights have been changed if they where members of this role
-            $gCurrentSession->renewUserObject();
+            if(isset($gCurrentSession))
+            {
+                // all active users must renew their user data because maybe their
+                // rights have been changed if they where members of this role
+                $gCurrentSession->renewUserObject();
+            }
 
             return $return;
         }

@@ -106,7 +106,7 @@ if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
 }
 else
 {
-    $headline = $gL10n->get('PRO_PROFILE_FROM', $user->getValue('LAST_NAME'), $user->getValue('FIRST_NAME'));
+    $headline = $gL10n->get('PRO_PROFILE_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
 }
 
 // if user id was not set and own profile should be shown then initialize navigation
@@ -149,6 +149,38 @@ $page->addJavascript('
         else {
             $(id).hide("fast");
         }
+    }
+    
+    function callbackProfilePhoto() {
+        var img_src = $("#profile_photo").attr("src");
+        var timestamp = new Date().getTime();
+        $("#btn_delete_photo").hide();
+        $("#profile_photo").attr("src",img_src+"&"+timestamp);
+    }
+    
+    function callbackRoles() {
+        if(profileJS) {
+            profileJS.formerRoleCount++;
+            profileJS.reloadFormerRoleMemberships();
+        };
+    }
+
+    function callbackFormerRoles() {
+        if(profileJS) {
+            profileJS.formerRoleCount--;
+            if(profileJS.formerRoleCount == 0) {
+                $("#profile_former_roles_box").fadeOut("slow");
+            }
+        };
+    }
+
+    function callbackFutureRoles() {
+        if(profileJS) {
+            profileJS.futureRoleCount--;
+            if(profileJS.futureRoleCount == 0) {
+                $("#profile_future_roles_box").fadeOut("slow");
+            }
+        };
     }');
 $page->addJavascript('
     $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
@@ -289,19 +321,21 @@ $page->addHtml('
             && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('GENDER', 'usf_hidden') == 0))
             {
                 // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
-                $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('LAST_NAME'). ' '. $user->getValue('FIRST_NAME').' '.$user->getValue('GENDER', 'html'));
+                $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME').' '.$user->getValue('GENDER', 'html'));
             }
             else
             {
-                $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('LAST_NAME'). ' '. $user->getValue('FIRST_NAME'));
+                $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
             }
 
             // add loginname
             if(strlen($user->getValue('usr_login_name')) > 0)
             {
-                if ($user->getValue('usr_id') != $gCurrentUser->getValue('usr_id'))
+                if ($user->getValue('usr_id') != $gCurrentUser->getValue('usr_id') && $gPreferences['enable_pm_module'] == 1)
                 {
-                    $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), '<a href='.$g_root_path.'/adm_program/modules/messages/messages_write.php?msg_type=PM&usr_id='.$user->getValue('usr_id').'>'.$user->getValue('usr_login_name').'</a>');
+                    $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'),
+                        '<img src="'.THEME_PATH.'/icons/pm.png" alt="'.$gL10n->get('PMS_SEND_PM').'" /> 
+                        <a href='.$g_root_path.'/adm_program/modules/messages/messages_write.php?msg_type=PM&usr_id='.$user->getValue('usr_id').'>'.$user->getValue('usr_login_name').'</a>');
                 }
                 else
                 {
@@ -442,7 +476,7 @@ $page->addHtml('
                 if((strlen($user->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
                     || file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$user->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
                 {
-                    $page->addHtml('<a class="btn" data-toggle="modal" data-target="#admidio_modal"
+                    $page->addHtml('<a id="btn_delete_photo" class="btn" data-toggle="modal" data-target="#admidio_modal"
                                     href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
                                     '&amp;database_id='.$user->getValue('usr_id').'"><img src="'. THEME_PATH. '/icons/delete.png"
                                     alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</a>');

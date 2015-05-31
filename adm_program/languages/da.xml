@@ -812,8 +812,8 @@
         <text id="ORG_FIELD_DOWN" development="new" translation="edited">Flyt profil felt ned</text>
         <text id="ORG_FIELD_EXIST" development="new" translation="edited">Feltnavnet eksisterer allerede i denne kategori.</text>
         <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Feltet er kun synligt for godkendte brugere (egen profil &amp; rolle autorisation)</text>
-        <text id="ORG_FIELD_MANDATORY" development="new" translation="edited">Krævet felt der altid skal udfyldes.</text>
-        <text id="ORG_FIELD_MANDATORY_DESC" development="new" translation="edited">Mærket (påkrævet) felter skal altid udfyldes. Denne regel gælder for registreringer og for regulære profil ændringer udført af brugerne selv.</text>
+        <text id="ORG_FIELD_REQUIRED" development="new" translation="edited">Krævet felt der altid skal udfyldes.</text>
+        <text id="ORG_FIELD_REQUIRED_DESC" development="new" translation="edited">Mærket (påkrævet) felter skal altid udfyldes. Denne regel gælder for registreringer og for regulære profil ændringer udført af brugerne selv.</text>
         <text id="ORG_FIELD_NOT_DISABLED" development="new" translation="edited">Felt kan rettes af brugeren selv.</text>
         <text id="ORG_FIELD_NOT_HIDDEN" development="new" translation="edited">Felt som er synligt for alle.</text>
         <text id="ORG_FIELD_NOT_MANDATORY" development="new" translation="edited">Feltet er påkrævet. Det skal udfyldes.</text>

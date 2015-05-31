@@ -65,8 +65,8 @@ $roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->ge
 // show form
 $form = new HtmlForm('rooms_edit_form', $g_root_path.'/adm_program/modules/rooms/rooms_function.php?room_id='.$getRoomId.'&amp;mode=1', $page);
 $form->openGroupBox('gb_name_properties', $gL10n->get('SYS_NAME').' &amp; '.$gL10n->get('SYS_PROPERTIES'));
-    $form->addInput('room_name', $gL10n->get('SYS_ROOM'), $room->getValue('room_name'), array('maxLength' => 100, 'property' => FIELD_MANDATORY));
-    $form->addInput('room_capacity', $gL10n->get('ROO_CAPACITY').' ('.$gL10n->get('ROO_SEATING').')', $room->getValue('room_capacity'),  array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'property' => FIELD_MANDATORY));
+    $form->addInput('room_name', $gL10n->get('SYS_ROOM'), $room->getValue('room_name'), array('maxLength' => 100, 'property' => FIELD_REQUIRED));
+    $form->addInput('room_capacity', $gL10n->get('ROO_CAPACITY').' ('.$gL10n->get('ROO_SEATING').')', $room->getValue('room_capacity'),  array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'property' => FIELD_REQUIRED));
     $form->addInput('room_overhang', $gL10n->get('ROO_OVERHANG'), $room->getValue('room_overhang'), array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_ROOM_OVERHANG'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');

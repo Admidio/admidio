@@ -110,7 +110,7 @@ $columnHeading = array(
     $gL10n->get('SYS_DESCRIPTION'),
     '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />',
     '<img class="admidio-icon-info" data-html="true" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" title="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" />',
-    '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_MANDATORY').'" title="'.$gL10n->get('ORG_FIELD_MANDATORY').'" />',
+    '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_REQUIRED').'" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'" />',
     $gL10n->get('ORG_DATATYPE'),
     '&nbsp;');
 $table->addRowHeadingByArray($columnHeading);
@@ -180,7 +180,7 @@ while($row = $gDb->fetch_array($result))
     
     if($userField->getValue('usf_mandatory') == 1)
     {
-        $mandatory = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_MANDATORY').'" title="'.$gL10n->get('ORG_FIELD_MANDATORY').'" />';
+        $mandatory = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_REQUIRED').'" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'" />';
     }
     else
     {

@@ -28,9 +28,9 @@ $get_name          = admFuncVariableIsValid($_GET, 'name', 'string');
 // initialize local variables
 $icon = 'error_big.png';
 $text = 'SYS_DELETE_ENTRY';
-$textVariable    = $get_name;
-$textVariable2   = '';
-$callbackSuccess = '';
+$textVariable     = $get_name;
+$textVariable2    = '';
+$callbackFunction = '';
 
 // URL zusammensetzen
 switch ($get_type)
@@ -68,25 +68,6 @@ switch ($get_type)
         break;
     case 'gbc':
         $url = 'guestbook_function.php?mode=5&id='.$get_database_id;
-        $callbackSuccess = '
-            $("#gbc_'.$get_database_id.'").remove();
-            $("#comments_'.$get_database_id_2.' > br").remove();
-
-            var count = 0;
-            $("#comments_'.$get_database_id_2.' > .groupBox").each( function(index, value) {
-                count++;
-            });
-
-            if (count == 0) {
-                $("#admCommentsVisible_'.$get_database_id_2.'").hide();
-                $("#admCommentsInvisible_'.$get_database_id_2.'").hide();
-            }
-            else {
-                var msgOrg = "'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY').'";
-                var msg = msgOrg.replace("%VAR1%",count);
-                $("#admCommentsInvisible_'.$get_database_id_2.' btn > a:nth-child(2)").html(msg);
-            }
-            ';
         break;
     case 'lnk':
         $url = 'links_function.php?mode=2&lnk_id='.$get_database_id;
@@ -102,40 +83,24 @@ switch ($get_type)
         $url = 'photo_album_function.php?mode=delete&pho_id='.$get_database_id;
         break;
     case 'pro_pho':
-        $url = 'profile_photo_edit.php?mode=delete&usr_id='.$get_database_id;
-        $callbackSuccess = '
-           var img_src = $("#profile_photo").attr("src");
-           var timestamp = new Date().getTime();
-           $("#profile_photo").attr("src",img_src+"&"+timestamp);';
+        $url  = 'profile_photo_edit.php?mode=delete&usr_id='.$get_database_id;
         $text = 'PRO_WANT_DELETE_PHOTO';
+        $callbackFunction = 'callbackProfilePhoto';
         break;
     case 'pro_role':
-        $url = 'profile_function.php?mode=2&mem_id='.$get_database_id;
-        $callbackSuccess = 'if(profileJS) {
-                        profileJS.formerRoleCount++;
-                        profileJS.reloadFormerRoleMemberships();
-                    };';
+        $url  = 'profile_function.php?mode=2&mem_id='.$get_database_id;
         $text = 'ROL_MEMBERSHIP_DEL';
+        $callbackFunction = 'callbackRoles';
         break;
     case 'pro_future':
-        $url = 'profile_function.php?mode=3&mem_id='.$get_database_id;
-        $callbackSuccess = 'if(profileJS) {
-                        profileJS.futureRoleCount--;
-                        if(profileJS.futureRoleCount == 0) {
-                            $("#profile_future_roles_box").fadeOut("slow");
-                        }
-                    };';
+        $url  = 'profile_function.php?mode=3&mem_id='.$get_database_id;
         $text = 'ROL_LINK_MEMBERSHIP_DEL';
+        $callbackFunction = 'callbackFutureRoles';
         break;
     case 'pro_former':
-        $url = 'profile_function.php?mode=3&mem_id='.$get_database_id;
-        $callbackSuccess = 'if(profileJS) {
-                        profileJS.formerRoleCount--;
-                        if(profileJS.formerRoleCount == 0) {
-                            $("#profile_former_roles_box").fadeOut("slow");
-                        }
-                    };';
+        $url  = 'profile_function.php?mode=3&mem_id='.$get_database_id;
         $text = 'ROL_LINK_MEMBERSHIP_DEL';
+        $callbackFunction = 'callbackFormerRoles';
         break;
     case 'room':
         $url = 'rooms_function.php?mode=2&room_id='.$get_database_id;
@@ -150,6 +115,11 @@ switch ($get_type)
     default:
         $url = '';
         break;
+}
+
+if(strlen($callbackFunction) > 0)
+{
+    $callbackFunction = ', \''.$callbackFunction.'\'';
 }
 
 if($url === '')
@@ -170,11 +140,14 @@ echo '
     <div id="message_text" class="col-xs-10">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
 </div>
 <div class="modal-footer">
-        <button id="btn_yes" class="btn btn-default" type="button" onclick="callUrlHideElement(\''.$get_element_id.'\', \''.$url.'\')"><img src="'. THEME_PATH. '/icons/ok.png"
-            alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;</button>
-        <button id="btn_no" class="btn btn-default" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/error.png"
-            alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'</button>
-        <button id="btn_close" class="btn btn-default hidden" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/close.png"
-            alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</button>
+        <button id="btn_yes" class="btn btn-default" type="button" onclick="javascript:callUrlHideElement(\''.$get_element_id.'\', \''.$url.'\''.$callbackFunction.')">
+            <img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;
+        </button>
+        <button id="btn_no" class="btn btn-default" type="button" data-dismiss="modal">
+            <img src="'. THEME_PATH. '/icons/error.png" alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'
+        </button>
+        <button id="btn_close" class="btn btn-default hidden" type="button" data-dismiss="modal">
+            <img src="'. THEME_PATH. '/icons/close.png" alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'
+        </button>
 </div>';
 ?>

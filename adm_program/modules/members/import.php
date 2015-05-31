@@ -52,9 +52,9 @@ $importMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->g
 // show form
 $form = new HtmlForm('import_users_form', $g_root_path.'/adm_program/modules/members/import_function.php', $page, array('enableFileUpload' => true));
 $form->addStaticControl('format', $gL10n->get('MEM_FORMAT'), 'CSV');
-$form->addFileUpload('userfile', $gL10n->get('MEM_CHOOSE_FILE'), array('property' => FIELD_MANDATORY));
+$form->addFileUpload('userfile', $gL10n->get('MEM_CHOOSE_FILE'), array('property' => FIELD_REQUIRED));
 $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
-$form->addSelectBox('import_coding', $gL10n->get('MEM_CODING'), $selectBoxEntries, array('property' => FIELD_MANDATORY, 'defaultValue' => $form_values['import_coding']));
+$form->addSelectBox('import_coding', $gL10n->get('MEM_CODING'), $selectBoxEntries, array('property' => FIELD_REQUIRED, 'defaultValue' => $form_values['import_coding']));
 
 // add a selectbox to the form where the user can choose a role from all roles he could see
 // first read all relevant roles from database and create an array with them
@@ -86,11 +86,11 @@ while($row = $gDb->fetch_array($resultList))
 {
     $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
 }
-$form->addSelectBox('import_role_id', $gL10n->get('MEM_ASSIGN_ROLE'), $roles, array('property' => FIELD_MANDATORY, 
+$form->addSelectBox('import_role_id', $gL10n->get('MEM_ASSIGN_ROLE'), $roles, array('property' => FIELD_REQUIRED, 
                     'defaultValue' => $form_values['import_role_id'], 'helpTextIdLabel' => 'MEM_ASSIGN_ROLE_FOR_IMPORT'));
 
 $selectBoxEntries = array(1 => $gL10n->get('MEM_NOT_EDIT'), 2 => $gL10n->get('MEM_DUPLICATE'), 3 => $gL10n->get('MEM_REPLACE'), 4 => $gL10n->get('MEM_COMPLEMENT'));
-$form->addSelectBox('user_import_mode', $gL10n->get('MEM_EXISTING_USERS'), $selectBoxEntries, array('property' => FIELD_MANDATORY, 
+$form->addSelectBox('user_import_mode', $gL10n->get('MEM_EXISTING_USERS'), $selectBoxEntries, array('property' => FIELD_REQUIRED, 
                     'defaultValue' => $form_values['user_import_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'MEM_IDENTIFY_USERS'));
 $form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_PATH.'/icons/forward.png', 'class' => ' col-sm-offset-3'));
 

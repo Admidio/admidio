@@ -117,8 +117,8 @@ if ($getMode == 1 || $getMode == 3)
     // Der Inhalt des Formulars wird nun in der Session gespeichert...
     $_SESSION['guestbook_entry_request'] = $_POST;
 
-    // if login then fill name with login user
-    if($gCurrentUser->getValue('usr_id') > 0)
+    // if login and new entry then fill name with login user
+    if($getMode == 1 && $gCurrentUser->getValue('usr_id') > 0)
     {
         $_POST['gbo_name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
     }
@@ -303,7 +303,7 @@ elseif($getMode == 4 || $getMode == 8)
     $_SESSION['guestbook_comment_request'] = $_POST;
 
     // if login then fill name with login user
-    if($gCurrentUser->getValue('usr_id') > 0)
+    if($getMode == 4 && $gCurrentUser->getValue('usr_id') > 0)
     {
         $_POST['gbc_name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
     }

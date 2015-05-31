@@ -206,7 +206,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 }
                 elseif($getNewUser > 0)
                 {
-                    $fieldProperty = FIELD_MANDATORY;
+                    $fieldProperty = FIELD_REQUIRED;
                     $fieldHelpId   = 'PRO_USERNAME_DESCRIPTION';
                 }
 
@@ -215,14 +215,14 @@ foreach($gProfileFields->mProfileFields as $field)
                 if($getNewUser == 2)
                 {
                     // at registration add password and password confirm to form
-                    $form->addInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'minLength' => 6, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION', 'class' => 'form-control-small'));
-                    $form->addInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'minLength' => 6, 'class' => 'form-control-small'));
+                    $form->addInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 6, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION', 'class' => 'form-control-small'));
+                    $form->addInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 6, 'class' => 'form-control-small'));
 
                     // show selectbox with all organizations of database
                     if($gPreferences['system_organization_select'] == 1)
                     {
                         $sql = 'SELECT org_id, org_longname FROM '.TBL_ORGANIZATIONS.' ORDER BY org_longname ASC, org_shortname ASC';
-                        $form->addSelectBoxFromSql('reg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, array('property' => FIELD_MANDATORY, 'defaultValue' => $registrationOrgId));
+                        $form->addSelectBoxFromSql('reg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, array('property' => FIELD_REQUIRED, 'defaultValue' => $registrationOrgId));
                     }
                 }
                 else
@@ -261,7 +261,7 @@ foreach($gProfileFields->mProfileFields as $field)
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_mandatory') == 1)
         {
             // set mandatory field
-            $fieldProperty = FIELD_MANDATORY;
+            $fieldProperty = FIELD_REQUIRED;
         }
 
         if(strlen($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_description')) > 0)
@@ -341,7 +341,6 @@ foreach($gProfileFields->mProfileFields as $field)
             elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'URL')
             {
                 // maximal browser compatible url length will be 2000 characters
-                $fieldType = 'url';
                 $maxlength = '2000';
             }
             elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'NUMBER')

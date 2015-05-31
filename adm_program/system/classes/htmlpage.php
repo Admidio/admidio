@@ -163,6 +163,9 @@ class HtmlPage
 
         $this->menu->addItem('menu_item_modules', null, $gL10n->get('SYS_MODULES'), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
 
+        $this->menu->addItem('menu_item_overview', '/adm_program/index.php',
+                            $gL10n->get('SYS_OVERVIEW'), 'home.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
+
         if($gPreferences['enable_announcements_module'] == 1
         || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
         {

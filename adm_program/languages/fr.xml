@@ -489,8 +489,8 @@
         <text id="ORG_FIELD_DOWN" development="new" translation="edited">Déplacer champ de profil bas</text>
         <text id="ORG_FIELD_EXIST" development="new" translation="edited">Terrain avec le même nom existe déjà dans cette catégorie.</text>
         <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Champ visible pour les utilisateurs autorisés seulement (même profil et le rôle d'autorisation)</text>
-        <text id="ORG_FIELD_MANDATORY" development="new" translation="edited">Champ obligatoire.</text>
-        <text id="ORG_FIELD_MANDATORY_DESC" development="new" translation="edited">Flagged (obligatoire) des champs doivent toujours être remplis Cette règle s'applique pour les inscriptions et les changements profil régulier effectué par les utilisateurs.</text>
+        <text id="ORG_FIELD_REQUIRED" development="new" translation="edited">Champ obligatoire.</text>
+        <text id="ORG_FIELD_REQUIRED_DESC" development="new" translation="edited">Flagged (obligatoire) des champs doivent toujours être remplis Cette règle s'applique pour les inscriptions et les changements profil régulier effectué par les utilisateurs.</text>
         <text id="ORG_FIELD_NOT_DISABLED" development="new" translation="edited">Ces champs peuvent être modifiés par les utilisateurs eux-mêmes.</text>
         <text id="ORG_FIELD_NOT_HIDDEN" development="new" translation="edited">Champ à voir pour tous les utilisateurs.</text>
         <text id="ORG_FIELD_NOT_MANDATORY" development="new" translation="edited">Champ est obligatoire. Il doit absolument être rempli.</text>

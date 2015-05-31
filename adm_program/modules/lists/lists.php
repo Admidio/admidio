@@ -27,29 +27,6 @@ $getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', array('
 //New Modulelist object
 $lists = new ModuleLists();
 $lists->setParameter('cat_id', $getCatId);
-//get Number of roles
-$numberOfRoles = $lists->getDataSetCount();
-
-if($numberOfRoles == 0)
-{
-    if($gValidLogin == true)
-    {
-        // wenn User eingeloggt, dann Meldung, falls doch keine Rollen zur Verfuegung stehen
-        if($getActiveRole == 0)
-        {
-            $gMessage->show($gL10n->get('LST_NO_ROLES_REMOVED'));
-        }
-        else
-        {
-            $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
-        }
-    }
-    else
-    {
-        // wenn User ausgeloggt, dann Login-Bildschirm anzeigen
-        require_once('../../system/login_valid.php');
-    }
-}
 
 // set headline
 if($getActiveRole)
@@ -104,6 +81,13 @@ if($gCurrentUser->manageRoles())
                         $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
 }
 
+if($gCurrentUser->manageRoles() && !$gCurrentUser->isWebmaster())
+{
+    // show link to maintain categories
+    $LinksMenu->addItem('menu_item_maintain_categories', $g_root_path.'/adm_program/modules/categories/categories.php?type=ROL&title='. $getHeadline,
+                        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
+}
+
 $page->addJavascript('$("#cat_id").change(function() { $("#navbar_cat_id_form").submit();});', true);
 $navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/lists/lists.php?active_role='.$getActiveRole, $page, array('type' => 'navbar', 'setFocus' => false));
 $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
@@ -119,9 +103,31 @@ if($gCurrentUser->isWebmaster())
 $previousCategoryId   = 0;
 
 //Get Lists
-$getStart = $lists->getStartElement();
-$listsResult = $lists->getDataSet($getStart);
+$getStart      = $lists->getStartElement();
+$listsResult   = $lists->getDataSet($getStart);
+$numberOfRoles = $listsResult['numResults'];
 
+if($numberOfRoles == 0)
+{
+    if($gValidLogin == true)
+    {
+        // wenn User eingeloggt, dann Meldung, falls doch keine Rollen zur Verfuegung stehen
+        if($getActiveRole == 0)
+        {
+            $gMessage->show($gL10n->get('LST_NO_ROLES_REMOVED'));
+        }
+        else
+        {
+            $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
+        }
+    }
+    else
+    {
+        // wenn User ausgeloggt, dann Login-Bildschirm anzeigen
+        require_once('../../system/login_valid.php');
+    }
+}
+    
 //Get list configurations
 $listConfigurations = $lists->getListConfigurations();
 
@@ -293,7 +299,7 @@ foreach($listsResult['recordset'] as $row)
     </div>');
 }
 
-if($listsResult['numResults'] >0)
+if($listsResult['numResults'] > 0)
 {
     $page->addHtml('</div></div></div>');
 }

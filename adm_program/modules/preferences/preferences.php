@@ -138,11 +138,11 @@ $page->addHtml('
 
                         // search all available themes in theme folder
                         $themes = admFuncGetDirectoryEntries(SERVER_PATH.'/adm_themes', 'dir');
-                        $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, array('property' => FIELD_MANDATORY, 'defaultValue' => $form_values['theme'], 'helpTextIdInline' => 'ORG_ADMIDIO_THEME_DESC'));
+                        $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, array('property' => FIELD_REQUIRED, 'defaultValue' => $form_values['theme'], 'helpTextIdInline' => 'ORG_ADMIDIO_THEME_DESC'));
                         $form->addInput('homepage_logout', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('SYS_VISITORS').')', $form_values['homepage_logout'],
-                            array('maxLength' => 250, 'property' => FIELD_MANDATORY, 'helpTextIdInline' => 'ORG_HOMEPAGE_VISITORS'));
+                            array('maxLength' => 250, 'property' => FIELD_REQUIRED, 'helpTextIdInline' => 'ORG_HOMEPAGE_VISITORS'));
                         $form->addInput('homepage_login', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('ORG_REGISTERED_USERS').')', $form_values['homepage_login'],
-                            array('maxLength' => 250, 'property' => FIELD_MANDATORY, 'helpTextIdInline' => 'ORG_HOMEPAGE_REGISTERED_USERS'));
+                            array('maxLength' => 250, 'property' => FIELD_REQUIRED, 'helpTextIdInline' => 'ORG_HOMEPAGE_REGISTERED_USERS'));
                         $form->addCheckbox('enable_rss', $gL10n->get('ORG_ENABLE_RSS_FEEDS'), $form_values['enable_rss'], array('helpTextIdInline' => 'ORG_ENABLE_RSS_FEEDS_DESC'));
                         $form->addCheckbox('enable_auto_login', $gL10n->get('ORG_LOGIN_AUTOMATICALLY'), $form_values['enable_auto_login'], array('helpTextIdInline' => 'ORG_LOGIN_AUTOMATICALLY_DESC'));
                         $form->addInput('logout_minutes', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $form_values['logout_minutes'],
@@ -172,8 +172,8 @@ $page->addHtml('
                         // show form
                         $form = new HtmlForm('organization_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=organization', $page, array('class' => 'form-preferences'));
                         $form->addStaticControl('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $form_values['org_shortname'], array('class' => 'form-control-small'));
-                        $form->addInput('org_longname', $gL10n->get('SYS_NAME'), $form_values['org_longname'], array('maxLength' => 60, 'property' => FIELD_MANDATORY));
-                        $form->addInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $form_values['org_homepage'], array('type' => 'url', 'maxLength' => 60));
+                        $form->addInput('org_longname', $gL10n->get('SYS_NAME'), $form_values['org_longname'], array('maxLength' => 60, 'property' => FIELD_REQUIRED));
+                        $form->addInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $form_values['org_homepage'], array('maxLength' => 60));
 
                         //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
                         if($gCurrentOrganization->hasChildOrganizations() == false)
@@ -213,7 +213,7 @@ $page->addHtml('
                         // show form
                         $form = new HtmlForm('regional_settings_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=regional_settings', $page, array('class' => 'form-preferences'));
                         $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME',
-                                                   array('property' => FIELD_MANDATORY, 'defaultValue' => $form_values['system_language'], 'showContextDependentFirstEntry' => true));
+                                                   array('property' => FIELD_REQUIRED, 'defaultValue' => $form_values['system_language'], 'showContextDependentFirstEntry' => true));
                         $form->addSelectBox('default_country', $gL10n->get('PRO_DEFAULT_COUNTRY'), $gL10n->getCountries(),
                                             array('defaultValue' => $form_values['default_country'], 'helpTextIdInline' => 'PRO_DEFAULT_COUNTRY_DESC'));
                         $form->addInput('system_date', $gL10n->get('ORG_DATE_FORMAT'), $form_values['system_date'], array('maxLength' => 20,
@@ -644,6 +644,10 @@ $page->addHtml('
                         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
                         $form->addSelectBox('lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries, array('defaultValue' => $form_values['lists_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC'));
                         $form->addCheckbox('lists_hide_overview_details', $gL10n->get('LST_HIDE_DETAILS'), $form_values['lists_hide_overview_details'], array('helpTextIdInline' => 'LST_HIDE_DETAILS_DESC'));
+                        $html = '<a class="btn" href="'. $g_root_path. '/adm_program/modules/categories/categories.php?type=ROL"><img
+                                    src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
+                        $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+                        $form->addCustomContent($gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, array('helpTextIdInline' => $htmlDesc));
                         $form->addSubmitButton('btn_save_lists', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
@@ -775,7 +779,7 @@ $page->addHtml('
                 </div>
             </div>');
             /*
-            <div class="panel panel-default" id="panel_links">
+            <div class="panel panel-default" id="panel_inventory">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_inventory">
