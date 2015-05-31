@@ -69,15 +69,16 @@ class Language
      * Reads a text string out of a language xml file that is identified
      * with a unique text id e.g. SYS_COMMON. If the text contains placeholders
      * than you must set more parameters to replace them.
-     * @param  string $textId Unique text id of the text that should be read e.g. SYS_COMMON
-     * @param $param1,$param2... The function accepts an undefined number of values which will be used to replace
-     *                        the placeholder in the text.
-     *                        $param1 will replace @b %%VAR1% or @b %%VAR1_BOLD%,
-     *                        $param2 will replace @b %%VAR2% or @b %%VAR2_BOLD% etc.
+     * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     *
+     * param  string $param1,$param2... The function accepts an undefined number of values which will be used
+     *                                  to replace the placeholder in the text.
+     *                                  $param1 will replace @b %%VAR1% or @b %%VAR1_BOLD%,
+     *                                  $param2 will replace @b %%VAR2% or @b %%VAR2_BOLD% etc.
      * @return string Returns the text string with replaced placeholders of the text id.
      * @par Examples
      * @code // display a text without placeholders
-     *                       echo $gL10n->get('SYS_NUMBER');
+     *                echo $gL10n->get('SYS_NUMBER');
      *
      * // display a text with placeholders for individual content
      * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Webmaster');
@@ -90,7 +91,7 @@ class Language
             return 'Error: '.$this->languageData.' is not an object!';
         }
 
-        $text   = '';
+        $text = '';
 
         // first read text from cache if it exists there
         if(array_key_exists($textId, $this->languageData->textCache))
@@ -104,7 +105,8 @@ class Language
             {
                 if($text === '')
                 {
-                    $text = $this->searchLanguageText($this->xmlLanguageObjects, $languagePath, $this->languageData->getLanguage(), $textId);
+                    $text = $this->searchLanguageText($this->xmlLanguageObjects, $languagePath,
+                                                      $this->languageData->getLanguage(), $textId);
                 }
             }
 
@@ -116,7 +118,8 @@ class Language
                 {
                     if($text === '')
                     {
-                        $text = $this->searchLanguageText($this->xmlReferenceLanguageObjects, $languagePath, $this->languageData->getLanguage(true), $textId);
+                        $text = $this->searchLanguageText($this->xmlReferenceLanguageObjects, $languagePath,
+                                                          $this->languageData->getLanguage(true), $textId);
                     }
                 }
             }
@@ -222,8 +225,8 @@ class Language
 
     /**
      * Returns the ISO code of the language of this object.
-     * @param  bool    $referenceLanguage If set to @b true than the ISO code of the reference language will returned.
-     * @return Returns the ISO code of the language of this object or the reference language e.g. @b de or @b en.
+     * @param  bool   $referenceLanguage If set to @b true than the ISO code of the reference language will returned.
+     * @return string Returns the ISO code of the language of this object or the reference language e.g. @b de or @b en.
      */
     public function getLanguageIsoCode($referenceLanguage = false)
     {
@@ -242,8 +245,8 @@ class Language
     /**
      * Returns the language code of the language of this object. This is the code that is set within
      * Admidio with some specials like de_sie. If you only want the ISO code then call getLanguageIsoCode().
-     * @param  bool    $referenceLanguage If set to @b true than the language code of the reference language will returned.
-     * @return Returns the language code of the language of this object or the reference language.
+     * @param  bool   $referenceLanguage If set to @b true than the language code of the reference language will returned.
+     * @return string Returns the language code of the language of this object or the reference language.
      */
     public function getLanguage($referenceLanguage = false)
     {
@@ -279,8 +282,8 @@ class Language
      * @param  array  $objectArray  The reference to an array where every SimpleXMLElement of each language path is stored
      * @param  string $languagePath The path in which the different language xml files are.
      * @param  string $language     The ISO code of the language in which the text will be searched
-     * @param $textId              The id of the text that will be searched in the file.
-     * @return Return the text in the language or nothing if text id wasn't found.
+     * @param  string $textId       The id of the text that will be searched in the file.
+     * @return string Return the text in the language or nothing if text id wasn't found.
      */
     public function searchLanguageText(&$objectArray, $languagePath, $language, $textId)
     {
@@ -307,9 +310,11 @@ class Language
                 // replace highly comma, so there are no problems in the code later
                 $text = str_replace('\'', '&rsquo;', $text);
                 $this->languageData->textCache[$textId] = $text;
+
                 return $text;
             }
         }
+
         return '';
     }
 

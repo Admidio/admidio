@@ -29,7 +29,6 @@
  *                        Rolle "Webmaster" ist
  *
  *****************************************************************************/
-
 class User extends TableUsers
 {
     protected $webmaster;
@@ -45,12 +44,12 @@ class User extends TableUsers
     protected $saveChangesWithoutRights;        ///< If this flag is set then a user can save changes to the user if he hasn't the necessary rights
 
     /**
-     * Constuctor that will create an object of a recordset of the users table.
+     * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
      * @param object $db         Object of the class database. This could be the default object @b $gDb.
      * @param object $userFields An object of the ProfileFields class with the profile field structure
      *                           of the current organization. This could be the default object @b $gProfileFields.
-     * @param $userId            The id of the user who should be loaded. If id isn't set than an empty object with
+     * @param int    $userId     The id of the user who should be loaded. If id isn't set than an empty object with
      *                           no specific user is created.
      */
     public function __construct(&$db, $userFields, $userId = 0)
@@ -62,8 +61,9 @@ class User extends TableUsers
         parent::__construct($db, $userId);
     }
 
-    /** Assign the user to all roles that have set the flag @b rol_default_registration.
-     *  These flag should be set if you want that every new user should get this role.
+    /**
+     * Assign the user to all roles that have set the flag @b rol_default_registration.
+     * These flag should be set if you want that every new user should get this role.
      */
     public function assignDefaultRoles()
     {
@@ -72,14 +72,14 @@ class User extends TableUsers
         $this->db->startTransaction();
 
         // every user will get the default roles for registration, if the current user has the right to assign roles
-        // than the roles assignement dialog will be shown
+        // than the roles assignment dialog will be shown
         $sql = 'SELECT rol_id FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
                  WHERE rol_cat_id = cat_id
                    AND cat_org_id = '.$this->organizationId.'
                    AND rol_default_registration = 1 ';
         $result = $this->db->query($sql);
 
-        if($this->db->num_rows() == 0)
+        if($this->db->num_rows() === 0)
         {
             $gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
         }
@@ -121,21 +121,22 @@ class User extends TableUsers
         return false;
     }
 
-    /** The method reads all roles where this user has a valid membership and checks the rights of
-     *  those roles. It stores all rights that the user get at last through one role in an array.
-     *  In addition the method checks which roles lists the user could see in an separate array.
-     *  Also an array with all roles where the user has the right to write an email will be stored.
-     *  The method considered the role leader rights of each role if this is set and the current
-     *  user is a leader in a role.
-     *  @param string $right The database column name of the right that should be checked. If this param
-     *                is not set then only the arrays are filled.
-     *  @return bool Return true if a special right should be checked and the user has this right.
+    /**
+     * The method reads all roles where this user has a valid membership and checks the rights of
+     * those roles. It stores all rights that the user get at last through one role in an array.
+     * In addition the method checks which roles lists the user could see in an separate array.
+     * Also an array with all roles where the user has the right to write an email will be stored.
+     * The method considered the role leader rights of each role if this is set and the current
+     * user is a leader in a role.
+     * @param  string $right The database column name of the right that should be checked. If this param
+     *                       is not set then only the arrays are filled.
+     * @return bool   Return true if a special right should be checked and the user has this right.
      */
     public function checkRolesRight($right = '')
     {
         if($this->getValue('usr_id') > 0)
         {
-            if(count($this->roles_rights) == 0)
+            if(count($this->roles_rights) === 0)
             {
                 $this->assignRoles = false;
                 $tmp_roles_rights  = array('rol_assign_roles'  => '0', 'rol_approve_users' => '0',
@@ -268,6 +269,7 @@ class User extends TableUsers
                 return true;
             }
         }
+
         return false;
     }
 
@@ -400,8 +402,10 @@ class User extends TableUsers
         {
             return true;
         }
-
-        return false;
+        else
+        {
+            return false;
+        }
     }
 
     /**
@@ -426,12 +430,12 @@ class User extends TableUsers
      * Edit an existing role membership of the current user. If the new date range contains
      * a future or past membership of the same role then the two memberships will be merged.
      * In opposite to setRoleMembership this method is useful to end a membership earlier.
-     * @param         $memberId  Id of the current membership that should be edited.
-     * @param  string $startDate New start date of the membership. Default will be @b DATE_NOW.
-     * @param  string $endDate   New end date of the membership. Default will be @b 9999-12-31
-     * @param         $leader    If set to @b 1 then the member will be leader of the role and
-     *                           might get more rights for this role.
-     * @return bool   Return @b true if the membership was successfully edited.
+     * @param  int         $memberId  Id of the current membership that should be edited.
+     * @param  string      $startDate New start date of the membership. Default will be @b DATE_NOW.
+     * @param  string      $endDate   New end date of the membership. Default will be @b 9999-12-31
+     * @param  bool|string $leader    If set to @b 1 then the member will be leader of the role and
+     *                                might get more rights for this role.
+     * @return bool        Return @b true if the membership was successfully edited.
      */
     public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = '9999-12-31', $leader = '')
     {
@@ -456,7 +460,7 @@ class User extends TableUsers
                  ORDER BY mem_begin ASC ';
         $this->db->query($sql);
 
-        if($this->db->num_rows() == 1)
+        if($this->db->num_rows() === 1)
         {
             // one record found than update this record
             $row = $this->db->fetch_array();
@@ -576,7 +580,10 @@ class User extends TableUsers
         {
             return $this->organizationId;
         }
-        return 0;
+        else
+        {
+            return 0;
+        }
     }
 
     /**
@@ -607,6 +614,7 @@ class User extends TableUsers
     public function getValue($columnName, $format = '')
     {
         global $gPreferences;
+
         if(strpos($columnName, 'usr_') === 0)
         {
             if($columnName === 'usr_photo' && $gPreferences['profile_photo_storage'] == 0
@@ -788,6 +796,7 @@ class User extends TableUsers
                 }
             }
         }
+
         return false;
     }
 
@@ -848,13 +857,14 @@ class User extends TableUsers
                 }
             }
         }
+
         return false;
     }
 
     /**
      * Check if the user of this object has the right to view the role that is set in the parameter.
-     * @param $roleId The id of the role that should be checked.
-     * @return bool Return @b true if the user has the right to view the role otherwise @b false.
+     * @param  int|string $roleId The id of the role that should be checked.
+     * @return bool       Return @b true if the user has the right to view the role otherwise @b false.
      */
     public function hasRightViewRole($roleId)
     {
@@ -871,12 +881,13 @@ class User extends TableUsers
                 return true;
             }
         }
+
         return false;
     }
 
     /**
      * check if user is leader of a role
-     * @param $roleId
+     * @param  int|string $roleId
      * @return bool
      */
     public function isLeaderOfRole($roleId)
@@ -893,7 +904,7 @@ class User extends TableUsers
 
     /**
      * check if user is member of a role
-     * @param $roleId
+     * @param  int|string $roleId
      * @return bool
      */
     public function isMemberOfRole($roleId)
@@ -931,8 +942,8 @@ class User extends TableUsers
     /**
      * Reads a user record out of the table adm_users in database selected by the unique user id.
      * Also all profile fields of the object @b mProfileFieldsData will be read.
-     * @param $userId Unique id of the user that should be read
-     * @return bool Returns @b true if one record is found
+     * @param  int|string $userId Unique id of the user that should be read
+     * @return bool       Returns @b true if one record is found
      */
     public function readDataById($userId)
     {
@@ -942,8 +953,10 @@ class User extends TableUsers
             $this->mProfileFieldsData->readUserData($userId, $this->organizationId);
             return true;
         }
-
-        return false;
+        else
+        {
+            return false;
+        }
     }
 
     /**
@@ -954,10 +967,10 @@ class User extends TableUsers
     public function renewRoleData()
     {
         // initialize rights arrays
-        $this->roles_rights     = array();
-        $this->list_view_rights = array();
-        $this->role_mail_rights = array();
-        $this->rolesMembership  = array();
+        $this->roles_rights          = array();
+        $this->list_view_rights      = array();
+        $this->role_mail_rights      = array();
+        $this->rolesMembership       = array();
         $this->rolesMembershipLeader = array();
     }
 
@@ -1199,7 +1212,7 @@ class User extends TableUsers
             // user data from adm_user_fields table
 
             // only to a update if value has changed
-            if(strcmp($newValue, $oldFieldValue) != 0)
+            if(strcmp($newValue, $oldFieldValue) !== 0)
             {
                 // Disabled fields can only be edited by users with the right "edit_users" except on registration.
                 // Here is no need to check hidden fields because we check on save() method that only users who
