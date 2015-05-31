@@ -1,128 +1,4 @@
 <?php
-/*******************************************************************************/
-/** @class ModuleDates
- *  @brief This class reads date recordsets from database
- *
- *  This class reads all available recordsets from table dates.
- *  and returns an Array with results, recordsets and validated parameters from $_GET Array.
- *  @par Returned Array
- *  @code
- *  array(
- *          [numResults] => 1
- *          [limit] => 10
- *          [totalCount] => 1
- *          [recordset] => Array
- *          (
- *              [0] => Array
- *                  (
- *                      [0] => 10
- *                      [cat_id] => 10
- *                      [1] => 1
- *                      [cat_org_id] => 1
- *                      [2] => DAT
- *                      [cat_type] => DAT
- *                      [3] => COMMON
- *                      [cat_name_intern] => COMMON
- *                      [4] => Allgemein
- *                      [cat_name] => Allgemein
- *                      [5] => 0
- *                      [cat_hidden] => 0
- *                      [6] => 0
- *                      [cat_system] => 0
- *                      [7] => 0
- *                      [cat_default] => 0
- *                      [8] => 1
- *                      [cat_sequence] => 1
- *                      [9] => 1
- *                      [cat_usr_id_create] => 1
- *                      [10] => 2012-01-08 11:12:05
- *                      [cat_timestamp_create] => 2012-01-08 11:12:05
- *                      [11] =>
- *                      [cat_usr_id_change] =>
- *                      [12] =>
- *                      [cat_timestamp_change] =>
- *                      [13] => 9
- *                      [dat_id] => 9
- *                      [14] => 10
- *                      [dat_cat_id] => 10
- *                      [15] =>
- *                      [dat_rol_id] =>
- *                      [16] =>
- *                      [dat_room_id] =>
- *                      [17] => 0
- *                      [dat_global] => 0
- *                      [18] => 2013-09-21 21:00:00
- *                      [dat_begin] => 2013-09-21 21:00:00
- *                      [19] => 2013-09-21 22:00:00
- *                      [dat_end] => 2013-09-21 22:00:00
- *                      [20] => 0
- *                      [dat_all_day] => 0
- *                      [21] => 0
- *                      [dat_highlight] => 0
- *                      [22] =>
- *                      [dat_description] =>
- *                      [23] =>
- *                      [dat_location] =>
- *                      [24] =>
- *                      [dat_country] =>
- *                      [25] => eet
- *                      [dat_headline] => eet
- *                      [26] => 0
- *                      [dat_max_members] => 0
- *                      [27] => 1
- *                      [dat_usr_id_create] => 1
- *                      [28] => 2013-09-20 21:56:23
- *                      [dat_timestamp_create] => 2013-09-20 21:56:23
- *                      [29] =>
- *                      [dat_usr_id_change] =>
- *                      [30] =>
- *                      [dat_timestamp_change] =>
- *                      [31] =>
- *                      [member_date_role] =>
- *                      [32] =>
- *                      [mem_leader] =>
- *                      [33] => Paul Webmaster
- *                      [create_name] => Paul Webmaster
- *                      [34] =>
- *                      [change_name] =>
- *                  )
- *
- *          )
- *
- *      [parameter] => Array
- *          (
- *              [active_role] => 1
- *              [calendar-selection] => 1
- *              [cat_id] => 0
- *              [category-selection] => 0,
- *              [date] =>
- *              [daterange] => Array
- *                  (
- *                      [english] => Array
- *                          (
- *                              [start_date] => 2013-09-21
- *                              [end_date] => 9999-12-31
- *                          )
- *
- *                      [system] => Array
- *                          (
- *                              [start_date] => 21.09.2013
- *                              [end_date] => 31.12.9999
- *                          )
- *
- *                  )
- *
- *              [headline] => Termine
- *              [id] => 0
- *              [mode] => actual
- *              [order] => ASC
- *              [startelement] => 0
- *              [view_mode] => html
- *          )
- *
- *  )
- *  @endcode
- */
 /*******************************************************************************
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
@@ -131,10 +7,135 @@
  *
  *******************************************************************************/
 
+/**
+ * @class ModuleDates
+ * @brief This class reads date recordsets from database
+ *
+ * This class reads all available recordsets from table dates.
+ * and returns an Array with results, recordsets and validated parameters from $_GET Array.
+ * @par Returned Array
+ * @code
+ * array(
+ *         [numResults] => 1
+ *         [limit] => 10
+ *         [totalCount] => 1
+ *         [recordset] => Array
+ *         (
+ *             [0] => Array
+ *                 (
+ *                     [0] => 10
+ *                     [cat_id] => 10
+ *                     [1] => 1
+ *                     [cat_org_id] => 1
+ *                     [2] => DAT
+ *                     [cat_type] => DAT
+ *                     [3] => COMMON
+ *                     [cat_name_intern] => COMMON
+ *                     [4] => Allgemein
+ *                     [cat_name] => Allgemein
+ *                     [5] => 0
+ *                     [cat_hidden] => 0
+ *                     [6] => 0
+ *                     [cat_system] => 0
+ *                     [7] => 0
+ *                     [cat_default] => 0
+ *                     [8] => 1
+ *                     [cat_sequence] => 1
+ *                     [9] => 1
+ *                     [cat_usr_id_create] => 1
+ *                     [10] => 2012-01-08 11:12:05
+ *                     [cat_timestamp_create] => 2012-01-08 11:12:05
+ *                     [11] =>
+ *                     [cat_usr_id_change] =>
+ *                     [12] =>
+ *                     [cat_timestamp_change] =>
+ *                     [13] => 9
+ *                     [dat_id] => 9
+ *                     [14] => 10
+ *                     [dat_cat_id] => 10
+ *                     [15] =>
+ *                     [dat_rol_id] =>
+ *                     [16] =>
+ *                     [dat_room_id] =>
+ *                     [17] => 0
+ *                     [dat_global] => 0
+ *                     [18] => 2013-09-21 21:00:00
+ *                     [dat_begin] => 2013-09-21 21:00:00
+ *                     [19] => 2013-09-21 22:00:00
+ *                     [dat_end] => 2013-09-21 22:00:00
+ *                     [20] => 0
+ *                     [dat_all_day] => 0
+ *                     [21] => 0
+ *                     [dat_highlight] => 0
+ *                     [22] =>
+ *                     [dat_description] =>
+ *                     [23] =>
+ *                     [dat_location] =>
+ *                     [24] =>
+ *                     [dat_country] =>
+ *                     [25] => eet
+ *                     [dat_headline] => eet
+ *                     [26] => 0
+ *                     [dat_max_members] => 0
+ *                     [27] => 1
+ *                     [dat_usr_id_create] => 1
+ *                     [28] => 2013-09-20 21:56:23
+ *                     [dat_timestamp_create] => 2013-09-20 21:56:23
+ *                     [29] =>
+ *                     [dat_usr_id_change] =>
+ *                     [30] =>
+ *                     [dat_timestamp_change] =>
+ *                     [31] =>
+ *                     [member_date_role] =>
+ *                     [32] =>
+ *                     [mem_leader] =>
+ *                     [33] => Paul Webmaster
+ *                     [create_name] => Paul Webmaster
+ *                     [34] =>
+ *                     [change_name] =>
+ *                 )
+ *
+ *         )
+ *
+ *     [parameter] => Array
+ *         (
+ *             [active_role] => 1
+ *             [calendar-selection] => 1
+ *             [cat_id] => 0
+ *             [category-selection] => 0,
+ *             [date] =>
+ *             [daterange] => Array
+ *                 (
+ *                     [english] => Array
+ *                         (
+ *                             [start_date] => 2013-09-21
+ *                             [end_date] => 9999-12-31
+ *                         )
+ *
+ *                     [system] => Array
+ *                         (
+ *                             [start_date] => 21.09.2013
+ *                             [end_date] => 31.12.9999
+ *                         )
+ *
+ *                 )
+ *
+ *             [headline] => Termine
+ *             [id] => 0
+ *             [mode] => actual
+ *             [order] => ASC
+ *             [startelement] => 0
+ *             [view_mode] => html
+ *         )
+ *
+ * )
+ * @endcode
+ */
 class ModuleDates extends Modules
 {
-    /** Constuctor that will create an object of a parameter set needed in modules to get the recordsets.
-     *  Initialize parameters
+    /**
+     * Constructor that will create an object of a parameter set needed in modules to get the recordsets.
+     * Initialize parameters
      */
     public function __construct()
     {
@@ -143,14 +144,17 @@ class ModuleDates extends Modules
         $this->setParameter('mode', 'actual');
     }
 
-    /** Method validates all date inputs and formats them to date format 'Y-m-d' needed for database queries
-     *  @param $date Date to be validated and formated if needed
+    /**
+     * Method validates all date inputs and formats them to date format 'Y-m-d' needed for database queries
+     * @param  string       $date Date to be validated and formated if needed
+     * @return string|false
      */
     private function formatDate($date)
     {
         global $gPreferences;
 
         $objDate = new DateTimeExtended($date, 'Y-m-d', 'date');
+
         if($objDate->valid())
         {
             return $date;
@@ -162,29 +166,29 @@ class ModuleDates extends Modules
 
             if($objDate->valid())
             {
-                return  substr($objDate->getDateTimeEnglish(), 0, 10);
+                return substr($objDate->getDateTimeEnglish(), 0, 10);
             }
             else
             {
-                FALSE;
+                return false;
             }
         }
     }
 
-    /** SQL query returns an array with available dates.
-     *  @param $startelement Defines the offset of the query (default: 0)
-     *  @param $limit Limit of query rows (default: 0)
-     *  @return Array with all results, dates and parameters.
+    /**
+     * SQL query returns an array with available dates.
+     * @param  int   $startElement Defines the offset of the query (default: 0)
+     * @param  int   $limit        Limit of query rows (default: 0)
+     * @return array Array with all results, dates and parameters.
      */
-    public function getDataSet($startElement=0, $limit=NULL)
+    public function getDataSet($startElement = 0, $limit = null)
     {
         global $gCurrentOrganization;
         global $gCurrentUser;
-        global $gProfileFields;
         global $gDb;
         global $gPreferences;
 
-        if($limit === NULL)
+        if($limit === null)
         {
             $limit = $gPreferences['dates_per_page'];
         }
@@ -219,12 +223,13 @@ class ModuleDates extends Modules
                    AND dat_id = dtr_dat_id
                        '.$this->sqlConditionsGet()
                         . ' ORDER BY dat_begin '.$this->order;
+
          //Parameter
         if($limit > 0)
         {
             $sql .= ' LIMIT '.$limit;
         }
-        if($startElement != 0)
+        if($startElement > 0)
         {
             $sql .= ' OFFSET '.$startElement;
         }
@@ -232,10 +237,11 @@ class ModuleDates extends Modules
         $result = $gDb->query($sql);
 
         //array for results
-        $dates= array('numResults'=>$gDb->num_rows($result), 'limit' => $limit, 'totalCount'=>$this->getDataSetCount());
+        $dates = array('numResults'=>$gDb->num_rows($result), 'limit' => $limit, 'totalCount'=>$this->getDataSetCount());
 
         //push results to array
-        while($row = $gDb->fetch_array($result))
+        $row = $gDb->fetch_array($result);
+        while($row)
         {
             $dates['recordset'][] = $row;
         }
@@ -243,9 +249,10 @@ class ModuleDates extends Modules
         return $dates;
     }
 
-    /** Returns a module specific headline
-     *  @param $headline  The initiale headline of the module.
-     *  @return Returns the full headline of the module
+    /**
+     * Returns a module specific headline
+     * @param  string $headline The initial headline of the module.
+     * @return string Returns the full headline of the module
      */
     public function getHeadline($headline)
     {
@@ -255,27 +262,29 @@ class ModuleDates extends Modules
         if($this->getParameter('cat_id') > 0)
         {
             $category  = new TableCategory($gDb, $this->getParameter('cat_id'));
-            $headline .= ' - '. $category->getValue('cat_name');
+            $headline .= ' - '.$category->getValue('cat_name');
         }
 
-        // check time period if old dates are choosen, then set headline to previous dates
+        // check time period if old dates are chosen, then set headline to previous dates
         // Define a prefix
         if($this->getParameter('dateStartFormatEnglish') < DATE_NOW
             && $this->getParameter('dateEndFormatEnglish') < DATE_NOW
-            || $this->getParameter('mode') == 'old')
+            || $this->getParameter('mode') === 'old')
         {
             $headline = $gL10n->get('DAT_PREVIOUS_DATES', ' ').$headline;
         }
 
-        if($this->getParameter('view_mode') == 'print')
+        if($this->getParameter('view_mode') === 'print')
         {
             $headline = $gCurrentOrganization->getValue('org_longname').' - '.$headline;
         }
+
         return $headline;
     }
 
     /**
-     *  Get number of available dates.
+     * Get number of available dates.
+     * @return int
      */
     public function getDataSetCount()
     {
@@ -295,8 +304,10 @@ class ModuleDates extends Modules
                            )
                        AND dat_id = dtr_dat_id'
                        .$this->sqlConditionsGet();
+
             $result = $gDb->query($sql);
             $row    = $gDb->fetch_array($result);
+
             return $row['count'];
         }
         else
@@ -305,20 +316,21 @@ class ModuleDates extends Modules
         }
     }
 
-    /** Returns value for form field.
-     *  This method compares a date value to a reference value and to date '1970-01-01'.
-     *  Html output will be set regarding the parameters.
-     *  If value matches the reference or date('1970-01-01'), the output value is cleared to get an empty string.
-     *  This method can be used to fill a html form
-     *  @param $date Date is to be checked to reference and default date '1970-01-01'.
-     *  @param $reference Reference date
-     *  @return String with date value, or an empty string, if $date is '1970-01-01' or reference date
+    /**
+     * Returns value for form field.
+     * This method compares a date value to a reference value and to date '1970-01-01'.
+     * Html output will be set regarding the parameters.
+     * If value matches the reference or date('1970-01-01'), the output value is cleared to get an empty string.
+     * This method can be used to fill a html form
+     * @param  string $date      Date is to be checked to reference and default date '1970-01-01'.
+     * @param  string $reference Reference date
+     * @return string String with date value, or an empty string, if $date is '1970-01-01' or reference date
      */
     public function getFormValue($date, $reference)
     {
         if(!isset($date) || !isset($reference))
         {
-            return FALSE;
+            return false;
         }
         else
         {
@@ -327,15 +339,16 @@ class ModuleDates extends Modules
         }
     }
 
-    /** Set a date range in which the dates should be searched. The method will fill
-     *  4 parameters @b dateStartFormatEnglish, @b dateStartFormatEnglish,
-     *  @b dateEndFormatEnglish and @b dateEndFormatAdmidio that could be read with
-     *  getParameter and could be used in the script.
-     *  @param $dateRangeStart A date in english or Admidio format that will be the start date of the range.
-     *  @param $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
-     *  @return Returns false if invalid date format is submitted
+    /**
+     * Set a date range in which the dates should be searched. The method will fill
+     * 4 parameters @b dateStartFormatEnglish, @b dateStartFormatEnglish,
+     * @b dateEndFormatEnglish and @b dateEndFormatAdmidio that could be read with
+     * getParameter and could be used in the script.
+     * @param  string     $dateRangeStart A date in english or Admidio format that will be the start date of the range.
+     * @param  string     $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
+     * @return void|false Returns false if invalid date format is submitted
      */
-    public function setDateRange($dateRangeStart = null, $dateRangeEnd = null)
+    public function setDateRange($dateRangeStart = '', $dateRangeEnd = '')
     {
         global $gPreferences;
 
@@ -345,17 +358,17 @@ class ModuleDates extends Modules
             switch($this->mode)
             {
                 case 'actual':
-                    $dateRangeStart  = DATE_NOW;
-                    $dateRangeEnd    = '9999-12-31';
+                    $dateRangeStart = DATE_NOW;
+                    $dateRangeEnd   = '9999-12-31';
                     break;
                 case 'old':
-                    $dateRangeStart  = '1970-01-01';
-                    $dateRangeEnd    = DATE_NOW;
-                    $this->order     = 'DESC';
+                    $dateRangeStart = '1970-01-01';
+                    $dateRangeEnd   = DATE_NOW;
+                    $this->order    = 'DESC';
                     break;
                 case 'all':
-                    $dateRangeStart  = '1970-01-01';
-                    $dateRangeEnd    = '9999-12-31';
+                    $dateRangeStart = '1970-01-01';
+                    $dateRangeEnd   = '9999-12-31';
                     break;
             }
         }
@@ -408,13 +421,17 @@ class ModuleDates extends Modules
 
     }
 
-    /** Check date value to reference and set html output.
-     *  If value matches to reference, value is cleared to get an empty string.
+    /**
+     * Check date value to reference and set html output.
+     * If value matches to reference, value is cleared to get an empty string.
+     * @param  string $date
+     * @param  string $reference
+     * @return string
      */
     private function setFormValue($date, $reference)
     {
         $checkedDate = $this->formatDate($date);
-        if($checkedDate == $reference || $checkedDate == '1970-01-01')
+        if($checkedDate == $reference || $checkedDate === '1970-01-01')
         {
             $date = '';
         }
@@ -422,25 +439,25 @@ class ModuleDates extends Modules
         {
             $this->date = $date;
         }
+
         return $date;
     }
 
     /**
-     *  Get additional tables for sql statement
-     *  @param $type of sql statement: @b data is joining tables to get more data from them
-     *                                 @b count is joining tables only to get the correct number of records
-     *                                 (default: 'data')
-     *  @return String with the necessary joins
+     * Get additional tables for sql statement
+     * @param  string $type of sql statement:
+     *                      data:  is joining tables to get more data from them
+     *                      count: is joining tables only to get the correct number of records (default: 'data')
+     * @return string String with the necessary joins
      */
-
-    public function sqlAdditionalTablesGet($type='data')
+    public function sqlAdditionalTablesGet($type = 'data')
     {
         global $gPreferences;
         global $gProfileFields;
 
-        $additionalTables='';
+        $additionalTables = '';
 
-        if ($type=='data')
+        if ($type === 'data')
         {
             if($gPreferences['system_show_create_edit'] == 1)
             {
@@ -474,16 +491,17 @@ class ModuleDates extends Modules
     }
 
     /**
-     *  Prepare SQL Statement.
+     * Prepare SQL Statement.
+     * @return string
      */
     private function sqlConditionsGet()
     {
         global $gValidLogin, $gCurrentUser;
 
-        $sqlConditions ='';
+        $sqlConditions = '';
 
         // if user isn't logged in, then don't show hidden categories
-        if ($gValidLogin == false)
+        if (!$gValidLogin)
         {
             $sqlConditions .= ' AND cat_hidden = 0 ';
         }
@@ -516,7 +534,7 @@ class ModuleDates extends Modules
         // add conditions for role permission
         if($gCurrentUser->getValue('usr_id') > 0)
         {
-            if($this->getParameter('show') == 'all')
+            if($this->getParameter('show') === 'all')
             {
                 $sqlConditions .= '
                 AND (  dtr_rol_id IS NULL

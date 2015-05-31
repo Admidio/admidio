@@ -71,7 +71,7 @@ if($getCatId > 0)
 }
 
 // Number of events each page for default view 'html' or 'compact' view
-if($gPreferences['dates_per_page'] > 0 && ($getViewMode == 'html' || $getViewMode == 'compact'))
+if($gPreferences['dates_per_page'] > 0 && ($getViewMode === 'html' || $getViewMode === 'compact'))
 {
     $datesPerPage = $gPreferences['dates_per_page'];
 }
@@ -84,7 +84,7 @@ else
 $datesResult     = $dates->getDataset($getStart, $datesPerPage);
 $datesTotalCount = $dates->getDataSetCount();
 
-if($getId  == 0 || $getViewMode == 'compact' && $getId > 0)
+if($getId == 0 || $getViewMode === 'compact' && $getId > 0)
 {
     // Navigation of the module starts here
     $gNavigation->addStartUrl(CURRENT_URL, $dates->getHeadline($getHeadline));
@@ -110,18 +110,18 @@ if($datesTotalCount != 0)
         if($date->getValue('dat_room_id') > 0)
         {
             $room = new TableRooms($gDb, $date->getValue('dat_room_id'));
-            $datesResult['recordset'][''.$count.'']['room_name'] = $room->getValue('room_name');
+            $datesResult['recordset'][$count]['room_name'] = $room->getValue('room_name');
         }
 
         // count members and leaders of the date role and push the result to the array
-        if($date->getValue('dat_rol_id')!= null)
+        if($date->getValue('dat_rol_id') != null)
         {
-            $datesResult['recordset'][''.$count.'']['dat_num_members'] = $participants->getCount($date->getValue('dat_rol_id'));
-            $datesResult['recordset'][''.$count.'']['dat_num_leaders'] = $participants->getNumLeaders($date->getValue('dat_rol_id'));
+            $datesResult['recordset'][$count]['dat_num_members'] = $participants->getCount($date->getValue('dat_rol_id'));
+            $datesResult['recordset'][$count]['dat_num_leaders'] = $participants->getNumLeaders($date->getValue('dat_rol_id'));
         }
 
         // For print view also read the participants and push the result to the array with index 'dat_rol_id'
-        if($getViewMode == 'print')
+        if($getViewMode === 'print')
         {
             if($date->getValue('dat_rol_id') > 0)
             {
@@ -136,12 +136,14 @@ if($datesTotalCount != 0)
 // create html page object
 $page = new HtmlPage($getHeadline);
 
-if($getViewMode == 'html'  || $getViewMode == 'compact')
+if($getViewMode === 'html' || $getViewMode === 'compact')
 {
 
     if($gPreferences['enable_rss'] == 1 && $gPreferences['enable_dates_module'] == 1)
     {
-        $page->addRssFile($g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline));
+        $page->addRssFile($g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$getHeadline,
+                          $gL10n->get('SYS_RSS_FEED_FOR_VAR',
+                          $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
     };
 
     $page->addJavascript('
@@ -166,7 +168,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
         }');
 
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
-    if($gPreferences['dates_viewmode'] == 'compact' && $getViewMode == 'html' && $getId > 0)
+    if($gPreferences['dates_viewmode'] === 'compact' && $getViewMode === 'html' && $getId > 0)
     {
         // add back link to module menu
         $datesMenu = $page->getMenu();
@@ -182,7 +184,8 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
         //Add new event
         if($gCurrentUser->editDates())
         {
-            $DatesMenu->addItem('admMenuItemAdd', $g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$getHeadline,
+            $DatesMenu->addItem('admMenuItemAdd',
+                                $g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$getHeadline,
                                 $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
         }
 
@@ -191,24 +194,30 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             //ical Download
             if($gPreferences['enable_dates_ical'] == 1)
             {
-                $DatesMenu->addItem('admMenuItemICal', $g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId,
-                                $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png');
+                $DatesMenu->addItem('admMenuItemICal',
+                                    $g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId,
+                                    $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png');
             }
 
             // show print button
             $DatesMenu->addItem('menu_item_print', null, $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
-            $page->addJavascript('$("#menu_item_print").click(function() {window.open("'.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode=print", "_blank")});', true);
+            $page->addJavascript('
+                $("#menu_item_print").click(function() {
+                    window.open("'.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode=print", "_blank");
+                });', true);
 
             if($gCurrentUser->isWebmaster())
             {
                 // show link to system preferences of weblinks
-                $DatesMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=events',
+                $DatesMenu->addItem('admMenuItemPreferencesLinks',
+                                    $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=events',
                                     $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
             }
             elseif($gCurrentUser->editDates())
             {
                 // if no calendar selectbox is shown, then show link to edit calendars
-                $DatesMenu->addItem('admMenuItemCategories', '/adm_program/modules/categories/categories.php?type=DAT&title='.$gL10n->get('DAT_CALENDAR'),
+                $DatesMenu->addItem('admMenuItemCategories',
+                                    '/adm_program/modules/categories/categories.php?type=DAT&title='.$gL10n->get('DAT_CALENDAR'),
                                     $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png');
             }
         }
@@ -239,7 +248,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
     else
     {
         // Output table header for compact view
-        if ($getViewMode == 'compact')
+        if ($getViewMode === 'compact')
         {
             $compactTable = new HtmlTable('events_compact_table', $page, true, true);
             $columnHeading = array('&nbsp;', $gL10n->get('SYS_START'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('DAT_LOCATION'));
@@ -266,12 +275,12 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             }
 
             // change and delete is only for users with additional rights
-            $copyIcon = '';
-            $editIcon = '';
+            $copyIcon   = '';
+            $editIcon   = '';
             $deleteIcon = '';
             if ($gCurrentUser->editDates())
             {
-                if($date->editRight() == true)
+                if($date->editRight())
                 {
                     $copyIcon = '
                     <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$getHeadline.'"><img
@@ -295,11 +304,11 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             // Initialize variables
             $registerLink    = '';
             $participantLink = '';
-            $mgrpartLink  = '';
-            $dateElements = array();
-            $maxMembers   = '';
-            $numMembers   = '';
-            $locationHtml = '';
+            $mgrpartLink     = '';
+            $dateElements    = array();
+            $maxMembers      = '';
+            $numMembers      = '';
+            $locationHtml    = '';
 
             if ($date->getValue('dat_all_day') == 0)
             {
@@ -311,7 +320,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             // write calendar in output array
             $dateElements[] = array($gL10n->get('DAT_CALENDAR'), '<strong>'. $date->getValue('cat_name'). '</strong>');
 
-            if (strlen($date->getValue('dat_location')) > 0)
+            if ($date->getValue('dat_location') !== '')
             {
                 // Show map link, when at least 2 words available
                 // having more than 3 characters each
@@ -324,12 +333,11 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                     }
                 }
 
-                if($gPreferences['dates_show_map_link'] == true
-                    && $map_info_count > 1)
+                if($gPreferences['dates_show_map_link'] && $map_info_count > 1)
                 {
                     // Create Google-Maps-Link for location
                     $location_url = 'http://maps.google.com/?q='. $date->getValue('dat_location');
-                    if(strlen($date->getValue('dat_country')) > 0)
+                    if($date->getValue('dat_country') !== '')
                     {
                         // Better results with additional country information
                         $location_url .= ',%20'. $date->getValue('dat_country');
@@ -337,25 +345,25 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                     $locationHtml = '<a href="'. $location_url. '" target="_blank" title="'.$gL10n->get('DAT_SHOW_ON_MAP').'"/><strong>'.$date->getValue("dat_location").'</strong></a>';
 
                     // if valid login and enough information about address exist - calculate the route
-                    if($gValidLogin && strlen($gCurrentUser->getValue('ADDRESS')) > 0
-                    && (strlen($gCurrentUser->getValue('POSTCODE'))  > 0 || strlen($gCurrentUser->getValue('CITY'))  > 0))
+                    if($gValidLogin && $gCurrentUser->getValue('ADDRESS') !== ''
+                    && ($gCurrentUser->getValue('POSTCODE') !== '' || $gCurrentUser->getValue('CITY') !== ''))
                     {
                         $route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($gCurrentUser->getValue('ADDRESS'));
-                        if(strlen($gCurrentUser->getValue('POSTCODE'))  > 0)
+                        if($gCurrentUser->getValue('POSTCODE') !== '')
                         {
                             $route_url .= ',%20'. urlencode($gCurrentUser->getValue('POSTCODE'));
                         }
-                        if(strlen($gCurrentUser->getValue('CITY'))  > 0)
+                        if($gCurrentUser->getValue('CITY') !== '')
                         {
                             $route_url .= ',%20'. urlencode($gCurrentUser->getValue('CITY'));
                         }
-                        if(strlen($gCurrentUser->getValue('COUNTRY'))  > 0)
+                        if($gCurrentUser->getValue('COUNTRY') !== '')
                         {
                             $route_url .= ',%20'. urlencode($gCurrentUser->getValue('COUNTRY'));
                         }
 
                         $route_url .= '&amp;daddr='. urlencode($date->getValue('dat_location'));
-                        if(strlen($date->getValue('dat_country')) > 0)
+                        if($date->getValue('dat_country') !== '')
                         {
                             // With information about country Google finds the location much better
                             $route_url .= ',%20'. $date->getValue('dat_country');
@@ -384,7 +392,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             // count participants of the date
             if($date->getValue('dat_rol_id') > 0)
             {
-                $numMembers  = $row['dat_num_members'];
+                $numMembers = $row['dat_num_members'];
 
                 if($date->getValue('dat_max_members')!=0)
                 {
@@ -405,7 +413,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                     {
                         $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id');
 
-                        if ($getViewMode == 'html')
+                        if ($getViewMode === 'html')
                         {
                             $registerLink = '<button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" />'.$gL10n->get('DAT_CANCEL').'</button>';
                         }
@@ -432,7 +440,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                         {
                             $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
 
-                            if ($getViewMode == 'html')
+                            if ($getViewMode === 'html')
                             {
                                 $registerLink = '<button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" />'.$gL10n->get('DAT_ATTEND').'</button>';
                             }
@@ -454,7 +462,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                         {
                             $buttonURL = $g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id');
 
-                            if ($getViewMode == 'html')
+                            if ($getViewMode === 'html')
                             {
                                 $participantLink = '<button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" />'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</button>';
                             }
@@ -470,7 +478,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                     {
                         $buttonURL = $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$date->getValue('dat_rol_id');
 
-                        if ($getViewMode == 'html')
+                        if ($getViewMode === 'html')
                         {
                             $mgrpartLink = '<button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</button>';
                         }
@@ -482,7 +490,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 }
             }
 
-            if ($getViewMode == 'html')
+            if ($getViewMode === 'html')
             {
                 // show panel view of events
 
@@ -520,7 +528,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                     }
                 }
 
-                if($firstElement == false)
+                if(!$firstElement)
                 {
                     $htmlDateElements .= '</div>';
 
@@ -560,7 +568,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
 
                 // Change css class if date is highlighted
                 $cssClass = '';
-                if($row['dat_highlight'] == true)
+                if($row['dat_highlight'])
                 {
                     $cssClass = 'event-highlight';
                 }
@@ -570,7 +578,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 $timeBegin = '';
                 if ($date->getValue('dat_all_day') == 0)
                 {
-                    $timeBegin = $date->getValue('dat_begin', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK');
+                    $timeBegin = $date->getValue('dat_begin', $gPreferences['system_time']).' '.$gL10n->get('SYS_CLOCK');
                 }
                 else
                 {
@@ -614,7 +622,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
         }  // End foreach
 
         // Output table bottom for compact view
-        if ($getViewMode == 'compact')
+        if ($getViewMode === 'compact')
         {
             $page->addHtml($compactTable->show(false));
         }
@@ -622,7 +630,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
 
     // If necessary show links to navigate to next and previous recordsets of the query
     $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode='.$getViewMode;
-    $page->addHtml(admFuncGeneratePagination($base_url, $datesTotalCount, $datesResult['limit'], $getStart, TRUE));
+    $page->addHtml(admFuncGeneratePagination($base_url, $datesTotalCount, $datesResult['limit'], $getStart, true));
     $page->show();
 }
 else
@@ -733,7 +741,7 @@ else
                 $buffer['dat_participation'] = $row['dat_num_members'].' '.'('.$row['dat_max_members'].')';
             }
 
-            // If date has participation and patricipants are assigned
+            // If date has participation and participants are assigned
             if($row['dat_rol_id'] != null && isset($row['dat_num_members']))
             {
                 $dateParticipation = new HtmlTableBasic('', 'dateParticipation');
@@ -749,7 +757,7 @@ else
                     // If last entry close table row
                     if($memberCount < $totalMemberCount)
                     {
-                        if(($memberCount % 6) == 0)
+                        if(($memberCount % 6) === 0)
                         {
                             $dateParticipation->addRow();
                         }
@@ -757,11 +765,13 @@ else
                     // Leaders are shown highlighted
                     if($memberDate['leader'] != 0)
                     {
-                        $dateParticipation->addColumn('<strong>'.$memberDate['surname'].' '.$memberDate['firstname'].'</strong>'.';', array('class' => 'left'), 'td');
+                        $dateParticipation->addColumn('<strong>'.$memberDate['surname'].' '.$memberDate['firstname'].'</strong>'.';',
+                                                      array('class' => 'left'), 'td');
                     }
                     else
                     {
-                        $dateParticipation->addColumn($memberDate['surname'].' '.$memberDate['firstname'].';', array('class' => 'left'), 'td');
+                        $dateParticipation->addColumn($memberDate['surname'].' '.$memberDate['firstname'].';',
+                                                      array('class' => 'left'), 'td');
                     }
                     $memberCount++;
                 }
@@ -774,32 +784,32 @@ else
             }
 
             // Configure table body contents
-            $body_1[$numElement]['dat_highlight']   = $buffer['dat_highlight'];
-            $body_1[$numElement]['dat_details']     = array($buffer['dat_begin'],
-                                                            $buffer['dat_end'],
-                                                            $buffer['dat_starttime'],
-                                                            $buffer['dat_endtime'],
-                                                            $buffer['dat_headline'],
-                                                            $buffer['dat_location'],
-                                                            $buffer['room_name'],
-                                                            $buffer['dat_num_leaders'],
-                                                            $buffer['dat_participation']);
+            $body_1[$numElement]['dat_highlight'] = $buffer['dat_highlight'];
+            $body_1[$numElement]['dat_details']   = array($buffer['dat_begin'],
+                                                          $buffer['dat_end'],
+                                                          $buffer['dat_starttime'],
+                                                          $buffer['dat_endtime'],
+                                                          $buffer['dat_headline'],
+                                                          $buffer['dat_location'],
+                                                          $buffer['room_name'],
+                                                          $buffer['dat_num_leaders'],
+                                                          $buffer['dat_participation']);
 
-            $body_2[$numElement]['dat_highlight']   = $buffer['dat_highlight'];
-            $body_2[$numElement]['dat_details']     = array($buffer['dat_begin'],
-                                                            $buffer['dat_end'],
-                                                            $buffer['dat_starttime'],
-                                                            $buffer['dat_endtime'],
-                                                            $buffer['dat_headline'],
-                                                            $buffer['dat_description']);
+            $body_2[$numElement]['dat_highlight'] = $buffer['dat_highlight'];
+            $body_2[$numElement]['dat_details']   = array($buffer['dat_begin'],
+                                                          $buffer['dat_end'],
+                                                          $buffer['dat_starttime'],
+                                                          $buffer['dat_endtime'],
+                                                          $buffer['dat_headline'],
+                                                          $buffer['dat_description']);
 
-            $body_3[$numElement]['dat_highlight']   = $buffer['dat_highlight'];
-            $body_3[$numElement]['dat_details']     = array($buffer['dat_begin'],
-                                                            $buffer['dat_end'],
-                                                            $buffer['dat_starttime'],
-                                                            $buffer['dat_endtime'],
-                                                            $buffer['dat_headline'],
-                                                            $tableParticipants);
+            $body_3[$numElement]['dat_highlight'] = $buffer['dat_highlight'];
+            $body_3[$numElement]['dat_details']   = array($buffer['dat_begin'],
+                                                          $buffer['dat_end'],
+                                                          $buffer['dat_starttime'],
+                                                          $buffer['dat_endtime'],
+                                                          $buffer['dat_headline'],
+                                                          $tableParticipants);
             $numElement++;
             unset($buffer);
         }  // end foreach
@@ -882,11 +892,11 @@ else
             {
                 if($row['dat_highlight'] != 1)
                 {
-                    $className = (($numDateElements % 2) == 0) ? 'even' : 'odd';
+                    $className = (($numDateElements % 2) === 0) ? 'even' : 'odd';
                 }
                 else
                 {
-                    $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
+                    $className = (($numDateElements % 2) === 0) ? 'evenHighlight' : 'oddHighlight';
                 }
 
                 $datePrint->addRow($row['dat_details'], array('class' => $className));
@@ -903,9 +913,9 @@ echo'
     <head>
         <!-- (c) 2004 - 2015 The Admidio Team - http://www.admidio.org -->
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>'. $gCurrentOrganization->getValue('org_longname'). ' - Terminliste </title>
+        <title>'.$gCurrentOrganization->getValue('org_longname').' - Terminliste </title>
         <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/print.css" />
+        <link rel="stylesheet" type="text/css" href="'.THEME_PATH.'/css/print.css" />
 
     <script type="text/javascript">
 
@@ -919,7 +929,7 @@ echo'
     </script>
     </head>
         <body>
-            ' .$tableDatePrint. '
+            '.$tableDatePrint.'
         </body>
     </html>';
 }
