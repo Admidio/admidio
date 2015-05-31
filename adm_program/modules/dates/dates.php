@@ -295,6 +295,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             // Initialize variables
             $registerLink    = '';
             $participantLink = '';
+            $emailLink    = '';
             $mgrpartLink  = '';
             $dateElements = array();
             $maxMembers   = '';
@@ -465,6 +466,24 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                         }
                     }
 
+                    // Link to send email to participants
+                    if($gValidLogin && $gCurrentUser->hasRightSendMailToRole($date->getValue('dat_rol_id')) == true)
+                    {
+                        if($row['dat_num_members'] > 0 || $row['dat_num_leaders'] > 0)
+                        {
+                            $buttonURL = $g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='.$date->getValue('dat_rol_id');
+                            
+                            if ($getViewMode == 'html')
+                            {
+                                $emailLink = '<button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'"><img src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" />'.$gL10n->get('MAI_SEND_EMAIL').'</button>';
+                            }
+                            else
+                            {
+                                $emailLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
+                            }
+                        }
+                    }
+
                     // Link for managing new participants
                     if($row['mem_leader'] == 1)
                     {
@@ -544,7 +563,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                                             
                         if (strlen($registerLink) > 0 || strlen($participantLink) > 0 || strlen($mgrpartLink) > 0)
                         {
-                            $page->addHtml('<div class="btn-group">'.$registerLink.$participantLink.$mgrpartLink.'</div>');
+                            $page->addHtml('<div class="btn-group">'.$registerLink.$participantLink.$emailLink.$mgrpartLink.'</div>');
                         }
                     $page->addHtml('</div>
                     <div class="panel-footer">'.
@@ -599,6 +618,15 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 }
                 
                 $columnValues[] = $participants;
+
+                if(strlen($emailLink) > 0)
+                {
+                    $columnValues[] = $emailLink;
+                }
+                else
+                {
+                    $columnValues[] = '&nbsp;';
+                }
 
                 if(strlen($locationHtml) > 0)
                 {
