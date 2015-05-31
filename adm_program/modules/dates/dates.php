@@ -545,7 +545,6 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
                                 $icalIcon . $copyIcon . $editIcon . $deleteIcon . '
                             </div>
                         </div>
-
                         <div class="panel-body">
                             ' . $htmlDateElements . '<br />
                             <p>' . $date->getValue('dat_description') . '</p>');
