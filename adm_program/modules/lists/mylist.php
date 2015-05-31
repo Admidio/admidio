@@ -327,10 +327,10 @@ else
             $column_content = $column->getValue('lsc_special_field');
         }
         $javascriptCode .= '
-                default_fields['. $number. '] = new Object();
-                default_fields['. $number. ']["usf_id"]    = "'. $column_content. '";
-                default_fields['. $number. ']["sort"]      = "'. $column->getValue('lsc_sort'). '";
-                default_fields['. $number. ']["condition"] = "'. $column->getValue('lsc_filter'). '";';
+            default_fields['.$number.'] = new Object();
+            default_fields['.$number.']["usf_id"]    = "'.$column_content. '";
+            default_fields['.$number.']["sort"]      = "'.$column->getValue('lsc_sort'). '";
+            default_fields['.$number.']["condition"] = "'.$column->getValue('lsc_filter'). '";';
     }
 }
 
@@ -565,7 +565,7 @@ if($gDb->num_rows() > 0)
         {
             // erst mal schauen, ob eine neue Gruppe von Konfigurationen angefangen hat
             if($tableList->getValue('lst_global') != $tableListGlobalFlag
-                || ($tableList->getValue('lst_name')  != $tableListNameFlag && strlen($tableListNameFlag) == 0))
+                || ($tableList->getValue('lst_name') != $tableListNameFlag && strlen($tableListNameFlag) == 0))
             {
                 if($optgroup_flag == 1)
                 {
@@ -619,8 +619,9 @@ if(($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
     || ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
 {
     $page->addHtml('
-                <a class="admidio-icon-link" href="javascript:send(\'save\');"><img
-                    src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('LST_SAVE_CONFIGURATION').'" title="'.$gL10n->get('LST_SAVE_CONFIGURATION').'" /></a>');
+                <a class="admidio-icon-link" href="javascript:send(\'save\');">
+                    <img src="'.THEME_PATH.'/icons/disk.png" alt="'.$gL10n->get('LST_SAVE_CONFIGURATION').'" title="'.$gL10n->get('LST_SAVE_CONFIGURATION').'" />
+                </a>');
 }
 
 if($gCurrentUser->isWebmaster()
@@ -638,8 +639,9 @@ if($gCurrentUser->isWebmaster()
         $icon_text = $gL10n->get('LST_SAVE_CONFIGURATION');
     }
     $page->addHtml('
-                <a class="admidio-icon-link" href="javascript:send(\'save_as\');"><img
-                    src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$icon_text.'" title="'.$icon_text.'" /></a>');
+                <a class="admidio-icon-link" href="javascript:send(\'save_as\');">
+                    <img src="'.THEME_PATH.'/icons/'.$icon.'" alt="'.$icon_text.'" title="'.$icon_text.'" />
+                </a>');
 }
 
 // eigene Liste duerfen geloescht werden, Webmaster koennen auch Systemkonfigurationen loeschen
@@ -647,24 +649,27 @@ if(($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
     || ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
 {
     $page->addHtml('
-                <a class="admidio-icon-link" href="javascript:send(\'delete\');"><img
-                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('LST_DELETE_CONFIGURATION').'" title="'.$gL10n->get('LST_DELETE_CONFIGURATION').'" /></a>');
+                <a class="admidio-icon-link" href="javascript:send(\'delete\');">
+                    <img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('LST_DELETE_CONFIGURATION').'" title="'.$gL10n->get('LST_DELETE_CONFIGURATION').'" />
+                </a>');
 }
 
 // eine gespeicherte Konfiguration kann vom Webmaster zur Systemkonfiguration gemacht werden
 if($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 0 && strlen($list->getValue('lst_name')) > 0)
 {
     $page->addHtml('
-                <a class="admidio-icon-link" href="javascript:send(\'system\');"><img
-                    src="'. THEME_PATH. '/icons/list_global.png" alt="'.$gL10n->get('LST_CONFIGURATION_ALL_USERS').'" title="'.$gL10n->get('LST_CONFIGURATION_ALL_USERS').'" /></a>');
+                <a class="admidio-icon-link" href="javascript:send(\'system\');">
+                    <img src="'.THEME_PATH.'/icons/list_global.png" alt="'.$gL10n->get('LST_CONFIGURATION_ALL_USERS').'" title="'.$gL10n->get('LST_CONFIGURATION_ALL_USERS').'" />
+                </a>');
 }
 
 // eine Systemkonfiguration kann vom Webmaster zur Default-Liste gemacht werden
 if($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
 {
     $page->addHtml('
-                <a class="admidio-icon-link" href="javascript:send(\'default\');"><img
-                    src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" title="'.$gL10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" /></a>');
+                <a class="admidio-icon-link" href="javascript:send(\'default\');">
+                    <img src="'.THEME_PATH.'/icons/star.png" alt="'.$gL10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" title="'.$gL10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" />
+                </a>');
 }
 
 // Hinweistext fuer Webmaster
@@ -672,8 +677,9 @@ if($gCurrentUser->isWebmaster())
 {
     $page->addHtml('
                 <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                    href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_config_webmaster&amp;inline=true"><img
-                    src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>');
+                    href="'.$g_root_path.'/adm_program/system/msg_window.php?message_id=mylist_config_webmaster&amp;inline=true">
+                    <img src="'.THEME_PATH.'/icons/help.png" alt="Help" />
+                </a>');
 }
 $page->addHtml('</div>
     </div>
@@ -689,16 +695,19 @@ $page->addHtml('</div>
                 <th style="width: 18%;">'.$gL10n->get('SYS_ORDER').'</th>
                 <th style="width: 25%;">'.$gL10n->get('SYS_CONDITION').'
                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true"><img
-                        src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
+                        href="'.$g_root_path.'/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true">
+                        <img src="'.THEME_PATH.'/icons/help.png" alt="Help" />
+                    </a>
                 </th>
             </tr>
         </thead>
         <tbody id="mylist_fields_tbody">
             <tr id="table_row_button">
                 <td colspan="4">
-                    <button type="button" class="btn btn-default" onclick="javascript:addColumn()"><img
-                        src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('LST_ADD_ANOTHER_COLUMN').'" />'.$gL10n->get('LST_ADD_ANOTHER_COLUMN').'</button>
+                    <button type="button" class="btn btn-default" onclick="javascript:addColumn()">
+                        <img src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('LST_ADD_ANOTHER_COLUMN').'" />
+                        '.$gL10n->get('LST_ADD_ANOTHER_COLUMN').'
+                    </button>
                 </td>
             </tr>
         </tbody>
@@ -742,8 +751,10 @@ $page->addHtml('</div>
 
     <hr />
 
-    <button id="btn_show_list" class="btn btn-primary" type="button"><img
-        src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('LST_SHOW_LIST').'" />&nbsp;'.$gL10n->get('LST_SHOW_LIST').'</button>
+    <button id="btn_show_list" class="btn btn-primary" type="button">
+        <img src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('LST_SHOW_LIST').'" />
+        &nbsp;'.$gL10n->get('LST_SHOW_LIST').'
+    </button>
 </form>');
 
 $page->show();

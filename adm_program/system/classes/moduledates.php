@@ -376,12 +376,12 @@ class ModuleDates extends Modules
         }
 
         // Create date object and format date_from in English format and sytem format and push to daterange array
-        $objDate = DateTime::createFromFormat ('Y-m-d', $dateRangeStart);
+        $objDate = DateTime::createFromFormat('Y-m-d', $dateRangeStart);
 
         if($objDate === false)
         {
             // check if date_from  has system format
-            $objDate = DateTime::createFromFormat ($gPreferences['system_date'], $dateRangeStart);
+            $objDate = DateTime::createFromFormat($gPreferences['system_date'], $dateRangeStart);
         }
 
         if(is_object($objDate))
@@ -395,12 +395,12 @@ class ModuleDates extends Modules
         }
 
         // Create date object and format date_to in English format and sytem format and push to daterange array
-        $objDate = DateTime::createFromFormat ('Y-m-d', $dateRangeEnd);
+        $objDate = DateTime::createFromFormat('Y-m-d', $dateRangeEnd);
 
         if($objDate === false)
         {
             // check if date_from  has system format
-            $objDate = DateTime::createFromFormat ($gPreferences['system_date'], $dateRangeEnd);
+            $objDate = DateTime::createFromFormat($gPreferences['system_date'], $dateRangeEnd);
         }
 
         if(is_object($objDate))

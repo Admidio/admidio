@@ -117,7 +117,7 @@ switch ($get_type)
         break;
 }
 
-if(strlen($callbackFunction) > 0)
+if($callbackFunction !== '')
 {
     $callbackFunction = ', \''.$callbackFunction.'\'';
 }
