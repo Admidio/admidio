@@ -491,7 +491,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 // Change css if date is highlighted
                 if($row['dat_highlight'] == 1)
                 {
-                    $cssClassHighlight = ' event-highlight';
+                    $cssClassHighlight = ' admidio-event-highlight';
                 }
 
                 // Output of elements
@@ -562,7 +562,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 $cssClass = '';
                 if($row['dat_highlight'] == true)
                 {
-                    $cssClass = 'event-highlight';
+                    $cssClass = 'admidio-event-highlight';
                 }
 
                 $objDateBegin = new DateTime($row['dat_begin']);

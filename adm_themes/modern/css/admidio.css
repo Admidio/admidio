@@ -718,11 +718,11 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 
 /* Events */
 
-tr.event-highlight, .event-highlight .panel-heading {
+tr.admidio-event-highlight, .admidio-event-highlight .panel-heading {
     font-weight: bold;
     color: #ff9c00;
 }
 
-.panel-primary.event-highlight > .panel-heading {
+.panel-primary.admidio-event-highlight > .panel-heading {
     border-bottom: 2px solid #ff9c00;
 }
