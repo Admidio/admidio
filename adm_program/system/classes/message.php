@@ -1,27 +1,5 @@
 <?php
-/******************************************************************************
-/** @class Message
- *  @brief Simple presentation of messages to the user
- *
- *  This class creates a new html page with a simple headline and a message. It's
- *  designed to easily integrate this class into your code. An object @b $gMessage
- *  of this class is created in the common.php. You can set a url that should be
- *  open after user confirmed the message or you can show a question with two
- *  default buttons yes and no. There is also an option to automatically leave the
- *  message after some time.
- *  @par Examples
- *  @code // show a message with a back button, the object $gMessage is created in common.php
- *  $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
- *
- *  // show a message and set a link to a page that should be shown after user click ok
- *  $gMessage->setForwardUrl('http://www.example.de/mypage.php');
- *  $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
- *
- *  // show a message with yes and no button and set a link to a page that should be shown after user click yes
- *  $gMessage->setForwardYesNo('http://www.example.de/mypage.php');
- *  $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));@endcode
- */
- /*****************************************************************************
+/*****************************************************************************
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -29,6 +7,28 @@
  *
  *****************************************************************************/
 
+/**
+ * @class Message
+ * @brief Simple presentation of messages to the user
+ *
+ * This class creates a new html page with a simple headline and a message. It's
+ * designed to easily integrate this class into your code. An object @b $gMessage
+ * of this class is created in the common.php. You can set a url that should be
+ * open after user confirmed the message or you can show a question with two
+ * default buttons yes and no. There is also an option to automatically leave the
+ * message after some time.
+ * @par Examples
+ * @code // show a message with a back button, the object $gMessage is created in common.php
+ * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
+ *
+ * // show a message and set a link to a page that should be shown after user click ok
+ * $gMessage->setForwardUrl('http://www.example.de/mypage.php');
+ * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
+ *
+ * // show a message with yes and no button and set a link to a page that should be shown after user click yes
+ * $gMessage->setForwardYesNo('http://www.example.de/mypage.php');
+ * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));@endcode
+ */
 class Message
 {
     private $inline;            // wird ermittelt, ob bereits eine Ausgabe an den Browser erfolgt ist
@@ -42,7 +42,9 @@ class Message
     private $showYesNoButtons;  // Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
     private $modalWindowMode;   ///< If this is set to true than the message will be show with html of the bootstrap modal window
 
-    /** Constructor that initialize the class member parameters */
+    /**
+     * Constructor that initialize the class member parameters
+     */
     public function __construct()
     {
         $this->inline           = false;
@@ -53,7 +55,9 @@ class Message
         $this->modalWindowMode  = false;
     }
 
-    /** No button will be shown in the message window. */
+    /**
+     * No button will be shown in the message window.
+     */
     public function hideButtons()
     {
         $this->showButtons = false;
@@ -71,9 +75,9 @@ class Message
     /**
      * Set a URL to which the user should be directed if he confirmed the message.
      * It's possible to set a timer after that the page of the url will be
-     * automatically displayed without user inteaction.
+     * automatically displayed without user interaction.
      * @param string $url   The full url to which the user should be directed.
-     * @param int    $timer Optional a timer in millisec after the user will be automatically redirected to the $url.
+     * @param int    $timer Optional a timer in millisecond after the user will be automatically redirected to the $url.
      */
     public function setForwardUrl($url, $timer = 0)
     {
@@ -90,9 +94,8 @@ class Message
     }
 
     /**
-     * Add two buttons with the labels @b yes and @b no to the message. If the user
-     * choose yes he will be redirected to the $url. If he chooses no he will be
-     * directed back to the previous page.
+     * Add two buttons with the labels @b yes and @b no to the message. If the user choose yes
+     * he will be redirected to the $url. If he chooses no he will be directed back to the previous page.
      * @param string $url The full url to which the user should be directed if he chooses @b yes.
      */
     public function setForwardYesNo($url)
@@ -103,16 +106,13 @@ class Message
 
     /**
      * Create a html page if necessary and show the message with the configured buttons.
-     * @param  string  $content The message text that should be shown. The content could have html.
-     * @param $headline Optional a headline for the message. Default will be SYS_NOTE.
-     * @return Returns the complete html page with the message.
+     * @param string $content  The message text that should be shown. The content could have html.
+     * @param string $headline Optional a headline for the message. Default will be SYS_NOTE.
      */
-    public function show($content, $headline = null)
+    public function show($content, $headline = '')
     {
         // noetig, da dies bei den includes benoetigt wird
-        global $gLayout, $gDb, $gDbConnection, $g_adm_db, $gL10n, $page;
-        global $gValidLogin, $g_root_path, $gPreferences, $gHomepage, $gMessages, $gProfileFields;
-        global $g_organization, $gCurrentOrganization, $gCurrentUser, $gCurrentSession;
+        global $gDb, $gL10n, $page;
 
         $html = '';
 
@@ -193,8 +193,9 @@ class Message
                 {
                     $htmlButtons .= '
                         <a class="btn" href="javascript:history.back()">
-                            <img src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'"
-                            title="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').
+                            <img src="'.THEME_PATH.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'"
+                                title="'.$gL10n->get('SYS_BACK').'" />'.
+                            $gL10n->get('SYS_BACK').
                         '</a>';
                 }
             }
@@ -204,20 +205,22 @@ class Message
         if($this->modalWindowMode)
         {
             $html .= '
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">'.$headline.'</h4>
-            </div>
-            <div class="modal-body">'.$content.'</div>
-            <div class="modal-footer">'.$htmlButtons.'</div>';
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">'.$headline.'</h4>
+                </div>
+                <div class="modal-body">'.$content.'</div>
+                <div class="modal-footer">'.$htmlButtons.'</div>';
         }
         else
         {
             $html .= '
-            <div class="message">
-                <p class="lead">'. $content.'</p>
-                '.$htmlButtons.'
-            </div>';
+                <div class="message">
+                    <p class="lead">'. $content.'</p>
+                    '.$htmlButtons.'
+                </div>';
         }
 
         if($this->showTextOnly)
@@ -241,12 +244,11 @@ class Message
             $page->addHtml($html);
             $page->show();
         }
-        exit();
     }
 
     /**
-     * If this will be set then only the text message will be shown. If this message contains html elements
-     * then these will also be shown in the output,
+     * If this will be set then only the text message will be shown.
+     * If this message contains html elements then these will also be shown in the output.
      * @param bool $showText If set to true than only the message text with their html elements will be shown.
      */
     public function showHtmlTextOnly($showText)
@@ -256,8 +258,8 @@ class Message
 
 
     /**
-     * If set no theme files will be integrated in the page. This setting is usefull if the message should be
-     * loaded in a small window.
+     * If set no theme files will be integrated in the page.
+     * This setting is useful if the message should be loaded in a small window.
      * @param bool $showTheme If set to true than theme body and header will be shown. Otherwise this will be hidden.
      */
     public function showThemeBody($showTheme)

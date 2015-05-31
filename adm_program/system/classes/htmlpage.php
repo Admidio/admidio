@@ -1,21 +1,4 @@
 <?php
-/*****************************************************************************/
-/** @class HtmlPage
- *  @brief Creates an Admidio specific complete html page
- *
- *  This class creates a html page with head and body and integrates some Admidio
- *  specific elements like css files, javascript files and javascript code. It
- *  also provides some methods to easily add new html data to the page. The generated
- *  page will automatically integrate the choosen theme. You can optional disable the
- *  integration of the theme files.
- *  @par Examples
- *  @code // create a simple html page with some text
- *  $page = new HtmlPage();
- *  $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.min.js');
- *  $page->addHeadline('A simple Html page');
- *  $page->addHtml('<strong>This is a simple Html page!</strong>');
- *  $page->show();@endcode
- */
 /*****************************************************************************
  *
  *  Copyright    : (c) 2004 - 2015 The Admidio Team
@@ -24,6 +7,23 @@
  *
  *****************************************************************************/
 
+/**
+ * @class HtmlPage
+ * @brief Creates an Admidio specific complete html page
+ *
+ * This class creates a html page with head and body and integrates some Admidio
+ * specific elements like css files, javascript files and javascript code. It
+ * also provides some methods to easily add new html data to the page. The generated
+ * page will automatically integrate the choosen theme. You can optional disable the
+ * integration of the theme files.
+ * @par Examples
+ * @code // create a simple html page with some text
+ * $page = new HtmlPage();
+ * $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.min.js');
+ * $page->addHeadline('A simple Html page');
+ * $page->addHtml('<strong>This is a simple Html page!</strong>');
+ * $page->show();@endcode
+ */
 class HtmlPage
 {
     protected $pageContent;     ///< Contains the custom html of the current page. This will be added to the default html of each page.
@@ -41,29 +41,30 @@ class HtmlPage
     protected $rssFiles;        ///< An array with all necessary rss files for the html page.
     protected $printMode;       ///< A flag that indicates if the page should be styled in print mode then no colors will be shown
 
-    /** Constructor creates the page object and initialized all parameters
-     *  @param $title A string that contains the title/headline for the page.
+    /**
+     * Constructor creates the page object and initialized all parameters
+     * @param string $title A string that contains the title/headline for the page.
      */
     public function __construct($title = '')
     {
         global $g_root_path, $gDebug;
 
-        $this->pageContent = '';
-        $this->header      = '';
-        $this->title       = $title;
-        $this->headline    = $title;
-        $this->menu        = new HtmlNavbar('menu_main_script', $title, $this);
-        $this->showMenu    = true;
+        $this->pageContent   = '';
+        $this->header        = '';
+        $this->title         = $title;
+        $this->headline      = $title;
+        $this->menu          = new HtmlNavbar('menu_main_script', $title, $this);
+        $this->showMenu      = true;
         $this->showThemeHtml = true;
-        $this->printMode   = false;
-        $this->hasNavbar   = false;
-        $this->hasModal    = false;
+        $this->printMode     = false;
+        $this->hasNavbar     = false;
+        $this->hasModal      = false;
 
         if($gDebug)
         {
             $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.css');
             $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.js',
-                                    $g_root_path. '/adm_program/system/js/common_functions.js',
+                                    $g_root_path.'/adm_program/system/js/common_functions.js',
                                     $g_root_path.'/adm_program/libs/bootstrap/js/bootstrap.js');
         }
         else
@@ -71,38 +72,41 @@ class HtmlPage
             // if not in debug mode only load the minified files
             $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.min.css');
             $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.min.js',
-                                    $g_root_path. '/adm_program/system/js/common_functions.js',
+                                    $g_root_path.'/adm_program/system/js/common_functions.js',
                                     $g_root_path.'/adm_program/libs/bootstrap/js/bootstrap.min.js');
         }
         $this->rssFiles = array();
     }
 
-    /** Adds a cascading style sheets file to the html page.
-     *  @param $file The url with filename of the css file.
+    /**
+     * Adds a cascading style sheets file to the html page.
+     * @param string $file The url with filename of the css file.
      */
     public function addCssFile($file)
     {
-        if(in_array($file, $this->cssFiles) == false)
+        if(!in_array($file, $this->cssFiles, true))
         {
             $this->cssFiles[] = $file;
         }
     }
 
-    /** Add content to the header segment of a html page.
-     *  @param $header Content for the html header segement.
+    /**
+     * Add content to the header segment of a html page.
+     * @param string $header Content for the html header segment.
      */
     public function addHeader($header)
     {
         $this->header .= $header;
     }
 
-    /** Set the h1 headline of the current html page. If the title of the page was not set
-     *  until now than this will also be the title.
-     *  @param $headline A string that contains the headline for the page.
+    /**
+     * Set the h1 headline of the current html page. If the title of the page was not set
+     * until now than this will also be the title.
+     * @param string $headline A string that contains the headline for the page.
      */
     public function addHeadline($headline)
     {
-        if(strlen($this->title) == 0)
+        if($this->title === '')
         {
             $this->setTitle($headline);
         }
@@ -122,11 +126,11 @@ class HtmlPage
         $this->pageContent .= $html;
     }
 
-    /** Adds any javascript content to the page. The javascript will be added in the order
-     *  you call this method.
-     *  @param $javascriptCode A valid javascript code that will be added to the header of the page.
-     *  @param $executeAfterPageLoad If set to @b true the javascript code will be executed after
-     *                               the page is fully loaded.
+    /**
+     * Adds any javascript content to the page. The javascript will be added in the order you call this method.
+     * @param string $javascriptCode       A valid javascript code that will be added to the header of the page.
+     * @param bool   $executeAfterPageLoad If set to @b true the javascript code will be executed after
+     *                                     the page is fully loaded.
      */
     public function addJavascript($javascriptCode, $executeAfterPageLoad = false)
     {
@@ -140,12 +144,13 @@ class HtmlPage
         }
     }
 
-    /** Adds a javascript file to the html page.
-     *  @param $file The url with filename of the javascript file.
+    /**
+     * Adds a javascript file to the html page.
+     * @param string $file The url with filename of the javascript file.
      */
     public function addJavascriptFile($file)
     {
-        if(in_array($file, $this->jsFiles) == false)
+        if(!in_array($file, $this->jsFiles, true))
         {
             $this->jsFiles[] = $file;
         }
@@ -271,14 +276,14 @@ class HtmlPage
         }
     }
 
-    /** Adds a RSS file to the html page.
-     *  @param $file  The url with filename of the rss file.
-     *  @param $title Optional set a title. This is the name of the feed and
-     *                will be shown when adding the rss feed.
+    /**
+     * Adds a RSS file to the html page.
+     * @param string $file  The url with filename of the rss file.
+     * @param string $title Optional set a title. This is the name of the feed and will be shown when adding the rss feed.
      */
-    public function addRssFile($file, $title = null)
+    public function addRssFile($file, $title = '')
     {
-        if($title != null)
+        if($title !== '')
         {
             $this->rssFiles[$title] = $file;
         }
@@ -288,75 +293,81 @@ class HtmlPage
         }
     }
 
-    /** Returns the menu object of this html page.
-     *  @return Returns the menu object of this html page.
+    /**
+     * Returns the menu object of this html page.
+     * @return object Returns the menu object of this html page.
      */
     public function getMenu()
     {
         return $this->menu;
     }
 
-    /** Returns the title of the html page.
-     *  @return Returns the title of the html page.
+    /**
+     * Returns the title of the html page.
+     * @return string Returns the title of the html page.
      */
     public function getTitle()
     {
         return $this->title;
     }
 
-    /** Every html page of Admidio contains a menu. If the menu should
-     *  not be included in the current page, than this method must be called.
+    /**
+     * Every html page of Admidio contains a menu.
+     * If the menu should not be included in the current page, than this method must be called.
      */
     public function hideMenu()
     {
         $this->showMenu = false;
     }
 
-    /** Every html page of Admidio contains three files of the custom theme.
-     *  my_header.php, my_body_top.php and my_body_bottom.php
-     *  With these files the webmaster can contain custom layout to Admidio.
-     *  If these files should not be included in the current page, than
-     *  this method must be called.
+    /**
+     * Every html page of Admidio contains three files of the custom theme.
+     * my_header.php, my_body_top.php and my_body_bottom.php
+     * With these files the webmaster can contain custom layout to Admidio.
+     * If these files should not be included in the current page, than this method must be called.
      */
     public function hideThemeHtml()
     {
         $this->showThemeHtml = false;
     }
 
-    /** Flag if the current page has a navbar.
+    /**
+     * Flag if the current page has a navbar.
      */
     public function hasNavbar()
     {
         $this->hasNavbar = true;
     }
 
-    /** If print mode is set then a print specific css file will be loaded.
-     *  All styles will be more print compatible and are only black, grey and white.
+    /**
+     * If print mode is set then a print specific css file will be loaded.
+     * All styles will be more print compatible and are only black, grey and white.
      */
     public function setPrintMode()
     {
         $this->printMode = true;
     }
 
-    /** Set the title of the html page. This will also be the h1 headline for the Admidio page.
-     *  @param $title A string that contains the title for the page.
+    /**
+     * Set the title of the html page. This will also be the h1 headline for the Admidio page.
+     * @param string $title A string that contains the title for the page.
      */
     public function setTitle($title)
     {
         $this->title = $title;
     }
 
-    /** This method send the whole html code of the page to the browser. Call this method
-     *  if you have finished your page layout.
-     *  @param $directOutput If set to @b true (default) the html page will be directly send
-     *                       to the browser. If set to @b false the html will be returned.
-     *  @return If $directOutput is set to @b false this method will return the html code of the page.
+    /**
+     * This method send the whole html code of the page to the browser. Call this method
+     * if you have finished your page layout.
+     * @param  bool        $directOutput If set to @b true (default) the html page will be directly send
+     *                                   to the browser. If set to @b false the html will be returned.
+     * @return string|void If $directOutput is set to @b false this method will return the html code of the page.
      */
     public function show($directOutput = true)
     {
         global $g_root_path, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences, $gValidLogin;
 
-        $newLayout        = true;
         $headerContent    = '';
         $htmlMyHeader     = '';
         $htmlMyBodyTop    = '';
@@ -371,7 +382,7 @@ class HtmlPage
             $htmlMenu = $this->menu->show(false);
         }
 
-        if(strlen($this->headline) > 0)
+        if($this->headline !== '')
         {
             $htmlHeadline = '<h1>'.$this->headline.'</h1>';
         }
@@ -389,12 +400,12 @@ class HtmlPage
         if($this->showThemeHtml)
         {
             ob_start();
-            include(THEME_SERVER_PATH. '/my_header.php');
+            include(THEME_SERVER_PATH.'/my_header.php');
             $htmlMyHeader = ob_get_contents();
             ob_end_clean();
 
             ob_start();
-            include(THEME_SERVER_PATH. '/my_body_top.php');
+            include(THEME_SERVER_PATH.'/my_body_top.php');
             $htmlMyBodyTop = ob_get_contents();
             ob_end_clean();
 
@@ -402,7 +413,7 @@ class HtmlPage
             $gDb->setCurrentDB();
 
             ob_start();
-            include(THEME_SERVER_PATH. '/my_body_bottom.php');
+            include(THEME_SERVER_PATH.'/my_body_bottom.php');
             $htmlMyBodyBottom = ob_get_contents();
             ob_end_clean();
 
@@ -431,7 +442,7 @@ class HtmlPage
         // add rss feed files to page
         foreach($this->rssFiles as $title => $file)
         {
-            if(is_numeric($title) == false)
+            if(!is_numeric($title))
             {
                 $headerContent .= '<link rel="alternate" type="application/rss+xml" title="'.$title.'" href="'.$file.'" />';
             }
@@ -442,7 +453,7 @@ class HtmlPage
         }
 
         // add organization name to title
-        if(strlen($this->title) > 0)
+        if($this->title !== '')
         {
             $this->title = $gCurrentOrganization->getValue('org_longname').' - '.$this->title;
         }
@@ -458,15 +469,15 @@ class HtmlPage
                         </div>');
 
         // add javascript code to page
-        if(strlen($this->javascriptContent) > 0)
+        if($this->javascriptContent !== '')
         {
             $headerContent .= '<script type="text/javascript"><!--
                 '.$this->javascriptContent.'
             --></script>';
         }
 
-        // add javascript code to page that will be excecuted after page is fully loaded
-        if(strlen($this->javascriptContentExecute) > 0)
+        // add javascript code to page that will be executed after page is fully loaded
+        if($this->javascriptContentExecute !== '')
         {
             $headerContent .= '<script type="text/javascript"><!--
                 $(document).ready(function(){
@@ -494,7 +505,7 @@ class HtmlPage
 
             $html .= $headerContent;
 
-            if(strlen($this->header) > 0)
+            if($this->header !== '')
             {
                 $html .= $this->header;
             }
@@ -510,9 +521,9 @@ class HtmlPage
         </body>
         </html>';
 
-        if($this->hasNavbar == true)
+        if($this->hasNavbar)
         {
-            // set css clss to hide headline in mobile mode if navbar is shown
+            // set css class to hide headline in mobile mode if navbar is shown
             $html = str_replace('<h1>'.$this->headline.'</h1>', '<h1 class="hidden-xs">'.$this->headline.'</h1>', $html);
         }
 
