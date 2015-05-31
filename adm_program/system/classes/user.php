@@ -1067,12 +1067,12 @@ class User extends TableUsers
      * Create a new membership to a role for the current user. If the date range contains
      * a future or past membership of the same role then the two memberships will be merged.
      * In opposite to setRoleMembership this method can't be used to end a membership earlier!
-     * @param $roleId           Id of the role for which the membership should be set.
-     * @param  string $startDate Start date of the membership. Default will be @b DATE_NOW.
-     * @param  string $endDate   End date of the membership. Default will be @b 31.12.9999
-     * @param $leader           If set to @b 1 then the member will be leader of the role and
-     *                           might get more rights for this role.
-     * @return bool   Return @b true if the membership was successfully added.
+     * @param  int         $roleId    Id of the role for which the membership should be set.
+     * @param  string      $startDate Start date of the membership. Default will be @b DATE_NOW.
+     * @param  string      $endDate   End date of the membership. Default will be @b 31.12.9999
+     * @param  bool|string $leader    If set to @b 1 then the member will be leader of the role and
+     *                                might get more rights for this role.
+     * @return bool        Return @b true if the membership was successfully added.
      */
     public function setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = '9999-12-31', $leader = '')
     {
