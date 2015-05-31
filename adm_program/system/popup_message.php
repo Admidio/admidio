@@ -140,7 +140,6 @@ echo '
     <div id="message_text" class="col-xs-10">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
 </div>
 <div class="modal-footer">
-<<<<<<< HEAD
         <button id="btn_yes" class="btn btn-default" type="button" onclick="javascript:callUrlHideElement(\''.$get_element_id.'\', \''.$url.'\''.$callbackFunction.')">
             <img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;
         </button>
@@ -150,13 +149,5 @@ echo '
         <button id="btn_close" class="btn btn-default hidden" type="button" data-dismiss="modal">
             <img src="'. THEME_PATH. '/icons/close.png" alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'
         </button>
-=======
-        <button id="btn_yes" class="btn btn-default" type="button" onclick="javascript:callUrlHideElement(\''.$get_element_id.'\', \''.$url.'\''.$callbackFunction.')"><img src="'. THEME_PATH. '/icons/ok.png"
-            alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;</button>
-        <button id="btn_no" class="btn btn-default" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/error.png"
-            alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'</button>
-        <button id="btn_close" class="btn btn-default hidden" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/close.png"
-            alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</button>
->>>>>>> v3.0
 </div>';
 ?>
