@@ -412,7 +412,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                         }
                         else
                         {
-                            $registerLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" /></a>';
+                            $registerLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" title="'.$gL10n->get('DAT_CANCEL').'" /></a>';
                         }
                     }
                     else
@@ -439,7 +439,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                             }
                             else
                             {
-                                $registerLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" /></a>';
+                                $registerLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" title="'.$gL10n->get('DAT_ATTEND').'" /></a>';
                             }
                         }
                         else
@@ -461,7 +461,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                             }
                             else
                             {
-                                $participantLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
+                                $participantLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" title="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
                             }
                         }
                     }
@@ -479,7 +479,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                             }
                             else
                             {
-                                $emailLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
+                                $emailLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
                             }
                         }
                     }
@@ -495,7 +495,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                         }
                         else
                         {
-                            $mgrpartLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" /></a>';
+                            $mgrpartLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" title="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" /></a>';
                         }
                     }
                 }
@@ -604,28 +604,33 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 }
                 else
                 {
-                    $columnValues[] = '&nbsp;';
+                    $columnValues[] = '';
                 }
 
                 $columnValues[] = $dateBegin.' '.$timeBegin;
                 $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>';
                 
-                $participants = $numMembers .'/'. $maxMembers;
-                
-                if($numMembers)
+                if($date->getValue('dat_rol_id') > 0)
                 {
-                    $participants = $participantLink;
-                }
-                
-                $columnValues[] = $participants;
-
-                if(strlen($emailLink) > 0)
-                {
-                    $columnValues[] = $emailLink;
+                    if($maxMembers > 0)
+                    {
+                        $participants = $numMembers .' / '. $maxMembers;
+                    }
+                    else
+                    {
+                        $participants = $numMembers.'&nbsp;';
+                    }
+                    
+                    if($numMembers > 0)
+                    {
+                        $participants .= $participantLink.$emailLink;
+                    }
+                    
+                    $columnValues[] = $participants;
                 }
                 else
                 {
-                    $columnValues[] = '&nbsp;';
+                    $columnValues[] = '';                    
                 }
 
                 if(strlen($locationHtml) > 0)
@@ -634,7 +639,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 }
                 else
                 {
-                    $columnValues[] = '&nbsp;';
+                    $columnValues[] = '';
                 }
 
                 $compactTable->addRowByArray($columnValues, null, array('class' => $cssClass));
