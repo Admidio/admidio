@@ -55,17 +55,14 @@ class TableDate extends TableAccess
         $sql = 'DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
         $result = $this->db->query($sql);
 
-        // haben diesem Termin Mitglieder zugesagt, so muessen diese Zusagen noch geloescht werden
+        // if date has participiants then the role with their memberships must be deleted
         if($this->getValue('dat_rol_id') > 0)
         {
             $sql = 'UPDATE '.TBL_DATES.' SET dat_rol_id = NULL WHERE dat_id = '.$this->getValue('dat_id');
             $this->db->query($sql);
             
-            $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id = '.$this->getValue('dat_rol_id');
-            $this->db->query($sql);
-            
-            $sql = 'DELETE FROM '.TBL_ROLES.' WHERE rol_id = '.$this->getValue('dat_rol_id');
-            $this->db->query($sql);
+            $dateRole = new TableRoles($this->db, $this->getValue('dat_rol_id'));
+            $dateRole->delete();
         }
 
         parent::delete();
