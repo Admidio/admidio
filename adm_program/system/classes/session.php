@@ -241,7 +241,8 @@ class Session extends TableAccess
         }
 
         $sql    = 'DELETE FROM '. TBL_SESSIONS. '
-                    WHERE ses_timestamp < \''. date('Y.m.d H:i:s', $date_session_delete). '\'';
+                    WHERE ses_timestamp < \''. date('Y.m.d H:i:s', $date_session_delete). '\'
+                      AND ses_session_id NOT LIKE \''.$this->getValue('ses_session_id').'\' ';
         $this->db->query($sql);
     }
 }
