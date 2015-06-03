@@ -341,6 +341,7 @@ class User extends TableUsers
                 setcookie($gCookiePraefix. '_DATA', $setAutoLogin. ';'. $this->getValue('usr_id'), $timestamp_expired, '/', $domain, 0);
 
                 // count logins and update login dates
+                $this->saveChangesWithoutRights();
                 $this->updateLoginData();
             }
 
