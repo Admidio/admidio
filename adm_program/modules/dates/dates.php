@@ -270,8 +270,10 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
             $icalIcon = '';
             if($gPreferences['enable_dates_ical'] == 1)
             {
-                $icalIcon = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=6"><img
-                    src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
+                $icalIcon = '
+                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id'). '&amp;mode=6">
+                        <img src="'.THEME_PATH.'/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" />
+                    </a>';
             }
 
             // change and delete is only for users with additional rights
@@ -283,21 +285,23 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
                 if($date->editRight())
                 {
                     $copyIcon = '
-                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$getHeadline.'"><img
-                        src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>';
+                        <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='.$date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$getHeadline.'">
+                            <img src="'.THEME_PATH.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" />
+                        </a>';
                     $editIcon = '
-                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$getHeadline.'"><img
-                        src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
+                        <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='.$date->getValue('dat_id'). '&amp;headline='.$getHeadline.'">
+                            <img src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" />
+                        </a>';
                 }
 
                 // Deleting events is only allowed for group members
                 if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
                 {
                     $deleteIcon = '
-                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
-                        $date->getValue('dat_id').'&amp;name='.urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.$date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'"><img
-                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                        <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                            href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
+                            $date->getValue('dat_id').'&amp;name='.urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.$date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'"><img
+                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                 }
             }
 
@@ -314,12 +318,12 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
             if ($date->getValue('dat_all_day') == 0)
             {
                 // Write start in array
-                $dateElements[] = array($gL10n->get('SYS_START'), '<strong>'. $date->getValue('dat_begin', $gPreferences['system_time']). '</strong> '.$gL10n->get('SYS_CLOCK'));
+                $dateElements[] = array($gL10n->get('SYS_START'), '<strong>'.$date->getValue('dat_begin', $gPreferences['system_time']).'</strong> '.$gL10n->get('SYS_CLOCK'));
                 // Write end in array
-                $dateElements[] = array($gL10n->get('SYS_END'), '<strong>'. $date->getValue('dat_end', $gPreferences['system_time']). '</strong> '.$gL10n->get('SYS_CLOCK'));
+                $dateElements[] = array($gL10n->get('SYS_END'), '<strong>'.$date->getValue('dat_end', $gPreferences['system_time']).'</strong> '.$gL10n->get('SYS_CLOCK'));
             }
             // write calendar in output array
-            $dateElements[] = array($gL10n->get('DAT_CALENDAR'), '<strong>'. $date->getValue('cat_name'). '</strong>');
+            $dateElements[] = array($gL10n->get('DAT_CALENDAR'), '<strong>'.$date->getValue('cat_name').'</strong>');
 
             if ($date->getValue('dat_location') !== '')
             {
@@ -337,46 +341,55 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
                 if($gPreferences['dates_show_map_link'] && $map_info_count > 1)
                 {
                     // Create Google-Maps-Link for location
-                    $location_url = 'http://maps.google.com/?q='. $date->getValue('dat_location');
+                    $location_url = 'https://maps.google.com/?q='.$date->getValue('dat_location');
+
                     if($date->getValue('dat_country') !== '')
                     {
                         // Better results with additional country information
-                        $location_url .= ',%20'. $date->getValue('dat_country');
+                        $location_url .= ',%20'.$date->getValue('dat_country');
                     }
-                    $locationHtml = '<a href="'. $location_url. '" target="_blank" title="'.$gL10n->get('DAT_SHOW_ON_MAP').'"/><strong>'.$date->getValue("dat_location").'</strong></a>';
+
+                    $locationHtml = '
+                        <a href="'.$location_url.'" target="_blank" title="'.$gL10n->get('DAT_SHOW_ON_MAP').'"/>
+                            <strong>'.$date->getValue("dat_location").'</strong>
+                        </a>';
 
                     // if valid login and enough information about address exist - calculate the route
                     if($gValidLogin && $gCurrentUser->getValue('ADDRESS') !== ''
                     && ($gCurrentUser->getValue('POSTCODE') !== '' || $gCurrentUser->getValue('CITY') !== ''))
                     {
-                        $route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($gCurrentUser->getValue('ADDRESS'));
+                        $route_url = 'https://maps.google.com/?f=d&amp;saddr='.urlencode($gCurrentUser->getValue('ADDRESS'));
+
                         if($gCurrentUser->getValue('POSTCODE') !== '')
                         {
-                            $route_url .= ',%20'. urlencode($gCurrentUser->getValue('POSTCODE'));
+                            $route_url .= ',%20'.urlencode($gCurrentUser->getValue('POSTCODE'));
                         }
                         if($gCurrentUser->getValue('CITY') !== '')
                         {
-                            $route_url .= ',%20'. urlencode($gCurrentUser->getValue('CITY'));
+                            $route_url .= ',%20'.urlencode($gCurrentUser->getValue('CITY'));
                         }
                         if($gCurrentUser->getValue('COUNTRY') !== '')
                         {
-                            $route_url .= ',%20'. urlencode($gCurrentUser->getValue('COUNTRY'));
+                            $route_url .= ',%20'.urlencode($gCurrentUser->getValue('COUNTRY'));
                         }
 
-                        $route_url .= '&amp;daddr='. urlencode($date->getValue('dat_location'));
+                        $route_url .= '&amp;daddr='.urlencode($date->getValue('dat_location'));
+
                         if($date->getValue('dat_country') !== '')
                         {
                             // With information about country Google finds the location much better
-                            $route_url .= ',%20'. $date->getValue('dat_country');
+                            $route_url .= ',%20'.$date->getValue('dat_country');
                         }
+
                         $locationHtml .= '
-                        <a class="admidio-icon-link" href="'. $route_url. '" target="_blank"><img
-                            src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'" /></a>';
+                            <a class="admidio-icon-link" href="'.$route_url.'" target="_blank">
+                                <img src="'.THEME_PATH.'/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'" />
+                            </a>';
                     }
                 }
                 else
                 {
-                    $locationHtml = '<strong>'. $date->getValue('dat_location'). '</strong>';
+                    $locationHtml = '<strong>'.$date->getValue('dat_location').'</strong>';
                 }
 
                 $dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
@@ -416,11 +429,17 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
 
                         if ($getViewMode === 'html')
                         {
-                            $registerLink = '<button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" />'.$gL10n->get('DAT_CANCEL').'</button>';
+                            $registerLink = '
+                                <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
+                                    <img src="'.THEME_PATH.'/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" />'.$gL10n->get('DAT_CANCEL').'
+                                </button>';
                         }
                         else
                         {
-                            $registerLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" title="'.$gL10n->get('DAT_CANCEL').'" /></a>';
+                            $registerLink = '
+                                <a class="admidio-icon-link" href="'.$buttonURL.'">
+                                    <img src="'.THEME_PATH.'/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" title="'.$gL10n->get('DAT_CANCEL').'" />
+                                </a>';
                         }
                     }
                     else
@@ -443,11 +462,17 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
 
                             if ($getViewMode === 'html')
                             {
-                                $registerLink = '<button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" />'.$gL10n->get('DAT_ATTEND').'</button>';
+                                $registerLink = '
+                                    <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
+                                        <img src="'.THEME_PATH.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" />'.$gL10n->get('DAT_ATTEND').'
+                                    </button>';
                             }
                             else
                             {
-                                $registerLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" title="'.$gL10n->get('DAT_ATTEND').'" /></a>';
+                                $registerLink = '
+                                    <a class="admidio-icon-link" href="'.$buttonURL.'">
+                                        <img src="'.THEME_PATH.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" title="'.$gL10n->get('DAT_ATTEND').'" />
+                                    </a>';
                             }
                         }
                         else
@@ -465,11 +490,17 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
 
                             if ($getViewMode === 'html')
                             {
-                                $participantLink = '<button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" />'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</button>';
+                                $participantLink = '
+                                    <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
+                                        <img src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" />'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'
+                                    </button>';
                             }
                             else
                             {
-                                $participantLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" title="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
+                                $participantLink = '
+                                    <a class="admidio-icon-link" href="'.$buttonURL.'">
+                                        <img src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" title="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" />
+                                    </a>';
                             }
                         }
                     }
@@ -481,13 +512,19 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
                         {
                             $buttonURL = $g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='.$date->getValue('dat_rol_id');
 
-                            if ($getViewMode == 'html')
+                            if ($getViewMode === 'html')
                             {
-                                $emailLink = '<button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'"><img src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" />'.$gL10n->get('MAI_SEND_EMAIL').'</button>';
+                                $emailLink = '
+                                    <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
+                                        <img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" />'.$gL10n->get('MAI_SEND_EMAIL').'
+                                    </button>';
                             }
                             else
                             {
-                                $emailLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
+                                $emailLink = '
+                                    <a class="admidio-icon-link" href="'.$buttonURL.'">
+                                        <img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" />
+                                    </a>';
                             }
                         }
                     }
@@ -499,11 +536,17 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
 
                         if ($getViewMode === 'html')
                         {
-                            $mgrpartLink = '<button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</button>';
+                            $mgrpartLink = '
+                                <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
+                                    <img src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'
+                                </button>';
                         }
                         else
                         {
-                            $mgrpartLink = '<a class="admidio-icon-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" title="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" /></a>';
+                            $mgrpartLink = '
+                                <a class="admidio-icon-link" href="'.$buttonURL.'">
+                                    <img src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" title="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />
+                                </a>';
                         }
                     }
                 }
@@ -557,7 +600,7 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
                     <div class="panel panel-primary'.$cssClassHighlight.'" id="dat_'.$date->getValue('dat_id').'">
                         <div class="panel-heading">
                             <div class="pull-left">
-                                <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />' .
+                                <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/dates.png" alt="'.$date->getValue('dat_headline').'" />' .
                                 $date->getValue('dat_begin', $gPreferences['system_date']).$endDate.' '.$date->getValue('dat_headline') . '
                             </div>
                             <div class="pull-right text-right">' .
