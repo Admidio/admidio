@@ -259,7 +259,7 @@ class HtmlTable extends HtmlTableBasic
      * Hide some columns for the user. This is useful if you want to use the column for ordering but
      * won't show the content if this column.
      * @param array|int $arrayColumnsHide An array which contain the columns that should be hidden. The columns
-     *                          of the table starts with 1 (not 0).
+     *                                    of the table starts with 1 (not 0).
      */
     public function setDatatablesColumnsHide($arrayColumnsHide)
     {
@@ -303,6 +303,7 @@ class HtmlTable extends HtmlTableBasic
      *                                 datatable will be ordered by the number of this column ascending.
      * @par Examples
      * @code $table = new HtmlTable('simple-table');
+     *
      * // sort all rows after first and third column ascending
      * $table->setDatatablesOrderColumns(array(1, 3));
      * // sort all rows after first column descending and third column ascending
