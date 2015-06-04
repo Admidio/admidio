@@ -1,27 +1,4 @@
 <?php
-/*****************************************************************************/
-/** @class HtmlTable
- *  @brief Creates an Admidio specific table with special methods
- *
- *  This class inherits the common HtmlTableBasic class and extends their elements
- *  with custom Admidio table methods. The class should be used to create the
- *  html part of all Admidio tables. It has simple methods to add complete rows with
- *  their column values to the table. It's also possible to add the jQuery plugin Datatables
- *  to each table. Therefore you only need to set a flag when creating the object.
- *  @par Examples
- *  @code // create a simple table with one input field and a button
- *  $table = new HtmlTable('simple-table');
- *  $table->addRowHeadingByArray(array('Firstname', 'Lastname', 'Address', 'Phone', 'E-Mail'));
- *  $table->addRowByArray(array('Hans', 'Mustermann', 'Sonnenallee 22', '+49 342 59433', 'h.mustermann@example.org'));
- *  $table->addRowByArray(array('Anne', 'Musterfrau', 'Seestraße 6', '+34 7433 7433', 'a.musterfrau@example.org'));
- *  $table->show();@endcode
- *  @code // create a table with jQuery datatables and align columns to center or right
- *  $table = new HtmlTable('simple-table', null, true, true);
- *  $table->setColumnAlignByArray(array('left', 'left', 'center', 'right'));
- *  $table->addRowHeadingByArray(array('Firstname', 'Lastname', 'Birthday', 'Membership fee'));
- *  $table->addRowByArray(array('Hans', 'Mustermann', 'Sonnenallee 22', '14.07.1995', '38,50'));
- *  $table->show();@endcode
- */
 /*****************************************************************************
  *
  *  Copyright    : (c) 2004 - 2015 The Admidio Team
@@ -30,31 +7,53 @@
  *
  *****************************************************************************/
 
+/**
+ * @class HtmlTable
+ * @brief Creates an Admidio specific table with special methods
+ *
+ * This class inherits the common HtmlTableBasic class and extends their elements
+ * with custom Admidio table methods. The class should be used to create the
+ * html part of all Admidio tables. It has simple methods to add complete rows with
+ * their column values to the table. It's also possible to add the jQuery plugin Datatables
+ * to each table. Therefore you only need to set a flag when creating the object.
+ * @par Examples
+ * @code // create a simple table with one input field and a button
+ * $table = new HtmlTable('simple-table');
+ * $table->addRowHeadingByArray(array('Firstname', 'Lastname', 'Address', 'Phone', 'E-Mail'));
+ * $table->addRowByArray(array('Hans', 'Mustermann', 'Sonnenallee 22', '+49 342 59433', 'h.mustermann@example.org'));
+ * $table->addRowByArray(array('Anne', 'Musterfrau', 'Seestraße 6', '+34 7433 7433', 'a.musterfrau@example.org'));
+ * $table->show();@endcode
+ * @code // create a table with jQuery datatables and align columns to center or right
+ * $table = new HtmlTable('simple-table', null, true, true);
+ * $table->setColumnAlignByArray(array('left', 'left', 'center', 'right'));
+ * $table->addRowHeadingByArray(array('Firstname', 'Lastname', 'Birthday', 'Membership fee'));
+ * $table->addRowByArray(array('Hans', 'Mustermann', 'Sonnenallee 22', '14.07.1995', '38,50'));
+ * $table->show();@endcode
+ */
 class HtmlTable extends HtmlTableBasic
 {
-    protected $id;                   ///< Html id attribute of the table.
-    protected $columnAlign;          ///< Array with entry for each column with the align of that column. Values are @b right, @b left or @b center.
-    protected $columnCount;          ///< Number of columns in this table. This will be set after columns were added to the table.
-    protected $messageNoRowsFound;   ///< The text that should be shown if no row was added to the table
-    protected $htmlPage;             ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
-    protected $datatables;           ///< A flag if the jQuery plugin DataTables should be used to show the table.
+    protected $id;                       ///< Html id attribute of the table.
+    protected $columnAlign;              ///< Array with entry for each column with the align of that column. Values are @b right, @b left or @b center.
+    protected $columnCount;              ///< Number of columns in this table. This will be set after columns were added to the table.
+    protected $messageNoRowsFound;       ///< The text that should be shown if no row was added to the table
+    protected $htmlPage;                 ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
+    protected $datatables;               ///< A flag if the jQuery plugin DataTables should be used to show the table.
     protected $datatablesInitParameters; ///< An array that stores all necessary DataTables parameters that should be set on initialization of this plugin.
     protected $datatablesColumnDefs;     ///< Array that contains several elements for DataTables columnDefs parameter.
-    protected $groupedColumn;        ///< The number of the column which should be used to group the table data.
-    protected $rowsPerPage;          ///< Number of rows that should be displayed on one page.
-    protected $orderColumns;         ///< Array with the column number as key and the 'asc' or 'desc' as value.
+    protected $groupedColumn;            ///< The number of the column which should be used to group the table data.
+    protected $rowsPerPage;              ///< Number of rows that should be displayed on one page.
+    protected $orderColumns;             ///< Array with the column number as key and the 'asc' or 'desc' as value.
 
-    /** Constructor creates the table element
-     *  @param $id         Id of the table
-     *  @param $htmlPage   Optional a HtmlPage object that will be used to add javascript code
-     *                     or files to the html output page.
-     *  @param $hoverRows  If set to @b true then the active selected row will be marked with
-     *                     special css code
-     *  @param $datatables If set to @b true then the jQuery plugin Datatables will be
-     *                     used to create the table. Then column sort, search within the
-     *                     table and other features are possible.
-     *  @param $class      Optional an additional css classname. The class @b table
-     *                     is set as default and need not set with this parameter.
+    /**
+     * Constructor creates the table element
+     * @param string $id         Id of the table
+     * @param object $htmlPage   Optional a HtmlPage object that will be used to add javascript code
+     *                           or files to the html output page.
+     * @param bool   $hoverRows  If set to @b true then the active selected row will be marked with special css code
+     * @param bool   $datatables If set to @b true then the jQuery plugin Datatables will be used to create the table.
+     *                           Then column sort, search within the table and other features are possible.
+     * @param string $class      Optional an additional css classname. The class @b table
+     *                           is set as default and need not set with this parameter.
      */
     public function __construct($id, $htmlPage = null, $hoverRows = true, $datatables = false, $class = '')
     {
@@ -65,7 +64,7 @@ class HtmlTable extends HtmlTableBasic
             $class = 'table';
         }
 
-        if($hoverRows == true)
+        if($hoverRows)
         {
             $class .= ' table-hover';
         }
@@ -85,7 +84,7 @@ class HtmlTable extends HtmlTableBasic
 
         // when using DataTables we must set the width attribute so that all columns will change
         // dynamic their width if the browser window size change.
-        if($datatables == true)
+        if($datatables)
         {
             $this->addAttribute('width', '100%');
 
@@ -98,18 +97,19 @@ class HtmlTable extends HtmlTableBasic
         }
     }
 
-    /** Adds a complete row with all columns to the table. This will be the column heading row.
-     *  Each value of the array represents the heading text for each column.
-     *  @param $arrayRowValues Array with the values for each column.
-     *  @param $id             Optional set an unique id for the column.
-     *  @param $arrAttributes  Further attributes as array with key/value pairs
-     *  @param $startColspan   Number of column where the colspan should start. The first column of a table will be 1.
-     *  @param $colspan        Number of columns that should be join together.
+    /**
+     * Adds a complete row with all columns to the table. This will be the column heading row.
+     * Each value of the array represents the heading text for each column.
+     * @param array  $arrayColumnValues Array with the values for each column.
+     * @param string $id                Optional set an unique id for the column.
+     * @param array  $arrAttributes     Further attributes as array with key/value pairs
+     * @param int    $startColspan      Number of column where the colspan should start. The first column of a table will be 1.
+     * @param int    $colspan           Number of columns that should be join together.
      */
     public function addRowHeadingByArray($arrayColumnValues, $id = null, $arrAttributes = null, $startColspan = 0, $colspan = 0)
     {
         // set an id to the column
-        if($id != null)
+        if($id !== null)
         {
             $arrAttributes['id'] = $id;
         }
@@ -140,18 +140,18 @@ class HtmlTable extends HtmlTableBasic
         $this->columnCount = count($arrayColumnValues);
     }
 
-    /** Adds a complete row with all columns to the table. Each column element will be a
-     *  value of the array parameter.
-     *  @param $arrayRowValues Array with the values for each column.
-     *  @param $id             Optional set an unique id for the column.
-     *  @param $arrAttributes  Further attributes as array with key/value pairs
-     *  @param $startColspan   Number of column where the colspan should start. The first column of a table will be 1.
-     *  @param $colspan        Number of columns that should be join together.
+    /**
+     * Adds a complete row with all columns to the table. Each column element will be a value of the array parameter.
+     * @param array  $arrayColumnValues Array with the values for each column.
+     * @param string $id                Optional set an unique id for the column.
+     * @param array  $arrAttributes     Further attributes as array with key/value pairs
+     * @param int    $startColspan      Number of column where the colspan should start. The first column of a table will be 1.
+     * @param int    $colspan           Number of columns that should be join together.
      */
     public function addRowByArray($arrayColumnValues, $id = null, $arrAttributes = null, $startColspan = 0, $colspan = 0)
     {
         // set an id to the column
-        if($id != null)
+        if($id !== null)
         {
             $arrAttributes['id'] = $id;
         }
@@ -187,10 +187,11 @@ class HtmlTable extends HtmlTableBasic
         $this->columnCount = count($arrayColumnValues);
     }
 
-    /** Disable the sort function for some columns. This is useful if a sorting of the column doesn't make sense
-     *  because it only show function icons or something equal.
-     *  @param $arrayColumnsSort An array which contain the columns where the sort should be disabled.
-     *                           The columns of the table starts with 1 (not 0).
+    /**
+     * Disable the sort function for some columns. This is useful if a sorting of the column doesn't make sense
+     * because it only show function icons or something equal.
+     * @param array|int $arrayColumnsSort An array which contain the columns where the sort should be disabled.
+     *                                    The columns of the table starts with 1 (not 0).
      */
     public function disableDatatablesColumnsSort($arrayColumnsSort)
     {
@@ -208,31 +209,33 @@ class HtmlTable extends HtmlTableBasic
         }
     }
 
-    /** Return the number of the column which should be grouped when using the
-     *  jQuery plugin DataTables.
-     *  @return Return the number of the column.
+    /**
+     * Return the number of the column which should be grouped when using the jQuery plugin DataTables.
+     * @return int Return the number of the column.
      */
     public function getDatatablesGroupColumn()
     {
         return $this->groupedColumn;
     }
 
-    /** Set the align for each column of the current table. This method must be called
-     *  before a row is added to the table. Each entry of the array represents a column.
-     *  @param $arrayColumnAlign An array which contains the align for each column of the table.
-     *                           E.g. array('center', 'left', 'left', 'right') for a table with 4 columns.
+    /**
+     * Set the align for each column of the current table. This method must be called
+     * before a row is added to the table. Each entry of the array represents a column.
+     * @param string[] $arrayColumnAlign An array which contains the align for each column of the table.
+     *                                   E.g. array('center', 'left', 'left', 'right') for a table with 4 columns.
      */
     public function setColumnAlignByArray($arrayColumnAlign)
     {
         $this->columnAlign = $arrayColumnAlign;
     }
 
-    /** This method will set for a selected column other columns that should be used to order the datatables.
-     *  For example if you will click the name column than you could set the columns lastname and firstname
-     *  as alternative order columns and the table will be ordered by lastname and firstname.
-     *  @param $selectedColumn    This is the column the user clicked to be sorted.
-     *  @param $arrayOrderColumns This are the columns the table will internal be sorted. If you have more
-     *                            than 1 column this must be an array. The columns of the table starts with 1 (not 0).
+    /**
+     * This method will set for a selected column other columns that should be used to order the datatables.
+     * For example if you will click the name column than you could set the columns lastname and firstname
+     * as alternative order columns and the table will be ordered by lastname and firstname.
+     * @param int   $selectedColumn    This is the column the user clicked to be sorted.
+     * @param array $arrayOrderColumns This are the columns the table will internal be sorted. If you have more
+     *                                 than 1 column this must be an array. The columns of the table starts with 1 (not 0).
      */
     public function setDatatablesAlternativOrderColumns($selectedColumn, $arrayOrderColumns)
     {
@@ -241,7 +244,7 @@ class HtmlTable extends HtmlTableBasic
             // internal datatable columns starts with 0
             foreach($arrayOrderColumns as $key => $column)
             {
-                $arrayOrderColumns[$key] = $column-1;
+                $arrayOrderColumns[$key] = $column - 1;
             }
 
             $this->datatablesColumnDefs[] = '{ "targets": ['.($selectedColumn-1).'], "orderData": ['.(implode(',', $arrayOrderColumns)).'] }';
@@ -252,10 +255,11 @@ class HtmlTable extends HtmlTableBasic
         }
     }
 
-    /** Hide some columns for the user. This is useful if you want to use the column for ordering but
-     *  won't show the content if this column.
-     *  @param $arrayColumnsHide An array which contain the columns that should be hidden. The columns
-     *                           of the table starts with 1 (not 0).
+    /**
+     * Hide some columns for the user. This is useful if you want to use the column for ordering but
+     * won't show the content if this column.
+     * @param array|int $arrayColumnsHide An array which contain the columns that should be hidden. The columns
+     *                          of the table starts with 1 (not 0).
      */
     public function setDatatablesColumnsHide($arrayColumnsHide)
     {
@@ -273,10 +277,11 @@ class HtmlTable extends HtmlTableBasic
         }
     }
 
-    /** Specify a column that should be used to group data. Everytime the value of this column
-     *  changed then a new subheader row will be created with the name of the new value.
-     *  @param $columnNumber Number of the column that should be grouped. The first column
-     *                       starts with 1. The columns were set with the method @b addRowByArray.
+    /**
+     * Specify a column that should be used to group data. Everytime the value of this column
+     * changed then a new subheader row will be created with the name of the new value.
+     * @param int $columnNumber Number of the column that should be grouped. The first column starts with 1.
+     *                          The columns were set with the method @b addRowByArray.
      */
     public function setDatatablesGroupColumn($columnNumber)
     {
@@ -288,19 +293,20 @@ class HtmlTable extends HtmlTableBasic
         $this->datatablesColumnDefs[] = '{ "visible":false, "targets":'.$this->groupedColumn.' }';
     }
 
-    /** Set the order of the columns which should be used to sort the rows.
-     *  @param $arrayOrderColumns An array which could contain the columns that should be
-     *                            ascending ordered or contain arrays where each array
-     *                            contain the column and the sorting 'asc' or 'desc'. The columns
-     *                            of the table starts with 1 (not 0).
-     *                            Optional this could also only be a numeric value than the
-     *                            datatable will be ordered by the number of this column ascending.
-     *  @par Examples
-     *  @code $table = new HtmlTable('simple-table');
-     *  // sort all rows after first and third column ascending
-     *  $table->setDatatablesOrderColumns(array(1, 3));
-     *  // sort all rows after first column descending and third column ascending
-     *  $table->setDatatablesOrderColumns(array(array(1, 'desc'), array(3, 'asc')));@endcode
+    /**
+     * Set the order of the columns which should be used to sort the rows.
+     * @param array $arrayOrderColumns An array which could contain the columns that should be
+     *                                 ascending ordered or contain arrays where each array
+     *                                 contain the column and the sorting 'asc' or 'desc'. The columns
+     *                                 of the table starts with 1 (not 0).
+     *                                 Optional this could also only be a numeric value than the
+     *                                 datatable will be ordered by the number of this column ascending.
+     * @par Examples
+     * @code $table = new HtmlTable('simple-table');
+     * // sort all rows after first and third column ascending
+     * $table->setDatatablesOrderColumns(array(1, 3));
+     * // sort all rows after first column descending and third column ascending
+     * $table->setDatatablesOrderColumns(array(array(1, 'desc'), array(3, 'asc')));@endcode
      */
     public function setDatatablesOrderColumns($arrayOrderColumns)
     {
@@ -321,19 +327,20 @@ class HtmlTable extends HtmlTableBasic
         }
     }
 
-    /** Set the number of rows that should be displayed on one page if the jQuery plugin
-     *  DataTables is used.
-     *  @param $numberRows Number of rows that should be displayed on one page.
+    /**
+     * Set the number of rows that should be displayed on one page if the jQuery plugin DataTables is used.
+     * @param int $numberRows Number of rows that should be displayed on one page.
      */
     public function setDatatablesRowsPerPage($numberRows)
     {
         $this->rowsPerPage = $numberRows;
     }
 
-    /** Set a text id of the translation files that should be shown if table has no rows.
-     *  @param $messageId Text id of the translation file.
-     *  @param $messageType As @b default the text will be shown. If @b warning or @b error
-     *                      is set then a box in yellow or red with the message will be shown.
+    /**
+     * Set a text id of the translation files that should be shown if table has no rows.
+     * @param string $messageId   Text id of the translation file.
+     * @param string $messageType As @b default the text will be shown. If @b warning or @b error
+     *                            is set then a box in yellow or red with the message will be shown.
      */
     public function setMessageIfNoRowsFound($messageId, $messageType = 'default')
     {
@@ -353,18 +360,19 @@ class HtmlTable extends HtmlTableBasic
         }
     }
 
-    /** This method send the whole html code of the table to the browser. If the jQuery plugin DataTables
-     *  is activated then the javascript for that plugin will be added. Call this method if you
-     *  have finished your form layout. If table has no rows then a message will be shown.
-     *  @param $directOutput If set to @b true (default) the table html will be directly send
-     *                       to the browser. If set to @b false the html will be returned.
-     *  @return If $directOutput is set to @b false this method will return the html code of the table.
+    /**
+     * This method send the whole html code of the table to the browser. If the jQuery plugin DataTables
+     * is activated then the javascript for that plugin will be added. Call this method if you
+     * have finished your form layout. If table has no rows then a message will be shown.
+     * @param  bool        $directOutput If set to @b true (default) the table html will be directly send
+     *                                   to the browser. If set to @b false the html will be returned.
+     * @return string|void If $directOutput is set to @b false this method will return the html code of the table.
      */
     public function show($directOutput = true)
     {
-        global $g_root_path, $gDebug, $gPreferences, $gL10n;
+        global $g_root_path, $gDebug, $gPreferences;
 
-        if($this->rowCount == 0)
+        if($this->rowCount === 0)
         {
             // if table contains no rows then show message and not the table
             if($directOutput)

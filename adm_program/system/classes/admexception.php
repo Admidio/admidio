@@ -1,11 +1,19 @@
 <?php
-/*****************************************************************************/
-/** @class AdmException
- *  @brief Admidio specific enhancements of the exception class
+/*****************************************************************************
  *
- *  This class extends the default PHP exception class with an Admidio specific
- *  output. The exception get's a language string as parameter and returns a
- *  html or plain text message with the translated error if an exception is thrown
+ *  Copyright    : (c) 2004 - 2015 The Admidio Team
+ *  Homepage     : http://www.admidio.org
+ *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ *****************************************************************************/
+
+/**
+ * @class AdmException
+ * @brief Admidio specific enhancements of the exception class
+ *
+ * This class extends the default PHP exception class with an Admidio specific
+ * output. The exception get's a language string as parameter and returns a
+ * html or plain text message with the translated error if an exception is thrown
  *
  * @par Example
  * @code try
@@ -26,14 +34,6 @@
  *    $e->showText();
  * } @endcode
  */
-/*****************************************************************************
- *
- *  Copyright    : (c) 2004 - 2015 The Admidio Team
- *  Homepage     : http://www.admidio.org
- *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- *
- *****************************************************************************/
-
 class AdmException extends Exception
 {
     /**
@@ -110,7 +110,9 @@ class AdmException extends Exception
         return $gMessage->show($this->getText());
     }
 
-    /** Simply return the plain translated error text without any markup and stop the script. */
+    /**
+     * Simply return the plain translated error text without any markup and stop the script.
+     */
     public function showText()
     {
         echo $this->getText();

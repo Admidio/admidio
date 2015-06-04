@@ -1,20 +1,4 @@
 <?php
-/*****************************************************************************/
-/** @class AutoLogin
- *  @brief Handle auto login with Admidio and manage it in the database
- *
- *  The class search in the database table @b adm_auto_login for the session id.
- *  If there is an entry for that id then it reads the user id and set this
- *  user to the current session. Now the current session has become a valid user
- *  that is automatically login.
- *  @par Examples
- *  @code // create a valid user login for a Admidio session from auto login
- *  $autoLogin = new AutoLogin($gDb, $gSessionId);
- *  $autoLogin->setValidLogin($gCurrentSession, $_COOKIE['ADMIDIO_ID']);@endcode
- *  @code // delete an auto login
- *  $autoLogin = new AutoLogin($gDb, $gSessionId);
- *  $autoLogin->delete();@endcode
- */
 /*****************************************************************************
  *
  *  Copyright    : (c) 2004 - 2015 The Admidio Team
@@ -23,12 +7,29 @@
  *
  *****************************************************************************/
 
+/**
+ * @class AutoLogin
+ * @brief Handle auto login with Admidio and manage it in the database
+ *
+ * The class search in the database table @b adm_auto_login for the session id.
+ * If there is an entry for that id then it reads the user id and set this
+ * user to the current session. Now the current session has become a valid user
+ * that is automatically login.
+ * @par Examples
+ * @code // create a valid user login for a Admidio session from auto login
+ * $autoLogin = new AutoLogin($gDb, $gSessionId);
+ * $autoLogin->setValidLogin($gCurrentSession, $_COOKIE['ADMIDIO_ID']);@endcode
+ * @code // delete an auto login
+ * $autoLogin = new AutoLogin($gDb, $gSessionId);
+ * $autoLogin->delete();@endcode
+ */
 class AutoLogin extends TableAccess
 {
-    /** Constuctor that will create an object of a recordset of the table adm_auto_login.
-     *  If the id is set than the specific auto login will be loaded.
-     *  @param object $db Object of the class database. This should be the default object $gDb.
-     *  @param $session The recordset of the auto login with this session will be loaded. If session isn't set than an empty object of the table is created.
+    /**
+     * Constructor that will create an object of a recordset of the table adm_auto_login.
+     * If the id is set than the specific auto login will be loaded.
+     * @param object $db Object of the class database. This should be the default object $gDb.
+     * @param $session The recordset of the auto login with this session will be loaded. If session isn't set than an empty object of the table is created.
      */
     public function __construct(&$db, $session = 0)
     {
@@ -46,12 +47,13 @@ class AutoLogin extends TableAccess
 
     }
 
-    /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     *  a new record or if only an update is necessary. The update statement will only update
-     *  the changed columns. If the table has columns for creator or editor than these column
-     *  with their timestamp will be updated.
-     *  The current organization, last login and ip adress will be set per default.
-     *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+    /**
+     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * a new record or if only an update is necessary. The update statement will only update the changed columns.
+     * If the table has columns for creator or editor than these column with their timestamp will be updated.
+     * The current organization, last login and ip adress will be set per default.
+     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
+     *                                if table has columns like @b usr_id_create or @b usr_id_changed
      */
     public function save($updateFingerPrint = true)
     {
@@ -75,12 +77,13 @@ class AutoLogin extends TableAccess
         parent::save($updateFingerPrint);
     }
 
-    /** Method checks the data of the cookie against the data stored in the
-     *  database table @b adm_auto_login. If cookie data is ok then the
-     *  user id will be set in the current session. Now there is a valid login
-     *  for this user.
-     *  @param object $session The Session object of the current Admidio session.
-     *  @param $cookieData     The data of the cookie @b ADMIDIO_DATA.
+    /**
+     * Method checks the data of the cookie against the data stored in the
+     * database table @b adm_auto_login. If cookie data is ok then the
+     * user id will be set in the current session. Now there is a valid login
+     * for this user.
+     * @param object $session The Session object of the current Admidio session.
+     * @param $cookieData     The data of the cookie @b ADMIDIO_DATA.
      */
     public function setValidLogin($session, $cookieData)
     {
@@ -106,8 +109,9 @@ class AutoLogin extends TableAccess
         }
     }
 
-    /** Method will clean the database table @b adm_auto_login. All login that had their last
-     *  login one year ago will be deleted.
+    /**
+     * Method will clean the database table @b adm_auto_login.
+     * All login that had their last login one year ago will be deleted.
      */
     public function tableCleanup()
     {

@@ -52,20 +52,23 @@ class Captcha
     private $font, $signature, $width, $height, $codeSize, $allowedChars;
     private $backgroundColourR, $backgroundColourG, $backgroundColourB;
     private $backgroundWriting, $backgroundWritingSize;
-    private $text_part1,$text_part2,$text_part3_third,$text_part3_half,$text_part4;
 
     public function __construct()
     {
         global $gPreferences;
 
         // Hier wird jetzt die Schriftart festgelegt. (Standard: Theme)
-        if($gPreferences['captcha_fonts'] == 'Theme')
-            {$this->font = THEME_SERVER_PATH. '/font.ttf';}
+        if($gPreferences['captcha_fonts'] === 'Theme')
+        {
+            $this->font = THEME_SERVER_PATH.'/font.ttf';
+        }
         else
-            {$this->font = SERVER_PATH .'/adm_program/system/fonts/'.$gPreferences['captcha_fonts'];}
+        {
+            $this->font = SERVER_PATH.'/adm_program/system/fonts/'.$gPreferences['captcha_fonts'];
+        }
 
         // Hier wird die Schriftart für die Bildunterschrift festgelegt. (Standard: Theme, nicht wechselbar)
-        $this->signature = THEME_SERVER_PATH. '/font.ttf';
+        $this->signature = THEME_SERVER_PATH.'/font.ttf';
 
         // Nun die Bildgroesse des Captchas festlegen
         $this->width = $gPreferences['captcha_width'];
@@ -73,15 +76,15 @@ class Captcha
 
         // Hier wird die Hintergrundfarbe festgelegt. Einzelne RGB-Werte (Umwandlung aus Hex-Wert)
         $color = $gPreferences['captcha_background_color'];
-        if($color[0] == '#')
+        if($color[0] === '#')
         {
             $color = substr($color, 1);
         }
-        if(strlen($color) == 6)
+        if(strlen($color) === 6)
         {
-            list($r, $g, $b) = array($color[0].$color[1],$color[2].$color[3],$color[4].$color[5]);
+            list($r, $g, $b) = array($color[0].$color[1], $color[2].$color[3], $color[4].$color[5]);
         }
-        elseif(strlen($color) == 3)
+        elseif(strlen($color) === 3)
         {
             list($r, $g, $b) = array($color[0].$color[0], $color[1].$color[1], $color[2].$color[2]);
         }
@@ -113,27 +116,27 @@ class Captcha
     public function getCaptchaCalc($text_part1, $text_part2, $text_part3_third, $text_part3_half, $text_part4)
     {
         // Zuweisung der Einstiegsvariablen
-        $number = array(rand(40, 60),rand(20, 40),rand(1, 20));
+        $number = array(rand(40, 60), rand(20, 40), rand(1, 20));
         $operator_value = array();
         $result = $number[0];
 
         // Rechenaufgabe erstellen
-        for($count=1;$count<=2;$count++)
+        for($count = 1; $count <= 2; $count++)
         {
             $operator = rand(1, 2);
-            if($operator == 1)
+            if($operator === 1)
             {
-                $result = $result+$number[$count];
+                $result = $result + $number[$count];
                 $operator_value[$count-1] = '+';
             }
-            if($operator == 2)
+            if($operator === 2)
             {
-                $result = $result-$number[$count];
+                $result = $result - $number[$count];
                 $operator_value[$count-1] = '-';
             }
-            if($count==2 && $result<1)
+            if($count === 2 && $result < 1)
             {
-                $count=1;
+                $count = 1;
                 $result = $number[0];
             }
         }
@@ -146,13 +149,13 @@ class Captcha
             if(is_int($number[3]/3))
             {
                 $operator_value[2] = $text_part3_third;
-                $result = $result+($number[3]/3);
+                $result = $result + ($number[3]/3);
                 $ready = 1;
             }
             elseif(is_int($number[3]/2))
             {
                 $operator_value[2] = $text_part3_half;
-                $result = $result+($number[3]/2);
+                $result = $result + ($number[3]/2);
                 $ready = 1;
             }
         }
@@ -175,9 +178,9 @@ class Captcha
         $this->charCount = rand(4, 6);
 
         $this->captchaCode = '';
-        for ($i=0; $i < $this->charCount; $i++)
+        for ($i = 0; $i < $this->charCount; $i++)
         {
-            $this->captchaCode = $this->captchaCode. $this->allowedChars{rand(0, strlen($this->allowedChars)-1)};
+            $this->captchaCode = $this->captchaCode . $this->allowedChars{rand(0, strlen($this->allowedChars)-1)};
         }
 
         // hier wird der Code jetzt in der Session gespeichert...
@@ -191,35 +194,35 @@ class Captcha
         $image = imagecreate($this->width, $this->height);
 
         // Hintergrundfarbe setzen...
-        $background =  imagecolorallocate($image, $this->backgroundColourR, $this->backgroundColourG, $this->backgroundColourB);
+        $background = imagecolorallocate($image, $this->backgroundColourR, $this->backgroundColourG, $this->backgroundColourB);
         imagefilledrectangle($image, 0, 0, $this->width, $this->height, $background);
 
         // Gitter in den Hintergrund zeichnen...
         // erst vertikal...
-        for($i=0; $i < $this->width; $i += intval($this->backgroundWritingSize / 2))
+        for($i = 0; $i < $this->width; $i += intval($this->backgroundWritingSize / 2))
         {
-            $color    = imagecolorallocate($image, $this->backgroundColourR - 40, $this->backgroundColourG - 40, $this->backgroundColourB - 40);
+            $color = imagecolorallocate($image, $this->backgroundColourR - 40, $this->backgroundColourG - 40, $this->backgroundColourB - 40);
             imageline($image, $i, 0, $i, $this->height, $color);
         }
 
         // ...dann horizontal
-        for($i=0; $i < $this->height; $i += intval($this->backgroundWritingSize / 2))
+        for($i = 0; $i < $this->height; $i += intval($this->backgroundWritingSize / 2))
         {
             imageline($image, 0, $i, $this->width, $i, $color);
         }
 
         // Untertitel in das Captcha reinschreiben...
-        imagettftext($image, $this->backgroundWritingSize, 0, 15, $this->height-5, imagecolorallocate($image, 0, 0, 0), $this->signature, $this->backgroundWriting);
+        imagettftext($image, $this->backgroundWritingSize, 0, 15, $this->height - 5, imagecolorallocate($image, 0, 0, 0), $this->signature, $this->backgroundWriting);
 
         // Jetzt wird dem Bild der eigentliche CaptchaCode hinzugefuegt...
         $xStartPosition = 15;
 
-        for ($i=0; $i < $this->charCount; $i++)
+        for ($i = 0; $i < $this->charCount; $i++)
         {
-            $xPosition = intval($xStartPosition + $i * ($this->width / ($this->charCount +1)));
+            $xPosition = intval($xStartPosition + $i * ($this->width / ($this->charCount + 1)));
 
-            $text      = substr($this->captchaCode, $i, 1);
-            $color     =  imagecolorallocate($image, $this->backgroundColourR - 125, $this->backgroundColourG - 55, $this->backgroundColourB - 90);
+            $text  = substr($this->captchaCode, $i, 1);
+            $color = imagecolorallocate($image, $this->backgroundColourR - 125, $this->backgroundColourG - 55, $this->backgroundColourB - 90);
             imagettftext($image, $this->codeSize, 0, $xPosition, 35, $color, $this->font, $text);
         }
 

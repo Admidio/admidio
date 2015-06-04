@@ -62,13 +62,16 @@ class DateTimeExtended extends DateTime
         parent::__construct($this->getDateTimeEnglish());
     }
 
-    // berechnet aus dem Datum das Alter einer Person
+    /**
+     * berechnet aus dem Datum das Alter einer Person
+     * @return int
+     */
     public function getAge()
     {
         // Alter berechnen
         // Hier muss man aufpassen, da viele PHP-Funkionen nicht mit einem Datum vor 1970 umgehen koennen !!!
-        $act_date  = getDate(time());
-        $birthday  = false;
+        $act_date = getDate(time());
+        $birthday = false;
 
         if($act_date['mon'] >= $this->month)
         {
@@ -85,25 +88,26 @@ class DateTimeExtended extends DateTime
             }
         }
         $age = $act_date['year'] - $this->year;
-        if($birthday == false)
+        if(!$birthday)
         {
             $age--;
         }
+
         return $age;
     }
 
-    /** The method will convert a date format with the syntax of date()
-     *  to a syntax that is known by the bootstrap datepicker plugin.
-     *  e.g.: input: 'd.m.Y' output: 'dd.mm.yyyy'
-     *  e.g.: input: 'j.n.y' output: 'd.m.yy'
-     *  @param $format Optional a format could be given in the date() syntax
-     *                 that should be transformed. If no format is set then
-     *                 the format of the class constructor will be used.
-     *  @return Return the transformed format that is valid for the datepicker.
+    /**
+     * The method will convert a date format with the syntax of date()
+     * to a syntax that is known by the bootstrap datepicker plugin.
+     * e.g.: input: 'd.m.Y' output: 'dd.mm.yyyy'
+     * e.g.: input: 'j.n.y' output: 'd.m.yy'
+     * @param  string $format Optional a format could be given in the date() syntax that should be transformed.
+     *                        If no format is set then the format of the class constructor will be used.
+     * @return string Return the transformed format that is valid for the datepicker.
      */
     public static function getDateFormatForDatepicker($format = null)
     {
-        if($format == null)
+        if($format === null)
         {
             $format = $this->format;
         }
@@ -147,30 +151,37 @@ class DateTimeExtended extends DateTime
                case 'y':
                     $destFormat .= 'yy';
                     break;
-
                 default:
                     $destFormat .= $formatChar;
                     break;
             }
         }
+
         return $destFormat;
     }
 
-    // liefert das gesetzte DateTime im Format 'Y-m-d H:i:s' zurueck
+    /**
+     * liefert das gesetzte DateTime im Format 'Y-m-d H:i:s' zurueck
+     * @return string
+     */
     public function getDateTimeEnglish()
     {
         return $this->year.'-'.$this->month.'-'.$this->day.' '.$this->hour.':'.$this->minute.':'.$this->second;
     }
 
-    // gibt den Unix-Timestamp zurueck
+    /**
+     * gibt den Unix-Timestamp zurueck
+     * @return string
+     */
     public function getTimestamp()
     {
         return $this->format('U');
     }
 
-    /** Returns an array with all 7 weekdays with full name in the specific language.
-     *  @param $weekday The number of the weekday for which the name should be returned (1 = Monday ...)
-     *  @return Array with all 7 weekday or if param weekday is set than the full name of that weekday
+    /**
+     * Returns an array with all 7 weekdays with full name in the specific language.
+     * @param  int             $weekday The number of the weekday for which the name should be returned (1 = Monday ...)
+     * @return string|string[] with all 7 weekday or if param weekday is set than the full name of that weekday
      */
     public static function getWeekdays($weekday = 0)
     {
@@ -182,7 +193,7 @@ class DateTimeExtended extends DateTime
                           4 => $gL10n->get('SYS_THURSDAY'),
                           5 => $gL10n->get('SYS_FRIDAY'),
                           6 => $gL10n->get('SYS_SATURDAY'),
-                          7 => $gL10n->get('SYS_SUNDAY') );
+                          7 => $gL10n->get('SYS_SUNDAY'));
 
         if($weekday > 0)
         {
@@ -194,12 +205,13 @@ class DateTimeExtended extends DateTime
         }
     }
 
-    /** Method will replace a valid php date or time format into a valid
-     *  regex syntax. This method to not accept the complete format string.
-     *  Only a segement of the format can be given to this method, so you
-     *  must call this method several times to get the whole format.
-     *  @param $formatArray An array with a part of a datetime format e.g. $array(0 => 'd')
-     *  @return Returns the regex for the format array element e.g. (?P<d>0[1-9]|[12][0-9]|3[01])
+    /**
+     * Method will replace a valid php date or time format into a valid regex syntax.
+     * This method to not accept the complete format string.
+     * Only a segment of the format can be given to this method, so you
+     * must call this method several times to get the whole format.
+     * @param  array  $formatArray An array with a part of a datetime format e.g. $array(0 => 'd')
+     * @return string Returns the regex for the format array element e.g. (?P<d>0[1-9]|[12][0-9]|3[01])
      */
     public static function replaceDatetimeFormatIntoRegex($formatArray)
     {
@@ -207,7 +219,7 @@ class DateTimeExtended extends DateTime
             'a' => '(?P<a>am|pm)',
             'A' => '(?P<A>AM|PM)',
             'B' => '(?P<B>[0-9]{3})',
-        //    'c' => '(?P<c>)',
+//            'c' => '(?P<c>)',
             'd' => '(?P<d>0[1-9]|[12][0-9]|3[01])',
             'D' => '(?P<D>Mon|Tue|Wed|Thu|Fri|Sat|Sun)',
             'F' => '(?P<F>January|February|March|April|May|June|July|August|September|October|November|December)',
@@ -224,7 +236,7 @@ class DateTimeExtended extends DateTime
             'M' => '(?P<M>Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)',
             'n' => '(?P<n>[1-9]|1[0-2])',
             'O' => '(?P<O>[+\-][0-9]{4})',
-        //    'r' => '(?P<r>)',
+//            'r' => '(?P<r>)',
             's' => '(?P<s>[0-4][0-9]|5[0-9])',
             'S' => '(?P<S>st|nd|rd|th)',
             't' => '(?P<t>28|29|30|31)',
@@ -248,55 +260,71 @@ class DateTimeExtended extends DateTime
         }
     }
 
-    // setzt das Datum und die Uhrzeit fuer das aktuelle Objekt
-    // erwartet wird ein String und das dazugehoerige Format aehnlich date()
+    /**
+     * setzt das Datum und die Uhrzeit fuer das aktuelle Objekt
+     * erwartet wird ein String und das dazugehoerige Format aehnlich date()
+     * @param string $date
+     * @param string $format
+     */
     public function setDateTime($date, $format)
     {
-        $this->year   = 0;
-        $this->month  = 0;
-        $this->day    = 0;
-        $this->hour   = 0;
-        $this->minute = 0;
-        $this->second = 0;
-        $this->errorCode = 0;
+        $this->year      = 0;
+        $this->month     = 0;
+        $this->day       = 0;
+        $this->hour      = 0;
+        $this->minute    = 0;
+        $this->second    = 0;
+        $this->errorCode = true;
 
-        $regexp = preg_replace_callback('/[a-zA-Z]/', "DateTimeExtended::replaceDatetimeFormatIntoRegex", $format);
+        $regexp = preg_replace_callback('/[a-zA-Z]/', 'DateTimeExtended::replaceDatetimeFormatIntoRegex', $format);
 
         if (preg_match('/^'.$regexp.'$/', trim($date), $match))
         {
             foreach ($match as $format => $value)
             {
-                if ($format == 'g' || $format == 'G' || $format == 'h' || $format == 'H') {
-                    $this->hour = $value;
-                } elseif ($format == 'i') {
-                    $this->minute = $value;
-                } elseif ($format == 's') {
-                    $this->second = $value;
-                } elseif ($format == 'm' || $format == 'n') {
-                    $this->month = $value;
-                } elseif ($format == 'd' || $format == 'j') {
-                    $this->day = $value;
-                } elseif ($format == 'Y' || $format == 'y') {
-                    $this->year = $value;
+                switch ($format) {
+                    case 'g':
+                    case 'G':
+                    case 'h':
+                    case 'H':
+                        $this->hour = $value;
+                        break;
+                    case 'i':
+                        $this->minute = $value;
+                        break;
+                    case 's':
+                        $this->second = $value;
+                        break;
+                    case 'm':
+                    case 'n':
+                        $this->month = $value;
+                        break;
+                    case 'd':
+                    case 'j':
+                        $this->day = $value;
+                        break;
+                    case 'Y':
+                    case 'y':
+                        $this->year = $value;
+                        break;
                 }
             }
         }
 
         // Datum validieren
-        if($this->month == 0 || $this->day == 0)
+        if($this->month === 0 || $this->day === 0)
         {
-            $this->errorCode = 1;
+            $this->errorCode = false;
         }
     }
 
-    // gibt true oder false zurueck, je nachdem ob DateTime gueltig ist
+    /**
+     * gibt true oder false zurueck, je nachdem ob DateTime gueltig ist
+     * @return bool
+     */
     public function valid()
     {
-        if($this->errorCode == 0)
-        {
-            return true;
-        }
-        return false;
+        return $this->errorCode;
     }
 }
 ?>
