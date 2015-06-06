@@ -85,7 +85,7 @@ $gDb->setCurrentDB();
 $plgDates = new ModuleDates();
 
 // read events for output
-$plgDatesResult = $plgDates->getDates(0, $plg_dates_count);
+$plgDatesResult = $plgDates->getDataSet(0, $plg_dates_count);
 
 $plg_date = new TableDate($gDb);
 
@@ -97,7 +97,7 @@ if($plg_show_headline==1)
 
 if($plgDatesResult['numResults'] > 0)
 {
-    foreach($plgDatesResult['dates'] as $plg_row)
+    foreach($plgDatesResult['recordset'] as $plg_row)
     {
         $plg_date->clear();
         $plg_date->setArray($plg_row);

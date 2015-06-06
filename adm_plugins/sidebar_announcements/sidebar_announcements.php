@@ -71,17 +71,17 @@ if($plg_show_headline==1)
     echo '<h3>'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE').'</h3>';
 }
 
-if($plg_announcements->getAnnouncementsCount() == 0)
+if($plg_announcements->getDataSetCount() == 0)
 {
     echo $gL10n->get('SYS_NO_ENTRIES');
 }
 else
 {
     //Daten holen
-    $plg_getAnnouncements = $plg_announcements->getAnnouncements(0, $plg_announcements_count);
+    $plg_getAnnouncements = $plg_announcements->getDataSet(0, $plg_announcements_count);
     $plg_announcement = new TableAnnouncement($gDb);
 
-    foreach($plg_getAnnouncements['announcements'] as $plg_row)
+    foreach($plg_getAnnouncements['recordset'] as $plg_row)
     {
         $plg_announcement->clear();
         $plg_announcement->setArray($plg_row);
