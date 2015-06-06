@@ -316,7 +316,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
     <tr>';
         if($plg_ajax_change == 1)
         {
-            echo "<th align=\"center\" class=\"plgCalendarHeader\"><a href=\"#\" onclick=\"$.ajax({
+            echo "<th style=\"text-align: center;\" class=\"plgCalendarHeader\"><a href=\"#\" onclick=\"$.ajax({
                 type: 'GET',
                 url: '".$g_root_path."/adm_plugins/$plugin_folder/calendar.php',
                 cache: false,
@@ -325,8 +325,8 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
                     $('#plgCalendarContent').replaceWith(html);
                 }
             }); return false;\">&laquo;</a></th>";
-            echo '<th colspan="5" align="center" class="plgCalendarHeader">'.$monate[$monat-1].' '.$jahr.'</th>';
-            echo "<th align=\"center\" class=\"plgCalendarHeader\"><a href=\"#\" onclick=\"$.ajax({
+            echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$monate[$monat-1].' '.$jahr.'</th>';
+            echo "<th style=\"text-align: center;\" class=\"plgCalendarHeader\"><a href=\"#\" onclick=\"$.ajax({
                 type: 'GET',
                 url: '".$g_root_path."/adm_plugins/$plugin_folder/calendar.php',
                 cache: false,
@@ -421,11 +421,11 @@ while($i<=$insgesamt)
 
                 if($i <= 9)
                 {
-                    $plg_link = $plg_link_url.'?date='.$jahr.$monat.'0'. $i;
+                    $plg_link = $plg_link_url.'?date_from='.$jahr.'-'.$monat.'-'.'0'. $i.'&date_to='.$jahr.'-'.$monat.'-'.'0'. $i;
                 }
                 else
                 {
-                    $plg_link = $plg_link_url.'?date='.$jahr.$monat.$i;
+                    $plg_link = $plg_link_url.'?date_from='.$jahr.'-'.$monat.'-'.$i.'&date_to='.$jahr.'-'.$monat.'-'. $i;
                 }
             }
             if($ter_anzahl >> 1)
