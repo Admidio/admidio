@@ -3,16 +3,17 @@
      and after the Admidio module code.
 -->
 
-                </div>
             </div>
-            <div class="col-md-3">
-                <div id="right-block" class="admidio-container">
+        </div>
+        <div class="col-md-3">
+            <div id="right-block" class="admidio-container">
+                <?php
+
+                include(SERVER_PATH . '/adm_plugins/login_form/login_form.php');
+
+                ?>
+                <div id="plugin_menu" class="admidio-plugin-content">
                     <?php
-
-                    include(SERVER_PATH . '/adm_plugins/login_form/login_form.php');
-
-                    // prepare the menus here so that the plugins have a chance to modify them
-                    echo '<div id="plugin_menu" class="admidio-plugin-content">';
 
                     $moduleMenu = new Menu('modules', $gL10n->get('SYS_MODULES'));
 
@@ -131,7 +132,7 @@
 
 
 <p id="copyright">
-    <a href="http://www.admidio.org/">
+    <a href="http://www.admidio.org/" style="text-decoration: none;">
         <img src="<?php echo THEME_PATH; ?>/images/admidio_logo_20.png"
              alt="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>"
              title="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>"
