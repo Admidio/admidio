@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="da">
     <version id="3.0.0" translator="Henrik Troels-Hansen">
+	    <text id="PHO_PHOTO_UPLOAD_SUCCESSFUL" development="new" translation="todo">Alle billeder blev uploaded.\n\nDu kan lukke dialogboksen nu.</text>
+        <text id="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL" development="new" translation="todo">Ikke alle billeder blev uploaded.</text>
+        <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="edited">En dato blev ændret</text>
+        <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1" development="new" translation="edited">En dato for %VAR1% blev ændret.\n\nTitel: %VAR2%\nDato: %VAR3%\nKalender: %VAR4%\n</text>
+        <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2" development="new" translation="edited">Sted: %VAR1%\nRum: %VAR2%\nDeltagere: %VAR3%\nÆndret af: %VAR4%\n</text>
+        <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3" development="new" translation="edited">Ændret den: %VAR1%</text>
 	    <text id="MAI_EMAIL_SEND_TO_RECEIVER" development="new" translation="todo">%VAR1% sendt til modtagerne: %VAR3% fra %VAR2% den følgende e-mail:</text>
         <text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Tidligere medlemmer</text>
         <text id="MSG_ACTIVE_FORMER_SHORT" development="new" translation="todo">Aktive og tidligere</text>
