@@ -108,14 +108,14 @@ else
                     $plg_new_headline = $plg_new_headline.' '. $plg_value;
                 }
             }
-            echo $plg_new_headline.'</a><br />';
+            echo $plg_new_headline.'</a>';
         }
         else
         {
-            echo $plg_announcement->getValue('ann_headline').'</a><br />';
+            echo $plg_announcement->getValue('ann_headline').'</a>';
         }
          
-        echo '(&nbsp;'. $plg_announcement->getValue('ann_timestamp_create', $gPreferences['system_date']). '&nbsp;)<hr />';
+        echo ' (&nbsp;'. $plg_announcement->getValue('ann_timestamp_create', $gPreferences['system_date']). '&nbsp;)<hr />';
     }
     
     echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ANNOUNCEMENTS').'</a>';

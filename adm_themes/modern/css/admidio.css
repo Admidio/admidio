@@ -198,6 +198,12 @@ h3 {
 /* Other styles */
 /**************************************************/
 
+hr {
+    border: 1px solid #bad8e2;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
 .ekko-lightbox-nav-overlay a:link, .ekko-lightbox-nav-overlay a:visited,
 .ekko-lightbox-nav-overlay a:hover, .ekko-lightbox-nav-overlay a:active {
     color: #ffffff;
@@ -380,12 +386,6 @@ a.btn {
 .form-group, input[type="file"] {
     margin-bottom: 10px;
     padding-top: 0;
-}
-
-form hr {
-    border: 1px solid #bad8e2;
-    width: 100%;
-    margin-bottom: 15px;
 }
 
 .navbar-form .form-group {
