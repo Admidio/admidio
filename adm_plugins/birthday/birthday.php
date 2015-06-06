@@ -102,6 +102,13 @@ if($plg_show_names_extern == 0 && $gValidLogin == 0)
     $plg_show_future = 0;
 }
 
+// if page object is set then integrate css file of this plugin
+global $page;
+if(isset($page) && is_object($page))
+{
+    $page->addCssFile($g_root_path.'/adm_plugins/birthday/birthday.css');
+}
+
 // set database to admidio, sometimes the user has other database connections at the same time
 $gDb->setCurrentDB();
 

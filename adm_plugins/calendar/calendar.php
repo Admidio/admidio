@@ -162,6 +162,13 @@ else
 }
 $sql_dat = $jahr. '-'. $monat;
 
+// if page object is set then integrate css file of this plugin
+global $page;
+if(isset($page) && is_object($page))
+{
+    $page->addCssFile($g_root_path.'/adm_plugins/calendar/calendar.css');
+}
+
 // set database to admidio, sometimes the user has other database connections at the same time
 $gDb->setCurrentDB();
 
