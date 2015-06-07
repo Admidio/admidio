@@ -13,12 +13,16 @@
  *
  *****************************************************************************/
 
+/**
+ * Class TableText
+ */
 class TableText extends TableAccess
 {
-    /** Constuctor that will create an object of a recordset of the table adm_texts.
-     *  If the id is set than the specific text will be loaded.
-     *  @param $db Object of the class database. This should be the default object $gDb.
-     *  @param $name The recordset of the text with this name will be loaded. If name isn't set than an empty object of the table is created.
+    /**
+     * Constructor that will create an object of a recordset of the table adm_texts.
+     * If the id is set than the specific text will be loaded.
+     * @param $db Object of the class database. This should be the default object $gDb.
+     * @param $name The recordset of the text with this name will be loaded. If name isn't set than an empty object of the table is created.
      */
     public function __construct(&$db, $name = '')
     {
@@ -28,15 +32,15 @@ class TableText extends TableAccess
     /**
      * Get the value of a column of the database table.
      * If the value was manipulated before with @b setValue than the manipulated value is returned.
-     * @param string $columnName The name of the database column whose value should be read
-     * @param string $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                For text columns the format can be @b database that would return the original database value without any transformations
+     * @param  string  $columnName The name of the database column whose value should be read
+     * @param  string  $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                             For text columns the format can be @b database that would return the original database value without any transformations
      * @return Returns the value of the database column.
-     *         If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *                            If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
-        if($columnName == 'txt_text')
+        if($columnName === 'txt_text')
         {
             return $this->dbColumns['txt_text'];
         }

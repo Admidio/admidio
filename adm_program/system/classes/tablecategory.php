@@ -24,7 +24,7 @@ class TableCategory extends TableAccess
     protected $elementTable;
     protected $elementColumn;
 
-    /** Constuctor that will create an object of a recordset of the table adm_category.
+    /** Constructor that will create an object of a recordset of the table adm_category.
      *  If the id is set than the specific category will be loaded.
      *  @param $db Object of the class database. This should be the default object $gDb.
      *  @param $cat_id The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.

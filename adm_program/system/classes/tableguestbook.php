@@ -17,7 +17,7 @@
 
 class TableGuestbook extends TableAccess
 {
-    /** Constuctor that will create an object of a recordset of the table adm_guestbook.
+    /** Constructor that will create an object of a recordset of the table adm_guestbook.
      *  If the id is set than the specific guestbook will be loaded.
      *  @param $db Object of the class database. This should be the default object $gDb.
      *  @param $gbo_id The recordset of the guestbook with this id will be loaded. If id isn't set than an empty object of the table is created.

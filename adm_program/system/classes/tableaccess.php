@@ -41,7 +41,7 @@ class TableAccess
     public $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
 
     /**
-     * Constuctor that will create an object of a recordset of the specified table.
+     * Constructor that will create an object of a recordset of the specified table.
      * If the id is set than this recordset will be loaded.
      * @param object     $db            Object of the class database. This should be the default object @b $gDb.
      * @param string     $tableName     The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS

@@ -13,8 +13,8 @@
 class TableMessage extends TableAccess
 {
     protected $msg_id;
-    
-    /** Constuctor that will create an object of a recordset of the table adm_messages.
+
+    /** Constructor that will create an object of a recordset of the table adm_messages.
      *  If the id is set than the specific message will be loaded.
      *  @param $db Object of the class database. This should be the default object $gDb.
      *  @param $msg_converation_id The recordset of the message with this conversation id will be loaded. If id isn't set than an empty object of the table is created.
@@ -22,7 +22,7 @@ class TableMessage extends TableAccess
     public function __construct(&$db, $msg_id = 0)
     {
         $this->msg_id = $msg_id;
-        
+
         parent::__construct($db, TBL_MESSAGES, 'msg', $this->msg_id);
     }
 
@@ -36,7 +36,7 @@ class TableMessage extends TableAccess
         $row = $this->db->fetch_array();
         return $row['count'];
     }
-    
+
     /** Reads the number of all conversations in this table
      *  @return Number of conversations in this table
      */
@@ -47,7 +47,7 @@ class TableMessage extends TableAccess
         $row = $this->db->fetch_array();
         return $row['max_id'];
     }
-    
+
     /** Reads the number of all messages in actual conversation
      *  @return Number of all messages in actual conversation
      */
@@ -59,7 +59,7 @@ class TableMessage extends TableAccess
         $row = $this->db->fetch_array();
         return $row['max_id'];
     }
-    
+
     /** Set a new value for a column of the database table.
      *  @param $usr_id of the receiver - just for security reasons.
      *  @return Returns @b answer of the SQL execution
@@ -70,7 +70,7 @@ class TableMessage extends TableAccess
             WHERE msg_id = ".$this->msg_id." and msg_usr_id_receiver LIKE '".$usr_id."'";
         return $this->db->query($sql);
     }
-    
+
     /** Set a new value for a column of the database table.
      *  The value is only saved in the object. You must call the method @b save to store the new value to the database
      *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
@@ -89,7 +89,7 @@ class TableMessage extends TableAccess
 
         return $row['user'];
     }
-    
+
     /** Deletes the selected message with all associated fields.
      *  After that the class will be initialize.
      *  @return @b 'done' if message is deleted or message with additional information if it is marked
@@ -98,19 +98,19 @@ class TableMessage extends TableAccess
     public function delete()
     {
         global $gCurrentUser;
-        
+
         $return = 'delete not OK';
-        
+
         if($this->getValue('msg_read') == 2 || $this->getValue('msg_type') == 'EMAIL')
         {
             $sql = "DELETE FROM ".TBL_MESSAGES_CONTENT."
              WHERE msc_msg_id = ". $this->getValue('msg_id');
             $this->db->query($sql);
-            
+
             $sql = "DELETE FROM ".TBL_MESSAGES."
              WHERE msg_id = ". $this->getValue('msg_id');
             $this->db->query($sql);
-            
+
             $return = 'done';
         }
         else
@@ -120,7 +120,7 @@ class TableMessage extends TableAccess
             {
                 $other = $this->getValue('msg_usr_id_receiver');
             }
-            
+
             $sql = "UPDATE ". TBL_MESSAGES. " SET msg_read = 2, msg_timestamp = CURRENT_TIMESTAMP
                                                 , msg_usr_id_sender = ".$gCurrentUser->getValue('usr_id').", msg_usr_id_receiver = '".$other."'
              WHERE msg_id = ".$this->getValue('msg_id');

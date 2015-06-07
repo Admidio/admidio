@@ -28,7 +28,7 @@ class Inventory extends TableInventory
     protected $list_view_rights = array();  ///< Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
     protected $organizationId;              ///< the organization for which the rights are read, could be changed with method @b setOrganization
 
-    /** Constuctor that will create an object of a recordset of the users table.
+    /** Constructor that will create an object of a recordset of the users table.
      *  If the id is set than this recordset will be loaded.
      *  @param $db          Object of the class database. This could be the default object @b $gDb.
      *  @param $userFields  An object of the ProfileFields class with the profile field structure

@@ -13,7 +13,7 @@
 
 class TableInventoryField extends TableAccess
 {
-    /** Constuctor that will create an object of a recordset of the table adm_invent_fields.
+    /** Constructor that will create an object of a recordset of the table adm_invent_fields.
      *  If the id is set than the specific item field will be loaded.
      *  @param $db Object of the class database. This should be the default object $gDb.
      *  @param $inf_id The recordset of the item field with this id will be loaded. If id isn't set than an empty object of the table is created.

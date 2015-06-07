@@ -34,7 +34,7 @@ class TableRoles extends TableAccess
     protected $countLeaders;    ///< number of leaders of this role
     protected $countMembers;    ///< number of members (without leaders) of this role
 
-    /** Constuctor that will create an object of a recordset of the table adm_roles.
+    /** Constructor that will create an object of a recordset of the table adm_roles.
      *  If the id is set than the specific role will be loaded.
      *  @param $db Object of the class database. This should be the default object $gDb.
      *  @param $rol_id The recordset of the role with this id will be loaded. If id isn't set than an empty object of the table is created.

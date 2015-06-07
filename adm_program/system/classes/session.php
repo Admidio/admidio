@@ -35,7 +35,7 @@ class Session extends TableAccess
     private $mObjectArray = array(); ///< Array with all objects of this session object.
 
     /**
-     * Constuctor that will create an object of a recordset of the table adm_sessions.
+     * Constructor that will create an object of a recordset of the table adm_sessions.
      * If the id is set than the specific session will be loaded.
      * @param object $db Object of the class database. This should be the default object $gDb.
      * @param $session The recordset of the session with this id will be loaded.

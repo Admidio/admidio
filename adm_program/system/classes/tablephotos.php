@@ -27,7 +27,7 @@ class TablePhotos extends TableAccess
 {
     protected $hasChildAlbums; ///< Flag if this album has child albums
 
-    /** Constuctor that will create an object of a recordset of the table adm_photos.
+    /** Constructor that will create an object of a recordset of the table adm_photos.
      *  If the id is set than the specific photo album will be loaded.
      *  @param $db Object of the class database. This should be the default object $gDb.
      *  @param $pho_id The recordset of the photo album with this id will be loaded. If id isn't set than an empty object of the table is created.
