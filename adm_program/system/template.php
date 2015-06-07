@@ -13,8 +13,11 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'template.php')
     die('This page may not be called directly!');
 }
 
-// Function to Read a file
-// and store all data into a variable
+/**
+ * Function to Read a file and store all data into a variable
+ * @param  string $filename
+ * @return string
+ */
 function admReadTemplateFile($filename)
 {
     if (file_exists(SERVER_PATH. '/adm_my_files/mail_templates/'.$filename))

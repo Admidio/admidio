@@ -18,9 +18,9 @@ $gCurrentSession->save();
 $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
 
 // remove auto login
-if(isset($_COOKIE[$gCookiePraefix. '_DATA']))
+if(isset($_COOKIE[$gCookiePraefix.'_DATA']))
 {
-    setcookie($gCookiePraefix. '_DATA', '', time() - 1000, '/', $domain, 0);
+    setcookie($gCookiePraefix.'_DATA', '', time() - 1000, '/', $domain, 0);
 
     $autoLogin = new AutoLogin($gDb, $gSessionId);
     $autoLogin->delete();
@@ -41,7 +41,7 @@ if($g_organization != $gCurrentOrganization->getValue('org_shortname'))
 $gCurrentUser->clear();
 
 // set homepage to logout page
-$gHomepage = $g_root_path. '/'. $gPreferences['homepage_logout'];
+$gHomepage = $g_root_path.'/'.$gPreferences['homepage_logout'];
 
 $message_code = 'SYS_LOGOUT_SUCCESSFUL';
 

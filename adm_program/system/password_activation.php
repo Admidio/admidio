@@ -15,7 +15,7 @@
 require_once('common.php');
 
 // Initialize and check the parameters
-$getActivationId = admFuncVariableIsValid($_GET, 'aid', 'string', array('requireValue' => true));
+$getActivationId = admFuncVariableIsValid($_GET, 'aid',    'string',  array('requireValue' => true));
 $getUserId       = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('requireValue' => true));
 
 // Systemmails und Passwort zusenden muessen aktiviert sein
@@ -28,7 +28,7 @@ $user = new TableUsers($gDb, $getUserId);
 
 if($user->getValue('usr_activation_code') == $getActivationId)
 {
-    // das neue Passwort aktivieren
+    // activate the new password
     $user->setValue('usr_password', $user->getValue('usr_new_password'));
     $user->setValue('usr_new_password', '');
     $user->setValue('usr_activation_code', '');

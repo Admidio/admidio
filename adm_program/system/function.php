@@ -433,50 +433,50 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
         }
     }
 
-    if($datatype === 'file')
-    {
-        try
-        {
-            admStrIsValidFileName($array[$variableName]);
-        }
-        catch(AdmException $e)
-        {
-            $errorMessage = $e->getText();
-        }
-    }
-    elseif($datatype === 'date')
-    {
-        // check if date is a valid Admidio date format
-        $objAdmidioDate = DateTime::createFromFormat($gPreferences['system_date'], $array[$variableName]);
-
-        if(!$objAdmidioDate)
-        {
-            // check if date has english format
-            $objEnglishDate = DateTime::createFromFormat('Y-m-d', $array[$variableName]);
-
-            if(!$objEnglishDate)
+    switch ($datatype) {
+        case 'file':
+            try
             {
-                $errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT', $variableName);
+                admStrIsValidFileName($array[$variableName]);
             }
-        }
-    }
-    elseif($datatype === 'numeric')
-    {
-        // numeric datatype should only contain numbers
-        if (!is_numeric($array[$variableName]))
-        {
-            $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-        }
-    }
-    elseif($datatype === 'string')
-    {
-        $array[$variableName] = strStripTags(htmlspecialchars($array[$variableName], ENT_COMPAT, 'UTF-8'));
-    }
+            catch(AdmException $e)
+            {
+                $errorMessage = $e->getText();
+            }
+            break;
 
-    elseif($datatype === 'html')
-    {
-        // check html string vor invalid tags and scripts
-        $array[$variableName] = htmLawed(stripslashes($array[$variableName]), array('safe' => 1));
+        case 'date':
+            // check if date is a valid Admidio date format
+            $objAdmidioDate = DateTime::createFromFormat($gPreferences['system_date'], $array[$variableName]);
+
+            if(!$objAdmidioDate)
+            {
+                // check if date has english format
+                $objEnglishDate = DateTime::createFromFormat('Y-m-d', $array[$variableName]);
+
+                if(!$objEnglishDate)
+                {
+                    $errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT', $variableName);
+                }
+            }
+            break;
+
+        case 'numeric':
+            // numeric datatype should only contain numbers
+            if (!is_numeric($array[$variableName]))
+            {
+                $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+            }
+            break;
+
+        case 'string':
+            $array[$variableName] = strStripTags(htmlspecialchars($array[$variableName], ENT_COMPAT, 'UTF-8'));
+            break;
+
+        case 'html':
+            // check html string vor invalid tags and scripts
+            $array[$variableName] = htmLawed(stripslashes($array[$variableName]), array('safe' => 1));
+            break;
     }
 
     // wurde kein Fehler entdeckt, dann den Inhalt der Variablen zurueckgeben
@@ -648,6 +648,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
             $html = '<div class="admidio-admidio-info-created-edited">'.$html.'</div>';
         }
     }
+
     return $html;
 }
 

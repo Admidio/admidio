@@ -69,7 +69,7 @@ $gDb = Database::createDatabaseObject($gDbType);
 if(!$gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db))
 {
     // organization not found
-    die('<div style="color: #CC0000;">Error: Wrong database connection parameters!</div>');
+    die('<div style="color: #cc0000;">Error: Wrong database connection parameters!</div>');
 }
 
 // create an installation unique cookie prefix and remove special characters
@@ -171,7 +171,7 @@ else
     if($gCurrentOrganization->getValue('org_id') === 0)
     {
         // organization not found
-        die('<div style="color: #CC0000;">Error: The organization of the config.php could not be found in the database!</div>');
+        die('<div style="color: #cc0000;">Error: The organization of the config.php could not be found in the database!</div>');
     }
     // add the organization to the session
     $gPreferences = $gCurrentOrganization->getPreferences();

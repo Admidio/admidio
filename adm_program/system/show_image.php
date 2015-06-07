@@ -17,16 +17,16 @@ require('common.php');
 
 // Initialize and check the parameters
 $getModule = admFuncVariableIsValid($_GET, 'module', 'file', array('requireValue' => true, 'directOutput' => true));
-$getFile   = admFuncVariableIsValid($_GET, 'file', 'file', array('requireValue' => true, 'directOutput' => true));
+$getFile   = admFuncVariableIsValid($_GET, 'file',   'file', array('requireValue' => true, 'directOutput' => true));
 
 // Initialize locale parameters
-$imageServerPath = SERVER_PATH. '/adm_my_files/'.$getModule.'/images/'.$getFile;
+$imageServerPath = SERVER_PATH.'/adm_my_files/'.$getModule.'/images/'.$getFile;
 
 // check if image exists
 if(file_exists($imageServerPath))
 {
     $image = new Image($imageServerPath);
-    header('Content-Type: '. $image->getMimeType());
+    header('Content-Type: '.$image->getMimeType());
     $image->copyToBrowser();
     $image->delete();
 }

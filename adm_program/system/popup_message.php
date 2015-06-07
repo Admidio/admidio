@@ -19,11 +19,11 @@ require_once('login_valid.php');
 
 // Initialize and check the parameters
 $gMessage->showThemeBody(false);
-$get_type          = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true));
-$get_element_id    = admFuncVariableIsValid($_GET, 'element_id', 'string', array('requireValue' => true));
-$get_database_id   = admFuncVariableIsValid($_GET, 'database_id', 'string', array('requireValue' => true));
+$get_type          = admFuncVariableIsValid($_GET, 'type',          'string', array('requireValue' => true));
+$get_element_id    = admFuncVariableIsValid($_GET, 'element_id',    'string', array('requireValue' => true));
+$get_database_id   = admFuncVariableIsValid($_GET, 'database_id',   'string', array('requireValue' => true));
 $get_database_id_2 = admFuncVariableIsValid($_GET, 'database_id_2', 'string');
-$get_name          = admFuncVariableIsValid($_GET, 'name', 'string');
+$get_name          = admFuncVariableIsValid($_GET, 'name',          'string');
 
 // initialize local variables
 $icon = 'error_big.png';

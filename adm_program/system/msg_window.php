@@ -15,10 +15,10 @@
 require_once('common.php');
 
 // Initialize and check the parameters
-$getMessageId    = admFuncVariableIsValid($_GET, 'message_id', 'string', array('requireValue' => true, 'directOutput' => true));
-$getMessageTitle = admFuncVariableIsValid($_GET, 'message_title', 'string', array('defaultValue' => 'SYS_NOTE', 'directOutput' => true));
-$getMessageVar1  = admFuncVariableIsValid($_GET, 'message_var1', 'string', array('directOutput' => true));
-$getInlineView   = admFuncVariableIsValid($_GET, 'inline', 'boolean', array('directOutput' => true));
+$getMessageId    = admFuncVariableIsValid($_GET, 'message_id',    'string',  array('directOutput' => true, 'requireValue' => true));
+$getMessageTitle = admFuncVariableIsValid($_GET, 'message_title', 'string',  array('directOutput' => true, 'defaultValue' => 'SYS_NOTE'));
+$getMessageVar1  = admFuncVariableIsValid($_GET, 'message_var1',  'string',  array('directOutput' => true));
+$getInlineView   = admFuncVariableIsValid($_GET, 'inline',        'boolean', array('directOutput' => true));
 
 header('Content-type: text/html; charset=utf-8');
 
@@ -26,11 +26,11 @@ header('Content-type: text/html; charset=utf-8');
 if($getInlineView)
 {
     echo '
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h4>
-    </div>
-    <div class="modal-body">';
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h4>
+        </div>
+        <div class="modal-body">';
 }
 
 switch ($getMessageId)
@@ -54,22 +54,22 @@ switch ($getMessageId)
         {
             $room = new TableRooms($gDb, $getMessageVar1);
             echo '
-            <div class="row">
-                <div class="col-xs-4"><strong>'.$gL10n->get('SYS_ROOM').':</strong></div>
-                <div class="col-xs-8">'.$room->getValue('room_name').'</div>
-            </div>
-            <div class="row">
-                <div class="col-xs-4"><strong>'.$gL10n->get('ROO_CAPACITY').':</strong></div>
-                <div class="col-xs-8">'.$room->getValue('room_capacity').'</div>
-            </div>
-            <div class="row">
-                <div class="col-xs-4"><strong>'.$gL10n->get('ROO_OVERHANG').':</strong></div>
-                <div class="col-xs-8">'.$room->getValue('room_overhang').'</div>
-            </div>
-            <div class="row">
-                <div class="col-xs-4"><strong>'.$gL10n->get('SYS_DESCRIPTION').':</strong></div>
-                <div class="col-xs-8">'.$room->getValue('room_description').'</div>
-            </div>';
+                <div class="row">
+                    <div class="col-xs-4"><strong>'.$gL10n->get('SYS_ROOM').':</strong></div>
+                    <div class="col-xs-8">'.$room->getValue('room_name').'</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4"><strong>'.$gL10n->get('ROO_CAPACITY').':</strong></div>
+                    <div class="col-xs-8">'.$room->getValue('room_capacity').'</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4"><strong>'.$gL10n->get('ROO_OVERHANG').':</strong></div>
+                    <div class="col-xs-8">'.$room->getValue('room_overhang').'</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4"><strong>'.$gL10n->get('SYS_DESCRIPTION').':</strong></div>
+                    <div class="col-xs-8">'.$room->getValue('room_description').'</div>
+                </div>';
         }
         break;
 
@@ -80,79 +80,80 @@ switch ($getMessageId)
     // Eigene Listen
 
     case 'mylist_condition':
-        echo '<p>'.$gL10n->get('LST_MYLIST_CONDITION_DESC').'</p>
-              <p>'.$gL10n->get('SYS_EXAMPLES').':</p>
-              <table class="table table-condensed">
+        echo '
+            <p>'.$gL10n->get('LST_MYLIST_CONDITION_DESC').'</p>
+            <p>'.$gL10n->get('SYS_EXAMPLES').':</p>
+            <table class="table table-condensed">
                 <thead>
-                 <tr>
-                    <th style="width: 100px;">'.$gL10n->get('SYS_FIELD').'</th>
-                    <th style="width: 130px;">'.$gL10n->get('SYS_CONDITION').'</th>
-                    <th>'.$gL10n->get('SYS_DESCRIPTION').'</th>
-                 </tr>
+                    <tr>
+                        <th style="width: 100px;">'.$gL10n->get('SYS_FIELD').'</th>
+                        <th style="width: 130px;">'.$gL10n->get('SYS_CONDITION').'</th>
+                        <th>'.$gL10n->get('SYS_DESCRIPTION').'</th>
+                    </tr>
                 </thead>
                 <tbody>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_LASTNAME').'</td>
-                    <td><b>'.$gL10n->get('LST_SEARCH_LASTNAME_EXAMPLE').'</b></td>
-                    <td>'.$gL10n->get('LST_SEARCH_LASTNAME_DESC').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_LASTNAME').'</td>
-                    <td><b>'.$gL10n->get('LST_SEARCH_LASTNAME_BEGINS_EXAMPLE').'</b></td>
-                    <td>'.$gL10n->get('LST_SEARCH_LASTNAME_BEGINS_DESC').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_BIRTHDAY').'</td>
-                    <td><b>&gt; '.$gL10n->get('LST_SEARCH_DATE_EXAMPLE').'</b></td>
-                    <td>'.$gL10n->get('LST_SEARCH_DATE_DESC').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_BIRTHDAY').'</td>
-                    <td><b>&gt; '.$gL10n->get('LST_SEARCH_AGE_EXAMPLE').'</b></td>
-                    <td>'.$gL10n->get('LST_SEARCH_AGE_DESC').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_GENDER').'</td>
-                    <td><b>'.$gL10n->get('SYS_MALE').'</b></td>
-                    <td>'.$gL10n->get('LST_SEARCH_GENDER_DESC').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_LOCATION').'</td>
-                    <td><b>'.$gL10n->get('LST_SEARCH_LOCATION_EXAMPLE').'</b></td>
-                    <td>'.$gL10n->get('LST_SEARCH_LOCATION_DESC').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_PHONE').'</td>
-                    <td><b>'.$gL10n->get('LST_SEARCH_TELEFON_EXAMPLE').'</b></td>
-                    <td>'.$gL10n->get('LST_SEARCH_TELEFON_DESC').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('LST_SEARCH_YES_NO_FIELD').'</td>
-                    <td><b>'.$gL10n->get('SYS_YES').'</b></td>
-                    <td>'.$gL10n->get('LST_SEARCH_YES_NO_FIELD_DESC').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_FIRSTNAME').'</td>
-                    <td><b>&lt;&gt; '.$gL10n->get('LST_EXCLUDE_EXAMPLE').'</b></td>
-                    <td>'.$gL10n->get('LST_EXCLUDE_EXAMPLE_DESC').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_ADDRESS').'</td>
-                    <td><b>'.$gL10n->get('SYS_EMPTY').'</b></td>
-                    <td>'.$gL10n->get('LST_EMPTY_EXAMPLE_DESC').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_ADDRESS').'</td>
-                    <td><b>'.$gL10n->get('SYS_NOT_EMPTY').'</b></td>
-                    <td>'.$gL10n->get('LST_NOT_EMPTY_EXAMPLE_DESC').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_COUNTRY').'</td>
-                    <td><b>'.$gL10n->get('SYS_COUNTRY_EG').'</b></td>
-                    <td>'.$gL10n->get('LST_COUNTRY_ISO').'</td>
-                 </tr>
+                    <tr>
+                        <td>'.$gL10n->get('SYS_LASTNAME').'</td>
+                        <td><b>'.$gL10n->get('LST_SEARCH_LASTNAME_EXAMPLE').'</b></td>
+                        <td>'.$gL10n->get('LST_SEARCH_LASTNAME_DESC').'</td>
+                    </tr>
+                    <tr>
+                        <td>'.$gL10n->get('SYS_LASTNAME').'</td>
+                        <td><b>'.$gL10n->get('LST_SEARCH_LASTNAME_BEGINS_EXAMPLE').'</b></td>
+                        <td>'.$gL10n->get('LST_SEARCH_LASTNAME_BEGINS_DESC').'</td>
+                    </tr>
+                    <tr>
+                        <td>'.$gL10n->get('SYS_BIRTHDAY').'</td>
+                        <td><b>&gt; '.$gL10n->get('LST_SEARCH_DATE_EXAMPLE').'</b></td>
+                        <td>'.$gL10n->get('LST_SEARCH_DATE_DESC').'</td>
+                    </tr>
+                    <tr>
+                        <td>'.$gL10n->get('SYS_BIRTHDAY').'</td>
+                        <td><b>&gt; '.$gL10n->get('LST_SEARCH_AGE_EXAMPLE').'</b></td>
+                        <td>'.$gL10n->get('LST_SEARCH_AGE_DESC').'</td>
+                    </tr>
+                    <tr>
+                        <td>'.$gL10n->get('SYS_GENDER').'</td>
+                        <td><b>'.$gL10n->get('SYS_MALE').'</b></td>
+                        <td>'.$gL10n->get('LST_SEARCH_GENDER_DESC').'</td>
+                    </tr>
+                    <tr>
+                        <td>'.$gL10n->get('SYS_LOCATION').'</td>
+                        <td><b>'.$gL10n->get('LST_SEARCH_LOCATION_EXAMPLE').'</b></td>
+                        <td>'.$gL10n->get('LST_SEARCH_LOCATION_DESC').'</td>
+                    </tr>
+                    <tr>
+                        <td>'.$gL10n->get('SYS_PHONE').'</td>
+                        <td><b>'.$gL10n->get('LST_SEARCH_TELEFON_EXAMPLE').'</b></td>
+                        <td>'.$gL10n->get('LST_SEARCH_TELEFON_DESC').'</td>
+                    </tr>
+                    <tr>
+                        <td>'.$gL10n->get('LST_SEARCH_YES_NO_FIELD').'</td>
+                        <td><b>'.$gL10n->get('SYS_YES').'</b></td>
+                        <td>'.$gL10n->get('LST_SEARCH_YES_NO_FIELD_DESC').'</td>
+                    </tr>
+                    <tr>
+                        <td>'.$gL10n->get('SYS_FIRSTNAME').'</td>
+                        <td><b>&lt;&gt; '.$gL10n->get('LST_EXCLUDE_EXAMPLE').'</b></td>
+                        <td>'.$gL10n->get('LST_EXCLUDE_EXAMPLE_DESC').'</td>
+                    </tr>
+                    <tr>
+                        <td>'.$gL10n->get('SYS_ADDRESS').'</td>
+                        <td><b>'.$gL10n->get('SYS_EMPTY').'</b></td>
+                        <td>'.$gL10n->get('LST_EMPTY_EXAMPLE_DESC').'</td>
+                    </tr>
+                    <tr>
+                        <td>'.$gL10n->get('SYS_ADDRESS').'</td>
+                        <td><b>'.$gL10n->get('SYS_NOT_EMPTY').'</b></td>
+                        <td>'.$gL10n->get('LST_NOT_EMPTY_EXAMPLE_DESC').'</td>
+                    </tr>
+                    <tr>
+                        <td>'.$gL10n->get('SYS_COUNTRY').'</td>
+                        <td><b>'.$gL10n->get('SYS_COUNTRY_EG').'</b></td>
+                        <td>'.$gL10n->get('LST_COUNTRY_ISO').'</td>
+                    </tr>
                 </tbody>
-              </table>';
+            </table>';
         break;
 
     case 'mylist_config_webmaster':
@@ -165,7 +166,8 @@ switch ($getMessageId)
     //Fotomodulhifen
 
     case 'photo_up_help':
-        echo '<ul>
+        echo '
+            <ul>
                 <li>'.$gL10n->get('PHO_UPLOAD_HELP_1', $gL10n->get('SYS_BROWSE')).'</li>
                 <li>'.$gL10n->get('PHO_UPLOAD_HELP_2').'</li>
                 <li>'.$gL10n->get('PHO_UPLOAD_HELP_3', $gL10n->get('PHO_UPLOAD_PHOTOS')).'</li>
@@ -186,13 +188,13 @@ switch ($getMessageId)
 
     case 'profile_photo_up_help':
         echo '
-        <h3>'.$gL10n->get('SYS_RESTRICTIONS').'</h3>
-        <ul>
-            <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_1').'</li>
-            <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_2').'</li>
-            <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_3', round(admFuncProcessableImageSize()/1000000, 2)).'</li>
-            <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_4', round(admFuncMaxUploadSize()/pow(1024, 2), 2)).'</li>
-        </ul>';
+            <h3>'.$gL10n->get('SYS_RESTRICTIONS').'</h3>
+            <ul>
+                <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_1').'</li>
+                <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_2').'</li>
+                <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_3', round(admFuncProcessableImageSize()/1000000, 2)).'</li>
+                <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_4', round(admFuncMaxUploadSize()/pow(1024, 2), 2)).'</li>
+            </ul>';
         break;
 
     default:
@@ -216,7 +218,6 @@ switch ($getMessageId)
 
 if($getInlineView)
 {
-    echo '</div>
-    </div>';
+    echo '</div></div>';
 }
 ?>
