@@ -147,15 +147,15 @@ class HtmlForm extends HtmlFormBasic
      * @param string $id      Id of the button. This will also be the name of the button.
      * @param string $text    Text of the button
      * @param array  $options An array with the following possible entries:
-     *                        @b icon  Optional parameter. Path and filename of an icon.
-     *                            If set a icon will be shown in front of the text.
-     *                        @b link  If set a javascript click event with a page load to this link
-     *                            will be attached to the button.
-     *                        @b onClickText A text that will be shown after a click on this button
-     *                            until the next page is loaded. The button will be disabled after click.
-     *                        @b class Optional an additional css classname. The class @b admButton
-     *                            is set as default and need not set with this parameter.
-     *                        @b type  Optional a button type could be set. The default is @b button.
+     *                        icon        Optional parameter. Path and filename of an icon.
+     *                        If set a icon will be shown in front of the text.
+     *                        link        If set a javascript click event with a page load to this link
+     *                        will be attached to the button.
+     *                        onClickText A text that will be shown after a click on this button
+     *                        until the next page is loaded. The button will be disabled after click.
+     *                        class       Optional an additional css classname. The class @b admButton
+     *                        is set as default and need not set with this parameter.
+     *                        type        Optional a button type could be set. The default is @b button.
      */
     public function addButton($id, $text, $options = array())
     {

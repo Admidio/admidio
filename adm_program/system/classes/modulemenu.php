@@ -46,7 +46,7 @@ class ModuleMenu
     /**
      * Creates a selectbox with all categories of a category type. If an category of this selectbox is selected
      * than the link is called and where you can select entries of this category
-     * @param bool   $id Html         id of the element
+     * @param bool   $id              Html id of the element
      * @param string $categoryType    Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
      * @param        $defaultCategory Id of selected category (if id = -1 then no default category will be selected)
      * @param string $link            Link to the page that will be called if menu item is clicked. At the end of

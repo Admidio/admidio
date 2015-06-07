@@ -432,7 +432,7 @@ class Organization extends TableAccess
      * @param  string $columnName The name of the database column whose value should get a new value
      * @param         $newValue   The new value that should be stored in the database field
      * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @return bool   Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
