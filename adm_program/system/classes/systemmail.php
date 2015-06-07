@@ -21,6 +21,9 @@
  *
  *****************************************************************************/
 
+/**
+ * Class SystemMail
+ */
 class SystemMail extends Email
 {
     private $smTextObject;
@@ -30,7 +33,10 @@ class SystemMail extends Email
     private $smMailHeader;
     private $smVariables = array();   // speichert zusaetzliche Variablen fuer den Mailtext
 
-    // Konstruktor
+    /**
+     * Constructor
+     * @param object $db
+     */
     public function __construct(&$db)
     {
         $this->db          =& $db;
@@ -38,15 +44,18 @@ class SystemMail extends Email
         parent::__construct();
     }
 
-    // diese Methode liest den Mailtext aus der DB und ersetzt vorkommende Platzhalter durch den gewuenschten Inhalt
-    // sysmail_id : eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
-    // user       : Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
+    /**
+     * diese Methode liest den Mailtext aus der DB und ersetzt vorkommende Platzhalter durch den gewuenschten Inhalt
+     * @param string $systemMailId eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
+     * @param object $user         Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
+     * @return string
+     */
     public function getMailText($systemMailId, &$user)
     {
         global $gPreferences;
 
         // create organization object of the organization the current user is assigned (at registration this can be every organization)
-        if(is_object($this->smOrganization) == false || $this->smOrganization->getValue('org_id') != $user->getOrganization())
+        if(!is_object($this->smOrganization) || $this->smOrganization->getValue('org_id') != $user->getOrganization())
         {
             $this->smOrganization = new Organization($this->db, $user->getOrganization());
         }
@@ -54,7 +63,8 @@ class SystemMail extends Email
         // read email text from text table in database
         if($this->smTextObject->getValue('txt_name') != $systemMailId)
         {
-            $this->smTextObject->readDataByColumns(array('txt_name' => $systemMailId, 'txt_org_id' => $this->smOrganization->getValue('org_id')));
+            $this->smTextObject->readDataByColumns(array('txt_name' => $systemMailId,
+                                                         'txt_org_id' => $this->smOrganization->getValue('org_id')));
         }
 
         $mailSrcText = $this->smTextObject->getValue('txt_text');
@@ -70,7 +80,8 @@ class SystemMail extends Email
         $mailSrcText = preg_replace('/%organization_homepage%/',   $this->smOrganization->getValue('org_homepage'), $mailSrcText);
 
         // zusaetzliche Variablen ersetzen
-        for($i = 1; $i <= count($this->smVariables); $i++)
+        $iMax = count($this->smVariables);
+        for($i = 1; $i <= $iMax; $i++)
         {
             $mailSrcText = preg_replace('/%variable'.$i.'%/', $this->smVariables[$i], $mailSrcText);
         }
@@ -82,30 +93,38 @@ class SystemMail extends Email
         }
         else
         {
-            $this->smMailHeader = 'Systemmail von '. $this->smOrganization->getValue('org_homepage');
+            $this->smMailHeader = 'Systemmail von '.$this->smOrganization->getValue('org_homepage');
         }
 
         if(strpos($mailSrcText, '#content#') !== false)
         {
-            $this->smMailText   = trim(substr($mailSrcText, strpos($mailSrcText, '#content#') + 9));
+            $this->smMailText = trim(substr($mailSrcText, strpos($mailSrcText, '#content#') + 9));
         }
         else
         {
-            $this->smMailText   = $mailSrcText;
+            $this->smMailText = $mailSrcText;
         }
 
         return $this->smMailText;
     }
 
-    // die Methode setzt den Inhalt fuer spezielle Variablen
+    /**
+     * die Methode setzt den Inhalt fuer spezielle Variablen
+     * @param $number
+     * @param $value
+     */
     public function setVariable($number, $value)
     {
         $this->smVariables[$number] = $value;
     }
 
-    // diese Methode sendet eine Systemmail nachdem der Mailtext ausgelesen und Platzhalter ersetzt wurden
-    // sysmail_id : eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
-    // user       : Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
+    /**
+     * diese Methode sendet eine Systemmail nachdem der Mailtext ausgelesen und Platzhalter ersetzt wurden
+     * @param  string $systemMailId eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
+     * @param  object $user Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
+     * @return true
+     * @throws AdmException SYS_EMAIL_NOT_SEND
+     */
     public function sendSystemMail($systemMailId, &$user)
     {
         global $gPreferences;
@@ -118,10 +137,11 @@ class SystemMail extends Email
         $returnMessage = $this->sendEmail();
 
         // if something went wrong then throw an exception with the error message
-        if($returnMessage != true)
+        if($returnMessage !== true)
         {
             throw new AdmException('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL'), $this->sendEmail());
         }
+
         return true;
     }
 }

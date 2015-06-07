@@ -1,24 +1,34 @@
 <?php
 
-
 require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/uploadhandler.php');
 
+/**
+ * Class UploadHandlerPhoto
+ */
 class UploadHandlerPhoto extends UploadHandler
 {
-    /* Override the default method to handle the specific things of the photo module.
-       This method has the same parameters as the default.
-    */
-    protected function handle_file_upload($uploaded_file, $name, $size, $type, $error,
-        $index = null, $content_range = null)
+    /**
+     * Override the default method to handle the specific things of the photo module.
+     * This method has the same parameters as the default.
+     * @param $uploaded_file
+     * @param $name
+     * @param $size
+     * @param $type
+     * @param $error
+     * @param null $index
+     * @param null $content_range
+     * @return stdClass
+     */
+    protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null, $content_range = null)
     {
         global $photoAlbum, $gPreferences, $gL10n;
 
         $file = parent::handle_file_upload($uploaded_file, $name, $size, $type, $error, $index, $content_range);
 
-        if(isset($file->error) == false)
+        if(!isset($file->error))
         {
-            $fileLocation = SERVER_PATH. '/adm_my_files/photos/upload/'.$file->name;
-            $albumFolder  = SERVER_PATH. '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
+            $fileLocation = SERVER_PATH.'/adm_my_files/photos/upload/'.$file->name;
+            $albumFolder  = SERVER_PATH.'/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
             $newFotoFileNumber = $photoAlbum->getValue('pho_quantity') + 1;
 
             // read image size
@@ -32,11 +42,11 @@ class UploadHandlerPhoto extends UploadHandler
             }
 
             // check mime type and set file extension
-            if($imageProperties['mime'] == 'image/jpeg')
+            if($imageProperties['mime'] === 'image/jpeg')
             {
                 $fileExtension = 'jpg';
             }
-            elseif($imageProperties['mime'] == 'image/png')
+            elseif($imageProperties['mime'] === 'image/png')
             {
                 $fileExtension = 'png';
             }
@@ -56,7 +66,7 @@ class UploadHandlerPhoto extends UploadHandler
             // if enabled then save original image
             if ($gPreferences['photo_keep_original'] == 1)
             {
-                if(file_exists($albumFolder.'/originals') == false)
+                if(!file_exists($albumFolder.'/originals'))
                 {
                     $folder = new Folder($albumFolder);
                     $folder->createFolder('originals', true);
@@ -66,7 +76,7 @@ class UploadHandlerPhoto extends UploadHandler
             }
 
             // save thumbnail
-            if(file_exists($albumFolder.'/thumbnails') == false)
+            if(!file_exists($albumFolder.'/thumbnails'))
             {
                 $folder = new Folder($albumFolder);
                 $folder->createFolder('thumbnails', true);
@@ -91,10 +101,10 @@ class UploadHandlerPhoto extends UploadHandler
             }
             else
             {
-                $newFotoFileNumber --;
                 $file->error = $gL10n->get('PHO_PHOTO_PROCESSING_ERROR');
             }
         }
+
         return $file;
     }
 }
