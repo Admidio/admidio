@@ -23,7 +23,7 @@ session_name('admidio_php_session_id');
 session_start();
 
 // if config file already exists then load file with their variables
-if(file_exists('../../adm_my_files/config.php') === true)
+if(file_exists('../../adm_my_files/config.php'))
 {
     require_once('../../adm_my_files/config.php');
 }
@@ -42,18 +42,18 @@ if(isset($g_tbl_praefix) === false)
 }
 
 // embed constants file
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/adm_program/system/constants.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1).'/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
 if(version_compare(phpversion(), MIN_PHP_VERSION) === -1)
 {
-    die('<div style="color: #CC0000;">Error: Your PHP version '.phpversion().' does not fulfill
+    die('<div style="color: #cc0000;">Error: Your PHP version '.phpversion().' does not fulfill
         the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or higher.</div>');
 }
 
 require_once('install_functions.php');
-require_once(SERVER_PATH. '/adm_program/system/string.php');
-require_once(SERVER_PATH. '/adm_program/system/function.php');
+require_once(SERVER_PATH.'/adm_program/system/string.php');
+require_once(SERVER_PATH.'/adm_program/system/function.php');
 
 // Initialize and check the parameters
 
@@ -81,7 +81,7 @@ $gLanguageData = new LanguageData($language);
 $gL10n->addLanguageData($gLanguageData);
 
 // if config file exists then connect to database
-if(file_exists('../../adm_my_files/config.php') == true)
+if(file_exists('../../adm_my_files/config.php'))
 {
     $db = Database::createDatabaseObject($gDbType);
     $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
@@ -94,14 +94,16 @@ if(file_exists('../../adm_my_files/config.php') == true)
     if($count > 0)
     {
         // valid installation exists -> exit installation
-        showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
+        showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php',
+                   $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
     }
     elseif($getMode != 8)
     {
-        showNotice($gL10n->get('INS_CONFIGURATION_FILE_FOUND', 'config.php'), 'installation.php?mode=8', $gL10n->get('INS_CONTINUE_INSTALLATION'), 'layout/database_in.png');
+        showNotice($gL10n->get('INS_CONFIGURATION_FILE_FOUND', 'config.php'), 'installation.php?mode=8',
+                   $gL10n->get('INS_CONTINUE_INSTALLATION'), 'layout/database_in.png');
     }
 }
-elseif(file_exists('../../config.php') == true)
+elseif(file_exists('../../config.php'))
 {
     // Config file found at location of version 2. Then go to update
     header('Location: update.php');
@@ -116,7 +118,8 @@ if($getMode == 1)  // (Default) Choose language
     // the possible languages will be read from a xml file
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=2');
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_CHOOSE_LANGUAGE'));
-    $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml',
+    $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'),
+                               SERVER_PATH.'/adm_program/languages/languages.xml',
                                'ISOCODE', 'NAME', array('property' => FIELD_REQUIRED));
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png'));
@@ -125,9 +128,10 @@ if($getMode == 1)  // (Default) Choose language
 elseif($getMode == 2)  // Welcome to installation
 {
     // check if a language string was committed
-    if(isset($_POST['system_language']) == false || strlen(trim($_POST['system_language'])) == 0)
+    if(!isset($_POST['system_language']) || trim($_POST['system_language']) === '')
     {
-        showNotice($gL10n->get('INS_LANGUAGE_NOT_CHOOSEN'), 'installation.php?mode=1', $gL10n->get('SYS_BACK'), 'layout/back.png');
+        showNotice($gL10n->get('INS_LANGUAGE_NOT_CHOOSEN'), 'installation.php?mode=1',
+                   $gL10n->get('SYS_BACK'), 'layout/back.png');
     }
     else
     {
@@ -141,13 +145,19 @@ elseif($getMode == 2)  // Welcome to installation
     // if this is a beta version then show a notice to the user
     if(ADMIDIO_VERSION_BETA > 0)
     {
-        $message .= '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_WARNING_BETA_VERSION').'</div>';
+        $message .= '
+            <div class="alert alert-warning alert-small" role="alert">
+                <span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_WARNING_BETA_VERSION').'
+            </div>';
     }
 
     // if safe mode is used then show a notice to the user
     if(ini_get('safe_mode') == 1)
     {
-        $message .= '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_WARNING_SAFE_MODE').'</div>';
+        $message .= '
+            <div class="alert alert-warning alert-small" role="alert">
+                <span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_WARNING_SAFE_MODE').'
+            </div>';
     }
 
     // create a page with the notice that the installation must be configured on the next pages
@@ -198,14 +208,14 @@ elseif($getMode == 4)  // Creating organization
 {
     if(isset($_POST['db_server']))
     {
-        if(strlen($_POST['db_prefix']) == 0)
+        if($_POST['db_prefix'] === '')
         {
             $_POST['db_prefix'] = 'adm';
         }
         else
         {
             // wenn letztes Zeichen ein _ dann abschneiden
-            if(strrpos($_POST['db_prefix'], '_')+1 == strlen($_POST['db_prefix']))
+            if(strrpos($_POST['db_prefix'], '_')+1 === strlen($_POST['db_prefix']))
             {
                 $_POST['db_prefix'] = substr($_POST['db_prefix'], 0, strlen($_POST['db_prefix'])-1);
             }
@@ -213,36 +223,39 @@ elseif($getMode == 4)  // Creating organization
             // nur gueltige Zeichen zulassen
             $anz = strspn($_POST['db_prefix'], 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_');
 
-            if($anz != strlen($_POST['db_prefix']))
+            if($anz !== strlen($_POST['db_prefix']))
             {
-                showNotice($gL10n->get('INS_TABLE_PREFIX_INVALID'), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
+                showNotice($gL10n->get('INS_TABLE_PREFIX_INVALID'), 'installation.php?mode=3',
+                           $gL10n->get('SYS_BACK'), 'layout/back.png');
             }
         }
 
         // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
-        $_SESSION['db_type']  = strStripTags($_POST['db_type']);
+        $_SESSION['db_type']     = strStripTags($_POST['db_type']);
         $_SESSION['db_server']   = strStripTags($_POST['db_server']);
         $_SESSION['db_user']     = strStripTags($_POST['db_user']);
         $_SESSION['db_password'] = strStripTags($_POST['db_password']);
         $_SESSION['db_database'] = strStripTags($_POST['db_database']);
-        $_SESSION['prefix']   = strStripTags($_POST['db_prefix']);
+        $_SESSION['prefix']      = strStripTags($_POST['db_prefix']);
 
-        if(strlen($_SESSION['db_type'])  == 0
-        || strlen($_SESSION['db_server'])   == 0
-        || strlen($_SESSION['db_user'])     == 0
-        || strlen($_SESSION['db_database']) == 0)
+        if($_SESSION['db_type']     === ''
+        || $_SESSION['db_server']   === ''
+        || $_SESSION['db_user']     === ''
+        || $_SESSION['db_database'] === '')
         {
-            showNotice($gL10n->get('INS_MYSQL_LOGIN_NOT_COMPLETELY'), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
+            showNotice($gL10n->get('INS_MYSQL_LOGIN_NOT_COMPLETELY'), 'installation.php?mode=3',
+                       $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
 
         // for security reasons only check database connection if no config file exists
-        if(file_exists('../../adm_my_files/config.php') == false)
+        if(!file_exists('../../adm_my_files/config.php'))
         {
             // check database connections
             $db = Database::createDatabaseObject($_SESSION['db_type']);
             if($db->connect($_SESSION['db_server'], $_SESSION['db_user'], $_SESSION['db_password'], $_SESSION['db_database']) == false)
             {
-                showNotice($gL10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
+                showNotice($gL10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3',
+                           $gL10n->get('SYS_BACK'), 'layout/back.png');
             }
 
             // check database version
@@ -289,11 +302,12 @@ elseif($getMode == 5)  // Creating addministrator
         $_SESSION['orga_longname']  = strStripTags($_POST['orga_longname']);
         $_SESSION['orga_email']     = strStripTags($_POST['orga_email']);
 
-        if(strlen($_SESSION['orga_shortname']) == 0
-        || strlen($_SESSION['orga_longname']) == 0
-        || strlen($_SESSION['orga_email']) == 0)
+        if($_SESSION['orga_shortname'] === ''
+        || $_SESSION['orga_longname']  === ''
+        || $_SESSION['orga_email']     === '')
         {
-            showNotice($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'installation.php?mode=4', $gL10n->get('SYS_BACK'), 'layout/back.png');
+            showNotice($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'installation.php?mode=4',
+                       $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
     }
 
@@ -333,31 +347,35 @@ elseif($getMode == 6)  // Creating configuration file
     if(isset($_POST['user_last_name']))
     {
         // Daten des Administrators in Sessionvariablen gefiltert speichern
-        $_SESSION['user_last_name']  = strStripTags($_POST['user_last_name']);
-        $_SESSION['user_first_name'] = strStripTags($_POST['user_first_name']);
-        $_SESSION['user_email']      = strStripTags($_POST['user_email']);
-        $_SESSION['user_login']      = strStripTags($_POST['user_login']);
-        $_SESSION['user_password']   = strStripTags($_POST['user_password']);
+        $_SESSION['user_last_name']        = strStripTags($_POST['user_last_name']);
+        $_SESSION['user_first_name']       = strStripTags($_POST['user_first_name']);
+        $_SESSION['user_email']            = strStripTags($_POST['user_email']);
+        $_SESSION['user_login']            = strStripTags($_POST['user_login']);
+        $_SESSION['user_password']         = strStripTags($_POST['user_password']);
         $_SESSION['user_password_confirm'] = strStripTags($_POST['user_password_confirm']);
 
-        if(strlen($_SESSION['user_last_name'])  == 0
-        || strlen($_SESSION['user_first_name']) == 0
-        || strlen($_SESSION['user_email'])     == 0
-        || strlen($_SESSION['user_login'])      == 0
-        || strlen($_SESSION['user_password'])   == 0)
+        if($_SESSION['user_last_name']  === ''
+        || $_SESSION['user_first_name'] === ''
+        || $_SESSION['user_email']      === ''
+        || $_SESSION['user_login']      === ''
+        || $_SESSION['user_password']   === '')
         {
-            showNotice($gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'), 'installation.php?mode=5', $gL10n->get('SYS_BACK'), 'layout/back.png');
+            showNotice($gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'), 'installation.php?mode=5',
+                       $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
 
         $_SESSION['user_email'] = admStrToLower($_SESSION['user_email']);
+
         if(!strValidCharacters($_SESSION['user_email'], 'email'))
         {
-            showNotice($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')), 'installation.php?mode=5', $gL10n->get('SYS_BACK'), 'layout/back.png');
+            showNotice($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')), 'installation.php?mode=5',
+                       $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
 
-        if($_SESSION['user_password'] != $_SESSION['user_password_confirm'])
+        if($_SESSION['user_password'] !== $_SESSION['user_password_confirm'])
         {
-            showNotice($gL10n->get('INS_PASSWORDS_NOT_EQUAL'), 'installation.php?mode=5', $gL10n->get('SYS_BACK'), 'layout/back.png');
+            showNotice($gL10n->get('INS_PASSWORDS_NOT_EQUAL'), 'installation.php?mode=5',
+                       $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
     }
 
@@ -368,7 +386,7 @@ elseif($getMode == 6)  // Creating configuration file
     fclose($configFileHandle);
 
     // detect root path
-    $rootPath = $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
+    $rootPath = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     $rootPath = substr($rootPath, 0, strpos($rootPath, '/adm_program'));
     if(!strpos($rootPath, 'http://') && !strpos($rootPath, 'https://'))
     {
@@ -383,10 +401,10 @@ elseif($getMode == 6)  // Creating configuration file
     }
 
     // replace placeholders in configuration file structure with data of installation wizard
-    $configFileContent = str_replace('%PREFIX%',  $_SESSION['prefix'],  $configFileContent);
-    $configFileContent = str_replace('%DB_TYPE%', $_SESSION['db_type'], $configFileContent);
-    $configFileContent = str_replace('%SERVER%',  $_SESSION['db_server'],  $configFileContent);
-    $configFileContent = str_replace('%USER%',    $_SESSION['db_user'],    $configFileContent);
+    $configFileContent = str_replace('%PREFIX%',   $_SESSION['prefix'],      $configFileContent);
+    $configFileContent = str_replace('%DB_TYPE%',  $_SESSION['db_type'],     $configFileContent);
+    $configFileContent = str_replace('%SERVER%',   $_SESSION['db_server'],   $configFileContent);
+    $configFileContent = str_replace('%USER%',     $_SESSION['db_user'],     $configFileContent);
     $configFileContent = str_replace('%PASSWORD%', $_SESSION['db_password'], $configFileContent);
     $configFileContent = str_replace('%DATABASE%', $_SESSION['db_database'], $configFileContent);
     $configFileContent = str_replace('%ROOT_PATH%', $rootPath, $configFileContent);
@@ -394,7 +412,7 @@ elseif($getMode == 6)  // Creating configuration file
     $_SESSION['config_file_content'] = $configFileContent;
 
     // now save new configuration file in Admidio folder if user has write access to this folder
-    $filename   = '../../adm_my_files/config.php';
+    $filename = '../../adm_my_files/config.php';
     $configFileHandle = @fopen($filename, 'a');
 
     if($configFileHandle)
@@ -431,9 +449,10 @@ elseif($getMode == 7) // Download configuration file
 elseif($getMode == 8) // Start installation
 {
     // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
-    if(file_exists('../../adm_my_files/config.php') == false)
+    if(!file_exists('../../adm_my_files/config.php'))
     {
-        showNotice($gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6', $gL10n->get('SYS_BACK'), 'layout/back.png');
+        showNotice($gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6',
+                   $gL10n->get('SYS_BACK'), 'layout/back.png');
     }
 
     // set execution time to 6 minutes because we have a lot to do :)
@@ -452,21 +471,23 @@ elseif($getMode == 8) // Start installation
         || $g_adm_db      != $_SESSION['db_database']
         || $g_organization!= $_SESSION['orga_shortname'])
         {
-            showNotice($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6', $gL10n->get('SYS_BACK'), 'layout/back.png');
+            showNotice($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6',
+                       $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
     }
 
     // read data from sql script db.sql and execute all statements to the current database
     $filename = 'db_scripts/db.sql';
     $file     = fopen($filename, 'r')
-                or showNotice($gL10n->get('INS_DATABASE_FILE_NOT_FOUND', 'db.sql', 'adm_program/installation/db_scripts'), 'installation.php?mode=6', $gL10n->get('SYS_BACK'), 'layout/back.png');
+                or showNotice($gL10n->get('INS_DATABASE_FILE_NOT_FOUND', 'db.sql', 'adm_program/installation/db_scripts'),
+                              'installation.php?mode=6', $gL10n->get('SYS_BACK'), 'layout/back.png');
     $content  = fread($file, filesize($filename));
     $sql_arr  = explode(';', $content);
     fclose($file);
 
     foreach($sql_arr as $sql)
     {
-        if(strlen(trim($sql)) > 0)
+        if(trim($sql) !== '')
         {
             // Prefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
             $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
@@ -514,7 +535,7 @@ elseif($getMode == 8) // Start installation
                  , (\'MODULE\', \'ROL_ROLE_ADMINISTRATION\', \'ROLES\', \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
                  , (\'MODULE\', \'ROO_ROOM_MANAGEMENT\', \'ROOMS\', \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')';
     $db->query($sql);
-    
+
     // create organization independent categories
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
             VALUES (NULL, \'USF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
@@ -631,15 +652,19 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
 
     // text for dialog
     $text = $gL10n->get('INS_INSTALLATION_SUCCESSFUL').'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');
-    if(is_writeable('../../adm_my_files') == false)
+    if(!is_writable('../../adm_my_files'))
     {
-        $text = $text. '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files').'</div>';
+        $text = $text.'
+            <div class="alert alert-warning alert-small" role="alert">
+                <span class="glyphicon glyphicon-warning-sign"></span>
+                '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files').'
+            </div>';
     }
 
     // show dialog with success notification
     $form = new HtmlFormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
     $form->setFormDescription($text, '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span>
-                                        <strong>'.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong></div>');
+                                      <strong>'.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong></div>');
     $form->openButtonGroup();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
     $form->addButton('main_page', $gL10n->get('SYS_LATER'), array('icon' => 'layout/application_view_list.png', 'link' => '../index.php'));

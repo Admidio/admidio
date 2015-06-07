@@ -141,20 +141,21 @@ class HtmlForm extends HtmlFormBasic
         }
     }
 
-    /** Add a new button with a custom text to the form. This button could have
-     *  an icon in front of the text.
-     *  @param $id      Id of the button. This will also be the name of the button.
-     *  @param $text    Text of the button
-     *  @param $options An array with the following possible entries:
-     *                  @b icon  Optional parameter. Path and filename of an icon.
-     *                      If set a icon will be shown in front of the text.
-     *                  @b link  If set a javascript click event with a page load to this link
-     *                      will be attached to the button.
-     *                  @b onClickText A text that will be shown after a click on this button
-     *                      until the next page is loaded. The button will be disabled after click.
-     *                  @b class Optional an additional css classname. The class @b admButton
-     *                      is set as default and need not set with this parameter.
-     *                  @b type  Optional a button type could be set. The default is @b button.
+    /**
+     * Add a new button with a custom text to the form. This button could have
+     * an icon in front of the text.
+     * @param string $id      Id of the button. This will also be the name of the button.
+     * @param string $text    Text of the button
+     * @param array  $options An array with the following possible entries:
+     *                        @b icon  Optional parameter. Path and filename of an icon.
+     *                            If set a icon will be shown in front of the text.
+     *                        @b link  If set a javascript click event with a page load to this link
+     *                            will be attached to the button.
+     *                        @b onClickText A text that will be shown after a click on this button
+     *                            until the next page is loaded. The button will be disabled after click.
+     *                        @b class Optional an additional css classname. The class @b admButton
+     *                            is set as default and need not set with this parameter.
+     *                        @b type  Optional a button type could be set. The default is @b button.
      */
     public function addButton($id, $text, $options = array())
     {
@@ -396,9 +397,9 @@ class HtmlForm extends HtmlFormBasic
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
 
-    /** Add a line with a custom description to the form. No form elements will be
-     *  displayed in this line.
-     *  @param $text The (html) text that should be displayed.
+    /**
+     * Add a line with a custom description to the form. No form elements will be displayed in this line.
+     * @param string $text The (html) text that should be displayed.
      */
     public function addDescription($text)
     {
@@ -1212,38 +1213,38 @@ class HtmlForm extends HtmlFormBasic
 
     /** Add a new selectbox with a label to the form. The selectbox could have
      *  different values and a default value could be set.
-     *  @param $id          Id of the selectbox. This will also be the name of the selectbox.
-     *  @param $label       The label of the selectbox.
-     *  @param $xmlFile     Serverpath to the xml file
-     *  @param $xmlValueTag Name of the xml tag that should contain the internal value of a selectbox entry
-     *  @param $xmlViewTag  Name of the xml tag that should contain the visual value of a selectbox entry
-     *  @param $options     An array with the following possible entries:
-     *                      @b property    With this param you can set the following properties:
-     *                         @b FIELD_DEFAULT The field can accept an input.
-     *                         @b FIELD_REQUIRED The field will be marked as a mandatory field where the user must insert a value.
-     *                         @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *                      @b defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
-     *                         an array with all default values could be set.
-     *                      @b showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
-     *                         If FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
-     *                         an emptry entry will be added so you must not select something.
-     *                      @b firstEntry       Here you can define a string that should be shown as firstEntry and will be the
-     *                         default value if no other value is set. This entry will only be added if @b showContextDependentFirstEntry
-     *                         is set to false!
-     *                      @b multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
-     *                         where the user could select multiple values from the selectbox. Then an array will be
-     *                         created within the $_POST array.
-     *                      @b helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                         If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
-     *                         If you need an additional parameter for the text you can add an array. The first entry must
-     *                         be the unique text id and the second entry will be a parameter of the text id.
-     *                      @b helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                         If set the complete text will be shown after the form element.
-     *                         If you need an additional parameter for the text you can add an array. The first entry must
-     *                         be the unique text id and the second entry will be a parameter of the text id.
-     *                      @b icon  Optional an icon can be set. This will be placed in front of the label.
-     *                      @b class Optional an additional css classname. The class @b admSelectbox
-     *                         is set as default and need not set with this parameter.
+     *  @param string $id          Id of the selectbox. This will also be the name of the selectbox.
+     *  @param string $label       The label of the selectbox.
+     *  @param string $xmlFile     Serverpath to the xml file
+     *  @param string $xmlValueTag Name of the xml tag that should contain the internal value of a selectbox entry
+     *  @param string $xmlViewTag  Name of the xml tag that should contain the visual value of a selectbox entry
+     *  @param array  $options     An array with the following possible entries:
+     *                             @b property    With this param you can set the following properties:
+     *                                @b FIELD_DEFAULT The field can accept an input.
+     *                                @b FIELD_REQUIRED The field will be marked as a mandatory field where the user must insert a value.
+     *                                @b FIELD_DISABLED The field will be disabled and could not accept an input.
+     *                             @b defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
+     *                                an array with all default values could be set.
+     *                             @b showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
+     *                                If FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
+     *                                an emptry entry will be added so you must not select something.
+     *                             @b firstEntry       Here you can define a string that should be shown as firstEntry and will be the
+     *                                default value if no other value is set. This entry will only be added if @b showContextDependentFirstEntry
+     *                                is set to false!
+     *                             @b multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
+     *                                where the user could select multiple values from the selectbox. Then an array will be
+     *                                created within the $_POST array.
+     *                             @b helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                                If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                                If you need an additional parameter for the text you can add an array. The first entry must
+     *                                be the unique text id and the second entry will be a parameter of the text id.
+     *                             @b helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                                If set the complete text will be shown after the form element.
+     *                                If you need an additional parameter for the text you can add an array. The first entry must
+     *                                be the unique text id and the second entry will be a parameter of the text id.
+     *                             @b icon  Optional an icon can be set. This will be placed in front of the label.
+     *                             @b class Optional an additional css classname. The class @b admSelectbox
+     *                                is set as default and need not set with this parameter.
      */
     public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $options = array())
     {
@@ -1672,10 +1673,12 @@ class HtmlForm extends HtmlFormBasic
         }
     }
 
-    /** Add a new groupbox to the form. This could be used to group some elements
-     *  together. There is also the option to set a headline to this group box.
-     *  @param $id       Id the the groupbox.
-     *  @param $headline Optional a headline that will be shown to the user.
+    /**
+     * Add a new groupbox to the form. This could be used to group some elements
+     * together. There is also the option to set a headline to this group box.
+     * @param string $id       Id the the groupbox.
+     * @param string $headline Optional a headline that will be shown to the user.
+     * @param string $class
      */
     public function openGroupBox($id, $headline = '', $class = '')
     {

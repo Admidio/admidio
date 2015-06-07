@@ -137,7 +137,7 @@ class ComponentUpdate extends Component
     /**
      * Set the target version for the component after update.
      * This information should be read from the files of the component.
-     * @param $version Target version of the component after update
+     * @param string $version Target version of the component after update
      */
     public function setTargetVersion($version)
     {

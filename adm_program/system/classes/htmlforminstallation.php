@@ -1,11 +1,11 @@
-<?php 
+<?php
 /*****************************************************************************/
 /** @class HtmlFormInstallation
- *  @brief Create the html script for an installation / update form 
+ *  @brief Create the html script for an installation / update form
  *
  *  This class will create the complete html for a installation / update page.
  *  First you set the modus (update or installation) and then you can optional
- *  add custom text to the page. The main configuration part will be the 
+ *  add custom text to the page. The main configuration part will be the
  *  form. You can use the complete methods of the Form class.
  *  @par Examples
  *  @code // create a simple installation form with a free text, a text field and a submit button
@@ -29,22 +29,22 @@ class HtmlFormInstallation extends HtmlForm
     private $descriptionText;   ///< A text that will be shown after the headline before the form will be set
     private $headline;          ///< Headline of the form
     private $title;             ///< Title of the html page
-    
+
     /** Constructor creates the form element
-     *  @param $id Id of the form
-     *  @param $action Optional action attribute of the form
+     *  @param string $id     Id of the form
+     *  @param string $action Optional action attribute of the form
      */
     public function __construct($id, $action)
-    {        
-        
+    {
+
         parent::__construct($id, $action);
     }
-    
-    /** If the method is called then a text with an optional title will be displayed after 
+
+    /** If the method is called then a text with an optional title will be displayed after
      *  the headline before the form will be displayed.
-     *  @param $description The (html) text that should be shown.
-     *  @param $title       The headline of the description. If set than this will be displayed 
-     *                      before the description as h2
+     *  @param string $description The (html) text that should be shown.
+     *  @param string $title       The headline of the description. If set than this will be displayed
+     *                             before the description as h2
      */
     public function setFormDescription($description, $title = '')
     {
@@ -70,7 +70,7 @@ class HtmlFormInstallation extends HtmlForm
         $this->title = $gL10n->get('INS_UPDATE');
         $this->headline = $gL10n->get('INS_UPDATE_VERSION', ADMIDIO_VERSION_TEXT);
     }
-    
+
     /** This method will create the whole html installation/update code. It will show the headline,
      *  text and the configured form. If no modus is set the installation modus will be set here.
      *  @param $directOutput If set to @b true (default) the form html will be directly send
@@ -80,32 +80,32 @@ class HtmlFormInstallation extends HtmlForm
     public function show($directOutput = true)
     {
         global $gL10n;
-    
+
         // if no modus set then set installation modus
         if(strlen($this->title) == 0)
         {
             $this->setInstallationModus();
         }
-    
-        header('Content-type: text/html; charset=utf-8'); 
+
+        header('Content-type: text/html; charset=utf-8');
         $html = '
         <!DOCTYPE html>
         <html>
         <head>
             <!-- (c) 2004 - 2015 The Admidio Team - http://www.admidio.org -->
-            
+
             <meta http-equiv="content-type" content="text/html; charset=utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <meta name="author"   content="Admidio Team" />
             <meta name="robots"   content="noindex" />
-            
+
             <title>Admidio - '. $this->title. '</title>
 
             <link rel="shortcut icon" type="image/x-icon" href="layout/favicon.png" />
-            
+
             <link rel="stylesheet" type="text/css" href="../libs/bootstrap/css/bootstrap.min.css" />
             <link rel="stylesheet" type="text/css" href="layout/admidio.css" />
-            
+
             <script type="text/javascript" src="../libs/jquery/jquery.min.js"></script>
             <script type="text/javascript" src="../libs/bootstrap/js/bootstrap.min.js"></script>
             <script type="text/javascript" src="../system/js/common_functions.js"></script>
@@ -128,7 +128,7 @@ class HtmlFormInstallation extends HtmlForm
             $html .= '</div>
         </body>
         </html>';
-        
+
         if($directOutput)
         {
             echo $html;
