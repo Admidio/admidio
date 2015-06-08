@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
     <version id="3.0.0" translator="Stefanie Schima">
+        <text id="MSG_SEND_PM" development="new" translation="edited">Your PM will be sent to the selected recipient.</text>
         <text id="PHO_PHOTO_UPLOAD_SUCCESSFUL" development="new" translation="todo">All photos were successfully uploaded.\n\nYou can close the dialog now.</text>
         <text id="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL" development="new" translation="todo">Not all photos were successfully uploaded.</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="edited">A date was changed</text>
@@ -723,7 +724,7 @@
         <text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Selected role does not have any member with valid e-mail address!</text>
         <text id="MAI_SEND_COPY" development="new" translation="edited">Send copy of e-mail to my address</text>
         <text id="MAI_SEND_EMAIL" development="new" translation="edited">Send e-mail</text>
-        <text id="MAI_SEND_MAIL_TO_ROLE" development="new" translation="edited">Your e-mail will be sent to all members with an e-mail address of the selected role.\n\nFurther roles as recipients are available for logged in users only.</text>
+        <text id="MAI_SEND_MAIL_TO_ROLE" development="new" translation="edited">Your e-mail will be sent to all members with an e-mail address of the selected role or the selected recipients .\n\nFurther roles and recipients are available for logged in users only.</text>
         <text id="MAI_SENDER_EMAIL" development="new" translation="edited">Sender's e-mail</text>
         <text id="MAI_SENDER_EMAIL_ADDRESS_DESC" development="new" translation="edited">Certain service provider do to not allow unidentified sender information. Due to that please provide an e-mail address as default sender e-mail address that will be used by the e-mail module (e.g. outbox@%VAR1%).\nIf field remains empty, sender's registered e-mail address will appear as sender information. (default: empty)</text>
         <text id="MAI_SENDER_NOT_LOGGED_IN" development="new" translation="edited">(Sender was logged out. Due to that sender's information might be incorrect.)</text>

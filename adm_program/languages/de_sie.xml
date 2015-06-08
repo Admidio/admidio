@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de_sie">
     <version id="3.0.0" translator="Markus Faßbender">
+        <text id="MSG_SEND_PM" development="new" translation="todo">Ihre PM wird an den ausgewählten Empfänger gesendet</text>
         <text id="PHO_PHOTO_UPLOAD_SUCCESSFUL" development="new" translation="todo">Alle Fotos wurden erfolgreich hochgeladen.\n\nSie können den Dialog jetzt schließen.</text>
         <text id="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL" development="new" translation="todo">Es wurden nicht alle Fotos erfolgreich hochgeladen.</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="todo">Ein Termin wurde geändert</text>
@@ -716,7 +717,7 @@
         <text id="MAI_ROLE_NO_EMAILS" development="new" translation="todo">Die von Ihnen ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mail-Adressen, an die eine E-Mail versendet werden kann!</text>
         <text id="MAI_SEND_COPY" development="new" translation="todo">Kopie der E-Mail an mich senden</text>
         <text id="MAI_SEND_EMAIL" development="new" translation="todo">E-Mail senden</text>
-        <text id="MAI_SEND_MAIL_TO_ROLE" development="new" translation="todo">Ihre E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben.\n\nWenn Sie eingeloggt sind stehen Ihnen weitere Rollen zur Verfügung, an die Sie E-Mails schreiben können.</text>
+        <text id="MAI_SEND_MAIL_TO_ROLE" development="new" translation="todo">Ihre E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn Sie eingeloggt sind stehen Ihnen weitere Rollen und Empfänger zur Verfügung, an die Sie E-Mails schreiben können.</text>
         <text id="MAI_SENDER_EMAIL" development="new" translation="todo">Absender Mailadresse</text>
         <text id="MAI_SENDER_EMAIL_ADDRESS_DESC" development="new" translation="todo">Manche Provider erlauben die Nutzung unbekannter Mailadressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle Mails aus dem Mailmodul verschickt werden, (z.B. mailversand@%VAR1%).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</text>
         <text id="MAI_SENDER_NOT_LOGGED_IN" development="new" translation="todo">(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)</text>
