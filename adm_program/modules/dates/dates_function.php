@@ -173,7 +173,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         }
     }
     
-    // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
+    // DateTo should be greater than DateFrom (Timestamp must be less)
     if($startDateTime->getTimestamp() > $endDateTime->getTimestamp())
     {
         $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));

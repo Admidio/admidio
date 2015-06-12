@@ -56,30 +56,36 @@ if ($gPreferences['profile_log_edit_fields'] == 0
 // add page to navigation history
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// filter_date_from and filter_date_to can have differnt formats
+// filter_date_from and filter_date_to can have different formats
 // now we try to get a default format for intern use and html output
-$objDateFrom = new DateTimeExtended($getDateFrom, 'Y-m-d', 'date');
-if($objDateFrom->valid() == false)
+$objDateFrom = DateTime::createFromFormat ('Y-m-d', $getDateFrom);
+if($objDateFrom === false)
 {
     // check if date has system format
-    $objDateFrom = new DateTimeExtended($getDateFrom, $gPreferences['system_date'], 'date');
-    if($objDateFrom->valid() == false)
+    $objDateFrom = DateTime::createFromFormat ($gPreferences['system_date'], $getDateFrom);
+    if($objDateFrom === false)
     {
-        $objDateFrom->setDateTime('1970-01-01', $gPreferences['system_date']);
+        $objDateFrom = DateTime::createFromFormat ($gPreferences['system_date'], '1970-01-01');
     }
 }
 
-$objDateTo = new DateTimeExtended($getDateTo, 'Y-m-d', 'date');
-if($objDateTo->valid() == false)
+$objDateTo = DateTime::createFromFormat ('Y-m-d', $getDateTo);
+if($objDateTo === false)
 {
     // check if date has system format
-    $objDateTo = new DateTimeExtended($getDateTo, $gPreferences['system_date'], 'date');
-    if($objDateTo->valid() == false)
+    $objDateTo = DateTime::createFromFormat ($gPreferences['system_date'], $getDateTo);
+    if($objDateTo === false)
     {
-        $objDateTo->setDateTime('1970-01-01', $gPreferences['system_date']);
+        $objDateTo = DateTime::createFromFormat ($gPreferences['system_date'], '1970-01-01');
     }
 }
 
+// DateTo should be greater than DateFrom (Timestamp must be less)
+if($objDateFrom->getTimestamp() > $objDateTo->getTimestamp())
+{
+    $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+}
+    
 $dateFromIntern = $objDateFrom->format('Y-m-d');
 $dateFromHtml   = $objDateFrom->format($gPreferences['system_date']);
 $dateToIntern   = $objDateTo->format('Y-m-d');

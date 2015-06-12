@@ -57,13 +57,20 @@ elseif($gPreferences['enable_dates_module'] == 2)
 
 // create object and get recordset of available dates
 
-$dates = new ModuleDates();
-$dates->setParameter('mode', $getMode);
-$dates->setParameter('cat_id', $getCatId);
-$dates->setParameter('id', $getId);
-$dates->setParameter('show', $getShow);
-$dates->setParameter('view_mode', $getViewMode);
-$dates->setDateRange($getDateFrom, $getDateTo);
+try
+{
+    $dates = new ModuleDates();
+    $dates->setParameter('mode', $getMode);
+    $dates->setParameter('cat_id', $getCatId);
+    $dates->setParameter('id', $getId);
+    $dates->setParameter('show', $getShow);
+    $dates->setParameter('view_mode', $getViewMode);
+    $dates->setDateRange($getDateFrom, $getDateTo);
+}
+catch(AdmException $e)
+{
+    $e->showHtml();
+}
 
 if($getCatId > 0)
 {
