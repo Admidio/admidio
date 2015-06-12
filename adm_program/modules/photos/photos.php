@@ -516,7 +516,7 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
                     }
 
                     // if user has admin rights for photo module then show some functions
-                    if ($gCurrentUser->editPhotoRight() && file_exists($ordner))
+                    if ($gCurrentUser->editPhotoRight())
                     {
                         $page->addHtml('<div class="btn-group" role="group" style="width: 100%;">
                             <button class="btn btn-default admidio-btn-album-upload" style="width: 50%;"
