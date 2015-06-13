@@ -118,9 +118,9 @@ class HtmlFormBasic extends HtmlElement
 
     /**
      * Add a input field with attribute properties.
-     * @param string   $type Type of input field e.g. 'text'
-     * @param string   $name Name of the input field
-     * @param string   $id Optional ID for the input
+     * @param string   $type          Type of input field e.g. 'text'
+     * @param string   $name          Name of the input field
+     * @param string   $id            Optional ID for the input
      * @param string   $value         Value of the field (Default: empty)
      * @param string[] $arrAttributes Further attributes as array with key/value pairs
      */
@@ -150,7 +150,7 @@ class HtmlFormBasic extends HtmlElement
 
     /**
      * Add a label to the input field.
-     * @param string $string Value of the label as string
+     * @param string $string    Value of the label as string
      * @param string $refID
      * @param string $attribute
      */
