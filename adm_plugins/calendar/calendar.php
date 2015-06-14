@@ -2,12 +2,12 @@
 /******************************************************************************
  * Calendar
  *
- * Version 1.9.0
+ * Version 1.10.0
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Compatible with Admidio version 2.3
+ * Compatible with Admidio version 3.0
  *
  * Übergaben: date_id (Format MMJJJJ Beispiel: 052011 = Mai 2011)
  *            ajax_change (ist gesetzt bei Monatswechsel per Ajax)
