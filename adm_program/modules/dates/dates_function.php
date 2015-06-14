@@ -65,11 +65,11 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
 {
     $_SESSION['dates_request'] = $_POST;
     error_log(print_r($_POST, true));
-    
+
     // ------------------------------------------------
     // pruefen ob alle notwendigen Felder gefuellt sind
     // ------------------------------------------------
-    
+
     if(strlen($_POST['dat_headline']) == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TITLE')));
@@ -105,7 +105,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     {
         $date->setValue('dat_all_day', 0);
     }
-    
+
     if(isset($_POST['date_roles']) == false || array_count_values($_POST['date_roles']) == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
@@ -151,7 +151,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     {
         $_POST['date_to_time'] = $_POST['date_from_time'];
     }
-    
+
     $endDateTime = new DateTimeExtended($_POST['date_to'].' '.$_POST['date_to_time'], $gPreferences['system_date'].' '.$gPreferences['system_time']);
 
     if($endDateTime->valid())
@@ -172,7 +172,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
             $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END'), $gPreferences['system_time']));
         }
     }
-    
+
     // DateTo should be greater than DateFrom (Timestamp must be less)
     if($startDateTime->getTimestamp() > $endDateTime->getTimestamp())
     {
@@ -199,19 +199,19 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     {
         $_POST['dat_room_id'] = 0;
     }
-    
+
     if(is_numeric($_POST['dat_max_members']) == false)
     {
         $_POST['dat_max_members'] = 0;
     }
-    
+
     // make html in description secure
     $_POST['dat_description'] = admFuncVariableIsValid($_POST, 'dat_description', 'html');
-    
+
     // ------------------------------------------------
     // Prüfen ob gewaehlter Raum bereits zu dem Termin reserviert ist
     // ------------------------------------------------
-    
+
     if($gPreferences['dates_show_rooms'] == 1)
     {
         if($_POST['dat_room_id'] > 0)
@@ -228,7 +228,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
             {
                 $gMessage->show($gL10n->get('DAT_ROOM_RESERVED'));
             }
-            
+
             $date->setValue('dat_room_id', $_POST['dat_room_id']);
             $room = new TableRooms($gDb);
             $room->readDataById($_POST['dat_room_id']);
@@ -254,10 +254,10 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
 
     // now save array with all roles that should see this event to date object
     $date->setVisibleRoles($_POST['date_roles']);
-    
+
     // save event in database
     $return_code = $date->save();
-    
+
     if($return_code == 0 && $gPreferences['enable_email_notification'] == 1)
     {
         // Benachrichtigungs-Email für neue Einträge
@@ -271,7 +271,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         {
             $datum = $_POST['date_from']. ' - '.$_POST['date_to'];
         }
-        
+
         if($_POST['dat_all_day']!=0)
         {
             $zeit = $gL10n->get('DAT_ALL_DAY');
@@ -280,13 +280,13 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         {
             $zeit = $_POST['date_from_time']. ' - '. $_POST['date_to_time'];
         }
-        
+
         $sql_cal = 'SELECT cat_name FROM '.TBL_CATEGORIES.'
                      WHERE cat_id = '.$_POST['dat_cat_id'];
         $gDb->query($sql_cal);
         $row_cal  = $gDb->fetch_array();
         $calendar = $row_cal['cat_name'];
-        
+
         if(strlen($_POST['dat_location']) > 0)
         {
             $ort = $_POST['dat_location'];
@@ -295,11 +295,11 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         {
             $ort = 'n/a';
         }
-        
+
         if($_POST['dat_room_id'] == 0)
         {
             $raum = 'n/a';}
-        
+
         if(strlen($_POST['dat_max_members']) > 0)
         {
             $teilnehmer = $_POST['dat_max_members'];
@@ -308,25 +308,25 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         {
             $teilnehmer = 'n/a';
         }
-        
+
         $notification = new Email();
-		
-		if($getMode  == 1)
-		{
+
+        if($getMode  == 1)
+        {
             $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum. ' ('. $zeit. ')', $calendar)
                       .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
                       .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date($gPreferences['system_date'], time()));
             $notification->adminNotfication($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
-		}
-		else
-		{
+        }
+        else
+        {
             $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum. ' ('. $zeit. ')', $calendar)
                       .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
                       .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', date($gPreferences['system_date'], time()));
-			$notification->adminNotfication($gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
-		}
+            $notification->adminNotfication($gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+        }
     }
-    
+
     // ----------------------------------------
     // ggf. Rolle fuer Anmeldungen wegschreiben
     // ----------------------------------------
@@ -349,7 +349,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         $role->setValue('rol_visible', '0');
         $role->setValue('rol_leader_rights', ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participations
         $role->setValue('rol_max_members', $_POST['dat_max_members']);
-        
+
         // save role in database
         $return_code2 = $role->save();
         if($return_code < 0 || $return_code2 < 0)
@@ -357,7 +357,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
             $date->delete();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
-        
+
         // dat_rol_id anpassen (Referenz zwischen date und role)
         $date->setValue('dat_rol_id', $role->getValue('rol_id'));
         $return_code = $date->save();
@@ -381,7 +381,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         // if the data of the role must be changed
         $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
         $roleName = $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$date->getValue('dat_id');
-        
+
         if($role->getValue('rol_max_members') != $date->getValue('dat_max_members')
         || $role->getValue('role_name'        != $roleName))
         {
@@ -423,7 +423,7 @@ elseif($getMode == 2)  // Termin loeschen
     {
          //member bzw. Teilnahme/Rolle löschen
         $date->delete();
-        
+
         // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
         echo 'done';
     }
@@ -447,7 +447,7 @@ elseif($getMode == 4)  // Benutzer vom Termin abmelden
 elseif($getMode == 6)  // Termin im iCal-Format exportieren
 {
     $filename = $date->getValue('dat_headline');
-    
+
     // for IE the filename must have special chars in hexadecimal
     if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
     {
@@ -456,7 +456,7 @@ elseif($getMode == 6)  // Termin im iCal-Format exportieren
 
     header('Content-Type: text/calendar; charset=utf-8');
     header('Content-Disposition: attachment; filename="'. $filename. '.ics"');
-    
+
     // neccessary for IE, because without it the download with SSL has problems
     header('Cache-Control: private');
     header('Pragma: public');

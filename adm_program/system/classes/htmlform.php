@@ -71,7 +71,7 @@ class HtmlForm extends HtmlFormBasic
     public function __construct($id, $action, $htmlPage = null, $options = array())
     {
         // create array with all options
-        $optionsDefault = array('type' => 'default', 'enableFileUpload' => false, 'showRequiredFields' => true, 
+        $optionsDefault = array('type' => 'default', 'enableFileUpload' => false, 'showRequiredFields' => true,
                                 'setFocus' => true, 'class' => null);
         $optionsAll     = array_replace($optionsDefault, $options);
 
@@ -974,7 +974,7 @@ class HtmlForm extends HtmlFormBasic
 
         $attributes = array('class' => 'form-control');
         $name       = $id;
-        
+
         if(count($values) > 0)
         {
             $this->countElements++;
@@ -1367,11 +1367,11 @@ class HtmlForm extends HtmlFormBasic
                 $optionsAll['defaultValue'] = $row['cat_id'];
             }
 
-			// if text is a translation-id then translate it
-			if(strpos($row['cat_name'], '_') == 3)
-			{
-				$categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
-			}
+            // if text is a translation-id then translate it
+            if(strpos($row['cat_name'], '_') == 3)
+            {
+                $categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
+            }
             else
             {
                 $categoriesArray[$row['cat_id']] = $row['cat_name'];
@@ -1387,11 +1387,11 @@ class HtmlForm extends HtmlFormBasic
 
             while($row = $databaseObject->fetch_array($result))
             {
-    			// if text is a translation-id then translate it
-    			if(strpos($row['cat_name'], '_') == 3)
-    			{
-    				$categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
-    			}
+                // if text is a translation-id then translate it
+                if(strpos($row['cat_name'], '_') == 3)
+                {
+                    $categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
+                }
                 else
                 {
                     $categoriesArray[$row['cat_id']] = $row['cat_name'];
