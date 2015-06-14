@@ -48,7 +48,7 @@ $plg_geb_icon = 1;
 $plg_kal_cat =  array('all');
 
 // Soll die Kategorie des Kalenders mit ausgegeben werden (1) Ja oder (0) Nein
-$plg_kal_cat_show = 1;
+$plg_kal_cat_show = 0;
 
 // Angabe welche Rollen (ID) selektiert werden sollen: Alle ('all'), ID (1,2,3)
 // ID Aufzählung mit Komma vornehmen (4,5)
