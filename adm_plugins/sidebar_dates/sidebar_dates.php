@@ -2,12 +2,12 @@
 /******************************************************************************
  * Sidebar Dates
  *
- * Version 1.5.0
+ * Version 1.6.0
  *
  * Plugin das die letzten X Termine in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Compatible with Admidio version 2.3.0
+ * Compatible with Admidio version 3.0
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org

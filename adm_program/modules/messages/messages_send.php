@@ -25,11 +25,15 @@ $postFrom        = admFuncVariableIsValid($_POST, 'mailfrom', 'string');
 $postName        = admFuncVariableIsValid($_POST, 'name', 'string');
 $postSubject     = admFuncVariableIsValid($_POST, 'subject', 'html');
 $postSubjectSQL  = admFuncVariableIsValid($_POST, 'subject', 'string');
-$postTo          = $_POST['msg_to'];
 $postBody        = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postBodySQL     = admFuncVariableIsValid($_POST, 'msg_body', 'string');
 $postDeliveryConfirmation  = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'boolean');
 $postCaptcha     = admFuncVariableIsValid($_POST, 'captcha', 'string');
+
+if (isset($_POST['msg_to']))
+{
+    $postTo      = $_POST['msg_to'];
+}
 
 $message = new TableMessage($gDb, $getMsgId);
 

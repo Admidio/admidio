@@ -375,19 +375,19 @@ class ModuleDates extends Modules
             }
         }
 
-        // Create date object and format date_from in English format and sytem format and push to daterange array
-        $objDate = DateTime::createFromFormat('Y-m-d', $dateRangeStart);
+        // Create date object and format date_from in English format and system format and push to daterange array
+        $objDateFrom = DateTime::createFromFormat ('Y-m-d', $dateRangeStart);
 
-        if($objDate === false)
+        if($objDateFrom === false)
         {
             // check if date_from  has system format
-            $objDate = DateTime::createFromFormat($gPreferences['system_date'], $dateRangeStart);
+            $objDateFrom = DateTime::createFromFormat ($gPreferences['system_date'], $dateRangeStart);
         }
 
-        if(is_object($objDate))
+        if(is_object($objDateFrom))
         {
-            $this->setParameter('dateStartFormatEnglish', $objDate->format('Y-m-d'));
-            $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
+            $this->setParameter('dateStartFormatEnglish', $objDateFrom->format('Y-m-d'));
+            $this->setParameter('dateStartFormatAdmidio', $objDateFrom->format($gPreferences['system_date']));
         }
         else
         {
@@ -395,22 +395,28 @@ class ModuleDates extends Modules
         }
 
         // Create date object and format date_to in English format and sytem format and push to daterange array
-        $objDate = DateTime::createFromFormat('Y-m-d', $dateRangeEnd);
+        $objDateTo = DateTime::createFromFormat ('Y-m-d', $dateRangeEnd);
 
-        if($objDate === false)
+        if($objDateTo === false)
         {
             // check if date_from  has system format
-            $objDate = DateTime::createFromFormat($gPreferences['system_date'], $dateRangeEnd);
+            $objDateTo = DateTime::createFromFormat ($gPreferences['system_date'], $dateRangeEnd);
         }
 
-        if(is_object($objDate))
+        if(is_object($objDateTo))
         {
-            $this->setParameter('dateEndFormatEnglish', $objDate->format('Y-m-d'));
-            $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));
+            $this->setParameter('dateEndFormatEnglish', $objDateTo->format('Y-m-d'));
+            $this->setParameter('dateEndFormatAdmidio', $objDateTo->format($gPreferences['system_date']));
         }
         else
         {
             return false;
+        }
+
+        // DateTo should be greater than DateFrom (Timestamp must be less)
+        if($objDateFrom->format('U') > $objDateTo->format('U'))
+        {
+            throw new AdmException('SYS_DATE_END_BEFORE_BEGIN');
         }
     }
 

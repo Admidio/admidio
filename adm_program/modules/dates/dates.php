@@ -57,13 +57,20 @@ elseif($gPreferences['enable_dates_module'] == 2)
 
 // create object and get recordset of available dates
 
-$dates = new ModuleDates();
-$dates->setParameter('mode', $getMode);
-$dates->setParameter('cat_id', $getCatId);
-$dates->setParameter('id', $getId);
-$dates->setParameter('show', $getShow);
-$dates->setParameter('view_mode', $getViewMode);
-$dates->setDateRange($getDateFrom, $getDateTo);
+try
+{
+    $dates = new ModuleDates();
+    $dates->setParameter('mode', $getMode);
+    $dates->setParameter('cat_id', $getCatId);
+    $dates->setParameter('id', $getId);
+    $dates->setParameter('show', $getShow);
+    $dates->setParameter('view_mode', $getViewMode);
+    $dates->setDateRange($getDateFrom, $getDateTo);
+}
+catch(AdmException $e)
+{
+    $e->showHtml();
+}
 
 if($getCatId > 0)
 {
@@ -300,8 +307,11 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
                     $deleteIcon = '
                         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                             href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
-                            $date->getValue('dat_id').'&amp;name='.urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.$date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'"><img
-                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                            $date->getValue('dat_id').'&amp;name='.
+                            urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.
+                            $date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'">
+                            <img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" />
+                        </a>';
                 }
             }
 
@@ -669,7 +679,7 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
                 {
                     if($maxMembers > 0)
                     {
-                        $participants = $numMembers .' / '. $maxMembers;
+                        $participants = $numMembers.' / '.$maxMembers;
                     }
                     else
                     {

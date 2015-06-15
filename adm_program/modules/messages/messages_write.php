@@ -182,7 +182,7 @@ if ($getMsgType == 'PM')
     {
         $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
         $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_REQUIRED,
-                            'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE'));
+                            'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MSG_SEND_PM'));
         $form->closeGroupBox();
         $sendto = '';
     }
@@ -248,7 +248,6 @@ elseif (!isset($message_result))
         }
 
         $rollenName = $row['rol_name'];
-        $rollenID   = $getRoleId;
         $formerMembers = $row['former'];
     }
 
@@ -293,7 +292,8 @@ elseif (!isset($message_result))
     elseif ($getRoleId > 0)
     {
         // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
-        $preload_data = '{ id: "groupID: ' .$rollenID. '", text: "' .$rollenName. '", locked: true}';
+        $preload_data = '{ id: "groupID: ' .$getRoleId. '", text: "' .$rollenName. '", locked: true}';
+		$list[] = array('groupID: '.$getRoleId, $rollenName, '');
     }
 
     // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten

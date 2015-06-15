@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="da">
-    <version id="3.0.0" translator="Henrik Troels-Hansen">
-        <text id="PHO_PHOTO_UPLOAD_SUCCESSFUL" development="new" translation="todo">Alle billeder blev uploaded.\n\nDu kan lukke dialogboksen nu.</text>
-        <text id="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL" development="new" translation="todo">Ikke alle billeder blev uploaded.</text>
+    <version id="3.0.0-Beta.3" translator="Henrik Troels-Hansen">
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="edited">En dato blev ændret</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1" development="new" translation="edited">En dato for %VAR1% blev ændret.\n\nTitel: %VAR2%\nDato: %VAR3%\nKalender: %VAR4%\n</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2" development="new" translation="edited">Sted: %VAR1%\nRum: %VAR2%\nDeltagere: %VAR3%\nÆndret af: %VAR4%\n</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3" development="new" translation="edited">Ændret den: %VAR1%</text>
         <text id="MAI_EMAIL_SEND_TO_RECEIVER" development="new" translation="todo">%VAR1% sendt til modtagerne: %VAR3% fra %VAR2% den følgende e-mail:</text>
-        <text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Tidligere medlemmer</text>
+        <text id="MAI_SEND_MAIL_TO_ROLE" development="changed" translation="edited">Din email vil blive sendt til alle medlemmer der har en email adresse og som tilhører den valgte rolle eller de valgte modtagere.\n\nFlere roller og modtagere er tilgængelige kun for brugere der er logget ind.</text>
         <text id="MSG_ACTIVE_FORMER_SHORT" development="new" translation="todo">Aktive og tidligere</text>
+        <text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Tidligere medlemmer</text>
+        <text id="MSG_SEND_PM" development="new" translation="edited">Din personlige besked vil blive sendt til den valgte modtager.</text>
+        <text id="PHO_PHOTO_UPLOAD_SUCCESSFUL" development="new" translation="todo">Alle billeder blev uploaded.\n\nDu kan lukke dialogboksen nu.</text>
+        <text id="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL" development="new" translation="todo">Ikke alle billeder blev uploaded.</text>
+    </version>
+    <version id="3.0.0" translator="Henrik Troels-Hansen">
         <text id="BAC_ONLY_MYSQL" development="new" translation="edited">Backup modulet kan kun anvendes sammen med en MySQL database.</text>
         <text id="DAT_EDIT_CALENDAR_DESC" development="new" translation="edited">Her kan du oprette og redigere kalendre.</text>
         <text id="DAT_MAINTAIN_CATEGORIES_DESC" development="new" translation="edited">Her kan du oprette og redigere ketegorier.</text>
@@ -34,14 +38,14 @@
         <text id="INS_WEBMASTER_LOGIN" development="new" translation="edited">Web administration login</text>
         <text id="INS_WEBMASTER_LOGIN_DESC" development="new" translation="edited">Kun en web administrator kan opdatere databasen. Venligst anvend web administrator login oplysninger.</text>
         <text id="INS_WEBMASTER_LOGIN_FAILED" development="new" translation="edited">Kunne ikke finde en bruger med disse login oplysninger og en web administrator rolle.</text>
-    	<text id="INV_INVENTORY" development="new" translation="edited">Inventar administration</text>
-    	<text id="INV_ITEM_MANAGEMENT" development="new" translation="edited">Artikel administration</text>
-    	<text id="INV_CREATE_ITEM" development="new" translation="edited">Opret artikel</text>
-    	<text id="LST_COUNTRY_ISO" development="new" translation="edited">Landekoden skal overholde standarden Code ISO 3166 ALPHA-3 (3 karakterer)</text>
+        <text id="INV_INVENTORY" development="new" translation="edited">Inventar administration</text>
+        <text id="INV_ITEM_MANAGEMENT" development="new" translation="edited">Artikel administration</text>
+        <text id="INV_CREATE_ITEM" development="new" translation="edited">Opret artikel</text>
+        <text id="LST_COUNTRY_ISO" development="new" translation="edited">Landekoden skal overholde standarden Code ISO 3166 ALPHA-3 (3 karakterer)</text>
         <text id="LST_INFOBOX" development="new" translation="edited" description="En lille html boks som vil vise yderligere informationer">Info boks</text>
         <text id="LST_MEMBER_STATUS" development="new" translation="edited">Medlems status</text>
         <text id="LST_MEMBERS_PER_PAGE_DESC" development="changed" translation="edited">Antal medlemmer som vises i HTML visningen. Flere medlemmer kan vises ved at bruge side opdelings funktionen. Denne værdi vil ikke påvirke print visning eller eksport funktionalitet (Standard: 25).</text>
-    	<text id="MAI_INTO_TO" development="new" translation="edited">Modtagere skal placeres i TIL feltet istedet for i BCC feltet</text>
+        <text id="MAI_INTO_TO" development="new" translation="edited">Modtagere skal placeres i TIL feltet istedet for i BCC feltet</text>
         <text id="MAI_INTO_TO_DESC" development="new" translation="edited">Alle modtagere vil blive vist i TIL feltet hvis aktiveret og en e-mail vil blive modtaget af alle modtagere. Alle modtagere kan se navn og e-mail adresse på alle andre modtagere. Samtidigt så kan enhver modtager svare til alle andre modtagere. (Standard: deaktiveret)</text>
         <text id="MEM_USER_COULD_BE_CREATED" development="new" translation="edited">Bruger kunne oprettes.</text>
         <text id="MEM_DAYS_FIELD_HISTORY" development="new" translation="edited">Standard periode for felt historik (dage)</text>
@@ -51,36 +55,36 @@
         <text id="MEM_USERS_PER_PAGE_DESC" development="new" translation="edited">Antal brugere vist på hver side. Hvis der er flere medlemmer i denne gruppe så kan siderne vendes. (Standard: 25)</text>
         <text id="MAI_MAX_RECEIVER" development="new" translation="edited">Maximum antal mail modtagere</text>
         <text id="MAI_MAX_RECEIVER_DESC" development="new" translation="edited">Denne værdi beskriver maximum antallet af samtidige mail modtagere. En rolle tæller kun som én modtager.</text>
-    	<text id="MSG_ACTIVATE_PM_MODULE" development="new" translation="edited">Aktiver private beskeder</text>
+        <text id="MSG_ACTIVATE_PM_MODULE" development="new" translation="edited">Aktiver private beskeder</text>
         <text id="MSG_ACTIVATE_PM_MODULE_DESC" development="new" translation="edited">Denne indstilling tillader deaktivering af private meddelelser. Dette modul vil ikke være tilgængeligt eller vist i oversigten. (Standard: deaktiveret)</text>
-    	<text id="MSG_CHAT" development="new" translation="edited">Chat</text>
-    	<text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="edited">Aktiver chat</text>
-		<text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="edited">Aktiver chat modul. Chat beskeder vil blive hentet dynamisk fra databasen hvert 3 sekund. Kun 99 beskeder vil blive gemt i databasen. Når besked nr. 100 gemmes så slettes de første 50 beskeder.</text>
-         <text id="MSG_OPPOSITE" development="new" translation="edited">Forretnings partner</text>
-      	<text id="MSG_PM_SEND" development="new" translation="edited">En privat besked er sendt til %VAR1_BOLD%.</text>
-     	<text id="MSG_PM_NOT_SEND" development="new" translation="edited">Privat besked kunne ikke sendes til %VAR1_BOLD%.\n\nFølgende fejl er opstået:\n%VAR2%</text>
-     	<text id="MSG_REMOVE" development="new" translation="edited">Slet besked</text>
-     	<text id="MSG_REMOVE_CONFIRM" development="new" translation="edited">Bekræft sletning</text>
-     	<text id="MSG_REMOVE_REVERT" development="new" translation="edited">Gendan slettet besked</text>
-         <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="edited">En ny organisation vil blive tilføjet til databasen inklusiv dens master data. Den nuværende bruger vil blive webmaster og kan vedligeholde datasættet. Brugere der logge ind skal vælge den relevante organisation.</text>
-         <text id="ORG_CAPTCHA_WIDTH" development="new" translation="edited">Captcha bredde</text>
-         <text id="ORG_CAPTCHA_HEIGHT" development="new" translation="edited">Captcha højde</text>
-         <text id="ORG_CAPTCHA_WIDTH_DESC" development="new" translation="edited">Bredde på captcha billede. Så karakterer i captcha billedet kan blive strukket eller skrumpet. (Standard: 250)</text>
-         <text id="ORG_CAPTCHA_HEIGHT_DESC" development="new" translation="edited">Højde på captcha billede. Så karakterer i captcha billedet kan blive strukket eller skrumpet. (Standard: 60)</text>
-         <text id="ORG_CREATE_ITEM_FIELD" development="new" translation="edited">Opret emne felt</text>
-         <text id="ORG_DIFFERENT_DATABASE_VERSION" development="new" translation="edited">Anden database version</text>
-         <text id="ORG_LAST_UPDATE_STEP" development="new" translation="edited">Sidste trin af opdateringen</text>
-         <text id="ORG_FIELD_HIDDEN_DESC" development="changed" translation="edited">Sædvanligvis er et felt synligt for alle brugere som har tilladelse til at se profilen. Hvis denne indstilling er valgt fra så er det kun brugere med tilladelse til at redigere profilen der kan se dette felt.</text>
-         <text id="ORG_INVALID_THEME" development="new" translation="edited">Kunne ikke finde et gyldigt tema.</text>
-         <text id="ORG_NEW_ORGANIZATION" development="new" translation="edited">Ny organisation</text>
-         <text id="ORG_NEW_ORGANIZATION_DESC" development="new" translation="edited">Indtast en forkortelse, det officiellle navn samt en e-mail adresse til organisationen du til tilføje. E-mail adressen skal være en generel e-mail adresse. Den vil blive brugt som afsender e-mail adresse når der sendes automatiske system e-mails og notifikationer.</text>
-         <text id="ORG_NOT_SAVED_SETTINGS_LOST" development="new" translation="edited">Ved ændringer i visningen vil alle ikke gemte ændringer være tabt.</text>
-         <text id="ORG_ORGANIZATION_SUCCESSFULL_ADDED" development="new" translation="edited">Organisationen %VAR1_BOLD% er blevet tilføjet. Den er nu til at vælge ved login.\n\nHvis du har en separat hjemmeside til denne organisation, venligst tilføj den til config.php filen.</text>
-         <text id="ORG_REGIONAL_SETTINGS" development="new" translation="edited">Regionale indstillinger</text>
-    	<text id="PMS_MESSAGE" development="new" translation="edited">Private beskder</text>
-    	<text id="PMS_SEND_PM" development="new" translation="edited">Send privat besked</text>
-    	<text id="PMS_WAS_SENT_TO" development="new" translation="edited">Beskeden blev sendt til:</text>
-    	<text id="PMS_WAS_NOT_SENT_TO" development="new" translation="edited">Fejl - beskeden blev ikke sendt til:</text>
+        <text id="MSG_CHAT" development="new" translation="edited">Chat</text>
+        <text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="edited">Aktiver chat</text>
+        <text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="edited">Aktiver chat modul. Chat beskeder vil blive hentet dynamisk fra databasen hvert 3 sekund. Kun 99 beskeder vil blive gemt i databasen. Når besked nr. 100 gemmes så slettes de første 50 beskeder.</text>
+        <text id="MSG_OPPOSITE" development="new" translation="edited">Forretnings partner</text>
+        <text id="MSG_PM_SEND" development="new" translation="edited">En privat besked er sendt til %VAR1_BOLD%.</text>
+        <text id="MSG_PM_NOT_SEND" development="new" translation="edited">Privat besked kunne ikke sendes til %VAR1_BOLD%.\n\nFølgende fejl er opstået:\n%VAR2%</text>
+        <text id="MSG_REMOVE" development="new" translation="edited">Slet besked</text>
+        <text id="MSG_REMOVE_CONFIRM" development="new" translation="edited">Bekræft sletning</text>
+        <text id="MSG_REMOVE_REVERT" development="new" translation="edited">Gendan slettet besked</text>
+        <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="edited">En ny organisation vil blive tilføjet til databasen inklusiv dens master data. Den nuværende bruger vil blive webmaster og kan vedligeholde datasættet. Brugere der logge ind skal vælge den relevante organisation.</text>
+        <text id="ORG_CAPTCHA_WIDTH" development="new" translation="edited">Captcha bredde</text>
+        <text id="ORG_CAPTCHA_HEIGHT" development="new" translation="edited">Captcha højde</text>
+        <text id="ORG_CAPTCHA_WIDTH_DESC" development="new" translation="edited">Bredde på captcha billede. Så karakterer i captcha billedet kan blive strukket eller skrumpet. (Standard: 250)</text>
+        <text id="ORG_CAPTCHA_HEIGHT_DESC" development="new" translation="edited">Højde på captcha billede. Så karakterer i captcha billedet kan blive strukket eller skrumpet. (Standard: 60)</text>
+        <text id="ORG_CREATE_ITEM_FIELD" development="new" translation="edited">Opret emne felt</text>
+        <text id="ORG_DIFFERENT_DATABASE_VERSION" development="new" translation="edited">Anden database version</text>
+        <text id="ORG_LAST_UPDATE_STEP" development="new" translation="edited">Sidste trin af opdateringen</text>
+        <text id="ORG_FIELD_HIDDEN_DESC" development="changed" translation="edited">Sædvanligvis er et felt synligt for alle brugere som har tilladelse til at se profilen. Hvis denne indstilling er valgt fra så er det kun brugere med tilladelse til at redigere profilen der kan se dette felt.</text>
+        <text id="ORG_INVALID_THEME" development="new" translation="edited">Kunne ikke finde et gyldigt tema.</text>
+        <text id="ORG_NEW_ORGANIZATION" development="new" translation="edited">Ny organisation</text>
+        <text id="ORG_NEW_ORGANIZATION_DESC" development="new" translation="edited">Indtast en forkortelse, det officiellle navn samt en e-mail adresse til organisationen du til tilføje. E-mail adressen skal være en generel e-mail adresse. Den vil blive brugt som afsender e-mail adresse når der sendes automatiske system e-mails og notifikationer.</text>
+        <text id="ORG_NOT_SAVED_SETTINGS_LOST" development="new" translation="edited">Ved ændringer i visningen vil alle ikke gemte ændringer være tabt.</text>
+        <text id="ORG_ORGANIZATION_SUCCESSFULL_ADDED" development="new" translation="edited">Organisationen %VAR1_BOLD% er blevet tilføjet. Den er nu til at vælge ved login.\n\nHvis du har en separat hjemmeside til denne organisation, venligst tilføj den til config.php filen.</text>
+        <text id="ORG_REGIONAL_SETTINGS" development="new" translation="edited">Regionale indstillinger</text>
+        <text id="PMS_MESSAGE" development="new" translation="edited">Private beskder</text>
+        <text id="PMS_SEND_PM" development="new" translation="edited">Send privat besked</text>
+        <text id="PMS_WAS_SENT_TO" development="new" translation="edited">Beskeden blev sendt til:</text>
+        <text id="PMS_WAS_NOT_SENT_TO" development="new" translation="edited">Fejl - beskeden blev ikke sendt til:</text>
         <text id="PHO_ALBUM_LOCK" development="new" translation="edited">Lås album</text>
         <text id="PHO_ALBUM_LOCK_DESC" development="new" translation="edited">Låste albummer kan ikke ses af gæster eller medlemmer, f.eks. kan du låse et album imens alle billeder er ved at blive lagt op.</text>
         <text id="PHO_ALBUM_UNLOCK" development="new" translation="edited">Lås album op</text>
@@ -101,20 +105,20 @@
         <text id="PRO_DELETE_PROFILE_PICTURE" development="changed" translation="edited">Slet profil billede</text>
         <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="edited">Definer et land fra hvilket denne organisation hovedsagligt opererer. Det vil så blive forvalgt når nye brugere oprettes eller registrerer sig. Det letter data indtastningen og kan ændres af brugeren efterfølgende. (Standard: Tyskland)</text>
         <text id="PRO_EXPORT_VCARD" development="new" translation="edited">Eksporter vCard</text>
-    	<text id="PRO_MAINTAIN_ITEM_FIELDS" development="new" translation="edited">Vedligehold artikel felter</text>
+        <text id="PRO_MAINTAIN_ITEM_FIELDS" development="new" translation="edited">Vedligehold artikel felter</text>
         <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="changed" translation="edited">I profil felt vedligehold kan profil felter tilføjes og redigeres. De kan efterfølgende placeres i samme kategorier.</text>
         <text id="ROL_RIGHT_INVENTORY" development="new" translation="edited">Artikel og inventar administration</text>
         <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="edited">Rollefordeling for %VAR1% %VAR2%</text>
         <text id="SYS_APPLY" development="new" translation="edited">Udfør</text>
         <text id="SYS_CATEGORIES" development="new" translation="edited">Kategorier</text>
         <text id="SYS_CHARACTERS" development="new" translation="edited">Karakterer</text>
-    	<text id="SYS_COUNTRY_EG" development="new" translation="edited">GER</text>
+        <text id="SYS_COUNTRY_EG" development="new" translation="edited">GER</text>
         <text id="SYS_DECIMAL_NUMBER" development="new" translation="edited">Decimal nummer</text>
         <text id="SYS_EMAIL_SEND" development="changed" translation="edited">Mailen er afsendt</text>
         <text id="SYS_FILENAME_EMPTY" development="new" translation="edited">Filnavn mangler!</text>
         <text id="SYS_FILTER" development="new" translation="edited">Filter</text>
         <text id="SYS_FULL_SCREEN" development="new" translation="edited">Fuld skærm</text>
-    	<text id="SYS_ITEMNAME" development="new" translation="edited">Emne navn</text>
+        <text id="SYS_ITEMNAME" development="new" translation="edited">Emne navn</text>
         <text id="SYS_REQUIRED_FIELDS" development="new" translation="edited">Krævede felter</text>
         <text id="SYS_MENU" development="new" translation="edited">Menu</text>
         <text id="SYS_MESSAGES" development="new" translation="edited">Beskeder</text>
@@ -122,10 +126,10 @@
         <text id="SYS_NORMAL_PICTURE" development="new" translation="edited">Normalt billede</text>
         <text id="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION" development="new" translation="edited">Online medlemsskabs administration</text>
         <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="changed" translation="edited">Hvis du har mistet dit kodeord, så kan systemet generere et nyt. Venligst indtast den e-mail adresse som du brugte ved registreringen, så bliver den nye kode sendt dertil med det samme.</text>
-    	<text id="SYS_PM" development="new" translation="edited">Privat Besked</text>
-    	<text id="SYS_QUANTITY" development="new" translation="edited">Mængde</text>
+        <text id="SYS_PM" development="new" translation="edited">Privat Besked</text>
+        <text id="SYS_QUANTITY" development="new" translation="edited">Mængde</text>
         <text id="SYS_ROLES" development="new" translation="edited">Roller</text>
-    	<text id="SYS_SELECT_FROM_LIST" development="new" translation="edited">Vælg fra liste</text>
+        <text id="SYS_SELECT_FROM_LIST" development="new" translation="edited">Vælg fra liste</text>
         <text id="SYS_STILL_X_CHARACTERS" development="new" translation="edited">still %VAR1% karakterer</text>
         <text id="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION" development="new" translation="edited">Skift til kategori administration</text>
     </version>
@@ -819,7 +823,7 @@
         <text id="ORG_FIELD_EXIST" development="new" translation="edited">Feltnavnet eksisterer allerede i denne kategori.</text>
         <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Feltet er kun synligt for godkendte brugere (egen profil &amp; rolle autorisation)</text>
         <text id="ORG_FIELD_REQUIRED" development="new" translation="edited">Krævet felt der altid skal udfyldes.</text>
-        <text id="ORG_FIELD_REQUIRED_DESC" development="new" translation="edited">Mærket (påkrævet) felter skal altid udfyldes. Denne regel gælder for registreringer og for regulære profil ændringer udført af brugerne selv.</text>
+        <text id="ORG_FIELD_REQUIRED_DESC" development="new" translation="edited">Mærket (påkrævet) felter skalaltid udfyldes. Denne regel gælder for registreringer og for regulære profil ændringer udført af brugerne selv.</text>
         <text id="ORG_FIELD_NOT_DISABLED" development="new" translation="edited">Felt kan rettes af brugeren selv.</text>
         <text id="ORG_FIELD_NOT_HIDDEN" development="new" translation="edited">Felt som er synligt for alle.</text>
         <text id="ORG_FIELD_NOT_MANDATORY" development="new" translation="edited">Feltet er påkrævet. Det skal udfyldes.</text>
@@ -856,6 +860,7 @@
         <text id="ORG_VARIABLE_EMAIL_ORGANIZATION" development="new" translation="edited">System e-mail adresse for organisationen</text>
         <text id="ORG_VARIABLE_FIRST_NAME" development="new" translation="edited">Brugerens fornavn</text>
         <text id="ORG_VARIABLE_LAST_NAME" development="new" translation="edited">Brugerens efternavn</text>
+
         <text id="ORG_VARIABLE_NAME_ORGANIZATION" development="new" translation="edited">Navn på organisationen</text>
         <text id="ORG_VARIABLE_NEW_PASSWORD" development="new" translation="edited">Nyt bruger kodeord</text>
         <text id="ORG_VARIABLE_SHORTNAME_ORGANIZATION" development="new" translation="edited">Forkortelse af organisations navnet</text>
@@ -1268,7 +1273,7 @@
         <text id="SYS_POSTCODE" development="new" translation="edited">Postnummer</text>
         <text id="SYS_PREVIEW" development="new" translation="edited">Vis</text>
         <text id="SYS_PREVIOUS" development="new" translation="edited">Tidligere</text>
-        <text id="SYS_PROCESS_CANCELED" development="new" translation="edited">Proces afbrudt.</text>
+        <text id="SYS_PROCESS_CANCELED" development="new" translation="edited">Proces afbrudt.</text>0D
         <text id="SYS_PROGRESSBAR" development="new" translation="edited">Status bar</text>
         <text id="SYS_PROPERTIES" development="new" translation="edited">Indstillinger</text>
         <text id="SYS_PWACT_PW_SAVED" development="new" translation="edited">Nyt kodeord gemt!</text>

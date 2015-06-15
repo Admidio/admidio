@@ -41,7 +41,7 @@ var entryDeleted;
  *  @param callbackFunction A name of a function that should be called if the return was positive.
  */
 function callUrlHideElement(elementId, url, callbackFunction) {
-	callbackFunction = typeof callbackFunction !== 'undefined' ?  callbackFunction : "";
+    callbackFunction = typeof callbackFunction !== 'undefined' ?  callbackFunction : "";
     entryDeleted = document.getElementById(elementId);
     var fn = window[callbackFunction];
 
@@ -49,12 +49,12 @@ function callUrlHideElement(elementId, url, callbackFunction) {
     $.get(url, function(data) {
         if(data == "done") {
             $("#admidio_modal").modal("hide");
-            
+
             if(typeof fn === "function") {
                 $(entryDeleted).fadeOut("slow", fn());
             }
             else {
-                $(entryDeleted).fadeOut("slow");                
+                $(entryDeleted).fadeOut("slow");
             }
         }
         else {
@@ -65,9 +65,9 @@ function callUrlHideElement(elementId, url, callbackFunction) {
             var html = $("#message_text").html();
 
             if(data.length > 0) {
-            	$("#message_text").html(html + "<br /><div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-exclamation-sign\">" + data + "</span></div>");
+                $("#message_text").html(html + "<br /><div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-exclamation-sign\">" + data + "</span></div>");
             } else {
-            	$("#message_text").html(html + "<br /><div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-exclamation-sign\">Error: Entry not deleted</span></div>");
+                $("#message_text").html(html + "<br /><div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-exclamation-sign\">Error: Entry not deleted</span></div>");
             }
         }
     });
@@ -79,7 +79,7 @@ function callUrlHideElement(elementId, url, callbackFunction) {
  *  @return Format of moment.js script
  */
 function formatPhpToMoment(format){
-	var formatMap = {
+    var formatMap = {
         d: "DD",
         D: "ddd",
         j: "D",
@@ -110,8 +110,8 @@ function formatPhpToMoment(format){
         A: "A",
         B: function(){
             var thisUTC = this.clone().utc(),
-            	// Shamelessly stolen from http://javascript.about.com/library/blswatch.htm
-            	swatch = ((thisUTC.hours()+1) % 24) + (thisUTC.minutes() / 60) + (thisUTC.seconds() / 3600);
+                // Shamelessly stolen from http://javascript.about.com/library/blswatch.htm
+                swatch = ((thisUTC.hours()+1) % 24) + (thisUTC.minutes() / 60) + (thisUTC.seconds() / 3600);
             return Math.floor(swatch * 1000 / 24);
         },
         g: "h",
@@ -134,10 +134,10 @@ function formatPhpToMoment(format){
         c: "YYYY-MM-DD[T]HH:mm:ssZ",
         r: "ddd, DD MMM YYYY HH:mm:ss ZZ",
         U: "X"
-	},
-	formatEx = /[dDjlNSwzWFmMntLoYyaABgGhHisueIOPTZcrU]/g;
+    },
+    formatEx = /[dDjlNSwzWFmMntLoYyaABgGhHisueIOPTZcrU]/g;
 
-	return format.replace(formatEx, function(phpStr){
-	  return formatMap[phpStr];
-	});
+    return format.replace(formatEx, function(phpStr){
+      return formatMap[phpStr];
+    });
 };

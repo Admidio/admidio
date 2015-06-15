@@ -29,6 +29,19 @@ class UploadHandlerPhoto extends UploadHandler
         {
             $fileLocation = SERVER_PATH.'/adm_my_files/photos/upload/'.$file->name;
             $albumFolder  = SERVER_PATH.'/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
+
+            // create folder if not exists
+            if(file_exists($albumFolder) === false)
+            {
+                $error = $photoAlbum->createFolder();
+
+                if($error['text'] !== '')
+                {
+                    $file->error = $gL10n->get($error['text'], $error['path']);
+                    return $file;
+                }
+            }
+
             $newFotoFileNumber = $photoAlbum->getValue('pho_quantity') + 1;
 
             // read image size

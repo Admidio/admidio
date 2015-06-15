@@ -2,12 +2,12 @@
 /******************************************************************************
 * sidebar_downloads
 *
-* Version 1.3.0
+* Version 1.4.0
 *
 * Plugin das die aktuellsten X Downloads auflistet
 *
 *
-* Compatible with Admidio version 2.3.0
+* Compatible with Admidio version 3.0
 *
 * Copyright : (c) 2004 - 2008 The Admidio Team
 * Homepage : http://www.admidio.org
@@ -24,8 +24,9 @@ if(!defined('PLUGIN_PATH'))
 {
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
+
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
-require_once(PLUGIN_PATH. '/../adm_program/system/file_extension_icons.php');
+require(PLUGIN_PATH. '/../adm_program/system/file_extension_icons.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // Sprachdatei des Plugins einbinden
@@ -45,6 +46,11 @@ if(isset($plg_link_class_downl))
 else
 {
     $plg_link_class_downl = '';
+}
+
+if(!isset($plg_show_upload_timestamp))
+{
+    $plg_show_upload_timestamp = true;
 }
 
 // Sprachdatei des Plugins einbinden
@@ -75,10 +81,15 @@ if ($gPreferences['enable_download_module'] == 1)
     if($gDb->num_rows($plg_result_fil) > 0)
     {
         $anzahl = 0;
-        echo '<div class="btn-group-vertical" role="group">';
 
         while($plg_row = $gDb->fetch_object($plg_result_fil))
         {
+            $errorCode     = '';
+            $html          = '';
+            $timestampHtml = '';
+
+            echo '<div class="btn-group-vertical" role="group">';
+            
             try
             {
                 // get recordset of current file from databse
@@ -87,32 +98,48 @@ if ($gPreferences['enable_download_module'] == 1)
             }
             catch(AdmException $e)
             {
-                $e->showHtml();
+                $errorCode = $e->getMessage();
+                
+                if($errorCode != 'DOW_FOLDER_NO_RIGHTS')
+                {
+                    $e->showText();
+                }
             }
 
-            //Ermittlung der Dateiendung
-            $fileExtension  = mb_strtolower(substr($plg_row->fil_name, strrpos($plg_row->fil_name, '.')+1), 'UTF-8');
-
-            //Auszugebendes Icon ermitteln
-            $iconFile = 'page_white_question.png';
-            if(array_key_exists($fileExtension, $icon_file_extension))
+            // only show download if user has rights to view folder
+            if($errorCode != 'DOW_FOLDER_NO_RIGHTS')
             {
-                $iconFile = $icon_file_extension[$fileExtension];
-            }
-
-            // Vorname und Nachname abfragen (Upload der Datei)
-            $mein_user = new User($gDb, $gProfileFields, $plg_row->fil_usr_id);
-
-            echo '
+                //Ermittlung der Dateiendung
+                $fileExtension  = mb_strtolower(substr($plg_row->fil_name, strrpos($plg_row->fil_name, '.')+1), 'UTF-8');
+    
+                //Auszugebendes Icon ermitteln
+                $iconFile = 'page_white_question.png';
+                if(array_key_exists($fileExtension, $icon_file_extension))
+                {
+                    $iconFile = $icon_file_extension[$fileExtension];
+                }
+                
+                // if set in config file then show timestamp of file upload
+                if($plg_show_upload_timestamp)
+                {
+                    // Vorname und Nachname abfragen (Upload der Datei)
+                    $mein_user = new User($gDb, $gProfileFields, $plg_row->fil_usr_id);
+                    
+                    $timestampHtml = '<img class="admidio-icon-info" data-html="true" src="'. THEME_PATH. '/icons/info.png" alt="'.$gL10n->get('SYS_FILE').'" 
+                        title="'. $plg_row->fil_timestamp. ',<br />'. $mein_user->getValue('FIRST_NAME'). ' '. $mein_user->getValue('LAST_NAME'). '" />';
+                }
+    
+                echo '
                 <a class="btn '.$plg_link_class_downl.'" href="'. $g_root_path. '/adm_program/modules/downloads/get_file.php?file_id='. $plg_row->fil_id. '"><img
-                src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/"
-                title="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/" />'.$plg_row->fil_name.'</a>
-                <br /><span class="smallFontSize">(&nbsp;'. $plg_row->fil_timestamp. ', '. $mein_user->getValue('FIRST_NAME'). ' '. $mein_user->getValue('LAST_NAME'). '&nbsp;)</span><hr />';
-            $anzahl++;
-
-            if ($anzahl == $plg_downloads_count)
-            {
-                break;
+                    src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/"
+                    title="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/" />'.$plg_row->fil_name.$timestampHtml.'</a>';
+                    
+                $anzahl++;
+    
+                if ($anzahl == $plg_downloads_count)
+                {
+                    break;
+                }
             }
         }
 

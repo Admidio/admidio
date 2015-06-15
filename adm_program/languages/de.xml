@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
-    <version id="3.0.0" translator="Markus Faßbender">
-        <text id="PHO_PHOTO_UPLOAD_SUCCESSFUL" development="new" translation="todo">Alle Fotos wurden erfolgreich hochgeladen.\n\nDer Dialog kann jetzt geschlossen werden.</text>
-        <text id="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL" development="new" translation="todo">Es wurden nicht alle Fotos erfolgreich hochgeladen.</text>
+    <version id="3.0.0-Beta.3" translator="Markus Faßbender">
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="todo">Ein Termin wurde geändert</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1" development="new" translation="todo">Es wurde ein Termin bei %VAR1% geändert.\n\nTitel: %VAR2%\nDatum: %VAR3%\nKalender: %VAR4%\n</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2" development="new" translation="todo">Ort: %VAR1%\nRaum: %VAR2%\nTeilnehmer: %VAR3%\nGeändert von: %VAR4%\n</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3" development="new" translation="todo">Geändert am: %VAR1%</text>
         <text id="MAI_EMAIL_SEND_TO_RECEIVER" development="new" translation="todo">%VAR1% hat an die folgenden Empfänger: %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
-        <text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Ehemalige Mitglieder</text>
+        <text id="MAI_SEND_MAIL_TO_ROLE" development="changed" translation="todo">Deine E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn du eingeloggt bist stehen dir weitere Rollen und Empfänger zur Verfügung, an die du E-Mails schreiben kannst.</text>
         <text id="MSG_ACTIVE_FORMER_SHORT" development="new" translation="todo">Aktive und ehemalige</text>
+        <text id="MSG_FORMER_MEMBERS" development="new" translation="todo">Ehemalige Mitglieder</text>
+        <text id="MSG_SEND_PM" development="new" translation="todo">Deine PM wird an den ausgewählten Empfänger gesendet</text>
+        <text id="PHO_PHOTO_UPLOAD_SUCCESSFUL" development="new" translation="todo">Alle Fotos wurden erfolgreich hochgeladen.\n\nDer Dialog kann jetzt geschlossen werden.</text>
+        <text id="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL" development="new" translation="todo">Es wurden nicht alle Fotos erfolgreich hochgeladen.</text>
+    </version>
+    <version id="3.0.0" translator="Markus Faßbender">
         <text id="BAC_ONLY_MYSQL" development="new" translation="todo">Das Backupmodul kann nur bei einer MySQL-Datenbank genutzt werden.</text>
         <text id="DAT_EDIT_CALENDAR_DESC" development="new" translation="todo">Hier können Kalender angelegt und bearbeitet werden.</text>
         <text id="DAT_MAINTAIN_CATEGORIES_DESC" development="new" translation="todo">Hier können Kategorien angelegt und bearbeitet werden.</text>
@@ -715,7 +719,6 @@
         <text id="MAI_ROLE_NO_EMAILS" development="new" translation="todo">Die von dir ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mail-Adressen, an die eine E-Mail versendet werden kann!</text>
         <text id="MAI_SEND_COPY" development="new" translation="todo">Kopie der E-Mail an mich senden</text>
         <text id="MAI_SEND_EMAIL" development="new" translation="todo">E-Mail senden</text>
-        <text id="MAI_SEND_MAIL_TO_ROLE" development="new" translation="todo">Deine E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben.\n\nWenn du eingeloggt bist stehen dir weitere Rollen zur Verfügung, an die du E-Mails schreiben kannst.</text>
         <text id="MAI_SENDER_EMAIL" development="new" translation="todo">Absender Mailadresse</text>
         <text id="MAI_SENDER_EMAIL_ADDRESS_DESC" development="new" translation="todo">Manche Provider erlauben die Nutzung unbekannter Mailadressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle Mails aus dem Mailmodul verschickt werden, (z.B. mailversand@%VAR1%).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</text>
         <text id="MAI_SENDER_NOT_LOGGED_IN" development="new" translation="todo">(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)</text>

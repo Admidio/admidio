@@ -39,7 +39,7 @@ function GetUpdateVersion($update_info, $search)
     while($pointer !== '\n')
     {
         $i++;
-        $update_version .= $pointer;
+        $update_version = $update_version.$pointer;
         $pointer = substr($update_info, $current_version_start+$adding+$i, 1);
     }
 
