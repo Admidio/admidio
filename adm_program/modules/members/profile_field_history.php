@@ -58,25 +58,25 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // filter_date_from and filter_date_to can have different formats
 // now we try to get a default format for intern use and html output
-$objDateFrom = DateTime::createFromFormat ('Y-m-d', $getDateFrom);
+$objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
 if($objDateFrom === false)
 {
     // check if date has system format
-    $objDateFrom = DateTime::createFromFormat ($gPreferences['system_date'], $getDateFrom);
+    $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], $getDateFrom);
     if($objDateFrom === false)
     {
-        $objDateFrom = DateTime::createFromFormat ($gPreferences['system_date'], '1970-01-01');
+        $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], '1970-01-01');
     }
 }
 
-$objDateTo = DateTime::createFromFormat ('Y-m-d', $getDateTo);
+$objDateTo = DateTime::createFromFormat('Y-m-d', $getDateTo);
 if($objDateTo === false)
 {
     // check if date has system format
-    $objDateTo = DateTime::createFromFormat ($gPreferences['system_date'], $getDateTo);
+    $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], $getDateTo);
     if($objDateTo === false)
     {
-        $objDateTo = DateTime::createFromFormat ($gPreferences['system_date'], '1970-01-01');
+        $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], '1970-01-01');
     }
 }
 

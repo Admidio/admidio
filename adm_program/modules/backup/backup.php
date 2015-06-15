@@ -43,7 +43,6 @@ if($myFilesBackup->checkSettings() == false)
 
 $headline = $gL10n->get('BAC_DATABASE_BACKUP');
 
-
 // create html page object
 $page = new HtmlPage($headline);
 

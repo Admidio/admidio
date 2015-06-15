@@ -39,7 +39,6 @@ function FunctionIsDisabled($function) {
     return isset($DisabledFunctions[$function]);
 }
 
-
 function SafeExec($command) {
     static $AllowedExecFunctions = array();
     if (empty($AllowedExecFunctions)) {

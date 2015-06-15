@@ -229,26 +229,26 @@ class HtmlPage
                                 $gL10n->get('LNK_WEBLINKS'), 'weblinks.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
         }
 
-        if($gCurrentUser ->isWebmaster() || $gCurrentUser ->manageRoles() || $gCurrentUser ->approveUsers() || $gCurrentUser ->editUsers())
+        if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
         {
             $this->menu->addItem('menu_item_administration', null, $gL10n->get('SYS_ADMINISTRATION'), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
 
-            if($gCurrentUser ->approveUsers() && $gPreferences['registration_mode'] > 0)
+            if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
             {
                 $this->menu->addItem('menu_item_registration', '/adm_program/modules/registration/registration.php',
                                     $gL10n->get('NWU_NEW_REGISTRATIONS'), 'new_registrations.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
             }
-            if($gCurrentUser ->editUsers())
+            if($gCurrentUser->editUsers())
             {
                 $this->menu->addItem('menu_item_members', '/adm_program/modules/members/members.php',
                                     $gL10n->get('MEM_USER_MANAGEMENT'), 'user_administration.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
             }
-            if($gCurrentUser ->manageRoles())
+            if($gCurrentUser->manageRoles())
             {
                 $this->menu->addItem('menu_item_roles', '/adm_program/modules/roles/roles.php',
                                     $gL10n->get('ROL_ROLE_ADMINISTRATION'), 'roles.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
             }
-            if($gCurrentUser ->isWebmaster())
+            if($gCurrentUser->isWebmaster())
             {
                 $this->menu->addItem('menu_item_backup', '/adm_program/modules/backup/backup.php',
                                     $gL10n->get('BAC_DATABASE_BACKUP'), 'backup.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');

@@ -2,7 +2,7 @@
 /*****************************************************************************/
 /** @class HtmlTableBasic
  *  @brief  Create html tables
- * 
+ *
  *  This class creates html tables.
  *  Create a table object, define the elements with optional attributes and pass your content.
  *  Several methods allows you to set table rows, columns, header and footer element. Also you can define an array with column widths.
@@ -85,7 +85,7 @@
  *  // Add the column with colspan attribute
  *  $table->addColumn('', array('colspan' => '3')); // no data here, because first do the settings and after finishend pass the content !
  *  // Define center position for the text
- *  $table->addAttribute('align', 'center'); // ok, it is worse style! 
+ *  $table->addAttribute('align', 'center'); // ok, it is worse style!
  *  // Now we can set the data if all settings are done!
  *  $table->addData('Tablefooter');
  *  // Now set the body element of the table
@@ -114,8 +114,8 @@ class HtmlTableBasic extends HtmlElement {
 
     protected $border;                   ///< String with border attribute and value of the table
     protected $lineChange;               ///< Integer value for class change mode for table rows.
-    protected $class_1;                  ///< Class name for standard design of table rows 
-    protected $class_2;                  ///< Class name for changed design of table rows 
+    protected $class_1;                  ///< Class name for standard design of table rows
+    protected $class_2;                  ///< Class name for changed design of table rows
     protected $changeClass;              ///< Class name for the next table row using class change mode
     protected $columnsWidth;             ///< Array with values for the columns width
     protected $thead;                    ///< Internal Flag for setted thead element
@@ -123,43 +123,43 @@ class HtmlTableBasic extends HtmlElement {
     protected $tbody;                    ///< Internal Flag for setted tbody element
     protected $columnCount;              ///< Counter for setted columns
     protected $rowCount;                 ///< Counter for setted rows in body element
-    
+
     /**
      * Constructor initializing all class variables
-     * 
+     *
      * @param $id Id of the table
      * @param $class Class name of the table
      * @param $border Set table border
      */
     public function __construct($id = '', $class = '', $border = 0)
-    {        
-        $this->border       = (is_numeric($border))? $border : 0;
+    {
+        $this->border      = (is_numeric($border)) ? $border : 0;
         $this->lineChange  = '';
-        $this->columsWidth  = array();
-        $this->changeclass  = '';
-        $this->thead        = -1;
-        $this->tfoot        = -1;
-        $this->tbody        = -1;
-        $this->columnCount  = 0;
-        $this->rowCount     = 0;
-        
+        $this->columsWidth = array();
+        $this->changeclass = '';
+        $this->thead       = -1;
+        $this->tfoot       = -1;
+        $this->tbody       = -1;
+        $this->columnCount = 0;
+        $this->rowCount    = 0;
+
         parent::__construct('table', '', '', true);
-        
+
         if(strlen($id) > 0)
         {
             $this->addAttribute('id', $id);
         }
-        
+
         if(strlen($class) > 0)
         {
             $this->addAttribute('class', $class);
         }
-        
+
         if($border == 1)
         {
             $this->addAttribute('border', '1');
         }
-    } 
+    }
 
     /**
      *  @par Add Columns to current table row.
@@ -209,7 +209,7 @@ class HtmlTableBasic extends HtmlElement {
     {
         // Clear column counter
         $this->columnCount = 0;
-        
+
         // If row is active we must close it first before starting new one
         if(in_array('tr', $this->arrParentElements))
         {
@@ -269,7 +269,7 @@ class HtmlTableBasic extends HtmlElement {
             {
                 $this->setAttributesFromArray($arrAttributes);
             }
-            
+
             if($this->tbody == 1)
             {
                 // Only allowed in body element of the table
@@ -280,7 +280,7 @@ class HtmlTableBasic extends HtmlElement {
                 else
                 {
                     $this->changeclass = $this->class_2;
-                }    
+                }
                 $modulo = $this->changeclass;
                 $this->addAttribute('class', $modulo, 'tr');
             }
@@ -304,7 +304,7 @@ class HtmlTableBasic extends HtmlElement {
         else
         {
             $this->addParentElement('tr');
-            
+
             // Check optional attributes in associative array and set all attributes
             if($arrAttributes != null && is_array($arrAttributes))
             {
@@ -343,7 +343,7 @@ class HtmlTableBasic extends HtmlElement {
                 }
             }
         }
-        
+
         // only increase rowcount if this is a data row and not the header
         if($col == 'td')
         {
@@ -375,9 +375,9 @@ class HtmlTableBasic extends HtmlElement {
         {
             $this->closeParentElement('thead');
         }
-        
+
         $this->addParentElement('tbody');
-        $this->tbody = 1 ;
+        $this->tbody = 1;
         if($attribute != '' && $value != '')
         {
             $this->addAttribute($attribute, $value);
@@ -388,7 +388,7 @@ class HtmlTableBasic extends HtmlElement {
             $this->addRow($data, null, $col);
         }
     }
-    
+
     /**
      *  @par Define table footer
      *  Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
@@ -409,7 +409,7 @@ class HtmlTableBasic extends HtmlElement {
         {
             $this->closeParentElement('thead');
             $this->addParentElement('tfoot');
-            $this->tfoot = 1 ;
+            $this->tfoot = 1;
 
             if($attribute != '' && $value != '')
             {
@@ -424,7 +424,7 @@ class HtmlTableBasic extends HtmlElement {
         }
         return false;
     }
-    
+
     /**
      *  @par Define table header
      *  Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
@@ -440,7 +440,7 @@ class HtmlTableBasic extends HtmlElement {
         if($this->thead != 1)
         {
             $this->addParentElement('thead');
-            $this->thead = 1 ;
+            $this->thead = 1;
 
             if($attribute != '' && $value != '')
             {
@@ -455,7 +455,7 @@ class HtmlTableBasic extends HtmlElement {
         }
         return false;
     }
-    
+
     /**
      * Get the parsed html table
      *
@@ -474,7 +474,7 @@ class HtmlTableBasic extends HtmlElement {
      * In body elements you can use this option. You have to define two class names and a counter as integer value.
      * The first class name is the standard class and the second name is the class used if the class is changed regarding the counter.
      * As default value, every second row is to be changed.
-     * 
+     *
      * @param $class_1 Name of the standard class used for lineChange mode
      * @param $class_2 Name of the change class used for lineChange mode
      * @param $line Number (integer) of the line that is changed to Class_2 (Default: 2)
@@ -489,12 +489,12 @@ class HtmlTableBasic extends HtmlElement {
         {
             return false;
         }
-        
+
         $this->class_1 = $class_1;
         $this->class_2 = $class_2;
     }
 
-    /** Set a specific width for all columns of the table. This is useful if the automatically 
+    /** Set a specific width for all columns of the table. This is useful if the automatically
      *  that will be set by the browser doesn't fit your needs.
      *  @param $array Array with all width values of each column. Here you can set all valid CSS values e.g. '100%' or '300px'
      */
@@ -502,7 +502,7 @@ class HtmlTableBasic extends HtmlElement {
     {
         if(is_array($array))
         {
-            foreach ($array as $column) 
+            foreach ($array as $column)
             {
                 if($column != '')
                 {
@@ -514,10 +514,10 @@ class HtmlTableBasic extends HtmlElement {
                 }
             }
         }
-        return false; 
-    } 
-    
-    
+        return false;
+    }
+
+
     /** Set a specific width for one column of the table. This is useful if you have one column
      *  that will not get a useful width automatically by the browser.
      *  @param $column The column number where you want to set the width. The columns of the table starts with 1 (not 0).
@@ -530,7 +530,7 @@ class HtmlTableBasic extends HtmlElement {
             // internal datatable columns starts with 0
             $this->columnsWidth[$column-1] = $width;
         }
-    } 
-} 
+    }
+}
 
 ?>

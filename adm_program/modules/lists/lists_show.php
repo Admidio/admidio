@@ -31,7 +31,6 @@ $getStart       = admFuncVariableIsValid($_GET, 'start', 'numeric');
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
 $getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen', 'numeric');
 
-
 // Initialize the content of this parameter (otherwise some servers will keep the content)
 unset($role_ids);
 
@@ -131,7 +130,6 @@ catch(AdmException $e)
 {
     $e->showHtml();
 }
-
 
 // determine the number of users in this list
 $resultList = $gDb->query($mainSql);

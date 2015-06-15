@@ -98,7 +98,7 @@ if($available == 0)
 
     $version_update = 99;
 }
-else if($available == 1)
+elseif($available == 1)
 {
     $update_info = file_get_contents('http://www.admidio.org/update.txt');
 
@@ -139,23 +139,29 @@ if($getMode == 2)
     {
         $versionstext = $gL10n->get('UPD_NEW');
     }
-    else if($version_update == 2)
+    elseif($version_update == 2)
     {
         $versionstext = $gL10n->get('UPD_NEW_BETA');
     }
-    else if($version_update == 3)
+    elseif($version_update == 3)
     {
         $versionstext = $gL10n->get('UPD_NEW_BOTH');
     }
-    else if($version_update == 99)
+    elseif($version_update == 99)
     {
         $admidio_link = '<a href="http://www.admidio.org/index.php?page=download"" target="_blank">Admidio</a>';
         $versionstext = $gL10n->get('UPD_CONNECTION_ERROR', $admidio_link);
     }
     else
     {
-        if(ADMIDIO_VERSION_BETA > 0) {$versionstext_beta = 'Beta ';}
-        else {$versionstext_beta = ' ';}
+        if(ADMIDIO_VERSION_BETA > 0)
+        {
+            $versionstext_beta = 'Beta ';
+        }
+        else
+        {
+            $versionstext_beta = ' ';
+        }
         $versionstext = $gL10n->get('UPD_NO_NEW', $versionstext_beta);
     }
 

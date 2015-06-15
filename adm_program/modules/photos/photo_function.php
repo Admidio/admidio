@@ -128,7 +128,6 @@ function deletePhoto($pho_id, $pic_nr)
     }
 };
 
-
 // Foto um 90° drehen
 if($getJob == 'rotate')
 {

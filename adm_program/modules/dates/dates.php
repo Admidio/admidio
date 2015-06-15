@@ -637,7 +637,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 }
                 else
                 {
-                    $columnValues[] = '';                    
+                    $columnValues[] = '';
                 }
 
                 if(strlen($locationHtml) > 0)
