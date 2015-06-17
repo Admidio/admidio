@@ -341,7 +341,10 @@ elseif (!isset($message_result))
             {
                 if($act_number == '' || $row['former'] > 0)
                 {
-                    $list[] = array('groupID: '.$row['rol_id'].$act_number, $row['rol_name'].' '.$act_group_short, $act_group);
+                    if($gCurrentUser->hasRightSendMailToRole($row['rol_id']))
+                    {
+                        $list[] = array('groupID: '.$row['rol_id'].$act_number, $row['rol_name'].' '.$act_group_short, $act_group);
+                    }
                 }
             }
 
