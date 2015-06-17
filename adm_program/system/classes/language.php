@@ -188,8 +188,13 @@ class Language
      */
     public function getCountryByCode($isoCode)
     {
+        if(strlen($isoCode) == 0)
+        {
+            return "";
+        }
+        
         $countries = $this->languageData->getCountriesArray();
-
+        
         if(count($countries) == 0)
         {
             $countries = $this->getCountries();
