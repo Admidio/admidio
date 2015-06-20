@@ -327,7 +327,7 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-create unique index IDX_INF_NAME_INTERN on %PREFIX%_invent_fields (inf_name_intern);
+create unique index IDX_%PREFIX%_INF_NAME_INTERN on %PREFIX%_invent_fields (inf_name_intern);
 
 
 /*==============================================================*/
@@ -346,7 +346,7 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-create unique index IDX_IND_ITM_INF_ID on %PREFIX%_invent_data (ind_itm_id, ind_inf_id);
+create unique index IDX_%PREFIX%_IND_ITM_INF_ID on %PREFIX%_invent_data (ind_itm_id, ind_inf_id);
 
 
 /*==============================================================*/
@@ -463,7 +463,7 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-create index IDX_MEM_ROL_USR_ID on %PREFIX%_members (mem_rol_id, mem_usr_id);
+create index IDX_%PREFIX%_MEM_ROL_USR_ID on %PREFIX%_members (mem_rol_id, mem_usr_id);
 
 
 /*==============================================================*/
@@ -501,7 +501,7 @@ engine = InnoDB
 default character set = utf8
 collate = utf8_unicode_ci;
 
-create index IDX_MSC_PART_ID on %PREFIX%_messages_content (msc_part_id);
+create index IDX_%PREFIX%_MSC_PART_ID on %PREFIX%_messages_content (msc_part_id);
 
 /*==============================================================*/
 /* Table: adm_organizations                                     */
@@ -520,7 +520,7 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-create unique index ak_shortname on %PREFIX%_organizations (org_shortname);
+create unique index ak_%PREFIX%_shortname on %PREFIX%_organizations (org_shortname);
 
 
 /*==============================================================*/
@@ -565,7 +565,7 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-create unique index IDX_PRF_ORG_ID_NAME on %PREFIX%_preferences (prf_org_id, prf_name);
+create unique index IDX_%PREFIX%_PRF_ORG_ID_NAME on %PREFIX%_preferences (prf_org_id, prf_name);
 
 
 /*==============================================================*/
@@ -701,7 +701,7 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-create index IDX_SESSION_ID on %PREFIX%_sessions (ses_session_id);
+create index IDX_%PREFIX%_SESSION_ID on %PREFIX%_sessions (ses_session_id);
 
 
 /*==============================================================*/
@@ -751,7 +751,7 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-create unique index IDX_USF_NAME_INTERN on %PREFIX%_user_fields (usf_name_intern);
+create unique index IDX_%PREFIX%_USF_NAME_INTERN on %PREFIX%_user_fields (usf_name_intern);
 
 
 /*==============================================================*/
@@ -770,7 +770,7 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-create unique index IDX_USD_USR_USF_ID on %PREFIX%_user_data (usd_usr_id, usd_usf_id);
+create unique index IDX_%PREFIX%_USD_USR_USF_ID on %PREFIX%_user_data (usd_usr_id, usd_usf_id);
 
 /*==============================================================*/
 /* Table: adm_user_log                                             */
@@ -820,7 +820,7 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-create unique index IDX_USR_LOGIN_NAME on %PREFIX%_users (usr_login_name);
+create unique index IDX_%PREFIX%_USR_LOGIN_NAME on %PREFIX%_users (usr_login_name);
 
 /*==============================================================*/
 /* Constraints                                                  */
