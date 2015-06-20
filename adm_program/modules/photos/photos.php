@@ -188,7 +188,7 @@ if($gCurrentUser->editPhotoRight())
 }
 
 //show link to download photos if enabled
-if($gPreferences['photo_download_enabled']==1 && $getPhotoId > 0)
+if($gPreferences['photo_download_enabled']==1 && $photoAlbum->getValue('pho_quantity') > 0)
 {
         //show link to download photos
         $photosMenu->addItem('menu_item_download_photos', $g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId,
@@ -465,7 +465,7 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
                     <div class="pull-right text-right">');
 
                         // check if download option is enabled
-                        if($gPreferences['photo_download_enabled']==1)
+                        if($gPreferences['photo_download_enabled'] == 1 && $childPhotoAlbum->getValue('pho_quantity') > 0)
                         {
                             $page->addHtml('
                                 <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img
