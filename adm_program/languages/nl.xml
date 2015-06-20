@@ -469,7 +469,6 @@
         <text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="edited">We zouden het enorm waarderen als u de onwikkeling van Admidio wilt steunen met een donatie!</text>
         <text id="INS_TABLE_PREFIX" development="new" translation="edited">Table prefix</text>
         <text id="INS_TABLE_PREFIX_INVALID" development="new" translation="edited">Table prefix bevat onjuiste karakters!</text>
-        <text id="INS_TABLE_PREFIX_OVERRIDE_DATA" development="new" translation="edited">Bestaande gegevens die onder dezelfde prefix staan zullen overschreven worden!</text>
         <text id="INS_TEAMS" development="new" translation="edited">Teams</text>
         <text id="INS_TRAINING" development="new" translation="edited">Training</text>
         <text id="INS_UPDATE" development="new" translation="edited">Update</text>
@@ -725,7 +724,7 @@
         <text id="ORG_NO_FIELD_CREATED" development="new" translation="edited">Er zijn nog geen specifieke velden voor deze organistaie aangemaakt!</text>
         <text id="ORG_NOTIFY_WEBMASTER" development="new" translation="edited">Beheerder informeren over nieuwe registraties</text>
         <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="edited">Aantal items per pagina</text>
-        <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Bepaal het aantal die per pagina getoond wordt. Er ontstaat pagina-nummering wanneer er meer geplaatst wordt. Print voorbeeld en export functie worden niet beinvloed. Als aantal 0 is, zal alles getoond worden zonder pagina-nummering. (standaard: 10)</text>
+        <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Bepaal het aantal die per pagina getoond wordt. Er ontstaat pagina-nummering wanneer er meer geplaatst wordt. Print voorbeeld en export functie worden niet beinvloed. Als aantal 0 is, zal alles getoond worden zonder pagina-nummering. (standaard: 0)</text>
         <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="edited">Alleen voor ingelogde gebruikers</text>
         <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="edited">Hier kunt u algemene voorkeuren en voorkeuren per module beheren.</text>
         <text id="ORG_PARENT_ORGANIZATION" development="new" translation="edited">Hoofd organisatie</text>

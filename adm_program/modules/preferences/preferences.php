@@ -345,14 +345,14 @@ $page->addHtml('
                         $fonts['Theme'] = 'Theme';
                         asort($fonts);
                         $form->addSelectBox('captcha_fonts', $gL10n->get('SYS_FONT'), $fonts, array('defaultValue' => $form_values['captcha_fonts'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_FONT'));
-                        $selectBoxEntries = array('11','12','13','14','15','16','17','18','20','22','24','30');
+                        $selectBoxEntries = array('11' => '11', '12' => '12', '13' => '13', '14' => '14', '16' => '16', '18' => '18', '20' => '20', '22' => '22', '24' => '24', '30' => '30');
                         $form->addSelectBox('captcha_font_size', $gL10n->get('SYS_FONT_SIZE'), $selectBoxEntries, array('defaultValue' => $form_values['captcha_font_size'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_FONT_SIZE'));
                         $form->addInput('captcha_background_color', $gL10n->get('ORG_CAPTCHA_BACKGROUND_COLOR'), $form_values['captcha_background_color'], array('maxLength' => 7, 'helpTextIdInline' => 'ORG_CAPTCHA_BACKGROUND_COLOR_TEXT', 'class' => 'form-control-small'));
                         $form->addInput('captcha_width', $gL10n->get('ORG_CAPTCHA_WIDTH').' ('.$gL10n->get('ORG_PIXEL').')', $form_values['captcha_width'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_CAPTCHA_WIDTH_DESC'));
                         $form->addInput('captcha_height', $gL10n->get('ORG_CAPTCHA_HEIGHT').' ('.$gL10n->get('ORG_PIXEL').')', $form_values['captcha_height'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_CAPTCHA_HEIGHT_DESC'));
                         $form->addInput('captcha_signs', $gL10n->get('ORG_CAPTCHA_SIGNS'), $form_values['captcha_signs'], array('maxLength' => 80, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNS_TEXT'));
                         $form->addInput('captcha_signature', $gL10n->get('ORG_CAPTCHA_SIGNATURE'), $form_values['captcha_signature'], array('maxLength' => 60, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNATURE_TEXT'));
-                        $selectBoxEntries = array('11','12','13','14','15','16','17','18','20','22','24','30');
+                        $selectBoxEntries = array('11' => '11', '12' => '12', '13' => '13', '14' => '14', '16' => '16', '18' => '18', '20' => '20', '22' => '22', '24' => '24', '30' => '30');
                         $form->addSelectBox('captcha_signature_font_size', $gL10n->get('SYS_FONT_SIZE'), $selectBoxEntries, array('defaultValue' => $form_values['captcha_signature_font_size'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNATURE_FONT_SIZE'));
 
                         if($gPreferences['captcha_type']=='pic')

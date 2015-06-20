@@ -246,7 +246,6 @@
         <text id="INS_SKYPE" development="new1" translation="edited">Skype</text>
         <text id="INS_TABLE_PREFIX" development="new" translation="edited">Préfixe de la table</text>
         <text id="INS_TABLE_PREFIX_INVALID" development="new" translation="edited">Le préfixe de la table contient des caractères non valide !</text>
-        <text id="INS_TABLE_PREFIX_OVERRIDE_DATA" development="new" translation="edited">L'information existante du même préfixe sera écrasé !</text>
         <text id="INS_TEAMS" development="new" translation="edited">Équipes</text>
         <text id="INS_TRAINING" development="new" translation="edited">Formation</text>
         <text id="INS_UPDATE" development="new" translation="edited">Mise à jour</text>
@@ -503,7 +502,7 @@
         <text id="ORG_NO_FIELD_CREATED" development="new" translation="edited">Aucun champ d'organisation spécifique ont été éviscérées encore!</text>
         <text id="ORG_NOTIFY_WEBMASTER" development="new" translation="edited">Informer l'administrateur des nouveaux enregistrements</text>
         <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="edited">Nombre d'entrées par page</text>
-        <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Définir le nombre d'éléments affichés sur une page. La pagination est fournie si nombre d'éléments dépasse la valeur définie. Aperçu avant impression et la fonctionnalité d'exportation ne sont pas affectés. Si la valeur est 0, tous les éléments seront cotées et la pagination est désactivée. (Par défaut: 10)</text>
+        <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Définir le nombre d'éléments affichés sur une page. La pagination est fournie si nombre d'éléments dépasse la valeur définie. Aperçu avant impression et la fonctionnalité d'exportation ne sont pas affectés. Si la valeur est 0, tous les éléments seront cotées et la pagination est désactivée. (Par défaut: 0)</text>
         <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="edited">Pour les utilisateurs connectés uniquement</text>
         <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="edited">Gérer les préférences de l'organisation générale ou préférences module ici.</text>
         <text id="ORG_PARENT_ORGANIZATION" development="new" translation="edited">Organisation parent</text>
