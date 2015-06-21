@@ -440,6 +440,7 @@ while($i<=$insgesamt)
     if($plg_geb_aktiv == 1)
     {
         $geb_valid = 0;
+
         if($plg_geb_login == 0)
         {
             $geb_valid = 1;
@@ -451,36 +452,29 @@ while($i<=$insgesamt)
                 $geb_valid = 1;
             }
         }
+        
         if($geb_valid == 1)
         {
             for($k=1;$k<=$geb-1;$k++)
             {
                 if($i==$geb_day[$k])
                 {
-                    $geb_aktuell = $geb_day[$k];
-                    if($plg_ajaxbox == 1)
+                    if($htmlContent !== '' && $plg_ajaxbox == 1)
                     {
-                        if($geb_anzahl >> 0)
+                        if($plg_ajaxbox == 1)
                         {
-                            $geb_link = $geb_link. '&';
+                            $htmlContent .= '<br />';
                         }
-                        $geb_anzahl++;
-                        $geb_link = $geb_link. 'gebname'.$geb_anzahl.'='.$geb_name[$k].'&gebalter'.$geb_anzahl.'='.$alter[$k];
-                    }
-                    else
-                    {
-                        if($geb_anzahl >> 0)
+                        else
                         {
-                            $geb_title = $geb_title. ', ';
+                            $htmlContent .= ', ';
                         }
-                        $geb_anzahl++;
-                        $geb_title = $geb_title. $geb_name[$k]. ' ('.$alter[$k].')';
                     }
+
+                    $htmlContent .= $geb_name[$k]. ' ('.$alter[$k].')';
+                    $geb_aktuell  = $geb_day[$k];
+                    $geb_anzahl++;
                 }
-            }
-            if($plg_ajaxbox == 1)
-            {
-                $geb_link = 'gebanzahl='.$geb_anzahl.'&'.$geb_link;
             }
         }
     }
@@ -491,15 +485,15 @@ while($i<=$insgesamt)
     
     // Zuerst Vorbelegung der Wochentagsklassen
     $plg_link_class_saturday = 'plgCalendarSaturday';
-    $plg_link_class_sunday = 'plgCalendarSunday';
-    $plg_link_class_weekday = 'plgCalendarDay';
+    $plg_link_class_sunday   = 'plgCalendarSunday';
+    $plg_link_class_weekday  = 'plgCalendarDay';
     
     if($i != $ter_aktuell && $i == $geb_aktuell) // Geburstag aber kein Termin
     {
         $plg_link_class = 'geb';
         $plg_link_class_saturday = 'plgCalendarBirthSaturday';
-        $plg_link_class_sunday = 'plgCalendarBirthSunday';
-        $plg_link_class_weekday = 'plgCalendarBirthDay';
+        $plg_link_class_sunday   = 'plgCalendarBirthSunday';
+        $plg_link_class_weekday  = 'plgCalendarBirthDay';
 
     }
 
@@ -507,8 +501,8 @@ while($i<=$insgesamt)
     {
         $plg_link_class = 'date';
         $plg_link_class_saturday = 'plgCalendarDateSaturday';
-        $plg_link_class_sunday = 'plgCalendarDateSunday';
-        $plg_link_class_weekday = 'plgCalendarDateDay';
+        $plg_link_class_sunday   = 'plgCalendarDateSunday';
+        $plg_link_class_weekday  = 'plgCalendarDateDay';
 
     }
     
@@ -516,8 +510,8 @@ while($i<=$insgesamt)
     {
         $plg_link_class = 'merge';
         $plg_link_class_saturday = 'plgCalendarMergeSaturday';
-        $plg_link_class_sunday = 'plgCalendarMergeSunday';
-        $plg_link_class_weekday = 'plgCalendarMergeDay';
+        $plg_link_class_sunday   = 'plgCalendarMergeSunday';
+        $plg_link_class_weekday  = 'plgCalendarMergeDay';
 
     }
     // Ende der Linklassenbestimmung
