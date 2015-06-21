@@ -19,8 +19,6 @@ require_once('../../system/login_valid.php');
 
 header('Content-type: text/html; charset=utf-8');
 
-$gMessage->showThemeBody(false);
-
 // Initialize and check the parameters
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('requireValue' => true));
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'change')));
@@ -30,14 +28,18 @@ if($getMode == 'change')
 {
     $gMessage->showHtmlTextOnly(true);
 }
+else
+{
+    $gMessage->showInModaleWindow();
+}
 
 $user = new User($gDb, $gProfileFields, $getUserId);
 
-// only the own password could be individual set. Webmaster could only send a generated password.
+// only the own password could be individual set. 
+// Webmaster could only send a generated password or set a password if no password was set before
 if(isMember($getUserId) == false
-|| strlen($user->getValue('usr_login_name')) == 0
 || ($gCurrentUser->isWebmaster() == false && $gCurrentUser->getValue('usr_id') != $getUserId)
-|| ($gCurrentUser->isWebmaster() == true  && strlen($user->getValue('EMAIL')) == 0 && $gPreferences['enable_system_mails'] == 1))
+|| ($gCurrentUser->isWebmaster() == true  && strlen($user->getValue('usr_password')) > 0 && strlen($user->getValue('EMAIL')) == 0 && $gPreferences['enable_system_mails'] == 1))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
