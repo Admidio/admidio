@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
+    <version id="3.0.0-Beta.4" translator="Markus Faßbender">
+        <text id="INS_DATABASE_LOGIN_DESC" development="changed" translation="edited">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</text>
+    </version>
     <version id="3.0.0-Beta.3" translator="Markus Faßbender">
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="edited">A date was changed</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1" development="new" translation="edited">A date at %VAR1% was changed.\n\nTitle: %VAR2%\nDate: %VAR3%\nCalendar: %VAR4%\n</text>
@@ -559,7 +562,6 @@
         <text id="INS_DATABASE_IS_UP_TO_DATE" development="new" translation="edited">Admidio's database is up to date</text>
         <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Updating database</text>
         <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Entering database information</text>
-        <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="edited">Provide your database access information here. Table prefix can be customized if needed. Customization should not be necessary if multiple Admidio installations are using the same database.</text>
         <text id="INS_DATABASE_NO_LOGIN" development="new" translation="edited">Provided database access information is incorrect!\n\nCheck and update access information or check if database is on-line and accessible.</text>
         <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Creating database</text>
         <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Administrative board of association</text>
