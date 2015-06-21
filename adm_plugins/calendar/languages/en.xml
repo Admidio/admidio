@@ -11,6 +11,5 @@
         <text id="PLG_CALENDAR_SUNDAY_SHORT" development="new" translation="todo">Su</text>
         <text id="PLG_CALENDAR_MORE" development="new" translation="todo"> (... more)</text>
         <text id="PLG_CALENDAR_CURRENT_MONTH" development="new" translation="todo">Current month</text>
-        <text id="PLG_CALENDAR_FULLTIME" development="new" translation="todo">(full-time event)</text>
     </version>
 </language>

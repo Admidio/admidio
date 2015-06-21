@@ -241,9 +241,13 @@ if($plg_ter_aktiv == 1)
         if($plg_kal_cat_show == 1)
         {
             if(substr($row['cat_name'], 3, 1)=='_')
-            {$calendar_name = $gL10n->get($row['cat_name']);}
+            {
+                $calendar_name = $gL10n->get($row['cat_name']);
+            }
             else
-            {$calendar_name = $row['cat_name'];}
+            {
+                $calendar_name = $row['cat_name'];
+            }
             $termin_titel[$ter]= $calendar_name. ': '. $termin_titel[$ter];
         }
 
@@ -323,6 +327,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
                 data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $monat-1, 1, $jahr))."',
                 success: function(html){
                     $('#plgCalendarContent').replaceWith(html);
+                    $('.admidio-calendar-link').popover();
                 }
             }); return false;\">&laquo;</a></th>";
             echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$monate[$monat-1].' '.$jahr.'</th>';
@@ -333,6 +338,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
                 data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $monat+1, 1, $jahr))."',
                 success: function(html){
                     $('#plgCalendarContent').replaceWith(html);
+                    $('.admidio-calendar-link').popover();
                 }
             }); return false;\">&raquo;</a></th>";
         }
@@ -471,7 +477,16 @@ while($i<=$insgesamt)
                         }
                     }
 
-                    $htmlContent .= $geb_name[$k]. ' ('.$alter[$k].')';
+                    if($plg_geb_icon == 1)
+                    {
+                        $icon = '<img src=\''.$g_root_path.'/adm_plugins/'.$plugin_folder.'/cake.png\' alt=\'Birthday\' /> ';
+                    }
+                    else
+                    {
+                        $icon = '';
+                    }
+
+                    $htmlContent .= $icon.$geb_name[$k]. ' ('.$alter[$k].')';
                     $geb_aktuell  = $geb_day[$k];
                     $geb_anzahl++;
                 }
@@ -562,7 +577,7 @@ while($i<=$insgesamt)
                 }
 
                 // plg_link_class bestimmt das Erscheinungsbild des jeweiligen Links
-                echo '<a class="'.$plg_link_class.'" href="'.$plg_link.'" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
+                echo '<a class="admidio-calendar-link '.$plg_link_class.'" href="'.$plg_link.'" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
                     title="'.$dateObj->format($gPreferences['system_date']).'" data-content="'.$htmlContent.'" target="'.$plg_link_target.'">'.$i.'</a>';
             }
             else
@@ -615,6 +630,7 @@ if($monat.$jahr != date('mY'))
             data: \'ajax_change&amp;date_id='.date('mY').'\',
             success: function(html){
                 $(\'#plgCalendarContent\').replaceWith(html);
+                $(\'.admidio-calendar-link\').popover();
             }
         }); return false;">'.$gL10n->get('PLG_CALENDAR_CURRENT_MONTH').'</a></div>';
 }
