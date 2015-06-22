@@ -250,6 +250,17 @@ elseif($getMode == 4)  // Creating organization
             {
                 showNotice($message, 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
             }
+            
+            // now check if a valid installation exists.
+            $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
+            $db->query($sql, false);
+            $count = $db->num_rows();
+        
+            if($count > 0)
+            {
+                // valid installation exists -> exit installation
+                showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
+            }
         }
     }
 
