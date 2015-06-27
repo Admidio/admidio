@@ -101,13 +101,16 @@ $table = new HtmlTable('roles_table', $page, true, true);
 // create array with all column heading values
 $columnHeading = array(
     $gL10n->get('SYS_CATEGORY'),
+    'ORDER',
     $listDescription,
     $gL10n->get('SYS_AUTHORIZATION'),
     $gL10n->get('ROL_PREF'),
     $gL10n->get('SYS_FEATURES'));
-$table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
+$table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));
 $table->setColumnWidth(3, '40%');
-$table->disableDatatablesColumnsSort(array(3, 4, 5));
+$table->disableDatatablesColumnsSort(array(4, 5, 6));
+$table->setDatatablesAlternativOrderColumns(1, 2);
+$table->setDatatablesColumnsHide(2);
 $table->setDatatablesGroupColumn(1);
 $table->addRowHeadingByArray($columnHeading);
 
@@ -301,6 +304,7 @@ while($row = $gDb->fetch_array($rol_result))
     // create array with all column values
     $columnValues = array(
         $categoryName,
+        $role->getValue('cat_sequence'),
         '<a href="'.$g_root_path.'/adm_program/modules/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'" title="'.$role->getValue('rol_description').'">'.$role->getValue('rol_name').'</a>',
         $assignRoles,
         $listView,
