@@ -121,7 +121,7 @@ create table %PREFIX%_components
     com_name                      varchar(255)  not null,
     com_name_intern               varchar(255)  not null,
     com_version                   varchar(10)   not null,
-    com_beta                      smallint,
+    com_beta                      smallint      not null default 0,
     com_update_step               integer       not null default 0,
     com_timestamp_installed       timestamp     not null default CURRENT_TIMESTAMP,
     primary key (com_id)
