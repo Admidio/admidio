@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de_sie">
+    <version id="3.0.0-Beta.4" translator="Markus Faßbender">
+        <text id="INS_DATABASE_LOGIN_DESC" development="changed" translation="todo">Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere Admidio-Installationen auf derselben Datenbank einrichten möchten.</text>
+    </version>
     <version id="3.0.0-Beta.3" translator="Markus Faßbender">
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="todo">Ein Termin wurde geändert</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1" development="new" translation="todo">Es wurde ein Termin bei %VAR1% geändert.\n\nTitel: %VAR2%\nDatum: %VAR3%\nKalender: %VAR4%\n</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2" development="new" translation="todo">Ort: %VAR1%\nRaum: %VAR2%\nTeilnehmer: %VAR3%\nGeändert von: %VAR4%\n</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3" development="new" translation="todo">Geändert am: %VAR1%</text>
+        <text id="INS_DATA_FULLY_ENTERED" development="new" translation="todo">Sie haben alle notwendigen Daten für die Installation von Admidio eingegeben.\n\nJetzt muss die Datenbank erstellt und mit Ihren Daten befüllt werden.</text>
         <text id="MAI_EMAIL_SEND_TO_RECEIVER" development="new" translation="todo">%VAR1% hat an die folgenden Empfänger: %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
         <text id="MAI_SEND_MAIL_TO_ROLE" development="changed" translation="todo">Ihre E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn Sie eingeloggt sind stehen Ihnen weitere Rollen und Empfänger zur Verfügung, an die Sie E-Mails schreiben können.</text>
         <text id="MSG_ACTIVE_FORMER_SHORT" development="new" translation="todo">Aktive und ehemalige</text>
@@ -57,7 +61,7 @@
         <text id="MAI_MAX_RECEIVER" development="new" translation="todo">Maximale Empfänger für E-Mails</text>
         <text id="MAI_MAX_RECEIVER_DESC" development="new" translation="todo">Dieser Wert gibt an, wieviele Empfänger man für ein E-Mail auswählen kann. Eine Rolle wird als ein einzelner Empfänger verstanden</text>
         <text id="MSG_ACTIVATE_PM_MODULE" development="new" translation="todo">Private Nachrichten aktivieren</text>
-        <text id="MSG_ACTIVATE_PM_MODULE_DESC" development="new" translation="todo">Private Nachrichten können über diese Einstellung komplett deaktiviert werden. Das Modul ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: Deaktiviert)</text>
+        <text id="MSG_ACTIVATE_PM_MODULE_DESC" development="new" translation="todo">Private Nachrichten können über diese Einstellung komplett deaktiviert werden. Das Modul ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: Aktiviert)</text>
         <text id="MSG_CHAT" development="new" translation="todo">Chat</text>
         <text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="todo">Chat aktivieren</text>
         <text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="todo">Chat Modul aktivieren, welches die Daten dynamisch alle 3 Sekunden aus der Datenbank holt. In der Datenbank werden maximal 99 Einträge gespeichert, ab der 100 meldung werden die ersten 50 wieder gelöscht.</text>
@@ -554,7 +558,6 @@
         <text id="INS_DATABASE_IS_UPDATED" development="new" translation="todo">Datenbank wird aktualisiert</text>
         <text id="INS_DATABASE_IS_UP_TO_DATE" development="new" translation="todo">Die Admidio-Datenbank ist aktuell</text>
         <text id="INS_DATABASE_LOGIN" development="new" translation="todo">Datenbank Zugangsdaten</text>
-        <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="todo">Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere Admidio-Installationen auf derselben Datenbank einrichten möchten.</text>
         <text id="INS_DATABASE_NO_LOGIN" development="new" translation="todo">Mit den Zugangsdaten konnte keine Verbindung zur Datenbank erstellt werden!\n\nKorrigieren Sie gegebenenfalls Ihre Zugangsdaten bzw. kontrollieren Sie, ob die Datenbank online ist.</text>
         <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="todo">Datenbank wird eingerichtet</text>
         <text id="INS_DESCRIPTION_BOARD" development="new" translation="todo">Vorstand des Vereins</text>
@@ -589,7 +592,6 @@
         <text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="todo">Wir würden uns freuen, wenn Sie die weitere Entwicklung von Admidio mit einer Spende unterstützen würdent!</text>
         <text id="INS_TABLE_PREFIX" development="new" translation="todo">Tabellenpräfix</text>
         <text id="INS_TABLE_PREFIX_INVALID" development="new" translation="todo">Das Tabellenpräfix enthält ungültige Zeichen!</text>
-        <text id="INS_TABLE_PREFIX_OVERRIDE_DATA" development="new" translation="todo">Bereits vorhandene Daten unter diesem Tabellenpräfix werden überschrieben!</text>
         <text id="INS_TEAMS" development="new" translation="todo">Mannschaften</text>
         <text id="INS_TRAINING" development="new" translation="todo">Training</text>
         <text id="INS_UPDATE" development="new" translation="todo">Update</text>
@@ -842,7 +844,7 @@
         <text id="ORG_NO_FIELD_CREATED" development="new" translation="todo">Es wurden noch keine organisationsspezifischen Profilfelder angelegt!</text>
         <text id="ORG_NOTIFY_WEBMASTER" development="new" translation="todo">Benachrichtung des Webmasters nach einer Registrierung</text>
         <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="todo">Anzahl Einträge pro Seite</text>
-        <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)</text>
+        <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 0)</text>
         <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="todo">Nur für angemeldete Benutzer</text>
         <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="todo">Allgemeine Admidio-Einstellungen, sowie Einstellungen zu den einzelnen Modulen, können hier festgelegt werden.</text>
         <text id="ORG_PARENT_ORGANIZATION" development="new" translation="todo">Übergeordnete Organisation</text>

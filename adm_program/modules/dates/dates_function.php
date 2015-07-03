@@ -108,6 +108,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
 
     if(isset($_POST['date_roles']) == false || array_count_values($_POST['date_roles']) == 0)
     {
+        $_SESSION['dates_request']['date_roles'] = '';
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
     }
 

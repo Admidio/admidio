@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 /******************************************************************************
  * Photofunktionen
@@ -128,7 +127,6 @@ function deletePhoto($pho_id, $pic_nr)
         $photo_album->save();
     }
 };
-
 
 // Foto um 90° drehen
 if($getJob == 'rotate')

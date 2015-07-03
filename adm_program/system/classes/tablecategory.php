@@ -177,14 +177,18 @@ class TableCategory extends TableAccess
         return $value;
     }
 
-    // die Kategorie wird um eine Position in der Reihenfolge verschoben
+    /** Change the internal sequence of this category. It can be moved one place up or down
+     *  @param $mode This could be @b UP or @b DOWN. 
+     */
     public function moveSequence($mode)
     {
         global $gCurrentOrganization;
 
-        // Anzahl orgaunabhaengige ermitteln, da diese nicht mit den abhaengigen vermischt werden duerfen
+        // count all categories that are organization independent because these categories should not
+        // be mixed with the organization categories. Hidden categories are sidelined.
         $sql = 'SELECT COUNT(1) as count FROM '. TBL_CATEGORIES. '
                  WHERE cat_type = \''. $this->getValue('cat_type'). '\'
+                   AND cat_name_intern NOT LIKE \'CONFIRMATION_OF_PARTICIPATION\'
                    AND cat_org_id IS NULL ';
         $this->db->query($sql);
         $row = $this->db->fetch_array();

@@ -198,7 +198,6 @@ elseif($getMode == 3)  // Enter database access information
     $form->addInput('db_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password'));
     $form->addInput('db_database', $gL10n->get('SYS_DATABASE'), $database, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('db_prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix, array('maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
-    $form->addDescription('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA').'</div>');
     $form->closeGroupBox();
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=2'));
     $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'layout/forward.png'));
@@ -263,6 +262,17 @@ elseif($getMode == 4)  // Creating organization
             if($message !== '')
             {
                 showNotice($message, 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
+            }
+            
+            // now check if a valid installation exists.
+            $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
+            $db->query($sql, false);
+            $count = $db->num_rows();
+        
+            if($count > 0)
+            {
+                // valid installation exists -> exit installation
+                showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
             }
         }
     }
@@ -339,7 +349,7 @@ elseif($getMode == 5)  // Creating addministrator
     $form->addInput('user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED));
     $form->closeGroupBox();
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=4'));
-    $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
+    $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'layout/forward.png'));
     $form->show();
 }
 elseif($getMode == 6)  // Creating configuration file
@@ -422,7 +432,10 @@ elseif($getMode == 6)  // Creating configuration file
         fclose($configFileHandle);
 
         // start installation
-        header('Location: installation.php?mode=8');
+        $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=8');
+        $form->setFormDescription($gL10n->get('INS_DATA_FULLY_ENTERED'), $gL10n->get('INS_INSTALL_ADMIDIO'));
+        $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
+        $form->show();
     }
     else
     {
@@ -431,7 +444,7 @@ elseif($getMode == 6)  // Creating configuration file
         $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', $rootPath.'/adm_my_files', 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
         $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=5'));
         $form->addButton('download_config', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'), array('icon' => 'layout/page_white_download.png', 'link' => 'installation.php?mode=7'));
-        $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
+        $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
         $form->show();
     }
 }

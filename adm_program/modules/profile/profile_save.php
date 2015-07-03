@@ -238,7 +238,6 @@ if($getNewUser == 2)
     $user->setValue('usr_password', $_POST['usr_password']);
 }
 
-
 // Falls der User sich registrieren wollte, aber ein Captcha geschaltet ist,
 // muss natuerlich der Code ueberprueft werden
 if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1)
@@ -340,4 +339,3 @@ else
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
 ?>
-

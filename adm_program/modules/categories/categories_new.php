@@ -24,7 +24,7 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getCatId = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
-$getType  = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF')));
+$getType  = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
 $getTitle = admFuncVariableIsValid($_GET, 'title', 'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
 
 // Modus und Rechte pruefen
@@ -41,6 +41,10 @@ elseif($getType == 'USF' && $gCurrentUser->editUsers() == false)
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 elseif($getType == 'DAT' && $gCurrentUser->editDates() == false)
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+}
+elseif($getType == 'AWA' && $gCurrentUser->editUsers() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
+    <version id="3.0.0-Beta.4" translator="Markus Faßbender">
+        <text id="INS_DATABASE_LOGIN_DESC" development="changed" translation="edited">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</text>
+    </version>
     <version id="3.0.0-Beta.3" translator="Markus Faßbender">
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="edited">A date was changed</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1" development="new" translation="edited">A date at %VAR1% was changed.\n\nTitle: %VAR2%\nDate: %VAR3%\nCalendar: %VAR4%\n</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2" development="new" translation="edited">Location: %VAR1%\nRoom: %VAR2%\nParticipants: %VAR3%\nChanged by: %VAR4%\n</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3" development="new" translation="edited">Changed at: %VAR1%</text>
+        <text id="INS_DATA_FULLY_ENTERED" development="new" translation="todo">You have entered all the necessary data for installing Admidio.\n\nNow the database has to be created and filled with your data.</text>
         <text id="MAI_EMAIL_SEND_TO_RECEIVER" development="new" translation="edited">%VAR1% sent to the receivers: %VAR3% from %VAR2% the following E-Mail:</text>
         <text id="MAI_SEND_MAIL_TO_ROLE" development="changed" translation="edited">Your e-mail will be sent to all members with an e-mail address of the selected role or the selected recipients .\n\nFurther roles and recipients are available for logged in users only.</text>
         <text id="MSG_ACTIVE_FORMER_SHORT" development="new" translation="edited">Active and former</text>
@@ -57,7 +61,7 @@
         <text id="MAI_MAX_RECEIVER" development="new" translation="edited">Maximum number of mail recipients</text>
         <text id="MAI_MAX_RECEIVER_DESC" development="new" translation="edited">This value defines the maximum amount of mail recipients. A role counts as one recipient.</text>
         <text id="MSG_ACTIVATE_PM_MODULE" development="new" translation="edited">Activate private messages</text>
-        <text id="MSG_ACTIVATE_PM_MODULE_DESC" development="new" translation="edited">This option allows to deactivate private messages. The module will neither be callable nor listed in the overview. (Default: deactivated)</text>
+        <text id="MSG_ACTIVATE_PM_MODULE_DESC" development="new" translation="edited">This option allows to deactivate private messages. The module will neither be callable nor listed in the overview. (Default: Activated)</text>
         <text id="MSG_CHAT" development="new" translation="edited">Chat</text>
         <text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="edited">Activate chat</text>
         <text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="edited">Activate chat module. Messages will be fetched dynamically from database every 3 seconds. Only 99 entries will be saved into database. As soon as the 100th entry is to be saved the first 50 entries will be deleted.</text>
@@ -89,7 +93,7 @@
         <text id="PHO_ALBUM_LOCK" development="new" translation="edited">Lock album</text>
         <text id="PHO_ALBUM_LOCK_DESC" development="new" translation="edited">Locked albums can not be viewed by visitors or members, e.g. you can lock an album as long as all images are uploading.</text>
         <text id="PHO_ALBUM_UNLOCK" development="new" translation="edited">Unlock album</text>
-        <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="edited">With this option you can define how the images will be displayed within the foto module. This can be done with a modal window which will be opened as seperate browser window. The image preview will stay active in the background. If the image should be displayed in the same window the currenct image preview will be closed. The third option allows to show the image in a popup window which can be used in addition to the image preview. (Default: Modale window)</text>
+        <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="edited">With this option you can define how the images will be displayed within the foto module. This can be done with a modal window which will be opened as seperate browser window. The image preview will stay active in the background. If the image should be displayed in the same window the currenct image preview will be closed. The third option allows to show the image in a popup window which can be used in addition to the image preview. (Default: Modal window)</text>
         <text id="PHO_MODAL_WINDOW" development="new" translation="edited">Modal window</text>
         <text id="PHO_MAX_PHOTO_SIZE_WIDTH" development="new" translation="edited">Maximum image size (width)</text>
         <text id="PHO_MAX_PHOTO_SIZE_HEIGHT" development="new" translation="edited">Maximum image size (height)</text>
@@ -217,7 +221,7 @@
         <text id="ORG_SHOW_ALL_USERS" development="new" translation="edited">Show all users</text>
         <text id="ORG_SHOW_ALL_USERS_DESC" development="new" translation="edited">If this option is enabled, former members and members of other organizations will be displayed in addition to the active members of the current organization. Otherwise only members of the current organization will be displayed. When creating new users or assigning registrations all organizations will still be checked for existing users.</text>
         <text id="ORG_SYSTEM_MAIL_ADDRESS" development="changed" translation="edited">Email address</text>
-        <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="changed" translation="edited">This field should contain the email address of an administrator as it will be used as sender address of system notifications, e.g. for registration confirmation. (Default: webmaster @% VAR1%)</text>
+        <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="changed" translation="edited">This field should contain the email address of an administrator as it will be used as sender address of system notifications, e.g. for registration confirmation. (Default: webmaster @%VAR1%)</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="changed" translation="edited">Notification for new entries</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="changed" translation="edited">This function is used to enable the system notification for new entries within the modules. It is used as a monitoring function within Admidio. Thus the administrator can be notified by e-mail when new entries are added within a module (only new entries will be considered). The system notifications will be sent to the email address %VAR1%. (Default: no)</text>
         <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="changed" translation="edited">Here you can amend the text of each system notification. The texts are divided into two parts (subject and content) and are identified by #subject# and #content#. The content for each section follows it.\n\nIn each mail the following wildcards can be used. They will be replaced with the corresponding content at runtime</text>
@@ -525,7 +529,7 @@
         <text id="GBO_GUESTBOOK" development="new" translation="edited">Guestbook</text>
         <text id="GBO_GUESTBOOK_DESC" development="new" translation="edited">Guests and users are able to leave greetings and comments, and can annotate other's entries.</text>
         <text id="GBO_GUESTBOOK_MODERATION" development="new" translation="edited">Moderation activated for</text>
-        <text id="GBO_GUESTBOOK_MODERATION_DESC" development="new" translation="edited">Guestbook entries will be displayed after moderation. Define if moderation should be performed in case of guests or for logged in users only, or nobody's comments should be checked in advance. (default: no)</text>
+        <text id="GBO_GUESTBOOK_MODERATION_DESC" development="new" translation="edited">Guestbook entries will be displayed after moderation. Define if moderation should be performed in case of guests or for logged in users only, or nobody's comments should be checked in advance. (default: Nobody)</text>
         <text id="GBO_HIDE_COMMENTS" development="new" translation="edited">Hide comments</text>
         <text id="GBO_INITIAL_COMMENTS_LOADING" development="new" translation="edited">Display comments right away</text>
         <text id="GBO_INITIAL_COMMENTS_LOADING_DESC" development="new" translation="edited">When this option is active and a guestbook page is being loaded, comments on this page will be loaded right away. Otherwise user has to click a hyperlink in order to reveal comments. (default: no)</text>
@@ -558,7 +562,6 @@
         <text id="INS_DATABASE_IS_UP_TO_DATE" development="new" translation="edited">Admidio's database is up to date</text>
         <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Updating database</text>
         <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Entering database information</text>
-        <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="edited">Provide your database access information here. Table prefix can be customized if needed. Customization should not be necessary if multiple Admidio installations are using the same database.</text>
         <text id="INS_DATABASE_NO_LOGIN" development="new" translation="edited">Provided database access information is incorrect!\n\nCheck and update access information or check if database is on-line and accessible.</text>
         <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Creating database</text>
         <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Administrative board of association</text>
@@ -596,7 +599,6 @@
         <text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="edited">We would appreciate a lot if you could support the development of Admidio with your donation!</text>
         <text id="INS_TABLE_PREFIX" development="new" translation="edited">Table prefix</text>
         <text id="INS_TABLE_PREFIX_INVALID" development="new" translation="edited">Table prefix includes invalid character!</text>
-        <text id="INS_TABLE_PREFIX_OVERRIDE_DATA" development="new" translation="edited">Existing data stored under same prefix will be overwritten!</text>
         <text id="INS_TEAMS" development="new" translation="edited">Teams</text>
         <text id="INS_TRAINING" development="new" translation="edited">Training</text>
         <text id="INS_UPDATE" development="new" translation="edited">Update</text>
@@ -849,7 +851,7 @@
         <text id="ORG_NO_FIELD_CREATED" development="new" translation="edited">No organization specific field have been cerated yet!</text>
         <text id="ORG_NOTIFY_WEBMASTER" development="new" translation="edited">Informing administrator about new registrations</text>
         <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="edited">Number of entries per page</text>
-        <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Define number of items displayed on a page. Pagination is provided if number of items exceeds defined value. Print preview and export functionality are not affected. If value is 0, all items will be listed and pagination is deactivated. (default: 10)</text>
+        <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Define number of items displayed on a page. Pagination is provided if number of items exceeds defined value. Print preview and export functionality are not affected. If value is 0, all items will be listed and pagination is deactivated. (default: 0)</text>
         <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="edited">For logged in users only</text>
         <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="edited">Manage general organization preferences or module preferences here.</text>
         <text id="ORG_PARENT_ORGANIZATION" development="new" translation="edited">Parent organization</text>

@@ -197,12 +197,12 @@ class HtmlForm extends HtmlFormBasic
 
             if($optionsAll['onClickText'] !== '')
             {
-                $javascriptCode .= '$btn = $(this).button("loading");';
+                $javascriptCode .= '$(this).button("loading");';
             }
 
             if($optionsAll['type'] === 'submit')
             {
-                $javascriptCode .= '$("#'.$this->id.'").submit();';
+                $javascriptCode .= '$(this).submit();';
             }
 
             $javascriptCode = '$("#'.$id.'").click(function(event) {

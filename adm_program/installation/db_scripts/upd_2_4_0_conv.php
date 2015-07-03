@@ -86,7 +86,7 @@ $sql = 'alter table '.$g_tbl_praefix.'_members add constraint '.$g_tbl_praefix.'
       references '.$g_tbl_praefix.'_users (usr_id) on delete restrict on update restrict';
 $gDb->query($sql, false);
 
-$sql = 'create index IDX_MEM_ROL_USR_ID on '. TBL_MEMBERS. ' (mem_rol_id, mem_usr_id)';
+$sql = 'create index IDX_'.$g_tbl_praefix.'_MEM_ROL_USR_ID on '. TBL_MEMBERS. ' (mem_rol_id, mem_usr_id)';
 $gDb->query($sql);
 
 $sql = 'UPDATE '. TBL_ROLES. ' SET rol_webmaster = 1

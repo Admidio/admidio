@@ -2,15 +2,16 @@
 /******************************************************************************
  * Photo download
  *
- * creates a zipfile on the fly with all fotos including sub-albums and returns it
+ * Creates a zip file on the fly with all photos including sub-albums and returns it
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
- * pho_id: id of album to download
- * photo_nr: Number of photo that should be downloaded
+ *
+ * pho_id   : id of album to download
+ * photo_nr : Number of photo that should be downloaded
  *
  *****************************************************************************/
 
@@ -63,7 +64,12 @@ if($photo_album->getValue('pho_locked')==1 && (!$gCurrentUser->editPhotoRight())
     $gMessage->show($gL10n->get('PHO_ALBUM_NOT_APPROVED'));
 }
 
-$ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
+$albumFolder = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
+
+if($photo_album->getValue('pho_quantity') == 0)
+{
+    $gMessage->show($gL10n->get('PHO_NO_ALBUM_CONTENT'));
+}
 
 // check whether to take original version instead of scaled one
 $takeOriginalsIfAvailable = false;
@@ -89,7 +95,7 @@ if($getPhotoNr == null)
         if ($takeOriginalsIfAvailable)
         {
             // try to find the original version if available, if not fallback to the scaled one
-            $path = $ordner.'/originals/'.$i;
+            $path = $albumFolder.'/originals/'.$i;
             if(file_exists($path.'.jpg'))
             {
                 $path = $path.'.jpg';
@@ -104,7 +110,7 @@ if($getPhotoNr == null)
             }
         }
 
-        $path = $ordner.'/'.$i.'.jpg';
+        $path = $albumFolder.'/'.$i.'.jpg';
         if(file_exists($path)){
             $zip->addFromString(basename($path),  file_get_contents($path));
         }
@@ -145,7 +151,7 @@ if($getPhotoNr == null)
         // ignore locked albums owned by others
         if($photo_album->getValue('pho_locked')==0 || $gCurrentUser->editPhotoRight())
         {
-            $ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
+            $albumFolder = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
             // get number of photos in total
             $quantity = $photo_album->getValue('pho_quantity');
             $photo_album_name = $photo_album->getValue('pho_name');
@@ -154,7 +160,7 @@ if($getPhotoNr == null)
                 if ($takeOriginalsIfAvailable)
                 {
                     // try to find the original version if available, if not fallback to the scaled one
-                    $path = $ordner.'/originals/'.$i;
+                    $path = $albumFolder.'/originals/'.$i;
                     if(file_exists($path.'.jpg'))
                     {
                         $path = $path.'.jpg';
@@ -168,7 +174,7 @@ if($getPhotoNr == null)
                         continue;
                     }
                 }
-                $path = $ordner.'/'.$i.'.jpg';
+                $path = $albumFolder.'/'.$i.'.jpg';
                 if(file_exists($path))
                 {
                     $zip->addFromString($photo_album_name."/".basename($path),  file_get_contents($path));
@@ -203,7 +209,7 @@ if($getPhotoNr == null)
     if ($takeOriginalsIfAvailable)
     {
         // try to find the original version if available, if not fallback to the scaled one
-        $path = $ordner.'/originals/'.$getPhotoNr;
+        $path = $albumFolder.'/originals/'.$getPhotoNr;
         if(file_exists($path.'.jpg'))
         {
             header('Content-Type: application/jpeg');
@@ -222,7 +228,7 @@ if($getPhotoNr == null)
         }
     }
 
-    $path = $ordner.'/'.$getPhotoNr.'.jpg';
+    $path = $albumFolder.'/'.$getPhotoNr.'.jpg';
 
     if(file_exists($path)){
         header('Content-Type: application/jpeg');

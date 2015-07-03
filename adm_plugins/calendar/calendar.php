@@ -241,9 +241,13 @@ if($plg_ter_aktiv == 1)
         if($plg_kal_cat_show == 1)
         {
             if(substr($row['cat_name'], 3, 1)=='_')
-            {$calendar_name = $gL10n->get($row['cat_name']);}
+            {
+                $calendar_name = $gL10n->get($row['cat_name']);
+            }
             else
-            {$calendar_name = $row['cat_name'];}
+            {
+                $calendar_name = $row['cat_name'];
+            }
             $termin_titel[$ter]= $calendar_name. ': '. $termin_titel[$ter];
         }
 
@@ -323,6 +327,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
                 data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $monat-1, 1, $jahr))."',
                 success: function(html){
                     $('#plgCalendarContent').replaceWith(html);
+                    $('.admidio-calendar-link').popover();
                 }
             }); return false;\">&laquo;</a></th>";
             echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$monate[$monat-1].' '.$jahr.'</th>';
@@ -333,6 +338,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
                 data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $monat+1, 1, $jahr))."',
                 success: function(html){
                     $('#plgCalendarContent').replaceWith(html);
+                    $('.admidio-calendar-link').popover();
                 }
             }); return false;\">&raquo;</a></th>";
         }
@@ -440,6 +446,7 @@ while($i<=$insgesamt)
     if($plg_geb_aktiv == 1)
     {
         $geb_valid = 0;
+
         if($plg_geb_login == 0)
         {
             $geb_valid = 1;
@@ -451,36 +458,38 @@ while($i<=$insgesamt)
                 $geb_valid = 1;
             }
         }
+        
         if($geb_valid == 1)
         {
             for($k=1;$k<=$geb-1;$k++)
             {
                 if($i==$geb_day[$k])
                 {
-                    $geb_aktuell = $geb_day[$k];
-                    if($plg_ajaxbox == 1)
+                    if($htmlContent !== '' && $plg_ajaxbox == 1)
                     {
-                        if($geb_anzahl >> 0)
+                        if($plg_ajaxbox == 1)
                         {
-                            $geb_link = $geb_link. '&';
+                            $htmlContent .= '<br />';
                         }
-                        $geb_anzahl++;
-                        $geb_link = $geb_link. 'gebname'.$geb_anzahl.'='.$geb_name[$k].'&gebalter'.$geb_anzahl.'='.$alter[$k];
+                        else
+                        {
+                            $htmlContent .= ', ';
+                        }
+                    }
+
+                    if($plg_geb_icon == 1)
+                    {
+                        $icon = '<img src=\''.$g_root_path.'/adm_plugins/'.$plugin_folder.'/cake.png\' alt=\'Birthday\' /> ';
                     }
                     else
                     {
-                        if($geb_anzahl >> 0)
-                        {
-                            $geb_title = $geb_title. ', ';
-                        }
-                        $geb_anzahl++;
-                        $geb_title = $geb_title. $geb_name[$k]. ' ('.$alter[$k].')';
+                        $icon = '';
                     }
+
+                    $htmlContent .= $icon.$geb_name[$k]. ' ('.$alter[$k].')';
+                    $geb_aktuell  = $geb_day[$k];
+                    $geb_anzahl++;
                 }
-            }
-            if($plg_ajaxbox == 1)
-            {
-                $geb_link = 'gebanzahl='.$geb_anzahl.'&'.$geb_link;
             }
         }
     }
@@ -491,15 +500,15 @@ while($i<=$insgesamt)
     
     // Zuerst Vorbelegung der Wochentagsklassen
     $plg_link_class_saturday = 'plgCalendarSaturday';
-    $plg_link_class_sunday = 'plgCalendarSunday';
-    $plg_link_class_weekday = 'plgCalendarDay';
+    $plg_link_class_sunday   = 'plgCalendarSunday';
+    $plg_link_class_weekday  = 'plgCalendarDay';
     
     if($i != $ter_aktuell && $i == $geb_aktuell) // Geburstag aber kein Termin
     {
         $plg_link_class = 'geb';
         $plg_link_class_saturday = 'plgCalendarBirthSaturday';
-        $plg_link_class_sunday = 'plgCalendarBirthSunday';
-        $plg_link_class_weekday = 'plgCalendarBirthDay';
+        $plg_link_class_sunday   = 'plgCalendarBirthSunday';
+        $plg_link_class_weekday  = 'plgCalendarBirthDay';
 
     }
 
@@ -507,8 +516,8 @@ while($i<=$insgesamt)
     {
         $plg_link_class = 'date';
         $plg_link_class_saturday = 'plgCalendarDateSaturday';
-        $plg_link_class_sunday = 'plgCalendarDateSunday';
-        $plg_link_class_weekday = 'plgCalendarDateDay';
+        $plg_link_class_sunday   = 'plgCalendarDateSunday';
+        $plg_link_class_weekday  = 'plgCalendarDateDay';
 
     }
     
@@ -516,8 +525,8 @@ while($i<=$insgesamt)
     {
         $plg_link_class = 'merge';
         $plg_link_class_saturday = 'plgCalendarMergeSaturday';
-        $plg_link_class_sunday = 'plgCalendarMergeSunday';
-        $plg_link_class_weekday = 'plgCalendarMergeDay';
+        $plg_link_class_sunday   = 'plgCalendarMergeSunday';
+        $plg_link_class_weekday  = 'plgCalendarMergeDay';
 
     }
     // Ende der Linklassenbestimmung
@@ -568,7 +577,7 @@ while($i<=$insgesamt)
                 }
 
                 // plg_link_class bestimmt das Erscheinungsbild des jeweiligen Links
-                echo '<a class="'.$plg_link_class.'" href="'.$plg_link.'" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
+                echo '<a class="admidio-calendar-link '.$plg_link_class.'" href="'.$plg_link.'" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
                     title="'.$dateObj->format($gPreferences['system_date']).'" data-content="'.$htmlContent.'" target="'.$plg_link_target.'">'.$i.'</a>';
             }
             else
@@ -621,6 +630,7 @@ if($monat.$jahr != date('mY'))
             data: \'ajax_change&amp;date_id='.date('mY').'\',
             success: function(html){
                 $(\'#plgCalendarContent\').replaceWith(html);
+                $(\'.admidio-calendar-link\').popover();
             }
         }); return false;">'.$gL10n->get('PLG_CALENDAR_CURRENT_MONTH').'</a></div>';
 }

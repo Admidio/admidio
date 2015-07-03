@@ -56,7 +56,7 @@
         <text id="MAI_MAX_RECEIVER" development="new" translation="edited">Maximum antal mail modtagere</text>
         <text id="MAI_MAX_RECEIVER_DESC" development="new" translation="edited">Denne værdi beskriver maximum antallet af samtidige mail modtagere. En rolle tæller kun som én modtager.</text>
         <text id="MSG_ACTIVATE_PM_MODULE" development="new" translation="edited">Aktiver private beskeder</text>
-        <text id="MSG_ACTIVATE_PM_MODULE_DESC" development="new" translation="edited">Denne indstilling tillader deaktivering af private meddelelser. Dette modul vil ikke være tilgængeligt eller vist i oversigten. (Standard: deaktiveret)</text>
+        <text id="MSG_ACTIVATE_PM_MODULE_DESC" development="new" translation="edited">Denne indstilling tillader deaktivering af private meddelelser. Dette modul vil ikke være tilgængeligt eller vist i oversigten. (Standard: aktiveret)</text>
         <text id="MSG_CHAT" development="new" translation="edited">Chat</text>
         <text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="edited">Aktiver chat</text>
         <text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="edited">Aktiver chat modul. Chat beskeder vil blive hentet dynamisk fra databasen hvert 3 sekund. Kun 99 beskeder vil blive gemt i databasen. Når besked nr. 100 gemmes så slettes de første 50 beskeder.</text>
@@ -215,7 +215,7 @@
         <text id="ORG_SHOW_ALL_USERS" development="new" translation="edited">Vis alle brugere</text>
         <text id="ORG_SHOW_ALL_USERS_DESC" development="new" translation="edited">Hvis denne mulighed er aktiveret, vil tidligere medlemmer og medlemmer af andre organisationer blive vist sammen med de aktive medlemmer af den nuværende organisation/forening. Ellers så vil kun medlemmer af den nuværende organisation/forening blive vist. Når der oprettes nye brugere eller der tildeles registreringer vil alle organisationer/foreninger blive checket for eksisterende brugere.</text>
         <text id="ORG_SYSTEM_MAIL_ADDRESS" development="changed" translation="edited">E-mail adresse</text>
-        <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="changed" translation="edited">Dette felt skal indeholde e-mail adressen på en administrator, da den vil blive brugt som afsender adresse for system beskeder, som f.eks. registrerings bekræftelser. (Standard: webmaster @% VAR1%)</text>
+        <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="changed" translation="edited">Dette felt skal indeholde e-mail adressen på en administrator, da den vil blive brugt som afsender adresse for system beskeder, som f.eks. registrerings bekræftelser. (Standard: webmaster @%VAR1%)</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="changed" translation="edited">Besked om nye poster</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="changed" translation="edited">Denne funktion bliver brugt til at aktivere system beskeder for nye poster inde i moduler. Det anvendes som en monitorerings funktion inde i Admidio. Så administratoren kan blive gjort opmærksom på når nye poster bliver tilføjet inde i et modul (kun NYE poster vil blive taget i betragtning). Disse system beskeder vil blive sendt til e-mail adressen %VAR1%. (Standard: Nej)</text>
         <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="changed" translation="edited">Her kan du ændre teksten til hver enkelt system besked. Teksterne er delt i to dele(emne og indhold) og er identificeret med #subject# og #content#. Indholdet i hver sektion kommer lige efter overskriften.\n\nI hver mail kan de følgende wildcards bruges. Disse vil blive erstattet af indhold når systemet køres.</text>
@@ -586,7 +586,6 @@
         <text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="edited">Vi vil sætte stor pris på hvis du kunne støtte udviklingen af Admidio med en donation!</text>
         <text id="INS_TABLE_PREFIX" development="new" translation="edited">Tabel prefix</text>
         <text id="INS_TABLE_PREFIX_INVALID" development="new" translation="edited">Tabel prefix indeholder ulovlige karakterer!</text>
-        <text id="INS_TABLE_PREFIX_OVERRIDE_DATA" development="new" translation="edited">Eksisterende data gemt under samme prefix vil blive overskrevet!</text>
         <text id="INS_TEAMS" development="new" translation="edited">Teams</text>
         <text id="INS_TRAINING" development="new" translation="edited">Træning</text>
         <text id="INS_UPDATE" development="new" translation="edited">Opdater</text>
@@ -836,7 +835,7 @@
         <text id="ORG_NO_FIELD_CREATED" development="new" translation="edited">Intet organisations specifikt felt er oprettet endnu!</text>
         <text id="ORG_NOTIFY_WEBMASTER" development="new" translation="edited">Informer administrator om nye registreringer</text>
         <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="edited">Antal poster pr. side</text>
-        <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Definér antal poster vist pr. side. Sidenummerering træder i kraft hvis antallet af poster overskrider denne definerede værdi. Print eksempel og eksport funktionaliteten bliver ikke påvirket af dette. Hvis værdien er 0, vil alle poster blive listet og sidenummerering deaktiveret. (Standard: 10)</text>
+        <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Definér antal poster vist pr. side. Sidenummerering træder i kraft hvis antallet af poster overskrider denne definerede værdi. Print eksempel og eksport funktionaliteten bliver ikke påvirket af dette. Hvis værdien er 0, vil alle poster blive listet og sidenummerering deaktiveret. (Standard: 0)</text>
         <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="edited">Kun for brugere der er logget ind</text>
         <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="edited">Administrer generelle organisations indstillinger og modul indstillinger.</text>
         <text id="ORG_PARENT_ORGANIZATION" development="new" translation="edited">Forældre organisation</text>

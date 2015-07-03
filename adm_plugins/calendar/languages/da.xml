@@ -11,6 +11,5 @@
         <text id="PLG_CALENDAR_SUNDAY_SHORT" development="new" translation="todo">Sø</text>
         <text id="PLG_CALENDAR_MORE" development="new" translation="todo"> (... mere)</text>
         <text id="PLG_CALENDAR_CURRENT_MONTH" development="new" translation="todo">Nuværende måned</text>
-        <text id="PLG_CALENDAR_FULLTIME" development="new" translation="todo">(Hel dags event)</text>
     </version>
 </language>

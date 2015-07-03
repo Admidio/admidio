@@ -78,7 +78,6 @@ function CheckVersion($current_version, $check_stable_version, $check_beta_versi
 // Erreichbarkeit der Updateinformation prüfen und bei Verbindung
 // verfügbare Admidio Versionen vom Server einlesen (Textfile)
 // Zunächst die Methode selektieren (CURL bevorzugt)
-$available = 0;
 if(@file_get_contents('http://www.admidio.org/update.txt') === false)
 {
     // Admidio Versionen nicht auslesbar

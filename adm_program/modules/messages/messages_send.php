@@ -34,6 +34,11 @@ if (isset($_POST['msg_to']))
 {
     $postTo      = $_POST['msg_to'];
 }
+else
+{
+    // message when no receiver is given
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TO')));
+}
 
 $message = new TableMessage($gDb, $getMsgId);
 
