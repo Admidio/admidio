@@ -135,10 +135,9 @@ while($row = $gDb->fetch_array($result))
         $block_id = 'admCategory'.$userField->getValue('usf_cat_id');
         
         $table->addTableBody();
-        $table->addRow();
-        $table->addColumn('', array('class' => 'admidio-group-heading', 'id' => 'group_'.$block_id), 'td');
-        $table->addAttribute('colspan', '8');
-        $table->addData('<span id="caret_'.$block_id.'" class="caret"></span>'.$userField->getValue('cat_name'));
+        $table->addRow('', array('class' => 'admidio-group-heading'));
+        $table->addColumn('<span id="caret_'.$block_id.'" class="caret"></span>'.$userField->getValue('cat_name'), 
+            array('id' => 'group_'.$block_id, 'colspan' => '8'), 'td');
         $table->addTableBody('id', $block_id);
         
         $categoryId = $userField->getValue('usf_cat_id');
