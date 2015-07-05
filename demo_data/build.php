@@ -222,8 +222,7 @@ if($gDbType === 'postgresql')
     $sql = 'SELECT c.relname FROM pg_class c WHERE c.relkind = \'S\' ';
     $sqlResult = $db->query($sql);
 
-    $row = $db->fetch_array($sqlResult);
-    while($row)
+    while($row = $db->fetch_array($sqlResult))
     {
         $sql = 'SELECT setval(\''.$row['relname'].'\', 1000000)';
         $db->query($sql);

@@ -240,8 +240,7 @@ class ModuleDates extends Modules
         $dates = array('numResults'=>$gDb->num_rows($result), 'limit' => $limit, 'totalCount'=>$this->getDataSetCount());
 
         //push results to array
-        $row = $gDb->fetch_array($result);
-        while($row)
+        while($row = $gDb->fetch_array($result))
         {
             $dates['recordset'][] = $row;
         }

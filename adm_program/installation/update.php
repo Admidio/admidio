@@ -322,8 +322,7 @@ elseif($getMode == 2)
     $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
     $result_orga = $gDb->query($sql);
 
-    $row_orga = $gDb->fetch_array($result_orga);
-    while($row_orga)
+    while($row_orga = $gDb->fetch_array($result_orga))
     {
         $gCurrentOrganization->setValue('org_id', $row_orga['org_id']);
         $gCurrentOrganization->setPreferences($orga_preferences, false);

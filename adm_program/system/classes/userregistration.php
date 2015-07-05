@@ -206,8 +206,7 @@ class UserRegistration extends User
                            AND usr_valid         = 1 ';
                 $result = $this->db->query($sql);
 
-                $row = $this->db->fetch_array($result);
-                while($row)
+                while($row = $this->db->fetch_array($result))
                 {
                     // send mail that a new registration is available
                     $sysmail = new SystemMail($this->db);

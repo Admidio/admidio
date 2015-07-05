@@ -241,8 +241,7 @@ class ComponentUpdate extends Component
                    and not exists (select 1 from '.TBL_DATES.' where dat_rol_id = rol_id)';
         $result = $this->db->query($sql);
 
-        $row = $this->db->fetch_array($result);
-        while($row)
+        while($row = $this->db->fetch_array($result))
         {
             $role = new TableRoles($this->db, $row['rol_id']);
             $role->delete();

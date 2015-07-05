@@ -84,8 +84,7 @@ class User extends TableUsers
             $gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
         }
 
-        $row = $this->db->fetch_array($result);
-        while($row)
+        while($row = $this->db->fetch_array($result))
         {
             // starts a membership for role from now
             $this->setRoleMembership($row['rol_id']);
@@ -162,8 +161,7 @@ class User extends TableUsers
                                OR cat_org_id IS NULL ) ';
                 $this->db->query($sql);
 
-                $row = $this->db->fetch_array();
-                while($row)
+                while($row = $this->db->fetch_array())
                 {
                     if($row['mem_leader'] == 1)
                     {
@@ -482,8 +480,7 @@ class User extends TableUsers
         elseif($this->db->num_rows() > 1)
         {
             // several records found then read min and max date and delete all records
-            $row = $this->db->fetch_array();
-            while($row)
+            while($row = $this->db->fetch_array())
             {
                 $member->clear();
                 $member->setArray($row);
@@ -840,8 +837,7 @@ class User extends TableUsers
 
                     if($this->db->num_rows() > 0)
                     {
-                        $row = $this->db->fetch_array();
-                        while($row)
+                        while($row = $this->db->fetch_array())
                         {
                             if($row['rol_this_list_view'] == 2)
                             {
@@ -1131,8 +1127,7 @@ class User extends TableUsers
         elseif($this->db->num_rows() > 1)
         {
             // several records found then read min and max date and delete all records
-            $row = $this->db->fetch_array();
-            while($row)
+            while($row = $this->db->fetch_array())
             {
                 $member->clear();
                 $member->setArray($row);

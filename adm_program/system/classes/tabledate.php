@@ -279,8 +279,7 @@ class TableDate extends TableAccess
             $sql = 'SELECT dtr_rol_id FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
             $this->db->query($sql);
 
-            $row = $this->db->fetch_array();
-            while($row)
+            while($row = $this->db->fetch_array())
             {
                 if($row['dtr_rol_id'] === null)
                 {

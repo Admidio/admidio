@@ -685,8 +685,7 @@ function admFuncGetDirectoryEntries($directory, $searchType = 'file')
     $curdir = opendir($directory);
     if($curdir)
     {
-        $filename = readdir($curdir);
-        while($filename)
+        while($filename = readdir($curdir))
         {
             if(strpos($filename, '.') !== 0)
             {
