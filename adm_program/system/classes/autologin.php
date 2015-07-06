@@ -116,10 +116,10 @@ class AutoLogin extends TableAccess
     public function tableCleanup()
     {
         // Zeitpunkt bestimmen, ab dem die Auto-Logins geloescht werden, mind. 1 Jahr alt
-        $date_session_delete = time() - 60*60*24*365;
+        $date_session_delete = (new DateTime())->sub(new DateInterval('P1Y'))->format('Y.m.d H:i:s');
 
-        $sql    = 'DELETE FROM '. TBL_AUTO_LOGIN. '
-                    WHERE atl_last_login < \''. date('Y.m.d H:i:s', $date_session_delete). '\'';
+        $sql = 'DELETE FROM '. TBL_AUTO_LOGIN. '
+                 WHERE atl_last_login < \''. $date_session_delete. '\'';
         $this->db->query($sql);
     }
 }
