@@ -157,17 +157,17 @@ elseif($getMode == 2)
 
     if(strlen($_POST['rol_start_date']) > 0)
     {
-        $startDate = new DateTimeExtended($_POST['rol_start_date'], $gPreferences['system_date'], 'date');
+        $startDate = new DateTimeExtended($_POST['rol_start_date'], $gPreferences['system_date']);
 
-        if($startDate->valid())
+        if($startDate->isValid())
         {
             $_POST['rol_start_date'] = $startDate->format('Y-m-d');
 
             if(strlen($_POST['rol_end_date']) > 0)
             {
-                $endDate = new DateTimeExtended($_POST['rol_end_date'], $gPreferences['system_date'], 'date');
+                $endDate = new DateTimeExtended($_POST['rol_end_date'], $gPreferences['system_date']);
 
-                if($endDate->valid())
+                if($endDate->isValid())
                 {
                     $_POST['rol_end_date'] = $endDate->format('Y-m-d');
                 }
@@ -177,7 +177,7 @@ elseif($getMode == 2)
                 }
 
                 // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
-                if ($startDate->getTimestamp() > $endDate->getTimestamp())
+                if ($startDate < $endDate)
                 {
                     $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
                 }
@@ -197,9 +197,9 @@ elseif($getMode == 2)
 
     if(strlen($_POST['rol_start_time']) > 0)
     {
-        $startTime = new DateTimeExtended($_POST['rol_start_time'], $gPreferences['system_time'], 'time');
+        $startTime = new DateTimeExtended($_POST['rol_start_time'], $gPreferences['system_time']);
 
-        if($startTime->valid())
+        if($startTime->isValid())
         {
             $_POST['rol_start_time'] = $startTime->format('H:i:s');
         }
@@ -210,9 +210,9 @@ elseif($getMode == 2)
 
         if(strlen($_POST['rol_end_time']) > 0)
         {
-            $endTime = new DateTimeExtended($_POST['rol_end_time'], $gPreferences['system_time'], 'time');
+            $endTime = new DateTimeExtended($_POST['rol_end_time'], $gPreferences['system_time']);
 
-            if($endTime->valid())
+            if($endTime->isValid())
             {
                 $_POST['rol_end_time'] = $endTime->format('H:i:s');
             }

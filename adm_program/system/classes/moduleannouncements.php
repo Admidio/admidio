@@ -219,19 +219,19 @@ class ModuleAnnouncements extends Modules
 
         // Create date object and format date_from in English format and sytem format and push to daterange array
         $objDate = new DateTimeExtended($dateRangeStart, 'Y-m-d', 'date');
-        if($objDate->valid())
+        if($objDate->isValid())
         {
-            $this->setParameter('dateStartFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
+            $this->setParameter('dateStartFormatEnglish', substr($objDate->getDateTimeString(), 0, 10));
             $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
         }
         else
         {
             // check if date_from  has system format
-            $objDate = new DateTimeExtended($dateRangeStart, $gPreferences['system_date'], 'date');
+            $objDate = new DateTimeExtended($dateRangeStart, $gPreferences['system_date']);
 
-            if($objDate->valid())
+            if($objDate->isValid())
             {
-                $this->setParameter('dateStartFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
+                $this->setParameter('dateStartFormatEnglish', substr($objDate->getDateTimeString(), 0, 10));
                 $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
             }
             else
@@ -242,19 +242,19 @@ class ModuleAnnouncements extends Modules
 
         // Create date object and format date_to in English format and sytem format and push to daterange array
         $objDate = new DateTimeExtended($dateRangeEnd, 'Y-m-d', 'date');
-        if($objDate->valid())
+        if($objDate->isValid())
         {
-            $this->setParameter('dateEndFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
+            $this->setParameter('dateEndFormatEnglish', substr($objDate->getDateTimeString(), 0, 10));
             $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));
         }
         else
         {
             // check if date_from  has system format
-            $objDate = new DateTimeExtended($dateRangeEnd, $gPreferences['system_date'], 'date');
+            $objDate = new DateTimeExtended($dateRangeEnd, $gPreferences['system_date']);
 
-            if($objDate->valid())
+            if($objDate->isValid())
             {
-                $this->setParameter('dateEndFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
+                $this->setParameter('dateEndFormatEnglish', substr($objDate->getDateTimeString(), 0, 10));
                 $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));
             }
             else

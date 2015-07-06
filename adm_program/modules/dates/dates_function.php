@@ -124,16 +124,16 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
 
     $startDateTime = new DateTimeExtended($_POST['date_from'].' '.$_POST['date_from_time'], $gPreferences['system_date'].' '.$gPreferences['system_time']);
 
-    if($startDateTime->valid())
+    if($startDateTime->isValid())
     {
         // Datum & Uhrzeit formatiert zurueckschreiben
-        $date->setValue('dat_begin', $startDateTime->getDateTimeEnglish());
+        $date->setValue('dat_begin', $startDateTime->getDateTimeString());
     }
     else
     {
         // Fehler: pruefen, ob Datum oder Uhrzeit falsches Format hat
-        $startDateTime->setDateTime($_POST['date_from'], $gPreferences['system_date']);
-        if($startDateTime->valid())
+        $startDateTime = new DateTimeExtended($_POST['date_from'], $gPreferences['system_date']);
+        if($startDateTime->isValid())
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
         }
@@ -155,16 +155,16 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
 
     $endDateTime = new DateTimeExtended($_POST['date_to'].' '.$_POST['date_to_time'], $gPreferences['system_date'].' '.$gPreferences['system_time']);
 
-    if($endDateTime->valid())
+    if($endDateTime->isValid())
     {
         // Datum & Uhrzeit formatiert zurueckschreiben
-        $date->setValue('dat_end', $endDateTime->getDateTimeEnglish());
+        $date->setValue('dat_end', $endDateTime->getDateTimeString());
     }
     else
     {
         // Fehler: pruefen, ob Datum oder Uhrzeit falsches Format hat
-        $endDateTime->setDateTime($_POST['date_to'], $gPreferences['system_date']);
-        if($endDateTime->valid())
+        $endDateTime = new DateTimeExtended($_POST['date_to'], $gPreferences['system_date']);
+        if($endDateTime->isValid())
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
         }
@@ -175,7 +175,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     }
 
     // DateTo should be greater than DateFrom (Timestamp must be less)
-    if($startDateTime->getTimestamp() > $endDateTime->getTimestamp())
+    if($startDateTime < $endDateTime)
     {
         $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
     }
@@ -219,8 +219,8 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         {
             $sql = 'SELECT COUNT(dat_id) AS is_reserved
                       FROM '.TBL_DATES.'
-                     WHERE dat_begin  <= \''.$endDateTime->getDateTimeEnglish().'\'
-                       AND dat_end    >= \''.$startDateTime->getDateTimeEnglish().'\'
+                     WHERE dat_begin  <= \''.$endDateTime->getDateTimeString().'\'
+                       AND dat_end    >= \''.$startDateTime->getDateTimeString().'\'
                        AND dat_room_id = '.$_POST['dat_room_id'].'
                        AND dat_id     <> '.$getDateId;
             $result = $gDb->query($sql);

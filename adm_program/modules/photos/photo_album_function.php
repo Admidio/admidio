@@ -44,7 +44,7 @@ $photo_album = new TablePhotos($gDb);
 if($getMode != 'new' && $getPhotoId > 0)
 {
     $photo_album->readDataById($getPhotoId);
-    
+
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
     if($photo_album->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
     {
@@ -70,13 +70,13 @@ if($getMode == 'new' || $getMode == 'change')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('PHO_ALBUM')));
     }
-    
+
     //Beginn
     if(strlen($_POST['pho_begin']) > 0)
     {
-        $startDate = new DateTimeExtended($_POST['pho_begin'], $gPreferences['system_date'], 'date');
-        
-        if($startDate->valid())
+        $startDate = new DateTimeExtended($_POST['pho_begin'], $gPreferences['system_date']);
+
+        if($startDate->isValid())
         {
             $_POST['pho_begin'] = $startDate->format('Y-m-d');
         }
@@ -88,14 +88,14 @@ if($getMode == 'new' || $getMode == 'change')
     else
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_START')));
-    }    
-    
+    }
+
     //Ende
     if(strlen($_POST['pho_end']) > 0)
     {
-        $endDate = new DateTimeExtended($_POST['pho_end'], $gPreferences['system_date'], 'date');
+        $endDate = new DateTimeExtended($_POST['pho_end'], $gPreferences['system_date']);
 
-        if($endDate->valid())
+        if($endDate->isValid())
         {
             $_POST['pho_end'] = $endDate->format('Y-m-d');
         }
@@ -129,32 +129,32 @@ if($getMode == 'new' || $getMode == 'change')
             $photo_album->setValue($key, $value);
         }
     }
-    
+
     /********************neuen Datensatz anlegen***********************************/
     if ($getMode == 'new')
     {
         // Album in Datenbank schreiben
         $photo_album->save();
-        
+
         $error = $photo_album->createFolder();
-        
+
         if(strlen($error['text']) > 0)
         {
             $photo_album->delete();
-            
+
             // der entsprechende Ordner konnte nicht angelegt werden
             $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
             $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
         }
-        
+
         if(strlen($error['text']) == 0)
-        { 
+        {
             // Benachrichtigungs-Email für neue Einträge
             $notification = new Email();
             $message = $gL10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['pho_name'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
-            $notification->adminNotfication($gL10n->get('PHO_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));        
+            $notification->adminNotfication($gL10n->get('PHO_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
         }
-        
+
         $getPhotoId = $photo_album->getValue('pho_id');
     }//if
 
@@ -163,11 +163,11 @@ if($getMode == 'new' || $getMode == 'change')
     elseif ($getMode=='change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
     {
         $newFolder = SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
-        
+
         // das komplette Album in den neuen Ordner kopieren
         $albumFolder = new Folder($ordner);
         $b_return = $albumFolder->move($newFolder);
-        
+
         // Verschieben war nicht erfolgreich, Schreibrechte vorhanden ?
         if($b_return == false)
         {
@@ -183,7 +183,7 @@ if($getMode == 'new' || $getMode == 'change')
         // geaenderte Daten in der Datenbank akutalisieren
         $photo_album->save();
     }
-    
+
     unset($_SESSION['photo_album_request']);
     $gNavigation->deleteLastUrl();
 
@@ -198,7 +198,7 @@ elseif($getMode == 'delete')
     // Album loeschen
     if($photo_album->delete())
     {
-        echo 'done'; 
+        echo 'done';
     }
     exit();
 }

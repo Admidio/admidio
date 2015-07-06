@@ -150,8 +150,8 @@ elseif($getMode == 7)
     $formatedEndDate   = '';
 
     //Check das Beginn Datum
-    $startDate = new DateTimeExtended($getMembershipStart, $gPreferences['system_date'], 'date');
-    if($startDate->valid())
+    $startDate = new DateTimeExtended($getMembershipStart, $gPreferences['system_date']);
+    if($startDate->isValid())
     {
         // Datum formatiert zurueckschreiben
         $formatedStartDate = $startDate->format('Y-m-d');
@@ -164,8 +164,8 @@ elseif($getMode == 7)
     //Falls gesetzt wird das Enddatum gecheckt
     if($getMembershipEnd !== '')
     {
-        $endDate = new DateTimeExtended($getMembershipEnd, $gPreferences['system_date'], 'date');
-        if($endDate->valid())
+        $endDate = new DateTimeExtended($getMembershipEnd, $gPreferences['system_date']);
+        if($endDate->isValid())
         {
             // Datum formatiert zurueckschreiben
             $formatedEndDate = $endDate->format('Y-m-d');
@@ -176,7 +176,7 @@ elseif($getMode == 7)
         }
 
         // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
-        if ($startDate->getTimestamp() > $endDate->getTimestamp())
+        if ($startDate < $endDate)
         {
             die($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
         }

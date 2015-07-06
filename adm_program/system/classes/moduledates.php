@@ -155,18 +155,18 @@ class ModuleDates extends Modules
 
         $objDate = new DateTimeExtended($date, 'Y-m-d', 'date');
 
-        if($objDate->valid())
+        if($objDate->isValid())
         {
             return $date;
         }
         else
         {
             // check if date has system format
-            $objDate = new DateTimeExtended($date, $gPreferences['system_date'], 'date');
+            $objDate = new DateTimeExtended($date, $gPreferences['system_date']);
 
-            if($objDate->valid())
+            if($objDate->isValid())
             {
-                return substr($objDate->getDateTimeEnglish(), 0, 10);
+                return substr($objDate->getDateTimeString(), 0, 10);
             }
             else
             {

@@ -88,8 +88,8 @@ class ConditionParser
         // validate date and return it in database format
         if($date !== '')
         {
-            $date = new DateTimeExtended($date, $gPreferences['system_date'], 'date');
-            if($date->valid())
+            $date = new DateTimeExtended($date, $gPreferences['system_date']);
+            if($date->isValid())
             {
                 $formatDate = $date->format('Y-m-d');
             }

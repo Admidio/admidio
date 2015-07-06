@@ -294,7 +294,7 @@ class InventoryFields
 
                     // if date field then the current date format must be used
                     $date = new DateTimeExtended($value, 'Y-m-d', 'date');
-                    if($date->valid() == false)
+                    if(!$date->isValid())
                     {
                         return $value;
                     }
@@ -452,8 +452,8 @@ class InventoryFields
             elseif($this->mInventoryFields[$fieldNameIntern]->getValue('inf_type') == 'DATE')
             {
                 // Datum muss gueltig sein und formatiert werden
-                $date = new DateTimeExtended($fieldValue, $gPreferences['system_date'], 'date');
-                if($date->valid() == false)
+                $date = new DateTimeExtended($fieldValue, $gPreferences['system_date']);
+                if(!$date->isValid())
                 {
                     if($this->noValueCheck != true)
                     {

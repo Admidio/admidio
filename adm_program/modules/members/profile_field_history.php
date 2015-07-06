@@ -81,11 +81,11 @@ if($objDateTo === false)
 }
 
 // DateTo should be greater than DateFrom (Timestamp must be less)
-if($objDateFrom->getTimestamp() > $objDateTo->getTimestamp())
+if($objDateFrom < $objDateTo)
 {
     $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
 }
-    
+
 $dateFromIntern = $objDateFrom->format('Y-m-d');
 $dateFromHtml   = $objDateFrom->format($gPreferences['system_date']);
 $dateToIntern   = $objDateTo->format('Y-m-d');
