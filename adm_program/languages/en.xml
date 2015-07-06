@@ -1150,7 +1150,6 @@
         <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="edited">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your %VAR1%profile%VAR1%.</text>
         <text id="SYS_DATABASE" development="new" translation="edited">Database</text>
         <text id="SYS_DATABASE_ERROR" development="new" translation="edited">Database error</text>
-        <text id="SYS_DATABASE_INVALID" description="Var3 und Var4 erzeugen den MailTo-Link" development="new" translation="edited">Database version %VAR1% does not comply with Admidio scripts %VAR2%.\n\nPlease contact the %VAR3%webmaster%VAR4% of the site.</text>
         <text id="SYS_DATE" development="new" translation="edited">Date</text>
         <text id="SYS_DATE_END_BEFORE_BEGIN" development="new" translation="edited">End date is before start date.</text>
         <text id="SYS_DATE_FROM_TO" development="new" translation="edited" description="Used in date-context: 2010/01/10 to 2010/01/12">%VAR1% to %VAR2%</text>

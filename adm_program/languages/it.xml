@@ -1136,7 +1136,6 @@
         <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="edited">Nessun indirizzo email valido è stato fornito!\n\nPer favore fornisci un indirizzo email nel tuo %VAR1%profilo%VAR1%.</text>
         <text id="SYS_DATABASE" development="new" translation="edited">Database</text>
         <text id="SYS_DATABASE_ERROR" development="new" translation="edited">Errore nel database</text>
-        <text id="SYS_DATABASE_INVALID" description="Var3 und Var4 erzeugen den MailTo-Link" development="new" translation="edited">La versione del database %VAR1% non rispetta lo script di Admidio %VAR2%.\n\nPer favore contatta il %VAR3%webmaster%VAR4% del sito.</text>
         <text id="SYS_DATE" development="new" translation="edited">Data</text>
         <text id="SYS_DATE_END_BEFORE_BEGIN" development="new" translation="edited">La data di fine è prima della data inizio.</text>
         <text id="SYS_DATE_FROM_TO" development="new" translation="edited" description="Used in date-context: 2010/01/10 to 2010/01/12">%VAR1% a %VAR2%</text>

@@ -149,5 +149,6 @@
     <step id="580" database="mysql">ALTER TABLE %PREFIX%_components MODIFY COLUMN com_beta smallint not null default 0</step>
     <step id="590" database="postgresql">ALTER TABLE %PREFIX%_components ALTER COLUMN com_beta SET DEFAULT 0</step>
     <step id="600" database="postgresql">ALTER TABLE %PREFIX%_components ALTER COLUMN com_beta SET NOT NULL</step>
+    <step id="610">UPDATE %PREFIX%_preferences SET prf_value = 'modern' WHERE prf_name LIKE 'theme'</step>
     <step>stop</step>
 </update>

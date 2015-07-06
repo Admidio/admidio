@@ -43,72 +43,40 @@ class Component extends TableAccess
 
     /**
      * Check version of component in database against the version of the file system.
-     * There will be different messages shown if versions aren't equal. If user has a current
-     * login and is webmaster than there will be links to the next step to do.
-     * @param  bool         $webmaster          Flag if the current user is a webmaster. This should be 0 or 1
-     * @param  string       $emailAdministrator The email address of the administrator.
+     * There will be different messages shown if versions aren't equal. If database has minor
+     * version than a link to update the database will be shown. If filesystem has minor version
+     * than a link to download current version will be shown.
      * @return void         Nothing will be returned. If the versions aren't equal a message will be shown.
      * @throws AdmException SYS_WEBMASTER_DATABASE_INVALID
      * @throws AdmException SYS_WEBMASTER_FILESYSTEM_INVALID
-     * @throws AdmException SYS_DATABASE_INVALID
      */
-    public function checkDatabaseVersion($webmaster, $emailAdministrator)
+    public function checkDatabaseVersion()
     {
         global $g_root_path;
 
-        $dbVersion = (string)$this->getValue('com_version');
-        $dbVersionBeta = (string)$this->getValue('com_beta');
-        $dbVersionText = $dbVersion;
-        if((int)$dbVersionBeta > 0)
+        $dbVersion = $this->getValue('com_version');
+        if ($this->getValue('com_beta') > 0)
         {
-            $dbVersionText .= ' Beta ' . $dbVersionBeta;
+            $dbVersion .= '-Beta.'.$this->getValue('com_beta');
         }
 
-        if(version_compare($dbVersion, ADMIDIO_VERSION) !== 0 || version_compare($dbVersionBeta, ADMIDIO_VERSION_BETA) !== 0)
+        $filesystemVersion = ADMIDIO_VERSION;
+        if (ADMIDIO_VERSION_BETA > 0)
         {
-            $arrDbVersion         = explode('.', $dbVersion . '.' . $dbVersionBeta);
-            $arrFileSystemVersion = explode('.', ADMIDIO_VERSION . '.' . ADMIDIO_VERSION_BETA);
+            $filesystemVersion .= '-Beta.'.ADMIDIO_VERSION_BETA;
+        }
 
-            if($webmaster)
-            {
-                // if webmaster and db version is less than file system version then show notice
-                if($arrDbVersion[0] < $arrFileSystemVersion[0]
-                || $arrDbVersion[1] < $arrFileSystemVersion[1]
-                || $arrDbVersion[2] < $arrFileSystemVersion[2]
-                || $arrDbVersion[3] < $arrFileSystemVersion[3])
-                {
-                    throw new AdmException('SYS_WEBMASTER_DATABASE_INVALID', $dbVersionText, ADMIDIO_VERSION_TEXT,
-                        '<a href="' . $g_root_path . '/adm_program/installation/update.php">', '</a>');
-                }
-                // if webmaster and file system version is less than db version then show notice
-                elseif($arrDbVersion[0] > $arrFileSystemVersion[0]
-                    || $arrDbVersion[1] > $arrFileSystemVersion[1]
-                    || $arrDbVersion[2] > $arrFileSystemVersion[2]
-                    || $arrDbVersion[3] > $arrFileSystemVersion[3])
-                {
-                    throw new AdmException('SYS_WEBMASTER_FILESYSTEM_INVALID', $dbVersionText, ADMIDIO_VERSION_TEXT,
-                        '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
-                }
-            }
-            else
-            {
-                // if main version and subversion not equal then show notice
-                if($arrDbVersion[0] != $arrFileSystemVersion[0]
-                || $arrDbVersion[1] != $arrFileSystemVersion[1])
-                {
-                    throw new AdmException('SYS_DATABASE_INVALID', $dbVersionText, ADMIDIO_VERSION_TEXT,
-                        '<a href="mailto:' . $emailAdministrator . '">', '</a>');
-                }
-                // if main version and subversion are equal
-                // but subsub db version is less then subsub file version show notice
-                elseif($arrDbVersion[0] == $arrFileSystemVersion[0]
-                &&     $arrDbVersion[1] == $arrFileSystemVersion[1]
-                &&     $arrDbVersion[2]  < $arrFileSystemVersion[2])
-                {
-                    throw new AdmException('SYS_DATABASE_INVALID', $dbVersionText, ADMIDIO_VERSION_TEXT,
-                        '<a href="mailto:' . $emailAdministrator . '">', '</a>');
-                }
-            }
+        $returnCode = version_compare($dbVersion, $filesystemVersion);
+
+        if ($returnCode === -1) // database has minor version
+        {
+            throw new AdmException('SYS_WEBMASTER_DATABASE_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT,
+                                   '<a href="'.$g_root_path.'/adm_program/installation/update.php">', '</a>');
+        }
+        elseif ($returnCode === 1) // filesystem has minor version
+        {
+            throw new AdmException('SYS_WEBMASTER_FILESYSTEM_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT,
+                                   '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
         }
     }
 }

@@ -808,7 +808,6 @@
         <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und den Var2 erzeugen Profil-Link" development="new" translation="edited">Aucun adresse courriel valide a été fournie! \n\nVeuillez indiquer une adresse courriel dans votre profil %VAR1% %VAR2%.</text>
         <text id="SYS_DATABASE" development="new" translation="edited">Database</text>
         <text id="SYS_DATABASE_ERROR" development="new" translation="edited">Une erreur s'est produite lors de l'accès la base de données: \n\n%VAR1%</text>
-        <text id="SYS_DATABASE_INVALID" description="Var3 und den var4 erzeugen MailTo-Link" development="new" translation="edited">La version de la base de données %VAR1% n'est pas conforme aux scripts Admidio %VAR2%. \n\nVeuillez contacter l'%VAR3% %VAR4% webmestre du site.</text>
         <text id="SYS_DATE" development="new" translation="edited">Date</text>
         <text id="SYS_DATE_END_BEFORE_BEGIN" development="new" translation="edited">Date de fin est avant la date de début.</text>
         <text id="SYS_DATE_FROM_TO" development="new" translation="edited" description="Used dans date-context: 10/01/2010 à 2010/01/12">%VAR1% vers %VAR2%</text>

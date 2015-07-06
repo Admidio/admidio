@@ -1027,7 +1027,6 @@
         <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="edited">Ongeldig e-mail adres doorgegeven!\n\nGeef svp een e-mail adres door voor uw %VAR1%profiel%VAR1%.</text>
         <text id="SYS_DATABASE" development="new" translation="edited">Database</text>
         <text id="SYS_DATABASE_ERROR" development="new" translation="edited">Database fout</text>
-        <text id="SYS_DATABASE_INVALID" description="Var3 und Var4 erzeugen den MailTo-Link" development="new" translation="edited">Database versie %VAR1% gaat niet samen met Admidio scripts %VAR2%.\n\nNeem contact op met de %VAR3%beheerder%VAR4% van de website.</text>
         <text id="SYS_DATE" development="new" translation="edited">Datum</text>
         <text id="SYS_DATE_END_BEFORE_BEGIN" development="new" translation="edited">Einddatum ligt voor startdatum.</text>
         <text id="SYS_DATE_FROM_TO" development="new" translation="edited" description="Gebruikt in datum-context: 2010/01/10 tot 2010/01/12">%VAR1% tot %VAR2%</text>
