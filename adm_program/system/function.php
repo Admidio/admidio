@@ -387,7 +387,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
             // if value is required an no value is given then show error
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
         }
-        elseif($optionsAll['defaultValue'] !== '')
+        elseif($optionsAll['defaultValue'] !== null)
         {
             // if a default value was set then take this value
             $array[$variableName] = $optionsAll['defaultValue'];
