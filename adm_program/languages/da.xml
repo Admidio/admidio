@@ -1129,7 +1129,6 @@
         <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="edited">Du har ikke indtastet en gyldig e-mail adresse!\n\nIndtast en gyldig e-mail adresse i din %VAR1%profil%VAR1%.</text>
         <text id="SYS_DATABASE" development="new" translation="edited">Database</text>
         <text id="SYS_DATABASE_ERROR" development="new" translation="edited">Database fejl</text>
-        <text id="SYS_DATABASE_INVALID" description="Var3 und Var4 erzeugen den MailTo-Link" development="new" translation="edited">Database version %VAR1% stemmer ikke overens med Admidio scriptet %VAR2%.\n\nKontakt %VAR3%webmasteren%VAR4% på siden.</text>
         <text id="SYS_DATE" development="new" translation="edited">Dato</text>
         <text id="SYS_DATE_END_BEFORE_BEGIN" development="new" translation="edited">Slut dato er før start dato.</text>
         <text id="SYS_DATE_FROM_TO" development="new" translation="edited" description="Used in date-context: 2010/01/10 to 2010/01/12">%VAR1% til %VAR2%</text>

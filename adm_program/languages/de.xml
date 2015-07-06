@@ -1137,7 +1137,6 @@
         <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="todo">Du hast keine gültige E-Mail-Adresse hinterlegt!\n\nTrage bitte in deinem %VAR1%Profil%VAR1% eine E-Mail-Adresse ein.</text>
         <text id="SYS_DATABASE" development="new" translation="todo">Datenbank</text>
         <text id="SYS_DATABASE_ERROR" development="new" translation="todo">Datenbankfehler</text>
-        <text id="SYS_DATABASE_INVALID" description="Var3 und Var4 erzeugen den MailTo-Link" development="new" translation="todo">Die Datenbankversion %VAR1% stimmt nicht mit der Version der Admidio-Scripte %VAR2% überein.\n\nWende dich bitte an den %VAR3%Webmaster%VAR4% dieser Webseite.</text>
         <text id="SYS_DATE" development="new" translation="todo">Datum</text>
         <text id="SYS_DATE_END_BEFORE_BEGIN" development="new" translation="todo">Das eingegebene Enddatum liegt vor dem Anfangsdatum.</text>
         <text id="SYS_DATE_FROM_TO" development="new" translation="todo" description="Used in date-context: 2010/01/10 to 2010/01/12">%VAR1% bis %VAR2%</text>

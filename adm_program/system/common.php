@@ -274,7 +274,7 @@ else
 try
 {
     // check version of database against version of file system and show notice if not equal
-    $gSystemComponent->checkDatabaseVersion($gCurrentUser->isWebmaster(), $gPreferences['email_administrator']);
+    $gSystemComponent->checkDatabaseVersion();
 }
 catch(AdmException $e)
 {

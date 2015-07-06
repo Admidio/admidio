@@ -12,7 +12,7 @@
  *  {
  *      $systemComponent = new Component($gDb);
  *      $systemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
- *      $systemComponent->checkDatabaseVersion(true, 'webmaster@example.com');
+ *      $systemComponent->checkDatabaseVersion();
  *  }
  *  catch(AdmException $e)
  *  {
@@ -40,13 +40,12 @@ class Component extends TableAccess
     }
 
     /** Check version of component in database against the version of the file system.
-     *  There will be different messages shown if versions aren't equal. If user has a current
-     *  login and is webmaster than there will be links to the next step to do.
-     *  @param $webmaster          Flag if the current user is a webmaster. This should be 0 or 1
-     *  @param $emailAdministrator The email address of the administrator.
+     *  There will be different messages shown if versions aren't equal. If database has minor 
+     *  version than a link to update the database will be shown. If filesystem has minor version
+     *  than a link to download current version will be shown.
      *  @return Nothing will be returned. If the versions aren't equal a message will be shown.
      */
-    public function checkDatabaseVersion($webmaster, $emailAdministrator)
+    public function checkDatabaseVersion()
     {
         global $g_root_path;
 
@@ -66,25 +65,11 @@ class Component extends TableAccess
         
         if($returnCode == -1) // database has minor version
         {
-            if($webmaster == true)
-            {
-                throw new AdmException('SYS_WEBMASTER_DATABASE_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT, '<a href="'.$g_root_path.'/adm_program/installation/update.php">', '</a>');                
-            }
-            else
-            {
-                throw new AdmException('SYS_DATABASE_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT, '<a href="mailto:'.$emailAdministrator.'">', '</a>');                
-            }
+            throw new AdmException('SYS_WEBMASTER_DATABASE_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT, '<a href="'.$g_root_path.'/adm_program/installation/update.php">', '</a>');                
         }
         elseif($returnCode == 1) // filesystem has minor version
         {
-            if($webmaster == true)
-            {
-                throw new AdmException('SYS_WEBMASTER_FILESYSTEM_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT, '<a href="http://www.admidio.org/index.php?page=download">', '</a>');                
-            }
-            else
-            {
-                throw new AdmException('SYS_DATABASE_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT, '<a href="mailto:'.$emailAdministrator.'">', '</a>');                
-            }            
+            throw new AdmException('SYS_WEBMASTER_FILESYSTEM_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT, '<a href="http://www.admidio.org/index.php?page=download">', '</a>');                
         }
     }
 }
