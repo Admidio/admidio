@@ -393,9 +393,12 @@ a.btn {
 .admidio-menu {
     margin: 0;
 }
+.admidio-menu img {
+    vertical-align: bottom;
+}
 
 .admidio-media-menu p {
-    padding-bottom: 0;
+    margin: 0;
 }
 
 .admidio-media-submenu > li {
