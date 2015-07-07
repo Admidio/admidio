@@ -390,6 +390,27 @@ a.btn {
     text-decoration: none !important;
 }
 
+.admidio-menu {
+    margin: 0;
+}
+
+.admidio-media-menu p {
+    padding-bottom: 0;
+}
+
+.admidio-media-submenu > li {
+    padding-right: 0;
+}
+.admidio-media-submenu > li + li:before {
+    content: ' | ';
+}
+.admidio-media-submenu > li:first-child:before {
+    content: '[ ';
+}
+.admidio-media-submenu > li:last-child:after {
+    content: ' ]';
+}
+
 /**************************************************/
 /* Customized layout for forms and their elements */
 /**************************************************/

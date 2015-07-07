@@ -118,7 +118,8 @@ class Menu
         }
         else
         {
-            $insert = array($id => $this->mkItem($id, $link, $text, $icon, $desc));
+            $item = $this->mkItem($id, $link, $text, $icon, $desc);
+            $insert = array($id => $item);
             $this->items = array_splice($this->items, $position, 0, $insert);
 
             return true;
@@ -140,11 +141,12 @@ class Menu
         if ($complex)
         {
             $html .= '<h2 id="head_'.$this->id.'">'.$this->title.'</h2>';
+            $html .= '<menu id="menu_'.$this->id.'" class="list-unstyled admidio-media-menu">'; // or class="media-list"
         }
         else
         {
             $html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>';
-            $html .= '<div class="btn-group-vertical admidio-menu" role="group" id="menu_'.$this->id.'">';
+            $html .= '<menu id="menu_'.$this->id.'" class="list-unstyled admidio-menu btn-group-vertical">';
         }
 
         // now create each menu item
@@ -153,48 +155,45 @@ class Menu
             if ($complex)
             {
                 $html .= '
-                    <div class="media">
+                    <li class="media">
                         <div class="media-left">
-                            <a id="menu_'.$this->id.'_' .$item['id'].'" href="'.$item['link'].'">
+                            <a id="menu_'.$this->id.'_'.$item['id'].'" href="'.$item['link'].'">
                                 <img class="media-object" src="'.$item['icon'].'" alt="'.strip_tags($item['text']).'" />
                             </a>
                         </div>
                         <div class="media-body">
                             <h4 class="media-heading">
-                                <a id="lmenu_'.$this->id.'_' .$item['id'].'" href="'.$item['link'].'">'.$item['text'].'</a>
+                                <a id="lmenu_'.$this->id.'_'.$item['id'].'" href="'.$item['link'].'">'.$item['text'].'</a>
                             </h4>';
 
                 // adding submenus if any
                 if ($item['subitems'])
                 {
-                    $html .= '<div class="admidio-media-submenu">&#91; ';
-                    $separator = '';
+                    $html .= '<menu id="lsubmenu_'.$this->id.'_'.$item['id'].'" class="list-inline admidio-media-submenu">';
 
                     foreach($item['subitems'] as $subitem)
                     {
-                        $html .= $separator . '<a href="'.$subitem['link'].'">'.$subitem['text'].'</a>';
-                        $separator = '&nbsp;| ';
+                        $html .= '<li><a href="'.$subitem['link'].'">'.$subitem['text'].'</a></li>';
                     }
 
-                    $html .= ' &#93;</div>';
+                    $html .= '</menu>'; // closes sub-menu "menu.admidio-media-submenu"
                 }
 
-                $html .= $item['desc'];
-                $html .= '</div></div>';
+                $html .= '<p>'.$item['desc'].'</p>';
+                $html .= '</div></li>'; // closes "div.media-body" and "li.media"
             }
             else
             {
                 $html .= '
-                <a id="lmenu_'.$this->id.'_' .$item['id'].'" class="btn " href="'.$item['link'].'">
-                    <img src="'.$item['icon'].'" alt="'.strip_tags($item['text']).'" />'.$item['text'].'
-                </a>';
+                    <li>
+                        <a id="lmenu_'.$this->id.'_'.$item['id'].'" class="btn " href="'.$item['link'].'">
+                            <img src="'.$item['icon'].'" alt="'.strip_tags($item['text']).'" />'.$item['text'].'
+                        </a>
+                    </li>';
             }
         }
 
-        if (!$complex)
-        {
-            $html .= '</div>'; // End Wraps all menu items
-        }
+        $html .= '</menu>'; // closes main-menu "menu.list-unstyled"
 
         if (count($this->items) > 0)
         {

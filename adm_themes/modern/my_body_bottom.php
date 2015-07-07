@@ -51,7 +51,7 @@
                         }
 
                         $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages.php',
-                            $gL10n->get('SYS_MESSAGES') . $unreadBadge, '/icons/messages.png');
+                                             $gL10n->get('SYS_MESSAGES') . $unreadBadge, '/icons/messages.png');
                     }
                     if($gPreferences['enable_photo_module'] == 1
                     || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
