@@ -76,22 +76,20 @@ if($gPreferences['enable_mail_module'] == 1 && !$gValidLogin)
 }
 if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
 {
+    $unreadBadge = '';
+
     // get number of unread messages for user
     $message = new TableMessage($gDb);
     $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
 
-    if ($unread > 0)
+    if($unread > 0)
     {
-        $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages.php',
-                             $gL10n->get('SYS_MESSAGES').'<span class="badge">'.$unread.'</span>',
-                             '/icons/messages_big.png', $gL10n->get('MAI_EMAIL_DESC'));
+        $unreadBadge = '<span class="badge">' . $unread . '</span>';
     }
-    else
-    {
-        $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages.php',
-                             $gL10n->get('SYS_MESSAGES'), '/icons/messages_big.png',
-                             $gL10n->get('MAI_EMAIL_DESC'));
-    }
+
+    $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages.php',
+                         $gL10n->get('SYS_MESSAGES') . $unreadBadge, '/icons/messages_big.png',
+                         $gL10n->get('MAI_EMAIL_DESC'));
 }
 if($gPreferences['enable_photo_module'] == 1
 || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))

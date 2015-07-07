@@ -148,45 +148,45 @@ class Menu
         }
 
         // now create each menu item
-        foreach($this->items as $key => $value)
+        foreach($this->items as $item)
         {
             if ($complex)
             {
                 $html .= '
                     <div class="media">
                         <div class="media-left">
-                            <a id="menu_'.$this->id.'_' .$this->items[$key]['id'].'" href="'.$this->items[$key]['link'].'">
-                                <img class="media-object" src="'.$this->items[$key]['icon'].'" alt="'.strip_tags($this->items[$key]['text']).'" />
+                            <a id="menu_'.$this->id.'_' .$item['id'].'" href="'.$item['link'].'">
+                                <img class="media-object" src="'.$item['icon'].'" alt="'.strip_tags($item['text']).'" />
                             </a>
                         </div>
                         <div class="media-body">
                             <h4 class="media-heading">
-                                <a id="lmenu_'.$this->id.'_' .$this->items[$key]['id'].'" href="'.$this->items[$key]['link'].'">'.$this->items[$key]['text'].'</a>
+                                <a id="lmenu_'.$this->id.'_' .$item['id'].'" href="'.$item['link'].'">'.$item['text'].'</a>
                             </h4>';
 
                 // adding submenus if any
-                if ($this->items[$key]['subitems'])
+                if ($item['subitems'])
                 {
                     $html .= '<div class="admidio-media-submenu">&#91; ';
                     $separator = '';
 
-                    foreach($this->items[$key]['subitems'] as $subkey => $subvalue)
+                    foreach($item['subitems'] as $subitem)
                     {
-                        $html .= $separator . '<a href="'.$this->items[$key]['subitems'][$subkey]['link'].'">'.$this->items[$key]['subitems'][$subkey]['text'].'</a>';
+                        $html .= $separator . '<a href="'.$subitem['link'].'">'.$subitem['text'].'</a>';
                         $separator = '&nbsp;| ';
                     }
 
                     $html .= ' &#93;</div>';
                 }
 
-                $html .= $this->items[$key]['desc'];
+                $html .= $item['desc'];
                 $html .= '</div></div>';
             }
             else
             {
                 $html .= '
-                <a id="lmenu_'.$this->id.'_' .$this->items[$key]['id'].'" class="btn " href="'.$this->items[$key]['link'].'">
-                    <img src="'.$this->items[$key]['icon'].'" alt="'.strip_tags($this->items[$key]['text']).'" />'.$this->items[$key]['text'].'
+                <a id="lmenu_'.$this->id.'_' .$item['id'].'" class="btn " href="'.$item['link'].'">
+                    <img src="'.$item['icon'].'" alt="'.strip_tags($item['text']).'" />'.$item['text'].'
                 </a>';
             }
         }

@@ -491,39 +491,35 @@ class HtmlPage
             --></script>';
         }
 
-        $html = '<!DOCTYPE html>
-        <html>
-        <head>
-            <!-- (c) 2004 - 2014 The Admidio Team - http://www.admidio.org -->
+        $html = '
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <!-- (c) 2004 - 2015 The Admidio Team - http://www.admidio.org/ -->
 
-            <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
+                <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
 
-            <title>'.$this->title.'</title>
+                <title>'.$this->title.'</title>
 
-            <script type="text/javascript"><!--
-                var gRootPath  = "'. $g_root_path. '";
-                var gThemePath = "'. THEME_PATH. '";
-            --></script>';
+                <script type="text/javascript"><!--
+                    var gRootPath  = "'. $g_root_path. '";
+                    var gThemePath = "'. THEME_PATH. '";
+                --></script>';
 
-            $html .= $headerContent;
-
-            if($this->header !== '')
-            {
-                $html .= $this->header;
-            }
-
-            $html .= $htmlMyHeader.'
-        </head>
-        <body>'.
-            $htmlMyBodyTop.'
-            <div class="admContent">
-                '.$htmlHeadline.$htmlMenu.$this->pageContent.'
-            </div>'.
-            $htmlMyBodyBottom.'
-        </body>
-        </html>';
+        $html .= $headerContent;
+        $html .= $this->header;
+        $html .= $htmlMyHeader;
+        $html .= '</head><body>';
+        $html .= $htmlMyBodyTop;
+        $html .= '<div class="admContent">';
+        $html .= $htmlHeadline;
+        $html .= $htmlMenu;
+        $html .= $this->pageContent;
+        $html .= '</div>';
+        $html .= $htmlMyBodyBottom;
+        $html .= '</body></html>';
 
         if($this->hasNavbar)
         {

@@ -3,8 +3,8 @@
      and after the Admidio module code.
 -->
 
-            </div>
-        </div>
+            </div><!-- closes "div#left-block" -->
+        </div><!-- closes "div.col-md-9" -->
         <div class="col-md-3">
             <div id="right-block" class="admidio-container">
                 <?php
@@ -15,6 +15,7 @@
                 <div id="plugin_menu" class="admidio-plugin-content">
                     <?php
 
+                    // Module Menu
                     $moduleMenu = new Menu('modules', $gL10n->get('SYS_MODULES'));
 
                     $moduleMenu->addItem('overview', '/adm_program/index.php',
@@ -38,21 +39,19 @@
                     }
                     if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
                     {
+                        $unreadBadge = '';
+
                         // get number of unread messages for user
                         $message = new TableMessage($gDb);
                         $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
 
                         if($unread > 0)
                         {
-                            $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages.php',
-                                                 $gL10n->get('SYS_MESSAGES') . '<span class="badge">'.$unread.'</span>',
-                                                 '/icons/messages.png');
+                            $unreadBadge = '<span class="badge">' . $unread . '</span>';
                         }
-                        else
-                        {
-                            $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages.php',
-                                                 $gL10n->get('SYS_MESSAGES'), '/icons/messages.png');
-                        }
+
+                        $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages.php',
+                            $gL10n->get('SYS_MESSAGES') . $unreadBadge, '/icons/messages.png');
                     }
                     if($gPreferences['enable_photo_module'] == 1
                     || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
@@ -92,8 +91,9 @@
 
                     echo $moduleMenu->show();
 
-                    if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles()
-                    || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
+                    // Administration Menu
+                    if($gCurrentUser->approveUsers() || $gCurrentUser->editUsers()
+                    || $gCurrentUser->manageRoles() || $gCurrentUser->isWebmaster())
                     {
                         $adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
 
@@ -124,11 +124,11 @@
                     }
 
                     ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                </div><!-- closes "div#plugin_menu" -->
+            </div><!-- closes "div#right-block" -->
+        </div><!-- closes "div.col-md-3" -->
+    </div><!-- closes "div.row" -->
+</div><!-- closes "div#page" -->
 
 
 <p id="copyright">
@@ -138,5 +138,5 @@
              title="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>"
              style="border: 0; vertical-align: bottom;" />
     </a>
-    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2015&nbsp;&nbsp;<?php echo $gL10n->get('SYS_ADMIDIO_TEAM'); ?></span>
+    <span style="font-size: 9pt; padding-left: 8px;">&copy; 2004 - 2015&nbsp;&nbsp;<?php echo $gL10n->get('SYS_ADMIDIO_TEAM'); ?></span>
 </p>
