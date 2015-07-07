@@ -5,7 +5,7 @@
 
 <div id="page" class="container-fluid">
     <div id="header-block" class="admidio-container">
-        <a href="<?php echo $g_root_path; ?>"><img id="admidio-logo" class="hidden-xs" src="<?php echo THEME_PATH; ?>/images/logo.png" alt="Logo" /></a>
+        <a href="<?php echo $gHomepage; ?>"><img id="admidio-logo" class="hidden-xs" src="<?php echo THEME_PATH; ?>/images/logo.png" alt="Logo" /></a>
         <div id="page-h1-membership" class="hidden-xs"><?php echo $gL10n->get('SYS_ONLINE_MEMBERSHIP_ADMINISTRATION'); ?></div>
         <div id="page-h1-orga"><?php echo $gCurrentOrganization->getValue('org_longname'); ?></div>
     </div>

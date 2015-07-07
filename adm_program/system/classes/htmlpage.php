@@ -356,7 +356,8 @@ class HtmlPage
      */
     public function show($directOutput = true)
     {
-        global $g_root_path, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences, $gValidLogin, $gProfileFields;
+        global $g_root_path, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
+        global $gValidLogin, $gProfileFields, $gHomepage;
 
         $newLayout        = true;
         $headerContent    = '';
