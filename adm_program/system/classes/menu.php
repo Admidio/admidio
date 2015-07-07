@@ -19,6 +19,11 @@
 
 class Menu
 {
+    protected $id;
+    protected $title;
+    protected $items;
+    protected $root_path;
+
     /**
      * constructor
      * @param string $id
@@ -186,7 +191,7 @@ class Menu
             {
                 $html .= '
                     <li>
-                        <a id="lmenu_'.$this->id.'_'.$item['id'].'" class="btn " href="'.$item['link'].'">
+                        <a id="lmenu_'.$this->id.'_'.$item['id'].'" class="btn" href="'.$item['link'].'">
                             <img src="'.$item['icon'].'" alt="'.strip_tags($item['text']).'" />'.$item['text'].'
                         </a>
                     </li>';
