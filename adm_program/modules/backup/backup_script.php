@@ -55,7 +55,7 @@ $ReplaceInto        = false; // if true: "REPLACE INTO ", if false: "INSERT INTO
 $HexBLOBs           = true;  // if true: blobs get data dumped as hex string; if false: blobs get data dumped as escaped binary string
 $SuppressHTMLoutput = (@$_REQUEST['nohtml'] ? true : false); // disable all output for running as a cron job
 $Disable_mysqldump  = false; // LEAVE THIS AS "false"! If true, avoid use of "mysqldump" program to export databases which is *MUCH* *MUCH* faster than doing it row-by-row in PHP. If mysqldump is not available, will automatically fall back to slower row-by-row method. Highly recommended to leave this at "false" (i.e. do use mysqldump)
-$backuptimestamp    = '.'.date('Y-m-d.Gis'); // timestamp
+$backuptimestamp    = '.'.date('Y-m-d.His'); // timestamp
 $backupabsolutepath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
 $fileextension = ((OUTPUT_COMPRESSION_TYPE == 'bzip2') ? '.bz2' : ((OUTPUT_COMPRESSION_TYPE == 'gzip') ? '.gz' : ''));
 $fullbackupfilename = 'db_backup'.$backuptimestamp.'.sql'.$fileextension;
