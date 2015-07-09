@@ -210,7 +210,7 @@ class TableUsers extends TableAccess
         // username should not contain special characters
         elseif($columnName === 'usr_login_name')
         {
-            if($newValue !== '' && !strValidCharacters($newValue, 'noSpecialChar'))
+            if($newValue === '' || !strValidCharacters($newValue, 'noSpecialChar'))
             {
                 return false;
             }
