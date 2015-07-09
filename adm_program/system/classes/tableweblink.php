@@ -11,12 +11,16 @@
  *
  *****************************************************************************/
 
+/**
+ * Class TableWeblink
+ */
 class TableWeblink extends TableAccess
 {
-    /** Constructor that will create an object of a recordset of the table adm_links.
-     *  If the id is set than the specific weblink will be loaded.
-     *  @param $db Object of the class database. This should be the default object $gDb.
-     *  @param $lnk_id The recordset of the weblink with this id will be loaded. If id isn't set than an empty object of the table is created.
+    /**
+     * Constructor that will create an object of a recordset of the table adm_links.
+     * If the id is set than the specific weblink will be loaded.
+     * @param object $db Object of the class database. This should be the default object $gDb.
+     * @param int    $lnk_id The recordset of the weblink with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$db, $lnk_id = 0)
     {
@@ -26,25 +30,26 @@ class TableWeblink extends TableAccess
         parent::__construct($db, TBL_LINKS, 'lnk', $lnk_id);
     }
 
-    /** Get the value of a column of the database table.
-     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
-     *  @param $columnName The name of the database column whose value should be read
-     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                 For text columns the format can be @b database that would return the original database value without any transformations
-     *  @return Returns the value of the database column.
-     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
+    /**
+     * Get the value of a column of the database table.
+     * If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @param  string $columnName The name of the database column whose value should be read
+     * @param  string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                            For text columns the format can be @b database that would return the original database value without any transformations
+     * @return mixed  Returns the value of the database column.
+     *                If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
         global $gL10n;
 
-        if($columnName == 'lnk_description')
+        if($columnName === 'lnk_description')
         {
-            if(isset($this->dbColumns['lnk_description']) == false)
+            if(isset($this->dbColumns['lnk_description']) === false)
             {
                 $value = '';
             }
-            elseif($format == 'database')
+            elseif($format === 'database')
             {
                 $value = html_entity_decode(strStripTags($this->dbColumns['lnk_description']));
             }
@@ -58,10 +63,10 @@ class TableWeblink extends TableAccess
             $value = parent::getValue($columnName, $format);
         }
 
-        if($columnName == 'cat_name' && $format != 'database')
+        if($columnName === 'cat_name' && $format !== 'database')
         {
             // if text is a translation-id then translate it
-            if(strpos($value, '_') == 3)
+            if(strpos($value, '_') === 3)
             {
                 $value = $gL10n->get(admStrToUpper($value));
             }
@@ -70,19 +75,20 @@ class TableWeblink extends TableAccess
         return $value;
     }
 
-    /** Set a new value for a column of the database table.
-     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
-     *  @param $columnName The name of the database column whose value should get a new value
-     *  @param $newValue The new value that should be stored in the database field
-     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+    /**
+     * Set a new value for a column of the database table.
+     * The value is only saved in the object. You must call the method @b save to store the new value to the database
+     * @param  string $columnName The name of the database column whose value should get a new value
+     * @param  mixed  $newValue   The new value that should be stored in the database field
+     * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($columnName == 'lnk_url' && $newValue !== '')
+        if($columnName === 'lnk_url' && $newValue !== '')
         {
             // Homepage darf nur gueltige Zeichen enthalten
-            if (!strValidCharacters($newValue, 'url'))
+            if(!strValidCharacters($newValue, 'url'))
             {
                 return false;
             }
@@ -90,10 +96,10 @@ class TableWeblink extends TableAccess
             if(strpos(admStrToLower($newValue), 'http://')  === false
             && strpos(admStrToLower($newValue), 'https://') === false)
             {
-                $newValue = 'http://'. $newValue;
+                $newValue = 'http://'.$newValue;
             }
         }
-        elseif($columnName == 'lnk_description')
+        elseif($columnName === 'lnk_description')
         {
             return parent::setValue($columnName, $newValue, false);
         }

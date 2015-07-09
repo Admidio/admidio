@@ -11,35 +11,40 @@
  *
  *****************************************************************************/
 
+/**
+ * Class TableRooms
+ */
 class TableRooms extends TableAccess
 {
-    /** Constructor that will create an object of a recordset of the table adm_rooms.
-     *  If the id is set than the specific room will be loaded.
-     *  @param $db Object of the class database. This should be the default object $gDb.
-     *  @param $room_id The recordset of the room with this id will be loaded. If id isn't set than an empty object of the table is created.
+    /**
+     * Constructor that will create an object of a recordset of the table adm_rooms.
+     * If the id is set than the specific room will be loaded.
+     * @param object $db Object of the class database. This should be the default object $gDb.
+     * @param int    $room_id The recordset of the room with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$db, $room_id = 0)
     {
         parent::__construct($db, TBL_ROOMS, 'room', $room_id);
     }
 
-    /** Get the value of a column of the database table.
-     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
-     *  @param string $columnName The name of the database column whose value should be read
-     *  @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                            For text columns the format can be @b database that would return the original database value without any transformations
-     *  @return mixed Returns the value of the database column.
-     *                If the value was manipulated before with @b setValue than the manipulated value is returned.
+    /**
+     * Get the value of a column of the database table.
+     * If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @param string $columnName The name of the database column whose value should be read
+     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                           For text columns the format can be @b database that would return the original database value without any transformations
+     * @return mixed Returns the value of the database column.
+     *               If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
-        if($columnName == 'room_description')
+        if($columnName === 'room_description')
         {
-            if(isset($this->dbColumns['room_description']) == false)
+            if(isset($this->dbColumns['room_description']) === false)
             {
                 $value = '';
             }
-            elseif($format == 'database')
+            elseif($format === 'database')
             {
                 $value = html_entity_decode(strStripTags($this->dbColumns['room_description']));
             }
@@ -56,16 +61,17 @@ class TableRooms extends TableAccess
         return $value;
     }
 
-    /** Set a new value for a column of the database table.
-     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
-     *  @param $columnName The name of the database column whose value should get a new value
-     *  @param $newValue The new value that should be stored in the database field
-     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+    /**
+     * Set a new value for a column of the database table.
+     * The value is only saved in the object. You must call the method @b save to store the new value to the database
+     * @param  string $columnName The name of the database column whose value should get a new value
+     * @param  mixed  $newValue   The new value that should be stored in the database field
+     * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @return bool   Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($columnName == 'room_description')
+        if($columnName === 'room_description')
         {
             return parent::setValue($columnName, $newValue, false);
         }
