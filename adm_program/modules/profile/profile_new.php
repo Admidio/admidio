@@ -215,8 +215,8 @@ foreach($gProfileFields->mProfileFields as $field)
                 if($getNewUser == 2)
                 {
                     // at registration add password and password confirm to form
-                    $form->addInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 6, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION', 'class' => 'form-control-small'));
-                    $form->addInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 6, 'class' => 'form-control-small'));
+                    $form->addInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 8, 'maxLength' => 64, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION', 'class' => 'form-control-small'));
+                    $form->addInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 8, 'maxLength' => 64, 'class' => 'form-control-small'));
 
                     // show selectbox with all organizations of database
                     if($gPreferences['system_organization_select'] == 1)

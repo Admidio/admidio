@@ -59,7 +59,7 @@ if($getMode == 'change')
     && strlen($_POST['new_password']) > 0
     && strlen($_POST['new_password_confirm']) > 0)
     {
-        if(strlen($_POST['new_password']) > 5)
+        if(strlen($_POST['new_password']) >= 8 && strlen($_POST['new_password']) <= 64)
         {
             if ($_POST['new_password'] == $_POST['new_password_confirm'])
             {
@@ -144,11 +144,12 @@ elseif($getMode == 'html')
         if($gCurrentUser->getValue('usr_id') == $getUserId)
         {
             // to change own password user must enter the valid old password for verification
+            // TODO Future: 'minLength' => 8, 'maxLength' => 64
             $form->addInput('old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED));
             $form->addLine();
         }
-        $form->addInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 6, 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'));
-        $form->addInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 6));
+        $form->addInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 8, 'maxLength' => 64, 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'));
+        $form->addInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 8, 'maxLength' => 64));
         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
         $form->show();
     echo '</div>';
