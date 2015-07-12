@@ -127,6 +127,42 @@ class PasswordHashing
     {
         return substr(bin2hex(openssl_random_pseudo_bytes(ceil($length/2))), 0, $length);
     }
+
+    /**
+     * @param  string $password
+     * @return array
+     */
+    public static function passwordInfo($password)
+    {
+        $passwordInfo = array(
+            'length' => 0,
+            'number' => false,
+            'lowerCase' => false,
+            'upperCase' => false,
+            'symbol' => false,
+        );
+
+        $passwordInfo['length'] = strlen($password);
+
+        if (preg_match('/\d/', $password) === 1)
+        {
+            $passwordInfo['number'] = true;
+        }
+        if (preg_match('/[a-z]/', $password) === 1)
+        {
+            $passwordInfo['lowerCase'] = true;
+        }
+        if (preg_match('/[A-Z]/', $password) === 1)
+        {
+            $passwordInfo['upperCase'] = true;
+        }
+        if (preg_match('/\W/', $password) === 1 || strpos($password, '_') !== false) // Note: \W = ![0-9a-zA-Z_]
+        {
+            $passwordInfo['symbol'] = true;
+        }
+
+        return $passwordInfo;
+    }
 }
 
 ?>
