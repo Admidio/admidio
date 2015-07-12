@@ -26,7 +26,7 @@ if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_r
 
 $user = new TableUsers($gDb, $getUserId);
 
-if($user->getValue('usr_activation_code') == $getActivationId)
+if($user->getValue('usr_activation_code') === $getActivationId)
 {
     // activate the new password
     $user->setValue('usr_password', $user->getValue('usr_new_password'));

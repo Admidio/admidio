@@ -35,45 +35,48 @@ else
 
 $user = new User($gDb, $gProfileFields, $getUserId);
 
-// only the own password could be individual set. 
+// only the own password could be individual set.
 // Webmaster could only send a generated password or set a password if no password was set before
-if(isMember($getUserId) == false
-|| ($gCurrentUser->isWebmaster() == false && $gCurrentUser->getValue('usr_id') != $getUserId)
-|| ($gCurrentUser->isWebmaster() == true  && strlen($user->getValue('usr_password')) > 0 && strlen($user->getValue('EMAIL')) == 0 && $gPreferences['enable_system_mails'] == 1))
+if(!isMember($getUserId)
+|| (!$gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
+|| ($gCurrentUser->isWebmaster() && $user->getValue('usr_password') !== '' && $user->getValue('EMAIL') === '' && $gPreferences['enable_system_mails'] == 1))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 
-if($getMode == 'change')
+if($getMode === 'change')
 {
+    $oldPassword        = $_POST['old_password'];
+    $newPassword        = $_POST['new_password'];
+    $newPasswordConfirm = $_POST['new_password_confirm'];
+
     /***********************************************************************/
     /* Handle form input */
     /***********************************************************************/
     if($gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
     {
-        $_POST['old_password'] = '';
+        $oldPassword = '';
     }
 
-    if((strlen($_POST['old_password']) > 0 || $gCurrentUser->isWebmaster())
-    && strlen($_POST['new_password']) > 0
-    && strlen($_POST['new_password_confirm']) > 0)
+    if(($oldPassword !== '' || $gCurrentUser->isWebmaster())
+    &&  $newPassword !== '' && $newPasswordConfirm !== '')
     {
-        if(strlen($_POST['new_password']) >= 8 && strlen($_POST['new_password']) <= 64)
+        if(strlen($newPassword) >= 8 && strlen($newPassword) <= 64)
         {
-            if ($_POST['new_password'] == $_POST['new_password_confirm'])
+            if ($newPassword === $newPasswordConfirm)
             {
                 // check if old password is correct.
                 // Webmaster could change password of other users without this verification.
-                if($user->checkPassword($_POST['old_password']) || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
+                if($user->checkPassword($oldPassword) || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
                 {
-                    $user->setValue('usr_password', $_POST['new_password']);
+                    $user->setValue('usr_password', $newPassword);
                     $user->save();
 
                     // if password of current user changed, then update value in current session
                     if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
                     {
-                        $gCurrentUser->setValue('usr_password', $_POST['new_password']);
+                        $gCurrentUser->setValue('usr_password', $newPassword);
                     }
 
                     $phrase = 'success';

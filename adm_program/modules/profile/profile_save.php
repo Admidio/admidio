@@ -88,7 +88,7 @@ switch($getNewUser)
 // bei Registrierung muss Loginname und Pw geprueft werden
 if($getNewUser == 2)
 {
-    if(strlen($_POST['usr_login_name']) == 0)
+    if($_POST['usr_login_name'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME')));
     }
@@ -100,12 +100,12 @@ if($getNewUser == 2)
     }
 
     // beide Passwortfelder muessen identisch sein
-    if ($_POST['usr_password'] != $_POST['password_confirm'])
+    if($_POST['usr_password'] !== $_POST['password_confirm'])
     {
         $gMessage->show($gL10n->get('PRO_PASSWORDS_NOT_EQUAL'));
     }
 
-    if(strlen($_POST['usr_password']) == 0)
+    if($_POST['usr_password'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
     }
