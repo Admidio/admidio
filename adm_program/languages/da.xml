@@ -956,8 +956,8 @@
         <text id="PRO_NEW_PASSWORD" development="new" translation="edited">Nyt kodeord</text>
         <text id="PRO_NEW_PICTURE" development="new" translation="edited">Nyt profil billede</text>
         <text id="PRO_PASSWORD_CHANGED" development="new" translation="edited">Kodeordet er blevet ændret.</text>
-        <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="edited">Kodeordet skal have mindst 6 karakterer som kan være numre, bogstaver og specielle karakterer (brug IKKE ÆØÅ).\n\nAf sikkerhedshensyn gemmes kodeordet krypteret. Det kan derfor ikke vises i klartekst efter indtastningen.</text>
-        <text id="PRO_PASSWORD_LENGTH" development="new" translation="edited">Kodeord skal indeholde mindst 6 karakterer.</text>
+        <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="edited">Kodeordet skal have mindst 8 karakterer som kan være numre, bogstaver og specielle karakterer (brug IKKE ÆØÅ).\n\nAf sikkerhedshensyn gemmes kodeordet krypteret. Det kan derfor ikke vises i klartekst efter indtastningen.</text>
+        <text id="PRO_PASSWORD_LENGTH" development="new" translation="edited">Kodeord skal indeholde mindst 8 karakterer.</text>
         <text id="PRO_PASSWORD_OLD_WRONG" development="new" translation="edited">Det gamle kodeord er ikke korrekt.</text>
         <text id="PRO_PASSWORDS_NOT_EQUAL" development="new" translation="edited">Det originale og det genindtastede kodeord er ikke ens.</text>
         <text id="PRO_PHOTO_DELETED" development="new" translation="edited">Profil billede er blevet slettet.</text>

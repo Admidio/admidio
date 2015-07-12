@@ -974,8 +974,8 @@
         <text id="PRO_NEW_PASSWORD" development="new" translation="edited">New password</text>
         <text id="PRO_NEW_PICTURE" development="new" translation="edited">New profile picture</text>
         <text id="PRO_PASSWORD_CHANGED" development="new" translation="edited">Password has been successfully changed.</text>
-        <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="edited">Password has to have at least 6 characters including numbers, letters and special characters.\n\nDue to security reasons, password is being saved encrypted.Later it can not be seen anymore.</text>
-        <text id="PRO_PASSWORD_LENGTH" development="new" translation="edited">Password has to include at least 6 characters.</text>
+        <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="edited">Password has to have at least 8 characters including numbers, letters and special characters.\n\nDue to security reasons, password is being saved encrypted.Later it can not be seen anymore.</text>
+        <text id="PRO_PASSWORD_LENGTH" development="new" translation="edited">Password has to include at least 8 characters.</text>
         <text id="PRO_PASSWORD_OLD_WRONG" development="new" translation="edited">Old password is incorrect.</text>
         <text id="PRO_PASSWORDS_NOT_EQUAL" development="new" translation="edited">Original and retyped passwords are different.</text>
         <text id="PRO_PHOTO_DELETED" development="new" translation="edited">Profile picture has been deleted.</text>

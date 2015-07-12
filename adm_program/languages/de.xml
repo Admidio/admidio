@@ -963,8 +963,8 @@
         <text id="PRO_NEW_PASSWORD" development="new" translation="todo">Neues Passwort</text>
         <text id="PRO_NEW_PICTURE" development="new" translation="todo">Neues Profilfoto</text>
         <text id="PRO_PASSWORD_CHANGED" development="new" translation="todo">Das Passwort wurde erfolgreich geändert.</text>
-        <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="todo">Das Passwort muss mindestens aus 6 Zeichen bestehen. Es sollte sowohl Zahlen,  Buchstaben als auch Sonderzeichen beinhalten.\n\nAus Sicherheitsgründen wird das Passwort verschlüsselt gespeichert. Es ist später nicht mehr möglich dieses einzusehen.</text>
-        <text id="PRO_PASSWORD_LENGTH" development="new" translation="todo">Das Passwort muss aus mindestens 6 Zeichen bestehen.</text>
+        <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="todo">Das Passwort muss aus mindestens 8 Zeichen bestehen. Es sollte sowohl Zahlen, Buchstaben als auch Sonderzeichen beinhalten.\n\nAus Sicherheitsgründen wird das Passwort verschlüsselt gespeichert. Es ist später nicht mehr möglich dieses einzusehen.</text>
+        <text id="PRO_PASSWORD_LENGTH" development="new" translation="todo">Das Passwort muss aus mindestens 8 Zeichen bestehen.</text>
         <text id="PRO_PASSWORD_OLD_WRONG" development="new" translation="todo">Das alte Passwort ist falsch.</text>
         <text id="PRO_PASSWORDS_NOT_EQUAL" development="new" translation="todo">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
         <text id="PRO_PHOTO_DELETED" development="new" translation="todo">Das Profilfoto wurde gelöscht.</text>

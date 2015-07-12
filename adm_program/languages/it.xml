@@ -958,8 +958,8 @@
         <text id="PRO_NEW_PASSWORD" development="new" translation="edited">Nuova password</text>
         <text id="PRO_NEW_PICTURE" development="new" translation="edited">Nuova immagine del profilo</text>
         <text id="PRO_PASSWORD_CHANGED" development="new" translation="edited">La password è stata cambiata con successo.</text>
-        <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="edited">La password deve avere almeno 6 caratteri tra numeri, lettere e caratteri speciali.\n\nPer motivi di sicurezza, la password viene salvata crittografata. Più tardi non si vede più.</text>
-        <text id="PRO_PASSWORD_LENGTH" development="new" translation="edited">La password deve contenere almeno 6 caratteri.</text>
+        <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="edited">La password deve avere almeno 8 caratteri tra numeri, lettere e caratteri speciali.\n\nPer motivi di sicurezza, la password viene salvata crittografata. Più tardi non si vede più.</text>
+        <text id="PRO_PASSWORD_LENGTH" development="new" translation="edited">La password deve contenere almeno 8 caratteri.</text>
         <text id="PRO_PASSWORD_OLD_WRONG" development="new" translation="edited">La vecchia password non è corretta.</text>
         <text id="PRO_PASSWORDS_NOT_EQUAL" development="new" translation="edited">La password originale e quella ridigitata sono diverse.</text>
         <text id="PRO_PHOTO_DELETED" development="new" translation="edited">L'immagine del profilo è stata eliminata.</text>
