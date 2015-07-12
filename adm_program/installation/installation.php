@@ -629,7 +629,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     // create user webmaster and assign roles
     $webmaster = new TableUsers($db);
     $webmaster->setValue('usr_login_name', $_SESSION['user_login']);
-    $webmaster->setValue('usr_password',   $_SESSION['user_password']);
+    $webmaster->setPassword($_SESSION['user_password']);
     $webmaster->setValue('usr_usr_id_create', $gCurrentUser->getValue('usr_id'));
     $webmaster->setValue('usr_timestamp_create', DATETIME_NOW);
     $webmaster->save(false); // no registered user -> UserIdCreate couldn't be filled

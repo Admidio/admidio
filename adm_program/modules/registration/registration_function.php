@@ -54,7 +54,7 @@ if($getMode == 1 || $getMode == 2)
     {
         $user->setValue('EMAIL', $registrationUser->getValue('EMAIL'));
         $user->setValue('usr_login_name', $registrationUser->getValue('usr_login_name'));
-        $user->setValue('usr_password', $registrationUser->getValue('usr_password'));
+        $user->setPassword($registrationUser->getValue('usr_password'));
     }
 
     try

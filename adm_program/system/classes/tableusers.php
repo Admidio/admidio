@@ -16,7 +16,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH.'/adm_program/libs/phpass/passwordhash.php');
+require_once(SERVER_PATH.'/adm_program/system/classes/passwordhashing.php');
 
 /**
  * Class TableUsers
@@ -200,12 +200,9 @@ class TableUsers extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        // encode Password with phpAss
-        if(($columnName === 'usr_password' || $columnName === 'usr_new_password') && strlen($newValue) < 30)
+        if($columnName === 'usr_password' || $columnName === 'usr_new_password')
         {
-            $checkValue     = false;
-            $passwordHasher = new PasswordHash(9, true); // only use private hash because of compatibility
-            $newValue       = $passwordHasher->HashPassword($newValue);
+            return false;
         }
         // username should not contain special characters
         elseif($columnName === 'usr_login_name')
@@ -217,6 +214,26 @@ class TableUsers extends TableAccess
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
+    }
+
+    /**
+     * Set a new value for a password column of the database table.
+     * The value is only saved in the object. You must call the method @b save to store the new value to the database
+     * @param  string $newPassword   The new value that should be stored in the database field
+     * @param  bool   $isNewPassword Should the column password or new_password be set
+     * @param  bool   $doHashing     Should the password get hashed before inserted. Default is true
+     * @return bool   Returns @b true if the value is stored in the current object and @b false if a check failed
+     */
+    public function setPassword($newPassword, $isNewPassword = false, $doHashing = true)
+    {
+        $columnName = ($isNewPassword) ? 'usr_new_password' : 'usr_password';
+
+        if ($doHashing)
+        {
+            $newPassword = PasswordHashing::hash($newPassword);
+        }
+
+        return parent::setValue($columnName, $newPassword, false);
     }
 
     /**

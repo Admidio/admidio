@@ -235,7 +235,7 @@ if($gCurrentUser->isWebmaster() || $getNewUser > 0)
 // falls Registrierung, dann die entsprechenden Felder noch besetzen
 if($getNewUser == 2)
 {
-    $user->setValue('usr_password', $_POST['usr_password']);
+    $user->setPassword($_POST['usr_password']);
 }
 
 // Falls der User sich registrieren wollte, aber ein Captcha geschaltet ist,

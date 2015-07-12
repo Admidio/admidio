@@ -68,15 +68,15 @@ if($getMode === 'change')
             {
                 // check if old password is correct.
                 // Webmaster could change password of other users without this verification.
-                if($user->checkPassword($oldPassword) || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
+                if(PasswordHashing::verify($oldPassword, $user->getValue('usr_password')) || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
                 {
-                    $user->setValue('usr_password', $newPassword);
+                    $user->setPassword($newPassword);
                     $user->save();
 
                     // if password of current user changed, then update value in current session
                     if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
                     {
-                        $gCurrentUser->setValue('usr_password', $newPassword);
+                        $gCurrentUser->setPassword($newPassword);
                     }
 
                     $phrase = 'success';
