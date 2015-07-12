@@ -63,6 +63,12 @@ if($password === '')
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
 }
 
+// TODO Future: check Password min/max Length
+//if(strlen($password) < 8 || strlen($password) > 64)
+//{
+//    $gMessage->show($gL10n->get('PRO_PASSWORD_LENGTH', $gL10n->get('SYS_PASSWORD')));
+//}
+
 // check name and password
 // user must have membership of one role of the organization
 
