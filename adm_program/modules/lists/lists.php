@@ -84,7 +84,7 @@ if($gCurrentUser->manageRoles())
 if($gCurrentUser->manageRoles() && !$gCurrentUser->isWebmaster())
 {
     // show link to maintain categories
-    $LinksMenu->addItem('menu_item_maintain_categories', $g_root_path.'/adm_program/modules/categories/categories.php?type=ROL&title='. $getHeadline,
+    $ListsMenu->addItem('menu_item_maintain_categories', $g_root_path.'/adm_program/modules/categories/categories.php?type=ROL',
                         $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
 }
 
