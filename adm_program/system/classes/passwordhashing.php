@@ -16,38 +16,17 @@ class PasswordHashing
      */
     public static function info($hash)
     {
-        if (strlen($hash) === 60)
+        if (strlen($hash) === 60 && substr($hash, 0, 4) === '$2y$')
         {
-            if (substr($hash, 0, 4) === '$2y$')
-            {
-                return password_get_info($hash);
-            }
-            elseif (substr($hash, 0, 4) === '$2a$' || substr($hash, 0, 4) === '$2x$')
-            {
-                return 'CRYPT_BLOWFISH_INSECURE';
-            }
+            return password_get_info($hash);
         }
-        elseif (strlen($hash) === 34)
+        elseif (strlen($hash) === 34 && substr($hash, 0, 3) === '$P$')
         {
-            if (substr($hash, 0, 3) === '$P$' || substr($hash, 0, 3) === '$H$')
-            {
-                return 'PRIVATE/PORTABLE_HASH';
-            }
-        }
-        elseif (strlen($hash) === 20)
-        {
-            if (substr($hash, 0, 1) === '_')
-            {
-                return 'CRYPT_EXT_DES';
-            }
+            return 'PRIVATE/PORTABLE_HASH';
         }
         elseif (strlen($hash) === 32)
         {
             return 'MD5';
-        }
-        elseif (substr($hash, 0, 1) === '$')
-        {
-            return $hash;
         }
 
         return 'UNKNOWN';

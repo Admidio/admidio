@@ -64,7 +64,7 @@ if($password === '')
 }
 
 // TODO Future: check Password min/max Length
-//if(strlen($password) < 8 || strlen($password) > 64)
+//if(strlen($password) < 8)
 //{
 //    $gMessage->show($gL10n->get('PRO_PASSWORD_LENGTH', $gL10n->get('SYS_PASSWORD')));
 //}

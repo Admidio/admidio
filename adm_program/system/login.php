@@ -40,7 +40,7 @@ $form = new HtmlForm('login_form', $g_root_path.'/adm_program/system/login_check
 
 $form->addInput('usr_login_name', $gL10n->get('SYS_USERNAME'), null,
                 array('maxLength' => 35, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
-// TODO Future: 'minLength' => 8, 'maxLength' => 64
+// TODO Future: 'minLength' => 8
 $form->addInput('usr_password', $gL10n->get('SYS_PASSWORD'), null,
                 array('type' => 'password', 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
 

@@ -94,7 +94,7 @@ if($getNewUser == 2)
     }
 
     // Passwort muss mindestens 8 Zeichen lang sein
-    if(strlen($_POST['usr_password']) < 8 || strlen($_POST['usr_password']) > 64)
+    if(strlen($_POST['usr_password']) < 8)
     {
         $gMessage->show($gL10n->get('PRO_PASSWORD_LENGTH'));
     }

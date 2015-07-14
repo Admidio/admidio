@@ -226,7 +226,10 @@ class TableUsers extends TableAccess
      */
     public function setPassword($newPassword, $isNewPassword = false, $doHashing = true)
     {
-        $columnName = ($isNewPassword) ? 'usr_new_password' : 'usr_password';
+        $columnName = 'usr_password';
+        if ($isNewPassword) {
+            $columnName = 'usr_new_password';
+        }
 
         if ($doHashing)
         {
