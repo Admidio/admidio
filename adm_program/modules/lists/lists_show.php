@@ -559,7 +559,7 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
                     if(strlen($row[$sqlColumnNumber]) > 0)
                     {
                         // date must be formated
-                        $date = new DateTimeExtended($row[$sqlColumnNumber], 'Y-m-d', 'date');
+                        $date = new DateTimeExtended($row[$sqlColumnNumber], 'Y-m-d');
                         $content = $date->format($gPreferences['system_date']);
                     }
                 }

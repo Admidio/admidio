@@ -303,7 +303,7 @@ class ProfileFields
                     }
 
                     // if date field then the current date format must be used
-                    $date = new DateTimeExtended($value, 'Y-m-d', 'date');
+                    $date = new DateTimeExtended($value, 'Y-m-d');
                     if(!$date->isValid())
                     {
                         return $value;

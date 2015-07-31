@@ -20,7 +20,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // calculate default date from which the profile fields history should be shown
-$filterDateFrom = new DateTimeExtended(DATE_NOW, 'Y-m-d', 'date');
+$filterDateFrom = new DateTimeExtended(DATE_NOW, 'Y-m-d');
 $filterDateFrom->modify('-'.$gPreferences['members_days_field_history'].' day');
 
 // Initialize and check the parameters

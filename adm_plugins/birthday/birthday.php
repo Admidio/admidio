@@ -249,7 +249,7 @@ if($anz_geb > 0)
                     }
                     else
                     {
-                        $birthayDate = new DateTimeExtended($row['birthday'], 'Y-m-d', 'date');
+                        $birthayDate = new DateTimeExtended($row['birthday'], 'Y-m-d');
                         $plgDays = ' ';
                         $plgCssClass = '';
 

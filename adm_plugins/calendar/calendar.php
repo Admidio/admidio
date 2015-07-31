@@ -289,7 +289,7 @@ if($plg_geb_aktiv == 1)
 
     while($row = $gDb->fetch_array($result))
     {
-        $birthdayDate   = new DateTimeExtended($row['birthday'], 'Y-m-d', 'date');
+        $birthdayDate   = new DateTimeExtended($row['birthday'], 'Y-m-d');
         $geb_day[$geb]  = $birthdayDate->format('d');
         $geb_year[$geb] = $birthdayDate->format('Y');
         $alter[$geb]    = $jahr-$geb_year[$geb];

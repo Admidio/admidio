@@ -217,8 +217,8 @@ class ModuleAnnouncements extends Modules
             $dateRangeEnd    = DATE_NOW;
         }
 
-        // Create date object and format date_from in English format and sytem format and push to daterange array
-        $objDate = new DateTimeExtended($dateRangeStart, 'Y-m-d', 'date');
+        // Create date object and format date_from in English format and system format and push to daterange array
+        $objDate = new DateTimeExtended($dateRangeStart, 'Y-m-d');
         if($objDate->isValid())
         {
             $this->setParameter('dateStartFormatEnglish', substr($objDate->getDateTimeString(), 0, 10));
@@ -241,7 +241,7 @@ class ModuleAnnouncements extends Modules
         }
 
         // Create date object and format date_to in English format and sytem format and push to daterange array
-        $objDate = new DateTimeExtended($dateRangeEnd, 'Y-m-d', 'date');
+        $objDate = new DateTimeExtended($dateRangeEnd, 'Y-m-d');
         if($objDate->isValid())
         {
             $this->setParameter('dateEndFormatEnglish', substr($objDate->getDateTimeString(), 0, 10));

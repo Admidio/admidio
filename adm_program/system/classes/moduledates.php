@@ -153,7 +153,7 @@ class ModuleDates extends Modules
     {
         global $gPreferences;
 
-        $objDate = new DateTimeExtended($date, 'Y-m-d', 'date');
+        $objDate = new DateTimeExtended($date, 'Y-m-d');
 
         if($objDate->isValid())
         {

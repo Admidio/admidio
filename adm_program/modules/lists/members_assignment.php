@@ -428,7 +428,7 @@ else
         //Geburtstag nur ausgeben wenn bekannt
         if(strlen($user['birthday']) > 0)
         {
-            $birthdayDate = new DateTimeExtended($user['birthday'], 'Y-m-d', 'date');
+            $birthdayDate = new DateTimeExtended($user['birthday'], 'Y-m-d');
             $htmlBirthday = $birthdayDate->format($gPreferences['system_date']);
         }
 

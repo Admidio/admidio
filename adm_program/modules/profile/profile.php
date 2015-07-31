@@ -49,7 +49,7 @@ function getFieldCode($fieldNameIntern, $user)
     // if birthday then show age
     if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'BIRTHDAY')
     {
-        $birthday = new DateTimeExtended($user->getValue($fieldNameIntern, 'Y.m.d'), 'Y.m.d', 'date');
+        $birthday = new DateTimeExtended($user->getValue($fieldNameIntern, 'Y.m.d'), 'Y.m.d');
         $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' '.$gL10n->get('PRO_YEARS').')';
     }
 
@@ -792,7 +792,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
                     $showRolesOtherOrganizations = true;
                 }
 
-                $startDate = new DateTimeExtended($row['mem_begin'], 'Y-m-d', 'date');
+                $startDate = new DateTimeExtended($row['mem_begin'], 'Y-m-d');
                 // jede einzelne Rolle anzeigen
                 $page->addHtml('
                 <li class="list-group-item">

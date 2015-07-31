@@ -264,7 +264,7 @@ while($row = $gDb->fetch_array($result_mgl))
     if(strlen($row['birthday']) > 0)
     {
         // date must be formated
-        $date = new DateTimeExtended($row['birthday'], 'Y-m-d', 'date');
+        $date = new DateTimeExtended($row['birthday'], 'Y-m-d');
         $columnValues[] = $date->format($gPreferences['system_date']);
     }
     else
