@@ -531,6 +531,9 @@ class HtmlForm extends HtmlFormBasic
      *                          + @b FIELD_DEFAULT  : The field can accept an input.
      *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
      *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
+     *                        - @b allowedMimeTypes : An array with the allowed MIME types (http://wiki.selfhtml.org/wiki/Referenz:MIME-Typen).
+     *                          If this is set then the user can only choose the specified files with the browser file dialog.
+     *                          You should check the uploaded file against the MIME type because the file could be manipulated.
      *                        - @b maxUploadSize : The size in byte that could be maximum uploaded.
      *                          The default will be $gPreferences['max_file_upload_size'] * 1024 * 1024.
      *                        - @b enableMultiUploads : If set to true a button will be added where the user can
@@ -559,7 +562,7 @@ class HtmlForm extends HtmlFormBasic
 
         // create array with all options
         $optionsDefault = array('property' => FIELD_DEFAULT, 'maxUploadSize' => $gPreferences['max_file_upload_size'] * 1024 * 1024,
-                                'enableMultiUploads' => false, 'hideUploadField' => false, 'multiUploadLabel' => '',
+                                'allowedMimeTypes' => array(), 'enableMultiUploads' => false, 'hideUploadField' => false, 'multiUploadLabel' => '',
                                 'helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');
         $optionsAll     = array_replace($optionsDefault, $options);
 
@@ -571,6 +574,11 @@ class HtmlForm extends HtmlFormBasic
         elseif($optionsAll['property'] === FIELD_REQUIRED)
         {
             $attributes['required'] = 'required';
+        }
+
+        if(count($optionsAll['allowedMimeTypes']) > 0)
+        {
+            $attributes['accept'] = implode(',', $optionsAll['allowedMimeTypes']);
         }
 
         // set specific css class for this field
@@ -1792,8 +1800,8 @@ class HtmlForm extends HtmlFormBasic
         if($parameters !== null)
         {
             return '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true">
-                        <img src="'. THEME_PATH. '/icons/help.png" alt="Help" />
+                        href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true"><img
+                        src="'. THEME_PATH. '/icons/help.png" alt="Help" />
                     </a>';
         }
     }

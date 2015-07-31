@@ -52,7 +52,7 @@ $importMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->g
 // show form
 $form = new HtmlForm('import_users_form', $g_root_path.'/adm_program/modules/members/import_function.php', $page, array('enableFileUpload' => true));
 $form->addStaticControl('format', $gL10n->get('MEM_FORMAT'), 'CSV');
-$form->addFileUpload('userfile', $gL10n->get('MEM_CHOOSE_FILE'), array('property' => FIELD_REQUIRED));
+$form->addFileUpload('userfile', $gL10n->get('MEM_CHOOSE_FILE'), array('property' => FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values')));
 $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
 $form->addSelectBox('import_coding', $gL10n->get('MEM_CODING'), $selectBoxEntries, array('property' => FIELD_REQUIRED, 'defaultValue' => $form_values['import_coding']));
 
