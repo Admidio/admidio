@@ -25,7 +25,7 @@
  * catch(AdmException $e)
  * {
  *     $e->showHtml();
- * }@endcode
+ * } @endcode
  */
 class Component extends TableAccess
 {

@@ -22,13 +22,13 @@
  * $table->addRowHeadingByArray(array('Firstname', 'Lastname', 'Address', 'Phone', 'E-Mail'));
  * $table->addRowByArray(array('Hans', 'Mustermann', 'Sonnenallee 22', '+49 342 59433', 'h.mustermann@example.org'));
  * $table->addRowByArray(array('Anne', 'Musterfrau', 'Seestraße 6', '+34 7433 7433', 'a.musterfrau@example.org'));
- * $table->show();@endcode
+ * $table->show(); @endcode
  * @code // create a table with jQuery datatables and align columns to center or right
  * $table = new HtmlTable('simple-table', null, true, true);
  * $table->setColumnAlignByArray(array('left', 'left', 'center', 'right'));
  * $table->addRowHeadingByArray(array('Firstname', 'Lastname', 'Birthday', 'Membership fee'));
  * $table->addRowByArray(array('Hans', 'Mustermann', 'Sonnenallee 22', '14.07.1995', '38,50'));
- * $table->show();@endcode
+ * $table->show(); @endcode
  */
 class HtmlTable extends HtmlTableBasic
 {
@@ -47,12 +47,12 @@ class HtmlTable extends HtmlTableBasic
     /**
      * Constructor creates the table element
      * @param string $id         Id of the table
-     * @param object $htmlPage   Optional a HtmlPage object that will be used to add javascript code
+     * @param object $htmlPage   (optional) A HtmlPage object that will be used to add javascript code
      *                           or files to the html output page.
-     * @param bool   $hoverRows  If set to @b true then the active selected row will be marked with special css code
-     * @param bool   $datatables If set to @b true then the jQuery plugin Datatables will be used to create the table.
+     * @param bool   $hoverRows  (optional) If set to @b true then the active selected row will be marked with special css code
+     * @param bool   $datatables (optional) If set to @b true then the jQuery plugin Datatables will be used to create the table.
      *                           Then column sort, search within the table and other features are possible.
-     * @param string $class      Optional an additional css classname. The class @b table
+     * @param string $class      (optional) An additional css classname. The class @b table
      *                           is set as default and need not set with this parameter.
      */
     public function __construct($id, $htmlPage = null, $hoverRows = true, $datatables = false, $class = '')
@@ -101,10 +101,10 @@ class HtmlTable extends HtmlTableBasic
      * Adds a complete row with all columns to the table. This will be the column heading row.
      * Each value of the array represents the heading text for each column.
      * @param array  $arrayColumnValues Array with the values for each column.
-     * @param string $id                Optional set an unique id for the column.
-     * @param array  $arrAttributes     Further attributes as array with key/value pairs
-     * @param int    $startColspan      Number of column where the colspan should start. The first column of a table will be 1.
-     * @param int    $colspan           Number of columns that should be join together.
+     * @param string $id                (optional) Set an unique id for the column.
+     * @param array  $arrAttributes     (optional) Further attributes as array with key/value pairs
+     * @param int    $startColspan      (optional) Number of column where the colspan should start. The first column of a table will be 1.
+     * @param int    $colspan           (optional) Number of columns that should be join together.
      */
     public function addRowHeadingByArray($arrayColumnValues, $id = null, $arrAttributes = null, $startColspan = 0, $colspan = 0)
     {
@@ -143,10 +143,10 @@ class HtmlTable extends HtmlTableBasic
     /**
      * Adds a complete row with all columns to the table. Each column element will be a value of the array parameter.
      * @param array  $arrayColumnValues Array with the values for each column.
-     * @param string $id                Optional set an unique id for the column.
-     * @param array  $arrAttributes     Further attributes as array with key/value pairs
-     * @param int    $startColspan      Number of column where the colspan should start. The first column of a table will be 1.
-     * @param int    $colspan           Number of columns that should be join together.
+     * @param string $id                (optional) Set an unique id for the column.
+     * @param array  $arrAttributes     (optional) Further attributes as array with key/value pairs
+     * @param int    $startColspan      (optional) Number of column where the colspan should start. The first column of a table will be 1.
+     * @param int    $colspan           (optional) Number of columns that should be join together.
      */
     public function addRowByArray($arrayColumnValues, $id = null, $arrAttributes = null, $startColspan = 0, $colspan = 0)
     {
@@ -307,7 +307,7 @@ class HtmlTable extends HtmlTableBasic
      * // sort all rows after first and third column ascending
      * $table->setDatatablesOrderColumns(array(1, 3));
      * // sort all rows after first column descending and third column ascending
-     * $table->setDatatablesOrderColumns(array(array(1, 'desc'), array(3, 'asc')));@endcode
+     * $table->setDatatablesOrderColumns(array(array(1, 'desc'), array(3, 'asc'))); @endcode
      */
     public function setDatatablesOrderColumns($arrayOrderColumns)
     {
@@ -340,7 +340,7 @@ class HtmlTable extends HtmlTableBasic
     /**
      * Set a text id of the translation files that should be shown if table has no rows.
      * @param string $messageId   Text id of the translation file.
-     * @param string $messageType As @b default the text will be shown. If @b warning or @b error
+     * @param string $messageType (optional) As @b default the text will be shown. If @b warning or @b error
      *                            is set then a box in yellow or red with the message will be shown.
      */
     public function setMessageIfNoRowsFound($messageId, $messageType = 'default')
@@ -365,7 +365,7 @@ class HtmlTable extends HtmlTableBasic
      * This method send the whole html code of the table to the browser. If the jQuery plugin DataTables
      * is activated then the javascript for that plugin will be added. Call this method if you
      * have finished your form layout. If table has no rows then a message will be shown.
-     * @param  bool        $directOutput If set to @b true (default) the table html will be directly send
+     * @param  bool        $directOutput (optional) If set to @b true (default) the table html will be directly send
      *                                   to the browser. If set to @b false the html will be returned.
      * @return string|void If $directOutput is set to @b false this method will return the html code of the table.
      */

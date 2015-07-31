@@ -21,7 +21,7 @@
  * $autoLogin->setValidLogin($gCurrentSession, $_COOKIE['ADMIDIO_ID']);@endcode
  * @code // delete an auto login
  * $autoLogin = new AutoLogin($gDb, $gSessionId);
- * $autoLogin->delete();@endcode
+ * $autoLogin->delete(); @endcode
  */
 class AutoLogin extends TableAccess
 {

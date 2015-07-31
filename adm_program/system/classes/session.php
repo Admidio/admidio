@@ -28,7 +28,7 @@
  * if($session->hasObject('organization'))
  * {
  *     $organization =& $session->getObject('organization');
- * }@endcode
+ * } @endcode
  */
 class Session extends TableAccess
 {

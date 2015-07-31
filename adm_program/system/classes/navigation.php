@@ -26,10 +26,10 @@
  *  $gNavigation->getHtml();
  *
  *  // if you want to remove the last entry from the stack
- *  $gNavigation->deleteLastUrl();@endcode
+ *  $gNavigation->deleteLastUrl(); @endcode
  *  @par Example 2
  *  @code // show a navigation bar in your html code
- *  ... <br /><?php echo $gNavigation->getHtmlNavigationBar('id-my-navigation'); ?><br /> ...@endcode
+ *  ... <br /><?php echo $gNavigation->getHtmlNavigationBar('id-my-navigation'); ?><br /> ... @endcode
  */
 class Navigation
 {

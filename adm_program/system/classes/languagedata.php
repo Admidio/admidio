@@ -28,7 +28,7 @@
  * script_b.php
  * // read language data from session and add it to language object
  * $language = new Language();
- * $language->addLanguageData($session->getObject('languageData'));@endcode
+ * $language->addLanguageData($session->getObject('languageData')); @endcode
  */
 class LanguageData
 {

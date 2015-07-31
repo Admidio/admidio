@@ -13,7 +13,7 @@
  *  // read membership data and then stop membership
  *  $membership = new TableMembers($gDb);
  *  $membership->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
- *  $membership->stopMembership();@endcode
+ *  $membership->stopMembership(); @endcode
  */
 /*****************************************************************************
  *

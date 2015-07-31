@@ -23,7 +23,7 @@ function __autoload($className)
  * Function checks if the user is a member of the role.
  * If @b userId is not set than this will be checked for the current user
  * @param string $roleName The name of the role where the membership of the user should be checked
- * @param int $userId      The id of the user who should be checked if he is a member of the role.
+ * @param int    $userId   The id of the user who should be checked if he is a member of the role.
  *                         If @userId is not set than this will be checked for the current user
  * @return int|bool Returns @b true if the user is a member of the role
  */
@@ -65,7 +65,7 @@ function hasRole($roleName, $userId = 0)
 
 /**
  * Function checks if the user is a member in a role of the current organization.
- * @param int $userId The id of the user who should be checked if he is a member of the current organization
+ * @param  int  $userId The id of the user who should be checked if he is a member of the current organization
  * @return bool Returns @b true if the user is a member
  */
 function isMember($userId)
@@ -101,7 +101,7 @@ function isMember($userId)
  * Function checks if the user is a group leader in a role of the current organization.
  * If you use the @b roleId parameter you can check if the user is group leader of that role.
  * @param int $userId  The id of the user who should be checked if he is a group leader
- * @param int $roleId  If set <> 0 than the function checks if the user is group leader of this role
+ * @param int $roleId  (optional) If set <> 0 than the function checks if the user is group leader of this role
  *                     otherwise it checks if the user is group leader in one role of the current organization
  * @return bool Returns @b true if the user is a group leader
  */
@@ -143,11 +143,11 @@ function isGroupLeader($userId, $roleId = 0)
  *     Seite: < Vorherige 1  2  3 ... 9  10  11 Naechste >
  *
  * @param string $base_url                 Basislink zum Modul (auch schon mit notwendigen Uebergabevariablen)
- * @param int $num_items                   Gesamtanzahl an Elementen
- * @param int $per_page                    Anzahl Elemente pro Seite
- * @param int $start_item                  Mit dieser Elementnummer beginnt die aktuelle Seite
- * @param bool $add_prevnext_text          Links mit "Vorherige" "Naechste" anzeigen
- * @param string $scriptParameterNameStart Optional you can set a new name for the parameter that should be used as start parameter.
+ * @param int    $num_items                Gesamtanzahl an Elementen
+ * @param int    $per_page                 Anzahl Elemente pro Seite
+ * @param int    $start_item               Mit dieser Elementnummer beginnt die aktuelle Seite
+ * @param bool   $add_prevnext_text        Links mit "Vorherige" "Naechste" anzeigen
+ * @param string $scriptParameterNameStart (optional) You can set a new name for the parameter that should be used as start parameter.
  * @return string
  */
 function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true, $scriptParameterNameStart = 'start')
@@ -348,14 +348,14 @@ function admFuncProcessableImageSize()
  *                             is expected and which will be checked.
  *                             Datatype @b date expects a date that has the Admidio default format from the
  *                             preferences or the english date format @b Y-m-d
- * @param array $options       An array with the following possible entries:
- *                             @b defaultValue: A value that will be set if the variable has no value
- *                             @b requireValue: If set to @b true than a value is required otherwise the function
- *                                              returns an error
- *                             @b validValues:  An array with all values that the variable could have. If another
- *                                              value is found than the function returns an error
- *                             @b directOutput: If set to @b true the function returns only the error string, if set
- *                                              to false a html message with the error will be returned
+ * @param array $options       (optional) An array with the following possible entries:
+ *                             - @b defaultValue : A value that will be set if the variable has no value
+ *                             - @b requireValue : If set to @b true than a value is required otherwise the function
+ *                                                 returns an error
+ *                             - @b validValues :  An array with all values that the variable could have. If another
+ *                                                 value is found than the function returns an error
+ *                             - @b directOutput : If set to @b true the function returns only the error string, if set
+ *                                                 to false a html message with the error will be returned
  * @return mixed|null Returns the value of the element or the error message if a test failed
  *
  * @par Examples
@@ -368,7 +368,7 @@ function admFuncProcessableImageSize()
  * // string initialized with actual and the only allowed values are actual and old
  * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old'))); @endcode
  */
-function admFuncVariableIsValid($array, $variableName, $datatype, $options = array()) // $defaultValue = null, $requireValue = false, $validValues = null, $directOutput = false)
+function admFuncVariableIsValid($array, $variableName, $datatype, $options = array())
 {
     global $gL10n, $gMessage, $gPreferences;
 
@@ -509,10 +509,10 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
  * Creates a html fragment with information about user and time when the recordset was created
  * and when it was at last edited. Therefore all necessary data must be set in the function
  * parameters. If userid is not set then the function will show @b deleted @b user.
- * @param int $userIdCreated      Id of the user who create the recordset.
- * @param string $timestampCreate Date and time of the moment when the user create the recordset.
- * @param int $userIdEdited       Id of the user last changed the recordset.
- * @param string $timestampEdited Date and time of the moment when the user last changed the recordset
+ * @param int     $userIdCreated   Id of the user who create the recordset.
+ * @param string  $timestampCreate Date and time of the moment when the user create the recordset.
+ * @param int     $userIdEdited    Id of the user last changed the recordset.
+ * @param string  $timestampEdited Date and time of the moment when the user last changed the recordset
  * @return string Returns a html string with usernames who creates item and edit item the last time
  */
 function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $userIdEdited, $timestampEdited)
@@ -588,9 +588,9 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
  * @param string $timestampCreate Date and time of the moment when the user create the recordset.
  * @param string $userNameEdited  Id of the user last changed the recordset.
  * @param string $timestampEdited Date and time of the moment when the user last changed the recordset
- * @param int $userIdCreated      Optional the id of the user who create the recordset.
+ * @param int    $userIdCreated   (optional) The id of the user who create the recordset.
  *                                If id is set than a link to the user profile will be created
- * @param int $userIdEdited       Optional the id of the user last changed the recordset.
+ * @param int    $userIdEdited    (optional) The id of the user last changed the recordset.
  *                                If id is set than a link to the user profile will be created
  * @return string Returns a html string with usernames who creates item and edit item the last time
  */

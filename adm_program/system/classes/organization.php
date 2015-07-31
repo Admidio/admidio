@@ -12,7 +12,7 @@
  *  $organization = new Organization($gDb, $organizationId);
  *  $preferences  = $organization->getPreferences();
  *  $language     = $preferences['system_language'];
- *  // language = 'de'@endcode
+ *  // language = 'de' @endcode
  */
 /*****************************************************************************
  *

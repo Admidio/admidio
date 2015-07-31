@@ -22,7 +22,7 @@
  * $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.min.js');
  * $page->addHeadline('A simple Html page');
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
- * $page->show();@endcode
+ * $page->show(); @endcode
  */
 class HtmlPage
 {
@@ -43,7 +43,7 @@ class HtmlPage
 
     /**
      * Constructor creates the page object and initialized all parameters
-     * @param string $title A string that contains the title/headline for the page.
+     * @param string $title (optional) A string that contains the title/headline for the page.
      */
     public function __construct($title = '')
     {
@@ -129,7 +129,7 @@ class HtmlPage
     /**
      * Adds any javascript content to the page. The javascript will be added in the order you call this method.
      * @param string $javascriptCode       A valid javascript code that will be added to the header of the page.
-     * @param bool   $executeAfterPageLoad If set to @b true the javascript code will be executed after
+     * @param bool   $executeAfterPageLoad (optional) If set to @b true the javascript code will be executed after
      *                                     the page is fully loaded.
      */
     public function addJavascript($javascriptCode, $executeAfterPageLoad = false)
@@ -282,7 +282,7 @@ class HtmlPage
     /**
      * Adds a RSS file to the html page.
      * @param string $file  The url with filename of the rss file.
-     * @param string $title Optional set a title. This is the name of the feed and will be shown when adding the rss feed.
+     * @param string $title (optional) Set a title. This is the name of the feed and will be shown when adding the rss feed.
      */
     public function addRssFile($file, $title = '')
     {
@@ -363,7 +363,7 @@ class HtmlPage
     /**
      * This method send the whole html code of the page to the browser. Call this method
      * if you have finished your page layout.
-     * @param  bool        $directOutput If set to @b true (default) the html page will be directly send
+     * @param  bool        $directOutput (optional) If set to @b true (default) the html page will be directly send
      *                                   to the browser. If set to @b false the html will be returned.
      * @return string|void If $directOutput is set to @b false this method will return the html code of the page.
      */

@@ -16,7 +16,7 @@
  *
  *  // show a message with yes and no button and set a link to a page that should be shown after user click yes
  *  $gMessage->setForwardYesNo('http://www.example.de/mypage.php');
- *  $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));@endcode
+ *  $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID')); @endcode
  */
  /*****************************************************************************
  *
