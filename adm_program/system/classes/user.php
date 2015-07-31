@@ -1078,7 +1078,7 @@ class User extends TableUsers
 
         $member = new TableMembers($this->db);
 
-        if($startDate === '' || $startDate === '')
+        if($startDate === '' || $endDate === '')
         {
             return false;
         }
@@ -1086,11 +1086,13 @@ class User extends TableUsers
 
         // subtract 1 day from start date so that we find memberships that ends yesterday
         // these memberships can be continued with new date
-        $startDate = DateTime::createFromFormat('Y-m-d', $startDate)->sub(new DateInterval('P1D'))->format('Y-m-d');
+        $oneDayDateInterval = new DateInterval('P1D');
+
+        $startDate = DateTime::createFromFormat('Y-m-d', $startDate)->sub($oneDayDateInterval)->format('Y-m-d');
         // add 1 to max date because we subtract one day if a membership ends
         if($endDate !== '9999-12-31')
         {
-            $endDate = DateTime::createFromFormat('Y-m-d', $startDate)->add(new DateInterval('P1D'))->format('Y-m-d');
+            $endDate = DateTime::createFromFormat('Y-m-d', $endDate)->add($oneDayDateInterval)->format('Y-m-d');
         }
 
         // search for membership with same role and user and overlapping dates
