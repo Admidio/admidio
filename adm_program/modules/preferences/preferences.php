@@ -468,7 +468,7 @@ $page->addHtml('
                         $html = '<a href="preferences_function.php?mode=4" target="_blank">phpinfo()</a>';
                         $form->addCustomContent($gL10n->get('SYS_PHP_INFO'), $html);
 
-                        if($gDebug)
+                        if(isset($gDebug) && $gDebug)
                         {
                             $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_ON').'</strong></span>';
                         }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 /******************************************************************************
  * Show role members list
@@ -339,7 +340,7 @@ for($columnNumber = 1; $columnNumber <= $list->countColumns(); $columnNumber++)
             $columnAlign[] = 'center';
         }
         elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'NUMBER'
-        || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DECIMAL_NUMBER')
+        || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DECIMAL')
         {
             $columnAlign[] = 'right';
         }

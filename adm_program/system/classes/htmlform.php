@@ -1508,8 +1508,8 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // now create html for the field
-        $this->openControlStructure('', $label, FIELD_DEFAULT, $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
-        $this->addHtml('<p class="form-control-static">'.$value.'</p>');
+        $this->openControlStructure(null, $label, FIELD_DEFAULT, $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
+        $this->addHtml('<p class="'.$attributes['class'].'">'.$value.'</p>');
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
 

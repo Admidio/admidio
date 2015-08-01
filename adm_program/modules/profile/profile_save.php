@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 /******************************************************************************
  * Save profile/registration data
@@ -177,7 +178,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 {
                     $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
                 }
-                elseif($field->getValue('usf_type') == 'NUMBER' || $field->getValue('usf_type') == 'DECIMAL_NUMBER')
+                elseif($field->getValue('usf_type') == 'NUMBER' || $field->getValue('usf_type') == 'DECIMAL')
                 {
                     $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
                 }
