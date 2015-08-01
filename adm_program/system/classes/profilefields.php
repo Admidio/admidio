@@ -496,7 +496,7 @@ class ProfileFields
                     $fieldValue = ltrim($fieldValue, '0');
                 }
             }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DECIMAL_NUMBER')
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DECIMAL')
             {
                 // A number must be numeric
                 if(is_numeric(strtr($fieldValue, ',.', '00')) == false && $this->noValueCheck != true)

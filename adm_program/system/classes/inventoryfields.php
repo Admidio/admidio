@@ -487,7 +487,7 @@ class InventoryFields
                     $fieldValue = ltrim($fieldValue, '0');
                 }
             }
-            elseif($this->mInventoryFields[$fieldNameIntern]->getValue('inf_type') == 'DECIMAL_NUMBER')
+            elseif($this->mInventoryFields[$fieldNameIntern]->getValue('inf_type') == 'DECIMAL')
             {
                 // A number must be numeric
                 if(is_numeric(strtr($fieldValue, ',.', '00')) == false && $this->noValueCheck != true)

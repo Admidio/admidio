@@ -216,7 +216,7 @@ class ListConfiguration extends TableLists
                     $sqlOrderBy = $sqlOrderBy. ', ';
                 }
 
-                if($userFieldType == 'NUMBER' || $userFieldType == 'DECIMAL_NUMBER')
+                if($userFieldType == 'NUMBER' || $userFieldType == 'DECIMAL')
                 {
                     // if a field has numeric values then there must be a cast because database
                     // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
@@ -265,7 +265,7 @@ class ListConfiguration extends TableLists
                         $value = array_search(admStrToLower($value), array_map('admStrToLower', $arrListValues));
                     }
                     elseif($userFieldType == 'NUMBER'
-                    ||     $userFieldType == 'DECIMAL_NUMBER')
+                    ||     $userFieldType == 'DECIMAL')
                     {
                         $type = 'int';
                     }

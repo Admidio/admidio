@@ -97,7 +97,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
                 {
                     $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $field->getValue('inf_name')));
                 }
-                elseif($field->getValue('inf_type') == 'NUMBER' || $field->getValue('inf_type') == 'DECIMAL_NUMBER')
+                elseif($field->getValue('inf_type') == 'NUMBER' || $field->getValue('inf_type') == 'DECIMAL')
                 {
                     $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('inf_name')));
                 }
