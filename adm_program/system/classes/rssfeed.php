@@ -106,12 +106,12 @@ class RSSfeed
         {
             if (isset($this->channel[$field]))
             {
-                echo '<${field}>'.htmlspecialchars($this->channel[$field], ENT_QUOTES).'</${field}>\n';
+                echo '<${field}>'.htmlspecialchars($this->channel[$field], ENT_QUOTES)."</${field}>\n";
             }
         }
-        echo '<language>'.$gL10n->getLanguageIsoCode().'</language>\n';
-        echo '<generator>Admidio RSS-Class</generator>\n\n';
-        echo '<pubDate>'.date('r').'</pubDate>\n\n';
+        echo '<language>'.$gL10n->getLanguageIsoCode()."</language>\n";
+        echo "<generator>Admidio RSS-Class</generator>\n\n";
+        echo '<pubDate>'.date('r')."</pubDate>\n\n";
     }
 
 
@@ -122,17 +122,17 @@ class RSSfeed
     {
         foreach ($this->items as $item)
         {
-            echo '<item>\n';
+            echo "<item>\n";
             foreach (array('title', 'description', 'link', 'author', 'pubDate') as $field)
             {
                 if (isset($item[$field]))
                 {
-                    echo '<${field}>'.htmlspecialchars($item[$field], ENT_QUOTES).'</${field}>\n';
+                    echo '<${field}>'.htmlspecialchars($item[$field], ENT_QUOTES)."</${field}>\n";
                 }
             }
-            echo '<guid>'.str_replace('&', '&amp;', $item['link']).'</guid>\n';
-            echo '<source url="'.$this->feed.'">'.htmlspecialchars($this->channel['title'], ENT_QUOTES).'</source>\n';
-            echo '</item>\n\n';
+            echo '<guid>'.str_replace('&', '&amp;', $item['link'])."</guid>\n";
+            echo '<source url="'.$this->feed.'">'.htmlspecialchars($this->channel['title'], ENT_QUOTES)."</source>\n";
+            echo "</item>\n\n";
         }
     }
 

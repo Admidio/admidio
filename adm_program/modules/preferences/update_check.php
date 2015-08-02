@@ -36,14 +36,14 @@ function GetUpdateVersion($update_info, $search)
     $adding = strlen($search)-1;
 
     // Version auslesen
-    while($pointer !== '\n')
+    while($pointer !== "\n")
     {
         $i++;
         $update_version = $update_version.$pointer;
         $pointer = substr($update_info, $current_version_start+$adding+$i, 1);
     }
 
-    return trim($update_version, '\n\r');
+    return trim($update_version, "\n\r");
 }
 
 // Funktion zur Überprüfung eines Updates

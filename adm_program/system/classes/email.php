@@ -257,8 +257,8 @@ class Email extends PHPMailer
     {
         //Erst mal die Zeilenumbrueche innerhalb des Mailtextes umwandeln in einfache Umbrueche
         // statt \r und \r\n nur noch \n
-        $text = str_replace('\r\n', '\n', $text);
-        $text = str_replace('\r', '\n', $text);
+        $text = str_replace("\r\n", "\n", $text);
+        $text = str_replace("\r", "\n", $text);
 
         $this->emText = $this->emText.strip_tags($text);
         $this->emHtmlText = $this->emHtmlText.$text;

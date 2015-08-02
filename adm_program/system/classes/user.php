@@ -642,64 +642,64 @@ class User extends TableUsers
     {
         global $gPreferences;
 
-        $vcard  = 'BEGIN:VCARD\r\n';
-        $vcard .= 'VERSION:2.1\r\n';
+        $vcard  = 'BEGIN:VCARD'."\r\n";
+        $vcard .= 'VERSION:2.1'."\r\n";
         if($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_hidden') == 0))
         {
-            $vcard .= 'N;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('LAST_NAME')). ';'. utf8_decode($this->getValue('FIRST_NAME')) . ';;;\r\n';
+            $vcard .= 'N;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('LAST_NAME')). ';'. utf8_decode($this->getValue('FIRST_NAME')) . ";;;\r\n";
         }
         if($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_hidden') == 0))
         {
-            $vcard .= 'FN;CHARSET=ISO-8859-1:'. utf8_decode($this->getValue('FIRST_NAME')) . ' '. utf8_decode($this->getValue('LAST_NAME')) . '\r\n';
+            $vcard .= 'FN;CHARSET=ISO-8859-1:'. utf8_decode($this->getValue('FIRST_NAME')) . ' '. utf8_decode($this->getValue('LAST_NAME')) . "\r\n";
         }
         if (strlen($this->getValue('usr_login_name')) > 0)
         {
-            $vcard .= 'NICKNAME;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('usr_login_name')). '\r\n';
+            $vcard .= 'NICKNAME;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('usr_login_name')). "\r\n";
         }
         if (strlen($this->getValue('PHONE')) > 0
         && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('PHONE', 'usf_hidden') == 0)))
         {
-            $vcard .= 'TEL;HOME;VOICE:' . $this->getValue('PHONE'). '\r\n';
+            $vcard .= 'TEL;HOME;VOICE:' . $this->getValue('PHONE'). "\r\n";
         }
         if (strlen($this->getValue('MOBILE')) > 0
         && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('MOBILE', 'usf_hidden') == 0)))
         {
-            $vcard .= 'TEL;CELL;VOICE:' . $this->getValue('MOBILE'). '\r\n';
+            $vcard .= 'TEL;CELL;VOICE:' . $this->getValue('MOBILE'). "\r\n";
         }
         if (strlen($this->getValue('FAX')) > 0
         && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('FAX', 'usf_hidden') == 0)))
         {
-            $vcard .= 'TEL;HOME;FAX:' . $this->getValue('FAX'). '\r\n';
+            $vcard .= 'TEL;HOME;FAX:' . $this->getValue('FAX'). "\r\n";
         }
         if($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('ADDRESS', 'usf_hidden') == 0 && $this->mProfileFieldsData->getProperty('CITY', 'usf_hidden') == 0
         && $this->mProfileFieldsData->getProperty('POSTCODE', 'usf_hidden') == 0  && $this->mProfileFieldsData->getProperty('COUNTRY', 'usf_hidden') == 0))
         {
-            $vcard .= 'ADR;CHARSET=ISO-8859-1;HOME:;;' . utf8_decode($this->getValue('ADDRESS')). ';' . utf8_decode($this->getValue('CITY')). ';;' . utf8_decode($this->getValue('POSTCODE')). ';' . utf8_decode($this->getValue('COUNTRY')). '\r\n';
+            $vcard .= 'ADR;CHARSET=ISO-8859-1;HOME:;;' . utf8_decode($this->getValue('ADDRESS')). ';' . utf8_decode($this->getValue('CITY')). ';;' . utf8_decode($this->getValue('POSTCODE')). ';' . utf8_decode($this->getValue('COUNTRY')). "\r\n";
         }
         if (strlen($this->getValue('WEBSITE')) > 0
         && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('WEBSITE', 'usf_hidden') == 0)))
         {
-            $vcard .= 'URL;HOME:' . $this->getValue('WEBSITE'). '\r\n';
+            $vcard .= 'URL;HOME:' . $this->getValue('WEBSITE'). "\r\n";
         }
         if (strlen($this->getValue('BIRTHDAY')) > 0
         && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('BIRTHDAY', 'usf_hidden') == 0)))
         {
-            $vcard .= 'BDAY:' . $this->getValue('BIRTHDAY', 'Ymd') . '\r\n';
+            $vcard .= 'BDAY:' . $this->getValue('BIRTHDAY', 'Ymd') . "\r\n";
         }
         if (strlen($this->getValue('EMAIL')) > 0
         && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('EMAIL', 'usf_hidden') == 0)))
         {
-            $vcard .= 'EMAIL;PREF;INTERNET:' . $this->getValue('EMAIL'). '\r\n';
+            $vcard .= 'EMAIL;PREF;INTERNET:' . $this->getValue('EMAIL'). "\r\n";
         }
         if (file_exists(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
         {
             $img_handle = fopen(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg', 'rb');
-            $vcard .= 'PHOTO;ENCODING=BASE64;TYPE=JPEG:'.base64_encode(fread($img_handle, filesize(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))). '\r\n';
+            $vcard .= 'PHOTO;ENCODING=BASE64;TYPE=JPEG:'.base64_encode(fread($img_handle, filesize(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))). "\r\n";
             fclose($img_handle);
         }
         if (strlen($this->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
         {
-            $vcard .= 'PHOTO;ENCODING=BASE64;TYPE=JPEG:'.base64_encode($this->getValue('usr_photo')). '\r\n';
+            $vcard .= 'PHOTO;ENCODING=BASE64;TYPE=JPEG:'.base64_encode($this->getValue('usr_photo')). "\r\n";
         }
         // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
         if ($this->getValue('GENDER') > 0
@@ -713,14 +713,14 @@ class User extends TableUsers
             {
                 $wab_gender = 1;
             }
-            $vcard .= 'X-WAB-GENDER:' . $wab_gender . '\r\n';
+            $vcard .= 'X-WAB-GENDER:' . $wab_gender . "\r\n";
         }
         if (strlen($this->getValue('usr_timestamp_change')) > 0)
         {
-            $vcard .= 'REV:' . $this->getValue('usr_timestamp_change', 'ymdThis') . '\r\n';
+            $vcard .= 'REV:' . $this->getValue('usr_timestamp_change', 'ymdThis') . "\r\n";
         }
 
-        $vcard .= 'END:VCARD\r\n';
+        $vcard .= 'END:VCARD'."\r\n";
         return $vcard;
     }
 
