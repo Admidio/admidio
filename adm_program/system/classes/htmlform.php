@@ -366,7 +366,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // now create html for the field
-        $this->openControlStructure($id, null, null);
+        $this->openControlStructure($id, '');
         $this->addHtml('<div class="'.$cssClasses.'"><label>');
         $this->addSimpleInput('checkbox', $id, $id, '1', $attributes);
         $this->addHtml($htmlIcon.$label.$htmlHelpIcon.'</label></div>');
@@ -1565,11 +1565,11 @@ class HtmlForm extends HtmlFormBasic
      *                                 If you need an additional parameter for the text you can add an array. The first entry
      *                                 must be the unique text id and the second entry will be a parameter of the text id.
      */
-    protected function closeControlStructure($helpTextId = null)
+    protected function closeControlStructure($helpTextId = '')
     {
         global $gL10n;
 
-        if($helpTextId !== null)
+        if($helpTextId !== '')
         {
             if(is_array($helpTextId))
             {
