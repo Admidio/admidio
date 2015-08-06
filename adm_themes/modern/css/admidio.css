@@ -46,6 +46,11 @@ body {
     margin-bottom: 25px;
 }
 
+body > .admContent {
+    background-color: #ffffff;
+    padding: 15px;
+}
+
 /* Layout adjustments for devices > 7" */
 @media (min-width: 768px) {
     body {
