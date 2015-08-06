@@ -9,7 +9,7 @@
  *****************************************************************************/
 
 /**
- * @param int $days
+ * @param  int    $days
  * @return string
  */
 function addDaysToDate($days)
