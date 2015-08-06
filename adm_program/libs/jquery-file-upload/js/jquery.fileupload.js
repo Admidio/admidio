@@ -277,7 +277,8 @@
             // The following are jQuery ajax settings required for the file uploads:
             processData: false,
             contentType: false,
-            cache: false
+            cache: false,
+            timeout: 0
         },
 
         // A list of options that require reinitializing event listeners and/or
@@ -983,7 +984,10 @@
                 fileSet,
                 i,
                 j = 0;
-            if (limitSize && (!filesLength || files[0].size === undefined)) {
+            if (!filesLength) {
+                return false;
+            }
+            if (limitSize && files[0].size === undefined) {
                 limitSize = undefined;
             }
             if (!(options.singleFileUploads || limit || limitSize) ||

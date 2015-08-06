@@ -1,6 +1,6 @@
 <?php
 
-require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/uploadhandler.php');
+require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/UploadHandler.php');
 
 /**
  * Class UploadHandlerPhoto

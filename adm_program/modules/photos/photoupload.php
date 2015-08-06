@@ -16,7 +16,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/uploadhandler.php');
+require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/UploadHandler.php');
 
 // Initialize and check the parameters
 $getMode    = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'choose_files', 'validValues' => array('choose_files', 'upload_files')));
@@ -66,20 +66,20 @@ if($getMode == 'choose_files')
     // delete old stuff in upload folder
     $uploadFolder = new Folder(SERVER_PATH.'/adm_my_files/photos/upload');
     $uploadFolder->delete('', true);
-    
+
     // create html page object
     $page = new HtmlPage();
     $page->hideThemeHtml();
     $page->hideMenu();
-    
+
     $page->addCssFile($g_root_path.'/adm_program/libs/jquery-file-upload/css/jquery.fileupload.css');
     $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery-file-upload/js/vendor/jquery.ui.widget.js');
     $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery-file-upload/js/jquery.iframe-transport.js');
     $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery-file-upload/js/jquery.fileupload.js');
-    
+
     $page->addJavascript('
     var countErrorFiles = 0;
-    
+
     $(function () {
         "use strict";
         $("#fileupload").fileupload({
