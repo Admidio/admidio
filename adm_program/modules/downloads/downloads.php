@@ -77,7 +77,7 @@ $DownloadsMenu = $page->getMenu();
 if ($gCurrentUser->editDownloadRight())
 {
     // upload only possible if upload filesize > 0
-    if ($gPreferences['max_file_upload_size'] > 0) 
+    if ($gPreferences['max_file_upload_size'] > 0)
     {
         // show links for upload, create folder and folder configuration
         $DownloadsMenu->addItem('admMenuItemCreateFolder', $g_root_path.'/adm_program/modules/downloads/folder_new.php?folder_id='.$getFolderId,
@@ -94,7 +94,7 @@ if ($gCurrentUser->editDownloadRight())
 if($gCurrentUser->isWebmaster())
 {
     // show link to system preferences of weblinks
-    $DownloadsMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=downloads', 
+    $DownloadsMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=downloads',
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
@@ -122,10 +122,10 @@ $downloadOverview->addRowHeadingByArray($columnHeading);
 $downloadOverview->setMessageIfNoRowsFound('DOW_FOLDER_NO_FILES', 'warning');
 
 // Get folder content
-if (isset($folderContent['folders'])) 
+if (isset($folderContent['folders']))
 {
     // First get possible sub folders
-    for($i=0; $i<count($folderContent['folders']); $i++) 
+    for($i=0; $i<count($folderContent['folders']); $i++)
     {
         $nextFolder = $folderContent['folders'][$i];
         $folderDescription = '';
@@ -162,17 +162,17 @@ if (isset($folderContent['folders']))
                                 <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" 
                                     href="'.$g_root_path.'/adm_program/system/popup_message.php?type=fol&amp;element_id=row_folder_'.
                                     $nextFolder['fol_id'].'&amp;name='.urlencode($nextFolder['fol_name']).'&amp;database_id='.$nextFolder['fol_id'].'"><img
-                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>'. 
-                                    $noteFolderNotExists; 
+                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>'.
+                                    $noteFolderNotExists;
         }
         $downloadOverview->addRowByArray($columnValues, 'row_folder_'.$nextFolder['fol_id']);
     }
 }
 
 // Get contained files
-if (isset($folderContent['files'])) 
+if (isset($folderContent['files']))
 {
-    for($i=0; $i<count($folderContent['files']); $i++) 
+    for($i=0; $i<count($folderContent['files']); $i++)
     {
         $nextFile = $folderContent['files'][$i];
 
@@ -199,7 +199,7 @@ if (isset($folderContent['files']))
         $columnValues = array(
             2, // Type file
             '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">
-                <img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'" /></a>',     
+                <img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'" /></a>',
             '<a href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">'. $nextFile['fil_name']. '</a>'.$fileDescription,
             $timestamp->format($gPreferences['system_date'].' '.$gPreferences['system_time']),
             $nextFile['fil_size']. ' kB&nbsp;',
@@ -265,9 +265,9 @@ if ($gCurrentUser->editDownloadRight())
         $adminTable->addRowHeadingByArray($columnHeading);
 
         // Get folders
-        if (isset($folderContent['additionalFolders'])) 
+        if (isset($folderContent['additionalFolders']))
         {
-            for($i=0; $i<count($folderContent['additionalFolders']); $i++) 
+            for($i=0; $i<count($folderContent['additionalFolders']); $i++)
             {
 
                 $nextFolder = $folderContent['additionalFolders'][$i];
@@ -281,9 +281,9 @@ if ($gCurrentUser->editDownloadRight())
         }
 
         // Get files
-        if (isset($folderContent['additionalFiles'])) 
+        if (isset($folderContent['additionalFiles']))
         {
-            for($i=0; $i<count($folderContent['additionalFiles']); $i++) 
+            for($i=0; $i<count($folderContent['additionalFiles']); $i++)
             {
 
                 $nextFile = $folderContent['additionalFiles'][$i];

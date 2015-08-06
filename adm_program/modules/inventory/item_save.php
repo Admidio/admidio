@@ -65,12 +65,12 @@ switch($getNewItem)
 // nun alle Profilfelder pruefen
 foreach($gInventoryFields->mInventoryFields as $field)
 {
-    $post_id = 'inf-'. $field->getValue('inf_id');    
+    $post_id = 'inf-'. $field->getValue('inf_id');
     
     // check and save only fields that aren't disabled
     if($gCurrentUser->editUsers() == true || $field->getValue('inf_disabled') == 0 || ($field->getValue('inf_disabled') == 1 && $getNewItem > 0))
     {
-        if(isset($_POST[$post_id])) 
+        if(isset($_POST[$post_id]))
         {
             // Pflichtfelder muessen gefuellt sein
             // E-Mail bei Registrierung immer !!!
@@ -166,7 +166,7 @@ $gNavigation->deleteLastUrl();
 /*------------------------------------------------------------*/
 
 if($getNewItem == 1)
-{    
+{
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }

@@ -106,7 +106,7 @@ if (isset($comment_result))
             if(strlen($gbComment->getValue('gbc_usr_id_change')) > 0)
             {
                 echo '<div class="panel-footer">'.admFuncShowCreateChangeInfoById(0, '', $gbComment->getValue('gbc_usr_id_change'), $gbComment->getValue('gbc_timestamp_change')).'</div>';
-            }            
+            }
         echo '</div>';
     }
 

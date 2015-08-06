@@ -100,7 +100,7 @@ else
             {
                 if(strlen($plg_value) > $plg_max_char_per_word)
                 {
-                    $plg_new_headline = $plg_new_headline.' '. substr($plg_value, 0, $plg_max_char_per_word). '-<br />'. 
+                    $plg_new_headline = $plg_new_headline.' '. substr($plg_value, 0, $plg_max_char_per_word). '-<br />'.
                                     substr($plg_value, $plg_max_char_per_word);
                 }
                 else

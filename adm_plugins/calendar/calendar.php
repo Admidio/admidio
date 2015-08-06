@@ -497,7 +497,7 @@ while($i<=$insgesamt)
     // Hier erfolgt nun die Bestimmung der Linkklasse
     // Dabei werden 3 Linkklassen verwendet:
     // geb (Geburtstage), date (Termine) und merge (gleichzeitig Geburtstage und Termine
-    
+
     // Zuerst Vorbelegung der Wochentagsklassen
     $plg_link_class_saturday = 'plgCalendarSaturday';
     $plg_link_class_sunday   = 'plgCalendarSunday';

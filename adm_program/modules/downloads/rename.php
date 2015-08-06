@@ -73,7 +73,7 @@ else
 
 try
 {
-    if ($getFileId) 
+    if ($getFileId)
     {
         // get recordset of current file from databse
         $file = new TableFile($gDb);
@@ -81,18 +81,18 @@ try
         
         $originalName = $file->getValue('fil_name');
     
-        if ($form_values['new_name'] == null) 
+        if ($form_values['new_name'] == null)
         {
             $form_values['new_name'] = admFuncGetFilenameWithoutExtension($originalName);
         }
     
-        if ($form_values['new_description'] == null) 
+        if ($form_values['new_description'] == null)
         {
             $form_values['new_description'] = $file->getValue('fil_description');
         }
     
     }
-    else 
+    else
     {
         // get recordset of current folder from databses
         $folder = new TableFolder($gDb);
@@ -100,15 +100,15 @@ try
         
         $originalName = $folder->getValue('fol_name');
     
-        if ($form_values['new_name'] == null) 
+        if ($form_values['new_name'] == null)
         {
             $form_values['new_name'] = $originalName;
         }
     
-        if ($form_values['new_description'] == null) 
+        if ($form_values['new_description'] == null)
         {
             $form_values['new_description'] = $folder->getValue('fol_description');
-        }    
+        }
     }
 }
 catch(AdmException $e)

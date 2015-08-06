@@ -35,7 +35,7 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
 }
 
 // upload only possible if upload filesize > 0
-if ($gPreferences['max_file_upload_size'] == 0) 
+if ($gPreferences['max_file_upload_size'] == 0)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }

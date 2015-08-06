@@ -67,7 +67,7 @@ if($getMode == 'assign')
 {
     // change membership of that user
     // this must be called as ajax request
-    
+
     try
     {
         $membership = 0;
@@ -113,7 +113,7 @@ if($getMode == 'assign')
 else
 {
     // show html list with all users and their membership to this role
-    
+
     // set headline of the script
     $headline = $gL10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
 

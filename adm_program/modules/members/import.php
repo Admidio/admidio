@@ -86,11 +86,11 @@ while($row = $gDb->fetch_array($resultList))
 {
     $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
 }
-$form->addSelectBox('import_role_id', $gL10n->get('MEM_ASSIGN_ROLE'), $roles, array('property' => FIELD_REQUIRED, 
+$form->addSelectBox('import_role_id', $gL10n->get('MEM_ASSIGN_ROLE'), $roles, array('property' => FIELD_REQUIRED,
                     'defaultValue' => $form_values['import_role_id'], 'helpTextIdLabel' => 'MEM_ASSIGN_ROLE_FOR_IMPORT'));
 
 $selectBoxEntries = array(1 => $gL10n->get('MEM_NOT_EDIT'), 2 => $gL10n->get('MEM_DUPLICATE'), 3 => $gL10n->get('MEM_REPLACE'), 4 => $gL10n->get('MEM_COMPLEMENT'));
-$form->addSelectBox('user_import_mode', $gL10n->get('MEM_EXISTING_USERS'), $selectBoxEntries, array('property' => FIELD_REQUIRED, 
+$form->addSelectBox('user_import_mode', $gL10n->get('MEM_EXISTING_USERS'), $selectBoxEntries, array('property' => FIELD_REQUIRED,
                     'defaultValue' => $form_values['user_import_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'MEM_IDENTIFY_USERS'));
 $form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_PATH.'/icons/forward.png', 'class' => ' col-sm-offset-3'));
 

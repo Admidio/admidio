@@ -79,7 +79,7 @@ else
 $form = new HtmlForm('weblinks_edit_form', $g_root_path.'/adm_program/modules/links/links_function.php?lnk_id='. $getLinkId. '&amp;headline='. $getHeadline. '&amp;mode='.$modeEditOrCreate, $page);
 $form->addInput('lnk_name', $gL10n->get('LNK_LINK_NAME'), $link->getValue('lnk_name'), array('maxLength' => 250, 'property' => FIELD_REQUIRED));
 $form->addInput('lnk_url', $gL10n->get('LNK_LINK_ADDRESS'), $link->getValue('lnk_url'), array('maxLength' => 2000, 'property' => FIELD_REQUIRED));
-$form->addSelectBoxForCategories('lnk_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'EDIT_CATEGORIES', 
+$form->addSelectBoxForCategories('lnk_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'EDIT_CATEGORIES',
                                  array('property' => FIELD_REQUIRED, 'defaultValue' => $link->getValue('lnk_cat_id')));
 $form->addEditor('lnk_description', $gL10n->get('SYS_DESCRIPTION'), $link->getValue('lnk_description'), array('height' => '150px'));
 

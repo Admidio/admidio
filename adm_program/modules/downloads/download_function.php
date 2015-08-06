@@ -55,7 +55,7 @@ if($myFilesDownload->checkSettings() == false)
 // upload files
 if ($getMode == 1)
 {
-    if ($getFolderId == 0) 
+    if ($getFolderId == 0)
     {
         //FolderId ist zum hochladen erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -101,11 +101,11 @@ if ($getMode == 1)
                 //Falls der Dateityp nicht bestimmt ist auf Standard setzen
                 if (strlen($_FILES['userfile']['type'][$currentFileNo]) <= 0)
                 {
-                    $_FILES['userfile']['type'][$currentFileNo] = 'application/octet-stream';                        
+                    $_FILES['userfile']['type'][$currentFileNo] = 'application/octet-stream';
                 }
                 
                 // Dateinamen ermitteln
-                $fileName = $_FILES['userfile']['name'][$currentFileNo];                
+                $fileName = $_FILES['userfile']['name'][$currentFileNo];
                 
                 // check filename and throw exception if something is wrong
                 if(admStrIsValidFileName($fileName, true))
@@ -137,7 +137,7 @@ if ($getMode == 1)
                     {
                         $gMessage->show($gL10n->get('DOW_FILE_UPLOAD_ERROR', $fileName));
                     }
-                }               
+                }
             }
         }
 
@@ -185,7 +185,7 @@ elseif ($getMode == 2)
         catch(AdmException $e)
         {
             $e->showText();
-        }  
+        }
 
         if ($file->delete())
         {
@@ -221,7 +221,7 @@ elseif ($getMode == 3)
             $newFolderDescription = $_POST['new_description'];
 
             //Test ob der Ordner schon existiert im Filesystem
-            if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$newFolderName)) 
+            if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$newFolderName))
             {
                 $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolderName));
             }
@@ -382,7 +382,7 @@ elseif ($getMode == 4)
             $e->setNewMessage('DOW_FOLDER_NAME_INVALID');
         }
         $e->showHtml();
-    }    
+    }
 }
 
 
@@ -421,7 +421,7 @@ elseif ($getMode == 5)
 //Datei / Ordner zur DB hinzufeuegen
 elseif ($getMode == 6)
 {
-    if ($getFolderId == 0) 
+    if ($getFolderId == 0)
     {
         //FolderId ist zum hinzufuegen erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -498,7 +498,7 @@ elseif ($getMode == 7)
         $targetFolder = new TableFolder($gDb);
         $targetFolder->getFolderForDownload($getFolderId);
         
-        if ($targetFolder->getValue('fol_fol_id_parent')) 
+        if ($targetFolder->getValue('fol_fol_id_parent'))
         {
             // get recordset of parent folder from databse
             $parentFolder = new TableFolder($gDb);
@@ -516,7 +516,7 @@ elseif ($getMode == 7)
             {
                 $publicFlag = 1;
             }
-            else 
+            else
             {
                 $publicFlag = 0;
             }
@@ -529,7 +529,7 @@ elseif ($getMode == 7)
         //Nur wenn der Ordner oeffentlich nicht zugaenglich ist
         //werden die Rollenbrechtigungen gespeichert.
         //Ansonsten wird ein leeres Rollenset gespeichert...
-        if ($publicFlag == 0) 
+        if ($publicFlag == 0)
         {
             //Rollenberechtigungen aufbereiten
             if(array_key_exists('AllowedRoles', $_POST))

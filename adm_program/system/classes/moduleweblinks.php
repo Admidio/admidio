@@ -104,17 +104,17 @@
 class ModuleWeblinks extends Modules
 {
     protected $getConditions;       ///< String with SQL condition
-    
+
     /**
      *  creates an new ModuleWeblink object
-     */    
+     */
     public function __construct()
     {
         global $gValidLogin;
         global $gL10n;
         
         // get parent instance with all parameters from $_GET Array
-        parent::__construct();           
+        parent::__construct();
     }
     
     /** Function returns a set of links with corresponding informations
@@ -146,7 +146,7 @@ class ModuleWeblinks extends Modules
         {
             // if user isn't logged in, then don't show hidden categories
             $this->getConditions .= ' AND cat_hidden = 0 ';
-        }       
+        }
         
 
         //Ankuendigungen aus der DB fischen...
@@ -187,7 +187,7 @@ class ModuleWeblinks extends Modules
      *  @return int Number of links.
      */
     public function getDataSetCount()
-    {     
+    {
         global $gCurrentOrganization;
         global $gDb;
         
@@ -197,7 +197,7 @@ class ModuleWeblinks extends Modules
                 AND cat_type = \'LNK\'
         '.$this->getConditions.'';
         $result = $gDb->query($sql);
-        $row    = $gDb->fetch_array($result);             
+        $row    = $gDb->fetch_array($result);
         return $row['count'];
     }
     
@@ -216,6 +216,6 @@ class ModuleWeblinks extends Modules
             $headline .= ' - '. $category->getValue('cat_name');
         }
         return $headline;
-    }   
+    }
 }
 ?>

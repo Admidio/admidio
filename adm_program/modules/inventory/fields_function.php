@@ -62,12 +62,12 @@ if($getMode == 1)
     if($itemField->getValue('inf_system') == 0 && strlen($_POST['inf_name']) == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
-    }    
+    }
 
     if($itemField->getValue('inf_system') == 0 && strlen($_POST['inf_type']) == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATATYPE')));
-    }    
+    }
 
     if($itemField->getValue('inf_system') == 0 && $_POST['inf_cat_id'] == 0)
     {
@@ -88,7 +88,7 @@ if($getMode == 1)
         if($row['count'] > 0)
         {
             $gMessage->show($gL10n->get('ORG_FIELD_EXIST'));
-        }      
+        }
     }
 
     // Eingabe verdrehen, da der Feldname anders als im Dialog ist
@@ -127,7 +127,7 @@ if($getMode == 1)
     if($return_code < 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    }    
+    }
 
     $gNavigation->deleteLastUrl();
     unset($_SESSION['fields_request']);

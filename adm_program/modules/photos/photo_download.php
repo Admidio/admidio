@@ -90,7 +90,7 @@ if($getPhotoNr == null)
     $zip = new ZipArchive();
     $zip->open($zipname, ZipArchive::CREATE);
 
-    for ($i = 1; $i <= $quantity; $i++) 
+    for ($i = 1; $i <= $quantity; $i++)
     {
         if ($takeOriginalsIfAvailable)
         {
@@ -101,7 +101,7 @@ if($getPhotoNr == null)
                 $path = $path.'.jpg';
                 $zip->addFromString(basename($path),  file_get_contents($path));
                 continue;
-            } 
+            }
             elseif(file_exists($path.'.png'))
             {
                 $path = $path.'.png';
@@ -155,7 +155,7 @@ if($getPhotoNr == null)
             // get number of photos in total
             $quantity = $photo_album->getValue('pho_quantity');
             $photo_album_name = $photo_album->getValue('pho_name');
-            for ($i = 1; $i <= $quantity; $i++) 
+            for ($i = 1; $i <= $quantity; $i++)
             {
                 if ($takeOriginalsIfAvailable)
                 {
@@ -166,7 +166,7 @@ if($getPhotoNr == null)
                         $path = $path.'.jpg';
                         $zip->addFromString($photo_album_name."/".basename($path),  file_get_contents($path));
                         continue;
-                    } 
+                    }
                     elseif(file_exists($path.'.png'))
                     {
                         $path = $path.'.png';
@@ -187,9 +187,9 @@ if($getPhotoNr == null)
     $zip->close();
 
     header('Content-Type: application/zip');
-    header('Content-Description: File Transfer'); 
+    header('Content-Description: File Transfer');
     header('Content-disposition: attachment; filename="'.$nicename.'"');
-    header('Expires: 0'); 
+    header('Expires: 0');
     header('Content-Transfer-Encoding: binary');
     header('Cache-Control: private');
 
@@ -201,8 +201,8 @@ if($getPhotoNr == null)
 } else
 {
     // download single file
-    header('Content-Description: File Transfer'); 
-    header('Expires: 0'); 
+    header('Content-Description: File Transfer');
+    header('Expires: 0');
     header('Content-Transfer-Encoding: binary');
     header('Cache-Control: private');
 
@@ -217,7 +217,7 @@ if($getPhotoNr == null)
             $fp = fopen($path.'.jpg', 'rb');
             fpassthru($fp);
             exit;
-        } 
+        }
         elseif(file_exists($path.'.png'))
         {
             header('Content-Type: application/png');

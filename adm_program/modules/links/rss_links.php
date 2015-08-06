@@ -56,7 +56,7 @@ else
     $additionalTables = '
       LEFT JOIN '. TBL_USERS .' cre_username
         ON cre_username.usr_id = lnk_usr_id_create ';
-} 
+}
 
 //read weblinks from database
 $sql = 'SELECT cat.*, lnk.*, '.$additionalFields.'
@@ -72,8 +72,8 @@ $result = $gDb->query($sql);
 // start defining the RSS Feed
 
 // create RSS feed object with channel information
-$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline, 
-            $gCurrentOrganization->getValue('org_homepage'), 
+$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline,
+            $gCurrentOrganization->getValue('org_homepage'),
             $gL10n->get('LNK_LINKS_FROM', $gCurrentOrganization->getValue('org_longname')),
             $gCurrentOrganization->getValue('org_longname'));
 $weblink = new TableWeblink($gDb);

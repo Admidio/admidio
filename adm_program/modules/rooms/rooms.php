@@ -33,7 +33,7 @@ $roomsMenu = $page->getMenu();
 // show back link
 $roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 // show link to create new room
-$roomsMenu->addItem('menu_item_new_room', $g_root_path.'/adm_program/modules/rooms/rooms_new.php?headline='.$textRoom, 
+$roomsMenu->addItem('menu_item_new_room', $g_root_path.'/adm_program/modules/rooms/rooms_new.php?headline='.$textRoom,
                             $gL10n->get('SYS_CREATE_VAR', $textRoom), 'add.png');
 
 if($gPreferences['system_show_create_edit'] == 1)
@@ -66,7 +66,7 @@ else
         ON cre_username.usr_id = room_usr_id_create
       LEFT JOIN '. TBL_USERS .' cha_username
         ON cha_username.usr_id = room_usr_id_change ';
-}  
+}
 
 //read rooms from database
 $sql = 'SELECT room.*, '.$additionalFields.'
@@ -132,7 +132,7 @@ else
             $page->addHtml('</div>
             <div class="panel-footer">'.
                 // show informations about user who creates the recordset and changed it
-                admFuncShowCreateChangeInfoByName($row['create_name'], $room->getValue('room_timestamp_create'), 
+                admFuncShowCreateChangeInfoByName($row['create_name'], $room->getValue('room_timestamp_create'),
                         $row['change_name'], $room->getValue('room_timestamp_change'), $room->getValue('room_usr_id_create'), $room->getValue('room_usr_id_change')).'
             </div>
         </div>');

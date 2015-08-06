@@ -154,7 +154,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                             if($role->allowedToAssignMembers($gCurrentUser))
                             {
                                 // You are not allowed to delete your own webmaster membership, other roles could be deleted
-                                if (($role->getValue('rol_webmaster') == 1 && $gCurrentUser->getValue('usr_id') != $user->getValue('usr_id')) 
+                                if (($role->getValue('rol_webmaster') == 1 && $gCurrentUser->getValue('usr_id') != $user->getValue('usr_id'))
                                 || ($role->getValue('rol_webmaster') == 0))
                                 {
                                     $roleMemHTML .= '
@@ -221,7 +221,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
     }
     else
     {
-        return $roleMemHTML;    
+        return $roleMemHTML;
     }
 }
 

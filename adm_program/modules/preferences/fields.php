@@ -83,10 +83,10 @@ $fieldsMenu = $page->getMenu();
 $fieldsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // define link to create new profile field
-$fieldsMenu->addItem('menu_item_new_field', $g_root_path.'/adm_program/modules/preferences/fields_new.php', 
+$fieldsMenu->addItem('menu_item_new_field', $g_root_path.'/adm_program/modules/preferences/fields_new.php',
                             $gL10n->get('ORG_CREATE_PROFILE_FIELD'), 'add.png');
 // define link to maintain categories
-$fieldsMenu->addItem('menu_item_maintain_category', $g_root_path.'/adm_program/modules/categories/categories.php?type=USF', 
+$fieldsMenu->addItem('menu_item_maintain_category', $g_root_path.'/adm_program/modules/categories/categories.php?type=USF',
                             $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
 
 $sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_USER_FIELDS. '
@@ -136,12 +136,12 @@ while($row = $gDb->fetch_array($result))
         
         $table->addTableBody();
         $table->addRow('', array('class' => 'admidio-group-heading'));
-        $table->addColumn('<span id="caret_'.$block_id.'" class="caret"></span>'.$userField->getValue('cat_name'), 
+        $table->addColumn('<span id="caret_'.$block_id.'" class="caret"></span>'.$userField->getValue('cat_name'),
             array('id' => 'group_'.$block_id, 'colspan' => '8'), 'td');
         $table->addTableBody('id', $block_id);
         
         $categoryId = $userField->getValue('usf_cat_id');
-    }           
+    }
    
     // cut long text strings and provide tooltip
     if(strlen($userField->getValue('usf_description')) > 22)
@@ -151,11 +151,11 @@ while($row = $gDb->fetch_array($result))
                 href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $userField->getValue('usf_name_intern'). '&amp;inline=true"><span  data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('usf_description')).'">[..]</span></a>';
     }
     elseif(strlen($userField->getValue('usf_description')== 0))
-    {   
+    {
         $description = '&nbsp;';
     }
     else
-    {   
+    {
         $description = $userField->getValue('usf_description');
     }
     
@@ -198,7 +198,7 @@ while($row = $gDb->fetch_array($result))
                             'DECIMAL'  => $gL10n->get('SYS_DECIMAL_NUMBER'));
     
     $usfSystem = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/preferences/fields_new.php?usf_id='.$userField->getValue('usf_id').'"><img
-                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';     
+                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
 
     if($userField->getValue('usf_system') == 1)
     {

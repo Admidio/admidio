@@ -155,7 +155,7 @@ if($plg_photos_show_link && $plg_max_char_per_word > 0)
     {
         if(strlen($words[$i]) > $plg_max_char_per_word)
         {
-            $link_text = $link_text.substr($words[$i], 0, $plg_max_char_per_word). '-<br />'. 
+            $link_text = $link_text.substr($words[$i], 0, $plg_max_char_per_word). '-<br />'.
                             substr($words[$i], $plg_max_char_per_word).' ';
         }
         else
