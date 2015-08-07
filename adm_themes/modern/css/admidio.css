@@ -46,10 +46,15 @@ body {
     margin-bottom: 25px;
 }
 
+body > .admContent {
+    background-color: #ffffff;
+    padding: 15px;
+}
+
 /* Layout adjustments for devices > 7" */
 @media (min-width: 768px) {
     body {
-        padding: 15px 0px;
+        padding: 15px 0;
         background-color: #96c4cb;
         background-repeat: repeat-x;
         background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);
@@ -116,7 +121,7 @@ body {
 /* Layout adjustments for small devices */
 @media (max-width: 767px) {
     #header-block {
-        margin: 0px -15px 0px -15px;
+        margin: 0 -15px 0 -15px;
         background-color: #C1DCE6;
     }
 
