@@ -36,7 +36,7 @@ if (!$gCurrentUser->editDownloadRight())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-        
+
 // Initialize and check the parameters
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric');
@@ -72,11 +72,11 @@ if ($getMode == 1)
             $gMessage->show($gL10n->get('DOW_UPLOAD_POST_EMPTY', ini_get('upload_max_filesize')));
         }
 
-        
+
         $fileSize = 0;
         $fileName = '';
         $countUploadedFiles = 0;
-        
+
         // now check every file
         for($currentFileNo = 0; isset($_FILES['userfile']['name'][$currentFileNo]) == true; $currentFileNo++)
         {
@@ -85,28 +85,28 @@ if ($getMode == 1)
             {
                 $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', ini_get('upload_max_filesize')));
             }
-            
+
             //Dateigroesse ueberpruefen Administratoreinstellungen
-            if ($_FILES['userfile']['size'][$currentFileNo] > ($gPreferences['max_file_upload_size'])*1024)
+            if ($_FILES['userfile']['size'][$currentFileNo] > ($gPreferences['max_file_upload_size']) * 1024 * 1024)
             {
                 $gMessage->show($gL10n->get('DOW_FILE_TO_LARGE', $gPreferences['max_file_upload_size']));
             }
-            
+
             // Wenn eine Datei vorliegt diese in den Ordner hochlagen
             if ($_FILES['userfile']['error'][$currentFileNo] == 0)
             {
                 // pruefen, ob die Anhanggroesse groesser als die zulaessige Groesse ist
                 $fileSize = $fileSize + $_FILES['userfile']['size'][$currentFileNo];
-                
+
                 //Falls der Dateityp nicht bestimmt ist auf Standard setzen
                 if (strlen($_FILES['userfile']['type'][$currentFileNo]) <= 0)
                 {
                     $_FILES['userfile']['type'][$currentFileNo] = 'application/octet-stream';
                 }
-                
+
                 // Dateinamen ermitteln
                 $fileName = $_FILES['userfile']['name'][$currentFileNo];
-                
+
                 // check filename and throw exception if something is wrong
                 if(admStrIsValidFileName($fileName, true))
                 {
@@ -125,12 +125,12 @@ if ($getMode == 1)
                         $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
                         $newFile->setValue('fil_counter', '0');
                         $newFile->save();
-                        
-                        // Benachrichtigungs-Email für neue Einträge        
+
+                        // Benachrichtigungs-Email für neue Einträge
                         $message = $gL10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $fileName, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
                         $notification = new Email();
                         $notification->adminNotfication($gL10n->get('DOW_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
-                        
+
                         $countUploadedFiles++;
                     }
                     else
@@ -211,7 +211,7 @@ elseif ($getMode == 3)
         // get recordset of current folder from databse
         $targetFolder = new TableFolder($gDb);
         $targetFolder->getFolderForDownload($getFolderId);
-    
+
         $newFolderName = null;
 
         // check filename and throw exception if something is wrong
@@ -336,7 +336,7 @@ elseif ($getMode == 4)
 
             $oldFolder = $folder->getCompletePathOfFolder();
             $newFolder = null;
-            
+
             // check foldername and throw exception if something is wrong
             if(admStrIsValidFileName($_POST['new_name']))
             {
@@ -497,7 +497,7 @@ elseif ($getMode == 7)
         // get recordset of current folder from databse
         $targetFolder = new TableFolder($gDb);
         $targetFolder->getFolderForDownload($getFolderId);
-        
+
         if ($targetFolder->getValue('fol_fol_id_parent'))
         {
             // get recordset of parent folder from databse
@@ -521,10 +521,10 @@ elseif ($getMode == 7)
                 $publicFlag = 0;
             }
         }
-    
+
         //setze schon einmal das Public_Flag
         $targetFolder->editPublicFlagOnFolder($publicFlag);
-    
+
         $rolesArray = null;
         //Nur wenn der Ordner oeffentlich nicht zugaenglich ist
         //werden die Rollenbrechtigungen gespeichert.
@@ -535,7 +535,7 @@ elseif ($getMode == 7)
             if(array_key_exists('AllowedRoles', $_POST))
             {
                 $sentAllowedRoles = $_POST['AllowedRoles'];
-    
+
                 //fuege alle neuen Rollen hinzu
                 foreach ($sentAllowedRoles as $newRole)
                 {
@@ -544,12 +544,12 @@ elseif ($getMode == 7)
                 }
             }
         }
-    
+
         //jetzt noch die Rollenberechtigungen in die DB schreiben
         $targetFolder->setRolesOnFolder($rolesArray);
-    
+
         $targetFolder->save();
-    
+
         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
         $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
     }

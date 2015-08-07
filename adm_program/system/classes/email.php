@@ -171,30 +171,41 @@ class Email extends PHPMailer
         return true;
     }
 
-    // Methode gibt die maximale Groesse der Anhaenge zurueck
-    // size_unit : 'b' = byte; 'kb' = kilobyte; 'mb' = megabyte
-    public static function getMaxAttachementSize($size_unit = 'kb')
+    /**
+     * Returns the maximum size of an attachment
+     * @param  string $sizeUnit 'b' = byte, 'kib' = kilobyte, 'mib' = megabyte, 'gib' = gigabyte, 'tib' = terabyte
+     * @return float  The maximum attachment size in the given size-unit
+     */
+    public static function getMaxAttachementSize($sizeUnit = 'mib')
     {
         global $gPreferences;
 
-        if(round(admFuncMaxUploadSize()/pow(1024, 1), 1) < $gPreferences['max_email_attachment_size'])
+        $maxUploadSize = admFuncMaxUploadSize();
+        $currentAttachmentSize = $gPreferences['max_email_attachment_size'] * pow(1024, 2);
+
+        if($maxUploadSize < $currentAttachmentSize)
         {
-            $attachment_size = round(admFuncMaxUploadSize()/pow(1024, 1), 2);
+            $attachmentSize = $maxUploadSize;
         }
         else
         {
-            $attachment_size = $gPreferences['max_email_attachment_size'];
+            $attachmentSize = $currentAttachmentSize;
         }
 
-        if($size_unit == 'mb')
+        switch($sizeUnit)
         {
-            $attachment_size = $attachment_size / 1024;
+            case 'tib':
+                $attachmentSize /= 1024;
+            case 'gib':
+                $attachmentSize /= 1024;
+            case 'mib':
+                $attachmentSize /= 1024;
+            case 'kib':
+                $attachmentSize /= 1024;
+            default:
         }
-        elseif($size_unit == 'b')
-        {
-            $attachment_size = $attachment_size * 1024;
-        }
-        return round($attachment_size, 2);
+
+        return round($attachmentSize, 1);
     }
 
     // method adds sender to mail

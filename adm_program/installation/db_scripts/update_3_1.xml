@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<update>
+    <step id="10">UPDATE %PREFIX%_preferences SET max_file_upload_size = '3' WHERE prf_name LIKE 'max_file_upload_size'</step>
+    <step id="20">UPDATE %PREFIX%_preferences SET max_email_attachment_size = '1' WHERE prf_name LIKE 'max_email_attachment_size'</step>
+    <step>stop</step>
+</update>

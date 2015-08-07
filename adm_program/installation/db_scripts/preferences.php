@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Systempreferences for an organization
+ * System preferences for an organization
  *
  * IMPORTANT: If preferences should get other values with an update,
  *            then you must set these values for every organization
@@ -65,7 +65,7 @@ $orga_preferences = array(
     'captcha_signature'           => 'POWERED  BY   A D M I D I O . O R G',
     'captcha_signature_font_size' => '13',
     'captcha_type'                => 'pic',
-    
+
     // Announcements
     'enable_announcements_module' => '1',
     'announcements_per_page'      => '10',
@@ -77,7 +77,7 @@ $orga_preferences = array(
 
     // Downloads
     'enable_download_module' => '1',
-    'max_file_upload_size'   => '3072',
+    'max_file_upload_size'   => '3',
 
     // Photos
     'enable_photo_module'    => '1',
@@ -105,7 +105,7 @@ $orga_preferences = array(
     'lists_roles_per_page'        => '10',
     'lists_members_per_page'      => '25',
     'lists_hide_overview_details' => '0',
-    
+
     // Messages
     'enable_mail_module'          => '1',
     'enable_pm_module'            => '1',
@@ -113,7 +113,7 @@ $orga_preferences = array(
     'enable_mail_captcha'         => '1',
     'mail_max_receiver'           => '1',
     'mail_into_to'                => '0',
-    'max_email_attachment_size'   => '1024',
+    'max_email_attachment_size'   => '1',
     'mail_sendmail_address'       => '',
     'mail_sendmail_name'          => '',
     'mail_html_registered_users'  => '1',
