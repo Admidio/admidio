@@ -46,11 +46,6 @@ body {
     margin-bottom: 25px;
 }
 
-body > .admContent {
-    background-color: #ffffff;
-    padding: 15px;
-}
-
 /* Layout adjustments for devices > 7" */
 @media (min-width: 768px) {
     body {
@@ -691,6 +686,13 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 
 .admidio-list-roles-assign-pos li {
     padding: 0 0 5px 0;
+}
+
+/* Fullscreen mode for lists */
+
+body > .admidio-content {
+    background-color: #ffffff;
+    padding: 15px;
 }
 
 /* Photos */

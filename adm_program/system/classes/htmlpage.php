@@ -507,7 +507,7 @@ class HtmlPage
         </head>
         <body>'.
             $htmlMyBodyTop.'
-            <div class="admContent">
+            <div class="admidio-content">
                 '.$htmlHeadline.$htmlMenu.$this->pageContent.'
             </div>'.
             $htmlMyBodyBottom.'
