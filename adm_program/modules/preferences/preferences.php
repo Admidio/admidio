@@ -539,7 +539,7 @@ $page->addHtml('
                         // show form
                         $form = new HtmlForm('downloads_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=downloads', $page, array('class' => 'form-preferences'));
                         $form->addCheckbox('enable_download_module', $gL10n->get('DOW_ENABLE_DOWNLOAD_MODULE'), $form_values['enable_download_module'], array('helpTextIdInline' => 'DOW_ENABLE_DOWNLOAD_MODULE_DESC'));
-                        $form->addInput('max_file_upload_size', $gL10n->get('DOW_MAXIMUM_FILE_SIZE').' (MiB)', $form_values['max_file_upload_size'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999999, 'step' => 1, 'helpTextIdInline' => 'DOW_MAXIMUM_FILE_SIZE_DESC'));
+                        $form->addInput('max_file_upload_size', $gL10n->get('DOW_MAXIMUM_FILE_SIZE').' (MB)', $form_values['max_file_upload_size'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999999, 'step' => 1, 'helpTextIdInline' => 'DOW_MAXIMUM_FILE_SIZE_DESC'));
                         $form->addSubmitButton('btn_save_downloads', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
@@ -671,7 +671,7 @@ $page->addHtml('
                         $form->addCheckbox('enable_mail_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), $form_values['enable_mail_captcha'], array('helpTextIdInline' => 'MAI_SHOW_CAPTCHA_DESC'));
                         $form->addInput('mail_max_receiver', $gL10n->get('MAI_MAX_RECEIVER'), $form_values['mail_max_receiver'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'MAI_MAX_RECEIVER_DESC'));
                         $form->addCheckbox('mail_into_to', $gL10n->get('MAI_INTO_TO'), $form_values['mail_into_to'], array('helpTextIdInline' => 'MAI_INTO_TO_DESC'));
-                        $form->addInput('max_email_attachment_size', $gL10n->get('MAI_ATTACHMENT_SIZE').' (MiB)', $form_values['max_email_attachment_size'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999, 'helpTextIdInline' => 'MAI_ATTACHMENT_SIZE_DESC'));
+                        $form->addInput('max_email_attachment_size', $gL10n->get('MAI_ATTACHMENT_SIZE').' (MB)', $form_values['max_email_attachment_size'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999, 'helpTextIdInline' => 'MAI_ATTACHMENT_SIZE_DESC'));
                         $form->addInput('mail_sendmail_address', $gL10n->get('MAI_SENDER_EMAIL'), $form_values['mail_sendmail_address'], array('maxLength' => 50, 'helpTextIdInline' => array('MAI_SENDER_EMAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST'])));
                         $form->addInput('mail_sendmail_name', $gL10n->get('MAI_SENDER_NAME'), $form_values['mail_sendmail_name'], array('maxLength' => 50, 'helpTextIdInline' => 'MAI_SENDER_NAME_DESC'));
                         $form->addCheckbox('mail_html_registered_users', $gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS'), $form_values['mail_html_registered_users'], array('helpTextIdInline' => 'MAI_HTML_MAILS_REGISTERED_USERS_DESC'));

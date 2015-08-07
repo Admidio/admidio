@@ -455,7 +455,7 @@
         <text id="DOW_FILE_NOT_EXISTS" development="new" translation="todo">Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.</text>
         <text id="DOW_FILE_RENAME" development="new" translation="todo">Die Datei %VAR1% wurde umbenannt.</text>
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="todo">Beim Umbenennen der Datei %VAR1% ist ein Fehler aufgetreten.</text>
-        <text id="DOW_FILE_TO_LARGE" development="new" translation="todo">Die hochgeladene Datei übersteigt die zulässige Dateigröße von %VAR1% MiB.</text>
+        <text id="DOW_FILE_TO_LARGE" development="new" translation="todo">Die hochgeladene Datei übersteigt die zulässige Dateigröße von %VAR1% MB.</text>
         <text id="DOW_FILE_TYPE" development="new" translation="todo">Dateityp</text>
         <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="todo">Beim Hochladen der Datei %VAR1% ist ein unbekannter Fehler aufgetreten.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="todo">Die Datei %VAR1_BOLD% wurde hochgeladen</text>
@@ -468,7 +468,7 @@
         <text id="DOW_FOLDER_RENAME" development="new" translation="todo">Der Ordner %VAR1% wurde umbenannt.</text>
         <text id="DOW_FOLDER_RENAME_ERROR" development="new" translation="todo">Beim Umbenennen des Ordners %VAR1% ist ein Fehler aufgetreten.</text>
         <text id="DOW_MAXIMUM_FILE_SIZE" development="new" translation="todo">Maximale Dateigröße</text>
-        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="todo">Benutzer können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 3MiB)</text>
+        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="todo">Benutzer können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 3MB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="todo">Neuer Dateiname</text>
         <text id="DOW_NEW_NAME" development="new" translation="todo">Neuer Name</text>
         <text id="DOW_NO_ACCESS" development="new" translation="todo">Kein Zugriff</text>
@@ -710,14 +710,14 @@
         <text id="MAI_ADD_ATTACHEMENT" development="new" translation="todo">Anhang hinzufügen</text>
         <text id="MAI_ATTACHEMENT" development="new" translation="todo">Anhang</text>
         <text id="MAI_ATTACHMENT_SIZE" development="new" translation="todo">Maximale Dateigröße für Anhänge</text>
-        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="todo">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich. (Standard: 1MiB)</text>
+        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="todo">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich. (Standard: 1MB)</text>
         <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="todo">Ihr Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</text>
         <text id="MAI_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
         <text id="MAI_CHOOSE_ROLE" development="new" translation="todo">Bitte wählen Sie eine Rolle als Adressat der E-Mail aus!</text>
         <text id="MAI_COUNT_BCC" development="new" translation="todo">Anzahl der BCC Empfänger</text>
         <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="todo">%VAR1% hat Ihnen von %VAR2% folgende E-Mail geschickt:\nEine Antwort können Sie an %VAR3% schicken.</text>
         <text id="MAI_EMAIL_DESC" development="new" translation="todo">E-Mails können an unterschiedliche Rollen, dies können Gruppen, Kurse oder Abteilungen sein, geschrieben werden.</text>
-        <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="todo">Sie können beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MiB nicht überschreiten.</text>
+        <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="todo">Sie können beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MB nicht überschreiten.</text>
         <text id="MAI_MESSAGE" development="new" translation="todo">Nachricht</text>
         <text id="MAI_ROLE_NO_EMAILS" development="new" translation="todo">Die von Ihnen ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mail-Adressen, an die eine E-Mail versendet werden kann!</text>
         <text id="MAI_SEND_COPY" development="new" translation="todo">Kopie der E-Mail an mich senden</text>
@@ -1179,7 +1179,7 @@
         <text id="SYS_FILE_NOT_EXIST" development="new" translation="todo">Die ausgewählte Datei existiert nicht auf dem Server.</text>
         <text id="SYS_FILE_PROGRESS" development="new" translation="todo">%0 von %1 übertragen</text>
         <text id="SYS_FILE_TO_LARGE" development="new" translation="todo">Datei ist zu groß.</text>
-        <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="todo">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von %VAR1% MiB.</text>
+        <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="todo">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von %VAR1% MB.</text>
         <text id="SYS_FILE_UPLOADS" development="new" translation="todo">Dateiuploads</text>
         <text id="SYS_FIRSTNAME" development="new" translation="todo">Vorname</text>
         <text id="SYS_FROM_TO" development="new" translation="todo">vom %VAR1% bis %VAR2%</text>

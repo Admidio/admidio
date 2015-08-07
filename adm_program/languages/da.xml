@@ -448,7 +448,7 @@
         <text id="DOW_FILE_NOT_EXISTS" development="new" translation="edited">Filen er ikke længere fysisk til stede på serveren. Den bør slettes fra databasen.</text>
         <text id="DOW_FILE_RENAME" development="new" translation="edited">Fil %VAR1% blev omdøbt.</text>
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="edited">Der opstod en fejl da filen %VAR1% skulle omdøbes.</text>
-        <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">Den overførte fil størrelse er større end det tilladte maximum.(maximum fil størrelse: %VAR1% MiB).</text>
+        <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">Den overførte fil størrelse er større end det tilladte maximum.(maximum fil størrelse: %VAR1% MB).</text>
         <text id="DOW_FILE_TYPE" development="new" translation="edited">Fil type</text>
         <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="edited">Uidentificeret fejl opstod imens filen %VAR1% blev forsøgt overført.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="edited">Filen %VAR1_BOLD% blev overført.</text>
@@ -461,7 +461,7 @@
         <text id="DOW_FOLDER_RENAME" development="new" translation="edited">Folderen %VAR1% blev omdøbt.</text>
         <text id="DOW_FOLDER_RENAME_ERROR" development="new" translation="edited">En fejl opstod imens folderen %VAR1% blev omdøbt.</text>
         <text id="DOW_MAXIMUM_FILE_SIZE" development="new" translation="edited">Maximum fil størrelse</text>
-        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Brugere må kun overføre filer mindre end det her viste. Hvis du skriver 0 deaktiveres overførsler. (Standard: 3MiB)</text>
+        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Brugere må kun overføre filer mindre end det her viste. Hvis du skriver 0 deaktiveres overførsler. (Standard: 3MB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="edited">Nyt fil navn</text>
         <text id="DOW_NEW_NAME" development="new" translation="edited">Nyt navn</text>
         <text id="DOW_NO_ACCESS" development="new" translation="edited">Adgang nægtet</text>
@@ -703,14 +703,14 @@
         <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Vedhæft fil</text>
         <text id="MAI_ATTACHEMENT" development="new" translation="todo">Vedhæftet:</text>
         <text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Maximum størrelse af vedhæftede filer (tilsammen)</text>
-        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Brugere kan vedhæfte filer som er mindre end værdien der er defineret her. Hvis værdien er 0, kan vedhæftede filer ikke sendes. (Standard: 1MiB)</text>
+        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Brugere kan vedhæfte filer som er mindre end værdien der er defineret her. Hvis værdien er 0, kan vedhæftede filer ikke sendes. (Standard: 1MB)</text>
         <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">Filerne vedhæftet e-mailen kunne ikke overføres.\nFilen er sikkert for stor!</text>
         <text id="MAI_CAPTCHA_DESC" development="new" translation="edited">Hvis indstillingen er aktiv, kan brugere der er logget ind se et billede med en captcha kode eller et simpelt regnestykke. Det er nødvendigt at skrive den rigtige kode eller den rigtige løsning for at kunne sende e-mailen. Captcha er en del af antispam løsningen i Admidio. (Standard: Ja)</text>
         <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Venligst vælg en rolle som modtager af denne mail!</text>
         <text id="MAI_COUNT_BCC" development="new" translation="edited">Antal BCC modtagere</text>
         <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% har sendt dig fra %VAR2% følgende besked:\nVenligst svar til %VAR3%.</text>
         <text id="MAI_EMAIL_DESC" development="new" translation="edited">E-mails kan sendes til forskellige roller såsom grupper, kurser, afdelinger.</text>
-        <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Ubegrænset antal modtagere kan tilføjes. Total størrelse af alle vedhæftede filer må ikke overstige %VAR1% MiB.</text>
+        <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Ubegrænset antal modtagere kan tilføjes. Total størrelse af alle vedhæftede filer må ikke overstige %VAR1% MB.</text>
         <text id="MAI_MESSAGE" development="new" translation="edited">Besked</text>
         <text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Den valgte rolle har ingen medlemmer med gyldige e-mail adresser!</text>
         <text id="MAI_SEND_COPY" development="new" translation="edited">Send kopi af e-mail til min egen adresse</text>
@@ -1167,7 +1167,7 @@
         <text id="SYS_FILE_NOT_EXIST" development="new" translation="edited">Den valgte fil findes ikke på serveren.</text>
         <text id="SYS_FILE_PROGRESS" development="new" translation="edited">%0 af %1 overført</text>
         <text id="SYS_FILE_TO_LARGE" development="new" translation="edited">Filen er for stor.</text>
-        <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="edited">Størrelsen på den fil du har forsøgt at overføre, overskrider den tilladte størrelse som er, %VAR1% MiB.</text>
+        <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="edited">Størrelsen på den fil du har forsøgt at overføre, overskrider den tilladte størrelse som er, %VAR1% MB.</text>
         <text id="SYS_FILE_UPLOADS" development="new" translation="todo">fil overførsler</text>
         <text id="SYS_FIRSTNAME" development="new" translation="edited">Fornavn</text>
         <text id="SYS_FROM_TO" development="new" translation="edited">fra %VAR1% til %VAR2%</text>

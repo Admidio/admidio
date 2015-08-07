@@ -327,7 +327,7 @@
         <text id="DOW_FILE_NOT_EXISTS" development="new" translation="edited">Bestand is niet meer beschikbaar op de server. Het is verwijderd uit de database.</text>
         <text id="DOW_FILE_RENAME" development="new" translation="edited">Bestand %VAR1% is hernoemd.</text>
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="edited">Foutmelding tijdens hernoemen van bestand %VAR1%.</text>
-        <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">De grootte van bestanden die geupload moeten worden is groter dan toegestaan (maximale grootte: %VAR1% MiB).</text>
+        <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">De grootte van bestanden die geupload moeten worden is groter dan toegestaan (maximale grootte: %VAR1% MB).</text>
         <text id="DOW_FILE_TYPE" development="new" translation="edited">Type bestand</text>
         <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="edited">Onbekende fout tijdens uploaden van bestand %VAR1%.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="edited">Bestand %VAR1_BOLD% is geupload.</text>
@@ -340,7 +340,7 @@
         <text id="DOW_FOLDER_RENAME" development="new" translation="edited">Map %VAR1% is hernoemd.</text>
         <text id="DOW_FOLDER_RENAME_ERROR" development="new" translation="edited">Foutmelding tijdens hernomen van map %VAR1%.</text>
         <text id="DOW_MAXIMUM_FILE_SIZE" development="new" translation="edited">Maximale grootte van bestand</text>
-        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Gebruikers mogen alleen bestanden uploaden die kleiner zijn dan hier staat. Als hier 0 staat, is uploaden gedeactiveerd. (standaard: 3MiB)</text>
+        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Gebruikers mogen alleen bestanden uploaden die kleiner zijn dan hier staat. Als hier 0 staat, is uploaden gedeactiveerd. (standaard: 3MB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="edited">Naam nieuw bestand</text>
         <text id="DOW_NEW_NAME" development="new" translation="edited">Nieuwe naam</text>
         <text id="DOW_NO_ACCESS" development="new" translation="edited">Toegang afgewezen</text>
@@ -590,13 +590,13 @@
         <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Attach bestand</text>
         <text id="MAI_ATTACHEMENT" development="new" translation="edited">Attachment:</text>
         <text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Max. grootte e-mail attachments</text>
-        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Gebruikers kunnen een bestand bijvoegen die kleiner is dan de grootte die hier ingesteld is. Als waarde 0 is, kunnen attachments niet verzonden worden. (standaard: 1MiB)</text>
+        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Gebruikers kunnen een bestand bijvoegen die kleiner is dan de grootte die hier ingesteld is. Als waarde 0 is, kunnen attachments niet verzonden worden. (standaard: 1MB)</text>
         <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">Foutmelding uploaden E-mail attachment.\nWaarschijnlijk is grootte van bestand te groot!</text>
         <text id="MAI_CAPTCHA_DESC" development="new" translation="edited">Als deze optie is geactiveerd zullen niet ingelogde bezoekers een afbeelding zien met captcha code of een simpele som. Het is noodzakelijk om de juiste code of oplossing in te vullen. Captcha is onderdeel van antispam oplossing van Admidio. (standaard: ja)</text>
         <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Selecteer svp rol als ontvanger van de e-mail!</text>
         <text id="MAI_COUNT_BCC" development="new" translation="edited">Aantal BCC ontvangers</text>
         <text id="MAI_EMAIL_DESC" development="new" translation="edited">Er kunnen e-mails gestuurd worden naar verschillende rollen, personen, groepen of afdelingen. </text>
-        <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Onbeperkt aantal ontvangers kan toegevoegd worden. Totale grootte van alle attachments mag niet meer zijn dan %VAR1% MiB.</text>
+        <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Onbeperkt aantal ontvangers kan toegevoegd worden. Totale grootte van alle attachments mag niet meer zijn dan %VAR1% MB.</text>
         <text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Geselecteerde rol heeft geen lid met geldig e-mail adres!</text>
         <text id="MAI_SEND_COPY" development="new" translation="edited">Stuur kopie naar mijn e-mail adres</text>
         <text id="MAI_SEND_EMAIL" development="new" translation="edited">Stuur e-mail</text>
@@ -1065,7 +1065,7 @@
         <text id="SYS_FILE_NOT_EXIST" development="new" translation="edited">Geselecteerde bestand bestaat niet op de server.</text>
         <text id="SYS_FILE_PROGRESS" development="new" translation="edited">%0 van %1 geupload</text>
         <text id="SYS_FILE_TO_LARGE" development="new" translation="edited">Grootte bestand is te groot.</text>
-        <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="edited">Grootte van geuploade bestand is groter dan door server gedefinieerde maximale grootte %VAR1% MiB.</text>
+        <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="edited">Grootte van geuploade bestand is groter dan door server gedefinieerde maximale grootte %VAR1% MB.</text>
         <text id="SYS_FILE_UPLOADS" development="new" translation="edited">Bestand uploads</text>
         <text id="SYS_FIRSTNAME" development="new" translation="edited">Voornaam</text>
         <text id="SYS_FROM_TO" development="new" translation="edited">van %VAR1% tot %VAR2%</text>
