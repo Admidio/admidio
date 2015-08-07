@@ -442,7 +442,7 @@
         <text id="DOW_FILE_NOT_EXISTS" development="new" translation="edited">Il file non è più fisicamente disponibile sul server. Esso andrebbe cancellato dal database.</text>
         <text id="DOW_FILE_RENAME" development="new" translation="edited">Il file %VAR1% è stato rinominato.</text>
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="edited">Si è verificato un errore mentre il file %VAR1% è stato rinominato.</text>
-        <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">La grandezza dei file caricati è più grande di quella consentita (massima grandezza del file: %VAR1% kB).</text>
+        <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">La grandezza dei file caricati è più grande di quella consentita (massima grandezza del file: %VAR1% MiB).</text>
         <text id="DOW_FILE_TYPE" development="new" translation="edited">Tipo di file</text>
         <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="edited">Si è verificato un errore indefinito mentre il file %VAR1% era in corso di caricamento.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="edited">Il file %VAR1_BOLD% è stato caricato.</text>
@@ -455,7 +455,7 @@
         <text id="DOW_FOLDER_RENAME" development="new" translation="edited">La cartella %VAR1% è stata rinominata.</text>
         <text id="DOW_FOLDER_RENAME_ERROR" development="new" translation="edited">Si è verificato un errore mentre la cartella %VAR1% è stata rinominata.</text>
         <text id="DOW_MAXIMUM_FILE_SIZE" development="new" translation="edited">Massima grandezza del file</text>
-        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Agli utenti è consentito caricare file di grandezza minore di quella visualizzata qui. Se è 0 il caricamento è disattivato. (predefinito: 3072kB)</text>
+        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Agli utenti è consentito caricare file di grandezza minore di quella visualizzata qui. Se è 0 il caricamento è disattivato. (predefinito: 3MiB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="edited">Nuovo nome del file</text>
         <text id="DOW_NEW_NAME" development="new" translation="edited">Nuovo nome</text>
         <text id="DOW_NO_ACCESS" development="new" translation="edited">Accesso negato</text>
@@ -700,14 +700,14 @@
         <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Allega file</text>
         <text id="MAI_ATTACHEMENT" development="new" translation="edited">Allegati:</text>
         <text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Grandezza massima degli allegati email</text>
-        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Gli utenti possono allegare file di grandezza più piccola del valore definito qui. Quando il valore è 0, gli allegati non possono essere inviati. (predefinito: 1024kB)</text>
+        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Gli utenti possono allegare file di grandezza più piccola del valore definito qui. Quando il valore è 0, gli allegati non possono essere inviati. (predefinito: 1MiB)</text>
         <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">Errore nel caricamento dell'allegato all'email.\nLa misura del file probabilmente è troppo grande!</text>
         <text id="MAI_CAPTCHA_DESC" development="new" translation="edited">Quando l'opzione è attivata, gli utenti registrati riceveranno un'immagine con un codice captcha o con un semplice calcolo. Questa dovrà essere riempita con il codice corretto o con il risultato del calcolo perché l'email sia inviata. Il captcha è parte della soluzione anticpam di Admidio. (predefinito: sì)</text>
         <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Per favore seleziona un ruolo come destinatario dell'email!</text>
         <text id="MAI_COUNT_BCC" development="new" translation="edited">Numero dei destinatari BCC</text>
         <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% ti ha inviato da %VAR2% i seguenti messaggi:\nPer favore rispondi a %VAR3%.</text>
         <text id="MAI_EMAIL_DESC" development="new" translation="edited">Le email possono essere inviate a ruoli differenti come i gruppi, i corsi o i dipartimenti.</text>
-        <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Possono essere aggiunti un numero illimitato di destinatari. La grandezza totale di tutti gli allegati insieme non può eccedere i %VAR1% MB.</text>
+        <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Possono essere aggiunti un numero illimitato di destinatari. La grandezza totale di tutti gli allegati insieme non può eccedere i %VAR1% MiB.</text>
         <text id="MAI_MESSAGE" development="new" translation="edited">Messaggio</text>
         <text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Il ruolo selezionato non ha alcun membro con un indirizzo email valido!</text>
         <text id="MAI_SEND_COPY" development="new" translation="edited">Invia copia dell'email al mio indirizzo</text>
@@ -1174,7 +1174,7 @@
         <text id="SYS_FILE_NOT_EXIST" development="new" translation="edited">Il file selezionato non esiste sul server.</text>
         <text id="SYS_FILE_PROGRESS" development="new" translation="edited">%0 di %1 trasferito</text>
         <text id="SYS_FILE_TO_LARGE" development="new" translation="edited">La dimensione del file è troppo grande</text>
-        <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="edited">Dimensione del file caricato supera la dimensione massima del file definita dal server di %VAR1%.</text>
+        <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="edited">Dimensione del file caricato supera la dimensione massima del file definita dal server di %VAR1% MiB.</text>
         <text id="SYS_FILE_UPLOADS" development="new" translation="edited">Caricamenti di file</text>
         <text id="SYS_FIRSTNAME" development="new" translation="edited">Nome</text>
         <text id="SYS_FROM_TO" development="new" translation="edited">da %VAR1% a %VAR2%</text>

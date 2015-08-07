@@ -106,7 +106,7 @@
         <text id="DOW_FILE_NOT_EXISTS" development="new" translation="edited">Le fichier n'est plus disponible sur le serveur. Il devrait être supprimé de la base de données.</text>
         <text id="DOW_FILE_RENAME" development="new" translation="edited">Le fichier %VAR1% a été renommé avec succès.</text>
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="edited">Une erreur c'est produite quand le fichier %VAR1% a été renommé.</text>
-        <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">La taille des fichiers téléchargés dépasse la limite accordée(Taille maximum: %VAR1% Ko).</text>
+        <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">La taille des fichiers téléchargés dépasse la limite accordée(Taille maximum: %VAR1% MiB).</text>
         <text id="DOW_FILE_TYPE" development="new" translation="edited">Type de fichier</text>
         <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="edited">Une erreur non identifiée s'est produite lors du transfère du fichier %VAR1%.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="edited">Téléchargement du fichier %VAR1_BOLD% terminé.</text>
@@ -119,7 +119,7 @@
         <text id="DOW_FOLDER_RENAME" development="new" translation="edited">Le dossier %VAR1% a été renommé.</text>
         <text id="DOW_FOLDER_RENAME_ERROR" development="new" translation="edited">Une erreur c'est produite quand le dossier %VAR1% a été renommé..</text>
         <text id="DOW_MAXIMUM_FILE_SIZE" development="new" translation="edited">Taille maximum des fichiers</text>
-        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Les utilisateurs ne sont pas autorisés à télécharger des fichiers de plus petite taille que celles affichées ici. 0 pour désactiver le téléchargement. (defaut: 4000kB)</text>
+        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Les utilisateurs ne sont pas autorisés à télécharger des fichiers de plus petite taille que celles affichées ici. 0 pour désactiver le téléchargement. (defaut: 3MiB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="edited">Nouveau nom de fichier</text>
         <text id="DOW_NEW_NAME" development="new" translation="edited">Nouveau nom</text>
         <text id="DOW_NO_ACCESS" development="new" translation="edited">Accès refusé</text>
@@ -364,14 +364,14 @@
         <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Joindre un fichier</text>
         <text id="MAI_ATTACHEMENT" development="new" translation="edited">Fichiers joints</text>
         <text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Taille maximum des fichiers joint</text>
-        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Les utilisateurs sont capable de joindre des fichiers de taille inférieur à la taille spécifiée ici. Si la valeur est à 0, aucun fichier ne pourra être joint au courriel (Par defaut: 1024MO)</text>
+        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Les utilisateurs sont capable de joindre des fichiers de taille inférieur à la taille spécifiée ici. Si la valeur est à 0, aucun fichier ne pourra être joint au courriel (Par defaut: 1MiB)</text>
         <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">Erreur lors du téléversement du fichier joint. \nLa taille du fichier est trop importante !</text>
         <text id="MAI_CAPTCHA_DESC" development="new" translation="edited">Quand l'option est activé, les membres authentifiés recevrons une image avec un capcha ou un calcule simple. Il est important de remplir le champs demandé afin d'envoyer le courriel. (Par defaut: oui)</text>
         <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Veuillez sélectionner un rôle en tant que récipiendaire du courriel !</text>
         <text id="MAI_COUNT_BCC" development="new" translation="edited">Nombre si BCC récipiendaires</text>
         <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% a envoyé de %VAR2% message suivant:\nVeuillez répondre à %VAR3%.</text>
         <text id="MAI_EMAIL_DESC" development="new" translation="edited">Système de courriel des membres.</text>
-        <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Un nombre illimité de récipiendaire peut être ajouté. La taille total des fichiers ne doit pas dépasser %VAR1% MO.</text>
+        <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Un nombre illimité de récipiendaire peut être ajouté. La taille total des fichiers ne doit pas dépasser %VAR1% MiB.</text>
         <text id="MAI_MESSAGE" development="new" translation="edited">Message</text>
         <text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Le rôle sélectionné n'a aucun membre avec un courriel valide !</text>
         <text id="MAI_SEND_COPY" development="new" translation="edited">Envoyer une copy du courriel à mon adresse</text>
@@ -848,7 +848,7 @@
         <text id="SYS_FILE_NOT_EXIST" development="new" translation="edited">Le fichier sélectionné n'existe pas sur le serveur.</text>
         <text id="SYS_FILE_PROGRESS" development="new" translation="edited">0% de 1% transféré</text>
         <text id="SYS_FILE_TO_LARGE" development="new" translation="edited">La taille du fichier est trop grande.</text>
-        <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="edited">Taille du fichier téléchargé excède la taille définie sur serveur de fichier maximale: %VAR1%.</text>
+        <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="edited">Taille du fichier téléchargé excède la taille définie sur serveur de fichier maximale: %VAR1% MiB.</text>
         <text id="SYS_FILE_UPLOADS" development="new" translation="edited">Téléversement de fichiers</text>
         <text id="SYS_FIRSTNAME" development="new" translation="edited">Prénom</text>
         <text id="SYS_FROM_TO" development="new" translation="edited">%VAR1% vers %VAR2%</text>

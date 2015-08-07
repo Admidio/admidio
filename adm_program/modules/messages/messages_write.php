@@ -255,7 +255,7 @@ elseif (!isset($message_result))
     // dann soll das Formular gefuellt werden mit den Werten aus der Session
     if (strpos($gNavigation->getUrl(), 'message_send.php') > 0 && isset($_SESSION['message_request']))
     {
-        // Das Formular wurde also schon einmal ausgefüllt,
+        // Das Formular wurde also schon einmal ausgefï¿½llt,
         // da der User hier wieder gelandet ist nach der Mailversand-Seite
         $form_values = strStripSlashesDeep($_SESSION['message_request']);
         unset($_SESSION['message_request']);
@@ -450,7 +450,7 @@ elseif (!isset($message_result))
     if (($gValidLogin) && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
     {
         $form->addFileUpload('btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'), array('enableMultiUploads' => true, 'multiUploadLabel' => $gL10n->get('MAI_ADD_ATTACHEMENT'),
-            'hideUploadField' => true, 'helpTextIdLabel' => array('MAI_MAX_ATTACHMENT_SIZE', Email::getMaxAttachementSize('mb'))));
+            'hideUploadField' => true, 'helpTextIdLabel' => array('MAI_MAX_ATTACHMENT_SIZE', Email::getMaxAttachementSize('mib'))));
     }
 
     // add textfield or ckeditor to form

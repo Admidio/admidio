@@ -459,7 +459,7 @@
         <text id="DOW_FILE_NOT_EXISTS" development="new" translation="edited">The file is physically not available anymore on the server. It should be deleted from the database.</text>
         <text id="DOW_FILE_RENAME" development="new" translation="edited">File %VAR1% was renamed.</text>
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="edited">An error occurred while file %VAR1% was renamed.</text>
-        <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">Uploaded files size is greater than allowed (maximum file size: %VAR1% kB).</text>
+        <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">Uploaded files size is greater than allowed (maximum file size: %VAR1% MiB).</text>
         <text id="DOW_FILE_TYPE" development="new" translation="edited">File type</text>
         <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="edited">Unidentified error occurred while file %VAR1% was being uploaded.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="edited">File %VAR1_BOLD% was uploaded.</text>
@@ -472,7 +472,7 @@
         <text id="DOW_FOLDER_RENAME" development="new" translation="edited">Folder %VAR1% was renamed.</text>
         <text id="DOW_FOLDER_RENAME_ERROR" development="new" translation="edited">An error occurred while folder %VAR1% was renamed.</text>
         <text id="DOW_MAXIMUM_FILE_SIZE" development="new" translation="edited">Maximum file size</text>
-        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Users are only allowed to upload files of smaller size than displayed here. In case of 0 upload is deactivated. (default: 3072kB)</text>
+        <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Users are only allowed to upload files of smaller size than displayed here. In case of 0 upload is deactivated. (default: 3MiB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="edited">New file name</text>
         <text id="DOW_NEW_NAME" development="new" translation="edited">New name</text>
         <text id="DOW_NO_ACCESS" development="new" translation="edited">Access denied</text>
@@ -717,14 +717,14 @@
         <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Attach file</text>
         <text id="MAI_ATTACHEMENT" development="new" translation="edited">Attachment</text>
         <text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Maximum size of e-mail attachments</text>
-        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Users are able to attach files of smaller size than the value defined here. When value is 0, attachments can not be sent. (default: 1024kB)</text>
+        <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Users are able to attach files of smaller size than the value defined here. When value is 0, attachments can not be sent. (default: 1MiB)</text>
         <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">E-mail attachment upload error.\nFile size is most likely to large!</text>
         <text id="MAI_CAPTCHA_DESC" development="new" translation="edited">When option is activated, logged in users will receive a picture with a captcha code or a simple calculation. It's necessary to fill in the correct code or result to send the mail. The captcha is part of antispam solution in Admidio. (default: yes)</text>
         <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Please select a role as recipient of the e-mail!</text>
         <text id="MAI_COUNT_BCC" development="new" translation="edited">Number if BCC recipients</text>
         <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% has sent you from %VAR2% following message:\nPlease reply to %VAR3%.</text>
         <text id="MAI_EMAIL_DESC" development="new" translation="edited">E-mails can be sent to different roles like groups, courses or departments.</text>
-        <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Unlimited number of recipients can be added. Total size of all attachments together must not exceed %VAR1% MB.</text>
+        <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Unlimited number of recipients can be added. Total size of all attachments together must not exceed %VAR1% MiB.</text>
         <text id="MAI_MESSAGE" development="new" translation="edited">Message</text>
         <text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Selected role does not have any member with valid e-mail address!</text>
         <text id="MAI_SEND_COPY" development="new" translation="edited">Send copy of e-mail to my address</text>
@@ -1187,7 +1187,7 @@
         <text id="SYS_FILE_NOT_EXIST" development="new" translation="edited">Selected file does not exist on the server.</text>
         <text id="SYS_FILE_PROGRESS" development="new" translation="edited">%0 of %1 transferred</text>
         <text id="SYS_FILE_TO_LARGE" development="new" translation="edited">File size is to large.</text>
-        <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="edited">Size of uploaded file exceeds server defined maximum file size of %VAR1%.</text>
+        <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="edited">Size of uploaded file exceeds server defined maximum file size of %VAR1% MiB.</text>
         <text id="SYS_FILE_UPLOADS" development="new" translation="edited">File uploads</text>
         <text id="SYS_FIRSTNAME" development="new" translation="edited">First name</text>
         <text id="SYS_FROM_TO" development="new" translation="edited">from %VAR1% to %VAR2%</text>
