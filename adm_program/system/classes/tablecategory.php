@@ -216,6 +216,8 @@ class TableCategory extends TableAccess
      */
     public function readDataById($cat_id)
     {
+        global $g_tbl_praefix;
+        
         $returnValue = parent::readDataById($cat_id);
 
         if($returnValue)
