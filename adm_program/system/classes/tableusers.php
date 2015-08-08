@@ -233,7 +233,9 @@ class TableUsers extends TableAccess
 
         if ($doHashing)
         {
-            $newPassword = PasswordHashing::hash($newPassword);
+            global $gPreferences;
+            $cost = intval($gPreferences['system_hashing_cost']);
+            $newPassword = PasswordHashing::hash($newPassword, PASSWORD_DEFAULT, array('cost' => $cost));
         }
 
         return parent::setValue($columnName, $newPassword, false);

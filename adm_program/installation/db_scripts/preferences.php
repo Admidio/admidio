@@ -32,6 +32,7 @@ $orga_preferences = array(
     'system_search_similar'         => '1',
     'system_time'                   => 'H:i',
     'system_browser_update_check'   => '0',
+    'system_hashing_cost'           => '10',
 
     // Registration
     'registration_mode'              => '1',
