@@ -173,8 +173,8 @@ elseif($getMode == 4)
         try
         {
             // neues Passwort generieren und abspeichern
-            $password = substr(md5(time()), 0, 8);
-            $user->setValue('usr_password', $password);
+            $password = PasswordHashing::genRandomPassword(8);
+            $user->setPassword($password);
             $user->save();
 
             // Mail an den User mit den Loginaten schicken

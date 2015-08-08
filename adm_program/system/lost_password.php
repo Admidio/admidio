@@ -82,14 +82,14 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
         $user = new User($gDb, $gProfileFields, $row['usr_id']);
 
         // create and save new password and activation id
-        $newPassword  = substr(md5(time()), 0, 8);
-        $activationId = substr(md5(uniqid($user->getValue('EMAIL').time())), 0, 10);
+        $newPassword  = PasswordHashing::genRandomPassword(8);
+        $activationId = PasswordHashing::genRandomPassword(10);
 
-        $user->setValue('usr_new_password', $newPassword);
+        $user->setPassword($newPassword, true);
         $user->setValue('usr_activation_code', $activationId);
 
         $sysmail = new SystemMail($gDb);
-        $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
+        $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
         $sysmail->setVariable(1, $newPassword);
         $sysmail->setVariable(2, $g_root_path.'/adm_program/system/password_activation.php?usr_id='.$user->getValue('usr_id').'&aid='.$activationId);
         $sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user);

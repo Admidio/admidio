@@ -853,8 +853,8 @@
         <text id="PRO_NEW_PICTURE" development="new" translation="edited">Nieuwe profielfoto</text>
         <text id="PRO_NO_DEFAULT_ROLE" development="new" translation="edited">Geen standaard rol geselecteerd in de voorkeuren van organisatie. Neem voor hulp svp contact op met beheerder.</text>
         <text id="PRO_PASSWORD_CHANGED" development="new" translation="edited">Wachtwoord is succesvol gewijzigd.</text>
-        <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="edited">Wachtwoord moet uit tenminste 6 karakters bestaan en kan uit letters en cijfers bestaan.\n\nOp grond van veiligheid wordt het wachtwoord gecodeerd opgeslagen. Het is later niet zichtbaar.</text>
-        <text id="PRO_PASSWORD_LENGTH" development="new" translation="edited">Wachtwoord moet tenminste uit 6 karakters bestaan.</text>
+        <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="edited">Wachtwoord moet uit tenminste 8 karakters bestaan en kan uit letters en cijfers bestaan.\n\nOp grond van veiligheid wordt het wachtwoord gecodeerd opgeslagen. Het is later niet zichtbaar.</text>
+        <text id="PRO_PASSWORD_LENGTH" development="new" translation="edited">Wachtwoord moet tenminste uit 8 karakters bestaan.</text>
         <text id="PRO_PASSWORD_OLD_WRONG" development="new" translation="edited">Oude wachtwoord is onjuist.</text>
         <text id="PRO_PASSWORDS_NOT_EQUAL" development="new" translation="edited">De ingevoerde wachtwoorden zijn verschillend.</text>
         <text id="PRO_PHOTO_DELETED" development="new" translation="edited">Profielfoto is verwijderd.</text>

@@ -35,45 +35,48 @@ else
 
 $user = new User($gDb, $gProfileFields, $getUserId);
 
-// only the own password could be individual set. 
+// only the own password could be individual set.
 // Webmaster could only send a generated password or set a password if no password was set before
-if(isMember($getUserId) == false
-|| ($gCurrentUser->isWebmaster() == false && $gCurrentUser->getValue('usr_id') != $getUserId)
-|| ($gCurrentUser->isWebmaster() == true  && strlen($user->getValue('usr_password')) > 0 && strlen($user->getValue('EMAIL')) == 0 && $gPreferences['enable_system_mails'] == 1))
+if(!isMember($getUserId)
+|| (!$gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
+|| ($gCurrentUser->isWebmaster() && $user->getValue('usr_password') !== '' && $user->getValue('EMAIL') === '' && $gPreferences['enable_system_mails'] == 1))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 
-if($getMode == 'change')
+if($getMode === 'change')
 {
+    $oldPassword        = $_POST['old_password'];
+    $newPassword        = $_POST['new_password'];
+    $newPasswordConfirm = $_POST['new_password_confirm'];
+
     /***********************************************************************/
     /* Handle form input */
     /***********************************************************************/
     if($gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
     {
-        $_POST['old_password'] = '';
+        $oldPassword = '';
     }
 
-    if((strlen($_POST['old_password']) > 0 || $gCurrentUser->isWebmaster())
-    && strlen($_POST['new_password']) > 0
-    && strlen($_POST['new_password_confirm']) > 0)
+    if(($oldPassword !== '' || $gCurrentUser->isWebmaster())
+    &&  $newPassword !== '' && $newPasswordConfirm !== '')
     {
-        if(strlen($_POST['new_password']) > 5)
+        if(strlen($newPassword) >= 8)
         {
-            if ($_POST['new_password'] == $_POST['new_password_confirm'])
+            if ($newPassword === $newPasswordConfirm)
             {
                 // check if old password is correct.
                 // Webmaster could change password of other users without this verification.
-                if($user->checkPassword($_POST['old_password']) || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
+                if(PasswordHashing::verify($oldPassword, $user->getValue('usr_password')) || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
                 {
-                    $user->setValue('usr_password', $_POST['new_password']);
+                    $user->setPassword($newPassword);
                     $user->save();
 
                     // if password of current user changed, then update value in current session
                     if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
                     {
-                        $gCurrentUser->setValue('usr_password', $_POST['new_password']);
+                        $gCurrentUser->setPassword($newPassword);
                     }
 
                     $phrase = 'success';
@@ -144,11 +147,12 @@ elseif($getMode == 'html')
         if($gCurrentUser->getValue('usr_id') == $getUserId)
         {
             // to change own password user must enter the valid old password for verification
+            // TODO Future: 'minLength' => 8
             $form->addInput('old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED));
             $form->addLine();
         }
-        $form->addInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 6, 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'));
-        $form->addInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 6));
+        $form->addInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 8, 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'));
+        $form->addInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 8));
         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
         $form->show();
     echo '</div>';

@@ -632,8 +632,8 @@
         <text id="PRO_NEW_PICTURE" development="new" translation="edited">Photo de profil Nouvelle</text>
         <text id="PRO_NO_DEFAULT_ROLE" development="new" translation="edited">Pas de rôle par défaut a été défini dans les préférences de l'organisation. S'il vous plaît contacter le webmestre.</text>
         <text id="PRO_PASSWORD_CHANGED" development="new" translation="edited">Le mot de passe a été changé avec succès.</text>
-        <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="edited">Le mot de passe doit avoir au moins 6 caractères incluant des chiffres, lettres et caractères spéciaux. Pour des raisons de sécurité, quand mot de passe est enregistré, il ne peut plus être vu.</text>
-        <text id="PRO_PASSWORD_LENGTH" development="new" translation="edited">Le mot de passe doit comporter au moins 6 caractères.</text>
+        <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="edited">Le mot de passe doit avoir au moins 8 caractères incluant des chiffres, lettres et caractères spéciaux. Pour des raisons de sécurité, quand mot de passe est enregistré, il ne peut plus être vu.</text>
+        <text id="PRO_PASSWORD_LENGTH" development="new" translation="edited">Le mot de passe doit comporter au moins 8 caractères.</text>
         <text id="PRO_PASSWORD_OLD_WRONG" development="new" translation="edited">L'ancien mot de passe est incorrect.</text>
         <text id="PRO_PASSWORDS_NOT_EQUAL" development="new" translation="edited">Les mots de passe original et retapé sont différents.</text>
         <text id="PRO_PHOTO_DELETED" development="new" translation="edited">l'image de profil a été supprimé.</text>

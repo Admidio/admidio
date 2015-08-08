@@ -263,12 +263,12 @@ elseif($getMode == 4)  // Creating organization
             {
                 showNotice($message, 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
             }
-            
+
             // now check if a valid installation exists.
             $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
             $db->query($sql, false);
             $count = $db->num_rows();
-        
+
             if($count > 0)
             {
                 // valid installation exists -> exit installation
@@ -345,8 +345,8 @@ elseif($getMode == 5)  // Creating addministrator
     $form->addInput('user_first_name', $gL10n->get('SYS_FIRSTNAME'), $userFirstName, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('user_email', $gL10n->get('SYS_EMAIL'), $userEmail, array('maxLength' => 255, 'property' => FIELD_REQUIRED));
     $form->addInput('user_login', $gL10n->get('SYS_USERNAME'), $userLogin, array('maxLength' => 35, 'property' => FIELD_REQUIRED));
-    $form->addInput('user_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED));
-    $form->addInput('user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED));
+    $form->addInput('user_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 8));
+    $form->addInput('user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 8));
     $form->closeGroupBox();
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=4'));
     $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'layout/forward.png'));
@@ -361,8 +361,8 @@ elseif($getMode == 6)  // Creating configuration file
         $_SESSION['user_first_name']       = strStripTags($_POST['user_first_name']);
         $_SESSION['user_email']            = strStripTags($_POST['user_email']);
         $_SESSION['user_login']            = strStripTags($_POST['user_login']);
-        $_SESSION['user_password']         = strStripTags($_POST['user_password']);
-        $_SESSION['user_password_confirm'] = strStripTags($_POST['user_password_confirm']);
+        $_SESSION['user_password']         = $_POST['user_password'];
+        $_SESSION['user_password_confirm'] = $_POST['user_password_confirm'];
 
         if($_SESSION['user_last_name']  === ''
         || $_SESSION['user_first_name'] === ''
@@ -385,6 +385,12 @@ elseif($getMode == 6)  // Creating configuration file
         if($_SESSION['user_password'] !== $_SESSION['user_password_confirm'])
         {
             showNotice($gL10n->get('INS_PASSWORDS_NOT_EQUAL'), 'installation.php?mode=5',
+                       $gL10n->get('SYS_BACK'), 'layout/back.png');
+        }
+
+        if(strlen($_SESSION['user_password']) < 8 || strlen($_SESSION['user_password_confirm']) < 8)
+        {
+            showNotice($gL10n->get('PRO_PASSWORD_LENGTH'), 'installation.php?mode=5',
                        $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
     }
@@ -622,7 +628,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     // create user webmaster and assign roles
     $webmaster = new TableUsers($db);
     $webmaster->setValue('usr_login_name', $_SESSION['user_login']);
-    $webmaster->setValue('usr_password',   $_SESSION['user_password']);
+    $webmaster->setPassword($_SESSION['user_password']);
     $webmaster->setValue('usr_usr_id_create', $gCurrentUser->getValue('usr_id'));
     $webmaster->setValue('usr_timestamp_create', DATETIME_NOW);
     $webmaster->save(false); // no registered user -> UserIdCreate couldn't be filled

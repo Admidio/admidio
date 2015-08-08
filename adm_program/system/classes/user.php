@@ -1,4 +1,7 @@
 <?php
+
+require_once(SERVER_PATH.'/adm_program/system/classes/passwordhashing.php');
+
 /******************************************************************************
  * Class handle role rights, cards and other things of users
  *
@@ -11,7 +14,6 @@
  *
  * Beside the methods of the parent class there are the following additional methods:
  *
- * checkPassword($password) - check password against stored hash
  * deleteUserFieldData()    - delete all user data of profile fields;
  *                            user record will not be deleted
  * getListViewRights()  - Liefert ein Array mit allen Rollen und der
@@ -91,33 +93,6 @@ class User extends TableUsers
         }
 
         $this->db->endTransaction();
-    }
-
-    /**
-     * The method expects the clear password and will check this against the hash in the database.
-     * Therefore the password will be hashed the same way as the original password was
-     * hashed and stored in database.
-     * @param  string $password The clear password that should be checked against the hash in database
-     * @return bool   Return @b true if the password is equal to the stored hashed password in database
-     */
-    public function checkPassword($password)
-    {
-        // if password is stored with phpass hash, then use phpass
-        if(substr($this->getValue('usr_password'), 0, 1) === '$'     // private hash
-        || substr($this->getValue('usr_password'), 0, 1) === '_')    // BSDI-style extended DES-based hashes
-        {
-            $passwordHasher = new PasswordHash(9, true); // only use private hash because of compatibility
-            if($passwordHasher->CheckPassword($password, $this->getValue('usr_password')))
-            {
-                return true;
-            }
-        }
-        // if password is stored the old way then use md5
-        elseif(md5($password) === $this->getValue('usr_password'))
-        {
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -299,8 +274,16 @@ class User extends TableUsers
             }
         }
 
-        if($this->checkPassword($password))
+        $currHash = $this->getValue('usr_password');
+
+        if(PasswordHashing::verify($password, $currHash))
         {
+            if(PasswordHashing::needsRehash($currHash))
+            {
+                $this->setPassword($password);
+                $this->save();
+            }
+
             if($updateSessionCookies)
             {
                 $gCurrentSession->setValue('ses_usr_id', $this->getValue('usr_id'));

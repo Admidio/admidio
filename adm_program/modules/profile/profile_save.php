@@ -88,24 +88,24 @@ switch($getNewUser)
 // bei Registrierung muss Loginname und Pw geprueft werden
 if($getNewUser == 2)
 {
-    if(strlen($_POST['usr_login_name']) == 0)
+    if($_POST['usr_login_name'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME')));
     }
 
-    // Passwort sollte laenger als 6 Zeichen sein
-    if(strlen($_POST['usr_password']) < 6)
+    // Passwort muss mindestens 8 Zeichen lang sein
+    if(strlen($_POST['usr_password']) < 8)
     {
         $gMessage->show($gL10n->get('PRO_PASSWORD_LENGTH'));
     }
 
     // beide Passwortfelder muessen identisch sein
-    if ($_POST['usr_password'] != $_POST['password_confirm'])
+    if($_POST['usr_password'] !== $_POST['password_confirm'])
     {
         $gMessage->show($gL10n->get('PRO_PASSWORDS_NOT_EQUAL'));
     }
 
-    if(strlen($_POST['usr_password']) == 0)
+    if($_POST['usr_password'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
     }
@@ -235,7 +235,7 @@ if($gCurrentUser->isWebmaster() || $getNewUser > 0)
 // falls Registrierung, dann die entsprechenden Felder noch besetzen
 if($getNewUser == 2)
 {
-    $user->setValue('usr_password', $_POST['usr_password']);
+    $user->setPassword($_POST['usr_password']);
 }
 
 // Falls der User sich registrieren wollte, aber ein Captcha geschaltet ist,
