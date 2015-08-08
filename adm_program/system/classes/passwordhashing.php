@@ -25,6 +25,7 @@ class PasswordHashing
 {
     /**
      * Hash the given password with the given options
+     * Minimum cost is 8
      * @param  string       $password  The password string
      * @param  int          $algorithm The hash-algorithm constant
      * @param  array        $options   The hash-options array
@@ -32,6 +33,10 @@ class PasswordHashing
      */
     public static function hash($password, $algorithm = PASSWORD_DEFAULT, $options = array())
     {
+        if (in_array('cost', $options) && $options['cost'] < 8) {
+            $options['cost'] = 8;
+        }
+
         return password_hash($password, $algorithm, $options);
     }
 
