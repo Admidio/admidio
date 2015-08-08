@@ -48,34 +48,14 @@ class PasswordHashing
      */
     public static function verify($password, $hash)
     {
-        if (strlen($hash) === 60)
+        if (strlen($hash) === 60 && substr($hash, 0, 4) === '$2y$')
         {
-            if (substr($hash, 0, 4) === '$2y$')
-            {
-                return password_verify($password, $hash);
-            }
-            elseif (substr($hash, 0, 4) === '$2a$' || substr($hash, 0, 4) === '$2x$')
-            {
-                $hashParts = explode('$', $hash);
-                $passwordHasher = new PasswordHash($hashParts[1], false);
-                return $passwordHasher->CheckPassword($password, $hash);
-            }
+            return password_verify($password, $hash);
         }
-        elseif (strlen($hash) === 34)
+        elseif (strlen($hash) === 34 && substr($hash, 0, 3) === '$P$')
         {
-            if (substr($hash, 0, 3) === '$P$' || substr($hash, 0, 3) === '$H$')
-            {
-                $passwordHasher = new PasswordHash(9, true);
-                return $passwordHasher->CheckPassword($password, $hash);
-            }
-        }
-        elseif (strlen($hash) === 20)
-        {
-            if (substr($hash, 0, 1) === '_')
-            {
-                $passwordHasher = new PasswordHash(9, false);
-                return $passwordHasher->CheckPassword($password, $hash);
-            }
+            $passwordHasher = new PasswordHash(9, true);
+            return $passwordHasher->CheckPassword($password, $hash);
         }
         elseif (strlen($hash) === 32)
         {
