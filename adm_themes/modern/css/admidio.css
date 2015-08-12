@@ -129,7 +129,7 @@ body {
 
 @media (max-width: 991px) {
     #adm_menu_item_login, #adm_menu_item_registration, #adm_menu_item_my_profile,
-    #adm_menu_item_logout, #right-block {
+    #adm_menu_item_logout, #plugin_login_form, #plugin_menu {
         display: none !important;
     }
 }
