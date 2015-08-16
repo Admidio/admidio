@@ -11,6 +11,11 @@
 // Anzahl der Termine, die angezeigt werden sollen (Default = 2)
 $plg_announcements_count = 2;
 
+// Soll ein Vorschau-Text der Ankündigung gezeigt werden?
+// 0 = keine Voranzeige
+// >0 = Anzahl Zeichen des Vorschau-Textes
+$plg_show_preview = 70;
+
 // Name einer CSS-Klasse fuer Links
 // Nur noetig, falls die Links ein anderes Aussehen bekommen sollen
 $plg_link_class = '';
