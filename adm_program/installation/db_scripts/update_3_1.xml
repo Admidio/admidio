@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
-    <step id="10">UPDATE %PREFIX%_preferences SET max_file_upload_size = '3' WHERE prf_name LIKE 'max_file_upload_size'</step>
-    <step id="20">UPDATE %PREFIX%_preferences SET max_email_attachment_size = '1' WHERE prf_name LIKE 'max_email_attachment_size'</step>
+    <step id="10">UPDATE %PREFIX%_preferences SET prf_value = '3' WHERE prf_name = 'max_file_upload_size'</step>
+    <step id="20">UPDATE %PREFIX%_preferences SET prf_value = '1' WHERE prf_name = 'max_email_attachment_size'</step>
     <step id="30" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_password varchar(60)</step>
     <step id="40" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_new_password varchar(60)</step>
     <step id="50" database="postgresql">ALTER TABLE %PREFIX%_users ALTER COLUMN usr_password TYPE varchar(60)</step>
