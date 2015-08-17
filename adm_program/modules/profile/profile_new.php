@@ -24,8 +24,8 @@ require_once('../../system/common.php');
 // Initialize and check the parameters
 $getUserId    = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
 $getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'numeric');
-$getLastname  = admFuncVariableIsValid($_GET, 'lastname', 'string');
-$getFirstname = admFuncVariableIsValid($_GET, 'firstname', 'string');
+$getLastname  = stripslashes(admFuncVariableIsValid($_GET, 'lastname', 'string'));
+$getFirstname = stripslashes(admFuncVariableIsValid($_GET, 'firstname', 'string'));
 $getRemoveUrl = admFuncVariableIsValid($_GET, 'remove_url', 'boolean');
 
 $registrationOrgId = $gCurrentOrganization->getValue('org_id');
@@ -119,7 +119,7 @@ if(isset($_SESSION['profile_request']))
         $field_name = 'usf-'. $field->getValue('usf_id');
         if(isset($_SESSION['profile_request'][$field_name]))
         {
-            $user->setValue($field->getValue('usf_name_intern'), $_SESSION['profile_request'][$field_name]);
+            $user->setValue($field->getValue('usf_name_intern'), stripslashes($_SESSION['profile_request'][$field_name]));
         }
     }
 

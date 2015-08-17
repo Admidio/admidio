@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="de_sie">
+<language id="en">
+    <version id="1.7.1">
+        <text id="PLG_SIDEBAR_ANNOUNCEMENTS_MORE" development="new" translation="todo" description="Show 'more' content of this">more</text>
+    </version>
     <version id="1.5.1">
         <text id="PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ANNOUNCEMENTS" development="new" translation="todo">All Announcements</text>
         <text id="PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE" development="new" translation="todo">Announcements</text>

@@ -75,14 +75,15 @@ $newfullfilename = $backupabsolutepath.$fullbackupfilename;
 unset($SelectedTables);
 unset($tables);
 
-// create a list with all tables out of the "table defines"
-foreach (get_defined_constants() as $key => $value)
+// create a list with all tables with configured table prefix
+$sql    = 'SHOW TABLES LIKE \''.$g_tbl_praefix.'\_%\'';
+$result = $gDb->query($sql);
+
+while($table = $gDb->fetch_array($result))
 {
-    if (substr($key, 0, strlen('TBL_'))=='TBL_')
-    {
-        $tables[] = $value;
-    }
+    $tables[] = $table[0];
 }
+
 $SelectedTables[$g_adm_db] = $tables;
 
 $starttime = getmicrotime();

@@ -137,7 +137,8 @@ body > .admContent {
     #adm_menu_item_registration,
     #adm_menu_item_my_profile,
     #adm_menu_item_logout,
-    #right-block {
+    #plugin_login_form,
+    #plugin_menu {
         display: none !important;
     }
 }
@@ -757,6 +758,13 @@ input[type="time"] {
 
 .admidio-list-roles-assign-pos li {
     padding: 0 0 5px 0;
+}
+
+/* Fullscreen mode for lists */
+
+body > .admidio-content {
+    background-color: #ffffff;
+    padding: 15px;
 }
 
 /* Photos */

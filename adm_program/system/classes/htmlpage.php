@@ -514,7 +514,7 @@ class HtmlPage
         $html .= $htmlMyHeader;
         $html .= '</head><body>';
         $html .= $htmlMyBodyTop;
-        $html .= '<div class="admContent">';
+        $html .= '<div class="admidio-content">';
         $html .= $htmlHeadline;
         $html .= $htmlMenu;
         $html .= $this->pageContent;

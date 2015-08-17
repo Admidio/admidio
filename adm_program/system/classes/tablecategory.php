@@ -70,24 +70,6 @@ class TableCategory extends TableAccess
                        AND cat_type     = \''. $this->getValue('cat_type'). '\'';
             $this->db->query($sql);
 
-            // Abhaenigigkeiten loeschen
-            if($this->getValue('cat_type') == 'DAT')
-            {
-                $object = new TableDate($this->db);
-            }
-            elseif($this->getValue('cat_type') == 'LNK')
-            {
-                $object = new TableWeblink($this->db);
-            }
-            elseif($this->getValue('cat_type') == 'ROL')
-            {
-                $object = new TableRoles($this->db);
-            }
-            elseif($this->getValue('cat_type') == 'USF')
-            {
-                $object = new TableUserField($this->db);
-            }
-
             // alle zugehoerigen abhaengigen Objekte suchen und mit weiteren Abhaengigkeiten loeschen
             $sql    = 'SELECT * FROM '.$this->elementTable.'
                         WHERE '.$this->elementColumn.' = '. $this->getValue('cat_id');
@@ -234,6 +216,8 @@ class TableCategory extends TableAccess
      */
     public function readDataById($cat_id)
     {
+        global $g_tbl_praefix;
+        
         $returnValue = parent::readDataById($cat_id);
 
         if($returnValue)
@@ -257,6 +241,11 @@ class TableCategory extends TableAccess
             {
                 $this->elementTable = TBL_DATES;
                 $this->elementColumn = 'dat_cat_id';
+            }
+            elseif($this->getValue('cat_type') == 'AWA')
+            {
+                $this->elementTable  = $g_tbl_praefix.'_user_awards';
+                $this->elementColumn = 'awa_cat_id';
             }
         }
 

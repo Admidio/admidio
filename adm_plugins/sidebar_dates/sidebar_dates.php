@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar Dates
  *
- * Version 1.6.0
+ * Version 1.6.1
  *
  * Plugin das die letzten X Termine in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -35,6 +35,11 @@ $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 if(isset($plg_dates_count) == false || is_numeric($plg_dates_count) == false)
 {
     $plg_dates_count = 2;
+}
+
+if(isset($plg_dates_show_preview) == false || is_numeric($plg_dates_show_preview) == false)
+{
+    $plg_dates_show_preview = 0;
 }
 
 if(isset($plg_show_date_end) == false || is_numeric($plg_show_date_end) == false)
@@ -103,7 +108,7 @@ if($plgDatesResult['numResults'] > 0)
         $plg_date->setArray($plg_row);
         $plg_html_end_date = '';
 
-        echo $plg_date->getValue('dat_begin', $gPreferences['system_date']). '&nbsp;&nbsp;';
+        echo '<div>'.$plg_date->getValue('dat_begin', $gPreferences['system_date']). '&nbsp;&nbsp;';
 
         if ($plg_date->getValue('dat_all_day') != 1)
         {
@@ -150,12 +155,27 @@ if($plgDatesResult['numResults'] > 0)
                     $plg_new_headline = $plg_new_headline.' '. $plg_value;
                 }
             }
-            echo $plg_new_headline. '</a><hr />';
+            echo $plg_new_headline. '</a></div>';
         }
         else
         {
-            echo $plg_date->getValue('dat_headline'). '</a><hr />';
+            echo $plg_date->getValue('dat_headline'). '</a></div>';
         }
+        
+        // Vorschau-Text anzeigen
+        if($plg_dates_show_preview > 0)
+        {
+            // Anfang des Ankündigungs-Textes auslesen. Plus 15 Zeichen, um am Ende eines Wortes abzubrechen
+            $textPrev = substr($plg_date->getValue('dat_description'), 0, $plg_dates_show_preview + 15);
+            $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...';
+            
+            echo '<div>'.$textPrev.' 
+            <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
+                href="'.$plg_link_url.'?view_mode=html&amp;id='. $plg_date->getValue("dat_id"). '"><span 
+                class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_DATES_MORE').'</a></div>';
+        }
+        
+        echo '<hr>';
     }
 
     // WEiterleitung ?ber $plg_link_url ohne weiteren ?bergabeparameter
