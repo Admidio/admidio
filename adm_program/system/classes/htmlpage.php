@@ -437,6 +437,11 @@ class HtmlPage
             <script src="'.$g_root_path.'/adm_program/libs/respond/respond.js"></script>
         <![endif]-->';
 
+        if ($gPreferences['system_browser_update_check'] == 1)
+        {
+            $this->addJavascriptFile($g_root_path.'/adm_program/libs/browser-update/browser-update.js');
+        }
+
         // add javascript files to page
         foreach($this->jsFiles as $file)
         {
