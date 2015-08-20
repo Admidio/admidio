@@ -59,6 +59,8 @@ class HtmlPage
         $this->printMode     = false;
         $this->hasNavbar     = false;
         $this->hasModal      = false;
+        $this->javascriptContent        = '';
+        $this->javascriptContentExecute = '';
 
         if($gDebug)
         {

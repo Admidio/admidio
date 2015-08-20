@@ -277,7 +277,7 @@ class HtmlFormBasic extends HtmlElement
      * @param string $link  If set a javascript click event with a page load to this link
      *                      will be attached to the button.
      */
-    public function addSimpleButton($name, $type = 'button', $value, $id = null, $link = null)
+    public function addSimpleButton($name, $type = 'button', $value, $id = '', $link = '')
     {
         $this->addElement('button');
 
