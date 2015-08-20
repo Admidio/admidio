@@ -95,24 +95,32 @@ echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
 
 if($gValidLogin == 1)
 {
-    echo '
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#adm_logout_link").click(function() {';
-                if($plg_link_target !== '' && strpos($plg_link_target, '_') === false)
-                {
-                    echo '
-                    parent.'. $plg_link_target. '.location.href = \''. $g_root_path. '/adm_program/system/logout.php\';
-                    self.location.reload(); ';
-                }
-                else
-                {
-                    echo 'self.location.href = \''. $g_root_path. '/adm_program/system/logout.php\';';
-                }
-            echo '
+    if($plg_link_target !== '' && strpos($plg_link_target, '_') === false)
+    {
+        $jsContentNextPage = '
+        parent.'. $plg_link_target. '.location.href = \''. $g_root_path. '/adm_program/system/logout.php\';
+        self.location.reload(); ';
+    }
+    else
+    {
+        $jsContentNextPage = 'self.location.href = \''. $g_root_path. '/adm_program/system/logout.php\';';
+    }
+
+    $jsContent = '$("#adm_logout_link").click(function() {'.$jsContentNextPage.'});';
+
+    if(isset($page) && is_object($page))
+    {
+        $page->addJavascript($jsContent, true);
+    }
+    else
+    {
+        echo '
+        <script type="text/javascript">
+            $(document).ready(function() {
+                '.$jsContent.'
             });
-        });
-    </script>';
+        </script>';
+    }
 
     // show the rank of the user if this is configured in the config.php
     $htmlUserRank = '';
