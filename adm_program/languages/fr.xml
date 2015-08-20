@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="fr">
+    <version id="3.1.0" translator="Markus Faßbender">
+        <text id="ORG_BROWSER_UPDATE_CHECK" development="new" translation="todo">Message de mis à jour concernant navigateur désuet</text>
+        <text id="ORG_BROWSER_UPDATE_CHECK_DESC" development="new" translation="todo">
+            Après l'activation les utilisateurs de navigateurs désuet devraient effectuer une mise à jour du navigateur.
+            Des nouveaux navigateurs protègent contre la fraude, les virus, les chevaux de Troie, le vol d'identité et les autres menaces qui mettent en péril votre vie privée et la sécurité. Chaque nouvelle génération de navigateurs améliore la vitesse et prend en charge des nouvelles technologies web. Pour cela les sites peuvent être présentés mieux. A cet effet, le service de https://browser-update.org/ est utilisé.</text>
+    </version>
     <version id="2.2.0">
         <!-- Phrases only in Announcementmodule -->
         <text id="ANN_ANNOUNCEMENT" development="new" translation="edited">Annonces</text>

@@ -59,6 +59,8 @@ class HtmlPage
         $this->printMode     = false;
         $this->hasNavbar     = false;
         $this->hasModal      = false;
+        $this->javascriptContent        = '';
+        $this->javascriptContentExecute = '';
 
         if($gDebug)
         {
@@ -436,6 +438,11 @@ class HtmlPage
             <script src="'.$g_root_path.'/adm_program/libs/html5shiv/html5shiv.min.js"></script>
             <script src="'.$g_root_path.'/adm_program/libs/respond/respond.js"></script>
         <![endif]-->';
+
+        if ($gPreferences['system_browser_update_check'] == 1)
+        {
+            $this->addJavascriptFile($g_root_path.'/adm_program/libs/browser-update/browser-update.js');
+        }
 
         // add javascript files to page
         foreach($this->jsFiles as $file)

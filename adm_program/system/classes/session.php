@@ -174,7 +174,7 @@ class Session extends TableAccess
         $this->readDataById($this->getValue('ses_id'));
 
         $sesRenew = $this->getValue('ses_renew');
-        if($sesRenew === 2 || $sesRenew === 3)
+        if($sesRenew == 2 || $sesRenew == 3)
         {
             // if flag for reload of organization is set than reload the organization data
             $organization =& $this->getObject('gCurrentOrganization');

@@ -47,7 +47,8 @@ case 1:
         switch($getForm)
         {
             case 'common':
-                $checkboxes = array('enable_rss','enable_auto_login','enable_password_recovery','system_js_editor_enabled','system_search_similar');
+                $checkboxes = array('enable_rss', 'enable_auto_login', 'enable_password_recovery',
+                    'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check');
 
                 if(admStrIsValidFileName($_POST['theme']) == false
                 || file_exists(SERVER_PATH. '/adm_themes/'.$_POST['theme'].'/index.html') == false)
