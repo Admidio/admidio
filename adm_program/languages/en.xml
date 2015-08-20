@@ -2,7 +2,7 @@
 <language id="en">
     <version id="3.1.0" translator="Markus Faßbender">
         <text id="ORG_BROWSER_UPDATE_CHECK" development="new" translation="todo">Update message for outdated Browsers</text>
-        <text id="ORG_BROWSER_UPDATE_CHECK_DESC" development="new" translation="todo">Newer browsers guarantee a better protection against fraud, viruses, Trojans, identity theft and other threats to your privacy and security. Every new browser generation improves speed and supports more and more new web technologies, which leads to a better web experience. For this purpose, the service of https://browser-update.org/ is used.</text>
+        <text id="ORG_BROWSER_UPDATE_CHECK_DESC" development="new" translation="todo">After activation users with outdated browsers are advised to run a browserupdate. Newer browsers guarantee a better protection against fraud, viruses, Trojans, identity theft and other threats to your privacy and security. Every new browser generation improves speed and supports more and more new web technologies, which leads to a better web experience. For this purpose, the service of https://browser-update.org/ is used.</text>
     </version>
     <version id="3.0.0-Beta.4" translator="Markus Faßbender">
         <text id="INS_DATABASE_LOGIN_DESC" development="changed" translation="edited">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</text>
