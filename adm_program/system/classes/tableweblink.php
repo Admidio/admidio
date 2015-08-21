@@ -68,7 +68,7 @@ class TableWeblink extends TableAccess
             // if text is a translation-id then translate it
             if(strpos($value, '_') === 3)
             {
-                $value = $gL10n->get(admStrToUpper($value));
+                $value = $gL10n->get(mb_strtoupper($value));
             }
         }
 
@@ -93,8 +93,8 @@ class TableWeblink extends TableAccess
                 return false;
             }
             // Homepage noch mit http vorbelegen
-            if(strpos(admStrToLower($newValue), 'http://')  === false
-            && strpos(admStrToLower($newValue), 'https://') === false)
+            if(strpos(mb_strtolower($newValue), 'http://')  === false
+            && strpos(mb_strtolower($newValue), 'https://') === false)
             {
                 $newValue = 'http://'.$newValue;
             }

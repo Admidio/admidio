@@ -119,7 +119,7 @@ class TableGuestbook extends TableAccess
         {
             if($columnName == 'gbo_email')
             {
-                $newValue = admStrToLower($newValue);
+                $newValue = mb_strtolower($newValue);
                 if (!strValidCharacters($newValue, 'email'))
                 {
                     // falls die Email ein ungueltiges Format aufweist wird sie nicht gesetzt
@@ -134,8 +134,8 @@ class TableGuestbook extends TableAccess
                     return false;
                 }
                 // Homepage noch mit http vorbelegen
-                if(strpos(admStrToLower($newValue), 'http://')  === false
-                && strpos(admStrToLower($newValue), 'https://') === false)
+                if(strpos(mb_strtolower($newValue), 'http://')  === false
+                && strpos(mb_strtolower($newValue), 'https://') === false)
                 {
                     $newValue = 'http://'. $newValue;
                 }

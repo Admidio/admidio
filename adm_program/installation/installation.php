@@ -374,7 +374,7 @@ elseif($getMode == 6)  // Creating configuration file
                        $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
 
-        $_SESSION['user_email'] = admStrToLower($_SESSION['user_email']);
+        $_SESSION['user_email'] = mb_strtolower($_SESSION['user_email']);
 
         if(!strValidCharacters($_SESSION['user_email'], 'email'))
         {

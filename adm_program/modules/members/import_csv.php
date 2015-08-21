@@ -78,7 +78,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
     {
         // Hochkomma und Spaces entfernen
         $columnValue = trim(strip_tags(str_replace('"', '', $columnValue)));
-        $columnValueToLower = admStrToLower($columnValue);
+        $columnValueToLower = mb_strtolower($columnValue);
 
         // nun alle Userfelder durchgehen und schauen, bei welchem
         // die entsprechende Dateispalte ausgewaehlt wurde
@@ -100,7 +100,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
                 elseif($field->getValue('usf_type') == 'CHECKBOX')
                 {
                     if($columnValueToLower == 'j'
-                    || $columnValueToLower == admStrToLower($gL10n->get('SYS_YES'))
+                    || $columnValueToLower == mb_strtolower($gL10n->get('SYS_YES'))
                     || $columnValueToLower == 'y'
                     || $columnValueToLower == 'yes'
                     || $columnValueToLower == '1')
@@ -108,7 +108,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
                         $user->setValue($field->getValue('usf_name_intern'), '1');
                     }
                     if($columnValueToLower == 'n'
-                    || $columnValueToLower == admStrToLower($gL10n->get('SYS_NO'))
+                    || $columnValueToLower == mb_strtolower($gL10n->get('SYS_NO'))
                     || $columnValueToLower == 'no'
                     || $columnValueToLower  == '0'
                     || $columnValue === '')
@@ -125,7 +125,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
 
                     foreach($arrListValues as $key => $value)
                     {
-                        if(strcmp(admStrToLower($columnValue), admStrToLower(trim($arrListValues[$position]))) == 0)
+                        if(strcmp(mb_strtolower($columnValue), mb_strtolower(trim($arrListValues[$position]))) == 0)
                         {
                             // if col_value is text than save position if text is equal to text of position
                             $user->setValue($field->getValue('usf_name_intern'), $position);
@@ -140,7 +140,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
                 }
                 elseif($field->getValue('usf_type') == 'EMAIL')
                 {
-                    $columnValue = admStrToLower($columnValue);
+                    $columnValue = mb_strtolower($columnValue);
                     if(strValidCharacters($columnValue, 'email'))
                     {
                         $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 255));

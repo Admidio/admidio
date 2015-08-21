@@ -350,7 +350,7 @@ class HtmlForm extends HtmlFormBasic
         if($optionsAll['icon'] !== '')
         {
             // create html for icon
-            if(strpos(admStrToLower($optionsAll['icon']), 'http') === 0 && strValidCharacters($optionsAll['icon'], 'url'))
+            if(strpos(mb_strtolower($optionsAll['icon']), 'http') === 0 && strValidCharacters($optionsAll['icon'], 'url'))
             {
                 $htmlIcon = '<img class="admidio-icon-info" src="'.$optionsAll['icon'].'" title="'.$label.'" alt="'.$label.'" />';
             }
@@ -1442,7 +1442,7 @@ class HtmlForm extends HtmlFormBasic
             // if text is a translation-id then translate it
             if(strpos($row['cat_name'], '_') == 3)
             {
-                $categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
+                $categoriesArray[$row['cat_id']] = $gL10n->get(mb_strtoupper($row['cat_name']));
             }
             else
             {
@@ -1462,7 +1462,7 @@ class HtmlForm extends HtmlFormBasic
                 // if text is a translation-id then translate it
                 if(strpos($row['cat_name'], '_') == 3)
                 {
-                    $categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
+                    $categoriesArray[$row['cat_id']] = $gL10n->get(mb_strtoupper($row['cat_name']));
                 }
                 else
                 {
@@ -1705,7 +1705,7 @@ class HtmlForm extends HtmlFormBasic
         if($icon !== '')
         {
             // create html for icon
-            if(strpos(admStrToLower($icon), 'http') === 0 && strValidCharacters($icon, 'url'))
+            if(strpos(mb_strtolower($icon), 'http') === 0 && strValidCharacters($icon, 'url'))
             {
                 $htmlIcon = '<img class="admidio-icon-info" src="'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
             }

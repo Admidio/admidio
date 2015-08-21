@@ -159,7 +159,7 @@ class ProfileFields
                     if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'RADIO_BUTTON')
                     {
                         // if value is imagefile or imageurl then show image
-                        if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
+                        if(strpos(mb_strtolower($listValue), '.png') > 0 || strpos(mb_strtolower($listValue), '.jpg') > 0)
                         {
                             // if there is imagefile and text separated by | then explode them
                             if(strpos($listValue, '|') > 0)
@@ -176,13 +176,13 @@ class ProfileFields
                             // if text is a translation-id then translate it
                             if(strpos($listValueText, '_') == 3)
                             {
-                                $listValueText = $gL10n->get(admStrToUpper($listValueText));
+                                $listValueText = $gL10n->get(mb_strtoupper($listValueText));
                             }
 
                             try
                             {
                                 // create html for optionbox entry
-                                if(strpos(admStrToLower($listValueImage), 'http') === 0 && strValidCharacters($listValueImage, 'url'))
+                                if(strpos(mb_strtolower($listValueImage), 'http') === 0 && strValidCharacters($listValueImage, 'url'))
                                 {
                                     $listValue = '<img class="admidio-icon-info" src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
                                 }
@@ -201,7 +201,7 @@ class ProfileFields
                     // if text is a translation-id then translate it
                     if(strpos($listValue, '_') == 3)
                     {
-                        $listValue = $gL10n->get(admStrToUpper($listValue));
+                        $listValue = $gL10n->get(mb_strtoupper($listValue));
                     }
 
                     // save values in new array that starts with key = 1
@@ -478,7 +478,7 @@ class ProfileFields
             elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'EMAIL')
             {
                 // Email darf nur gueltige Zeichen enthalten und muss einem festen Schema entsprechen
-                $fieldValue = admStrToLower($fieldValue);
+                $fieldValue = mb_strtolower($fieldValue);
                 if (!strValidCharacters($fieldValue, 'email') && $this->noValueCheck != true)
                 {
                     return false;
@@ -518,8 +518,8 @@ class ProfileFields
                     return false;
                 }
                 // Homepage noch mit http vorbelegen
-                if(strpos(admStrToLower($fieldValue), 'http://')  === false
-                && strpos(admStrToLower($fieldValue), 'https://') === false)
+                if(strpos(mb_strtolower($fieldValue), 'http://')  === false
+                && strpos(mb_strtolower($fieldValue), 'https://') === false)
                 {
                     $fieldValue = 'http://'. $fieldValue;
                 }

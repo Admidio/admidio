@@ -114,7 +114,7 @@ case 1:
                 }
                 else
                 {
-                    $_POST['email_administrator'] = admStrToLower($_POST['email_administrator']);
+                    $_POST['email_administrator'] = mb_strtolower($_POST['email_administrator']);
                     if(!strValidCharacters($_POST['email_administrator'], 'email'))
                     {
                         $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
@@ -153,7 +153,7 @@ case 1:
 
                 if(strlen($_POST['mail_sendmail_address']) > 0)
                 {
-                    $_POST['mail_sendmail_address'] = admStrToLower($_POST['mail_sendmail_address']);
+                    $_POST['mail_sendmail_address'] = mb_strtolower($_POST['mail_sendmail_address']);
                     if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
                     {
                         $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_SENDER_EMAIL')));

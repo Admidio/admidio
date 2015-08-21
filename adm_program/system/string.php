@@ -214,7 +214,7 @@ function strValidCharacters($string, $checkType)
         }
 
         // check if string contains only valid characters
-        if(strspn(admStrToLower($string), $validChars) === strlen($string))
+        if(strspn(mb_strtolower($string), $validChars) === strlen($string))
         {
             switch ($checkType)
             {

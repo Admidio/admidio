@@ -274,7 +274,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 function admFuncMaxUploadSize()
 {
     $post_max_size = trim(ini_get('post_max_size'));
-    switch(admStrToLower(substr($post_max_size, strlen($post_max_size/1), 1)))
+    switch(mb_strtolower(substr($post_max_size, strlen($post_max_size/1), 1)))
     {
         case 'g':
             $post_max_size *= 1024;
@@ -284,7 +284,7 @@ function admFuncMaxUploadSize()
             $post_max_size *= 1024;
     }
     $upload_max_filesize = trim(ini_get('upload_max_filesize'));
-    switch(admStrToLower(substr($upload_max_filesize, strlen($upload_max_filesize/1), 1)))
+    switch(mb_strtolower(substr($upload_max_filesize, strlen($upload_max_filesize/1), 1)))
     {
         case 'g':
             $upload_max_filesize *= 1024;
@@ -320,7 +320,7 @@ function admFuncProcessableImageSize()
     {
         $memory_limit = '128M';
     }
-    switch(admStrToLower(substr($memory_limit, strlen($memory_limit/1), 1)))
+    switch(mb_strtolower(substr($memory_limit, strlen($memory_limit/1), 1)))
     {
      case 'g':
          $memory_limit *= 1024;
@@ -377,7 +377,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
     $optionsAll     = array_replace($optionsDefault, $options);
 
     $errorMessage = '';
-    $datatype = admStrToLower($datatype);
+    $datatype = mb_strtolower($datatype);
 
     // set default value for each datatype if no value is given and no value was required
     if(!isset($array[$variableName]) || $array[$variableName] === '')
@@ -426,8 +426,8 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
     {
         // check if parameter has a valid value
         // do a strict check with in_array because the function don't work properly
-        if(!in_array(admStrToUpper($array[$variableName]), $optionsAll['validValues'], true)
-        && !in_array(admStrToLower($array[$variableName]), $optionsAll['validValues'], true))
+        if(!in_array(mb_strtoupper($array[$variableName]), $optionsAll['validValues'], true)
+        && !in_array(mb_strtolower($array[$variableName]), $optionsAll['validValues'], true))
         {
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
         }

@@ -242,7 +242,7 @@ if($getNewUser == 2)
 // muss natuerlich der Code ueberprueft werden
 if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1)
 {
-    if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
+    if (!isset($_SESSION['captchacode']) || mb_strtoupper($_SESSION['captchacode']) != mb_strtoupper($_POST['captcha']))
     {
         if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
         elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
