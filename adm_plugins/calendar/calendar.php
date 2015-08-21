@@ -2,15 +2,16 @@
 /******************************************************************************
  * Calendar
  *
- * Version 1.10.0
+ * Version 1.11.0
  *
- * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
- * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
+ * Plugin shows the actual month with all the events and birthdays that are
+ * coming. This plugin can be used to show the Admidio events and birthdays in a
+ * sidebar within Admidio or in an external website.
  *
  * Compatible with Admidio version 3.0
  *
- * Übergaben: date_id (Format MMJJJJ Beispiel: 052011 = Mai 2011)
- *            ajax_change (ist gesetzt bei Monatswechsel per Ajax)
+ * Parameters : date_id (Format MMJJJJ Beispiel: 052011 = Mai 2011)
+ *              ajax_change (ist gesetzt bei Monatswechsel per Ajax)
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -121,9 +122,12 @@ $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 $geb_link = '';
 $plg_link = '';
+$currentMonth = '';
+$currentYear  = '';
+$today        = 0;
+$lastDayCurrentMonth = '';
 
 // Date ID auslesen oder aktuellen Monat und Jahr erzeugen
-$heute = 0;
 if(array_key_exists('date_id', $_GET))
 {
     if(is_numeric($_GET['date_id']) == false)
@@ -133,34 +137,39 @@ if(array_key_exists('date_id', $_GET))
     else
     {
         $date_id = $_GET['date_id'];
-        $monat = substr($date_id, 0, 2);
-        $jahr = substr($date_id, 2, 4);
-        $_SESSION['plugin_calendar_last_month'] = $monat.$jahr;
+        $currentMonth = substr($date_id, 0, 2);
+        $currentYear = substr($date_id, 2, 4);
+        $_SESSION['plugin_calendar_last_month'] = $currentMonth.$currentYear;
 
-        if($monat == date('m') and $jahr == date('Y'))
+        if($currentMonth == date('m') and $currentYear == date('Y'))
         {
-            $heute = date('d');
+            $today = date('d');
         }
     }
 }
 elseif(isset($_SESSION['plugin_calendar_last_month']))
 {
     // Zuletzt gewählten Monat anzeigen
-    $monat = substr($_SESSION['plugin_calendar_last_month'], 0, 2);
-    $jahr = substr($_SESSION['plugin_calendar_last_month'], 2, 4);
-    if($monat == date('m') and $jahr == date('Y'))
+    $currentMonth = substr($_SESSION['plugin_calendar_last_month'], 0, 2);
+    $currentYear = substr($_SESSION['plugin_calendar_last_month'], 2, 4);
+    if($currentMonth == date('m') and $currentYear == date('Y'))
     {
-        $heute = date('d');
+        $today = date('d');
     }
 }
 else
 {
     // Aktuellen Monat anzeigen
-    $monat = date('m');
-    $jahr = date('Y');
-    $heute = date('d');
+    $currentMonth = date('m');
+    $currentYear = date('Y');
+    $today = date('d');
 }
-$sql_dat = $jahr. '-'. $monat;
+
+$lastDayCurrentMonth = date('t', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
+$dateMonthStart = $currentYear.'-'.$currentMonth.'-01';
+$dateMonthEnd   = $currentYear.'-'.$currentMonth.'-'.$lastDayCurrentMonth;
+$eventsMonthDayArray    = array();
+$birthdaysMonthDayArray = array();
 
 // if page object is set then integrate css file of this plugin
 global $page;
@@ -189,80 +198,105 @@ if($plg_ter_aktiv == 1)
     if(in_array('all', $plg_kal_cat))
     {
         // alle Kalender anzeigen
-        $sql_syntax = '';
+        $sqlSyntax = '';
     }
     else
     {
         // nur bestimmte Kalender anzeigen
-        $sql_syntax = ' AND cat_type = \'DAT\' AND ( ';
+        $sqlSyntax = ' AND cat_type = \'DAT\' AND ( ';
         for($i=0;$i<count($plg_kal_cat);$i++)
         {
-            $sql_syntax = $sql_syntax. 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
+            $sqlSyntax = $sqlSyntax. 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
         }
-        $sql_syntax = substr($sql_syntax, 0, -4). ') ';
+        $sqlSyntax = substr($sqlSyntax, 0, -4). ') ';
     }
 
-
-    // Dummy-Zähler für Schleifen definieren
-    $ter = 1;
-    $ter_anzahl = 0;
-    $ter_aktuell = 0;
-
-    // Datenbankabfrage mit Datum (Monat / Jahr)
+    // search for all events in database within the given month
     if($gCurrentUser->getValue('usr_id') > 0)
     {
-        $login_sql = 'AND ( dtr_rol_id IS NULL OR dtr_rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$gCurrentUser->getValue('usr_id').') )';
+        $sqlLogin = 'AND ( dtr_rol_id IS NULL OR dtr_rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$gCurrentUser->getValue('usr_id').') )';
     }
     else
     {
-        $login_sql = 'AND dtr_rol_id IS NULL';
+        $sqlLogin = 'AND dtr_rol_id IS NULL';
     }
-    $sql = 'SELECT DISTINCT dat_id, dat_cat_id, cat_name, dat_begin, dat_all_day, dat_location, dat_headline
-            FROM '. TBL_DATE_ROLE.', '. TBL_DATES. ', '.TBL_CATEGORIES.'
-            WHERE dat_id = dtr_dat_id
-                '.$login_sql.'
-                AND DATE_FORMAT(dat_begin, \'%Y-%m\') = \''.$sql_dat.'\'
-                '.$sql_syntax.'
-            AND dat_cat_id = cat_id
-            ORDER BY dat_begin ASC';
+
+    $sql = 'SELECT DISTINCT dat_id, dat_cat_id, cat_name, dat_begin, dat_end, dat_all_day, dat_location, dat_headline
+              FROM '. TBL_DATE_ROLE.', '. TBL_DATES. ', '.TBL_CATEGORIES.'
+             WHERE dat_id = dtr_dat_id
+                   '.$sqlLogin.'
+               AND dat_begin <= \''.$dateMonthEnd.'\'
+               AND dat_end   >= \''.$dateMonthStart.'\'
+                   '.$sqlSyntax.'
+               AND dat_cat_id = cat_id
+             ORDER BY dat_begin ASC';
     $result = $gDb->query($sql);
 
     while($row = $gDb->fetch_array($result))
     {
-        $startDate = new DateTimeExtended($row['dat_begin'], 'Y-m-d H:i:s');
-        $termin_id[$ter]       = $row['dat_id'];
-        $termin_tag[$ter]      = $startDate->format('d');
-        $termin_uhr[$ter]      = $startDate->format($gPreferences['system_time']);
-        $termin_ganztags[$ter] = $row['dat_all_day'];
-        $termin_ort[$ter]      = $row['dat_location'];
-        $termin_titel[$ter]    = $row['dat_headline'];
+        $startDate = new DateTime($row['dat_begin']);
+        $endDate   = new DateTime($row['dat_end']);
 
         // Name der Standardkalender umsetzen, sonst Name lt. Datenbank
         if($plg_kal_cat_show == 1)
         {
             if(substr($row['cat_name'], 3, 1)=='_')
             {
-                $calendar_name = $gL10n->get($row['cat_name']);
+                $calendarName = $gL10n->get($row['cat_name']);
             }
             else
             {
-                $calendar_name = $row['cat_name'];
+                $calendarName = $row['cat_name'];
             }
-            $termin_titel[$ter]= $calendar_name. ': '. $termin_titel[$ter];
+            $row['dat_headline'] = $calendarName. ': '. $row['dat_headline'];
         }
 
-        $ter++;
+        if($startDate->format('Y-m-d') === $endDate->format('Y-m-d'))
+        {
+            // event only within one day
+            $eventsMonthDayArray[$startDate->format('j')][] = array('dat_id'   => $row['dat_id'],
+                                                              'time'     => $startDate->format($gPreferences['system_time']),
+                                                              'all_day'  => $row['dat_all_day'],
+                                                              'location' => $row['dat_location'],
+                                                              'headline' => $row['dat_headline']);
+        }
+        else
+        {
+            // event within several days
+            if($startDate->format('m') != $currentMonth)
+            {
+                $firstDay = 1;
+            }
+            else
+            {
+                $firstDay = $startDate->format('d');
+            }
+
+            if($endDate->format('m') != $currentMonth)
+            {
+                $lastDay = $lastDayCurrentMonth;
+            }
+            else
+            {
+                $lastDay = $endDate->format('d');
+            }
+
+            // now add event to every relevant day of month
+            for($i = $firstDay; $i <= $lastDay; $i++)
+            {
+                $eventsMonthDayArray[$i][] = array('dat_id'   => $row['dat_id'],
+                                             'time'     => $startDate->format($gPreferences['system_time']),
+                                             'all_day'  => $row['dat_all_day'],
+                                             'location' => $row['dat_location'],
+                                             'headline' => $row['dat_headline']);
+            }
+        }
     }
 }
 
 // Abfrage der Geburtstage
 if($plg_geb_aktiv == 1)
 {
-    // Dummy-Zähler für Schleifen definieren
-    $geb = 1;
-    $geb_anzahl = 0;
-    $geb_aktuell = 0;
-
     // Datenbankabfrage nach Geburtstagen im Monat
     $sql = 'SELECT DISTINCT
                    usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name,
@@ -270,7 +304,7 @@ if($plg_geb_aktiv == 1)
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
               JOIN '. TBL_USER_DATA. ' AS birthday ON birthday.usd_usr_id = usr_id
                AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
-               AND MONTH(birthday.usd_value) = '.$monat.'
+               AND MONTH(birthday.usd_value) = '.$currentMonth.'
               LEFT JOIN '. TBL_USER_DATA. ' AS last_name ON last_name.usd_usr_id = usr_id
                AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
               LEFT JOIN '. TBL_USER_DATA. ' AS first_name ON first_name.usd_usr_id = usr_id
@@ -289,23 +323,24 @@ if($plg_geb_aktiv == 1)
 
     while($row = $gDb->fetch_array($result))
     {
-        $birthdayDate   = new DateTimeExtended($row['birthday'], 'Y-m-d');
-        $geb_day[$geb]  = $birthdayDate->format('d');
-        $geb_year[$geb] = $birthdayDate->format('Y');
-        $alter[$geb]    = $jahr-$geb_year[$geb];
-        $geb_name[$geb] = $row['last_name']. ' '. $row['first_name'];
-        $geb++;
+        $birthdayDate   = new DateTime($row['birthday']);
+
+        $birthdaysMonthDayArray[$birthdayDate->format('j')][] = array(
+            'year' => $birthdayDate->format('Y'),
+            'age'  => $currentYear - $birthdayDate->format('Y'),
+            'name' => $row['last_name']. ', '. $row['first_name']);
     }
 }
 
 // Kalender erstellen
-$erster = date('w', mktime(0, 0, 0, $monat, 1, $jahr));
-$insgesamt = date('t', mktime(0, 0, 0, $monat, 1, $jahr));
+$firstWeekdayOfMonth = date('w', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
 $monate = explode(',', $gL10n->get('PLG_CALENDAR_MONTH'));
-if($erster == 0)
+
+if($firstWeekdayOfMonth == 0)
 {
-    $erster = 7;
+    $firstWeekdayOfMonth = 7;
 }
+
 echo '<div id="plgCalendarContent" class="admidio-plugin-content">
 <h3>'.$gL10n->get('DAT_CALENDAR').'</h3>
 
@@ -324,18 +359,18 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
                 type: 'GET',
                 url: '".$g_root_path."/adm_plugins/$plugin_folder/calendar.php',
                 cache: false,
-                data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $monat-1, 1, $jahr))."',
+                data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $currentMonth-1, 1, $currentYear))."',
                 success: function(html){
                     $('#plgCalendarContent').replaceWith(html);
                     $('.admidio-calendar-link').popover();
                 }
             }); return false;\">&laquo;</a></th>";
-            echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$monate[$monat-1].' '.$jahr.'</th>';
+            echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$monate[$currentMonth-1].' '.$currentYear.'</th>';
             echo "<th style=\"text-align: center;\" class=\"plgCalendarHeader\"><a href=\"#\" onclick=\"$.ajax({
                 type: 'GET',
                 url: '".$g_root_path."/adm_plugins/$plugin_folder/calendar.php',
                 cache: false,
-                data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $monat+1, 1, $jahr))."',
+                data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $currentMonth+1, 1, $currentYear))."',
                 success: function(html){
                     $('#plgCalendarContent').replaceWith(html);
                     $('.admidio-calendar-link').popover();
@@ -344,7 +379,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
         }
         else
         {
-            echo '<th colspan="7" align="center" class="plgCalendarHeader">'.$monate[$monat-1].' '.$jahr.'</th>';
+            echo '<th colspan="7" align="center" class="plgCalendarHeader">'.$monate[$currentMonth-1].' '.$currentYear.'</th>';
         }
     echo '</tr>
     <tr>
@@ -356,23 +391,27 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
     <tr>';
 
 $i = 1;
-while($i<$erster)
+while($i < $firstWeekdayOfMonth)
 {
     echo '<td>&nbsp;</td>';
     $i++;
 }
-$i = 1;
+
+$currentDay = 1;
 $boolNewStart = false;
-while($i<=$insgesamt)
+
+while($currentDay <= $lastDayCurrentMonth)
 {
     $ter_link  = '';
-    $ter_title = '';
     $geb_link  = '';
-    $geb_title = '';
-    $htmlContent = '';
-    
-    $dateObj = DateTime::createFromFormat('Y-m-j', $jahr.'-'.$monat.'-'.$i);
-    
+    $htmlContent  = '';
+    $textContent  = '';
+    $hasEvents    = false;
+    $hasBirthdays = false;
+    $countEvents  = 0;
+
+    $dateObj = DateTime::createFromFormat('Y-m-j', $currentYear.'-'.$currentMonth.'-'.$currentDay);
+
     // Terminanzeige generieren
     if($plg_ter_aktiv == 1)
     {
@@ -388,56 +427,48 @@ while($i<=$insgesamt)
                 $ter_valid = 1;
             }
         }
-        
-        if($ter_valid == 1)
-        {
-            for($j=1;$j<=$ter-1;$j++)
-            {
-                if($i==$termin_tag[$j])
-                {
-                    $ter_aktuell = $termin_tag[$j];
 
-                    if($plg_ajaxbox == 1 || $ter_anzahl == 0)
+        if($ter_valid == 1 && array_key_exists($currentDay, $eventsMonthDayArray))
+        {
+            $hasEvents = true;
+
+            foreach($eventsMonthDayArray[$currentDay] as $eventArray)
+            {
+                if($plg_ajaxbox == 1 || $countEvents == 0)
+                {
+                    if($eventArray['location'] != '')
                     {
-                        if($termin_ort[$j] != '')
-                        {
-                            $termin_ort[$j] = ', '. $termin_ort[$j];
-                        }
-        
-                        if($htmlContent !== '' && $plg_ajaxbox == 1)
-                        {
-                            $htmlContent .= '<br />';
-                        }
-                        if($termin_ganztags[$j] == 1)
-                        {
-                            $htmlContent .= '<strong>'.$gL10n->get('DAT_ALL_DAY').'</strong> '.$termin_titel[$j].$termin_ort[$j];
-                        }
-                        else
-                        {
-                            $htmlContent .= '<strong>'.$termin_uhr[$j].' '.$gL10n->get('SYS_CLOCK').'</strong> '.$termin_titel[$j].$termin_ort[$j];
-                        }
+                        $eventArray['location'] = ', '. $eventArray['location'];
                     }
-                    $ter_anzahl++;
+
+                    if($htmlContent !== '' && $plg_ajaxbox == 1)
+                    {
+                        $htmlContent .= '<br />';
+                    }
+                    if($eventArray['all_day'] == 1)
+                    {
+                        $htmlContent .= '<strong>'.$gL10n->get('DAT_ALL_DAY').'</strong> '.$eventArray['headline'].$eventArray['location'];
+                        $textContent .= $gL10n->get('DAT_ALL_DAY').' '.$eventArray['headline'].$eventArray['location'];
+                    }
+                    else
+                    {
+                        $htmlContent .= '<strong>'.$eventArray['time'].' '.$gL10n->get('SYS_CLOCK').'</strong> '.$eventArray['headline'].$eventArray['location'];
+                        $textContent .= $eventArray['time'].' '.$gL10n->get('SYS_CLOCK').' '.$eventArray['headline'].$eventArray['location'];
+                    }
                 }
+                $countEvents++;
             }
-            
-            if($ter_anzahl >> 0)
+
+            if($countEvents > 0)
             {
                 // Link_Target auf Termin-Vorgabe einstellen
                 $plg_link_target = $plg_link_target_termin;
                 $plg_link = $plg_link_url.'?date_from='.$dateObj->format('Y-m-d').'&date_to='.$dateObj->format('Y-m-d');
             }
-            
-            if($ter_anzahl >> 1)
+
+            if($plg_ajaxbox !== 1 && count($eventsMonthDayArray[$currentDay]) > 1)
             {
-                if($plg_ajaxbox == 1)
-                {
-                    $ter_link = $ter_link. '&weitere=1';
-                }
-                else
-                {
-                    $ter_title = $ter_title. $gL10n->get('PLG_CALENDAR_MORE');
-                }
+                $textContent .= $gL10n->get('PLG_CALENDAR_MORE');
             }
         }
     }
@@ -458,38 +489,30 @@ while($i<=$insgesamt)
                 $geb_valid = 1;
             }
         }
-        
-        if($geb_valid == 1)
+
+        if($geb_valid == 1 && array_key_exists($currentDay, $birthdaysMonthDayArray))
         {
-            for($k=1;$k<=$geb-1;$k++)
+            foreach($birthdaysMonthDayArray[$currentDay] as $birthdayArray)
             {
-                if($i==$geb_day[$k])
+                $hasBirthdays = true;
+
+                if($htmlContent !== '')
                 {
-                    if($htmlContent !== '' && $plg_ajaxbox == 1)
-                    {
-                        if($plg_ajaxbox == 1)
-                        {
-                            $htmlContent .= '<br />';
-                        }
-                        else
-                        {
-                            $htmlContent .= ', ';
-                        }
-                    }
-
-                    if($plg_geb_icon == 1)
-                    {
-                        $icon = '<img src=\''.$g_root_path.'/adm_plugins/'.$plugin_folder.'/cake.png\' alt=\'Birthday\' /> ';
-                    }
-                    else
-                    {
-                        $icon = '';
-                    }
-
-                    $htmlContent .= $icon.$geb_name[$k]. ' ('.$alter[$k].')';
-                    $geb_aktuell  = $geb_day[$k];
-                    $geb_anzahl++;
+                    $htmlContent .= '<br />';
+                    $textContent .= ', ';
                 }
+
+                if($plg_geb_icon == 1)
+                {
+                    $icon = '<img src=\''.$g_root_path.'/adm_plugins/'.$plugin_folder.'/cake.png\' alt=\'Birthday\' /> ';
+                }
+                else
+                {
+                    $icon = '';
+                }
+
+                $htmlContent .= $icon.$birthdayArray['name']. ' ('.$birthdayArray['age'].')';
+                $textContent .= $birthdayArray['name']. ' ('.$birthdayArray['age'].')';
             }
         }
     }
@@ -502,8 +525,8 @@ while($i<=$insgesamt)
     $plg_link_class_saturday = 'plgCalendarSaturday';
     $plg_link_class_sunday   = 'plgCalendarSunday';
     $plg_link_class_weekday  = 'plgCalendarDay';
-    
-    if($i != $ter_aktuell && $i == $geb_aktuell) // Geburstag aber kein Termin
+
+    if($hasEvents === false && $hasBirthdays === true) // no events but birthdays
     {
         $plg_link_class = 'geb';
         $plg_link_class_saturday = 'plgCalendarBirthSaturday';
@@ -512,7 +535,7 @@ while($i<=$insgesamt)
 
     }
 
-    if($i == $ter_aktuell && $i!= $geb_aktuell) // Termin aber kein Geburtstag
+    if($hasEvents === true && $hasBirthdays === false) // events but no birthdays
     {
         $plg_link_class = 'date';
         $plg_link_class_saturday = 'plgCalendarDateSaturday';
@@ -520,8 +543,8 @@ while($i<=$insgesamt)
         $plg_link_class_weekday  = 'plgCalendarDateDay';
 
     }
-    
-    if($i == $ter_aktuell && $i == $geb_aktuell) // Termin und Geburtstag
+
+    if($hasEvents === true && $hasBirthdays === true) // events and birthdays
     {
         $plg_link_class = 'merge';
         $plg_link_class_saturday = 'plgCalendarMergeSaturday';
@@ -537,8 +560,8 @@ while($i<=$insgesamt)
         ';
         $boolNewStart = false;
     }
-    $rest = ($i+$erster-1)%7;
-    if($i == $heute)
+    $rest = ($currentDay+$firstWeekdayOfMonth-1)%7;
+    if($currentDay == $today)
     {
         echo '<td align="center" class="plgCalendarToday">';
     }
@@ -557,9 +580,9 @@ while($i<=$insgesamt)
         echo '<td align="center" class="'.$plg_link_class_weekday.'">';
     }
 
-    if($i == $heute or $i == $ter_aktuell or $i == $geb_aktuell)
+    if($currentDay == $today || $hasEvents === true || $hasBirthdays === true)
     {
-        if($i != $ter_aktuell && $i == $geb_aktuell)
+        if($hasEvents === false && $hasBirthdays === true)
         {
             // Link-URL bei Geburtstag durch # abschalten
             $plg_link = '#';
@@ -567,7 +590,7 @@ while($i<=$insgesamt)
             $plg_link_target = $plg_link_target_geb;
         }
 
-        if($i == $ter_aktuell || $i == $geb_aktuell)
+        if($hasEvents === true || $hasBirthdays === true)
         {
             if($plg_ajaxbox == 1)
             {
@@ -578,50 +601,44 @@ while($i<=$insgesamt)
 
                 // plg_link_class bestimmt das Erscheinungsbild des jeweiligen Links
                 echo '<a class="admidio-calendar-link '.$plg_link_class.'" href="'.$plg_link.'" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
-                    title="'.$dateObj->format($gPreferences['system_date']).'" data-content="'.$htmlContent.'" target="'.$plg_link_target.'">'.$i.'</a>';
+                    title="'.$dateObj->format($gPreferences['system_date']).'" data-content="'.$htmlContent.'" target="'.$plg_link_target.'">'.$currentDay.'</a>';
             }
             else
             {
-                if($ter_title != '' && $geb_title != '')
-                {
-                    $geb_title = ', '. $geb_title;
-                }
-
-                echo '<a class="'.$plg_link_class.'" href="'.$plg_link.'" title="'.$ter_title.$geb_title.'"
-                    href="'.$plg_link.'" target="'.$plg_link_target.'">'.$i.'</a>';
+                echo '<a class="'.$plg_link_class.'" href="'.$plg_link.'" title="'.$textContent.'"
+                    href="'.$plg_link.'" target="'.$plg_link_target.'">'.$currentDay.'</a>';
             }
         }
-        elseif($i == $heute)
+        elseif($currentDay == $today)
         {
-            echo '<span class="plgCalendarToday">'.$i.'</span>';
+            echo '<span class="plgCalendarToday">'.$currentDay.'</span>';
         }
     }
     elseif($rest == 6)
     {
-        echo '<span class="plgCalendarSaturday">'.$i.'</span>';
+        echo '<span class="plgCalendarSaturday">'.$currentDay.'</span>';
     }
     elseif($rest == 0)
     {
-        echo '<span class="plgCalendarSunday">'.$i.'</span>';
+        echo '<span class="plgCalendarSunday">'.$currentDay.'</span>';
     }
     else
     {
-        echo $i;
+        echo $currentDay;
     }
     echo '</td>';
-    if($rest == 0 || $i == $insgesamt)
+    if($rest == 0 || $currentDay == $lastDayCurrentMonth)
     {
         echo '</tr>
         ';
         $boolNewStart = true;
     }
-    $i++;
-    $ter_anzahl = 0;
-    $geb_anzahl = 0;
+
+    $currentDay++;
 }
 echo '</table>
 ';
-if($monat.$jahr != date('mY'))
+if($currentMonth.$currentYear != date('mY'))
 {
     echo '<div id="plgCalendarReset"><a href="#" onclick="$.ajax({
             type: \'GET\',

@@ -679,19 +679,19 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
                 {
                     if($maxMembers > 0)
                     {
-                        $participants = $numMembers.' / '.$maxMembers;
+                        $htmlParticipants = $numMembers.' / '.$maxMembers;
                     }
                     else
                     {
-                        $participants = $numMembers.'&nbsp;';
+                        $htmlParticipants = $numMembers.'&nbsp;';
                     }
 
                     if($numMembers > 0)
                     {
-                        $participants .= $participantLink.$emailLink;
+                        $htmlParticipants .= $participantLink.$emailLink;
                     }
 
-                    $columnValues[] = $participants;
+                    $columnValues[] = $htmlParticipants;
                 }
                 else
                 {

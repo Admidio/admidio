@@ -785,6 +785,12 @@ body > .admidio-content {
     margin-bottom: 5px;
 }
 
+/* Won't get fixed in lightbox-lib */
+/* Needed to remove dotted border around images in firefox */
+.ekko-lightbox-nav-overlay a {
+    outline: none;
+}
+
 /* Weblinks */
 
 .admidio-weblink-item {
