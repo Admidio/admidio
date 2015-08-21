@@ -74,7 +74,7 @@ if($gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db) == false)
 
 // create an installation unique cookie prefix and remove special characters
 $gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
-$gCookiePraefix = strtr($gCookiePraefix, ' .,;:', '_____');
+$gCookiePraefix = strtr($gCookiePraefix, ' .,;:[]', '_______');
 
 /*********************************************************************************
  Create and validate sessions, check auto login, read session variables
