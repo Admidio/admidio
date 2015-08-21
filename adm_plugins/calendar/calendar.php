@@ -2,7 +2,7 @@
 /******************************************************************************
  * Calendar
  *
- * Version 1.11.0
+ * Version 2.0.1
  *
  * Plugin shows the actual month with all the events and birthdays that are
  * coming. This plugin can be used to show the Admidio events and birthdays in a
@@ -166,8 +166,8 @@ else
 }
 
 $lastDayCurrentMonth = date('t', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
-$dateMonthStart = $currentYear.'-'.$currentMonth.'-01';
-$dateMonthEnd   = $currentYear.'-'.$currentMonth.'-'.$lastDayCurrentMonth;
+$dateMonthStart = $currentYear.'-'.$currentMonth.'-01 00:00:00';
+$dateMonthEnd   = $currentYear.'-'.$currentMonth.'-'.$lastDayCurrentMonth.' 23:59:59';
 $eventsMonthDayArray    = array();
 $birthdaysMonthDayArray = array();
 
@@ -258,11 +258,16 @@ if($plg_ter_aktiv == 1)
                                                               'time'     => $startDate->format($gPreferences['system_time']),
                                                               'all_day'  => $row['dat_all_day'],
                                                               'location' => $row['dat_location'],
-                                                              'headline' => $row['dat_headline']);
+                                                              'headline' => $row['dat_headline'],
+                                                              'one_day'  => false);
         }
         else
         {
             // event within several days
+            
+            $oneDayDate = false;
+            error_log($row['dat_id'].'::'.$startDate->format('Y-m-d').'::'.$endDate->format('Y-m-d').'::'.$oneDayDate);
+            
             if($startDate->format('m') != $currentMonth)
             {
                 $firstDay = 1;
@@ -278,7 +283,18 @@ if($plg_ter_aktiv == 1)
             }
             else
             {
+                if($row['dat_all_day'] == 1)
+                {
+                    $oneDay  = new DateInterval('P1D');
+                    $endDate = $endDate->sub($oneDay);
+                }
+                
                 $lastDay = $endDate->format('d');
+            }
+
+            if($startDate->format('Y-m-d') == $endDate->format('Y-m-d'))
+            {
+                $oneDayDate = true;
             }
             
             // now add event to every relevant day of month
@@ -288,7 +304,8 @@ if($plg_ter_aktiv == 1)
                                              'time'     => $startDate->format($gPreferences['system_time']),
                                              'all_day'  => $row['dat_all_day'],
                                              'location' => $row['dat_location'],
-                                             'headline' => $row['dat_headline']);
+                                             'headline' => $row['dat_headline'],
+                                             'one_day'  => $oneDayDate);
             }
         }
     }
@@ -447,8 +464,16 @@ while($currentDay <= $lastDayCurrentMonth)
                     }
                     if($eventArray['all_day'] == 1)
                     {
-                        $htmlContent .= '<strong>'.$gL10n->get('DAT_ALL_DAY').'</strong> '.$eventArray['headline'].$eventArray['location'];
-                        $textContent .= $gL10n->get('DAT_ALL_DAY').' '.$eventArray['headline'].$eventArray['location'];
+                        if($eventArray['one_day'] == true)
+                        {
+                            $htmlContent .= '<strong>'.$gL10n->get('DAT_ALL_DAY').'</strong> '.$eventArray['headline'].$eventArray['location'];
+                            $textContent .= $gL10n->get('DAT_ALL_DAY').' '.$eventArray['headline'].$eventArray['location'];
+                        }
+                        else
+                        {
+                            $htmlContent .= '<strong>'.$gL10n->get('PLG_CALENDAR_SEVERAL_DAYS').'</strong> '.$eventArray['headline'].$eventArray['location'];
+                            $textContent .= $gL10n->get('PLG_CALENDAR_SEVERAL_DAYS').' '.$eventArray['headline'].$eventArray['location'];                            
+                        }
                     }
                     else
                     {
