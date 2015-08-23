@@ -140,6 +140,7 @@ $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
                            'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
                            'EMAIL'    => $gL10n->get('SYS_EMAIL'),
                            'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
+                           'PHONE'    => $gL10n->get('SYS_PHONE'),
                            'TEXT'     => $gL10n->get('SYS_TEXT').' (100 '.$gL10n->get('SYS_CHARACTERS').')',
                            'TEXT_BIG' => $gL10n->get('SYS_TEXT').' (4000 '.$gL10n->get('SYS_CHARACTERS').')',
                            'URL'      => $gL10n->get('ORG_URL'),

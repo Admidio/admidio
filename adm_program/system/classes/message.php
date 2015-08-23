@@ -53,6 +53,7 @@ class Message
         $this->includeThemeBody = true;
         $this->showTextOnly     = false;
         $this->modalWindowMode  = false;
+        $this->forwardUrl       = '';
     }
 
     /**

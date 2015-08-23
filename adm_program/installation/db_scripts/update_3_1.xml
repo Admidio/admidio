@@ -6,5 +6,6 @@
     <step id="40" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_new_password varchar(60)</step>
     <step id="50" database="postgresql">ALTER TABLE %PREFIX%_users ALTER COLUMN usr_password TYPE varchar(60)</step>
     <step id="60" database="postgresql">ALTER TABLE %PREFIX%_users ALTER COLUMN usr_new_password TYPE varchar(60)</step>
+    <step id="70">UPDATE %PREFIX%_user_fields SET usf_type = 'PHONE' WHERE usf_name_intern IN ('PHONE', 'MOBILE', 'FAX')</step>
     <step>stop</step>
 </update>

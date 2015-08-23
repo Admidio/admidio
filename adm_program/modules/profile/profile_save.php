@@ -181,6 +181,10 @@ foreach($gProfileFields->mProfileFields as $field)
                 {
                     $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
                 }
+                elseif($field->getValue('usf_type') == 'PHONE')
+                {
+                    $gMessage->show($gL10n->get('SYS_PHONE_INVALID_CHAR', $field->getValue('usf_name')));
+                }
                 elseif($field->getValue('usf_type') == 'URL')
                 {
                     $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $field->getValue('usf_name')));

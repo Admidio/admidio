@@ -187,7 +187,7 @@ function strNextLetter($letter, $reverse = false)
  * Check if a string contains only valid characters. Therefore the string is
  * compared with a hard coded list of valid characters for each datatype.
  * @param string $string    The string that should be checked.
- * @param string $checkType The type @b email, @b file, @b noSpecialChar or @b url that will be checked.
+ * @param string $checkType The type @b email, @b file, @b noSpecialChar, @b phone or @b url that will be checked.
  *                          Each type has a different valid character list.
  * @return bool Returns @b true if all characters of @b string match the internal character list.
  */
@@ -205,6 +205,9 @@ function strValidCharacters($string, $checkType)
                 break;
             case 'noSpecialChar': // eine einfache E-Mail-Adresse sollte dennoch moeglich sein (Benutzername)
                 $validChars = 'abcdefghijklmnopqrstuvwxyz0123456789.-_+@';
+                break;
+            case 'phone':
+                $validChars = '0123456789+-/ ()';
                 break;
             case 'url':
                 $validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß.-_:/#?=%&!';

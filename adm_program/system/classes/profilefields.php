@@ -59,6 +59,18 @@ class ProfileFields
      */
     public function getProperty($fieldNameIntern, $column, $format = '')
     {
+        if($column == 'usf_icon')
+        {
+            $value =$this->mProfileFields[$fieldNameIntern]->getValue($column, $format);
+            if($value == null)
+            {
+            error_log('geticonprof::isnull');                
+            }
+            elseif($value == '')
+            {
+            error_log('geticonprof::isempty');                                
+            }
+        }
         if(array_key_exists($fieldNameIntern, $this->mProfileFields))
         {
             return $this->mProfileFields[$fieldNameIntern]->getValue($column, $format);
@@ -69,7 +81,7 @@ class ProfileFields
         {
             return 0;
         }
-        return null;
+        return '';
     }
 
     /** returns for field id (usf_id) the value of the column from table adm_user_fields
@@ -86,7 +98,7 @@ class ProfileFields
                 return $field->getValue($column, $format);
             }
         }
-        return null;
+        return '';
     }
 
     /** Returns the value of the field in html format with consideration of all layout parameters
@@ -208,6 +220,13 @@ class ProfileFields
                     $arrListValuesWithKeys[++$key] = $listValue;
                 }
                 $htmlValue = $arrListValuesWithKeys[$value];
+            }
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'PHONE')
+            {
+                if($value !== '')
+                {
+                    $htmlValue = '<a href="tel:'. str_replace(array('-', '/', ' ', '(', ')'), '', $value).'">'. $value. '</a>';
+                }                
             }
             elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'URL')
             {
@@ -508,6 +527,14 @@ class ProfileFields
                 {
                     // numbers don't have leading zero
                     $fieldValue = ltrim($fieldValue, '0');
+                }
+            }
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'PHONE')
+            {
+                // Homepage darf nur gueltige Zeichen enthalten
+                if (!strValidCharacters($fieldValue, 'phone') && $this->noValueCheck != true)
+                {
+                    return false;
                 }
             }
             elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'URL')

@@ -1702,7 +1702,7 @@ class HtmlForm extends HtmlFormBasic
             $this->addHtml('<div class="form-group'.$cssClassRow.'">');
         }
 
-        if($icon !== '')
+        if(strlen($icon) > 0)
         {
             // create html for icon
             if(strpos(admStrToLower($icon), 'http') === 0 && strValidCharacters($icon, 'url'))
