@@ -2,7 +2,7 @@
 /******************************************************************************
  * Calendar
  *
- * Version 2.0.1
+ * Version 2.0.2
  *
  * Plugin shows the actual month with all the events and birthdays that are
  * coming. This plugin can be used to show the Admidio events and birthdays in a
