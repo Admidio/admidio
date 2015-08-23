@@ -266,7 +266,6 @@ if($plg_ter_aktiv == 1)
             // event within several days
             
             $oneDayDate = false;
-            error_log($row['dat_id'].'::'.$startDate->format('Y-m-d').'::'.$endDate->format('Y-m-d').'::'.$oneDayDate);
             
             if($startDate->format('m') != $currentMonth)
             {
@@ -274,7 +273,7 @@ if($plg_ter_aktiv == 1)
             }
             else
             {
-                $firstDay = $startDate->format('d');
+                $firstDay = $startDate->format('j');
             }
             
             if($endDate->format('m') != $currentMonth)
@@ -289,14 +288,14 @@ if($plg_ter_aktiv == 1)
                     $endDate = $endDate->sub($oneDay);
                 }
                 
-                $lastDay = $endDate->format('d');
+                $lastDay = $endDate->format('j');
             }
 
             if($startDate->format('Y-m-d') == $endDate->format('Y-m-d'))
             {
                 $oneDayDate = true;
             }
-            
+
             // now add event to every relevant day of month
             for($i = $firstDay; $i <= $lastDay; $i++)
             {
