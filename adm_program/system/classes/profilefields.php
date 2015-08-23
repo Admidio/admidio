@@ -62,15 +62,8 @@ class ProfileFields
         if($column == 'usf_icon')
         {
             $value =$this->mProfileFields[$fieldNameIntern]->getValue($column, $format);
-            if($value == null)
-            {
-            error_log('geticonprof::isnull');                
-            }
-            elseif($value == '')
-            {
-            error_log('geticonprof::isempty');                                
-            }
         }
+
         if(array_key_exists($fieldNameIntern, $this->mProfileFields))
         {
             return $this->mProfileFields[$fieldNameIntern]->getValue($column, $format);

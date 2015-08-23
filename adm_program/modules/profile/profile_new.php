@@ -251,7 +251,7 @@ foreach($gProfileFields->mProfileFields as $field)
     {
         // add profile fields to form
         $fieldProperty = FIELD_DEFAULT;
-        $helpId        = null;
+        $helpId        = '';
 
         if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_disabled') == 1 && $gCurrentUser->editUsers() == false && $getNewUser == 0)
         {
