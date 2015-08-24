@@ -48,10 +48,14 @@ class Message
     public function __construct()
     {
         $this->inline           = false;
-        $this->showButtons      = true;
-        $this->showYesNoButtons = false;
+        $this->forwardUrl       = '';
+        $this->timer            = 0;
         $this->includeThemeBody = true;
         $this->showTextOnly     = false;
+        $this->showHtmlTextOnly = false;
+
+        $this->showButtons      = true;
+        $this->showYesNoButtons = false;
         $this->modalWindowMode  = false;
     }
 
@@ -244,6 +248,7 @@ class Message
             $page->addHtml($html);
             $page->show();
         }
+        exit();
     }
 
     /**

@@ -311,7 +311,7 @@ class Language
             if($node != false)
             {
                 // set line break with html
-                $text = str_replace("\n", '<br />', $node[0]);
+                $text = str_replace('\n', '<br />', $node[0]);
                 // replace highly comma, so there are no problems in the code later
                 $text = str_replace('\'', '&rsquo;', $text);
                 $this->languageData->textCache[$textId] = $text;

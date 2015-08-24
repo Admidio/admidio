@@ -137,14 +137,16 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
     $userFieldText = array('CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
                            'DATE'     => $gL10n->get('SYS_DATE'),
+                           'DECIMAL'  => $gL10n->get('SYS_DECIMAL_NUMBER'),
                            'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
                            'EMAIL'    => $gL10n->get('SYS_EMAIL'),
+                           'NUMBER'   => $gL10n->get('SYS_NUMBER'),
+                           'PHONE'    => $gL10n->get('SYS_PHONE'),
                            'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
                            'TEXT'     => $gL10n->get('SYS_TEXT').' (100 '.$gL10n->get('SYS_CHARACTERS').')',
                            'TEXT_BIG' => $gL10n->get('SYS_TEXT').' (4000 '.$gL10n->get('SYS_CHARACTERS').')',
-                           'URL'      => $gL10n->get('ORG_URL'),
-                           'NUMBER'   => $gL10n->get('SYS_NUMBER'),
-                           'DECIMAL'  => $gL10n->get('SYS_DECIMAL_NUMBER'));
+                           'URL'      => $gL10n->get('ORG_URL'));
+    asort($userFieldText);
 
     if($userField->getValue('usf_system') == 1)
     {
