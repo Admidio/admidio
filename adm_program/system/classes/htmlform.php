@@ -336,7 +336,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // if checked = true then set checkbox checked
-        if($checked === true || $checked === '1') // "$checked === '1'" for backwards compatibility | TODO: change everywhere to bool
+        if($checked === true || $checked == 1) // "$checked == 1" for backwards compatibility | TODO: change everywhere to bool
         {
             $attributes['checked'] = 'checked';
         }

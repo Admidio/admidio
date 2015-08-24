@@ -48,12 +48,15 @@ class Message
     public function __construct()
     {
         $this->inline           = false;
-        $this->showButtons      = true;
-        $this->showYesNoButtons = false;
+        $this->forwardUrl       = '';
+        $this->timer            = 0;
         $this->includeThemeBody = true;
         $this->showTextOnly     = false;
+        $this->showHtmlTextOnly = false;
+
+        $this->showButtons      = true;
+        $this->showYesNoButtons = false;
         $this->modalWindowMode  = false;
-        $this->forwardUrl       = '';
     }
 
     /**
@@ -153,10 +156,7 @@ class Message
         }
         elseif(!$this->modalWindowMode)
         {
-            if(!$this->inline)
-            {
-                header('Content-type: text/html; charset=utf-8');
-            }
+            header('Content-type: text/html; charset=utf-8');
             $html .= '<h1>'.$headline.'</h1>';
         }
 
@@ -248,6 +248,7 @@ class Message
             $page->addHtml($html);
             $page->show();
         }
+        exit();
     }
 
     /**
