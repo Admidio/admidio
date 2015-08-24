@@ -65,7 +65,7 @@ $getFolderId = $currentFolder->getValue('fol_id');
 // Get folder content for style
 $folderContent = $currentFolder->getFolderContentsForDownload();
 
-// Keep navigation link 
+// Keep navigation link
 $navigationBar = $currentFolder->getNavigationForDownload();
 
 // create html page object
@@ -148,7 +148,7 @@ if (isset($folderContent['folders']))
         {
             //Links for change and delete
             $noteFolderNotExists = '';
-            
+
             if($nextFolder['fol_exists'] == false)
             {
                 $noteFolderNotExists = '
@@ -159,7 +159,7 @@ if (isset($folderContent['folders']))
 
             $columnValues[] = ' <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?folder_id='. $nextFolder['fol_id']. '">
                                     <img src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-                                <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" 
+                                <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                     href="'.$g_root_path.'/adm_program/system/popup_message.php?type=fol&amp;element_id=row_folder_'.
                                     $nextFolder['fol_id'].'&amp;name='.urlencode($nextFolder['fol_name']).'&amp;database_id='.$nextFolder['fol_id'].'"><img
                                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>'.
@@ -177,7 +177,7 @@ if (isset($folderContent['files']))
         $nextFile = $folderContent['files'][$i];
 
         // Check filetyp
-        $fileExtension  = admStrToLower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], '.')+1));
+        $fileExtension  = mb_strtolower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], '.')+1));
 
         // Choose icon for the file
         $iconFile = 'page_white_question.png';
@@ -185,7 +185,7 @@ if (isset($folderContent['files']))
         {
             $iconFile = $icon_file_extension[$fileExtension];
         }
-        
+
         // Format timestamp
         $timestamp = new DateTimeExtended($nextFile['fil_timestamp'], 'Y-m-d H:i:s');
 
@@ -194,7 +194,7 @@ if (isset($folderContent['files']))
         {
             $fileDescription = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/info.png" alt="'.$gL10n->get('SYS_FILE').'" title="'.$nextFile['fil_description'].'" />';
         }
-        
+
         // create array with all column values
         $columnValues = array(
             2, // Type file
@@ -205,12 +205,12 @@ if (isset($folderContent['files']))
             $nextFile['fil_size']. ' kB&nbsp;',
             ($nextFile['fil_counter'] != '') ? $nextFile['fil_counter'] : '0'
         );
-        
+
         if ($gCurrentUser->editDownloadRight())
         {
             //Links for change and delete
             $noteFileNotExists = '';
-            
+
             if($nextFile['fil_exists'] == false)
             {
                 $noteFileNotExists = '
@@ -221,7 +221,7 @@ if (isset($folderContent['files']))
             $columnValues[] = '
             <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?file_id='. $nextFile['fil_id']. '">
                 <img src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-            <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" 
+            <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                 href="'.$g_root_path.'/adm_program/system/popup_message.php?type=fil&amp;element_id=row_file_'.
                 $nextFile['fil_id'].'&amp;name='.urlencode($nextFile['fil_name']).'&amp;database_id='.$nextFile['fil_id'].'"><img
                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>'.
@@ -230,7 +230,7 @@ if (isset($folderContent['files']))
         $downloadOverview->addRowByArray($columnValues, 'row_file_'.$nextFile['fil_id']);
     }
 }
-    
+
 //Create download table
 $downloadOverview->setDatatablesColumnsHide(array(1));
 $downloadOverview->setDatatablesOrderColumns(array(1, 3));
@@ -251,8 +251,8 @@ if ($gCurrentUser->editDownloadRight())
         $htmlAdminTableHeadline = '<h2>
                                     '.$gL10n->get('DOW_UNMANAGED_FILES').'
                                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_ADDITIONAL_FILES&amp;inline=true"><img 
-                                        src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>            
+                                        href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_ADDITIONAL_FILES&amp;inline=true"><img
+                                        src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
                                 </h2>';
 
         //Create table object
@@ -289,7 +289,7 @@ if ($gCurrentUser->editDownloadRight())
                 $nextFile = $folderContent['additionalFiles'][$i];
 
                 // Get filetyp
-                $fileExtension  = admStrToLower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], '.')+1));
+                $fileExtension  = mb_strtolower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], '.')+1));
 
                 // Choose icon for the file
                 $iconFile = 'page_white_question.png';

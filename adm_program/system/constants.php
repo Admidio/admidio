@@ -45,6 +45,8 @@ else
     define('CURRENT_URL', 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 }
 
+mb_internal_encoding('UTF-8');
+
 // default timezone so that there are no errors in php5 until Admidio supports timezones
 date_default_timezone_set('Europe/Berlin');
 // date and time for use in scripts

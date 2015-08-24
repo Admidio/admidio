@@ -77,7 +77,7 @@ if ($getMsgType != 'PM')
     // Check Captcha if enabled and user logged out
     if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
     {
-        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($postCaptcha))
+        if (!isset($_SESSION['captchacode']) || mb_strtoupper($_SESSION['captchacode']) != mb_strtoupper($postCaptcha))
         {
             if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
             elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}

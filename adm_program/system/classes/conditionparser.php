@@ -43,7 +43,7 @@ class ConditionParser
 
         // if last char is Y or J then user searches for age
         $last = substr($date, -1);
-        $last = admStrToUpper($last);
+        $last = mb_strtoupper($last);
 
         if($last === 'J' || $last === 'Y')
         {
@@ -108,15 +108,15 @@ class ConditionParser
     {
         global $gL10n;
 
-        $this->mSrcCond = admStrToUpper(trim($sourceCondition));
+        $this->mSrcCond = mb_strtoupper(trim($sourceCondition));
         $this->mSrcCond = strtr($this->mSrcCond, '*', '%');
 
         // valid 'not null' is '#'
-        $this->mSrcCond = str_replace(admStrToUpper($gL10n->get('SYS_NOT_EMPTY')), ' # ', $this->mSrcCond);
+        $this->mSrcCond = str_replace(mb_strtoupper($gL10n->get('SYS_NOT_EMPTY')), ' # ', $this->mSrcCond);
         $this->mSrcCond = str_replace(' NOT NULL ', ' # ', $this->mSrcCond);
 
         // valid 'null' is '_'
-        $this->mSrcCond = str_replace(admStrToUpper($gL10n->get('SYS_EMPTY')), ' _ ', $this->mSrcCond);
+        $this->mSrcCond = str_replace(mb_strtoupper($gL10n->get('SYS_EMPTY')), ' _ ', $this->mSrcCond);
         $this->mSrcCond = str_replace(' NULL ', ' _ ', $this->mSrcCond);
 
         // valid 'is not' is '!'
@@ -291,8 +291,8 @@ class ConditionParser
                             case '{':
                                 // bastwe: invert condition on age search
                                 if($columnType === 'date'
-                                    && (strstr(admStrToUpper($sourceCondition), 'J') !== false
-                                        || strstr(admStrToUpper($sourceCondition), 'Y') !== false))
+                                    && (strstr(mb_strtoupper($sourceCondition), 'J') !== false
+                                        || strstr(mb_strtoupper($sourceCondition), 'Y') !== false))
                                 {
                                     $this->mDestCond = $this->mDestCond.' > ';
                                 }
@@ -304,8 +304,8 @@ class ConditionParser
                             case '}':
                                 // bastwe: invert condition on age search
                                 if($columnType === 'date'
-                                    && (strstr(admStrToUpper($sourceCondition), 'J') !== false
-                                        || strstr(admStrToUpper($sourceCondition), 'Y') !== false))
+                                    && (strstr(mb_strtoupper($sourceCondition), 'J') !== false
+                                        || strstr(mb_strtoupper($sourceCondition), 'Y') !== false))
                                 {
                                     $this->mDestCond = $this->mDestCond.' < ';
                                 }
@@ -317,8 +317,8 @@ class ConditionParser
                             case '[':
                                 // bastwe: invert condition on age search
                                 if($columnType === 'date'
-                                    && (strstr(admStrToUpper($sourceCondition), 'J') !== false
-                                        || strstr(admStrToUpper($sourceCondition), 'Y') !== false))
+                                    && (strstr(mb_strtoupper($sourceCondition), 'J') !== false
+                                        || strstr(mb_strtoupper($sourceCondition), 'Y') !== false))
                                 {
                                     $this->mDestCond = $this->mDestCond.' >= ';
                                 }
@@ -330,8 +330,8 @@ class ConditionParser
                             case ']':
                                 // bastwe: invert condition on age search
                                 if($columnType === 'date'
-                                    && (strstr(admStrToUpper($sourceCondition), 'J') !== false
-                                        || strstr(admStrToUpper($sourceCondition), 'Y') !== false))
+                                    && (strstr(mb_strtoupper($sourceCondition), 'J') !== false
+                                        || strstr(mb_strtoupper($sourceCondition), 'Y') !== false))
                                 {
                                     $this->mDestCond = $this->mDestCond.' <= ';
                                 }

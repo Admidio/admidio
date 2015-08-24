@@ -152,7 +152,7 @@ class TableCategory extends TableAccess
             // if text is a translation-id then translate it
             if(strpos($value, '_') == 3)
             {
-                $value = $gL10n->get(admStrToUpper($value));
+                $value = $gL10n->get(mb_strtoupper($value));
             }
         }
 
@@ -160,7 +160,7 @@ class TableCategory extends TableAccess
     }
 
     /** Change the internal sequence of this category. It can be moved one place up or down
-     *  @param $mode This could be @b UP or @b DOWN. 
+     *  @param $mode This could be @b UP or @b DOWN.
      */
     public function moveSequence($mode)
     {
@@ -176,7 +176,7 @@ class TableCategory extends TableAccess
         $row = $this->db->fetch_array();
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if(admStrToUpper($mode) == 'UP')
+        if(mb_strtoupper($mode) == 'UP')
         {
             if($this->getValue('cat_org_id') == 0
             || $this->getValue('cat_sequence') > $row['count']+1)
@@ -192,7 +192,7 @@ class TableCategory extends TableAccess
             }
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif(admStrToUpper($mode) == 'DOWN')
+        elseif(mb_strtoupper($mode) == 'DOWN')
         {
             if($this->getValue('cat_org_id') > 0
             || $this->getValue('cat_sequence') < $row['count'])
@@ -217,7 +217,7 @@ class TableCategory extends TableAccess
     public function readDataById($cat_id)
     {
         global $g_tbl_praefix;
-        
+
         $returnValue = parent::readDataById($cat_id);
 
         if($returnValue)

@@ -449,8 +449,8 @@ class Organization extends TableAccess
                 return false;
             }
             // Homepage noch mit http vorbelegen
-            if(strpos(admStrToLower($newValue), 'http://')  === false
-            && strpos(admStrToLower($newValue), 'https://') === false)
+            if(strpos(mb_strtolower($newValue), 'http://')  === false
+            && strpos(mb_strtolower($newValue), 'https://') === false)
             {
                 $newValue = 'http://'. $newValue;
             }

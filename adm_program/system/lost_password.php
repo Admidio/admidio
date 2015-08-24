@@ -25,7 +25,7 @@ if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_r
 // muss natuerlich der Code ueberprueft werden
 if (!empty($_POST['btnSend']) && !$gValidLogin && $gPreferences['enable_mail_captcha'] == 1 && !empty($_POST['captcha']))
 {
-    if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($_POST['captcha']))
+    if (!isset($_SESSION['captchacode']) || mb_strtoupper($_SESSION['captchacode']) !== mb_strtoupper($_POST['captcha']))
     {
         if($gPreferences['captcha_type'] === 'pic')
         {

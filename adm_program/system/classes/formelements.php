@@ -125,7 +125,7 @@ class FormElements
                 // if text is a translation-id then translate it
                 if(strpos($row['cat_name'], '_') === 3)
                 {
-                    $row['cat_name'] = $gL10n->get(admStrToUpper($row['cat_name']));
+                    $row['cat_name'] = $gL10n->get(mb_strtoupper($row['cat_name']));
                 }
 
                 // if new category then show label with category name

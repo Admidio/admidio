@@ -116,7 +116,7 @@ class Email extends PHPMailer
     //Bcc Empfänger werden ersteinmal gesammelt, damit später Päckchen verschickt werden können
     public function addBlindCopy($address, $name='')
     {
-        $address = admStrToLower($address);
+        $address = mb_strtolower($address);
         // Blindcopy must be Ascii-US formated, so encode in MimeHeader
         $asciiName = stripslashes($name);
 
@@ -133,7 +133,7 @@ class Email extends PHPMailer
     // method adds CC recipients to mail
     public function addCopy($address, $name='')
     {
-        $address = admStrToLower($address);
+        $address = mb_strtolower($address);
         // Copy must be Ascii-US formated, so encode in MimeHeader
         $asciiName = stripslashes($name);
 
@@ -153,7 +153,7 @@ class Email extends PHPMailer
     // method adds main recipients to mail
     public function addRecipient($address, $name='')
     {
-        $address = admStrToLower($address);
+        $address = mb_strtolower($address);
         // Recipient must be Ascii-US formated, so encode in MimeHeader
         $asciiName = stripslashes($name);
 

@@ -313,7 +313,7 @@ class TableRoles extends TableAccess
             // if text is a translation-id then translate it
             if(strpos($value, '_') == 3)
             {
-                $value = $gL10n->get(admStrToUpper($value));
+                $value = $gL10n->get(mb_strtoupper($value));
             }
         }
 

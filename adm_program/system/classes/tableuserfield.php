@@ -158,7 +158,7 @@ class TableUserField extends TableAccess
             // if text is a translation-id then translate it
             if(strpos($value, '_') === 3)
             {
-                $value = $gL10n->get(admStrToUpper($value));
+                $value = $gL10n->get(mb_strtoupper($value));
             }
         }
         elseif($columnName === 'usf_value_list' && $format !== 'database')
@@ -176,7 +176,7 @@ class TableUserField extends TableAccess
                     if($this->dbColumns['usf_type'] === 'RADIO_BUTTON')
                     {
                         // if value is imagefile or imageurl then show image
-                        if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
+                        if(strpos(mb_strtolower($listValue), '.png') > 0 || strpos(mb_strtolower($listValue), '.jpg') > 0)
                         {
                             // if there is imagefile and text separated by | then explode them
                             if(strpos($listValue, '|') > 0)
@@ -193,7 +193,7 @@ class TableUserField extends TableAccess
                             // if text is a translation-id then translate it
                             if(strpos($listValueText, '_') === 3)
                             {
-                                $listValueText = $gL10n->get(admStrToUpper($listValueText));
+                                $listValueText = $gL10n->get(mb_strtoupper($listValueText));
                             }
 
                             if($format === 'text')
@@ -213,7 +213,7 @@ class TableUserField extends TableAccess
                                 try
                                 {
                                     // create html for optionbox entry
-                                    if(strpos(admStrToLower($listValueImage), 'http') === 0 && strValidCharacters($listValueImage, 'url'))
+                                    if(strpos(mb_strtolower($listValueImage), 'http') === 0 && strValidCharacters($listValueImage, 'url'))
                                     {
                                         $listValue = '<img class="admidio-icon-info" src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
                                     }
@@ -233,7 +233,7 @@ class TableUserField extends TableAccess
                     // if text is a translation-id then translate it
                     if(strpos($listValue, '_') === 3)
                     {
-                        $listValue = $gL10n->get(admStrToUpper($listValue));
+                        $listValue = $gL10n->get(mb_strtoupper($listValue));
                     }
 
                     // save values in new array that starts with key = 1
@@ -245,12 +245,12 @@ class TableUserField extends TableAccess
         elseif($columnName === 'usf_icon' && $format !== 'database')
         {
             // if value is imagefile or imageurl then show image
-            if(strpos(admStrToLower($value), '.png') > 0 || strpos(admStrToLower($value), '.jpg') > 0)
+            if(strpos(mb_strtolower($value), '.png') > 0 || strpos(mb_strtolower($value), '.jpg') > 0)
             {
                 try
                 {
                     // create html for icon
-                    if(strpos(admStrToLower($value), 'http') === 0 && strValidCharacters($value, 'url'))
+                    if(strpos(mb_strtolower($value), 'http') === 0 && strValidCharacters($value, 'url'))
                     {
                         $value = '<img src="'.$value.'" style="vertical-align: middle;" title="'.$this->getValue('usf_name').'" alt="'.$this->getValue('usf_name').'" />';
                     }
@@ -279,7 +279,7 @@ class TableUserField extends TableAccess
         global $gCurrentOrganization;
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if(admStrToUpper($mode) === 'UP')
+        if(mb_strtoupper($mode) === 'UP')
         {
             $sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_sequence = '.$this->getValue('usf_sequence').'
                      WHERE usf_cat_id   = '.$this->getValue('usf_cat_id').'
@@ -289,7 +289,7 @@ class TableUserField extends TableAccess
             $this->save();
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif(admStrToUpper($mode) === 'DOWN')
+        elseif(mb_strtoupper($mode) === 'DOWN')
         {
             $sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_sequence = '.$this->getValue('usf_sequence').'
                      WHERE usf_cat_id   = '.$this->getValue('usf_cat_id').'
@@ -368,8 +368,8 @@ class TableUserField extends TableAccess
                 return false;
             }
             // Homepage noch mit http vorbelegen
-            if(strpos(admStrToLower($newValue), 'http://')  === false
-            && strpos(admStrToLower($newValue), 'https://') === false)
+            if(strpos(mb_strtolower($newValue), 'http://')  === false
+            && strpos(mb_strtolower($newValue), 'https://') === false)
             {
                 $newValue = 'http://'.$newValue;
             }

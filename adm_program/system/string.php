@@ -9,43 +9,6 @@
  *****************************************************************************/
 
 /**
- * In case the multibyte functions are not supported, we fallback to a no-multibyte function
- * IMPORTANT: If the fallback is used, the conversion of umlauts not work!
- * admStrToLower\(([\w$\[\]()]+)\) -> mb_strtolower($1, 'UTF-8')
- * @param string $string
- * @return string
- */
-function admStrToLower($string)
-{
-    if(function_exists('mb_strtolower'))
-    {
-        return mb_strtolower($string, 'UTF-8');
-    }
-    else
-    {
-        return strtolower($string);
-    }
-}
-
-/**
- * In case the multibyte functions are not supported, we fallback to a no-multibyte function
- * IMPORTANT: If the fallback is used, the conversion of umlauts not work!
- * @param string $string
- * @return string
-*/
-function admStrToUpper($string)
-{
-    if(function_exists('mb_strtoupper'))
-    {
-        return mb_strtoupper($string, 'UTF-8');
-    }
-    else
-    {
-        return strtoupper($string);
-    }
-}
-
-/**
  * removes html, php code and blancs at beginning and end
  * of string or all elements of array without ckeditor variables !!!
  * @param string[] $srcArray
@@ -217,7 +180,7 @@ function strValidCharacters($string, $checkType)
         }
 
         // check if string contains only valid characters
-        if(strspn(admStrToLower($string), $validChars) === strlen($string))
+        if(strspn(mb_strtolower($string), $validChars) === strlen($string))
         {
             switch ($checkType)
             {

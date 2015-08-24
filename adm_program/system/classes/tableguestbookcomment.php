@@ -104,7 +104,7 @@ class TableGuestbookComment extends TableAccess
         {
             if($columnName == 'gbc_email')
             {
-                $newValue = admStrToLower($newValue);
+                $newValue = mb_strtolower($newValue);
                 if (!strValidCharacters($newValue, 'email'))
                 {
                     // falls die Email ein ungueltiges Format aufweist wird sie nicht gesetzt

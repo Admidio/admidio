@@ -118,7 +118,7 @@ class TableInventoryField extends TableAccess
             // if text is a translation-id then translate it
             if(strpos($value, '_') == 3)
             {
-                $value = $gL10n->get(admStrToUpper($value));
+                $value = $gL10n->get(mb_strtoupper($value));
             }
         }
         elseif($columnName == 'inf_value_list' && $format != 'database')
@@ -134,7 +134,7 @@ class TableInventoryField extends TableAccess
                     if($this->dbColumns['inf_type'] == 'RADIO_BUTTON')
                     {
                         // if value is imagefile or imageurl then show image
-                        if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
+                        if(strpos(mb_strtolower($listValue), '.png') > 0 || strpos(mb_strtolower($listValue), '.jpg') > 0)
                         {
                             // if there is imagefile and text separated by | then explode them
                             if(strpos($listValue, '|') > 0)
@@ -151,7 +151,7 @@ class TableInventoryField extends TableAccess
                             // if text is a translation-id then translate it
                             if(strpos($listValueText, '_') == 3)
                             {
-                                $listValueText = $gL10n->get(admStrToUpper($listValueText));
+                                $listValueText = $gL10n->get(mb_strtoupper($listValueText));
                             }
 
                             if($format == 'text')
@@ -171,7 +171,7 @@ class TableInventoryField extends TableAccess
                                 try
                                 {
                                     // create html for optionbox entry
-                                    if(strpos(admStrToLower($listValueImage), 'http') === 0 && strValidCharacters($listValueImage, 'url'))
+                                    if(strpos(mb_strtolower($listValueImage), 'http') === 0 && strValidCharacters($listValueImage, 'url'))
                                     {
                                         $listValue = '<img class="admidio-icon-info" src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
                                     }
@@ -191,7 +191,7 @@ class TableInventoryField extends TableAccess
                     // if text is a translation-id then translate it
                     if(strpos($listValue, '_') == 3)
                     {
-                        $listValue = $gL10n->get(admStrToUpper($listValue));
+                        $listValue = $gL10n->get(mb_strtoupper($listValue));
                     }
 
                     // save values in new array that starts with key = 1
@@ -209,7 +209,7 @@ class TableInventoryField extends TableAccess
     {
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if(admStrToUpper($mode) == 'UP')
+        if(mb_strtoupper($mode) == 'UP')
         {
             $sql = 'UPDATE '. TBL_INVENT_FIELDS. ' SET inf_sequence = '.$this->getValue('inf_sequence').'
                      WHERE inf_cat_id   = '.$this->getValue('inf_cat_id').'
@@ -219,7 +219,7 @@ class TableInventoryField extends TableAccess
             $this->save();
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif(admStrToUpper($mode) == 'DOWN')
+        elseif(mb_strtoupper($mode) == 'DOWN')
         {
             $sql = 'UPDATE '. TBL_INVENT_FIELDS. ' SET inf_sequence = '.$this->getValue('inf_sequence').'
                      WHERE inf_cat_id   = '.$this->getValue('inf_cat_id').'
