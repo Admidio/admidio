@@ -234,6 +234,8 @@ class TableUsers extends TableAccess
         if ($doHashing)
         {
             global $gPreferences;
+
+            // get the saved cost value that fits your server performance best and rehash your password
             $cost = intval($gPreferences['system_hashing_cost']);
             $newPassword = PasswordHashing::hash($newPassword, PASSWORD_DEFAULT, array('cost' => $cost));
         }

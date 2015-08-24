@@ -319,6 +319,7 @@ elseif($getMode == 2)
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
     require_once('db_scripts/preferences.php');
 
+    // calculate the best cost value for your server performance
     $benchmarkResults = PasswordHashing::costBenchmark();
     $orga_preferences['system_hashing_cost'] = end($benchmarkResults)['cost'];
 
