@@ -157,21 +157,24 @@ class PasswordHashing
      */
     public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = PASSWORD_DEFAULT, $options = array('cost' => 8))
     {
+        $cost = $options['cost'];
         $time = 0;
         $results = array();
 
-        while ($time <= $maxTime) {
-            $options['cost']++;
+        if ($cost < 4) {
+            $cost = 4;
+        }
 
+        // loop through the cost value until the needed hashing time reaches the maximum set time
+        while ($time <= $maxTime && $cost <= 31) {
             $start = microtime(true);
-
             PasswordHashing::hash($password, $algorithm, $options);
-
             $end = microtime(true);
 
             $time = $end - $start;
 
-            $results[] = array('cost' => $options['cost'], 'time' => $time);
+            $results[] = array('cost' => $cost, 'time' => $time);
+            $cost++;
         }
 
         array_pop($results);

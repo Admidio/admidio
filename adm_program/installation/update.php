@@ -317,7 +317,11 @@ elseif($getMode == 2)
     $flagNextVersion  = true;
 
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
-    include('db_scripts/preferences.php');
+    require_once('db_scripts/preferences.php');
+
+    // calculate the best cost value for your server performance
+    $benchmarkResults = PasswordHashing::costBenchmark();
+    $orga_preferences['system_hashing_cost'] = end($benchmarkResults)['cost'];
 
     $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
     $result_orga = $gDb->query($sql);

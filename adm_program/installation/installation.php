@@ -640,6 +640,10 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     $orga_preferences['email_administrator'] = $_SESSION['orga_email'];
     $orga_preferences['system_language']     = $language;
 
+    // calculate the best cost value for your server performance
+    $benchmarkResults = PasswordHashing::costBenchmark();
+    $orga_preferences['system_hashing_cost'] = end($benchmarkResults)['cost'];
+
     // create all necessary data for this organization
     $gCurrentOrganization->setPreferences($orga_preferences, false);
     $gCurrentOrganization->createBasicData($webmaster->getValue('usr_id'));
