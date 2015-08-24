@@ -219,7 +219,7 @@ class ProfileFields
                 if($value !== '')
                 {
                     $htmlValue = '<a href="tel:'. str_replace(array('-', '/', ' ', '(', ')'), '', $value).'">'. $value. '</a>';
-                }                
+                }
             }
             elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'URL')
             {
