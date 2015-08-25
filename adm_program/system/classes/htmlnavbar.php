@@ -35,6 +35,7 @@ class HtmlNavbar
     protected $name;        ///< Name of the navbar that will be shown when navbar changed to vertical mode on small devices
     protected $type;        ///< Navbar type. There is the @b default and the @b filter type possible.
     protected $id;          ///< The id of the navbar.
+    protected $customCssClass; ///< A css class name that should be added to the main nav tag of the navbar
 
     /** creates the object of the module menu and initialize all class parameters
      *  @param $id       Html id of the navbar
@@ -69,6 +70,7 @@ class HtmlNavbar
         $this->name       = $name;
         $this->type       = $type;
         $this->id         = $id;
+        $this->customCssClass = '';
     }
 
     /** Creates the html for the menu entry.
@@ -88,6 +90,14 @@ class HtmlNavbar
         </li>';
 
         return $html;
+    }
+
+    /* This method adds an additional css class to the main nav tag of the menu.
+     * @param $className The name of a css class that should be add to the main nav tag of the manu       
+     */
+    public function addCssClass($className)
+    {
+        $this->customCssClass = ' '. $className;
     }
 
     /** Add a form to the menu. The form will be added between the left and the right part of the navbar.
@@ -184,7 +194,7 @@ class HtmlNavbar
 
         // add html for navbar
         $html = '
-        <nav class="navbar navbar-default '.$cssClassNavbar.'" role="navigation">
+        <nav class="navbar navbar-default '.$cssClassNavbar.$this->customCssClass.'" role="navigation">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">

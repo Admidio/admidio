@@ -28,15 +28,19 @@
 
 class ModuleMenu
 {
+    protected $customCssClass;
+    
     /** creates the object of the module menu and initialize all class parameters
      *  @param $id Html id of the module menu
      */
     public function __construct($id, $maxMenuLinkItem = 6)
     {
         global $g_root_path;
+        
         $this->id        = $id;
         $this->items     = array();
         $this->root_path = $g_root_path;
+        $this->customCssClass  = '';
         $this->maxMenuLinkItem = $maxMenuLinkItem;
     }
 
@@ -55,6 +59,14 @@ class ModuleMenu
     {
         $this->items[$id] = array('id'=>$id, 'type'=>'category', 'categoryType'=>$categoryType, 'defaultCategory'=>$defaultCategory,
                                   'link'=>$link, 'text'=>$text, 'admin'=>$admin, 'subitems'=>array());
+    }
+    
+    /* This method adds an additional css class to the main nav tag of the menu.
+     * @param $className The name of a css class that should be add to the main nav tag of the manu       
+     */
+    public function addCssClass($className)
+    {
+        $this->customCssClass = ' '. $className;
     }
 
     /** add a drop down item
@@ -230,7 +242,7 @@ class ModuleMenu
         $formHtml = '';
 
         $html = '
-        <nav class="navbar navbar-default" role="navigation">
+        <nav class="navbar navbar-default'.$this->customCssClass.'" role="navigation">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
