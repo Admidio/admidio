@@ -168,6 +168,7 @@ class PasswordHashing
         // loop through the cost value until the needed hashing time reaches the maximum set time
         while ($time <= $maxTime && $cost <= 31) {
             $start = microtime(true);
+            $options['cost'] = $cost;
             PasswordHashing::hash($password, $algorithm, $options);
             $end = microtime(true);
 
