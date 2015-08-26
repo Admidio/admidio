@@ -12,7 +12,7 @@
  *  @code // create a simple html page with some text
  *  $page = new HtmlPage();
  *  $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.min.js');
- *  $page->addHeadline('A simple Html page');
+ *  $page->setHeadline('A simple Html page');
  *  $page->addHtml('<strong>This is a simple Html page!</strong>');
  *  $page->show();@endcode
  */
@@ -42,22 +42,23 @@ class HtmlPage
     protected $printMode;       ///< A flag that indicates if the page should be styled in print mode then no colors will be shown
 
     /** Constructor creates the page object and initialized all parameters
-     *  @param $title A string that contains the title/headline for the page.
+     *  @param $headline A string that contains the headline for the page that will be shown in the <h1> tag.
      */
-    public function __construct($title = '')
+    public function __construct($headline = '')
     {
         global $g_root_path, $gDebug;
 
         $this->pageContent = '';
         $this->header      = '';
-        $this->title       = $title;
-        $this->headline    = $title;
-        $this->menu        = new HtmlNavbar('menu_main_script', $title, $this);
+        $this->headline    = $headline;
+        $this->menu        = new HtmlNavbar('menu_main_script', $headline, $this);
         $this->showMenu    = true;
         $this->showThemeHtml = true;
         $this->printMode   = false;
         $this->hasNavbar   = false;
         $this->hasModal    = false;
+
+        $this->setHeadline($headline);
 
         if($gDebug)
         {
@@ -94,21 +95,6 @@ class HtmlPage
     public function addHeader($header)
     {
         $this->header .= $header;
-    }
-
-    /** Set the h1 headline of the current html page. If the title of the page was not set
-     *  until now than this will also be the title.
-     *  @param $headline A string that contains the headline for the page.
-     */
-    public function addHeadline($headline)
-    {
-        if(strlen($this->title) == 0)
-        {
-            $this->setTitle($headline);
-        }
-
-        $this->headline = $headline;
-        $this->menu->setName($headline);
     }
 
     /** Adds any html content to the page. The content will be added in the order
@@ -289,6 +275,15 @@ class HtmlPage
             $this->rssFiles[] = $file;
         }
     }
+    
+    /* Returns the headline of the current Admidio page. This is the text
+     * of the <h1> tag of the page.
+     * @return Returns the headline of the current Admidio page.
+     */
+    public function getHeadline()
+    {
+        return $this->headline;
+    }
 
     /** Returns the menu object of this html page.
      *  @return Returns the menu object of this html page.
@@ -332,6 +327,21 @@ class HtmlPage
         $this->hasNavbar = true;
     }
 
+    /** Set the h1 headline of the current html page. If the title of the page was not set
+     *  until now than this will also be the title.
+     *  @param $headline A string that contains the headline for the page.
+     */
+    public function setHeadline($headline)
+    {
+        if(strlen($this->title) == 0)
+        {
+            $this->setTitle($headline);
+        }
+
+        $this->headline = $headline;
+        $this->menu->setName($headline);
+    }
+
     /** If print mode is set then a print specific css file will be loaded.
      *  All styles will be more print compatible and are only black, grey and white.
      */
@@ -340,12 +350,21 @@ class HtmlPage
         $this->printMode = true;
     }
 
-    /** Set the title of the html page. This will also be the h1 headline for the Admidio page.
+    /** Set the title of the html page that will be shown in the <title> tag.
      *  @param $title A string that contains the title for the page.
      */
     public function setTitle($title)
     {
-        $this->title = $title;
+        global $gCurrentOrganization;
+        
+        if($title !== '')
+        {
+            $this->title = $gCurrentOrganization->getValue('org_longname') . ' - ' . $title;
+        }
+        else
+        {
+            $this->title = $gCurrentOrganization->getValue('org_longname');
+        }
     }
 
     /** This method send the whole html code of the page to the browser. Call this method
@@ -442,16 +461,6 @@ class HtmlPage
             {
                 $headerContent .= '<link rel="alternate" type="application/rss+xml" href="'.$file.'" />';
             }
-        }
-
-        // add organization name to title
-        if(strlen($this->title) > 0)
-        {
-            $this->title = $gCurrentOrganization->getValue('org_longname').' - '.$this->title;
-        }
-        else
-        {
-            $this->title = $gCurrentOrganization->getValue('org_longname');
         }
 
         // add code for a modal window

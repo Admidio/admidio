@@ -343,10 +343,7 @@ case 3:
     $gDb->endTransaction();
 
     // create html page object
-    $page = new HtmlPage();
-
-    // add headline and title of module
-    $page->addHeadline($gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
+    $page = new HtmlPage($gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
 
     $page->addHtml('<p class="lead">'.$gL10n->get('ORG_ORGANIZATION_SUCCESSFULL_ADDED', $_POST['orgaLongName']).'</p>');
 

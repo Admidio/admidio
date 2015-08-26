@@ -190,7 +190,7 @@ if($getMode != 'csv')
         $page->setPrintMode();
                 
         $page->setTitle($title);
-        $page->addHeadline($headline);
+        $page->setHeadline($headline);
         
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
     }
@@ -250,7 +250,7 @@ if($getMode != 'csv')
         }
 
         $page->setTitle($title);
-        $page->addHeadline($headline);
+        $page->setHeadline($headline);
         
         $page->addHtml('<h5>'.$role->getValue('cat_name').' - '.$memberStatus.'</h5>');
         $page->addJavascript('
