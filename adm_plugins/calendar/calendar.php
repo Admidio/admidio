@@ -2,7 +2,7 @@
 /******************************************************************************
  * Calendar
  *
- * Version 1.11.0
+ * Version 2.0.2
  *
  * Plugin shows the actual month with all the events and birthdays that are
  * coming. This plugin can be used to show the Admidio events and birthdays in a
@@ -166,8 +166,8 @@ else
 }
 
 $lastDayCurrentMonth = date('t', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
-$dateMonthStart = $currentYear.'-'.$currentMonth.'-01';
-$dateMonthEnd   = $currentYear.'-'.$currentMonth.'-'.$lastDayCurrentMonth;
+$dateMonthStart = $currentYear.'-'.$currentMonth.'-01 00:00:00';
+$dateMonthEnd   = $currentYear.'-'.$currentMonth.'-'.$lastDayCurrentMonth.' 23:59:59';
 $eventsMonthDayArray    = array();
 $birthdaysMonthDayArray = array();
 
@@ -255,21 +255,25 @@ if($plg_ter_aktiv == 1)
         {
             // event only within one day
             $eventsMonthDayArray[$startDate->format('j')][] = array('dat_id'   => $row['dat_id'],
-                                                              'time'     => $startDate->format($gPreferences['system_time']),
-                                                              'all_day'  => $row['dat_all_day'],
-                                                              'location' => $row['dat_location'],
-                                                              'headline' => $row['dat_headline']);
+                                                                    'time'     => $startDate->format($gPreferences['system_time']),
+                                                                    'all_day'  => $row['dat_all_day'],
+                                                                    'location' => $row['dat_location'],
+                                                                    'headline' => $row['dat_headline'],
+                                                                    'one_day'  => false);
         }
         else
         {
             // event within several days
+
+            $oneDayDate = false;
+
             if($startDate->format('m') != $currentMonth)
             {
                 $firstDay = 1;
             }
             else
             {
-                $firstDay = $startDate->format('d');
+                $firstDay = $startDate->format('j');
             }
 
             if($endDate->format('m') != $currentMonth)
@@ -278,17 +282,29 @@ if($plg_ter_aktiv == 1)
             }
             else
             {
-                $lastDay = $endDate->format('d');
+                if($row['dat_all_day'] == 1)
+                {
+                    $oneDay  = new DateInterval('P1D');
+                    $endDate = $endDate->sub($oneDay);
+                }
+
+                $lastDay = $endDate->format('j');
+            }
+
+            if($startDate->format('Y-m-d') == $endDate->format('Y-m-d'))
+            {
+                $oneDayDate = true;
             }
 
             // now add event to every relevant day of month
             for($i = $firstDay; $i <= $lastDay; $i++)
             {
                 $eventsMonthDayArray[$i][] = array('dat_id'   => $row['dat_id'],
-                                             'time'     => $startDate->format($gPreferences['system_time']),
-                                             'all_day'  => $row['dat_all_day'],
-                                             'location' => $row['dat_location'],
-                                             'headline' => $row['dat_headline']);
+                                                   'time'     => $startDate->format($gPreferences['system_time']),
+                                                   'all_day'  => $row['dat_all_day'],
+                                                   'location' => $row['dat_location'],
+                                                   'headline' => $row['dat_headline'],
+                                                   'one_day'  => $oneDayDate);
             }
         }
     }
@@ -447,8 +463,16 @@ while($currentDay <= $lastDayCurrentMonth)
                     }
                     if($eventArray['all_day'] == 1)
                     {
-                        $htmlContent .= '<strong>'.$gL10n->get('DAT_ALL_DAY').'</strong> '.$eventArray['headline'].$eventArray['location'];
-                        $textContent .= $gL10n->get('DAT_ALL_DAY').' '.$eventArray['headline'].$eventArray['location'];
+                        if($eventArray['one_day'] == true)
+                        {
+                            $htmlContent .= '<strong>'.$gL10n->get('DAT_ALL_DAY').'</strong> '.$eventArray['headline'].$eventArray['location'];
+                            $textContent .= $gL10n->get('DAT_ALL_DAY').' '.$eventArray['headline'].$eventArray['location'];
+                        }
+                        else
+                        {
+                            $htmlContent .= '<strong>'.$gL10n->get('PLG_CALENDAR_SEVERAL_DAYS').'</strong> '.$eventArray['headline'].$eventArray['location'];
+                            $textContent .= $gL10n->get('PLG_CALENDAR_SEVERAL_DAYS').' '.$eventArray['headline'].$eventArray['location'];
+                        }
                     }
                     else
                     {
@@ -601,11 +625,11 @@ while($currentDay <= $lastDayCurrentMonth)
 
                 // plg_link_class bestimmt das Erscheinungsbild des jeweiligen Links
                 echo '<a class="admidio-calendar-link '.$plg_link_class.'" href="'.$plg_link.'" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
-                    title="'.$dateObj->format($gPreferences['system_date']).'" data-content="'.$htmlContent.'" target="'.$plg_link_target.'">'.$currentDay.'</a>';
+                    title="'.$dateObj->format($gPreferences['system_date']).'" data-content="'.htmlspecialchars($htmlContent).'" target="'.$plg_link_target.'">'.$currentDay.'</a>';
             }
             else
             {
-                echo '<a class="'.$plg_link_class.'" href="'.$plg_link.'" title="'.$textContent.'"
+                echo '<a class="'.$plg_link_class.'" href="'.$plg_link.'" title="'.str_replace('"', "", $textContent).'"
                     href="'.$plg_link.'" target="'.$plg_link_target.'">'.$currentDay.'</a>';
             }
         }

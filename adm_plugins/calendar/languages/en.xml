@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
+    <version id="2.0.1">
+        <text id="PLG_CALENDAR_SEVERAL_DAYS" development="new" translation="todo">Several days</text>
+    </version>
     <version id="1.8.1">
         <text id="PLG_CALENDAR_MONTH" development="new" translation="todo">January,February,March,April,May,June,July,August,September,October,November,December</text>
         <text id="PLG_CALENDAR_MONDAY_SHORT" development="new" translation="todo">Mo</text>

@@ -28,6 +28,8 @@
  */
 class ModuleMenu
 {
+    protected $customCssClass;
+
     /**
      * creates the object of the module menu and initialize all class parameters
      * @param string $id              Html id of the module menu
@@ -37,9 +39,10 @@ class ModuleMenu
     {
         global $g_root_path;
 
-        $this->id              = $id;
-        $this->items           = array();
-        $this->root_path       = $g_root_path;
+        $this->id        = $id;
+        $this->items     = array();
+        $this->root_path = $g_root_path;
+        $this->customCssClass  = '';
         $this->maxMenuLinkItem = $maxMenuLinkItem;
     }
 
@@ -61,6 +64,15 @@ class ModuleMenu
         $this->items[$id] = array('id'=>$id, 'type'=>'category', 'categoryType'=>$categoryType,
                                   'defaultCategory'=>$defaultCategory, 'link'=>$link, 'text'=>$text,
                                   'admin'=>$admin, 'subitems'=>array());
+    }
+
+    /**
+     * This method adds an additional css class to the main nav tag of the menu.
+     * @param $className The name of a css class that should be add to the main nav tag of the manu
+     */
+    public function addCssClass($className)
+    {
+        $this->customCssClass = ' '. $className;
     }
 
     /**
@@ -256,20 +268,20 @@ class ModuleMenu
         $formHtml = '';
 
         $html = '
-        <nav class="navbar navbar-default" role="navigation">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                  <a class="navbar-brand" href="#">Menu</a>
-                </div>
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav" id="'.$this->id.'">';
+            <nav class="navbar navbar-default'.$this->customCssClass.'" role="navigation">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">Menu</a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav" id="'.$this->id.'">';
 
         $linkCnt = 0;
 

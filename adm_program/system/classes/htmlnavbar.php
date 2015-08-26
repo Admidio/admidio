@@ -28,13 +28,14 @@
  */
 class HtmlNavbar
 {
-    protected $leftItems;   ///< An array with all items that should be displayed at the left part of the navbar
-    protected $rightItems;  ///< An array with all items that should be displayed at the right part of the navbar
-    protected $htmlPage;    ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
-    protected $htmlForm;    ///< Parameter that includes the html of the form that should be shown within the navbar
-    protected $name;        ///< Name of the navbar that will be shown when navbar changed to vertical mode on small devices
-    protected $type;        ///< Navbar type. There is the @b default and the @b filter type possible.
-    protected $id;          ///< The id of the navbar.
+    protected $leftItems;      ///< An array with all items that should be displayed at the left part of the navbar
+    protected $rightItems;     ///< An array with all items that should be displayed at the right part of the navbar
+    protected $htmlPage;       ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
+    protected $htmlForm;       ///< Parameter that includes the html of the form that should be shown within the navbar
+    protected $name;           ///< Name of the navbar that will be shown when navbar changed to vertical mode on small devices
+    protected $type;           ///< Navbar type. There is the @b default and the @b filter type possible.
+    protected $id;             ///< The id of the navbar.
+    protected $customCssClass; ///< A css class name that should be added to the main nav tag of the navbar
 
     /**
      * creates the object of the module menu and initialize all class parameters
@@ -70,6 +71,7 @@ class HtmlNavbar
         $this->name       = $name;
         $this->type       = $type;
         $this->id         = $id;
+        $this->customCssClass = '';
     }
 
     /**
@@ -91,6 +93,15 @@ class HtmlNavbar
         </li>';
 
         return $html;
+    }
+
+    /**
+     * This method adds an additional css class to the main nav tag of the menu.
+     * @param string $className The name of a css class that should be add to the main nav tag of the manu
+     */
+    public function addCssClass($className)
+    {
+        $this->customCssClass = ' '.$className;
     }
 
     /**
@@ -192,7 +203,7 @@ class HtmlNavbar
 
         // add html for navbar
         $html = '
-            <nav class="navbar navbar-default '.$cssClassNavbar.'" role="navigation">
+            <nav class="navbar navbar-default '.$cssClassNavbar.$this->customCssClass.'" role="navigation">
                 <div class="container-fluid">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
