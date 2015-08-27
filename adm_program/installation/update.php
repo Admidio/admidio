@@ -321,7 +321,7 @@ elseif($getMode == 2)
 
     // calculate the best cost value for your server performance
     $benchmarkResults = PasswordHashing::costBenchmark();
-    $orga_preferences['system_hashing_cost'] = end($benchmarkResults)['cost'];
+    $orga_preferences['system_hashing_cost'] = $benchmarkResults['cost'];
 
     $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
     $result_orga = $gDb->query($sql);

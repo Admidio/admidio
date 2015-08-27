@@ -153,7 +153,7 @@ class PasswordHashing
      * @param  string $password  The password to test
      * @param  int    $algorithm The algorithm to test
      * @param  array  $options   The options to test
-     * @return array  Returns an array with the tested costs with their required time
+     * @return array  Returns an array with the maximum tested cost with the required time
      */
     public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = PASSWORD_DEFAULT, $options = array('cost' => 8))
     {
@@ -174,7 +174,7 @@ class PasswordHashing
 
             $time = $end - $start;
 
-            $results[] = array('cost' => $cost, 'time' => $time);
+            $results = array('cost' => $cost, 'time' => $time);
             $cost++;
         }
 

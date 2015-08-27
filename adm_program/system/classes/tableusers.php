@@ -226,15 +226,15 @@ class TableUsers extends TableAccess
      */
     public function setPassword($newPassword, $isNewPassword = false, $doHashing = true)
     {
+        global $gPreferences;
+        
         $columnName = 'usr_password';
         if ($isNewPassword) {
             $columnName = 'usr_new_password';
         }
 
-        if ($doHashing)
+        if(isset($gPreferences['system_hashing_cost']) && $doHashing)
         {
-            global $gPreferences;
-
             // get the saved cost value that fits your server performance best and rehash your password
             $cost = intval($gPreferences['system_hashing_cost']);
             $newPassword = PasswordHashing::hash($newPassword, PASSWORD_DEFAULT, array('cost' => $cost));
