@@ -229,15 +229,22 @@ class TableUsers extends TableAccess
         global $gPreferences;
         
         $columnName = 'usr_password';
-        if ($isNewPassword) {
+        
+        if($isNewPassword) 
+        {
             $columnName = 'usr_new_password';
         }
 
-        if(isset($gPreferences['system_hashing_cost']) && $doHashing)
+        if($doHashing)
         {
             // get the saved cost value that fits your server performance best and rehash your password
-            $cost = intval($gPreferences['system_hashing_cost']);
-            $newPassword = PasswordHashing::hash($newPassword, PASSWORD_DEFAULT, array('cost' => $cost));
+            $cost = 10;
+            if(isset($gPreferences['system_hashing_cost']))
+            {
+                $cost = intval($gPreferences['system_hashing_cost']);
+            }
+
+            $newPassword = PasswordHashing::hash($newPassword, PASSWORD_DEFAULT, array('cost' => 10));
         }
 
         return parent::setValue($columnName, $newPassword, false);
