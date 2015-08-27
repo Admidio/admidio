@@ -148,7 +148,7 @@ class PasswordHashing
     }
 
     /**
-     * Run a benchmark to get the best fitting cost value
+     * Run a benchmark to get the best fitting cost value. The cost value can vary from 4 to 31.
      * @param  float  $maxTime   The maximum time the hashing process should take in seconds
      * @param  string $password  The password to test
      * @param  int    $algorithm The algorithm to test
