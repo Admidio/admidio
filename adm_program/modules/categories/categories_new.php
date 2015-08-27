@@ -25,7 +25,7 @@ require_once('../../system/login_valid.php');
 // Initialize and check the parameters
 $getCatId = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
 $getType  = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
-$getTitle = admFuncVariableIsValid($_GET, 'title', 'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
+$getTitle = admFuncVariableIsValid($_GET, 'title', 'string');
 
 // Modus und Rechte pruefen
 if($getType == 'ROL' && $gCurrentUser->manageRoles() == false)
@@ -49,14 +49,40 @@ elseif($getType == 'AWA' && $gCurrentUser->editUsers() == false)
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// set headline of the script
-if($getCatId > 0)
+// set module headline
+if($getTitle === '')
 {
-    $headline = $gL10n->get('SYS_EDIT_VAR', $getTitle);
+    if($getType === 'ROL')
+    {
+        $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('SYS_ROLES'));
+    }
+    elseif($getType === 'LNK')
+    {
+        $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('LNK_WEBLINKS'));
+    }
+    elseif($getType === 'USF')
+    {
+        $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('ORG_PROFILE_FIELDS'));
+    }
+    else
+    {
+        $headline = $gL10n->get('SYS_CATEGORY');
+    }
 }
 else
 {
-    $headline = $gL10n->get('SYS_CREATE_VAR', $getTitle);
+    $headline = $getTitle;
+}
+
+
+// set headline of the script
+if($getCatId > 0)
+{
+    $headline = $gL10n->get('SYS_EDIT_VAR', $headline);
+}
+else
+{
+    $headline = $gL10n->get('SYS_CREATE_VAR', $headline);
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);

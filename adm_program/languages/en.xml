@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
     <version id="3.1.0" translator="Markus Faßbender">
-        <text id="ORG_BROWSER_UPDATE_CHECK" development="new" translation="todo">Update message for outdated Browsers</text>
-        <text id="ORG_BROWSER_UPDATE_CHECK_DESC" development="new" translation="todo">After activation users with outdated browsers are advised to run a browserupdate. Newer browsers guarantee a better protection against fraud, viruses, Trojans, identity theft and other threats to your privacy and security. Every new browser generation improves speed and supports more and more new web technologies, which leads to a better web experience. For this purpose, the service of https://browser-update.org/ is used.</text>
+        <text id="BAC_FILE_NAME_INVALID" development="changed" translation="todo">The selected file name contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers from 0 to 9 and special characters $!?._+-&amp; are free to use.</text>
+        <text id="SYS_CATEGORIES_VAR" development="new" translation="edited">%VAR1%-categories</text>
+        <text id="SYS_CATEGORY_VAR" development="new" translation="edited">%VAR1%-category</text>
+        <text id="ORG_BROWSER_UPDATE_CHECK" development="new" translation="edited">Update message for outdated Browsers</text>
+        <text id="ORG_BROWSER_UPDATE_CHECK_DESC" development="new" translation="edited">After activation users with outdated browsers are advised to run a browserupdate. Newer browsers guarantee a better protection against fraud, viruses, Trojans, identity theft and other threats to your privacy and security. Every new browser generation improves speed and supports more and more new web technologies, which leads to a better web experience. For this purpose, the service of https://browser-update.org/ is used.</text>
     </version>
     <version id="3.0.0-Beta.4" translator="Markus Faßbender">
         <text id="INS_DATABASE_LOGIN_DESC" development="changed" translation="edited">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</text>
@@ -377,7 +380,6 @@
         <text id="BAC_DATABASE_BACKUP" development="new" translation="edited">Database-Backup</text>
         <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="edited">Create and download database backups of Admidio tables.</text>
         <text id="BAC_DAYS_VAR" development="new" translation="edited">%VAR1% Days</text>
-        <text id="BAC_FILE_NAME_INVALID" development="new" translation="edited">Filename includes invalid character!</text>
         <text id="BAC_HOURS_VAR" development="new" translation="edited">%VAR1% hours</text>
         <text id="BAC_MINUTES_VAR" development="new" translation="edited">%VAR1% minutes</text>
         <text id="BAC_NO_BACKUP_FILE_EXISTS" development="new" translation="edited">No Backup file present!</text>
@@ -900,7 +902,6 @@
         <text id="PHO_ALBUM_DELETE" development="new" translation="edited">Delete album</text>
         <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="edited">Album is being blocked and guests are unable to display it. Enable it by pressing key symbol in editing field.</text>
         <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="edited">Album has been successfully created / changed.</text>
-        <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="edited">Album management</text>
         <text id="PHO_BACK_TO_ALBUM" development="new" translation="edited">back to album</text>
         <text id="PHO_CREATE_ALBUM" development="new" translation="edited">Creating album</text>
         <text id="PHO_DISPLAY_PHOTOS" development="new" translation="edited">How to display photos</text>
@@ -1101,7 +1102,6 @@
         <text id="SYS_ADMIDIO_TEAM" development="new" translation="edited">Admidio Team</text>
         <text id="SYS_ADMIDIO_VERSION" development="new" translation="edited">Admidio version</text>
         <text id="SYS_ADMINISTRATION" development="new" translation="edited">Administration</text>
-        <text id="SYS_ADMINISTRATION_VAR" development="new" translation="edited">%VAR1% administration</text>
         <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Ajax request error.\nError Details: %VAR1%</text>
         <text id="SYS_ALL" development="new" translation="edited">All</text>
         <text id="SYS_ALSO_VISITORS" development="new" translation="edited">also Visitors</text>

@@ -878,7 +878,6 @@
         <text id="PHO_ALBUM_DELETE" development="new" translation="edited">Slet album</text>
         <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="edited">Albummet er blokeret og gæsterne kan ikke få det vist. Du kan aktivere det ved at klikke på nøgle symbolet i redigerings feltet.</text>
         <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="edited">Albummet er blevet oprettet / redigeret.</text>
-        <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="edited">Album Administration</text>
         <text id="PHO_BACK_TO_ALBUM" development="new" translation="edited">Tilbage til album</text>
         <text id="PHO_CREATE_ALBUM" development="new" translation="edited">Opret album</text>
         <text id="PHO_DISPLAY_PHOTOS" development="new" translation="edited">Hvordan skal billederne vises</text>
@@ -1075,7 +1074,6 @@
         <text id="SYS_ADMIDIO_TEAM" development="new" translation="edited">Admidio Team</text>
         <text id="SYS_ADMIDIO_VERSION" development="new" translation="todo">Admidio version</text>
         <text id="SYS_ADMINISTRATION" development="new" translation="edited">Administration</text>
-        <text id="SYS_ADMINISTRATION_VAR" development="new" translation="edited">%VAR1% administration</text>
         <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Ajax forespørgsels fejl.\nFejl detaljer: %VAR1%</text>
         <text id="SYS_ALL" development="new" translation="edited">Alle</text>
         <text id="SYS_ALSO_VISITORS" development="new" translation="edited">også Gæster</text>

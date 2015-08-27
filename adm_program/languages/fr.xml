@@ -558,7 +558,6 @@
         <text id="PHO_ALBUM_DELETE" development="new" translation="edited">Supprimer l'album</text>
         <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="edited">L'album est bloqué et les clients sont incapables de les afficher. Activez-le en appuyant sur le symbole clé de montage sur le terrain.</text>
         <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="edited">L'album a été créé avec succès.</text>
-        <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="edited">Gestion de l'Album</text>
         <text id="PHO_BACK_TO_ALBUM" development="new" translation="edited">Revenir à l'album</text>
         <text id="PHO_CREATE_ALBUM" development="new" translation="edited">Créer un album</text>
         <text id="PHO_DISPLAY_PHOTOS" development="new" translation="edited">Comment afficher les photos</text>
@@ -760,7 +759,6 @@
         <text id="SYS_ADMIDIO_TEAM" development="new" translation="edited">Équipe Admidio</text>
         <text id="SYS_ADMIDIO_VERSION" development="new" translation="edited">Version Admidio</text>
         <text id="SYS_ADMINISTRATION" development="new" translation="edited">Administration</text>
-        <text id="SYS_ADMINISTRATION_VAR" development="new" translation="edited">Administration %VAR1%</text>
         <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Erreur requête Ajax Détails nErreur \:.%VAR1%</text>
         <text id="SYS_ALL" development="new" translation="edited">Tous</text>
         <text id="SYS_ALSO_VISITORS" development="new" translation="edited">Également aux visiteurs</text>
