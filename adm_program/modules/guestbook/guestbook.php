@@ -96,11 +96,11 @@ $page->addJavascript('
 // add headline and title of module
 if($getModeration == 1)
 {
-    $page->addHeadline($gL10n->get('GBO_MODERATE_VAR', $getHeadline));
+    $page->setHeadline($gL10n->get('GBO_MODERATE_VAR', $getHeadline));
 }
 else
 {
-    $page->addHeadline($getHeadline);
+    $page->setHeadline($getHeadline);
 }
 
 // ------------------------------------------------------
