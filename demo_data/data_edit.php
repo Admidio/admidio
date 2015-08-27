@@ -89,9 +89,39 @@ $sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(10).' 15:00:00\'
          WHERE dat_id = 6 ';
 $db->query($sql);
 
-$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(-1).' 00:00:00\'
-                               , dat_end = \''.addDaysToDate(0).' 00:00:00\'
+$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(-2).' 05:30:00\'
+                               , dat_end = \''.addDaysToDate(-1).' 15:00:00\'
          WHERE dat_id = 7 ';
+$db->query($sql);
+
+$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(-4).' 17:00:00\'
+                               , dat_end = \''.addDaysToDate(-4).' 18:30:00\'
+         WHERE dat_id = 8 ';
+$db->query($sql);
+
+$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(3).' 17:00:00\'
+                               , dat_end = \''.addDaysToDate(3).' 18:30:00\'
+         WHERE dat_id = 9 ';
+$db->query($sql);
+
+$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(10).' 17:00:00\'
+                               , dat_end = \''.addDaysToDate(10).' 18:30:00\'
+         WHERE dat_id = 10 ';
+$db->query($sql);
+
+$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(17).' 17:00:00\'
+                               , dat_end = \''.addDaysToDate(17).' 18:30:00\'
+         WHERE dat_id = 11 ';
+$db->query($sql);
+
+$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(24).' 17:00:00\'
+                               , dat_end = \''.addDaysToDate(24).' 18:30:00\'
+         WHERE dat_id = 12 ';
+$db->query($sql);
+
+$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(31).' 17:00:00\'
+                               , dat_end = \''.addDaysToDate(31).' 18:30:00\'
+         WHERE dat_id = 13 ';
 $db->query($sql);
 
 

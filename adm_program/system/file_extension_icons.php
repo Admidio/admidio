@@ -30,6 +30,7 @@ $icon_file_extension = array(
     'ppt'  => 'page_white_powerpoint.png',
     'pptx' => 'page_white_powerpoint.png',
     'log'  => 'page_white_text.png',
+    'md'   => 'page_white_text.png',
     'php'  => 'page_white_text.png',
     'sql'  => 'page_white_text.png',
     'txt'  => 'page_white_text.png',

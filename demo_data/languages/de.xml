@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
+    <version id="3.1.0" translator="Markus Faßbender">
+        <text id="DEMO_DAT_TEAM_TRAINING" development="new" translation="todo">Mannschaftstraining</text>
+        <text id="DEMO_DAT_TEAM_TRAINING_LOCATION" development="new" translation="todo">Sporthalle Alpenstraße Salzburg</text>
+    </version>
     <version id="2.4.0" translator="Markus Faßbender">
         <text id="DEMO_CHAIRMAN" development="new" translation="todo">Vorsitzender</text>
         <text id="DEMO_ANN_WELCOME" development="new" translation="todo">Willkommen im Demobereich</text>

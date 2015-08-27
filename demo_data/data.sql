@@ -515,13 +515,18 @@ INSERT INTO %PREFIX%_announcements (ann_id, ann_org_shortname, ann_global, ann_h
 -- Data for table adm_dates
 --
 
-INSERT INTO %PREFIX%_dates (dat_id, dat_cat_id, dat_global, dat_begin, dat_end, dat_all_day, dat_description, dat_location, dat_country, dat_headline, dat_usr_id_create, dat_timestamp_create, dat_usr_id_change, dat_timestamp_change, dat_rol_id, dat_room_id, dat_max_members) VALUES
-(3, 12, 0, '2012-01-22 16:00:00', '2012-01-22 18:00:00', 0, 'DEMO_DAT_YOUTH_TRAINING_CONTENT', 'DEMO_DAT_YOUTH_TRAINING_LOCATION', 'GBR', 'DEMO_DAT_YOUTH_TRAINING', 1, '2008-07-06 17:38:26', NULL, NULL, NULL, NULL, 0),
-(4, 10, 0, '2012-01-12 19:00:00', '2012-01-12 23:30:00', 0, 'DEMO_DAT_BARBECUE_CONTENT', NULL, NULL, 'DEMO_DAT_BARBECUE', 1, '2008-07-06 17:41:18', NULL, NULL, 8, NULL, 0),
-(5, 10, 0, '2012-02-07 00:00:00', '2012-02-12 00:00:00', 1, 'DEMO_DAT_TRAINER_COURSE_CONTENT', 'DEMO_DAT_TRAINER_COURSE_LOCATION', 'FRA', 'DEMO_DAT_TRAINER_COURSE', 1, '2008-07-06 17:49:13', NULL, NULL, NULL, NULL, 0),
-(6, 21, 1, '2012-01-18 15:00:00', '2012-01-18 19:00:00', 0, 'DEMO_DAT_COMPUTER_COURSE_CONTENT', 'DEMO_DAT_COMPUTER_COURSE_LOCATION', 'DEU', 'DEMO_DAT_COMPUTER_COURSE', 1, '2010-01-06 11:25:13', NULL, NULL, NULL, NULL, 0),
-(7, 10, 1, '2012-01-07 00:00:00', '2012-01-08 00:00:00', 1, 'DEMO_DAT_TRIP_AMSTERDAM_CONTENT', 'DEMO_DAT_TRIP_AMSTERDAM_LOCATION', 'NLD', 'DEMO_DAT_TRIP_AMSTERDAM', 1, '2010-01-06 11:25:13', NULL, NULL, NULL, NULL, 0);
-
+INSERT INTO %PREFIX%_dates (dat_id, dat_cat_id, dat_global, dat_begin, dat_end, dat_all_day, dat_description, dat_location, dat_country, dat_headline, dat_highlight, dat_usr_id_create, dat_timestamp_create, dat_usr_id_change, dat_timestamp_change, dat_rol_id, dat_room_id, dat_max_members) VALUES
+(3, 12, 0, '2012-01-22 16:00:00', '2012-01-22 18:00:00', 0, 'DEMO_DAT_YOUTH_TRAINING_CONTENT', 'DEMO_DAT_YOUTH_TRAINING_LOCATION', 'GBR', 'DEMO_DAT_YOUTH_TRAINING', 0,  1, '2008-07-06 17:38:26', NULL, NULL, NULL, NULL, 0),
+(4, 10, 0, '2012-01-12 19:00:00', '2012-01-12 23:30:00', 0, 'DEMO_DAT_BARBECUE_CONTENT', NULL, NULL, 'DEMO_DAT_BARBECUE', 1, 1, '2008-07-06 17:41:18', NULL, NULL, 8, NULL, 0),
+(5, 10, 0, '2012-02-07 00:00:00', '2012-02-12 00:00:00', 1, 'DEMO_DAT_TRAINER_COURSE_CONTENT', 'DEMO_DAT_TRAINER_COURSE_LOCATION', 'FRA', 'DEMO_DAT_TRAINER_COURSE', 1, 1, '2008-07-06 17:49:13', NULL, NULL, NULL, NULL, 0),
+(6, 21, 1, '2012-01-18 15:00:00', '2012-01-18 19:00:00', 0, 'DEMO_DAT_COMPUTER_COURSE_CONTENT', 'DEMO_DAT_COMPUTER_COURSE_LOCATION', 'DEU', 'DEMO_DAT_COMPUTER_COURSE', 0, 1, '2010-01-06 11:25:13', NULL, NULL, NULL, NULL, 0),
+(7, 10, 1, '2012-01-07 06:00:00', '2012-01-08 15:00:00', 1, 'DEMO_DAT_TRIP_AMSTERDAM_CONTENT', 'DEMO_DAT_TRIP_AMSTERDAM_LOCATION', 'NLD', 'DEMO_DAT_TRIP_AMSTERDAM', 0, 1, '2010-01-06 11:25:13', NULL, NULL, NULL, NULL, 0),
+(8, 12, 0, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0,  1, '2013-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
+(9, 12, 0, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2013-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
+(10, 12, 0, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2013-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
+(11, 12, 0, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2013-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
+(12, 12, 0, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2013-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
+(13, 12, 0, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2013-09-06 12:05:26', NULL, NULL, NULL, NULL, 0);
 
 --
 -- Data for table adm_date_role
@@ -532,15 +537,33 @@ INSERT INTO %PREFIX%_date_role (dtr_id, dtr_dat_id, dtr_rol_id) VALUES
 (2, 4, NULL),
 (3, 5, NULL),
 (4, 6, NULL),
-(5, 7, NULL);
+(5, 7, NULL),
+(6, 8, NULL),
+(7, 9, NULL),
+(8, 10, NULL),
+(9, 11, NULL),
+(10, 12, NULL),
+(11, 13, NULL);
 
 --
 -- Data for table adm_folders
 --
 
 INSERT INTO %PREFIX%_folders (fol_id, fol_org_id, fol_fol_id_parent, fol_type, fol_name, fol_description, fol_path, fol_locked, fol_public, fol_usr_id, fol_timestamp) VALUES
-(1, 1, NULL, 'DOWNLOAD', 'download', NULL, '/adm_my_files', 0, 1, NULL, '2012-01-01 22:35:07');
+(1, 1, NULL, 'DOWNLOAD', 'download', NULL, '/adm_my_files', 0, 1, NULL, '2014-01-01 22:35:07'),
+(2, 1, 1, 'DOWNLOAD', 'licenses', NULL, '/adm_my_files/download', 0, 1, NULL, '2014-02-05 14:05:34');
 
+--
+-- Data for table adm_folders
+--
+
+INSERT INTO %PREFIX%_files (fil_id, fil_fol_id, fil_name, fil_description, fil_locked, fil_counter, fil_usr_id, fil_timestamp) VALUES
+(1, 2, 'gpl-1.0.txt', null, 0, 15, 1, '2015-08-13 08:24:45'),
+(2, 2, 'gpl-2.0.txt', null, 0, 45, 1, '2015-08-13 08:24:45'),
+(3, 2, 'gpl-3.0.txt', null, 0, 8, 1, '2015-08-13 08:24:45'),
+(4, 2, 'lgpl-3.0.txt', null, 0, 0, 1, '2015-08-13 08:24:45'),
+(5, 1, 'admidio-readme.md', null, 0, 134, 1, '2015-07-01 10:05:23'),
+(6, 1, 'admidio-logo.png', null, 0, 45, 1, '2015-07-01 10:07:23');
 
 --
 -- Data for table adm_guestbook
