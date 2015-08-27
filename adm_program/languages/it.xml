@@ -880,7 +880,6 @@
         <text id="PHO_ALBUM_DELETE" development="new" translation="edited">Cancella album</text>
         <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="edited">L'album è stato bloccato e gli ospiti non sono in grado di visualizzarlo. Attivalo con il tasto con il simbolo della chiave nel campo di modifica.</text>
         <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="edited">L'album è stato creato / modificato con successo.</text>
-        <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="edited">Gestione album</text>
         <text id="PHO_BACK_TO_ALBUM" development="new" translation="edited">indietro all'album</text>
         <text id="PHO_CREATE_ALBUM" development="new" translation="edited">Creazione album</text>
         <text id="PHO_DISPLAY_PHOTOS" development="new" translation="edited">Come visualizzare le foto</text>
@@ -1082,7 +1081,6 @@
         <text id="SYS_ADMIDIO_TEAM" development="new" translation="edited">Team di Admidio</text>
         <text id="SYS_ADMIDIO_VERSION" development="new" translation="edited">Vwersione di Admidio</text>
         <text id="SYS_ADMINISTRATION" development="new" translation="edited">Amministrazione</text>
-        <text id="SYS_ADMINISTRATION_VAR" development="new" translation="edited">Amministrazione %VAR1%</text>
         <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Errore di richiesta ajax.\nDettagli dell'errore: %VAR1%</text>
         <text id="SYS_ALL" development="new" translation="edited">Tutto</text>
         <text id="SYS_ALSO_VISITORS" development="new" translation="edited">anche i visitatori</text>

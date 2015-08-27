@@ -773,7 +773,6 @@
         <text id="PHO_ALBUM_DELETE" development="new" translation="edited">Verwijder album</text>
         <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="edited">Album is geblokkeerd en gebruikers kunnen dit niet plaatsen. Deblokkeer dit door sleutel symbool in te toetsen.</text>
         <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="edited">Album is succesvol gemaakt/gewijzigd.</text>
-        <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="edited">Album management</text>
         <text id="PHO_BACK_TO_ALBUM" development="new" translation="edited">terug naar album</text>
         <text id="PHO_CREATE_ALBUM" development="new" translation="edited">Album maken</text>
         <text id="PHO_DISPLAY_PHOTOS" development="new" translation="edited">Hoe foto's te tonen</text>
@@ -975,7 +974,6 @@
         <text id="SYS_ADMIDIO_TEAM" development="new" translation="edited">Admidio Team</text>
         <text id="SYS_ADMIDIO_VERSION" development="new" translation="edited">Admidio versie</text>
         <text id="SYS_ADMINISTRATION" development="new" translation="edited">Administratie</text>
-        <text id="SYS_ADMINISTRATION_VAR" development="new" translation="edited">%VAR1% administratie</text>
         <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Ajax foutmelding.\nDetails foutmelding: %VAR1%</text>
         <text id="SYS_ALL" development="new" translation="edited">Iedereen</text>
         <text id="SYS_ALSO_VISITORS" development="new" translation="edited">ook bezoekers</text>

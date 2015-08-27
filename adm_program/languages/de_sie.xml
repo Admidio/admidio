@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de_sie">
     <version id="3.1.0" translator="Markus Faßbender">
+        <text id="BAC_FILE_NAME_INVALID" development="changed" translation="todo">Der ausgewählte Dateiname enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen $!?._+-&amp; .</text>
+        <text id="SYS_CATEGORIES_VAR" development="new" translation="todo">%VAR1%-Kategorien</text>
+        <text id="SYS_CATEGORY_VAR" development="new" translation="todo">%VAR1%-Kategorie</text>
         <text id="ORG_BROWSER_UPDATE_CHECK" development="new" translation="todo">Update Meldung für veraltete Browser</text>
         <text id="ORG_BROWSER_UPDATE_CHECK_DESC" development="new" translation="todo">Nach Aktivierung wird Benutzern mit veraltetem Browser geraten ein Browserupdate durchzuführen. Neuere Browser schützen besser vor Betrug, Viren, Trojanern, Datendiebstahl und anderen Bedrohungen Ihrer Privatsphäre und Sicherheit. Jede neue Browsergeneration verbessert die Geschwindigkeit und die Unterstützung neuer Webtechniken, mit der Webseiten besser dargestellt werden können. Hierzu wird das Service von https://browser-update.org/ verwendet.</text>
     </version>
@@ -375,7 +378,6 @@
         <text id="BAC_DATABASE_BACKUP" development="new" translation="todo">Datenbank-Backup</text>
         <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="todo">Datenbanksicherungen der Admidio-Tabellen können hier erstellt und heruntergeladen werden.</text>
         <text id="BAC_DAYS_VAR" development="new" translation="todo">%VAR1% Tagen</text>
-        <text id="BAC_FILE_NAME_INVALID" development="new" translation="todo">Der ausgewählte Dateiname enthält ungültige Zeichen!</text>
         <text id="BAC_HOURS_VAR" development="new" translation="todo">%VAR1% Stunden</text>
         <text id="BAC_MINUTES_VAR" development="new" translation="todo">%VAR1% Minuten</text>
         <text id="BAC_NO_BACKUP_FILE_EXISTS" development="new" translation="todo">Keine Backupdatei vorhanden!</text>
@@ -894,7 +896,6 @@
         <text id="PHO_ALBUM_DELETE" development="new" translation="todo">Album Löschen</text>
         <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="todo">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt. Sie können das Album über das Schlüsselsymbol in der Bearbeitungszeile freigeben.</text>
         <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="todo">Das Album wurde erfolgreich angelegt / geändert</text>
-        <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="todo">Alben-Verwaltung</text>
         <text id="PHO_BACK_TO_ALBUM" development="new" translation="todo">zurück zum Album</text>
         <text id="PHO_CREATE_ALBUM" development="new" translation="todo">Album anlegen</text>
         <text id="PHO_DISPLAY_PHOTOS" development="new" translation="todo">Fotodarstellung</text>
@@ -1094,7 +1095,6 @@
         <text id="SYS_ADMIDIO_TEAM" development="new" translation="todo">Admidio Team</text>
         <text id="SYS_ADMIDIO_VERSION" development="new" translation="todo">Admidio-Version</text>
         <text id="SYS_ADMINISTRATION" development="new" translation="todo">Administration</text>
-        <text id="SYS_ADMINISTRATION_VAR" development="new" translation="todo">%VAR1%-Verwaltung</text>
         <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: %VAR1%</text>
         <text id="SYS_ALL" development="new" translation="todo">Alle</text>
         <text id="SYS_ALSO_VISITORS" development="new" translation="todo">auch Besucher</text>

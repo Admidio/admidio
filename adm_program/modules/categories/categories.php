@@ -23,32 +23,57 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getType  = admFuncVariableIsValid($_GET, 'type', 'string',  array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
-$getTitle = admFuncVariableIsValid($_GET, 'title', 'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
+$getTitle = admFuncVariableIsValid($_GET, 'title', 'string');
 
 // Modus und Rechte pruefen
-if($getType == 'ROL' && $gCurrentUser->manageRoles() == false)
+if($getType === 'ROL' && $gCurrentUser->manageRoles() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType == 'LNK' && $gCurrentUser->editWeblinksRight() == false)
+elseif($getType === 'LNK' && $gCurrentUser->editWeblinksRight() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType == 'USF' && $gCurrentUser->editUsers() == false)
+elseif($getType === 'USF' && $gCurrentUser->editUsers() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType == 'DAT' && $gCurrentUser->editDates() == false)
+elseif($getType === 'DAT' && $gCurrentUser->editDates() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType == 'AWA' && $gCurrentUser->editUsers() == false)
+elseif($getType === 'AWA' && $gCurrentUser->editUsers() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // set module headline
-$headline = $gL10n->get('SYS_ADMINISTRATION_VAR', $getTitle);
+if($getTitle === '')
+{
+    if($getType === 'ROL')
+    {
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', $gL10n->get('SYS_ROLES'));
+    }
+    elseif($getType === 'LNK')
+    {
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', $gL10n->get('LNK_WEBLINKS'));
+    }
+    elseif($getType === 'USF')
+    {
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', $gL10n->get('ORG_PROFILE_FIELDS'));
+    }
+    else
+    {
+        $headline = $gL10n->get('SYS_CATEGORIES');
+    }
+
+    $addButtonText = $gL10n->get('SYS_CATEGORY');
+}
+else
+{
+    $headline      = $getTitle;
+    $addButtonText = $getTitle;
+}
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 unset($_SESSION['categories_request']);
@@ -118,7 +143,7 @@ $categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10
 
 // define link to create new category
 $categoriesMenu->addItem('admMenuItemNewCategory', $g_root_path.'/adm_program/modules/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
-                            $gL10n->get('SYS_CREATE_VAR', $getTitle), 'add.png');
+                            $gL10n->get('SYS_CREATE_VAR', $addButtonText), 'add.png');
 
 //Create table object
 $categoriesOverview = new HtmlTable('tbl_categories', $page, true);

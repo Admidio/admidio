@@ -667,7 +667,6 @@ elseif($getMode == 'html' || $getMode == 'print')
     // add table list to the page
     $page->addHtml($table->show(false));
 
-
     // create a infobox for the role
     if($getMode == 'html')
     {
