@@ -166,7 +166,7 @@ $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
 
     if($userField->getValue('usf_name_intern') == 'LAST_NAME' || $userField->getValue('usf_name_intern') == 'FIRST_NAME')
     {
-        $form->addCheckbox('usf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), $userField->getValue('usf_mandatory'), array('helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'asterisk_yellow.png'));
+        $form->addCheckbox('usf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), $userField->getValue('usf_mandatory'), array('property' => FIELD_DISABLED, 'helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'asterisk_yellow.png'));
     }
     else
     {
