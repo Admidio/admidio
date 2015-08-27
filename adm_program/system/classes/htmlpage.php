@@ -1,6 +1,4 @@
 <?php
-<<<<<<< HEAD
-=======
 /*****************************************************************************/
 /** @class HtmlPage
  *  @brief Creates an Admidio specific complete html page
@@ -16,9 +14,8 @@
  *  $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.min.js');
  *  $page->setHeadline('A simple Html page');
  *  $page->addHtml('<strong>This is a simple Html page!</strong>');
- *  $page->show();@endcode
+ *  $page->show(); @endcode
  */
->>>>>>> v3.0
 /*****************************************************************************
  *
  *  Copyright    : (c) 2004 - 2015 The Admidio Team
@@ -26,24 +23,7 @@
  *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
-
-/**
- * @class HtmlPage
- * @brief Creates an Admidio specific complete html page
- *
- * This class creates a html page with head and body and integrates some Admidio
- * specific elements like css files, javascript files and javascript code. It
- * also provides some methods to easily add new html data to the page. The generated
- * page will automatically integrate the choosen theme. You can optional disable the
- * integration of the theme files.
- * @par Examples
- * @code // create a simple html page with some text
- * $page = new HtmlPage();
- * $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.min.js');
- * $page->addHeadline('A simple Html page');
- * $page->addHtml('<strong>This is a simple Html page!</strong>');
- * $page->show(); @endcode
- */
+ 
 class HtmlPage
 {
     protected $pageContent;     ///< Contains the custom html of the current page. This will be added to the default html of each page.
@@ -61,33 +41,18 @@ class HtmlPage
     protected $rssFiles;        ///< An array with all necessary rss files for the html page.
     protected $printMode;       ///< A flag that indicates if the page should be styled in print mode then no colors will be shown
 
-<<<<<<< HEAD
-    /**
-     * Constructor creates the page object and initialized all parameters
-     * @param string $title (optional) A string that contains the title/headline for the page.
-=======
     /** Constructor creates the page object and initialized all parameters
      *  @param $headline A string that contains the headline for the page that will be shown in the <h1> tag.
->>>>>>> v3.0
      */
     public function __construct($headline = '')
     {
         global $g_root_path, $gDebug;
 
-<<<<<<< HEAD
-        $this->pageContent   = '';
-        $this->header        = '';
-        $this->title         = $title;
-        $this->headline      = $title;
-        $this->menu          = new HtmlNavbar('menu_main_script', $title, $this);
-        $this->showMenu      = true;
-=======
         $this->pageContent = '';
         $this->header      = '';
         $this->headline    = $headline;
         $this->menu        = new HtmlNavbar('menu_main_script', $headline, $this);
         $this->showMenu    = true;
->>>>>>> v3.0
         $this->showThemeHtml = true;
         $this->printMode     = false;
         $this->hasNavbar     = false;
@@ -136,34 +101,10 @@ class HtmlPage
         $this->header .= $header;
     }
 
-<<<<<<< HEAD
-    /**
-     * Set the h1 headline of the current html page. If the title of the page was not set
-     * until now than this will also be the title.
-     * @param string $headline A string that contains the headline for the page.
-     */
-    public function addHeadline($headline)
-    {
-        if($this->title === '')
-        {
-            $this->setTitle($headline);
-        }
-
-        $this->headline = $headline;
-        $this->menu->setName($headline);
-    }
-
-    /**
-     * Adds any html content to the page. The content will be added in the order
-     * you call this method. The first call will place the content at the top of
-     * the page. The second call below the first etc.
-     * @param string $html A valid html code that will be added to the page.
-=======
     /** Adds any html content to the page. The content will be added in the order
      *  you call this method. The first call will place the content at the top of
      *  the page. The second call below the first etc.
      *  @param $html A valid html code that will be added to the page.
->>>>>>> v3.0
      */
     public function addHtml($html)
     {
@@ -395,11 +336,6 @@ class HtmlPage
         $this->hasNavbar = true;
     }
 
-<<<<<<< HEAD
-    /**
-     * If print mode is set then a print specific css file will be loaded.
-     * All styles will be more print compatible and are only black, grey and white.
-=======
     /** Set the h1 headline of the current html page. If the title of the page was not set
      *  until now than this will also be the title.
      *  @param $headline A string that contains the headline for the page.
@@ -417,21 +353,14 @@ class HtmlPage
 
     /** If print mode is set then a print specific css file will be loaded.
      *  All styles will be more print compatible and are only black, grey and white.
->>>>>>> v3.0
      */
     public function setPrintMode()
     {
         $this->printMode = true;
     }
 
-<<<<<<< HEAD
-    /**
-     * Set the title of the html page. This will also be the h1 headline for the Admidio page.
-     * @param string $title A string that contains the title for the page.
-=======
     /** Set the title of the html page that will be shown in the <title> tag.
      *  @param $title A string that contains the title for the page.
->>>>>>> v3.0
      */
     public function setTitle($title)
     {
@@ -548,19 +477,6 @@ class HtmlPage
             }
         }
 
-<<<<<<< HEAD
-        // add organization name to title
-        if($this->title !== '')
-        {
-            $this->title = $gCurrentOrganization->getValue('org_longname').' - '.$this->title;
-        }
-        else
-        {
-            $this->title = $gCurrentOrganization->getValue('org_longname');
-        }
-
-=======
->>>>>>> v3.0
         // add code for a modal window
         $this->addJavascript('$("body").on("hidden.bs.modal", ".modal", function () { $(this).removeData("bs.modal"); });', true);
         $this->addHtml('<div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
