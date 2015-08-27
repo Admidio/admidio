@@ -227,10 +227,10 @@ class TableUsers extends TableAccess
     public function setPassword($newPassword, $isNewPassword = false, $doHashing = true)
     {
         global $gPreferences;
-        
+
         $columnName = 'usr_password';
-        
-        if($isNewPassword) 
+
+        if($isNewPassword)
         {
             $columnName = 'usr_new_password';
         }
@@ -244,7 +244,7 @@ class TableUsers extends TableAccess
                 $cost = intval($gPreferences['system_hashing_cost']);
             }
 
-            $newPassword = PasswordHashing::hash($newPassword, PASSWORD_DEFAULT, array('cost' => 10));
+            $newPassword = PasswordHashing::hash($newPassword, PASSWORD_DEFAULT, array('cost' => $cost));
         }
 
         return parent::setValue($columnName, $newPassword, false);

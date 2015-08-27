@@ -33,8 +33,11 @@ class PasswordHashing
      */
     public static function hash($password, $algorithm = PASSWORD_DEFAULT, $options = array())
     {
-        if (in_array('cost', $options) && $options['cost'] < 8) {
-            $options['cost'] = 8;
+        if (!in_array('cost', $options)) {
+            $options['cost'] = 10;
+        }
+        if ($options['cost'] < 4) {
+            $options['cost'] = 4;
         }
 
         return password_hash($password, $algorithm, $options);
