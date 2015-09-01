@@ -178,9 +178,6 @@ if(isset($page) && is_object($page))
     $page->addCssFile($g_root_path.'/adm_plugins/calendar/calendar.css');
 }
 
-// set database to admidio, sometimes the user has other database connections at the same time
-$gDb->setCurrentDB();
-
 // Abfrage der Termine
 if($plg_ter_aktiv == 1)
 {

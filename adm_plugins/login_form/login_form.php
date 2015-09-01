@@ -79,10 +79,6 @@ if(isset($page) && is_object($page))
     $page->addCssFile($g_root_path.'/adm_plugins/login_form/login_form.css');
 }
 
-// set database to admidio, sometimes the user has other database connections at the same time
-global $gDb;
-$gDb->setCurrentDB();
-
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
     if($gValidLogin)
     {

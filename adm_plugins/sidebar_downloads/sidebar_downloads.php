@@ -56,9 +56,6 @@ if(!isset($plg_show_upload_timestamp))
 // Sprachdatei des Plugins einbinden
 $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
-// set database to admidio, sometimes the user has other database connections at the same time
-$gDb->setCurrentDB();
-
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_download_module'] == 1)
 {

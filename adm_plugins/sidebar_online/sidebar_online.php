@@ -68,9 +68,6 @@ else
     $plg_link_target = '_self';
 }
 
-// set database to admidio, sometimes the user has other database connections at the same time
-$gDb->setCurrentDB();
-
 // Referenzzeit setzen
 $ref_date = date('Y.m.d H:i:s', time() - 60 * $plg_time_online);
 

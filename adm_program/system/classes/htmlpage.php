@@ -429,16 +429,10 @@ class HtmlPage
             $htmlMyBodyTop = ob_get_contents();
             ob_end_clean();
 
-            // if user had set another db in theme content then switch back to admidio db
-            $gDb->setCurrentDB();
-
             ob_start();
             include(THEME_SERVER_PATH.'/my_body_bottom.php');
             $htmlMyBodyBottom = ob_get_contents();
             ob_end_clean();
-
-            // if user had set another db in theme content then switch back to admidio db
-            $gDb->setCurrentDB();
         }
 
         // add css files to page

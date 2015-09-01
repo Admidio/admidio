@@ -109,9 +109,6 @@ if(isset($page) && is_object($page))
     $page->addCssFile($g_root_path.'/adm_plugins/birthday/birthday.css');
 }
 
-// set database to admidio, sometimes the user has other database connections at the same time
-$gDb->setCurrentDB();
-
 $sql    = 'SELECT DISTINCT usr_id, usr_login_name,
                            last_name.usd_value as last_name, first_name.usd_value as first_name,
                            birthday.bday as birthday, birthday.bdate,

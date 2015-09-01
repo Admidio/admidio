@@ -64,9 +64,6 @@ if(isset($plg_show_preview) == false || is_numeric($plg_show_preview) == false)
 // Sprachdatei des Plugins einbinden
 $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
-// set database to admidio, sometimes the user has other database connections at the same time
-$gDb->setCurrentDB();
-
 //Objekt anlegen
 $plg_announcements = new ModuleAnnouncements();
 
