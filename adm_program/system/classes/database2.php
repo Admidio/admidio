@@ -51,18 +51,20 @@ class Database2
         $this->username = $username;
         $this->password = $password;
         $this->options  = $options;
-        
+
         $this->transactions = 0;
         $this->sqlStatement = null;
         $this->fetchArray   = array();
 
         try
         {
-            if (empty(PDO::getAvailableDrivers()))
+            $availableDrivers = PDO::getAvailableDrivers();
+
+            if (empty($availableDrivers))
             {
                 throw new PDOException('PDO does not support any drivers');
             }
-            if (!in_array($this->engine, PDO::getAvailableDrivers(), true))
+            if (!in_array($this->engine, $availableDrivers, true))
             {
                 throw new PDOException('The requested PDO driver '.$this->engine.' is not supported');
             }
@@ -133,7 +135,7 @@ class Database2
             exit();
         }
     }
-    
+
     /** The method will commit an open transaction to the database. If the
      *  transaction counter is greater 1 than only the counter will be
      *  decreased and no commit will performed.
@@ -158,7 +160,7 @@ class Database2
         $this->transactions = 0;
         return $result;
     }
-    
+
     /** Fetch a result row as an associative array, a numeric array, or both.
      *  @param $fetchType Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
      *                     @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
@@ -187,7 +189,7 @@ class Database2
         }
 
         return null;
-    }    
+    }
 
     /**
      * @return array
@@ -196,7 +198,7 @@ class Database2
     {
         return PDO::getAvailableDrivers();
     }
-    
+
     // Teile dieser Funktion sind von get_backtrace aus phpBB3
     // Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
     protected function getBacktrace()
@@ -254,13 +256,13 @@ class Database2
         $output .= '</div>';
         return $output;
     }
-    
+
     // Liefert die ID einer vorherigen INSERT-Operation
     public function insert_id()
     {
         return $this->pdo->lastInsertId();
     }
-    
+
     /** Returns the number of rows of the last executed statement.
      *  Therefore a valid result must exists or set as parameter.
      *  If no valid result exists the method will return 0.
@@ -271,7 +273,7 @@ class Database2
     public function num_rows()
     {
         $rowCount = 0;
-        
+
         if(is_object($this->pdoStatement))
         {
             $rowCount = $this->pdoStatement->rowCount();
@@ -279,7 +281,7 @@ class Database2
 
         return $rowCount;
     }
-    
+
     /** Send a sql statement to the database that will be executed. If debug mode is set
      *  then this statement will be written to the error log. If it's a @b SELECT statement
      *  then also the number of rows will be logged. If an error occurred the script will
@@ -320,7 +322,7 @@ class Database2
 
         return $this->pdoStatement;
     }
-    
+
     /** If there is a open transaction than this method sends a rollback to the database
      *  and will set the transaction counter to zero.
      */
@@ -340,7 +342,7 @@ class Database2
         }
         return false;
     }
-    
+
     // This method delivers the columns and their properties of the passed variable as an array
     // The array has the following format:
     // array('Fieldname1' => array('serial' => '1', 'null' => '0', 'key' => '0', 'type' => 'integer'),
@@ -397,7 +399,7 @@ class Database2
 
         return $this->dbStructure[$table];
     }
-    
+
     /** Display the error code and error message to the user if a database error occurred.
      *  The error must be read by the child method. This method will call a backtrace so
      *  you see the script and specific line in which the error occurred.
@@ -425,20 +427,22 @@ class Database2
         }
 
         // transform the database error to html
-        $error_string = '<div style="font-family: monospace;">
+        $errorInfo   = $this->pdo->errorInfo();
+
+        $errorString = '<div style="font-family: monospace;">
                          <p><b>S Q L - E R R O R</b></p>
                          <p><b>CODE:</b> '.$this->pdo->errorCode().'</p>
-                         '.$this->pdo->errorInfo()[1].'<br /><br />
-                         '.$this->pdo->errorInfo()[2].'<br /><br />
+                         '.$errorInfo[1].'<br /><br />
+                         '.$errorInfo[2].'<br /><br />
                          <b>B A C K T R A C E</b><br />
                          '.$backtrace.'
                          </div>';
-        $htmlOutput = $error_string;
+        $htmlOutput = $errorString;
 
         // in debug mode show error in log file
         if($gDebug === 1)
         {
-             error_log($this->pdo->errorCode(). ': '. $this->pdo->errorInfo()[1]."\n".$this->pdo->errorInfo()[2]);
+             error_log($this->pdo->errorCode(). ': '. $errorInfo[1]."\n".$errorInfo[2]);
         }
 
         // display database error to user
@@ -454,7 +458,7 @@ class Database2
 
         exit();
     }
-    
+
     /** Checks if an open transaction exists. If there is no open transaction than
      *  start one otherwise increase the internal transaction counter.
      */
