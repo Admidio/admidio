@@ -81,6 +81,8 @@ class Database2
         try
         {
             $this->pdo = new PDO($this->dsn, $this->username, $this->password, $this->options);
+
+            $this->setConnectionOptions();
         }
         catch (PDOException $e)
         {
@@ -341,6 +343,23 @@ class Database2
             return true;
         }
         return false;
+    }
+    
+    /** Set connection specific options like UTF8 connection. These options
+     *  should always be set if Admidio connect to a database.
+     */
+    private function setConnectionOptions()
+    {
+        // Connect to database with UTF8
+        $this->query('SET NAMES \'UTF8\'');
+        
+        if($this->engine === 'mysql')
+        {
+            // ANSI Modus setzen, damit SQL kompatibler zu anderen DBs werden kann
+            $this->query('SET SQL_MODE = \'ANSI\'');
+            // falls der Server die Joins begrenzt hat, kann dies mit diesem Statement aufgehoben werden
+            $this->query('SET SQL_BIG_SELECTS = 1');                
+        }
     }
 
     // This method delivers the columns and their properties of the passed variable as an array

@@ -39,6 +39,16 @@ class ProfileFields
         $this->noValueCheck = false;
         $this->columnsValueChanged = false;
     }
+    
+    /**
+     *  Called on serialization of this object. The database object could not 
+     *  be serialized and should be ignored.
+     *  @return Returns all class variables that should be serialized.
+     */
+    public function __sleep()
+    {
+        return array_diff(array_keys(get_object_vars($this)), array('mDb'));
+    }
 
     /** user data of all profile fields will be initialized
      *  the fields array will not be renewed

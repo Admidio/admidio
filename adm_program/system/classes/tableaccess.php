@@ -29,7 +29,7 @@
  */
 class TableAccess
 {
-    private $additionalTables;      ///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
+    protected $additionalTables;      ///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
     protected $tableName;           ///< Name of the database table of this object. This must be the table name with the installation specific praefix e.g. @b demo_users
     protected $columnPraefix;       ///< The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
     protected $keyColumnName;       ///< Name of the unique autoincrement index column of the database table
@@ -63,6 +63,16 @@ class TableAccess
         {
             $this->clear();
         }
+    }
+
+    /**
+     *  Called on serialization of this object. The database object could not 
+     *  be serialized and should be ignored.
+     *  @return Returns all class variables that should be serialized.
+     */
+    public function __sleep()
+    {
+        return array_diff(array_keys(get_object_vars($this)), array('db'));
     }
 
     /**

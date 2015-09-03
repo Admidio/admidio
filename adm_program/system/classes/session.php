@@ -32,7 +32,7 @@
  */
 class Session extends TableAccess
 {
-    private $mObjectArray = array(); ///< Array with all objects of this session object.
+    protected $mObjectArray = array(); ///< Array with all objects of this session object.
 
     /**
      * Constructor that will create an object of a recordset of the table adm_sessions.
@@ -88,12 +88,14 @@ class Session extends TableAccess
     {
         if(array_key_exists($objectName, $this->mObjectArray))
         {
+            $objectVariables = get_object_vars($this->mObjectArray[$objectName]);
+            
             // if object has database connection add database object
-            if(isset($this->mObjectArray[$objectName]->db))
+            if(in_array('db', array_keys($objectVariables)))
             {
                 $this->mObjectArray[$objectName]->db =& $this->db;
             }
-            if(isset($this->mObjectArray[$objectName]->mDb))
+            if(in_array('mDb', array_keys($objectVariables)))
             {
                 $this->mObjectArray[$objectName]->mDb =& $this->db;
             }

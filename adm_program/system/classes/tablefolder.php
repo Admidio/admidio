@@ -282,13 +282,6 @@ class TableFolder extends TableAccess
                         ORDER BY fol_name';
         $result_folders = $this->db->query($sql_folders);
 
-        //Nun alle Dateien auslesen, die in diesem Verzeichnis enthalten sind
-        $sql_files   = 'SELECT *
-                         FROM '. TBL_FILES. '
-                        WHERE fil_fol_id = '. $this->getValue('fol_id'). '
-                        ORDER BY fil_name';
-        $result_files = $this->db->query($sql_files);
-
         //Nun alle Folders und Files in ein mehrdimensionales Array stopfen
         //angefangen mit den Ordnern:
         while($row_folders = $this->db->fetch_object($result_folders))
@@ -364,6 +357,13 @@ class TableFolder extends TableAccess
                 );
             }
         }
+
+        //Nun alle Dateien auslesen, die in diesem Verzeichnis enthalten sind
+        $sql_files   = 'SELECT *
+                         FROM '. TBL_FILES. '
+                        WHERE fil_fol_id = '. $this->getValue('fol_id'). '
+                        ORDER BY fil_name';
+        $result_files = $this->db->query($sql_files);
 
         //jetzt noch die Dateien ins Array packen:
         while($row_files = $this->db->fetch_object($result_files))
