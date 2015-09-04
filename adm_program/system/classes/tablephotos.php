@@ -29,12 +29,12 @@ class TablePhotos extends TableAccess
 
     /** Constructor that will create an object of a recordset of the table adm_photos.
      *  If the id is set than the specific photo album will be loaded.
-     *  @param object $databaseObject Object of the class Database. This should be the default global object @b $gDb.
-     *  @param int    $pho_id         The recordset of the photo album with this id will be loaded. If id isn't set than an empty object of the table is created.
+     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     *  @param int    $pho_id   The recordset of the photo album with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$databaseObject, $photo_id = 0)
+    public function __construct(&$database, $photo_id = 0)
     {
-        parent::__construct($databaseObject, TBL_PHOTOS, 'pho', $photo_id);
+        parent::__construct($database, TBL_PHOTOS, 'pho', $photo_id);
 
         $hasChildAlbums = null;
     }

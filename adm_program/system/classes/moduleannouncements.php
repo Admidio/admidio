@@ -188,7 +188,6 @@ class ModuleAnnouncements extends Modules
         //Ergebnisse auf Array pushen
         while($row = $gDb->fetch_array())
         {
-            error_log(print_r($row, true));
             $announcements['recordset'][] = $row;
         }
 

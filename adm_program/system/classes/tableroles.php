@@ -36,15 +36,15 @@ class TableRoles extends TableAccess
 
     /** Constructor that will create an object of a recordset of the table adm_roles.
      *  If the id is set than the specific role will be loaded.
-     *  @param object $databaseObject Object of the class Database. This should be the default global object @b $gDb.
-     *  @param int    $rol_id         The recordset of the role with this id will be loaded. If id isn't set than an empty object of the table is created.
+     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     *  @param int    $rol_id   The recordset of the role with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$databaseObject, $rol_id = 0)
+    public function __construct(&$database, $rol_id = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'rol_cat_id');
 
-        parent::__construct($databaseObject, TBL_ROLES, 'rol', $rol_id);
+        parent::__construct($database, TBL_ROLES, 'rol', $rol_id);
     }
 
     /** checks if user is allowed to assign members to this role

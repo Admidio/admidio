@@ -22,15 +22,15 @@ class TableUserField extends TableAccess
     /**
      *  Constructor that will create an object of a recordset of the table adm_user_fields.
      *  If the id is set than the specific user field will be loaded.
-     *  @param object $databaseObject Object of the class Database. This should be the default global object @b $gDb.
-     *  @param int    $usf_id         The recordset of the user field with this id will be loaded. If id isn't set than an empty object of the table is created.
+     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     *  @param int    $usf_id   The recordset of the user field with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$databaseObject, $usf_id = 0)
+    public function __construct(&$database, $usf_id = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'usf_cat_id');
 
-        parent::__construct($databaseObject, TBL_USER_FIELDS, 'usf', $usf_id);
+        parent::__construct($database, TBL_USER_FIELDS, 'usf', $usf_id);
     }
 
     /**

@@ -28,11 +28,11 @@ class RoleDependency
 
     /**
      *  Constructor that will create an object of a recordset of the specified table.
-     *  @param object $databaseObject Object of the class Database. This should be the default global object @b $gDb.
+     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
      */
-    public function __construct(&$databaseObject)
+    public function __construct(&$database)
     {
-        $this->db =& $databaseObject;
+        $this->db =& $database;
         $this->clear();
     }
 

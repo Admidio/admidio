@@ -15,15 +15,15 @@ class TableInventoryField extends TableAccess
 {
     /** Constructor that will create an object of a recordset of the table adm_invent_fields.
      *  If the id is set than the specific item field will be loaded.
-     *  @param object $databaseObject Object of the class Database. This should be the default global object @b $gDb.
-     *  @param int    $inf_id         The recordset of the item field with this id will be loaded. If id isn't set than an empty object of the table is created.
+     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     *  @param int    $inf_id   The recordset of the item field with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$databaseObject, $inf_id = 0)
+    public function __construct(&$database, $inf_id = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'inf_cat_id');
 
-        parent::__construct($databaseObject, TBL_INVENT_FIELDS, 'inf', $inf_id);
+        parent::__construct($database, TBL_INVENT_FIELDS, 'inf', $inf_id);
     }
 
     /** Deletes the selected field and all references in other tables. Also

@@ -43,17 +43,17 @@ class TableAccess
     /**
      * Constructor that will create an object of a recordset of the specified table.
      * If the id is set than this recordset will be loaded.
-     * @param object     $databaseObject Object of the class Database. This should be the default global object @b $gDb.
-     * @param string     $tableName      The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
-     * @param string     $columnPraefix  The praefix of each column of that table. E.g. for table @b adm_roles this is @b rol
-     * @param string|int $id             The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+     * @param object     $database      Object of the class Database. This should be the default global object @b $gDb.
+     * @param string     $tableName     The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
+     * @param string     $columnPraefix The praefix of each column of that table. E.g. for table @b adm_roles this is @b rol
+     * @param string|int $id            The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$databaseObject, $tableName, $columnPraefix, $id = '')
+    public function __construct(&$database, $tableName, $columnPraefix, $id = '')
     {
         $this->tableName     = $tableName;
         $this->columnPraefix = $columnPraefix;
         
-        $this->setDatabase($databaseObject);
+        $this->setDatabase($database);
 
         // if a id is commited, then read data out of database
         if((!is_numeric($id) && $id !== '') || (is_numeric($id) && $id > 0))
@@ -570,13 +570,13 @@ class TableAccess
 
     /**
      *  Set the database object for communication with the database of this class.
-     *  @param object $databaseObject An object of the class Database. This should be the global $gDb object.
+     *  @param object $database An object of the class Database. This should be the global $gDb object.
      */
-    public function setDatabase(&$databaseObject)
+    public function setDatabase(&$database)
     {
-        if(is_object($databaseObject))
+        if(is_object($database))
         {
-            $this->db =& $databaseObject;
+            $this->db =& $database;
         }
     }
 

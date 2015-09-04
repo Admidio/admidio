@@ -30,14 +30,14 @@ class Organization extends TableAccess
 
     /** Constructor that will create an object of a recordset of the table adm_organizations.
      *  If the id is set than the specific organization will be loaded.
-     *  @param object     $databaseObject Object of the class Database. This should be the default global object @b $gDb.
+     *  @param object     $database     Object of the class Database. This should be the default global object @b $gDb.
      *  @param int|string $organization The recordset of the organization with this id will be loaded.
      *                                  The organization can be the table id or the organization shortname.
      *                                  If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$databaseObject, $organization = '')
+    public function __construct(&$database, $organization = '')
     {
-        parent::__construct($databaseObject, TBL_ORGANIZATIONS, 'org');
+        parent::__construct($database, TBL_ORGANIZATIONS, 'org');
 
         if(is_numeric($organization))
         {

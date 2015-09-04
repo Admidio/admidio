@@ -48,21 +48,21 @@ class User extends TableUsers
     /**
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
-     * @param object $databaseObject Object of the class Database. This should be the default global object @b $gDb.
+     * @param object $database   Object of the class Database. This should be the default global object @b $gDb.
      * @param object $userFields An object of the ProfileFields class with the profile field structure
      *                           of the current organization. This could be the default object @b $gProfileFields.
      * @param int    $userId     The id of the user who should be loaded. If id isn't set than an empty object with
      *                           no specific user is created.
      */
-    public function __construct(&$databaseObjectdb, $userFields, $userId = 0)
+    public function __construct(&$database, $userFields, $userId = 0)
     {
         global $gCurrentOrganization;
 
         $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
-        $this->mProfileFieldsData->setDatabase($databaseObject);
+        $this->mProfileFieldsData->setDatabase($database);
         
         $this->organizationId = $gCurrentOrganization->getValue('org_id');
-        parent::__construct($databaseObject, $userId);
+        parent::__construct($database, $userId);
     }
 
     /**

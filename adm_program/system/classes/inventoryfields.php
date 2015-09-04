@@ -28,13 +28,13 @@ class InventoryFields
     public $columnsValueChanged;        ///< flag if a value of one field had changed
 
     /** constructor that will initialize variables and read the inventory field structure
-     *  @param $databaseObject Object of the class Database. This should be the default global object @b $gDb.
+     *  @param $database       Object of the class Database. This should be the default global object @b $gDb.
      *  @param $organizationId The id of the organization for which the
      *                         profile field structure should be read
      */
-    public function __construct(&$databaseObject, $organizationId)
+    public function __construct(&$database, $organizationId)
     {
-        $this->mDb =& $databaseObject;
+        $this->mDb =& $database;
         $this->readInventoryFields($organizationId);
         $this->mItemId = 0;
         $this->noValueCheck = false;

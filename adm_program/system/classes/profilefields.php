@@ -28,12 +28,12 @@ class ProfileFields
     public $columnsValueChanged;        ///< flag if a value of one field had changed
 
     /** constructor that will initialize variables and read the profile field structure
-     *  @param object $db Database object (should be @b $gDb)
-     *  @param $organizationId The id of the organization for which the profile field structure should be read
+     *  @param object $database       Database object (should be @b $gDb)
+     *  @param int    $organizationId The id of the organization for which the profile field structure should be read
      */
-    public function __construct(&$databaseObject, $organizationId)
+    public function __construct(&$database, $organizationId)
     {
-        $this->setDatabase($databaseObject);
+        $this->setDatabase($database);
         
         $this->readProfileFields($organizationId);
         $this->mUserId = 0;
@@ -468,13 +468,13 @@ class ProfileFields
 
     /**
      *  Set the database object for communication with the database of this class.
-     *  @param object $databaseObject An object of the class Database. This should be the global $gDb object.
+     *  @param object $database An object of the class Database. This should be the global $gDb object.
      */
-    public function setDatabase(&$databaseObject)
+    public function setDatabase(&$database)
     {
-        if(is_object($databaseObject))
+        if(is_object($database))
         {
-            $this->mDb =& $databaseObject;
+            $this->mDb =& $database;
         }
     }
 

@@ -1203,7 +1203,7 @@ class HtmlForm extends HtmlFormBasic
      * of the third column changed a new optiongroup will be created.
      * @param string $id             Id of the selectbox. This will also be the name of the selectbox.
      * @param string $label          The label of the selectbox.
-     * @param object $databaseObject A Admidio database object that contains a valid connection to a database
+     * @param object $database Object of the class Database. This should be the default global object @b $gDb.
      * @param string $sql            Any SQL statement that return 2 columns. The first column will be the internal value of the
      *                               selectbox item and will be submitted with the form. The second column represents the
      *                               displayed value of the item. Each row of the result will be a new selectbox entry.
@@ -1243,15 +1243,15 @@ class HtmlForm extends HtmlFormBasic
      * $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, array('defaultValue' => $gL10n->get('SYS_SURNAME'), 'showContextDependentFirstEntry' => true));
      * $form->show(); @endcode
      */
-    public function addSelectBoxFromSql($id, $label, $databaseObject, $sql, $options = array())
+    public function addSelectBoxFromSql($id, $label, $database, $sql, $options = array())
     {
         $selectboxEntries = array();
 
         // execute the sql statement
-        $result = $databaseObject->query($sql);
+        $result = $database->query($sql);
 
         // create array from sql result
-        while($row = $databaseObject->fetch_array($result))
+        while($row = $database->fetch_array($result))
         {
             // if result has 3 columns then create a array in array
             if(array_key_exists(2, $row))
@@ -1334,7 +1334,7 @@ class HtmlForm extends HtmlFormBasic
      * You must define the category type (roles, dates, links ...). All categories of this type will be shown.
      * @param string $id             Id of the selectbox. This will also be the name of the selectbox.
      * @param string $label          The label of the selectbox.
-     * @param object $databaseObject A Admidio database object that contains a valid connection to a database
+     * @param object $database A Admidio database object that contains a valid connection to a database
      * @param string $categoryType   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
      * @param string $selectboxModus The selectbox could be shown in 2 different modus.
      *                               - @b EDIT_CATEGORIES : First entry will be "Please choose" and default category will be preselected.
@@ -1359,7 +1359,7 @@ class HtmlForm extends HtmlFormBasic
      *                        - @b class : An additional css classname. The class @b admSelectbox
      *                          is set as default and need not set with this parameter.
      */
-    public function addSelectBoxForCategories($id, $label, $databaseObject, $categoryType, $selectboxModus, $options = array())
+    public function addSelectBoxForCategories($id, $label, $database, $categoryType, $selectboxModus, $options = array())
     {
         global $gCurrentOrganization, $gValidLogin, $gL10n;
 
@@ -1421,8 +1421,8 @@ class HtmlForm extends HtmlFormBasic
                    AND cat_type   = \''.$categoryType.'\'
                        '.$sqlCondidtions.'
                  ORDER BY cat_sequence ASC ';
-        $result = $databaseObject->query($sql);
-        $countCategories = $databaseObject->num_rows($result);
+        $result = $database->query($sql);
+        $countCategories = $database->num_rows($result);
 
         // if only one category exists then select this if not in filter modus
         if($countCategories === 1)
@@ -1433,7 +1433,7 @@ class HtmlForm extends HtmlFormBasic
                 return null;
             }
 
-            $row = $databaseObject->fetch_array($result);
+            $row = $database->fetch_array($result);
             if($optionsAll['defaultValue'] === null)
             {
                 $optionsAll['defaultValue'] = $row['cat_id'];
@@ -1457,7 +1457,7 @@ class HtmlForm extends HtmlFormBasic
                 $categoriesArray[0] = $gL10n->get('SYS_ALL');
             }
 
-            while($row = $databaseObject->fetch_array($result))
+            while($row = $database->fetch_array($result))
             {
                 // if text is a translation-id then translate it
                 if(strpos($row['cat_name'], '_') == 3)
