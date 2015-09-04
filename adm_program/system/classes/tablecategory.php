@@ -26,12 +26,12 @@ class TableCategory extends TableAccess
 
     /** Constructor that will create an object of a recordset of the table adm_category.
      *  If the id is set than the specific category will be loaded.
-     *  @param $db Object of the class database. This should be the default object $gDb.
+     *  @param object $databaseObject Object of the class Database. This should be the default global object @b $gDb.
      *  @param $cat_id The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$db, $cat_id = 0)
+    public function __construct(&$databaseObject, $cat_id = 0)
     {
-        parent::__construct($db, TBL_CATEGORIES, 'cat', $cat_id);
+        parent::__construct($databaseObject, TBL_CATEGORIES, 'cat', $cat_id);
     }
 
     /** Deletes the selected record of the table and all references in other tables.

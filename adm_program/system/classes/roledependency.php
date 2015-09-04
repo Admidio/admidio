@@ -13,7 +13,7 @@
  */
 class RoleDependency
 {
-    public $db;
+    protected $db;          ///< An object of the class Database for communication with the database
 
     public $roleIdParent;
     public $roleIdChild;
@@ -27,18 +27,18 @@ class RoleDependency
     public $persisted;
 
     /**
-     * Constructor
-     * @param object $db
+     *  Constructor that will create an object of a recordset of the specified table.
+     *  @param object $databaseObject Object of the class Database. This should be the default global object @b $gDb.
      */
-    public function __construct(&$db)
+    public function __construct(&$databaseObject)
     {
-        $this->db =& $db;
+        $this->db =& $databaseObject;
         $this->clear();
     }
 
     /**
-     * alle Klassenvariablen wieder zuruecksetzen
-     * @return void
+     *  Initializes all class parameters and deletes all read data.
+     *  @return void
      */
     public function clear()
     {
@@ -51,7 +51,7 @@ class RoleDependency
         $this->roleIdParentOrig = 0;
         $this->roleIdChildOrig  = 0;
 
-        $this->persisted = false;
+        $this->persisted        = false;
     }
 
     /**

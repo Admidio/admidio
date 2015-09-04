@@ -22,17 +22,17 @@ class TableDate extends TableAccess
     protected $changeVisibleRoles;
 
     /**
-     * Constructor that will create an object of a recordset of the table adm_dates.
-     * If the id is set than the specific date will be loaded.
-     * @param $db Object of the class database. This should be the default object $gDb.
-     * @param $dat_id The recordset of the date with this id will be loaded. If id isn't set than an empty object of the table is created.
+     *  Constructor that will create an object of a recordset of the table adm_dates.
+     *  If the id is set than the specific date will be loaded.
+     *  @param object $databaseObject Object of the class Database. This should be the default global object @b $gDb.
+     *  @param int    $dat_id         The recordset of the date with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$db, $dat_id = 0)
+    public function __construct(&$databaseObject, $dat_id = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'dat_cat_id');
 
-        parent::__construct($db, TBL_DATES, 'dat', $dat_id);
+        parent::__construct($databaseObject, TBL_DATES, 'dat', $dat_id);
     }
 
     /**

@@ -27,12 +27,12 @@ class TableFolder extends TableAccess
 
     /** Constructor that will create an object of a recordset of the table adm_folders.
      *  If the id is set than the specific folder will be loaded.
-     *  @param $db Object of the class database. This should be the default object $gDb.
-     *  @param $folderId The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
+     *  @param object $databaseObject Object of the class Database. This should be the default global object @b $gDb.
+     *  @param int    $folderId       The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$db, $folderId = 0)
+    public function __construct(&$databaseObject, $folderId = 0)
     {
-        parent::__construct($db, TBL_FOLDERS, 'fol', $folderId);
+        parent::__construct($databaseObject, TBL_FOLDERS, 'fol', $folderId);
 
         $this->folderPath = new Folder();
     }

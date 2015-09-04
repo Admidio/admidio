@@ -28,18 +28,18 @@ class SystemMail extends Email
 {
     private $smTextObject;
     private $smOrganization;
-    private $db;
+    private $db;                    ///< An object of the class Database for communication with the database
     private $smMailText;
     private $smMailHeader;
-    private $smVariables = array();   // speichert zusaetzliche Variablen fuer den Mailtext
+    private $smVariables = array(); // speichert zusaetzliche Variablen fuer den Mailtext
 
     /**
-     * Constructor
-     * @param object $db
+     *  Constructor that will create an object of a SystemMail to handle all system notifications.
+     *  @param object $databaseObject Object of the class Database. This should be the default global object @b $gDb.
      */
-    public function __construct(&$db)
+    public function __construct(&$databaseObject)
     {
-        $this->db          =& $db;
+        $this->db          =& $databaseObject;
         $this->smTextObject = new TableText($this->db);
         parent::__construct();
     }

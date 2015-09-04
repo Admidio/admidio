@@ -44,7 +44,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
     $photo_album =& $_SESSION['photo_album'];
-    $photo_album->db =& $gDb;
+    $photo_album->setDatabase($gDb);
 }
 else
 {

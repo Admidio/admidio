@@ -27,15 +27,15 @@ class TableMembers extends TableAccess
 {
     /** Constructor that will create an object of a recordset of the table adm_members.
      *  If the id is set than the specific membership will be loaded.
-     *  @param $db Object of the class database. This should be the default object $gDb.
-     *  @param $mem_id The recordset of the membership with this id will be loaded. If id isn't set than an empty object of the table is created.
+     *  @param object $databaseObject Object of the class Database. This should be the default global object @b $gDb.
+     *  @param int    $mem_id         The recordset of the membership with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$db, $mem_id = 0)
+    public function __construct(&$databaseObject, $mem_id = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_ROLES, 'rol_id', 'mem_rol_id');
 
-        parent::__construct($db, TBL_MEMBERS, 'mem', $mem_id);
+        parent::__construct($databaseObject, TBL_MEMBERS, 'mem', $mem_id);
     }
 
     /** Deletes a membership for the assigned role and user. In opposite to removeMembership

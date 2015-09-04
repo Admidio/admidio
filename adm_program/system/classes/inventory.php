@@ -30,18 +30,18 @@ class Inventory extends TableInventory
 
     /** Constructor that will create an object of a recordset of the users table.
      *  If the id is set than this recordset will be loaded.
-     *  @param $db          Object of the class database. This could be the default object @b $gDb.
-     *  @param $userFields  An object of the ProfileFields class with the profile field structure
-     *                      of the current organization. This could be the default object @b $gProfileFields.
-     *  @param $userId      The id of the user who should be loaded. If id isn't set than an empty object with no specific user is created.
+     *  @param $databaseObject Object of the class database. This could be the default object @b $gDb.
+     *  @param $userFields     An object of the ProfileFields class with the profile field structure
+     *                         of the current organization. This could be the default object @b $gProfileFields.
+     *  @param $userId         The id of the user who should be loaded. If id isn't set than an empty object with no specific user is created.
      */
-    public function __construct(&$db, $inventoryFields, $itemId = 0)
+    public function __construct(&$databaseObject, $inventoryFields, $itemId = 0)
     {
         global $gCurrentOrganization;
 
         $this->mInventoryFieldsData = clone $inventoryFields; // create explicit a copy of the object (param is in PHP5 a reference)
         $this->organizationId = $gCurrentOrganization->getValue('org_id');
-        parent::__construct($db, $itemId);
+        parent::__construct($databaseObject, $itemId);
     }
 
 

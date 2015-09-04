@@ -23,7 +23,7 @@ class ProfileFields
     public $mUserData = array();        ///< Array with all user data objects
 
     protected $mUserId;                 ///< UserId of the current user of this object
-    public $mDb;                        ///< db object must public because of session handling
+    protected $mDb;                     ///< An object of the class Database for communication with the database
     protected $noValueCheck;            ///< if true, than no value will be checked if method setValue is called
     public $columnsValueChanged;        ///< flag if a value of one field had changed
 
@@ -31,17 +31,18 @@ class ProfileFields
      *  @param object $db Database object (should be @b $gDb)
      *  @param $organizationId The id of the organization for which the profile field structure should be read
      */
-    public function __construct(&$db, $organizationId)
+    public function __construct(&$databaseObject, $organizationId)
     {
-        $this->mDb =& $db;
+        $this->setDatabase($databaseObject);
+        
         $this->readProfileFields($organizationId);
         $this->mUserId = 0;
         $this->noValueCheck = false;
         $this->columnsValueChanged = false;
     }
-    
+
     /**
-     *  Called on serialization of this object. The database object could not 
+     *  Called on serialization of this object. The database object could not
      *  be serialized and should be ignored.
      *  @return Returns all class variables that should be serialized.
      */
@@ -463,6 +464,18 @@ class ProfileFields
         $this->columnsValueChanged = false;
         $this->mUserId = $userId;
         $this->mDb->endTransaction();
+    }
+
+    /**
+     *  Set the database object for communication with the database of this class.
+     *  @param object $databaseObject An object of the class Database. This should be the global $gDb object.
+     */
+    public function setDatabase(&$databaseObject)
+    {
+        if(is_object($databaseObject))
+        {
+            $this->mDb =& $databaseObject;
+        }
     }
 
     // set value for column usd_value of field

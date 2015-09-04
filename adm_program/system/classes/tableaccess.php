@@ -29,11 +29,11 @@
  */
 class TableAccess
 {
-    protected $additionalTables;      ///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
+    protected $additionalTables;    ///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
     protected $tableName;           ///< Name of the database table of this object. This must be the table name with the installation specific praefix e.g. @b demo_users
     protected $columnPraefix;       ///< The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
     protected $keyColumnName;       ///< Name of the unique autoincrement index column of the database table
-    public $db;                     ///< Database object to handle the communication with the database. This must be public because of session handling.
+    protected $db;                  ///< An object of the class Database for communication with the database
 
     protected $new_record;          // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
     protected $columnsValueChanged; ///< Flag will be set to true if data in array dbColumns was changed
@@ -43,16 +43,17 @@ class TableAccess
     /**
      * Constructor that will create an object of a recordset of the specified table.
      * If the id is set than this recordset will be loaded.
-     * @param object     $db            Object of the class database. This should be the default object @b $gDb.
-     * @param string     $tableName     The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
-     * @param string     $columnPraefix The praefix of each column of that table. E.g. for table @b adm_roles this is @b rol
-     * @param string|int $id            The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+     * @param object     $databaseObject Object of the class Database. This should be the default global object @b $gDb.
+     * @param string     $tableName      The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
+     * @param string     $columnPraefix  The praefix of each column of that table. E.g. for table @b adm_roles this is @b rol
+     * @param string|int $id             The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$db, $tableName, $columnPraefix, $id = '')
+    public function __construct(&$databaseObject, $tableName, $columnPraefix, $id = '')
     {
-        $this->db            =& $db;
         $this->tableName     = $tableName;
         $this->columnPraefix = $columnPraefix;
+        
+        $this->setDatabase($databaseObject);
 
         // if a id is commited, then read data out of database
         if((!is_numeric($id) && $id !== '') || (is_numeric($id) && $id > 0))
@@ -565,6 +566,18 @@ class TableAccess
             $this->columnsInfos[$field]['changed'] = false;
         }
         $this->new_record = false;
+    }
+
+    /**
+     *  Set the database object for communication with the database of this class.
+     *  @param object $databaseObject An object of the class Database. This should be the global $gDb object.
+     */
+    public function setDatabase(&$databaseObject)
+    {
+        if(is_object($databaseObject))
+        {
+            $this->db =& $databaseObject;
+        }
     }
 
     /**

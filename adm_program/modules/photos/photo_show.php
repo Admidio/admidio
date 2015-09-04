@@ -45,7 +45,7 @@ $image = NULL;
 if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
     $photoAlbum =& $_SESSION['photo_album'];
-    $photoAlbum->db =& $gDb;
+    $photoAlbum->setDatabase($gDb);
 }
 else
 {

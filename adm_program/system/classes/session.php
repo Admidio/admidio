@@ -37,14 +37,14 @@ class Session extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_sessions.
      * If the id is set than the specific session will be loaded.
-     * @param object $db Object of the class database. This should be the default object $gDb.
-     * @param $session The recordset of the session with this id will be loaded.
-     *                   The session can be the table id or the alphanumeric session id.
-     *                   If id isn't set than an empty object of the table is created.
+     * @param object     $databaseObject Object of the class Database. This should be the default global object @b $gDb.
+     * @param int|string $session        The recordset of the session with this id will be loaded.
+     *                                   The session can be the table id or the alphanumeric session id.
+     *                                   If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$db, $session = 0)
+    public function __construct(&$databaseObject, $session = 0)
     {
-        parent::__construct($db, TBL_SESSIONS, 'ses');
+        parent::__construct($databaseObject, TBL_SESSIONS, 'ses');
 
         if(is_numeric($session))
         {
@@ -93,11 +93,11 @@ class Session extends TableAccess
             // if object has database connection add database object
             if(in_array('db', array_keys($objectVariables)))
             {
-                $this->mObjectArray[$objectName]->db =& $this->db;
+                $this->mObjectArray[$objectName]->setDatabase($this->db);
             }
             if(in_array('mDb', array_keys($objectVariables)))
             {
-                $this->mObjectArray[$objectName]->mDb =& $this->db;
+                $this->mObjectArray[$objectName]->setDatabase($this->db);
             }
 
             // return reference of object
