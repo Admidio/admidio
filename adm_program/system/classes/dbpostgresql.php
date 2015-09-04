@@ -82,11 +82,12 @@ class DBPostgreSQL extends DBCommon
         return pg_fetch_assoc($result);
     }
 
-    /** Fetch a result row as an associative array, a numeric array, or both.
-     *  @param $result     The result resource that is being evaluated. This result comes from a call to query().
-     *  @param $resultType Set the result type. Can contain @b ASSOC for an associative array,
-     *                     @b NUM for a numeric array or @b BOTH (Default).
-     *  @return Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
+    /**
+     * Fetch a result row as an associative array, a numeric array, or both.
+     * @param $result     The result resource that is being evaluated. This result comes from a call to query().
+     * @param $resultType Set the result type. Can contain @b ASSOC for an associative array,
+     *                    @b NUM for a numeric array or @b BOTH (Default).
+     * @return array Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
      */
     public function fetch_array($result = false, $resultType = 'BOTH')
     {

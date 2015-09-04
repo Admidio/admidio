@@ -1,21 +1,4 @@
 <?php
-/*****************************************************************************/
-/** @class HtmlPage
- *  @brief Creates an Admidio specific complete html page
- *
- *  This class creates a html page with head and body and integrates some Admidio
- *  specific elements like css files, javascript files and javascript code. It
- *  also provides some methods to easily add new html data to the page. The generated
- *  page will automatically integrate the choosen theme. You can optional disable the
- *  integration of the theme files.
- *  @par Examples
- *  @code // create a simple html page with some text
- *  $page = new HtmlPage();
- *  $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.min.js');
- *  $page->setHeadline('A simple Html page');
- *  $page->addHtml('<strong>This is a simple Html page!</strong>');
- *  $page->show(); @endcode
- */
 /*****************************************************************************
  *
  *  Copyright    : (c) 2004 - 2015 The Admidio Team
@@ -23,7 +6,24 @@
  *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
- 
+
+/**
+ * @class HtmlPage
+ * @brief Creates an Admidio specific complete html page
+ *
+ * This class creates a html page with head and body and integrates some Admidio
+ * specific elements like css files, javascript files and javascript code. It
+ * also provides some methods to easily add new html data to the page. The generated
+ * page will automatically integrate the choosen theme. You can optional disable the
+ * integration of the theme files.
+ * @par Examples
+ * @code // create a simple html page with some text
+ * $page = new HtmlPage();
+ * $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.min.js');
+ * $page->setHeadline('A simple Html page');
+ * $page->addHtml('<strong>This is a simple Html page!</strong>');
+ * $page->show(); @endcode
+ */
 class HtmlPage
 {
     protected $pageContent;     ///< Contains the custom html of the current page. This will be added to the default html of each page.
@@ -41,18 +41,19 @@ class HtmlPage
     protected $rssFiles;        ///< An array with all necessary rss files for the html page.
     protected $printMode;       ///< A flag that indicates if the page should be styled in print mode then no colors will be shown
 
-    /** Constructor creates the page object and initialized all parameters
-     *  @param $headline A string that contains the headline for the page that will be shown in the <h1> tag.
+    /**
+     * Constructor creates the page object and initialized all parameters
+     * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag.
      */
     public function __construct($headline = '')
     {
         global $g_root_path, $gDebug;
 
-        $this->pageContent = '';
-        $this->header      = '';
-        $this->headline    = $headline;
-        $this->menu        = new HtmlNavbar('menu_main_script', $headline, $this);
-        $this->showMenu    = true;
+        $this->pageContent   = '';
+        $this->header        = '';
+        $this->headline      = $headline;
+        $this->menu          = new HtmlNavbar('menu_main_script', $headline, $this);
+        $this->showMenu      = true;
         $this->showThemeHtml = true;
         $this->printMode     = false;
         $this->hasNavbar     = false;
@@ -101,10 +102,11 @@ class HtmlPage
         $this->header .= $header;
     }
 
-    /** Adds any html content to the page. The content will be added in the order
-     *  you call this method. The first call will place the content at the top of
-     *  the page. The second call below the first etc.
-     *  @param $html A valid html code that will be added to the page.
+    /**
+     * Adds any html content to the page. The content will be added in the order
+     * you call this method. The first call will place the content at the top of
+     * the page. The second call below the first etc.
+     * @param string $html A valid html code that will be added to the page.
      */
     public function addHtml($html)
     {
@@ -141,7 +143,10 @@ class HtmlPage
         }
     }
 
-
+    /**
+     * Adds the default menu
+     * @return void
+     */
     public function addDefaultMenu()
     {
         global $gL10n, $gPreferences, $gValidLogin, $gDb, $gCurrentUser;
@@ -280,10 +285,10 @@ class HtmlPage
             $this->rssFiles[] = $file;
         }
     }
-    
-    /* Returns the headline of the current Admidio page. This is the text
-     * of the <h1> tag of the page.
-     * @return Returns the headline of the current Admidio page.
+
+    /**
+     * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
+     * @return string Returns the headline of the current Admidio page.
      */
     public function getHeadline()
     {
@@ -311,6 +316,7 @@ class HtmlPage
     /**
      * Every html page of Admidio contains a menu.
      * If the menu should not be included in the current page, than this method must be called.
+     * @return void
      */
     public function hideMenu()
     {
@@ -322,6 +328,7 @@ class HtmlPage
      * my_header.php, my_body_top.php and my_body_bottom.php
      * With these files the webmaster can contain custom layout to Admidio.
      * If these files should not be included in the current page, than this method must be called.
+     * @return void
      */
     public function hideThemeHtml()
     {
@@ -330,19 +337,22 @@ class HtmlPage
 
     /**
      * Flag if the current page has a navbar.
+     * @return void
      */
     public function hasNavbar()
     {
         $this->hasNavbar = true;
     }
 
-    /** Set the h1 headline of the current html page. If the title of the page was not set
-     *  until now than this will also be the title.
-     *  @param $headline A string that contains the headline for the page.
+    /**
+     * Set the h1 headline of the current html page. If the title of the page
+     * was not set until now than this will also be the title.
+     * @param string $headline A string that contains the headline for the page.
+     * @return void
      */
     public function setHeadline($headline)
     {
-        if(strlen($this->title) == 0)
+        if($this->title === '')
         {
             $this->setTitle($headline);
         }
@@ -351,21 +361,25 @@ class HtmlPage
         $this->menu->setName($headline);
     }
 
-    /** If print mode is set then a print specific css file will be loaded.
-     *  All styles will be more print compatible and are only black, grey and white.
+    /**
+     * If print mode is set then a print specific css file will be loaded.
+     * All styles will be more print compatible and are only black, grey and white.
+     * @return void
      */
     public function setPrintMode()
     {
         $this->printMode = true;
     }
 
-    /** Set the title of the html page that will be shown in the <title> tag.
-     *  @param $title A string that contains the title for the page.
+    /**
+     * Set the title of the html page that will be shown in the <title> tag.
+     * @param string $title A string that contains the title for the page.
+     * @return void
      */
     public function setTitle($title)
     {
         global $gCurrentOrganization;
-        
+
         if($title !== '')
         {
             $this->title = $gCurrentOrganization->getValue('org_longname') . ' - ' . $title;
