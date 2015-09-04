@@ -15,7 +15,7 @@
  * sequence : new sequence für profile field
  *
  *****************************************************************************/
- 
+
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
@@ -36,14 +36,14 @@ $userField = new TableUserField($gDb);
 if($getUsfId > 0)
 {
     $userField->readDataById($getUsfId);
-    
+
     // check if profile field belongs to actual organization
     if($userField->getValue('cat_org_id') >  0
     && $userField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
-    
+
     // if system profile field then set usf_type to default
     if($userField->getValue('usf_system') == 1)
     {
@@ -56,7 +56,7 @@ if($getMode == 1)
    // Feld anlegen oder updaten
 
     $_SESSION['fields_request'] = $_POST;
-    
+
     // pruefen, ob Pflichtfelder gefuellt sind
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
     if($userField->getValue('usf_system') == 0 && strlen($_POST['usf_name']) == 0)
@@ -79,22 +79,22 @@ if($getMode == 1)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_VALUE_LIST')));
     }
-    
+
     // Nachname und Vorname sollen immer Pflichtfeld bleiben
-    if($userField->getValue('usf_name_intern') == 'LAST_NAME'
-    || $userField->getValue('usf_name_intern') == 'FIRST_NAME')
+    if($userField->getValue('usf_name_intern') === 'LAST_NAME'
+    || $userField->getValue('usf_name_intern') === 'FIRST_NAME')
     {
         $_POST['usf_mandatory'] = 1;
     }
-    
+
     if(isset($_POST['usf_name']) && $userField->getValue('usf_name') != $_POST['usf_name'])
     {
         // Schauen, ob das Feld bereits existiert
-        $sql    = 'SELECT COUNT(*) as count 
-                     FROM '. TBL_USER_FIELDS. '
-                    WHERE usf_name LIKE \''.$_POST['usf_name'].'\'
-                      AND usf_cat_id  = '.$_POST['usf_cat_id'].'
-                      AND usf_id     <> '.$getUsfId;
+        $sql = 'SELECT COUNT(*) as count
+                  FROM '. TBL_USER_FIELDS. '
+                 WHERE usf_name LIKE \''.$_POST['usf_name'].'\'
+                   AND usf_cat_id  = '.$_POST['usf_cat_id'].'
+                   AND usf_id     <> '.$getUsfId;
         $result = $gDb->query($sql);
         $row    = $gDb->fetch_array($result);
 
@@ -113,15 +113,15 @@ if($getMode == 1)
     {
         $_POST['usf_hidden'] = 1;
     }
-    if(isset($_POST['usf_disabled']) == false)
+    if(!isset($_POST['usf_disabled']))
     {
         $_POST['usf_disabled'] = 0;
     }
-    if(isset($_POST['usf_mandatory']) == false)
+    if(!isset($_POST['usf_mandatory']))
     {
         $_POST['usf_mandatory'] = 0;
     }
-    
+
     // make html in description secure
     $_POST['usf_description'] = admFuncVariableIsValid($_POST, 'usf_description', 'html');
 
@@ -140,7 +140,7 @@ if($getMode == 1)
             }
         }
     }
-    
+
     // Daten in Datenbank schreiben
     $return_code = $userField->save();
 
@@ -178,5 +178,5 @@ elseif($getMode == 4)
     $userField->moveSequence($getSequence);
     exit();
 }
-         
+
 ?>

@@ -22,7 +22,7 @@ $showOption = admFuncVariableIsValid($_GET, 'show_option', 'string');
 $headline = $gL10n->get('SYS_SETTINGS');
 
 // only webmasters are allowed to edit organization preferences
-if($gCurrentUser->isWebmaster() == false)
+if(!$gCurrentUser->isWebmaster())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -41,22 +41,29 @@ foreach($gPreferences as $key => $value)
 
 // create html page object
 $page = new HtmlPage($headline);
-$showOptionValidModules = array('announcements', 'downloads', 'guestbook', 'ecards', 'lists', 'messages', 'photos', 'profile', 'events', 'links', 'user_management');
+$showOptionValidModules = array('announcements', 'downloads', 'guestbook', 'ecards', 'lists', 'messages',
+                                'photos', 'profile', 'events', 'links', 'user_management');
 
 // open the modules tab if the options of a module should be shown
-if(in_array($showOption, $showOptionValidModules) == true)
+if(in_array($showOption, $showOptionValidModules))
 {
-    $page->addJavascript('$("#tabs_nav_modules").attr("class", "active");
+    $page->addJavascript('
+        $("#tabs_nav_modules").attr("class", "active");
         $("#tabs-modules").attr("class", "tab-pane active");
         $("#collapse_'.$showOption.'").attr("class", "panel-collapse collapse in");
-        location.hash = "#" + "panel_'.$showOption.'";', true);
+        location.hash = "#" + "panel_'.$showOption.'";',
+        true
+    );
 }
 else
 {
-    $page->addJavascript('$("#tabs_nav_common").attr("class", "active");
+    $page->addJavascript('
+        $("#tabs_nav_common").attr("class", "active");
         $("#tabs-common").attr("class", "tab-pane active");
         $("#collapse_'.$showOption.'").attr("class", "panel-collapse collapse in");
-        location.hash = "#" + "panel_'.$showOption.'";', true);
+        location.hash = "#" + "panel_'.$showOption.'";',
+        true
+    );
 }
 
 $page->addJavascript('

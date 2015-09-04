@@ -1,19 +1,4 @@
 <?php
-/*****************************************************************************/
-/** @class Organization
- *  @brief Handle organization data of Admidio and is connected to database table adm_organizations
- *
- *  This class creates the organization object and manages the access to the
- *  organization specific preferences of the table adm_preferences. There
- *  are also some method to read the relationship of organizations if the
- *  database contains more then one organization.
- *  @par Examples
- *  @code // create object and read the value of the language preference
- *  $organization = new Organization($gDb, $organizationId);
- *  $preferences  = $organization->getPreferences();
- *  $language     = $preferences['system_language'];
- *  // language = 'de' @endcode
- */
 /*****************************************************************************
  *
  *  Copyright    : (c) 2004 - 2015 The Admidio Team
@@ -22,18 +7,34 @@
  *
  *****************************************************************************/
 
+/**
+ * @class Organization
+ * @brief Handle organization data of Admidio and is connected to database table adm_organizations
+ *
+ * This class creates the organization object and manages the access to the
+ * organization specific preferences of the table adm_preferences. There
+ * are also some method to read the relationship of organizations if the
+ * database contains more then one organization.
+ * @par Examples
+ * @code // create object and read the value of the language preference
+ * $organization = new Organization($gDb, $organizationId);
+ * $preferences  = $organization->getPreferences();
+ * $language     = $preferences['system_language'];
+ * // language = 'de' @endcode
+ */
 class Organization extends TableAccess
 {
     protected $bCheckChildOrganizations;     ///< Flag will be set if the class had already search for child organizations
     protected $childOrganizations = array(); ///< Array with all child organizations of this organization
     protected $preferences = array();        ///< Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
 
-    /** Constructor that will create an object of a recordset of the table adm_organizations.
-     *  If the id is set than the specific organization will be loaded.
-     *  @param object $db    Object of the class database. This should be the default object $gDb.
-     *  @param $organization The recordset of the organization with this id will be loaded.
-     *                       The organization can be the table id or the organization shortname.
-     *                       If id isn't set than an empty object of the table is created.
+    /**
+     * Constructor that will create an object of a recordset of the table adm_organizations.
+     * If the id is set than the specific organization will be loaded.
+     * @param object     $db           Object of the class database. This should be the default object $gDb.
+     * @param int|string $organization The recordset of the organization with this id will be loaded.
+     *                                 The organization can be the table id or the organization shortname.
+     *                                 If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$db, $organization = '')
     {
@@ -49,7 +50,9 @@ class Organization extends TableAccess
         }
     }
 
-    /** Initialize all necessary data of this object.
+    /**
+     * Initialize all necessary data of this object.
+     * @return void
      */
     public function clear()
     {
@@ -60,11 +63,11 @@ class Organization extends TableAccess
         $this->preferences              = array();
     }
 
-    /** Creates all necessary data for a new organization. This method can only be
-     *  called once for an organization. It will create the basic categories, lists,
-     *  roles, systemmails etc.
-     *  @param $userId The id of the webmaster who creates the new organization.
-     *                 This will be the first valid user of the new organization.
+    /**
+     * Creates all necessary data for a new organization. This method can only be called once for an organization.
+     * It will create the basic categories, lists, roles, systemmails etc.
+     * @param $userId The id of the webmaster who creates the new organization.
+     *                This will be the first valid user of the new organization.
      */
     public function createBasicData($userId)
     {
@@ -78,11 +81,11 @@ class Organization extends TableAccess
         $systemUserId = $row['usr_id'];
 
         // create all systemmail texts and write them into table adm_texts
-        $systemmailsTexts = array('SYSMAIL_REGISTRATION_USER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
+        $systemmailsTexts = array('SYSMAIL_REGISTRATION_USER'      => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
                                   'SYSMAIL_REGISTRATION_WEBMASTER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_WEBMASTER'),
-                                  'SYSMAIL_REFUSE_REGISTRATION' => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
-                                  'SYSMAIL_NEW_PASSWORD' => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
-                                  'SYSMAIL_ACTIVATION_LINK' => $gL10n->get('SYS_SYSMAIL_ACTIVATION_LINK'));
+                                  'SYSMAIL_REFUSE_REGISTRATION'    => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
+                                  'SYSMAIL_NEW_PASSWORD'           => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
+                                  'SYSMAIL_ACTIVATION_LINK'        => $gL10n->get('SYS_SYSMAIL_ACTIVATION_LINK'));
         $text = new TableText($this->db);
 
         foreach($systemmailsTexts as $key => $value)
@@ -235,11 +238,12 @@ class Organization extends TableAccess
         $formerList->save();
     }
 
-    /** Create a comma separated list with all organization ids of children,
-     *  parent and this organization that is prepared for use in SQL
-     *  @param $shortname If set to true then a list of all shortnames will be returned
-     *  @return Returns a string with a comma separated list of all organization
-     *          ids that are parents or children and the own id
+    /**
+     * Create a comma separated list with all organization ids of children,
+     * parent and this organization that is prepared for use in SQL
+     * @param bool $shortname If set to true then a list of all shortnames will be returned
+     * @return string Returns a string with a comma separated list of all organization
+     *                ids that are parents or children and the own id
      */
     public function getFamilySQL($shortname = false)
     {
@@ -266,38 +270,37 @@ class Organization extends TableAccess
         }
     }
 
-    /** Read all child and parent organizations of this organization and returns
-     *  an array with them.
-     *  @param $child    If set to @b true (default) then all child organizations will be in the array
-     *  @param $parent   If set to @b true (default) then the parent organization will be in the array
-     *  @param $longname If set to @b true then the value of the array will be the @b org_longname
-     *                   otherwise it will be @b org_shortname
-     *  @return Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
+    /**
+     * Read all child and parent organizations of this organization and returns an array with them.
+     * @param bool $child    If set to @b true (default) then all child organizations will be in the array
+     * @param bool $parent   If set to @b true (default) then the parent organization will be in the array
+     * @param bool $longname If set to @b true then the value of the array will be the @b org_longname
+     *                       otherwise it will be @b org_shortname
+     * @return array Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
      */
     public function getOrganizationsInRelationship($child = true, $parent = true, $longname = false)
     {
         $arr_child_orgas = array();
 
-        $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS. '
+        $sql = 'SELECT * FROM '.TBL_ORGANIZATIONS.'
                  WHERE ';
-        if($child == true)
+        if($child)
         {
-            $sql .= ' org_org_id_parent = '. $this->getValue('org_id');
+            $sql .= ' org_org_id_parent = '.$this->getValue('org_id');
         }
-        if($parent == true
-        && $this->getValue('org_org_id_parent') > 0)
+        if($parent && $this->getValue('org_org_id_parent') > 0)
         {
-            if($child == true)
+            if($child)
             {
                 $sql .= ' OR ';
             }
-            $sql .= ' org_id = '. $this->getValue('org_org_id_parent');
+            $sql .= ' org_id = '.$this->getValue('org_org_id_parent');
         }
         $this->db->query($sql);
 
         while($row = $this->db->fetch_array())
         {
-            if($longname == true)
+            if($longname)
             {
                 $arr_child_orgas[$row['org_id']] = $row['org_longname'];
             }
@@ -309,15 +312,15 @@ class Organization extends TableAccess
         return $arr_child_orgas;
     }
 
-    /** Reads all preferences of the current organization out of the database
-     *  table adm_preferences. If the object has read the preferences than
-     *  the method will return the stored values of the object.
-     *  @return Returns an array with all preferences of this organization.
-     *          Array key is the column @b prf_name and array value is the column @b prf_value.
+    /**
+     * Reads all preferences of the current organization out of the database table adm_preferences.
+     * If the object has read the preferences than the method will return the stored values of the object.
+     * @return array Returns an array with all preferences of this organization.
+     *               Array key is the column @b prf_name and array value is the column @b prf_value.
      */
     public function getPreferences()
     {
-        if(count($this->preferences) == 0)
+        if(count($this->preferences) === 0)
         {
             $sql    = 'SELECT * FROM '. TBL_PREFERENCES. '
                         WHERE prf_org_id = '. $this->getValue('org_id');
@@ -332,8 +335,9 @@ class Organization extends TableAccess
         return $this->preferences;
     }
 
-    /** Method checks if this organization is the parent of other organizations.
-     *  @return Return @b true if the organization has child organizations.
+    /**
+     * Method checks if this organization is the parent of other organizations.
+     * @return bool Return @b true if the organization has child organizations.
      */
     public function hasChildOrganizations()
     {
@@ -354,12 +358,11 @@ class Organization extends TableAccess
         }
     }
 
-    /** Method checks if the organization is configured as a child
-     *  organization in the recordset.
-     *  @param $organization The @b org_shortname or @b org_id of the organization
-     *                       that should be set. If parameter isn't set than check
-     *                       the organization of this object.
-     *  @return Return @b true if the organization is a child of another organization
+    /**
+     * Method checks if the organization is configured as a child organization in the recordset.
+     * @param int $organization The @b org_shortname or @b org_id of the organization that should be set.
+     *                          If parameter isn't set than check the organization of this object.
+     * @return bool Return @b true if the organization is a child of another organization
      */
     public function isChildOrganization($organization = 0)
     {
@@ -389,12 +392,12 @@ class Organization extends TableAccess
         return $ret_code;
     }
 
-    /** Writes all preferences of the array @b $preferences in the database
-     *  table @b adm_preferences. The method will only insert or update
-     *  changed preferences.
-     *  @param $preferences Array with all preferences that should be stored in
-     *                      database. array('name_of_preference' => 'value')
-     *  @param $update      If set to @b false then no update will be done, only inserts
+    /**
+     * Writes all preferences of the array @b $preferences in the database table @b adm_preferences.
+     * The method will only insert or update changed preferences.
+     * @param array $preferences Array with all preferences that should be stored in
+     *                           database. array('name_of_preference' => 'value')
+     * @param bool  $update      If set to @b false then no update will be done, only inserts
      */
     public function setPreferences($preferences, $update = true)
     {
@@ -430,7 +433,7 @@ class Organization extends TableAccess
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
      * @param  string $columnName The name of the database column whose value should get a new value
-     * @param         $newValue   The new value that should be stored in the database field
+     * @param  mixed  $newValue   The new value that should be stored in the database field
      * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
      * @return bool   Returns @b true if the value is stored in the current object and @b false if a check failed
      */
