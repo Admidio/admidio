@@ -88,9 +88,10 @@ class HtmlNavbar
             $icon = '<img src="'.$data['icon'].'" alt="'.strip_tags($data['text']).'" />';
         }
 
-        $html = '<li class="'.$data['class'].'">
-            <a class="navbar-link" id="'.$data['id'].'" href="'.$data['url'].'">'.$icon.$data['text'].'</a>
-        </li>';
+        $html = '
+            <li class="'.$data['class'].'">
+                <a class="navbar-link" id="'.$data['id'].'" href="'.$data['url'].'">'.$icon.$data['text'].'</a>
+            </li>';
 
         return $html;
     }
@@ -133,7 +134,7 @@ class HtmlNavbar
         // add root path to link unless the full URL is given
         if($url !== '' && preg_match('/^http(s?):\/\//', $url) === 0)
         {
-            $url = $g_root_path. $url;
+            $url = $g_root_path.$url;
         }
 
         // add THEME_PATH to images unless the full URL is given
@@ -142,29 +143,28 @@ class HtmlNavbar
             $icon = THEME_PATH.'/icons/'.$icon;
         }
 
+        $item = array('id' => $id, 'text' => $text, 'icon' => $icon, 'url' => $url, 'class' => $class);
 
         if($orientation === 'left')
         {
             if($parentItem === 'navbar')
             {
-                $this->leftItems[$id] = array('id' => $id, 'text' => $text, 'icon' => $icon, 'url' => $url, 'class' => $class);
+                $this->leftItems[$id] = $item;
             }
             elseif(array_key_exists($parentItem, $this->leftItems))
             {
-                $this->leftItems[$parentItem]['items'][$id] = array('id' => $id, 'text' => $text, 'icon' => $icon,
-                                                                    'url' => $url, 'class' => $class);
+                $this->leftItems[$parentItem]['items'][$id] = $item;
             }
         }
         elseif($orientation === 'right')
         {
             if($parentItem === 'navbar')
             {
-                $this->rightItems[$id] = array('id' => $id, 'text' => $text, 'icon' => $icon, 'url' => $url, 'class' => $class);
+                $this->rightItems[$id] = $item;
             }
             elseif(array_key_exists($parentItem, $this->rightItems))
             {
-                $this->rightItems[$parentItem]['items'][$id] = array('id' => $id, 'text' => $text, 'icon' => $icon,
-                                                                     'url' => $url, 'class' => $class);
+                $this->rightItems[$parentItem]['items'][$id] = $item;
             }
         }
     }
@@ -194,7 +194,7 @@ class HtmlNavbar
         // default navbar should not show the brand, only in xs mode
         if($this->type === 'default')
         {
-            $cssClassBrand  = 'visible-xs-block';
+            $cssClassBrand = 'visible-xs-block';
         }
         elseif($this->type === 'filter')
         {
@@ -236,11 +236,12 @@ class HtmlNavbar
                     else
                     {
                         // add a dropdown to the navbar
-                        $html .= '<li class="dropdown '.$menuEntry['class'].'">
-                            <a id="'.$menuEntry['id'].'" href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-menu-hamburger"></span>'.$menuEntry['text'].'<span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">';
+                        $html .= '
+                            <li class="dropdown '.$menuEntry['class'].'">
+                                <a id="'.$menuEntry['id'].'" href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-menu-hamburger"></span>'.$menuEntry['text'].'<span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">';
 
                         foreach($menuEntry['items'] as $keyDropDown => $menuEntryDropDown)
                         {
@@ -284,11 +285,12 @@ class HtmlNavbar
                     else
                     {
                         // add a dropdown to the navbar
-                        $html .= '<li class="dropdown '.$menuEntry['class'].'">
-                            <a id="'.$menuEntry['id'].'" href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-menu-hamburger"></span>'.$menuEntry['text'].'<span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">';
+                        $html .= '
+                            <li class="dropdown '.$menuEntry['class'].'">
+                                <a id="'.$menuEntry['id'].'" href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-menu-hamburger"></span>'.$menuEntry['text'].'<span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">';
 
                         foreach($menuEntry['items'] as $keyDropDown => $menuEntryDropDown)
                         {
