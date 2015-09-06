@@ -149,7 +149,7 @@ class ModuleWeblinks extends Modules
         }
 
 
-        //Ankuendigungen aus der DB fischen...
+        //Weblinks aus der DB fischen...
         $sql = 'SELECT cat.*, lnk.*
                   FROM '. TBL_CATEGORIES .' cat, '. TBL_LINKS. ' lnk
                  WHERE lnk_cat_id = cat_id
@@ -168,13 +168,8 @@ class ModuleWeblinks extends Modules
 
         $gDb->query($sql);
 
-        //Ergebnisse auf Array pushen
-        while($row = $gDb->fetch_array())
-        {
-            $weblinks['recordset'][] = $row;
-        }
-
         //array for results
+        $weblinks['recordset']  = $gDb->fetchAll();
         $weblinks['numResults'] = $gDb->num_rows();
         $weblinks['limit']      = $limit;
         $weblinks['totalCount'] = $this->getDataSetCount();

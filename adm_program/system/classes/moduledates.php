@@ -236,13 +236,8 @@ class ModuleDates extends Modules
 
         $gDb->query($sql);
 
-        //push results to array
-        while($row = $gDb->fetch_array())
-        {
-            $dates['recordset'][] = $row;
-        }
-
         //array for results
+        $dates['recordset']  = $gDb->fetchAll();
         $dates['numResults'] = $gDb->num_rows();
         $dates['limit']      = $limit;
         $dates['totalCount'] = $this->getDataSetCount();

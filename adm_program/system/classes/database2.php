@@ -198,6 +198,36 @@ class Database2
         return null;
     }
 
+    /** Fetch from the sql all rows into an array. The array will contain each row which is also an array.
+     *  This row array contains as default the row name as key. If you set the $fetchType than you can change
+     *  this behavior.
+     *  @param $fetchType Set the result type. Can contain @b PDO::FETCH_ASSOC (default) for an associative array,
+     *                     @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
+     *  @return Returns an array with arrays of each fetched row. If no rows were found an empty array is returned.
+     *
+     *  @par Examples
+     *  @code   $this->query('SELECT cat_id, cat_name, cat_sequence FROM adm_categories ');
+     *  $records = $this->fetchAll();
+     *
+     *  // Array with the results:
+     *     $records = array(
+     *          [0] => array(
+     *              [cat_id]       => 1
+     *              [cat_name]     => 'Common'
+     *              [cat_sequence] => 4
+     *              )
+     *          [1] => array(
+     *              [cat_id]       => 2
+     *              [cat_name]     => 'Teams'
+     *              [cat_sequence] => 2
+     *              )
+     *          ... @endcode
+     */
+    public function fetchAll($fetchType = PDO::FETCH_ASSOC)
+    {
+        return $this->pdoStatement->fetchAll($fetchType);
+    }
+
     /**
      * @return array
      */

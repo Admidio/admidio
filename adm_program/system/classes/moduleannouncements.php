@@ -185,13 +185,8 @@ class ModuleAnnouncements extends Modules
 
         $gDb->query($sql);
 
-        //Ergebnisse auf Array pushen
-        while($row = $gDb->fetch_array())
-        {
-            $announcements['recordset'][] = $row;
-        }
-
         //array for results
+        $announcements['recordset']  = $gDb->fetchAll();
         $announcements['numResults'] = $gDb->num_rows();
         $announcements['limit']      = $limit;
         $announcements['totalCount'] = $this->getDataSetCount();
