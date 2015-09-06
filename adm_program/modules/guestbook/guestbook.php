@@ -135,7 +135,7 @@ $sql = 'SELECT COUNT(*) AS count
          WHERE gbo_org_id = '.$gCurrentOrganization->getValue('org_id').
                $conditions;
 $result = $gDb->query($sql);
-$row = $gDb->fetch_array($result);
+$row = $gDb->fetch_array();
 $num_guestbook = $row['count'];
 
 // Anzahl Gaestebucheintraege pro Seite
@@ -147,15 +147,6 @@ else
 {
     $guestbook_entries_per_page = $num_guestbook;
 }
-
-// Alle Gaestebucheintraege fuer die aktuelle Seite ermitteln
-$sql = 'SELECT *
-          FROM '. TBL_GUESTBOOK. ' gbo
-         WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-               '.$conditions.'
-         ORDER BY gbo_timestamp_create DESC
-         LIMIT '. $guestbook_entries_per_page.' OFFSET '.$getStart;
-$guestbook_result = $gDb->query($sql);
 
 // get module menu
 $guestbookMenu = $page->getMenu();
@@ -204,7 +195,20 @@ if($gCurrentUser->isWebmaster())
                             $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
-if ($gDb->num_rows($guestbook_result) == 0)
+$guestbook = new TableGuestbook($gDb);
+
+// Alle Gaestebucheintraege fuer die aktuelle Seite ermitteln
+$sql = 'SELECT *
+          FROM '. TBL_GUESTBOOK. ' gbo
+         WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+               '.$conditions.'
+         ORDER BY gbo_timestamp_create DESC
+         LIMIT '. $guestbook_entries_per_page.' OFFSET '.$getStart;
+$gDb->query($sql);
+
+$countGuestbookEntries = $gDb->num_rows();
+
+if ($countGuestbookEntries == 0)
 {
     // Keine Gaestebucheintraege gefunden
     if ($getGboId > 0)
@@ -218,10 +222,8 @@ if ($gDb->num_rows($guestbook_result) == 0)
 }
 else
 {
-    $guestbook = new TableGuestbook($gDb);
-
     // Gaestebucheintraege auflisten
-    while ($row = $gDb->fetch_object($guestbook_result))
+    while ($row = $gDb->fetch_array())
     {
         // GB-Objekt initialisieren und neuen DS uebergeben
         $guestbook->clear();
@@ -361,7 +363,7 @@ else
 
                 // Falls eine ID uebergeben wurde und der dazugehoerige Eintrag existiert,
                 // werden unter dem Eintrag die dazugehoerigen Kommentare (falls welche da sind) angezeigt.
-                if ($gDb->num_rows($guestbook_result) > 0 && $getGboId > 0)
+                if ($countGuestbookEntries > 0 && $getGboId > 0)
                 {
                     ob_start();
                     include('get_comments.php');

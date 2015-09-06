@@ -12,12 +12,15 @@ class Database2
     protected $username;
     protected $password;
     protected $options;
+
     protected $dsn;
-    protected $pdo;
-    protected $transactions;
-    protected $pdoStatement;
-    protected $dbStructure; ///< array with arrays of every table with their structure
+    protected $pdo;                 ///< The PDO object that handles the communication with the database.
+    protected $transactions;        ///< The transaction marker. If this is > 0 than a transaction is open.
+    protected $pdoStatement;        ///< The PdoStatement object which is needed to handle the return of a query.
+    protected $dbStructure;         ///< array with arrays of every table with their structure
     protected $fetchArray;
+    protected $minRequiredVersion;  ///< The minimun required version of this database that is necessary to run Admidio.
+    protected $databaseName;        ///< The name of the database e.g. 'MySQL'
 
     /** The constructor will check if a valid engine was set and try to connect to the database.
      *  If the engine is invalid or the connection not possible an exception will be thrown.
@@ -55,6 +58,8 @@ class Database2
         $this->transactions = 0;
         $this->sqlStatement = null;
         $this->fetchArray   = array();
+        $this->minRequiredVersion = '';
+        $this->databaseName       = '';
 
         try
         {
@@ -259,6 +264,45 @@ class Database2
         return $output;
     }
 
+    /** Get the minimum required version of the database that is necessary to run Admidio.
+     *  @return Returns a string with the minimum required database version e.g. '5.0.1'
+     */
+    public function getMinimumRequiredVersion()
+    {
+        if($this->minRequiredVersion === '')
+        {
+            $xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', 0, true);
+            $node = $xmlDatabases->xpath("/databases/database[@id='".$this->engine."']/minversion");
+            $this->minRequiredVersion = (string)$node[0]; // explicit typcasting because of problem with simplexml and sessions
+        }
+        return $this->minRequiredVersion;
+    }
+
+    /** Get the name of the database that is running Admidio.
+     *  @return Returns a string with the name of the databse e.g. 'MySQL' or 'PostgreSQL'
+     */
+    public function getName()
+    {
+        if($this->databaseName === '')
+        {
+            $xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', 0, true);
+            $node = $xmlDatabases->xpath("/databases/database[@id='".$this->engine."']/name");
+            $this->databaseName = (string)$node[0]; // explicit typcasting because of problem with simplexml and sessions
+        }
+        return $this->databaseName;
+    }
+
+    /** Get the version of the connected database.
+     *  @return Returns a string with the database version e.g. '5.5.8'
+     */
+    public function getVersion()
+    {
+        $this->query('SELECT version()');
+        $row = $this->fetch_array();
+
+        return $row[0];
+    }
+
     // Liefert die ID einer vorherigen INSERT-Operation
     public function insert_id()
     {
@@ -344,7 +388,7 @@ class Database2
         }
         return false;
     }
-    
+
     /** Set connection specific options like UTF8 connection. These options
      *  should always be set if Admidio connect to a database.
      */
@@ -352,13 +396,13 @@ class Database2
     {
         // Connect to database with UTF8
         $this->query('SET NAMES \'UTF8\'');
-        
+
         if($this->engine === 'mysql')
         {
             // ANSI Modus setzen, damit SQL kompatibler zu anderen DBs werden kann
             $this->query('SET SQL_MODE = \'ANSI\'');
             // falls der Server die Joins begrenzt hat, kann dies mit diesem Statement aufgehoben werden
-            $this->query('SET SQL_BIG_SELECTS = 1');                
+            $this->query('SET SQL_BIG_SELECTS = 1');
         }
     }
 

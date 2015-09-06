@@ -295,10 +295,9 @@ class ModuleLists extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $result = $gDb->query($sql);
+        $gDb->query($sql);
 
-        $lists= array('numResults'=>$gDb->num_rows($result), 'limit' => $limit, 'totalCount'=>$this->getDataSetCount());
-        while($row = $gDb->fetch_array($result))
+        while($row = $gDb->fetch_array())
         {
             $lists['recordset'][] = $row;
         }
@@ -307,8 +306,12 @@ class ModuleLists extends Modules
         {
             $lists['recordset'] = array();
         }
-        // Push parameter to array
-        $lists['parameter'] = $this->getParameters();
+
+        //array for results
+        $lists['numResults'] = $gDb->num_rows();
+        $lists['limit']      = $limit;
+        $lists['totalCount'] = $this->getDataSetCount();
+        $lists['parameter']  = $this->getParameters();
         return $lists;
     }
 

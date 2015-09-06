@@ -408,9 +408,9 @@ $page->addHtml('
                         }
                         $form->addCustomContent($gL10n->get('SYS_PHP_VERSION'), $html);
 
-                        if(version_compare($gDb->getVersion(), $gDb->getMinVersion()) == -1)
+                        if(version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion()) == -1)
                         {
-                            $html = '<span class="text-danger"><strong>'.$gDb->getVersion().'</strong></span> &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', $gDb->getMinVersion());
+                            $html = '<span class="text-danger"><strong>'.$gDb->getVersion().'</strong></span> &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', $gDb->getMinimumRequiredVersion());
                         }
                         else
                         {
