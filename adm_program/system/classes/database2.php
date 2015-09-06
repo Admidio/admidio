@@ -169,20 +169,23 @@ class Database2
     }
 
     /** Fetch a result row as an associative array, a numeric array, or both.
-     *  @param $fetchType Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
-     *                     @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
+     *  @param object $pdoStatement An object of the class PDOStatement. This should be set if multiple
+     *                              rows where selected and other sql statements are also send to the database.
+     *  @param int    $fetchType    Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
+     *                              @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
      *  @return Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
      */
-    public function fetch_array($fetchType = PDO::FETCH_BOTH)
+    public function fetch_array($pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
     {
-        if(is_object($this->pdoStatement) && count($this->fetchArray) === 0)
+        // if pdo statement is committed then fetch this object
+        if(is_object($pdoStatement))
         {
-            $this->fetchArray = $this->pdoStatement->fetchAll(PDO::FETCH_BOTH);
-            return current($this->fetchArray);
+            return $pdoStatement->fetch($fetchType);
         }
-        else
+        // if no pdo statement was committed then take the one from the last query
+        elseif(is_object($this->pdoStatement))
         {
-            return next($this->fetchArray);
+            return $this->pdoStatement->fetch($fetchType);
         }
 
         return null;
@@ -198,8 +201,45 @@ class Database2
         return null;
     }
 
+    /** Fetch from the sql the next row into an array. The array will contain each column.
+     *  This row array contains as default the column name as key. If you set the $fetchType than you can change
+     *  this behavior.
+     *  @param object $pdoStatement An object of the class PDOStatement. This should be set if multiple
+     *                              rows where selected and other sql statements are also send to the database.
+     *  @param int    $fetchType    Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
+     *                              @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
+     *  @return Returns an array with each column of the current row. If no rows were found an empty array is returned.
+     *
+     *  @par Examples
+     *  @code   $this->query('SELECT cat_id, cat_name, cat_sequence FROM adm_categories ');
+     *  $records = $this->fetchAll();
+     *
+     *  // Array with the results:
+     *     $record = array(
+     *              [cat_id]       => 1
+     *              [cat_name]     => 'Common'
+     *              [cat_sequence] => 4
+     *              )
+     *          ... @endcode
+     */
+    public function fetch($pdoStatement = null, $fetchType = PDO::FETCH_ASSOC)
+    {
+        // if pdo statement is committed then fetch this object
+        if(is_object($pdoStatement))
+        {
+            return $pdoStatement->fetch($fetchType);
+        }
+        // if no pdo statement was committed then take the one from the last query
+        elseif(is_object($this->pdoStatement))
+        {
+            return $this->pdoStatement->fetch($fetchType);
+        }
+
+        return null;
+    }
+
     /** Fetch from the sql all rows into an array. The array will contain each row which is also an array.
-     *  This row array contains as default the row name as key. If you set the $fetchType than you can change
+     *  This row array contains as default the column name as key. If you set the $fetchType than you can change
      *  this behavior.
      *  @param $fetchType Set the result type. Can contain @b PDO::FETCH_ASSOC (default) for an associative array,
      *                     @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
@@ -397,6 +437,16 @@ class Database2
         }
 
         return $this->pdoStatement;
+    }
+
+    /** Places quotes around the input string (if required) and escapes special characters 
+     *  within the input string.
+     *  @param string $string The string to be quoted.
+     *  @return Returns a quoted string that is theoretically safe to pass into an SQL statement.
+     */
+    public function quote($string)
+    {
+        return $this->pdo->quote($string);
     }
 
     /** If there is a open transaction than this method sends a rollback to the database

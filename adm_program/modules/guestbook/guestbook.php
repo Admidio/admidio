@@ -204,7 +204,7 @@ $sql = 'SELECT *
                '.$conditions.'
          ORDER BY gbo_timestamp_create DESC
          LIMIT '. $guestbook_entries_per_page.' OFFSET '.$getStart;
-$gDb->query($sql);
+$guestbookStatement = $gDb->query($sql);
 
 $countGuestbookEntries = $gDb->num_rows();
 
@@ -223,7 +223,7 @@ if ($countGuestbookEntries == 0)
 else
 {
     // Gaestebucheintraege auflisten
-    while ($row = $gDb->fetch_array())
+    while ($row = $gDb->fetch_array($guestbookStatement))
     {
         // GB-Objekt initialisieren und neuen DS uebergeben
         $guestbook->clear();
@@ -303,7 +303,7 @@ else
 
 
                 // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...
-                if ($getGboId == 0 && $gDb->num_rows($comment_result) > 0)
+                if ($getGboId == 0 && $comment_result->rowCount() > 0)
                 {
                     if($gPreferences['enable_intial_comments_loading'] == 1 || $getModeration == 1)
                     {
@@ -349,7 +349,7 @@ else
                     $page->addHtml('</div>');
                 }
 
-                if ($getGboId == 0 && $gDb->num_rows($comment_result) == 0
+                if ($getGboId == 0 && $comment_result->rowCount() == 0
                 && ($gCurrentUser->commentGuestbookRight() || $gPreferences['enable_gbook_comments4all'] == 1)
                 && $getModeration == 0)
                 {

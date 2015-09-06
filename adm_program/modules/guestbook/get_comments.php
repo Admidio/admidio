@@ -48,7 +48,7 @@ if (isset($comment_result))
     $gbComment = new TableGuestbookComment($gDb);
 
     // Jetzt nur noch die Kommentare auflisten
-    while ($row = $gDb->fetch_object($comment_result))
+    while ($row = $gDb->fetch_array($comment_result))
     {
         // GBComment-Objekt initialisieren und neuen DS uebergeben
         $gbComment->clear();
