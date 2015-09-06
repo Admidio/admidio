@@ -132,8 +132,11 @@ catch(AdmException $e)
 }
 
 // determine the number of users in this list
-$resultList = $gDb->query($mainSql);
-$numMembers = $gDb->num_rows($resultList);
+$listStatement = $gDb->query($mainSql);
+$numMembers = $listStatement->rowCount();
+
+// get all members and their data of this list in an array
+$membersList = $gDb->fetchAll(PDO::FETCH_BOTH);
 
 if($numMembers == 0)
 {
@@ -411,198 +414,191 @@ else
 
 $lastGroupHead = -1;             // Merker um Wechsel zwischen Leiter und Mitglieder zu merken
 
-// jetzt erst einmal zu dem ersten relevanten Datensatz springen
-if(!$gDb->data_seek($resultList, $getStart))
+for($j = $getStart; $j < $numMembers; $j++)
 {
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-for($j = 0; $j + $getStart < $numMembers; $j++)
-{
-    if($row = $gDb->fetch_array($resultList))
+    $row = $membersList[$j];
+    
+    if($getMode == 'print' || $getMode == 'pdf')
     {
-        if($getMode == 'print' || $getMode == 'pdf')
+        // in print preview and pdf we group the role leaders and the members and
+        // add a specific header for them
+        if($lastGroupHead != $row['mem_leader']
+        && ($row['mem_leader'] != 0 || $lastGroupHead != -1))
         {
-            // in print preview and pdf we group the role leaders and the members and
-            // add a specific header for them
-            if($lastGroupHead != $row['mem_leader']
-            && ($row['mem_leader'] != 0 || $lastGroupHead != -1))
+            if($row['mem_leader'] == 1)
             {
-                if($row['mem_leader'] == 1)
-                {
-                    $title = $gL10n->get('SYS_LEADER');
-                }
-                else
-                {
-                    // if list has leaders then initialize row number for members
-                    $listRowNumber = 1;
-                    $title = $gL10n->get('SYS_PARTICIPANTS');
-                }
-
-                $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), 1, ($list->countColumns() + 1));
-                $lastGroupHead = $row['mem_leader'];
-            }
-        }
-
-        // if html mode and the role has leaders then group all data between leaders and members
-        if($getMode == 'html')
-        {
-            if($row['mem_leader'] != 0)
-            {
-                $table->setDatatablesGroupColumn(2);
+                $title = $gL10n->get('SYS_LEADER');
             }
             else
             {
-                $table->setDatatablesColumnsHide(2);
+                // if list has leaders then initialize row number for members
+                $listRowNumber = 1;
+                $title = $gL10n->get('SYS_PARTICIPANTS');
             }
+
+            $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), 1, ($list->countColumns() + 1));
+            $lastGroupHead = $row['mem_leader'];
+        }
+    }
+
+    // if html mode and the role has leaders then group all data between leaders and members
+    if($getMode == 'html')
+    {
+        if($row['mem_leader'] != 0)
+        {
+            $table->setDatatablesGroupColumn(2);
+        }
+        else
+        {
+            $table->setDatatablesColumnsHide(2);
+        }
+    }
+
+    $columnValues = array();
+
+    // Felder zu Datensatz
+    for($columnNumber = 1; $columnNumber <= $list->countColumns(); $columnNumber++)
+    {
+        $column = $list->getColumnObject($columnNumber);
+
+        // da im SQL noch mem_leader und usr_id vor die eigentlichen Spalten kommen,
+        // muss der Index auf row direkt mit 2 anfangen
+        $sqlColumnNumber = $columnNumber + 1;
+
+        if($column->getValue('lsc_usf_id') > 0)
+        {
+            // pruefen, ob ein benutzerdefiniertes Feld und Kennzeichen merken
+            $b_user_field = true;
+            $usf_id = $column->getValue('lsc_usf_id');
+        }
+        else
+        {
+            $b_user_field = false;
+            $usf_id = 0;
         }
 
-        $columnValues = array();
-
-        // Felder zu Datensatz
-        for($columnNumber = 1; $columnNumber <= $list->countColumns(); $columnNumber++)
+        // versteckte Felder duerfen nur von Leuten mit entsprechenden Rechten gesehen werden
+        if($usf_id == 0
+        || $gCurrentUser->editUsers()
+        || $gProfileFields->getPropertyById($usf_id, 'usf_hidden') == 0)
         {
-            $column = $list->getColumnObject($columnNumber);
-
-            // da im SQL noch mem_leader und usr_id vor die eigentlichen Spalten kommen,
-            // muss der Index auf row direkt mit 2 anfangen
-            $sqlColumnNumber = $columnNumber + 1;
-
-            if($column->getValue('lsc_usf_id') > 0)
+            if($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf')
             {
-                // pruefen, ob ein benutzerdefiniertes Feld und Kennzeichen merken
-                $b_user_field = true;
-                $usf_id = $column->getValue('lsc_usf_id');
-            }
-            else
-            {
-                $b_user_field = false;
-                $usf_id = 0;
-            }
-
-            // versteckte Felder duerfen nur von Leuten mit entsprechenden Rechten gesehen werden
-            if($usf_id == 0
-            || $gCurrentUser->editUsers()
-            || $gProfileFields->getPropertyById($usf_id, 'usf_hidden') == 0)
-            {
-                if($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf')
+                if($columnNumber == 1)
                 {
-                    if($columnNumber == 1)
-                    {
-                        // die Laufende Nummer noch davorsetzen
-                        $columnValues[] = $listRowNumber;
+                    // die Laufende Nummer noch davorsetzen
+                    $columnValues[] = $listRowNumber;
 
-                        // in html mode we add an additional column with leader/member information to
-                        // enable the grouping function of jquery datatables
-                        if($getMode == 'html')
+                    // in html mode we add an additional column with leader/member information to
+                    // enable the grouping function of jquery datatables
+                    if($getMode == 'html')
+                    {
+                        if($row['mem_leader'] == 1)
                         {
-                            if($row['mem_leader'] == 1)
-                            {
-                                $columnValues[] = $gL10n->get('SYS_LEADER');
-                            }
-                            else
-                            {
-                                $columnValues[] = $gL10n->get('SYS_PARTICIPANTS');
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if($columnNumber == 1)
-                    {
-                        // erste Spalte zeigt lfd. Nummer an
-                        $str_csv = $str_csv. $valueQuotes. $listRowNumber. $valueQuotes;
-                    }
-                }
-
-                // fill content with data of database
-                $content = $row[$sqlColumnNumber];
-
-                /*****************************************************************/
-                // in some cases the content must have a special output format
-                /*****************************************************************/
-                if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id') && $usf_id!=0)
-                {
-                    $content = $gL10n->getCountryByCode($row[$sqlColumnNumber]);
-                }
-                elseif($column->getValue('lsc_special_field') == 'usr_photo')
-                {
-                    // show user photo
-                    if($getMode == 'html' || $getMode == 'print')
-                    {
-                        $content = '<img src="'.$g_root_path.'/adm_program/modules/profile/profile_photo_show.php?usr_id='.$row['usr_id'].'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
-                    }
-                    if ($getMode == 'csv' && $row[$sqlColumnNumber] != NULL)
-                    {
-                        $content = $gL10n->get('LST_USER_PHOTO');
-                    }
-                }
-                elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX')
-                {
-                    if($getMode != 'html')
-                    {
-                        if($content == 1)
-                        {
-                            $content = $gL10n->get('SYS_YES');
+                            $columnValues[] = $gL10n->get('SYS_LEADER');
                         }
                         else
                         {
-                            $content = $gL10n->get('SYS_NO');
+                            $columnValues[] = $gL10n->get('SYS_PARTICIPANTS');
                         }
                     }
                 }
-                elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DATE'
-                ||     $column->getValue('lsc_special_field') == 'mem_begin'
-                ||     $column->getValue('lsc_special_field') == 'mem_end')
+            }
+            else
+            {
+                if($columnNumber == 1)
                 {
-                    if(strlen($row[$sqlColumnNumber]) > 0)
-                    {
-                        // date must be formated
-                        $date = new DateTimeExtended($row[$sqlColumnNumber], 'Y-m-d');
-                        $content = $date->format($gPreferences['system_date']);
-                    }
-                }
-                elseif(($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
-                      || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON')
-                && $getMode == 'csv')
-                {
-                    if(strlen($row[$sqlColumnNumber]) > 0)
-                    {
-                        // show selected text of optionfield or combobox
-                        $arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
-                        $content       = $arrListValues[$row[$sqlColumnNumber]];
-                    }
-                }
-
-                // format value for csv export
-                if($getMode == 'csv')
-                {
-                    $str_csv = $str_csv. $separator. $valueQuotes. $content. $valueQuotes;
-                }
-                // create output in html layout
-                else
-                {
-                    $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $row['usr_id']);
+                    // erste Spalte zeigt lfd. Nummer an
+                    $str_csv = $str_csv. $valueQuotes. $listRowNumber. $valueQuotes;
                 }
             }
-        }
 
-        if($getMode == 'csv')
-        {
-            $str_csv = $str_csv. "\n";
-        }
-        elseif($getMode == 'html')
-        {
-            $table->addRowByArray($columnValues, null, array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '\''));
-        }
-        elseif($getMode == 'print' || $getMode == 'pdf')
-        {
-            $table->addRowByArray($columnValues, null, array('nobr' => 'true'));
-        }
+            // fill content with data of database
+            $content = $row[$sqlColumnNumber];
 
-        $listRowNumber++;
+            /*****************************************************************/
+            // in some cases the content must have a special output format
+            /*****************************************************************/
+            if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id') && $usf_id!=0)
+            {
+                $content = $gL10n->getCountryByCode($row[$sqlColumnNumber]);
+            }
+            elseif($column->getValue('lsc_special_field') == 'usr_photo')
+            {
+                // show user photo
+                if($getMode == 'html' || $getMode == 'print')
+                {
+                    $content = '<img src="'.$g_root_path.'/adm_program/modules/profile/profile_photo_show.php?usr_id='.$row['usr_id'].'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
+                }
+                if ($getMode == 'csv' && $row[$sqlColumnNumber] != NULL)
+                {
+                    $content = $gL10n->get('LST_USER_PHOTO');
+                }
+            }
+            elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX')
+            {
+                if($getMode != 'html')
+                {
+                    if($content == 1)
+                    {
+                        $content = $gL10n->get('SYS_YES');
+                    }
+                    else
+                    {
+                        $content = $gL10n->get('SYS_NO');
+                    }
+                }
+            }
+            elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DATE'
+            ||     $column->getValue('lsc_special_field') == 'mem_begin'
+            ||     $column->getValue('lsc_special_field') == 'mem_end')
+            {
+                if(strlen($row[$sqlColumnNumber]) > 0)
+                {
+                    // date must be formated
+                    $date = new DateTimeExtended($row[$sqlColumnNumber], 'Y-m-d');
+                    $content = $date->format($gPreferences['system_date']);
+                }
+            }
+            elseif(($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
+                  || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON')
+            && $getMode == 'csv')
+            {
+                if(strlen($row[$sqlColumnNumber]) > 0)
+                {
+                    // show selected text of optionfield or combobox
+                    $arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
+                    $content       = $arrListValues[$row[$sqlColumnNumber]];
+                }
+            }
+
+            // format value for csv export
+            if($getMode == 'csv')
+            {
+                $str_csv = $str_csv. $separator. $valueQuotes. $content. $valueQuotes;
+            }
+            // create output in html layout
+            else
+            {
+                $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $row['usr_id']);
+            }
+        }
     }
+
+    if($getMode == 'csv')
+    {
+        $str_csv = $str_csv. "\n";
+    }
+    elseif($getMode == 'html')
+    {
+        $table->addRowByArray($columnValues, null, array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '\''));
+    }
+    elseif($getMode == 'print' || $getMode == 'pdf')
+    {
+        $table->addRowByArray($columnValues, null, array('nobr' => 'true'));
+    }
+
+    $listRowNumber++;
 }  // End-While (jeder gefundene User)
 
 // Settings for export file

@@ -102,12 +102,13 @@ else
                 ORDER BY cat_sequence, rol_name';
 }
 $result_rol = $gDb->query($sql);
+$rolesList  = $gDb->fetchAll();
 
 $count_assigned = 0;
 $parentRoles = array();
 
 // Ergebnisse durchlaufen und kontrollieren ob maximale Teilnehmerzahl ueberschritten wuerde
-while($row = $gDb->fetch_array($result_rol))
+foreach($rolesList as $row)
 {
     if($row['rol_max_members'] > 0)
     {
@@ -154,16 +155,10 @@ while($row = $gDb->fetch_array($result_rol))
     }
 }
 
-//Dateizeiger auf erstes Element zurueck setzen
-if($gDb->num_rows($result_rol)>0)
-{
-    $gDb->data_seek($result_rol, 0);
-}
-
 $user = new User($gDb, $gProfileFields, $getUserId);
 
 // Ergebnisse durchlaufen und Datenbankupdate durchfuehren
-while($row = $gDb->fetch_array($result_rol))
+foreach($rolesList as $row)
 {
     // if role is webmaster than only webmaster can add new user,
     // but don't change their own membership, because there must be at least one webmaster

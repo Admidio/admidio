@@ -124,7 +124,6 @@ $starttime = getmicrotime();
             OutputInformation('', '<br><span id="topprogress" style="font-weight: bold;">Overall Progress:</span><br>');
             $overallrows = 0;
             foreach ($SelectedTables as $dbname => $value) {
-                $gDb->select_db($dbname);
                 echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables[$dbname]) / TABLES_PER_COL).'"><b>'.htmlentities($dbname).'</b></th></tr><tr><td nowrap valign="top">';
                 $tablecounter = 0;
                 for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
@@ -145,7 +144,6 @@ $starttime = getmicrotime();
 
             $alltablesstructure = '';
             foreach ($SelectedTables as $dbname => $value) {
-                $gDb->select_db($dbname);
                 for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
                     @set_time_limit(60);
                     OutputInformation('statusinfo', 'Creating structure for <b>'.htmlentities($dbname.'.'.$SelectedTables[$dbname][$t]).'</b>');
@@ -293,7 +291,6 @@ $starttime = getmicrotime();
                 $processedrows    = 0;
                 foreach ($SelectedTables as $dbname => $value) {
                     @set_time_limit(60);
-                    $gDb->select_db($dbname);
                     for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
                         $SQLquery  = 'SELECT *';
                         $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->quote($SelectedTables[$dbname][$t]).BACKTICKCHAR;
@@ -413,7 +410,6 @@ $starttime = getmicrotime();
                                     mail(ADMIN_EMAIL, 'backupDB: FAILURE! Failed to connect to MySQL database (line '.__LINE__.')', 'Failed to reconnect to SQL database (row #'.$currentrow.') on line '.__LINE__.' in file '.@$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].LINE_TERMINATOR.$gDb->db_error());
                                     die('There was a problem connecting to the database:<br>'.LINE_TERMINATOR.$gDb->db_error());
                                 }
-                                $gDb->select_db($dbname);
                             }
                         }
                         if ($DHTMLenabled) {

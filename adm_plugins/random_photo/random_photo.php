@@ -98,7 +98,8 @@ if($plg_photos_albums != 0)
     $sql = $sql.' LIMIT '.$plg_photos_albums;
 }
 
-$result = $gDb->query($sql);
+$albumStatement = $gDb->query($sql);
+$albumList      = $gDb->fetchAll();
 
 // Variablen initialisieren
 $i         = 0;
@@ -108,13 +109,10 @@ $link_text = '';
 $album = new TablePhotos($gDb);
 
 // Schleife, falls nicht direkt ein Bild gefunden wird, aber auf 20 Durchlaeufe begrenzen
-while(!file_exists($picpath) && $i < 20 && $gDb->num_rows($result) > 0)
+while(!file_exists($picpath) && $i < 20 && $albumStatement->rowCount() > 0)
 {
-    //Zeiger per Zufall auf ein Album setzen
-    $gDb->data_seek($result, mt_rand(0, $gDb->num_rows($result)-1));
-    
     //Ausgewähltendatendatz holen
-    $album->setArray($gDb->fetch_array($result));
+    $album->setArray($albumList[mt_rand(0, $albumStatement->rowCount()-1)]);
     
     //Falls gewuensch Bild per Zufall auswaehlen
     if($plg_photos_picnr ==0)
