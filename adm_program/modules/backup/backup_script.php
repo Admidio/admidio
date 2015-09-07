@@ -118,7 +118,7 @@ $starttime = getmicrotime();
             } else {
                 fwrite($fp, $fileheaderline, strlen($fileheaderline));
             }
-            
+
             // Begin original backupDB (removed table optimize and repair part because some user database had problems with this)
 
             OutputInformation('', '<br><span id="topprogress" style="font-weight: bold;">Overall Progress:</span><br>');
@@ -283,10 +283,10 @@ $starttime = getmicrotime();
             } else {
                 fwrite($fp, $alltablesstructure.LINE_TERMINATOR, strlen($alltablesstructure) + strlen(LINE_TERMINATOR));
             }
-            
+
             $datastarttime = getmicrotime();
             OutputInformation('statusinfo', '');
-            
+
             if ($_REQUEST['StartBackup'] != 'structure') {
                 $processedrows    = 0;
                 foreach ($SelectedTables as $dbname => $value) {
@@ -307,9 +307,8 @@ $starttime = getmicrotime();
                             }
                         }
                         unset($fieldnames);
-                        for ($i = 0; $i < $gDb->num_fields($result); $i++) {
-                            $fieldnames[] = $gDb->field_name($result, $i);
-                        }
+                        $fieldnames = $gDb->showColumns($gDb->quote($SelectedTables[$dbname][$t]), false);
+
                         if ($_REQUEST['StartBackup'] == 'complete') {
                             $insertstatement = ($ReplaceInto ? 'REPLACE' : 'INSERT').' INTO '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR.' ('.BACKTICKCHAR.implode(BACKTICKCHAR.', '.BACKTICKCHAR, $fieldnames).BACKTICKCHAR.') VALUES (';
                         } else {
@@ -426,9 +425,9 @@ $starttime = getmicrotime();
                     }
                 }
             }
-            
+
             $activateForeignKeys = 'SET FOREIGN_KEY_CHECKS=1;'.LINE_TERMINATOR.LINE_TERMINATOR;
-            
+
             if (OUTPUT_COMPRESSION_TYPE == 'bzip2') {
                 bzwrite($bp, $activateForeignKeys, strlen($activateForeignKeys));
             } elseif (OUTPUT_COMPRESSION_TYPE == 'gzip') {
@@ -436,7 +435,7 @@ $starttime = getmicrotime();
             } else {
                 fwrite($fp, $activateForeignKeys, strlen($activateForeignKeys));
             }
-            
+
             if (OUTPUT_COMPRESSION_TYPE == 'bzip2') {
                 bzclose($bp);
             } elseif (OUTPUT_COMPRESSION_TYPE == 'gzip') {
@@ -449,7 +448,7 @@ $starttime = getmicrotime();
                 unlink($newfullfilename); // Windows won't allow overwriting via rename
             }
             rename($backupabsolutepath.$tempbackupfilename, $newfullfilename);
-            
+
         } else {
 
             echo '<b>Warning:</b> failed to open '.$backupabsolutepath.$tempbackupfilename.' for writing!<br><br>';

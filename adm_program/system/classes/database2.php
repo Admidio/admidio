@@ -149,6 +149,12 @@ class Database2
      */
     public function endTransaction()
     {
+        // if there is no open transaction then do nothing and return
+        if($this->transactions === 0)
+        {
+            return true;
+        }
+
         // If there was a previously opened transaction we do not commit yet...
         // but count back the number of inner transactions
         if ($this->transactions > 1)
@@ -439,14 +445,14 @@ class Database2
         return $this->pdoStatement;
     }
 
-    /** Places quotes around the input string (if required) and escapes special characters 
-     *  within the input string.
+    /** Escapes special characters within the input string. 
+     *  The returned string has no quotes around the input string!
      *  @param string $string The string to be quoted.
      *  @return Returns a quoted string that is theoretically safe to pass into an SQL statement.
      */
     public function quote($string)
     {
-        return $this->pdo->quote($string);
+        return trim($this->pdo->quote($string),"'");
     }
 
     /** If there is a open transaction than this method sends a rollback to the database
@@ -486,11 +492,21 @@ class Database2
         }
     }
 
-    // This method delivers the columns and their properties of the passed variable as an array
-    // The array has the following format:
-    // array('Fieldname1' => array('serial' => '1', 'null' => '0', 'key' => '0', 'type' => 'integer'),
-    //       'Fieldname2' => ...)
-    public function showColumns($table)
+    /** Methods reads all columns and their properties from the database table.
+     *  @param string  $table                Name of the database table for which the columns should be shown.
+     *  @param boolean $showColumnProperties If this is set to @b false only the column names were returned.
+     *  @return Returns an array with each column and their properties if $showColumnProperties is set to @b true.
+     *          The array has the following format:
+     *          array (
+     *          'column1' => array (
+     *                       'serial' => '1',
+     *                       'null'   => '0',
+     *                       'key'    => '0',
+     *                       'type'   => 'integer')
+     *          'column2' => array (...)
+     *          ...
+     */
+    public function showColumns($table, $showColumnProperties = true)
     {
         if(!isset($this->dbStructure[$table]))
         {
@@ -540,7 +556,23 @@ class Database2
             $this->dbStructure[$table] = $columnProperties;
         }
 
-        return $this->dbStructure[$table];
+        if($showColumnProperties)
+        {
+            // returns all columns with their properties of the table
+            return $this->dbStructure[$table];
+        }
+        else
+        {
+            // returns only the column names of the table.
+            $tableColumns = array();
+
+            foreach($this->dbStructure[$table] as $columnName => $columnProperties)
+            {
+                $tableColumns[] = $columnName;
+            }
+
+            return $tableColumns;
+        }
     }
 
     /** Display the error code and error message to the user if a database error occurred.
