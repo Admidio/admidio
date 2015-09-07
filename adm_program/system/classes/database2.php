@@ -96,14 +96,6 @@ class Database2
         }
     }
 
-    /**
-     *
-     */
-    public function __destruct()
-    {
-        $this->pdo = null;
-    }
-
     /** Create a valid DSN string for the engine that was set through the constructor.
      *  If no valid engine is set than an exception is thrown.
      */
@@ -175,6 +167,8 @@ class Database2
     }
 
     /** Fetch a result row as an associative array, a numeric array, or both.
+     *  @warning This method is deprecated and will be removed in future versions.
+     *  @warning Please use methods Database2#fetchAll or Database2#fetch instead.
      *  @param object $pdoStatement An object of the class PDOStatement. This should be set if multiple
      *                              rows where selected and other sql statements are also send to the database.
      *  @param int    $fetchType    Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
@@ -197,6 +191,11 @@ class Database2
         return null;
     }
 
+    /** Fetch a result row as an object.
+     *  @warning This method is deprecated and will be removed in future versions.
+     *  @warning Please use methods Database2#fetchAll or Database2#fetch instead.
+     *  @return Returns an object that corresponds to the fetched row and moves the internal data pointer ahead.
+     */
     public function fetch_object()
     {
         if(is_object($this->pdoStatement))
@@ -217,16 +216,15 @@ class Database2
      *  @return Returns an array with each column of the current row. If no rows were found an empty array is returned.
      *
      *  @par Examples
-     *  @code   $this->query('SELECT cat_id, cat_name, cat_sequence FROM adm_categories ');
-     *  $records = $this->fetchAll();
+     *  @code  $this->query('SELECT cat_id, cat_name, cat_sequence FROM adm_categories ');
+     *  $records = $this->fetch();
      *
      *  // Array with the results:
      *     $record = array(
      *              [cat_id]       => 1
      *              [cat_name]     => 'Common'
      *              [cat_sequence] => 4
-     *              )
-     *          ... @endcode
+     *              ) @endcode
      */
     public function fetch($pdoStatement = null, $fetchType = PDO::FETCH_ASSOC)
     {
@@ -252,7 +250,7 @@ class Database2
      *  @return Returns an array with arrays of each fetched row. If no rows were found an empty array is returned.
      *
      *  @par Examples
-     *  @code   $this->query('SELECT cat_id, cat_name, cat_sequence FROM adm_categories ');
+     *  @code  $this->query('SELECT cat_id, cat_name, cat_sequence FROM adm_categories ');
      *  $records = $this->fetchAll();
      *
      *  // Array with the results:
@@ -379,29 +377,32 @@ class Database2
         return $row[0];
     }
 
-    // Liefert die ID einer vorherigen INSERT-Operation
+    /** Returns the ID of the unique id column of the last INSERT operation.
+     *  @warning This method is deprecated and will be removed in future versions.
+     *  @warning Please use methods Database2#lastInsertId instead.
+     *  @return Return ID value of the last INSERT operation..
+     */
     public function insert_id()
+    {
+        return $this->lastInsertId();
+    }
+
+    /** Returns the ID of the unique id column of the last INSERT operation.
+     *  @return Return ID value of the last INSERT operation..
+     */
+    public function lastInsertId()
     {
         return $this->pdo->lastInsertId();
     }
 
     /** Returns the number of rows of the last executed statement.
-     *  Therefore a valid result must exists or set as parameter.
-     *  If no valid result exists the method will return 0.
-     *  @param $result Optional a valid result of a executed sql statement. If no result is set
-     *                 then the method will look for a result within the database object.
+     *  @warning This method is deprecated and will be removed in future versions.
+     *  @warning Please use methods Database2#rowCount instead.
      *  @return Return the number of rows of the result of the sql statement.
      */
     public function num_rows()
     {
-        $rowCount = 0;
-
-        if(is_object($this->pdoStatement))
-        {
-            $rowCount = $this->pdoStatement->rowCount();
-        }
-
-        return $rowCount;
+        return $this->rowCount();
     }
 
     /** Send a sql statement to the database that will be executed. If debug mode is set
@@ -475,6 +476,21 @@ class Database2
         return false;
     }
 
+    /** Returns the number of rows of the last executed statement.
+     *  @return Return the number of rows of the result of the sql statement.
+     */
+    public function rowCount()
+    {
+        $rowCount = 0;
+
+        if(is_object($this->pdoStatement))
+        {
+            $rowCount = $this->pdoStatement->rowCount();
+        }
+
+        return $rowCount;
+    }
+
     /** Set connection specific options like UTF8 connection. These options
      *  should always be set if Admidio connect to a database.
      */
@@ -514,41 +530,42 @@ class Database2
 
             $sql = 'SHOW COLUMNS FROM '.$table;
             $this->query($sql);
+            $columnsList = $this->fetchAll();
 
-            while ($row = $this->fetch_array())
+            foreach($columnsList as $properties)
             {
-                $columnProperties[$row['Field']]['serial'] = 0;
-                $columnProperties[$row['Field']]['null']   = 0;
-                $columnProperties[$row['Field']]['key']    = 0;
+                $columnProperties[$properties['Field']]['serial'] = 0;
+                $columnProperties[$properties['Field']]['null']   = 0;
+                $columnProperties[$properties['Field']]['key']    = 0;
 
-                if($row['Extra'] === 'auto_increment')
+                if($properties['Extra'] === 'auto_increment')
                 {
-                    $columnProperties[$row['Field']]['serial'] = 1;
+                    $columnProperties[$properties['Field']]['serial'] = 1;
                 }
-                if($row['Null'] === 'YES')
+                if($properties['Null'] === 'YES')
                 {
-                    $columnProperties[$row['Field']]['null'] = 1;
+                    $columnProperties[$properties['Field']]['null'] = 1;
                 }
-                if($row['Key'] === 'PRI' || $row['Key'] === 'MUL')
+                if($properties['Key'] === 'PRI' || $properties['Key'] === 'MUL')
                 {
-                    $columnProperties[$row['Field']]['key'] = 1;
+                    $columnProperties[$properties['Field']]['key'] = 1;
                 }
 
-                if(strpos($row['Type'], 'tinyint(1)') !== false)
+                if(strpos($properties['Type'], 'tinyint(1)') !== false)
                 {
-                    $columnProperties[$row['Field']]['type'] = 'boolean';
+                    $columnProperties[$properties['Field']]['type'] = 'boolean';
                 }
-                elseif(strpos($row['Type'], 'smallint') !== false)
+                elseif(strpos($properties['Type'], 'smallint') !== false)
                 {
-                    $columnProperties[$row['Field']]['type'] = 'smallint';
+                    $columnProperties[$properties['Field']]['type'] = 'smallint';
                 }
-                elseif(strpos($row['Type'], 'int') !== false)
+                elseif(strpos($properties['Type'], 'int') !== false)
                 {
-                    $columnProperties[$row['Field']]['type'] = 'integer';
+                    $columnProperties[$properties['Field']]['type'] = 'integer';
                 }
                 else
                 {
-                    $columnProperties[$row['Field']]['type'] = $row['Type'];
+                    $columnProperties[$properties['Field']]['type'] = $properties['Type'];
                 }
             }
 
