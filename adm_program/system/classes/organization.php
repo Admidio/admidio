@@ -1,5 +1,11 @@
 <?php
-/*****************************************************************************/
+/*****************************************************************************
+ *
+ *  Copyright    : (c) 2004 - 2015 The Admidio Team
+ *  Homepage     : http://www.admidio.org
+ *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ *****************************************************************************/
 /** @class Organization
  *  @brief Handle organization data of Admidio and is connected to database table adm_organizations
  *
@@ -14,13 +20,6 @@
  *  $language     = $preferences['system_language'];
  *  // language = 'de' @endcode
  */
-/*****************************************************************************
- *
- *  Copyright    : (c) 2004 - 2015 The Admidio Team
- *  Homepage     : http://www.admidio.org
- *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- *
- *****************************************************************************/
 
 class Organization extends TableAccess
 {
@@ -101,7 +100,7 @@ class Organization extends TableAccess
         $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                                                VALUES ('. $this->getValue('org_id'). ', \'ROL\', \'COMMON\', \'SYS_COMMON\', 0, 1, 1, '.$systemUserId.',\''. DATETIME_NOW.'\')';
         $this->db->query($sql);
-        $categoryCommon = $this->db->insert_id();
+        $categoryCommon = $this->db->lastInsertId();
 
         $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                                          VALUES ('. $this->getValue('org_id').', \'ROL\', \'GROUPS\',  \'INS_GROUPS\', 0, 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\')

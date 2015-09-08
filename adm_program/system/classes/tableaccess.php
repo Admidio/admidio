@@ -6,7 +6,6 @@
  *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
-
 /** @class TableAccess
  *  @brief Controls read and write access to datbase tables
  *
@@ -27,6 +26,7 @@
  *  $role->setValue('rol_max_members', $maxMembers);
  *  $role->save(); @endcode
  */
+
 class TableAccess
 {
     protected $additionalTables;    ///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
@@ -517,7 +517,7 @@ class TableAccess
                 $this->new_record = false;
                 if($this->keyColumnName !== '')
                 {
-                    $this->dbColumns[$this->keyColumnName] = $this->db->insert_id();
+                    $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
                 }
             }
             else

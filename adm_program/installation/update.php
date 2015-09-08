@@ -76,7 +76,7 @@ if(!isset($gDbType))
 // connect to database
 try
 {
-    $gDb = new Database2($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+    $gDb = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
 }
 catch(AdmException $e)
 {

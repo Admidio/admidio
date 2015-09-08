@@ -132,7 +132,7 @@ $starttime = getmicrotime();
                         $tablecounter = 1;
                     }
                     $SQLquery  = 'SELECT COUNT(*) AS '.BACKTICKCHAR.'num'.BACKTICKCHAR;
-                    $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->quote($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+                    $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
                     $result = $gDb->query($SQLquery);
                     $row = $gDb->fetch($result);
                     $rows[$t] = $row['num'];
@@ -168,7 +168,7 @@ $starttime = getmicrotime();
                     } else {
                         $structurelines = array();
                         $SQLquery  = 'SHOW FULL FIELDS';
-                        $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->quote($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+                        $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
                         $result_showfields = $gDb->query($SQLquery);
                         while ($row = $gDb->fetch($result_showfields)) {
                             $structureline  = BACKTICKCHAR.$row['Field'].BACKTICKCHAR;
@@ -254,7 +254,7 @@ $starttime = getmicrotime();
                             $structurelines[] = $structureline;
                         }
 
-                        $SQLquery  = 'SHOW TABLE STATUS LIKE "'.$gDb->quote($SelectedTables[$dbname][$t]).'"';
+                        $SQLquery  = 'SHOW TABLE STATUS LIKE "'.$gDb->escapeString($SelectedTables[$dbname][$t]).'"';
                         $result_tablestatus = $gDb->query($SQLquery);
                         if (!($TableStatusRow = $gDb->fetch($result_tablestatus))) {
                             die('failed to execute "'.$SQLquery.'" on '.$dbname.'.'.$tablename);
@@ -293,7 +293,7 @@ $starttime = getmicrotime();
                     @set_time_limit(60);
                     for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
                         $SQLquery  = 'SELECT *';
-                        $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->quote($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+                        $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
                         $result = $gDb->query($SQLquery);
                         $rows[$t] = $gDb->num_rows($result);
                         if ($rows[$t] > 0) {
@@ -307,7 +307,7 @@ $starttime = getmicrotime();
                             }
                         }
                         unset($fieldnames);
-                        $fieldnames = $gDb->showColumns($gDb->quote($SelectedTables[$dbname][$t]), false);
+                        $fieldnames = $gDb->showColumns($gDb->escapeString($SelectedTables[$dbname][$t]), false);
 
                         if ($_REQUEST['StartBackup'] == 'complete') {
                             $insertstatement = ($ReplaceInto ? 'REPLACE' : 'INSERT').' INTO '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR.' ('.BACKTICKCHAR.implode(BACKTICKCHAR.', '.BACKTICKCHAR, $fieldnames).BACKTICKCHAR.') VALUES (';
@@ -340,7 +340,7 @@ $starttime = getmicrotime();
                                                 }
                                                 $valuevalues[] = $hexstring;
                                             } else {
-                                                $valuevalues[] = QUOTECHAR.$gDb->quote($data).QUOTECHAR;
+                                                $valuevalues[] = QUOTECHAR.$gDb->escapeString($data).QUOTECHAR;
                                             }
                                             break;
 
@@ -354,7 +354,7 @@ $starttime = getmicrotime();
                                         case 'double':
                                         case 'decimal':
                                         case 'year':
-                                            $valuevalues[] = $gDb->quote($row[$key]);
+                                            $valuevalues[] = $gDb->escapeString($row[$key]);
                                             break;
 
                                         // value surrounded by quotes
@@ -371,7 +371,7 @@ $starttime = getmicrotime();
                                         case 'time':
                                         case 'timestamp':
                                         default:
-                                            $valuevalues[] = QUOTECHAR.$gDb->quote($row[$key]).QUOTECHAR;
+                                            $valuevalues[] = QUOTECHAR.$gDb->escapeString($row[$key]).QUOTECHAR;
                                             break;
                                     }
 

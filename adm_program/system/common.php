@@ -66,14 +66,14 @@ if(!isset($gDbType))
     $gDbType = 'mysql';
 }
 
-$gDb = new Database2($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
-/*
-$gDb = Database::createDatabaseObject($gDbType);
-if(!$gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db))
+try
 {
-    // organization not found
-    die('<div style="color: #cc0000;">Error: Wrong database connection parameters!</div>');
-}*/
+    $gDb = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+}
+catch(AdmException $e)
+{
+    $e->showText();
+}
 
 // create an installation unique cookie prefix and remove special characters
 $gCookiePraefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;

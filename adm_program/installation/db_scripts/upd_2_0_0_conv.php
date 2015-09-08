@@ -22,78 +22,78 @@ $gDb->query($sql);
 $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
                                   VALUES (NULL, 'USF', 'Stammdaten', 0, 1, 0)";
 $gDb->query($sql);
-$cat_id_stammdaten = $gDb->insert_id();
+$cat_id_stammdaten = $gDb->lastInsertId();
 
 $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
                                   VALUES (NULL, 'USF', 'Messenger', 0, 0, 1)";
 $gDb->query($sql);
-$cat_id_messenger = $gDb->insert_id();
+$cat_id_messenger = $gDb->lastInsertId();
 
 // neue Userfelder anlegen
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_system, usf_mandatory, usf_disabled, usf_sequence)
                                    VALUES ($cat_id_stammdaten, 'TEXT', 'Nachname', 1, 1, 0, 1) ";
 $gDb->query($sql);
-$usf_id_last_name = $gDb->insert_id();
+$usf_id_last_name = $gDb->lastInsertId();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_system, usf_mandatory, usf_disabled, usf_sequence)
                                    VALUES ($cat_id_stammdaten, 'TEXT', 'Vorname', 1, 1, 0, 2) ";
 $gDb->query($sql);
-$usf_id_first_name = $gDb->insert_id();
+$usf_id_first_name = $gDb->lastInsertId();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
                                    VALUES ($cat_id_stammdaten, 'TEXT', 'Adresse', 1, 3) ";
 $gDb->query($sql);
-$usf_id_address = $gDb->insert_id();
+$usf_id_address = $gDb->lastInsertId();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
                                    VALUES ($cat_id_stammdaten, 'TEXT', 'PLZ', 1, 4) ";
 $gDb->query($sql);
-$usf_id_zip_code = $gDb->insert_id();
+$usf_id_zip_code = $gDb->lastInsertId();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
                                    VALUES ($cat_id_stammdaten, 'TEXT', 'Ort', 1, 5) ";
 $gDb->query($sql);
-$usf_id_city = $gDb->insert_id();
+$usf_id_city = $gDb->lastInsertId();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
                                    VALUES ($cat_id_stammdaten, 'TEXT', 'Land', 1, 6) ";
 $gDb->query($sql);
-$usf_id_country = $gDb->insert_id();
+$usf_id_country = $gDb->lastInsertId();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
                                    VALUES ($cat_id_stammdaten, 'TEXT', 'Telefon', 1, 7) ";
 $gDb->query($sql);
-$usf_id_phone = $gDb->insert_id();
+$usf_id_phone = $gDb->lastInsertId();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
                                    VALUES ($cat_id_stammdaten, 'TEXT', 'Handy', 1, 8) ";
 $gDb->query($sql);
-$usf_id_mobile = $gDb->insert_id();
+$usf_id_mobile = $gDb->lastInsertId();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
                                    VALUES ($cat_id_stammdaten, 'TEXT', 'Fax', 1, 9) ";
 $gDb->query($sql);
-$usf_id_fax = $gDb->insert_id();
+$usf_id_fax = $gDb->lastInsertId();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
                                    VALUES ($cat_id_stammdaten, 'DATE', 'Geburtstag', 1, 10) ";
 $gDb->query($sql);
-$usf_id_birthday = $gDb->insert_id();
+$usf_id_birthday = $gDb->lastInsertId();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
                                    VALUES ($cat_id_stammdaten, 'NUMERIC', 'Geschlecht', 1, 11) ";
 $gDb->query($sql);
-$usf_id_gender = $gDb->insert_id();
+$usf_id_gender = $gDb->lastInsertId();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_mandatory, usf_sequence)
                                    VALUES ($cat_id_stammdaten, 'EMAIL',  'E-Mail', 'Es muss eine gültige E-Mail-Adresse angegeben werden.<br />Ohne diese kann das Programm nicht genutzt werden.', 1, 1, 12) ";
 $gDb->query($sql);
-$usf_id_email = $gDb->insert_id();
+$usf_id_email = $gDb->lastInsertId();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
                                    VALUES ($cat_id_stammdaten, 'URL',     'Homepage', 1, 13) ";
 $gDb->query($sql);
-$usf_id_homepage = $gDb->insert_id();
+$usf_id_homepage = $gDb->lastInsertId();
 
 
 // Termine auf "ganztaegig" konvertieren
@@ -164,7 +164,7 @@ while($row_orga = $gDb->fetch_object($result_orga))
                                           VALUES (NULL, 'USF', 'Zusätzliche Daten', 0, 2)";
     }
     $gDb->query($sql);
-    $cat_id_data = $gDb->insert_id();
+    $cat_id_data = $gDb->lastInsertId();
 
     // Systemeinstellungen anlegen
     $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '0'

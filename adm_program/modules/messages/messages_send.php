@@ -459,7 +459,7 @@ else
             VALUES ('".$getMsgType."', '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', CURRENT_TIMESTAMP, '1')";
 
         $gDb->query($sql);
-        $getMsgId = $gDb->insert_id();
+        $getMsgId = $gDb->lastInsertId();
     }
     else
     {
@@ -489,7 +489,7 @@ if ($sendResult === TRUE)
             VALUES ('".$getMsgType."', '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$ReceiverString."', CURRENT_TIMESTAMP, '0')";
 
         $gDb->query($sql);
-        $getMsgId = $gDb->insert_id();
+        $getMsgId = $gDb->lastInsertId();
 
         $sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
             VALUES ('".$getMsgId."', '1', '".$gCurrentUser->getValue('usr_id')."', '".$postBodySQL."', CURRENT_TIMESTAMP)";

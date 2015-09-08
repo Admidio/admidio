@@ -139,9 +139,14 @@ if(!$b_return)
 echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';
 
  // connect to database
-$db = Database::createDatabaseObject($gDbType);
-$connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
-
+try
+{
+    $db = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+}
+catch(AdmException $e)
+{
+    die('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()));
+}
 
 if($gDbType === 'mysql')
 {
@@ -205,7 +210,7 @@ foreach($sql_arr as $sql)
 
             // search for the exact value as a separate word and replace it with the translation
             // in l10n the single quote is transformed in html entity, but we need the original sql escaped
-            $sql = preg_replace('/\b'.$value.'\b/', $db->escape_string(str_replace('&rsquo;', '\'', $convertedText)), $sql);
+            $sql = preg_replace('/\b'.$value.'\b/', $db->escapeString(str_replace('&rsquo;', '\'', $convertedText)), $sql);
         }
 
         $db->query($sql);
