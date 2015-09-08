@@ -34,19 +34,6 @@ class Database2
      */
     public function __construct($engine, $host, $port = null, $dbName, $username = null, $password = null, $options = array())
     {
-        try
-        {
-            if (!$engine || !$host || !$dbName)
-            {
-                throw new Exception('Engine, Host and DB-Name are required Parameters');
-            }
-        }
-        catch (Exception $e)
-        {
-            print 'Error .. Details :<br /> {'.$e->getMessage().'}';
-            exit();
-        }
-
         $this->engine   = $engine;
         $this->host     = $host;
         $this->port     = $port;
@@ -73,26 +60,17 @@ class Database2
             {
                 throw new PDOException('The requested PDO driver '.$this->engine.' is not supported');
             }
-        }
-        catch (PDOException $e)
-        {
-            print 'PDO Driver Error .. Details :<br /> {'.$e->getMessage().'}';
-            exit();
-        }
 
-        $this->buildDSNString();
+            $this->buildDSNString();
 
-        // needed to avoid leaking username, password,... if a PDOException is thrown
-        try
-        {
+            // needed to avoid leaking username, password,... if a PDOException is thrown
             $this->pdo = new PDO($this->dsn, $this->username, $this->password, $this->options);
 
             $this->setConnectionOptions();
         }
         catch (PDOException $e)
         {
-            print 'Error!: ' . $e->getMessage() . '<br/>';
-            exit();
+            throw new AdmException($e->getMessage());
         }
     }
 
@@ -101,37 +79,29 @@ class Database2
      */
     private function buildDSNString()
     {
-        try
+        switch ($this->engine)
         {
-            switch ($this->engine)
-            {
-                case 'mysql':
-                    if (!$this->port)
-                    {
-                        $this->port = 3307;
-                    }
+            case 'mysql':
+                if (!$this->port)
+                {
+                    $this->port = 3307;
+                }
 
-                    $this->dsn = 'mysql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbName;
-                    break;
+                $this->dsn = 'mysql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbName;
+                break;
 
-                case 'pgsql':
-                case 'postgresql':
-                    if (!$this->port)
-                    {
-                        $this->port = 5432;
-                    }
+            case 'pgsql':
+            case 'postgresql':
+                if (!$this->port)
+                {
+                    $this->port = 5432;
+                }
 
-                    $this->dsn = 'pgsql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbName;
-                    break;
+                $this->dsn = 'pgsql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbName;
+                break;
 
-                default:
-                    throw new Exception('Engine is not supported by Admidio');
-            }
-        }
-        catch (Exception $e)
-        {
-            print "Error!: " . $e->getMessage() . "<br/>";
-            exit();
+            default:
+                throw new PDOException('Engine is not supported by Admidio');
         }
     }
 
@@ -446,7 +416,7 @@ class Database2
         return $this->pdoStatement;
     }
 
-    /** Escapes special characters within the input string. 
+    /** Escapes special characters within the input string.
      *  The returned string has no quotes around the input string!
      *  @param string $string The string to be quoted.
      *  @return Returns a quoted string that is theoretically safe to pass into an SQL statement.

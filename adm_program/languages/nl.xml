@@ -435,7 +435,6 @@
         <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Updating database</text>
         <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Database informatie doorgeven</text>
         <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="edited">Geef hier uw database informatie op. Table prefix kan aangepast worden, indien nodig. Aanpassing is niet nodig als meerdere Admidio installaties dezelfde database gebruiken.</text>
-        <text id="INS_DATABASE_NO_LOGIN" development="new" translation="edited">Opgegeven database toegangsinformatie is onjuist!\n\nCheck en update toegangsinformatie. Of check of database online is en of u toegang heeft.</text>
         <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Database maken</text>
         <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Bestuur van de organisatie</text>
         <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Hier kunnen vergaderingen plaatsvinden. Zaal moet van tevoren gereserveerd worden.</text>

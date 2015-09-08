@@ -83,8 +83,14 @@ $gL10n->addLanguageData($gLanguageData);
 // if config file exists then connect to database
 if(file_exists('../../adm_my_files/config.php'))
 {
-    $db = Database::createDatabaseObject($gDbType);
-    $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
+    try
+    {
+        $db = new Database2($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+    }
+    catch(AdmException $e)
+    {
+        showNotice($gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
+    }
 
     // now check if a valid installation exists.
     $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
@@ -250,11 +256,13 @@ elseif($getMode == 4)  // Creating organization
         if(!file_exists('../../adm_my_files/config.php'))
         {
             // check database connections
-            $db = Database::createDatabaseObject($_SESSION['db_type']);
-            if($db->connect($_SESSION['db_server'], $_SESSION['db_user'], $_SESSION['db_password'], $_SESSION['db_database']) == false)
+            try
             {
-                showNotice($gL10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3',
-                           $gL10n->get('SYS_BACK'), 'layout/back.png');
+                $db = new Database2($_SESSION['db_type'], $_SESSION['db_server'], null, $_SESSION['db_database'], $_SESSION['db_user'], $_SESSION['db_password']);
+            }
+            catch(AdmException $e)
+            {
+                showNotice($gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
             }
 
             // check database version
@@ -615,8 +623,13 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
                  , ('.$cat_id_master_inf.', \'NUMBER\', \'PRICE\',   \'SYS_QUANTITY\', NULL, 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
 
-    // now set db specific admidio preferences
-    $db->setDBSpecificAdmidioProperties();
+    if($gDbType === 'postgresql')
+    {
+        // soundex is not a default function in PostgreSQL
+        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'0\'
+                 WHERE prf_name LIKE \'system_search_similar\'';
+        $db->query($sql);
+    }
 
     // create new organization
     $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);

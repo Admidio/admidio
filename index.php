@@ -28,8 +28,14 @@ if(file_exists('adm_my_files/config.php'))
     require_once('adm_program/system/function.php');
 
     // connect to database
-    $gDb = Database::createDatabaseObject($gDbType);
-    $gDbConnection = $gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
+    try
+    {
+        $gDb = new Database2($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+    }
+    catch(AdmException $e)
+    {
+        $e->showText();
+    }
 
     // if database doesn't contain the components table then link to update wizard
     // because database Admidio version is lower then 3.0
