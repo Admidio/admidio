@@ -353,11 +353,11 @@ elseif (!isset($message_result))
         // select Users
 
         $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
-                                 email.usd_value as email, (SELECT count(1)
+                                 email.usd_value as email, (SELECT DISTINCT 1
                          FROM '.TBL_MEMBERS.' as temp
                         WHERE mem_usr_id = usr_id
-                         AND (  mem_begin > \''.DATE_NOW.'\'
-                        OR mem_end   < \''.DATE_NOW.'\')) as former
+                         AND mem_begin <= \''.DATE_NOW.'\'
+                         AND mem_end   >= \''.DATE_NOW.'\') as active
                     FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
                     JOIN '. TBL_USER_DATA. ' as email
                       ON email.usd_usr_id = usr_id
@@ -375,15 +375,17 @@ elseif (!isset($message_result))
                      AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
                      AND usr_valid   = 1
                    GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
-                   ORDER BY former, last_name, first_name';
+                   ORDER BY active DESC, last_name ASC, first_name ASC';
 
         $result = $gDb->query($sql);
 
         $next = true;
         $active = $gL10n->get('LST_ACTIVE_MEMBERS');
 
-        while ($row = $gDb->fetch_array($result)) {
-            if ($row['former'] == 1 && $next == true)
+        while ($row = $gDb->fetch_array($result)) 
+        {
+            // if former members were found then change the string for the group title
+            if ($row['active'] != 1 && $next == true)
             {
                 $active = $gL10n->get('MSG_FORMER_MEMBERS');
                 $next = false;
