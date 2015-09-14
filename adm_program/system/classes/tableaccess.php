@@ -542,8 +542,9 @@ class TableAccess
         $this->new_record = false;
     }
 
-    /** Set a new value for a column of the database table.
-     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
+    /** Set a new value for a column of the database table. The value is only saved in the object.
+     *  You must call the method @b save to store the new value to the database. If the unique key
+     *  column is set to 0 than this record will be a new record and all other columns are marked as changed.
      *  @param $columnName  The name of the database column whose value should get a new value
      *  @param $newValue    The new value that should be stored in the database field
      *  @param $checkValue  The value will be checked if it's valid. If set to @b false than the value will not be checked.
@@ -599,6 +600,15 @@ class TableAccess
             if($columnName == $this->keyColumnName && $newValue == 0)
             {
                 $this->new_record = true;
+
+                // now mark all other columns with values of this object as changed
+                foreach($this->dbColumns as $column => $value)
+                {
+                    if(strlen($value) > 0)
+                    {
+                        $this->columnsInfos[$column]['changed'] = true;
+                    }
+                }
             }
 
             if(array_key_exists($columnName, $this->dbColumns))
