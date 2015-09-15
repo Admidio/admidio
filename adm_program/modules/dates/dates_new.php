@@ -40,7 +40,12 @@ $dateRegistrationPossible = 0;
 $dateCurrentUserAssigned  = 0;
 
 // set headline of the script
-if($getDateId > 0)
+if($getCopy)
+{
+    $headline = $gL10n->get('SYS_COPY_VAR', $getHeadline);
+    $mode = 5;
+}
+elseif($getDateId > 0)
 {
     $headline = $gL10n->get('SYS_EDIT_VAR', $getHeadline);
     $mode = 5;
