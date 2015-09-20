@@ -30,7 +30,7 @@ if($getMode == 1)
 }
 
 // only webmasters are allowed to edit organization preferences or create new organizations
-if($gCurrentUser->isWebmaster() == false)
+if(!$gCurrentUser->isWebmaster())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -49,18 +49,18 @@ case 1:
                 $checkboxes = array('enable_rss', 'enable_auto_login', 'enable_password_recovery',
                                     'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check');
 
-                if(admStrIsValidFileName($_POST['theme']) == false
-                || file_exists(SERVER_PATH.'/adm_themes/'.$_POST['theme'].'/index.html') == false)
+                if(!admStrIsValidFileName($_POST['theme'])
+                || !file_exists(SERVER_PATH.'/adm_themes/'.$_POST['theme'].'/index.html'))
                 {
                     $gMessage->show($gL10n->get('ORG_INVALID_THEME'));
                 }
 
-                if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
+                if(!is_numeric($_POST['logout_minutes']) || $_POST['logout_minutes'] <= 0)
                 {
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER')));
                 }
 
-                if(isset($_POST['enable_auto_login']) == false && $gPreferences['enable_auto_login'] == 1)
+                if(!isset($_POST['enable_auto_login']) && $gPreferences['enable_auto_login'] == 1)
                 {
                     // if auto login was deactivated than delete all saved logins
                     $sql = 'DELETE FROM '.TBL_AUTO_LOGIN;
@@ -79,8 +79,8 @@ case 1:
                 break;
 
             case 'regional_settings':
-                if(admStrIsValidFileName($_POST['system_language']) == false
-                || file_exists(SERVER_PATH.'/adm_program/languages/'.$_POST['system_language'].'.xml') == false)
+                if(!admStrIsValidFileName($_POST['system_language'])
+                || !file_exists(SERVER_PATH.'/adm_program/languages/'.$_POST['system_language'].'.xml'))
                 {
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LANGUAGE')));
                 }
@@ -176,7 +176,7 @@ case 1:
                 break;
 
             case 'links':
-                if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_redirect_seconds'] < 0)
+                if(!is_numeric($_POST['weblinks_redirect_seconds']) || $_POST['weblinks_redirect_seconds'] < 0)
                 {
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('LNK_DISPLAY_REDIRECT')));
                 }
@@ -197,7 +197,7 @@ case 1:
     // if no value is found then set 0 because 0 will not be committed in a html checkbox element
     foreach($checkboxes as $key => $value)
     {
-        if(isset($_POST[$value]) == false || $_POST[$value] != 1)
+        if(!isset($_POST[$value]) || $_POST[$value] != 1)
         {
             $_POST[$value] = 0;
         }
@@ -340,7 +340,7 @@ case 3:
     $newOrganization->createBasicData($gCurrentUser->getValue('usr_id'));
 
     // if installation of second organization than show organization select at login
-    if($gCurrentOrganization->countAllRecords() == 2)
+    if($gCurrentOrganization->countAllRecords() === 2)
     {
         $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = 1
                  WHERE prf_name = \'system_organization_select\' ';

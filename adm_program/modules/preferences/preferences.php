@@ -80,17 +80,16 @@ $page->addJavascript('
             url:     action,
             data:    $(this).serialize(),
             success: function(data) {
-                if(data == "success") {
+                if (data === "success") {
                     $("#"+id+" .form-alert").attr("class", "alert alert-success form-alert");
                     $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                     $("#"+id+" .form-alert").fadeIn("slow");
                     $("#"+id+" .form-alert").animate({opacity: 1.0}, 2500);
                     $("#"+id+" .form-alert").fadeOut("slow");
-                }
-                else {
+                } else {
                     $("#"+id+" .form-alert").attr("class", "alert alert-danger form-alert");
                     $("#"+id+" .form-alert").fadeIn();
-                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
+                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
                 }
             }
         });
@@ -183,8 +182,8 @@ $page->addHtml('
                         $form->addInput('org_longname', $gL10n->get('SYS_NAME'), $form_values['org_longname'], array('maxLength' => 60, 'property' => FIELD_REQUIRED));
                         $form->addInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $form_values['org_homepage'], array('maxLength' => 60));
 
-                        //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
-                        if($gCurrentOrganization->hasChildOrganizations() == false)
+                        // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
+                        if(!$gCurrentOrganization->hasChildOrganizations())
                         {
                             $sql = 'SELECT org_id, org_longname FROM '. TBL_ORGANIZATIONS.'
                                      WHERE org_id <> '. $gCurrentOrganization->getValue('org_id'). '
@@ -363,7 +362,7 @@ $page->addHtml('
                         $selectBoxEntries = array('11' => '11', '12' => '12', '13' => '13', '14' => '14', '16' => '16', '18' => '18', '20' => '20', '22' => '22', '24' => '24', '30' => '30');
                         $form->addSelectBox('captcha_signature_font_size', $gL10n->get('SYS_FONT_SIZE'), $selectBoxEntries, array('defaultValue' => $form_values['captcha_signature_font_size'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNATURE_FONT_SIZE'));
 
-                        if($gPreferences['captcha_type']=='pic')
+                        if($gPreferences['captcha_type'] === 'pic')
                         {
                             $captcha_parameter = '&amp;type=pic';
                         }
@@ -399,13 +398,13 @@ $page->addHtml('
                         $form->addCustomContent($gL10n->get('SYS_ADMIDIO_VERSION'), $html);
 
                         // if database version is different to file version, then show database version
-                        if(strcmp(ADMIDIO_VERSION, $gSystemComponent->getValue('com_version')) != 0)
+                        if(strcmp(ADMIDIO_VERSION, $gSystemComponent->getValue('com_version')) !== 0)
                         {
                             $form->addStaticControl('database_version', $gL10n->get('ORG_DIFFERENT_DATABASE_VERSION'), $gSystemComponent->getValue('com_version'));
                         }
                         $form->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $gSystemComponent->getValue('com_update_step'));
 
-                        if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
+                        if(version_compare(phpversion(), MIN_PHP_VERSION) === -1)
                         {
                             $html = '<span class="text-danger"><strong>'.phpversion().'</strong></span> &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', MIN_PHP_VERSION);
                         }
@@ -415,7 +414,7 @@ $page->addHtml('
                         }
                         $form->addCustomContent($gL10n->get('SYS_PHP_VERSION'), $html);
 
-                        if(version_compare($gDb->getVersion(), $gDb->getMinVersion()) == -1)
+                        if(version_compare($gDb->getVersion(), $gDb->getMinVersion()) === -1)
                         {
                             $html = '<span class="text-danger"><strong>'.$gDb->getVersion().'</strong></span> &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', $gDb->getMinVersion());
                         }
@@ -435,7 +434,7 @@ $page->addHtml('
                         }
                         $form->addCustomContent($gL10n->get('SYS_SAFE_MODE'), $html);
 
-                        if(ini_get('post_max_size')!='')
+                        if(ini_get('post_max_size') !== '')
                         {
                             $form->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), ini_get('post_max_size'));
                         }
@@ -444,7 +443,7 @@ $page->addHtml('
                             $form->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $gL10n->get('SYS_NOT_SET'));
                         }
 
-                        if(ini_get('memory_limit')!='')
+                        if(ini_get('memory_limit') !== '')
                         {
                             $form->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), ini_get('memory_limit'));
                         }
@@ -463,7 +462,7 @@ $page->addHtml('
                         }
                         $form->addCustomContent($gL10n->get('SYS_FILE_UPLOADS'), $html);
 
-                        if(ini_get('upload_max_filesize')!='')
+                        if(ini_get('upload_max_filesize') !== '')
                         {
                             $form->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), ini_get('upload_max_filesize'));
                         }

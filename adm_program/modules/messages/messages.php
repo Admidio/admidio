@@ -18,8 +18,8 @@ if ($gPreferences['enable_pm_module'] != 1 && $gPreferences['enable_mail_module'
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
-    
-//check for valid login
+
+// check for valid login
 if (!$gValidLogin)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -32,7 +32,7 @@ if ($getMsgId != 0)
 {
     $delMessage = new TableMessage($gDb, $getMsgId);
 
-    //Function to delete message
+    // Function to delete message
     $delete = $delMessage->delete();
     echo $delete;
     exit();
@@ -87,40 +87,39 @@ $href  = 'href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php
 // open some additonal functions for messages
 $modulemessages = new ModuleMessages();
 
-//find all own Email messages
+// find all own Email messages
 $result = $modulemessages->msgGetUserEmails($gCurrentUser->getValue('usr_id'));
 if(isset($result))
 {
-    
-    while ($row = $gDb->fetch_array($result)) {
-        
-        $ReceiverName = "";
-        if (strpos($row['user'], '|') == true)
+    while ($row = $gDb->fetch_array($result))
+    {
+        $ReceiverName = '';
+        if (strpos($row['user'], '|') > 0)
         {
             $reciversplit = explode('|', $row['user']);
             foreach ($reciversplit as $value)
             {
-                if (strpos($value, ':') == true)
+                if (strpos($value, ':') > 0)
                 {
-                    $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($value);
+                    $ReceiverName .= '; ' . $modulemessages->msgGroupNameSplit($value);
                 }
                 else
                 {
                     $user = new User($gDb, $gProfileFields, $value);
-                    $ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                    $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
                 }
             }
         }
         else
         {
-            if (strpos($row['user'], ':') == true)
+            if (strpos($row['user'], ':') > 0)
             {
-                $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($row['user']);
+                $ReceiverName .= '; ' . $modulemessages->msgGroupNameSplit($row['user']);
             }
             else
             {
                 $user = new User($gDb, $gProfileFields, $row['user']);
-                $ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
             }
         }
         $ReceiverName = substr($ReceiverName, 2);
@@ -137,7 +136,7 @@ if(isset($result))
    }
 }
 
-//find all unread PM messages
+// find all unread PM messages
 $result = $modulemessages->msgGetUserUnread($gCurrentUser->getValue('usr_id'));
 if(isset($result))
 {
@@ -164,7 +163,7 @@ if(isset($result))
    }
 }
 
-//find all read or own PM messages
+// find all read or own PM messages
 $result = $modulemessages->msgGetUser($gCurrentUser->getValue('usr_id'));
 if(isset($result))
 {
@@ -182,7 +181,7 @@ if(isset($result))
         $ReceiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
         $message = new TableMessage($gDb, $row['msg_id']);
         $key++;
-        
+
         $messageAdministration = $part1 . $key . '&amp;name=' . urlencode($message->getValue('msg_subject')) . '&amp;database_id=' . $message->getValue('msg_id') . $part2;
 
         $table->addRowByArray(array('<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') . '">
@@ -192,7 +191,7 @@ if(isset($result))
     }
 }
 
-//special settings for the table
+// special settings for the table
 $table->setDatatablesOrderColumns(array(array(4, 'desc')));
 
 // add table to the form

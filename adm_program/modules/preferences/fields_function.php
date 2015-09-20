@@ -59,12 +59,12 @@ if($getMode == 1)
 
     // pruefen, ob Pflichtfelder gefuellt sind
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
-    if($userField->getValue('usf_system') == 0 && strlen($_POST['usf_name']) == 0)
+    if($userField->getValue('usf_system') == 0 && $_POST['usf_name'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
     }
 
-    if($userField->getValue('usf_system') == 0 && strlen($_POST['usf_type']) == 0)
+    if($userField->getValue('usf_system') == 0 && $_POST['usf_type'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATATYPE')));
     }
@@ -74,8 +74,8 @@ if($getMode == 1)
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
     }
 
-    if(($_POST['usf_type'] == 'DROPDOWN' || $_POST['usf_type'] == 'RADIO_BUTTON')
-    && strlen($_POST['usf_value_list']) == 0)
+    if(($_POST['usf_type'] === 'DROPDOWN' || $_POST['usf_type'] === 'RADIO_BUTTON')
+    && $_POST['usf_value_list'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_VALUE_LIST')));
     }
@@ -87,10 +87,10 @@ if($getMode == 1)
         $_POST['usf_mandatory'] = 1;
     }
 
-    if(isset($_POST['usf_name']) && $userField->getValue('usf_name') != $_POST['usf_name'])
+    if(isset($_POST['usf_name']) && $userField->getValue('usf_name') !== $_POST['usf_name'])
     {
         // Schauen, ob das Feld bereits existiert
-        $sql = 'SELECT COUNT(*) as count
+        $sql = 'SELECT COUNT(*) AS count
                   FROM '. TBL_USER_FIELDS. '
                  WHERE usf_name LIKE \''.$_POST['usf_name'].'\'
                    AND usf_cat_id  = '.$_POST['usf_cat_id'].'
@@ -130,10 +130,10 @@ if($getMode == 1)
     {
         if(strpos($key, 'usf_') === 0)
         {
-            if($userField->setValue($key, $value) == false)
+            if(!$userField->setValue($key, $value))
             {
                 // Daten wurden nicht uebernommen, Hinweis ausgeben
-                if($key == 'usf_url')
+                if($key === 'usf_url')
                 {
                     $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('ORG_URL')));
                 }
