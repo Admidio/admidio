@@ -22,27 +22,28 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getType  = admFuncVariableIsValid($_GET, 'type', 'string',  array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
+$getType  = admFuncVariableIsValid($_GET, 'type', 'string',
+                                   array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
 $getTitle = admFuncVariableIsValid($_GET, 'title', 'string');
 
 // Modus und Rechte pruefen
-if($getType === 'ROL' && $gCurrentUser->manageRoles() == false)
+if($getType === 'ROL' && !$gCurrentUser->manageRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType === 'LNK' && $gCurrentUser->editWeblinksRight() == false)
+elseif($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType === 'USF' && $gCurrentUser->editUsers() == false)
+elseif($getType === 'USF' && !$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType === 'DAT' && $gCurrentUser->editDates() == false)
+elseif($getType === 'DAT' && !$gCurrentUser->editDates())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType === 'AWA' && $gCurrentUser->editUsers() == false)
+elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -92,45 +93,44 @@ $page->addJavascript('
         var secondSequence = 0;
 
         // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
-        for(i=0;i < childs.length; i++) {
-            if(childs[i].tagName == "TR") {
+        for (i=0; i < childs.length; i++) {
+            if (childs[i].tagName === "TR") {
                 actRowCount++;
-                if(actSequence > 0 && nextNode == null) {
+                if (actSequence > 0 && nextNode === null) {
                     nextNode = childs[i];
                 }
 
-                if(childs[i].id == "row_" + catID) {
+                if (childs[i].id === "row_" + catID) {
                     actSequence = actRowCount;
                 }
 
-                if(actSequence == 0) {
+                if (actSequence === 0) {
                     prevNode = childs[i];
                 }
             }
         }
 
         // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
-        if(direction == "up") {
-            if(prevNode != null) {
+        if (direction === "up") {
+            if (prevNode !== null) {
                 actRow.parentNode.insertBefore(actRow, prevNode);
                 secondSequence = actSequence - 1;
             }
-        }
-        else {
-            if(nextNode != null) {
+        } else {
+            if (nextNode !== null) {
                 actRow.parentNode.insertBefore(nextNode, actRow);
                 secondSequence = actSequence + 1;
             }
         }
 
-        if(secondSequence > 0) {
+        if (secondSequence > 0) {
             // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
             $.get(gRootPath + "/adm_program/modules/categories/categories_function.php?cat_id=" + catID + "&type='. $getType. '&mode=4&sequence=" + direction);
         }
     }');
 
 $htmlIconLoginUser = '&nbsp;';
-if($getType != 'USF')
+if($getType !== 'USF')
 {
     $htmlIconLoginUser = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" />';
 }
@@ -143,7 +143,7 @@ $categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10
 
 // define link to create new category
 $categoriesMenu->addItem('admMenuItemNewCategory', $g_root_path.'/adm_program/modules/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
-                            $gL10n->get('SYS_CREATE_VAR', $addButtonText), 'add.png');
+                         $gL10n->get('SYS_CREATE_VAR', $addButtonText), 'add.png');
 
 //Create table object
 $categoriesOverview = new HtmlTable('tbl_categories', $page, true);
@@ -177,15 +177,15 @@ while($cat_row = $gDb->fetch_array($categoryResult))
     $category->clear();
     $category->setArray($cat_row);
 
-    if($category->getValue('cat_system') == 1 && $getType == 'USF')
+    if($category->getValue('cat_system') == 1 && $getType === 'USF')
     {
         // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
         $categoriesOverview->addTableBody('id', 'cat_'.$category->getValue('cat_id'));
     }
-    elseif($category->getValue('cat_org_id') == 0 && $getType == 'USF')
+    elseif($category->getValue('cat_org_id') == 0 && $getType === 'USF')
     {
         // Kategorien über alle Organisationen kommen immer zuerst
-        if($flagTbodyAllOrgasWritten == false)
+        if(!$flagTbodyAllOrgasWritten)
         {
             $flagTbodyAllOrgasWritten = true;
             $categoriesOverview->addTableBody('id', 'cat_all_orgas');
@@ -193,7 +193,7 @@ while($cat_row = $gDb->fetch_array($categoryResult))
     }
     else
     {
-        if($flagTbodyWritten == false)
+        if(!$flagTbodyWritten)
         {
             $flagTbodyWritten = true;
             $categoriesOverview->addTableBody('id', 'cat_list');
@@ -201,7 +201,7 @@ while($cat_row = $gDb->fetch_array($categoryResult))
     }
 
     $htmlMoveRow = '&nbsp;';
-    if($category->getValue('cat_system') == 0 || $getType != 'USF')
+    if($category->getValue('cat_system') == 0 || $getType !== 'USF')
     {
         $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveCategory(\'up\', '.$category->getValue('cat_id').')"><img
                                 src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', $getTitle).'" title="'.$gL10n->get('CAT_MOVE_UP', $getTitle).'" /></a>
@@ -241,7 +241,8 @@ while($cat_row = $gDb->fetch_array($categoryResult))
         $htmlMoveRow,
         $htmlHideCategory,
         $htmlDefaultCategory,
-        $categoryAdministration);
+        $categoryAdministration
+    );
     $categoriesOverview->addRowByArray($columnValues, 'row_'. $category->getValue('cat_id'));
 }
 

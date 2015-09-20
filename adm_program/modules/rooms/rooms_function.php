@@ -27,20 +27,20 @@ if (!$gCurrentUser->isWebmaster())
 
 // Raumobjekt anlegen
 $room = new TableRooms($gDb);
-if($getRoomId > 0)
+if ($getRoomId > 0)
 {
     $room->readDataById($getRoomId);
 }
 
-if($getMode == 1)
+if ($getMode == 1)
 {
     $_SESSION['rooms_request'] = $_POST;
 
-    if(strlen($_POST['room_name']) == 0)
+    if (!array_key_exists('room_name', $_POST) || $_POST['room_name'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROOM')));
     }
-    if(strlen($_POST['room_capacity']) == 0)
+    if (!array_key_exists('room_capacity', $_POST) || $_POST['room_capacity'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ROO_CAPACITY')));
     }
@@ -49,9 +49,9 @@ if($getMode == 1)
     $_POST['room_description'] = admFuncVariableIsValid($_POST, 'room_description', 'html');
 
     // POST Variablen in das Termin-Objekt schreiben
-    foreach($_POST as $key => $value)
+    foreach ($_POST as $key => $value)
     {
-        if(strpos($key, 'room_') === 0)
+        if (strpos($key, 'room_') === 0)
         {
             $room->setValue($key, $value);
         }
@@ -66,17 +66,16 @@ if($getMode == 1)
     exit();
 }
 // Löschen des Raums
-elseif($getMode == 2)
+elseif ($getMode == 2)
 {
     $sql = 'SELECT * FROM '.TBL_DATES.' WHERE dat_room_id = '.$getRoomId;
     $result = $gDb->query($sql);
     $row = $gDb->num_rows($result);
-    if($row == 0)
+    if($row === 0)
     {
         $room->delete();
         echo 'done';
     }
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
-
 }
 ?>

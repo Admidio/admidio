@@ -34,7 +34,7 @@ $roomsMenu = $page->getMenu();
 $roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 // show link to create new room
 $roomsMenu->addItem('menu_item_new_room', $g_root_path.'/adm_program/modules/rooms/rooms_new.php?headline='.$textRoom,
-                            $gL10n->get('SYS_CREATE_VAR', $textRoom), 'add.png');
+                    $gL10n->get('SYS_CREATE_VAR', $textRoom), 'add.png');
 
 if($gPreferences['system_show_create_edit'] == 1)
 {
@@ -68,14 +68,14 @@ else
         ON cha_username.usr_id = room_usr_id_change ';
 }
 
-//read rooms from database
+// read rooms from database
 $sql = 'SELECT room.*, '.$additionalFields.'
           FROM '.TBL_ROOMS.' room
                '.$additionalTables.'
          ORDER BY room_name';
 $rooms_result = $gDb->query($sql);
 
-if($gDb->num_rows($rooms_result) == 0)
+if($gDb->num_rows($rooms_result) === 0)
 {
     // Keine Räume gefunden
     $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
@@ -83,8 +83,8 @@ if($gDb->num_rows($rooms_result) == 0)
 else
 {
     $room = new TableRooms($gDb);
-    //Räume auflisten
-    while($row=$gDb->fetch_array($rooms_result))
+    // Räume auflisten
+    while($row = $gDb->fetch_array($rooms_result))
     {
         // GB-Objekt initialisieren und neuen DS uebergeben
         $room->clear();

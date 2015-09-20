@@ -33,23 +33,23 @@ $getTitle    = admFuncVariableIsValid($_GET, 'title', 'string', array('defaultVa
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
 
 // Modus und Rechte pruefen
-if($getType == 'ROL' && $gCurrentUser->manageRoles() == false)
+if($getType === 'ROL' && !$gCurrentUser->manageRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType == 'LNK' && $gCurrentUser->editWeblinksRight() == false)
+elseif($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType == 'USF' && $gCurrentUser->editUsers() == false)
+elseif($getType === 'USF' && !$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType == 'DAT' && $gCurrentUser->editDates() == false)
+elseif($getType === 'DAT' && !$gCurrentUser->editDates())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType == 'AWA' && $gCurrentUser->editUsers() == false)
+elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -62,7 +62,7 @@ if($getCatId > 0)
     $category->readDataById($getCatId);
 
     // check if category belongs to actual organization
-    if($category->getValue('cat_org_id') >  0
+    if($category->getValue('cat_org_id') > 0
     && $category->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -87,7 +87,8 @@ if($getMode == 1)
 
     $_SESSION['categories_request'] = $_POST;
 
-    if(strlen($_POST['cat_name']) == 0 && $category->getValue('cat_system') == 0)
+    if((!array_key_exists('cat_name', $_POST) || $_POST['cat_name'] === '')
+    && $category->getValue('cat_system') == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
     }
@@ -96,9 +97,9 @@ if($getMode == 1)
 
     // Profilfelderkategorien bei einer Orga oder wenn Haekchen gesetzt, immer Orgaunabhaengig anlegen
     // Terminbestaetigungskategorie bleibt auch Orgaunabhaengig
-    if(($getType == 'USF' && (isset($_POST['show_in_several_organizations'])
-                              || $gCurrentOrganization->countAllRecords() == 1))
-    || ($getType == 'ROL' && $category->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION'))
+    if(($getType === 'USF'
+    && (isset($_POST['show_in_several_organizations']) || $gCurrentOrganization->countAllRecords() == 1))
+    || ($getType === 'ROL' && $category->getValue('cat_name_intern') === 'CONFIRMATION_OF_PARTICIPATION'))
     {
         $category->setValue('cat_org_id', '0');
         $sqlSearchOrga = ' AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
@@ -113,12 +114,12 @@ if($getMode == 1)
     if($category->getValue('cat_name') != $_POST['cat_name'])
     {
         // Schauen, ob die Kategorie bereits existiert
-        $sql    = 'SELECT COUNT(*) as count
-                     FROM '. TBL_CATEGORIES. '
-                    WHERE cat_type    = \''. $getType. '\'
-                      AND cat_name LIKE \''. $_POST['cat_name']. '\'
-                      AND cat_id     <> '.$getCatId.
-                          $sqlSearchOrga;
+        $sql = 'SELECT COUNT(*) as count
+                  FROM '. TBL_CATEGORIES. '
+                 WHERE cat_type    = \''. $getType. '\'
+                   AND cat_name LIKE \''. $_POST['cat_name']. '\'
+                   AND cat_id     <> '.$getCatId.
+                       $sqlSearchOrga;
         $result = $gDb->query($sql);
         $row    = $gDb->fetch_array($result);
 
@@ -134,7 +135,7 @@ if($getMode == 1)
 
     foreach($checkboxes as $key => $value)
     {
-        if(isset($_POST[$value]) == false || $_POST[$value] != 1)
+        if(!isset($_POST[$value]) || $_POST[$value] != 1)
         {
             $_POST[$value] = 0;
         }
@@ -166,12 +167,12 @@ if($getMode == 1)
         $sequenceCategory = new TableCategory($gDb);
         $sequence = 0;
 
-        $sql    = 'SELECT *
-                     FROM '. TBL_CATEGORIES. '
-                    WHERE cat_type = "'. $getType. '"
-                      AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                          OR cat_org_id IS NULL )
-                    ORDER BY cat_org_id ASC, cat_sequence ASC';
+        $sql = 'SELECT *
+                  FROM '. TBL_CATEGORIES. '
+                 WHERE cat_type = "'. $getType. '"
+                   AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+                       OR cat_org_id IS NULL )
+                 ORDER BY cat_org_id ASC, cat_sequence ASC';
         $result = $gDb->query($sql);
 
         while($row = $gDb->fetch_array($result))

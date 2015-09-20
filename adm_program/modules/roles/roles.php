@@ -37,17 +37,17 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 unset($_SESSION['roles_request']);
 
 // per default show active and visible roles
-$sqlRolesStatus   = ' AND rol_valid   = \'1\'
-                      AND rol_visible = \'1\' ';
+$sqlRolesStatus = ' AND rol_valid   = \'1\'
+                    AND rol_visible = \'1\' ';
 
-if($getInactive == true)
+if($getInactive)
 {
     $activeRolesLinkDescription = $gL10n->get('ROL_ACTIV_ROLES');
     $listDescription  = $gL10n->get('ROL_INACTIV_ROLES');
     $activeRolesImage = 'roles.png';
     $activeRolesFlag  = '0';
     // in inactive mode show visible and invisible inactive roles
-    $sqlRolesStatus   = ' AND rol_valid   = \'0\' ';
+    $sqlRolesStatus   = ' AND rol_valid = \'0\' ';
 }
 else
 {
@@ -57,7 +57,7 @@ else
     $activeRolesFlag  = '1';
 }
 
-if($getInvisible == true)
+if($getInvisible)
 {
     $visibleRolesLinkDescription = $gL10n->get('ROL_VISIBLE_ROLES');
     $listDescription   = $gL10n->get('ROL_INVISIBLE_ROLES');
@@ -84,16 +84,16 @@ $rolesMenu = $page->getMenu();
 
 // define link to create new profile field
 $rolesMenu->addItem('menu_item_new_role', $g_root_path.'/adm_program/modules/roles/roles_new.php',
-                            $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
+                    $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
 // define link to maintain categories
 $rolesMenu->addItem('menu_item_maintain_category', $g_root_path.'/adm_program/modules/categories/categories.php?type=ROL',
-                            $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'edit.png');
+                    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'edit.png');
 // define link to show inactive roles
 $rolesMenu->addItem('menu_item_inactive_role', $g_root_path.'/adm_program/modules/roles/roles.php?inactive='.$activeRolesFlag,
-                            $activeRolesLinkDescription, $activeRolesImage);
+                    $activeRolesLinkDescription, $activeRolesImage);
 // define link to show hidden roles
 $rolesMenu->addItem('menu_item_hidden_role', $g_root_path.'/adm_program/modules/roles/roles.php?invisible='.$visibleRolesFlag,
-                            $visibleRolesLinkDescription, $visibleRolesImage);
+                    $visibleRolesLinkDescription, $visibleRolesImage);
 
 // Create table
 $table = new HtmlTable('roles_table', $page, true, true);
@@ -105,7 +105,8 @@ $columnHeading = array(
     $listDescription,
     $gL10n->get('SYS_AUTHORIZATION'),
     $gL10n->get('ROL_PREF'),
-    $gL10n->get('SYS_FEATURES'));
+    $gL10n->get('SYS_FEATURES')
+);
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));
 $table->setColumnWidth(3, '40%');
 $table->disableDatatablesColumnsSort(array(4, 5, 6));
@@ -117,13 +118,13 @@ $table->addRowHeadingByArray($columnHeading);
 $cat_id = '';
 
 // list all roles group by category
-$sql    = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-            WHERE rol_cat_id  = cat_id
-                AND cat_type    = \'ROL\'
-                    '.$sqlRolesStatus.'
-                AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                     OR cat_org_id IS NULL )
-            ORDER BY cat_sequence ASC, rol_name ASC ';
+$sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+         WHERE rol_cat_id = cat_id
+             AND cat_type = \'ROL\'
+                 '.$sqlRolesStatus.'
+             AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                  OR cat_org_id IS NULL )
+         ORDER BY cat_sequence ASC, rol_name ASC ';
 $rol_result = $gDb->query($sql);
 
 // Create role object
@@ -257,7 +258,7 @@ while($row = $gDb->fetch_array($rol_result))
     $linkAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$role->getValue("rol_id").'"><img
                                 src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('ROL_SHOW_MEMBERS').'" title="'.$gL10n->get('ROL_SHOW_MEMBERS').'" /></a>';
 
-    if($getInactive == true)
+    if($getInactive)
     {
         $linkAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=5"><img
                                     src="'.THEME_PATH.'/icons/roles.png" alt="'.$gL10n->get('ROL_ENABLE_ROLE').'" title="'.$gL10n->get('ROL_ENABLE_ROLE').'" /></a>';
@@ -279,7 +280,7 @@ while($row = $gDb->fetch_array($rol_result))
     }
     else
     {
-        if($getInactive == true)
+        if($getInactive)
         {
             $linkAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=6"><img
                                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" title="'.$gL10n->get('ROL_ROLE_DELETE').'" /></a>';
@@ -290,7 +291,7 @@ while($row = $gDb->fetch_array($rol_result))
                                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" title="'.$gL10n->get('ROL_ROLE_DELETE').'" /></a>';
         }
     }
-    if($getInvisible == true)
+    if($getInvisible)
     {
         $linkAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=8"><img
                                     src="'. THEME_PATH. '/icons/light_on.png" alt="'.$gL10n->get('ROL_SET_ROLE_VISIBLE').'" title="'.$gL10n->get('ROL_SET_ROLE_VISIBLE').'" /></a>';
@@ -308,7 +309,8 @@ while($row = $gDb->fetch_array($rol_result))
         '<a href="'.$g_root_path.'/adm_program/modules/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'" title="'.$role->getValue('rol_description').'">'.$role->getValue('rol_name').'</a>',
         $assignRoles,
         $listView,
-        $linkAdministration);
+        $linkAdministration
+    );
 
     $table->addRowByArray($columnValues);
 }

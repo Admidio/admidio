@@ -26,7 +26,7 @@ $getNewUserId = admFuncVariableIsValid($_GET, 'new_user_id', 'numeric', array('r
 $getUserId    = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
 
 // nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
-if($gCurrentUser->approveUsers() == false)
+if(!$gCurrentUser->approveUsers())
 {
    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

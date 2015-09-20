@@ -28,23 +28,23 @@ $getType  = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue'
 $getTitle = admFuncVariableIsValid($_GET, 'title', 'string');
 
 // Modus und Rechte pruefen
-if($getType == 'ROL' && $gCurrentUser->manageRoles() == false)
+if($getType === 'ROL' && !$gCurrentUser->manageRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType == 'LNK' && $gCurrentUser->editWeblinksRight() == false)
+elseif($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType == 'USF' && $gCurrentUser->editUsers() == false)
+elseif($getType === 'USF' && !$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType == 'DAT' && $gCurrentUser->editDates() == false)
+elseif($getType === 'DAT' && !$gCurrentUser->editDates())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($getType == 'AWA' && $gCurrentUser->editUsers() == false)
+elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -95,7 +95,7 @@ if($getCatId > 0)
     $category->readDataById($getCatId);
 
     // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
-    if($category->getValue('cat_org_id') >  0
+    if($category->getValue('cat_org_id') > 0
     && $category->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -107,7 +107,7 @@ if(isset($_SESSION['categories_request']))
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
     $category->setArray($_SESSION['categories_request']);
-    if(isset($_SESSION['categories_request']['show_in_several_organizations']) == false)
+    if(!isset($_SESSION['categories_request']['show_in_several_organizations']))
     {
        $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
     }
@@ -131,13 +131,13 @@ if($category->getValue('cat_system') == 1)
     $fieldPropertyCatName = FIELD_DISABLED;
 }
 
-$form->addInput('cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_name', 'database'), array('maxLength' => 100, 'property' => $fieldPropertyCatName));
+$form->addInput('cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_name', 'database'),
+                array('maxLength' => 100, 'property' => $fieldPropertyCatName));
 
-if($getType == 'USF')
+if($getType === 'USF')
 {
     // if current organization has a parent organization or is child organizations then show option to set this category to global
-    if($category->getValue('cat_system') == 0
-    && $gCurrentOrganization->countAllRecords() > 1)
+    if($category->getValue('cat_system') == 0 && $gCurrentOrganization->countAllRecords() > 1)
     {
         // show all organizations where this organization is mother or child organization
         $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
@@ -149,14 +149,17 @@ if($getType == 'USF')
             $value = 1;
         }
 
-        $form->addCheckbox('show_in_several_organizations', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $value, array('helpTextIdLabel' => array('SYS_DATA_GLOBAL', $organizations)));
+        $form->addCheckbox('show_in_several_organizations', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $value,
+                           array('helpTextIdLabel' => array('SYS_DATA_GLOBAL', $organizations)));
     }
 }
 else
 {
-    $form->addCheckbox('cat_hidden', $gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle), $category->getValue('cat_hidden'), array('icon' => 'user_key.png'));
+    $form->addCheckbox('cat_hidden', $gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle), $category->getValue('cat_hidden'),
+                       array('icon' => 'user_key.png'));
 }
-$form->addCheckbox('cat_default', $gL10n->get('CAT_DEFAULT_VAR', $getTitle), $category->getValue('cat_default'), array('icon' => 'star.png'));
+$form->addCheckbox('cat_default', $gL10n->get('CAT_DEFAULT_VAR', $getTitle), $category->getValue('cat_default'),
+                   array('icon' => 'star.png'));
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($category->getValue('cat_usr_id_create'), $category->getValue('cat_timestamp_create'), $category->getValue('cat_usr_id_change'), $category->getValue('cat_timestamp_change')));
 

@@ -17,14 +17,14 @@ if($gPreferences['registration_mode'] == 0)
 }
 
 // if there is no login then show a profile form where the user can register himself
-if($gValidLogin == false)
+if(!$gValidLogin)
 {
     header('Location: '.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=2');
     exit();
 }
 
 // Only Users with the right "approve users" can confirm registrations. Otherwise exit.
-if($gCurrentUser->approveUsers() == false)
+if(!$gCurrentUser->approveUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -36,26 +36,26 @@ $headline = $gL10n->get('NWU_NEW_REGISTRATIONS');
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // Select new Members of the group
-$sql    = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value as last_name,
-                  first_name.usd_value as first_name, email.usd_value as email
-             FROM '. TBL_REGISTRATIONS. ', '. TBL_USERS. '
-             LEFT JOIN '. TBL_USER_DATA. ' as last_name
-               ON last_name.usd_usr_id = usr_id
-              AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-             LEFT JOIN '. TBL_USER_DATA. ' as first_name
-               ON first_name.usd_usr_id = usr_id
-              AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-             LEFT JOIN '. TBL_USER_DATA. ' as email
-               ON email.usd_usr_id = usr_id
-              AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
-            WHERE usr_valid = 0
-              AND reg_usr_id = usr_id
-              AND reg_org_id = '.$gCurrentOrganization->getValue('org_id').'
-            ORDER BY last_name, first_name ';
+$sql = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value as last_name,
+               first_name.usd_value as first_name, email.usd_value as email
+          FROM '. TBL_REGISTRATIONS. ', '. TBL_USERS. '
+          LEFT JOIN '. TBL_USER_DATA. ' as last_name
+            ON last_name.usd_usr_id = usr_id
+           AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+          LEFT JOIN '. TBL_USER_DATA. ' as first_name
+            ON first_name.usd_usr_id = usr_id
+           AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+          LEFT JOIN '. TBL_USER_DATA. ' as email
+            ON email.usd_usr_id = usr_id
+           AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
+         WHERE usr_valid = 0
+           AND reg_usr_id = usr_id
+           AND reg_org_id = '.$gCurrentOrganization->getValue('org_id').'
+         ORDER BY last_name, first_name ';
 $usr_result   = $gDb->query($sql);
-$member_found = $gDb->num_rows($usr_result);
+$members_found = $gDb->num_rows($usr_result);
 
-if ($member_found == 0)
+if ($members_found === 0)
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('NWU_NO_REGISTRATIONS'), $gL10n->get('SYS_REGISTRATION'));
@@ -70,8 +70,9 @@ if($gCurrentUser->isWebmaster())
     $registrationMenu = $page->getMenu();
 
     // show link to system preferences of announcements
-    $registrationMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=registration',
-                                $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    $registrationMenu->addItem('menu_item_preferences',
+                               $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=registration',
+                               $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
 $table = new HtmlTable('new_user_table', $page, true);
@@ -82,7 +83,8 @@ $columnHeading = array(
     $gL10n->get('SYS_REGISTRATION'),
     $gL10n->get('SYS_USERNAME'),
     $gL10n->get('SYS_EMAIL'),
-    $gL10n->get('SYS_FEATURES'));
+    $gL10n->get('SYS_FEATURES')
+);
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
 $table->setDatatablesOrderColumns(1);
 $table->addRowHeadingByArray($columnHeading);
