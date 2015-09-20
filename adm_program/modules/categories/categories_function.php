@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -67,7 +67,7 @@ if($getCatId > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
-    
+
     // if system category then set cat_name to default
     if($category->getValue('cat_system') == 1)
     {
@@ -93,7 +93,7 @@ if($getMode == 1)
     }
 
     $sqlSearchOrga = '';
-    
+
     // Profilfelderkategorien bei einer Orga oder wenn Haekchen gesetzt, immer Orgaunabhaengig anlegen
     // Terminbestaetigungskategorie bleibt auch Orgaunabhaengig
     if(($getType == 'USF' && (isset($_POST['show_in_several_organizations'])
@@ -127,7 +127,7 @@ if($getMode == 1)
             $gMessage->show($gL10n->get('CAT_CATEGORY_EXIST'));
         }
     }
-    
+
     // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
     // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
     $checkboxes = array('cat_hidden','cat_default');

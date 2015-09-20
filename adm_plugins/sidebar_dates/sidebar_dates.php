@@ -11,7 +11,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -161,20 +161,20 @@ if($plgDatesResult['numResults'] > 0)
         {
             echo $plg_date->getValue('dat_headline'). '</a></div>';
         }
-        
+
         // Vorschau-Text anzeigen
         if($plg_dates_show_preview > 0)
         {
             // Anfang des Ankündigungs-Textes auslesen. Plus 15 Zeichen, um am Ende eines Wortes abzubrechen
             $textPrev = substr($plg_date->getValue('dat_description'), 0, $plg_dates_show_preview + 15);
             $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...';
-            
-            echo '<div>'.$textPrev.' 
+
+            echo '<div>'.$textPrev.'
             <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
-                href="'.$plg_link_url.'?view_mode=html&amp;id='. $plg_date->getValue("dat_id"). '"><span 
+                href="'.$plg_link_url.'?view_mode=html&amp;id='. $plg_date->getValue("dat_id"). '"><span
                 class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_DATES_MORE').'</a></div>';
         }
-        
+
         echo '<hr>';
     }
 

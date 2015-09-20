@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -66,7 +66,7 @@ switch($getNewItem)
 foreach($gInventoryFields->mInventoryFields as $field)
 {
     $post_id = 'inf-'. $field->getValue('inf_id');
-    
+
     // check and save only fields that aren't disabled
     if($gCurrentUser->editUsers() == true || $field->getValue('inf_disabled') == 0 || ($field->getValue('inf_disabled') == 1 && $getNewItem > 0))
     {
@@ -81,7 +81,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
 
             // Wert aus Feld in das User-Klassenobjekt schreiben
             $returnCode = $inventory->setValue($field->getValue('inf_name_intern'), $_POST[$post_id]);
-            
+
             // Ausgabe der Fehlermeldung je nach Datentyp
             if($returnCode == false)
             {
@@ -135,7 +135,7 @@ try
     {
         // der User wird gerade angelegt und die ID kann erst danach in das Create-Feld gesetzt werden
         $inventory->save();
-    
+
         if($getNewItem == 1)
         {
             $inventory->setValue('inv_usr_id_create', $gCurrentUser->getValue('inv_id'));

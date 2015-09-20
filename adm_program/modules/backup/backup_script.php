@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *
  * Based on backupDB Version 1.2.7-201104261502
@@ -118,7 +118,7 @@ $starttime = getmicrotime();
             } else {
                 fwrite($fp, $fileheaderline, strlen($fileheaderline));
             }
-            
+
             // Begin original backupDB (removed table optimize and repair part because some user database had problems with this)
 
             OutputInformation('', '<br><span id="topprogress" style="font-weight: bold;">Overall Progress:</span><br>');
@@ -290,10 +290,10 @@ $starttime = getmicrotime();
             } else {
                 fwrite($fp, $alltablesstructure.LINE_TERMINATOR, strlen($alltablesstructure) + strlen(LINE_TERMINATOR));
             }
-            
+
             $datastarttime = getmicrotime();
             OutputInformation('statusinfo', '');
-            
+
             if ($_REQUEST['StartBackup'] != 'structure') {
                 $processedrows    = 0;
                 foreach ($SelectedTables as $dbname => $value) {
@@ -436,9 +436,9 @@ $starttime = getmicrotime();
                     }
                 }
             }
-            
+
             $activateForeignKeys = 'SET FOREIGN_KEY_CHECKS=1;'.LINE_TERMINATOR.LINE_TERMINATOR;
-            
+
             if (OUTPUT_COMPRESSION_TYPE == 'bzip2') {
                 bzwrite($bp, $activateForeignKeys, strlen($activateForeignKeys));
             } elseif (OUTPUT_COMPRESSION_TYPE == 'gzip') {
@@ -446,7 +446,7 @@ $starttime = getmicrotime();
             } else {
                 fwrite($fp, $activateForeignKeys, strlen($activateForeignKeys));
             }
-            
+
             if (OUTPUT_COMPRESSION_TYPE == 'bzip2') {
                 bzclose($bp);
             } elseif (OUTPUT_COMPRESSION_TYPE == 'gzip') {
@@ -459,7 +459,7 @@ $starttime = getmicrotime();
                 unlink($newfullfilename); // Windows won't allow overwriting via rename
             }
             rename($backupabsolutepath.$tempbackupfilename, $newfullfilename);
-            
+
         } else {
 
             echo '<b>Warning:</b> failed to open '.$backupabsolutepath.$tempbackupfilename.' for writing!<br><br>';

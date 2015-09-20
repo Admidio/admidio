@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -53,7 +53,7 @@ if (isset($comment_result))
         // GBComment-Objekt initialisieren und neuen DS uebergeben
         $gbComment->clear();
         $gbComment->setArray($row);
-    
+
         $getGbcId = $gbComment->getValue('gbc_gbo_id');
 
         echo '
@@ -66,7 +66,7 @@ if (isset($comment_result))
                     // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
                     if(strlen($gbComment->getValue('gbc_email')) > 0)
                     {
-                        echo '<a class="admidio-icon-link" href="mailto:'.$gbComment->getValue('gbc_email').'"><img src="'. THEME_PATH. '/icons/email.png" 
+                        echo '<a class="admidio-icon-link" href="mailto:'.$gbComment->getValue('gbc_email').'"><img src="'. THEME_PATH. '/icons/email.png"
                             alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gbComment->getValue('gbc_email')).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gbComment->getValue('gbc_email')).'" /></a>';
                     }
                 echo '</div>
@@ -76,11 +76,11 @@ if (isset($comment_result))
                     if ($gCurrentUser->editGuestbookRight())
                     {
                         echo '
-                        <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?cid='.$gbComment->getValue('gbc_id').'"><img 
+                        <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?cid='.$gbComment->getValue('gbc_id').'"><img
                             src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
                         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                             href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.
-                            $gbComment->getValue('gbc_id').'&amp;database_id='.$gbComment->getValue('gbc_id').'&amp;database_id_2='.$gbComment->getValue('gbo_id').'&amp;name='.urlencode($gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name'))).'"><img 
+                            $gbComment->getValue('gbc_id').'&amp;database_id='.$gbComment->getValue('gbc_id').'&amp;database_id_2='.$gbComment->getValue('gbo_id').'&amp;name='.urlencode($gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name'))).'"><img
                             src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                     }
                 echo '</div>
@@ -94,9 +94,9 @@ if (isset($comment_result))
                 {
                     echo '
                     <div class="btn-group" role="group">
-                        <button class="btn btn-default" onclick="javascript:callUrlHideElement(\'gbc_'.$gbComment->getValue('gbc_id').'\', \'guestbook_function.php?mode=10&id='.$gbComment->getValue('gbc_id').'\')"><img 
+                        <button class="btn btn-default" onclick="javascript:callUrlHideElement(\'gbc_'.$gbComment->getValue('gbc_id').'\', \'guestbook_function.php?mode=10&id='.$gbComment->getValue('gbc_id').'\')"><img
                             src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</button>
-                        <button class="btn btn-default" onclick="javascript:callUrlHideElement(\'gbc_'.$gbComment->getValue('gbc_id').'\', \'guestbook_function.php?mode=5&id='.$gbComment->getValue('gbc_id').'\')"><img 
+                        <button class="btn btn-default" onclick="javascript:callUrlHideElement(\'gbc_'.$gbComment->getValue('gbc_id').'\', \'guestbook_function.php?mode=5&id='.$gbComment->getValue('gbc_id').'\')"><img
                             src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</button>
                     </div>';
                 }
@@ -115,7 +115,7 @@ if (isset($comment_result))
     {
         // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
         echo '
-        <button type="button" class="btn btn-default" onclick="javascript:window.location.href=\''.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$getGbcId.'\'"><img 
+        <button type="button" class="btn btn-default" onclick="javascript:window.location.href=\''.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$getGbcId.'\'"><img
             src="'. THEME_PATH. '/icons/comment_new.png" alt="'.$gL10n->get('GBO_WRITE_COMMENT').'"
             title="'.$gL10n->get('GBO_WRITE_COMMENT').'" />'.$gL10n->get('GBO_WRITE_COMMENT').'</button>';
     }

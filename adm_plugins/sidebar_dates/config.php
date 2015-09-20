@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -21,8 +21,8 @@ $plg_show_date_end = 1;
 // >0 = Anzahl Zeichen des Vorschau-Textes
 $plg_dates_show_preview = 70;
 
-// Maximale Anzahl von Zeichen in einem Wort, 
-// bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert)) 
+// Maximale Anzahl von Zeichen in einem Wort,
+// bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert))
 $plg_max_char_per_word = 0;
 
 // Welche Kalender sollen ausgegeben werden: Alle (all), Kalender xyz (xyz)

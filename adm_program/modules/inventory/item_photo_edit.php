@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -65,7 +65,7 @@ if($inventory->getValue('inv_id') == 0)
 if($getMode == 'save')
 {
     /*****************************Foto speichern*************************************/
-    
+
     if($gPreferences['profile_photo_storage'] == 1)
     {
         // Foto im Dateisystem speichern
@@ -77,7 +77,7 @@ if($getMode == 'save')
             {
                 unlink(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg');
             }
-            
+
             rename(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg', SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg');
         }
     }
@@ -98,7 +98,7 @@ if($getMode == 'save')
             $gCurrentSession->renewUserObject($getItemId);
         }
     }
-    
+
     // zur Ausgangsseite zurueck
     $gNavigation->deleteLastUrl();
     header('Location: '.$g_root_path.'/adm_program/modules/inventory/item.php?item_id='.$getItemId);
@@ -158,12 +158,12 @@ if($getMode == 'choose')
     {
         $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', $inventory->getValue('FIRST_NAME'), $inventory->getValue('LAST_NAME'));
     }
-    
+
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
     $page = new HtmlPage($headline);
-    
+
     // add back link to module menu
     $profilePhotoMenu = $page->getMenu();
     $profilePhotoMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
@@ -181,7 +181,7 @@ if($getMode == 'choose')
 elseif($getMode == 'upload')
 {
     /*****************************Foto zwischenspeichern bestaetigen***********************************/
-    
+
     //Dateigroesse
     if ($_FILES['userfile']['error'][0]==1)
     {
@@ -207,12 +207,12 @@ elseif($getMode == 'upload')
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', round(admFuncProcessableImageSize()/1000000, 2)));
     }
-    
+
     // Foto auf entsprechende Groesse anpassen
     $user_image = new Image($_FILES['userfile']['tmp_name'][0]);
     $user_image->setImageType('jpeg');
     $user_image->scale(130, 170);
-    
+
     //Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
@@ -225,12 +225,12 @@ elseif($getMode == 'upload')
         $user_image->copyToFile(null, ($_FILES['userfile']['tmp_name'][0]));
         // Foto aus PHP-Temp-Ordner einlesen
         $user_image_data = fread(fopen($_FILES['userfile']['tmp_name'][0], 'r'), $_FILES['userfile']['size'][0]);
-        
+
         // Zwischenspeichern des neuen Fotos in der Session
         $gCurrentSession->setValue('ses_binary', $user_image_data);
         $gCurrentSession->save();
     }
-    
+
     //Image-Objekt löschen
     $user_image->delete();
 
@@ -242,7 +242,7 @@ elseif($getMode == 'upload')
     {
         $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', $inventory->getValue('FIRST_NAME'), $inventory->getValue('LAST_NAME'));
     }
-    
+
     // create html page object
     $page = new HtmlPage($headline);
     $page->addJavascript('$("#btn_cancel").click(function() {

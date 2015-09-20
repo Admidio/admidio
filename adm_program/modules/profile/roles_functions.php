@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -37,7 +37,7 @@ function getRolesFromDatabase($user_id)
 function getFutureRolesFromDatabase($user_id)
 {
     global $gDb, $gCurrentOrganization;
-    
+
     $sql = 'SELECT *
               FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
              WHERE mem_rol_id  = rol_id
@@ -56,7 +56,7 @@ function getFutureRolesFromDatabase($user_id)
 function getFormerRolesFromDatabase($user_id)
 {
     global $gDb, $gCurrentOrganization;
-    
+
     $sql    = 'SELECT *
                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                 WHERE mem_rol_id  = rol_id
@@ -74,7 +74,7 @@ function getFormerRolesFromDatabase($user_id)
 function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $directOutput)
 {
     global $gDb, $gL10n, $gCurrentUser, $gPreferences, $g_root_path, $gProfileFields;
-    
+
     $countShowRoles  = 0;
     $member = new TableMembers($gDb);
     $role   = new TableRoles($gDb);
@@ -93,7 +93,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
             $member->setArray($row);
             $role->clear();
             $role->setArray($row);
-            
+
             // if membership will not end, then don't show end date
             if(strcmp($member->getValue('mem_end', 'Y-m-d'), '9999-12-31') != 0)
             {
@@ -121,7 +121,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                     <li class="list-group-item">
                         <span>'.
                             $role->getValue('cat_name'). ' - ';
-                            
+
                             if($gCurrentUser->hasRightViewRole($member->getValue('mem_rol_id')))
                             {
                                 $roleMemHTML .= '<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $member->getValue('mem_rol_id'). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
@@ -134,7 +134,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                             {
                                 $roleMemHTML .= ' - '.$gL10n->get('SYS_LEADER');
                             }
-                            
+
                             $roleMemHTML .= '&nbsp;
                         </span>
                         <span class="pull-right text-right">';
@@ -150,7 +150,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                             {
                                 $roleMemHTML .= $gL10n->get('SYS_SINCE', $member->getValue('mem_begin', $gPreferences['system_date']));
                             }
-        
+
                             if($role->allowedToAssignMembers($gCurrentUser))
                             {
                                 // You are not allowed to delete your own webmaster membership, other roles could be deleted
@@ -168,7 +168,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                                     $roleMemHTML .= '
                                     <a class="admidio-icon-link"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
                                 }
-        
+
                                 // do not edit webmaster role
                                 if ($row['rol_webmaster'] == 0)
                                 {
@@ -179,9 +179,9 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                                 {
                                     $roleMemHTML .= '<a class="admidio-icon-link"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
                                 }
-        
+
                             }
-        
+
                             // only show info if system setting is activated
                             if($gPreferences['system_show_create_edit'] > 0)
                             {

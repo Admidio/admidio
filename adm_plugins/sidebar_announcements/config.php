@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -24,8 +24,8 @@ $plg_link_class = '';
 // Hier koennen die ueblichen targets (_self, _top ...) oder Framenamen angegeben werden
 $plg_link_target = '_self';
 
-// Maximale Anzahl von Zeichen in einem Wort, 
-// bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert)) 
+// Maximale Anzahl von Zeichen in einem Wort,
+// bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert))
 $plg_max_char_per_word = 0;
 
 // Soll die Überschrift des Plugins angezeigt werden

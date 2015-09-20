@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -150,14 +150,14 @@ $page->addJavascript('
             $(id).hide("fast");
         }
     }
-    
+
     function callbackProfilePhoto() {
         var img_src = $("#profile_photo").attr("src");
         var timestamp = new Date().getTime();
         $("#btn_delete_photo").hide();
         $("#profile_photo").attr("src",img_src+"&"+timestamp);
     }
-    
+
     function callbackRoles() {
         if(profileJS) {
             profileJS.formerRoleCount++;
@@ -334,7 +334,7 @@ $page->addHtml('
                 if ($user->getValue('usr_id') != $gCurrentUser->getValue('usr_id') && $gPreferences['enable_pm_module'] == 1)
                 {
                     $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'),
-                        '<img src="'.THEME_PATH.'/icons/pm.png" alt="'.$gL10n->get('PMS_SEND_PM').'" /> 
+                        '<img src="'.THEME_PATH.'/icons/pm.png" alt="'.$gL10n->get('PMS_SEND_PM').'" />
                         <a href='.$g_root_path.'/adm_program/modules/messages/messages_write.php?msg_type=PM&usr_id='.$user->getValue('usr_id').'>'.$user->getValue('usr_login_name').'</a>');
                 }
                 else

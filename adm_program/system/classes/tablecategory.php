@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Diese Klasse dient dazu einen Kategorieobjekt zu erstellen.
  * Eine Kategorieobjekt kann ueber diese Klasse in der Datenbank verwaltet werden
@@ -160,7 +160,7 @@ class TableCategory extends TableAccess
     }
 
     /** Change the internal sequence of this category. It can be moved one place up or down
-     *  @param $mode This could be @b UP or @b DOWN. 
+     *  @param $mode This could be @b UP or @b DOWN.
      */
     public function moveSequence($mode)
     {
@@ -217,7 +217,7 @@ class TableCategory extends TableAccess
     public function readDataById($cat_id)
     {
         global $g_tbl_praefix;
-        
+
         $returnValue = parent::readDataById($cat_id);
 
         if($returnValue)

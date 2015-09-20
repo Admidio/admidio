@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -142,13 +142,13 @@ if($getType == 'USF')
         // show all organizations where this organization is mother or child organization
         $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
         $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
-        
+
         $value = 0;
         if($category->getValue('cat_org_id') == 0)
         {
             $value = 1;
         }
-        
+
         $form->addCheckbox('show_in_several_organizations', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $value, array('helpTextIdLabel' => array('SYS_DATA_GLOBAL', $organizations)));
     }
 }

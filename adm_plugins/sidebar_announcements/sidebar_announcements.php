@@ -11,7 +11,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -90,17 +90,17 @@ else
     {
         $plg_announcement->clear();
         $plg_announcement->setArray($plg_row);
-        
+
         echo '<div><a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue("ann_id"). '&amp;headline='. $gL10n->get('PLG_ANNOUNCEMENTS_HEADLINE'). '" target="'. $plg_link_target. '">';
-        
+
         if($plg_max_char_per_word > 0)
         {
             $plg_new_headline = "";
             unset($plg_words);
-        
+
             // Woerter unterbrechen, wenn sie zu lang sind
             $plg_words = explode(" ", $plg_announcement->getValue('ann_headline'));
-            
+
             foreach($plg_words as $plg_key => $plg_value)
             {
                 if(strlen($plg_value) > $plg_max_char_per_word)
@@ -119,26 +119,26 @@ else
         {
             echo $plg_announcement->getValue('ann_headline').'</a></div>';
         }
-         
+
         // Vorschau-Text anzeigen
         if($plg_show_preview > 0)
         {
             // Anfang des Ankündigungs-Textes auslesen. Plus 15 Zeichen, um am Ende eines Wortes abzubrechen
             $textPrev = substr($plg_announcement->getValue('ann_description'), 0, $plg_show_preview + 15);
             $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...';
-            
-            echo '<div>'.$textPrev.' 
+
+            echo '<div>'.$textPrev.'
             <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
-                href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue("ann_id"). '&amp;headline='. $gL10n->get('PLG_ANNOUNCEMENTS_HEADLINE'). '"><span 
+                href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue("ann_id"). '&amp;headline='. $gL10n->get('PLG_ANNOUNCEMENTS_HEADLINE'). '"><span
                 class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_MORE').'</a></div>';
         }
-         
+
         echo '<div><i>('. $plg_announcement->getValue('ann_timestamp_create', $gPreferences['system_date']). ')</i></div>';
 
         echo '<hr />';
 
     }
-    
+
     echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ANNOUNCEMENTS').'</a>';
 }
 echo '</div>';
