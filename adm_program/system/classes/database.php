@@ -158,6 +158,7 @@ class Database
      * The method will commit an open transaction to the database. If the
      * transaction counter is greater 1 than only the counter will be
      * decreased and no commit will performed.
+     * @return Returns @b true if the commit was successful otherwise @b false
      * @see Database#startTransaction
      * @see Database#rollback
      */
@@ -276,8 +277,11 @@ class Database
         return PDO::getAvailableDrivers();
     }
 
-    // Teile dieser Funktion sind von get_backtrace aus phpBB3
-    // Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
+    /**
+     * This method will create an backtrace of the current position in the script. If several
+     * scripts were called than each script with their position will be listet in the backtrace.
+     * @return Returns a string with the backtrace of all called scripts.
+     */
     protected function getBacktrace()
     {
         $output = '<div style="font-family: monospace;">';
@@ -389,8 +393,8 @@ class Database
      *  @param bool $throwError Default will be @b true and if an error the script will be terminated and
      *                          occurred the error with a backtrace will be send to the browser. If set to
      *                          @b false no error will be shown and the script will be continued.
-     *  @return For @b SELECT statements a result resource will be returned and otherwise @b true.
-     *          If an error occurred then @b false will be returned of the script was not terminated.
+     *  @return For @b SELECT statements an object of PDOStatement will be returned.
+     *          If an error occurred then @b false will be returned.
      */
     public function query($sql, $throwError = true)
     {
@@ -477,7 +481,7 @@ class Database
     }
 
     /** Methods reads all columns and their properties from the database table.
-     *  @param string  $table                Name of the database table for which the columns should be shown.
+     *  @param string  $table                Name of the database table for which the columns should be shown.
      *  @param boolean $showColumnProperties If this is set to @b false only the column names were returned.
      *  @return Returns an array with each column and their properties if $showColumnProperties is set to @b true.
      *          The array has the following format:
@@ -563,8 +567,8 @@ class Database
     /** Display the error code and error message to the user if a database error occurred.
      *  The error must be read by the child method. This method will call a backtrace so
      *  you see the script and specific line in which the error occurred.
-     *  @param $code    The database error code that will be displayed.
-     *  @param $message The database error message that will be displayed.
+     *  @param string $code    The database error code that will be displayed.
+     *  @param string $message The database error message that will be displayed.
      *  @return Will exit the script and returns a html output with the error informations.
      */
     public function showError($code = 0, $message = '')
