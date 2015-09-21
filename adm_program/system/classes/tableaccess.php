@@ -208,7 +208,7 @@ class TableAccess
                 || strpos($this->columnsInfos[$columnName]['type'], 'date') !== false
                 || strpos($this->columnsInfos[$columnName]['type'], 'time') !== false)
             {
-                if($columnValue !== '')
+                if(strlen($columnValue) > 0)
                 {
                     if($format === '' && isset($gPreferences))
                     {
