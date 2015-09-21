@@ -6,9 +6,51 @@
  *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
-/**
- * Class DB
+ /** 
+ * @class Database
+ * @brief Handle the connection to the database, send all sql statements and handle the returned rows.
+ *
+ * This class creates a connection to the database and provides several methods
+ * to communicate with the database. There are methods to send sql statements
+ * and to handle the response of the database. This class also supports transactions.
+ * Just call Database#startTransaction and finish it with Database#endTransaction. If
+ * you call this multiple times only 1 transaction will be open and it will be closed
+ * after the last endTransaction was send.
+ * @par Examples
+ * To open a connection you can use the settings of the config.php of Admidio.
+ * @code // create object and open connection to database
+ * try
+ * {
+ *     $gDb = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+ * }
+ * catch(AdmException $e)
+ * {
+ *     $e->showText();
+ * } @endcode
+ * Now you can use the new object @b $gDb to send a query to the database
+ * @code // send sql to database
+ * $gDb->query('SELECT org_shortname, org_longname FROM adm_organizations');
+ * // now fetch all rows of the result within one array
+ * $organizationsList = $gDb->fetchAll();
+ *
+ * // Array with the results:
+ * //    $organizationsList = array(
+ * //         [0] => array(
+ * //             [org_shortname] => 'DEMO'
+ * //             [org_longname]  => 'Demo-Organization'
+ * //             )
+ * //         [1] => array(
+ * //             [org_shortname] => 'TEST'
+ * //             [org_longname]  => 'Test-Organization'
+ * //             )
+ *
+ * // you can also go step by step through the result
+ * while($organizationNames = $gDb->fetch())
+ * {
+ *     echo $organizationNames['shortname'].' '.$organizationNames['longname'];
+ * } @endcode
  */
+
 
 class Database
 {
@@ -91,7 +133,7 @@ class Database
             case 'mysql':
                 if (!$this->port)
                 {
-                    $this->port = 3307;
+                    $this->port = 3306;
                 }
 
                 $this->dsn = 'mysql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbName;
@@ -112,9 +154,12 @@ class Database
         }
     }
 
-    /** The method will commit an open transaction to the database. If the
-     *  transaction counter is greater 1 than only the counter will be
-     *  decreased and no commit will performed.
+    /**
+     * The method will commit an open transaction to the database. If the
+     * transaction counter is greater 1 than only the counter will be
+     * decreased and no commit will performed.
+     * @see Database#startTransaction
+     * @see Database#rollback
      */
     public function endTransaction()
     {
@@ -172,6 +217,8 @@ class Database
      *              [cat_name]     => 'Common'
      *              [cat_sequence] => 4
      *              ) @endcode
+     * @see Database#fetchAll
+     * @see Database#query
      */
     public function fetch($pdoStatement = null, $fetchType = PDO::FETCH_ASSOC)
     {
@@ -213,6 +260,8 @@ class Database
      *              [cat_sequence] => 2
      *              )
      *          ... @endcode
+     * @see Database#fetch
+     * @see Database#query
      */
     public function fetchAll($fetchType = PDO::FETCH_ASSOC)
     {
@@ -375,6 +424,8 @@ class Database
 
     /** If there is a open transaction than this method sends a rollback to the database
      *  and will set the transaction counter to zero.
+     * @see Database#startTransaction
+     * @see Database#endTransaction
      */
     public function rollback()
     {
@@ -568,8 +619,12 @@ class Database
         exit();
     }
 
-    /** Checks if an open transaction exists. If there is no open transaction than
-     *  start one otherwise increase the internal transaction counter.
+    /** 
+     * Start a transaction if no open transaction exists. If you call this 
+     * multiple times only 1 transaction will be open and it will be closed
+     * after the last endTransaction was send.
+     * @see Database#endTransaction
+     * @see Database#rollback
      */
     public function startTransaction()
     {
@@ -593,14 +648,17 @@ class Database
     }
 
 
-    /** Fetch a result row as an associative array, a numeric array, or both.
-     *  @warning This method is deprecated and will be removed in future versions.
-     *  @warning Please use methods Database#fetchAll or Database#fetch instead.
-     *  @param object $pdoStatement An object of the class PDOStatement. This should be set if multiple
-     *                              rows where selected and other sql statements are also send to the database.
-     *  @param int    $fetchType    Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
-     *                              @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
-     *  @return Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
+    /**
+     * Fetch a result row as an associative array, a numeric array, or both.
+     * @warning This method is deprecated and will be removed in future versions.
+     * @warning Please use methods Database#fetchAll or Database#fetch instead.
+     * @param object $pdoStatement An object of the class PDOStatement. This should be set if multiple
+     *                             rows where selected and other sql statements are also send to the database.
+     * @param int    $fetchType    Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
+     *                             @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
+     * @return Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
+     * @see Database#fetch
+     * @see Database#fetchAll
      */
     public function fetch_array($pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
     {
@@ -618,10 +676,13 @@ class Database
         return null;
     }
 
-    /** Fetch a result row as an object.
-     *  @warning This method is deprecated and will be removed in future versions.
-     *  @warning Please use methods Database#fetchAll or Database#fetch instead.
-     *  @return Returns an object that corresponds to the fetched row and moves the internal data pointer ahead.
+    /**
+     * Fetch a result row as an object.
+     * @warning This method is deprecated and will be removed in future versions.
+     * @warning Please use methods Database#fetchAll or Database#fetch instead.
+     * @return Returns an object that corresponds to the fetched row and moves the internal data pointer ahead.
+     * @see Database#fetch
+     * @see Database#fetchAll
      */
     public function fetch_object()
     {
@@ -633,20 +694,24 @@ class Database
         return null;
     }
 
-    /** Returns the ID of the unique id column of the last INSERT operation.
-     *  @warning This method is deprecated and will be removed in future versions.
-     *  @warning Please use methods Database#lastInsertId instead.
-     *  @return Return ID value of the last INSERT operation..
+    /**
+     * Returns the ID of the unique id column of the last INSERT operation.
+     * @warning This method is deprecated and will be removed in future versions.
+     * @warning Please use methods Database#lastInsertId instead.
+     * @return Return ID value of the last INSERT operation..
+     * @see Database#lastInsertId
      */
     public function insert_id()
     {
         return $this->lastInsertId();
     }
 
-    /** Returns the number of rows of the last executed statement.
-     *  @warning This method is deprecated and will be removed in future versions.
-     *  @warning Please use methods Database#rowCount instead.
-     *  @return Return the number of rows of the result of the sql statement.
+    /**
+     * Returns the number of rows of the last executed statement.
+     * @warning This method is deprecated and will be removed in future versions.
+     * @warning Please use methods Database#rowCount instead.
+     * @return Return the number of rows of the result of the sql statement.
+     * @see Database#rowCount
      */
     public function num_rows()
     {

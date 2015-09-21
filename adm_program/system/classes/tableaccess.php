@@ -151,7 +151,7 @@ class TableAccess
     {
         $sql = 'SELECT COUNT(1) as count FROM '.$this->tableName;
         $this->db->query($sql);
-        $row = $this->db->fetch_array();
+        $row = $this->db->fetch();
         return $row['count'];
     }
 
@@ -180,6 +180,7 @@ class TableAccess
      *                            For text columns the format can be @b database that would return the original database value without any transformations
      * @return mixed  Returns the value of the database column.
      *                           If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @see TableAccess#setValue
      */
     public function getValue($columnName, $format = '')
     {
@@ -288,6 +289,8 @@ class TableAccess
      * Per default all columns of the default table will be read and stored in the object.
      * @param  string $sqlWhereCondition Conditions for the table to select one record
      * @return bool   Returns @b true if one record is found
+     * @see TableAccess#readDataById
+     * @see TableAccess#readDataByColumns
      */
     protected function readData($sqlWhereCondition)
     {
@@ -315,9 +318,9 @@ class TableAccess
                      WHERE '.$sqlWhereCondition;
             $result = $this->db->query($sql);
 
-            if($this->db->num_rows($result) === 1)
+            if($this->db->rowCount($result) === 1)
             {
-                $row = $this->db->fetch_array($result, PDO::FETCH_ASSOC);
+                $row = $this->db->fetch();
                 $this->new_record = false;
 
                 // Daten in das Klassenarray schieben
@@ -347,6 +350,8 @@ class TableAccess
      * Per default all columns of the default table will be read and stored in the object.
      * @param  int|string $id Unique id of id column of the table.
      * @return bool       Returns @b true if one record is found
+     * @see TableAccess#readData
+     * @see TableAccess#readDataByColumns
      */
     public function readDataById($id)
     {
@@ -376,6 +381,8 @@ class TableAccess
      * @code  // reads data not be mem_id but with combination of role and user id
      *                           $member = new TableAccess($gDb, TBL_MEMBERS, 'rol');
      *                           $member->readDataByColumn(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId)); @endcode
+     * @see TableAccess#readData
+     * @see TableAccess#readDataById
      */
     public function readDataByColumns($columnArray)
     {
@@ -550,7 +557,7 @@ class TableAccess
      *                          $result = $gDb->query($sql);
      *                          $announcement = new TableAnnouncements($gDb);
      *
-     * while ($row = $gDb->fetch_array(result))
+     * while ($row = $gDb->fetch(result))
      * {
      *     // add each recordset to an object without a separate sql within the object
      *     $announcement->clear();
@@ -587,6 +594,7 @@ class TableAccess
      * @param  mixed  $newValue   The new value that should be stored in the database field
      * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
      * @return bool   Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @see TableAccess#getValue
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {

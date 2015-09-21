@@ -505,7 +505,7 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
                     }
 
                     // Notice for users with foto edit right that this album is locked
-                    if($childPhotoAlbum->getValue('pho_locked']) == 1 && file_exists($ordner))
+                    if($childPhotoAlbum->getValue('pho_locked') == 1 && file_exists($ordner))
                     {
                         $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('PHO_ALBUM_NOT_APPROVED').'</div>');
                     }
