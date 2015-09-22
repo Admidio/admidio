@@ -193,7 +193,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                         $form = new HtmlForm('membership_period_form_'.$member->getValue('mem_id'), $g_root_path.'/adm_program/modules/profile/profile_function.php?mode=7&amp;user_id='.$user->getValue('usr_id').'&amp;mem_id='.$row['mem_id'], null, array('type' => 'navbar', 'setFocus' => false, 'class' => 'admidio-form-membership-period'));
                         $form->addInput('membership_start_date_'.$member->getValue('mem_id'), $gL10n->get('SYS_START'), $member->getValue('mem_begin', $gPreferences['system_date']), array('type' => 'date', 'maxLength' => 10));
                         $form->addInput('membership_end_date_'.$member->getValue('mem_id'), $gL10n->get('SYS_END'), $member->getValue('mem_end', $gPreferences['system_date']), array('type' => 'date', 'maxLength' => 10));
-                        $form->addSubmitButton('btn_send_'.$member->getValue('mem_id'), $gL10n->get('SYS_OK'));
+                        $form->addButton('btn_send_'.$member->getValue('mem_id'), $gL10n->get('SYS_OK'), array('class' => 'button-membership-period-form', 'data-admidio' => $member->getValue('mem_id')));
                         $roleMemHTML .= $form->show(false);
                     $roleMemHTML .= '</div></li>
                     <li class="list-group-item" id="member_info_'.$member->getValue('mem_id').'_Content" style="display: none;">';

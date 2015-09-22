@@ -162,7 +162,7 @@ class HtmlForm extends HtmlFormBasic
         $this->countElements++;
 
         // create array with all options
-        $optionsDefault = array('icon' => null, 'link' => null, 'onClickText' => null, 'class' => null, 'type' => 'button');
+        $optionsDefault = array('icon' => null, 'link' => null, 'onClickText' => null, 'class' => null, 'type' => 'button', 'data-admidio' => '');
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // add text and icon to button
@@ -174,6 +174,11 @@ class HtmlForm extends HtmlFormBasic
         }
         $this->addElement('button');
         $this->addAttribute('class', 'btn btn-default');
+
+        if($optionsAll['data-admidio'] !== '')
+        {
+            $this->addAttribute('data-admidio', $optionsAll['data-admidio']);
+        }
 
         if(strlen($optionsAll['onClickText']) > 0)
         {
