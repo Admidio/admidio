@@ -724,20 +724,13 @@ $page->addHtml('
         <label class="col-sm-3 control-label" for="show_members">'.$gL10n->get('LST_MEMBER_STATUS').'</label>
         <div class="col-sm-9">');
             // Auswahlbox, ob aktive oder ehemalige Mitglieder angezeigt werden sollen
-            // bei inaktiven Rollen gibt es nur Ehemalige
-            if($getActiveRole == 1)
-            {
-                $selected[0] = '';
-                $selected[1] = '';
-                $selected[2] = '';
-                $selected[$getShowMembers] = ' selected="selected" ';
-                $page->addHtml('
-                <select class="form-control" size="1" id="show_members" name="show_members">
-                    <option '.$selected[0].' value="0">'.$gL10n->get('LST_ACTIVE_MEMBERS').'</option>
-                    <option '.$selected[1].' value="1">'.$gL10n->get('LST_FORMER_MEMBERS').'</option>
-                    <option '.$selected[2].' value="2">'.$gL10n->get('LST_ACTIVE_FORMER_MEMBERS').'</option>
-                </select>');
-            }
+            $page->addHtml('
+            <select class="form-control" size="1" id="show_members" name="show_members">
+                <option selected="selected" value="0">'.$gL10n->get('LST_ACTIVE_MEMBERS').'</option>
+                <option value="1">'.$gL10n->get('LST_FORMER_MEMBERS').'</option>
+                <option value="2">'.$gL10n->get('LST_ACTIVE_FORMER_MEMBERS').'</option>
+            </select>');
+
         $page->addHtml('</div>
     </div>
     
