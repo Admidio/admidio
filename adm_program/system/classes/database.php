@@ -6,7 +6,7 @@
  * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
- /** 
+ /**
  * @class Database
  * @brief Handle the connection to the database, send all sql statements and handle the returned rows.
  *
@@ -123,8 +123,9 @@ class Database
         }
     }
 
-    /** Create a valid DSN string for the engine that was set through the constructor.
-     *  If no valid engine is set than an exception is thrown.
+    /**
+     * Create a valid DSN string for the engine that was set through the constructor.
+     * If no valid engine is set than an exception is thrown.
      */
     private function buildDSNString()
     {
@@ -133,20 +134,24 @@ class Database
             case 'mysql':
                 if (!$this->port)
                 {
-                    $this->port = 3306;
+                    $this->dsn = 'mysql:host='.$this->host.';dbname='.$this->dbName;
                 }
-
-                $this->dsn = 'mysql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbName;
+                else
+                {
+                    $this->dsn = 'mysql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbName;
+                }
                 break;
 
             case 'pgsql':
             case 'postgresql':
                 if (!$this->port)
                 {
-                    $this->port = 5432;
+                    $this->dsn = 'pgsql:host='.$this->host.';dbname='.$this->dbName;
                 }
-
-                $this->dsn = 'pgsql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbName;
+                else
+                {
+                    $this->dsn = 'pgsql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbName;
+                }
                 break;
 
             default:
@@ -623,8 +628,8 @@ class Database
         exit();
     }
 
-    /** 
-     * Start a transaction if no open transaction exists. If you call this 
+    /**
+     * Start a transaction if no open transaction exists. If you call this
      * multiple times only 1 transaction will be open and it will be closed
      * after the last endTransaction was send.
      * @see Database#endTransaction
