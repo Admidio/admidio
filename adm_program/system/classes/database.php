@@ -83,6 +83,11 @@ class Database
      */
     public function __construct($engine, $host, $port = null, $dbName, $username = null, $password = null, $options = array())
     {
+		if($engine === 'postgresql')
+		{
+			$engine = 'pgsql';
+		}
+
         $this->engine   = $engine;
         $this->host     = $host;
         $this->port     = $port;
@@ -143,7 +148,6 @@ class Database
                 break;
 
             case 'pgsql':
-            case 'postgresql':
                 if (!$this->port)
                 {
                     $this->dsn = 'pgsql:host='.$this->host.';dbname='.$this->dbName;
@@ -379,6 +383,14 @@ class Database
         $this->query('SELECT version()');
         $row = $this->fetch_array();
 
+		if($this->engine === 'pgsql')
+		{
+			// the string (PostgreSQL 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
+			$version_array  = explode(',', $row[0]);
+			$version_array2 = explode(' ', $version_array[0]);
+			return $version_array2[1];
+		}
+		
         return $row[0];
     }
 
@@ -387,7 +399,16 @@ class Database
      */
     public function lastInsertId()
     {
-        return $this->pdo->lastInsertId();
+		if($this->engine === 'pgsql')
+		{
+			$this->query('SELECT lastval()');
+			$insertRow = $this->fetch(null, PDO::FETCH_NUM);
+			return $insertRow[0];
+		}
+		else
+		{
+			return $this->pdo->lastInsertId();
+		}
     }
 
     /** Send a sql statement to the database that will be executed. If debug mode is set
@@ -404,6 +425,37 @@ class Database
     public function query($sql, $throwError = true)
     {
         global $gDebug;
+
+		if($this->engine === 'pgsql')
+		{
+			// prepare the sql statement to be compatible with PostgreSQL
+			if(strpos(strtolower($sql), 'create table') !== false
+			|| strpos(strtolower($sql), 'alter table') !== false)
+			{
+				if(strpos(strtolower($sql), 'create table') !== false)
+				{
+					// bei einem Create-Table-Statement ggf. vorhandene Tabellenoptionen von MySQL abgeschnitten werden
+					$sql = substr(strtolower($sql), 0, strrpos($sql, ')') + 1);
+				}
+
+				// PostgreSQL doesn't know unsigned
+				$sql = str_replace('unsigned', '', $sql);
+
+				// Boolean macht Probleme, da PostgreSQL es als String behandelt
+				$sql = str_replace('boolean', 'smallint', $sql);
+
+				// Blobs sind in PostgreSQL bytea Datentypen
+				$sql = str_replace('blob', 'bytea', $sql);
+
+				// Auto_Increment muss durch Serial ersetzt werden
+				$posAutoIncrement = strpos($sql, 'auto_increment');
+				if($posAutoIncrement > 0)
+				{
+					$posInteger = strrpos(substr($sql, 0, $posAutoIncrement), 'integer');
+					$sql = substr($sql, 0, $posInteger).' serial '.substr($sql, $posAutoIncrement + 14);
+				}
+			}
+		}
 
         // if debug mode then log all sql statements
         if($gDebug === 1)
@@ -505,46 +557,89 @@ class Database
         {
             $columnProperties = array();
 
-            $sql = 'SHOW COLUMNS FROM '.$table;
-            $this->query($sql);
-            $columnsList = $this->fetchAll();
+			if($this->engine === 'mysql')
+			{
+				$sql = 'SHOW COLUMNS FROM '.$table;
+				$this->query($sql);
+				$columnsList = $this->fetchAll();
 
-            foreach($columnsList as $properties)
-            {
-                $columnProperties[$properties['Field']]['serial'] = 0;
-                $columnProperties[$properties['Field']]['null']   = 0;
-                $columnProperties[$properties['Field']]['key']    = 0;
+				foreach($columnsList as $properties)
+				{
+					$columnProperties[$properties['Field']]['serial'] = 0;
+					$columnProperties[$properties['Field']]['null']   = 0;
+					$columnProperties[$properties['Field']]['key']    = 0;
 
-                if($properties['Extra'] === 'auto_increment')
-                {
-                    $columnProperties[$properties['Field']]['serial'] = 1;
-                }
-                if($properties['Null'] === 'YES')
-                {
-                    $columnProperties[$properties['Field']]['null'] = 1;
-                }
-                if($properties['Key'] === 'PRI' || $properties['Key'] === 'MUL')
-                {
-                    $columnProperties[$properties['Field']]['key'] = 1;
-                }
+					if($properties['Extra'] === 'auto_increment')
+					{
+						$columnProperties[$properties['Field']]['serial'] = 1;
+					}
+					if($properties['Null'] === 'YES')
+					{
+						$columnProperties[$properties['Field']]['null'] = 1;
+					}
+					if($properties['Key'] === 'PRI' || $properties['Key'] === 'MUL')
+					{
+						$columnProperties[$properties['Field']]['key'] = 1;
+					}
 
-                if(strpos($properties['Type'], 'tinyint(1)') !== false)
-                {
-                    $columnProperties[$properties['Field']]['type'] = 'boolean';
-                }
-                elseif(strpos($properties['Type'], 'smallint') !== false)
-                {
-                    $columnProperties[$properties['Field']]['type'] = 'smallint';
-                }
-                elseif(strpos($properties['Type'], 'int') !== false)
-                {
-                    $columnProperties[$properties['Field']]['type'] = 'integer';
-                }
-                else
-                {
-                    $columnProperties[$properties['Field']]['type'] = $properties['Type'];
-                }
-            }
+					if(strpos($properties['Type'], 'tinyint(1)') !== false)
+					{
+						$columnProperties[$properties['Field']]['type'] = 'boolean';
+					}
+					elseif(strpos($properties['Type'], 'smallint') !== false)
+					{
+						$columnProperties[$properties['Field']]['type'] = 'smallint';
+					}
+					elseif(strpos($properties['Type'], 'int') !== false)
+					{
+						$columnProperties[$properties['Field']]['type'] = 'integer';
+					}
+					else
+					{
+						$columnProperties[$properties['Field']]['type'] = $properties['Type'];
+					}
+				}
+			}
+			elseif($this->engine === 'pgsql')
+			{
+				$sql = 'SELECT column_name, column_default, is_nullable, data_type
+						  FROM information_schema.columns WHERE table_name = \''.$table.'\'';
+				$this->query($sql);
+				$columnsList = $this->fetchAll();
+
+				foreach($columnsList as $properties)
+				{
+					$columnProperties[$properties['column_name']]['serial'] = 0;
+					$columnProperties[$properties['column_name']]['null']   = 0;
+					$columnProperties[$properties['column_name']]['key']    = 0;
+
+					if(strpos($properties['column_default'], 'nextval') !== false)
+					{
+						$columnProperties[$properties['column_name']]['serial'] = 1;
+					}
+					if($properties['is_nullable'] === 'YES')
+					{
+						$columnProperties[$properties['column_name']]['null']   = 1;
+					}
+					/*if($properties['Key'] === 'PRI' || $properties['Key'] === 'MUL')
+					{
+						$columnProperties[$properties['column_name']]['key'] = 1;
+					}*/
+
+					if(strpos($properties['data_type'], 'timestamp') !== false)
+					{
+						$columnProperties[$properties['column_name']]['type'] = 'timestamp';
+					}
+					elseif(strpos($properties['data_type'], 'time') !== false)
+					{
+						$columnProperties[$properties['column_name']]['type'] = 'time';
+					}
+					else
+					{
+						$columnProperties[$properties['column_name']]['type'] = $properties['data_type'];
+					}
+				}
+			}
 
             // safe array with table structure in class array
             $this->dbStructure[$table] = $columnProperties;

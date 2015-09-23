@@ -111,7 +111,7 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultVal
 
 // set runtime of script to 2 minutes because of the many work to do
 // but no output of error message because of safe mode
-@set_time_limit(600);
+@set_time_limit(1000);
 
 echo 'Start with installation ...<br />';
 

@@ -5,7 +5,7 @@
         <name>MySQL</name>
         <minversion>5.0.3</minversion>
     </database>
-    <database id="postgresql">
+    <database id="pgsql">
         <identifier>postgresql</identifier>
         <name>PostgreSQL</name>
         <minversion>9.0.0</minversion>
