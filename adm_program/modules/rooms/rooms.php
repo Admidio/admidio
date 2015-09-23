@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  ****************************************************************************/
 
@@ -34,7 +34,7 @@ $roomsMenu = $page->getMenu();
 $roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 // show link to create new room
 $roomsMenu->addItem('menu_item_new_room', $g_root_path.'/adm_program/modules/rooms/rooms_new.php?headline='.$textRoom,
-                            $gL10n->get('SYS_CREATE_VAR', $textRoom), 'add.png');
+                    $gL10n->get('SYS_CREATE_VAR', $textRoom), 'add.png');
 
 if($gPreferences['system_show_create_edit'] == 1)
 {
@@ -68,14 +68,14 @@ else
         ON cha_username.usr_id = room_usr_id_change ';
 }
 
-//read rooms from database
+// read rooms from database
 $sql = 'SELECT room.*, '.$additionalFields.'
           FROM '.TBL_ROOMS.' room
                '.$additionalTables.'
          ORDER BY room_name';
 $rooms_result = $gDb->query($sql);
 
-if($gDb->num_rows($rooms_result) == 0)
+if($gDb->num_rows($rooms_result) === 0)
 {
     // Keine Räume gefunden
     $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
@@ -83,13 +83,13 @@ if($gDb->num_rows($rooms_result) == 0)
 else
 {
     $room = new TableRooms($gDb);
-    //Räume auflisten
-    while($row=$gDb->fetch_array($rooms_result))
+    // Räume auflisten
+    while($row = $gDb->fetch_array($rooms_result))
     {
         // GB-Objekt initialisieren und neuen DS uebergeben
         $room->clear();
         $room->setArray($row);
-        
+
         $page->addHtml('
         <div class="panel panel-primary" id="room_'.$room->getValue('room_id').'">
             <div class="panel-heading">
@@ -98,11 +98,11 @@ else
                      . $room->getValue('room_name').'
                 </div>
                 <div class="pull-right text-right">
-                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/rooms/rooms_new.php?room_id='. $room->getValue('room_id'). '&amp;headline='.$textRoom.'"><img 
+                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/rooms/rooms_new.php?room_id='. $room->getValue('room_id'). '&amp;headline='.$textRoom.'"><img
                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                         href="'.$g_root_path.'/adm_program/system/popup_message.php?type=room&amp;element_id=room_'.
-                        $room->getValue('room_id').'&amp;name='.urlencode($room->getValue('room_name')).'&amp;database_id='.$room->getValue('room_id').'"><img 
+                        $room->getValue('room_id').'&amp;name='.urlencode($room->getValue('room_name')).'&amp;database_id='.$room->getValue('room_id').'"><img
                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>
                 </div>
             </div>
@@ -121,10 +121,10 @@ else
                         $page->addHtml('<div class="col-sm-2 col-xs-4">&nbsp;</div>
                         <div class="col-sm-4 col-xs-8">&nbsp;</div>');
                     }
-                    
+
                     //echo $table->getHtmlTable();
                     $page->addHtml('</div>');
-                    
+
                 if(strlen($room->getValue('room_description')) > 0)
                 {
                    $page->addHtml($room->getValue('room_description'));

@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -78,33 +78,33 @@ try
         // get recordset of current file from databse
         $file = new TableFile($gDb);
         $file->getFileForDownload($getFileId);
-        
+
         $originalName = $file->getValue('fil_name');
-    
+
         if ($form_values['new_name'] == null)
         {
             $form_values['new_name'] = admFuncGetFilenameWithoutExtension($originalName);
         }
-    
+
         if ($form_values['new_description'] == null)
         {
             $form_values['new_description'] = $file->getValue('fil_description');
         }
-    
+
     }
     else
     {
         // get recordset of current folder from databses
         $folder = new TableFolder($gDb);
         $folder->getFolderForDownload($getFolderId);
-        
+
         $originalName = $folder->getValue('fol_name');
-    
+
         if ($form_values['new_name'] == null)
         {
             $form_values['new_name'] = $originalName;
         }
-    
+
         if ($form_values['new_description'] == null)
         {
             $form_values['new_description'] = $folder->getValue('fol_description');

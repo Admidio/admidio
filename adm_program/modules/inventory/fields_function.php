@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -15,7 +15,7 @@
  * sequence : new sequence for item field
  *
  *****************************************************************************/
- 
+
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
@@ -36,14 +36,14 @@ $itemField = new TableInventoryField($gDb);
 if($getInfId > 0)
 {
     $itemField->readDataById($getInfId);
-    
+
     // check if profile field belongs to actual organization
     if($itemField->getValue('cat_org_id') >  0
     && $itemField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
-    
+
     // if system profile field then set usf_type to default
     if($itemField->getValue('inf_system') == 1)
     {
@@ -56,7 +56,7 @@ if($getMode == 1)
    // Feld anlegen oder updaten
 
     $_SESSION['fields_request'] = $_POST;
-    
+
     // pruefen, ob Pflichtfelder gefuellt sind
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
     if($itemField->getValue('inf_system') == 0 && strlen($_POST['inf_name']) == 0)
@@ -73,11 +73,11 @@ if($getMode == 1)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
     }
-    
+
     if(isset($_POST['inf_name']) && $itemField->getValue('inf_name') != $_POST['inf_name'])
     {
         // Schauen, ob das Feld bereits existiert
-        $sql    = 'SELECT COUNT(*) as count 
+        $sql    = 'SELECT COUNT(*) as count
                      FROM '. TBL_INVENT_FIELDS. '
                     WHERE inf_name LIKE \''.$_POST['inf_name'].'\'
                       AND inf_cat_id  = '.$_POST['inf_cat_id'].'
@@ -108,7 +108,7 @@ if($getMode == 1)
     {
         $_POST['inf_mandatory'] = 0;
     }
-    
+
     // make html in description secure
     $_POST['inf_description'] = admFuncVariableIsValid($_POST, 'inf_description', 'html');
 
@@ -120,7 +120,7 @@ if($getMode == 1)
             $itemField->setValue($key, $value);
         }
     }
-    
+
     // Daten in Datenbank schreiben
     $return_code = $itemField->save();
 
@@ -158,5 +158,5 @@ elseif($getMode == 4)
     $itemField->moveSequence($getSequence);
     exit();
 }
-         
+
 ?>

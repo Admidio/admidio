@@ -4,14 +4,14 @@
  *
  * Version 1.7.0
  *
- * Plugin zeigt ein zufaellig ausgewaehltes Foto aus dem Fotomodul an und 
+ * Plugin zeigt ein zufaellig ausgewaehltes Foto aus dem Fotomodul an und
  * und verlinkt neben dem Bild das dazugehörige Album
  *
  * Compatible with Admidio version 3.0
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -84,10 +84,10 @@ if($plg_show_headline==1)
 }
 
 // Fotoalben Aufrufen
-// Bedingungen: freigegeben,Anzahllimit, Bilder enthalten 
+// Bedingungen: freigegeben,Anzahllimit, Bilder enthalten
 $sql='      SELECT *
             FROM '. TBL_PHOTOS. '
-            WHERE pho_org_shortname = \''.$gCurrentOrganization->getValue('org_shortname').'\' 
+            WHERE pho_org_shortname = \''.$gCurrentOrganization->getValue('org_shortname').'\'
             AND pho_locked = 0
             AND pho_quantity > 0
             ORDER BY pho_begin DESC';
@@ -113,7 +113,7 @@ while(!file_exists($picpath) && $i < 20 && $albumStatement->rowCount() > 0)
 {
     //Ausgewähltendatendatz holen
     $album->setArray($albumList[mt_rand(0, $albumStatement->rowCount()-1)]);
-    
+
     //Falls gewuensch Bild per Zufall auswaehlen
     if($plg_photos_picnr ==0)
     {
@@ -123,7 +123,7 @@ while(!file_exists($picpath) && $i < 20 && $albumStatement->rowCount() > 0)
     {
         $picnr = $plg_photos_picnr;
     }
-    
+
     //Bilpfad zusammensetzen
     $picpath = PLUGIN_PATH. '/../adm_my_files/photos/'.$album->getValue('pho_begin', 'Y-m-d').'_'.$album->getValue('pho_id').'/'.$picnr.'.jpg';
     $i++;
@@ -145,7 +145,7 @@ if($plg_photos_show_link && $plg_max_char_per_word > 0)
 {
     //Linktext umbrechen wenn noetig
     $words = explode(' ', $album->getValue('pho_name'));
-    
+
     for($i = 0; $i < count($words); $i++)
     {
         if(strlen($words[$i]) > $plg_max_char_per_word)
@@ -166,7 +166,7 @@ else
 
 //Ausgabe
 $pho_id = $album->getValue('pho_id');
-echo '<a class="'.$plg_link_class.'" href="'. $g_root_path. '/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'&amp;photo_nr='.$picnr.'" target="'. $plg_link_target. '"><img 
+echo '<a class="'.$plg_link_class.'" href="'. $g_root_path. '/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'&amp;photo_nr='.$picnr.'" target="'. $plg_link_target. '"><img
     class="thumbnail" alt="'.$link_text.'" title="'.$link_text.'"
     src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;photo_nr='.$picnr.'&amp;pho_begin='.$album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$plg_photos_max_width.'&amp;max_height='.$plg_photos_max_height.'" /></a>';
 

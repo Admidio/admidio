@@ -4,10 +4,10 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
- * 
+ *
  * room_id  : ID of room, that should be shown
  * headline : headline for room module
  *            (Default) SYS_ROOM
@@ -28,7 +28,7 @@ if (!$gCurrentUser->isWebmaster())
 }
 
 // set headline of the script
-if($getRoomId > 0)
+if ($getRoomId > 0)
 {
     $headline = $gL10n->get('SYS_EDIT_VAR', $getHeadline);
 }
@@ -42,12 +42,12 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // Create room object
 $room = new TableRooms($gDb);
-if($getRoomId > 0)
+if ($getRoomId > 0)
 {
     $room->readDataById($getRoomId);
 }
 
-if(isset($_SESSION['rooms_request']))
+if (isset($_SESSION['rooms_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
@@ -65,16 +65,22 @@ $roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->ge
 // show form
 $form = new HtmlForm('rooms_edit_form', $g_root_path.'/adm_program/modules/rooms/rooms_function.php?room_id='.$getRoomId.'&amp;mode=1', $page);
 $form->openGroupBox('gb_name_properties', $gL10n->get('SYS_NAME').' &amp; '.$gL10n->get('SYS_PROPERTIES'));
-    $form->addInput('room_name', $gL10n->get('SYS_ROOM'), $room->getValue('room_name'), array('maxLength' => 100, 'property' => FIELD_REQUIRED));
-    $form->addInput('room_capacity', $gL10n->get('ROO_CAPACITY').' ('.$gL10n->get('ROO_SEATING').')', $room->getValue('room_capacity'),  array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'property' => FIELD_REQUIRED));
-    $form->addInput('room_overhang', $gL10n->get('ROO_OVERHANG'), $room->getValue('room_overhang'), array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_ROOM_OVERHANG'));
+$form->addInput('room_name', $gL10n->get('SYS_ROOM'), $room->getValue('room_name'),
+                array('maxLength' => 100, 'property' => FIELD_REQUIRED));
+$form->addInput('room_capacity', $gL10n->get('ROO_CAPACITY').' ('.$gL10n->get('ROO_SEATING').')', $room->getValue('room_capacity'),
+                array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'property' => FIELD_REQUIRED));
+$form->addInput('room_overhang', $gL10n->get('ROO_OVERHANG'), $room->getValue('room_overhang'),
+                array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_ROOM_OVERHANG'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
-    $form->addEditor('room_description', null, $room->getValue('room_description'), array('height' => '150px'));
+$form->addEditor('room_description', null, $room->getValue('room_description'), array('height' => '150px'));
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
-$form->addHtml(admFuncShowCreateChangeInfoById($room->getValue('room_usr_id_create'), $room->getValue('room_timestamp_create'), $room->getValue('dat_usr_id_change'), $room->getValue('room_timestamp_change')));
+$form->addHtml(admFuncShowCreateChangeInfoById($room->getValue('room_usr_id_create'),
+                                               $room->getValue('room_timestamp_create'),
+                                               $room->getValue('dat_usr_id_change'),
+                                               $room->getValue('room_timestamp_change')));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

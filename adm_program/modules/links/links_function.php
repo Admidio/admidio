@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -73,13 +73,13 @@ if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0))
             }
         }
     }
-    
+
     // Link-Counter auf 0 setzen
     if ($getMode == 1)
     {
         $link->setValue('lnk_counter', '0');
     }
-    
+
     // Daten in Datenbank schreiben
     $return_code = $link->save();
 
@@ -87,10 +87,10 @@ if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
-    
+
     if($return_code == 0 && $getMode == 1)
     {
-        // Benachrichtigungs-Email für neue Einträge        
+        // Benachrichtigungs-Email für neue Einträge
         $message = $gL10n->get('LNK_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
         $notification = new Email();
         $notification->adminNotfication($gL10n->get('LNK_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));

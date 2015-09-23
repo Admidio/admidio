@@ -3,7 +3,7 @@
  *
  *  Copyright    : (c) 2004 - 2015 The Admidio Team
  *  Homepage     : http://www.admidio.org
- *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *  License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -491,7 +491,7 @@ class HtmlForm extends HtmlFormBasic
                 filebrowserImageUploadUrl: "'.$g_root_path.'/adm_program/system/ckeditor_upload_handler.php"
             });';
 
-        if($gPreferences['system_js_editor_enabled'] === 1)
+        if($gPreferences['system_js_editor_enabled'] == 1)
         {
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if(is_object($this->htmlPage))
@@ -1132,7 +1132,7 @@ class HtmlForm extends HtmlFormBasic
                 }
 
                 // add option
-                if($optionsAll['multiselect'] === false && $optionsAll['defaultValue'] === $values[$arrayCount][0])
+                if($optionsAll['multiselect'] === false && $optionsAll['defaultValue'] == $values[$arrayCount][0])
                 {
                     $defaultEntry = true;
                 }
@@ -1142,7 +1142,7 @@ class HtmlForm extends HtmlFormBasic
             else
             {
                 // array has only key and value then create a normal selectbox without optiongroups
-                if($optionsAll['multiselect'] === false && $optionsAll['defaultValue'] === key($values))
+                if($optionsAll['multiselect'] === false && $optionsAll['defaultValue'] == key($values))
                 {
                     $defaultEntry = true;
                 }

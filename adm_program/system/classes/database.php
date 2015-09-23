@@ -1,9 +1,9 @@
 <?php
 /*****************************************************************************
  *
- *  Copyright    : (c) 2004 - 2015 The Admidio Team
- *  Homepage     : http://www.admidio.org
- *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * Copyright    : (c) 2004 - 2015 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
  /** 

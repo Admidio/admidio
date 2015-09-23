@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -30,7 +30,7 @@ if($getMode == 1)
 }
 
 // only webmasters are allowed to edit organization preferences or create new organizations
-if($gCurrentUser->isWebmaster() == false)
+if(!$gCurrentUser->isWebmaster())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -43,25 +43,24 @@ case 1:
     try
     {
         // first check the fields of the submitted form
-
         switch($getForm)
         {
             case 'common':
                 $checkboxes = array('enable_rss', 'enable_auto_login', 'enable_password_recovery',
-                    'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check');
+                                    'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check');
 
-                if(admStrIsValidFileName($_POST['theme']) == false
-                || file_exists(SERVER_PATH. '/adm_themes/'.$_POST['theme'].'/index.html') == false)
+                if(!admStrIsValidFileName($_POST['theme'])
+                || !file_exists(SERVER_PATH.'/adm_themes/'.$_POST['theme'].'/index.html'))
                 {
                     $gMessage->show($gL10n->get('ORG_INVALID_THEME'));
                 }
 
-                if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
+                if(!is_numeric($_POST['logout_minutes']) || $_POST['logout_minutes'] <= 0)
                 {
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER')));
                 }
 
-                if(isset($_POST['enable_auto_login']) == false && $gPreferences['enable_auto_login'] == 1)
+                if(!isset($_POST['enable_auto_login']) && $gPreferences['enable_auto_login'] == 1)
                 {
                     // if auto login was deactivated than delete all saved logins
                     $sql = 'DELETE FROM '.TBL_AUTO_LOGIN;
@@ -73,25 +72,25 @@ case 1:
             case 'organization':
                 $checkboxes = array('system_organization_select');
 
-                if(strlen($_POST['org_longname']) == 0)
+                if($_POST['org_longname'] === '')
                 {
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
                 }
                 break;
 
             case 'regional_settings':
-                if(admStrIsValidFileName($_POST['system_language']) == false
-                || file_exists(SERVER_PATH. '/adm_program/languages/'.$_POST['system_language'].'.xml') == false)
+                if(!admStrIsValidFileName($_POST['system_language'])
+                || !file_exists(SERVER_PATH.'/adm_program/languages/'.$_POST['system_language'].'.xml'))
                 {
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LANGUAGE')));
                 }
 
-                if(strlen($_POST['system_date']) == 0)
+                if($_POST['system_date'] === '')
                 {
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATE_FORMAT')));
                 }
 
-                if(strlen($_POST['system_time']) == 0)
+                if($_POST['system_time'] === '')
                 {
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_TIME_FORMAT')));
                 }
@@ -108,7 +107,7 @@ case 1:
             case 'system_notification':
                 $checkboxes = array('enable_system_mails', 'enable_email_notification');
 
-                if(strlen($_POST['email_administrator']) == 0)
+                if($_POST['email_administrator'] === '')
                 {
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
                 }
@@ -137,7 +136,8 @@ case 1:
                 break;
 
             case 'guestbook':
-                $checkboxes = array('enable_guestbook_captcha', 'enable_gbook_comments4all', 'enable_intial_comments_loading');
+                $checkboxes = array('enable_guestbook_captcha', 'enable_gbook_comments4all',
+                                    'enable_intial_comments_loading');
                 break;
 
             case 'ecards':
@@ -149,9 +149,10 @@ case 1:
                 break;
 
             case 'messages':
-                $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_chat_module', 'enable_mail_captcha', 'mail_html_registered_users', 'mail_into_to');
+                $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_chat_module',
+                                    'enable_mail_captcha', 'mail_html_registered_users', 'mail_into_to');
 
-                if(strlen($_POST['mail_sendmail_address']) > 0)
+                if($_POST['mail_sendmail_address'] !== '')
                 {
                     $_POST['mail_sendmail_address'] = admStrToLower($_POST['mail_sendmail_address']);
                     if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
@@ -166,7 +167,8 @@ case 1:
                 break;
 
             case 'profile':
-                $checkboxes = array('profile_log_edit_fields', 'profile_show_map_link', 'profile_show_roles', 'profile_show_former_roles', 'profile_show_extern_roles');
+                $checkboxes = array('profile_log_edit_fields', 'profile_show_map_link', 'profile_show_roles',
+                                    'profile_show_former_roles', 'profile_show_extern_roles');
                 break;
 
             case 'events':
@@ -174,7 +176,7 @@ case 1:
                 break;
 
             case 'links':
-                if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_redirect_seconds'] < 0)
+                if(!is_numeric($_POST['weblinks_redirect_seconds']) || $_POST['weblinks_redirect_seconds'] < 0)
                 {
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('LNK_DISPLAY_REDIRECT')));
                 }
@@ -195,7 +197,7 @@ case 1:
     // if no value is found then set 0 because 0 will not be committed in a html checkbox element
     foreach($checkboxes as $key => $value)
     {
-        if(isset($_POST[$value]) == false || $_POST[$value] != 1)
+        if(!isset($_POST[$value]) || $_POST[$value] != 1)
         {
             $_POST[$value] = 0;
         }
@@ -206,7 +208,7 @@ case 1:
     foreach($_POST as $key => $value)
     {
         // Elmente, die nicht in adm_preferences gespeichert werden hier aussortieren
-        if($key != 'save')
+        if($key !== 'save')
         {
             if(strpos($key, 'org_') === 0)
             {
@@ -219,7 +221,7 @@ case 1:
                 $text->setValue('txt_text', $value);
                 $text->save();
             }
-            elseif($key == 'enable_auto_login' && $value == 0 && $gPreferences['enable_auto_login'] == 1)
+            elseif($key === 'enable_auto_login' && $value == 0 && $gPreferences['enable_auto_login'] == 1)
             {
                 // if deactivate auto login than delete all saved logins
                 $sql = 'DELETE FROM '.TBL_AUTO_LOGIN;
@@ -233,13 +235,13 @@ case 1:
         }
     }
 
-    // alle Daten nun speichern
+    // now save all data
     $gCurrentOrganization->save();
 
     $gCurrentOrganization->setPreferences($gPreferences);
 
     // refresh language if necessary
-    if($gL10n->getLanguage() != $gPreferences['system_language'])
+    if($gL10n->getLanguage() !== $gPreferences['system_language'])
     {
         $gL10n->setLanguage($gPreferences['system_language']);
     }
@@ -278,11 +280,16 @@ case 2:
     $page->addHtml('<p class="lead">'.$gL10n->get('ORG_NEW_ORGANIZATION_DESC').'</p>');
 
     // show form
-    $form = new HtmlForm('add_new_organization_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?mode=3', $page);
-    $form->addInput('orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'], array('maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
-    $form->addInput('orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'], array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-    $form->addInput('orgaEmail', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $formValues['orgaEmail'], array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
-    $form->addSubmitButton('btn_foward', $gL10n->get('INS_SET_UP_ORGANIZATION'), array('icon' => THEME_PATH.'/icons/database_in.png', 'class' => ' col-sm-offset-3'));
+    $form = new HtmlForm('add_new_organization_form',
+                         $g_root_path.'/adm_program/modules/preferences/preferences_function.php?mode=3', $page);
+    $form->addInput('orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'],
+                    array('maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
+    $form->addInput('orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'],
+                    array('maxLength' => 50, 'property' => FIELD_REQUIRED));
+    $form->addInput('orgaEmail', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $formValues['orgaEmail'],
+                    array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
+    $form->addSubmitButton('btn_foward', $gL10n->get('INS_SET_UP_ORGANIZATION'),
+                           array('icon' => THEME_PATH.'/icons/database_in.png', 'class' => ' col-sm-offset-3'));
 
     // add form to html page and show page
     $page->addHtml($form->show(false));
@@ -296,8 +303,7 @@ case 3:
     $_SESSION['add_organization_request'] = strStripSlashesDeep($_POST);
 
     // form fields are not filled
-    if(strlen($_POST['orgaShortName']) == 0
-    || strlen($_POST['orgaLongName']) == 0)
+    if($_POST['orgaShortName'] === '' || $_POST['orgaLongName'] === '')
     {
         $gMessage->show($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'));
     }
@@ -334,9 +340,9 @@ case 3:
     $newOrganization->createBasicData($gCurrentUser->getValue('usr_id'));
 
     // if installation of second organization than show organization select at login
-    if($gCurrentOrganization->countAllRecords() == 2)
+    if($gCurrentOrganization->countAllRecords() === 2)
     {
-        $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = 1
+        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = 1
                  WHERE prf_name = \'system_organization_select\' ';
         $gDb->query($sql);
     }

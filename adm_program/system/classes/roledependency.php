@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -38,7 +38,6 @@ class RoleDependency
 
     /**
      *  Initializes all class parameters and deletes all read data.
-     *  @return void
      */
     public function clear()
     {
@@ -56,7 +55,6 @@ class RoleDependency
 
     /**
      * aktuelle Rollenabhaengigkeit loeschen
-     * @return void
      */
     public function delete()
     {
@@ -111,7 +109,6 @@ class RoleDependency
     /**
      * @param  object $db
      * @param  int    $parentId
-     * @return array
      */
     public static function getChildRoles(&$db, $parentId)
     {
@@ -139,7 +136,6 @@ class RoleDependency
     /**
      * @param  object $db
      * @param  int    $childId
-     * @return array
      */
     public static function getParentRoles(&$db, $childId)
     {
@@ -166,7 +162,6 @@ class RoleDependency
 
     /**
      * @param  int $login_user_id
-     * @return int
      */
     public function insert($login_user_id)
     {
@@ -184,9 +179,6 @@ class RoleDependency
         return -1;
     }
 
-    /**
-     * @return bool
-     */
     public function isEmpty()
     {
         if ($this->roleIdParent === 0 && $this->roleIdChild === 0)
@@ -202,7 +194,6 @@ class RoleDependency
     /**
      * @param  object $db
      * @param  int    $parentId
-     * @return int
      */
     public static function removeChildRoles(&$db, $parentId)
     {
@@ -220,7 +211,6 @@ class RoleDependency
 
     /**
      * @param  int $parentId
-     * @return int
      */
     public function setParent($parentId)
     {
@@ -237,7 +227,6 @@ class RoleDependency
 
     /**
      * @param  int $childId
-     * @return int
      */
     public function setChild($childId)
     {
@@ -255,7 +244,6 @@ class RoleDependency
     /**
      * Es muss die ID des eingeloggten Users uebergeben werden, damit die Aenderung protokolliert werden kann
      * @param  int $login_user_id
-     * @return int
      */
     public function update($login_user_id)
     {
@@ -281,7 +269,7 @@ class RoleDependency
      * Adds all active memberships of the child role to the parent role.
      * If a membership still exists than start date will not be changed. Only
      * the end date will be set to 31.12.9999.
-     * @return int Returns -1 if no parent or child row exists
+     * @return Returns -1 if no parent or child row exists
      */
     public function updateMembership()
     {

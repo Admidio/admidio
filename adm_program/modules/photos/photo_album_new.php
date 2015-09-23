@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  * pho_id : Id of the album that should be edited
@@ -74,7 +74,7 @@ if(isset($_SESSION['photo_album_request']))
 function subfolder($parent_id, $vorschub, $photoAlbum, $pho_id)
 {
     global $gDb, $gCurrentOrganization, $photoAlbumsArray;
-    
+
     $vorschub = $vorschub.'&nbsp;&nbsp;&nbsp;';
     $sqlConditionParentId = '';
     $parentPhotoAlbum = new TablePhotos($gDb);
@@ -100,7 +100,7 @@ function subfolder($parent_id, $vorschub, $photoAlbum, $pho_id)
     {
         $parentPhotoAlbum->clear();
         $parentPhotoAlbum->setArray($adm_photo_child);
-        
+
         // add entry to array of all photo albums
         $photoAlbumsArray[$parentPhotoAlbum->getValue('pho_id')] =
             $vorschub.'&#151; '.$parentPhotoAlbum->getValue('pho_name').'&nbsp('.$parentPhotoAlbum->getValue('pho_begin', 'Y').')';

@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Erzeugt einen RSS 2.0 - Feed mit Hilfe der RSS-Klasse fuer die 10 naechsten Termine
  *
@@ -61,7 +61,7 @@ if($datesResult['numResults'] > 0)
         // ausgelesene Termindaten in Date-Objekt schieben
         $date->clear();
         $date->setArray($row);
-    
+
         // set data for attributes of this entry
         $title = $date->getValue('dat_begin', $gPreferences['system_date']);
         if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
@@ -72,16 +72,16 @@ if($datesResult['numResults'] > 0)
         $link     = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id');
         $author     = $row['create_name'];
         $pubDate     = date('r', strtotime($date->getValue('dat_timestamp_create')));
-        
+
         // add additional informations about the event to the description
         $descDateTo   = '';
         $descDateFrom = $date->getValue('dat_begin', $gPreferences['system_date']);
         $description  = $descDateFrom;
-    
+
         if ($date->getValue('dat_all_day') == 0)
         {
             $descDateFrom = $descDateFrom. ' '. $date->getValue('dat_begin', $gPreferences['system_time']).' '.$gL10n->get('SYS_CLOCK');
-            
+
             if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
             {
                 $descDateTo = $date->getValue('dat_end', $gPreferences['system_date']). ' ';
@@ -96,17 +96,17 @@ if($datesResult['numResults'] > 0)
                 $description = $gL10n->get('SYS_DATE_FROM_TO', $descDateFrom, $date->getValue('dat_end', $gPreferences['system_date']));
             }
         }
-    
+
         if ($date->getValue('dat_location') != '')
         {
             $description = $description. '<br /><br />'.$gL10n->get('DAT_LOCATION').':&nbsp;'. $date->getValue('dat_location');
         }
-    
+
         $description = $description. '<br /><br />'. $date->getValue('dat_description');
-    
+
         //i-cal downloadlink
         $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id').'&mode=6">'.$gL10n->get('DAT_ADD_DATE_TO_CALENDAR').'</a>';
-    
+
         // add entry to RSS feed
         $rss->addItem($title, $description, $link, $author, $pubDate);
     }

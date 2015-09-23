@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -63,7 +63,7 @@ if($postImportCoding == 'iso-8859-1')
         $_SESSION['file_lines'][$key] = utf8_encode($value);
     }
 }
-    
+
 // CSV-Import (im Moment gibt es nur diesen, spaeter muss hier dann unterschieden werden)
 header('Location: '.$g_root_path.'/adm_program/modules/members/import_csv_config.php');
 exit();

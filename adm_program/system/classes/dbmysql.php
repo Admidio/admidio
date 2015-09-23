@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -86,11 +86,12 @@ class DBMySQL extends DBCommon
         return mysql_fetch_assoc($result);
     }
 
-    /** Fetch a result row as an associative array, a numeric array, or both.
-     *  @param $result     The result resource that is being evaluated. This result comes from a call to query().
-     *  @param $resultType Set the result type. Can contain @b ASSOC for an associative array,
-     *                     @b NUM for a numeric array or @b BOTH (Default).
-     *  @return Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
+    /**
+     * Fetch a result row as an associative array, a numeric array, or both.
+     * @param $result     The result resource that is being evaluated. This result comes from a call to query().
+     * @param $resultType Set the result type. Can contain @b ASSOC for an associative array,
+     *                    @b NUM for a numeric array or @b BOTH (Default).
+     * @return array Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
      */
     public function fetch_array($result = false, $resultType = 'BOTH')
     {

@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -526,7 +526,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
         $htmlEditName   = '';
 
         // compose name of user who create the recordset
-        if($timestampCreate !== '')
+        if(strlen($timestampCreate) > 0)
         {
             if($userIdCreated > 0)
             {
@@ -548,7 +548,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
         }
 
         // compose name of user who edit the recordset
-        if($timestampEdited !== '')
+        if(strlen($timestampEdited) > 0)
         {
             if($userIdEdited > 0)
             {
@@ -604,11 +604,11 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
     if($gPreferences['system_show_create_edit'] > 0)
     {
         // compose name of user who create the recordset
-        if($timestampCreate !== '')
+        if(strlen($timestampCreate) > 0)
         {
             $userNameCreated = trim($userNameCreated);
 
-            if($userNameCreated === '')
+            if(strlen($userNameCreated) == 0)
             {
                 $userNameCreated = $gL10n->get('SYS_DELETED_USER');
             }
@@ -624,11 +624,11 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
         }
 
         // compose name of user who edit the recordset
-        if($timestampEdited !== '')
+        if(strlen($timestampEdited) > 0)
         {
             $userNameEdited = trim($userNameEdited);
 
-            if($userNameEdited === '')
+            if(strlen($userNameEdited) == 0)
             {
                 $userNameEdited = $gL10n->get('SYS_DELETED_USER');
             }

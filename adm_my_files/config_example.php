@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * !!!!!!!!!!!!!!!!!!!!!!!!!! I M P O R T A N T !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * This is an example file. Don't use it with your production environment.
@@ -37,7 +37,7 @@ $g_root_path = 'http://www.your-website.de/admidio';
 // Maximun of 10 characters !!!
 $g_organization = 'Shortcut';
 
-// If this flag is set = 1 then you must enter your loginname and password 
+// If this flag is set = 1 then you must enter your loginname and password
 // for an update of the Admidio database to a new version of Admidio.
 // For a more comfortable and easy update you can set this preference = 0.
 $gLoginForUpdate = 1;

@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -85,7 +85,7 @@ if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganiza
     // show all organizations where this organization is mother or child organization
     $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
     $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
-    
+
     $form->addCheckbox('ann_global', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $announcement->getValue('ann_global'), array('helpTextIdLabel' => array('SYS_DATA_GLOBAL', $organizations)));
 }
 $form->addEditor('ann_description', $gL10n->get('SYS_TEXT'), $announcement->getValue('ann_description'), array('property' => FIELD_REQUIRED));

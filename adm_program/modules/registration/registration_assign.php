@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -19,7 +19,7 @@ require_once('../../system/login_valid.php');
 $getNewUserId = admFuncVariableIsValid($_GET, 'new_user_id', 'numeric', array('requireValue' => true));
 
 // nur Webmaster duerfen User zuordnen, ansonsten Seite verlassen
-if($gCurrentUser->approveUsers() == false)
+if(!$gCurrentUser->approveUsers())
 {
    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -37,7 +37,7 @@ $headline = $gL10n->get('NWU_ASSIGN_REGISTRATION');
 $new_user = new User($gDb, $gProfileFields, $getNewUserId);
 
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
-if($gPreferences['system_search_similar'] == 1 && $gDbType == 'mysql')
+if($gPreferences['system_search_similar'] == 1 && $gDbType === 'mysql')
 {
     $sql_similar_name =
     '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $new_user->getValue('LAST_NAME').'\'), 1, 4)
@@ -81,7 +81,7 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
          WHERE usr_valid = 1
            AND '.$sql_similar_name;
 $result_usr   = $gDb->query($sql);
-$member_found = $gDb->num_rows($result_usr);
+$members_found = $gDb->num_rows($result_usr);
 
 // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
 if($gCurrentUser->editUsers())
@@ -93,7 +93,7 @@ else
     $urlCreateNewUser = $g_root_path.'/adm_program/modules/registration/registration_function.php?mode=5&new_user_id='.$getNewUserId;
 }
 
-if($member_found == 0)
+if($members_found === 0)
 {
     // if user doesn't exists than show profile or auto assign roles
     header('Location: '.$urlCreateNewUser);
@@ -109,104 +109,107 @@ $page = new HtmlPage($headline);
 $registrationAssignMenu = $page->getMenu();
 $registrationAssignMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
-$page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('LAST_NAME')).'</p>
+$page->addHtml('
+    <p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('LAST_NAME')).'</p>
+    <div class="panel panel-default">
+        <div class="panel-heading">'.$gL10n->get('SYS_USERS_FOUND').'</div>
+        <div class="panel-body">'
+);
 
-<div class="panel panel-default">
-    <div class="panel-heading">'.$gL10n->get('SYS_USERS_FOUND').'</div>
-    <div class="panel-body">');
+// show all found users with their address who have a similar name and show link for further handling
+$i = 0;
+while($row = $gDb->fetch_object($result_usr))
+{
+    if($i > 0)
+    {
+        $page->addHtml('<hr />');
+    }
+    $page->addHtml('<p>
+        <a class="btn" href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row->usr_id.'"><img
+             src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row->first_name.' '.$row->last_name.'</a><br />');
 
-        // show all found users with their address who have a similar name and show link for further handling
-        $i = 0;
-        while($row = $gDb->fetch_object($result_usr))
+        if($row->address !== '')
         {
-            if($i > 0)
+            $page->addHtml($row->address.'<br />');
+        }
+        if($row->zip_code !== '' || $row->city !== '')
+        {
+            $page->addHtml($row->zip_code.' '.$row->city.'<br />');
+        }
+        if($row->email !== '')
+        {
+            if($gPreferences['enable_mail_module'] == 1)
             {
-                $page->addHtml('<hr />');
-            }
-            $page->addHtml('<p>
-                <a class="btn" href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row->usr_id.'"><img
-                     src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row->first_name.' '.$row->last_name.'</a><br />');
-                     
-                if(strlen($row->address) > 0)
-                {
-                    $page->addHtml($row->address.'<br />');
-                }
-                if(strlen($row->zip_code) > 0 || strlen($row->city) > 0)
-                {
-                    $page->addHtml($row->zip_code.' '.$row->city.'<br />');
-                }
-                if(strlen($row->email) > 0)
-                {
-                    if($gPreferences['enable_mail_module'] == 1)
-                    {
-                        $page->addHtml('<a href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='.$row->usr_id.'">'.$row->email.'</a><br />');
-                    }
-                    else
-                    {
-                        $page->addHtml('<a href="mailto:'.$row->email.'">'.$row->email.'</a><br />');
-                    }
-                }
-            $page->addHtml('</p>');
-            
-            if(isMember($row->usr_id))
-            {
-                // gefundene User ist bereits Mitglied dieser Organisation
-                if(strlen($row->usr_login_name) > 0)
-                {
-                    // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken
-                    $page->addHtml('<p>'.$gL10n->get('NWU_USER_VALID_LOGIN'));
-                    if($gPreferences['enable_system_mails'] == 1)
-                    {
-                        $page->addHtml('<br />'.$gL10n->get('NWU_REMINDER_SEND_LOGIN').'</p>
-
-                        <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=6\'"><img
-                            src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('NWU_SEND_LOGIN').'" />'.$gL10n->get('NWU_SEND_LOGIN').'</button>');
-                    }
-                }
-                else
-                {
-                    // Logindaten sind NICHT vorhanden -> diese nun zuordnen
-                    $page->addHtml('<p>'.$gL10n->get('NWU_USER_NO_VALID_LOGIN').'</p>
-
-                    <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=1\'"><img
-                        src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_LOGIN').'</button>');
-                }
+                $page->addHtml('<a href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='.$row->usr_id.'">'.$row->email.'</a><br />');
             }
             else
             {
-                // gefundene User ist noch KEIN Mitglied dieser Organisation
-                $link = $g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=2';
-
-                if(strlen($row->usr_login_name) > 0)
-                {
-                    // Logindaten sind bereits vorhanden
-                    $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP', $gCurrentOrganization->getValue('org_shortname')).'</p>
-
-                    <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'.THEME_PATH.'/icons/new_registrations.png"
-                        alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'</button>');
-                }
-                else
-                {
-                    // KEINE Logindaten vorhanden
-                    $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP_NO_LOGIN', $gCurrentOrganization->getValue('org_shortname')).'</p>
-                    
-                    <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'. THEME_PATH. '/icons/new_registrations.png"
-                        alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'</button>');
-                }
+                $page->addHtml('<a href="mailto:'.$row->email.'">'.$row->email.'</a><br />');
             }
-            $i++;
         }
-    $page->addHtml('</div>
-</div>
-<div class="panel panel-default">
-    <div class="panel-heading">'.$gL10n->get('SYS_CREATE_NEW_USER').'</div>
-    <div class="panel-body">
-        <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER'). '</p>
-            
-        <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$urlCreateNewUser.'\'"><img
-            src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" />'.$gL10n->get('SYS_CREATE_NEW_USER').'</button>
+    $page->addHtml('</p>');
+
+    if(isMember($row->usr_id))
+    {
+        // gefundene User ist bereits Mitglied dieser Organisation
+        if($row->usr_login_name !== '')
+        {
+            // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken
+            $page->addHtml('<p>'.$gL10n->get('NWU_USER_VALID_LOGIN'));
+            if($gPreferences['enable_system_mails'] == 1)
+            {
+                $page->addHtml('<br />'.$gL10n->get('NWU_REMINDER_SEND_LOGIN').'</p>
+
+                <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=6\'"><img
+                    src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('NWU_SEND_LOGIN').'" />'.$gL10n->get('NWU_SEND_LOGIN').'</button>');
+            }
+        }
+        else
+        {
+            // Logindaten sind NICHT vorhanden -> diese nun zuordnen
+            $page->addHtml('<p>'.$gL10n->get('NWU_USER_NO_VALID_LOGIN').'</p>
+
+            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=1\'"><img
+                src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_LOGIN').'</button>');
+        }
+    }
+    else
+    {
+        // gefundene User ist noch KEIN Mitglied dieser Organisation
+        $link = $g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=2';
+
+        if($row->usr_login_name !== '')
+        {
+            // Logindaten sind bereits vorhanden
+            $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP', $gCurrentOrganization->getValue('org_shortname')).'</p>
+
+            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'.THEME_PATH.'/icons/new_registrations.png"
+                alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'</button>');
+        }
+        else
+        {
+            // KEINE Logindaten vorhanden
+            $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP_NO_LOGIN', $gCurrentOrganization->getValue('org_shortname')).'</p>
+
+            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'. THEME_PATH. '/icons/new_registrations.png"
+                alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'</button>');
+        }
+    }
+    $i++;
+}
+$page->addHtml('
     </div>
-</div>');
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">'.$gL10n->get('SYS_CREATE_NEW_USER').'</div>
+        <div class="panel-body">
+            <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER'). '</p>
+
+            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$urlCreateNewUser.'\'"><img
+                src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" />'.$gL10n->get('SYS_CREATE_NEW_USER').'</button>
+        </div>
+    </div>'
+);
 
 $page->show();
 

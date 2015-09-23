@@ -60,7 +60,7 @@ Die Admidio Mitgliederverwaltung sowie dieses Plugin stehen unter der
 GNU General Public License 2. Bevor Sie Admidio oder dieses Plugin benutzen,
 sollten Sie unbedingt die mitgelieferte gpl-de.html durchlesen oder auf
 der GNU Homepage nachschauen.
-http://www.gnu.org/licenses/gpl-2.0.html
+https://www.gnu.org/licenses/gpl-2.0.html
 
 
  6. Copyright

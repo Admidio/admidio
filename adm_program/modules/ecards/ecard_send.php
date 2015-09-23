@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 require_once('../../system/common.php');
@@ -84,7 +84,7 @@ foreach($_POST['ecard_recipients'] as $key => $value)
 $ecardSendResult = true;
 
 if(count($arrayRoles) > 0)
-// Wenn schon dann alle Namen und die dazugehörigen Emails auslesen und in die versand Liste hinzufügen
+// Wenn schon dann alle Namen und die dazugehï¿½rigen Emails auslesen und in die versand Liste hinzufï¿½gen
 {
     $sql = 'SELECT DISTINCT first_name.usd_value as first_name, last_name.usd_value as last_name,
                    email.usd_value as email, rol_name

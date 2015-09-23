@@ -97,7 +97,7 @@
  *
  *  Copyright    : (c) 2004 - 2015 The Admidio Team
  *  Homepage     : http://www.admidio.org
- *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *  License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -147,7 +147,6 @@ class ModuleWeblinks extends Modules
             // if user isn't logged in, then don't show hidden categories
             $this->getConditions .= ' AND cat_hidden = 0 ';
         }
-
 
         //Weblinks aus der DB fischen...
         $sql = 'SELECT cat.*, lnk.*

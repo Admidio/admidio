@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2014 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -31,7 +31,7 @@ $getSubject     = admFuncVariableIsValid($_GET, 'subject', 'html');
 $getMsgId       = admFuncVariableIsValid($_GET, 'msg_id', 'numeric');
 $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
 $getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy', 'boolean', array('defaultValue' => 0));
-$getDeliveryConfirmation  = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'boolean');
+$getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'boolean');
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
 
 if ($getMsgId > 0)
@@ -41,27 +41,27 @@ if ($getMsgId > 0)
 }
 
 // check if the call of the page was allowed by settings
-if ($gPreferences['enable_mail_module'] != 1 && $getMsgType != 'PM')
+if ($gPreferences['enable_mail_module'] != 1 && $getMsgType !== 'PM')
 {
     // message if the sending of PM is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 // check if the call of the page was allowed by settings
-if ($gPreferences['enable_pm_module'] != 1 && $getMsgType == 'PM')
+if ($gPreferences['enable_pm_module'] != 1 && $getMsgType === 'PM')
 {
     // message if the sending of PM is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 // check for valid login
-if (!$gValidLogin && $getUserId == 0 && $getMsgType == 'PM')
+if (!$gValidLogin && $getUserId == 0 && $getMsgType === 'PM')
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // check if user has email address for sending a email
-if ($gValidLogin && $getMsgType != 'PM' && strlen($gCurrentUser->getValue('EMAIL')) == 0)
+if ($gValidLogin && $getMsgType !== 'PM' && $gCurrentUser->getValue('EMAIL') === '')
 {
     $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
 }
@@ -76,25 +76,25 @@ if ($getMsgId > 0)
     $getUserId = $message->getConversationPartner($gCurrentUser->getValue('usr_id'));
 
     $sql = "SELECT msc_usr_id, msc_message, msc_timestamp
-                  FROM ". TBL_MESSAGES_CONTENT. "
-                 WHERE msc_msg_id = ". $getMsgId ."
-                 ORDER BY msc_part_id DESC";
+              FROM ". TBL_MESSAGES_CONTENT. "
+             WHERE msc_msg_id = ". $getMsgId ."
+             ORDER BY msc_part_id DESC";
 
     $message_result = $gDb->query($sql);
 }
 
 $recept_number = 1;
-if ($gPreferences['mail_max_receiver'] > 0 and $getMsgType != 'PM')
+if ($gPreferences['mail_max_receiver'] > 0 && $getMsgType !== 'PM')
 {
     $recept_number = $gPreferences['mail_max_receiver'];
 }
 
 $list = array();
 
-if ($getMsgType == 'PM')
+if ($getMsgType === 'PM')
 {
 
-    $sql = "SELECT usr_id, CONCAT(LAST_NAME.usd_value, ' ', FIRST_NAME.usd_value) as name, usr_login_name
+    $sql = "SELECT usr_id, CONCAT(LAST_NAME.usd_value, ' ', FIRST_NAME.usd_value) AS name, usr_login_name
                   FROM ".TBL_ROLES.", ".TBL_CATEGORIES.", ".TBL_MEMBERS.", ".TBL_USERS."
                         LEFT JOIN ".TBL_USER_DATA." LAST_NAME
                                            ON LAST_NAME.usd_usr_id = usr_id
@@ -125,13 +125,11 @@ if ($getMsgType == 'PM')
 
 if ($getUserId > 0)
 {
-    //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
+    // usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
     $user = new User($gDb, $gProfileFields, $getUserId);
 
     // if an User ID is given, we need to check if the actual user is allowed to contact this user
-    if (($gCurrentUser->editUsers() == false
-       && isMember($user->getValue('usr_id')) == false)
-    || strlen($user->getValue('usr_id')) == 0)
+    if ((!$gCurrentUser->editUsers() && !isMember($user->getValue('usr_id'))) || $user->getValue('usr_id') === '')
     {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
     }
@@ -144,7 +142,7 @@ if ($getSubject !== '')
 else
 {
     $headline = $gL10n->get('MAI_SEND_EMAIL');
-    if ($getMsgType == 'PM')
+    if ($getMsgType === 'PM')
     {
         $headline = $gL10n->get('PMS_SEND_PM');
     }
@@ -160,7 +158,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $messagesWriteMenu = $page->getMenu();
 $messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
-if ($getMsgType == 'PM')
+if ($getMsgType === 'PM')
 {
 
     $formParam = 'msg_type=PM';
@@ -229,7 +227,7 @@ elseif (!isset($message_result))
                           FROM '.TBL_MEMBERS.'
                          WHERE mem_rol_id = rol_id
                            AND (  mem_begin > \''.DATE_NOW.'\'
-                               OR mem_end   < \''.DATE_NOW.'\')) as former
+                               OR mem_end   < \''.DATE_NOW.'\')) AS former
                   FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                  WHERE rol_cat_id    = cat_id
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
@@ -240,9 +238,9 @@ elseif (!isset($message_result))
         // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
         // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
         // Rollen muessen zur aktuellen Organisation gehoeren
-        if(($gValidLogin == false && $row['rol_mail_this_role'] != 3)
-        || ($gValidLogin == true  && $gCurrentUser->hasRightSendMailToRole($row['rol_id']) == false)
-        || $row['rol_id']  == null)
+        if((!$gValidLogin && $row['rol_mail_this_role'] != 3)
+        || ($gValidLogin && !$gCurrentUser->hasRightSendMailToRole($row['rol_id']))
+        || $row['rol_id'] === null)
         {
             $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         }
@@ -263,13 +261,13 @@ elseif (!isset($message_result))
     }
     else
     {
-        $form_values['name']         = '';
-        $form_values['mailfrom']     = '';
-        $form_values['subject']      = $getSubject;
-        $form_values['msg_body']     = '';
-        $form_values['msg_to']       = 0;
-        $form_values['carbon_copy']  = $getCarbonCopy;
-        $form_values['delivery_confirmation']  = $getDeliveryConfirmation;
+        $form_values['name']        = '';
+        $form_values['mailfrom']    = '';
+        $form_values['subject']     = $getSubject;
+        $form_values['msg_body']    = '';
+        $form_values['msg_to']      = 0;
+        $form_values['carbon_copy'] = $getCarbonCopy;
+        $form_values['delivery_confirmation'] = $getDeliveryConfirmation;
     }
 
     $formParam = '';
@@ -306,7 +304,7 @@ elseif (!isset($message_result))
                          FROM '.TBL_MEMBERS.'
                         WHERE mem_rol_id = rol_id
                          AND (  mem_begin > \''.DATE_NOW.'\'
-                        OR mem_end   < \''.DATE_NOW.'\')) as former
+                        OR mem_end   < \''.DATE_NOW.'\')) AS former
                   FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                  WHERE rol_valid   = 1
                    AND rol_cat_id  = cat_id
@@ -318,13 +316,13 @@ elseif (!isset($message_result))
         {
             $act_group = '';
             $act_group_short = '';
-            if ($act_or == 1)
+            if ($act_or === 1)
             {
                 $act_group = $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_FORMER_MEMBERS') . ')';
                 $act_group_short = '('.$gL10n->get('SYS_FORMER_PL').')';
                 $act_number = '-1';
             }
-            elseif ($act_or == 2)
+            elseif ($act_or === 2)
             {
                 $act_group = $gL10n->get('SYS_ROLES'). ' (' . $gL10n->get('LST_ACTIVE_FORMER_MEMBERS') . ')';
                 $act_group_short = '('.$gL10n->get('MSG_ACTIVE_FORMER_SHORT').')';
@@ -339,7 +337,7 @@ elseif (!isset($message_result))
             $result = $gDb->query($sql);
             while ($row = $gDb->fetch_array($result))
             {
-                if($act_number == '' || $row['former'] > 0)
+                if($act_number === '' || $row['former'] > 0)
                 {
                     if($gCurrentUser->hasRightSendMailToRole($row['rol_id']))
                     {
@@ -352,38 +350,40 @@ elseif (!isset($message_result))
 
         // select Users
 
-        $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
-                                 email.usd_value as email, (SELECT count(1)
-                         FROM '.TBL_MEMBERS.' as temp
-                        WHERE mem_usr_id = usr_id
-                         AND (  mem_begin > \''.DATE_NOW.'\'
-                        OR mem_end   < \''.DATE_NOW.'\')) as former
-                    FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
-                    JOIN '. TBL_USER_DATA. ' as email
-                      ON email.usd_usr_id = usr_id
-                     AND LENGTH(email.usd_value) > 0
-                    JOIN '.TBL_USER_FIELDS.' as field
-                      ON field.usf_id = email.usd_usf_id
-                     AND field.usf_type = \'EMAIL\'
-                    LEFT JOIN '. TBL_USER_DATA. ' as last_name
-                      ON last_name.usd_usr_id = usr_id
-                     AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-                    LEFT JOIN '. TBL_USER_DATA. ' as first_name
-                      ON first_name.usd_usr_id = usr_id
-                     AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-                   WHERE mem_usr_id  = usr_id
-                     AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
-                     AND usr_valid   = 1
-                   GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
-                   ORDER BY former, last_name, first_name';
+        $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
+                           email.usd_value as email, (SELECT DISTINCT 1
+                   FROM '.TBL_MEMBERS.' as temp
+                  WHERE mem_usr_id = usr_id
+                   AND mem_begin <= \''.DATE_NOW.'\'
+                   AND mem_end   >= \''.DATE_NOW.'\') as active
+                  FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
+              JOIN '. TBL_USER_DATA. ' as email
+                ON email.usd_usr_id = usr_id
+               AND LENGTH(email.usd_value) > 0
+              JOIN '.TBL_USER_FIELDS.' as field
+                ON field.usf_id = email.usd_usf_id
+               AND field.usf_type = \'EMAIL\'
+              LEFT JOIN '. TBL_USER_DATA. ' as last_name
+                ON last_name.usd_usr_id = usr_id
+               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+                 LEFT JOIN '. TBL_USER_DATA. ' as first_name
+                ON first_name.usd_usr_id = usr_id
+                   AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+             WHERE mem_usr_id  = usr_id
+               AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
+               AND usr_valid   = 1
+             GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
+             ORDER BY active DESC, last_name ASC, first_name ASC';
 
         $result = $gDb->query($sql);
 
         $next = true;
         $active = $gL10n->get('LST_ACTIVE_MEMBERS');
 
-        while ($row = $gDb->fetch_array($result)) {
-            if ($row['former'] == 1 && $next == true)
+        while ($row = $gDb->fetch_array($result))
+        {
+            // if former members were found then change the string for the group title
+            if ($row['active'] != 1 && $next)
             {
                 $active = $gL10n->get('MSG_FORMER_MEMBERS');
                 $next = false;
@@ -436,7 +436,7 @@ elseif (!isset($message_result))
     }
 
     // if preference is set then show a checkbox where the user can request a delivery confirmation for the email
-    if (($gCurrentUser->getValue('usr_id') > 0 && $gPreferences['mail_delivery_confirmation']==2) || $gPreferences['mail_delivery_confirmation']==1)
+    if (($gCurrentUser->getValue('usr_id') > 0 && $gPreferences['mail_delivery_confirmation'] == 2) || $gPreferences['mail_delivery_confirmation'] == 1)
     {
         $form->addCheckbox('delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $form_values['delivery_confirmation']);
     }
@@ -454,7 +454,7 @@ elseif (!isset($message_result))
     }
 
     // add textfield or ckeditor to form
-    if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
+    if($gValidLogin && $gPreferences['mail_html_registered_users'] == 1)
     {
         $form->addEditor('msg_body', null, $form_values['msg_body'], array('property' => FIELD_REQUIRED));
     }
@@ -495,7 +495,7 @@ if (isset($message_result))
 
         $ReceiverName = '';
         $message_text = htmlspecialchars_decode($row['msc_message']);
-        if ($getMsgType == 'PM')
+        if ($getMsgType === 'PM')
         {
             // list history of this PM
             $message_text = nl2br($row['msc_message']);
@@ -506,33 +506,33 @@ if (isset($message_result))
             $receivers = $message->getValue('msg_usr_id_receiver');
             // open some additonal functions for messages
             $modulemessages = new ModuleMessages();
-            $ReceiverName = "";
-            if (strpos($receivers, '|') == true)
+            $ReceiverName = '';
+            if (strpos($receivers, '|') > 0)
             {
                 $reciversplit = explode('|', $receivers);
                 foreach ($reciversplit as $value)
                 {
-                    if (strpos($value, ':') == true)
+                    if (strpos($value, ':') > 0)
                     {
-                        $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($value);
+                        $ReceiverName .= '; ' . $modulemessages->msgGroupNameSplit($value);
                     }
                     else
                     {
                         $user = new User($gDb, $gProfileFields, $value);
-                        $ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                        $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
                     }
                 }
             }
             else
             {
-                if (strpos($receivers, ':') == true)
+                if (strpos($receivers, ':') > 0)
                 {
-                    $ReceiverName .= "; " . $modulemessages->msgGroupNameSplit($receivers);
+                    $ReceiverName .= '; ' . $modulemessages->msgGroupNameSplit($receivers);
                 }
                 else
                 {
                     $user = new User($gDb, $gProfileFields, $receivers);
-                    $ReceiverName .= "; " . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                    $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
                 }
             }
             $ReceiverName = '<div class="panel-footer">'.$gL10n->get('MSG_OPPOSITE').': '.substr($ReceiverName, 2).'</div>';

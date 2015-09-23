@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -13,7 +13,7 @@
 // 0 = Link wird nicht angezeigt
 $plg_show_register_link = 1;
 
-// Zeigt einen Link um eine E-Mail an den Webmaster zu schreiben, 
+// Zeigt einen Link um eine E-Mail an den Webmaster zu schreiben,
 // falls es Probleme beim Login gibt
 // 1 = (Default) Link wird angezeigt
 // 0 = Link wird nicht angezeigt

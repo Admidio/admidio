@@ -4,10 +4,10 @@
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
- 
+
 #plgBirthdayNameList {
     margin:             0px;
     padding:            0px;
@@ -15,42 +15,42 @@
 }
 
 /* ********************************************************** */
-/* CSS Klasse für heutigen Geburtstag                         */
+/* CSS Klasse fÃ¼r heutigen Geburtstag                         */
 /* ********************************************************** */
 
-#plgBirthdayNameHighlight { 
+#plgBirthdayNameHighlight {
     color:              #53a351;
 }
 
-#plgBirthdayDateHighlight { 
+#plgBirthdayDateHighlight {
     color:              #53a351;
 }
 
 /* ********************************************************** */
-/* CSS Klasse für vergangene Geburtstage                      */
+/* CSS Klasse fÃ¼r vergangene Geburtstage                      */
 /* ********************************************************** */
 
-#plgBirthdayNameHighlightAgo { 
+#plgBirthdayNameHighlightAgo {
     color:              #d84d1e;
 }
 
-#plgBirthdayDateHighlightAgo { 
+#plgBirthdayDateHighlightAgo {
     color:              #d84d1e;
 }
 
 /* ********************************************************** */
-/* CSS Klasse für zukünftige Geburtstage                      */
+/* CSS Klasse fÃ¼r zukÃ¼nftige Geburtstage                      */
 /* ********************************************************** */
 
-#plgBirthdayNameHighlightFuture { 
+#plgBirthdayNameHighlightFuture {
     color:              #5475ff;
 }
 
-#plgBirthdayDateHighlightFuture { 
+#plgBirthdayDateHighlightFuture {
     color:              #5475ff;
 }
 
-#plgBirthdayNameList li { 
+#plgBirthdayNameList li {
     display:            inline;
     text-align:         left;
     float:              none;       /* left : Alles in einer Zeile anzeigen */

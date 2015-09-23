@@ -4,6 +4,7 @@
         <text id="BAC_FILE_NAME_INVALID" development="changed" translation="todo">The selected file name contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers from 0 to 9 and special characters $!?._+-&amp; are free to use.</text>
         <text id="SYS_CATEGORIES_VAR" development="new" translation="edited">%VAR1%-categories</text>
         <text id="SYS_CATEGORY_VAR" development="new" translation="edited">%VAR1%-category</text>
+        <text id="SYS_COPY_VAR" development="new" translation="todo">Copy %VAR1%</text>
         <text id="SYS_DATABASE_NO_LOGIN" development="new" translation="todo">The connection to the database failed!\n\nThe following error occurred:\n%VAR1%.</text>
         <text id="ORG_BROWSER_UPDATE_CHECK" development="new" translation="edited">Update message for outdated Browsers</text>
         <text id="ORG_BROWSER_UPDATE_CHECK_DESC" development="new" translation="edited">After activation users with outdated browsers are advised to run a browserupdate. Newer browsers guarantee a better protection against fraud, viruses, Trojans, identity theft and other threats to your privacy and security. Every new browser generation improves speed and supports more and more new web technologies, which leads to a better web experience. For this purpose, the service of https://browser-update.org/ is used.</text>

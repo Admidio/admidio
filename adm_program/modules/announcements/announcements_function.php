@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -40,7 +40,7 @@ $announcement = new TableAnnouncement($gDb);
 if($getAnnId > 0)
 {
     $announcement->readDataById($getAnnId);
-    
+
     // Pruefung, ob die Ankuendigung zur aktuellen Organisation gehoert bzw. global ist
     if($announcement->editRight() == false)
     {
@@ -65,10 +65,10 @@ if($getMode == 1)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TEXT')));
     }
-    
+
     // make html in description secure
     $_POST['ann_description'] = admFuncVariableIsValid($_POST, 'ann_description', 'html');
-    
+
     // POST Variablen in das Ankuendigungs-Objekt schreiben
     foreach($_POST as $key => $value)
     {
@@ -77,7 +77,7 @@ if($getMode == 1)
             $announcement->setValue($key, $value);
         }
     }
-    
+
     // Daten in Datenbank schreiben
     $return_code = $announcement->save();
 
@@ -94,7 +94,7 @@ if($getMode == 1)
             $notification->adminNotfication($gL10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
         }
     }
-    
+
     unset($_SESSION['announcements_request']);
     $gNavigation->deleteLastUrl();
 

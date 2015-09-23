@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2014 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -39,18 +39,18 @@ $page->addCssFile(THEME_PATH.'/css/chat.css');
 
 $page->addJavascript('
     // kick off chat
-    var chat =  new Chat();
-    
+    var chat = new Chat();
+
     chat.getState();
-    
+
     $(function() {
         // watch textarea for release of key press [enter]
-        $("#sendie").keyup(function(e) {    
-            if (e.keyCode == 13) {
+        $("#sendie").keyup(function(e) {
+            if (e.keyCode === 13) {
                 var text = $(this).val().trim();
                 if (text.length > 0)
                 {
-                    chat.send(text);    
+                    chat.send(text);
                 }
                 $(this).val("");
             }

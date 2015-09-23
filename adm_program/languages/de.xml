@@ -4,6 +4,7 @@
         <text id="BAC_FILE_NAME_INVALID" development="changed" translation="todo">Der ausgewählte Dateiname enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen $!?._+-&amp; .</text>
         <text id="SYS_CATEGORIES_VAR" development="new" translation="todo">%VAR1%-Kategorien</text>
         <text id="SYS_CATEGORY_VAR" development="new" translation="todo">%VAR1%-Kategorie</text>
+        <text id="SYS_COPY_VAR" development="new" translation="todo">%VAR1% kopieren</text>
         <text id="SYS_DATABASE_NO_LOGIN" development="new" translation="todo">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n%VAR1%.</text>
         <text id="ORG_BROWSER_UPDATE_CHECK" development="new" translation="todo">Update Meldung für veraltete Browser</text>
         <text id="ORG_BROWSER_UPDATE_CHECK_DESC" development="new" translation="todo">Nach Aktivierung wird Benutzern mit veraltetem Browser geraten ein Browserupdate durchzuführen. Neuere Browser schützen besser vor Betrug, Viren, Trojanern, Datendiebstahl und anderen Bedrohungen Ihrer Privatsphäre und Sicherheit. Jede neue Browsergeneration verbessert die Geschwindigkeit und die Unterstützung neuer Webtechniken, mit der Webseiten besser dargestellt werden können. Hierzu wird das Service von https://browser-update.org/ verwendet.</text>

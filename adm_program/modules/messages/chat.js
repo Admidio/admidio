@@ -1,6 +1,6 @@
-/*
-Name: Admidio Chat Engine
-*/
+/**
+ * Name: Admidio Chat Engine
+ */
 
 var instanse = false;
 var state;
@@ -12,12 +12,12 @@ function Chat () {
     this.send = sendChat;
 }
 
-//gets the state of the chat
+// gets the state of the chat
 function getStateOfChat(){
     state = 0;
 }
 
-//Updates the chat
+// Updates the chat
 function updateChat(){
     if(!instanse)
     {
@@ -26,8 +26,8 @@ function updateChat(){
             type: "POST",
             url: "process.php",
             data: {
-                'function': 'update',
-                'state': state
+                "function": "update",
+                "state": state
             },
             dataType: "json",
             success: function(data){
@@ -35,18 +35,18 @@ function updateChat(){
                 {
                     for (var i = 0; i < data.text.length; i++)
                     {
-                        $('#chat-area').append($("<p>"+ data.text[i] +"</p>"));
+                        $("#chat-area").append($("<p>"+ data.text[i] +"</p>"));
                     }
-                    document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
+                    document.getElementById("chat-area").scrollTop = document.getElementById("chat-area").scrollHeight;
                 }
                 instanse = false;
                 state = data.state;
-            },
+            }
         });
     }
 }
 
-//send the message
+// send the message
 function sendChat(message)
 {
     updateChat();
@@ -54,13 +54,13 @@ function sendChat(message)
         type: "POST",
         url: "process.php",
         data: {
-            'function': 'send',
-            'message': message,
-            'state': state
+            "function": "send",
+            "message": message,
+            "state": state
         },
         dataType: "json",
         success: function(data){
             updateChat();
-        },
+        }
     });
 }

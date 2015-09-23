@@ -4,12 +4,12 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
-// Maximale Anzahl von Zeichen in einem Wort, 
-// bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert)) 
+// Maximale Anzahl von Zeichen in einem Wort,
+// bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert))
 $plg_max_char_per_word = 0;
 
 //Maximale Photobreite
@@ -25,8 +25,8 @@ $plg_photos_max_height = 200;
 $plg_photos_albums = 0;
 
 //Bildauswahl
-// 0 : (Default) Zufallsbild 
-// 1 : erstes Bild etc. 
+// 0 : (Default) Zufallsbild
+// 1 : erstes Bild etc.
 $plg_photos_picnr = 0;
 
 //Soll der Link zum Album unter dem Bild angezeigt werden?

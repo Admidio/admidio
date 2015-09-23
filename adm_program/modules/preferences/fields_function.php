@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
  *
@@ -15,7 +15,7 @@
  * sequence : new sequence für profile field
  *
  *****************************************************************************/
- 
+
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
@@ -36,14 +36,14 @@ $userField = new TableUserField($gDb);
 if($getUsfId > 0)
 {
     $userField->readDataById($getUsfId);
-    
+
     // check if profile field belongs to actual organization
     if($userField->getValue('cat_org_id') >  0
     && $userField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
-    
+
     // if system profile field then set usf_type to default
     if($userField->getValue('usf_system') == 1)
     {
@@ -56,15 +56,15 @@ if($getMode == 1)
    // Feld anlegen oder updaten
 
     $_SESSION['fields_request'] = $_POST;
-    
+
     // pruefen, ob Pflichtfelder gefuellt sind
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
-    if($userField->getValue('usf_system') == 0 && strlen($_POST['usf_name']) == 0)
+    if($userField->getValue('usf_system') == 0 && $_POST['usf_name'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
     }
 
-    if($userField->getValue('usf_system') == 0 && strlen($_POST['usf_type']) == 0)
+    if($userField->getValue('usf_system') == 0 && $_POST['usf_type'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATATYPE')));
     }
@@ -74,27 +74,27 @@ if($getMode == 1)
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
     }
 
-    if(($_POST['usf_type'] == 'DROPDOWN' || $_POST['usf_type'] == 'RADIO_BUTTON')
-    && strlen($_POST['usf_value_list']) == 0)
+    if(($_POST['usf_type'] === 'DROPDOWN' || $_POST['usf_type'] === 'RADIO_BUTTON')
+    && $_POST['usf_value_list'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_VALUE_LIST')));
     }
-    
+
     // Nachname und Vorname sollen immer Pflichtfeld bleiben
-    if($userField->getValue('usf_name_intern') == 'LAST_NAME'
-    || $userField->getValue('usf_name_intern') == 'FIRST_NAME')
+    if($userField->getValue('usf_name_intern') === 'LAST_NAME'
+    || $userField->getValue('usf_name_intern') === 'FIRST_NAME')
     {
         $_POST['usf_mandatory'] = 1;
     }
-    
-    if(isset($_POST['usf_name']) && $userField->getValue('usf_name') != $_POST['usf_name'])
+
+    if(isset($_POST['usf_name']) && $userField->getValue('usf_name') !== $_POST['usf_name'])
     {
         // Schauen, ob das Feld bereits existiert
-        $sql    = 'SELECT COUNT(*) as count 
-                     FROM '. TBL_USER_FIELDS. '
-                    WHERE usf_name LIKE \''.$_POST['usf_name'].'\'
-                      AND usf_cat_id  = '.$_POST['usf_cat_id'].'
-                      AND usf_id     <> '.$getUsfId;
+        $sql = 'SELECT COUNT(*) AS count
+                  FROM '. TBL_USER_FIELDS. '
+                 WHERE usf_name LIKE \''.$_POST['usf_name'].'\'
+                   AND usf_cat_id  = '.$_POST['usf_cat_id'].'
+                   AND usf_id     <> '.$getUsfId;
         $result = $gDb->query($sql);
         $row    = $gDb->fetch_array($result);
 
@@ -113,15 +113,15 @@ if($getMode == 1)
     {
         $_POST['usf_hidden'] = 1;
     }
-    if(isset($_POST['usf_disabled']) == false)
+    if(!isset($_POST['usf_disabled']))
     {
         $_POST['usf_disabled'] = 0;
     }
-    if(isset($_POST['usf_mandatory']) == false)
+    if(!isset($_POST['usf_mandatory']))
     {
         $_POST['usf_mandatory'] = 0;
     }
-    
+
     // make html in description secure
     $_POST['usf_description'] = admFuncVariableIsValid($_POST, 'usf_description', 'html');
 
@@ -130,17 +130,17 @@ if($getMode == 1)
     {
         if(strpos($key, 'usf_') === 0)
         {
-            if($userField->setValue($key, $value) == false)
+            if(!$userField->setValue($key, $value))
             {
                 // Daten wurden nicht uebernommen, Hinweis ausgeben
-                if($key == 'usf_url')
+                if($key === 'usf_url')
                 {
                     $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('ORG_URL')));
                 }
             }
         }
     }
-    
+
     // Daten in Datenbank schreiben
     $return_code = $userField->save();
 
@@ -178,5 +178,5 @@ elseif($getMode == 4)
     $userField->moveSequence($getSequence);
     exit();
 }
-         
+
 ?>
