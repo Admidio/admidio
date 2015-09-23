@@ -380,15 +380,15 @@ class Database
      */
     public function getVersion()
     {
-        $this->query('SELECT version()');
-        $row = $this->fetch_array();
+        $versionStatement = $this->query('SELECT version()');
+        $row = $versionStatement->fetch(PDO::FETCH_NUM);
 
 		if($this->engine === 'pgsql')
 		{
 			// the string (PostgreSQL 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
-			$version_array  = explode(',', $row[0]);
-			$version_array2 = explode(' ', $version_array[0]);
-			return $version_array2[1];
+			$versionArray  = explode(',', $row[0]);
+			$versionArray2 = explode(' ', $versionArray[0]);
+			return $versionArray2[1];
 		}
 		
         return $row[0];
@@ -401,8 +401,8 @@ class Database
     {
 		if($this->engine === 'pgsql')
 		{
-			$this->query('SELECT lastval()');
-			$insertRow = $this->fetch(null, PDO::FETCH_NUM);
+			$lastValStatement = $this->query('SELECT lastval()');
+			$insertRow = $lastValStatement->fetch(PDO::FETCH_NUM);
 			return $insertRow[0];
 		}
 		else
@@ -434,20 +434,20 @@ class Database
 			{
 				if(strpos(strtolower($sql), 'create table') !== false)
 				{
-					// bei einem Create-Table-Statement ggf. vorhandene Tabellenoptionen von MySQL abgeschnitten werden
+					// on a create-table-statement if necessary cut existing MySQL table options
 					$sql = substr(strtolower($sql), 0, strrpos($sql, ')') + 1);
 				}
 
 				// PostgreSQL doesn't know unsigned
 				$sql = str_replace('unsigned', '', $sql);
 
-				// Boolean macht Probleme, da PostgreSQL es als String behandelt
+				// PostgreSQL interprets a boolean as string so transform it to a smallint
 				$sql = str_replace('boolean', 'smallint', $sql);
 
-				// Blobs sind in PostgreSQL bytea Datentypen
+				// A blob is in PostgreSQL a bytea datatype
 				$sql = str_replace('blob', 'bytea', $sql);
 
-				// Auto_Increment muss durch Serial ersetzt werden
+				// Auto_Increment must be replaced with Serial
 				$posAutoIncrement = strpos($sql, 'auto_increment');
 				if($posAutoIncrement > 0)
 				{
@@ -560,8 +560,8 @@ class Database
 			if($this->engine === 'mysql')
 			{
 				$sql = 'SHOW COLUMNS FROM '.$table;
-				$this->query($sql);
-				$columnsList = $this->fetchAll();
+				$columnsStatement = $this->query($sql);
+				$columnsList      = $columnsStatement->fetchAll();
 
 				foreach($columnsList as $properties)
 				{
@@ -604,8 +604,8 @@ class Database
 			{
 				$sql = 'SELECT column_name, column_default, is_nullable, data_type
 						  FROM information_schema.columns WHERE table_name = \''.$table.'\'';
-				$this->query($sql);
-				$columnsList = $this->fetchAll();
+				$columnsStatement = $this->query($sql);
+				$columnsList = $columnsStatement->fetchAll();
 
 				foreach($columnsList as $properties)
 				{
