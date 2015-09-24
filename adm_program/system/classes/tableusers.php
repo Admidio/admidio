@@ -193,7 +193,7 @@ class TableUsers extends TableAccess
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         // encode Passwort with phpAss
-        if(($columnName == 'usr_password' || $columnName == 'usr_new_password') && strlen($newValue) < 30)
+        if(($columnName == 'usr_password' || $columnName == 'usr_new_password'))
         {
             $checkValue     = false;
             $passwordHasher = new PasswordHash(9, true); // only use private hash because of compatibility
