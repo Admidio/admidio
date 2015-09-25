@@ -382,7 +382,7 @@ else
 
 // If necessary show links to navigate to next and previous recordsets of the query
 $base_url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline.'&amp;moderation='.$getModeration;
-$page->addHtml(admFuncGeneratePagination($base_url, $num_guestbook, $guestbook_entries_per_page, $getStart, TRUE));
+$page->addHtml(admFuncGeneratePagination($base_url, $num_guestbook, $guestbook_entries_per_page, $getStart, true));
 
 // show html of complete page
 $page->show();

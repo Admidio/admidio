@@ -125,7 +125,7 @@ class ComponentUpdate extends Component
             // go step by step through the SQL statements until the last one is found
             foreach($this->xmlObject->children() as $updateStep)
             {
-                if($updateStep[0] != 'stop')
+                if($updateStep[0] !== 'stop')
                 {
                     $maxUpdateStep = $updateStep['id'];
                 }

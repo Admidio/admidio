@@ -554,7 +554,7 @@ if(($photoAlbum->getValue('pho_quantity')=='0' || strlen($photoAlbum->getValue('
 
 // If necessary show links to navigate to next and previous albums of the query
 $base_url = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId;
-$page->addHtml(admFuncGeneratePagination($base_url, $albumsCount, $gPreferences['photo_albums_per_page'], $getStart, TRUE));
+$page->addHtml(admFuncGeneratePagination($base_url, $albumsCount, $gPreferences['photo_albums_per_page'], $getStart, true));
 
 // show html of complete page
 $page->show();

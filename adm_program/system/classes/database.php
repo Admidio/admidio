@@ -8,9 +8,16 @@
  *
  *****************************************************************************/
 
+/**
+ * Class Database
+ */
 class Database
 {
-    // method creates the interface to the relevant database
+    /**
+     * method creates the interface to the relevant database
+     * @param string $dbType
+     * @return DBMySQL|DBPostgreSQL|false
+     */
     public static function createDatabaseObject($dbType)
     {
         switch ($dbType)
