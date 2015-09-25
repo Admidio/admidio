@@ -15,17 +15,15 @@
  */
 function showHideBlock(elementId) {
     var showHideElementId = elementId.substring(6);
-    var caretId = "caret_" + showHideElementId;
+    var showHideElementIdObject = $("#" + showHideElementId);
+    var caretIdObject = $("#caret_" + showHideElementId);
 
-    if ($("#" + showHideElementId).css("display") == "none") {
-        $("#" + showHideElementId).show("slow");
-        if ($("#" + caretId).length > 0) {
-            $("#" + caretId).attr("class", "caret");
-        }
-    } else {
-        $("#" + showHideElementId).hide("slow");
-        if ($("#" + caretId).length > 0) {
-            $("#" + caretId).attr("class", "caret-right");
+    showHideElementIdObject.show("slow");
+    if (caretIdObject.length > 0) {
+        if (showHideElementIdObject.css("display") === "none") {
+            caretIdObject.attr("class", "caret");
+        } else {
+            caretIdObject.attr("class", "caret-right");
         }
     }
 }
@@ -77,7 +75,7 @@ function callUrlHideElement(elementId, url, callbackFunction) {
  * @param {string} format A string with the format definition of the php date() function
  * @return {string} Format of moment.js script
  */
-function formatPhpToMoment(format){
+function formatPhpToMoment(format) {
     var formatMap = {
         d: "DD",
         D: "ddd",

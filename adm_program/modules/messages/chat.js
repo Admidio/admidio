@@ -6,19 +6,19 @@ var instanse = false;
 var state;
 var mes;
 
-function Chat () {
+function Chat() {
     this.getState = getStateOfChat;
     this.update = updateChat;
     this.send = sendChat;
 }
 
 // gets the state of the chat
-function getStateOfChat(){
+function getStateOfChat() {
     state = 0;
 }
 
 // Updates the chat
-function updateChat(){
+function updateChat() {
     if(!instanse)
     {
         instanse = true;
@@ -30,12 +30,12 @@ function updateChat(){
                 "state": state
             },
             dataType: "json",
-            success: function(data){
-                if(data.text)
+            success: function(data) {
+                if (data.text)
                 {
                     for (var i = 0; i < data.text.length; i++)
                     {
-                        $("#chat-area").append($("<p>"+ data.text[i] +"</p>"));
+                        $("#chat-area").append($("<p>" + data.text[i] + "</p>"));
                     }
                     document.getElementById("chat-area").scrollTop = document.getElementById("chat-area").scrollHeight;
                 }
@@ -47,8 +47,7 @@ function updateChat(){
 }
 
 // send the message
-function sendChat(message)
-{
+function sendChat(message) {
     updateChat();
     $.ajax({
         type: "POST",
@@ -59,7 +58,7 @@ function sendChat(message)
             "state": state
         },
         dataType: "json",
-        success: function(data){
+        success: function(data) {
             updateChat();
         }
     });

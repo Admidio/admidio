@@ -35,7 +35,7 @@ Date.createNewFormat = function(format) {
     var ch = '';
     for (var i = 0; i < format.length; ++i) {
         ch = format.charAt(i);
-        if (!special && ch == "\\") {
+        if (!special && ch === "\\") {
             special = true;
         }
         else if (special) {
@@ -138,7 +138,7 @@ Date.createParser = function(format) {
     var ch = '';
     for (var i = 0; i < format.length; ++i) {
         ch = format.charAt(i);
-        if (!special && ch == "\\") {
+        if (!special && ch === "\\") {
             special = true;
         }
         else if (special) {
