@@ -60,7 +60,7 @@ class Menu
             $icon = THEME_PATH . $icon;
         }
 
-        return array('id'=>$id, 'link'=>$link, 'text'=>$text, 'icon'=>$icon, 'desc'=>$desc, 'subitems'=>array());
+        return array('id' => $id, 'link' => $link, 'text' => $text, 'icon' => $icon, 'desc' => $desc, 'subitems' => array());
     }
 
     /**
@@ -89,7 +89,7 @@ class Menu
             $link = $this->root_path . $link;
         }
 
-        $this->items[$parentId]['subitems'][$id] = array('link'=>$link, 'text'=>$text);
+        $this->items[$parentId]['subitems'][$id] = array('link' => $link, 'text' => $text);
     }
 
     /**

@@ -186,7 +186,7 @@ class ModuleAnnouncements extends Modules
         $result = $gDb->query($sql);
 
         //array for results
-        $announcements= array('numResults'=>$gDb->num_rows($result), 'limit' => $limit, 'totalCount'=>$this->getDataSetCount());
+        $announcements= array('numResults' => $gDb->num_rows($result), 'limit' => $limit, 'totalCount' => $this->getDataSetCount());
 
         //Ergebnisse auf Array pushen
         while($row = $gDb->fetch_array($result))

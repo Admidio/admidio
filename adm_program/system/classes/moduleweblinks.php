@@ -169,7 +169,7 @@ class ModuleWeblinks extends Modules
         $result = $gDb->query($sql);
 
         //array für Ergbenisse
-        $weblinks= array('numResults'=>$gDb->num_rows($result), 'limit' => $limit, 'totalCount'=>$this->getDataSetCount());
+        $weblinks= array('numResults' => $gDb->num_rows($result), 'limit' => $limit, 'totalCount' => $this->getDataSetCount());
 
         //Ergebnisse auf Array pushen
         while($row = $gDb->fetch_array($result))
@@ -195,7 +195,7 @@ class ModuleWeblinks extends Modules
                 WHERE lnk_cat_id = cat_id
                 AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                 AND cat_type = \'LNK\'
-        '.$this->getConditions.'';
+        '.$this->getConditions;
         $result = $gDb->query($sql);
         $row    = $gDb->fetch_array($result);
         return $row['count'];

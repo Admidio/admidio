@@ -12,15 +12,15 @@
 function validate_bbc($table, $idCol, $col)
 {
     global $gDb;
-    $bbcodes =array(array('o'=>'[b]', 'c'=>'[/b]'),
-                    array('o'=>'[i]', 'c'=>'[/i]'),
-                    array('o'=>'[u]', 'c'=>'[/u]'),
-                    array('o'=>'[big]', 'c'=>'[/big]'),
-                    array('o'=>'[small]', 'c'=>'[/small]'),
-                    array('o'=>'[center]', 'c'=>'[/center]'),
-                    array('o'=>'[img', 'c'=>'[/img]'),
-                    array('o'=>'[url', 'c'=>'[/url]'),
-                    array('o'=>'[email', 'c'=>'[/email]'));
+    $bbcodes =array(array('o' => '[b]', 'c' => '[/b]'),
+                    array('o' => '[i]', 'c' => '[/i]'),
+                    array('o' => '[u]', 'c' => '[/u]'),
+                    array('o' => '[big]', 'c' => '[/big]'),
+                    array('o' => '[small]', 'c' => '[/small]'),
+                    array('o' => '[center]', 'c' => '[/center]'),
+                    array('o' => '[img', 'c' => '[/img]'),
+                    array('o' => '[url', 'c' => '[/url]'),
+                    array('o' => '[email', 'c' => '[/email]'));
 
     //get all entrys with bb-codes
     $sql = 'SELECT '.$idCol.', '.$col.'

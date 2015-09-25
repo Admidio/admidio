@@ -438,7 +438,7 @@ while($currentDay <= $lastDayCurrentMonth)
         }
         if($plg_ter_login == 1)
         {
-            if($gValidLogin == TRUE)
+            if($gValidLogin == true)
             {
                 $ter_valid = 1;
             }
@@ -508,7 +508,7 @@ while($currentDay <= $lastDayCurrentMonth)
         }
         if($plg_geb_login == 1)
         {
-            if($gValidLogin == TRUE)
+            if($gValidLogin == true)
             {
                 $geb_valid = 1;
             }

@@ -297,7 +297,7 @@ class ModuleLists extends Modules
 
         $result = $gDb->query($sql);
 
-        $lists= array('numResults'=>$gDb->num_rows($result), 'limit' => $limit, 'totalCount'=>$this->getDataSetCount());
+        $lists= array('numResults' => $gDb->num_rows($result), 'limit' => $limit, 'totalCount' => $this->getDataSetCount());
         while($row = $gDb->fetch_array($result))
         {
             $lists['recordset'][] = $row;
