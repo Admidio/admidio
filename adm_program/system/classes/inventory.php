@@ -28,25 +28,27 @@ class Inventory extends TableInventory
     protected $list_view_rights = array();  ///< Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
     protected $organizationId;              ///< the organization for which the rights are read, could be changed with method @b setOrganization
 
-    /** Constructor that will create an object of a recordset of the users table.
-     *  If the id is set than this recordset will be loaded.
-     *  @param $db          Object of the class database. This could be the default object @b $gDb.
-     *  @param $userFields  An object of the ProfileFields class with the profile field structure
-     *                      of the current organization. This could be the default object @b $gProfileFields.
-     *  @param $userId      The id of the user who should be loaded. If id isn't set than an empty object with no specific user is created.
+    /**
+     * Constructor that will create an object of a recordset of the users table.
+     * If the id is set than this recordset will be loaded.
+     * @param $db          Object of the class database. This could be the default object @b $gDb.
+     * @param $userFields  An object of the ProfileFields class with the profile field structure
+     *                     of the current organization. This could be the default object @b $gProfileFields.
+     * @param $userId      The id of the user who should be loaded. If id isn't set than an empty object with no specific user is created.
      */
     public function __construct(&$db, $inventoryFields, $itemId = 0)
     {
         global $gCurrentOrganization;
 
         $this->mInventoryFieldsData = clone $inventoryFields; // create explicit a copy of the object (param is in PHP5 a reference)
-        $this->organizationId = $gCurrentOrganization->getValue('org_id');
+        $this->organizationId = intval($gCurrentOrganization->getValue('org_id'));
         parent::__construct($db, $itemId);
     }
 
 
-    /** Additional to the parent method the user profile fields and all
-     *  user rights and role memberships will be initilized
+    /**
+     * Additional to the parent method the user profile fields and
+     * all user rights and role memberships will be initialized
      */
     public function clear()
     {
@@ -59,11 +61,12 @@ class Inventory extends TableInventory
 
     }
 
-    // returns true if a column of user table or profile fields has changed
+    /**
+     * @return bool returns true if a column of user table or profile fields has changed
+     */
     public function columnsValueChanged()
     {
-        if($this->columnsValueChanged == true
-        || $this->mProfileFieldsData->columnsValueChanged == true)
+        if($this->columnsValueChanged || $this->mProfileFieldsData->columnsValueChanged)
         {
             return true;
         }
@@ -71,7 +74,9 @@ class Inventory extends TableInventory
         return false;
     }
 
-    // delete all user data of profile fields; user record will not be deleted
+    /**
+     * delete all user data of profile fields; user record will not be deleted
+     */
     public function deleteUserFieldData()
     {
         $this->db->startTransaction();
@@ -86,9 +91,10 @@ class Inventory extends TableInventory
         $this->db->endTransaction();
     }
 
-    /** Returns the id of the organization this user object has been assigned.
-     *  This is in the default case the default organization of the config file.
-     *  @return Returns the id of the organization this user object has been assigned
+    /**
+     * Returns the id of the organization this user object has been assigned.
+     * This is in the default case the default organization of the config file.
+     * @return int Returns the id of the organization this user object has been assigned
      */
     public function getOrganization()
     {
@@ -99,19 +105,20 @@ class Inventory extends TableInventory
         return 0;
     }
 
-    /** Get the value of a column of the database table if the column has the praefix @b usr_
-     *  otherwise the value of the profile field of the table adm_user_data will be returned.
-     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
-     *  @param $columnName The name of the database column whose value should be read or the internal unique profile field name
-     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                 For text columns the format can be @b database that would return the original database value without any transformations
-     *  @return Returns the value of the database column or the value of adm_user_fields
-     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
-     *  @par Examples
-     *  @code  // reads data of adm_users column
-     *  $loginname = $gCurrentUser->getValue('usr_login_name');
-     *  // reads data of adm_user_fields
-     *  $email = $gCurrentUser->getValue('EMAIL'); @endcode
+    /**
+     * Get the value of a column of the database table if the column has the praefix @b usr_
+     * otherwise the value of the profile field of the table adm_user_data will be returned.
+     * If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @param string $columnName The name of the database column whose value should be read or the internal unique profile field name
+     * @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                For text columns the format can be @b database that would return the original database value without any transformations
+     * @return mixed Returns the value of the database column or the value of adm_user_fields
+     *         If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @par Examples
+     * @code  // reads data of adm_users column
+     * $loginname = $gCurrentUser->getValue('usr_login_name');
+     * // reads data of adm_user_fields
+     * $email = $gCurrentUser->getValue('EMAIL'); @endcode
      */
     public function getValue($columnName, $format = '')
     {
@@ -133,18 +140,20 @@ class Inventory extends TableInventory
         }
     }
 
-    /** If this method is called than all further calls of method @b setValue will not check the values.
-     *  The values will be stored in database without any inspections !
+    /**
+     * If this method is called than all further calls of method @b setValue will not check the values.
+     * The values will be stored in database without any inspections !
      */
     public function noValueCheck()
     {
         $this->mInventoryFieldsData->noValueCheck();
     }
 
-    /** Reads a user record out of the table adm_users in database selected by the unique user id.
-     *  Also all profile fields of the object @b mProfileFieldsData will be read.
-     *  @param $userId Unique id of the user that should be read
-     *  @return Returns @b true if one record is found
+    /**
+     * Reads a user record out of the table adm_users in database selected by the unique user id.
+     * Also all profile fields of the object @b mProfileFieldsData will be read.
+     * @param $userId Unique id of the user that should be read
+     * @return bool Returns @b true if one record is found
      */
     public function readDataById($itemId)
     {
@@ -158,13 +167,16 @@ class Inventory extends TableInventory
         return false;
     }
 
-    /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     *  a new record or if only an update is necessary. The update statement will only update
-     *  the changed columns. If the table has columns for creator or editor than these column
-     *  with their timestamp will be updated.
-     *  First save recordset and then save all user fields. After that the session of this got a renew for the user object.
-     *  If the user doesn't have the right to save data of this user than an exception will be thrown.
-     *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+    /**
+     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * a new record or if only an update is necessary. The update statement will only update
+     * the changed columns. If the table has columns for creator or editor than these column
+     * with their timestamp will be updated.
+     * First save recordset and then save all user fields. After that the session of this got a renew for the user object.
+     * If the user doesn't have the right to save data of this user than an exception will be thrown.
+     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if
+     *                                table has columns like @b usr_id_create or @b usr_id_changed
+     * @throw AdmException
      */
     public function save($updateFingerPrint = true)
     {
@@ -195,35 +207,35 @@ class Inventory extends TableInventory
         }
     }
 
-    /** Set the id of the organization which should be used in this user object.
-     *  The organization is used to read the rights of the user. If @b setOrganization
-     *  isn't called than the default organization @b gCurrentOrganization is set for
-     *  the current user object.
-     *  @param $organizationId Id of the organization
+    /**
+     * Set the id of the organization which should be used in this user object.
+     * The organization is used to read the rights of the user. If @b setOrganization isn't called
+     * than the default organization @b gCurrentOrganization is set for the current user object.
+     * @param int $organizationId Id of the organization
      */
     public function setOrganization($organizationId)
     {
         if(is_numeric($organizationId))
         {
-            $this->organizationId = $organizationId;
+            $this->organizationId = intval($organizationId);
         }
     }
 
-    /** Set a new value for a column of the database table if the column has the praefix @b usr_
-     *  otherwise the value of the profile field of the table adm_user_data will set.
-     *  If the user log is activated than the change of the value will be logged in @b adm_user_log.
-     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
-     *  @param $columnName The name of the database column whose value should get a new value or the internal unique profile field name
-     *  @param $newValue The new value that should be stored in the database field
-     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
-     *  @par Examples
-     *  @code  // set data of adm_users column
-     *  $gCurrentUser->getValue('usr_login_name', 'Admidio');
-     *  // reads data of adm_user_fields
-     *  $gCurrentUser->getValue('EMAIL', 'webmaster@admidio.org'); @endcode
+    /**
+     * Set a new value for a column of the database table if the column has the praefix @b usr_
+     * otherwise the value of the profile field of the table adm_user_data will set.
+     * If the user log is activated than the change of the value will be logged in @b adm_user_log.
+     * The value is only saved in the object. You must call the method @b save to store the new value to the database
+     * @param string $columnName The name of the database column whose value should get a new value or the internal unique profile field name
+     * @param $newValue The new value that should be stored in the database field
+     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @par Examples
+     * @code  // set data of adm_users column
+     * $gCurrentUser->getValue('usr_login_name', 'Admidio');
+     * // reads data of adm_user_fields
+     * $gCurrentUser->getValue('EMAIL', 'webmaster@admidio.org'); @endcode
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue($columnName, $newValue)
     {
         global $gCurrentUser, $gPreferences;
 
@@ -241,7 +253,7 @@ class Inventory extends TableInventory
                 // Here is no need to check hidden fields because we check on save() method that only users who
                 // can edit the profile are allowed to save and change data.
                 if(($this->mInventoryFieldsData->getProperty($columnName, 'inf_disabled') == 1
-                   && $gCurrentUser->editUsers() == true)
+                   && $gCurrentUser->editUsers())
                 || $this->mInventoryFieldsData->getProperty($columnName, 'inf_disabled') == 0
                 || ($gCurrentUser->getValue('inv_id') == 0 && $this->getValue('inv_id') == 0))
                 {
@@ -260,12 +272,12 @@ class Inventory extends TableInventory
         return $returnCode;
     }
 
-    /** Checks if the current user is allowed to view the profile of the user of
-     *  the parameter. If will check if user has edit rights with method editProfile
-     *  or if the user is a member of a role where the current user has the right to
-     *  view profiles.
-     *  @param $user User object of the user that should be checked if the current user can view his profile.
-     *  @return Return @b true if the current user is allowed to view the profile of the user from @b $user.
+    /**
+     * Checks if the current user is allowed to view the profile of the user of the parameter.
+     * If will check if user has edit rights with method editProfile or if the user is a member
+     * of a role where the current user has the right to view profiles.
+     * @param $user User object of the user that should be checked if the current user can view his profile.
+     * @return Return @b true if the current user is allowed to view the profile of the user from @b $user.
      */
     public function hasRightViewItem($item)
     {

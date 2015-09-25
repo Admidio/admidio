@@ -199,7 +199,7 @@ class Language
     {
         if(strlen($isoCode) == 0)
         {
-            return "";
+            return '';
         }
 
         $countries = $this->languageData->getCountriesArray();
