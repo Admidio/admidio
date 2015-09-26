@@ -89,8 +89,8 @@ class AutoLogin extends TableAccess
     {
         $dataArray = explode(';', $cookieData);
 
-        if($dataArray[0] == true         // autologin
-        && is_numeric($dataArray[1]))    // user_id
+        if($dataArray[0] == true      // autologin
+        && is_numeric($dataArray[1])) // user_id
         {
             // restore user if saved database user id == cookie user id
             // if session is inactive than set it to an active session
@@ -105,7 +105,7 @@ class AutoLogin extends TableAccess
             }
 
             // auto login successful then create a valid session
-            $session->setValue('ses_usr_id',  $this->getValue('atl_usr_id'));
+            $session->setValue('ses_usr_id', $this->getValue('atl_usr_id'));
         }
     }
 

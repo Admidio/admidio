@@ -62,11 +62,10 @@ require_once(SERVER_PATH.'/adm_program/libs/phpmailer/PHPMailerAutoload.php');
  */
 class Email extends PHPMailer
 {
-    private $emText;              // plain text of email
-    private $emHtmlText;          // html text of email
-    private $emSender;            // mail sender adress and Name
+    private $emText;     // plain text of email
+    private $emHtmlText; // html text of email
+    private $emSender;   // mail sender adress and Name
 
-    // constructor of class
     public function __construct()
     {
         //Übername Einstellungen
@@ -75,11 +74,11 @@ class Email extends PHPMailer
         // Wir zeigen richtige Fehlermeldungen an
         $this->exceptions = true;
 
-        $this->emCopyToSender        = false;
-        $this->emListRecipients      = false;
-        $this->emSendAsHTML          = false;
-        $this->emText                = '';    // content of text part
-        $this->emHtmlText            = '';    // content of html part
+        $this->emCopyToSender   = false;
+        $this->emListRecipients = false;
+        $this->emSendAsHTML     = false;
+        $this->emText           = '';    // content of text part
+        $this->emHtmlText       = '';    // content of html part
 
         // Hier werden noch mal alle Empfaenger der Mail reingeschrieben,
         // fuer den Fall das eine Kopie der Mail angefordert wird...
