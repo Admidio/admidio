@@ -735,7 +735,7 @@ class Database
      */
     public function num_rows()
     {
-        return $this->rowCount();
+        return $this->pdoStatement->rowCount();
     }
 }
 
