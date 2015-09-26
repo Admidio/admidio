@@ -7,6 +7,8 @@
         <text id="SYS_COPY_VAR" development="new" translation="todo">%VAR1% kopieren</text>
         <text id="ORG_BROWSER_UPDATE_CHECK" development="new" translation="todo">Update Meldung für veraltete Browser</text>
         <text id="ORG_BROWSER_UPDATE_CHECK_DESC" development="new" translation="todo">Nach Aktivierung wird Benutzern mit veraltetem Browser geraten ein Browserupdate durchzuführen. Neuere Browser schützen besser vor Betrug, Viren, Trojanern, Datendiebstahl und anderen Bedrohungen Ihrer Privatsphäre und Sicherheit. Jede neue Browsergeneration verbessert die Geschwindigkeit und die Unterstützung neuer Webtechniken, mit der Webseiten besser dargestellt werden können. Hierzu wird das Service von https://browser-update.org/ verwendet.</text>
+        <text id="ORG_FIELD_DISABLED_DESC" development="changed" translation="todo">Ein gesperrtes Feld kann vom Benutzer im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten. Leiter einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</text>
+        <text id="SYS_PHONE_INVALID_CHAR" development="new" translation="todo">Die Telefonnummer im Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</text>
     </version>
     <version id="3.0.0-Beta.4" translator="Markus Faßbender">
         <text id="INS_DATABASE_LOGIN_DESC" development="changed" translation="todo">Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere Admidio-Installationen auf derselben Datenbank einrichten möchten.</text>
@@ -833,7 +835,6 @@
         <text id="ORG_FAST_REGISTRATION" development="new" translation="todo">Schnelle Registrierung</text>
         <text id="ORG_FIELD_DESCRIPTION" development="new" translation="todo">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</text>
         <text id="ORG_FIELD_DISABLED" development="new" translation="todo">Feld nur für Benutzer mit dem Recht "Alle Benutzer bearbeiten" editierbar</text>
-        <text id="ORG_FIELD_DISABLED_DESC" development="new" translation="todo">Wird ein Feld gesperrt, so können Benutzer im eigenen Profil dieses Feld nicht bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten.</text>
         <text id="ORG_FIELD_DOWN" development="new" translation="todo">Profilfeld nach unten verschieben</text>
         <text id="ORG_FIELD_EXIST" development="new" translation="todo">Es existiert bereits ein Feld in dieser Kategorie mit demselben Namen.</text>
         <text id="ORG_FIELD_HIDDEN" development="new" translation="todo">Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar</text>
