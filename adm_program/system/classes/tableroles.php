@@ -27,8 +27,9 @@
  *                    sein, sondern nur in einer Rolle sein, die den Termin sehen darf)
  *
  *****************************************************************************/
-
-// class definition
+/**
+ * Class TableRoles
+ */
 class TableRoles extends TableAccess
 {
     protected $countLeaders;    ///< number of leaders of this role
@@ -47,8 +48,10 @@ class TableRoles extends TableAccess
         parent::__construct($database, TBL_ROLES, 'rol', $rol_id);
     }
 
-    /** checks if user is allowed to assign members to this role
-     *  @param $user UserObject of user who should be checked
+    /**
+     * checks if user is allowed to assign members to this role
+     * @param object $user UserObject of user who should be checked
+     * @return bool
      */
     public function allowedToAssignMembers($user)
     {
@@ -80,8 +83,10 @@ class TableRoles extends TableAccess
         return false;
     }
 
-    /** checks if user is allowed to edit members of this role
-     *  @param UserObject of user who should be checked
+    /**
+     * checks if user is allowed to edit members of this role
+     * @param object $user UserObject of user who should be checked
+     * @return bool
      */
     public function allowedToEditMembers($user)
     {
@@ -107,7 +112,8 @@ class TableRoles extends TableAccess
         return false;
     }
 
-    /** Calls clear() Method of parent class and initialize child class specific parameters
+    /**
+     * Calls clear() Method of parent class and initialize child class specific parameters
      */
     public function clear()
     {
@@ -118,18 +124,19 @@ class TableRoles extends TableAccess
         $this->countMembers = -1;
     }
 
-    /** Method determines the number of active leaders of this role
-     *  @return Returns the number of leaders of this role
+    /**
+     * Method determines the number of active leaders of this role
+     * @return int Returns the number of leaders of this role
      */
     public function countLeaders()
     {
-        if($this->countLeaders == -1)
+        if($this->countLeaders === -1)
         {
-            $sql    = 'SELECT COUNT(mem_id) FROM '. TBL_MEMBERS. '
-                        WHERE mem_rol_id = '.$this->getValue('rol_id').'
-                          AND mem_leader = 1
-                          AND mem_begin <= \''.DATE_NOW.'\'
-                          AND mem_end    > \''.DATE_NOW.'\' ';
+            $sql = 'SELECT COUNT(mem_id) FROM '. TBL_MEMBERS. '
+                     WHERE mem_rol_id = '.$this->getValue('rol_id').'
+                       AND mem_leader = 1
+                       AND mem_begin <= \''.DATE_NOW.'\'
+                       AND mem_end    > \''.DATE_NOW.'\' ';
             $this->db->query($sql);
             $row = $this->db->fetch_array();
             $this->countLeaders = $row[0];
@@ -137,20 +144,21 @@ class TableRoles extends TableAccess
         return $this->countLeaders;
     }
 
-    /** Method determines the number of active members (without leaders) of this role
+    /**
+     * Method determines the number of active members (without leaders) of this role
      * @param exceptUserId UserId witch shoudn't be counted
-     * @return Returns the number of members of this role
+     * @return int Returns the number of members of this role
      */
-    public function countMembers($exceptUserId=NULL)
+    public function countMembers($exceptUserId = null)
     {
-        if($this->countMembers == -1)
+        if($this->countMembers === -1)
         {
-            $sql    = 'SELECT COUNT(mem_id) FROM '. TBL_MEMBERS. '
-                        WHERE mem_rol_id = '.$this->getValue('rol_id').'
-                          AND mem_usr_id != '.$exceptUserId.'
-                          AND mem_leader = 0
-                          AND mem_begin <= \''.DATE_NOW.'\'
-                          AND mem_end    > \''.DATE_NOW.'\' ';
+            $sql = 'SELECT COUNT(mem_id) FROM '. TBL_MEMBERS. '
+                     WHERE mem_rol_id = '.$this->getValue('rol_id').'
+                       AND mem_usr_id != '.$exceptUserId.'
+                       AND mem_leader = 0
+                       AND mem_begin <= \''.DATE_NOW.'\'
+                       AND mem_end    > \''.DATE_NOW.'\' ';
             $this->db->query($sql);
             $row = $this->db->fetch_array();
             $this->countMembers = $row[0];
@@ -158,17 +166,21 @@ class TableRoles extends TableAccess
         return $this->countMembers;
     }
 
-    // die Funktion gibt die Anzahl freier Plaetze zurueck
-    // ist rol_max_members nicht gesetzt so wird immer 999 zurueckgegeben
-    public function countVacancies($count_leaders = false)
+    /**
+     * die Funktion gibt die Anzahl freier Plaetze zurueck
+     * ist rol_max_members nicht gesetzt so wird immer 999 zurueckgegeben
+     * @param bool $countLeaders
+     * @return int
+     */
+    public function countVacancies($countLeaders = false)
     {
-        if(strlen($this->getValue('rol_max_members')) > 0)
+        if($this->getValue('rol_max_members') !== '')
         {
-            $sql    = 'SELECT mem_usr_id FROM '. TBL_MEMBERS. '
-                        WHERE mem_rol_id = '. $this->getValue('rol_id'). '
-                          AND mem_begin <= \''.DATE_NOW.'\'
-                          AND mem_end    > \''.DATE_NOW.'\'';
-            if($count_leaders == false)
+            $sql = 'SELECT mem_usr_id FROM '. TBL_MEMBERS. '
+                     WHERE mem_rol_id = '. $this->getValue('rol_id'). '
+                       AND mem_begin <= \''.DATE_NOW.'\'
+                       AND mem_end    > \''.DATE_NOW.'\'';
+            if(!$countLeaders)
             {
                 $sql = $sql. ' AND mem_leader = 0 ';
             }
@@ -180,9 +192,11 @@ class TableRoles extends TableAccess
         return 999;
     }
 
-    /** Deletes the selected role of the table and all references in other tables.
-     *  After that the class will be initialize.
-     *  @return @b true if no error occurred
+    /**
+     * Deletes the selected role of the table and all references in other tables.
+     * After that the class will be initialize.
+     * @return bool @b true if no error occurred
+     * @throws AdmException
      */
     public function delete()
     {
@@ -218,13 +232,13 @@ class TableRoles extends TableAccess
         {
             $this->db->startTransaction();
 
-            $sql    = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES. '
-                        WHERE rld_rol_id_parent = '. $this->getValue('rol_id'). '
-                           OR rld_rol_id_child  = '. $this->getValue('rol_id');
+            $sql = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES. '
+                     WHERE rld_rol_id_parent = '. $this->getValue('rol_id'). '
+                        OR rld_rol_id_child  = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
-            $sql    = 'DELETE FROM '. TBL_MEMBERS. '
-                        WHERE mem_rol_id = '. $this->getValue('rol_id');
+            $sql = 'DELETE FROM '. TBL_MEMBERS. '
+                     WHERE mem_rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
             $return = parent::delete();
@@ -242,9 +256,11 @@ class TableRoles extends TableAccess
         }
     }
 
-    /** Returns an array with all cost periods with full name in the specific language.
-     *  @param $costPeriod The number of the cost period for which the name should be returned (-1 = unique, 1 = annually, 2 = semiyearly, 4 = quarterly, 12 = monthly)
-     *  @return Array with all cost or if param costPeriod is set than the full name of that cost period
+    /**
+     * Returns an array with all cost periods with full name in the specific language.
+     * @param int $costPeriod The number of the cost period for which the name should be returned
+     *                        (-1 = unique, 1 = annually, 2 = semiyearly, 4 = quarterly, 12 = monthly)
+     * @return array|string Array with all cost or if param costPeriod is set than the full name of that cost period
      */
     public static function getCostPeriods($costPeriod = 0)
     {
@@ -254,9 +270,10 @@ class TableRoles extends TableAccess
                              1  => $gL10n->get('ROL_ANNUALLY'),
                              2  => $gL10n->get('ROL_SEMIYEARLY'),
                              4  => $gL10n->get('ROL_QUARTERLY'),
-                             12 => $gL10n->get('ROL_MONTHLY') );
+                             12 => $gL10n->get('ROL_MONTHLY')
+        );
 
-        if($costPeriod != 0)
+        if($costPeriod !== 0)
         {
             return $costPeriods[$costPeriod];
         }
@@ -266,10 +283,10 @@ class TableRoles extends TableAccess
         }
     }
 
-    /** Read the id of the default list of this role. The list is stored in the
-     *  column @b rol_lst_id. If there is no list stored then the system default
-     *  list will be returned
-     *  @return Returns the default list id of this role
+    /**
+     * Read the id of the default list of this role. The list is stored in the column @b rol_lst_id.
+     * If there is no list stored then the system default list will be returned
+     * @return Returns the default list id of this role
      */
     public function getDefaultList()
     {
@@ -277,7 +294,7 @@ class TableRoles extends TableAccess
         $defaultListId = $this->getValue('rol_lst_id');
 
         //if default list is not set
-        if($defaultListId <= 0 || $defaultListId == null)
+        if($defaultListId <= 0 || $defaultListId === null)
         {
             // read and set system default list configuration
             $sql = 'SELECT lst_id FROM '. TBL_LISTS. '
@@ -295,23 +312,24 @@ class TableRoles extends TableAccess
         return $defaultListId;
     }
 
-    /** Get the value of a column of the database table.
-     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
-     *  @param $columnName The name of the database column whose value should be read
-     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                 For text columns the format can be @b database that would return the original database value without any transformations
-     *  @return Returns the value of the database column.
-     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
+    /**
+     * Get the value of a column of the database table.
+     * If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @param string $columnName The name of the database column whose value should be read
+     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                           For text columns the format can be @b database that would return the original database value without any transformations
+     * @return mixed Returns the value of the database column.
+     *         If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
         global $gL10n;
         $value = parent::getValue($columnName, $format);
 
-        if($columnName == 'cat_name' && $format != 'database')
+        if($columnName === 'cat_name' && $format !== 'database')
         {
             // if text is a translation-id then translate it
-            if(strpos($value, '_') == 3)
+            if(strpos($value, '_') === 3)
             {
                 $value = $gL10n->get(admStrToUpper($value));
             }
@@ -320,8 +338,9 @@ class TableRoles extends TableAccess
         return $value;
     }
 
-    /** Checks if this role has former members
-     *  @return Returns @b true if the role has former memberships
+    /**
+     * Checks if this role has former members
+     * @return bool Returns @b true if the role has former memberships
      */
     public function hasFormerMembers()
     {
@@ -340,12 +359,12 @@ class TableRoles extends TableAccess
         return false;
     }
 
-    /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     *  a new record or if only an update is necessary. The update statement will only update
-     *  the changed columns. If the table has columns for creator or editor than these column
-     *  with their timestamp will be updated.
-     *  For new records the organization and ip address will be set per default.
-     *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+    /**
+     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * a new record or if only an update is necessary. The update statement will only update the changed columns.
+     * If the table has columns for creator or editor than these column with their timestamp will be updated.
+     * For new records the organization and ip address will be set per default.
+     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
      */
     public function save($updateFingerPrint = true)
     {
@@ -363,7 +382,10 @@ class TableRoles extends TableAccess
         }
     }
 
-    // aktuelle Rolle wird auf aktiv gesetzt
+    /**
+     * aktuelle Rolle wird auf aktiv gesetzt
+     * @return int
+     */
     public function setActive()
     {
         global $gCurrentSession;
@@ -371,8 +393,8 @@ class TableRoles extends TableAccess
         // die Systemrollem sind immer aktiv
         if($this->getValue('rol_system') == false)
         {
-            $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_valid = 1
-                        WHERE rol_id = '. $this->getValue('rol_id');
+            $sql = 'UPDATE '. TBL_ROLES. ' SET rol_valid = 1
+                     WHERE rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
             // all active users must renew their user data because maybe their
@@ -384,7 +406,10 @@ class TableRoles extends TableAccess
         return -1;
     }
 
-    // aktuelle Rolle wird auf inaktiv gesetzt
+    /**
+     * aktuelle Rolle wird auf inaktiv gesetzt
+     * @return int
+     */
     public function setInactive()
     {
         global $gCurrentSession;
@@ -392,8 +417,8 @@ class TableRoles extends TableAccess
         // die Systemrollem sind immer aktiv
         if($this->getValue('rol_system') == false)
         {
-            $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_valid = 0
-                        WHERE rol_id = '. $this->getValue('rol_id');
+            $sql = 'UPDATE '. TBL_ROLES. ' SET rol_valid = 0
+                     WHERE rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
             // all active users must renew their user data because maybe their
@@ -405,18 +430,19 @@ class TableRoles extends TableAccess
         return -1;
     }
 
-    /** Set a new value for a column of the database table. The value is only saved in the object.
-     *  You must call the method @b save to store the new value to the database.
-     *  @param $columnName The name of the database column whose value should get a new value
-     *  @param $newValue The new value that should be stored in the database field
-     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+    /**
+     * Set a new value for a column of the database table. The value is only saved in the object.
+     * You must call the method @b save to store the new value to the database.
+     * @param string $columnName The name of the database column whose value should get a new value
+     * @param mixed  $newValue The new value that should be stored in the database field
+     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         global $gCurrentOrganization;
 
-        if($columnName == 'rol_default_registration' && $newValue == '0' && $this->dbColumns[$columnName] == '1')
+        if($columnName === 'rol_default_registration' && $newValue == '0' && $this->dbColumns[$columnName] == '1')
         {
             // checks if at least one other role has this flag
             $sql = 'SELECT COUNT(1) AS count FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
@@ -435,16 +461,19 @@ class TableRoles extends TableAccess
         return parent::setValue($columnName, $newValue, $checkValue);
     }
 
-    // diese Methode basiert auf viewRole des Usersobjekts, geht aber noch weiter
-    // und prueft auch Rollen zu Terminen (hier muss man nicht Mitglied der Rolle
-    // sein, sondern nur in einer Rolle sein, die den Termin sehen darf)
+    /**
+     * diese Methode basiert auf viewRole des Usersobjekts, geht aber noch weiter
+     * und prueft auch Rollen zu Terminen (hier muss man nicht Mitglied der Rolle
+     * sein, sondern nur in einer Rolle sein, die den Termin sehen darf)
+     * @return bool
+     */
     public function viewRole()
     {
         global $gCurrentUser, $gValidLogin;
 
-        if($gValidLogin == true)
+        if($gValidLogin)
         {
-            if($this->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION')
+            if($this->getValue('cat_name_intern') === 'CONFIRMATION_OF_PARTICIPATION')
             {
                 if($this->getValue('rol_this_list_view') == 0)
                 {

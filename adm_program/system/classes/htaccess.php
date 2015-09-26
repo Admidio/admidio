@@ -23,13 +23,18 @@
  *
  *****************************************************************************/
 
+/**
+ * Class Htaccess
+ */
 class Htaccess
 {
     protected $folderPath;
     protected $htaccessFileExistsAlready = false;
     protected $folderExists              = false;
 
-    //Konstruktor
+    /**
+     * @param string $folderPathParam
+     */
     public function __construct($folderPathParam)
     {
         $this->folderPath = $folderPathParam;
@@ -38,31 +43,35 @@ class Htaccess
         {
             $this->folderExists = true;
 
-            if (file_exists($folderPathParam. '/.htaccess'))
+            if (file_exists($folderPathParam . '/.htaccess'))
             {
                 $this->htaccessFileExistsAlready = true;
             }
         }
     }
 
-    //Schuetzt den uebergebenen Ordner
+    /**
+     * Schuetzt den uebergebenen Ordner
+     */
     public function protectFolder()
     {
         if ($this->folderExists && !$this->htaccessFileExistsAlready)
         {
-            $file=fopen($this->folderPath. '/.htaccess', 'w+');
+            $file = fopen($this->folderPath . '/.htaccess', 'w+');
             fwrite($file, "Order deny,allow\n");
             fwrite($file, "Deny from all\n");
             fclose($file);
         }
     }
 
-    //Entfernt den Ordnerschutz (loeschen der htaccessDatei)
+    /**
+     * Entfernt den Ordnerschutz (loeschen der htaccessDatei)
+     */
     public function unprotectFolder()
     {
         if ($this->folderExists && $this->htaccessFileExistsAlready)
         {
-            @unlink($this->folderPath. '/.htaccess', 'w+');
+            @unlink($this->folderPath . '/.htaccess', 'w+');
         }
     }
 }

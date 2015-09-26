@@ -42,7 +42,7 @@ function FunctionIsDisabled($function) {
 function SafeExec($command) {
     static $AllowedExecFunctions = array();
     if (empty($AllowedExecFunctions)) {
-        $AllowedExecFunctions = array('shell_exec'=>true, 'passthru'=>true, 'system'=>true, 'exec'=>true);
+        $AllowedExecFunctions = array('shell_exec' => true, 'passthru' => true, 'system' => true, 'exec' => true);
         foreach ($AllowedExecFunctions as $key => $value) {
             $AllowedExecFunctions[$key] = !FunctionIsDisabled($key);
         }

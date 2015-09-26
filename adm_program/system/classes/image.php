@@ -29,14 +29,20 @@
  *
  *****************************************************************************/
 
+/**
+ * Class Image
+ */
 class Image
 {
     private $imagePath;
     private $imageType    = null;
-    public $imageResource = false;
+    public $imageResource = null;
     public $imageWidth    = 0;
     public $imageHeight   = 0;
 
+    /**
+     * @param string $pathAndFilename
+     */
     public function __construct($pathAndFilename = '')
     {
         if($pathAndFilename !== '')
@@ -45,16 +51,20 @@ class Image
         }
     }
 
-    // Methode setzt den Pfad zum Bild und liest Bildinformationen ein
+    /**
+     * Methode setzt den Pfad zum Bild und liest Bildinformationen ein
+     * @param string $pathAndFilename
+     * @return bool
+     */
     public function setImageFromPath($pathAndFilename)
     {
         if(file_exists($pathAndFilename))
         {
             $this->imagePath = $pathAndFilename;
             $properties = getimagesize($this->imagePath);
-            $this->imageWidth    = $properties[0];
-            $this->imageHeight   = $properties[1];
-            $this->imageType     = $properties[2];
+            $this->imageWidth  = $properties[0];
+            $this->imageHeight = $properties[1];
+            $this->imageType   = $properties[2];
 
             if($this->createResource($pathAndFilename))
             {
@@ -64,17 +74,19 @@ class Image
         return false;
     }
 
-    // Methode liest das Bild aus einem String ein und wird intern als PNG-Bild
-    // weiter verarbeitet und ausgegeben
-    // imageData : String with binary image data
+    /**
+     * Methode liest das Bild aus einem String ein und wird intern als PNG-Bild weiter verarbeitet und ausgegeben
+     * @param string $imageData String with binary image data
+     * @return bool
+     */
     public function setImageFromData($imageData)
     {
         $this->imageResource = imagecreatefromstring($imageData);
         if($this->imageResource !== false)
         {
-            $this->imageWidth    = imagesx($this->imageResource);
-            $this->imageHeight   = imagesy($this->imageResource);
-            $this->imageType     = IMAGETYPE_PNG;
+            $this->imageWidth  = imagesx($this->imageResource);
+            $this->imageHeight = imagesy($this->imageResource);
+            $this->imageType   = IMAGETYPE_PNG;
             return true;
         }
         else
@@ -83,6 +95,10 @@ class Image
         }
     }
 
+    /**
+     * @param string $pathAndFilename
+     * @return bool
+     */
     private function createResource($pathAndFilename)
     {
         switch ($this->imageType)
@@ -103,12 +119,13 @@ class Image
         return false;
     }
 
-    // Methode kopiert die uebergebene Bildresource in die uebergebene Datei bzw. der
-    // hinterlegten Datei des Objekts
-    // Optional: - eine andere Bild-Resource kann uebergeben werden
-    //           - ein andere Datei kann zur Ausgabe angegeben werden
-    //           - die Qualitaet kann fuer jpeg-Dateien veraendert werden
-    // Rueckgabe: true, falls erfolgreich
+    /**
+     * Methode kopiert die uebergebene Bildresource in die uebergebene Datei bzw. der hinterlegten Datei des Objekts
+     * @param resource $imageResource   eine andere Bild-Resource kann uebergeben werden
+     * @param string   $pathAndFilename ein andere Datei kann zur Ausgabe angegeben werden
+     * @param int      $quality         die Qualitaet kann fuer jpeg-Dateien veraendert werden
+     * @return bool true, falls erfolgreich
+     */
     public function copyToFile($imageResource = null, $pathAndFilename = '', $quality = 95)
     {
         $returnValue = false;
@@ -117,7 +134,7 @@ class Image
         {
             $pathAndFilename = $this->imagePath;
         }
-        if($imageResource == null)
+        if($imageResource === null)
         {
             $imageResource = $this->imageResource;
         }
@@ -136,12 +153,14 @@ class Image
         return $returnValue;
     }
 
-    // Methode gibt das Bild direkt aus, so dass es im Browser dargestellt werden kann
-    // Optional: - eine andere Bild-Resource kann uebergeben werden
-    //           - die Qualitaet kann fuer jpeg-Dateien veraendert werden
+    /**
+     * Methode gibt das Bild direkt aus, so dass es im Browser dargestellt werden kann
+     * @param resource $imageResource eine andere Bild-Resource kann uebergeben werden
+     * @param int      $quality       die Qualitaet kann fuer jpeg-Dateien veraendert werden
+     */
     public function copyToBrowser($imageResource = null, $quality = 95)
     {
-        if($imageResource == null)
+        if($imageResource === null)
         {
             $imageResource = $this->imageResource;
         }
@@ -158,13 +177,19 @@ class Image
         }
     }
 
-    // gibt den Mime-Type (image/png) des Bildes zurueck
+    /**
+     * gibt den Mime-Type (image/png) des Bildes zurueck
+     * @return string
+     */
     public function getMimeType()
     {
         return image_type_to_mime_type($this->imageType);
     }
 
-    // setzt den Image-Type des Bildes neu
+    /**
+     * setzt den Image-Type des Bildes neu
+     * @param string $imageType
+     */
     public function setImageType($imageType)
     {
         switch ($imageType)
@@ -179,12 +204,14 @@ class Image
         }
     }
 
-    // Methode dreht das Bild um 90° in eine Richtung
-    // direction : 'right' o. 'left' Richtung, in die gedreht wird
+    /**
+     * Methode dreht das Bild um 90° in eine Richtung
+     * @param string $direction 'right' o. 'left' Richtung, in die gedreht wird
+     */
     public function rotate($direction = 'right')
     {
         // nur bei gueltigen Uebergaben weiterarbeiten
-        if(($direction == 'left' || $direction == 'right'))
+        if(($direction === 'left' || $direction === 'right'))
         {
             // Erzeugung neues Bild
             $photo_rotate = imagecreatetruecolor($this->imageHeight, $this->imageWidth);
@@ -194,11 +221,11 @@ class Image
             {
                 for($x = 0; $x < $this->imageWidth; $x++)
                 {
-                    if($direction == 'right')
+                    if($direction === 'right')
                     {
                         imagecopy($photo_rotate, $this->imageResource, $this->imageHeight - $y - 1, $x, $x, $y, 1, 1);
                     }
-                    elseif($direction == 'left')
+                    elseif($direction === 'left')
                     {
                         imagecopy($photo_rotate, $this->imageResource, $y, $this->imageWidth - $x - 1, $x, $y, 1, 1);
                     }
@@ -213,8 +240,11 @@ class Image
         }
     }
 
-    // Methode skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
-    // die andere Seite wird dann entsprechend dem Seitenverhaeltnis zurueckgerechnet
+    /**
+     * Methode skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
+     * die andere Seite wird dann entsprechend dem Seitenverhaeltnis zurueckgerechnet
+     * @param int $newMaxSize
+     */
     public function scaleLargerSide($newMaxSize)
     {
         // Errechnung Seitenverhaeltnis
@@ -235,16 +265,17 @@ class Image
         $this->scale($newXSize, $newYSize, false);
     }
 
-    /** Scale an image to the new size of the parameters. Therefore the PHP instanze may need
-     *  some memory which should be set through the PHP setting memory_limit.
-     *  @param $newXSize The new horizontal width in pixel. The image will be scaled to this size.
-     *  @param $newYSize The new vertical height in pixel. The image will be scaled to this size.
-     *  @param $maintainAspectRatio If this is set to true, the image will be within the given size
-     *                              but maybe one side will be smaller than set with the parameters.
+    /**
+     * Scale an image to the new size of the parameters. Therefore the PHP instanze may need
+     * some memory which should be set through the PHP setting memory_limit.
+     * @param int  $newXSize            The new horizontal width in pixel. The image will be scaled to this size.
+     * @param int  $newYSize            The new vertical height in pixel. The image will be scaled to this size.
+     * @param bool $maintainAspectRatio If this is set to true, the image will be within the given size
+     *                                  but maybe one side will be smaller than set with the parameters.
      */
     public function scale($newXSize, $newYSize, $maintainAspectRatio = true)
     {
-        if($maintainAspectRatio == true)
+        if($maintainAspectRatio)
         {
             if($newXSize < $this->imageWidth || $newYSize < $this->imageHeight)
             {
@@ -281,12 +312,13 @@ class Image
 
             // update the class parameters to new image data
             $this->imageResource = $resizedUserPhoto;
-            $this->imageWidht    = $newXSize;
+            $this->imageWidth    = $newXSize;
             $this->imageHeight   = $newYSize;
         }
     }
 
-    /** Delete image from class and server memory
+    /**
+     * Delete image from class and server memory
      */
     public function delete()
     {

@@ -47,11 +47,15 @@
  *
  *****************************************************************************/
 
+/**
+ * Class Captcha
+ */
 class Captcha
 {
     private $font, $signature, $width, $height, $codeSize, $allowedChars;
     private $backgroundColourR, $backgroundColourG, $backgroundColourB;
     private $backgroundWriting, $backgroundWritingSize;
+    private $captchaCode, $charCount;
 
     public function __construct()
     {
@@ -113,7 +117,15 @@ class Captcha
         $this->makeCaptcha();
     }
 
-    public function getCaptchaCalc($text_part1, $text_part2, $text_part3_third, $text_part3_half, $text_part4)
+    /**
+     * @param string $textPart1
+     * @param string $textPart2
+     * @param string $textPart3_third
+     * @param string $textPart3_half
+     * @param string $textPart4
+     * @return string
+     */
+    public function getCaptchaCalc($textPart1, $textPart2, $textPart3_third, $textPart3_half, $textPart4)
     {
         // Zuweisung der Einstiegsvariablen
         $number = array(rand(40, 60), rand(20, 40), rand(1, 20));
@@ -148,13 +160,13 @@ class Captcha
             $number[3] = rand(20, 100);
             if(is_int($number[3]/3))
             {
-                $operator_value[2] = $text_part3_third;
+                $operator_value[2] = $textPart3_third;
                 $result = $result + ($number[3]/3);
                 $ready = 1;
             }
             elseif(is_int($number[3]/2))
             {
-                $operator_value[2] = $text_part3_half;
+                $operator_value[2] = $textPart3_half;
                 $result = $result + ($number[3]/2);
                 $ready = 1;
             }
@@ -164,7 +176,7 @@ class Captcha
         $_SESSION['captchacode'] = $result;
 
         // Aufgabe ausgeben
-        return $text_part1.' '.$number[0].$operator_value[0].$number[1].$operator_value[1].$number[2].' '.$text_part2.' '.$operator_value[2].' '.$number[3].' '.$text_part4;
+        return $textPart1.' '.$number[0].$operator_value[0].$number[1].$operator_value[1].$number[2].' '.$textPart2.' '.$operator_value[2].' '.$number[3].' '.$textPart4;
         //echo "<br>= $result (".$_SESSION['captchacode'].")";
     }
 

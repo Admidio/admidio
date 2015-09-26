@@ -11,7 +11,7 @@
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'common.php')
 {
-    die('This page may not be called directly !');
+    exit('This page may not be called directly !');
 }
 
 // embed config and constants file
@@ -174,7 +174,7 @@ else
     if($gCurrentOrganization->getValue('org_id') === 0)
     {
         // organization not found
-        die('<div style="color: #cc0000;">Error: The organization of the config.php could not be found in the database!</div>');
+        exit('<div style="color: #cc0000;">Error: The organization of the config.php could not be found in the database!</div>');
     }
     // add the organization to the session
     $gPreferences = $gCurrentOrganization->getPreferences();

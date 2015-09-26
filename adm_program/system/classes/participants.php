@@ -178,7 +178,7 @@ class Participants
 
         if(!in_array($order, array('ASC', 'DESC')))
         {
-            return FALSE;
+            return false;
         }
         else
         {

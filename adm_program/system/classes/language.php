@@ -1,5 +1,12 @@
 <?php
-/*****************************************************************************/
+/*****************************************************************************
+ *
+ *  Copyright    : (c) 2004 - 2015 The Admidio Team
+ *  Homepage     : http://www.admidio.org
+ *  License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ *
+ *****************************************************************************/
+
 /** @class Language
  *  @brief Reads language specific texts that are identified with text ids out of language xml files
  *
@@ -27,14 +34,6 @@
  *  // read and display a language specific text with placeholders for individual content
  *  echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Webmaster');@endcode
  */
-/*****************************************************************************
- *
- *  Copyright    : (c) 2004 - 2015 The Admidio Team
- *  Homepage     : http://www.admidio.org
- *  License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
- *****************************************************************************/
-
 class Language
 {
     private $languageData;                  ///< An object of the class @b LanguageData that stores all necessary language data in a session
@@ -197,9 +196,9 @@ class Language
      */
     public function getCountryByCode($isoCode)
     {
-        if(strlen($isoCode) == 0)
+        if($isoCode === '')
         {
-            return "";
+            return '';
         }
 
         $countries = $this->languageData->getCountriesArray();

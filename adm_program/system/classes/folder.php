@@ -24,10 +24,16 @@
  *
  *****************************************************************************/
 
+/**
+ * Class Folder
+ */
 class Folder
 {
     protected $folderWithPath;
 
+    /**
+     * @param string $folderWithPath
+     */
     public function __construct($folderWithPath = '')
     {
         $this->folderWithPath = '';
@@ -37,7 +43,10 @@ class Folder
         }
     }
 
-    // Ordner mit zugehoerigem Pfad setzen
+    /**
+     * Ordner mit zugehoerigem Pfad setzen
+     * @param string $folderWithPath
+     */
     public function setFolder($folderWithPath = '')
     {
         if($folderWithPath !== '' && is_dir($folderWithPath))
@@ -46,22 +55,30 @@ class Folder
         }
     }
 
-    // Ordner zurueckgeben
+    /**
+     * Ordner zurueckgeben
+     * @return string
+     */
     public function getFolder()
     {
         return $this->folderWithPath;
     }
 
-    // den Ordner der Klasse mit Schreibrechten erstellen
-    public function createFolder($newFolder, $writeable)
+    /**
+     * den Ordner der Klasse mit Schreibrechten erstellen
+     * @param string $newFolder
+     * @param bool   $writable
+     * @return bool
+     */
+    public function createFolder($newFolder, $writable)
     {
         $newPath = $this->folderWithPath. '/'. $newFolder;
         $retCode = true;
 
         // existiert der Ordner noch nicht, dann diesen anlegen
-        if(file_exists($newPath) == false)
+        if(!file_exists($newPath))
         {
-            if($writeable)
+            if($writable)
             {
                 $retCode = @mkdir($newPath, 0777);
             }
@@ -71,10 +88,10 @@ class Folder
             }
         }
 
-        if($writeable)
+        if($writable)
         {
             // der Ordner existiert, aber die Schreibrechte noch nicht
-            if(is_writeable($newPath) == false)
+            if(!is_writeable($newPath))
             {
                 $retCode = @chmod($newPath, 0777);
             }
@@ -82,9 +99,14 @@ class Folder
         return $retCode;
     }
 
-    // kopiert den kompletten Ordner mit allen Unterordnern und Dateien in einen neuen Pfad
-    // destinationFolder : das neue Zielverzeichnis
-    // sourceFolder      : der zu kopierende Ordner, falls nicht gefuellt wird der Ordner aus der Klasse genommen
+    /**
+     * kopiert den kompletten Ordner mit allen Unterordnern und Dateien in einen neuen Pfad
+     * destinationFolder : das neue Zielverzeichnis
+     * sourceFolder      : der zu kopierende Ordner, falls nicht gefuellt wird der Ordner aus der Klasse genommen
+     * @param string $destinationFolder
+     * @param string $sourceFolder
+     * @return bool
+     */
     public function copy($destinationFolder, $sourceFolder = '')
     {
         if($sourceFolder === '')
@@ -100,14 +122,14 @@ class Folder
         $this->setFolder($newPath);
         $b_return = $this->createFolder($newFolder, true);
 
-        if($b_return == true)
+        if($b_return)
         {
-            $dh  = @opendir($sourceFolder);
+            $dh = @opendir($sourceFolder);
             if($dh)
             {
                 while (false !== ($filename = readdir($dh)))
                 {
-                    if($filename != '.' && $filename != '..')
+                    if($filename !== '.' && $filename !== '..')
                     {
                         $act_folder_entry = $sourceFolder.'/'.$filename;
 
@@ -121,7 +143,7 @@ class Folder
                             // die Datei loeschen
                             if(file_exists($act_folder_entry))
                             {
-                                if(copy($act_folder_entry, $destinationFolder.'/'.$filename) == false)
+                                if(!copy($act_folder_entry, $destinationFolder.'/'.$filename))
                                 {
                                     return false;
                                 }
@@ -140,10 +162,12 @@ class Folder
         return true;
     }
 
-    /* Deletes the current folder recursive with all files and subfolders.
-     * @param $folder            Name of a folder that should be deleted. Default is always the current folder
-     * @param $onlyDeleteContent If set to @b true then only files and folders in the current
-     *                           folder will be deleted. The current folder will not be deleted.
+    /**
+     * Deletes the current folder recursive with all files and subfolders.
+     * @param string $folder            Name of a folder that should be deleted. Default is always the current folder
+     * @param bool   $onlyDeleteContent If set to @b true then only files and folders in the current
+     *                                  folder will be deleted. The current folder will not be deleted.
+     * @return bool
      */
     public function delete($folder = '', $onlyDeleteContent = false)
     {
@@ -152,12 +176,12 @@ class Folder
             $folder = $this->folderWithPath;
         }
 
-        $dh  = @opendir($folder);
+        $dh = @opendir($folder);
         if($dh)
         {
             while (false !== ($filename = readdir($dh)))
             {
-                if($filename != '.' && $filename != '..')
+                if($filename !== '.' && $filename !== '..')
                 {
                     $act_folder_entry = $folder.'/'.$filename;
 
@@ -171,7 +195,7 @@ class Folder
                         // deletes the file
                         if(file_exists($act_folder_entry))
                         {
-                            if(@unlink($act_folder_entry) == false)
+                            if(!@unlink($act_folder_entry))
                             {
                                 return false;
                             }
@@ -182,10 +206,10 @@ class Folder
             closedir($dh);
         }
 
-        if($onlyDeleteContent == false)
+        if(!$onlyDeleteContent)
         {
             // now delete current folder
-            if(@rmdir($folder) == false)
+            if(!@rmdir($folder))
             {
                 return false;
             }
@@ -193,9 +217,14 @@ class Folder
         return true;
     }
 
-    // verschiebt den kompletten Ordner mit allen Unterordnern und Dateien in einen neuen Pfad
-    // destinationFolder : das neue Zielverzeichnis
-    // sourceFolder      : der zu verschiebende Ordner, falls nicht gefuellt wird der Ordner aus der Klasse genommen
+    /**
+     * verschiebt den kompletten Ordner mit allen Unterordnern und Dateien in einen neuen Pfad
+     * destinationFolder : das neue Zielverzeichnis
+     * sourceFolder      : der zu verschiebende Ordner, falls nicht gefuellt wird der Ordner aus der Klasse genommen
+     * @param string $destinationFolder
+     * @param string $sourceFolder
+     * @return bool
+     */
     public function move($destinationFolder, $sourceFolder = '')
     {
         if($sourceFolder === '')
@@ -204,7 +233,7 @@ class Folder
         }
 
         // erst den kompletten Ordner kopieren und danach im erfolgsfall loeschen
-        if($this->copy($destinationFolder, $sourceFolder) == true)
+        if($this->copy($destinationFolder, $sourceFolder))
         {
             return $this->delete($sourceFolder);
         }

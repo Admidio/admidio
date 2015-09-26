@@ -10,7 +10,15 @@
 
 class DBMySQL extends DBCommon
 {
-    // create database connection
+    /**
+     * create database connection
+     * @param string $sql_server
+     * @param string $sql_user
+     * @param string $sql_password
+     * @param string $sql_dbName
+     * @param bool $new_connection
+     * @return false|???
+     */
     public function connect($sql_server, $sql_user, $sql_password, $sql_dbName, $new_connection = false)
     {
         $this->dbType   = 'mysql';
@@ -37,19 +45,24 @@ class DBMySQL extends DBCommon
         return false;
     }
 
-    // Bewegt den internen Ergebnis-Zeiger
+    /**
+     * Bewegt den internen Ergebnis-Zeiger
+     * @param $result
+     * @param int $rowNumber
+     * @return bool
+     */
     public function data_seek($result, $rowNumber)
     {
         return mysql_data_seek($result, $rowNumber);
     }
 
-    /** Read the last error from the database and call the parent method to display
-     *  this error to the user.
-     *  @param $code    Optional you could set a code that should be displayed to the user.
-     *                  Per default the database error code will be read and displayed.
-     *  @param $message Optional you could set a message that should be displayed to the user.
-     *                  Per default the database error message will be read and displayed.
-     *  @return Will exit the script and returns a html output with the error informations.
+    /**
+     * Read the last error from the database and call the parent method to display this error to the user.
+     * @param        $code    Optional you could set a code that should be displayed to the user.
+     *                        Per default the database error code will be read and displayed.
+     * @param string $message Optional you could set a message that should be displayed to the user.
+     *                        Per default the database error message will be read and displayed.
+     * @return Will exit the script and returns a html output with the error information.
      */
     public function db_error($code = 0, $message = '')
     {
@@ -70,13 +83,21 @@ class DBMySQL extends DBCommon
         }
     }
 
-    // Escaped den mysql String
+    /**
+     * Escaped den mysql String
+     * @param string $string
+     * @return string
+     */
     public function escape_string($string)
     {
         return mysql_real_escape_string($string);
     }
 
-    // Gibt den Speicher für den Result wieder frei
+    /**
+     * Gibt den Speicher für den Result wieder frei
+     * @param $result
+     * @return array|false
+     */
     public function fetch_assoc($result)
     {
         if(!$result)
@@ -88,10 +109,10 @@ class DBMySQL extends DBCommon
 
     /**
      * Fetch a result row as an associative array, a numeric array, or both.
-     * @param $result     The result resource that is being evaluated. This result comes from a call to query().
-     * @param $resultType Set the result type. Can contain @b ASSOC for an associative array,
-     *                    @b NUM for a numeric array or @b BOTH (Default).
-     * @return array Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
+     * @param bool   $result     The result resource that is being evaluated. This result comes from a call to query().
+     * @param string $resultType Set the result type. Can contain @b ASSOC for an associative array,
+     *                           @b NUM for a numeric array or @b BOTH (Default).
+     * @return array|false Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
      */
     public function fetch_array($result = false, $resultType = 'BOTH')
     {
@@ -105,6 +126,10 @@ class DBMySQL extends DBCommon
         return mysql_fetch_array($result, $typeArray[$resultType]);
     }
 
+    /**
+     * @param bool $result
+     * @return object
+     */
     public function fetch_object($result = false)
     {
         if(!$result)
@@ -115,25 +140,41 @@ class DBMySQL extends DBCommon
         return mysql_fetch_object($result);
     }
 
-    // Liefert den Namen eines Feldes in einem Ergebnis
+    /**
+     * Liefert den Namen eines Feldes in einem Ergebnis
+     * @param $result
+     * @param int $index
+     * @return string|false
+     */
     public function field_name($result, $index)
     {
         return mysql_field_name($result, $index);
     }
 
-    // Gibt den Speicher für den Result wieder frei
+    /**
+     * Gibt den Speicher für den Result wieder frei
+     * @param $result
+     * @return bool
+     */
     public function free_result($result)
     {
         return mysql_free_result($result);
     }
 
-    // Liefert die ID einer vorherigen INSERT-Operation
+    /**
+     * Liefert die ID einer vorherigen INSERT-Operation
+     * @return int|false
+     */
     public function insert_id()
     {
         return mysql_insert_id($this->connectId);
     }
 
-    // Liefert die Anzahl der Felder in einem Ergebnis
+    /**
+     * Liefert die Anzahl der Felder in einem Ergebnis
+     * @param bool $result
+     * @return int|false
+     */
     public function num_fields($result = false)
     {
         if(!$result)
@@ -144,12 +185,13 @@ class DBMySQL extends DBCommon
         return mysql_num_fields($result);
     }
 
-    /** Returns the number of rows of the last executed statement.
-     *  Therefore a valid result must exists or set as parameter.
-     *  If no valid result exists the method will return 0.
-     *  @param $result Optional a valid result of a executed sql statement. If no result is set
-     *                 then the method will look for a result within the database object.
-     *  @return Return the number of rows of the result of the sql statement.
+    /**
+     * Returns the number of rows of the last executed statement.
+     * Therefore a valid result must exists or set as parameter.
+     * If no valid result exists the method will return 0.
+     * @param bool $result Optional a valid result of a executed sql statement. If no result is set
+     *                     then the method will look for a result within the database object.
+     * @return int Return the number of rows of the result of the sql statement.
      */
     public function num_rows($result = false)
     {
@@ -169,16 +211,17 @@ class DBMySQL extends DBCommon
         }
     }
 
-    /** Send a sql statement to the database that will be executed. If debug mode is set
-     *  then this statement will be written to the error log. If it's a @b SELECT statement
-     *  then also the number of rows will be logged. If an error occurred the script will
-     *  be terminated and the error with a backtrace will be send to the browser.
-     *  @param string $sql A string with the sql statement that should be executed in database.
-     *  @param bool $throwError Default will be @b true and if an error the script will be terminated and
-     *                          occurred the error with a backtrace will be send to the browser. If set to
-     *                          @b false no error will be shown and the script will be continued.
-     *  @return For @b SELECT statements a result resource will be returned and otherwise @b true.
-     *          If an error occurred then @b false will be returned of the script was not terminated.
+    /**
+     * Send a sql statement to the database that will be executed. If debug mode is set
+     * then this statement will be written to the error log. If it's a @b SELECT statement
+     * then also the number of rows will be logged. If an error occurred the script will
+     * be terminated and the error with a backtrace will be send to the browser.
+     * @param string $sql A string with the sql statement that should be executed in database.
+     * @param bool $throwError Default will be @b true and if an error the script will be terminated and
+     *                         occurred the error with a backtrace will be send to the browser. If set to
+     *                         @b false no error will be shown and the script will be continued.
+     * @return For @b SELECT statements a result resource will be returned and otherwise @b true.
+     *         If an error occurred then @b false will be returned of the script was not terminated.
      */
     public function query($sql, $throwError = true)
     {
@@ -209,8 +252,12 @@ class DBMySQL extends DBCommon
         return $this->queryResult;
     }
 
-    // setzt die urspruengliche DB wieder auf aktiv
-    // alternativ kann auch eine andere DB uebergeben werden
+    /**
+     * setzt die urspruengliche DB wieder auf aktiv
+     * alternativ kann auch eine andere DB uebergeben werden
+     * @param string $database
+     * @return bool
+     */
     public function select_db($database = '')
     {
         if($database === '')
@@ -220,29 +267,42 @@ class DBMySQL extends DBCommon
         return mysql_select_db($database, $this->connectId);
     }
 
-    // returns the MySQL version of the database
+    /**
+     * returns the MySQL version of the database
+     * @return string|false
+     */
     public function server_info()
     {
         return mysql_get_server_info();
     }
 
-    // setzt die urspruengliche DB wieder auf aktiv
+    /**
+     * setzt die urspruengliche DB wieder auf aktiv
+     * @return bool
+     */
     public function setCurrentDB()
     {
         return $this->select_db($this->dbName);
     }
 
-    // this metod sets db specific properties of admidio
-    // this settings are necessary because the database won't work with the default settings of admidio
+    /**
+     * this metod sets db specific properties of admidio
+     * this settings are necessary because the database won't work with the default settings of admidio
+     * @param string $version
+     */
     public function setDBSpecificAdmidioProperties($version = '')
     {
         // nothing todo
     }
 
-    // This method delivers the columns and their properties of the passed variable as an array
-    // The array has the following format:
-    // array('Fieldname1' => array('serial' => '1', 'null' => '0', 'key' => '0', 'type' => 'integer'),
-    //       'Fieldname2' => ...)
+    /**
+     * This method delivers the columns and their properties of the passed variable as an array
+     * The array has the following format:
+     * array('Fieldname1' => array('serial' => '1', 'null' => '0', 'key' => '0', 'type' => 'integer'),
+     *       'Fieldname2' => ...)
+     * @param $table
+     * @return mixed
+     */
     public function showColumns($table)
     {
         if(!isset($this->dbStructure[$table]))

@@ -52,7 +52,6 @@
  * } @endcode
  */
 
-
 class Database
 {
     protected $engine;

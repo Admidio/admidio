@@ -8,6 +8,9 @@
  *
  *****************************************************************************/
 
+/**
+ * Class DBCommon
+ */
 class DBCommon
 {
     public $dbType;
@@ -25,12 +28,13 @@ class DBCommon
     protected $transactions = 0;
     protected $dbStructure; // array with arrays of every table with their structure
 
-    /** Display the error code and error message to the user if a database error occurred.
-     *  The error must be read by the child method. This method will call a backtrace so
-     *  you see the script and specific line in which the error occurred.
-     *  @param $code    The database error code that will be displayed.
-     *  @param $message The database error message that will be displayed.
-     *  @return Will exit the script and returns a html output with the error informations.
+    /**
+     * Display the error code and error message to the user if a database error occurred.
+     * The error must be read by the child method. This method will call a backtrace so
+     * you see the script and specific line in which the error occurred.
+     * @param int    $code    The database error code that will be displayed.
+     * @param string $message The database error message that will be displayed.
+     * @return Will exit the script and returns a html output with the error information.
      */
     public function db_error($code = 0, $message = '')
     {
@@ -81,9 +85,10 @@ class DBCommon
         exit();
     }
 
-    /** The method will commit an open transaction to the database. If the
-     *  transaction counter is greater 1 than only the counter will be
-     *  decreased and no commit will performed.
+    /**
+     * The method will commit an open transaction to the database. If the transaction counter
+     * is greater 1 than only the counter will be decreased and no commit will performed.
+     * @return
      */
     public function endTransaction()
     {
@@ -106,8 +111,11 @@ class DBCommon
         return $result;
     }
 
-    // Teile dieser Funktion sind von get_backtrace aus phpBB3
-    // Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
+    /**
+     * Teile dieser Funktion sind von get_backtrace aus phpBB3
+     * Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
+     * @return string
+     */
     protected function getBacktrace()
     {
         $output = '<div style="font-family: monospace;">';
@@ -164,7 +172,10 @@ class DBCommon
         return $output;
     }
 
-    // returns the minimum required version of the database
+    /**
+     * returns the minimum required version of the database
+     * @return string
+     */
     public function getName()
     {
         if($this->name === '')
@@ -176,7 +187,10 @@ class DBCommon
         return $this->name;
     }
 
-    // returns the minimum required version of the database
+    /**
+     * returns the minimum required version of the database
+     * @return string
+     */
     public function getMinVersion()
     {
         if($this->minVersion === '')
@@ -188,7 +202,10 @@ class DBCommon
         return $this->minVersion;
     }
 
-    // returns the version of the database
+    /**
+     * returns the version of the database
+     * @return string|false
+     */
     public function getVersion()
     {
         if($this->version === '')
@@ -198,8 +215,10 @@ class DBCommon
         return $this->version;
     }
 
-    /** If there is a open transaction than this method sends a rollback to the database
-     *  and will set the transaction counter to zero.
+    /**
+     * If there is a open transaction than this method sends a rollback to the database
+     * and will set the transaction counter to zero.
+     * @return bool
      */
     public function rollback()
     {
@@ -218,8 +237,10 @@ class DBCommon
         return false;
     }
 
-    /** Checks if an open transaction exists. If there is no open transaction than
-     *  start one otherwise increase the internal transaction counter.
+    /**
+     * Checks if an open transaction exists. If there is no open transaction than
+     * start one otherwise increase the internal transaction counter.
+     * @return
      */
     public function startTransaction()
     {

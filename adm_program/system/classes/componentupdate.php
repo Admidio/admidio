@@ -62,7 +62,7 @@ class ComponentUpdate extends Component
      * so if the whole update crashs later we know that this step was successfully executed.
      * When the node has an attribute @b database than this sql statement will only executed
      * if the value of the attribute is equal to your current @b $gDbType .
-     * @param $xmlNode A SimpleXML node of the current update step.
+     * @param object $xmlNode A SimpleXML node of the current update step.
      */
     private function executeStep($xmlNode)
     {
@@ -74,7 +74,7 @@ class ComponentUpdate extends Component
         {
             // if the sql statement is only for a special database and you do
             // not have this database then don't execute this statement
-            if(isset($xmlNode['database']) && $xmlNode['database'] != $gDbType)
+            if(isset($xmlNode['database']) && $xmlNode['database'] !== $gDbType)
             {
                 $executeSql = false;
             }
@@ -125,7 +125,7 @@ class ComponentUpdate extends Component
             // go step by step through the SQL statements until the last one is found
             foreach($this->xmlObject->children() as $updateStep)
             {
-                if($updateStep[0] != 'stop')
+                if($updateStep[0] !== 'stop')
                 {
                     $maxUpdateStep = $updateStep['id'];
                 }

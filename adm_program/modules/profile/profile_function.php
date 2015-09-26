@@ -143,7 +143,7 @@ elseif($getMode == 7)
     // check if user has the right to edit this membership
     if($role->allowedToAssignMembers($gCurrentUser) == false)
     {
-        die($gL10n->get('SYS_NO_RIGHTS'));
+        exit($gL10n->get('SYS_NO_RIGHTS'));
     }
 
     $formatedStartDate = '';
@@ -158,7 +158,7 @@ elseif($getMode == 7)
     }
     else
     {
-        die($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
+        exit($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
     }
 
     //Falls gesetzt wird das Enddatum gecheckt
@@ -172,13 +172,13 @@ elseif($getMode == 7)
         }
         else
         {
-            die($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
+            exit($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
         }
 
         // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
         if ($startDate < $endDate)
         {
-            die($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+            exit($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
         }
     }
     else

@@ -53,11 +53,11 @@ if($roleCount == 0)
 {
     if($getInline == 0)
     {
-        die($gMessage->show($gL10n->get('PRO_ROLE_NOT_ASSIGNED')));
+        exit($gMessage->show($gL10n->get('PRO_ROLE_NOT_ASSIGNED')));
     }
     else
     {
-        die($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
+        exit($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
     }
 }
 

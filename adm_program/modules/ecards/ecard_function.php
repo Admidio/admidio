@@ -153,7 +153,7 @@ class FunctionClass
     {
         global $gPreferences;
         $img_photo_path = '';
-        $returnCode = TRUE;
+        $returnCode = true;
 
         $email = new Email();
         $email->setSender($senderEmail, $senderName);
@@ -216,7 +216,7 @@ class FunctionClass
         $email->setText($ecardHtmlData);
         $email->sendDataAsHtml();
 
-        if($returnCode==TRUE)
+        if($returnCode==true)
         {
             $returnCode = $email->sendEmail();
         }

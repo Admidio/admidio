@@ -15,6 +15,9 @@
  *
  *****************************************************************************/
 
+/**
+ * Class DateTimeExtended
+ */
 class DateTimeExtended extends DateTime
 {
     private $valid;
@@ -86,7 +89,8 @@ class DateTimeExtended extends DateTime
             4 => $gL10n->get('SYS_THURSDAY'),
             5 => $gL10n->get('SYS_FRIDAY'),
             6 => $gL10n->get('SYS_SATURDAY'),
-            7 => $gL10n->get('SYS_SUNDAY'));
+            7 => $gL10n->get('SYS_SUNDAY')
+        );
 
         if ($weekday > 0)
         {

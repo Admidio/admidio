@@ -303,6 +303,7 @@ class ModuleLists extends Modules
         $lists['limit']      = $limit;
         $lists['totalCount'] = $this->getDataSetCount();
         $lists['parameter']  = $this->getParameters();
+
         return $lists;
     }
 

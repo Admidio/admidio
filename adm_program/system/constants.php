@@ -10,7 +10,7 @@
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'constants.php')
 {
-    die('This page may not be called directly!');
+    exit('This page may not be called directly!');
 }
 
 // !!! Please do not edit these version numbers !!!

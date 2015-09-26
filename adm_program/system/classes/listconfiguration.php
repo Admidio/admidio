@@ -23,9 +23,12 @@
  *
  *****************************************************************************/
 
+/**
+ * Class ListConfiguration
+ */
 class ListConfiguration extends TableLists
 {
-    protected $columns = array();     // Array ueber alle Listenspaltenobjekte
+    protected $columns = array(); // Array ueber alle Listenspaltenobjekte
 
     /**
      * Constructor that will create an object to handle the configuration of lists.
@@ -42,7 +45,14 @@ class ListConfiguration extends TableLists
         }
     }
 
-    // fuegt eine neue Spalte dem Spaltenarray hinzu
+    /**
+     * fuegt eine neue Spalte dem Spaltenarray hinzu
+     * @param int    $number
+     * @param        $field
+     * @param string $sort
+     * @param string $filter
+     * @return bool
+     */
     public function addColumn($number, $field, $sort = '', $filter = '')
     {
         // MySQL kann nicht mehr als 61 Tabellen joinen
@@ -50,7 +60,7 @@ class ListConfiguration extends TableLists
         if(count($this->columns) < 57 && $number > 0 && $field !== '')
         {
             // falls Spalte noch nicht existiert, dann Objekt anlegen
-            if(isset($this->columns[$number]) == false)
+            if(!isset($this->columns[$number]))
             {
                 $this->columns[$number] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
                 $this->columns[$number]->setValue('lsc_lsf_id', $this->getValue('lst_id'));
@@ -82,12 +92,18 @@ class ListConfiguration extends TableLists
         parent::clear();
     }
 
-    // Anzahl der Spalten der Liste zurueckgeben
+    /**
+     * Anzahl der Spalten der Liste zurueckgeben
+     * @return int
+     */
     public function countColumns()
     {
         return count($this->columns);
     }
 
+    /**
+     * @return true
+     */
     public function delete()
     {
         $this->db->startTransaction();
@@ -104,8 +120,11 @@ class ListConfiguration extends TableLists
         return $return;
     }
 
-    // entfernt die entsprechende Spalte aus der Konfiguration
-    // all : gibt an, ob alle folgenden Spalten auch geloescht werden sollen
+    /**
+     * entfernt die entsprechende Spalte aus der Konfiguration
+     * @param int  $number
+     * @param bool $all gibt an, ob alle folgenden Spalten auch geloescht werden sollen
+     */
     public function deleteColumn($number, $all = false)
     {
         if($number <= $this->countColumns())
@@ -136,12 +155,13 @@ class ListConfiguration extends TableLists
         }
     }
 
-    /** Returns the column object with the corresponding number.
-     *  If that column doesn't exists the method try to repair the
-     *  column list. If that won't help then @b null will be returned.
-     *  @param $number The internal number of the column.
-     *                 This will be the position of the column in the list.
-     *  @return Returns a TableAccess object of the database table @b adm_list_columns.
+    /**
+     * Returns the column object with the corresponding number.
+     * If that column doesn't exists the method try to repair the
+     * column list. If that won't help then @b null will be returned.
+     * @param int $number The internal number of the column.
+     *                    This will be the position of the column in the list.
+     * @return object|null Returns a TableAccess object of the database table @b adm_list_columns.
      */
     public function getColumnObject($number)
     {
@@ -164,11 +184,15 @@ class ListConfiguration extends TableLists
         }
     }
 
-    // gibt das passende SQL-Statement zu der Liste zurueck
-    // role_ids : Array ueber alle Rollen-IDs, von denen Mitglieder in der Liste angezeigt werden sollen
-    // member_status : 0 - Nur aktive Rollenmitglieder
-    //                 1 - Nur ehemalige Rollenmitglieder
-    //                 2 - Aktive und ehemalige Rollenmitglieder
+    /**
+     * gibt das passende SQL-Statement zu der Liste zurueck
+     * @param $roleIds Array ueber alle Rollen-IDs, von denen Mitglieder in der Liste angezeigt werden sollen
+     * @param int $memberStatus 0 - Nur aktive Rollenmitglieder
+     *                          1 - Nur ehemalige Rollenmitglieder
+     *                          2 - Aktive und ehemalige Rollenmitglieder
+     * @return string
+     * @throws AdmException
+     */
     public function getSQL($roleIds, $memberStatus = 0)
     {
         global $gL10n, $gProfileFields, $gCurrentOrganization, $gDbType;
@@ -185,7 +209,7 @@ class ListConfiguration extends TableLists
             // Spalte anhaengen
             if($sqlSelect !== '')
             {
-                $sqlSelect = $sqlSelect. ', ';
+                $sqlSelect = $sqlSelect . ', ';
             }
 
             if($listColumn->getValue('lsc_usf_id') > 0)
@@ -220,11 +244,11 @@ class ListConfiguration extends TableLists
                     $sqlOrderBy = $sqlOrderBy. ', ';
                 }
 
-                if($userFieldType == 'NUMBER' || $userFieldType == 'DECIMAL')
+                if($userFieldType === 'NUMBER' || $userFieldType === 'DECIMAL')
                 {
                     // if a field has numeric values then there must be a cast because database
                     // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
-                    if($gDbType == 'postgresql')
+                    if($gDbType === 'postgresql')
                     {
                         $columnType = 'numeric';
                     }
@@ -250,50 +274,54 @@ class ListConfiguration extends TableLists
                 // custom profile field
                 if($listColumn->getValue('lsc_usf_id') > 0)
                 {
-                    if($userFieldType == 'CHECKBOX')
-                    {
-                        $type = 'checkbox';
+                    switch ($userFieldType) {
+                        case 'CHECKBOX':
+                            $type = 'checkbox';
 
-                        // 'yes' or 'no' will be replaced with 1 or 0, so that you can compare it with the database value
-                        $arrCheckboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
-                        $arrCheckboxKeys   = array(1, 0, 1, 0);
-                        $value = str_replace(array_map('admStrToLower', $arrCheckboxValues), $arrCheckboxKeys, admStrToLower($value));
-                    }
-                    elseif($userFieldType == 'DROPDOWN'
-                    ||     $userFieldType == 'RADIO_BUTTON')
-                    {
-                        $type = 'int';
+                            // 'yes' or 'no' will be replaced with 1 or 0, so that you can compare it with the database value
+                            $arrCheckboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
+                            $arrCheckboxKeys   = array(1, 0, 1, 0);
+                            $value = str_replace(array_map('admStrToLower', $arrCheckboxValues), $arrCheckboxKeys, admStrToLower($value));
+                            break;
 
-                        // replace all field values with their internal numbers
-                        $arrListValues = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_value_list', 'text');
-                        $value = array_search(admStrToLower($value), array_map('admStrToLower', $arrListValues));
-                    }
-                    elseif($userFieldType == 'NUMBER'
-                    ||     $userFieldType == 'DECIMAL')
-                    {
-                        $type = 'int';
-                    }
-                    elseif($userFieldType == 'DATE')
-                    {
-                        $type = 'date';
-                    }
-                    else
-                    {
-                        $type = 'string';
+                        case 'DROPDOWN':
+                        case 'RADIO_BUTTON':
+                            $type = 'int';
+
+                            // replace all field values with their internal numbers
+                            $arrListValues = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_value_list', 'text');
+                            $value = array_search(admStrToLower($value), array_map('admStrToLower', $arrListValues));
+                            break;
+
+                        case 'NUMBER':
+                        case 'DECIMAL':
+                            $type = 'int';
+                            break;
+
+                        case 'DATE':
+                            $type = 'date';
+                            break;
+
+                        default:
+                            $type = 'string';
                     }
                 }
-                elseif($listColumn->getValue('lsc_special_field') == 'mem_begin'
-                || $listColumn->getValue('lsc_special_field') == 'mem_begin')
+                else
                 {
-                    $type = 'date';
-                }
-                elseif($listColumn->getValue('lsc_special_field') == 'usr_login_name')
-                {
-                    $type = 'string';
-                }
-                elseif($listColumn->getValue('lsc_special_field') == 'usr_photo')
-                {
-                    $type = '';
+                    switch ($listColumn->getValue('lsc_special_field')) {
+                        case 'mem_begin':
+                        case 'mem_end':
+                            $type = 'date';
+                            break;
+
+                        case 'usr_login_name':
+                            $type = 'string';
+                            break;
+
+                        case 'usr_photo':
+                            $type = '';
+                            break;
+                    }
                 }
 
                 $parser = new ConditionParser();
@@ -326,12 +354,12 @@ class ListConfiguration extends TableLists
         }
 
         // Status der Mitgliedschaft setzen
-        if($memberStatus == 0)
+        if($memberStatus === 0)
         {
             $sqlMemberStatus = ' AND mem_begin <= \''.DATE_NOW.'\'
-                                   AND mem_end   >= \''.DATE_NOW.'\' ';
+                                 AND mem_end   >= \''.DATE_NOW.'\' ';
         }
-        elseif($memberStatus == 1)
+        elseif($memberStatus === 1)
         {
             $sqlMemberStatus = ' AND mem_end < \''.DATE_NOW.'\' ';
         }
@@ -358,13 +386,15 @@ class ListConfiguration extends TableLists
         return $sql;
     }
 
-    // Daten der zugehoerigen Spalten einlesen und in Objekten speichern
+    /**
+     * Daten der zugehoerigen Spalten einlesen und in Objekten speichern
+     */
     public function readColumns()
     {
         $sql = 'SELECT * FROM '. TBL_LIST_COLUMNS. '
                  WHERE lsc_lst_id = '. $this->getValue('lst_id'). '
                  ORDER BY lsc_number ASC ';
-        $lsc_result   = $this->db->query($sql);
+        $lsc_result = $this->db->query($sql);
 
         while($lsc_row = $this->db->fetch_array($lsc_result))
         {
@@ -373,9 +403,10 @@ class ListConfiguration extends TableLists
         }
     }
 
-    /** The method will clear all column data of this object and restore all
-     *  columns from the database. Then the column number will be renewed for all columns.
-     *  This is in some cases a necessary fix if a column number was lost.
+    /**
+     * The method will clear all column data of this object and restore all
+     * columns from the database. Then the column number will be renewed for all columns.
+     * This is in some cases a necessary fix if a column number was lost.
      */
     public function repair()
     {
@@ -400,6 +431,9 @@ class ListConfiguration extends TableLists
         $this->readColumns();
     }
 
+    /**
+     * @param bool $updateFingerPrint
+     */
     public function save($updateFingerPrint = true)
     {
         $this->db->startTransaction();
