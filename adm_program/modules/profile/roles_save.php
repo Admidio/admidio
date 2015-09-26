@@ -101,8 +101,8 @@ else
                       OR cat_org_id IS NULL )
                 ORDER BY cat_sequence, rol_name';
 }
-$result_rol = $gDb->query($sql);
-$rolesList  = $gDb->fetchAll();
+$rolesStatement = $gDb->query($sql);
+$rolesList      = $rolesStatement->fetchAll();
 
 $count_assigned = 0;
 $parentRoles = array();

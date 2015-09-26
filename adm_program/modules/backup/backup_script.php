@@ -133,8 +133,8 @@ $starttime = getmicrotime();
                     }
                     $SQLquery  = 'SELECT COUNT(*) AS '.BACKTICKCHAR.'num'.BACKTICKCHAR;
                     $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
-                    $result = $gDb->query($SQLquery);
-                    $row = $gDb->fetch($result);
+                    $countTablesStatement = $gDb->query($SQLquery);
+                    $row = $countTablesStatement->fetch();
                     $rows[$t] = $row['num'];
                     $overallrows += $rows[$t];
                     echo '<span id="rows_'.$dbname.'_'.$SelectedTables[$dbname][$t].'">'.htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records)</span><br>';
@@ -151,15 +151,15 @@ $starttime = getmicrotime();
                     $fieldnames = array();
 
                     $SQLquery  = 'SHOW CREATE TABLE '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
-                    $result_showcreatetable = $gDb->query($SQLquery);
-                    if ($gDb->num_rows($result_showcreatetable) == 1) {
-                        $row = $gDb->fetch($result_showcreatetable);
+                    $showcreatetableStatement = $gDb->query($SQLquery);
+                    if ($showcreatetableStatement->rowCount() == 1) {
+                        $row = $showcreatetableStatement->fetch();
                         $tablestructure = $row['Create Table'];
 
                         $SQLquery  = 'SHOW FULL FIELDS';
                         $SQLquery .= ' FROM '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
-                        $result_showfields = $gDb->query($SQLquery);
-                        while ($row = $gDb->fetch($result_showfields)) {
+                        $showfieldsStatement = $gDb->query($SQLquery);
+                        while ($row = $showfieldsStatement->fetch()) {
                             if (preg_match('#^[a-z]+#i', $row['Type'], $matches)) {
                                 $RowTypes[$dbname][$SelectedTables[$dbname][$t]][$row['Field']] = $matches[0];
                             }
@@ -169,8 +169,8 @@ $starttime = getmicrotime();
                         $structurelines = array();
                         $SQLquery  = 'SHOW FULL FIELDS';
                         $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
-                        $result_showfields = $gDb->query($SQLquery);
-                        while ($row = $gDb->fetch($result_showfields)) {
+                        $showfieldsStatement = $gDb->query($SQLquery);
+                        while ($row = $showfieldsStatement->fetch()) {
                             $structureline  = BACKTICKCHAR.$row['Field'].BACKTICKCHAR;
                             $structureline .= ' '.$row['Type'];
                             if (isset($row['Collation']) && !is_null($row['Collation']) && !empty($row['Collation'])) {
@@ -220,9 +220,9 @@ $starttime = getmicrotime();
 
                         $SQLquery  = 'SHOW INDEX';
                         $SQLquery .= ' FROM '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
-                        $result_showindex = $gDb->query($SQLquery);
+                        $showindexStatement = $gDb->query($SQLquery);
                         $INDICES = array();
-                        while ($row = $gDb->fetch($result_showindex)) {
+                        while ($row = $showindexStatement->fetch()) {
                             $INDICES[$row['Key_name']][$row['Seq_in_index']] = $row;
                         }
                         foreach ($INDICES as $index_name => $columndata) {
@@ -255,8 +255,8 @@ $starttime = getmicrotime();
                         }
 
                         $SQLquery  = 'SHOW TABLE STATUS LIKE "'.$gDb->escapeString($SelectedTables[$dbname][$t]).'"';
-                        $result_tablestatus = $gDb->query($SQLquery);
-                        if (!($TableStatusRow = $gDb->fetch($result_tablestatus))) {
+                        $tablestatusStatement = $gDb->query($SQLquery);
+                        if (!($TableStatusRow = $tablestatusStatement->fetch())) {
                             die('failed to execute "'.$SQLquery.'" on '.$dbname.'.'.$tablename);
                         }
 

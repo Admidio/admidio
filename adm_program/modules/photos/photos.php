@@ -404,7 +404,7 @@ if($gCurrentUser->editPhotoRight() == false)
 $sql = $sql.' ORDER BY pho_begin DESC ';
 
 $albumStatement = $gDb->query($sql);
-$albumList      = $gDb->fetchAll();
+$albumList      = $albumStatement->fetchAll();
 
 //Gesamtzahl der auszugebenden Alben
 $albumsCount = $albumStatement->rowCount();

@@ -29,9 +29,10 @@
  * } @endcode
  * Now you can use the new object @b $gDb to send a query to the database
  * @code // send sql to database
- * $gDb->query('SELECT org_shortname, org_longname FROM adm_organizations');
+ * $organizationsStatement = $gDb->query('SELECT org_shortname, org_longname FROM adm_organizations');
+ *
  * // now fetch all rows of the result within one array
- * $organizationsList = $gDb->fetchAll();
+ * $organizationsList = $organizationsStatement->fetchAll();
  *
  * // Array with the results:
  * //    $organizationsList = array(
@@ -45,7 +46,7 @@
  * //             )
  *
  * // you can also go step by step through the result
- * while($organizationNames = $gDb->fetch())
+ * while($organizationNames = $organizationsStatement->fetch())
  * {
  *     echo $organizationNames['shortname'].' '.$organizationNames['longname'];
  * } @endcode
@@ -83,10 +84,11 @@ class Database
      */
     public function __construct($engine, $host, $port = null, $dbName, $username = null, $password = null, $options = array())
     {
-		if($engine === 'postgresql')
-		{
-			$engine = 'pgsql';
-		}
+        // for compatibility to old versions accept the string postgresql
+        if($engine === 'postgresql')
+        {
+            $engine = 'pgsql';
+        }
 
         $this->engine   = $engine;
         $this->host     = $host;
@@ -208,76 +210,6 @@ class Database
         return trim($this->pdo->quote($string),"'");
     }
 
-    /** Fetch from the sql the next row into an array. The array will contain each column.
-     *  This row array contains as default the column name as key. If you set the $fetchType than you can change
-     *  this behavior.
-     *  @param object $pdoStatement An object of the class PDOStatement. This should be set if multiple
-     *                              rows where selected and other sql statements are also send to the database.
-     *  @param int    $fetchType    Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
-     *                              @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
-     *  @return Returns an array with each column of the current row. If no rows were found an empty array is returned.
-     *
-     *  @par Examples
-     *  @code  $this->query('SELECT cat_id, cat_name, cat_sequence FROM adm_categories ');
-     *  $records = $this->fetch();
-     *
-     *  // Array with the results:
-     *     $record = array(
-     *              [cat_id]       => 1
-     *              [cat_name]     => 'Common'
-     *              [cat_sequence] => 4
-     *              ) @endcode
-     * @see Database#fetchAll
-     * @see Database#query
-     */
-    public function fetch($pdoStatement = null, $fetchType = PDO::FETCH_ASSOC)
-    {
-        // if pdo statement is committed then fetch this object
-        if(is_object($pdoStatement))
-        {
-            return $pdoStatement->fetch($fetchType);
-        }
-        // if no pdo statement was committed then take the one from the last query
-        elseif(is_object($this->pdoStatement))
-        {
-            return $this->pdoStatement->fetch($fetchType);
-        }
-
-        return null;
-    }
-
-    /** Fetch from the sql all rows into an array. The array will contain each row which is also an array.
-     *  This row array contains as default the column name as key. If you set the $fetchType than you can change
-     *  this behavior.
-     *  @param $fetchType Set the result type. Can contain @b PDO::FETCH_ASSOC (default) for an associative array,
-     *                     @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
-     *  @return Returns an array with arrays of each fetched row. If no rows were found an empty array is returned.
-     *
-     *  @par Examples
-     *  @code  $this->query('SELECT cat_id, cat_name, cat_sequence FROM adm_categories ');
-     *  $records = $this->fetchAll();
-     *
-     *  // Array with the results:
-     *     $records = array(
-     *          [0] => array(
-     *              [cat_id]       => 1
-     *              [cat_name]     => 'Common'
-     *              [cat_sequence] => 4
-     *              )
-     *          [1] => array(
-     *              [cat_id]       => 2
-     *              [cat_name]     => 'Teams'
-     *              [cat_sequence] => 2
-     *              )
-     *          ... @endcode
-     * @see Database#fetch
-     * @see Database#query
-     */
-    public function fetchAll($fetchType = PDO::FETCH_ASSOC)
-    {
-        return $this->pdoStatement->fetchAll($fetchType);
-    }
-
     /**
      * @return array
      */
@@ -383,14 +315,14 @@ class Database
         $versionStatement = $this->query('SELECT version()');
         $row = $versionStatement->fetch(PDO::FETCH_NUM);
 
-		if($this->engine === 'pgsql')
-		{
-			// the string (PostgreSQL 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
-			$versionArray  = explode(',', $row[0]);
-			$versionArray2 = explode(' ', $versionArray[0]);
-			return $versionArray2[1];
-		}
-		
+        if($this->engine === 'pgsql')
+        {
+            // the string (PostgreSQL 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
+            $versionArray  = explode(',', $row[0]);
+            $versionArray2 = explode(' ', $versionArray[0]);
+            return $versionArray2[1];
+        }
+        
         return $row[0];
     }
 
@@ -399,16 +331,16 @@ class Database
      */
     public function lastInsertId()
     {
-		if($this->engine === 'pgsql')
-		{
-			$lastValStatement = $this->query('SELECT lastval()');
-			$insertRow = $lastValStatement->fetch(PDO::FETCH_NUM);
-			return $insertRow[0];
-		}
-		else
-		{
-			return $this->pdo->lastInsertId();
-		}
+        if($this->engine === 'pgsql')
+        {
+            $lastValStatement = $this->query('SELECT lastval()');
+            $insertRow = $lastValStatement->fetch(PDO::FETCH_NUM);
+            return $insertRow[0];
+        }
+        else
+        {
+            return $this->pdo->lastInsertId();
+        }
     }
 
     /** Send a sql statement to the database that will be executed. If debug mode is set
@@ -426,36 +358,36 @@ class Database
     {
         global $gDebug;
 
-		if($this->engine === 'pgsql')
-		{
-			// prepare the sql statement to be compatible with PostgreSQL
-			if(strpos(strtolower($sql), 'create table') !== false
-			|| strpos(strtolower($sql), 'alter table') !== false)
-			{
-				if(strpos(strtolower($sql), 'create table') !== false)
-				{
-					// on a create-table-statement if necessary cut existing MySQL table options
-					$sql = substr(strtolower($sql), 0, strrpos($sql, ')') + 1);
-				}
+        if($this->engine === 'pgsql')
+        {
+            // prepare the sql statement to be compatible with PostgreSQL
+            if(strpos(strtolower($sql), 'create table') !== false
+            || strpos(strtolower($sql), 'alter table') !== false)
+            {
+                if(strpos(strtolower($sql), 'create table') !== false)
+                {
+                    // on a create-table-statement if necessary cut existing MySQL table options
+                    $sql = substr(strtolower($sql), 0, strrpos($sql, ')') + 1);
+                }
 
-				// PostgreSQL doesn't know unsigned
-				$sql = str_replace('unsigned', '', $sql);
+                // PostgreSQL doesn't know unsigned
+                $sql = str_replace('unsigned', '', $sql);
 
-				// PostgreSQL interprets a boolean as string so transform it to a smallint
-				$sql = str_replace('boolean', 'smallint', $sql);
+                // PostgreSQL interprets a boolean as string so transform it to a smallint
+                $sql = str_replace('boolean', 'smallint', $sql);
 
-				// A blob is in PostgreSQL a bytea datatype
-				$sql = str_replace('blob', 'bytea', $sql);
+                // A blob is in PostgreSQL a bytea datatype
+                $sql = str_replace('blob', 'bytea', $sql);
 
-				// Auto_Increment must be replaced with Serial
-				$posAutoIncrement = strpos($sql, 'auto_increment');
-				if($posAutoIncrement > 0)
-				{
-					$posInteger = strrpos(substr($sql, 0, $posAutoIncrement), 'integer');
-					$sql = substr($sql, 0, $posInteger).' serial '.substr($sql, $posAutoIncrement + 14);
-				}
-			}
-		}
+                // Auto_Increment must be replaced with Serial
+                $posAutoIncrement = strpos($sql, 'auto_increment');
+                if($posAutoIncrement > 0)
+                {
+                    $posInteger = strrpos(substr($sql, 0, $posAutoIncrement), 'integer');
+                    $sql = substr($sql, 0, $posInteger).' serial '.substr($sql, $posAutoIncrement + 14);
+                }
+            }
+        }
 
         // if debug mode then log all sql statements
         if($gDebug === 1)
@@ -505,21 +437,6 @@ class Database
         return false;
     }
 
-    /** Returns the number of rows of the last executed statement.
-     *  @return Return the number of rows of the result of the sql statement.
-     */
-    public function rowCount()
-    {
-        $rowCount = 0;
-
-        if(is_object($this->pdoStatement))
-        {
-            $rowCount = $this->pdoStatement->rowCount();
-        }
-
-        return $rowCount;
-    }
-
     /** Set connection specific options like UTF8 connection. These options
      *  should always be set if Admidio connect to a database.
      */
@@ -557,89 +474,89 @@ class Database
         {
             $columnProperties = array();
 
-			if($this->engine === 'mysql')
-			{
-				$sql = 'SHOW COLUMNS FROM '.$table;
-				$columnsStatement = $this->query($sql);
-				$columnsList      = $columnsStatement->fetchAll();
+            if($this->engine === 'mysql')
+            {
+                $sql = 'SHOW COLUMNS FROM '.$table;
+                $columnsStatement = $this->query($sql);
+                $columnsList      = $columnsStatement->fetchAll();
 
-				foreach($columnsList as $properties)
-				{
-					$columnProperties[$properties['Field']]['serial'] = 0;
-					$columnProperties[$properties['Field']]['null']   = 0;
-					$columnProperties[$properties['Field']]['key']    = 0;
+                foreach($columnsList as $properties)
+                {
+                    $columnProperties[$properties['Field']]['serial'] = 0;
+                    $columnProperties[$properties['Field']]['null']   = 0;
+                    $columnProperties[$properties['Field']]['key']    = 0;
 
-					if($properties['Extra'] === 'auto_increment')
-					{
-						$columnProperties[$properties['Field']]['serial'] = 1;
-					}
-					if($properties['Null'] === 'YES')
-					{
-						$columnProperties[$properties['Field']]['null'] = 1;
-					}
-					if($properties['Key'] === 'PRI' || $properties['Key'] === 'MUL')
-					{
-						$columnProperties[$properties['Field']]['key'] = 1;
-					}
+                    if($properties['Extra'] === 'auto_increment')
+                    {
+                        $columnProperties[$properties['Field']]['serial'] = 1;
+                    }
+                    if($properties['Null'] === 'YES')
+                    {
+                        $columnProperties[$properties['Field']]['null'] = 1;
+                    }
+                    if($properties['Key'] === 'PRI' || $properties['Key'] === 'MUL')
+                    {
+                        $columnProperties[$properties['Field']]['key'] = 1;
+                    }
 
-					if(strpos($properties['Type'], 'tinyint(1)') !== false)
-					{
-						$columnProperties[$properties['Field']]['type'] = 'boolean';
-					}
-					elseif(strpos($properties['Type'], 'smallint') !== false)
-					{
-						$columnProperties[$properties['Field']]['type'] = 'smallint';
-					}
-					elseif(strpos($properties['Type'], 'int') !== false)
-					{
-						$columnProperties[$properties['Field']]['type'] = 'integer';
-					}
-					else
-					{
-						$columnProperties[$properties['Field']]['type'] = $properties['Type'];
-					}
-				}
-			}
-			elseif($this->engine === 'pgsql')
-			{
-				$sql = 'SELECT column_name, column_default, is_nullable, data_type
-						  FROM information_schema.columns WHERE table_name = \''.$table.'\'';
-				$columnsStatement = $this->query($sql);
-				$columnsList = $columnsStatement->fetchAll();
+                    if(strpos($properties['Type'], 'tinyint(1)') !== false)
+                    {
+                        $columnProperties[$properties['Field']]['type'] = 'boolean';
+                    }
+                    elseif(strpos($properties['Type'], 'smallint') !== false)
+                    {
+                        $columnProperties[$properties['Field']]['type'] = 'smallint';
+                    }
+                    elseif(strpos($properties['Type'], 'int') !== false)
+                    {
+                        $columnProperties[$properties['Field']]['type'] = 'integer';
+                    }
+                    else
+                    {
+                        $columnProperties[$properties['Field']]['type'] = $properties['Type'];
+                    }
+                }
+            }
+            elseif($this->engine === 'pgsql')
+            {
+                $sql = 'SELECT column_name, column_default, is_nullable, data_type
+                          FROM information_schema.columns WHERE table_name = \''.$table.'\'';
+                $columnsStatement = $this->query($sql);
+                $columnsList = $columnsStatement->fetchAll();
 
-				foreach($columnsList as $properties)
-				{
-					$columnProperties[$properties['column_name']]['serial'] = 0;
-					$columnProperties[$properties['column_name']]['null']   = 0;
-					$columnProperties[$properties['column_name']]['key']    = 0;
+                foreach($columnsList as $properties)
+                {
+                    $columnProperties[$properties['column_name']]['serial'] = 0;
+                    $columnProperties[$properties['column_name']]['null']   = 0;
+                    $columnProperties[$properties['column_name']]['key']    = 0;
 
-					if(strpos($properties['column_default'], 'nextval') !== false)
-					{
-						$columnProperties[$properties['column_name']]['serial'] = 1;
-					}
-					if($properties['is_nullable'] === 'YES')
-					{
-						$columnProperties[$properties['column_name']]['null']   = 1;
-					}
-					/*if($properties['Key'] === 'PRI' || $properties['Key'] === 'MUL')
-					{
-						$columnProperties[$properties['column_name']]['key'] = 1;
-					}*/
+                    if(strpos($properties['column_default'], 'nextval') !== false)
+                    {
+                        $columnProperties[$properties['column_name']]['serial'] = 1;
+                    }
+                    if($properties['is_nullable'] === 'YES')
+                    {
+                        $columnProperties[$properties['column_name']]['null']   = 1;
+                    }
+                    /*if($properties['Key'] === 'PRI' || $properties['Key'] === 'MUL')
+                    {
+                        $columnProperties[$properties['column_name']]['key'] = 1;
+                    }*/
 
-					if(strpos($properties['data_type'], 'timestamp') !== false)
-					{
-						$columnProperties[$properties['column_name']]['type'] = 'timestamp';
-					}
-					elseif(strpos($properties['data_type'], 'time') !== false)
-					{
-						$columnProperties[$properties['column_name']]['type'] = 'time';
-					}
-					else
-					{
-						$columnProperties[$properties['column_name']]['type'] = $properties['data_type'];
-					}
-				}
-			}
+                    if(strpos($properties['data_type'], 'timestamp') !== false)
+                    {
+                        $columnProperties[$properties['column_name']]['type'] = 'timestamp';
+                    }
+                    elseif(strpos($properties['data_type'], 'time') !== false)
+                    {
+                        $columnProperties[$properties['column_name']]['type'] = 'time';
+                    }
+                    else
+                    {
+                        $columnProperties[$properties['column_name']]['type'] = $properties['data_type'];
+                    }
+                }
+            }
 
             // safe array with table structure in class array
             $this->dbStructure[$table] = $columnProperties;
@@ -755,14 +672,13 @@ class Database
     /**
      * Fetch a result row as an associative array, a numeric array, or both.
      * @warning This method is deprecated and will be removed in future versions.
-     * @warning Please use methods Database#fetchAll or Database#fetch instead.
+     * @warning Please use the PHP class <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a> and the method <a href="http://php.net/manual/en/pdostatement.fetch.php">fetch</a> instead.
      * @param object $pdoStatement An object of the class PDOStatement. This should be set if multiple
      *                             rows where selected and other sql statements are also send to the database.
      * @param int    $fetchType    Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
      *                             @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
      * @return Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
-     * @see Database#fetch
-     * @see Database#fetchAll
+     * @see <a href="http://php.net/manual/en/pdostatement.fetch.php">PDOStatement::fetch</a>
      */
     public function fetch_array($pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
     {
@@ -784,9 +700,9 @@ class Database
      * Fetch a result row as an object.
      * @warning This method is deprecated and will be removed in future versions.
      * @warning Please use methods Database#fetchAll or Database#fetch instead.
+     * @warning Please use the PHP class <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a> and the method <a href="http://php.net/manual/en/pdostatement.fetchobject.php">fetchObject</a> instead.
      * @return Returns an object that corresponds to the fetched row and moves the internal data pointer ahead.
-     * @see Database#fetch
-     * @see Database#fetchAll
+     * @see <a href="http://php.net/manual/en/pdostatement.fetchobject.php">PDOStatement::fetchObject</a>
      */
     public function fetch_object()
     {
@@ -813,9 +729,9 @@ class Database
     /**
      * Returns the number of rows of the last executed statement.
      * @warning This method is deprecated and will be removed in future versions.
-     * @warning Please use methods Database#rowCount instead.
+     * @warning Please use the PHP class <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a> and the method <a href="http://php.net/manual/en/pdostatement.rowcount.php">rowCount</a> instead.
      * @return Return the number of rows of the result of the sql statement.
-     * @see Database#rowCount
+     * @see <a href="http://php.net/manual/en/pdostatement.rowcount.php">PDOStatement::rowCount</a>
      */
     public function num_rows()
     {

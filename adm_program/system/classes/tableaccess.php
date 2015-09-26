@@ -148,8 +148,8 @@ class TableAccess
     public function countAllRecords()
     {
         $sql = 'SELECT COUNT(1) as count FROM '.$this->tableName;
-        $this->db->query($sql);
-        $row = $this->db->fetch();
+        $countStatement = $this->db->query($sql);
+        $row = $countStatement->fetch();
         return $row['count'];
     }
 
@@ -314,11 +314,11 @@ class TableAccess
         {
             $sql = 'SELECT * FROM '.$this->tableName.$sqlAdditionalTables.'
                      WHERE '.$sqlWhereCondition;
-            $result = $this->db->query($sql);
+            $readDataStatement = $this->db->query($sql);
 
-            if($this->db->rowCount($result) === 1)
+            if($readDataStatement->rowCount() === 1)
             {
-                $row = $this->db->fetch();
+                $row = $readDataStatement->fetch();
                 $this->new_record = false;
 
                 // Daten in das Klassenarray schieben
@@ -551,10 +551,10 @@ class TableAccess
      * @par Examples
      * @code // read all announcements with their categories
      * $sql = 'SELECT * FROM adm_announcements, adm_categories WHERE ann_cat_id = cat_id';
-     * $result = $gDb->query($sql);
+     * $announcementsStatement = $gDb->query($sql);
      * $announcement = new TableAnnouncements($gDb);
      *
-     * while ($row = $gDb->fetch(result))
+     * while ($row = $announcementsStatement->fetch())
      * {
      *     // add each recordset to an object without a separate sql within the object
      *     $announcement->clear();

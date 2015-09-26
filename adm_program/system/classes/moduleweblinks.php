@@ -165,11 +165,11 @@ class ModuleWeblinks extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $gDb->query($sql);
+        $weblinksStatement = $gDb->query($sql);
 
         //array for results
-        $weblinks['recordset']  = $gDb->fetchAll();
-        $weblinks['numResults'] = $gDb->num_rows();
+        $weblinks['recordset']  = $weblinksStatement->fetchAll();
+        $weblinks['numResults'] = $weblinksStatement->rowCount();
         $weblinks['limit']      = $limit;
         $weblinks['totalCount'] = $this->getDataSetCount();
 

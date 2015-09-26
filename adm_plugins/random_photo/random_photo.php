@@ -99,7 +99,7 @@ if($plg_photos_albums != 0)
 }
 
 $albumStatement = $gDb->query($sql);
-$albumList      = $gDb->fetchAll();
+$albumList      = $albumStatement->fetchAll();
 
 // Variablen initialisieren
 $i         = 0;

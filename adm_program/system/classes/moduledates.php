@@ -234,11 +234,11 @@ class ModuleDates extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $gDb->query($sql);
+        $datesStatement = $gDb->query($sql);
 
         //array for results
-        $dates['recordset']  = $gDb->fetchAll();
-        $dates['numResults'] = $gDb->num_rows();
+        $dates['recordset']  = $datesStatement->fetchAll();
+        $dates['numResults'] = $datesStatement->rowCount();
         $dates['limit']      = $limit;
         $dates['totalCount'] = $this->getDataSetCount();
 
