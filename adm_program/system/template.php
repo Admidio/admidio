@@ -10,7 +10,7 @@
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'template.php')
 {
-    die('This page may not be called directly!');
+    exit('This page may not be called directly!');
 }
 
 /**

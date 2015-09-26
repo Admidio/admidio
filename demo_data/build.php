@@ -25,7 +25,7 @@ elseif(file_exists('../config.php'))
 }
 else
 {
-    die('<p style="color: #cc0000;">Error: Config file not found!</p>');
+    exit('<p style="color: #cc0000;">Error: Config file not found!</p>');
 }
 
 include('../adm_program/system/constants.php');
@@ -35,7 +35,7 @@ include('../adm_program/system/string.php');
 // import of demo data must be enabled in config.php
 if(!isset($gImportDemoData) || $gImportDemoData != 1)
 {
-    die('<p style="color: #cc0000;">Error: Demo data could not be imported because you have
+    exit('<p style="color: #cc0000;">Error: Demo data could not be imported because you have
     not set the preference <strong>gImportDemoData</strong> in your configuration file.</p>
     <p style="color: #cc0000;">Please add the following line to your config.php :<br /><i>$gImportDemoData = 1;</i></p>');
 }
@@ -153,7 +153,7 @@ if($gDbType === 'mysql')
 
 $filename = 'db.sql';
 $file     = fopen($filename, 'r')
-            or die('<p style="color: #cc0000;">File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
+            or exit('<p style="color: #cc0000;">File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);
@@ -173,7 +173,7 @@ foreach($sql_arr as $sql)
 
 $filename = 'data.sql';
 $file     = fopen($filename, 'r')
-            or die('<p style="color: #cc0000;">File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
+            or exit('<p style="color: #cc0000;">File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);

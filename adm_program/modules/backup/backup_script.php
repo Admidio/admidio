@@ -95,11 +95,11 @@ $starttime = getmicrotime();
                 break;
             case 'bzip2':
                 if (!function_exists('bzopen')) {
-                    die('ERROR: PHP-bzip2 support does not appear to be installed, please change OUTPUT_COMPRESSION_TYPE to one of "gzip" or "none"');
+                    exit('ERROR: PHP-bzip2 support does not appear to be installed, please change OUTPUT_COMPRESSION_TYPE to one of "gzip" or "none"');
                 }
                 break;
             default:
-                die('ERROR: OUTPUT_COMPRESSION_TYPE ('.htmlentities(OUTPUT_COMPRESSION_TYPE).') must be one of "bzip2", "gzip", "none"');
+                exit('ERROR: OUTPUT_COMPRESSION_TYPE ('.htmlentities(OUTPUT_COMPRESSION_TYPE).') must be one of "bzip2", "gzip", "none"');
                 break;
         }
         if (((OUTPUT_COMPRESSION_TYPE == 'gzip')  && ($zp = @gzopen($backupabsolutepath.$tempbackupfilename, 'wb'.OUTPUT_COMPRESSION_LEVEL))) ||
@@ -262,7 +262,7 @@ $starttime = getmicrotime();
                         $SQLquery  = 'SHOW TABLE STATUS LIKE "'.$gDb->escape_string($SelectedTables[$dbname][$t]).'"';
                         $result_tablestatus = $gDb->query($SQLquery);
                         if (!($TableStatusRow = $gDb->fetch_assoc($result_tablestatus))) {
-                            die('failed to execute "'.$SQLquery.'" on '.$dbname.'.'.$tablename);
+                            exit('failed to execute "'.$SQLquery.'" on '.$dbname.'.'.$tablename);
                         }
                         $gDb->free_result($result_tablestatus);
 
@@ -416,7 +416,7 @@ $starttime = getmicrotime();
                                 $gDb->close();
                                 if (!@$gDb->connect(DB_HOST, DB_USER, DB_PASS)) {
                                     mail(ADMIN_EMAIL, 'backupDB: FAILURE! Failed to connect to MySQL database (line '.__LINE__.')', 'Failed to reconnect to SQL database (row #'.$currentrow.') on line '.__LINE__.' in file '.@$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].LINE_TERMINATOR.$gDb->db_error());
-                                    die('There was a problem connecting to the database:<br>'.LINE_TERMINATOR.$gDb->db_error());
+                                    exit('There was a problem connecting to the database:<br>'.LINE_TERMINATOR.$gDb->db_error());
                                 }
                                 $gDb->select_db($dbname);
                             }

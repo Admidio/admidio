@@ -10,7 +10,7 @@
 
 if ('roles_functions.php' == basename($_SERVER['SCRIPT_FILENAME']))
 {
-    die('This page may not be called directly !');
+    exit('This page may not be called directly !');
 }
 
 // get all memberships where the user is assigned
