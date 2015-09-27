@@ -51,7 +51,6 @@
  *     echo $organizationNames['shortname'].' '.$organizationNames['longname'];
  * } @endcode
  */
-
 class Database
 {
     protected $engine;
@@ -68,11 +67,12 @@ class Database
     protected $pdoStatement;        ///< The PdoStatement object which is needed to handle the return of a query.
     protected $dbStructure;         ///< array with arrays of every table with their structure
     protected $fetchArray;
-    protected $minRequiredVersion;  ///< The minimun required version of this database that is necessary to run Admidio.
+    protected $minRequiredVersion;  ///< The minimum required version of this database that is necessary to run Admidio.
     protected $databaseName;        ///< The name of the database e.g. 'MySQL'
 
-    /** The constructor will check if a valid engine was set and try to connect to the database.
-     *  If the engine is invalid or the connection not possible an exception will be thrown.
+    /**
+     * The constructor will check if a valid engine was set and try to connect to the database.
+     * If the engine is invalid or the connection not possible an exception will be thrown.
      * @param string $engine   The database type that is supported from Admidio. @b mysql and @b postgresql are valid values.
      * @param string $host     The hostname or server where the database is running. e.g. localhost or 127.0.0.1
      * @param int    $port     If you don't use the default port of the database then set your port here.
@@ -80,6 +80,7 @@ class Database
      * @param string $username Username to connect to database
      * @param string $password Password to connect to database
      * @param array  $options
+     * @throws AdmException
      */
     public function __construct($engine, $host, $port = null, $dbName, $username = null, $password = null, $options = array())
     {
@@ -132,6 +133,7 @@ class Database
     /**
      * Create a valid DSN string for the engine that was set through the constructor.
      * If no valid engine is set than an exception is thrown.
+     * @throws PDOException
      */
     private function buildDSNString()
     {
@@ -168,7 +170,7 @@ class Database
      * The method will commit an open transaction to the database. If the
      * transaction counter is greater 1 than only the counter will be
      * decreased and no commit will performed.
-     * @return Returns @b true if the commit was successful otherwise @b false
+     * @return bool Returns @b true if the commit was successful otherwise @b false
      * @see Database#startTransaction
      * @see Database#rollback
      */
@@ -199,14 +201,15 @@ class Database
         return $result;
     }
 
-    /** Escapes special characters within the input string.
-     *  The returned string has no quotes around the input string!
-     *  @param string $string The string to be quoted.
-     *  @return Returns a quoted string that is theoretically safe to pass into an SQL statement.
+    /**
+     * Escapes special characters within the input string.
+     * The returned string has no quotes around the input string!
+     * @param string $string The string to be quoted.
+     * @return string Returns a quoted string that is theoretically safe to pass into an SQL statement.
      */
     public function escapeString($string)
     {
-        return trim($this->pdo->quote($string),"'");
+        return trim($this->pdo->quote($string), "'");
     }
 
     /**
@@ -220,7 +223,7 @@ class Database
     /**
      * This method will create an backtrace of the current position in the script. If several
      * scripts were called than each script with their position will be listet in the backtrace.
-     * @return Returns a string with the backtrace of all called scripts.
+     * @return string Returns a string with the backtrace of all called scripts.
      */
     protected function getBacktrace()
     {
@@ -266,7 +269,7 @@ class Database
             }
 
             $trace['class'] = (!isset($trace['class'])) ? '' : $trace['class'];
-            $trace['type'] = (!isset($trace['type'])) ? '' : $trace['type'];
+            $trace['type']  = (!isset($trace['type']))  ? '' : $trace['type'];
 
             $output .= '<br />';
             $output .= '<b>FILE:</b> ' . htmlentities($trace['file']) . '<br />';
@@ -278,8 +281,9 @@ class Database
         return $output;
     }
 
-    /** Get the minimum required version of the database that is necessary to run Admidio.
-     *  @return Returns a string with the minimum required database version e.g. '5.0.1'
+    /**
+     * Get the minimum required version of the database that is necessary to run Admidio.
+     * @return string Returns a string with the minimum required database version e.g. '5.0.1'
      */
     public function getMinimumRequiredVersion()
     {
@@ -292,8 +296,9 @@ class Database
         return $this->minRequiredVersion;
     }
 
-    /** Get the name of the database that is running Admidio.
-     *  @return Returns a string with the name of the databse e.g. 'MySQL' or 'PostgreSQL'
+    /**
+     * Get the name of the database that is running Admidio.
+     * @return string Returns a string with the name of the database e.g. 'MySQL' or 'PostgreSQL'
      */
     public function getName()
     {
@@ -306,8 +311,9 @@ class Database
         return $this->databaseName;
     }
 
-    /** Get the version of the connected database.
-     *  @return Returns a string with the database version e.g. '5.5.8'
+    /**
+     * Get the version of the connected database.
+     * @return string Returns a string with the database version e.g. '5.5.8'
      */
     public function getVersion()
     {
@@ -321,12 +327,13 @@ class Database
             $versionArray2 = explode(' ', $versionArray[0]);
             return $versionArray2[1];
         }
-        
+
         return $row[0];
     }
 
-    /** Returns the ID of the unique id column of the last INSERT operation.
-     *  @return Return ID value of the last INSERT operation..
+    /**
+     * Returns the ID of the unique id column of the last INSERT operation.
+     * @return string Return ID value of the last INSERT operation..
      */
     public function lastInsertId()
     {
@@ -342,16 +349,17 @@ class Database
         }
     }
 
-    /** Send a sql statement to the database that will be executed. If debug mode is set
-     *  then this statement will be written to the error log. If it's a @b SELECT statement
-     *  then also the number of rows will be logged. If an error occurred the script will
-     *  be terminated and the error with a backtrace will be send to the browser.
-     *  @param string $sql A string with the sql statement that should be executed in database.
-     *  @param bool $throwError Default will be @b true and if an error the script will be terminated and
-     *                          occurred the error with a backtrace will be send to the browser. If set to
-     *                          @b false no error will be shown and the script will be continued.
-     *  @return For @b SELECT statements an object of PDOStatement will be returned.
-     *          If an error occurred then @b false will be returned.
+    /**
+     * Send a sql statement to the database that will be executed. If debug mode is set
+     * then this statement will be written to the error log. If it's a @b SELECT statement
+     * then also the number of rows will be logged. If an error occurred the script will
+     * be terminated and the error with a backtrace will be send to the browser.
+     * @param string $sql A string with the sql statement that should be executed in database.
+     * @param bool $throwError Default will be @b true and if an error the script will be terminated and
+     *                         occurred the error with a backtrace will be send to the browser. If set to
+     *                         @b false no error will be shown and the script will be continued.
+     * @return object For @b SELECT statements an object of PDOStatement will be returned.
+     *         If an error occurred then @b false will be returned.
      */
     public function query($sql, $throwError = true)
     {
@@ -414,8 +422,10 @@ class Database
         return $this->pdoStatement;
     }
 
-    /** If there is a open transaction than this method sends a rollback to the database
-     *  and will set the transaction counter to zero.
+    /**
+     * If there is a open transaction than this method sends a rollback
+     * to the database and will set the transaction counter to zero.
+     * @return bool
      * @see Database#startTransaction
      * @see Database#endTransaction
      */
@@ -436,8 +446,9 @@ class Database
         return false;
     }
 
-    /** Set connection specific options like UTF8 connection. These options
-     *  should always be set if Admidio connect to a database.
+    /**
+     * Set connection specific options like UTF8 connection.
+     * These options should always be set if Admidio connect to a database.
      */
     private function setConnectionOptions()
     {
@@ -453,19 +464,20 @@ class Database
         }
     }
 
-    /** Methods reads all columns and their properties from the database table.
-     *  @param string  $table                Name of the database table for which the columns should be shown.
-     *  @param boolean $showColumnProperties If this is set to @b false only the column names were returned.
-     *  @return Returns an array with each column and their properties if $showColumnProperties is set to @b true.
-     *          The array has the following format:
-     *          array (
-     *          'column1' => array (
-     *                       'serial' => '1',
-     *                       'null'   => '0',
-     *                       'key'    => '0',
-     *                       'type'   => 'integer')
-     *          'column2' => array (...)
-     *          ...
+    /**
+     * Methods reads all columns and their properties from the database table.
+     * @param string  $table                Name of the database table for which the columns should be shown.
+     * @param boolean $showColumnProperties If this is set to @b false only the column names were returned.
+     * @return array Returns an array with each column and their properties if $showColumnProperties is set to @b true.
+     *         The array has the following format:
+     *         array (
+     *         'column1' => array (
+     *                      'serial' => '1',
+     *                      'null'   => '0',
+     *                      'key'    => '0',
+     *                      'type'   => 'integer')
+     *         'column2' => array (...)
+     *         ...
      */
     public function showColumns($table, $showColumnProperties = true)
     {
@@ -519,7 +531,8 @@ class Database
             elseif($this->engine === 'pgsql')
             {
                 $sql = 'SELECT column_name, column_default, is_nullable, data_type
-                          FROM information_schema.columns WHERE table_name = \''.$table.'\'';
+                          FROM information_schema.columns
+                         WHERE table_name = \''.$table.'\'';
                 $columnsStatement = $this->query($sql);
                 $columnsList = $columnsStatement->fetchAll();
 
@@ -580,12 +593,13 @@ class Database
         }
     }
 
-    /** Display the error code and error message to the user if a database error occurred.
-     *  The error must be read by the child method. This method will call a backtrace so
-     *  you see the script and specific line in which the error occurred.
-     *  @param string $code    The database error code that will be displayed.
-     *  @param string $message The database error message that will be displayed.
-     *  @return Will exit the script and returns a html output with the error informations.
+    /**
+     * Display the error code and error message to the user if a database error occurred.
+     * The error must be read by the child method. This method will call a backtrace so
+     * you see the script and specific line in which the error occurred.
+     * @param int    $code    The database error code that will be displayed.
+     * @param string $message The database error message that will be displayed.
+     * @return void Will exit the script and returns a html output with the error information.
      */
     public function showError($code = 0, $message = '')
     {
@@ -626,7 +640,7 @@ class Database
         }
 
         // display database error to user
-        if(!headers_sent() && isset($gPreferences) && defined('THEME_SERVER_PATH'))
+        if(isset($page) && !headers_sent() && isset($gPreferences) && defined('THEME_SERVER_PATH'))
         {
             $page->addHtml($htmlOutput);
             $page->show();
@@ -643,6 +657,7 @@ class Database
      * Start a transaction if no open transaction exists. If you call this
      * multiple times only 1 transaction will be open and it will be closed
      * after the last endTransaction was send.
+     * @return bool
      * @see Database#endTransaction
      * @see Database#rollback
      */
@@ -676,7 +691,7 @@ class Database
      *                             rows where selected and other sql statements are also send to the database.
      * @param int    $fetchType    Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
      *                             @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
-     * @return Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
+     * @return object|null Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
      * @see <a href="http://php.net/manual/en/pdostatement.fetch.php">PDOStatement::fetch</a>
      */
     public function fetch_array($pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
@@ -700,7 +715,7 @@ class Database
      * @warning This method is deprecated and will be removed in future versions.
      * @warning Please use methods Database#fetchAll or Database#fetch instead.
      * @warning Please use the PHP class <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a> and the method <a href="http://php.net/manual/en/pdostatement.fetchobject.php">fetchObject</a> instead.
-     * @return Returns an object that corresponds to the fetched row and moves the internal data pointer ahead.
+     * @return object|null Returns an object that corresponds to the fetched row and moves the internal data pointer ahead.
      * @see <a href="http://php.net/manual/en/pdostatement.fetchobject.php">PDOStatement::fetchObject</a>
      */
     public function fetch_object()
@@ -717,7 +732,7 @@ class Database
      * Returns the ID of the unique id column of the last INSERT operation.
      * @warning This method is deprecated and will be removed in future versions.
      * @warning Please use methods Database#lastInsertId instead.
-     * @return Return ID value of the last INSERT operation..
+     * @return string Return ID value of the last INSERT operation..
      * @see Database#lastInsertId
      */
     public function insert_id()
@@ -729,7 +744,7 @@ class Database
      * Returns the number of rows of the last executed statement.
      * @warning This method is deprecated and will be removed in future versions.
      * @warning Please use the PHP class <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a> and the method <a href="http://php.net/manual/en/pdostatement.rowcount.php">rowCount</a> instead.
-     * @return Return the number of rows of the result of the sql statement.
+     * @return int Return the number of rows of the result of the sql statement.
      * @see <a href="http://php.net/manual/en/pdostatement.rowcount.php">PDOStatement::rowCount</a>
      */
     public function num_rows()
