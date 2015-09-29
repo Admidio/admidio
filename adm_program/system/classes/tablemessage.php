@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 /******************************************************************************
  * Class manages access to database table adm_messages
