@@ -26,6 +26,7 @@ function profileJSClass() {
                 $(".admMemberInfo").click(function () {
                     showHideMembershipInformation($(this));
                 });
+                formSubmitEvent();
             }
         });
     };
@@ -36,6 +37,7 @@ function profileJSClass() {
             dataType: "html",
             success: function(responseText) {
                 $("#profile_future_roles_box_body").html(responseText);
+                formSubmitEvent();
             }
         });
     };
@@ -46,6 +48,7 @@ function profileJSClass() {
             dataType: "html",
             success: function(responseText) {
                 $("#profile_former_roles_box_body").html(responseText);
+                formSubmitEvent();
             }
         });
     };

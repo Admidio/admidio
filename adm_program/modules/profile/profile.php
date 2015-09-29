@@ -181,7 +181,45 @@ $page->addJavascript('
                 $("#profile_future_roles_box").fadeOut("slow");
             }
         };
-    }');
+    }
+    
+    function formSubmitEvent()
+    {
+        $(".button-membership-period-form").click(function(event) {
+            var memberId  = $(this).attr("data-admidio");
+            var dateStart = $("#membership_start_date_"+memberId).val();
+            var dateEnd   = $("#membership_end_date_"+memberId).val();    
+            var action    = $("#membership_period_form_"+memberId).attr("action")+"&membership_start_date_"+memberId+"="+dateStart+"&membership_end_date_"+memberId+"="+dateEnd;
+
+            $("#membership_period_form_"+memberId+" .form-alert").hide();
+    
+            $.ajax({
+                type:    "GET",
+                url:     action,
+                success: function(data) {
+                    if(data == "success") {
+                        $("#membership_period_form_"+memberId+" .form-alert").attr("class", "alert alert-success form-alert");
+                        $("#membership_period_form_"+memberId+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                        $("#membership_period_form_"+memberId+" .form-alert").fadeIn("slow");
+                        $("#membership_period_form_"+memberId+" .form-alert").animate({opacity: 1.0}, 2500);
+                        $("#membership_period_form_"+memberId+" .form-alert").fadeOut("slow");
+                        $("#membership_period_"+memberId).animate({opacity: 1.0}, 2500);
+                        $("#membership_period_"+memberId).fadeOut("slow");
+                        profileJS.reloadRoleMemberships();
+                        profileJS.reloadFormerRoleMemberships();
+                        profileJS.reloadFutureRoleMemberships();
+                    }
+                    else {
+                        $("#membership_period_form_"+memberId+" .form-alert").attr("class", "alert alert-danger form-alert");
+                        $("#membership_period_form_"+memberId+" .form-alert").fadeIn();
+                        $("#membership_period_form_"+memberId+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
+                    }
+                }
+            });
+        });
+    }
+    
+    ');
 $page->addJavascript('
     $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
     $("#profile_authorizations_box_body").mouseout(function () { profileJS.deleteShowInfo()});
@@ -196,41 +234,7 @@ $page->addJavascript('
                             todayHighlight: "true",
                             autoclose: "true"
                         });
-
-    $(".admidio-form-membership-period").submit(function(event) {
-        var id = $(this).attr("id");
-        var parentId = $("#"+id).parent().parent().attr("id");
-        var action = $(this).attr("action");
-        $("#"+id+" .form-alert").hide();
-
-        // disable default form submit
-        event.preventDefault();
-
-        $.ajax({
-            type:    "GET",
-            url:     action,
-            data:    $(this).serialize(),
-            success: function(data) {
-                if(data == "success") {
-                    $("#"+id+" .form-alert").attr("class", "alert alert-success form-alert");
-                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
-                    $("#"+id+" .form-alert").fadeIn("slow");
-                    $("#"+id+" .form-alert").animate({opacity: 1.0}, 2500);
-                    $("#"+id+" .form-alert").fadeOut("slow");
-                    $("#"+parentId).animate({opacity: 1.0}, 2500);
-                    $("#"+parentId).fadeOut("slow");
-                    profileJS.reloadRoleMemberships();
-                    profileJS.reloadFormerRoleMemberships();
-                    profileJS.reloadFutureRoleMemberships();
-                }
-                else {
-                    $("#"+id+" .form-alert").attr("class", "alert alert-danger form-alert");
-                    $("#"+id+" .form-alert").fadeIn();
-                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
-                }
-            }
-        });
-    });', true);
+    formSubmitEvent(); ', true);
 
 // get module menu
 $profileMenu = $page->getMenu();

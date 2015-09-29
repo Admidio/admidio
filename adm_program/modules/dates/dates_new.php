@@ -98,12 +98,9 @@ else
         $date->setValue('dat_begin', date('Y-m-d H:00:00', time()+3600));
         $date->setValue('dat_end', date('Y-m-d H:00:00', time()+7200));
 
-        if($getCopy == false)
-        {
-            // a new event will be visible for all users per default
-            $date->setVisibleRoles(array('0'));
-            $dateRoles = array(0);
-        }
+        // a new event will be visible for all users per default
+        $date->setVisibleRoles(array('0'));
+        $dateRoles = array(0);
     }
     else
     {
@@ -111,12 +108,6 @@ else
 
         // get the saved roles for visibility
         $dateRoles = $date->getVisibleRoles();
-
-        if($getCopy)
-        {
-            $date->setValue('dat_id', 0);
-            $getDateId = 0;
-        }
 
         // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
         if($date->editRight() == false)
@@ -225,7 +216,7 @@ $datesMenu = $page->getMenu();
 $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('dates_edit_form', $g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode='.$mode, $page);
+$form = new HtmlForm('dates_edit_form', $g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode='.$mode.'&amp;copy='.$getCopy, $page);
 $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
     $form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'), array('maxLength' => 100, 'property' => FIELD_REQUIRED));
 
