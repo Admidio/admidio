@@ -42,10 +42,10 @@ class TableMessage extends TableAccess
      */
     public function countMessageConversations()
     {
-        $sql = "SELECT MAX(msg_id) as max_id FROM ". TBL_MESSAGES;
+        $sql = "SELECT COUNT(1) as count FROM ". TBL_MESSAGES;
         $this->db->query($sql);
         $row = $this->db->fetch_array();
-        return $row['max_id'];
+        return $row['count'];
     }
     
     /** Reads the number of all messages in actual conversation
@@ -53,11 +53,11 @@ class TableMessage extends TableAccess
      */
     public function countMessageParts()
     {
-        $sql = "SELECT MAX(msc_part_id) as max_id FROM ".TBL_MESSAGES_CONTENT."
+        $sql = "SELECT COUNT(1) as count FROM ".TBL_MESSAGES_CONTENT."
               where msc_msg_id = ".$this->getValue('msg_id');
         $this->db->query($sql);
         $row = $this->db->fetch_array();
-        return $row['max_id'];
+        return $row['count'];
     }
     
     /** Set a new value for a column of the database table.
