@@ -57,9 +57,9 @@ class TablePhotos extends TableAccess
                   FROM '. TBL_PHOTOS. '
                  WHERE pho_pho_id_parent = '.$pho_id.'
                    AND pho_locked = 0';
-        $pho_result = $this->db->query($sql);
+        $childAlbumsStatement = $this->db->query($sql);
 
-        while($pho_row = $this->db->fetch_array($pho_result))
+        while($pho_row = $childAlbumsStatement->fetch())
         {
             $total_images = $total_images + $pho_row['pho_quantity'] + $this->countImages($pho_row['pho_id']);
         }
@@ -114,9 +114,9 @@ class TablePhotos extends TableAccess
         // erst einmal rekursiv zur tiefsten Tochterveranstaltung gehen
         $sql     = 'SELECT pho_id FROM '. TBL_PHOTOS. '
                      WHERE pho_pho_id_parent = '.$photo_id;
-        $result1 = $this->db->query($sql);
+        $childAlbumStatement = $this->db->query($sql);
 
-        while($row = $this->db->fetch_array($result1))
+        while($row = $childAlbumStatement->fetch())
         {
             if($return_code)
             {
@@ -161,9 +161,9 @@ class TablePhotos extends TableAccess
         {
             $sql     = 'SELECT COUNT(1) FROM '. TBL_PHOTOS. '
                          WHERE pho_pho_id_parent = '.$this->getValue('pho_id');
-            $this->db->query($sql);
+            $countChildAlbums = $this->db->query($sql);
 
-            $row = $this->db->fetch_array();
+            $row = $countChildAlbums->fetch();
 
             if($row[0] > 0)
             {
@@ -224,9 +224,9 @@ class TablePhotos extends TableAccess
                      WHERE pho_pho_id_parent = '.$pho_id.'
                        AND pho_locked = 0
                      ORDER BY pho_quantity DESC';
-            $result_child = $this->db->query($sql);
+            $childAlbumsStatement = $this->db->query($sql);
 
-            while($pho_row = $this->db->fetch_array($result_child))
+            while($pho_row = $childAlbumsStatement->fetch())
             {
                 if($shuffle_image['shuffle_img_nr'] == 0)
                 {

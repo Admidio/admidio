@@ -184,8 +184,8 @@ class TableMembers extends TableAccess
                              WHERE mem_rol_id  = '.$roleId.'
                                AND mem_usr_id <> '.$userId.'
                                AND \''.DATE_NOW.'\' BETWEEN mem_begin AND mem_end ';
-                    $this->db->query($sql);
-                    if($this->db->num_rows() == 0)
+                    $memberStatement = $this->db->query($sql);
+                    if($memberStatement->rowCount() == 0)
                     {
                         throw new AdmException('LST_MUST_HAVE_WEBMASTER');
                     }

@@ -137,8 +137,9 @@ class TableRoles extends TableAccess
                        AND mem_leader = 1
                        AND mem_begin <= \''.DATE_NOW.'\'
                        AND mem_end    > \''.DATE_NOW.'\' ';
-            $this->db->query($sql);
-            $row = $this->db->fetch_array();
+            $countMembersStatement = $this->db->query($sql);
+
+            $row = $countMembersStatement->fetch();
             $this->countLeaders = $row[0];
         }
         return $this->countLeaders;
@@ -159,8 +160,9 @@ class TableRoles extends TableAccess
                        AND mem_leader = 0
                        AND mem_begin <= \''.DATE_NOW.'\'
                        AND mem_end    > \''.DATE_NOW.'\' ';
-            $this->db->query($sql);
-            $row = $this->db->fetch_array();
+            $countMembersStatement = $this->db->query($sql);
+
+            $row = $countMembersStatement->fetch();
             $this->countMembers = $row[0];
         }
         return $this->countMembers;
@@ -184,10 +186,9 @@ class TableRoles extends TableAccess
             {
                 $sql = $sql. ' AND mem_leader = 0 ';
             }
-            $this->db->query($sql);
+            $membersStatement = $this->db->query($sql);
 
-            $num_members = $this->db->num_rows();
-            return $this->getValue('rol_max_members') - $num_members;
+            return $this->getValue('rol_max_members') - $membersStatement->rowCount();
         }
         return 999;
     }
@@ -210,8 +211,8 @@ class TableRoles extends TableAccess
                        AND rol_id    <> '.$this->getValue('rol_id').'
                        AND rol_cat_id = cat_id
                        AND cat_org_id = '.$gCurrentOrganization->getValue('org_id');
-            $this->db->query($sql);
-            $row = $this->db->fetch_array();
+            $countRolesStatement = $this->db->query($sql);
+            $row = $countRolesStatement->fetch();
 
             if($row['count'] == 0)
             {
@@ -300,8 +301,9 @@ class TableRoles extends TableAccess
             $sql = 'SELECT lst_id FROM '. TBL_LISTS. '
                      WHERE lst_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                        AND lst_default = 1 ';
-            $result = $this->db->query($sql);
-            $row    = $this->db->fetch_array($result);
+            $defaultListStatement = $this->db->query($sql);
+
+            $row = $defaultListStatement->fetch();
             $defaultListId = $row[0];
 
             if(!is_numeric($defaultListId))
@@ -349,8 +351,8 @@ class TableRoles extends TableAccess
                  WHERE mem_rol_id = '.$this->getValue('rol_id').'
                    AND (  mem_begin > \''.DATE_NOW.'\'
                        OR mem_end   < \''.DATE_NOW.'\')';
-        $result = $this->db->query($sql);
-        $row    = $this->db->fetch_array($result);
+        $countMembersStatement = $this->db->query($sql);
+        $row = $countMembersStatement->fetch();
 
         if($row['count'] > 0)
         {
@@ -445,13 +447,14 @@ class TableRoles extends TableAccess
         if($columnName === 'rol_default_registration' && $newValue == '0' && $this->dbColumns[$columnName] == '1')
         {
             // checks if at least one other role has this flag
-            $sql = 'SELECT COUNT(1) AS count FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+            $sql = 'SELECT COUNT(1) AS count
+                      FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
                      WHERE rol_default_registration = 1
                        AND rol_id    <> '.$this->getValue('rol_id').'
                        AND rol_cat_id = cat_id
                        AND cat_org_id = '.$gCurrentOrganization->getValue('org_id');
-            $this->db->query($sql);
-            $row = $this->db->fetch_array();
+            $countRolesStatement = $this->db->query($sql);
+            $row = $countRolesStatement->fetch();
 
             if($row['count'] == 0)
             {
@@ -491,9 +494,9 @@ class TableRoles extends TableAccess
                                                 FROM '.TBL_MEMBERS.'
                                                WHERE mem_rol_id = dtr_rol_id
                                                  AND mem_usr_id = '.$gCurrentUser->getValue('usr_id').'))';
-                    $this->db->query($sql);
+                    $memberDatesStatement = $this->db->query($sql);
 
-                    if($this->db->num_rows() > 0)
+                    if($memberDatesStatement->rowCount() > 0)
                     {
                         return true;
                     }

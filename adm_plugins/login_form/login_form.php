@@ -221,8 +221,8 @@ else
                    AND rol_cat_id = cat_id
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL ) ';
-        $gDb->query($sql);
-        $row = $gDb->fetch_array();
+        $webmasterStatement = $gDb->query($sql);
+        $row = $webmasterStatement->fetch();
 
         // create role object for webmaster
         $roleWebmaster = new TableRoles($gDb, $row['rol_id']);

@@ -80,9 +80,9 @@ class TableFolder extends TableAccess
         $sql_subfolders = 'SELECT *
                               FROM '. TBL_FOLDERS. '
                             WHERE fol_fol_id_parent = '.$folderId;
-        $result_subfolders = $this->db->query($sql_subfolders);
+        $subfoldersStatement = $this->db->query($sql_subfolders);
 
-        while($row_subfolders = $this->db->fetch_object($result_subfolders))
+        while($row_subfolders = $subfoldersStatement->fetchObject())
         {
             //rekursiver Aufruf mit jedem einzelnen Unterordner
             $this->delete($row_subfolders->fol_id);
@@ -137,9 +137,9 @@ class TableFolder extends TableAccess
         $sql_subfolders = 'SELECT *
                               FROM '. TBL_FOLDERS. '
                             WHERE fol_fol_id_parent = '.$folderId;
-        $result_subfolders = $this->db->query($sql_subfolders);
+        $subfoldersStatement = $this->db->query($sql_subfolders);
 
-        while($row_subfolders = $this->db->fetch_object($result_subfolders))
+        while($row_subfolders = $subfoldersStatement->fetchObject())
         {
             //rekursiver Aufruf mit jedem einzelnen Unterordner
             $this->editLockedFlagOnFolder($locked_flag, $row_subfolders->fol_id);
@@ -174,9 +174,9 @@ class TableFolder extends TableAccess
         $sql_subfolders = 'SELECT *
                               FROM '. TBL_FOLDERS. '
                             WHERE fol_fol_id_parent = '.$folderId;
-        $result_subfolders = $this->db->query($sql_subfolders);
+        $subfoldersStatement = $this->db->query($sql_subfolders);
 
-        while($row_subfolders = $this->db->fetch_object($result_subfolders))
+        while($row_subfolders = $subfoldersStatement->fetchObject())
         {
             //rekursiver Aufruf mit jedem einzelnen Unterordner
             $this->editPublicFlagOnFolder($public_flag, $row_subfolders->fol_id);
@@ -242,8 +242,8 @@ class TableFolder extends TableAccess
                           AND mem_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                           AND mem_begin <= \''.DATE_NOW.'\'
                           AND mem_end    > \''.DATE_NOW.'\'';
-                $result_rights = $this->db->query($sql_rights);
-                $row_rights = $this->db->fetch_array($result_rights);
+                $rightsStatement = $this->db->query($sql_rights);
+                $row_rights = $rightsStatement->fetch();
                 $row_count  = $row_rights[0];
 
                 //Falls der User in keiner Rolle Mitglied ist, die Rechte an dem Ordner besitzt
@@ -280,11 +280,11 @@ class TableFolder extends TableAccess
                           AND fol_fol_id_parent = '. $this->getValue('fol_id'). '
                           AND fol_org_id        = '. $gCurrentOrganization->getValue('org_id'). '
                         ORDER BY fol_name';
-        $result_folders = $this->db->query($sql_folders);
+        $foldersStatement = $this->db->query($sql_folders);
 
         //Nun alle Folders und Files in ein mehrdimensionales Array stopfen
         //angefangen mit den Ordnern:
-        while($row_folders = $this->db->fetch_object($result_folders))
+        while($row_folders = $foldersStatement->fetchObject())
         {
             $addToArray = false;
 
@@ -309,8 +309,8 @@ class TableFolder extends TableAccess
                                   AND mem_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                                   AND mem_begin <= \''.DATE_NOW.'\'
                                   AND mem_end    > \''.DATE_NOW.'\'';
-                $result_rights = $this->db->query($sql_rights);
-                $row_rights = $this->db->fetch_array($result_rights);
+                $rightsStatement = $this->db->query($sql_rights);
+                $row_rights = $rightsStatement->fetch();
                 $row_count  = $row_rights[0];
 
                 //Falls der User in mindestens einer Rolle Mitglied ist, die Rechte an dem Ordner besitzt
@@ -363,10 +363,10 @@ class TableFolder extends TableAccess
                          FROM '. TBL_FILES. '
                         WHERE fil_fol_id = '. $this->getValue('fol_id'). '
                         ORDER BY fil_name';
-        $result_files = $this->db->query($sql_files);
+        $filesStatement = $this->db->query($sql_files);
 
         //jetzt noch die Dateien ins Array packen:
-        while($row_files = $this->db->fetch_object($result_files))
+        while($row_files = $filesStatement->fetchObject())
         {
             $addToArray = false;
 
@@ -533,9 +533,8 @@ class TableFolder extends TableAccess
                                        AND fol_type    = \'DOWNLOAD\'
                                        AND fol_path    = \'/adm_my_files\'
                                        AND fol_org_id  = '. $gCurrentOrganization->getValue('org_id');
-
-                $result_rootFolder = $this->db->query($sql_rootFolder);
-                $rootFolderRow = $this->db->fetch_object($result_rootFolder);
+                $rootFolderStatement = $this->db->query($sql_rootFolder);
+                $rootFolderRow = $rootFolderStatement->fetchObject();
 
                 $rootFolderId = $rootFolderRow->fol_id;
 
@@ -556,9 +555,8 @@ class TableFolder extends TableAccess
             //Informationen zur uebergebenen OrdnerId aus der DB holen
             $sql_currentFolder = 'SELECT * FROM '. TBL_FOLDERS. '
                                    WHERE fol_id   = '.$folderId;
-
-            $result_currentFolder = $this->db->query($sql_currentFolder);
-            $currentFolderRow = $this->db->fetch_object($result_currentFolder);
+            $currentFolderStatement = $this->db->query($sql_currentFolder);
+            $currentFolderRow = $currentFolderStatement->fetchObject();
 
             if ($currentFolderRow->fol_fol_id_parent)
             {
@@ -598,10 +596,9 @@ class TableFolder extends TableAccess
         $sql_rolset = 'SELECT * FROM '. TBL_FOLDER_ROLES. ', '. TBL_ROLES. '
                             WHERE flr_fol_id = '. $this->getValue('fol_id'). '
                               AND flr_rol_id = rol_id';
+        $rolesetStatement = $this->db->query($sql_rolset);
 
-        $result_roleset = $this->db->query($sql_rolset);
-
-        while($row_roleset = $this->db->fetch_object($result_roleset))
+        while($row_roleset = $rolesetStatement->fetchObject())
         {
             //Jede Rolle wird nun dem Array hinzugefuegt
             $roleArray[] = array(
@@ -656,9 +653,9 @@ class TableFolder extends TableAccess
         $sql_subfolders = 'SELECT *
                               FROM '. TBL_FOLDERS. '
                             WHERE fol_fol_id_parent = '.$folderId;
-        $result_subfolders = $this->db->query($sql_subfolders);
+        $subfoldersStatement = $this->db->query($sql_subfolders);
 
-        while($row_subfolders = $this->db->fetch_object($result_subfolders))
+        while($row_subfolders = $subfoldersStatement->fetchObject())
         {
             //rekursiver Aufruf mit jedem einzelnen Unterordner
             $this->rename($row_subfolders->fol_name, $newPath. '/'. $newName, $row_subfolders->fol_id);
@@ -702,9 +699,9 @@ class TableFolder extends TableAccess
         $sql_subfolders = 'SELECT *
                               FROM '. TBL_FOLDERS. '
                             WHERE fol_fol_id_parent = '.$folderId;
-        $result_subfolders = $this->db->query($sql_subfolders);
+        $subfoldersStatement = $this->db->query($sql_subfolders);
 
-        while($row_subfolders = $this->db->fetch_object($result_subfolders))
+        while($row_subfolders = $subfoldersStatement->fetchObject())
         {
             //rekursiver Aufruf mit jedem einzelnen Unterordner
             $this->setRolesOnFolder($rolesArray, $row_subfolders->fol_id);

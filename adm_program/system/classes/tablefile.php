@@ -98,8 +98,8 @@ class TableFile extends TableAccess
                           AND mem_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                           AND mem_begin <= \''.DATE_NOW.'\'
                           AND mem_end    > \''.DATE_NOW.'\'';
-                $result_rights = $this->db->query($sql_rights);
-                $row_rights = $this->db->fetch_array($result_rights);
+                $rightsStatement = $this->db->query($sql_rights);
+                $row_rights = $rightsStatement->fetch();
                 $row_count  = $row_rights[0];
 
                 //Falls der User in keiner Rolle Mitglied ist, die Rechte an dem Ordner besitzt

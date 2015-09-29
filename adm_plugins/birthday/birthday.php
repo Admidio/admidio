@@ -164,9 +164,9 @@ $sql    = 'SELECT DISTINCT usr_id, usr_login_name,
               AND mem_rol_id '.$rol_sql.'
             ORDER BY days_to_bdate '.$sort_sql.', last_name, first_name ';
 //echo $sql; exit();
-$result = $gDb->query($sql);
+$birthdayStatement = $gDb->query($sql);
 
-$anz_geb = $gDb->num_rows($result);
+$numberBirthdays = $birthdayStatement->rowCount();
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
 if($plg_show_headline==1)
@@ -174,13 +174,13 @@ if($plg_show_headline==1)
     echo '<h3>'.$gL10n->get('PLG_BIRTHDAY_HEADLINE').'</h3>';
 }
 
-if($anz_geb > 0)
+if($numberBirthdays > 0)
 {
     if($plg_show_names_extern == 1 || $gValidLogin == 1)
     {
 
         echo '<ul id="plgBirthdayNameList">';
-            while($row = $gDb->fetch_array($result))
+            while($row = $birthdayStatement->fetch())
             {
                 // Anzeigeart des Namens beruecksichtigen
                 if($plg_show_names == 2)        // Nachname, Vorname
@@ -287,13 +287,13 @@ if($anz_geb > 0)
     }
     else
     {
-        if($anz_geb == 1)
+        if($numberBirthdays == 1)
         {
             echo '<p>'.$gL10n->get('PLG_BIRTHDAY_ONE_USER').'</p>';
         }
         else
         {
-            echo '<p>'.$gL10n->get('PLG_BIRTHDAY_MORE_USERS', $anz_geb).'</p>';
+            echo '<p>'.$gL10n->get('PLG_BIRTHDAY_MORE_USERS', $numberBirthdays).'</p>';
         }
     }
 }

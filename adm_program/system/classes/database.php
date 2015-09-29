@@ -28,10 +28,10 @@
  *     $e->showText();
  * } @endcode
  * Now you can use the new object @b $gDb to send a query to the database
- * @code // send sql to database
+ * @code // send sql to database and assign the returned PDOStatement
  * $organizationsStatement = $gDb->query('SELECT org_shortname, org_longname FROM adm_organizations');
  *
- * // now fetch all rows of the result within one array
+ * // now fetch all rows of the returned PDOStatement within one array
  * $organizationsList = $organizationsStatement->fetchAll();
  *
  * // Array with the results:
@@ -45,7 +45,7 @@
  * //             [org_longname]  => 'Test-Organization'
  * //             )
  *
- * // you can also go step by step through the result
+ * // you can also go step by step through the returned PDOStatement
  * while($organizationNames = $organizationsStatement->fetch())
  * {
  *     echo $organizationNames['shortname'].' '.$organizationNames['longname'];
@@ -203,9 +203,10 @@ class Database
 
     /**
      * Escapes special characters within the input string.
-     * The returned string has no quotes around the input string!
+     * In contrast to the <a href="http://php.net/manual/en/pdo.quote.php">quote</a> method the returned string has no quotes around the input string!
      * @param string $string The string to be quoted.
      * @return string Returns a quoted string that is theoretically safe to pass into an SQL statement.
+     * @see <a href="http://php.net/manual/en/pdo.quote.php">PDO::quote</a>
      */
     public function escapeString($string)
     {
@@ -213,7 +214,8 @@ class Database
     }
 
     /**
-     * @return array
+     * Returnes an array with all available PDO database drivers of the server.
+     * @return array Returnes an array with all available PDO database drivers of the server.
      */
     public static function getAvailableDBs()
     {
@@ -333,7 +335,9 @@ class Database
 
     /**
      * Returns the ID of the unique id column of the last INSERT operation.
+     * This method replace the old method Database#insert_id.
      * @return string Return ID value of the last INSERT operation..
+     * @see Database#insert_id
      */
     public function lastInsertId()
     {
@@ -358,8 +362,8 @@ class Database
      * @param bool $throwError Default will be @b true and if an error the script will be terminated and
      *                         occurred the error with a backtrace will be send to the browser. If set to
      *                         @b false no error will be shown and the script will be continued.
-     * @return object For @b SELECT statements an object of PDOStatement will be returned.
-     *         If an error occurred then @b false will be returned.
+     * @return object For @b SELECT statements an object of <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
+     *                This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
      */
     public function query($sql, $throwError = true)
     {
