@@ -609,9 +609,9 @@ class HtmlForm extends HtmlFormBasic
      *  @param $label   The label of the input field.
      *  @param $value   A value for the text field. The field will be created with this value.
      *  @param $options An array with the following possible entries:
-     *                  @b type       Set the type if the field. Default will be @b text. Possible values are @b text, @b number, @b date
-     *                     or @datetime. If @b date or @datetime are set than a small calendar will be shown if the date field
-     *                     will be selected.
+     *                  @b type      Set the type if the field. Default will be @b text. Possible values are @b text, @b number, @b date
+     *                               @b datetime or @b birthday. If @b date, @b datetime or @b birthday are set than a small calendar will 
+     *                               be shown if the date field will be selected.
      *                  @b maxLength The maximum number of characters that are allowed in a text field.
      *                  @b minNumber The minimum number that is allowed in a number field.
      *                  @b maxNumber The maximum number that is allowed in a number field.
@@ -685,11 +685,22 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // add a nice modern datepicker to date inputs
-        if($optionsAll['type'] == 'date' || $optionsAll['type'] == 'datetime')
+        if($optionsAll['type'] == 'date' || $optionsAll['type'] == 'datetime' || $optionsAll['type'] == 'birthday')
         {
             $attributes['data-provide'] = 'datepicker';
             $attributes['placeholder']  = DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']);
             $javascriptCode             = '';
+            $datepickerOptions          = '';
+
+            // if you have a birthday field than start with the years selection
+            if($optionsAll['type'] == 'birthday')
+            {
+                $datepickerOptions = ' startView: 2, ';
+            }
+            else
+            {
+                $datepickerOptions = ' todayBtn: "linked", ';
+            }
 
             if($this->datepickerInitialized == false)
             {
@@ -697,8 +708,8 @@ class HtmlForm extends HtmlFormBasic
                     $("input[data-provide=\'datepicker\']").datepicker({
                         language: "'.$gL10n->getLanguageIsoCode().'",
                         format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
-                        todayHighlight: "true",
-                        autoclose: "true"
+                        '.$datepickerOptions.'
+                        todayHighlight: "true"
                     });';
                 $this->datepickerInitialized = true;
             }
@@ -748,7 +759,7 @@ class HtmlForm extends HtmlFormBasic
         else
         {
             // a date type has some problems with chrome so we set it as text type
-            if($optionsAll['type'] == 'date')
+            if($optionsAll['type'] == 'date' || $optionsAll['type'] == 'birthday')
             {
                 $optionsAll['type'] = 'text';
             }

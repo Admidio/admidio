@@ -330,7 +330,14 @@ foreach($gProfileFields->mProfileFields as $field)
 
             if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'DATE')
             {
-                $fieldType = 'date';
+                if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name_intern') == 'BIRTHDAY')
+                {
+                    $fieldType = 'birthday';
+                }
+                else
+                {
+                    $fieldType = 'date';
+                }
                 $maxlength = '10';
             }
             elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'EMAIL')
