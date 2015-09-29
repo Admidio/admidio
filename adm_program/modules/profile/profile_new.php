@@ -253,7 +253,7 @@ foreach($gProfileFields->mProfileFields as $field)
         $fieldProperty = FIELD_DEFAULT;
         $helpId        = '';
 
-        if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_disabled') == 1 
+        if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_disabled') == 1
         && $gCurrentUser->hasRightEditProfile($user, false) == false && $getNewUser == 0)
         {
             // disable field if this is configured in profile field configuration
