@@ -48,7 +48,10 @@ class AdmException extends Exception
     {
         global $gDb;
 
-        $gDb->endTransaction();
+        if(is_object($gDb))
+        {
+            $gDb->endTransaction();
+        }
 
         // save param in class parameters
         $this->param1 = $param1;

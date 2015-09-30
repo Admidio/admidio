@@ -20,17 +20,17 @@
 class TableUserField extends TableAccess
 {
     /**
-     * Constructor that will create an object of a recordset of the table adm_user_fields.
-     * If the id is set than the specific user field will be loaded.
-     * @param object $db Object of the class database. This should be the default object $gDb.
-     * @param int    $usf_id The recordset of the user field with this id will be loaded. If id isn't set than an empty object of the table is created.
+     *  Constructor that will create an object of a recordset of the table adm_user_fields.
+     *  If the id is set than the specific user field will be loaded.
+     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     *  @param int    $usf_id   The recordset of the user field with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$db, $usf_id = 0)
+    public function __construct(&$database, $usf_id = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'usf_cat_id');
 
-        parent::__construct($db, TBL_USER_FIELDS, 'usf', $usf_id);
+        parent::__construct($database, TBL_USER_FIELDS, 'usf', $usf_id);
     }
 
     /**
@@ -53,9 +53,9 @@ class TableUserField extends TableAccess
         // close gap in sequence of saved lists
         $sql = 'SELECT lsc_lst_id, lsc_number FROM '.TBL_LIST_COLUMNS.'
                  WHERE lsc_usf_id = '.$this->getValue('usf_id');
-        $result_lst = $this->db->query($sql);
+        $listsStatement = $this->db->query($sql);
 
-        while($row_lst = $this->db->fetch_array($result_lst))
+        while($row_lst = $listsStatement->fetch())
         {
             $sql = 'UPDATE '.TBL_LIST_COLUMNS.' SET lsc_number = lsc_number - 1
                      WHERE lsc_lst_id = '.$row_lst['lsc_lst_id']. '
@@ -102,9 +102,9 @@ class TableUserField extends TableAccess
             $newNameIntern = $newNameIntern.'_'.$index;
         }
         $sql = 'SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_name_intern = \''.$newNameIntern.'\'';
-        $this->db->query($sql);
+        $userFieldsStatement = $this->db->query($sql);
 
-        if($this->db->num_rows() > 0)
+        if($userFieldsStatement->rowCount() > 0)
         {
             $index++;
             $newNameIntern = $this->getNewNameIntern($name, $index);
@@ -350,9 +350,9 @@ class TableUserField extends TableAccess
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) as count FROM '.TBL_USER_FIELDS.'
                      WHERE usf_cat_id = '.$newValue;
-            $this->db->query($sql);
+            $countUserFieldsStatement = $this->db->query($sql);
 
-            $row = $this->db->fetch_array();
+            $row = $countUserFieldsStatement->fetch();
 
             $this->setValue('usf_sequence', $row['count'] + 1);
         }

@@ -178,9 +178,6 @@ if(isset($page) && is_object($page))
     $page->addCssFile($g_root_path.'/adm_plugins/calendar/calendar.css');
 }
 
-// set database to admidio, sometimes the user has other database connections at the same time
-$gDb->setCurrentDB();
-
 // Abfrage der Termine
 if($plg_ter_aktiv == 1)
 {
@@ -230,9 +227,9 @@ if($plg_ter_aktiv == 1)
                    '.$sqlSyntax.'
                AND dat_cat_id = cat_id
              ORDER BY dat_begin ASC';
-    $result = $gDb->query($sql);
+    $datesStatement = $gDb->query($sql);
 
-    while($row = $gDb->fetch_array($result))
+    while($row = $datesStatement->fetch())
     {
         $startDate = new DateTime($row['dat_begin']);
         $endDate   = new DateTime($row['dat_end']);
@@ -333,11 +330,9 @@ if($plg_geb_aktiv == 1)
                AND mem_end    > \''.DATE_NOW.'\'
                AND usr_valid  = 1
              ORDER BY Month(birthday.usd_value) ASC, DayOfMonth(birthday.usd_value) ASC, last_name, first_name';
+    $birthdayStatement = $gDb->query($sql);
 
-    $result = $gDb->query($sql);
-    $anz_geb = $gDb->num_rows($result);
-
-    while($row = $gDb->fetch_array($result))
+    while($row = $birthdayStatement->fetch())
     {
         $birthdayDate   = new DateTime($row['birthday']);
 

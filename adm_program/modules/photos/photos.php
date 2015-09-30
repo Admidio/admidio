@@ -46,7 +46,7 @@ unset($_SESSION['ecard_request']);
 if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
     $photoAlbum =& $_SESSION['photo_album'];
-    $photoAlbum->db =& $gDb;
+    $photoAlbum->setDatabase($gDb);
 }
 else
 {
@@ -402,10 +402,12 @@ if($gCurrentUser->editPhotoRight() == false)
 }
 
 $sql = $sql.' ORDER BY pho_begin DESC ';
-$result_list = $gDb->query($sql);
+
+$albumStatement = $gDb->query($sql);
+$albumList      = $albumStatement->fetchAll();
 
 //Gesamtzahl der auszugebenden Alben
-$albumsCount = $gDb->num_rows($result_list);
+$albumsCount = $albumStatement->rowCount();
 
 // falls zum aktuellen Album Fotos und Unteralben existieren,
 // dann einen Trennstrich zeichnen
@@ -414,22 +416,15 @@ if($photoAlbum->getValue('pho_quantity') > 0 && $albumsCount > 0)
     $page->addHtml('<hr />');
 }
 
-//Dateizeiger auf erstes auszugebendes Element setzen
-if($albumsCount > 0)
-{
-    $gDb->data_seek($result_list, $getStart);
-}
-
 $childPhotoAlbum = new TablePhotos($gDb);
 
 $page->addHtml('<div class="row">');
 
 for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1 && $x < $albumsCount; $x++)
 {
-    $adm_photo_list = $gDb->fetch_array($result_list);
     // Daten in ein Photo-Objekt uebertragen
     $childPhotoAlbum->clear();
-    $childPhotoAlbum->setArray($adm_photo_list);
+    $childPhotoAlbum->setArray($albumList[$x]);
 
     // folder of the album
     $ordner = SERVER_PATH. '/adm_my_files/photos/'.$childPhotoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$childPhotoAlbum->getValue('pho_id');
@@ -510,7 +505,7 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
                     }
 
                     // Notice for users with foto edit right that this album is locked
-                    if($adm_photo_list['pho_locked'] == 1 && file_exists($ordner))
+                    if($childPhotoAlbum->getValue('pho_locked') == 1 && file_exists($ordner))
                     {
                         $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('PHO_ALBUM_NOT_APPROVED').'</div>');
                     }

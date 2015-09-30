@@ -27,15 +27,15 @@ class TableMembers extends TableAccess
 {
     /** Constructor that will create an object of a recordset of the table adm_members.
      *  If the id is set than the specific membership will be loaded.
-     *  @param $db Object of the class database. This should be the default object $gDb.
-     *  @param $mem_id The recordset of the membership with this id will be loaded. If id isn't set than an empty object of the table is created.
+     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     *  @param int    $mem_id   The recordset of the membership with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$db, $mem_id = 0)
+    public function __construct(&$database, $mem_id = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_ROLES, 'rol_id', 'mem_rol_id');
 
-        parent::__construct($db, TBL_MEMBERS, 'mem', $mem_id);
+        parent::__construct($database, TBL_MEMBERS, 'mem', $mem_id);
     }
 
     /** Deletes a membership for the assigned role and user. In opposite to removeMembership
@@ -184,8 +184,8 @@ class TableMembers extends TableAccess
                              WHERE mem_rol_id  = '.$roleId.'
                                AND mem_usr_id <> '.$userId.'
                                AND \''.DATE_NOW.'\' BETWEEN mem_begin AND mem_end ';
-                    $this->db->query($sql);
-                    if($this->db->num_rows() == 0)
+                    $memberStatement = $this->db->query($sql);
+                    if($memberStatement->rowCount() == 0)
                     {
                         throw new AdmException('LST_MUST_HAVE_WEBMASTER');
                     }

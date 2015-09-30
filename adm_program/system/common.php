@@ -27,8 +27,8 @@ if(!isset($gDebug) || $gDebug !== 1)
 if($gDebug)
 {
     // write actual script with parameters in log file
-    error_log('--------------------------------------------------------------------------------\n' .
-              $_SERVER['SCRIPT_FILENAME'] . '\n? ' . $_SERVER['QUERY_STRING']);
+    error_log('--------------------------------------------------------------------------------'."\n" .
+              $_SERVER['SCRIPT_FILENAME'] . "\n? " . $_SERVER['QUERY_STRING']);
     error_log('memory_used::' . memory_get_usage());
 }
 
@@ -65,11 +65,14 @@ if(!isset($gDbType))
 {
     $gDbType = 'mysql';
 }
-$gDb = Database::createDatabaseObject($gDbType);
-if(!$gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db))
+
+try
 {
-    // organization not found
-    exit('<div style="color: #cc0000;">Error: Wrong database connection parameters!</div>');
+    $gDb = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+}
+catch(AdmException $e)
+{
+    $e->showText();
 }
 
 // create an installation unique cookie prefix and remove special characters
@@ -108,7 +111,7 @@ if(array_key_exists('gCurrentSession', $_SESSION))
 {
     // read session object from PHP session
     $gCurrentSession       = $_SESSION['gCurrentSession'];
-    $gCurrentSession->db  =& $gDb;
+    $gCurrentSession->setDatabase($gDb);
     // reload session data and if necessary the organization object
     $gCurrentSession->refreshSession();
     // read system component
@@ -192,7 +195,7 @@ if($gCurrentSession->hasObject('gCurrentUser'))
 {
     $gProfileFields =& $gCurrentSession->getObject('gProfileFields');
     $gCurrentUser   =& $gCurrentSession->getObject('gCurrentUser');
-    $gCurrentUser->mProfileFieldsData->mDb =& $gDb;
+    $gCurrentUser->mProfileFieldsData->setDatabase($gDb);
 
     // checks if user in database session is the same as in php session
     if($gCurrentUser->getValue('usr_id') !== $gCurrentSession->getValue('ses_usr_id'))

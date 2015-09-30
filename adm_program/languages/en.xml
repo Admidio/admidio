@@ -5,6 +5,7 @@
         <text id="SYS_CATEGORIES_VAR" development="new" translation="edited">%VAR1%-categories</text>
         <text id="SYS_CATEGORY_VAR" development="new" translation="edited">%VAR1%-category</text>
         <text id="SYS_COPY_VAR" development="new" translation="todo">Copy %VAR1%</text>
+        <text id="SYS_DATABASE_NO_LOGIN" development="new" translation="todo">The connection to the database failed!\n\nThe following error occurred:\n%VAR1%.</text>
         <text id="ORG_BROWSER_UPDATE_CHECK" development="new" translation="edited">Update message for outdated Browsers</text>
         <text id="ORG_BROWSER_UPDATE_CHECK_DESC" development="new" translation="edited">After activation users with outdated browsers are advised to run a browserupdate. Newer browsers guarantee a better protection against fraud, viruses, Trojans, identity theft and other threats to your privacy and security. Every new browser generation improves speed and supports more and more new web technologies, which leads to a better web experience. For this purpose, the service of https://browser-update.org/ is used.</text>
     </version>
@@ -39,7 +40,7 @@
         <text id="ECA_LAYOUT" development="new" translation="edited">Layout</text>
         <text id="ECA_SCALE_THUMBNAILS_DESC" development="new" translation="edited">Here you can define the size to which the longer side of a thumbnail images should be scaled to (Default: 250px).</text>
         <text id="ECA_MAX_PHOTO_SIZE_DESC" development="new" translation="edited">The defined values indicate the maximum size of an image in the greeting card (Standard: 400 x 250 Pixel).</text>
-        <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="edited">A configuration already exists. A new installation is not possible.\n\nIf an earlier installation has been interrupted it can be continued.</text>
+        <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="edited">A configuration file already exists. A new installation is not possible.\n\nIf an earlier installation has been interrupted it can be continued.</text>
         <text id="INS_CONTINUE_INSTALLATION" development="new" translation="edited">Continue installation</text>
         <text id="INS_DELETE_CONFIG_FILE" development="new" translation="edited">The Admidio main directory %VAR1_BOLD% contains a config.php. It has already been moved to the adm_my_files folder. Please delete the file in the main directory.</text>
         <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="changed" translation="edited">Download configuration file</text>
@@ -569,7 +570,6 @@
         <text id="INS_DATABASE_IS_UP_TO_DATE" development="new" translation="edited">Admidio's database is up to date</text>
         <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Updating database</text>
         <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Entering database information</text>
-        <text id="INS_DATABASE_NO_LOGIN" development="new" translation="edited">Provided database access information is incorrect!\n\nCheck and update access information or check if database is on-line and accessible.</text>
         <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Creating database</text>
         <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Administrative board of association</text>
         <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Meetings can take place here. Room has to be reserved before. Beamer is free for use.</text>

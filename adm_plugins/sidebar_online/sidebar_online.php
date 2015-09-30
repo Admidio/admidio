@@ -68,9 +68,6 @@ else
     $plg_link_target = '_self';
 }
 
-// set database to admidio, sometimes the user has other database connections at the same time
-$gDb->setCurrentDB();
-
 // Referenzzeit setzen
 $ref_date = date('Y.m.d H:i:s', time() - 60 * $plg_time_online);
 
@@ -90,7 +87,7 @@ if($plg_show_self == 0 && $gValidLogin)
     $sql = $sql. ' AND ses_usr_id <> '. $gCurrentUser->getValue('usr_id');
 }
 $sql = $sql. " ORDER BY ses_usr_id ";
-$result = $gDb->query($sql);
+$onlineUsersStatement = $gDb->query($sql);
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
 if($plg_show_headline==1)
@@ -98,13 +95,13 @@ if($plg_show_headline==1)
     echo '<h3>'.$gL10n->get('PLG_ONLINE_HEADLINE').'</h3>';
 }
 
-if($gDb->num_rows($result) > 0)
+if($onlineUsersStatement->rowCount() > 0)
 {
     echo $plg_online_text;
     $usr_id_merker  = 0;
     $count_visitors = 0;
 
-    while($row = $gDb->fetch_object($result))
+    while($row = $onlineUsersStatement->fetchObject())
     {
         if($row->ses_usr_id > 0)
         {

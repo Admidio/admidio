@@ -83,8 +83,14 @@ $gL10n->addLanguageData($gLanguageData);
 // if config file exists then connect to database
 if(file_exists('../../adm_my_files/config.php'))
 {
-    $db = Database::createDatabaseObject($gDbType);
-    $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
+    try
+    {
+        $db = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+    }
+    catch(AdmException $e)
+    {
+        showNotice($gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
+    }
 
     // now check if a valid installation exists.
     $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
@@ -250,11 +256,13 @@ elseif($getMode == 4)  // Creating organization
         if(!file_exists('../../adm_my_files/config.php'))
         {
             // check database connections
-            $db = Database::createDatabaseObject($_SESSION['db_type']);
-            if($db->connect($_SESSION['db_server'], $_SESSION['db_user'], $_SESSION['db_password'], $_SESSION['db_database']) == false)
+            try
             {
-                showNotice($gL10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3',
-                           $gL10n->get('SYS_BACK'), 'layout/back.png');
+                $db = new Database($_SESSION['db_type'], $_SESSION['db_server'], null, $_SESSION['db_database'], $_SESSION['db_user'], $_SESSION['db_password']);
+            }
+            catch(AdmException $e)
+            {
+                showNotice($gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
             }
 
             // check database version
@@ -559,12 +567,12 @@ elseif($getMode == 8) // Start installation
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
             VALUES (NULL, \'USF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
-    $cat_id_master_data = $db->insert_id();
+    $cat_id_master_data = $db->lastInsertId();
 
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
             VALUES (NULL, \'USF\', \'SOCIAL_NETWORKS\', \'SYS_SOCIAL_NETWORKS\', 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
-    $cat_id_messenger = $db->insert_id();
+    $cat_id_messenger = $db->lastInsertId();
 
     $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
             VALUES (NULL, \'ROL\', \'CONFIRMATION_OF_PARTICIPATION\', \'SYS_CONFIRMATION_OF_PARTICIPATION\', 1, 0, 1, 5, '.$systemUserId.',\''. DATETIME_NOW.'\')
@@ -575,7 +583,7 @@ elseif($getMode == 8) // Start installation
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
             VALUES (NULL, \'INF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
-    $cat_id_master_inf = $db->insert_id();
+    $cat_id_master_inf = $db->lastInsertId();
 
     // Stammdatenfelder anlegen
     $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_system, usf_disabled, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create)
@@ -594,7 +602,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
                  , ('.$cat_id_master_data.', \'EMAIL\', \'EMAIL\',    \'SYS_EMAIL\', NULL, NULL, 1, 0, 1, 12, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                  , ('.$cat_id_master_data.', \'URL\',  \'WEBSITE\',   \'SYS_WEBSITE\', NULL, NULL, 0, 0, 0, 13, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
-    $usf_id_homepage = $db->insert_id();
+    $usf_id_homepage = $db->lastInsertId();
 
     // Messenger anlegen
     $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_url, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
@@ -615,8 +623,13 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
                  , ('.$cat_id_master_inf.', \'NUMBER\', \'PRICE\',   \'SYS_QUANTITY\', NULL, 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
 
-    // now set db specific admidio preferences
-    $db->setDBSpecificAdmidioProperties();
+    if($gDbType === 'postgresql')
+    {
+        // soundex is not a default function in PostgreSQL
+        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'0\'
+                 WHERE prf_name LIKE \'system_search_similar\'';
+        $db->query($sql);
+    }
 
     // create new organization
     $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);

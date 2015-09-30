@@ -16,14 +16,14 @@ class TableMessage extends TableAccess
 
     /** Constructor that will create an object of a recordset of the table adm_messages.
      *  If the id is set than the specific message will be loaded.
-     *  @param $db Object of the class database. This should be the default object $gDb.
-     *  @param $msg_converation_id The recordset of the message with this conversation id will be loaded. If id isn't set than an empty object of the table is created.
+     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     *  @param int    $msg_id   The recordset of the message with this conversation id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$db, $msg_id = 0)
+    public function __construct(&$database, $msg_id = 0)
     {
         $this->msg_id = $msg_id;
 
-        parent::__construct($db, TBL_MESSAGES, 'msg', $this->msg_id);
+        parent::__construct($database, TBL_MESSAGES, 'msg', $this->msg_id);
     }
 
     /** Reads the number of all unread messages of this table
@@ -32,8 +32,8 @@ class TableMessage extends TableAccess
     public function countUnreadMessageRecords($usr_id)
     {
         $sql = 'SELECT COUNT(1) as count FROM '.$this->tableName.' WHERE msg_usr_id_receiver LIKE \''. $usr_id .'\' and msg_read = 1';
-        $this->db->query($sql);
-        $row = $this->db->fetch_array();
+        $countStatement = $this->db->query($sql);
+        $row = $countStatement->fetch();
         return $row['count'];
     }
 
@@ -42,10 +42,10 @@ class TableMessage extends TableAccess
      */
     public function countMessageConversations()
     {
-        $sql = "SELECT MAX(msg_id) as max_id FROM ". TBL_MESSAGES;
-        $this->db->query($sql);
-        $row = $this->db->fetch_array();
-        return $row['max_id'];
+        $sql = 'SELECT COUNT(1) as count FROM '. TBL_MESSAGES;
+        $countStatement = $this->db->query($sql);
+        $row = $countStatement->fetch();
+        return $row['count'];
     }
 
     /** Reads the number of all messages in actual conversation
@@ -53,11 +53,11 @@ class TableMessage extends TableAccess
      */
     public function countMessageParts()
     {
-        $sql = "SELECT MAX(msc_part_id) as max_id FROM ".TBL_MESSAGES_CONTENT."
-              where msc_msg_id = ".$this->getValue('msg_id');
-        $this->db->query($sql);
-        $row = $this->db->fetch_array();
-        return $row['max_id'];
+        $sql = 'SELECT COUNT(1) as count FROM '.TBL_MESSAGES_CONTENT.'
+                 WHERE msc_msg_id = '.$this->getValue('msg_id');
+        $countStatement = $this->db->query($sql);
+        $row = $countStatement->fetch();
+        return $row['count'];
     }
 
     /** Set a new value for a column of the database table.
@@ -66,8 +66,9 @@ class TableMessage extends TableAccess
      */
     public function setReadValue($usr_id)
     {
-        $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '0'
-            WHERE msg_id = ".$this->msg_id." and msg_usr_id_receiver LIKE '".$usr_id."'";
+        $sql = 'UPDATE '. TBL_MESSAGES. ' SET  msg_read = \'0\'
+                 WHERE msg_id = '.$this->msg_id.' 
+                   AND msg_usr_id_receiver LIKE \''.$usr_id.'\'';
         return $this->db->query($sql);
     }
 
@@ -78,14 +79,15 @@ class TableMessage extends TableAccess
      */
     public function getConversationPartner($usr_id)
     {
-        $sql = "SELECT msg_id,
-            CASE WHEN msg_usr_id_sender = ". $usr_id ." THEN msg_usr_id_receiver
-            ELSE msg_usr_id_sender
-            END AS user
-        FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'PM' and msg_id = ". $this->msg_id;
-        $result = $this->db->query($sql);
-        $row = $this->db->fetch_array($result);
+        $sql = 'SELECT msg_id,
+                 CASE WHEN msg_usr_id_sender = '. $usr_id .' THEN msg_usr_id_receiver
+                 ELSE msg_usr_id_sender
+                  END AS user
+                 FROM '. TBL_MESSAGES. '
+                WHERE msg_type = \'PM\' 
+                  AND msg_id = '. $this->msg_id;
+        $partnerStatement = $this->db->query($sql);
+        $row = $partnerStatement->fetch();
 
         return $row['user'];
     }

@@ -26,12 +26,12 @@ class TableCategory extends TableAccess
 
     /** Constructor that will create an object of a recordset of the table adm_category.
      *  If the id is set than the specific category will be loaded.
-     *  @param $db Object of the class database. This should be the default object $gDb.
-     *  @param $cat_id The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
+     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     *  @param int    $cat_id   The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$db, $cat_id = 0)
+    public function __construct(&$database, $cat_id = 0)
     {
-        parent::__construct($db, TBL_CATEGORIES, 'cat', $cat_id);
+        parent::__construct($database, TBL_CATEGORIES, 'cat', $cat_id);
     }
 
     /** Deletes the selected record of the table and all references in other tables.
@@ -54,9 +54,9 @@ class TableCategory extends TableAccess
                  WHERE (  cat_org_id = '. $gCurrentSession->getValue('ses_org_id'). '
                        OR cat_org_id IS NULL )
                    AND cat_type     = \''. $this->getValue('cat_type'). '\'';
-        $result = $this->db->query($sql);
+        $countCategoriesStatement = $this->db->query($sql);
 
-        $row = $this->db->fetch_array($result);
+        $row = $countCategoriesStatement->fetch();
 
         if($row['count_categories'] > 1)
         {
@@ -73,9 +73,9 @@ class TableCategory extends TableAccess
             // alle zugehoerigen abhaengigen Objekte suchen und mit weiteren Abhaengigkeiten loeschen
             $sql    = 'SELECT * FROM '.$this->elementTable.'
                         WHERE '.$this->elementColumn.' = '. $this->getValue('cat_id');
-            $resultRecordsets = $this->db->query($sql);
+            $recordsetsStatement = $this->db->query($sql);
 
-            if($this->db->num_rows() > 0)
+            if($recordsetsStatement->rowCount() > 0)
             {
                 throw new AdmException('CAT_DONT_DELETE_CATEGORY', $this->getValue('cat_name'), $this->getNumberElements());
             }
@@ -103,9 +103,9 @@ class TableCategory extends TableAccess
             $newNameIntern = $newNameIntern.'_'.$index;
         }
         $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.' WHERE cat_name_intern = \''.$newNameIntern.'\'';
-        $this->db->query($sql);
+        $categoriesStatement = $this->db->query($sql);
 
-        if($this->db->num_rows() > 0)
+        if($categoriesStatement->rowCount() > 0)
         {
             $index++;
             $newNameIntern = $this->getNewNameIntern($name, $index);
@@ -120,8 +120,8 @@ class TableCategory extends TableAccess
     {
         $sql    = 'SELECT COUNT(1) FROM '.$this->elementTable.'
                     WHERE '.$this->elementColumn.' = '. $this->getValue('cat_id');
-        $this->db->query($sql);
-        $row = $this->db->fetch_array();
+        $elementsStatement = $this->db->query($sql);
+        $row = $elementsStatement->fetch();
         return $row[0];
     }
 
@@ -172,8 +172,8 @@ class TableCategory extends TableAccess
                  WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                    AND cat_name_intern NOT LIKE \'CONFIRMATION_OF_PARTICIPATION\'
                    AND cat_org_id IS NULL ';
-        $this->db->query($sql);
-        $row = $this->db->fetch_array();
+        $countCategoriesStatement = $this->db->query($sql);
+        $row = $countCategoriesStatement->fetch();
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
         if(admStrToUpper($mode) == 'UP')
@@ -319,9 +319,9 @@ class TableCategory extends TableAccess
             $sql = 'SELECT COUNT(*) as count FROM '. TBL_CATEGORIES. '
                      WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                            '.$org_condition;
-            $this->db->query($sql);
+            $countCategoriesStatement = $this->db->query($sql);
 
-            $row = $this->db->fetch_array();
+            $row = $countCategoriesStatement->fetch();
 
             $this->setValue('cat_sequence', $row['count'] + 1);
 

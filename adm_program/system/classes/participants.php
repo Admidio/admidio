@@ -16,7 +16,6 @@
  *
  *  Copyright    : (c) 2004 - 2015 The Admidio Team
  *  Homepage     : http://www.admidio.org
- *  Author:      : Thomas-RCV
  *  License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *******************************************************************************/
@@ -30,14 +29,13 @@ class Participants
     public $memberDate;             ///< Array with surname, firstname of all participants of the date in current object.
     public $mDb;                    ///< db object must public because of session handling
 
-    /** constructor that will initialize variables and check if $rolId is numeric
-     *  else @b FALSE will be returned.
-     *  @param $db Database object (should be @b $gDb)
-     *  @param $rolId The Role ID of a date
+    /** Constructor that will initialize variables and check if $rolId is numeric
+     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     *  @param int    $rolId    The role ID of a date
      */
-    public function __construct(&$db, $rolId = 0)
+    public function __construct(&$database, $rolId = 0)
     {
-        $this->mDb        =& $db;
+        $this->mDb =& $database;
         $this->clear();
         $this->checkId($rolId);
     }

@@ -19,15 +19,15 @@ class TableGuestbookComment extends TableAccess
 {
     /** Constructor that will create an object of a recordset of the table adm_guestbook_comments.
      *  If the id is set than the specific guestbook comment will be loaded.
-     *  @param $db Object of the class database. This should be the default object $gDb.
-     *  @param $gbc_id The recordset of the guestbook comment with this id will be loaded. If id isn't set than an empty object of the table is created.
+     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     *  @param int    $gbc_id   The recordset of the guestbook comment with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$db, $gbc_id = 0)
+    public function __construct(&$database, $gbc_id = 0)
     {
         // read also data of assigned guestbook entry
         $this->connectAdditionalTable(TBL_GUESTBOOK, 'gbo_id', 'gbc_gbo_id');
 
-        parent::__construct($db, TBL_GUESTBOOK_COMMENTS, 'gbc', $gbc_id);
+        parent::__construct($database, TBL_GUESTBOOK_COMMENTS, 'gbc', $gbc_id);
     }
 
     /** Get the value of a column of the database table.

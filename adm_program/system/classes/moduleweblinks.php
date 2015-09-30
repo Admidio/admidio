@@ -148,8 +148,7 @@ class ModuleWeblinks extends Modules
             $this->getConditions .= ' AND cat_hidden = 0 ';
         }
 
-
-        //Ankuendigungen aus der DB fischen...
+        //Weblinks aus der DB fischen...
         $sql = 'SELECT cat.*, lnk.*
                   FROM '. TBL_CATEGORIES .' cat, '. TBL_LINKS. ' lnk
                  WHERE lnk_cat_id = cat_id
@@ -166,16 +165,13 @@ class ModuleWeblinks extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $result = $gDb->query($sql);
+        $weblinksStatement = $gDb->query($sql);
 
-        //array für Ergbenisse
-        $weblinks= array('numResults' => $gDb->num_rows($result), 'limit' => $limit, 'totalCount' => $this->getDataSetCount());
-
-        //Ergebnisse auf Array pushen
-        while($row = $gDb->fetch_array($result))
-        {
-            $weblinks['recordset'][] = $row;
-        }
+        //array for results
+        $weblinks['recordset']  = $weblinksStatement->fetchAll();
+        $weblinks['numResults'] = $weblinksStatement->rowCount();
+        $weblinks['limit']      = $limit;
+        $weblinks['totalCount'] = $this->getDataSetCount();
 
         // Push parameter to array
         $weblinks['parameter'] = $this->getParameters();

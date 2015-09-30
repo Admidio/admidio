@@ -5,6 +5,7 @@
         <text id="SYS_CATEGORIES_VAR" development="new" translation="todo">%VAR1%-Kategorien</text>
         <text id="SYS_CATEGORY_VAR" development="new" translation="todo">%VAR1%-Kategorie</text>
         <text id="SYS_COPY_VAR" development="new" translation="todo">%VAR1% kopieren</text>
+        <text id="SYS_DATABASE_NO_LOGIN" development="new" translation="todo">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n%VAR1%.</text>
         <text id="ORG_BROWSER_UPDATE_CHECK" development="new" translation="todo">Update Meldung für veraltete Browser</text>
         <text id="ORG_BROWSER_UPDATE_CHECK_DESC" development="new" translation="todo">Nach Aktivierung wird Benutzern mit veraltetem Browser geraten ein Browserupdate durchzuführen. Neuere Browser schützen besser vor Betrug, Viren, Trojanern, Datendiebstahl und anderen Bedrohungen Ihrer Privatsphäre und Sicherheit. Jede neue Browsergeneration verbessert die Geschwindigkeit und die Unterstützung neuer Webtechniken, mit der Webseiten besser dargestellt werden können. Hierzu wird das Service von https://browser-update.org/ verwendet.</text>
         <text id="ORG_FIELD_DISABLED_DESC" development="changed" translation="todo">Ein gesperrtes Feld kann vom Benutzer im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten. Leiter einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</text>
@@ -568,7 +569,6 @@
         <text id="INS_DATABASE_IS_UPDATED" development="new" translation="todo">Datenbank wird aktualisiert</text>
         <text id="INS_DATABASE_IS_UP_TO_DATE" development="new" translation="todo">Die Admidio-Datenbank ist aktuell</text>
         <text id="INS_DATABASE_LOGIN" development="new" translation="todo">Datenbank Zugangsdaten</text>
-        <text id="INS_DATABASE_NO_LOGIN" development="new" translation="todo">Mit den Zugangsdaten konnte keine Verbindung zur Datenbank erstellt werden!\n\nKorrigiere gegebenenfalls deine Zugangsdaten bzw. kontrolliere, ob die Datenbank online ist.</text>
         <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="todo">Datenbank wird eingerichtet</text>
         <text id="INS_DESCRIPTION_BOARD" development="new" translation="todo">Vorstand des Vereins</text>
         <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="todo">Hier können Besprechungen stattfinden. Der Raum muss vorher reserviert werden. Beamer steht zur Verfügung.</text>

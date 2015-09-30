@@ -216,7 +216,6 @@
         <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Mise à jour de la base de données en cours...</text>
         <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Saisie des informations de la base de données</text>
         <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="edited">Fournissez votre accès à la base de données ici. Le préfixe de la table peut être personnalisé si nécessaire. La personnalisation ne devrait pas être nécessaire si plusieurs installations de Admidio utilisent la même base de données.</text>
-        <text id="INS_DATABASE_NO_LOGIN" development="new" translation="edited">Les informations d'accès à la base de données fournis sont incorrect!\n\nVeuillez vérifier mettre à jour les informations ou vérifier si la base de données est disponible en ligne et accessible.</text>
         <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Création de la base de données</text>
         <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Tableau administratif des associations</text>
         <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Les rencontres peuvent prendre place ici. La salle doit d'abord être réservé avant la rencontre.</text>

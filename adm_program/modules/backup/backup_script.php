@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *
  * Based on backupDB Version 1.2.7-201104261502
@@ -124,7 +124,6 @@ $starttime = getmicrotime();
             OutputInformation('', '<br><span id="topprogress" style="font-weight: bold;">Overall Progress:</span><br>');
             $overallrows = 0;
             foreach ($SelectedTables as $dbname => $value) {
-                $gDb->select_db($dbname);
                 echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables[$dbname]) / TABLES_PER_COL).'"><b>'.htmlentities($dbname).'</b></th></tr><tr><td nowrap valign="top">';
                 $tablecounter = 0;
                 for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
@@ -133,9 +132,9 @@ $starttime = getmicrotime();
                         $tablecounter = 1;
                     }
                     $SQLquery  = 'SELECT COUNT(*) AS '.BACKTICKCHAR.'num'.BACKTICKCHAR;
-                    $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escape_string($SelectedTables[$dbname][$t]).BACKTICKCHAR;
-                    $result = $gDb->query($SQLquery);
-                    $row = $gDb->fetch_assoc($result);
+                    $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+                    $countTablesStatement = $gDb->query($SQLquery);
+                    $row = $countTablesStatement->fetch();
                     $rows[$t] = $row['num'];
                     $overallrows += $rows[$t];
                     echo '<span id="rows_'.$dbname.'_'.$SelectedTables[$dbname][$t].'">'.htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records)</span><br>';
@@ -145,7 +144,6 @@ $starttime = getmicrotime();
 
             $alltablesstructure = '';
             foreach ($SelectedTables as $dbname => $value) {
-                $gDb->select_db($dbname);
                 for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
                     @set_time_limit(60);
                     OutputInformation('statusinfo', 'Creating structure for <b>'.htmlentities($dbname.'.'.$SelectedTables[$dbname][$t]).'</b>');
@@ -153,27 +151,26 @@ $starttime = getmicrotime();
                     $fieldnames = array();
 
                     $SQLquery  = 'SHOW CREATE TABLE '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
-                    $result_showcreatetable = $gDb->query($SQLquery);
-                    if ($gDb->num_rows($result_showcreatetable) == 1) {
-                        $row = $gDb->fetch_assoc($result_showcreatetable);
+                    $showcreatetableStatement = $gDb->query($SQLquery);
+                    if ($showcreatetableStatement->rowCount() == 1) {
+                        $row = $showcreatetableStatement->fetch();
                         $tablestructure = $row['Create Table'];
 
                         $SQLquery  = 'SHOW FULL FIELDS';
                         $SQLquery .= ' FROM '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
-                        $result_showfields = $gDb->query($SQLquery);
-                        while ($row = $gDb->fetch_assoc($result_showfields)) {
+                        $showfieldsStatement = $gDb->query($SQLquery);
+                        while ($row = $showfieldsStatement->fetch()) {
                             if (preg_match('#^[a-z]+#i', $row['Type'], $matches)) {
                                 $RowTypes[$dbname][$SelectedTables[$dbname][$t]][$row['Field']] = $matches[0];
                             }
                             $fieldnames[] = $row['Field'];
                         }
-                        $gDb->free_result($result_showfields);
                     } else {
                         $structurelines = array();
                         $SQLquery  = 'SHOW FULL FIELDS';
-                        $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escape_string($SelectedTables[$dbname][$t]).BACKTICKCHAR;
-                        $result_showfields = $gDb->query($SQLquery);
-                        while ($row = $gDb->fetch_assoc($result_showfields)) {
+                        $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+                        $showfieldsStatement = $gDb->query($SQLquery);
+                        while ($row = $showfieldsStatement->fetch()) {
                             $structureline  = BACKTICKCHAR.$row['Field'].BACKTICKCHAR;
                             $structureline .= ' '.$row['Type'];
                             if (isset($row['Collation']) && !is_null($row['Collation']) && !empty($row['Collation'])) {
@@ -216,7 +213,6 @@ $starttime = getmicrotime();
 
                             $fieldnames[] = $row['Field'];
                         }
-                        $gDb->free_result($result_showfields);
 
                         $tablekeys    = array();
                         $uniquekeys   = array();
@@ -224,12 +220,11 @@ $starttime = getmicrotime();
 
                         $SQLquery  = 'SHOW INDEX';
                         $SQLquery .= ' FROM '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
-                        $result_showindex = $gDb->query($SQLquery);
+                        $showindexStatement = $gDb->query($SQLquery);
                         $INDICES = array();
-                        while ($row = $gDb->fetch_assoc($result_showindex)) {
+                        while ($row = $showindexStatement->fetch()) {
                             $INDICES[$row['Key_name']][$row['Seq_in_index']] = $row;
                         }
-                        $gDb->free_result($result_showindex);
                         foreach ($INDICES as $index_name => $columndata) {
                             $structureline  = '';
                             if ($index_name == 'PRIMARY') {
@@ -259,12 +254,11 @@ $starttime = getmicrotime();
                             $structurelines[] = $structureline;
                         }
 
-                        $SQLquery  = 'SHOW TABLE STATUS LIKE "'.$gDb->escape_string($SelectedTables[$dbname][$t]).'"';
-                        $result_tablestatus = $gDb->query($SQLquery);
-                        if (!($TableStatusRow = $gDb->fetch_assoc($result_tablestatus))) {
-                            exit('failed to execute "'.$SQLquery.'" on '.$dbname.'.'.$tablename);
+                        $SQLquery  = 'SHOW TABLE STATUS LIKE "'.$gDb->escapeString($SelectedTables[$dbname][$t]).'"';
+                        $tablestatusStatement = $gDb->query($SQLquery);
+                        if (!($TableStatusRow = $tablestatusStatement->fetch())) {
+                            die('failed to execute "'.$SQLquery.'" on '.$dbname.'.'.$tablename);
                         }
-                        $gDb->free_result($result_tablestatus);
 
                         $tablestructure  = 'CREATE TABLE '.($CreateIfNotExists ? 'IF NOT EXISTS ' : '').($dbNameInCreate ? BACKTICKCHAR.$dbname.BACKTICKCHAR.'.' : '').BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR.' ('.LINE_TERMINATOR;
                         $tablestructure .= '  '.implode(','.LINE_TERMINATOR.'  ', $structurelines).LINE_TERMINATOR;
@@ -277,7 +271,6 @@ $starttime = getmicrotime();
                         }
                     }
                     $tablestructure .= ';'.LINE_TERMINATOR.LINE_TERMINATOR;
-                    $gDb->free_result($result_showcreatetable);
 
                     $alltablesstructure .= str_replace(' ,', ',', $tablestructure);
 
@@ -298,10 +291,9 @@ $starttime = getmicrotime();
                 $processedrows    = 0;
                 foreach ($SelectedTables as $dbname => $value) {
                     @set_time_limit(60);
-                    $gDb->select_db($dbname);
                     for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
                         $SQLquery  = 'SELECT *';
-                        $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escape_string($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+                        $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
                         $result = $gDb->query($SQLquery);
                         $rows[$t] = $gDb->num_rows($result);
                         if ($rows[$t] > 0) {
@@ -315,9 +307,8 @@ $starttime = getmicrotime();
                             }
                         }
                         unset($fieldnames);
-                        for ($i = 0; $i < $gDb->num_fields($result); $i++) {
-                            $fieldnames[] = $gDb->field_name($result, $i);
-                        }
+                        $fieldnames = $gDb->showColumns($gDb->escapeString($SelectedTables[$dbname][$t]), false);
+
                         if ($_REQUEST['StartBackup'] == 'complete') {
                             $insertstatement = ($ReplaceInto ? 'REPLACE' : 'INSERT').' INTO '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR.' ('.BACKTICKCHAR.implode(BACKTICKCHAR.', '.BACKTICKCHAR, $fieldnames).BACKTICKCHAR.') VALUES (';
                         } else {
@@ -349,7 +340,7 @@ $starttime = getmicrotime();
                                                 }
                                                 $valuevalues[] = $hexstring;
                                             } else {
-                                                $valuevalues[] = QUOTECHAR.$gDb->escape_string($data).QUOTECHAR;
+                                                $valuevalues[] = QUOTECHAR.$gDb->escapeString($data).QUOTECHAR;
                                             }
                                             break;
 
@@ -363,7 +354,7 @@ $starttime = getmicrotime();
                                         case 'double':
                                         case 'decimal':
                                         case 'year':
-                                            $valuevalues[] = $gDb->escape_string($row[$key]);
+                                            $valuevalues[] = $gDb->escapeString($row[$key]);
                                             break;
 
                                         // value surrounded by quotes
@@ -380,7 +371,7 @@ $starttime = getmicrotime();
                                         case 'time':
                                         case 'timestamp':
                                         default:
-                                            $valuevalues[] = QUOTECHAR.$gDb->escape_string($row[$key]).QUOTECHAR;
+                                            $valuevalues[] = QUOTECHAR.$gDb->escapeString($row[$key]).QUOTECHAR;
                                             break;
                                     }
 
@@ -418,10 +409,8 @@ $starttime = getmicrotime();
                                     mail(ADMIN_EMAIL, 'backupDB: FAILURE! Failed to connect to MySQL database (line '.__LINE__.')', 'Failed to reconnect to SQL database (row #'.$currentrow.') on line '.__LINE__.' in file '.@$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].LINE_TERMINATOR.$gDb->db_error());
                                     exit('There was a problem connecting to the database:<br>'.LINE_TERMINATOR.$gDb->db_error());
                                 }
-                                $gDb->select_db($dbname);
                             }
                         }
-                        $gDb->free_result($result);
                         if ($DHTMLenabled) {
                             OutputInformation('rows_'.$dbname.'_'.$SelectedTables[$dbname][$t], htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records, [100%])');
                             $processedrows += $rows[$t];

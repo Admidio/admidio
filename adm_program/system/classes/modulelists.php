@@ -295,20 +295,15 @@ class ModuleLists extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $result = $gDb->query($sql);
+        $listsStatement = $gDb->query($sql);
 
-        $lists= array('numResults' => $gDb->num_rows($result), 'limit' => $limit, 'totalCount' => $this->getDataSetCount());
-        while($row = $gDb->fetch_array($result))
-        {
-            $lists['recordset'][] = $row;
-        }
-        // Set empty array if no results are found
-        if(!isset($lists['recordset']))
-        {
-            $lists['recordset'] = array();
-        }
-        // Push parameter to array
-        $lists['parameter'] = $this->getParameters();
+        //array for results
+        $lists['recordset']  = $listsStatement->fetchAll();
+        $lists['numResults'] = $listsStatement->rowCount();
+        $lists['limit']      = $limit;
+        $lists['totalCount'] = $this->getDataSetCount();
+        $lists['parameter']  = $this->getParameters();
+
         return $lists;
     }
 

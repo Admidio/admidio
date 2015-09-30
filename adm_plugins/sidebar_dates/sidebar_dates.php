@@ -82,10 +82,6 @@ if(isset($plg_link_url) == false || ($plg_link_url) =="")
 $plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
 }
 
-// set database to admidio, sometimes the user has other database connections at the same time
-$gDb->setCurrentDB();
-
-
 //create Object
 $plgDates = new ModuleDates();
 

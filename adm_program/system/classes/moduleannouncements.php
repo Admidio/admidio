@@ -183,19 +183,15 @@ class ModuleAnnouncements extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $result = $gDb->query($sql);
+        $announcementsStatement = $gDb->query($sql);
 
         //array for results
-        $announcements= array('numResults' => $gDb->num_rows($result), 'limit' => $limit, 'totalCount' => $this->getDataSetCount());
+        $announcements['recordset']  = $announcementsStatement->fetchAll();
+        $announcements['numResults'] = $announcementsStatement->rowCount();
+        $announcements['limit']      = $limit;
+        $announcements['totalCount'] = $this->getDataSetCount();
+        $announcements['parameter']  = $this->getParameters();
 
-        //Ergebnisse auf Array pushen
-        while($row = $gDb->fetch_array($result))
-        {
-            $announcements['recordset'][] = $row;
-        }
-
-        // Push parameter to array
-        $announcements['parameter'] = $this->getParameters();
         return $announcements;
     }
 

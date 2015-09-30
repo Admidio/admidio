@@ -74,8 +74,14 @@ if(!isset($gDbType))
 }
 
 // connect to database
-$gDb = Database::createDatabaseObject($gDbType);
-$gDbConnection = $gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
+try
+{
+    $gDb = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+}
+catch(AdmException $e)
+{
+    showNotice($gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
+}
 
 // now check if a valid installation exists.
 $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
@@ -392,9 +398,6 @@ elseif($getMode == 2)
                         $flagNextVersion = true;
                     }
 
-                    // now set db specific admidio preferences
-                    $gDb->setDBSpecificAdmidioProperties($version);
-
                     // check if an php update file exists and then execute the script
                     if(file_exists($phpUpdateFile))
                     {
@@ -422,6 +425,14 @@ elseif($getMode == 2)
                 }
             }
         }
+    }
+
+    if($gDbType === 'postgresql')
+    {
+        // soundex is not a default function in PostgreSQL
+        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'0\'
+                 WHERE prf_name LIKE \'system_search_similar\'';
+        $gDb->query($sql);
     }
 
     // since version 3 we do the update with xml files and a new class model
