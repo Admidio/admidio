@@ -6,27 +6,27 @@
  *  License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
-/** @class TableAccess
- *  @brief Controls read and write access to datbase tables
+/**
+ * @class TableAccess
+ * @brief Controls read and write access to datbase tables
  *
- *  This class should help you to read and write records of database tables.
- *  You create an object for a special table and than you are able to read
- *  a special record, manipulate him and write him back. Also new records can
- *  be created with this class. The advantage of this class is that you are
- *  independent from SQL. You can use @c getValue, @c setValue, @c readData
- *  and @c save to handle the record.
- *  @par Examples
- *  @code // create an object for table adm_roles of role 4711
- *  $roleId = 4177;
- *  $role = new TableAccess($gDb, TBL_ROLES, 'rol', $roleId);
+ * This class should help you to read and write records of database tables.
+ * You create an object for a special table and than you are able to read
+ * a special record, manipulate him and write him back. Also new records can
+ * be created with this class. The advantage of this class is that you are
+ * independent from SQL. You can use @c getValue, @c setValue, @c readData
+ * and @c save to handle the record.
+ * @par Examples
+ * @code // create an object for table adm_roles of role 4711
+ * $roleId = 4177;
+ * $role = new TableAccess($gDb, TBL_ROLES, 'rol', $roleId);
  *
- *  // read max. Members and add 1 to the count
- *  $maxMembers = $role->getValue('rol_max_members');
- *  $maxMembers = $maxMembers + 1;
- *  $role->setValue('rol_max_members', $maxMembers);
- *  $role->save(); @endcode
+ * // read max. Members and add 1 to the count
+ * $maxMembers = $role->getValue('rol_max_members');
+ * $maxMembers = $maxMembers + 1;
+ * $role->setValue('rol_max_members', $maxMembers);
+ * $role->save(); @endcode
  */
-
 class TableAccess
 {
     protected $additionalTables;    ///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
@@ -52,7 +52,7 @@ class TableAccess
     {
         $this->tableName     = $tableName;
         $this->columnPraefix = $columnPraefix;
-        
+
         $this->setDatabase($database);
 
         // if a id is commited, then read data out of database
@@ -67,7 +67,7 @@ class TableAccess
     }
 
     /**
-     * Called on serialization of this object. The database object could not 
+     * Called on serialization of this object. The database object could not
      * be serialized and should be ignored.
      * @return Returns all class variables that should be serialized.
      */
@@ -123,9 +123,9 @@ class TableAccess
      * Adds a table with the connected fields to a member array. This table will be add to the
      * select statement if data is read and the connected record is avaiable in this class.
      * The connected table must have a foreign key in the class table.
-     * @param  string $table                     Database table name that should be connected. This can be the define of the table.
-     * @param  string $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
-     * @param  string $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
+     * @param string $table                     Database table name that should be connected. This can be the define of the table.
+     * @param string $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
+     * @param string $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
      * @par Examples
      * @code // Constructor of adm_dates object where the category (calendar) is connected
      * public function __construct(&$db, $dat_id = 0)
@@ -155,7 +155,7 @@ class TableAccess
 
     /**
      * Deletes the selected record of the table and initializes the class
-     * @return Returns @b true if no error occurred
+     * @return true Returns @b true if no error occurred
      */
     public function delete()
     {
@@ -176,8 +176,8 @@ class TableAccess
      * @param  string $columnName The name of the database column whose value should be read
      * @param  string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
      *                            For text columns the format can be @b database that would return the original database value without any transformations
-     * @return Returns the value of the database column.
-     *                           If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @return mixed Returns the value of the database column.
+     *               If the value was manipulated before with @b setValue than the manipulated value is returned.
      * @see TableAccess#setValue
      */
     public function getValue($columnName, $format = '')
@@ -263,8 +263,8 @@ class TableAccess
     /**
      * If a column of the row in this object has changed throw setValue then this method
      * will return @b true otherwise @false
-     * @return Returns @b true if at least one value of one column has changed
-     *              after the recordset was loaded otherwise @b false
+     * @return bool Returns @b true if at least one value of one column has changed
+     *                      after the recordset was loaded otherwise @b false
      */
     public function hasColumnsValueChanged()
     {
@@ -274,7 +274,7 @@ class TableAccess
     /**
      * If the recordset is new and wasn't read from database or was not stored in database
      * then this method will return true otherwise false
-     * @return Returns @b true if record is not stored in database
+     * @return bool Returns @b true if record is not stored in database
      */
     public function isNewRecord()
     {
@@ -286,7 +286,7 @@ class TableAccess
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
      * @param  string $sqlWhereCondition Conditions for the table to select one record
-     * @return Returns @b true if one record is found
+     * @return bool Returns @b true if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
      */
@@ -347,7 +347,7 @@ class TableAccess
      * Reads a record out of the table in database selected by the unique id column in the table.
      * Per default all columns of the default table will be read and stored in the object.
      * @param  int|string $id Unique id of id column of the table.
-     * @return Returns @b true if one record is found
+     * @return bool Returns @b true if one record is found
      * @see TableAccess#readData
      * @see TableAccess#readDataByColumns
      */
@@ -374,7 +374,7 @@ class TableAccess
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
      * @param  array $columnArray An array where every element index is the column name and the value is the column value
-     * @return Returns @b true if one record is found
+     * @return bool Returns @b true if one record is found
      * @par Examples
      * @code // reads data not be mem_id but with combination of role and user id
      * $member = new TableAccess($gDb, TBL_MEMBERS, 'rol');
@@ -419,7 +419,7 @@ class TableAccess
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
      * @param  bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
      *                                 if table has columns like @b usr_id_create or @b usr_id_changed
-     * @return If an update or insert into the database was done then return true, otherwise false.
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
@@ -546,7 +546,7 @@ class TableAccess
      * table and want to use an table object for each recordset. So you don't have to do an
      * separate sql read for each record. This is a performant way to fill the object with
      * the necessary data.
-     * @param  array $fieldArray An array with all fields and their values of the table. If the
+     * @param array $fieldArray An array with all fields and their values of the table. If the
      *                           object has more connected tables than you should add the fields of these tables, too.
      * @par Examples
      * @code // read all announcements with their categories
@@ -584,14 +584,14 @@ class TableAccess
         }
     }
 
-    /** 
+    /**
      * Set a new value for a column of the database table. The value is only saved in the object.
      * You must call the method @b save to store the new value to the database. If the unique key
      * column is set to 0 than this record will be a new record and all other columns are marked as changed.
      * @param  string $columnName The name of the database column whose value should get a new value
      * @param  mixed  $newValue   The new value that should be stored in the database field
      * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     * @return Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      * @see TableAccess#getValue
      */
     public function setValue($columnName, $newValue, $checkValue = true)
