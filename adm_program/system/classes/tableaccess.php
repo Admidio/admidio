@@ -264,7 +264,7 @@ class TableAccess
      * If a column of the row in this object has changed throw setValue then this method
      * will return @b true otherwise @false
      * @return bool Returns @b true if at least one value of one column has changed
-     *                      after the recordset was loaded otherwise @b false
+     *              after the recordset was loaded otherwise @b false
      */
     public function hasColumnsValueChanged()
     {
