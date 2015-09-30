@@ -41,9 +41,11 @@ class User extends TableUsers
     protected $role_mail_rights = array();      ///< Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
     protected $rolesMembership  = array();      ///< Array with all roles who the user is assigned
     protected $rolesMembershipLeader = array(); ///< Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
+    protected $rolesMembershipNoLeader = array(); ///< Array with all roles who the user is assigned and is not a leader of the role
     protected $organizationId;                  ///< the organization for which the rights are read, could be changed with method @b setOrganization
     protected $assignRoles;                     ///< Flag if the user has the right to assign at least one role
     protected $saveChangesWithoutRights;        ///< If this flag is set then a user can save changes to the user if he hasn't the necessary rights
+    protected $usersEditAllowed = array();      ///< Array with all user ids where the current user is allowed to edit the profile.
 
     /**
      * Constructor that will create an object of a recordset of the users table.
@@ -140,23 +142,27 @@ class User extends TableUsers
 
                 while($row = $this->db->fetch_array())
                 {
-                    if($row['mem_leader'] == 1)
-                    {
-                        // if user is leader in this role than add role id and leader rights to array
-                        $this->rolesMembershipLeader[$row['rol_id']] = $row['rol_leader_rights'];
-
-                        // if role leader could assign new members then remember this setting
-                        // roles for confirmation of dates should be ignored
-                        if($row['cat_name_intern'] != 'CONFIRMATION_OF_PARTICIPATION'
-                        && ($row['rol_leader_rights'] == ROLE_LEADER_MEMBERS_ASSIGN || $row['rol_leader_rights'] == ROLE_LEADER_MEMBERS_ASSIGN_EDIT))
-                        {
-                            $this->assignRoles = true;
-                        }
-                    }
-
-                    // Rechte nur beruecksichtigen, wenn auch Rollenmitglied
                     if($row['mem_usr_id'] > 0)
                     {
+                        // Sql selects all roles. Only consider roles where user is a member.
+                        if($row['mem_leader'] == 1)
+                        {
+                            // if user is leader in this role than add role id and leader rights to array
+                            $this->rolesMembershipLeader[$row['rol_id']] = $row['rol_leader_rights'];
+    
+                            // if role leader could assign new members then remember this setting
+                            // roles for confirmation of dates should be ignored
+                            if($row['cat_name_intern'] != 'CONFIRMATION_OF_PARTICIPATION'
+                            && ($row['rol_leader_rights'] == ROLE_LEADER_MEMBERS_ASSIGN || $row['rol_leader_rights'] == ROLE_LEADER_MEMBERS_ASSIGN_EDIT))
+                            {
+                                $this->assignRoles = true;
+                            }
+                        }
+                        else
+                        {
+                            $this->rolesMembershipNoLeader[] = $row['rol_id'];
+                        }
+    
                         // add role to membership array
                         $this->rolesMembership[] = $row['rol_id'];
 
@@ -169,18 +175,18 @@ class User extends TableUsers
                                 $tmp_roles_rights[$key] = '1';
                             }
                         }
-
+    
                         // set flag assignRoles of user can manage roles
                         if($row['rol_assign_roles'] == 1)
                         {
                             $this->assignRoles = true;
                         }
-                    }
 
-                    // Webmasterflag setzen
-                    if($row['mem_usr_id'] > 0 && $row['rol_webmaster'] == 1)
-                    {
-                        $this->webmaster = 1;
+                        // Webmasterflag setzen
+                        if($row['rol_webmaster'] == 1)
+                        {
+                            $this->webmaster = 1;
+                        }
                     }
 
                     // Listenansichtseinstellung merken
@@ -372,6 +378,7 @@ class User extends TableUsers
         $this->webmaster = 0;
 
         // initialize rights arrays
+        $this->usersEditAllowed = array();
         $this->renewRoleData();
         $this->saveChangesWithoutRights = false;
     }
@@ -570,8 +577,8 @@ class User extends TableUsers
     }
 
     /**
-     * returns an array with all role ids where the user is a member
-     * @return array
+     * Returns an array with all role ids where the user is a member.
+     * @return Returns an array with all role ids where the user is a member.
      */
     public function getRoleMemberships()
     {
@@ -579,7 +586,19 @@ class User extends TableUsers
         return $this->rolesMembership;
     }
 
-    /**
+    /*
+     * Returns an array with all role ids where the user is a member 
+     * and not a leader of the role.
+     * @return Returns an array with all role ids where the user is a member
+     *         and not a leader of the role.
+     */
+    public function getRoleMembershipsNoLeader()
+    {
+        $this->checkRolesRight();
+        return $this->rolesMembershipNoLeader;
+    }
+
+    /** 
      * Get the value of a column of the database table if the column has the praefix @b usr_
      * otherwise the value of the profile field of the table adm_user_data will be returned.
      * If the value was manipulated before with @b setValue than the manipulated value is returned.
@@ -590,9 +609,9 @@ class User extends TableUsers
      *                           If the value was manipulated before with @b setValue than the manipulated value is returned.
      * @par Examples
      * @code  // reads data of adm_users column
-     *                           $loginname = $gCurrentUser->getValue('usr_login_name');
-     *                           // reads data of adm_user_fields
-     *                           $email = $gCurrentUser->getValue('EMAIL'); @endcode
+     * $loginname = $gCurrentUser->getValue('usr_login_name');
+     * // reads data of adm_user_fields
+     * $email = $gCurrentUser->getValue('EMAIL'); @endcode
      */
     public function getValue($columnName, $format = '')
     {
@@ -713,15 +732,20 @@ class User extends TableUsers
      * Checks if the current user is allowed to edit the profile of the user of the parameter.
      * If will check if user can generally edit all users or if he is a group leader and can edit users
      * of a special role where @b $user is a member or if it's the own profile and he could edit this.
-     * @param  object $user User object of the user that should be checked if the current user can edit his profile.
+     * @param  object $user            User object of the user that should be checked if the current user can edit his profile.
+     * @param  bool   $checkOwnProfile If set to @b false than this method don't check the role right to edit the own profile.
      * @return bool   Return @b true if the current user is allowed to edit the profile of the user from @b $user.
      */
-     public function hasRightEditProfile(&$user)
+     public function hasRightEditProfile(&$user, $checkOwnProfile = true)
     {
+        $returnValue = false;
+
         if(is_object($user))
         {
             // edit own profile ?
-            if($user->getValue('usr_id') === $this->getValue('usr_id') && $this->getValue('usr_id') > 0)
+            if($user->getValue('usr_id') === $this->getValue('usr_id')
+            && $this->getValue('usr_id') > 0
+            && $checkOwnProfile)
             {
                 $edit_profile = $this->checkRolesRight('rol_profile');
 
@@ -731,29 +755,39 @@ class User extends TableUsers
                 }
             }
 
+            // first check if user is in cache
+            if(array_key_exists($user->getValue('usr_id'), $this->usersEditAllowed))
+            {
+                return $this->usersEditAllowed[$user->getValue('usr_id')];
+            }
+
             if($this->editUsers())
             {
-                return true;
+                $returnValue = true;
             }
             else
             {
                 if(count($this->rolesMembershipLeader) > 0)
                 {
-                    // check if current user is a group leader of a role where $user is a member
-                    $rolesMembership = $user->getRoleMemberships();
+                    // check if current user is a group leader of a role where $user is only a member and not a leader
+                    $rolesMembership = $user->getRoleMembershipsNoLeader();
+
                     foreach($this->rolesMembershipLeader as $roleId => $leaderRights)
                     {
                         // is group leader of role and has the right to edit users ?
                         if(in_array($roleId, $rolesMembership) && $leaderRights > 1)
                         {
-                            return true;
+                            $returnValue = true;
                         }
                     }
                 }
             }
+
+            // add result into cache
+            $this->usersEditAllowed[$user->getValue('usr_id')] = $returnValue;
         }
 
-        return false;
+        return $returnValue;
     }
 
     /**
@@ -949,11 +983,12 @@ class User extends TableUsers
     public function renewRoleData()
     {
         // initialize rights arrays
-        $this->roles_rights          = array();
-        $this->list_view_rights      = array();
-        $this->role_mail_rights      = array();
-        $this->rolesMembership       = array();
-        $this->rolesMembershipLeader = array();
+        $this->roles_rights     = array();
+        $this->list_view_rights = array();
+        $this->role_mail_rights = array();
+        $this->rolesMembership  = array();
+        $this->rolesMembershipLeader   = array();
+        $this->rolesMembershipNoLeader = array();
     }
 
     /**
@@ -1198,9 +1233,9 @@ class User extends TableUsers
                 // Disabled fields can only be edited by users with the right "edit_users" except on registration.
                 // Here is no need to check hidden fields because we check on save() method that only users who
                 // can edit the profile are allowed to save and change data.
-                if(($this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 1
-                   && $gCurrentUser->editUsers() == true)
-                || $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 0
+                if($this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 0
+                || ($this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 1
+                   && $gCurrentUser->hasRightEditProfile($this, false))
                 || ($gCurrentUser->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
                 {
                     $returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);

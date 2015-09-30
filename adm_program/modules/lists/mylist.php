@@ -616,7 +616,7 @@ $page->addHtml('</select>');
 
 // Listen speichern darf man speichern, wenn es Eigene sind, Neue oder als Webmaster auch Systemlisten
 if(($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
-    || ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
+|| ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
 {
     $page->addHtml('
                 <a class="admidio-icon-link" href="javascript:send(\'save\');">
@@ -625,8 +625,8 @@ if(($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
 }
 
 if($gCurrentUser->isWebmaster()
-    || $getListId == 0
-    || $gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id'))
+|| $getListId == 0
+|| $gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id'))
 {
     if(strlen($list->getValue('lst_name')) > 0)
     {
@@ -649,9 +649,9 @@ if(($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
     || ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
 {
     $page->addHtml('
-                <a class="admidio-icon-link" href="javascript:send(\'delete\');">
-                    <img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('LST_DELETE_CONFIGURATION').'" title="'.$gL10n->get('LST_DELETE_CONFIGURATION').'" />
-                </a>');
+        <a class="admidio-icon-link" href="javascript:send(\'delete\');">
+            <img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('LST_DELETE_CONFIGURATION').'" title="'.$gL10n->get('LST_DELETE_CONFIGURATION').'" />
+        </a>');
 }
 
 // eine gespeicherte Konfiguration kann vom Webmaster zur Systemkonfiguration gemacht werden
@@ -719,34 +719,27 @@ $page->addHtml('</div>
     <div class="form-group">
         <label class="col-sm-3 control-label" for="rol_id">'.$gL10n->get('SYS_ROLE').'</label>
         <div class="col-sm-9">');
-// Combobox mit allen Rollen ausgeben, ggf. nur die inaktiven Rollen anzeigen
-$role_select_box_mode = 0;
-if($getActiveRole == 0)
-{
-    $role_select_box_mode = 2;
-}
-$page->addHtml(FormElements::generateRoleSelectBox($getRoleId, 'rol_id', $role_select_box_mode));
-$page->addHtml('</div>
+            // Combobox mit allen Rollen ausgeben, ggf. nur die inaktiven Rollen anzeigen
+            $role_select_box_mode = 0;
+            if($getActiveRole == 0)
+            {
+                $role_select_box_mode = 2;
+            }
+            $page->addHtml(FormElements::generateRoleSelectBox($getRoleId, 'rol_id', $role_select_box_mode));
+        $page->addHtml('</div>
     </div>
-    <div class="form-group">
+    <div class="form-group admidio-form-group-required">
         <label class="col-sm-3 control-label" for="show_members">'.$gL10n->get('LST_MEMBER_STATUS').'</label>
         <div class="col-sm-9">');
-// Auswahlbox, ob aktive oder ehemalige Mitglieder angezeigt werden sollen
-// bei inaktiven Rollen gibt es nur Ehemalige
-if($getActiveRole == 1)
-{
-    $selected[0] = '';
-    $selected[1] = '';
-    $selected[2] = '';
-    $selected[$getShowMembers] = ' selected="selected" ';
-    $page->addHtml('
-                <select class="form-control" size="1" id="show_members" name="show_members">
-                    <option '.$selected[0].' value="0">'.$gL10n->get('LST_ACTIVE_MEMBERS').'</option>
-                    <option '.$selected[1].' value="1">'.$gL10n->get('LST_FORMER_MEMBERS').'</option>
-                    <option '.$selected[2].' value="2">'.$gL10n->get('LST_ACTIVE_FORMER_MEMBERS').'</option>
-                </select>');
-}
-$page->addHtml('</div>
+            // Auswahlbox, ob aktive oder ehemalige Mitglieder angezeigt werden sollen
+            $page->addHtml('
+            <select class="form-control" size="1" id="show_members" name="show_members">
+                <option selected="selected" value="0">'.$gL10n->get('LST_ACTIVE_MEMBERS').'</option>
+                <option value="1">'.$gL10n->get('LST_FORMER_MEMBERS').'</option>
+                <option value="2">'.$gL10n->get('LST_ACTIVE_FORMER_MEMBERS').'</option>
+            </select>');
+
+        $page->addHtml('</div>
     </div>
 
     <hr />

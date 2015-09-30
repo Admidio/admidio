@@ -105,7 +105,7 @@ $previousCategoryId   = 0;
 //Get Lists
 $getStart      = $lists->getStartElement();
 $listsResult   = $lists->getDataSet($getStart);
-$numberOfRoles = $listsResult['numResults'];
+$numberOfRoles = $lists->getDataSetCount();
 
 if($numberOfRoles == 0)
 {

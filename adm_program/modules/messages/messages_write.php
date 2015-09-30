@@ -97,19 +97,23 @@ if ($getMsgType === 'PM')
     $sql = "SELECT usr_id, CONCAT(LAST_NAME.usd_value, ' ', FIRST_NAME.usd_value) AS name, usr_login_name
                   FROM ".TBL_ROLES.", ".TBL_CATEGORIES.", ".TBL_MEMBERS.", ".TBL_USERS."
                         LEFT JOIN ".TBL_USER_DATA." LAST_NAME
-                                           ON LAST_NAME.usd_usr_id = usr_id
-                                          AND LAST_NAME.usd_usf_id = 1 LEFT JOIN ".TBL_USER_DATA." FIRST_NAME
-                                           ON FIRST_NAME.usd_usr_id = usr_id
+                                       ON LAST_NAME.usd_usr_id = usr_id
+                                          AND LAST_NAME.usd_usf_id = 1
+                        LEFT JOIN ".TBL_USER_DATA." FIRST_NAME
+                                       ON FIRST_NAME.usd_usr_id = usr_id
                                           AND FIRST_NAME.usd_usf_id = 2
-                 WHERE rol_id IN (2)
-                   AND rol_cat_id = cat_id
-                   AND ( cat_org_id = 1
+                 WHERE rol_cat_id = cat_id
+                   AND cat_name_intern <> 'CONFIRMATION_OF_PARTICIPATION'
+                   AND (  cat_org_id = ". $gCurrentOrganization->getValue('org_id')."
                        OR cat_org_id IS NULL )
+                   AND mem_begin <= '".DATE_NOW."'
+                   AND mem_end   >= '".DATE_NOW."'
                    AND mem_rol_id = rol_id
                    AND mem_usr_id = usr_id
                    AND usr_id <> ".$gCurrentUser->getValue('usr_id')."
                    AND usr_valid  = 1
                    AND usr_login_name IS NOT NULL
+                  GROUP BY usr_id, name, usr_login_name
                   ORDER BY LAST_NAME.usd_value, FIRST_NAME.usd_value";
 
     $drop_result = $gDb->query($sql);
@@ -350,47 +354,52 @@ elseif (!isset($message_result))
 
         // select Users
 
-        $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
-                           email.usd_value as email, (SELECT DISTINCT 1
-                   FROM '.TBL_MEMBERS.' as temp
-                  WHERE mem_usr_id = usr_id
-                   AND mem_begin <= \''.DATE_NOW.'\'
-                   AND mem_end   >= \''.DATE_NOW.'\') as active
-                  FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
-              JOIN '. TBL_USER_DATA. ' as email
-                ON email.usd_usr_id = usr_id
-               AND LENGTH(email.usd_value) > 0
-              JOIN '.TBL_USER_FIELDS.' as field
-                ON field.usf_id = email.usd_usf_id
-               AND field.usf_type = \'EMAIL\'
-              LEFT JOIN '. TBL_USER_DATA. ' as last_name
-                ON last_name.usd_usr_id = usr_id
-               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-                 LEFT JOIN '. TBL_USER_DATA. ' as first_name
-                ON first_name.usd_usr_id = usr_id
-                   AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-             WHERE mem_usr_id  = usr_id
-               AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
-               AND usr_valid   = 1
-             GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
-             ORDER BY active DESC, last_name ASC, first_name ASC';
+        $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
+                                 email.usd_value as email, (SELECT count(1)
+                                 FROM '.TBL_MEMBERS.', '. TBL_ROLES. ', '. TBL_CATEGORIES. ' as temp
+                                 WHERE mem_usr_id = usr_id
+                                   AND mem_rol_id = rol_id
+                                   AND rol_cat_id = cat_id
+                                   AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+                                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                                       OR cat_org_id IS NULL )
+                                   AND mem_begin <= \''.DATE_NOW.'\'
+                                   AND mem_end   >= \''.DATE_NOW.'\') as mem_active
+                    FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
+                    JOIN '. TBL_USER_DATA. ' as email
+                      ON email.usd_usr_id = usr_id
+                     AND LENGTH(email.usd_value) > 0
+                    JOIN '.TBL_USER_FIELDS.' as field
+                      ON field.usf_id = email.usd_usf_id
+                     AND field.usf_type = \'EMAIL\'
+                    LEFT JOIN '. TBL_USER_DATA. ' as last_name
+                      ON last_name.usd_usr_id = usr_id
+                     AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+                    LEFT JOIN '. TBL_USER_DATA. ' as first_name
+                      ON first_name.usd_usr_id = usr_id
+                     AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+                   WHERE mem_usr_id  = usr_id
+                     AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
+                     AND usr_valid   = 1
+
+                   GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
+                   ORDER BY last_name, first_name';
 
         $result = $gDb->query($sql);
 
-        $next = true;
-        $active = $gL10n->get('LST_ACTIVE_MEMBERS');
-
         while ($row = $gDb->fetch_array($result))
         {
-            // if former members were found then change the string for the group title
-            if ($row['active'] != 1 && $next)
+            if ($row['mem_active'] == 0)
             {
-                $active = $gL10n->get('MSG_FORMER_MEMBERS');
-                $next = false;
+                $passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_FORMER_MEMBERS'));
             }
-
-            $list[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $active);
+            else
+            {
+                $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_ACTIVE_MEMBERS'));
+            }
         }
+
+        $list =  array_merge($list, $active_list, $passive_list);
 
     }
     else
