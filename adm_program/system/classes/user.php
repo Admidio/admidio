@@ -83,14 +83,14 @@ class User extends TableUsers
                  WHERE rol_cat_id = cat_id
                    AND cat_org_id = '.$this->organizationId.'
                    AND rol_default_registration = 1 ';
-        $result = $this->db->query($sql);
+        $defaultRolesStatement = $this->db->query($sql);
 
-        if($this->db->num_rows() === 0)
+        if($defaultRolesStatement->rowCount() === 0)
         {
             $gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
         }
 
-        while($row = $this->db->fetch_array($result))
+        while($row = $defaultRolesStatement->fetch())
         {
             // starts a membership for role from now
             $this->setRoleMembership($row['rol_id']);
@@ -138,9 +138,9 @@ class User extends TableUsers
                            AND rol_cat_id  = cat_id
                            AND (  cat_org_id = '.$this->organizationId.'
                                OR cat_org_id IS NULL ) ';
-                $this->db->query($sql);
+                $rolesStatement = $this->db->query($sql);
 
-                while($row = $this->db->fetch_array())
+                while($row = $rolesStatement->fetch())
                 {
                     if($row['mem_usr_id'] > 0)
                     {
@@ -449,12 +449,12 @@ class User extends TableUsers
                    AND mem_begin <= \''.$endDate.'\'
                    AND mem_end   >= \''.$startDate.'\'
                  ORDER BY mem_begin ASC ';
-        $this->db->query($sql);
+        $membershipStatement = $this->db->query($sql);
 
-        if($this->db->num_rows() === 1)
+        if($membershipStatement->rowCount() === 1)
         {
             // one record found than update this record
-            $row = $this->db->fetch_array();
+            $row = $membershipStatement->fetch();
             $member->setArray($row);
 
             // save new start date if an earlier date exists
@@ -469,10 +469,10 @@ class User extends TableUsers
                 $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
             }
         }
-        elseif($this->db->num_rows() > 1)
+        elseif($membershipStatement->rowCount() > 1)
         {
             // several records found then read min and max date and delete all records
-            while($row = $this->db->fetch_array())
+            while($row = $membershipStatement->fetch())
             {
                 $member->clear();
                 $member->setArray($row);
@@ -852,11 +852,11 @@ class User extends TableUsers
                                AND rol_cat_id = cat_id
                                AND (  cat_org_id = '.$this->organizationId.'
                                    OR cat_org_id IS NULL ) ';
-                    $this->db->query($sql);
+                    $listViewStatement = $this->db->query($sql);
 
-                    if($this->db->num_rows() > 0)
+                    if($listViewStatement->rowCount() > 0)
                     {
-                        while($row = $this->db->fetch_array())
+                        while($row = $listViewStatement->fetch())
                         {
                             if($row['rol_this_list_view'] == 2)
                             {
@@ -1122,12 +1122,12 @@ class User extends TableUsers
                    AND mem_begin <= \''.$endDate.'\'
                    AND mem_end   >= \''.$startDate.'\'
                  ORDER BY mem_begin ASC ';
-        $this->db->query($sql);
+        $membershipStatement = $this->db->query($sql);
 
-        if($this->db->num_rows() === 1)
+        if($membershipStatement->rowCount() === 1)
         {
             // one record found than update this record
-            $row = $this->db->fetch_array();
+            $row = $membershipStatement->fetch();
             $member->setArray($row);
 
             // save new start date if an earlier date exists
@@ -1144,10 +1144,10 @@ class User extends TableUsers
                 $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
             }
         }
-        elseif($this->db->num_rows() > 1)
+        elseif($membershipStatement->rowCount() > 1)
         {
             // several records found then read min and max date and delete all records
-            while($row = $this->db->fetch_array())
+            while($row = $membershipStatement->fetch())
             {
                 $member->clear();
                 $member->setArray($row);

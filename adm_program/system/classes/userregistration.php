@@ -122,9 +122,9 @@ class UserRegistration extends User
         if($this->getValue('usr_valid') == 0)
         {
             $sql = 'SELECT reg_id FROM '.TBL_REGISTRATIONS.' WHERE reg_usr_id = '.$this->getValue('usr_id');
-            $this->db->query($sql);
+            $registrationsStatement = $this->db->query($sql);
 
-            if($this->db->num_rows() === 0)
+            if($registrationsStatement->rowCount() === 0)
             {
                 $return = parent::delete();
             }
@@ -204,9 +204,9 @@ class UserRegistration extends User
                            AND mem_end           > \''.DATE_NOW.'\'
                            AND mem_usr_id        = usr_id
                            AND usr_valid         = 1 ';
-                $result = $this->db->query($sql);
+                $emailStatement = $this->db->query($sql);
 
-                while($row = $this->db->fetch_array($result))
+                while($row = $emailStatement->fetch())
                 {
                     // send mail that a new registration is available
                     $sysmail = new SystemMail($this->db);

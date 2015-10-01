@@ -95,13 +95,12 @@ class Participants
                 FROM '.TBL_MEMBERS.'
                 WHERE mem_rol_id = '.$this->rolId.'
                 AND mem_end    >= \''.DATE_NOW.'\'';
-
-        $result = $this->mDb->query($sql);
+        $membersStatement = $this->mDb->query($sql);
 
         // Write all member Id´s and leader status in an array
         $numParticipants = array();
 
-        while ($row = $this->mDb->fetch_array($result))
+        while ($row = $membersStatement->fetch())
         {
             $numParticipants [] = array('member' => $row['mem_usr_id'], 'leader' => $row['mem_leader']);
         }
@@ -195,10 +194,9 @@ class Participants
                             AND firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
                     WHERE mem_rol_id = '.$this->rolId.'
                     ORDER BY surname '.$this->order.' ';
+            $membersStatement = $this->mDb->query($sql);
 
-            $result = $this->mDb->query($sql);
-
-            while ($row = $this->mDb->fetch_array($result))
+            while ($row = $membersStatement->fetch())
             {
                 $participants[] = array('surname' => $row['surname'], 'firstname' => $row['firstname'], 'leader' => $row['mem_leader']);
             }

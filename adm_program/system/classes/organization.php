@@ -74,8 +74,8 @@ class Organization extends TableAccess
         // read id of system user from database
         $sql = 'SELECT usr_id FROM '.TBL_USERS.'
                  WHERE usr_login_name LIKE \''.$gL10n->get('SYS_SYSTEM').'\' ';
-        $this->db->query($sql);
-        $row = $this->db->fetch_array();
+        $systemUserStatement = $this->db->query($sql);
+        $row = $systemUserStatement->fetch();
         $systemUserId = $row['usr_id'];
 
         // create all systemmail texts and write them into table adm_texts
@@ -294,9 +294,9 @@ class Organization extends TableAccess
             }
             $sql .= ' org_id = '.$this->getValue('org_org_id_parent');
         }
-        $this->db->query($sql);
+        $organizationsStatement = $this->db->query($sql);
 
-        while($row = $this->db->fetch_array())
+        while($row = $organizationsStatement->fetch())
         {
             if($longname)
             {
@@ -322,9 +322,9 @@ class Organization extends TableAccess
         {
             $sql    = 'SELECT * FROM '. TBL_PREFERENCES. '
                         WHERE prf_org_id = '. $this->getValue('org_id');
-            $result = $this->db->query($sql);
+            $preferencesStatement = $this->db->query($sql);
 
-            while($prf_row = $this->db->fetch_array($result))
+            while($prf_row = $preferencesStatement->fetch())
             {
                 $this->preferences[$prf_row['prf_name']] = $prf_row['prf_value'];
             }

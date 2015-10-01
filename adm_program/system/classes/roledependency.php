@@ -81,9 +81,9 @@ class RoleDependency
             $sql = 'SELECT * FROM '. TBL_ROLE_DEPENDENCIES.
                    ' WHERE rld_rol_id_child  = '.$childRoleId.'
                        AND rld_rol_id_parent = '.$parentRoleId;
-            $this->db->query($sql);
+            $roleDependenciesStatement = $this->db->query($sql);
 
-            $row = $this->db->fetch_object();
+            $row = $roleDependenciesStatement->fetchObject();
             if($row)
             {
                 $this->roleIdParent     = $row->rld_rol_id_parent;
@@ -279,14 +279,14 @@ class RoleDependency
                    ' WHERE mem_rol_id = '.$this->roleIdChild.'
                        AND mem_begin <= \''.DATE_NOW.'\'
                        AND mem_end    > \''.DATE_NOW.'\'';
-            $result = $this->db->query($sql);
+            $membershipStatement = $this->db->query($sql);
 
-            $num_rows = $this->db->num_rows($result);
+            $num_rows = $membershipStatement->rowCount();
             if ($num_rows)
             {
                 $member = new TableMembers($this->db);
 
-                while ($row = $this->db->fetch_object($result))
+                while ($row = $membershipStatement->fetch())
                 {
                     $member->startMembership($this->roleIdParent, $row->mem_usr_id);
                 }

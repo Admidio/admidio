@@ -387,9 +387,9 @@ class ProfileFields
                    AND (  cat_org_id IS NULL
                        OR cat_org_id  = '.$organizationId.' )
                  ORDER BY cat_sequence ASC, usf_sequence ASC ';
-        $usfResult = $this->mDb->query($sql);
+        $userFieldsStatement = $this->mDb->query($sql);
 
-        while($row = $this->mDb->fetch_array($usfResult))
+        while($row = $userFieldsStatement->fetch())
         {
             if(isset($this->mProfileFields[$row['usf_name_intern']]) == false)
             {
@@ -422,9 +422,9 @@ class ProfileFields
             $sql = 'SELECT * FROM '.TBL_USER_DATA.', '. TBL_USER_FIELDS. '
                      WHERE usd_usf_id = usf_id
                        AND usd_usr_id = '.$userId;
-            $usdResult = $this->mDb->query($sql);
+            $userDataStatement = $this->mDb->query($sql);
 
-            while($row = $this->mDb->fetch_array($usdResult))
+            while($row = $userDataStatement->fetch())
             {
                 if(isset($this->mUserData[$row['usd_usf_id']]) == false)
                 {
