@@ -8,17 +8,19 @@
  *
  *****************************************************************************/
 
- /** Autoloading function of class files. This function is automatically called
-  *  by PHP. Therefore the class name must be the same as the file name except
-  *  for case sensitive.
-  *  @param $className Name of the class for which the file should be loaded
+ /**
+  * Autoloading function of class files. This function will be later registered
+  *.for default autoload implementation. Therefore the class name must be the same 
+  * as the file name except for case sensitive.
+  * @param $className Name of the class for which the file should be loaded
   */
- function __autoload($className)
+ function admFuncAutoload($className)
  {
     $fileName = SERVER_PATH. '/adm_program/system/classes/'.strtolower($className).'.php';
     require_once($fileName);
  }
-
+// now register this function in this script so only function.php must be included for autoload
+spl_autoload_register('admFuncAutoload');
 
 /** Function checks if the user is a member of the role.
  *  If @b userId is not set than this will be checked for the current user
