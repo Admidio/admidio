@@ -385,7 +385,7 @@ class TableFolder extends TableAccess
             if (file_exists(SERVER_PATH. $this->getValue('fol_path'). '/'. $this->getValue('fol_name'). '/'. $row_files->fil_name)) {
                 $fileExists = true;
 
-                //Filegroesse ermitteln
+                // compute filesize
                 $fileSize = round(filesize(SERVER_PATH. $this->getValue('fol_path'). '/'. $this->getValue('fol_name'). '/'. $row_files->fil_name)/1024);
             }
             else {
@@ -428,39 +428,42 @@ class TableFolder extends TableAccess
                 $fileHandle    = opendir($this->getCompletePathOfFolder());
                 if($fileHandle) {
                     while($file = readdir($fileHandle)) {
-                        if ($file == '.' || $file == '..' || substr($file, 0, 1) == '.') {
+                        if ($file == '.' || $file == '..' || substr($file, 0, 1) == '.') 
+                        {
                             continue;
                         }
-                         else {
-
+                        else 
+                        {
                             //Gucken ob Datei oder Ordner
-                            if (is_dir($this->getCompletePathOfFolder(). '/'. $file)) {
+                            $fileFolderPath = $this->getCompletePathOfFolder(). '/'. $file;
 
+                            if(is_dir($fileFolderPath)) 
+                            {
                                 $alreadyAdded = false;
 
                                 //Gucken ob das Verzeichnis bereits bei den regurlären Files dabei ist.
                                 if (isset($completeFolder['folders'])) {
-                                    for($i=0; $i<count($completeFolder['folders']); $i++) {
-
+                                    for($i=0; $i<count($completeFolder['folders']); $i++) 
+                                    {
                                         $nextFolder = $completeFolder['folders'][$i];
 
-                                        if ($nextFolder['fol_name'] == $file) {
-
+                                        if ($nextFolder['fol_name'] == $file) 
+                                        {
                                             $alreadyAdded = true;
                                         }
 
                                     }
                                 }
 
-                                if (!$alreadyAdded) {
-
-                                    //wenn nicht bereits enthalten wird es nun hinzugefuegt
+                                //wenn nicht bereits enthalten wird es nun hinzugefuegt
+                                if (!$alreadyAdded) 
+                                {
                                     $completeFolder['additionalFolders'][] = array('fol_name' => $file);
                                 }
 
                             }
-                            elseif (is_file($this->getCompletePathOfFolder(). '/'. $file)) {
-
+                            elseif (is_file($fileFolderPath)) 
+                            {
                                 $alreadyAdded = false;
 
                                 //Gucken ob die Datei bereits bei den regurlären Files dabei ist.
@@ -477,10 +480,13 @@ class TableFolder extends TableAccess
                                     }
                                 }
 
-                                if (!$alreadyAdded) {
+                                //wenn nicht bereits enthalten wird es nun hinzugefuegt
+                                if (!$alreadyAdded) 
+                                {
+                                    // compute filesize
+                                    $fileSize = round(filesize($fileFolderPath)/1024);
 
-                                    //wenn nicht bereits enthalten wird es nun hinzugefuegt
-                                    $completeFolder['additionalFiles'][] = array('fil_name' => $file);
+                                    $completeFolder['additionalFiles'][] = array('fil_name' => $file, 'fil_size' => $fileSize);
                                 }
                             }
                          }

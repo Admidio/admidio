@@ -312,7 +312,6 @@
         <text id="DOW_ACCESS_ALLOWED" development="new" translation="edited">Toegang verleend</text>
         <text id="DOW_ADD_TO_DATABASE" development="new" translation="edited">Voeg toe in database</text>
         <text id="DOW_ADDITIONAL_FILES" development="new" translation="edited">Deze lijst geeft u een overzicht van alle bestanden en mappen die nog niet in de database zijn geimporteerd. Voeg ze hier toe. Toegangsrechten zullen van geselecteerde map gekopieerd worden.</text>
-        <text id="DOW_CHOOSE_FILE" development="new" translation="edited">Kies bestand</text>
         <text id="DOW_COUNTER" development="new" translation="edited">Teller</text>
         <text id="DOW_CREATE_FOLDER" development="new" translation="edited">Maak map</text>
         <text id="DOW_DOWNLOADS" development="new" translation="edited">Downloads</text>
@@ -329,7 +328,6 @@
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="edited">Foutmelding tijdens hernoemen van bestand %VAR1%.</text>
         <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">De grootte van bestanden die geupload moeten worden is groter dan toegestaan (maximale grootte: %VAR1% MB).</text>
         <text id="DOW_FILE_TYPE" development="new" translation="edited">Type bestand</text>
-        <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="edited">Onbekende fout tijdens uploaden van bestand %VAR1%.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="edited">Bestand %VAR1_BOLD% is geupload.</text>
         <text id="DOW_FOLDER_CREATED" development="new" translation="edited">Map %VAR1_BOLD% aangemaakt.</text>
         <text id="DOW_FOLDER_EXISTS" development="new" translation="edited">Map %VAR1% bestaat al!\n\nKies svp andere naam.</text>
@@ -350,11 +348,9 @@
         <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="edited">Via dit panel kunt u toegangsrechten van mappen beheren. Toegangsrechten zijn van toepassing op sub-mappen en alle bestaande toegangsrechten worden overschreven. Toegestane rollen moeten toegang hebben tot hogere mappen.</text>
         <text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="edited">Instellingen toegangsrechten map</text>
         <text id="DOW_UNMANAGED_FILES" development="new" translation="edited">Onbeheerde bestanden</text>
-        <text id="DOW_UPLOAD_FILE" development="new" translation="edited">Upload bestand</text>
         <text id="DOW_EDIT_FILE" development="new" translation="edited">Bewerk bestand</text>
         <text id="DOW_EDIT_FOLDER" development="new" translation="edited">Edit map</text>
         <text id="DOW_PREVIOUS_NAME" development="new" translation="edited">Vorige naam</text>
-        <text id="DOW_UPLOAD_FILE" development="new" translation="edited">Bestand uploaden</text>
         <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="edited">Upload naar map %VAR1_BOLD%</text>
         <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Onjuiste pagina weergave of bestand kon niet worden geupload.\nMogelijk is grootte van bestand overschreden. Toegestane upload groote is %VAR1%B!</text>
 
@@ -1231,8 +1227,6 @@
         <text id="SYS_UNLIMITED" development="new" translation="edited">Onbeperkt</text>
         <text id="SYS_UNLOCK" development="new" translation="edited">Heropen</text>
         <text id="SYS_UPDATE" development="new" translation="edited">Update</text>
-        <text id="SYS_UPLOAD" development="new" translation="edited">Upload</text>
-        <text id="SYS_UPLOAD_ERROR" development="new" translation="edited">Bestand(en) kon(den) niet geupload worden.</text>
         <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="edited">Max. upload grootte bestand</text>
         <text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="edited">Bestandsnaam kan niet "Submit" heten.</text>
         <text id="SYS_USER" development="new" translation="edited">gebruiker</text>

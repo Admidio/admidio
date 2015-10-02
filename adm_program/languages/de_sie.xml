@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de_sie">
     <version id="3.1.0" translator="Markus Faßbender">
-        <text id="BAC_FILE_NAME_INVALID" development="changed" translation="todo">Der ausgewählte Dateiname enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen $!?._+-&amp; .</text>
+        <text id="BAC_FILE_NAME_INVALID" development="changed" translation="todo">Der ausgewählte Dateiname enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen $!?._+-()&amp; .</text>
         <text id="SYS_CATEGORIES_VAR" development="new" translation="todo">%VAR1%-Kategorien</text>
         <text id="SYS_CATEGORY_VAR" development="new" translation="todo">%VAR1%-Kategorie</text>
         <text id="SYS_COPY_VAR" development="new" translation="todo">%VAR1% kopieren</text>
@@ -36,9 +36,7 @@
         <text id="DAT_EDIT_ROOMS_DESC" development="changed" translation="todo">Hier können Räume für Veranstaltungen angelegt und bearbeitet werden.</text>
         <text id="DOW_CREATE_FOLDER_DESC" development="changed" translation="todo">Der neue Ordner wird im bestehenden Ordner %VAR1_BOLD% angelegt.</text>
         <text id="DOW_FILES_UPLOADED" development="new" translation="todo">%VAR1% Dateien wurden erfolgreich hochgeladen.</text>
-        <text id="DOW_UPLOAD_ANOTHER_FILE" development="new" translation="todo">Weitere Datei hochladen</text>
         <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="todo">Die Datei konnte nicht hochgeladen werden oder die Seite wurde ungültig aufgerufen.\n\nVermutlich wurde die maximale Dateigröße für Uploads überschritten. Diese ist auf deinem Server auf %VAR1%B eingestellt.</text>
-        <text id="DOW_UPLOAD_TO_FOLDER" development="new" translation="todo">Die Datei wird in den Ordner %VAR1_BOLD% hochgeladen.</text>
         <text id="ECA_LAYOUT" development="new" translation="todo">Layout</text>
         <text id="ECA_SCALE_THUMBNAILS_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige skaliert werden soll. (Standard: 250 Pixel)</text>
         <text id="ECA_MAX_PHOTO_SIZE_DESC" development="new" translation="todo">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild in der Grußkarte haben darf. (Standard: 400 x 250 Pixel)</text>
@@ -450,7 +448,6 @@
         <text id="DOW_ACCESS_ALLOWED" development="new" translation="todo">Zugriff erlaubt</text>
         <text id="DOW_ADD_TO_DATABASE" development="new" translation="todo">Zur Datenbank hinzufügen</text>
         <text id="DOW_ADDITIONAL_FILES" development="new" translation="todo">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</text>
-        <text id="DOW_CHOOSE_FILE" development="new" translation="todo">Datei auswählen</text>
         <text id="DOW_COUNTER" development="new" translation="todo">Zähler</text>
         <text id="DOW_CREATE_FOLDER" development="new" translation="todo">Ordner anlegen</text>
         <text id="DOW_DOWNLOADS" development="new" translation="todo">Downloads</text>
@@ -467,7 +464,6 @@
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="todo">Beim Umbenennen der Datei %VAR1% ist ein Fehler aufgetreten.</text>
         <text id="DOW_FILE_TO_LARGE" development="new" translation="todo">Die hochgeladene Datei übersteigt die zulässige Dateigröße von %VAR1% MB.</text>
         <text id="DOW_FILE_TYPE" development="new" translation="todo">Dateityp</text>
-        <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="todo">Beim Hochladen der Datei %VAR1% ist ein unbekannter Fehler aufgetreten.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="todo">Die Datei %VAR1_BOLD% wurde hochgeladen</text>
         <text id="DOW_FOLDER_CREATED" development="new" translation="todo">Der Ordner %VAR1_BOLD% wurde angelegt.</text>
         <text id="DOW_FOLDER_EXISTS" development="new" translation="todo">Der Ordner %VAR1% existiert bereits!\n\nBitte wählen Sie einen anderen Namen für den Ordner aus.</text>
@@ -488,11 +484,9 @@
         <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="todo">Hier wird konfiguriert welche Rollen Zugriff auf den Ordner haben dürfen. Gesetzte Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen nur Rollen zur Verfügung die auf den übergeordneten Ordner Zugriff haben.</text>
         <text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="todo">Ordnerberechtigungen setzen</text>
         <text id="DOW_UNMANAGED_FILES" development="new" translation="todo">Nicht verwaltete Dateien</text>
-        <text id="DOW_UPLOAD_FILE" development="new" translation="todo">Datei hochladen</text>
         <text id="DOW_EDIT_FILE" development="new" translation="todo">Datei bearbeiten</text>
         <text id="DOW_EDIT_FOLDER" development="new" translation="todo">Ordner bearbeiten</text>
         <text id="DOW_PREVIOUS_NAME" development="new" translation="todo">Bisheriger Name</text>
-        <text id="DOW_UPLOAD_FILE" development="new" translation="todo">Datei hochladen</text>
         <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="todo">Datei in den Ordner %VAR1_BOLD% hochladen</text>
         <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene maximale Uploadgröße von %VAR1% B. überschritten!</text>
 
@@ -1352,8 +1346,6 @@
         <text id="SYS_UNLIMITED" development="new" translation="todo">Unbegrenzt</text>
         <text id="SYS_UNLOCK" development="new" translation="todo">Freigeben</text>
         <text id="SYS_UPDATE" development="new" translation="todo">Aktualisieren</text>
-        <text id="SYS_UPLOAD" development="new" translation="todo">Hochladen</text>
-        <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Die Datei(en) konnten nicht hochgeladen werden.</text>
         <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="todo">max. Uploadgröße</text>
         <text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Der Dateiname darf nicht "submit" heißen.</text>
         <text id="SYS_USER" development="new" translation="todo">Benutzer</text>

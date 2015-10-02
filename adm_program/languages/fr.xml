@@ -97,7 +97,6 @@
         <text id="DOW_ACCESS_ALLOWED" development="new" translation="edited">Accès autorisé</text>
         <text id="DOW_ADD_TO_DATABASE" development="new" translation="edited">Ajouter à la base de donnée</text>
         <text id="DOW_ADDITIONAL_FILES" development="new" translation="edited">Cette liste vise à fournir un aperçu des fichiers et dossiers qui ne sont pas importé dans la base de données. Ajoutez-les ici. Les droits d'accès seront copiés du dossier sélectionné.</text>
-        <text id="DOW_CHOOSE_FILE" development="new" translation="edited">Sélectionner un fichier</text>
         <text id="DOW_COUNTER" development="new" translation="edited">Compteur</text>
         <text id="DOW_CREATE_FOLDER" development="new" translation="edited">Créer un dossier</text>
         <text id="DOW_DOWNLOADS" development="new" translation="edited">Téléchargements</text>
@@ -114,7 +113,6 @@
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="edited">Une erreur c'est produite quand le fichier %VAR1% a été renommé.</text>
         <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">La taille des fichiers téléchargés dépasse la limite accordée(Taille maximum: %VAR1% MB).</text>
         <text id="DOW_FILE_TYPE" development="new" translation="edited">Type de fichier</text>
-        <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="edited">Une erreur non identifiée s'est produite lors du transfère du fichier %VAR1%.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="edited">Téléchargement du fichier %VAR1_BOLD% terminé.</text>
         <text id="DOW_FOLDER_CREATED" development="new" translation="edited">Le dossier %VAR1_BOLD% a été créé.</text>
         <text id="DOW_FOLDER_EXISTS" development="new" translation="edited">Le dossier (%VAR1%) existe déjà!\n\nVeuillez sélectionner un nom différent.</text>
@@ -136,10 +134,8 @@
         <text id="DOW_SET_FOLER_PERMISSIONS" development="new" translation="edited">Appliquer les autorisations du dossier</text>
         <text id="DOW_UNMANAGED_FILES" development="new" translation="edited">Fichiers non gérés</text>
         <text id="DOW_UPLOAD_FILE" development="new" translation="edited">Télécharger le fichier</text>
-        <text id="DOW_EDIT_FILE" development="new" translation="edited">Éditer le fichier</text>
         <text id="DOW_EDIT_FOLDER" development="new" translation="edited">Éditer le dossier</text>
         <text id="DOW_PREVIOUS_NAME" development="new" translation="edited">Nom précédent</text>
-        <text id="DOW_UPLOAD_FILE" development="new" translation="edited">Téléchargement du fichier</text>
         <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="edited">Télécharger le fichier vers le dossier %VAR1_BOLD%</text>
         <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Le fichier n'a pas pu être transféré. \ taille nDélais dépassé, taille de téléchargement du fichier %VAR1%B!</text>
 
@@ -1021,8 +1017,6 @@
         <text id="SYS_UNLIMITED" development="new" translation="edited">Illimité</text>
         <text id="SYS_UNLOCK" development="new" translation="edited">Déverrouiller</text>
         <text id="SYS_UPDATE" development="new" translation="edited">Mise à jour</text>
-        <text id="SYS_UPLOAD" development="new" translation="edited">Téléversé</text>
-        <text id="SYS_UPLOAD_ERROR" development="new" translation="edited">Le(s) Fichier(s) n'a pas pu être téléchargé.</text>
         <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="edited">Taille du fichier maximum télécharger</text>
         <text id="SYS_USER" development="new" translation="edited">Utilisateur</text>
         <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="edited">Aucun utilisateur pourrait être trouvé avec cette ID!</text>

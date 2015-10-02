@@ -8,13 +8,12 @@
  *
  * Parameters:
  *
- * mode   :  1 - Upload files
- *           2 - Datei loeschen
- *           3 - Ordner erstellen
- *           4 - Datei / Ordner umbenennen
- *           5 - Ordner loeschen
- *           6 - Datei / Ordner zur DB hinzufuegen
- *           7 - Berechtigungen für Ordner speichern
+ * mode   :  2 - Delete file
+ *           3 - Create folder
+ *           4 - Rename file/folder
+ *           5 - Delete folder
+ *           6 - Add file/folder to database
+ *           7 - Save access to folder
  * folder_id : Id of the folder in the database
  * file_id   : Id of the file in the database
  * name      : Name of the file/folder that should be added to the database
@@ -52,120 +51,8 @@ if($myFilesDownload->checkSettings() == false)
     $gMessage->show($gL10n->get($myFilesDownload->errorText, $myFilesDownload->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
 }
 
-// upload files
-if ($getMode == 1)
-{
-    if ($getFolderId == 0)
-    {
-        //FolderId ist zum hochladen erforderlich
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-
-    try
-    {
-        // get recordset of current folder from database and throw exception if necessary
-        $targetFolder = new TableFolder($gDb);
-        $targetFolder->getFolderForDownload($getFolderId);
-
-        if(strlen($_FILES['userfile']['name'][0]) == 0)
-        {
-            $gMessage->show($gL10n->get('DOW_UPLOAD_POST_EMPTY', ini_get('upload_max_filesize')));
-        }
-
-
-        $fileSize = 0;
-        $fileName = '';
-        $countUploadedFiles = 0;
-
-        // now check every file
-        for($currentFileNo = 0; isset($_FILES['userfile']['name'][$currentFileNo]) == true; $currentFileNo++)
-        {
-            //Dateigroesse ueberpruefen Servereinstellungen
-            if ($_FILES['userfile']['error'][$currentFileNo] == 1)
-            {
-                $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', ini_get('upload_max_filesize')));
-            }
-
-            //Dateigroesse ueberpruefen Administratoreinstellungen
-            if ($_FILES['userfile']['size'][$currentFileNo] > ($gPreferences['max_file_upload_size']) * 1024 * 1024)
-            {
-                $gMessage->show($gL10n->get('DOW_FILE_TO_LARGE', $gPreferences['max_file_upload_size']));
-            }
-
-            // Wenn eine Datei vorliegt diese in den Ordner hochlagen
-            if ($_FILES['userfile']['error'][$currentFileNo] == 0)
-            {
-                // pruefen, ob die Anhanggroesse groesser als die zulaessige Groesse ist
-                $fileSize = $fileSize + $_FILES['userfile']['size'][$currentFileNo];
-
-                //Falls der Dateityp nicht bestimmt ist auf Standard setzen
-                if (strlen($_FILES['userfile']['type'][$currentFileNo]) <= 0)
-                {
-                    $_FILES['userfile']['type'][$currentFileNo] = 'application/octet-stream';
-                }
-
-                // Dateinamen ermitteln
-                $fileName = $_FILES['userfile']['name'][$currentFileNo];
-
-                // check filename and throw exception if something is wrong
-                if(admStrIsValidFileName($fileName, true))
-                {
-                    if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$fileName))
-                    {
-                        $gMessage->show($gL10n->get('DOW_FILE_EXIST', $fileName));
-                    }
-
-                    // Datei hochladen
-                    if(move_uploaded_file($_FILES['userfile']['tmp_name'][$currentFileNo], $targetFolder->getCompletePathOfFolder(). '/'.$fileName))
-                    {
-                        //Neue Datei noch in der DB eintragen
-                        $newFile = new TableFile($gDb);
-                        $newFile->setValue('fil_fol_id', $targetFolder->getValue('fol_id'));
-                        $newFile->setValue('fil_name', $fileName);
-                        $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
-                        $newFile->setValue('fil_counter', '0');
-                        $newFile->save();
-
-                        // Benachrichtigungs-Email für neue Einträge
-                        $message = $gL10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $fileName, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
-                        $notification = new Email();
-                        $notification->adminNotfication($gL10n->get('DOW_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
-
-                        $countUploadedFiles++;
-                    }
-                    else
-                    {
-                        $gMessage->show($gL10n->get('DOW_FILE_UPLOAD_ERROR', $fileName));
-                    }
-                }
-            }
-        }
-
-        if($currentFileNo == 1)
-        {
-            $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-            $gMessage->show($gL10n->get('DOW_FILE_UPLOADED', $fileName));
-        }
-        else
-        {
-            $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-            $gMessage->show($gL10n->get('DOW_FILES_UPLOADED', $countUploadedFiles));
-        }
-    }
-    catch(AdmException $e)
-    {
-        if($e->getMessage() == 'SYS_FILENAME_EMPTY')
-        {
-            $e->setNewMessage('SYS_FIELD_EMPTY', $gL10n->get('DOW_CHOOSE_FILE'));
-        }
-
-        $e->showHtml();
-    }
-}
-
-
-//Datei loeschen
-elseif ($getMode == 2)
+// Delete file
+if ($getMode == 2)
 {
     if (!$getFileId)
     {

@@ -21,9 +21,7 @@
         <text id="DAT_EDIT_ROOMS_DESC" development="changed" translation="edited">Her kan du oprette og redigere lokaler til aktiviteter.</text>
         <text id="DOW_CREATE_FOLDER_DESC" development="changed" translation="edited">En ny folder vil blive oprettet i folderen %VAR1_BOLD%.</text>
         <text id="DOW_FILES_UPLOADED" development="new" translation="edited">%VAR1% filer er blevet uploadet.</text>
-        <text id="DOW_UPLOAD_ANOTHER_FILE" development="new" translation="edited">Upload yderligere filer</text>
         <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Filen kunne ikke uploades eller der er sket et forkert side kald.\n\nDen maksimale fil upload størrelse er nok overskredet (%VAR1%B for denne server).</text>
-        <text id="DOW_UPLOAD_TO_FOLDER" development="new" translation="edited">Filen vil blive uploaded til folderen %VAR1_BOLD%.</text>
         <text id="ECA_LAYOUT" development="new" translation="edited">Layout</text>
         <text id="ECA_SCALE_THUMBNAILS_DESC" development="new" translation="edited">Her kan du definere størrelsen på den lange side af thumbnail billeder og hvad de scaleres til (Standard: 250px).</text>
         <text id="ECA_MAX_PHOTO_SIZE_DESC" development="new" translation="edited">Den definerede værdi indikerer maximum størrelsen på et billede i postkortet (Standard: 400 x 250 Pixel).</text>
@@ -433,7 +431,6 @@
         <text id="DOW_ACCESS_ALLOWED" development="new" translation="edited">Adgang tilladt</text>
         <text id="DOW_ADD_TO_DATABASE" development="new" translation="edited">Tilføj til database</text>
         <text id="DOW_ADDITIONAL_FILES" development="new" translation="edited">Denne listes opgave er at give et overblik over filer og foldere som ikke er importeret ind i databasen endnu. Tilføj dem her. Adgangs rettigheder vil blive kopieret fra den valgte folder.</text>
-        <text id="DOW_CHOOSE_FILE" development="new" translation="edited">Vælg fil</text>
         <text id="DOW_COUNTER" development="new" translation="edited">Tæller</text>
         <text id="DOW_CREATE_FOLDER" development="new" translation="edited">Opret folder</text>
         <text id="DOW_DOWNLOADS" development="new" translation="edited">Filer</text>
@@ -450,7 +447,6 @@
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="edited">Der opstod en fejl da filen %VAR1% skulle omdøbes.</text>
         <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">Den overførte fil størrelse er større end det tilladte maximum.(maximum fil størrelse: %VAR1% MB).</text>
         <text id="DOW_FILE_TYPE" development="new" translation="edited">Fil type</text>
-        <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="edited">Uidentificeret fejl opstod imens filen %VAR1% blev forsøgt overført.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="edited">Filen %VAR1_BOLD% blev overført.</text>
         <text id="DOW_FOLDER_CREATED" development="new" translation="edited">Folderen %VAR1_BOLD% blev oprettet.</text>
         <text id="DOW_FOLDER_EXISTS" development="new" translation="edited">Folderen %VAR1% eksisterer allerede!\n\nVenligst vælg et andet navn til folderen.</text>
@@ -471,11 +467,9 @@
         <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="edited">Dette panel tillader dig at konfigurere folder adgangs rettigheder. Adgangs rettigheder bliver sat som kaskade igennem underfoldere og alle eksisterende rettigheder bliver overskrevet. Tilladte roller skal have adgang til topfoldere.</text>
         <text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="edited">Sæt folder rettigheder</text>
         <text id="DOW_UNMANAGED_FILES" development="new" translation="edited">Filer uden ejer</text>
-        <text id="DOW_UPLOAD_FILE" development="new" translation="edited">Overfør fil</text>
         <text id="DOW_EDIT_FILE" development="new" translation="edited">Rediger fil</text>
         <text id="DOW_EDIT_FOLDER" development="new" translation="edited">Rediger folder</text>
         <text id="DOW_PREVIOUS_NAME" development="new" translation="edited">Tidligere navn</text>
-        <text id="DOW_UPLOAD_FILE" development="new" translation="edited">Overfører fil</text>
         <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="edited">Overfør fil til folder %VAR1_BOLD%</text>
         <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Ulovlig side visning eller også så kunne filen ikke overføres.\nFil størrelsen har muligvis overskredet den tilladte server definerede størrelse på %VAR1%B!</text>
 
@@ -1332,8 +1326,6 @@
         <text id="SYS_UNLIMITED" development="new" translation="edited">Ubegrænset</text>
         <text id="SYS_UNLOCK" development="new" translation="edited">Lås op</text>
         <text id="SYS_UPDATE" development="new" translation="edited">Opdater</text>
-        <text id="SYS_UPLOAD" development="new" translation="edited">Overfør</text>
-        <text id="SYS_UPLOAD_ERROR" development="new" translation="edited">Fil(er) kunne ikke overføres.</text>
         <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="todo">max. overførsels filstørrelse</text>
         <text id="SYS_USER" development="new" translation="edited">Bruger</text>
         <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="edited">Der kunne ikke findes nogen bruger med dette ID!</text>
