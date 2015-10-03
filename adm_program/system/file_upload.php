@@ -221,8 +221,6 @@ elseif($getMode == 'upload_files')
     }
     elseif($getModule === 'downloads')
     {
-        error_log('folder::'.$uploadDir);
-        error_log('folder::'.$uploadUrl);
         $uploadHandler = new UploadHandlerDownload(array('upload_dir' => $uploadDir,
                                                          'upload_url' => $uploadUrl,
                                                          'image_versions' => array()));

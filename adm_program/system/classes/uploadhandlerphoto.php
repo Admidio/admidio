@@ -1,14 +1,34 @@
 <?php
-
+/*****************************************************************************
+ *
+ * Copyright    : (c) 2004 - 2015 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ *
+ *****************************************************************************/
+/**
+ * @class UploadHandlerPhoto
+ * @brief Improved checks and update of database after upload of photos.
+ *
+ * This class extends the UploadHandler of the jquery-file-upload library. After 
+ * the upload of a photo we do some checks on the file and if no check fails then
+ * the Admidio database will be updated. If you want do upload files for the download
+ * module just create an instance of this class.
+ * @par Examples
+ * @code // create object and do upload
+ * $uploadHandler = new UploadHandlerPhoto(array('upload_dir' => $uploadDir,
+                                                 'upload_url' => $uploadUrl,
+                                                 'image_versions' => array(),
+                                                 'accept_file_types' => '/\.(jpe?g|png)$/i'), true,
+                                                 array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID'))); @endcode
+ */
 require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/UploadHandler.php');
 
-/**
- * Class UploadHandlerPhoto
- */
 class UploadHandlerPhoto extends UploadHandler
 {
     /**
-     * Override the default method to handle the specific things of the photo module.
+     * Override the default method to handle the specific things of the photo module and
+     * update the database after file was succesful uploaded.
      * This method has the same parameters as the default.
      * @param  $uploaded_file
      * @param  $name
@@ -27,94 +47,102 @@ class UploadHandlerPhoto extends UploadHandler
 
         if(!isset($file->error))
         {
-            $fileLocation = SERVER_PATH.'/adm_my_files/photos/upload/'.$file->name;
-            $albumFolder  = SERVER_PATH.'/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
-
-            // create folder if not exists
-            if(file_exists($albumFolder) === false)
+            try
             {
-                $error = $photoAlbum->createFolder();
-
-                if($error['text'] !== '')
+                $fileLocation = SERVER_PATH.'/adm_my_files/photos/upload/'.$file->name;
+                $albumFolder  = SERVER_PATH.'/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
+    
+                // create folder if not exists
+                if(file_exists($albumFolder) === false)
                 {
-                    $file->error = $gL10n->get($error['text'], $error['path']);
-                    return $file;
+                    $error = $photoAlbum->createFolder();
+    
+                    if($error['text'] !== '')
+                    {
+                        $file->error = $gL10n->get($error['text'], $error['path']);
+                        return $file;
+                    }
                 }
-            }
-
-            $newFotoFileNumber = $photoAlbum->getValue('pho_quantity') + 1;
-
-            // read image size
-            $imageProperties = getimagesize($fileLocation);
-            $imageDimensions = $imageProperties[0] * $imageProperties[1];
-
-            if($imageDimensions > admFuncProcessableImageSize())
-            {
-                $file->error = $gL10n->get('PHO_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('MEGA_PIXEL');
-                return $file;
-            }
-
-            // check mime type and set file extension
-            if($imageProperties['mime'] === 'image/jpeg')
-            {
-                $fileExtension = 'jpg';
-            }
-            elseif($imageProperties['mime'] === 'image/png')
-            {
-                $fileExtension = 'png';
-            }
-            else
-            {
-                $file->error = $gL10n->get('PHO_PHOTO_FORMAT_INVALID');
-                return $file;
-            }
-
-            // create image object and scale image to defined size of preferences
-            $image = new Image($fileLocation);
-            $image->setImageType('jpeg');
-            $image->scaleLargerSide($gPreferences['photo_save_scale']);
-            $image->copyToFile(null, $albumFolder.'/'.$newFotoFileNumber.'.jpg');
-            $image->delete();
-
-            // if enabled then save original image
-            if ($gPreferences['photo_keep_original'] == 1)
-            {
-                if(!file_exists($albumFolder.'/originals'))
+    
+                $newFotoFileNumber = $photoAlbum->getValue('pho_quantity') + 1;
+    
+                // read image size
+                $imageProperties = getimagesize($fileLocation);
+                $imageDimensions = $imageProperties[0] * $imageProperties[1];
+    
+                if($imageDimensions > admFuncProcessableImageSize())
+                {
+                    $errorText = $gL10n->get('PHO_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('MEGA_PIXEL');
+                    throw new AdmException($errorText);
+                }
+    
+                // check mime type and set file extension
+                if($imageProperties['mime'] === 'image/jpeg')
+                {
+                    $fileExtension = 'jpg';
+                }
+                elseif($imageProperties['mime'] === 'image/png')
+                {
+                    $fileExtension = 'png';
+                }
+                else
+                {
+                    throw new AdmException('PHO_PHOTO_FORMAT_INVALID');
+                }
+    
+                // create image object and scale image to defined size of preferences
+                $image = new Image($fileLocation);
+                $image->setImageType('jpeg');
+                $image->scaleLargerSide($gPreferences['photo_save_scale']);
+                $image->copyToFile(null, $albumFolder.'/'.$newFotoFileNumber.'.jpg');
+                $image->delete();
+    
+                // if enabled then save original image
+                if ($gPreferences['photo_keep_original'] == 1)
+                {
+                    if(!file_exists($albumFolder.'/originals'))
+                    {
+                        $folder = new Folder($albumFolder);
+                        $folder->createFolder('originals', true);
+                    }
+    
+                    rename($fileLocation, $albumFolder.'/originals/'.$newFotoFileNumber.'.'.$fileExtension);
+                }
+    
+                // save thumbnail
+                if(!file_exists($albumFolder.'/thumbnails'))
                 {
                     $folder = new Folder($albumFolder);
-                    $folder->createFolder('originals', true);
+                    $folder->createFolder('thumbnails', true);
                 }
-
-                rename($fileLocation, $albumFolder.'/originals/'.$newFotoFileNumber.'.'.$fileExtension);
+    
+                $image = new Image($fileLocation);
+                $image->scaleLargerSide($gPreferences['photo_thumbs_scale']);
+                $image->copyToFile(null, $albumFolder.'/thumbnails/'.$newFotoFileNumber.'.jpg');
+                $image->delete();
+    
+                // delete image from upload folder
+                if(file_exists($fileLocation))
+                {
+                    unlink($fileLocation);
+                }
+    
+                // if image was successfully saved in filesystem then update image count of album
+                if(file_exists($albumFolder.'/'.$newFotoFileNumber.'.jpg'))
+                {
+                    $photoAlbum->setValue('pho_quantity', $photoAlbum->getValue('pho_quantity')+1);
+                    $photoAlbum->save();
+                }
+                else
+                {
+                    throw new AdmException('PHO_PHOTO_PROCESSING_ERROR');
+                }
             }
-
-            // save thumbnail
-            if(!file_exists($albumFolder.'/thumbnails'))
+            catch(AdmException $e)
             {
-                $folder = new Folder($albumFolder);
-                $folder->createFolder('thumbnails', true);
-            }
-
-            $image = new Image($fileLocation);
-            $image->scaleLargerSide($gPreferences['photo_thumbs_scale']);
-            $image->copyToFile(null, $albumFolder.'/thumbnails/'.$newFotoFileNumber.'.jpg');
-            $image->delete();
-
-            // delete image from upload folder
-            if(file_exists($fileLocation))
-            {
-                unlink($fileLocation);
-            }
-
-            // if image was successfully saved in filesystem then update image count of album
-            if(file_exists($albumFolder.'/'.$newFotoFileNumber.'.jpg'))
-            {
-                $photoAlbum->setValue('pho_quantity', $photoAlbum->getValue('pho_quantity')+1);
-                $photoAlbum->save();
-            }
-            else
-            {
-                $file->error = $gL10n->get('PHO_PHOTO_PROCESSING_ERROR');
+                $file->error = $e->getText();
+                unlink($this->options['upload_dir'].$file->name);
+                return $file;
             }
         }
 

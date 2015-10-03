@@ -1,14 +1,32 @@
 <?php
-
+/*****************************************************************************
+ *
+ * Copyright    : (c) 2004 - 2015 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ *
+ *****************************************************************************/
+/**
+ * @class UploadHandlerDownload
+ * @brief Improved checks and update of database after upload of files.
+ *
+ * This class extends the UploadHandler of the jquery-file-upload library. After 
+ * the upload of the file we do some checks on the file and if no check fails then
+ * the Admidio database will be updated. If you want do upload files for the download
+ * module just create an instance of this class.
+ * @par Examples
+ * @code // create object and do upload
+ * $uploadHandler = new UploadHandlerDownload(array('upload_dir' => $uploadDir,
+                                                    'upload_url' => $uploadUrl,
+                                                    'image_versions' => array())); @endcode
+ */
 require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/UploadHandler.php');
 
-/**
- * Class UploadHandlerPhoto
- */
 class UploadHandlerDownload extends UploadHandler
 {
     /**
-     * Override the default method to handle the specific things of the photo module.
+     * Override the default method to handle the specific things of the download module and
+     * update the database after file was succesful uploaded.
      * This method has the same parameters as the default.
      * @param  $uploaded_file
      * @param  $name

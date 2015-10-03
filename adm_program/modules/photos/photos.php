@@ -150,7 +150,7 @@ $page->addJavascript('
     $("#menu_item_upload_photo").attr("data-toggle", "modal");
     $("#menu_item_upload_photo").attr("data-target", "#admidio_modal");
     $(".admidio-btn-album-upload").click(function(event){
-        $.get("'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id=" + $(this).attr("data-pho-id"),
+        $.get("'.$g_root_path.'/adm_program/system/file_upload.php?module=photos&id=" + $(this).attr("data-pho-id"),
             function(response) {
                 $(".modal-content").html(response);
                 $("#admidio_modal").modal();
@@ -182,7 +182,7 @@ if($gCurrentUser->editPhotoRight())
     if($getPhotoId > 0)
     {
         // show link to upload photos
-        $photosMenu->addItem('menu_item_upload_photo', $g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$getPhotoId,
+        $photosMenu->addItem('menu_item_upload_photo', $g_root_path.'/adm_program/system/file_upload.php?module=photos&id='.$getPhotoId,
                                     $gL10n->get('PHO_UPLOAD_PHOTOS'), 'photo_upload.png');
     }
 }
