@@ -85,8 +85,8 @@ catch(AdmException $e)
 
 // now check if a valid installation exists.
 $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
-$gDb->query($sql, false);
-$count = $gDb->num_rows();
+$pdoStatement = $gDb->query($sql, false);
+$count = $pdoStatement->rowCount();
 
 if($count === 0)
 {

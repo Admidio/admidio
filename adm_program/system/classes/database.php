@@ -203,7 +203,8 @@ class Database
 
     /**
      * Escapes special characters within the input string.
-     * In contrast to the <a href="http://php.net/manual/en/pdo.quote.php">quote</a> method the returned string has no quotes around the input string!
+     * In contrast to the <a href="http://php.net/manual/en/pdo.quote.php">quote</a> method,
+     * the returned string has no quotes around the input string!
      * @param string $string The string to be quoted.
      * @return string Returns a quoted string that is theoretically safe to pass into an SQL statement.
      * @see <a href="http://php.net/manual/en/pdo.quote.php">PDO::quote</a>
@@ -224,7 +225,7 @@ class Database
 
     /**
      * This method will create an backtrace of the current position in the script. If several
-     * scripts were called than each script with their position will be listet in the backtrace.
+     * scripts were called than each script with their position will be listed in the backtrace.
      * @return string Returns a string with the backtrace of all called scripts.
      */
     protected function getBacktrace()
@@ -336,7 +337,7 @@ class Database
     /**
      * Returns the ID of the unique id column of the last INSERT operation.
      * This method replace the old method Database#insert_id.
-     * @return string Return ID value of the last INSERT operation..
+     * @return string Return ID value of the last INSERT operation.
      * @see Database#insert_id
      */
     public function lastInsertId()
@@ -421,7 +422,7 @@ class Database
         elseif ($gDebug === 1 && strpos(strtoupper($sql), 'SELECT') === 0)
         {
             // if debug modus then show number of selected rows
-            error_log('Found rows: '.$this->num_rows());
+            error_log('Found rows: '.$this->pdoStatement->rowCount());
         }
 
         return $this->pdoStatement;
@@ -721,12 +722,20 @@ class Database
      *             Please use methods Database#fetchAll or Database#fetch instead.
      *             Please use the PHP class <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a>
      *             and the method <a href="http://php.net/manual/en/pdostatement.fetchobject.php">fetchObject</a> instead.
+     * @param object $pdoStatement An object of the class PDOStatement. This should be set if multiple
+     *                             rows where selected and other sql statements are also send to the database.
      * @return object|null Returns an object that corresponds to the fetched row and moves the internal data pointer ahead.
      * @see <a href="http://php.net/manual/en/pdostatement.fetchobject.php">PDOStatement::fetchObject</a>
      */
-    public function fetch_object()
+    public function fetch_object($pdoStatement = null)
     {
-        if (is_object($this->pdoStatement))
+        // if pdo statement is committed then fetch this object
+        if (is_object($pdoStatement))
+        {
+            return $pdoStatement->fetchObject();
+        }
+        // if no pdo statement was committed then take the one from the last query
+        elseif (is_object($this->pdoStatement))
         {
             return $this->pdoStatement->fetchObject();
         }
@@ -738,7 +747,7 @@ class Database
      * Returns the ID of the unique id column of the last INSERT operation.
      * @deprecated This method is deprecated and will be removed in future versions.
      *             Please use methods Database#lastInsertId instead.
-     * @return string Return ID value of the last INSERT operation..
+     * @return string Return ID value of the last INSERT operation.
      * @see Database#lastInsertId
      */
     public function insert_id()
@@ -751,12 +760,25 @@ class Database
      * @deprecated This method is deprecated and will be removed in future versions.
      *             Please use the PHP class <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a>
      *             and the method <a href="http://php.net/manual/en/pdostatement.rowcount.php">rowCount</a> instead.
-     * @return int Return the number of rows of the result of the sql statement.
+     * @param object $pdoStatement An object of the class PDOStatement. This should be set if multiple
+     *                             rows where selected and other sql statements are also send to the database.
+     * @return int|null Return the number of rows of the result of the sql statement.
      * @see <a href="http://php.net/manual/en/pdostatement.rowcount.php">PDOStatement::rowCount</a>
      */
-    public function num_rows()
+    public function num_rows($pdoStatement = null)
     {
-        return $this->pdoStatement->rowCount();
+        // if pdo statement is committed then fetch this object
+        if (is_object($pdoStatement))
+        {
+            return $pdoStatement->rowCount();
+        }
+        // if no pdo statement was committed then take the one from the last query
+        elseif (is_object($this->pdoStatement))
+        {
+            return $this->pdoStatement->rowCount();
+        }
+
+        return null;
     }
 }
 

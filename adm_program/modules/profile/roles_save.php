@@ -120,9 +120,9 @@ foreach($rolesList as $row)
                    AND mem_leader = 0
                    AND mem_begin <= \''.DATE_NOW.'\'
                    AND mem_end    > \''.DATE_NOW.'\'';
-        $gDb->query($sql);
+        $pdoStatement = $gDb->query($sql);
 
-        $row_usr = $gDb->fetch_array();
+        $row_usr = $pdoStatement->fetch();
 
         if($row_usr[0] == 0)
         {
@@ -133,9 +133,9 @@ foreach($rolesList as $row)
                        AND mem_leader = 0
                        AND mem_begin <= \''.DATE_NOW.'\'
                        AND mem_end    > \''.DATE_NOW.'\'';
-            $gDb->query($sql);
+            $pdoStatement = $gDb->query($sql);
 
-            $row_members = $gDb->fetch_array();
+            $row_members = $pdoStatement->fetch();
 
             //Bedingungen fuer Abbruch und Abbruch
             if($row_members[0] >= $row['rol_max_members']

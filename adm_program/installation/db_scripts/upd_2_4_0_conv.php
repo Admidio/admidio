@@ -105,8 +105,8 @@ $systemUser->setValue('usr_timestamp_create', DATETIME_NOW);
 $systemUser->save(false); // no registered user -> UserIdCreate couldn't be filled
 
 $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name_intern = \'LAST_NAME\'';
-$gDb->query($sql);
-$usfRow = $gDb->fetch_array();
+$pdoStatement = $gDb->query($sql);
+$usfRow = $pdoStatement->fetch();
 
 $sql = 'INSERT INTO '. TBL_USER_DATA. ' (usd_usf_id, usd_usr_id, usd_value)
             VALUES ('.$usfRow['usf_id'].', '.$systemUser->getValue('usr_id').', \''.$gL10n->get('SYS_SYSTEM').'\')';

@@ -173,9 +173,9 @@ $sql = 'SELECT lst_id, lst_name FROM '. TBL_LISTS. '
            AND lst_global = 1
            AND lst_name IS NOT NULL
          ORDER BY lst_global ASC, lst_name ASC';
-$gDb->query($sql);
+$pdoStatement = $gDb->query($sql);
 
-while($row = $gDb->fetch_array())
+while($row = $pdoStatement->fetch())
 {
     $selectBoxEntries[$row['lst_id']] = $row['lst_name'];
 }

@@ -134,8 +134,8 @@ $sql = 'SELECT COUNT(*) AS count
           FROM '.TBL_GUESTBOOK.'
          WHERE gbo_org_id = '.$gCurrentOrganization->getValue('org_id').
                $conditions;
-$result = $gDb->query($sql);
-$row = $gDb->fetch_array();
+$pdoStatement = $gDb->query($sql);
+$row = $pdoStatement->fetch();
 $num_guestbook = $row['count'];
 
 // Anzahl Gaestebucheintraege pro Seite
@@ -177,8 +177,8 @@ if($getModeration == 0 && $gCurrentUser->editGuestbookRight() && $gPreferences['
                        AND gbc_locked = 1) AS count_locked_comments
               FROM '.TBL_ORGANIZATIONS.'
              WHERE org_id = '.$gCurrentOrganization->getValue('org_id');
-    $gDb->query($sql);
-    $row = $gDb->fetch_array();
+    $pdoStatement = $gDb->query($sql);
+    $row = $pdoStatement->fetch();
     $countLockedEntries = $row['count_locked_guestbook'] + $row['count_locked_comments'];
 
     if($countLockedEntries > 0)
@@ -206,9 +206,9 @@ $sql = 'SELECT *
          LIMIT '. $guestbook_entries_per_page.' OFFSET '.$getStart;
 $guestbookStatement = $gDb->query($sql);
 
-$countGuestbookEntries = $gDb->num_rows();
+$countGuestbookEntries = $guestbookStatement->rowCount();
 
-if ($countGuestbookEntries == 0)
+if ($countGuestbookEntries === 0)
 {
     // Keine Gaestebucheintraege gefunden
     if ($getGboId > 0)
@@ -223,7 +223,7 @@ if ($countGuestbookEntries == 0)
 else
 {
     // Gaestebucheintraege auflisten
-    while ($row = $gDb->fetch_array($guestbookStatement))
+    while ($row = $guestbookStatement->fetch())
     {
         // GB-Objekt initialisieren und neuen DS uebergeben
         $guestbook->clear();

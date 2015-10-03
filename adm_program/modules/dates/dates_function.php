@@ -294,8 +294,8 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
 
         $sql_cal = 'SELECT cat_name FROM '.TBL_CATEGORIES.'
                      WHERE cat_id = '.$_POST['dat_cat_id'];
-        $gDb->query($sql_cal);
-        $row_cal  = $gDb->fetch_array();
+        $pdoStatement = $gDb->query($sql_cal);
+        $row_cal  = $pdoStatement->fetch();
         $calendar = $row_cal['cat_name'];
 
         if(strlen($_POST['dat_location']) > 0)
@@ -349,8 +349,8 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         // Kategorie fuer Terminbestaetigungen einlesen
         $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.'
                  WHERE cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'';
-        $gDb->query($sql);
-        $row = $gDb->fetch_array();
+        $pdoStatement = $gDb->query($sql);
+        $row = $pdoStatement->fetch();
 
         // create role for participations
         if($getCopy)
@@ -358,8 +358,8 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
             // copy original role with their settings
             $sql = 'SELECT dat_rol_id FROM '.TBL_DATES.'
                      WHERE dat_id = '.$originalDateId;
-            $gDb->query($sql);
-            $row = $gDb->fetch_array();
+            $pdoStatement = $gDb->query($sql);
+            $row = $pdoStatement->fetch();
 
             $role = new TableRoles($gDb, $row['dat_rol_id']);
             $role->setValue('rol_id', '0');

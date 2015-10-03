@@ -532,9 +532,9 @@ $sql = 'SELECT * FROM '. TBL_LISTS. '
                            AND (  lst_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                                OR lst_global = 1)
                          ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC ';
-$lst_result = $gDb->query($sql);
+$listStatement = $gDb->query($sql);
 
-if($gDb->num_rows() > 0)
+if($listStatement->rowCount() > 0)
 {
     $list_global_flag = '';
     $list_name_flag   = '';
@@ -544,7 +544,7 @@ if($gDb->num_rows() > 0)
     $tableListNameFlag   = null;
     $tableList = new TableLists($gDb);
 
-    while($row = $gDb->fetch_array($lst_result))
+    while($row = $listStatement->fetch())
     {
         $tableList->clear();
         $tableList->setArray($row);
