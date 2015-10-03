@@ -2,6 +2,7 @@
 <language id="de_sie">
     <version id="3.0.0-Beta.4" translator="Markus Faßbender">
         <text id="INS_DATABASE_LOGIN_DESC" development="changed" translation="todo">Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere Admidio-Installationen auf derselben Datenbank einrichten möchten.</text>
+        <text id="PHO_FILE_UPLOADED" development="new" translation="todo">Das Bild %VAR1_BOLD% wurde hochgeladen.</text>
     </version>
     <version id="3.0.0-Beta.3" translator="Markus Faßbender">
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="todo">Ein Termin wurde geändert</text>

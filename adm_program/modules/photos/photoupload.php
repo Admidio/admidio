@@ -95,7 +95,7 @@ if($getMode == 'choose_files')
                     }
                     else {
                         var message = "'.$gL10n->get('PHO_FILE_UPLOADED').'";
-                        var newMessage = message.replace("%VAR1%", "<strong>" + file.name + "</strong>");
+                        var newMessage = message.replace("%VAR1_BOLD%", "<strong>" + file.name + "</strong>");
                         $("<p/>").html(newMessage).appendTo("#files");
                     }
                 });
