@@ -201,7 +201,7 @@ function strValidCharacters($string, $checkType)
                 $validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß.-_@';
                 break;
             case 'file':
-                $validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß$&!?.-_+ ';
+                $validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß$&!?.-_+() ';
                 break;
             case 'noSpecialChar': // eine einfache E-Mail-Adresse sollte dennoch moeglich sein (Benutzername)
                 $validChars = 'abcdefghijklmnopqrstuvwxyz0123456789.-_+@';

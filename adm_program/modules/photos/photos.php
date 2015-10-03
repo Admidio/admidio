@@ -453,7 +453,7 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
         }
 
         $page->addHtml('
-          <div class="col-sm-6" id="panel_pho_'.$childPhotoAlbum->getValue('pho_id').'">
+          <div class="col-sm-6 admidio-album-card" id="panel_pho_'.$childPhotoAlbum->getValue('pho_id').'">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="pull-left"><h4 class="panel-title">'.$albumTitle.'</h4></div>
@@ -482,11 +482,11 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-6">
+                        <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-preview">
                             <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img
                                 class="thumbnail" src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$shuffle_image['shuffle_pho_id'].'&amp;photo_nr='.$shuffle_image['shuffle_img_nr'].'&amp;thumb=1" alt="'.$gL10n->get('PHO_PHOTOS').'" /></a>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6">');
+                        <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-description">');
                             $form = new HtmlForm('form_album_'.$childPhotoAlbum->getValue('pho_id'), null, $page, array('type' => 'vertical'));
                             $form->addStaticControl('pho_date', $gL10n->get('SYS_DATE'), $albumDate);
                             $form->addStaticControl('pho_count', $gL10n->get('SYS_PHOTOS'), $childPhotoAlbum->countImages());
