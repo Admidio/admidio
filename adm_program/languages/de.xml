@@ -18,6 +18,7 @@
     </version>
     <version id="3.0.0-Beta.4" translator="Markus Faßbender">
         <text id="INS_DATABASE_LOGIN_DESC" development="changed" translation="todo">Gib in diesem Formular deine Zugangsdaten zur Datenbank an. Du kannst das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls du mehrere Admidio-Installationen auf derselben Datenbank einrichten möchtest.</text>
+        <text id="PHO_FILE_UPLOADED" development="new" translation="todo">Das Bild %VAR1_BOLD% wurde hochgeladen.</text>
     </version>
     <version id="3.0.0-Beta.3" translator="Markus Faßbender">
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="todo">Ein Termin wurde geändert</text>
@@ -108,7 +109,6 @@
         <text id="PHO_ALBUM_LOCK_DESC" development="new" translation="todo">Gesperrte Alben können von Besuchern und Mitgliedern nicht eingesehen werden. Du kannst zum Beispiel ein Album vorübergehen sperren, während du gerade alle Bilder des Albums hochlädst.</text>
         <text id="PHO_ALBUM_UNLOCK" development="new" translation="todo">Album entsperren</text>
         <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="todo">Hier kann eingestellt werden, wie die Fotos im Fotomodul präsentiert werden sollen. Dies kann als modales Fenster geschehen, dann wird im vorhandenen Browserfenster ein neues Fenster geöffnet. Im Hintergrund bleibt die ausgewählte Fotovorschau weiterhin aktiv. Sollen die Bilder im gleichen Fenster dargestellt werden, dann wird die aktuelle Fotovorschau verlassen und eine neue Seite mit dem ausgewählten Foto angezeigt. Soll ein Popup-Fenster erzeugt werden, dann wird ein neues Browserfenster geöffnet in dem das ausgewählte Foto angezeigt wird. Dieses kann dann unabhängig vom Browserfenster mit der Fotovorschau bedient werden. (Standard: Modales Fenster)</text>
-        <text id="PHO_FILE_UPLOADED" development="new" translation="todo">Das Bild %VAR1% wurde hochgeladen.</text>
         <text id="PHO_MODAL_WINDOW" development="new" translation="todo">Modales Fenster</text>
         <text id="PHO_MAX_PHOTO_SIZE_WIDTH" development="new" translation="todo">Max. Bildanzeigegröße (Breite)</text>
         <text id="PHO_MAX_PHOTO_SIZE_HEIGHT" development="new" translation="todo">Max. Bildanzeigegröße (Höhe)</text>

@@ -118,12 +118,12 @@ class RoleDependency
         {
             $sql = 'SELECT rld_rol_id_child FROM '. TBL_ROLE_DEPENDENCIES.
                    ' WHERE rld_rol_id_parent = '.$parentId;
-            $db->query($sql);
+            $pdoStatement = $db->query($sql);
 
-            $num_rows = $db->num_rows();
-            if ($num_rows)
+            $numRows = $pdoStatement->rowCount();
+            if ($numRows)
             {
-                while ($row = $db->fetch_object())
+                while ($row = $pdoStatement->fetchObject())
                 {
                     $allChildIds[] = $row->rld_rol_id_child;
                 }
@@ -145,12 +145,12 @@ class RoleDependency
         {
             $sql = 'SELECT rld_rol_id_parent FROM '.TBL_ROLE_DEPENDENCIES.
                    ' WHERE rld_rol_id_child = '.$childId;
-            $db->query($sql);
+            $pdoStatement = $db->query($sql);
 
-            $num_rows = $db->num_rows();
-            if ($num_rows)
+            $numRows = $pdoStatement->rowCount();
+            if ($numRows)
             {
-                while ($row = $db->fetch_object())
+                while ($row = $pdoStatement->fetchObject())
                 {
                     $allParentIds[] = $row->rld_rol_id_parent;
                 }

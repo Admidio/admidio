@@ -65,8 +65,8 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
                    AND usr_valid  = 1
                    AND LENGTH(usr_login_name) > 0
                  GROUP BY usr_id';
-        $result = $gDb->query($sql);
-        $count  = $gDb->num_rows();
+        $pdoStatement = $gDb->query($sql);
+        $count = $pdoStatement->rowCount();
 
         // show error if no user found or more than one user found
         if($count === 0)
@@ -78,7 +78,7 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
             $gMessage->show($gL10n->get('SYS_LOSTPW_SEVERAL_EMAIL', $_POST['recipient_email']));
         }
 
-        $row  = $gDb->fetch_array($result);
+        $row  = $pdoStatement->fetch();
         $user = new User($gDb, $gProfileFields, $row['usr_id']);
 
         // create and save new password and activation id

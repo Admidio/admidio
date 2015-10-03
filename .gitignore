@@ -6,3 +6,5 @@
 !/adm_my_files/mail_templates/
 !/adm_my_files/config_example.php
 !/adm_my_files/index.html
+
+adm_program/modules/photos/photoupload.php

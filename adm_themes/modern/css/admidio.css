@@ -777,6 +777,12 @@ body > .admidio-content {
     height: 200px;
 }
 
+@media (min-width: 992px) and (max-width: 1100px) {
+    .admidio-album-card-description {
+        padding-left: 30px;
+    }
+}
+
 .thumbnail:hover {
     border: 1px solid #ff9c00;
 }
@@ -785,7 +791,6 @@ body > .admidio-content {
     margin-bottom: 5px;
 }
 
-/* Won't get fixed in lightbox-lib */
 /* Needed to remove dotted border around images in firefox */
 .ekko-lightbox-nav-overlay a {
     outline: none;

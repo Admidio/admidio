@@ -265,8 +265,8 @@ if(!$db->query('SELECT 1 FROM '.TBL_COMPONENTS, false))
     $sql = 'SELECT prf_value FROM '.$g_tbl_praefix.'_preferences
              WHERE prf_name   = \'db_version\'
                AND prf_org_id = 1';
-    $db->query($sql);
-    $row  = $db->fetch_array();
+    $pdoStatement = $db->query($sql);
+    $row = $pdoStatement->fetch();
     $databaseVersion = $row['prf_value'];
 }
 else

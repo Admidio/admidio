@@ -62,7 +62,7 @@ class User extends TableUsers
 
         $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
         $this->mProfileFieldsData->setDatabase($database);
-        
+
         $this->organizationId = $gCurrentOrganization->getValue('org_id');
         parent::__construct($database, $userId);
     }
@@ -149,7 +149,7 @@ class User extends TableUsers
                         {
                             // if user is leader in this role than add role id and leader rights to array
                             $this->rolesMembershipLeader[$row['rol_id']] = $row['rol_leader_rights'];
-    
+
                             // if role leader could assign new members then remember this setting
                             // roles for confirmation of dates should be ignored
                             if($row['cat_name_intern'] != 'CONFIRMATION_OF_PARTICIPATION'
@@ -162,7 +162,7 @@ class User extends TableUsers
                         {
                             $this->rolesMembershipNoLeader[] = $row['rol_id'];
                         }
-    
+
                         // add role to membership array
                         $this->rolesMembership[] = $row['rol_id'];
 
@@ -175,7 +175,7 @@ class User extends TableUsers
                                 $tmp_roles_rights[$key] = '1';
                             }
                         }
-    
+
                         // set flag assignRoles of user can manage roles
                         if($row['rol_assign_roles'] == 1)
                         {
@@ -586,8 +586,8 @@ class User extends TableUsers
         return $this->rolesMembership;
     }
 
-    /*
-     * Returns an array with all role ids where the user is a member 
+    /**
+     * Returns an array with all role ids where the user is a member
      * and not a leader of the role.
      * @return Returns an array with all role ids where the user is a member
      *         and not a leader of the role.
@@ -598,7 +598,7 @@ class User extends TableUsers
         return $this->rolesMembershipNoLeader;
     }
 
-    /** 
+    /**
      * Get the value of a column of the database table if the column has the praefix @b usr_
      * otherwise the value of the profile field of the table adm_user_data will be returned.
      * If the value was manipulated before with @b setValue than the manipulated value is returned.

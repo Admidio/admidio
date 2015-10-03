@@ -62,9 +62,9 @@ class TableInventoryField extends TableAccess
             $newNameIntern = $newNameIntern.'_'.$index;
         }
         $sql = 'SELECT inf_id FROM '.TBL_INVENT_FIELDS.' WHERE inf_name_intern = \''.$newNameIntern.'\'';
-        $this->db->query($sql);
+        $pdoStatement = $this->db->query($sql);
 
-        if($this->db->num_rows() > 0)
+        if($pdoStatement->rowCount() > 0)
         {
             $index++;
             $newNameIntern = $this->getNewNameIntern($name, $index);
@@ -272,9 +272,9 @@ class TableInventoryField extends TableAccess
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) as count FROM '. TBL_INVENT_FIELDS. '
                      WHERE inf_cat_id = '.$newValue;
-            $this->db->query($sql);
+            $pdoStatement = $this->db->query($sql);
 
-            $row = $this->db->fetch_array();
+            $row = $pdoStatement->fetch();
 
             $this->setValue('inf_sequence', $row['count'] + 1);
         }

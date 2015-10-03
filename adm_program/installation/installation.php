@@ -94,8 +94,8 @@ if(file_exists('../../adm_my_files/config.php'))
 
     // now check if a valid installation exists.
     $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
-    $db->query($sql, false);
-    $count = $db->num_rows();
+    $pdoStatement = $db->query($sql, false);
+    $count = $pdoStatement->rowCount();
 
     if($count > 0)
     {
@@ -274,8 +274,8 @@ elseif($getMode == 4)  // Creating organization
 
             // now check if a valid installation exists.
             $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
-            $db->query($sql, false);
-            $count = $db->num_rows();
+            $pdoStatement = $db->query($sql, false);
+            $count = $pdoStatement->rowCount();
 
             if($count > 0)
             {

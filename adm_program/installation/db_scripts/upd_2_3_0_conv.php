@@ -38,21 +38,21 @@ $sql = 'SELECT min(mem_usr_id) as webmaster_id
            AND rol_cat_id = cat_id
            AND rol_name   = \'Webmaster\'
            AND mem_rol_id = rol_id ';
-$result = $gDb->query($sql);
-$rowWebmaster = $gDb->fetch_array($result);
+$pdoStatement = $gDb->query($sql);
+$rowWebmaster = $pdoStatement->fetch();
 
 // if messenger category exists than transform the field definition
 $sql = 'SELECT cat_id FROM '. TBL_CATEGORIES.' WHERE cat_type = \'USF\' AND cat_name_intern = \'MESSENGER\' ';
-$gDb->query($sql);
-$rowCategory = $gDb->fetch_array();
+$pdoStatement = $gDb->query($sql);
+$rowCategory = $pdoStatement->fetch();
 
-if($gDb->num_rows() > 0)
+if($pdoStatement->rowCount() > 0)
 {
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS.'
              WHERE usf_cat_id = '.$rowCategory[0].'
                AND usf_name_intern = \'AOL_INSTANT_MESSENGER\' ';
-    $gDb->query($sql);
-    $rowProfileField = $gDb->fetch_array();
+    $pdoStatement = $gDb->query($sql);
+    $rowProfileField = $pdoStatement->fetch();
 
     if($rowProfileField[0] > 0)
     {
@@ -66,8 +66,8 @@ if($gDb->num_rows() > 0)
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS.'
              WHERE usf_cat_id = '.$rowCategory[0].'
                AND usf_name_intern = \'GOOGLE_TALK\' ';
-    $gDb->query($sql);
-    $rowProfileField = $gDb->fetch_array();
+    $pdoStatement = $gDb->query($sql);
+    $rowProfileField = $pdoStatement->fetch();
 
     if($rowProfileField[0] > 0)
     {
@@ -83,8 +83,8 @@ if($gDb->num_rows() > 0)
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS.'
              WHERE usf_cat_id = '.$rowCategory[0].'
                AND usf_name_intern = \'ICQ\' ';
-    $gDb->query($sql);
-    $rowProfileField = $gDb->fetch_array();
+    $pdoStatement = $gDb->query($sql);
+    $rowProfileField = $pdoStatement->fetch();
 
     if($rowProfileField[0] > 0)
     {
@@ -99,8 +99,8 @@ if($gDb->num_rows() > 0)
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS.'
              WHERE usf_cat_id = '.$rowCategory[0].'
                AND usf_name_intern = \'MSN_MESSENGER\' ';
-    $gDb->query($sql);
-    $rowProfileField = $gDb->fetch_array();
+    $pdoStatement = $gDb->query($sql);
+    $rowProfileField = $pdoStatement->fetch();
 
     if($rowProfileField[0] > 0)
     {
@@ -115,8 +115,8 @@ if($gDb->num_rows() > 0)
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS.'
              WHERE usf_cat_id = '.$rowCategory[0].'
                AND usf_name_intern = \'SKYPE\' ';
-    $gDb->query($sql);
-    $rowProfileField = $gDb->fetch_array();
+    $pdoStatement = $gDb->query($sql);
+    $rowProfileField = $pdoStatement->fetch();
 
     if($rowProfileField[0] > 0)
     {
@@ -130,8 +130,8 @@ if($gDb->num_rows() > 0)
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS.'
              WHERE usf_cat_id = '.$rowCategory[0].'
                AND usf_name_intern = \'YAHOO_MESSENGER\' ';
-    $gDb->query($sql);
-    $rowProfileField = $gDb->fetch_array();
+    $pdoStatement = $gDb->query($sql);
+    $rowProfileField = $pdoStatement->fetch();
 
     if($rowProfileField[0] > 0)
     {

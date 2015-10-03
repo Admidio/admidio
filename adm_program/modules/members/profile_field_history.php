@@ -102,8 +102,8 @@ $sql = 'SELECT COUNT(1) as count
           FROM '.TBL_USER_LOG.'
          WHERE 1 = 1 '.
                $sqlConditions;
-$gDb->query($sql);
-$row = $gDb->fetch_array();
+$pdoStatement = $gDb->query($sql);
+$row = $pdoStatement->fetch();
 $countChanges = $row['count'];
 
 // create select statement with all necessary data

@@ -308,11 +308,11 @@ class Inventory extends TableInventory
                                   AND rol_cat_id = cat_id
                                   AND (  cat_org_id = '.$this->organizationId.'
                                       OR cat_org_id IS NULL ) ';
-                    $this->db->query($sql);
+                    $pdoStatement = $this->db->query($sql);
 
-                    if($this->db->num_rows() > 0)
+                    if($pdoStatement->rowCount() > 0)
                     {
-                        while($row = $this->db->fetch_array())
+                        while($row = $pdoStatement->fetch())
                         {
                             if($row['rol_this_list_view'] == 2)
                             {
