@@ -374,14 +374,20 @@ elseif ($getMode == 6)
 //Berechtigungen fuer einen Ordner speichern
 elseif ($getMode == 7)
 {
-    if ($getFolderId == 0) {
+    if(!isset($_POST['adm_allowed_roles']))
+    {
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
+    }
+
+    if ($getFolderId == 0 || !is_array($_POST['adm_allowed_roles']))
+    {
         //FolderId ist zum hinzufuegen erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     try
     {
-        // get recordset of current folder from databse
+        // get recordset of current folder from database
         $targetFolder = new TableFolder($gDb);
         $targetFolder->getFolderForDownload($getFolderId);
 
@@ -392,48 +398,29 @@ elseif ($getMode == 7)
             $parentFolder->getFolderForDownload($targetFolder->getValue('fol_fol_id_parent'));
         }
 
-        //Formularinhalt aufbereiten
-        if($targetFolder->getValue('fol_fol_id_parent') && $parentFolder->getValue('fol_public') == 0)
+        if(in_array(0, $_POST['adm_allowed_roles']))
         {
-            $publicFlag = $targetFolder->getValue('fol_public');
+            $public = 1;
         }
         else
         {
-            if(isset($_POST['fol_public']) == false || $_POST['fol_public'] == 0)
-            {
-                $publicFlag = 1;
-            }
-            else
-            {
-                $publicFlag = 0;
-            }
+            $public = 0;
         }
 
-        //setze schon einmal das Public_Flag
-        $targetFolder->editPublicFlagOnFolder($publicFlag);
+        // set flag public for this folder and all child folders
+        $targetFolder->editPublicFlagOnFolder($public);
 
-        $rolesArray = null;
-        //Nur wenn der Ordner oeffentlich nicht zugaenglich ist
-        //werden die Rollenbrechtigungen gespeichert.
-        //Ansonsten wird ein leeres Rollenset gespeichert...
-        if ($publicFlag == 0)
+        // now set all rol
+        if ($public === 0)
         {
-            //Rollenberechtigungen aufbereiten
-            if(array_key_exists('AllowedRoles', $_POST))
-            {
-                $sentAllowedRoles = $_POST['AllowedRoles'];
-
-                //fuege alle neuen Rollen hinzu
-                foreach ($sentAllowedRoles as $newRole)
-                {
-                    $rolesArray[] = array('rol_id'        => $newRole,
-                                          'rol_name'      => '');
-                }
-            }
+            // save all set roles in the database
+            $targetFolder->setRolesOnFolder($_POST['adm_allowed_roles']);
         }
-
-        //jetzt noch die Rollenberechtigungen in die DB schreiben
-        $targetFolder->setRolesOnFolder($rolesArray);
+        else
+        {
+            // if all users have access then delete all existing roles
+            $targetFolder->setRolesOnFolder(array());
+        }
 
         $targetFolder->save();
 

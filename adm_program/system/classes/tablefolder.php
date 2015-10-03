@@ -160,8 +160,11 @@ class TableFolder extends TableAccess
         $this->db->endTransaction();
     }
 
-    // Setzt das Publicflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
-    // und all seinen Unterordnern rekursiv
+    /**
+     * Set the public flag to a folder and all subfolders.
+     * @param bool $public   If set to @b 1 then all users could see this folder.
+     * @param int  $folderId The id of the folder where the public flag should be set.
+     */
     public function editPublicFlagOnFolder($public_flag, $folderId = 0)
     {
         if ($folderId == 0)
@@ -428,26 +431,26 @@ class TableFolder extends TableAccess
                 $fileHandle    = opendir($this->getCompletePathOfFolder());
                 if($fileHandle) {
                     while($file = readdir($fileHandle)) {
-                        if ($file == '.' || $file == '..' || substr($file, 0, 1) == '.') 
+                        if ($file == '.' || $file == '..' || substr($file, 0, 1) == '.')
                         {
                             continue;
                         }
-                        else 
+                        else
                         {
                             //Gucken ob Datei oder Ordner
                             $fileFolderPath = $this->getCompletePathOfFolder(). '/'. $file;
 
-                            if(is_dir($fileFolderPath)) 
+                            if(is_dir($fileFolderPath))
                             {
                                 $alreadyAdded = false;
 
                                 //Gucken ob das Verzeichnis bereits bei den regurlären Files dabei ist.
                                 if (isset($completeFolder['folders'])) {
-                                    for($i=0; $i<count($completeFolder['folders']); $i++) 
+                                    for($i=0; $i<count($completeFolder['folders']); $i++)
                                     {
                                         $nextFolder = $completeFolder['folders'][$i];
 
-                                        if ($nextFolder['fol_name'] == $file) 
+                                        if ($nextFolder['fol_name'] == $file)
                                         {
                                             $alreadyAdded = true;
                                         }
@@ -456,13 +459,13 @@ class TableFolder extends TableAccess
                                 }
 
                                 //wenn nicht bereits enthalten wird es nun hinzugefuegt
-                                if (!$alreadyAdded) 
+                                if (!$alreadyAdded)
                                 {
                                     $completeFolder['additionalFolders'][] = array('fol_name' => $file);
                                 }
 
                             }
-                            elseif (is_file($fileFolderPath)) 
+                            elseif (is_file($fileFolderPath))
                             {
                                 $alreadyAdded = false;
 
@@ -481,7 +484,7 @@ class TableFolder extends TableAccess
                                 }
 
                                 //wenn nicht bereits enthalten wird es nun hinzugefuegt
-                                if (!$alreadyAdded) 
+                                if (!$alreadyAdded)
                                 {
                                     // compute filesize
                                     $fileSize = round(filesize($fileFolderPath)/1024);
@@ -592,11 +595,16 @@ class TableFolder extends TableAccess
         }
     }
 
-    //Gibt die aktuellen Rollenbrechtigungen des Ordners als Array zurueck
-    public function getRoleArrayOfFolder()
+    /**
+     * Creates an array with all roles ids that have the right to view the folder.
+     * If you need also the name of the folder then set the parameter to true.
+     * @param bool In addition to the id also read the name of the role and return them.
+     * @return Returns an array with all roles ids that have the right to view the folder.
+     */
+    public function getRoleArrayOfFolder($readRolesName = false)
     {
         //RueckgabeArray initialisieren
-        $roleArray = null;
+        $roleArray = array();
 
         //Erst einmal die aktuellen Rollenberechtigungen fuer den Ordner auslesen
         $sql_rolset = 'SELECT * FROM '. TBL_FOLDER_ROLES. ', '. TBL_ROLES. '
@@ -604,12 +612,19 @@ class TableFolder extends TableAccess
                               AND flr_rol_id = rol_id';
         $rolesetStatement = $this->db->query($sql_rolset);
 
-        while($row_roleset = $rolesetStatement->fetchObject())
+        while($rowRoleset = $rolesetStatement->fetchObject())
         {
-            //Jede Rolle wird nun dem Array hinzugefuegt
-            $roleArray[] = array(
-                                'rol_id'        => $row_roleset->rol_id,
-                                'rol_name'      => $row_roleset->rol_name);
+            if($readRolesName)
+            {
+                //Jede Rolle wird nun dem Array hinzugefuegt
+                $roleArray[] = array(
+                                    'rol_id'        => $rowRoleset->rol_id,
+                                    'rol_name'      => $rowRoleset->rol_name);
+            }
+            else
+            {
+                $roleArray[] = $rowRoleset->rol_id;
+            }
         }
 
         return $roleArray;
@@ -719,10 +734,12 @@ class TableFolder extends TableAccess
         $this->db->query($sql_delete);
 
         //Jetzt die neuen Berechtigungen schreiben
-        if (count($rolesArray) > 0) {
-            for($i=0; $i<count($rolesArray); $i++) {
+        if (count($rolesArray) > 0)
+        {
+            foreach($rolesArray as $rolesId)
+            {
                 $sql_insert = 'INSERT INTO '. TBL_FOLDER_ROLES. ' (flr_fol_id, flr_rol_id)
-                                  VALUES ('. $folderId. ', '. $rolesArray[$i]['rol_id']. ')';
+                                    VALUES ('. $folderId. ', '. $rolesId. ')';
                 $this->db->query($sql_insert);
             }
         }

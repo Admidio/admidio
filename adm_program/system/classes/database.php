@@ -176,6 +176,8 @@ class Database
      */
     public function endTransaction()
     {
+        global $gDebug;
+
         // if there is no open transaction then do nothing and return
         if ($this->transactions === 0)
         {
@@ -188,6 +190,12 @@ class Database
         {
             $this->transactions--;
             return true;
+        }
+
+        // if debug mode then log all sql statements
+        if ($gDebug === 1)
+        {
+            error_log('COMMIT');
         }
 
         $result = $this->pdo->commit();
@@ -437,8 +445,16 @@ class Database
      */
     public function rollback()
     {
+        global $gDebug;
+
         if ($this->transactions > 0)
         {
+            // if debug mode then log all sql statements
+            if ($gDebug === 1)
+            {
+                error_log('ROLLBACK');
+            }
+
             $result = $this->pdo->rollBack();
 
             if (!$result)
@@ -668,12 +684,20 @@ class Database
      */
     public function startTransaction()
     {
+        global $gDebug;
+
         // If we are within a transaction we will not open another one,
         // but enclose the current one to not loose data (prevening auto commit)
         if ($this->transactions > 0)
         {
             $this->transactions++;
             return true;
+        }
+
+        // if debug mode then log all sql statements
+        if ($gDebug === 1)
+        {
+            error_log('START TRANSACTION');
         }
 
         $result = $this->pdo->beginTransaction();
