@@ -252,7 +252,7 @@ elseif($getMode == 4)  // Creating organization
             }
             
             // now check if a valid installation exists.
-            $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
+            $sql = 'SELECT org_id FROM '.$_SESSION['prefix'].'_organizations';
             $db->query($sql, false);
             $count = $db->num_rows();
         
@@ -359,12 +359,20 @@ elseif($getMode == 6)  // Creating configuration file
             showNotice($gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'), 'installation.php?mode=5', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
 
+        // username should only have valid chars
+        if(!strValidCharacters($_SESSION['user_login'], 'noSpecialChar'))
+        {
+            showNotice($gL10n->get('SYS_FIELD_INVALID_CHAR', $gL10n->get('SYS_USERNAME')), 'installation.php?mode=5', $gL10n->get('SYS_BACK'), 'layout/back.png');
+        }
+
+        // email should only have valid chars
         $_SESSION['user_email'] = admStrToLower($_SESSION['user_email']);
         if(!strValidCharacters($_SESSION['user_email'], 'email'))
         {
             showNotice($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')), 'installation.php?mode=5', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
 
+        // password must be the same with password confirm
         if($_SESSION['user_password'] != $_SESSION['user_password_confirm'])
         {
             showNotice($gL10n->get('INS_PASSWORDS_NOT_EQUAL'), 'installation.php?mode=5', $gL10n->get('SYS_BACK'), 'layout/back.png');
