@@ -198,7 +198,7 @@ function strValidCharacters($string, $checkType)
         switch ($checkType)
         {
             case 'email':
-                $validRegex = '/^[áàâåäæcccçéèeênnñóòôöõøœúùûüß\w\.@-]+$/';
+                $validRegex = '/^[áàâåäæcccçéèeênnñóòôöõøœúùûüß\w\.@+-]+$/';
                 break;
             case 'file':
                 $validRegex = '/^[áàâåäæcccçéèeênnñóòôöõøœúùûüß\w\.@$&!?() +-]+$/';
