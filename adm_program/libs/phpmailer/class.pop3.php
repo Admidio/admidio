@@ -34,7 +34,7 @@ class POP3
      * @type string
      * @access public
      */
-    public $Version = '5.2.9';
+    public $Version = '5.2.13';
 
     /**
      * Default POP3 port number.
@@ -130,8 +130,8 @@ class POP3
     /**
      * Simple static wrapper for all-in-one POP before SMTP
      * @param $host
-     * @param boolean $port
-     * @param boolean $tval
+     * @param integer|boolean $port The port number to connect to
+     * @param integer|boolean $timeout The timeout value
      * @param string $username
      * @param string $password
      * @param integer $debug_level
@@ -140,13 +140,13 @@ class POP3
     public static function popBeforeSmtp(
         $host,
         $port = false,
-        $tval = false,
+        $timeout = false,
         $username = '',
         $password = '',
         $debug_level = 0
     ) {
         $pop = new POP3;
-        return $pop->authorise($host, $port, $tval, $username, $password, $debug_level);
+        return $pop->authorise($host, $port, $timeout, $username, $password, $debug_level);
     }
 
     /**
@@ -166,13 +166,13 @@ class POP3
     {
         $this->host = $host;
         // If no port value provided, use default
-        if ($port === false) {
+        if (false === $port) {
             $this->port = $this->POP3_PORT;
         } else {
             $this->port = (integer)$port;
         }
         // If no timeout value provided, use default
-        if ($timeout === false) {
+        if (false === $timeout) {
             $this->tval = $this->POP3_TIMEOUT;
         } else {
             $this->tval = (integer)$timeout;
@@ -215,7 +215,7 @@ class POP3
         //Rather than suppress it with @fsockopen, capture it cleanly instead
         set_error_handler(array($this, 'catchWarning'));
 
-        if ($port === false) {
+        if (false === $port) {
             $port = $this->POP3_PORT;
         }
 
@@ -231,7 +231,7 @@ class POP3
         restore_error_handler();
 
         //  Did we connect?
-        if ($this->pop_conn === false) {
+        if (false === $this->pop_conn) {
             //  It would appear not...
             $this->setError(array(
                 'error' => "Failed to connect to server $host on port $port",
