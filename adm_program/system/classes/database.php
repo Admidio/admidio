@@ -119,7 +119,7 @@ class Database
 
             $this->buildDSNString();
 
-            // needed to avoid leaking username, password,... if a PDOException is thrown
+            // needed to avoid leaking username, password, ... if a PDOException is thrown
             $this->pdo = new PDO($this->dsn, $this->username, $this->password, $this->options);
 
             $this->setConnectionOptions();
@@ -283,10 +283,11 @@ class Database
             $trace['type']  = (!isset($trace['type']))  ? '' : $trace['type'];
 
             $output .= '<br />';
-            $output .= '<b>FILE:</b> ' . htmlentities($trace['file']) . '<br />';
-            $output .= '<b>LINE:</b> ' . ((!empty($trace['line'])) ? $trace['line'] : '') . '<br />';
+            $output .= '<strong>FILE:</strong> '.htmlentities($trace['file']).'<br />';
+            $output .= '<strong>LINE:</strong> '.((!empty($trace['line'])) ? $trace['line'] : '').'<br />';
 
-            $output .= '<b>CALL:</b> ' . htmlentities($trace['class'] . $trace['type'] . $trace['function']) . '(' . ((count($args)) ? implode(', ', $args) : '') . ')<br />';
+            $output .= '<strong>CALL:</strong> '.htmlentities($trace['class'].$trace['type'].$trace['function']).
+                       '('.((count($args)) ? implode(', ', $args) : '').')<br />';
         }
         $output .= '</div>';
         return $output;
@@ -479,9 +480,9 @@ class Database
 
         if ($this->engine === 'mysql')
         {
-            // ANSI Modus setzen, damit SQL kompatibler zu anderen DBs werden kann
+            // set ANSI mode, that SQL could be more compatible with other DBs
             $this->query('SET SQL_MODE = \'ANSI\'');
-            // falls der Server die Joins begrenzt hat, kann dies mit diesem Statement aufgehoben werden
+            // if the server has limited the joins, it can be canceled with this statement
             $this->query('SET SQL_BIG_SELECTS = 1');
         }
     }
@@ -491,15 +492,15 @@ class Database
      * @param string  $table                Name of the database table for which the columns should be shown.
      * @param boolean $showColumnProperties If this is set to @b false only the column names were returned.
      * @return array Returns an array with each column and their properties if $showColumnProperties is set to @b true.
-     *         The array has the following format:
-     *         array (
-     *         'column1' => array (
-     *                      'serial' => '1',
-     *                      'null'   => '0',
-     *                      'key'    => '0',
-     *                      'type'   => 'integer')
-     *         'column2' => array (...)
-     *         ...
+     *               The array has the following format:
+     *               array (
+     *               'column1' => array (
+     *                            'serial' => '1',
+     *                            'null'   => '0',
+     *                            'key'    => '0',
+     *                            'type'   => 'integer')
+     *               'column2' => array (...)
+     *               ...
      */
     public function showColumns($table, $showColumnProperties = true)
     {
@@ -643,22 +644,22 @@ class Database
         }
 
         // transform the database error to html
-        $errorInfo   = $this->pdo->errorInfo();
+        $errorInfo = $this->pdo->errorInfo();
 
-        $errorString = '<div style="font-family: monospace;">
-                         <p><b>S Q L - E R R O R</b></p>
-                         <p><b>CODE:</b> '.$this->pdo->errorCode().'</p>
-                         '.$errorInfo[1].'<br /><br />
-                         '.$errorInfo[2].'<br /><br />
-                         <b>B A C K T R A C E</b><br />
-                         '.$backtrace.'
-                         </div>';
-        $htmlOutput = $errorString;
+        $htmlOutput = '
+            <div style="font-family: monospace;">
+                 <p><strong>S Q L - E R R O R</strong></p>
+                 <p><strong>CODE:</strong> '.$this->pdo->errorCode().'</p>
+                 '.$errorInfo[1].'<br /><br />
+                 '.$errorInfo[2].'<br /><br />
+                 <strong>B A C K T R A C E</strong><br />
+                 '.$backtrace.'
+             </div>';
 
         // in debug mode show error in log file
         if ($gDebug === 1)
         {
-             error_log($this->pdo->errorCode(). ': '. $errorInfo[1]."\n".$errorInfo[2]);
+             error_log($this->pdo->errorCode().': '.$errorInfo[1]."\n".$errorInfo[2]);
         }
 
         // display database error to user
