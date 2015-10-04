@@ -1,6 +1,6 @@
 /*
-htmLawed_README.txt, 2 August 2014
-htmLawed 1.1.18, 2 August 2014
+htmLawed_README.txt, 9 June 2015
+htmLawed 1.1.20, 9 June 2015
 Copyright Santosh Patnaik
 Dual licensed with LGPL 3 and GPL 2+
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -991,7 +991,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 -- 3.4  Attributes ------------------------------------------------oo
 
 
-  htmLawed will only permit attributes described in the HTML specs (including deprecated ones). It also permits some attributes for use with the 'embed' element (the non-standard 'embed' element is supported in htmLawed because of its widespread use), and the the 'xml:space' attribute (valid only in XHTML 1.1). A list of such 111 attributes and the elements they are allowed in is in section:- #5.2. Using the '$spec' argument, htmLawed can be forced to permit custom, non-standard attributes as well as custom rules for standard attributes (section:- #2.3).
+  htmLawed will only permit attributes described in the HTML specs (including deprecated ones). It also permits some attributes for use with the 'embed' element (the non-standard 'embed' element is supported in htmLawed because of its widespread use), and the 'allowfullscreen' (in 'iframe', because of its widespread use), 'bordercolor' (in 'table', 'td' and 'tr', because of its widespread use), and 'xml:space' (valid only in XHTML 1.1) attributes. A list of such 112 attributes and the elements they are allowed in is in section:- #5.2. Using the '$spec' argument, htmLawed can be forced to permit custom, non-standard attributes as well as custom rules for standard attributes (section:- #2.3).
 
   When '$config["deny_attribute"]' is not set, or set to '0', or empty ('""'), all the 111 attributes are permitted. Otherwise, '$config["deny_attribute"]' can be set as a list of comma-separated names of the denied attributes. 'on*' can be used to refer to the group of potentially dangerous, script-accepting attributes: 'onblur', 'onchange', 'onclick', 'ondblclick', 'onfocus', 'onkeydown', 'onkeypress', 'onkeyup', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup', 'onreset', 'onselect' and 'onsubmit'.
 
@@ -1344,6 +1344,11 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   `Version number - Release date. Notes`
 
+  
+  1.1.20 - 9 June 2015. Fix for a potential security vulnerability arising from unescaped double-quote character in single-quoted attribute value of some deprecated elements when tag transformation is enabled; recognition for non-(HTML4) standard 'allowfullscreen' attribute of 'iframe.'
+  
+  1.1.19 - 19 January 2015. Fix for a bug in cleaning of soft-hyphens in URL values, etc.
+
   1.1.18 - 2 August 2014. Fix for a potential security vulnerability arising from specially encoded text with serial opening tags
   
   1.1.17 - 11 March 2014. Removed use of PHP function preg_replace with 'e' modifier for compatibility with PHP 5.5
@@ -1470,7 +1475,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 -- 4.10  Acknowledgements ------------------------------------------o
 
 
-  Nicholas Alipaz, Bryan Blakey, Pádraic Brady, Dac Chartrand, Ulf Harnhammer, Gareth Heyes, Klaus Leithoff, Lukasz Pilorz, Shelley Powers, Psych0tr1a, Lincoln Russell, Harro Verton, Edward Yang, and many anonymous users.
+  Nicholas Alipaz, Bryan Blakey, Pádraic Brady, Dac Chartrand, Ulf Harnhammer, Gareth Heyes, Hakre, Klaus Leithoff, Lukasz Pilorz, Shelley Powers, Psych0tr1a, Lincoln Russell, Tomas Sykorka, Harro Verton, Edward Yang, and many anonymous users.
 
   Thank you!
 
@@ -1491,7 +1496,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   Valid attribute-element combinations as per W3C:- http://www.w3c.org specs.
 
-  *  includes deprecated attributes (marked '^'), attributes for the non-standard 'embed' element (marked '*'), and the proprietary 'bordercolor' (marked '~')
+  *  includes deprecated attributes (marked '^'), attributes for the non-standard 'embed' element (marked '*'), and the non-standard 'allowfullscreen' and 'bordercolor' (marked '~')
   *  only non-frameset, HTML body elements
   *  'name' for 'a' and 'map', and 'lang' are invalid in XHTML 1.1
   *  'target' is valid for 'a' in XHTML 1.1 and higher
@@ -1503,6 +1508,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
   accesskey - a, area, button, input, label, legend, textarea
   action - form
   align - caption^, embed, applet, iframe, img^, input^, object^, legend^, table^, hr^, div^, h1^, h2^, h3^, h4^, h5^, h6^, p^, col, colgroup, tbody, td, tfoot, th, thead, tr
+  allowfullscreen - iframe~
   alt - applet, area, img, input
   archive - applet, object
   axis - td, th
