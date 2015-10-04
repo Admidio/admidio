@@ -8,9 +8,7 @@
         <text id="DAT_EDIT_ROOMS_DESC" development="changed" translation="edited">Qui puoi creare e modificare le stanze per gli eventi.</text>
         <text id="DOW_CREATE_FOLDER_DESC" development="changed" translation="edited">Una nuova cartella sarà creata nella cartella %VAR1_BOLD%.</text>
         <text id="DOW_FILES_UPLOADED" development="new" translation="edited">%VAR1% file sono stati caricati con successo.</text>
-        <text id="DOW_UPLOAD_ANOTHER_FILE" development="new" translation="edited">Carica un altro file</text>
         <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Il file non può essere caricato o la pagina richiamata non è valida.\n\nProbabilmente la la massima dimensione per il caricamento dei file è stata superata (%VAR1%B per questo server).</text>
-        <text id="DOW_UPLOAD_TO_FOLDER" development="new" translation="edited">Il file è stato caricato nella cartella %VAR1_BOLD%.</text>
         <text id="ECA_LAYOUT" development="new" translation="edited">Layout</text>
         <text id="ECA_SCALE_THUMBNAILS_DESC" development="new" translation="edited">Qui puoi definire la misura del lato lungo a cui sarà scalata la miniatura delle immagini (Predefinita: 250px).</text>
         <text id="ECA_MAX_PHOTO_SIZE_DESC" development="new" translation="edited">I valori definiti indicano la misura massima di una immagine nella cartolina (Standard: 400 x 250 Pixel).</text>
@@ -424,10 +422,8 @@
         <text id="DAT_VISIBLE_TO" development="new" translation="edited">Visibile per</text>
 
         <!-- Phrases only in Downloadsmodule - 50 items -->
-        <text id="DOW_ACCESS_ALLOWED" development="new" translation="edited">Accesso grantito</text>
         <text id="DOW_ADD_TO_DATABASE" development="new" translation="edited">Aggiungi al database</text>
         <text id="DOW_ADDITIONAL_FILES" development="new" translation="edited">L'elenco intende fornire una vista d'insieme sui file e le cartelle non importate già nel database. Aggiungile qui. I diritti per l'accesso saranno copiati dalla cartella selezionata.</text>
-        <text id="DOW_CHOOSE_FILE" development="new" translation="edited">File selezionato</text>
         <text id="DOW_COUNTER" development="new" translation="edited">Contatore</text>
         <text id="DOW_CREATE_FOLDER" development="new" translation="edited">Crea cartella</text>
         <text id="DOW_DOWNLOADS" development="new" translation="edited">Scaricamenti</text>
@@ -444,7 +440,6 @@
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="edited">Si è verificato un errore mentre il file %VAR1% è stato rinominato.</text>
         <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">La grandezza dei file caricati è più grande di quella consentita (massima grandezza del file: %VAR1% MB).</text>
         <text id="DOW_FILE_TYPE" development="new" translation="edited">Tipo di file</text>
-        <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="edited">Si è verificato un errore indefinito mentre il file %VAR1% era in corso di caricamento.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="edited">Il file %VAR1_BOLD% è stato caricato.</text>
         <text id="DOW_FOLDER_CREATED" development="new" translation="edited">La cartella %VAR1_BOLD% è stata creata.</text>
         <text id="DOW_FOLDER_EXISTS" development="new" translation="edited">La cartella %VAR1% già esiste!\n\nPer favore scegli un nome diverso per la cartella.</text>
@@ -458,18 +453,12 @@
         <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Agli utenti è consentito caricare file di grandezza minore di quella visualizzata qui. Se è 0 il caricamento è disattivato. (predefinito: 3MB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="edited">Nuovo nome del file</text>
         <text id="DOW_NEW_NAME" development="new" translation="edited">Nuovo nome</text>
-        <text id="DOW_NO_ACCESS" development="new" translation="edited">Accesso negato</text>
-        <text id="DOW_NO_PUBLIC_ACCESS" development="new" translation="edited">L'accesso pubblico è negato.</text>
-        <text id="DOW_PUBLIC_DOWNLOAD_FLAG" development="new" translation="edited">Se questa opzione è attivata, solo agli utenti autenticati con il ruolo che ha i permessi è consentito visualizzare il contenuto di questa cartella.</text>
-        <text id="DOW_ROLE_ACCESS_PERMISSIONS" development="new" translation="edited">Permesso di acceso del ruolo</text>
         <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="edited">Questo pannello ti consente di configurare i permessi di accesso alla cartella. I diritti di accesso sono impostati ricorsivamente per le sottocartelle e tutti i permessi delle sottocartelle esistenti saranno sovrascritti. I ruoli consentiti devono avere il permesso d'accesso per le cartelle più in alto.</text>
         <text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="edited">Imposta i permessi per la cartella</text>
         <text id="DOW_UNMANAGED_FILES" development="new" translation="edited">File non gestiti</text>
-        <text id="DOW_UPLOAD_FILE" development="new" translation="edited">Carica file</text>
         <text id="DOW_EDIT_FILE" development="new" translation="edited">Modifica file</text>
         <text id="DOW_EDIT_FOLDER" development="new" translation="edited">Modifica cartella</text>
         <text id="DOW_PREVIOUS_NAME" development="new" translation="edited">Nome precedente</text>
-        <text id="DOW_UPLOAD_FILE" development="new" translation="edited">File in caricamento</text>
         <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="edited">Carica il file nella cartella %VAR1_BOLD%</text>
         <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Vista della pagina non consentita o il file non può essere caricato.\nE' possibile che il file superi la dimensione consentita dal server per il caricamento che è di %VAR1%B!</text>
 
@@ -1073,7 +1062,6 @@
         <text id="SYS_ABR_NO" development="new" translation="edited" description="Abbreviation for Number">No.</text>
         <text id="SYS_ACTIVE" development="new" translation="edited">Attivo</text>
         <text id="SYS_ACTIVATED" development="new" translation="edited">Attivo</text>
-        <text id="SYS_ADD_ROLE" development="new" translation="edited">Aggiungi ruolo</text>
         <text id="SYS_ADD_RECIPIENTS" development="new" translation="edited">Aggiungi destinatario</text>
         <text id="SYS_ADDRESS" development="new" translation="edited">Infìdirizzo</text>
         <text id="SYS_ADMIDIO_SHORT_DESC" development="new" translation="edited">Sistema di gestione online per Associazioni, Gruppi e Organizzazioni</text>
@@ -1289,7 +1277,6 @@
         <text id="SYS_REGISTRATION" development="new" translation="edited">Registrazione</text>
         <text id="SYS_REMEMBER_ME" development="new" translation="edited">Resta connesso</text>
         <text id="SYS_REMOVE" development="new" translation="edited">Rimuovi</text>
-        <text id="SYS_REMOVE_ROLE" development="new" translation="edited">Rimuovi ruolo</text>
         <text id="SYS_REPEAT" development="new" translation="edited">Ripetizione</text>
         <text id="SYS_RESTRICTIONS" development="new" translation="edited">Restrizioni</text>
         <text id="SYS_ROLE" development="new" translation="edited">Ruolo</text>
@@ -1349,8 +1336,6 @@
         <text id="SYS_UNLIMITED" development="new" translation="edited">Illimitato</text>
         <text id="SYS_UNLOCK" development="new" translation="edited">Sblocca</text>
         <text id="SYS_UPDATE" development="new" translation="edited">Aggiorna</text>
-        <text id="SYS_UPLOAD" development="new" translation="edited">Carica</text>
-        <text id="SYS_UPLOAD_ERROR" development="new" translation="edited">Il/I file non sono potuti essere caricati.</text>
         <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="edited">Massima grandezza del file caricabile</text>
         <text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Il nome del file non può essere "Submit".</text>
         <text id="SYS_USER" development="new" translation="edited">Utente</text>

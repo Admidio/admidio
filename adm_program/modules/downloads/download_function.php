@@ -8,13 +8,12 @@
  *
  * Parameters:
  *
- * mode   :  1 - Upload files
- *           2 - Datei loeschen
- *           3 - Ordner erstellen
- *           4 - Datei / Ordner umbenennen
- *           5 - Ordner loeschen
- *           6 - Datei / Ordner zur DB hinzufuegen
- *           7 - Berechtigungen für Ordner speichern
+ * mode   :  2 - Delete file
+ *           3 - Create folder
+ *           4 - Rename file/folder
+ *           5 - Delete folder
+ *           6 - Add file/folder to database
+ *           7 - Save access to folder
  * folder_id : Id of the folder in the database
  * file_id   : Id of the file in the database
  * name      : Name of the file/folder that should be added to the database
@@ -52,120 +51,8 @@ if($myFilesDownload->checkSettings() == false)
     $gMessage->show($gL10n->get($myFilesDownload->errorText, $myFilesDownload->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
 }
 
-// upload files
-if ($getMode == 1)
-{
-    if ($getFolderId == 0)
-    {
-        //FolderId ist zum hochladen erforderlich
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-
-    try
-    {
-        // get recordset of current folder from database and throw exception if necessary
-        $targetFolder = new TableFolder($gDb);
-        $targetFolder->getFolderForDownload($getFolderId);
-
-        if(strlen($_FILES['userfile']['name'][0]) == 0)
-        {
-            $gMessage->show($gL10n->get('DOW_UPLOAD_POST_EMPTY', ini_get('upload_max_filesize')));
-        }
-
-
-        $fileSize = 0;
-        $fileName = '';
-        $countUploadedFiles = 0;
-
-        // now check every file
-        for($currentFileNo = 0; isset($_FILES['userfile']['name'][$currentFileNo]) == true; $currentFileNo++)
-        {
-            //Dateigroesse ueberpruefen Servereinstellungen
-            if ($_FILES['userfile']['error'][$currentFileNo] == 1)
-            {
-                $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', ini_get('upload_max_filesize')));
-            }
-
-            //Dateigroesse ueberpruefen Administratoreinstellungen
-            if ($_FILES['userfile']['size'][$currentFileNo] > ($gPreferences['max_file_upload_size']) * 1024 * 1024)
-            {
-                $gMessage->show($gL10n->get('DOW_FILE_TO_LARGE', $gPreferences['max_file_upload_size']));
-            }
-
-            // Wenn eine Datei vorliegt diese in den Ordner hochlagen
-            if ($_FILES['userfile']['error'][$currentFileNo] == 0)
-            {
-                // pruefen, ob die Anhanggroesse groesser als die zulaessige Groesse ist
-                $fileSize = $fileSize + $_FILES['userfile']['size'][$currentFileNo];
-
-                //Falls der Dateityp nicht bestimmt ist auf Standard setzen
-                if (strlen($_FILES['userfile']['type'][$currentFileNo]) <= 0)
-                {
-                    $_FILES['userfile']['type'][$currentFileNo] = 'application/octet-stream';
-                }
-
-                // Dateinamen ermitteln
-                $fileName = $_FILES['userfile']['name'][$currentFileNo];
-
-                // check filename and throw exception if something is wrong
-                if(admStrIsValidFileName($fileName, true))
-                {
-                    if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$fileName))
-                    {
-                        $gMessage->show($gL10n->get('DOW_FILE_EXIST', $fileName));
-                    }
-
-                    // Datei hochladen
-                    if(move_uploaded_file($_FILES['userfile']['tmp_name'][$currentFileNo], $targetFolder->getCompletePathOfFolder(). '/'.$fileName))
-                    {
-                        //Neue Datei noch in der DB eintragen
-                        $newFile = new TableFile($gDb);
-                        $newFile->setValue('fil_fol_id', $targetFolder->getValue('fol_id'));
-                        $newFile->setValue('fil_name', $fileName);
-                        $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
-                        $newFile->setValue('fil_counter', '0');
-                        $newFile->save();
-
-                        // Benachrichtigungs-Email für neue Einträge
-                        $message = $gL10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $fileName, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
-                        $notification = new Email();
-                        $notification->adminNotfication($gL10n->get('DOW_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
-
-                        $countUploadedFiles++;
-                    }
-                    else
-                    {
-                        $gMessage->show($gL10n->get('DOW_FILE_UPLOAD_ERROR', $fileName));
-                    }
-                }
-            }
-        }
-
-        if($currentFileNo == 1)
-        {
-            $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-            $gMessage->show($gL10n->get('DOW_FILE_UPLOADED', $fileName));
-        }
-        else
-        {
-            $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-            $gMessage->show($gL10n->get('DOW_FILES_UPLOADED', $countUploadedFiles));
-        }
-    }
-    catch(AdmException $e)
-    {
-        if($e->getMessage() == 'SYS_FILENAME_EMPTY')
-        {
-            $e->setNewMessage('SYS_FIELD_EMPTY', $gL10n->get('DOW_CHOOSE_FILE'));
-        }
-
-        $e->showHtml();
-    }
-}
-
-
-//Datei loeschen
-elseif ($getMode == 2)
+// Delete file
+if ($getMode == 2)
 {
     if (!$getFileId)
     {
@@ -487,14 +374,20 @@ elseif ($getMode == 6)
 //Berechtigungen fuer einen Ordner speichern
 elseif ($getMode == 7)
 {
-    if ($getFolderId == 0) {
+    if(!isset($_POST['adm_allowed_roles']))
+    {
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
+    }
+
+    if ($getFolderId == 0 || !is_array($_POST['adm_allowed_roles']))
+    {
         //FolderId ist zum hinzufuegen erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     try
     {
-        // get recordset of current folder from databse
+        // get recordset of current folder from database
         $targetFolder = new TableFolder($gDb);
         $targetFolder->getFolderForDownload($getFolderId);
 
@@ -505,48 +398,29 @@ elseif ($getMode == 7)
             $parentFolder->getFolderForDownload($targetFolder->getValue('fol_fol_id_parent'));
         }
 
-        //Formularinhalt aufbereiten
-        if($targetFolder->getValue('fol_fol_id_parent') && $parentFolder->getValue('fol_public') == 0)
+        if(in_array(0, $_POST['adm_allowed_roles']))
         {
-            $publicFlag = $targetFolder->getValue('fol_public');
+            $public = 1;
         }
         else
         {
-            if(isset($_POST['fol_public']) == false || $_POST['fol_public'] == 0)
-            {
-                $publicFlag = 1;
-            }
-            else
-            {
-                $publicFlag = 0;
-            }
+            $public = 0;
         }
 
-        //setze schon einmal das Public_Flag
-        $targetFolder->editPublicFlagOnFolder($publicFlag);
+        // set flag public for this folder and all child folders
+        $targetFolder->editPublicFlagOnFolder($public);
 
-        $rolesArray = null;
-        //Nur wenn der Ordner oeffentlich nicht zugaenglich ist
-        //werden die Rollenbrechtigungen gespeichert.
-        //Ansonsten wird ein leeres Rollenset gespeichert...
-        if ($publicFlag == 0)
+        // now set all rol
+        if ($public === 0)
         {
-            //Rollenberechtigungen aufbereiten
-            if(array_key_exists('AllowedRoles', $_POST))
-            {
-                $sentAllowedRoles = $_POST['AllowedRoles'];
-
-                //fuege alle neuen Rollen hinzu
-                foreach ($sentAllowedRoles as $newRole)
-                {
-                    $rolesArray[] = array('rol_id'        => $newRole,
-                                          'rol_name'      => '');
-                }
-            }
+            // save all set roles in the database
+            $targetFolder->setRolesOnFolder($_POST['adm_allowed_roles']);
         }
-
-        //jetzt noch die Rollenberechtigungen in die DB schreiben
-        $targetFolder->setRolesOnFolder($rolesArray);
+        else
+        {
+            // if all users have access then delete all existing roles
+            $targetFolder->setRolesOnFolder(array());
+        }
 
         $targetFolder->save();
 

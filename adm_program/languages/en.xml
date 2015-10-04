@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
     <version id="3.1.0" translator="Markus Faßbender">
-        <text id="BAC_FILE_NAME_INVALID" development="changed" translation="todo">The selected file name contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers from 0 to 9 and special characters $!?._+-&amp; are free to use.</text>
+        <text id="BAC_FILE_NAME_INVALID" development="changed" translation="todo">The selected file name contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers from 0 to 9 and special characters $!?._+-()&amp; are free to use.</text>
         <text id="SYS_CATEGORIES_VAR" development="new" translation="edited">%VAR1%-categories</text>
         <text id="SYS_CATEGORY_VAR" development="new" translation="edited">%VAR1%-category</text>
         <text id="SYS_COPY_VAR" development="new" translation="todo">Copy %VAR1%</text>
@@ -35,9 +35,7 @@
         <text id="DAT_EDIT_ROOMS_DESC" development="changed" translation="edited">Here you can create and edit rooms for events.</text>
         <text id="DOW_CREATE_FOLDER_DESC" development="changed" translation="edited">A new folder will be created in folder %VAR1_BOLD%.</text>
         <text id="DOW_FILES_UPLOADED" development="new" translation="edited">%VAR1% files have been uploaded successfully.</text>
-        <text id="DOW_UPLOAD_ANOTHER_FILE" development="new" translation="edited">Upload additional file</text>
         <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">File could not be uploaded or invalid page call.\n\nProbably the maximum file upload size has been exeeded (%VAR1%B for this server).</text>
-        <text id="DOW_UPLOAD_TO_FOLDER" development="new" translation="edited">The file will be uploaded to folder %VAR1_BOLD%.</text>
         <text id="ECA_LAYOUT" development="new" translation="edited">Layout</text>
         <text id="ECA_SCALE_THUMBNAILS_DESC" development="new" translation="edited">Here you can define the size to which the longer side of a thumbnail images should be scaled to (Default: 250px).</text>
         <text id="ECA_MAX_PHOTO_SIZE_DESC" development="new" translation="edited">The defined values indicate the maximum size of an image in the greeting card (Standard: 400 x 250 Pixel).</text>
@@ -450,10 +448,8 @@
         <text id="DAT_VISIBLE_TO" development="new" translation="edited">Visible for</text>
 
         <!-- Phrases only in Downloadsmodule - 50 items -->
-        <text id="DOW_ACCESS_ALLOWED" development="new" translation="edited">Access granted</text>
         <text id="DOW_ADD_TO_DATABASE" development="new" translation="edited">Add to database</text>
         <text id="DOW_ADDITIONAL_FILES" development="new" translation="edited">This list intends to provide an overview of files and folders not imported into the database yet. Add them here. Access rights will be copied from selected folder.</text>
-        <text id="DOW_CHOOSE_FILE" development="new" translation="edited">Select file</text>
         <text id="DOW_COUNTER" development="new" translation="edited">Counter</text>
         <text id="DOW_CREATE_FOLDER" development="new" translation="edited">Create folder</text>
         <text id="DOW_DOWNLOADS" development="new" translation="edited">Downloads</text>
@@ -470,7 +466,6 @@
         <text id="DOW_FILE_RENAME_ERROR" development="new" translation="edited">An error occurred while file %VAR1% was renamed.</text>
         <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">Uploaded files size is greater than allowed (maximum file size: %VAR1% MB).</text>
         <text id="DOW_FILE_TYPE" development="new" translation="edited">File type</text>
-        <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="edited">Unidentified error occurred while file %VAR1% was being uploaded.</text>
         <text id="DOW_FILE_UPLOADED" development="new" translation="edited">File %VAR1_BOLD% was uploaded.</text>
         <text id="DOW_FOLDER_CREATED" development="new" translation="edited">Folder %VAR1_BOLD% was created.</text>
         <text id="DOW_FOLDER_EXISTS" development="new" translation="edited">Folder %VAR1% already exists!\n\nPlease select different folder name.</text>
@@ -484,18 +479,12 @@
         <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Users are only allowed to upload files of smaller size than displayed here. In case of 0 upload is deactivated. (default: 3MB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="edited">New file name</text>
         <text id="DOW_NEW_NAME" development="new" translation="edited">New name</text>
-        <text id="DOW_NO_ACCESS" development="new" translation="edited">Access denied</text>
-        <text id="DOW_NO_PUBLIC_ACCESS" development="new" translation="edited">Public access is denied.</text>
-        <text id="DOW_PUBLIC_DOWNLOAD_FLAG" development="new" translation="edited">If this option is activated, only logged in users of permitted roles are allowed to display the content of this folder.</text>
-        <text id="DOW_ROLE_ACCESS_PERMISSIONS" development="new" translation="edited">Role access permission</text>
         <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="edited">This panel allows you to configure folder access permissions. Access rights are set recursively for subfolders and all existing folder permissions will be overwritten. Allowed roles must have access permission for higher folders.</text>
         <text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="edited">Set folder permissions</text>
         <text id="DOW_UNMANAGED_FILES" development="new" translation="edited">Unmanaged files</text>
-        <text id="DOW_UPLOAD_FILE" development="new" translation="edited">Upload file</text>
         <text id="DOW_EDIT_FILE" development="new" translation="edited">Edit file</text>
         <text id="DOW_EDIT_FOLDER" development="new" translation="edited">Edit folder</text>
         <text id="DOW_PREVIOUS_NAME" development="new" translation="edited">Previous name</text>
-        <text id="DOW_UPLOAD_FILE" development="new" translation="edited">Uploading file</text>
         <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="edited">Upload file to folder %VAR1_BOLD%</text>
         <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Illegal page view or file could not be uploaded.\nFile size possibly exceeded allowed server defined upload size of  %VAR1%B!</text>
 
@@ -1097,7 +1086,6 @@
         <text id="SYS_ABR_NO" development="new" translation="edited" description="Abbreviation for Number">No.</text>
         <text id="SYS_ACTIVE" development="new" translation="edited">Active</text>
         <text id="SYS_ACTIVATED" development="new" translation="edited">Active</text>
-        <text id="SYS_ADD_ROLE" development="new" translation="edited">Add Role</text>
         <text id="SYS_ADD_RECIPIENTS" development="new" translation="edited">Add recipient</text>
         <text id="SYS_ADDRESS" development="new" translation="edited">Address</text>
         <text id="SYS_ADMIDIO_SHORT_DESC" development="new" translation="edited">The Online Management System for Associations, Groups and Organizations</text>
@@ -1307,7 +1295,6 @@
         <text id="SYS_REGISTRATION" development="new" translation="edited">Registration</text>
         <text id="SYS_REMEMBER_ME" development="new" translation="edited">Stay signed in</text>
         <text id="SYS_REMOVE" development="new" translation="edited">Remove</text>
-        <text id="SYS_REMOVE_ROLE" development="new" translation="edited">Remove role</text>
         <text id="SYS_REPEAT" development="new" translation="edited">Repeat</text>
         <text id="SYS_RESTRICTIONS" development="new" translation="edited">Resctrictions</text>
         <text id="SYS_ROLE" development="new" translation="edited">Role</text>
@@ -1361,8 +1348,6 @@
         <text id="SYS_UNLIMITED" development="new" translation="edited">Unlimited</text>
         <text id="SYS_UNLOCK" development="new" translation="edited">Unlock</text>
         <text id="SYS_UPDATE" development="new" translation="edited">Update</text>
-        <text id="SYS_UPLOAD" development="new" translation="edited">Upload</text>
-        <text id="SYS_UPLOAD_ERROR" development="new" translation="edited">File(s) couldn't be uploaded.</text>
         <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="edited">Max. file upload size</text>
         <text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">The file name can not be named "Submit".</text>
         <text id="SYS_USER" development="new" translation="edited">User</text>
