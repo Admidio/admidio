@@ -356,11 +356,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
             {
                 $array[$variableName] = 0;
             }
-            elseif($datatype == 'string' || $datatype == 'html')
-            {
-                $array[$variableName] = '';
-            }
-            elseif($datatype == 'date')
+            else
             {
                 $array[$variableName] = '';
             }
@@ -389,8 +385,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
         }
     }
-
-    if($datatype == 'file')
+    if($datatype == 'file' && $array[$variableName] !== '')
     {
         try
         {

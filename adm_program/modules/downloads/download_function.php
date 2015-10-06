@@ -41,7 +41,7 @@ if (!$gCurrentUser->editDownloadRight())
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric');
 $getFileId   = admFuncVariableIsValid($_GET, 'file_id', 'numeric');
-$getName     = admFuncVariableIsValid($_GET, 'name', 'string');
+$getName     = admFuncVariableIsValid($_GET, 'name', 'file');
 
 $_SESSION['download_request'] = $_POST;
 
@@ -167,13 +167,6 @@ if ($getMode == 1)
 //Datei loeschen
 elseif ($getMode == 2)
 {
-    if (!$getFileId)
-    {
-        //Es muss eine FileID uebergeben werden
-        //beides ist auch nicht erlaubt
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-
     if($getFileId > 0)
     {
         try
@@ -192,6 +185,11 @@ elseif ($getMode == 2)
             // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
             echo 'done';
         }
+    }
+    else
+    {
+        // if no file id was set then show error
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     unset($_SESSION['download_request']);
@@ -429,15 +427,11 @@ elseif ($getMode == 6)
 
     try
     {
-        // check filename and throw exception if something is wrong
-        if(admStrIsValidFileName(urldecode($getName), true))
-        {
-            $getName = urldecode($getName);
+        $getName = urldecode($getName);
 
-            // get recordset of current folder from databse
-            $targetFolder = new TableFolder($gDb);
-            $targetFolder->getFolderForDownload($getFolderId);
-        }
+        // get recordset of current folder from databse
+        $targetFolder = new TableFolder($gDb);
+        $targetFolder->getFolderForDownload($getFolderId);
     }
     catch(AdmException $e)
     {
