@@ -17,7 +17,7 @@
  function admFuncAutoload($className)
  {
     $fileName = SERVER_PATH. '/adm_program/system/classes/'.strtolower($className).'.php';
-    require_once($fileName);
+    include($fileName);
  }
 // now register this function in this script so only function.php must be included for autoload
 spl_autoload_register('admFuncAutoload');
