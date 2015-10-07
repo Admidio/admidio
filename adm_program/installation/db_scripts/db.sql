@@ -409,7 +409,6 @@ create table %PREFIX%_lists
     lst_name                       varchar(255),
     lst_timestamp                  timestamp     not null default CURRENT_TIMESTAMP,
     lst_global                     boolean       not null default '0',
-    lst_default                    boolean       not null default '0',
     primary key (lst_id)
 )
 engine = InnoDB

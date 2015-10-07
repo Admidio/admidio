@@ -17,6 +17,7 @@ $orga_preferences = array(
     // System
     'enable_rss'                    => '1',
     'enable_auto_login'             => '1',
+    'default_country'               => 'DEU',
     'logout_minutes'                => '20',
     'homepage_logout'               => 'adm_program/index.php',
     'homepage_login'                => 'adm_program/index.php',
@@ -107,6 +108,7 @@ $orga_preferences = array(
     'lists_roles_per_page'        => '10',
     'lists_members_per_page'      => '25',
     'lists_hide_overview_details' => '0',
+    'lists_default_configuation'  => '',
 
     // Messages
     'enable_mail_module'          => '1',
@@ -129,7 +131,6 @@ $orga_preferences = array(
     'ecard_template'              => 'postcard.tpl',
 
     // Profile
-    'default_country'           => 'DEU',
     'profile_log_edit_fields'   => '1',
     'profile_show_map_link'     => '1',
     'profile_show_roles'        => '1',

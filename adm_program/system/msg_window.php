@@ -158,9 +158,7 @@ switch ($getMessageId)
 
     case 'mylist_config_webmaster':
         echo '<h3>'.$gL10n->get('LST_PRESET_CONFIGURATION').'</h3>
-            '.$gL10n->get('LST_PRESET_CONFIGURATION_DESC', '<img src="'. THEME_PATH. '/icons/list_global.png" alt="list_global" />').'
-            <h3>'.$gL10n->get('LST_DEFAULT_CONFIGURATION').'</h3>
-            '.$gL10n->get('LST_DEFAULT_CONFIGURATION_DESC', '<img src="'. THEME_PATH. '/icons/star.png" alt="star" />');
+            '.$gL10n->get('LST_PRESET_CONFIGURATION_DESC', '<img src="'. THEME_PATH. '/icons/list_global.png" alt="list_global" />');
         break;
 
     //Fotomodulhifen

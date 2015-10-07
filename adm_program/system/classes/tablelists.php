@@ -33,6 +33,14 @@ class TableLists extends TableAccess
      */
     public function delete()
     {
+        global $gPreferences;
+
+        // if this list is the default configuration than it couldn't be deleted
+        if($this->getValue('lst_id') == $gPreferences['lists_default_configuation'])
+        {
+            throw new AdmException('LST_ERROR_DELETE_DEFAULT_LIST', $this->getValue('lst_name'));
+        }
+
         $this->db->startTransaction();
 
         // alle Spalten der Liste loeschen
@@ -79,26 +87,6 @@ class TableLists extends TableAccess
         }
 
         parent::save($updateFingerPrint);
-    }
-
-    // Aktuelle Liste wird zur Default-Liste der Organisation
-    public function setDefault()
-    {
-        global $gCurrentOrganization;
-        $this->db->startTransaction();
-
-        // erst die bisherige Default-Liste zuruecksetzen
-        $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = 0
-                 WHERE lst_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                   AND lst_default = 1 ';
-        $this->db->query($sql);
-
-        // jetzt die aktuelle Liste zur Default-Liste machen
-        $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = 1
-                 WHERE lst_id = '. $this->getValue('lst_id');
-        $this->db->query($sql);
-
-        $this->db->endTransaction();
     }
 }
 ?>

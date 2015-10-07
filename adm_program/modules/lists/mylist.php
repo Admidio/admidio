@@ -199,6 +199,18 @@ $javascriptCode = '
     {
         var user_fields = new Array(); ';
 
+
+if($gCurrentUser->isWebmaster())
+{
+    // get module menu
+    $ListsMenu = $page->getMenu();
+
+    // show link to system preferences of roles
+    $ListsMenu->addItem('admMenuItemPreferencesLists', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=lists',
+                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+}
+
+
 // create a multidimensional array for all columns with the necessary data
 $i = 1;
 $oldCategoryNameIntern = '';
@@ -479,15 +491,6 @@ $javascriptCode .= '
                     document.getElementById("form_mylist").submit();
                 }
                 break;
-
-            case "default":
-                var msg_result = confirm("'.$gL10n->get('LST_CONFIGURATION_DEFAULT').'");
-                if(msg_result)
-                {
-                    document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=5";
-                    document.getElementById("form_mylist").submit();
-                }
-                break;
         }
     }';
 $page->addJavascript($javascriptCode);
@@ -660,15 +663,6 @@ if($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 0 && strlen(
     $page->addHtml('
                 <a class="admidio-icon-link" href="javascript:send(\'system\');">
                     <img src="'.THEME_PATH.'/icons/list_global.png" alt="'.$gL10n->get('LST_CONFIGURATION_ALL_USERS').'" title="'.$gL10n->get('LST_CONFIGURATION_ALL_USERS').'" />
-                </a>');
-}
-
-// eine Systemkonfiguration kann vom Webmaster zur Default-Liste gemacht werden
-if($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
-{
-    $page->addHtml('
-                <a class="admidio-icon-link" href="javascript:send(\'default\');">
-                    <img src="'.THEME_PATH.'/icons/star.png" alt="'.$gL10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" title="'.$gL10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" />
                 </a>');
 }
 

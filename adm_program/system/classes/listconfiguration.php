@@ -102,25 +102,6 @@ class ListConfiguration extends TableLists
     }
 
     /**
-     * @return true
-     */
-    public function delete()
-    {
-        $this->db->startTransaction();
-
-        // first delete all columns
-        foreach($this->columns as $number => $listColumn)
-        {
-            $listColumn->delete();
-        }
-
-        $return = parent::delete();
-
-        $this->db->endTransaction();
-        return $return;
-    }
-
-    /**
      * entfernt die entsprechende Spalte aus der Konfiguration
      * @param int  $number
      * @param bool $all gibt an, ob alle folgenden Spalten auch geloescht werden sollen

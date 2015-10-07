@@ -13,7 +13,6 @@
  *          2 - Listenkonfiguration speichern und anzeigen
  *          3 - Listenkonfiguration loeschen
  *          4 - Listenkonfiguration zur Systemkonfiguration machen
- *          5 - Listenkonfiguration zur Standardkonfiguratoin machen
  * name   : (optional) die Liste wird unter diesem Namen gespeichert
  *
  *****************************************************************************/
@@ -125,20 +124,18 @@ if ($getMode == 1 || $getMode == 2 || $getMode == 4)
 }
 elseif ($getMode == 3)
 {
-    // Listenkonfiguration loeschen
-    $list->delete();
+    try
+    {
+        // delete list configuration
+        $list->delete();
+    }
+    catch(AdmException $e)
+    {
+        $e->showHtml();
+    }
 
-    // weiterleiten zur Listenkonfiguration
+    // go back to list configuration
     header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?rol_id='. $_POST['rol_id']. '&show_members='.$_POST['show_members']);
-    exit();
-}
-elseif ($getMode == 5)
-{
-    // Listenkonfiguration zur Standardkonfiguration machen
-    $list->setDefault();
-
-    // wieder zur eigenen Liste zurueck
-    header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'). '&rol_id='. $_POST['rol_id']. '&show_members='.$_POST['show_members']);
     exit();
 }
 
