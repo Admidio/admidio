@@ -343,7 +343,7 @@ elseif (!isset($message_result))
             $result = $gDb->query($sql);
             while ($row = $gDb->fetch_array($result))
             {
-                if($act_number == '' || $row['former'] > 0)
+                if($act_number == '' || ($row['former'] > 0 && $gPreferences['mail_hide_former'] == 0))
                 {
                     if($gCurrentUser->hasRightSendMailToRole($row['rol_id']))
                     {
@@ -408,13 +408,13 @@ elseif (!isset($message_result))
 		
         while ($row = $gDb->fetch_array($result))
         {
-            if ($row['mem_active'] == 0)
-            {
-                $passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_FORMER_MEMBERS'));
-            }
-            else
+            if ($row['mem_active'] > 0)
             {
                 $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_ACTIVE_MEMBERS'));
+            }
+            elseif ($gPreferences['mail_hide_former'] == 0)
+            {
+                $passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_FORMER_MEMBERS'));
             }
         }
 

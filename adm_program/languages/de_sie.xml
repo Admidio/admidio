@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de_sie">
+    <version id="3.0.3" translator="Stefan Weiß">
+        <text id="MSG_HIDE_FORMER" development="new" translation="todo">Senden an Ehemalige verbieten.</text>
+        <text id="MSG_HIDE_FORMER_DESC" development="new" translation="todo">Das Senden von Emails an ehemalige wird durch diese Einstellung unterbunden (die Rollen und Mitglieder werden in der Auswahl ausgeblendet).</text>
+    </version>
     <version id="3.0.0-Beta.4" translator="Markus Faßbender">
         <text id="INS_DATABASE_LOGIN_DESC" development="changed" translation="todo">Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere Admidio-Installationen auf derselben Datenbank einrichten möchten.</text>
         <text id="PHO_FILE_UPLOADED" development="new" translation="todo">Das Bild %VAR1_BOLD% wurde hochgeladen.</text>
