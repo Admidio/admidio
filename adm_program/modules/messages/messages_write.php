@@ -89,7 +89,7 @@ if ($gPreferences['mail_max_receiver'] > 0 and $getMsgType != 'PM')
     $recept_number = $gPreferences['mail_max_receiver'];
 }
 
-$list = [];
+$list = array();
 
 if ($getMsgType == 'PM')
 {
@@ -403,8 +403,8 @@ elseif (!isset($message_result))
 
         $result = $gDb->query($sql);
 		
-		$passive_list = [];
-		$active_list = [];
+		$passive_list = array();
+		$active_list = array();
 		
         while ($row = $gDb->fetch_array($result))
         {
