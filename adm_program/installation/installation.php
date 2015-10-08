@@ -95,15 +95,19 @@ if(file_exists('../../adm_my_files/config.php'))
     // now check if a valid installation exists.
     $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
     $pdoStatement = $db->query($sql, false);
-    $count = $pdoStatement->rowCount();
-
-    if($count > 0)
+    // Check the query for results in case installation is runnnig at this time and the config file is already created but database is not installed so far
+    if($pdoStatement)
     {
-        // valid installation exists -> exit installation
-        showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php',
-                   $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
+        $count = $pdoStatement->rowCount();
+    
+        if($count > 0)
+        {
+            // valid installation exists -> exit installation
+            showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php',
+                       $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
+        }
     }
-    elseif($getMode != 8)
+    if($getMode != 8)
     {
         showNotice($gL10n->get('INS_CONFIGURATION_FILE_FOUND', 'config.php'), 'installation.php?mode=8',
                    $gL10n->get('INS_CONTINUE_INSTALLATION'), 'layout/database_in.png');
@@ -275,13 +279,18 @@ elseif($getMode == 4)  // Creating organization
             // now check if a valid installation exists.
             $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
             $pdoStatement = $db->query($sql, false);
-            $count = $pdoStatement->rowCount();
-
-            if($count > 0)
+            // go on if the result is true
+            if($pdoStatement)
             {
-                // valid installation exists -> exit installation
-                showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
+                $count = $pdoStatement->rowCount();
+    
+                if($count > 0)
+                {
+                    // valid installation exists -> exit installation
+                    showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
+                }
             }
+            
         }
     }
 
