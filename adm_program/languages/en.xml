@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
     <version id="3.0.3" translator="Stefan Weiß">
-        <text id="MSG_HIDE_FORMER" development="new" translation="todo">Hide former Members.</text>
-        <text id="MSG_HIDE_FORMER_DESC" development="new" translation="todo">The possibility to send Emails to former members is declined (the roles and members are no more listed in the field).</text>
+        <text id="MSG_SHOW_FORMER" development="new" translation="todo">Send e-mails to former members</text>
+        <text id="MSG_SHOW_FORMER_DESC" development="new" translation="todo">If this option is set, then e-mails could be send to individual former members, as well as to all former members of a role. (Default: Activated)</text>
+        <text id="PHO_FILE_UPLOADED" development="new" translation="todo">The photo %VAR1_BOLD% was uploaded.</text>
     </version>
     <version id="3.0.0-Beta.4" translator="Markus Faßbender">
         <text id="INS_DATABASE_LOGIN_DESC" development="changed" translation="edited">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</text>
-        <text id="PHO_FILE_UPLOADED" development="new" translation="todo">The photo %VAR1_BOLD% was uploaded.</text>
     </version>
     <version id="3.0.0-Beta.3" translator="Markus Faßbender">
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="edited">A date was changed</text>

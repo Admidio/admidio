@@ -154,12 +154,12 @@ if ($getMsgType == 'EMAIL')
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
                 }
 
-                if($group[1] == 1)
+                if($group[1] == 1 && $gPreferences['mail_show_former'] == 1)
                 {
                     // only former members
                     $sqlConditions = ' AND mem_end < \''.DATE_NOW.'\' ';
                 }
-                elseif($group[1] == 2)
+                elseif($group[1] == 2 && $gPreferences['mail_show_former'] == 1)
                 {
                     // former members and active members
                     $sqlConditions = ' AND mem_begin < \''.DATE_NOW.'\' ';
@@ -486,13 +486,13 @@ if ($sendResult === TRUE)
     if ($getMsgType != 'PM' && $gValidLogin)
     {
         $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read) 
-            VALUES ('".$getMsgType."', '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$ReceiverString."', CURRENT_TIMESTAMP, '0')";
+            VALUES ('".$getMsgType."', '".$postSubjectSQL."', ".$gCurrentUser->getValue('usr_id').", '".$ReceiverString."', CURRENT_TIMESTAMP, 0)";
 
         $gDb->query($sql);
         $getMsgId = $gDb->insert_id();
 
         $sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp) 
-            VALUES ('".$getMsgId."', '1', '".$gCurrentUser->getValue('usr_id')."', '".$postBodySQL."', CURRENT_TIMESTAMP)";
+            VALUES (".$getMsgId.", 1, ".$gCurrentUser->getValue('usr_id').", '".$postBodySQL."', CURRENT_TIMESTAMP)";
 
         $gDb->query($sql);
     }
