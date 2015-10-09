@@ -458,7 +458,7 @@ class HtmlPage
         // add some special scripts so that ie8 could better understand the Bootstrap 3 framework
         $headerContent .= '<!--[if lt IE 9]>
             <script src="'.$g_root_path.'/adm_program/libs/html5shiv/html5shiv.min.js"></script>
-            <script src="'.$g_root_path.'/adm_program/libs/respond/respond.js"></script>
+            <script src="'.$g_root_path.'/adm_program/libs/respond/respond.min.js"></script>
         <![endif]-->';
 
         if ($gPreferences['system_browser_update_check'] == 1)

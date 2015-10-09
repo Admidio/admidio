@@ -114,6 +114,7 @@ $orga_preferences = array(
     'enable_chat_module'          => '0',
     'enable_mail_captcha'         => '1',
     'mail_max_receiver'           => '10',
+    'mail_show_former'            => '1',
     'mail_into_to'                => '0',
     'max_email_attachment_size'   => '1',
     'mail_sendmail_address'       => '',

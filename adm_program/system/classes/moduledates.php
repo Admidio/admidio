@@ -515,8 +515,8 @@ class ModuleDates extends Modules
             }
 
             // add 1 second to end date because full time events to until next day
-            $sqlConditions .= ' AND dat_begin < \''.$this->getParameter('dateEndFormatEnglish')  .' 00:00:00\'
-                                AND dat_end   > \''.$this->getParameter('dateStartFormatEnglish').' 00:00:00\' ';
+            $sqlConditions .= ' AND dat_begin <= \''.$this->getParameter('dateEndFormatEnglish')  .' 23:59:59\'
+                                AND dat_end   >  \''.$this->getParameter('dateStartFormatEnglish').' 00:00:00\' ';
 
             // show all events from category
             if($this->getParameter('cat_id') > 0)

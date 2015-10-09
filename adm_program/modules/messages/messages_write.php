@@ -341,15 +341,28 @@ elseif (!isset($message_result))
             $result = $gDb->query($sql);
             while ($row = $gDb->fetch_array($result))
             {
-                if($act_number === '' || $row['former'] > 0)
+                if($act_number === '' || ($row['former'] > 0 && $gPreferences['mail_show_former'] == 1))
                 {
                     if($gCurrentUser->hasRightSendMailToRole($row['rol_id']))
                     {
                         $list[] = array('groupID: '.$row['rol_id'].$act_number, $row['rol_name'].' '.$act_group_short, $act_group);
+                        $list_rol_id_array[] = $row['rol_id'];
                     }
                 }
             }
 
+        }
+        
+        foreach(array_unique($list_rol_id_array) as $key) 
+        {   
+            if(isset($list_rol_id))
+            {
+                $list_rol_id .= ", '".$key."'";
+            }
+            else
+            {
+                $list_rol_id = "'".$key."'";
+            }
         }
 
         // select Users
@@ -365,7 +378,7 @@ elseif (!isset($message_result))
                                        OR cat_org_id IS NULL )
                                    AND mem_begin <= \''.DATE_NOW.'\'
                                    AND mem_end   >= \''.DATE_NOW.'\') as mem_active
-                    FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
+                    FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_USERS. '
                     JOIN '. TBL_USER_DATA. ' as email
                       ON email.usd_usr_id = usr_id
                      AND LENGTH(email.usd_value) > 0
@@ -381,21 +394,25 @@ elseif (!isset($message_result))
                    WHERE mem_usr_id  = usr_id
                      AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
                      AND usr_valid   = 1
-
+                     AND mem_rol_id  = rol_id
+                     AND rol_id in ('.$list_rol_id.')
                    GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
                    ORDER BY last_name, first_name';
 
         $result = $gDb->query($sql);
-
+		
+		$passive_list = array();
+		$active_list = array();
+		
         while ($row = $gDb->fetch_array($result))
         {
-            if ($row['mem_active'] == 0)
-            {
-                $passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_FORMER_MEMBERS'));
-            }
-            else
+            if ($row['mem_active'] > 0)
             {
                 $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_ACTIVE_MEMBERS'));
+            }
+            elseif ($gPreferences['mail_show_former'] == 1)
+            {
+                $passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_FORMER_MEMBERS'));
             }
         }
 

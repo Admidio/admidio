@@ -277,7 +277,7 @@ elseif($getMode == 4)  // Creating organization
             }
 
             // now check if a valid installation exists.
-            $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
+            $sql = 'SELECT org_id FROM '.$_SESSION['prefix'].'_organizations';
             $pdoStatement = $db->query($sql, false);
             // go on if the result is true
             if($pdoStatement)
@@ -391,6 +391,13 @@ elseif($getMode == 6)  // Creating configuration file
                        $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
 
+        // username should only have valid chars
+        if(!strValidCharacters($_SESSION['user_login'], 'noSpecialChar'))
+        {
+            showNotice($gL10n->get('SYS_FIELD_INVALID_CHAR', $gL10n->get('SYS_USERNAME')), 'installation.php?mode=5', $gL10n->get('SYS_BACK'), 'layout/back.png');
+        }
+
+        // email should only have valid chars
         $_SESSION['user_email'] = admStrToLower($_SESSION['user_email']);
 
         if(!strValidCharacters($_SESSION['user_email'], 'email'))
@@ -399,6 +406,7 @@ elseif($getMode == 6)  // Creating configuration file
                        $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
 
+        // password must be the same with password confirm
         if($_SESSION['user_password'] !== $_SESSION['user_password_confirm'])
         {
             showNotice($gL10n->get('INS_PASSWORDS_NOT_EQUAL'), 'installation.php?mode=5',

@@ -512,7 +512,6 @@
         <text id="ORG_SEND_PASSWORD" development="new" translation="edited">Envoyer le mot de passe</text>
         <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="edited">Le mot de passe oublié régénéré peut être demandée par les utilisateurs à être envoyés automatiquement à la même adresse e-mail. En cas de désactivation, les utilisateurs sont en mesure de faire cette demande à l'administrateur uniquement. (Par défaut: oui)</text>
         <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Envoyer le nouveau mot de passe</text>
-        <text id="ORG_SYSTEM_INFOS" development="new" translation="edited">Sysinfo</text>
         <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">Informations système</text>
         <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="edited">Adresse courriel du système</text>
         <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="edited">Saisissez l'adresse courriel d'un administrateur. Cette adresse sera utilisée comme adresse d'expéditeur pour les messages système et des confirmations d'inscription. (Par défaut: webmaster@%VAR1%)</text>
