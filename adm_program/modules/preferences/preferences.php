@@ -377,7 +377,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_system_informations">
-                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('ORG_SYSTEM_INFOS').'" />'.$gL10n->get('ORG_SYSTEM_INFOS').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('ORG_SYSTEM_INFORMATIONS').'" />'.$gL10n->get('ORG_SYSTEM_INFORMATIONS').'
                         </a>
                     </h4>
                 </div>

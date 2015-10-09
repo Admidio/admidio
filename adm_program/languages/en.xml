@@ -871,8 +871,7 @@
         <text id="ORG_SEND_PASSWORD" development="new" translation="edited">Send password</text>
         <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="edited">Forgotten and regenerated password can be requested by the users to be sent automatically to the own e-mail address. In case of deactivation, users are able to make this request to the administrator only. . (default: yes)</text>
         <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Send new password</text>
-        <text id="ORG_SYSTEM_INFOS" development="new" translation="edited">Sysinfo</text>
-        <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">System information</text>
+        <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">System informations</text>
         <text id="ORG_TIME_FORMAT" development="new" translation="edited">Time format</text>
         <text id="ORG_TIME_FORMAT_DESC" development="new" translation="edited">Format complies with PHP function %VAR1%. (default: H:i)</text>
         <text id="ORG_URL" development="new" translation="edited">URL</text>

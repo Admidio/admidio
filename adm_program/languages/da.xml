@@ -854,8 +854,7 @@
         <text id="ORG_SEND_PASSWORD" development="new" translation="edited">Send kodeord</text>
         <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="edited">Brugerne kan anmode om at få tilsendt glemte og regenererede kodeord automatisk til deres egen registrerede e-mail adresse. Hvis denne indstilling deaktiveres, så kan brugerne kun få adgang ved at henvende sig til system administratoren. . (Standard: Ja)</text>
         <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Send nyt kodeord</text>
-        <text id="ORG_SYSTEM_INFOS" development="new" translation="edited">Sysinfo</text>
-        <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">System information</text>
+        <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">Systemets informationer</text>
         <text id="ORG_TIME_FORMAT" development="new" translation="edited">Tidsformat</text>
         <text id="ORG_TIME_FORMAT_DESC" development="new" translation="edited">Formatet efterkommer standarden i PHP funktionen %VAR1%. (Standard: H:i)</text>
         <text id="ORG_URL" development="new" translation="edited">URL</text>

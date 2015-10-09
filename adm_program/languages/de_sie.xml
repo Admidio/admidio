@@ -864,7 +864,6 @@
         <text id="ORG_SEND_PASSWORD" development="new" translation="todo">Passwort zusenden</text>
         <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="todo">Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den Administrator stellen. (Standard: ja)</text>
         <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="todo">Neues Passwort zuschicken</text>
-        <text id="ORG_SYSTEM_INFOS" development="new" translation="todo">Systeminfos</text>
         <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="todo">Systeminformationen</text>
         <text id="ORG_TIME_FORMAT" development="new" translation="todo">Zeitformat</text>
         <text id="ORG_TIME_FORMAT_DESC" development="new" translation="todo">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: H:i)</text>

@@ -850,7 +850,6 @@
         <text id="ORG_SEND_PASSWORD" development="new" translation="edited">Invia password</text>
         <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="edited">La dimenticanza e la rigenerazione della password possono essere richieste dagli utenti al fine di essere inviate automaticamente al proprio indirizzo di posta elettronica. Riguardo alla disattivazione, gli utenti possono fare questa richiesta solo all'amministratore. . (predefinita: sì)</text>
         <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Invia nuova password</text>
-        <text id="ORG_SYSTEM_INFOS" development="new" translation="edited">Informazioni di sistema</text>
         <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">Informazioni di sistema</text>
         <text id="ORG_TIME_FORMAT" development="new" translation="edited">Formato ora</text>
         <text id="ORG_TIME_FORMAT_DESC" development="new" translation="edited">Il ormato rispetta la funzione PHP %VAR1%. (predefinito: H:i)</text>
