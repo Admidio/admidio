@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="da">
+<version id="3.0.3" translator="Henrik Troels-Hansen">
+        <text id="MSG_SHOW_FORMER" development="new" translation="todo">Send e-mails til tidligere medlemmer</text>
+        <text id="MSG_SHOW_FORMER_DESC" development="new" translation="todo">Denne indstilling tillader at der sendes e-mail til enkeltstående tidligere medlemmer eller til alle tidligere medlemmer af en rolle.(Standard: aktiveret)</text>
+        <text id="PHO_FILE_UPLOADED" development="new" translation="todo">Billedet %VAR1_BOLD% blev uploadet.</text>
+    </version>
     <version id="3.0.0-Beta.3" translator="Henrik Troels-Hansen">
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="edited">En dato blev ændret</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1" development="new" translation="edited">En dato for %VAR1% blev ændret.\n\nTitel: %VAR2%\nDato: %VAR3%\nKalender: %VAR4%\n</text>
