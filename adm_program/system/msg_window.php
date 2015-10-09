@@ -156,32 +156,6 @@ switch ($getMessageId)
             </table>';
         break;
 
-    case 'mylist_config_webmaster':
-        echo '<h3>'.$gL10n->get('LST_PRESET_CONFIGURATION').'</h3>
-            '.$gL10n->get('LST_PRESET_CONFIGURATION_DESC', '<img src="'. THEME_PATH. '/icons/list_global.png" alt="list_global" />');
-        break;
-
-    //Fotomodulhifen
-
-    case 'photo_up_help':
-        echo '
-            <ul>
-                <li>'.$gL10n->get('PHO_UPLOAD_HELP_1', $gL10n->get('SYS_BROWSE')).'</li>
-                <li>'.$gL10n->get('PHO_UPLOAD_HELP_2').'</li>
-                <li>'.$gL10n->get('PHO_UPLOAD_HELP_3', $gL10n->get('PHO_UPLOAD_PHOTOS')).'</li>
-            </ul>
-            <h3>'.$gL10n->get('SYS_RESTRICTIONS').'</h3>
-            <ul>
-                <li>'.$gL10n->get('PHO_RESTRICTIONS_HELP_1').'</li>
-                <li>'.$gL10n->get('PHO_RESTRICTIONS_HELP_2', round(admFuncProcessableImageSize()/1000000, 2)).'</li>
-                <li>'.$gL10n->get('PHO_RESTRICTIONS_HELP_3', round(admFuncMaxUploadSize()/pow(1024, 2), 2)).'</li>
-                <li>'.$gL10n->get('PHO_RESTRICTIONS_HELP_4', $gPreferences['photo_save_scale']).'</li>
-                <li>'.$gL10n->get('PHO_RESTRICTIONS_HELP_5').'</li>
-                <li>'.$gL10n->get('PHO_RESTRICTIONS_HELP_6', $gPreferences['photo_save_scale']).'</li>
-            </ul>
-            ';
-        break;
-
     //Profil
 
     case 'profile_photo_up_help':

@@ -25,6 +25,8 @@ $getListId = admFuncVariableIsValid($_GET, 'lst_id', 'numeric');
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true));
 $getName   = admFuncVariableIsValid($_GET, 'name', 'string');
 
+$_SESSION['mylist_request'] = $_POST;
+
 // Mindestens ein Feld sollte zugeordnet sein
 if(isset($_POST['column1']) == false || strlen($_POST['column1']) == 0)
 {
@@ -33,7 +35,7 @@ if(isset($_POST['column1']) == false || strlen($_POST['column1']) == 0)
 
 // Rolle muss beim Anzeigen gefuellt sein
 if($getMode == 2
-&& (isset($_POST['rol_id']) == false || $_POST['rol_id'] == 0 || is_numeric($_POST['rol_id']) == false))
+&& (isset($_POST['sel_roles_ids']) == false || $_POST['sel_roles_ids'] == 0 || is_array($_POST['sel_roles_ids']) == false))
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', 'Rolle'));
 }
@@ -109,14 +111,12 @@ if ($getMode == 1 || $getMode == 2 || $getMode == 4)
     if($getMode == 1 || $getMode == 4)
     {
         // wieder zur eigenen Liste zurueck
-        header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'). '&rol_id='. $_POST['rol_id']. '&show_members='.$_POST['show_members']);
+        header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'). '&show_members='.$_POST['show_members']);
         exit();
     }
 
-    // anzuzeigende Rollen in Array schreiben und in Session merken
-    $role_ids = array();
-    $role_ids[] = $_POST['rol_id'];
-    $_SESSION['role_ids'] = $role_ids;
+    // save all roles in a session parameter for later use
+    $_SESSION['role_ids'] = $_POST['sel_roles_ids'];
 
     // weiterleiten zur allgemeinen Listeseite
     header('Location: '.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$list->getValue('lst_id').'&mode=html&show_members='. $_POST['show_members']);

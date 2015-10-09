@@ -616,7 +616,7 @@
         <text id="LST_ACTIVE_MEMBERS" development="new" translation="edited">Aktive Medlemmer</text>
         <text id="LST_COLUMN" development="new" translation="todo">Kolonne</text>
         <text id="LST_ACTIVE_ROLES" development="new" translation="edited">Oversigt over aktive roller</text>
-        <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="edited">Tilføj kolonne</text>
+        <text id="LST_ADD_COLUMN" development="new" translation="edited">Tilføj kolonne</text>
         <text id="LST_CHANGE_LIST" development="new" translation="edited">Vil du hente og ændre standard liste eller oprette en ny liste?</text>
         <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Vælg en rolle for den valgte liste.</text>
         <text id="LST_CONFIGURATION" development="new" translation="edited">Liste indstilling</text>
@@ -658,7 +658,7 @@
         <text id="LST_NEW_DEFAULT_CONFIGURATION" development="new" translation="edited">Liste indstillingen vil blive brugt som standard.</text>
         <text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="edited">Antal roller pr. side.</text>
         <text id="LST_PRESET_CONFIGURATION" development="new" translation="edited">Standard liste indstillinger</text>
-        <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">Som webmaster kan du definere en standard liste indstilling for alle brugere. Konfigurer rækker og kolonner og gem indstillingerne ved at navngive konfigurations sættet. Vælg en ny forud defineret liste indstilling og klik: %VAR1%</text>
+        <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">Som webmaster kan du definere en standard liste indstilling for alle brugere. Konfigurer rækker og kolonner og gem indstillingerne ved at navngive konfigurations sættet.</text>
         <text id="LST_PRINT_PREVIEW" development="new" translation="edited">Vis print eksempel</text>
         <text id="LST_ROLE_INFORMATION" development="new" translation="edited">Rolle information</text>
         <text id="LST_SAVE_CONFIGURATION" development="new" translation="edited">Gem indstilling</text>
@@ -900,12 +900,6 @@
         <text id="PHO_POPUP_WINDOW" development="new" translation="edited">popup vindue</text>
         <text id="PHO_PREVIOUS_PHOTO" development="new" translation="edited">Forrige billede</text>
         <text id="PHO_RESOLUTION_MORE_THAN" development="new" translation="edited">Opløsning større end</text>
-        <text id="PHO_RESTRICTIONS_HELP_1" development="new" translation="edited">Billeder skal gemmes som enten JPG eller PNG.</text>
-        <text id="PHO_RESTRICTIONS_HELP_2" development="new" translation="edited">Serveren kan kun behandle billeder med en max størrelse på %VAR1% megapixels.</text>
-        <text id="PHO_RESTRICTIONS_HELP_3" development="new" translation="edited">Den overførte fil må ikke være større end %VAR1% MB.</text>
-        <text id="PHO_RESTRICTIONS_HELP_4" development="new" translation="edited">Billeder bliver automatisk scaleret til %VAR1% pixels på den lange kant (og proprotionelt på den anden side) før de bliver gemt.</text>
-        <text id="PHO_RESTRICTIONS_HELP_5" development="new" translation="edited">Navnet på filen er irrelevant da alle filer bliver omdøbt fortløbende.</text>
-        <text id="PHO_RESTRICTIONS_HELP_6" development="new" translation="edited">Fil overførsler kan godt tage lang tid selv om man har en hurtig internet forbindelse. Før en overførsel er det anbefalet at man kopierer alle filer til en folder, og ændrer størrelsen på dem til %VAR1% pixels (lang side). JPG kvalitet skal være mindst 90% (lav kompression) for at få et godt resultat.</text>
         <text id="PHO_SAME_WINDOW" development="new" translation="edited">Samme vindue</text>
         <text id="PHO_SCALE_AT_UPLOAD" development="new" translation="edited">Overførsels skalering</text>
         <text id="PHO_SCALE_AT_UPLOAD_DESC" development="new" translation="edited">Billeder vil blive skaleret imens de overføres. Pixel værdien definerer den lange kant på portrætter og landskab billeder. Den korte side bliver proportionel til den lange. (Standard: 640 pixels)</text>
@@ -914,9 +908,6 @@
         <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Vis vandmærke</text>
         <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="edited">Teksten vil blive vist i på alle billeder med en lang kant længere end 200 pixels. (Standard: &#169; %VAR1%)</text>
         <text id="PHO_SHOWN_ON_READY"  development="new" translation="edited">Billeder er blevet tilføjet til albummet hvis de vises på denne side.</text>
-        <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Klik på knappen %VAR1_BOLD% for at vælge billede filer fra harddisken til overførsel.</text>
-        <text id="PHO_UPLOAD_HELP_2" development="new" translation="edited">Når du bruger processen med at overføre enkelt billeder, så skal du gentage den op til 5 gange, indtil alle felterne er i brug.</text>
-        <text id="PHO_UPLOAD_HELP_3" development="new" translation="edited">Klik så på %VAR1_BOLD% og hav lidt tålmodighed.</text>
         <text id="PHO_UPLOAD_MORE" development="new" translation="edited">Overfør flere billeder</text>
         <text id="PHO_UPLOAD_PHOTOS" development="new" translation="edited">Overfør billede</text>
         <text id="PHO_WANT_DELETE_PHOTO" development="new" translation="edited">Det valgte billede bliver slettet. Er du sikker?</text>
@@ -1072,8 +1063,6 @@
         <text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="edited">Tilbage til modul oversigten</text>
         <text id="SYS_BETA_VERSION" development="new" translation="edited">Du bruger en BETA version af Admidio.\n\nStabilitets problemer og tab af data er en mulighed. Brug venligst KUN denne version til tests!</text>
         <text id="SYS_BIRTHDAY" development="new" translation="edited">Fødselsdag</text>
-        <text id="SYS_BROWSE" development="new" translation="edited">Gennemse</text>
-        <text id="SYS_BROWSE_ERROR" development="new" translation="edited">Fil søgning kunne ikke gennemføres.</text>
         <text id="SYS_CAPTCHA" development="new" translation="edited">Captcha</text>
         <text id="SYS_CAPTCHA_CALC" development="new" translation="edited">Resultat af udregningen</text>
         <text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">Captcha kode resultat ugyldigt. Prøv igen!</text>

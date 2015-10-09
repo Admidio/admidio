@@ -638,7 +638,7 @@
         <text id="LST_ACTIVE_FORMER_MEMBERS" development="new" translation="edited">Active and former members</text>
         <text id="LST_ACTIVE_MEMBERS" development="new" translation="edited">Active Members</text>
         <text id="LST_ACTIVE_ROLES" development="new" translation="edited">Overview of active roles</text>
-        <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="edited">Add column</text>
+        <text id="LST_ADD_COLUMN" development="new" translation="edited">Add column</text>
         <text id="LST_CHANGE_LIST" development="new" translation="edited">Would you like to load and change default configuration or to create new configuration?</text>
         <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Choose role for selected list.</text>
         <text id="LST_COLUMN" development="new" translation="edited">Column</text>
@@ -681,7 +681,7 @@
         <text id="LST_NEW_DEFAULT_CONFIGURATION" development="new" translation="edited">Configuration will be defined as default configuration</text>
         <text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="edited">Number of roles per page</text>
         <text id="LST_PRESET_CONFIGURATION" development="new" translation="edited">Default configuration</text>
-        <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">As webmaster you are able to define the default configuration for all users. Configure rows and columns and save it by naming the configuration set. Select new predefined list configuration and hit this: %VAR1%</text>
+        <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">As webmaster you are able to define the default configuration for all users. Configure rows and columns and save it by naming the configuration set.</text>
         <text id="LST_PRINT_PREVIEW" development="new" translation="edited">Print preview</text>
         <text id="LST_ROLE_INFORMATION" development="new" translation="edited">Role information</text>
         <text id="LST_SAVE_CONFIGURATION" development="new" translation="edited">Save configuration</text>
@@ -925,12 +925,6 @@
         <text id="PHO_POPUP_WINDOW" development="new" translation="edited">popup window</text>
         <text id="PHO_PREVIOUS_PHOTO" development="new" translation="edited">previous picture</text>
         <text id="PHO_RESOLUTION_MORE_THAN" development="new" translation="edited">Resolution greater than</text>
-        <text id="PHO_RESTRICTIONS_HELP_1" development="new" translation="edited">Photos have to be saved as JPGs or PNGs.</text>
-        <text id="PHO_RESTRICTIONS_HELP_2" development="new" translation="edited">Server is able to process photos of a maximum size of  %VAR1% megapixels.</text>
-        <text id="PHO_RESTRICTIONS_HELP_3" development="new" translation="edited">Upload file should not be greater than  %VAR1% MB.</text>
-        <text id="PHO_RESTRICTIONS_HELP_4" development="new" translation="edited">Photos are being automatically scaled to %VAR1% pixels on the long edge (other edge proportional) before saving.</text>
-        <text id="PHO_RESTRICTIONS_HELP_5" development="new" translation="edited">Name of file is irrelevant as all files are being named consecutively.</text>
-        <text id="PHO_RESTRICTIONS_HELP_6" development="new" translation="edited">File upload can take a long time with fast internet connection, too. Before upload it is recommended to copy all files into a folder, and to resize them to %VAR1% pixels (long edge). JPG quality should be at least at 90% (low compression) for good result.</text>
         <text id="PHO_SAME_WINDOW" development="new" translation="edited">Same window</text>
         <text id="PHO_SCALE_AT_UPLOAD" development="new" translation="edited">Upload scaling</text>
         <text id="PHO_SCALE_AT_UPLOAD_DESC" development="new" translation="edited">Photos will be resized during upload. Pixel value defines long edge of portrait and landscape format photos. Other side remains proportional to long edge. (default: 640 pixels)</text>
@@ -939,9 +933,6 @@
         <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Show watermark</text>
         <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="edited">Text will be shown in all photos with a long edge larger than 200 pixels. (default: &#169; %VAR1%)</text>
         <text id="PHO_SHOWN_ON_READY"  development="new" translation="edited">Photos have been successfully added to album if they appear on this page.</text>
-        <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Press button %VAR1_BOLD% in order to select photo files on harddrive for upload.</text>
-        <text id="PHO_UPLOAD_HELP_2" development="new" translation="edited">When using single photo upload the selection process has to be repeated up to five times, until all upload fields are in use.</text>
-        <text id="PHO_UPLOAD_HELP_3" development="new" translation="edited">Press then %VAR1_BOLD% and be patient.</text>
         <text id="PHO_UPLOAD_MORE" development="new" translation="edited">Upload more photos</text>
         <text id="PHO_UPLOAD_PHOTOS" development="new" translation="edited">Upload photos</text>
         <text id="PHO_WANT_DELETE_PHOTO" development="new" translation="edited">Selected photo is going to be deleted. Do you confirm?</text>
@@ -1102,8 +1093,6 @@
         <text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="edited">Back to module overview</text>
         <text id="SYS_BETA_VERSION" development="new" translation="edited">You are using a BETA version of Admidio.\n\nStability issues and data loss might occur. Please use this version for testing purposes only!</text>
         <text id="SYS_BIRTHDAY" development="new" translation="edited">Birthday</text>
-        <text id="SYS_BROWSE" development="new" translation="edited">Browse</text>
-        <text id="SYS_BROWSE_ERROR" development="new" translation="edited">Files searching could not be performed.</text>
         <text id="SYS_CAPTCHA" development="new" translation="edited">Captcha</text>
         <text id="SYS_CAPTCHA_CALC" development="new" translation="edited">Result of the calculation</text>
         <text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">The result of the calculation is not correct.</text>

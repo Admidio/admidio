@@ -497,7 +497,7 @@
         <text id="LST_ACTIVE_FORMER_MEMBERS" development="new" translation="edited">Actieve en voormalige leden</text>
         <text id="LST_ACTIVE_MEMBERS" development="new" translation="edited">Actieve leden</text>
         <text id="LST_ACTIVE_ROLES" development="new" translation="edited">Overzicht actieve rollen</text>
-        <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="edited">Extra kolom</text>
+        <text id="LST_ADD_COLUMN" development="new" translation="edited">Extra kolom</text>
         <text id="LST_CHANGE_LIST" development="new" translation="edited">Wilt u standaard lijsten tonen/bewerken of nieuwe lijst maken?</text>
         <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Kies rol voor geselecteerde lijst</text>
         <text id="LST_COLUMN" development="new" translation="edited">Kolom</text>
@@ -541,7 +541,7 @@
         <text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="edited">Aantal rollen per pagina</text>
         <text id="LST_PERIOD" development="new" translation="edited">Periode</text>
         <text id="LST_PRESET_CONFIGURATION" development="new" translation="edited">Vooraf bepaalde instellingen</text>
-        <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">Als beheerder kunt u de standaard instellingen voor alle leden bepalen. Maak rijen en kolommen en sla dit op door het een naam te geven. Selecteer de nieuwe instellingen en klik op: %VAR1%</text>
+        <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">Als beheerder kunt u de standaard instellingen voor alle leden bepalen. Maak rijen en kolommen en sla dit op door het een naam te geven.</text>
         <text id="LST_PRINT_PREVIEW" development="new" translation="edited">Print</text>
         <text id="LST_ROLE_INFORMATION" development="new" translation="edited">Rol informatie</text>
         <text id="LST_SAVE_CONFIGURATION" development="new" translation="edited">Instellingen opslaan</text>
@@ -792,12 +792,6 @@
         <text id="PHO_POPUP_WINDOW" development="new" translation="edited">Popup venster</text>
         <text id="PHO_PREVIOUS_PHOTO" development="new" translation="edited">vorige foto</text>
         <text id="PHO_RESOLUTION_MORE_THAN" development="new" translation="edited">Resolutie groter dan</text>
-        <text id="PHO_RESTRICTIONS_HELP_1" development="new" translation="edited">Foto's moeten als JPG of PNG opgeslagen worden.</text>
-        <text id="PHO_RESTRICTIONS_HELP_2" development="new" translation="edited">De server kan foto's bewerken die maximaal %VAR1% megapixels groot zijn.</text>
-        <text id="PHO_RESTRICTIONS_HELP_3" development="new" translation="edited">De upload moet niet groter dan %VAR1% MB zijn.</text>
-        <text id="PHO_RESTRICTIONS_HELP_4" development="new" translation="edited">Foto's worden automatisch verkleind naar %VAR1% pixels aan de lange zijde (andere zijde proportioneel) voordat ze opgeslagen worden.</text>
-        <text id="PHO_RESTRICTIONS_HELP_5" development="new" translation="edited">De naam van de foto is niet relevant aangezien alle foto's achtereenvolgens worden genoemd.</text>
-        <text id="PHO_RESTRICTIONS_HELP_6" development="new" translation="edited">Uploaden van bestand kan ook lang duren met een snelle internetverbinding. Het is aan te raden alle foto's in een map te kopieren en ze te verkleinen naar %VAR1% pixels (lange zijde). Kwaliteit van JPG moet minimaal 90% (lage compressie) zijn, voor een goed resultaat.</text>
         <text id="PHO_SAME_WINDOW" development="new" translation="edited">Hetzelfde venster</text>
         <text id="PHO_SCALE_AT_UPLOAD" development="new" translation="edited">Upload schalen</text>
         <text id="PHO_SCALE_AT_UPLOAD_DESC" development="new" translation="edited">Foto's worden herschaald tijdens upload. Opgegeven pixels betreft de lange zijde van de foto. De korte zijde blijft in verhouding gelijk aan de lange zijde. (standaard: 640 pixels)</text>
@@ -806,9 +800,6 @@
         <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Toon watermerk</text>
         <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="edited">Tekst wordt getoond in alle foto's die breder zijn dan 200 pixels. (standaard: &#169; %VAR1%)</text>
         <text id="PHO_SHOWN_ON_READY"  development="new" translation="edited">Foto's zijn succesvol toegevoegd aan album als ze op deze pagina getoond worden. </text>
-        <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Klik op de knop %VAR1_BOLD% om foto's te selecteren die u vanaf uw harde schijf wilt uploaden.</text>
-        <text id="PHO_UPLOAD_HELP_2" development="new" translation="edited">Als u foto's per stuk gaat uploaden via de functie HTML-upload moet u dit tot maximaal 5 keer herhalen totdat alle velden gevuld zijn.</text>
-        <text id="PHO_UPLOAD_HELP_3" development="new" translation="edited">Klik dan op %VAR1_BOLD% en wacht rustig af.</text>
         <text id="PHO_UPLOAD_MORE" development="new" translation="edited">Meer foto's uploaden</text>
         <text id="PHO_UPLOAD_PHOTOS" development="new" translation="edited">Upload foto's</text>
         <text id="PHO_WANT_DELETE_PHOTO" development="new" translation="edited">Geselecteerde foto wordt verwijderd. Doorgaan?</text>
@@ -969,8 +960,6 @@
         <text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="edited">Terug naar beginpagina</text>
         <text id="SYS_BETA_VERSION" development="new" translation="edited">U gebruikt een BETA versie van Admidio.\n\nProblemen zoals instabiliteit en verlies van gegevens kunnen voorkomen. Gebruik deze versie svp alleen voor testdoeleinden!</text>
         <text id="SYS_BIRTHDAY" development="new" translation="edited">Geboortedatum</text>
-        <text id="SYS_BROWSE" development="new" translation="edited">Bladeren</text>
-        <text id="SYS_BROWSE_ERROR" development="new" translation="edited">Zoeken van bestanden kan niet plaatsvinden.</text>
         <text id="SYS_CAPTCHA" development="new" translation="edited">Captcha</text>
         <text id="SYS_CAPTCHA_CALC" development="new" translation="edited">Resultaat van berekening</text>
         <text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">Resultaat van berekening is onjuist.</text>

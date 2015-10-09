@@ -641,7 +641,7 @@
         <text id="LST_ACTIVE_FORMER_MEMBERS" development="new" translation="todo">Aktive und ehemalige Mitglieder</text>
         <text id="LST_ACTIVE_MEMBERS" development="new" translation="todo">Aktive Mitglieder</text>
         <text id="LST_ACTIVE_ROLES" development="new" translation="todo">Übersicht der aktiven Rollen</text>
-        <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="todo">Weitere Spalte hinzufügen</text>
+        <text id="LST_ADD_COLUMN" development="new" translation="todo">Spalte hinzufügen</text>
         <text id="LST_CHANGE_LIST" development="new" translation="todo">Möchten Sie eine gespeicherte Konfiguration laden und verändern oder eine neue Listenkonfiguration erstellen?</text>
         <text id="LST_CHOOSE_ROLE" development="new" translation="todo">Wählen Sie eine Rolle aus, von der Sie die konfigurierte Mitgliederliste anzeigen möchten.</text>
         <text id="LST_COLUMN" development="new" translation="todo">Spalte</text>
@@ -684,7 +684,7 @@
         <text id="LST_NEW_DEFAULT_CONFIGURATION" development="new" translation="todo">Konfiguration wird zur neuen Standardkonfiguration</text>
         <text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="todo">Anzahl Rollen pro Seite</text>
         <text id="LST_PRESET_CONFIGURATION" development="new" translation="todo">Vorgegebene Konfigurationen</text>
-        <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="todo">Als Webmaster können Sie Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen. Konfigurieren Sie die entsprechende Spalten und Bedingungen und speichern Sie diese unter dem gewünschten Namen. Wählen Sie nun die neu erstellte Liste aus und klickn Sie auf dieses Symbol: %VAR1%</text>
+        <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="todo">Als Webmaster können Sie Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen. Konfigurieren Sie die entsprechende Spalten und Bedingungen und speichern Sie diese unter dem gewünschten Namen.</text>
         <text id="LST_PRINT_PREVIEW" development="new" translation="todo">Druckvorschau</text>
         <text id="LST_ROLE_INFORMATION" development="new" translation="todo">Rolleninformationen</text>
         <text id="LST_SAVE_CONFIGURATION" development="new" translation="todo">Konfiguration speichern</text>
@@ -928,12 +928,6 @@
         <text id="PHO_POPUP_WINDOW" development="new" translation="todo">Popup-Fenster</text>
         <text id="PHO_PREVIOUS_PHOTO" development="new" translation="todo">Vorheriges Foto</text>
         <text id="PHO_RESOLUTION_MORE_THAN" development="new" translation="todo">Auflösung größer als</text>
-        <text id="PHO_RESTRICTIONS_HELP_1" development="new" translation="todo">Die Fotos müssen im Format JPG oder PNG gespeichert sein.</text>
-        <text id="PHO_RESTRICTIONS_HELP_2" development="new" translation="todo">Der Server kann Fotos mit einer maximalen Auflösung von %VAR1% MegaPixeln verarbeiten.</text>
-        <text id="PHO_RESTRICTIONS_HELP_3" development="new" translation="todo">Die hochgeladenen Dateien dürfen nicht größer als %VAR1% MB sein.</text>
-        <text id="PHO_RESTRICTIONS_HELP_4" development="new" translation="todo">Die Fotos werden automatisch auf eine Auflösung von %VAR1% Pixel der längeren Seite skaliert (andere Seite im Verhältnis) bevor sie gespeichert werden.</text>
-        <text id="PHO_RESTRICTIONS_HELP_5" development="new" translation="todo">Der Name der Dateien spielt keine Rolle, da sie automatisch mit fortlaufender Nummer benannt werden.</text>
-        <text id="PHO_RESTRICTIONS_HELP_6" development="new" translation="todo">Da auch bei schnellen Internetanbindungen das Hochladen von größeren Dateien einige Zeit in Anspruch nehmen kann, empfehlen wir zunächst alle hoch zu ladenden Fotos in einen Sammelordner zu kopieren und diese dann mit einer Fotobearbeitungssoftware auf %VAR1% Pixel (längere Seite) zu skalieren. Die JPG-Qualität sollte beim Speichern auf mindestens 90% (also geringe Komprimierung) gestellt werden.</text>
         <text id="PHO_SAME_WINDOW" development="new" translation="todo">Gleiches Fenster</text>
         <text id="PHO_SCALE_AT_UPLOAD" development="new" translation="todo">Skalierung beim Hochladen</text>
         <text id="PHO_SCALE_AT_UPLOAD_DESC" development="new" translation="todo">Beim Hochladen werden alle Fotos neu skaliert. Der eingegebene Pixelwert ist der Parameter für die längere Seite des Fotos, egal ob das Foto im Hoch- oder Querformat übergeben wurde. Die andere Seite wird im Verhältnis berechnet. (Standard: 640 Pixel)</text>
@@ -942,9 +936,6 @@
         <text id="PHO_SHOW_CAPTION" development="new" translation="todo">Bildtext einblenden</text>
         <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="todo">Der eingegebene Text wird in allen angezeigten Fotos, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet. (Standard: &#169; %VAR1%)</text>
         <text id="PHO_SHOWN_ON_READY"  development="new" translation="todo">Die Fotos wurden dem Album erfolgreich hinzugefügt, wenn sie hier angezeigt werden.</text>
-        <text id="PHO_UPLOAD_HELP_1" development="new" translation="todo">Auf den Button %VAR1_BOLD% klicken und die gewünschte(n) Fotodatei(en) von der Festplatte auswählen.</text>
-        <text id="PHO_UPLOAD_HELP_2" development="new" translation="todo">Bei Einzelbildupload den Vorgang ggf. bis zu fünfmal wiederholen, bis alle Felder gefüllt sind.</text>
-        <text id="PHO_UPLOAD_HELP_3" development="new" translation="todo">Dann auf %VAR1_BOLD% klicken und ein wenig Geduld haben.</text>
         <text id="PHO_UPLOAD_MORE" development="new" translation="todo">Weitere Fotos hochladen</text>
         <text id="PHO_UPLOAD_PHOTOS" development="new" translation="todo">Fotos hochladen</text>
         <text id="PHO_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
@@ -1104,8 +1095,6 @@
         <text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="todo">Zurück zur Modulübersicht</text>
         <text id="SYS_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</text>
         <text id="SYS_BIRTHDAY" development="new" translation="todo">Geburtstag</text>
-        <text id="SYS_BROWSE" development="new" translation="todo">Durchsuchen</text>
-        <text id="SYS_BROWSE_ERROR" development="new" translation="todo">Dateien konnten nicht durchsucht werden.</text>
         <text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
         <text id="SYS_CAPTCHA_CALC" development="new" translation="todo">Ergebnis der Rechnung</text>
         <text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="todo">Das Ergbenis der Rechnung wurde falsch eingegeben.</text>

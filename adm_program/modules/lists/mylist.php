@@ -8,10 +8,10 @@
  *
  * Parameters:
  *
- * lst_id : Liste deren Konfiguration direkt angezeigt werden soll
- * rol_id : das Feld Rolle kann mit der entsprechenden Rolle vorbelegt werden
- * active_role  : 1 - (Default) aktive Rollen auflisten
- *                0 - Ehemalige Rollen auflisten
+ * lst_id : Id of the list configuration that should be shown
+ * rol_id : (Optional) If a role id is set then the form field will be preassigned.
+ * active_role  : 1 - (Default) List only active roles
+ *                0 - List only deactivated roles
  * show_members : 0 - (Default) show active members of role
  *                1 - show former members of role
  *                2 - show active and former members of role
@@ -327,6 +327,8 @@ if(isset($form_values))
 }
 else
 {
+    $form_values['sel_select_configuation'] = 0;
+
     for($number = 0; $number < $list->countColumns(); $number++)
     {
         $column = $list->getColumnObject($number + 1);
@@ -434,10 +436,9 @@ $javascriptCode .= '
 
     function loadList()
     {
-        var listId = $("#lists_config").val();
-        var roleId = $("#rol_id").val();
-        var show_members = $("#show_members").val();
-        self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&rol_id=" + roleId + "&active_role='.$getActiveRole.'&show_members=" + show_members;
+        var listId = $("#sel_select_configuation").val();
+        var show_members = $("#sel_show_members").val();
+        self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'&show_members=" + show_members;
     }
 
     function send(mode)
@@ -455,13 +456,13 @@ $javascriptCode .= '
         switch (mode)
         {
             case "show":
-                document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=2";
-                document.getElementById("form_mylist").submit();
+                document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=2";
+                document.getElementById("mylist_configuration_form").submit();
                 break;
 
             case "save":
-                document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=1";
-                document.getElementById("form_mylist").submit();
+                document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=1";
+                document.getElementById("mylist_configuration_form").submit();
                 break;
 
             case "save_as":
@@ -469,8 +470,8 @@ $javascriptCode .= '
                 listName = prompt("'.$gL10n->get('LST_CONFIGURATION_SAVE').'");
                 if(listName != null)
                 {
-                    document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=1&name=" + listName;
-                    document.getElementById("form_mylist").submit();
+                    document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=1&name=" + listName;
+                    document.getElementById("mylist_configuration_form").submit();
                 }
                 break;
 
@@ -478,8 +479,8 @@ $javascriptCode .= '
                 var msg_result = confirm("'.$gL10n->get('LST_CONFIGURATION_DELETE').'");
                 if(msg_result)
                 {
-                    document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=3";
-                    document.getElementById("form_mylist").submit();
+                    document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=3";
+                    document.getElementById("mylist_configuration_form").submit();
                 }
                 break;
 
@@ -487,8 +488,8 @@ $javascriptCode .= '
                 var msg_result = confirm("'.$gL10n->get('LST_WANT_CONFIGURATION_FOR_ALL_USERS').'");
                 if(msg_result)
                 {
-                    document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=4";
-                    document.getElementById("form_mylist").submit();
+                    document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=4";
+                    document.getElementById("mylist_configuration_form").submit();
                 }
                 break;
         }
@@ -496,7 +497,13 @@ $javascriptCode .= '
 $page->addJavascript($javascriptCode);
 $page->addJavascript('$(document).ready(function() {
     $("form:first *:input[type!=hidden]:first").focus();
+    $("#sel_select_configuation").change(function() {loadList();});
     $("#btn_show_list").click(function() {send("show");});
+    $("#btn_add_column").click(function() {addColumn();});
+    $("#btn_save").click(function() {send("save_as");});
+    $("#btn_save_changes").click(function() {send("save");});
+    $("#btn_delete").click(function() {send("delete");});
+    $("#btn_configuration_all_users").click(function() {send("system");});
 
     for(var counter = 0; counter < '. $default_column_rows. '; counter++) {
         addColumn();
@@ -511,6 +518,123 @@ if($gNavigation->count() > 1)
     $myListMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 }
 
+// show form
+$form = new HtmlForm('mylist_configuration_form', $g_root_path. '/adm_program/modules/lists/mylist_prepare.php', $page);
+$form->openGroupBox('gb_configuration_list', $gL10n->get('LST_CONFIGURATION_LIST'));
+
+// read all relevant configurations from database and create an array
+$yourLastConfigurationsGroup = false;
+$yourConfigurationsGroup = false;
+$presetConfigurationsGroup  = false;
+$actualGroup                = '';
+$configurationsArray[]      = array(0, $gL10n->get('LST_CREATE_NEW_CONFIGURATION'), null);
+
+$sql = 'SELECT lst_id, lst_name, lst_global FROM '. TBL_LISTS. '
+         WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
+           AND (  lst_usr_id = '. $gCurrentUser->getValue('usr_id'). '
+               OR lst_global = 1)
+         ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC ';
+$configurationsStatement = $gDb->query($sql);
+
+$configurations = $configurationsStatement->fetchAll();
+
+foreach($configurations as $configuration)
+{
+    if($configuration['lst_global'] == 0 && !$yourLastConfigurationsGroup && $configuration['lst_name'] === '')
+    {
+        $actualGroup = $gL10n->get('LST_YOUR_LAST_CONFIGURATION');
+        $yourLastConfigurationsGroup = true;
+    }
+    elseif($configuration['lst_global'] == 0 && !$yourConfigurationsGroup && $configuration['lst_name'] !== '')
+    {
+        $actualGroup = $gL10n->get('LST_YOUR_CONFIGURATION');
+        $yourConfigurationsGroup = true;
+    }
+    elseif($configuration['lst_global'] == 1 && !$presetConfigurationsGroup)
+    {
+        $actualGroup = $gL10n->get('LST_PRESET_CONFIGURATION');
+        $presetConfigurationsGroup = true;
+    }
+
+    // now add configuration to array
+    $configurationsArray[]      = array($configuration['lst_id'], $configuration['lst_name'], $actualGroup);
+}
+
+$form->addSelectBox('sel_select_configuation', $gL10n->get('LST_SELECT_CONFIGURATION'), $configurationsArray, 
+    array('defaultValue' => $form_values['sel_select_configuation'], 'showContextDependentFirstEntry' => false));
+    
+// Webmasters could upgrade a configuration to a global configuration that is visible to all users
+if($gCurrentUser->isWebmaster())
+{
+    $form->addCheckbox('cbx_global_configuration', $gL10n->get('LST_CONFIGURATION_ALL_USERS'), $list->getValue('lst_global'), array('helpTextIdLabel' => 'LST_PRESET_CONFIGURATION_DESC'));
+}
+
+    $form->addDescription('Ordne in der folgenden Tabelle beliebig vielen Spalten entsprechende Profilfelder zu.
+    Zusätzlich kannst du die Standardsortierung vorgeben und Bedingungen zu Feldern hinzufügen, nach denen die
+    jeweiligen Mitglieder gefiltert werden sollen.');
+    $form->addHtml('
+    <div class="table-responsive">
+    <table class="table table-condensed" id="mylist_fields_table">
+        <thead>
+            <tr>
+                <th style="width: 20%;">'.$gL10n->get('SYS_ABR_NO').'</th>
+                <th style="width: 37%;">'.$gL10n->get('SYS_CONTENT').'</th>
+                <th style="width: 18%;">'.$gL10n->get('SYS_ORDER').'</th>
+                <th style="width: 25%;">'.$gL10n->get('SYS_CONDITION').'
+                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                        href="'.$g_root_path.'/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true">
+                        <img src="'.THEME_PATH.'/icons/help.png" alt="Help" />
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="mylist_fields_tbody">
+        </tbody>
+    </table>
+    </div>');
+
+$form->openButtonGroup();
+$form->addButton('btn_add_column', $gL10n->get('LST_ADD_COLUMN'), array('icon' => THEME_PATH.'/icons/add.png'));
+if($getListId > 0)
+{
+    $form->addButton('btn_save_changes', $gL10n->get('LST_SAVE_CHANGES'), array('icon' => THEME_PATH.'/icons/disk.png'));
+}
+else
+{
+    $form->addButton('btn_save', $gL10n->get('LST_SAVE_CONFIGURATION'), array('icon' => THEME_PATH.'/icons/disk.png'));
+}
+// your lists could be deleted, webmasters are allowed to delete system configurations
+if(($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
+|| ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
+{
+    $form->addButton('btn_delete', $gL10n->get('LST_DELETE_CONFIGURATION'), array('icon' => THEME_PATH.'/icons/delete.png'));
+}
+$form->closeButtonGroup();
+
+$form->closeGroupBox();
+
+$form->openGroupBox('gb_select_members', $gL10n->get('LST_SELECT_MEMBERS'));
+// show all roles where the user has the right to see them
+$sql = 'SELECT rol_id, rol_name, cat_name 
+          FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+         WHERE rol_valid   = '.$getActiveRole.'
+           AND rol_visible = 1
+           AND rol_cat_id  = cat_id
+           AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+               OR cat_org_id IS NULL )
+         ORDER BY cat_sequence, rol_name';
+$form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sql, 
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $getRoleId, 'multiselect' => true));
+$showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
+$form->addSelectBox('sel_show_members', $gL10n->get('SYS_ROLE'), $showMembersSelection,
+    array('property' => FIELD_REQUIRED, 'defaultValue' => 0, 'showContextDependentFirstEntry' => false));
+$form->closeGroupBox();
+
+$form->addButton('btn_show_list', $gL10n->get('LST_SHOW_LIST'), array('icon' => THEME_PATH.'/icons/list.png', 'class' => 'btn-primary'));
+
+// add form to html page and show page
+$page->addHtml($form->show(false));
+/*
 $page->addHtml('
 <form id="form_mylist" class="form-horizontal" action="'. $g_root_path. '/adm_program/modules/lists/mylist_prepare.php" method="post">
     <p><b>1.</b> '.$gL10n->get('LST_CHANGE_LIST').'</p>
@@ -743,7 +867,7 @@ $page->addHtml('</div>
         &nbsp;'.$gL10n->get('LST_SHOW_LIST').'
     </button>
 </form>');
-
+*/
 $page->show();
 
 ?>
