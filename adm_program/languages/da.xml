@@ -622,8 +622,6 @@
         <text id="LST_CONFIGURATION_SAVE" development="new" translation="edited">Vælg et navn til listen sættet?</text>
         <text id="LST_CREATE_NEW_CONFIGURATION" development="new" translation="edited">Opret ny liste</text>
         <text id="LST_CREATE_OWN_LIST" development="new" translation="edited">Opret egen liste</text>
-        <text id="LST_DEFAULT_CONFIGURATION" development="new" translation="edited">Standard liste indstilling</text>
-        <text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="edited">Gør et liste indstillings sæt til organisationens standard liste konfiguration. Vælg et liste indstillings sæt og klik på følgende symbol: %VAR1%. Den valgte indstilling vil blive aktiv for alle medlemmers rolle lister. Medlemmer vil ikke kunne bruge deres egne liste indstillinger.</text>
         <text id="LST_DEFAULT_LIST_NOT_SET_UP" development="new" translation="edited">Der er ikke defineret et standard liste indstillings sæt af administratoren!\n\nKontakt systemadministratoren for at få hjælp.</text>
         <text id="LST_DELETE_CONFIGURATION" development="new" translation="edited">Slet liste indstillingen</text>
         <text id="LST_EMAIL_TO_MEMBERS" development="new" translation="edited">E-mail til medlemmer</text>

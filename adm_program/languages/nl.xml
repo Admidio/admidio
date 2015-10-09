@@ -509,8 +509,6 @@
         <text id="LST_CONFIGURATION_SAVE" development="new" translation="edited">Geef deze instellingen een naam</text>
         <text id="LST_CREATE_NEW_CONFIGURATION" development="new" translation="edited">Nieuwe instellingen maken</text>
         <text id="LST_CREATE_OWN_LIST" development="new" translation="edited">Maak eigen lijst</text>
-        <text id="LST_DEFAULT_CONFIGURATION" development="new" translation="edited">Standaard instellingen</text>
-        <text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="edited">Maak een keuze voor de standaard instellingen. Selecteer de instellingen van uw keuze en klik op: %VAR1%. Geselecteerde instellingen worden actief voor alle leden.</text>
         <text id="LST_DEFAULT_LIST_NOT_SET_UP" development="new" translation="edited">Geen standaard lijst-instellingen gedefinieerd door beheerder!\n\nNeem voor hulp contact met beheerder op.</text>
         <text id="LST_DELETE_CONFIGURATION" development="new" translation="edited">Verwijder instellingen</text>
         <text id="LST_EMAIL_TO_MEMBERS" development="new" translation="edited">E-mail leden</text>

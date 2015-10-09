@@ -649,8 +649,6 @@
         <text id="LST_CONFIGURATION_SAVE" development="new" translation="todo">Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden?</text>
         <text id="LST_CREATE_NEW_CONFIGURATION" development="new" translation="todo">Neue Konfiguration erstellen</text>
         <text id="LST_CREATE_OWN_LIST" development="new" translation="todo">Eigene Liste erstellen</text>
-        <text id="LST_DEFAULT_CONFIGURATION" development="new" translation="todo">Standardkonfigurationen</text>
-        <text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="todo">Eine vorgegebene Konfiguration können Sie zur Standardkonfiguration machen. Wählen Sie dazu die entsprechende vorgegebene Konfiguration aus und klicken Sie auf folgendes Symbol: %VAR1%. Die gewählte Konfiguration wird nun an allen Stellen angezeigt, bei denen der Anwender eine Rollenliste angezeigt bekommt, ohne vorher die Möglichkeit zu haben, eine Konfiguration auszuwählen.</text>
         <text id="LST_DEFAULT_LIST_NOT_SET_UP" development="new" translation="todo">Es wurde keine Standardliste eingerichtet!\n\nWenden Sie sich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</text>
         <text id="LST_DELETE_CONFIGURATION" development="new" translation="todo">Konfiguration löschen</text>
         <text id="LST_EMAIL_TO_MEMBERS" development="new" translation="todo">E-Mail an Mitglieder</text>
