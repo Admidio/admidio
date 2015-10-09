@@ -20,9 +20,13 @@
         <text id="ORG_FIELD_DISABLED_DESC" development="changed" translation="todo">Ein gesperrtes Feld kann vom Benutzer im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten. Leiter einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</text>
         <text id="SYS_PHONE_INVALID_CHAR" development="new" translation="todo">Die Telefonnummer im Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</text>
     </version>
+    <version id="3.0.3" translator="Stefan Weiß">
+        <text id="MSG_SHOW_FORMER" development="new" translation="todo">E-Mails an Ehemalige senden</text>
+        <text id="MSG_SHOW_FORMER_DESC" development="new" translation="todo">Ist diese Einstellung gesetzt, dann können E-Mails an einzelne ehemalige Mitglieder, sowie an alle ehemaligen Mitglieder einer Rolle gesendet werden. (Standard: Aktiviert)</text>
+        <text id="PHO_FILE_UPLOADED" development="new" translation="todo">Das Bild %VAR1_BOLD% wurde hochgeladen.</text>
+    </version>
     <version id="3.0.0-Beta.4" translator="Markus Faßbender">
         <text id="INS_DATABASE_LOGIN_DESC" development="changed" translation="todo">Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere Admidio-Installationen auf derselben Datenbank einrichten möchten.</text>
-        <text id="PHO_FILE_UPLOADED" development="new" translation="todo">Das Bild %VAR1_BOLD% wurde hochgeladen.</text>
     </version>
     <version id="3.0.0-Beta.3" translator="Markus Faßbender">
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="todo">Ein Termin wurde geändert</text>
@@ -863,7 +867,6 @@
         <text id="ORG_SEND_PASSWORD" development="new" translation="todo">Passwort zusenden</text>
         <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="todo">Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den Administrator stellen. (Standard: ja)</text>
         <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="todo">Neues Passwort zuschicken</text>
-        <text id="ORG_SYSTEM_INFOS" development="new" translation="todo">Systeminfos</text>
         <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="todo">Systeminformationen</text>
         <text id="ORG_TIME_FORMAT" development="new" translation="todo">Zeitformat</text>
         <text id="ORG_TIME_FORMAT_DESC" development="new" translation="todo">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: H:i)</text>

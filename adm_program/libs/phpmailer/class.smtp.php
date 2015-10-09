@@ -30,7 +30,7 @@ class SMTP
      * The PHPMailer SMTP version number.
      * @type string
      */
-    const VERSION = '5.2.10';
+    const VERSION = '5.2.13';
 
     /**
      * SMTP line break constant.
@@ -81,7 +81,7 @@ class SMTP
      * @deprecated Use the `VERSION` constant instead
      * @see SMTP::VERSION
      */
-    public $Version = '5.2.10';
+    public $Version = '5.2.13';
 
     /**
      * SMTP server port number.
@@ -351,20 +351,21 @@ class SMTP
      * Perform SMTP authentication.
      * Must be run after hello().
      * @see hello()
-     * @param string $username    The user name
-     * @param string $password    The password
-     * @param string $authtype    The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5)
-     * @param string $realm       The auth realm for NTLM
+     * @param string $username The user name
+     * @param string $password The password
+     * @param string $authtype The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5, XOAUTH2)
+     * @param string $realm The auth realm for NTLM
      * @param string $workstation The auth workstation for NTLM
-     * @access public
-     * @return boolean True if successfully authenticated.
+     * @param null|OAuth  $OAuth An optional OAuth instance (@see PHPMailerOAuth)
+     * @return bool True if successfully authenticated.* @access public
      */
     public function authenticate(
         $username,
         $password,
         $authtype = null,
         $realm = '',
-        $workstation = ''
+        $workstation = '',
+        $OAuth = null
     ) {
         if (!$this->server_caps) {
             $this->setError('Authentication is not allowed before HELO/EHLO');
@@ -388,7 +389,7 @@ class SMTP
             );
 
             if (empty($authtype)) {
-                foreach (array('LOGIN', 'CRAM-MD5', 'NTLM', 'PLAIN') as $method) {
+                foreach (array('LOGIN', 'CRAM-MD5', 'NTLM', 'PLAIN', 'XOAUTH2') as $method) {
                     if (in_array($method, $this->server_caps['AUTH'])) {
                         $authtype = $method;
                         break;
@@ -433,6 +434,19 @@ class SMTP
                     return false;
                 }
                 if (!$this->sendCommand("Password", base64_encode($password), 235)) {
+                    return false;
+                }
+                break;
+            case 'XOAUTH2':
+                //If the OAuth Instance is not set. Can be a case when PHPMailer is used
+                //instead of PHPMailerOAuth
+                if (is_null($OAuth)) {
+                    return false;
+                }
+                $oauth = $OAuth->getOauth64();
+
+                // Start authentication
+                if (!$this->sendCommand('AUTH', 'AUTH XOAUTH2 ' . $oauth, 235)) {
                     return false;
                 }
                 break;
@@ -723,9 +737,11 @@ class SMTP
     {
         $this->server_caps = array();
         $lines = explode("\n", $this->last_reply);
+
         foreach ($lines as $n => $s) {
+            //First 4 chars contain response code followed by - or space
             $s = trim(substr($s, 4));
-            if (!$s) {
+            if (empty($s)) {
                 continue;
             }
             $fields = explode(' ', $s);
@@ -735,11 +751,20 @@ class SMTP
                     $fields = $fields[0];
                 } else {
                     $name = array_shift($fields);
-                    if ($name == 'SIZE') {
-                        $fields = ($fields) ? $fields[0] : 0;
+                    switch ($name) {
+                        case 'SIZE':
+                            $fields = ($fields ? $fields[0] : 0);
+                            break;
+                        case 'AUTH':
+                            if (!is_array($fields)) {
+                                $fields = array();
+                            }
+                            break;
+                        default:
+                            $fields = true;
                     }
                 }
-                $this->server_caps[$name] = ($fields ? $fields : true);
+                $this->server_caps[$name] = $fields;
             }
         }
     }
@@ -1031,10 +1056,9 @@ class SMTP
         }
         while (is_resource($this->smtp_conn) && !feof($this->smtp_conn)) {
             $str = @fgets($this->smtp_conn, 515);
-            $this->edebug("SMTP -> get_lines(): \$data was \"$data\"", self::DEBUG_LOWLEVEL);
-            $this->edebug("SMTP -> get_lines(): \$str is \"$str\"", self::DEBUG_LOWLEVEL);
-            $data .= $str;
             $this->edebug("SMTP -> get_lines(): \$data is \"$data\"", self::DEBUG_LOWLEVEL);
+            $this->edebug("SMTP -> get_lines(): \$str is  \"$str\"", self::DEBUG_LOWLEVEL);
+            $data .= $str;
             // If 4th character is a space, we are done reading, break the loop, micro-optimisation over strlen
             if ((isset($str[3]) and $str[3] == ' ')) {
                 break;

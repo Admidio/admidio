@@ -384,7 +384,7 @@ $page->addHtml('
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_system_informations">
-                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('ORG_SYSTEM_INFOS').'" />'.$gL10n->get('ORG_SYSTEM_INFOS').'
+                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('ORG_SYSTEM_INFORMATIONS').'" />'.$gL10n->get('ORG_SYSTEM_INFORMATIONS').'
                         </a>
                     </h4>
                 </div>
@@ -400,7 +400,7 @@ $page->addHtml('
                         // if database version is different to file version, then show database version
                         if(strcmp(ADMIDIO_VERSION, $gSystemComponent->getValue('com_version')) !== 0)
                         {
-                            $form->addStaticControl('database_version', $gL10n->get('ORG_DIFFERENT_DATABASE_VERSION'), $gSystemComponent->getValue('com_version'));
+                            $form->addStaticControl('admidio_database_version', $gL10n->get('ORG_DIFFERENT_DATABASE_VERSION'), $gSystemComponent->getValue('com_version'));
                         }
                         $form->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $gSystemComponent->getValue('com_update_step'));
 
@@ -412,7 +412,7 @@ $page->addHtml('
                         {
                             $html = '<span class="text-success"><strong>'.phpversion().'</strong></span>';
                         }
-                        $form->addCustomContent($gL10n->get('SYS_PHP_VERSION'), $html);
+                        $form->addStaticControl('php_version', $gL10n->get('SYS_PHP_VERSION'), $html);
 
                         if(version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion()) == -1)
                         {
@@ -422,7 +422,7 @@ $page->addHtml('
                         {
                             $html = '<span class="text-success"><strong>'.$gDb->getVersion().'</strong></span>';
                         }
-                        $form->addCustomContent($gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
+                        $form->addStaticControl('database_version', $gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
 
                         if(ini_get('safe_mode') == 1)
                         {
@@ -432,7 +432,7 @@ $page->addHtml('
                         {
                             $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_OFF').'</strong></span>';
                         }
-                        $form->addCustomContent($gL10n->get('SYS_SAFE_MODE'), $html);
+                        $form->addStaticControl('safe_mode', $gL10n->get('SYS_SAFE_MODE'), $html);
 
                         if(ini_get('post_max_size') !== '')
                         {
@@ -460,7 +460,7 @@ $page->addHtml('
                         {
                             $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_OFF').'</strong></span>';
                         }
-                        $form->addCustomContent($gL10n->get('SYS_FILE_UPLOADS'), $html);
+                        $form->addStaticControl('file_uploads', $gL10n->get('SYS_FILE_UPLOADS'), $html);
 
                         if(ini_get('upload_max_filesize') !== '')
                         {
@@ -473,7 +473,7 @@ $page->addHtml('
 
                         $form->addStaticControl('max_processable_image_size', $gL10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE'), round((admFuncProcessableImageSize()/1000000), 2).' '.$gL10n->get('SYS_MEGA_PIXEL'));
                         $html = '<a href="preferences_function.php?mode=4" target="_blank">phpinfo()</a>';
-                        $form->addCustomContent($gL10n->get('SYS_PHP_INFO'), $html);
+                        $form->addStaticControl('php_info', $gL10n->get('SYS_PHP_INFO'), $html);
 
                         if(isset($gDebug) && $gDebug)
                         {
@@ -483,7 +483,7 @@ $page->addHtml('
                         {
                             $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_OFF').'</strong></span>';
                         }
-                        $form->addCustomContent($gL10n->get('SYS_DEBUG_MODUS'), $html);
+                        $form->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_MODUS'), $html);
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -684,6 +684,7 @@ $page->addHtml('
                         $form->addCheckbox('enable_chat_module', $gL10n->get('MSG_ACTIVATE_CHAT_MODULE'), $form_values['enable_chat_module'], array('helpTextIdInline' => 'MSG_ACTIVATE_CHAT_MODULE_DESC'));
                         $form->addCheckbox('enable_mail_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), $form_values['enable_mail_captcha'], array('helpTextIdInline' => 'MAI_SHOW_CAPTCHA_DESC'));
                         $form->addInput('mail_max_receiver', $gL10n->get('MAI_MAX_RECEIVER'), $form_values['mail_max_receiver'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'MAI_MAX_RECEIVER_DESC'));
+                        $form->addCheckbox('mail_show_former', $gL10n->get('MSG_SHOW_FORMER'), $form_values['mail_show_former'], array('helpTextIdInline' => 'MSG_SHOW_FORMER_DESC'));
                         $form->addCheckbox('mail_into_to', $gL10n->get('MAI_INTO_TO'), $form_values['mail_into_to'], array('helpTextIdInline' => 'MAI_INTO_TO_DESC'));
                         $form->addInput('max_email_attachment_size', $gL10n->get('MAI_ATTACHMENT_SIZE').' (MB)', $form_values['max_email_attachment_size'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999, 'helpTextIdInline' => 'MAI_ATTACHMENT_SIZE_DESC'));
                         $form->addInput('mail_sendmail_address', $gL10n->get('MAI_SENDER_EMAIL'), $form_values['mail_sendmail_address'], array('maxLength' => 50, 'helpTextIdInline' => array('MAI_SENDER_EMAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST'])));

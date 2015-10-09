@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="da">
+<version id="3.0.3" translator="Henrik Troels-Hansen">
+        <text id="MSG_SHOW_FORMER" development="new" translation="todo">Send e-mails til tidligere medlemmer</text>
+        <text id="MSG_SHOW_FORMER_DESC" development="new" translation="todo">Denne indstilling tillader at der sendes e-mail til enkeltstående tidligere medlemmer eller til alle tidligere medlemmer af en rolle.(Standard: aktiveret)</text>
+        <text id="PHO_FILE_UPLOADED" development="new" translation="todo">Billedet %VAR1_BOLD% blev uploadet.</text>
+    </version>
     <version id="3.0.0-Beta.3" translator="Henrik Troels-Hansen">
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE" development="new" translation="edited">En dato blev ændret</text>
         <text id="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1" development="new" translation="edited">En dato for %VAR1% blev ændret.\n\nTitel: %VAR2%\nDato: %VAR3%\nKalender: %VAR4%\n</text>
@@ -835,8 +840,7 @@
         <text id="ORG_SEND_PASSWORD" development="new" translation="edited">Send kodeord</text>
         <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="edited">Brugerne kan anmode om at få tilsendt glemte og regenererede kodeord automatisk til deres egen registrerede e-mail adresse. Hvis denne indstilling deaktiveres, så kan brugerne kun få adgang ved at henvende sig til system administratoren. . (Standard: Ja)</text>
         <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Send nyt kodeord</text>
-        <text id="ORG_SYSTEM_INFOS" development="new" translation="edited">Sysinfo</text>
-        <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">System information</text>
+        <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">Systemets informationer</text>
         <text id="ORG_TIME_FORMAT" development="new" translation="edited">Tidsformat</text>
         <text id="ORG_TIME_FORMAT_DESC" development="new" translation="edited">Formatet efterkommer standarden i PHP funktionen %VAR1%. (Standard: H:i)</text>
         <text id="ORG_URL" development="new" translation="edited">URL</text>

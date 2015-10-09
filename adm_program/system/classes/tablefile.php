@@ -74,7 +74,7 @@ class TableFile extends TableAccess
 
         //Pruefen ob der aktuelle Benutzer Rechte an der Datei hat
         //Gucken ob ueberhaupt ein Datensatz gefunden wurde...
-        if ($this->getValue('fil_id'))
+        if ($this->getValue('fil_id') > 0)
         {
             //Falls die Datei gelocked ist und der User keine Downloadadminrechte hat, bekommt er nix zu sehen..
             if (!$gCurrentUser->editDownloadRight() && $this->getValue('fil_locked'))
@@ -117,6 +117,29 @@ class TableFile extends TableAccess
             }
         }
         throw new AdmException('SYS_INVALID_PAGE_VIEW');
+    }
+
+    /**
+     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *  @param $columnName The name of the database column whose value should be read
+     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                 For text columns the format can be @b database that would return the original database value without any transformations
+     *  @return Returns the value of the database column.
+     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
+     */
+    public function getValue($columnName, $format = '')
+    {
+        global $gL10n;
+
+        $value = parent::getValue($columnName, $format);
+
+        // getValue transforms & to html chars. This must be undone.
+        if($columnName == 'fil_name')
+        {
+            $value = htmlspecialchars_decode($value);
+        }
+
+        return $value;
     }
 
     /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's

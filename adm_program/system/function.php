@@ -12,12 +12,21 @@
   * Autoloading function of class files. This function will be later registered
   *.for default autoload implementation. Therefore the class name must be the same 
   * as the file name except for case sensitive.
-  * @param $className Name of the class for which the file should be loaded
+  * @param $className Name of the class for which the file should be loaded.
+  * @return Return @b false if the file for the class wasn't found.
   */
 function admFuncAutoload($className)
 {
     $fileName = SERVER_PATH. '/adm_program/system/classes/'.strtolower($className).'.php';
-    require_once($fileName);
+
+    if(file_exists($fileName))
+    {
+        include($fileName);
+    }
+    else
+    {
+        return false;
+    }
 }
 
 // now register this function in this script so only function.php must be included for autoload
@@ -403,11 +412,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
             {
                 $array[$variableName] = 0;
             }
-            elseif($datatype === 'string' || $datatype === 'html')
-            {
-                $array[$variableName] = '';
-            }
-            elseif($datatype === 'date')
+            else
             {
                 $array[$variableName] = '';
             }
@@ -441,7 +446,10 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
         case 'file':
             try
             {
-                admStrIsValidFileName($array[$variableName]);
+                if($array[$variableName] !== '')
+                {
+                    admStrIsValidFileName($array[$variableName]);
+                }
             }
             catch(AdmException $e)
             {

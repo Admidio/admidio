@@ -727,7 +727,6 @@
         <text id="ORG_SEND_PASSWORD" development="new" translation="edited">Stuur wachtwoord</text>
         <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="edited">Vergeten en opnieuw aangemaakte wachtwoorden kunnen op verzoek van gebruiker naar eigen e-mail adres gestuurd worden. Bij deactivatie, kunnen gebruikers dit verzoek alleen bij de beheerder doen. (standaard: ja)</text>
         <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Stuur nieuw wachtwoord</text>
-        <text id="ORG_SYSTEM_INFOS" development="new" translation="edited">Systeeminfo</text>
         <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">Systeem informatie</text>
         <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="edited">Systeem e-mail adres</text>
         <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="edited">Vul e-mail adres van beheerder in. Dit adres wordt gebruikt als afzender van systeemberichten en bevestiging van registratie. (standaard: webmaster@%VAR1%)</text>
