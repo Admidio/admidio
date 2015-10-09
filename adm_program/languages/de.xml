@@ -15,13 +15,13 @@
         <text id="LST_SAVE_CONFIGURATION" development="new" translation="todo">Konfiguration speichern</text>
         <text id="LST_SELECT_CONFIGURATION" development="new" translation="todo">Konfiguration auswählen</text>
         <text id="LST_SELECT_MEMBERS" development="new" translation="todo">Mitglieder auswählen</text>
+        <text id="ORG_BROWSER_UPDATE_CHECK" development="new" translation="todo">Update Meldung für veraltete Browser</text>
+        <text id="ORG_BROWSER_UPDATE_CHECK_DESC" development="new" translation="todo">Nach Aktivierung wird Benutzern mit veraltetem Browser geraten ein Browserupdate durchzuführen. Neuere Browser schützen besser vor Betrug, Viren, Trojanern, Datendiebstahl und anderen Bedrohungen Ihrer Privatsphäre und Sicherheit. Jede neue Browsergeneration verbessert die Geschwindigkeit und die Unterstützung neuer Webtechniken, mit der Webseiten besser dargestellt werden können. Hierzu wird das Service von https://browser-update.org/ verwendet.</text>
+        <text id="ORG_FIELD_DISABLED_DESC" development="changed" translation="todo">Ein gesperrtes Feld kann vom Benutzer im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten. Leiter einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</text>
         <text id="SYS_CATEGORIES_VAR" development="new" translation="todo">%VAR1%-Kategorien</text>
         <text id="SYS_CATEGORY_VAR" development="new" translation="todo">%VAR1%-Kategorie</text>
         <text id="SYS_COPY_VAR" development="new" translation="todo">%VAR1% kopieren</text>
         <text id="SYS_DATABASE_NO_LOGIN" development="new" translation="todo">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n%VAR1%.</text>
-        <text id="ORG_BROWSER_UPDATE_CHECK" development="new" translation="todo">Update Meldung für veraltete Browser</text>
-        <text id="ORG_BROWSER_UPDATE_CHECK_DESC" development="new" translation="todo">Nach Aktivierung wird Benutzern mit veraltetem Browser geraten ein Browserupdate durchzuführen. Neuere Browser schützen besser vor Betrug, Viren, Trojanern, Datendiebstahl und anderen Bedrohungen Ihrer Privatsphäre und Sicherheit. Jede neue Browsergeneration verbessert die Geschwindigkeit und die Unterstützung neuer Webtechniken, mit der Webseiten besser dargestellt werden können. Hierzu wird das Service von https://browser-update.org/ verwendet.</text>
-        <text id="ORG_FIELD_DISABLED_DESC" development="changed" translation="todo">Ein gesperrtes Feld kann vom Benutzer im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten. Leiter einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</text>
         <text id="SYS_PHONE_INVALID_CHAR" development="new" translation="todo">Die Telefonnummer im Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</text>
     </version>
     <version id="3.0.3" translator="Stefan Weiß">

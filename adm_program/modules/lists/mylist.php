@@ -560,9 +560,9 @@ foreach($configurations as $configuration)
     $configurationsArray[]      = array($configuration['lst_id'], $configuration['lst_name'], $actualGroup);
 }
 
-$form->addSelectBox('sel_select_configuation', $gL10n->get('LST_SELECT_CONFIGURATION'), $configurationsArray, 
+$form->addSelectBox('sel_select_configuation', $gL10n->get('LST_SELECT_CONFIGURATION'), $configurationsArray,
     array('defaultValue' => $form_values['sel_select_configuation'], 'showContextDependentFirstEntry' => false));
-    
+
 // Webmasters could upgrade a configuration to a global configuration that is visible to all users
 if($gCurrentUser->isWebmaster())
 {
@@ -615,7 +615,7 @@ $form->closeGroupBox();
 
 $form->openGroupBox('gb_select_members', $gL10n->get('LST_SELECT_MEMBERS'));
 // show all roles where the user has the right to see them
-$sql = 'SELECT rol_id, rol_name, cat_name 
+$sql = 'SELECT rol_id, rol_name, cat_name
           FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
          WHERE rol_valid   = '.$getActiveRole.'
            AND rol_visible = 1
@@ -623,7 +623,7 @@ $sql = 'SELECT rol_id, rol_name, cat_name
            AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )
          ORDER BY cat_sequence, rol_name';
-$form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sql, 
+$form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sql,
     array('property' => FIELD_REQUIRED, 'defaultValue' => $getRoleId, 'multiselect' => true));
 $showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
 $form->addSelectBox('sel_show_members', $gL10n->get('SYS_ROLE'), $showMembersSelection,
