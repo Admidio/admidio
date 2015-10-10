@@ -498,7 +498,6 @@
         <text id="LST_ACTIVE_MEMBERS" development="new" translation="edited">Actieve leden</text>
         <text id="LST_ACTIVE_ROLES" development="new" translation="edited">Overzicht actieve rollen</text>
         <text id="LST_ADD_COLUMN" development="new" translation="edited">Extra kolom</text>
-        <text id="LST_CHANGE_LIST" development="new" translation="edited">Wilt u standaard lijsten tonen/bewerken of nieuwe lijst maken?</text>
         <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Kies rol voor geselecteerde lijst</text>
         <text id="LST_COLUMN" development="new" translation="edited">Kolom</text>
         <text id="LST_CONFIGURATION" development="new" translation="edited">Instellingen</text>
@@ -545,7 +544,6 @@
         <text id="LST_PRINT_PREVIEW" development="new" translation="edited">Print</text>
         <text id="LST_ROLE_INFORMATION" development="new" translation="edited">Rol informatie</text>
         <text id="LST_SAVE_CONFIGURATION" development="new" translation="edited">Instellingen opslaan</text>
-        <text id="LST_SAVE_CONFIGURATION_OTHER_NAME" development="new" translation="edited">Instellingen met andere naam opslaan</text>
         <text id="LST_SEARCH_AGE_EXAMPLE" development="new" translation="edited">18y</text>
         <text id="LST_SEARCH_AGE_DESC" development="new" translation="edited">Leden zoeken die ouder zijn dan 18 jaar</text>
         <text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="edited">01.03.1986</text>
@@ -562,7 +560,6 @@
         <text id="LST_SEARCH_TELEFON_DESC" development="new" translation="edited">Leden zoeken met telefoonnummer waarin 241 voorkomt en die eindigt met 54</text>
         <text id="LST_SEARCH_YES_NO_FIELD" development="new" translation="edited">Ja/nee veld</text>
         <text id="LST_SEARCH_YES_NO_FIELD_DESC" development="new" translation="edited">Leden zoeken waarbij Ja aangevinkt is</text>
-        <text id="LST_SET_COLUMNS" development="new" translation="edited">Maak kolommen die in de lijst komen</text>
         <text id="LST_SHOW_LIST" development="new" translation="edited">Toon lijst</text>
         <text id="LST_SHOW_LISTS" development="new" translation="edited">Toon lijsten</text>
         <text id="LST_YOUR_CONFIGURATION" development="new" translation="edited">Eigen instellingen</text>

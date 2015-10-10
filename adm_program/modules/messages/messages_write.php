@@ -184,7 +184,7 @@ if ($getMsgType === 'PM')
     {
         $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
         $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_REQUIRED,
-                            'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MSG_SEND_PM'));
+                            'multiselect' => true, 'helpTextIdLabel' => 'MSG_SEND_PM'));
         $form->closeGroupBox();
         $sendto = '';
     }
@@ -440,7 +440,7 @@ elseif (!isset($message_result))
     }
 
     $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_REQUIRED,
-                        'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE'));
+                        'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE'));
 
     $form->addLine();
 

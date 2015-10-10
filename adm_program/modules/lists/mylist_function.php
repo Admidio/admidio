@@ -12,7 +12,6 @@
  * mode   : 1 - Listenkonfiguration speichern
  *          2 - Listenkonfiguration speichern und anzeigen
  *          3 - Listenkonfiguration loeschen
- *          4 - Listenkonfiguration zur Systemkonfiguration machen
  * name   : (optional) die Liste wird unter diesem Namen gespeichert
  *
  *****************************************************************************/
@@ -40,19 +39,9 @@ if($getMode == 2
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', 'Rolle'));
 }
 
-if(isset($_POST['show_members']) == false)
+if(isset($_POST['sel_show_members']) == false)
 {
-    $_POST['show_members'] = 0;
-}
-
-// Ehemalige
-if(array_key_exists('former', $_POST))
-{
-    $member_status = 1;
-}
-else
-{
-    $member_status = 0;
+    $_POST['sel_show_members'] = 0;
 }
 
 // Listenobjekt anlegen
@@ -75,7 +64,7 @@ if($getMode != 2)
 }
 
 // Liste speichern
-if ($getMode == 1 || $getMode == 2 || $getMode == 4)
+if ($getMode == 1 || $getMode == 2)
 {
     // alle vorhandenen Spalten durchgehen
     $columnNumber = 0;
@@ -84,7 +73,7 @@ if ($getMode == 1 || $getMode == 2 || $getMode == 4)
         if(strlen($_POST['column'. $number]) > 0)
         {
             $columnNumber++;
-            $list->addColumn($columnNumber, $_POST['column'. $number], $_POST['sort'. $number], $_POST['conditioncolumn'. $number]);
+            $list->addColumn($columnNumber, $_POST['column'. $number], $_POST['sort'. $number], $_POST['condition'. $number]);
         }
         else
         {
@@ -97,9 +86,10 @@ if ($getMode == 1 || $getMode == 2 || $getMode == 4)
         $list->setValue('lst_name', $getName);
     }
 
-    if($getMode == 4 && $gCurrentUser->isWebmaster())
+    // set list global only in save mode
+    if($getMode === 1 && $gCurrentUser->isWebmaster() && isset($_POST['cbx_global_configuration']))
     {
-        $list->setValue('lst_global', 1);
+        $list->setValue('lst_global', $_POST['cbx_global_configuration']);
     }
     else
     {
@@ -108,10 +98,10 @@ if ($getMode == 1 || $getMode == 2 || $getMode == 4)
 
     $list->save();
 
-    if($getMode == 1 || $getMode == 4)
+    if($getMode == 1)
     {
         // wieder zur eigenen Liste zurueck
-        header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'). '&show_members='.$_POST['show_members']);
+        header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'). '&show_members='.$_POST['sel_show_members']);
         exit();
     }
 
@@ -119,7 +109,7 @@ if ($getMode == 1 || $getMode == 2 || $getMode == 4)
     $_SESSION['role_ids'] = $_POST['sel_roles_ids'];
 
     // weiterleiten zur allgemeinen Listeseite
-    header('Location: '.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$list->getValue('lst_id').'&mode=html&show_members='. $_POST['show_members']);
+    header('Location: '.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$list->getValue('lst_id').'&mode=html&show_members='. $_POST['sel_show_members']);
     exit();
 }
 elseif ($getMode == 3)
@@ -135,7 +125,7 @@ elseif ($getMode == 3)
     }
 
     // go back to list configuration
-    header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?rol_id='. $_POST['rol_id']. '&show_members='.$_POST['show_members']);
+    header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?rol_id='. $_POST['rol_id']. '&show_members='.$_POST['sel_show_members']);
     exit();
 }
 

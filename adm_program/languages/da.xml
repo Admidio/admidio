@@ -617,7 +617,6 @@
         <text id="LST_COLUMN" development="new" translation="todo">Kolonne</text>
         <text id="LST_ACTIVE_ROLES" development="new" translation="edited">Oversigt over aktive roller</text>
         <text id="LST_ADD_COLUMN" development="new" translation="edited">Tilføj kolonne</text>
-        <text id="LST_CHANGE_LIST" development="new" translation="edited">Vil du hente og ændre standard liste eller oprette en ny liste?</text>
         <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Vælg en rolle for den valgte liste.</text>
         <text id="LST_CONFIGURATION" development="new" translation="edited">Liste indstilling</text>
         <text id="LST_CONFIGURATION_ALL_USERS" development="new" translation="edited">Tilladelse til at bruge listen for alle medlemer</text>
@@ -662,7 +661,6 @@
         <text id="LST_PRINT_PREVIEW" development="new" translation="edited">Vis print eksempel</text>
         <text id="LST_ROLE_INFORMATION" development="new" translation="edited">Rolle information</text>
         <text id="LST_SAVE_CONFIGURATION" development="new" translation="edited">Gem indstilling</text>
-        <text id="LST_SAVE_CONFIGURATION_OTHER_NAME" development="new" translation="edited">Gem indstillingen med andet navn</text>
         <text id="LST_SEARCH_AGE_EXAMPLE" development="new" translation="edited">18y</text>
         <text id="LST_SEARCH_AGE_DESC" development="new" translation="edited">Søgning efter alle brugere ældre end 18 år</text>
         <text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="edited">01.03.1986</text>
@@ -679,7 +677,6 @@
         <text id="LST_SEARCH_TELEFON_DESC" development="new" translation="edited">Søgning efter brugere med telefonnummer der inkluderer 241 og ender på 54</text>
         <text id="LST_SEARCH_YES_NO_FIELD" development="new" translation="edited">Ja/Nej felt</text>
         <text id="LST_SEARCH_YES_NO_FIELD_DESC" development="new" translation="edited">Søgning på markerede (fluebens markerede) brugere</text>
-        <text id="LST_SET_COLUMNS" development="new" translation="edited">Definér kolonner som skal vises i listen</text>
         <text id="LST_SHOW_LIST" development="new" translation="edited">Vis liste</text>
         <text id="LST_SHOW_LISTS" development="new" translation="edited">Vis Lister</text>
         <text id="LST_YOUR_CONFIGURATION" development="new" translation="edited">Din konfiguration</text>
