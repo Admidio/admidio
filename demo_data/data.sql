@@ -4,7 +4,7 @@
 --
 
 INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES ('SYSTEM', 'Admidio Core', 'CORE', '3.0.1', 0, 610)
+                         VALUES ('SYSTEM', 'Admidio Core', 'CORE', '3.0.3', 0, 610)
                               , ('MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUCEMENTS', '3.0.0', 0, 0)
                               , ('MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.0.0', 0, 0)
                               , ('MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.0.0', 0, 0)
@@ -84,6 +84,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (6915, 1, 'mail_delivery_confirmation', '0'),
 (6920, 1, 'mail_html_registered_users', '1'),
 (6925, 1, 'mail_into_to', '0'),
+(6927, 1, 'mail_show_former', '1'),
 (6930, 1, 'mail_max_receiver', '4'),
 (6950, 1, 'mail_sender_into_to', '0'),
 (7000, 1, 'mail_sendmail_address', ''),
@@ -189,6 +190,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (69150, 2, 'mail_delivery_confirmation', '0'),
 (69200, 2, 'mail_html_registered_users', '1'),
 (69250, 2, 'mail_into_to', '0'),
+(69270, 2, 'mail_show_former', '1'),
 (69300, 2, 'mail_max_receiver', '1'),
 (69500, 2, 'mail_sender_into_to', '0'),
 (70001, 2, 'mail_sendmail_address', ''),
