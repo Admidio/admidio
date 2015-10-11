@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Verschiedene Funktionen fuer die eigene Liste
+ * Various functions for mylist module
  *
  * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,11 +8,11 @@
  *
  * Parameters:
  *
- * lst_id : ID der Liste, die aktuell bearbeitet werden soll
- * mode   : 1 - Listenkonfiguration speichern
- *          2 - Listenkonfiguration speichern und anzeigen
- *          3 - Listenkonfiguration loeschen
- * name   : (optional) die Liste wird unter diesem Namen gespeichert
+ * lst_id : Id of the list configuration that should be edited
+ * mode   : 1 - Save list configuration
+ *          2 - Save list configuration and show list
+ *          3 - Delete list configuration
+ * name   : (optional) Name of the list that should be used to save list
  *
  *****************************************************************************/
 
@@ -21,7 +21,7 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getListId = admFuncVariableIsValid($_GET, 'lst_id', 'numeric');
-$getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true));
+$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
 $getName   = admFuncVariableIsValid($_GET, 'name', 'string');
 
 $_SESSION['mylist_request'] = $_POST;
@@ -67,17 +67,15 @@ if($getMode != 2)
 if ($getMode == 1 || $getMode == 2)
 {
     // alle vorhandenen Spalten durchgehen
-    $columnNumber = 0;
-    for($number = 1; isset($_POST['column'. $number]); $number++)
+    for($columnNumber = 1; isset($_POST['column'. $columnNumber]); $columnNumber++)
     {
-        if(strlen($_POST['column'. $number]) > 0)
+        if(strlen($_POST['column'. $columnNumber]) > 0)
         {
-            $columnNumber++;
-            $list->addColumn($columnNumber, $_POST['column'. $number], $_POST['sort'. $number], $_POST['condition'. $number]);
+            $list->addColumn($columnNumber, $_POST['column'. $columnNumber], $_POST['sort'. $columnNumber], $_POST['condition'. $columnNumber]);
         }
         else
         {
-            $list->deleteColumn($number, true);
+            $list->deleteColumn($columnNumber, true);
         }
     }
 
@@ -100,8 +98,11 @@ if ($getMode == 1 || $getMode == 2)
 
     if($getMode == 1)
     {
-        // wieder zur eigenen Liste zurueck
-        header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'). '&show_members='.$_POST['sel_show_members']);
+        // save new id to session so that we can restore the configuration with new list name
+        $_SESSION['mylist_request']['sel_select_configuation'] = $list->getValue('lst_id');
+
+        // go back to mylist configuration
+        header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'));
         exit();
     }
 
@@ -118,6 +119,7 @@ elseif ($getMode == 3)
     {
         // delete list configuration
         $list->delete();
+        unset($_SESSION['mylist_request']);
     }
     catch(AdmException $e)
     {
@@ -125,7 +127,7 @@ elseif ($getMode == 3)
     }
 
     // go back to list configuration
-    header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?rol_id='. $_POST['rol_id']. '&show_members='.$_POST['sel_show_members']);
+    header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php');
     exit();
 }
 
