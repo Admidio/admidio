@@ -407,10 +407,19 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         // if event exists and you could register to this event then we must check
         // if the data of the role must be changed
         $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
-        $roleName = $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$date->getValue('dat_id');
+
+        // only change name of role if no custom name was set
+        if(strpos($role->getValue('rol_name'), $gL10n->get('DAT_DATE')) !== false)
+        {
+            $roleName = $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$date->getValue('dat_id');
+        }
+        else
+        {
+            $roleName = $role->getValue('rol_name');
+        }
 
         if($role->getValue('rol_max_members') != $date->getValue('dat_max_members')
-        || $role->getValue('role_name'        != $roleName))
+        || $role->getValue('rol_name')        != $roleName)
         {
             $role->setValue('rol_name', $roleName);
             $role->setValue('rol_max_members', $date->getValue('dat_max_members'));
