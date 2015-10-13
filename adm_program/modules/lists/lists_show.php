@@ -32,29 +32,68 @@ $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
 $getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen', 'numeric');
 
 // Initialize the content of this parameter (otherwise some servers will keep the content)
-unset($role_ids);
+unset($rolesIds);
 
 if($getRoleId > 0)
 {
-    $role_ids[] = $getRoleId;
+    $rolesIds[] = $getRoleId;
 }
 else
 {
-    $role_ids = $_SESSION['role_ids'];
-    $getRoleId = $role_ids[0];
+    $rolesIds = $_SESSION['role_ids'];
+    $getRoleId = $rolesIds[0];
 }
 
-// Rollenobjekt erzeugen
-$role = new TableRoles($gDb, $getRoleId);
+// determine all roles relevant data
+$numberRoles      = count($rolesIds);
+$roleName         = $gL10n->get('LST_VARIOUS_ROLES');
+$htmlSubHeadline  = '';
+$numberLeaders     = 0;
 
-//Testen ob Recht zur Listeneinsicht besteht
-if($role->viewRole() == false)
+if($numberRoles > 1)
 {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $sql = 'SELECT rol_id, rol_name, (SELECT COUNT(mem_id) FROM '. TBL_MEMBERS. '
+                                       WHERE mem_rol_id = rol_id
+                                         AND mem_leader = 1
+                                         AND mem_begin <= \''.DATE_NOW.'\'
+                                         AND mem_end    > \''.DATE_NOW.'\') as num_leaders
+              FROM '.TBL_ROLES.'
+             WHERE rol_id IN ('.implode(',', $rolesIds).')';
+    $rolesStatement = $gDb->query($sql);
+    $rolesData      = $rolesStatement->fetchAll();
+
+    // check if user has right to view all roles
+    foreach($rolesData as $role)
+    {
+        if(!$gCurrentUser->hasRightViewRole($role['rol_id']))
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        }
+
+        $htmlSubHeadline .= ', '. $role['rol_name'];
+        $numberLeaders    = $numberLeaders + $role['num_leaders'];
+    }
+
+    $htmlSubHeadline = substr($htmlSubHeadline, 2);
 }
+else
+{
+    $role = new TableRoles($gDb, $getRoleId);
+
+    // check if user has right to view role
+    if(!$gCurrentUser->hasRightViewRole($getRoleId))
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    }
+
+    $roleName         = $role->getValue('rol_name');
+    $htmlSubHeadline .= $role->getValue('cat_name');
+    $numberLeaders    = $role->countLeaders();
+}
+
 
 // if no list parameter is set then load role default list configuration or system default list configuration
-if($getListId == 0)
+if($getListId === 0 && $numberRoles === 1)
 {
     // set role default list configuration
     $getListId = $role->getDefaultList();
@@ -117,20 +156,18 @@ $arr_col_name = array('usr_login_name' => $gL10n->get('SYS_USERNAME'),
 $mainSql      = '';   // enthaelt das Haupt-Sql-Statement fuer die Liste
 $str_csv      = '';   // enthaelt die komplette CSV-Datei als String
 $leiter       = 0;    // Gruppe besitzt Leiter
-$memberStatus = '';
 
 try
 {
     // create list configuration object and create a sql statement out of it
     $list = new ListConfiguration($gDb, $getListId);
-    $mainSql = $list->getSQL($role_ids, $getShowMembers);
+    $mainSql = $list->getSQL($rolesIds, $getShowMembers);
     //echo $mainSql; exit();
 }
 catch(AdmException $e)
 {
     $e->showHtml();
 }
-
 // determine the number of users in this list
 $listStatement = $gDb->query($mainSql);
 $numMembers = $listStatement->rowCount();
@@ -150,14 +187,14 @@ if($numMembers < $getStart)
 }
 
 // define title (html) and headline
-$title = $gL10n->get('LST_LIST').' - '. $role->getValue('rol_name');
+$title = $gL10n->get('LST_LIST').' - '. $roleName;
 if(strlen($list->getValue('lst_name')) > 0)
 {
-    $headline = $role->getValue('rol_name').' - '.$list->getValue('lst_name');
+    $headline = $roleName.' - '.$list->getValue('lst_name');
 }
 else
 {
-    $headline = $role->getValue('rol_name');
+    $headline = $roleName;
 }
 
 // if html mode and last url was not a list view then save this url to navigation stack
@@ -173,15 +210,15 @@ if($getMode != 'csv')
 
     if($getShowMembers == 0)
     {
-        $memberStatus = $gL10n->get('LST_ACTIVE_MEMBERS');
+        $htmlSubHeadline .= ' - '. $gL10n->get('LST_ACTIVE_MEMBERS');
     }
     elseif($getShowMembers == 1)
     {
-        $memberStatus = $gL10n->get('LST_FORMER_MEMBERS');
+        $htmlSubHeadline .= ' - '. $gL10n->get('LST_FORMER_MEMBERS');
     }
     elseif($getShowMembers == 2)
     {
-        $memberStatus = $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
+        $htmlSubHeadline .= ' - '. $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }
 
     if($getMode == 'print')
@@ -205,7 +242,7 @@ if($getMode != 'csv')
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('Admidio');
-        $pdf->SetTitle($role->getValue('rol_name') . ' - ' . $role->getValue('cat_name'));
+        $pdf->SetTitle($headline);
 
         // remove default header/footer
         $pdf->setPrintHeader(true);
@@ -255,7 +292,7 @@ if($getMode != 'csv')
         $page->setTitle($title);
         $page->setHeadline($headline);
 
-        $page->addHtml('<h5>'.$role->getValue('cat_name').' - '.$memberStatus.'</h5>');
+        $page->addHtml('<h5>'.$htmlSubHeadline.'</h5>');
         $page->addJavascript('
             $("#export_list_to").change(function () {
                 if($(this).val().length > 1) {
@@ -286,11 +323,14 @@ if($getMode != 'csv')
                 $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png');
         }
 
-        // link to assign or remove members if you are allowed to do it
-        if($role->allowedToAssignMembers($gCurrentUser))
+        if($numberRoles === 1)
         {
-            $listsMenu->addItem('menu_item_assign_members', $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='. $role->getValue('rol_id'),
-                $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png');
+            // link to assign or remove members if you are allowed to do it
+            if($role->allowedToAssignMembers($gCurrentUser))
+            {
+                $listsMenu->addItem('menu_item_assign_members', $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='. $role->getValue('rol_id'),
+                    $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png');
+            }
         }
 
         // link to print overlay and exports
@@ -403,9 +443,9 @@ else
 }
 
 // set number of first member of this page (leaders are counted separately)
-if($getStart > $role->countLeaders())
+if($getStart > $numberLeaders)
 {
-    $listRowNumber = $getStart - $role->countLeaders() + 1;
+    $listRowNumber = $getStart - $numberLeaders + 1;
 }
 else
 {
@@ -607,11 +647,11 @@ if($getMode == 'csv' || $getMode == 'pdf')
     //file name in the current directory...
     if(strlen($list->getValue('lst_name')) > 0)
     {
-        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '-'. str_replace('.', '', $list->getValue('lst_name')).'.'.$getMode;
+        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $roleName). '-'. str_replace('.', '', $list->getValue('lst_name')).'.'.$getMode;
     }
     else
     {
-        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')).'.'.$getMode;
+        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $roleName).'.'.$getMode;
     }
 
      // for IE the filename must have special chars in hexadecimal
@@ -658,13 +698,13 @@ elseif($getMode == 'pdf')
     ignore_user_abort(true);
     unlink(SERVER_PATH. '/adm_my_files/'.$filename);
 }
-elseif($getMode == 'html' || $getMode == 'print')
+elseif($getMode === 'html' || $getMode === 'print')
 {
     // add table list to the page
     $page->addHtml($table->show(false));
 
     // create a infobox for the role
-    if($getMode == 'html')
+    if($getMode == 'html' && $numberRoles === 1)
     {
         $htmlBox = '';
 

@@ -11,6 +11,7 @@
         <text id="LST_ADD_COLUMNS_DESC" development="new" translation="todo">Ordnen Sie in der folgenden Tabelle beliebig vielen Spalten entsprechende Profilfelder zu. Zusätzlich können Sie die Standardsortierung vorgeben und Bedingungen zu Feldern hinzufügen, nach denen die jeweiligen Mitglieder gefiltert werden sollen.</text>
         <text id="LST_DEFAULT_CONFIGURATION" development="new" translation="todo">Standardkonfiguration</text>
         <text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="todo">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden in mit dieser Konfiguration angezeigt.</text>
+        <text id="LST_VARIOUS_ROLES" development="new" translation="todo">Verschiedene Rollen</text>
         <text id="LST_ERROR_DELETE_DEFAULT_LIST" development="new" translation="todo">Die Liste %VAR1_BOLD% ist die Standardkonfiguration für Listen in dieser Organisation und kann nicht gelöscht werden. Wählen Sie in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuchen Sie danach diese Konfiguration zu löschen.</text>
         <text id="LST_SAVE_CHANGES" development="new" translation="todo">Änderungen speichern</text>
         <text id="LST_SELECT_CONFIGURATION" development="new" translation="todo">Konfiguration auswählen</text>
