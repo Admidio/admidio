@@ -440,7 +440,7 @@ elseif (!isset($message_result))
     }
 
     $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_REQUIRED,
-                        'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE'));
+                        'multiselect' => true, 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE'));
 
     $form->addLine();
 

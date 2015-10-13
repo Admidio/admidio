@@ -12,7 +12,6 @@
  * lst_id : Id of the list configuration that should be shown.
  *          If id is null then the default list of the role will be shown.
  * rol_id : Id of the role whose members should be shown
- * start  : Position of query recordset where the visual output should start
  * show_members : 0 - (Default) show active members of role
  *                1 - show former members of role
  *                2 - show active and former members of role
@@ -27,7 +26,6 @@ require_once('../../system/common.php');
 $getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl' )));
 $getListId      = admFuncVariableIsValid($_GET, 'lst_id', 'numeric');
 $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
-$getStart       = admFuncVariableIsValid($_GET, 'start', 'numeric');
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
 $getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen', 'numeric');
 
@@ -48,15 +46,11 @@ else
 $numberRoles      = count($rolesIds);
 $roleName         = $gL10n->get('LST_VARIOUS_ROLES');
 $htmlSubHeadline  = '';
-$numberLeaders     = 0;
+$roleIdLink       = '';
 
 if($numberRoles > 1)
 {
-    $sql = 'SELECT rol_id, rol_name, (SELECT COUNT(mem_id) FROM '. TBL_MEMBERS. '
-                                       WHERE mem_rol_id = rol_id
-                                         AND mem_leader = 1
-                                         AND mem_begin <= \''.DATE_NOW.'\'
-                                         AND mem_end    > \''.DATE_NOW.'\') as num_leaders
+    $sql = 'SELECT rol_id, rol_name
               FROM '.TBL_ROLES.'
              WHERE rol_id IN ('.implode(',', $rolesIds).')';
     $rolesStatement = $gDb->query($sql);
@@ -71,7 +65,6 @@ if($numberRoles > 1)
         }
 
         $htmlSubHeadline .= ', '. $role['rol_name'];
-        $numberLeaders    = $numberLeaders + $role['num_leaders'];
     }
 
     $htmlSubHeadline = substr($htmlSubHeadline, 2);
@@ -88,7 +81,7 @@ else
 
     $roleName         = $role->getValue('rol_name');
     $htmlSubHeadline .= $role->getValue('cat_name');
-    $numberLeaders    = $role->countLeaders();
+    $roleIdLink       = '&rol_id='. $getRoleId;
 }
 
 
@@ -181,11 +174,6 @@ if($numMembers == 0)
     $gMessage->show($gL10n->get('LST_NO_USER_FOUND'));
 }
 
-if($numMembers < $getStart)
-{
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
 // define title (html) and headline
 $title = $gL10n->get('LST_LIST').' - '. $roleName;
 if(strlen($list->getValue('lst_name')) > 0)
@@ -198,7 +186,7 @@ else
 }
 
 // if html mode and last url was not a list view then save this url to navigation stack
-if($getMode == 'html' && $getStart == 0 && strpos($gNavigation->getUrl(), 'lists_show.php') === false)
+if($getMode == 'html' && strpos($gNavigation->getUrl(), 'lists_show.php') === false)
 {
     $gNavigation->addUrl(CURRENT_URL);
 }
@@ -231,6 +219,7 @@ if($getMode != 'csv')
 
         $page->setTitle($title);
         $page->setHeadline($headline);
+        $page->addHtml('<h5>'.$htmlSubHeadline.'</h5>');
 
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
     }
@@ -299,12 +288,12 @@ if($getMode != 'csv')
                     var result = $(this).val();
                     $(this).prop("selectedIndex",0);
                     self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
-                        "lst_id='. $getListId. '&rol_id='. $getRoleId. '&mode=" + result + "&show_members='.$getShowMembers.'";
+                        "lst_id='. $getListId. $roleIdLink. '&mode=" + result + "&show_members='.$getShowMembers.'";
                 }
             });
 
             $("#menu_item_print_view").click(function () {
-                window.open("'.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&mode=print&rol_id='.$getRoleId.'&show_members='.$getShowMembers.'", "_blank");
+                window.open("'.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId. $roleIdLink. '&mode=print&show_members='.$getShowMembers.'", "_blank");
             });', true);
 
         // get module menu
@@ -314,12 +303,12 @@ if($getMode != 'csv')
 
         if($getFullScreen == true)
         {
-            $listsMenu->addItem('menu_item_normal_picture', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;mode=html&amp;rol_id='.$getRoleId.'&amp;show_members='.$getShowMembers.'&amp;full_screen=0',
+            $listsMenu->addItem('menu_item_normal_picture', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId. htmlspecialchars($roleIdLink). '&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=0',
                 $gL10n->get('SYS_NORMAL_PICTURE'), 'arrow_in.png');
         }
         else
         {
-            $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;mode=html&amp;rol_id='.$getRoleId.'&amp;show_members='.$getShowMembers.'&amp;full_screen=1',
+            $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId. htmlspecialchars($roleIdLink). '&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=1',
                 $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png');
         }
 
@@ -442,30 +431,19 @@ else
     $table->addTableBody();
 }
 
-// set number of first member of this page (leaders are counted separately)
-if($getStart > $numberLeaders)
-{
-    $listRowNumber = $getStart - $numberLeaders + 1;
-}
-else
-{
-    $listRowNumber = $getStart + 1;
-}
-
 $lastGroupHead = -1;             // Merker um Wechsel zwischen Leiter und Mitglieder zu merken
+$listRowNumber = 1;
 
-for($j = $getStart; $j < $numMembers; $j++)
+foreach($membersList as $member)
 {
-    $row = $membersList[$j];
-    
     if($getMode == 'print' || $getMode == 'pdf')
     {
         // in print preview and pdf we group the role leaders and the members and
         // add a specific header for them
-        if($lastGroupHead != $row['mem_leader']
-        && ($row['mem_leader'] != 0 || $lastGroupHead != -1))
+        if($lastGroupHead != $member['mem_leader']
+        && ($member['mem_leader'] != 0 || $lastGroupHead != -1))
         {
-            if($row['mem_leader'] == 1)
+            if($member['mem_leader'] == 1)
             {
                 $title = $gL10n->get('SYS_LEADER');
             }
@@ -477,14 +455,14 @@ for($j = $getStart; $j < $numMembers; $j++)
             }
 
             $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), 1, ($list->countColumns() + 1));
-            $lastGroupHead = $row['mem_leader'];
+            $lastGroupHead = $member['mem_leader'];
         }
     }
 
     // if html mode and the role has leaders then group all data between leaders and members
     if($getMode == 'html')
     {
-        if($row['mem_leader'] != 0)
+        if($member['mem_leader'] != 0)
         {
             $table->setDatatablesGroupColumn(2);
         }
@@ -533,7 +511,7 @@ for($j = $getStart; $j < $numMembers; $j++)
                     // enable the grouping function of jquery datatables
                     if($getMode == 'html')
                     {
-                        if($row['mem_leader'] == 1)
+                        if($member['mem_leader'] == 1)
                         {
                             $columnValues[] = $gL10n->get('SYS_LEADER');
                         }
@@ -554,23 +532,23 @@ for($j = $getStart; $j < $numMembers; $j++)
             }
 
             // fill content with data of database
-            $content = $row[$sqlColumnNumber];
+            $content = $member[$sqlColumnNumber];
 
             /*****************************************************************/
             // in some cases the content must have a special output format
             /*****************************************************************/
-            if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id') && $usf_id!=0)
+            if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id'))
             {
-                $content = $gL10n->getCountryByCode($row[$sqlColumnNumber]);
+                $content = $gL10n->getCountryByCode($member[$sqlColumnNumber]);
             }
             elseif($column->getValue('lsc_special_field') == 'usr_photo')
             {
                 // show user photo
                 if($getMode == 'html' || $getMode == 'print')
                 {
-                    $content = '<img src="'.$g_root_path.'/adm_program/modules/profile/profile_photo_show.php?usr_id='.$row['usr_id'].'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
+                    $content = '<img src="'.$g_root_path.'/adm_program/modules/profile/profile_photo_show.php?usr_id='.$member['usr_id'].'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
                 }
-                if ($getMode == 'csv' && $row[$sqlColumnNumber] != NULL)
+                if ($getMode == 'csv' && $member[$sqlColumnNumber] != NULL)
                 {
                     $content = $gL10n->get('LST_USER_PHOTO');
                 }
@@ -593,10 +571,10 @@ for($j = $getStart; $j < $numMembers; $j++)
             ||     $column->getValue('lsc_special_field') == 'mem_begin'
             ||     $column->getValue('lsc_special_field') == 'mem_end')
             {
-                if(strlen($row[$sqlColumnNumber]) > 0)
+                if(strlen($member[$sqlColumnNumber]) > 0)
                 {
                     // date must be formated
-                    $date = new DateTimeExtended($row[$sqlColumnNumber], 'Y-m-d');
+                    $date = new DateTimeExtended($member[$sqlColumnNumber], 'Y-m-d');
                     $content = $date->format($gPreferences['system_date']);
                 }
             }
@@ -604,23 +582,34 @@ for($j = $getStart; $j < $numMembers; $j++)
                   || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON')
             && $getMode == 'csv')
             {
-                if(strlen($row[$sqlColumnNumber]) > 0)
+                if(strlen($member[$sqlColumnNumber]) > 0)
                 {
                     // show selected text of optionfield or combobox
                     $arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
-                    $content       = $arrListValues[$row[$sqlColumnNumber]];
+                    $content       = $arrListValues[$member[$sqlColumnNumber]];
                 }
             }
 
             // format value for csv export
-            if($getMode == 'csv')
+            if($getMode === 'csv')
             {
                 $str_csv = $str_csv. $separator. $valueQuotes. $content. $valueQuotes;
             }
             // create output in html layout
             else
             {
-                $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $row['usr_id']);
+                // firstname and lastname get a link to the profile
+                if($getMode === 'html'
+                && (  $usf_id == $gProfileFields->getProperty('LAST_NAME', 'usf_id')
+                   || $usf_id == $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
+                {
+                    $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member['usr_id']);
+                    $columnValues[] = '<a href="'.$g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $member['usr_id'].'">'.$htmlValue.'</a>';
+                }
+                else
+                {
+                    $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member['usr_id']);
+                }
             }
         }
     }
@@ -629,11 +618,7 @@ for($j = $getStart; $j < $numMembers; $j++)
     {
         $str_csv = $str_csv. "\n";
     }
-    elseif($getMode == 'html')
-    {
-        $table->addRowByArray($columnValues, null, array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '\''));
-    }
-    elseif($getMode == 'print' || $getMode == 'pdf')
+    else
     {
         $table->addRowByArray($columnValues, null, array('nobr' => 'true'));
     }

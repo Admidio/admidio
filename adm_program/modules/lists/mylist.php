@@ -107,7 +107,7 @@ else
         }
     }
 }
-error_log(print_r($formValues, true));
+
 // create html page object
 $page = new HtmlPage($headline);
 
@@ -352,10 +352,6 @@ while(isset($formValues['column'. $actualColumnNumber]))
             default_fields['. $actualColumnNumber. ']["condition"] = "'. $conditionValue. '";';
 
     $actualColumnNumber++;
-}
-if($actualColumnNumber > $defaultColumnRows)
-{
-    $defaultColumnRows = $actualColumnNumber;
 }
 
 $javascriptCode .= '
