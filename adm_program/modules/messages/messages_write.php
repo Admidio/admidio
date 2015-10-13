@@ -298,8 +298,7 @@ elseif (!isset($message_result))
     elseif ($getRoleId > 0)
     {
         // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
-        $preload_data = $getRoleId;
-        $list[] = array('groupID: '.$getRoleId, $rollenName, '');
+        $preload_data = 'groupID: '.$getRoleId;
     }
 
     // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
