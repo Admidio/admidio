@@ -1194,10 +1194,10 @@ class HtmlForm extends HtmlFormBasic
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if(is_object($this->htmlPage))
             {
-                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/select2.css');
-                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/select2-bootstrap.css');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/select2.min.js');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/select2_locale_'.$gL10n->getLanguageIsoCode().'.js');
+                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/dist/css/select2.css');
+                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/dist/css/select2-bootstrap.css');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/dist/js/select2.min.js');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/dist/js/i18n/'.$gL10n->getLanguageIsoCode().'.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
             }
             else
