@@ -286,16 +286,17 @@ elseif (!isset($message_result))
     $form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
     $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
+    $preload_data = array();
+
     if ($getUserId > 0)
     {
         // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-        $preload_data = '{ id: "' .$getUserId. '", text: "' .$userEmail. '", locked: true}';
+        $preload_data = $getUserId;
     }
     elseif ($getRoleId > 0)
     {
         // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
-        $preload_data = '{ id: "groupID: ' .$getRoleId. '", text: "' .$rollenName. '", locked: true}';
-        $list[] = array('groupID: '.$getRoleId, $rollenName, '');
+        $preload_data = 'groupID: '.$getRoleId;
     }
 
     // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
@@ -440,7 +441,7 @@ elseif (!isset($message_result))
     }
 
     $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_REQUIRED,
-                        'multiselect' => true, 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE'));
+        'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE', 'defaultValue' => $preload_data));
 
     $form->addLine();
 
@@ -584,13 +585,6 @@ if (isset($message_result))
     }
 }
 
-$preload = '';
-
-if (isset($preload_data))
-{
-  $preload = '$("#msg_to").select2("data", ['.$preload_data.'] )';
-}
-
 // add JS code for the drop down to find email addresses and groups
 if(isset($list))
 {
@@ -602,9 +596,8 @@ if(isset($list))
                 allowClear: true,
                 maximumSelectionSize: '.$recept_number.',
                 separator: ";"
-            });'
-            .$preload.
-        '});
+            });
+        });
     </script>');
 }
 

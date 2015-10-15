@@ -45,7 +45,7 @@ try
         case 'lnk_description':
             $folderName = 'weblinks';
             break;
-        case 'mail_body':
+        case 'msg_body':
             $folderName = 'mail';
             break;
         case 'plugin_CKEditor':
