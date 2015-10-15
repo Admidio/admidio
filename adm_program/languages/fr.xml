@@ -280,8 +280,7 @@
         <text id="LST_ACTIVE_FORMER_MEMBERS" development="new" translation="edited">Membres actifs et fondateurs</text>
         <text id="LST_ACTIVE_MEMBERS" development="new" translation="edited">Membres actifs</text>
         <text id="LST_ACTIVE_ROLES" development="new" translation="edited">Liste des membres selon les rôles du bottin</text>
-        <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="edited">Ajouter une colonne</text>
-        <text id="LST_CHANGE_LIST" development="new" translation="edited">Désirez-vous charger et changer la configuration par défaut ou créer une nouvelle configuration ?</text>
+        <text id="LST_ADD_COLUMN" development="new" translation="edited">Ajouter une colonne</text>
         <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Choisissez un rôle pour la liste sélectionnée.</text>
         <text id="LST_CONFIGURATION" development="new" translation="edited">Configuration</text>
         <text id="LST_CONFIGURATION_ALL_USERS" development="new" translation="edited">Permission d'utiliser la configuration pour tous les membres</text>
@@ -291,8 +290,6 @@
         <text id="LST_CONFIGURATION_SAVE" development="new" translation="edited">Veuillez sélectionner un nom pour la configuration</text>
         <text id="LST_CREATE_NEW_CONFIGURATION" development="new" translation="edited">Création de la nouvelle configuration</text>
         <text id="LST_CREATE_OWN_LIST" development="new" translation="edited">Créer ma propre liste</text>
-        <text id="LST_DEFAULT_CONFIGURATION" development="new" translation="edited">Configurations par défaut</text>
-        <text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="edited">Spécifier une configuration par défaut. Sélectionner la configuration de votre choix et cliquez sur le symbole suivant: %VAR1%. La configuration sélectionnée sera active pour tous les membres du rôle. Les membres ne seront pas capable d'utiliser leurs propres configurations.</text>
         <text id="LST_DEFAULT_LIST_NOT_SET_UP" development="new" translation="edited">Aucune liste de configuration par défaut n'a été spécifiée par l'administrateur !\n\nContactez l'administrateur pour de l'aide.</text>
         <text id="LST_DELETE_CONFIGURATION" development="new" translation="edited">Supprimer la configuration</text>
         <text id="LST_EMAIL_TO_MEMBERS" development="new" translation="edited">Envoyer un courriel à tous les membres</text>
@@ -324,11 +321,10 @@
         <text id="LST_NEW_DEFAULT_CONFIGURATION" development="new" translation="edited">La configuration sera défini comme configuration par défaut</text>
         <text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="edited">Nombre de rôle par page</text>
         <text id="LST_PRESET_CONFIGURATION" development="new" translation="edited">Configuration par défaut</text>
-        <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">En tant que webmestre, vous êtes capable de définir la configuration par défaut de tous les utilisateurs. Configurez les colonnes et les rangés et enregistrez les en donnant un nom à votre groupe de configuration. Sélectionnez une nouvelle liste prédéfinie et cliquez ici: %VAR1%</text>
+        <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">En tant que webmestre, vous êtes capable de définir la configuration par défaut de tous les utilisateurs. Configurez les colonnes et les rangés et enregistrez les en donnant un nom à votre groupe de configuration.</text>
         <text id="LST_PRINT_PREVIEW" development="new" translation="edited">Afficher l'aperçu</text>
         <text id="LST_ROLE_INFORMATION" development="new" translation="edited">Informations du rôle</text>
         <text id="LST_SAVE_CONFIGURATION" development="new" translation="edited">Enregistrer la configuration</text>
-        <text id="LST_SAVE_CONFIGURATION_OTHER_NAME" development="new" translation="edited">Enregistrer la configuration sous un différent nom</text>
         <text id="LST_SEARCH_AGE_EXAMPLE" development="new" translation="edited">18y</text>
         <text id="LST_SEARCH_AGE_DESC" development="new" translation="edited">Recherche des utilisateurs de moins de 18 ans</text>
         <text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="edited">01.03.1986</text>
@@ -344,7 +340,6 @@
         <text id="LST_SEARCH_TELEFON_DESC" development="new" translation="edited">Recherche des utilisateurs avec un numéro de téléphone incluant 241 et terminant avec 54</text>
         <text id="LST_SEARCH_YES_NO_FIELD" development="new" translation="edited">oui/non champs</text>
         <text id="LST_SEARCH_YES_NO_FIELD_DESC" development="new" translation="edited">Recherche des utilisateur avec mention</text>
-        <text id="LST_SET_COLUMNS" development="new" translation="edited">Définir les colonnes pour afficher dans une liste</text>
         <text id="LST_SHOW_LIST" development="new" translation="edited">Afficher la liste</text>
         <text id="LST_SHOW_LISTS" development="new" translation="edited">Afficher les listes</text>
         <text id="LST_YOUR_CONFIGURATION" development="new" translation="edited">Votre configuration</text>
@@ -579,12 +574,6 @@
         <text id="PHO_POPUP_WINDOW" development="new" translation="edited">Fenêtre popup</text>
         <text id="PHO_PREVIOUS_PHOTO" development="new" translation="edited">Image précédente</text>
         <text id="PHO_RESOLUTION_MORE_THAN" development="new" translation="edited">Résolution supérieure</text>
-        <text id="PHO_RESTRICTIONS_HELP_1" development="new" translation="edited">Les hotos doivent être enregistrés en tant que fichiers JPG ou PNG.</text>
-        <text id="PHO_RESTRICTIONS_HELP_2" development="new" translation="edited">Le serveur est capable de traiter des photos d'une taille maximale de mégapixels %VAR1%.</text>
-        <text id="PHO_RESTRICTIONS_HELP_3" development="new" translation="edited">Importer un fichier ne doit pas être supérieure à %VAR1%MO.</text>
-        <text id="PHO_RESTRICTIONS_HELP_4" development="new" translation="edited">Les photos sont automatiquement redimensionnées aux pixels% VAR1% sur le bord long (bord d'autres proportionnelle) avant d'enregistrer.</text>
-        <text id="PHO_RESTRICTIONS_HELP_5" development="new" translation="edited">Le nom du fichier n'est pas pertinent que tous les fichiers sont nommés de façon consécutive.</text>
-        <text id="PHO_RESTRICTIONS_HELP_6" development="new" translation="edited">Le téléversement de fichier peut prendre un certain temps avec une connexion Internet rapide, trop. Avant de télécharger, il est recommandé de copier tous les fichiers dans un dossier, et de les redimensionner à %VAR1% pixels (bord long). Un JPG de qualité doit être au moins à 90% (faible compression) pour bon résultat.</text>
         <text id="PHO_SAME_WINDOW" development="new" translation="edited">Même fenêtre</text>
         <text id="PHO_SCALE_AT_UPLOAD" development="new" translation="edited">Téléversement échelle</text>
         <text id="PHO_SCALE_AT_UPLOAD_DESC" development="new" translation="edited">Les photos peuvent ainsi être redimensionnés pendant le téléchargement. La valeur en pixel définit le bord long du portrait et des photos au format paysage. L'autre côté reste proportionnelle au bord long. (Par défaut: 640 pixels)</text>
@@ -593,9 +582,6 @@
         <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Afficher le filigrane</text>
         <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="edited">Le texte sera affiché dans toutes les photos avec un long bord de plus de 200 pixels. (Par défaut: ©%VAR1%)</text>
         <text id="PHO_SHOWN_ON_READY" development="new" translation="edited">Les photos ont été ajouté avec succès à l'album si elles figurent sur cette page.</text>
-        <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Cliquez %VAR1_BOLD% afin de sélectionner les fichiers photo sur disque dur pour le téléchargement.</text>
-        <text id="PHO_UPLOAD_HELP_2" development="new" translation="edited">Lors de l'utilisation du processus de sélection de téléchargement individuelle de photos, l'opération doit être répété jusqu'à cinq fois ou jusqu'à ce que toutes les images soient télécharger.</text>
-        <text id="PHO_UPLOAD_HELP_3" development="new" translation="edited">Cliquez %VAR1_BOLD% et soyez patient.</text>
         <text id="PHO_UPLOAD_MORE" development="new" translation="edited">Télécharger davantage de photos</text>
         <text id="PHO_UPLOAD_PHOTOS" development="new" translation="edited">Transférez vos photos</text>
         <text id="PHO_WANT_DELETE_PHOTO" development="new" translation="edited">La photo sélectionnée va être supprimé. Confirmez-vous ?</text>
@@ -756,8 +742,6 @@
         <text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="edited">Retour à l'aperçu du module</text>
         <text id="SYS_BETA_VERSION" development="new" translation="edited">Vous utilisez une version BETA de Admidio. \n\nIl pourrait y avoir des problème de stabilité et des perte de données peut se produire. S'il vous plaît utiliser cette version à des fins de test uniquement!</text>
         <text id="SYS_BIRTHDAY" development="new" translation="edited">Anniversaire</text>
-        <text id="SYS_BROWSE" development="new" translation="edited">Parcourir</text>
-        <text id="SYS_BROWSE_ERROR" development="new" translation="edited">La recherche de fichiers n'a pas pu être effectuée.</text>
         <text id="SYS_CAPTCHA" development="new" translation="edited">Captcha</text>
         <text id="SYS_CAPTCHA_CALC" development="new" translation="edited">Résultat du calcul</text>
         <text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">Code Captcha invalide. Essayez à nouveau!</text>

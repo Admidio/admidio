@@ -184,7 +184,7 @@ if ($getMsgType === 'PM')
     {
         $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
         $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_REQUIRED,
-                            'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MSG_SEND_PM'));
+                            'multiselect' => true, 'helpTextIdLabel' => 'MSG_SEND_PM'));
         $form->closeGroupBox();
         $sendto = '';
     }
@@ -353,7 +353,7 @@ elseif (!isset($message_result))
             }
 
         }
-        
+
         foreach(array_unique($list_rol_id_array) as $key)
         {
             if(isset($list_rol_id))
@@ -401,10 +401,10 @@ elseif (!isset($message_result))
                    ORDER BY last_name, first_name';
 
         $result = $gDb->query($sql);
-        
+
         $passive_list = array();
         $active_list = array();
-        
+
         while ($row = $gDb->fetch_array($result))
         {
             if ($row['mem_active'] > 0)
@@ -441,7 +441,7 @@ elseif (!isset($message_result))
     }
 
     $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_REQUIRED,
-                        'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE', 'defaultValue' => $preload_data));
+        'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE', 'defaultValue' => $preload_data));
 
     $form->addLine();
 

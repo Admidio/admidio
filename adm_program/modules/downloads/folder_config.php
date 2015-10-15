@@ -128,7 +128,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC'
 // show form
 $form = new HtmlForm('folder_rights_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page);
 $form->addSelectBox('adm_allowed_roles', $gL10n->get('DAT_VISIBLE_TO'), $parentRoleSet, array('property' => FIELD_REQUIRED,
-                    'defaultValue' => $roleSet, 'showContextDependentFirstEntry' => false, 'multiselect' => true));
+                    'defaultValue' => $roleSet, 'multiselect' => true));
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
 
 // add form to html page and show page

@@ -1082,6 +1082,14 @@ class HtmlForm extends HtmlFormBasic
             {
                 $optionsAll['defaultValue'] = array($optionsAll['defaultValue']);
             }
+
+            if($optionsAll['showContextDependentFirstEntry'] === true && $optionsAll['property'] === FIELD_REQUIRED)
+            {
+                $attributes['placeholder'] = $gL10n->get('SYS_PLEASE_CHOOSE');
+
+                // reset the preferences so the logic for not multiselect will not be performed
+                $optionsAll['showContextDependentFirstEntry'] = false;
+            }
         }
 
         // set specific css class for this field

@@ -132,7 +132,7 @@ class HtmlNavbar
         global $g_root_path;
 
         // add root path to link unless the full URL is given
-        if($url !== '' && preg_match('/^http(s?):\/\//', $url) === 0)
+        if($url !== '' && $url !== '#' && preg_match('/^http(s?):\/\//', $url) === 0)
         {
             $url = $g_root_path.$url;
         }

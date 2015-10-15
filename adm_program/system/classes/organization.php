@@ -188,7 +188,6 @@ class Organization extends TableAccess
         $addressList->setValue('lst_name', $gL10n->get('INS_ADDRESS_LIST'));
         $addressList->setValue('lst_org_id', $this->getValue('org_id'));
         $addressList->setValue('lst_global', 1);
-        $addressList->setValue('lst_default', 1);
         $addressList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
         $addressList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
         $addressList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
@@ -196,6 +195,12 @@ class Organization extends TableAccess
         $addressList->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
         $addressList->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
         $addressList->save();
+
+        // set addresslist to default configuration
+        $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''.$addressList->getValue('lst_id').'\'
+                 WHERE prf_org_id = '.$this->getValue('org_id').'
+                   AND prf_name   = \'lists_default_configuation\' ';
+        $this->db->query($sql);
 
         $phoneList = new ListConfiguration($this->db);
         $phoneList->setValue('lst_name', $gL10n->get('INS_PHONE_LIST'));

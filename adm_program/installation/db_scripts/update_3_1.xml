@@ -7,5 +7,7 @@
     <step id="50" database="postgresql">ALTER TABLE %PREFIX%_users ALTER COLUMN usr_password TYPE varchar(60)</step>
     <step id="60" database="postgresql">ALTER TABLE %PREFIX%_users ALTER COLUMN usr_new_password TYPE varchar(60)</step>
     <step id="70">UPDATE %PREFIX%_user_fields SET usf_type = 'PHONE' WHERE usf_name_intern IN ('PHONE', 'MOBILE', 'FAX')</step>
+    <step id="80">ComponentUpdate::updateStepSetDefaultConfiguration</step>
+    <step id="90">ALTER TABLE %PREFIX%_lists DROP COLUMN lst_default</step>
     <step>stop</step>
 </update>

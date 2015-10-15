@@ -608,8 +608,7 @@
         <text id="LST_ACTIVE_FORMER_MEMBERS" development="new" translation="edited">Membri attivi ed ex membri</text>
         <text id="LST_ACTIVE_MEMBERS" development="new" translation="edited">Membri attivi</text>
         <text id="LST_ACTIVE_ROLES" development="new" translation="edited">Panoramica dei ruoli attivi</text>
-        <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="edited">Aggiungi colonna</text>
-        <text id="LST_CHANGE_LIST" development="new" translation="edited">Ti piacerebbe caricare e cambiare la configurazione predefinita o creare una nuova configurazione?</text>
+        <text id="LST_ADD_COLUMN" development="new" translation="edited">Aggiungi colonna</text>
         <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Scegli il ruolo per l'elenco selezionato.</text>
         <text id="LST_COLUMN" development="new" translation="edited">Colonna</text>
         <text id="LST_CONFIGURATION" development="new" translation="edited">Configurazione</text>
@@ -620,8 +619,6 @@
         <text id="LST_CONFIGURATION_SAVE" development="new" translation="edited">Per favore seleziona il nome per l'impostazione della configurazione?</text>
         <text id="LST_CREATE_NEW_CONFIGURATION" development="new" translation="edited">Creazione nuova configurazione</text>
         <text id="LST_CREATE_OWN_LIST" development="new" translation="edited">Crea un proprio elenco</text>
-        <text id="LST_DEFAULT_CONFIGURATION" development="new" translation="edited">Configurazioni predefinite</text>
-        <text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="edited">Fai un'impostazione della configurazione come configurazione predefinita. Seleziona l'impostazione della configurazione corrispondente alla tua scelta e clicca sul simbolo seguente: %VAR1%. La configurazione selezionata sarà attiva per tutti i membri degli elenchi del ruolo richiesto. I membri non potranno usare le impostazioni della propria configurazione.</text>
         <text id="LST_DEFAULT_LIST_NOT_SET_UP" development="new" translation="edited">Nessuna impostazione della configurazione dell'elenco predefinito è stata definita dall'amministratore!\n\nContatta l'amministratore del sietma per avere aiuto.</text>
         <text id="LST_DELETE_CONFIGURATION" development="new" translation="edited">Cancella la configurazione</text>
         <text id="LST_EMAIL_TO_MEMBERS" development="new" translation="edited">Email ai membri</text>
@@ -653,11 +650,10 @@
         <text id="LST_NEW_DEFAULT_CONFIGURATION" development="new" translation="edited">La configurazione sarà stata definita come configurazione predefinita</text>
         <text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="edited">Numero di ruoli per pagina</text>
         <text id="LST_PRESET_CONFIGURATION" development="new" translation="edited">Configurazione predefinita</text>
-        <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">Come webmaster puoi definire la configurazione predefinita per tutti gli utenti. Configura le righe e le colonne e salvale assegnando un nome all'impostazione della configurazione. Seleziona la nuova configurazione degli elenchi predefinita e colpisci questa: %VAR1%</text>
+        <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">Come webmaster puoi definire la configurazione predefinita per tutti gli utenti. Configura le righe e le colonne e salvale assegnando un nome all'impostazione della configurazione.</text>
         <text id="LST_PRINT_PREVIEW" development="new" translation="edited">Stampa anteprima</text>
         <text id="LST_ROLE_INFORMATION" development="new" translation="edited">Informazioni sul ruolo</text>
         <text id="LST_SAVE_CONFIGURATION" development="new" translation="edited">Salva configurazione</text>
-        <text id="LST_SAVE_CONFIGURATION_OTHER_NAME" development="new" translation="edited">Salva configurazione con un nome diverso</text>
         <text id="LST_SEARCH_AGE_EXAMPLE" development="new" translation="edited">18 anni</text>
         <text id="LST_SEARCH_AGE_DESC" development="new" translation="edited">Ricerca di tutti gli utenti maggiori di 18 anni</text>
         <text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="edited">01.03.1986</text>
@@ -672,7 +668,6 @@
         <text id="LST_SEARCH_TELEFON_DESC" development="new" translation="edited">Ricerca di tutti gli utenti che hanno il numero di telefono che include 241 e finisce per 54</text>
         <text id="LST_SEARCH_YES_NO_FIELD" development="new" translation="edited">campo sì/no</text>
         <text id="LST_SEARCH_YES_NO_FIELD_DESC" development="new" translation="edited">Ricerca degli utenti contrassegnati (verifica contrassegno)</text>
-        <text id="LST_SET_COLUMNS" development="new" translation="edited">Definisci le colonne da mostrare nell'elenco</text>
         <text id="LST_SHOW_LIST" development="new" translation="edited">Visualizza elenco</text>
         <text id="LST_SHOW_LISTS" development="new" translation="edited">Visualizza elenchi</text>
         <text id="LST_YOUR_CONFIGURATION" development="new" translation="edited">La tua configurazione</text>
@@ -898,12 +893,6 @@
         <text id="PHO_POPUP_WINDOW" development="new" translation="edited">finestra popup</text>
         <text id="PHO_PREVIOUS_PHOTO" development="new" translation="edited">immagine precedente</text>
         <text id="PHO_RESOLUTION_MORE_THAN" development="new" translation="edited">Risoluzione più grande di</text>
-        <text id="PHO_RESTRICTIONS_HELP_1" development="new" translation="edited">Le foto devono essere salvate come JPG o PNG.</text>
-        <text id="PHO_RESTRICTIONS_HELP_2" development="new" translation="edited">Il server può processare foto di grandezza massima %VAR1% megapixel.</text>
-        <text id="PHO_RESTRICTIONS_HELP_3" development="new" translation="edited">Il file da caricare non può essere più grande di %VAR1% MB.</text>
-        <text id="PHO_RESTRICTIONS_HELP_4" development="new" translation="edited">Le foto vengono scalate automaticamente a %VAR1% pixel sul lato lungo (o altro bordo proporzionale) prima di essere salvate.</text>
-        <text id="PHO_RESTRICTIONS_HELP_5" development="new" translation="edited">Il nome del file è irrilevante, in quanto tutti i file vengono nominati consecutivamente.</text>
-        <text id="PHO_RESTRICTIONS_HELP_6" development="new" translation="edited">Il caricamento del file può richiedere molto tempo con la connessione internet veloce, troppo. Prima del caricamento, si consiglia di copiare tutti i file in una cartella, e di ridimensionarli a %VAR1% pixel (lato lungo). La qualità JPG dovrebbe essere almeno al 90% (bassa compressione) per un buon risultato.</text>
         <text id="PHO_SAME_WINDOW" development="new" translation="edited">Stessa finestra</text>
         <text id="PHO_SCALE_AT_UPLOAD" development="new" translation="edited">Scala durante il caricamento</text>
         <text id="PHO_SCALE_AT_UPLOAD_DESC" development="new" translation="edited">Le foto verranno ridimensionate durante il caricamento. Il valore in pixel definisce il lato lungo verticale e orizzontale del formato della foto. L'altra dimensione rimane proporzionale al lato lungo. (predefinito: 640 pixel)</text>
@@ -912,9 +901,6 @@
         <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Mostra filigrana</text>
         <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="edited">Il testo verrà visualizzato in tutte le foto con un bordo lungo più grande di 200 pixel. (predefinito: &#169; %VAR1%)</text>
         <text id="PHO_SHOWN_ON_READY"  development="new" translation="edited">Le foto sono state aggiunte successo all'album se appaiono in questa pagina.</text>
-        <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Premi il pulsante %VAR1_BOLD% al fine di selezionare i file delle foto sull'hard disk per il caricamento.</text>
-        <text id="PHO_UPLOAD_HELP_2" development="new" translation="edited">Quando si utilizza il caricamento della singola foto il processo di selezione deve essere ripetuto cinque volte, fino a quando tutti i campi di caricamento saranno usati.</text>
-        <text id="PHO_UPLOAD_HELP_3" development="new" translation="edited">Poi premi %VAR1_BOLD% e sii paziente.</text>
         <text id="PHO_UPLOAD_MORE" development="new" translation="edited">Carica più foto</text>
         <text id="PHO_UPLOAD_PHOTOS" development="new" translation="edited">Carica foto</text>
         <text id="PHO_WANT_DELETE_PHOTO" development="new" translation="edited">La foto selezionata sta per essere cancellata. Confermi?</text>
@@ -1076,8 +1062,6 @@
         <text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="edited">Ritorna alla pagina principale del modulo</text>
         <text id="SYS_BETA_VERSION" development="new" translation="edited">Si sta utilizzando una versione beta di Admidio.\n\nPotrebbero verificarsi problemi di stabilità e perdita di dati. Si prega di utilizzare questa versione a solo scopo di test!</text>
         <text id="SYS_BIRTHDAY" development="new" translation="edited">Compleanno</text>
-        <text id="SYS_BROWSE" development="new" translation="edited">Sfoglia</text>
-        <text id="SYS_BROWSE_ERROR" development="new" translation="edited">La ricerca di file non può essere eseguita.</text>
         <text id="SYS_CAPTCHA" development="new" translation="edited">Captcha</text>
         <text id="SYS_CAPTCHA_CALC" development="new" translation="edited">Risultato del calcolo</text>
         <text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">Il risultato del calcolo non è corretto.</text>

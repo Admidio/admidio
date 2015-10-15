@@ -291,25 +291,14 @@ class TableRoles extends TableAccess
      */
     public function getDefaultList()
     {
-        global $gCurrentOrganization;
+        global $gCurrentOrganization, $gPreferences;
         $defaultListId = $this->getValue('rol_lst_id');
 
         //if default list is not set
         if($defaultListId <= 0 || $defaultListId === null)
         {
             // read and set system default list configuration
-            $sql = 'SELECT lst_id FROM '. TBL_LISTS. '
-                     WHERE lst_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                       AND lst_default = 1 ';
-            $defaultListStatement = $this->db->query($sql);
-
-            $row = $defaultListStatement->fetch();
-            $defaultListId = $row[0];
-
-            if(!is_numeric($defaultListId))
-            {
-               $defaultListId = 0;
-            }
+            $defaultListId = $gPreferences['lists_default_configuation'];
         }
         return $defaultListId;
     }

@@ -479,6 +479,10 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
             {
                 $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
             }
+            else
+            {
+                $array[$variableName] = (int) $array[$variableName];
+            }
             break;
 
         case 'string':
