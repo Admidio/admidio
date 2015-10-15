@@ -139,7 +139,7 @@ else
 {
     // create new session object and store it in PHP session
     $gCurrentSession = new Session($gDb, $gSessionId);
-    $_SESSION['gCurrentSession'] =& $gCurrentSession;
+    $_SESSION['gCurrentSession'] = $gCurrentSession;
 
     // create system component
     $gSystemComponent = new Component($gDb);

@@ -55,7 +55,7 @@ else
         $photo_album->readDataById($getPhotoId);
     }
 
-    $_SESSION['photo_album'] =& $photo_album;
+    $_SESSION['photo_album'] = $photo_album;
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert

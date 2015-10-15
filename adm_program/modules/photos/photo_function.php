@@ -161,7 +161,7 @@ elseif($getJob == 'delete')
         $photo_album->readDataById($getPhotoId);
     }
 
-    $_SESSION['photo_album'] =& $photo_album;
+    $_SESSION['photo_album'] = $photo_album;
 
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';

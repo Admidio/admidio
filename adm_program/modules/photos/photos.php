@@ -57,7 +57,7 @@ else
         $photoAlbum->readDataById($getPhotoId);
     }
 
-    $_SESSION['photo_album'] =& $photoAlbum;
+    $_SESSION['photo_album'] = $photoAlbum;
 }
 
 // set headline of module

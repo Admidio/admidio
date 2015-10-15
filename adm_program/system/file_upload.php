@@ -48,7 +48,7 @@ if($getModule === 'photos')
     else
     {
         $photoAlbum = new TablePhotos($gDb, $getId);
-        $_SESSION['photo_album'] =& $photoAlbum;
+        $_SESSION['photo_album'] = $photoAlbum;
     }
 
     // check if album belongs to current organization

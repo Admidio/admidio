@@ -40,7 +40,7 @@ if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id
 else
 {
     $photoAlbum = new TablePhotos($gDb, $getPhotoId);
-    $_SESSION['photo_album'] =& $photoAlbum;
+    $_SESSION['photo_album'] = $photoAlbum;
 }
 
 //Ordnerpfad zusammensetzen
