@@ -354,8 +354,8 @@ elseif (!isset($message_result))
 
         }
         
-        foreach(array_unique($list_rol_id_array) as $key) 
-        {   
+        foreach(array_unique($list_rol_id_array) as $key)
+        {
             if(isset($list_rol_id))
             {
                 $list_rol_id .= ", '".$key."'";
@@ -401,10 +401,10 @@ elseif (!isset($message_result))
                    ORDER BY last_name, first_name';
 
         $result = $gDb->query($sql);
-		
-		$passive_list = array();
-		$active_list = array();
-		
+        
+        $passive_list = array();
+        $active_list = array();
+        
         while ($row = $gDb->fetch_array($result))
         {
             if ($row['mem_active'] > 0)
