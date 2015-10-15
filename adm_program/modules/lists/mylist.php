@@ -535,6 +535,7 @@ $yourConfigurationsGroup     = false;
 $presetConfigurationsGroup   = false;
 $actualGroup                 = '';
 $configurationsArray[]       = array(0, $gL10n->get('LST_CREATE_NEW_CONFIGURATION'), null);
+$numberLastConfigurations    = 0;
 
 $sql = 'SELECT lst_id, lst_name, lst_global, lst_timestamp FROM '. TBL_LISTS. '
          WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
@@ -567,15 +568,27 @@ foreach($configurations as $configuration)
     if(strlen($configuration['lst_name']) === 0)
     {
         $objListTimestamp = new DateTime($configuration['lst_timestamp']);
-        $description = $objListTimestamp->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
+        $numberLastConfigurations++;
+
+        // only 5 configurations without a name should be saved for each user
+        if($numberLastConfigurations > 5)
+        {
+            // delete all other configurations
+            $del_list = new ListConfiguration($gDb, $configuration['lst_id']);
+            $del_list->delete();
+        }
+        else
+        {
+            // now add configuration to array
+            $configurationsArray[] = array($configuration['lst_id'], $objListTimestamp->format($gPreferences['system_date'].' '.$gPreferences['system_time']), $actualGroup);
+        }
     }
     else
     {
-        $description = $configuration['lst_name'];
+        // now add configuration to array
+        $configurationsArray[] = array($configuration['lst_id'], $configuration['lst_name'], $actualGroup);
     }
 
-    // now add configuration to array
-    $configurationsArray[]      = array($configuration['lst_id'], $description, $actualGroup);
 }
 
 $form->addSelectBox('sel_select_configuation', $gL10n->get('LST_SELECT_CONFIGURATION'), $configurationsArray,
@@ -629,7 +642,7 @@ if(($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
 // current configuration can be duplicated and saved with another name
 if(strlen($list->getValue('lst_name')) > 0)
 {
-    $form->addButton('btn_copy', $gL10n->get('SYS_COPY_VAR', $gL10n->get('LST_CONFIGURATION')), array('icon' => THEME_PATH.'/icons/application_double.png'));    
+    $form->addButton('btn_copy', $gL10n->get('SYS_COPY_VAR', $gL10n->get('LST_CONFIGURATION')), array('icon' => THEME_PATH.'/icons/application_double.png'));
 }
 $form->closeButtonGroup();
 
