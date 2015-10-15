@@ -402,8 +402,8 @@ elseif (!isset($message_result))
 
         $result = $gDb->query($sql);
 
-		$passive_list = array();
-		$active_list = array();
+        $passive_list = array();
+        $active_list = array();
 
         while ($row = $gDb->fetch_array($result))
         {

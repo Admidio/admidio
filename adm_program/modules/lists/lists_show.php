@@ -600,7 +600,7 @@ foreach($membersList as $member)
             {
                 // firstname and lastname get a link to the profile
                 if($getMode === 'html'
-                && (  $usf_id == $gProfileFields->getProperty('LAST_NAME', 'usf_id')
+                &&   ($usf_id == $gProfileFields->getProperty('LAST_NAME', 'usf_id')
                    || $usf_id == $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
                 {
                     $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member['usr_id']);
