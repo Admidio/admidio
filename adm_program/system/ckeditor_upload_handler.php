@@ -44,7 +44,7 @@ try
     {
         $folderName = 'weblinks';
     }
-    elseif($getCKEditor == 'mail_body')
+    elseif($getCKEditor == 'msg_body')
     {
         $folderName = 'mail';
     }
