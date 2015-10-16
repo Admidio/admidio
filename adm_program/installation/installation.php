@@ -302,7 +302,7 @@ elseif($getMode == 4)  // Creating organization
                 // valid installation exists -> exit installation
                 showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
             }
-            
+
         }
     }
 
@@ -323,7 +323,7 @@ elseif($getMode == 4)  // Creating organization
         $orgaShortName = $g_organization;
         $orgaLongName  = '';
         $orgaEmail     = '';
-        
+
         if($g_organization !== '')
         {
             $shortnameProperty = FIELD_READONLY;
