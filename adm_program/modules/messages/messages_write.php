@@ -288,17 +288,15 @@ elseif (!isset($message_result))
     $form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
     $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
-    $preload_data = array();
-
     if ($getUserId > 0)
     {
         // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-        $preload_data = $getUserId;
+        $preload_data = '{ id: "' .$getUserId. '", text: "' .$userEmail. '", locked: true}';
     }
     elseif ($getRoleId > 0)
     {
         // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
-        $preload_data = $getRoleId;
+        $preload_data = '{ id: "groupID: ' .$getRoleId. '", text: "' .$rollenName. '", locked: true}';
         $list[] = array('groupID: '.$getRoleId, $rollenName, '');
     }
 
@@ -370,6 +368,7 @@ elseif (!isset($message_result))
         }
 
         // select Users
+
         $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
                                  email.usd_value as email, (SELECT count(1)
                                  FROM '.TBL_MEMBERS.', '. TBL_ROLES. ', '. TBL_CATEGORIES. ' as temp
@@ -443,7 +442,7 @@ elseif (!isset($message_result))
     }
 
     $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_REQUIRED,
-                        'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE', 'defaultValue' => $preload_data));
+                        'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE'));
 
     $form->addLine();
 
@@ -587,6 +586,13 @@ if (isset($message_result))
     }
 }
 
+$preload = '';
+
+if (isset($preload_data))
+{
+  $preload = '$("#msg_to").select2("data", ['.$preload_data.'] )';
+}
+
 // add JS code for the drop down to find email addresses and groups
 if(isset($list))
 {
@@ -596,10 +602,11 @@ if(isset($list))
             $("#msg_to").select2({
                 placeholder: "'.$gL10n->get('SYS_SELECT_FROM_LIST').'",
                 allowClear: true,
-                maximumSelectionLength: '.$recept_number.',
+                maximumSelectionSize: '.$recept_number.',
                 separator: ";"
-            });
-        });
+            });'
+            .$preload.
+        '});
     </script>');
 }
 
