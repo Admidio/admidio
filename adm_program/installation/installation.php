@@ -27,6 +27,15 @@ if(file_exists('../../adm_my_files/config.php'))
 {
     require_once('../../adm_my_files/config.php');
 }
+else
+{
+    $g_organization = '';
+}
+
+if(!isset($_SESSION['create_config_file']))
+{
+    $_SESSION['create_config_file'] = true;
+}
 
 if(isset($g_tbl_praefix) === false)
 {
@@ -96,21 +105,29 @@ if(file_exists('../../adm_my_files/config.php'))
     $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
     $pdoStatement = $db->query($sql, false);
     // Check the query for results in case installation is runnnig at this time and the config file is already created but database is not installed so far
-    if($pdoStatement)
+    if($pdoStatement !== false && $pdoStatement->rowCount() > 0)
     {
-        $count = $pdoStatement->rowCount();
-    
-        if($count > 0)
-        {
-            // valid installation exists -> exit installation
-            showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php',
-                       $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
-        }
+        // valid installation exists -> exit installation
+        showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php',
+                   $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
     }
-    if($getMode != 8)
+
+    // if config exists then take parameters out of this file
+    if($getMode < 3)
     {
-        showNotice($gL10n->get('INS_CONFIGURATION_FILE_FOUND', 'config.php'), 'installation.php?mode=8',
-                   $gL10n->get('INS_CONTINUE_INSTALLATION'), 'layout/database_in.png');
+        $_SESSION['create_config_file'] = false;
+
+        // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
+        // save database parameters of config.php in session variables
+        $_SESSION['db_type']     = $gDbType;
+        $_SESSION['db_server']   = $g_adm_srv;
+        $_SESSION['db_user']     = $g_adm_usr;
+        $_SESSION['db_password'] = $g_adm_pw;
+        $_SESSION['db_database'] = $g_adm_db;
+        $_SESSION['prefix']      = $g_tbl_praefix;
+
+        header('Location: installation.php?mode=4');
+        exit();
     }
 }
 elseif(file_exists('../../config.php'))
@@ -120,7 +137,7 @@ elseif(file_exists('../../config.php'))
     exit();
 }
 
-if($getMode == 1)  // (Default) Choose language
+if($getMode === 1)  // (Default) Choose language
 {
     session_destroy();
 
@@ -135,7 +152,7 @@ if($getMode == 1)  // (Default) Choose language
     $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png'));
     $form->show();
 }
-elseif($getMode == 2)  // Welcome to installation
+elseif($getMode === 2)  // Welcome to installation
 {
     // check if a language string was committed
     if(!isset($_POST['system_language']) || trim($_POST['system_language']) === '')
@@ -279,22 +296,22 @@ elseif($getMode == 4)  // Creating organization
             // now check if a valid installation exists.
             $sql = 'SELECT org_id FROM '.$_SESSION['prefix'].'_organizations';
             $pdoStatement = $db->query($sql, false);
-            // go on if the result is true
-            if($pdoStatement)
+
+            if($pdoStatement !== false && $pdoStatement->rowCount() > 0)
             {
-                $count = $pdoStatement->rowCount();
-    
-                if($count > 0)
-                {
-                    // valid installation exists -> exit installation
-                    showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
-                }
+                // valid installation exists -> exit installation
+                showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
             }
             
         }
     }
 
+    // create a page to enter the organization names
+    $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=5');
+
     // initialize form data
+    $shortnameProperty = FIELD_REQUIRED;
+
     if(isset($_SESSION['orga_shortname']))
     {
         $orgaShortName = $_SESSION['orga_shortname'];
@@ -303,16 +320,19 @@ elseif($getMode == 4)  // Creating organization
     }
     else
     {
-        $orgaShortName = '';
+        $orgaShortName = $g_organization;
         $orgaLongName  = '';
         $orgaEmail     = '';
+        
+        if($g_organization !== '')
+        {
+            $shortnameProperty = FIELD_READONLY;
+        }
     }
 
-    // create a page to enter the organization names
-    $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=5');
     $form->setFormDescription($gL10n->get('ORG_NEW_ORGANIZATION_DESC'), $gL10n->get('INS_SET_ORGANIZATION'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_NAME_OF_ORGANIZATION'));
-    $form->addInput('orga_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, array('maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
+    $form->addInput('orga_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, array('maxLength' => 10, 'property' => $shortnameProperty, 'class' => 'form-control-small'));
     $form->addInput('orga_longname', $gL10n->get('SYS_NAME'), $orgaLongName, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('orga_email', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $orgaEmail, array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->closeGroupBox();
@@ -420,6 +440,13 @@ elseif($getMode == 6)  // Creating configuration file
         }
     }
 
+    // if config file exists than don't create a new one
+    if($_SESSION['create_config_file'] === false)
+    {
+        header('Location: installation.php?mode=8');
+        exit();
+    }
+
     // read configuration file structure
     $filename          = 'config.php';
     $configFileHandle  = fopen($filename, 'r');
@@ -513,7 +540,7 @@ elseif($getMode == 8) // Start installation
         || $g_adm_usr     != $_SESSION['db_user']
         || $g_adm_pw      != $_SESSION['db_password']
         || $g_adm_db      != $_SESSION['db_database']
-        || $g_organization!= $_SESSION['orga_shortname'])
+        || $g_organization== $_SESSION['orga_shortname'])
         {
             showNotice($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6',
                        $gL10n->get('SYS_BACK'), 'layout/back.png');

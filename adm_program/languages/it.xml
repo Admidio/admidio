@@ -12,7 +12,6 @@
         <text id="ECA_LAYOUT" development="new" translation="edited">Layout</text>
         <text id="ECA_SCALE_THUMBNAILS_DESC" development="new" translation="edited">Qui puoi definire la misura del lato lungo a cui sarà scalata la miniatura delle immagini (Predefinita: 250px).</text>
         <text id="ECA_MAX_PHOTO_SIZE_DESC" development="new" translation="edited">I valori definiti indicano la misura massima di una immagine nella cartolina (Standard: 400 x 250 Pixel).</text>
-        <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="edited">Esiste già un file di configurazione. Una nuova installazione non è possibile.\n\nSe è stata interrotta una installazione precedente essa può essere ripresa.</text>
         <text id="INS_CONTINUE_INSTALLATION" development="new" translation="edited">Continua l'installazione</text>
         <text id="INS_DELETE_CONFIG_FILE" development="new" translation="edited">La directory principale di Admidio %VAR1_BOLD% contiene un file config.php. Esso è stato già spostato nella cartella adm_my_files. Per favore cancella il file nella cdirectory principale.</text>
         <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="changed" translation="edited">Scarica il file di configurazione</text>

@@ -47,7 +47,6 @@
         <text id="ECA_LAYOUT" development="new" translation="edited">Layout</text>
         <text id="ECA_SCALE_THUMBNAILS_DESC" development="new" translation="edited">Here you can define the size to which the longer side of a thumbnail images should be scaled to (Default: 250px).</text>
         <text id="ECA_MAX_PHOTO_SIZE_DESC" development="new" translation="edited">The defined values indicate the maximum size of an image in the greeting card (Standard: 400 x 250 Pixel).</text>
-        <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="edited">A configuration file already exists. A new installation is not possible.\n\nIf an earlier installation has been interrupted it can be continued.</text>
         <text id="INS_CONTINUE_INSTALLATION" development="new" translation="edited">Continue installation</text>
         <text id="INS_DELETE_CONFIG_FILE" development="new" translation="edited">The Admidio main directory %VAR1_BOLD% contains a config.php. It has already been moved to the adm_my_files folder. Please delete the file in the main directory.</text>
         <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="changed" translation="edited">Download configuration file</text>

@@ -86,9 +86,8 @@ catch(AdmException $e)
 // now check if a valid installation exists.
 $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
 $pdoStatement = $gDb->query($sql, false);
-$count = $pdoStatement->rowCount();
 
-if($count === 0)
+if(!$pdoStatement || $pdoStatement->rowCount() === 0)
 {
     // no valid installation exists -> show installation wizard
     header('Location: installation.php');
