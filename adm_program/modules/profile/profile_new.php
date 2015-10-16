@@ -278,10 +278,10 @@ foreach($gProfileFields->mProfileFields as $field)
                 $user->getValue($field->getValue('usf_name_intern')), array('property' => $fieldProperty, 'helpTextIdLabel' => $helpId, 'icon' => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
         }
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'DROPDOWN'
-            || $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name_intern') == 'COUNTRY')
+            || $field->getValue('usf_name_intern') === 'COUNTRY')
         {
             // set array with values and set default value
-            if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name_intern') == 'COUNTRY')
+            if($field->getValue('usf_name_intern') === 'COUNTRY')
             {
                 $arrListValues = $gL10n->getCountries();
                 $defaultValue  = null;
@@ -330,7 +330,7 @@ foreach($gProfileFields->mProfileFields as $field)
 
             if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'DATE')
             {
-                if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name_intern') == 'BIRTHDAY')
+                if($field->getValue('usf_name_intern') === 'BIRTHDAY')
                 {
                     $fieldType = 'birthday';
                 }

@@ -425,7 +425,7 @@ select[multiple] {
     text-align: left;
 }
 
-input[data-provide="datepicker"], input[type="number"], input[type="time"] {
+input[data-provide*="datepicker"], input[type="number"], input[type="time"] {
     width: 130px !important;
 }
 
