@@ -81,7 +81,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
-if($getPhotoId > 0 && $photoAlbum->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
+if($getPhotoId > 0 && $photoAlbum->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -385,9 +385,9 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 /************************Albumliste*************************************/
 
 //erfassen der Alben die in der Albentabelle ausgegeben werden sollen
-$sql='      SELECT *
-            FROM '. TBL_PHOTOS. '
-            WHERE pho_org_shortname = \''.$gCurrentOrganization->getValue('org_shortname').'\'';
+$sql = 'SELECT *
+          FROM '. TBL_PHOTOS. '
+         WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
 if($getPhotoId == 0)
 {
     $sql = $sql.' AND (pho_pho_id_parent IS NULL) ';

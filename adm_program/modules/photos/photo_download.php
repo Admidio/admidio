@@ -53,7 +53,7 @@ $photo_album = new TablePhotos($gDb);
 $photo_album->readDataById($getPhotoId);
 
 // check whether album belongs to the current organization
-if($photo_album->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
+if($photo_album->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -119,9 +119,9 @@ if($getPhotoNr == null)
     /************************add sub albums as subfolders*************************************/
 
     // get sub albums
-    $sql='      SELECT *
-                FROM '. TBL_PHOTOS. '
-                WHERE pho_org_shortname = \''.$gCurrentOrganization->getValue('org_shortname').'\'';
+    $sql = 'SELECT *
+              FROM '. TBL_PHOTOS. '
+             WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
     if($getPhotoId == 0)
     {
         $sql = $sql.' AND (pho_pho_id_parent IS NULL) ';

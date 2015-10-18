@@ -87,7 +87,7 @@ if($plg_show_headline==1)
 // Bedingungen: freigegeben,Anzahllimit, Bilder enthalten
 $sql='      SELECT *
             FROM '. TBL_PHOTOS. '
-            WHERE pho_org_shortname = \''.$gCurrentOrganization->getValue('org_shortname').'\'
+            WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id').'
             AND pho_locked = 0
             AND pho_quantity > 0
             ORDER BY pho_begin DESC';
