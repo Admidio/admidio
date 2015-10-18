@@ -106,8 +106,9 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
 
     if(isset($_POST['dat_all_day']))
     {
-        $_POST['date_from_time'] = '00:00';
-        $_POST['date_to_time']   = '00:00'; // Ganztägig ist nur logisch bei 23:59 Uhr (rn)
+        $midnightDateTime = DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
+        $_POST['date_from_time'] = $midnightDateTime->format($gPreferences['system_time']);
+        $_POST['date_to_time']   = $midnightDateTime->format($gPreferences['system_time']);
         $date->setValue('dat_all_day', 1);
     }
     else
