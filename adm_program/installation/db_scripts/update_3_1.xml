@@ -9,5 +9,13 @@
     <step id="70">UPDATE %PREFIX%_user_fields SET usf_type = 'PHONE' WHERE usf_name_intern IN ('PHONE', 'MOBILE', 'FAX')</step>
     <step id="80">ComponentUpdate::updateStepSetDefaultConfiguration</step>
     <step id="90">ALTER TABLE %PREFIX%_lists DROP COLUMN lst_default</step>
+    <step id="100">ALTER TABLE %PREFIX%_announcements ADD COLUMN ann_org_id integer unsigned not null</step>
+    <step id="110">UPDATE %PREFIX%_announcements SET ann_org_id = (SELECT org_id FROM %PREFIX%_organizations WHERE org_shortname = ann_org_shortname) WHERE ann_org_shortname IS NOT NULL</step>
+    <step id="120" database="mysql">ALTER TABLE %PREFIX%_announcements DROP FOREIGN KEY %PREFIX%_FK_ANN_ORG</step>
+    <step id="130" database="mysql">ALTER TABLE %PREFIX%_announcements DROP INDEX %PREFIX%_FK_ANN_ORG</step>
+    <step id="140" database="postgresql">ALTER TABLE %PREFIX%_announcements DROP CONSTRAINT %PREFIX%_FK_ANN_ORG</step>
+    <step id="150" database="postgresql">DROP INDEX %PREFIX%_FK_ANN_ORG</step>
+    <step id="160">ALTER TABLE %PREFIX%_announcements DROP COLUMN ann_org_shortname</step>
+    <step id="170">ALTER TABLE %PREFIX%_announcements ADD CONSTRAINT %PREFIX%_FK_ANN_ORG FOREIGN KEY (ann_org_id) REFERENCES %PREFIX%_organizations (org_id) on delete restrict on update restrict</step>
     <step>stop</step>
 </update>

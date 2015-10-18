@@ -19,7 +19,7 @@
  *                      [0] => 3
  *                      [ann_id] => 3
  *                      [1] => DEMO
- *                      [ann_org_shortname] => DEMO
+ *                      [ann_org_id] => 1
  *                      [2] => 1
  *                      [ann_global] => 1
  *                      [3] => Willkommen im Demobereich
@@ -94,9 +94,9 @@ class ModuleAnnouncements extends Modules
 
         $sql = 'SELECT COUNT(1) as count
                   FROM '. TBL_ANNOUNCEMENTS. '
-                 WHERE (  ann_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname'). '\'
-                    OR (   ann_global   = 1
-                   AND ann_org_shortname IN ('.$gCurrentOrganization->getFamilySQL(true).') ))
+                 WHERE (  ann_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                       OR (   ann_global = 1
+                          AND ann_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                        '.$this->getConditions.'';
         $result = $gDb->query($sql);
         $row    = $gDb->fetch_array($result);
@@ -167,9 +167,9 @@ class ModuleAnnouncements extends Modules
         $sql = 'SELECT ann.*, '.$additionalFields.'
                   FROM '. TBL_ANNOUNCEMENTS. ' ann
                        '.$additionalTables.'
-                 WHERE (  ann_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname'). '\'
-                    OR (   ann_global   = 1
-                   AND ann_org_shortname IN ('.$gCurrentOrganization->getFamilySQL(true).') ))
+                 WHERE (  ann_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                       OR (   ann_global = 1
+                          AND ann_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                        '.$this->getConditions.'
                  ORDER BY ann_timestamp_create DESC';
 

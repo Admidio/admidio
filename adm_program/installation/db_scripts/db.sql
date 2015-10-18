@@ -50,7 +50,7 @@ drop table if exists %PREFIX%_ids cascade;
 create table %PREFIX%_announcements
 (
     ann_id                         integer       unsigned not null AUTO_INCREMENT,
-    ann_org_shortname              varchar(10)   not null,
+    ann_org_id                     integer       unsigned,
     ann_global                     boolean       not null default '0',
     ann_headline                   varchar(100)  not null,
     ann_description                text,
@@ -824,8 +824,8 @@ create unique index IDX_%PREFIX%_USR_LOGIN_NAME on %PREFIX%_users (usr_login_nam
 /*==============================================================*/
 /* Constraints                                                  */
 /*==============================================================*/
-alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_ORG foreign key (ann_org_shortname)
-      references %PREFIX%_organizations (org_shortname) on delete restrict on update restrict;
+alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_ORG foreign key (ann_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
 alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_USR_CREATE foreign key (ann_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_USR_CHANGE foreign key (ann_usr_id_change)

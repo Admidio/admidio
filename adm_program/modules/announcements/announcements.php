@@ -132,7 +132,7 @@ else
                         }
 
                         // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
-                        if($announcement->getValue('ann_org_shortname') == $gCurrentOrganization->getValue('org_shortname'))
+                        if($announcement->getValue('ann_org_id') == $gCurrentOrganization->getValue('org_id'))
                         {
                             $page->addHtml('
                             <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"

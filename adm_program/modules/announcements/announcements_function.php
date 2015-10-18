@@ -104,7 +104,7 @@ if($getMode == 1)
 elseif($getMode == 2)
 {
     // Ankuendigung loeschen, wenn diese zur aktuellen Orga gehoert
-    if($announcement->getValue('ann_org_shortname') == $gCurrentOrganization->getValue('org_shortname'))
+    if($announcement->getValue('ann_org_id') == $gCurrentOrganization->getValue('org_id'))
     {
         $announcement->delete();
 
