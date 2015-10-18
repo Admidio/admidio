@@ -217,7 +217,7 @@ class ModuleAnnouncements extends Modules
         $objDate = new DateTimeExtended($dateRangeStart, 'Y-m-d');
         if($objDate->isValid())
         {
-            $this->setParameter('dateStartFormatEnglish', substr($objDate->getDateTimeString(), 0, 10));
+            $this->setParameter('dateStartFormatEnglish', $objDate->format('Y-m-d'));
             $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
         }
         else
@@ -227,7 +227,7 @@ class ModuleAnnouncements extends Modules
 
             if($objDate->isValid())
             {
-                $this->setParameter('dateStartFormatEnglish', substr($objDate->getDateTimeString(), 0, 10));
+                $this->setParameter('dateStartFormatEnglish', $objDate->format('Y-m-d'));
                 $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
             }
             else
@@ -240,7 +240,7 @@ class ModuleAnnouncements extends Modules
         $objDate = new DateTimeExtended($dateRangeEnd, 'Y-m-d');
         if($objDate->isValid())
         {
-            $this->setParameter('dateEndFormatEnglish', substr($objDate->getDateTimeString(), 0, 10));
+            $this->setParameter('dateEndFormatEnglish', $objDate->format('Y-m-d'));
             $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));
         }
         else
@@ -250,7 +250,7 @@ class ModuleAnnouncements extends Modules
 
             if($objDate->isValid())
             {
-                $this->setParameter('dateEndFormatEnglish', substr($objDate->getDateTimeString(), 0, 10));
+                $this->setParameter('dateEndFormatEnglish', $objDate->format('Y-m-d'));
                 $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));
             }
             else

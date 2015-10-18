@@ -131,20 +131,6 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     // Check valid format of date and time input
     // ------------------------------------------------
 
-<<<<<<< HEAD
-    $startDateTime = new DateTimeExtended($_POST['date_from'].' '.$_POST['date_from_time'], $gPreferences['system_date'].' '.$gPreferences['system_time']);
-
-    if($startDateTime->isValid())
-    {
-        // Datum & Uhrzeit formatiert zurueckschreiben
-        $date->setValue('dat_begin', $startDateTime->getDateTimeString());
-    }
-    else
-    {
-        // Fehler: pruefen, ob Datum oder Uhrzeit falsches Format hat
-        $startDateTime = new DateTimeExtended($_POST['date_from'], $gPreferences['system_date']);
-        if($startDateTime->isValid())
-=======
     $startDateTime = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_from'].' '.$_POST['date_from_time']);
     if(!$startDateTime)
     {
@@ -152,7 +138,6 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         $startDateTime = DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_from']);
 
         if(!$startDateTime)
->>>>>>> v3.0
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
         }
@@ -179,25 +164,12 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
 
     $endDateTime = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_to'].' '.$_POST['date_to_time']);
 
-<<<<<<< HEAD
-    if($endDateTime->isValid())
-    {
-        // Datum & Uhrzeit formatiert zurueckschreiben
-        $date->setValue('dat_end', $endDateTime->getDateTimeString());
-    }
-    else
-    {
-        // Fehler: pruefen, ob Datum oder Uhrzeit falsches Format hat
-        $endDateTime = new DateTimeExtended($_POST['date_to'], $gPreferences['system_date']);
-        if($endDateTime->isValid())
-=======
     if(!$endDateTime)
     {
         // Error: now check if date format or time format was wrong and show message
         $endDateTime = DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_to']);
 
         if(!$endDateTime)
->>>>>>> v3.0
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
         }
@@ -213,11 +185,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     }
 
     // DateTo should be greater than DateFrom (Timestamp must be less)
-<<<<<<< HEAD
-    if($startDateTime < $endDateTime)
-=======
     if($startDateTime > $endDateTime)
->>>>>>> v3.0
     {
         $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
     }
@@ -261,8 +229,8 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         {
             $sql = 'SELECT COUNT(dat_id) AS is_reserved
                       FROM '.TBL_DATES.'
-                     WHERE dat_begin  <= \''.$endDateTime->getDateTimeString().'\'
-                       AND dat_end    >= \''.$startDateTime->getDateTimeString().'\'
+                     WHERE dat_begin  <= \''.$endDateTime->format('Y-m-d H:i:s').'\'
+                       AND dat_end    >= \''.$startDateTime->format('Y-m-d H:i:s').'\'
                        AND dat_room_id = '.$_POST['dat_room_id'].'
                        AND dat_id     <> '.$getDateId;
             $result = $gDb->query($sql);
