@@ -17,5 +17,13 @@
     <step id="150" database="postgresql">DROP INDEX %PREFIX%_FK_ANN_ORG</step>
     <step id="160">ALTER TABLE %PREFIX%_announcements DROP COLUMN ann_org_shortname</step>
     <step id="170">ALTER TABLE %PREFIX%_announcements ADD CONSTRAINT %PREFIX%_FK_ANN_ORG FOREIGN KEY (ann_org_id) REFERENCES %PREFIX%_organizations (org_id) on delete restrict on update restrict</step>
+    <step id="180">ALTER TABLE %PREFIX%_photos ADD COLUMN pho_org_id integer unsigned not null</step>
+    <step id="190">UPDATE %PREFIX%_photos SET pho_org_id = (SELECT org_id FROM %PREFIX%_organizations WHERE org_shortname = pho_org_shortname) WHERE pho_org_shortname IS NOT NULL</step>
+    <step id="200" database="mysql">ALTER TABLE %PREFIX%_photos DROP FOREIGN KEY %PREFIX%_FK_PHO_ORG</step>
+    <step id="210" database="mysql">ALTER TABLE %PREFIX%_photos DROP INDEX %PREFIX%_FK_PHO_ORG</step>
+    <step id="220" database="postgresql">ALTER TABLE %PREFIX%_photos DROP CONSTRAINT %PREFIX%_FK_PHO_ORG</step>
+    <step id="230" database="postgresql">DROP INDEX %PREFIX%_FK_PHO_ORG</step>
+    <step id="240">ALTER TABLE %PREFIX%_photos DROP COLUMN pho_org_shortname</step>
+    <step id="250">ALTER TABLE %PREFIX%_photos ADD CONSTRAINT %PREFIX%_FK_PHO_ORG FOREIGN KEY (pho_org_id) REFERENCES %PREFIX%_organizations (org_id) on delete restrict on update restrict</step>
     <step>stop</step>
 </update>

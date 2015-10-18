@@ -56,7 +56,7 @@ if ($getMode == 'change')
     $photoAlbum->readDataById($getPhotoId);
 
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
-    if($photoAlbum->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
+    if($photoAlbum->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -93,7 +93,7 @@ function subfolder($parent_id, $vorschub, $photoAlbum, $pho_id)
               FROM '. TBL_PHOTOS. '
              WHERE pho_id <> '. $photoAlbum->getValue('pho_id').
                    $sqlConditionParentId.'
-               AND pho_org_shortname LIKE \''.$gCurrentOrganization->getValue('org_shortname').'\'';
+               AND pho_org_id = '.$gCurrentOrganization->getValue('org_id');
     $result_child = $gDb->query($sql);
 
     while($adm_photo_child = $gDb->fetch_array($result_child))

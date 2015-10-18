@@ -67,7 +67,7 @@ else
 $sql = 'SELECT pho.*, '.$additionalFields.'
           FROM '. TBL_PHOTOS. ' pho
                '.$additionalTables.'
-         WHERE (   pho_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname'). '\'
+         WHERE (   pho_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                AND pho_locked = 0)
          ORDER BY pho_timestamp_create DESC
          LIMIT 10';

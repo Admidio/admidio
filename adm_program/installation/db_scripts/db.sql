@@ -528,8 +528,8 @@ create unique index ak_%PREFIX%_shortname on %PREFIX%_organizations (org_shortna
 create table %PREFIX%_photos
 (
     pho_id                         integer       unsigned not null AUTO_INCREMENT,
-    pho_org_shortname              varchar(10)   not null,
-    pho_quantity                   integer        unsigned not null default 0,
+    pho_org_id                     integer       unsigned not null,
+    pho_quantity                   integer       unsigned not null default 0,
     pho_name                       varchar(50)   not null,
     pho_begin                      date          not null,
     pho_end                        date          not null,
@@ -932,8 +932,8 @@ alter table %PREFIX%_organizations add constraint %PREFIX%_FK_ORG_ORG_PARENT for
 
 alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_PHO_PARENT foreign key (pho_pho_id_parent)
       references %PREFIX%_photos (pho_id) on delete set null on update restrict;
-alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_ORG foreign key (pho_org_shortname)
-      references %PREFIX%_organizations (org_shortname) on delete restrict on update restrict;
+alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_ORG foreign key (pho_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
 alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_USR_CREATE foreign key (pho_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_USR_CHANGE foreign key (pho_usr_id_change)
