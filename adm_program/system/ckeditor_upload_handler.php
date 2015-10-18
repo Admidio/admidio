@@ -35,7 +35,8 @@ try
     }
 
     // if necessary create the module folders in adm_my_files
-    switch ($getCKEditor) {
+    switch ($getCKEditor)
+    {
         case 'ann_description':
             $folderName = 'announcements';
             break;
