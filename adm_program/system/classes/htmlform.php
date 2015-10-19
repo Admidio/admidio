@@ -749,7 +749,7 @@ class HtmlForm extends HtmlFormBasic
         if($optionsAll['type'] == 'datetime')
         {
             // first try to split datetime to a date and a time value
-            $datetime = new DateTimeExtended($value, $gPreferences['system_date'].' '.$gPreferences['system_time']);
+            $datetime = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $value);
             $dateValue = $datetime->format($gPreferences['system_date']);
             $timeValue = $datetime->format($gPreferences['system_time']);
 
