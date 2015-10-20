@@ -117,7 +117,6 @@ if(file_exists('../../adm_my_files/config.php'))
     {
         $_SESSION['create_config_file'] = false;
 
-        // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
         // save database parameters of config.php in session variables
         $_SESSION['db_type']     = $gDbType;
         $_SESSION['db_server']   = $g_adm_srv;
