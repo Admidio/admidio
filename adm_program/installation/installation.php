@@ -540,7 +540,7 @@ elseif($getMode == 8) // Start installation
         || $g_adm_usr     != $_SESSION['db_user']
         || $g_adm_pw      != $_SESSION['db_password']
         || $g_adm_db      != $_SESSION['db_database']
-        || $g_organization== $_SESSION['orga_shortname'])
+        || $g_organization!= $_SESSION['orga_shortname'])
         {
             showNotice($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6',
                        $gL10n->get('SYS_BACK'), 'layout/back.png');
