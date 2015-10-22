@@ -59,7 +59,6 @@
         <text id="ECA_LAYOUT" development="new" translation="todo">Layout</text>
         <text id="ECA_SCALE_THUMBNAILS_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige skaliert werden soll. (Standard: 250 Pixel)</text>
         <text id="ECA_MAX_PHOTO_SIZE_DESC" development="new" translation="todo">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild in der Grußkarte haben darf. (Standard: 400 x 250 Pixel)</text>
-        <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="todo">Es wurde bereits eine Konfigurationsdatei gefunden. Eine erneute Installation ist nicht möglich.\n\nFalls deine vorherige Installation unterbrochen wurde, kannst du diese hier fortsetzen.</text>
         <text id="INS_CONTINUE_INSTALLATION" development="new" translation="todo">Installation fortsetzen</text>
         <text id="INS_DELETE_CONFIG_FILE" development="new" translation="todo">Im Hauptverzeichnis von Admidio %VAR1_BOLD% existiert noch eine Datei config.php. Diese wurde bereits in den Ordner adm_my_files verschoben. Lösche bitte diese Datei im Hauptverzeichnis.</text>
         <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="changed" translation="todo">Konfigurationsdatei herunterladen</text>
