@@ -15,7 +15,7 @@
  * that condition and creates a valid SQL statement which can be used in
  * another SQL statement to select data with these conditions.
  * This class uses AdmExceptions when an error occurred. Make sure you catch these
- * exeptions when using the class.
+ * exceptions when using the class.
  * @par Examples
  * @code // create a valid SQL condition out of the special syntax
  * $parser = new ConditionParser;
@@ -101,7 +101,7 @@ class ConditionParser
     /**
      * Replace different user conditions with predefined chars that
      * represents a special condition e.g. @b ! represents @b != and @b <>
-     * @param  string $sourceCondition The user condition string
+     * @param string $sourceCondition The user condition string
      * @return string String with the predefined chars for conditions
      */
     public function makeStandardCondition($sourceCondition)
@@ -153,13 +153,13 @@ class ConditionParser
 
     /**
      * Creates from a user defined condition a valid SQL condition
-     * @param  string       $sourceCondition The user condition string
-     * @param  string       $columnName      The name of the database column for which the condition should be created
-     * @param  string       $columnType      The type of the column. Valid types are @b string, @b int, @b date and @b checkbox
-     * @param  string       $fieldName       The name of the profile field. This is used for error output to the end user
+     * @param string $sourceCondition The user condition string
+     * @param string $columnName      The name of the database column for which the condition should be created
+     * @param string $columnType      The type of the column. Valid types are @b string, @b int, @b date and @b checkbox
+     * @param string $fieldName       The name of the profile field. This is used for error output to the end user
      * @return string       Returns a valid SQL string with the condition for that column
      * @throws AdmException LST_NOT_VALID_DATE_FORMAT
-     *                                      LST_NOT_NUMERIC
+     *                      LST_NOT_NUMERIC
      */
     public function makeSqlStatement($sourceCondition, $columnName, $columnType, $fieldName)
     {
@@ -466,7 +466,7 @@ class ConditionParser
      * Stores an sql statement that checks if a record in a table does exists or not exists.
      * This must bei a full subselect that starts with SELECT. The statement is used if
      * a condition with EMPTY or NOT EMPTY is used.
-     * @param $sqlStatement String with the full subselect
+     * @param string $sqlStatement String with the full subselect
      * @par Examples
      * @code $parser->setNotExistsStatement('SELECT 1 FROM adm_user_data WHERE usd_usr_id = 1 AND usd_usf_id = 9'); @endcode
      */

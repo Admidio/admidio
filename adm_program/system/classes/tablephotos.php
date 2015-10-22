@@ -191,7 +191,7 @@ class TablePhotos extends TableAccess
 
         if($this->new_record)
         {
-            $this->setValue('pho_org_shortname', $gCurrentOrganization->getValue('org_shortname'));
+            $this->setValue('pho_org_id', $gCurrentOrganization->getValue('org_id'));
         }
 
         parent::save($updateFingerPrint);

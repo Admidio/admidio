@@ -128,31 +128,31 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     }
 
     // ------------------------------------------------
-    // Datum und Uhrzeit auf Gueltigkeit pruefen
+    // Check valid format of date and time input
     // ------------------------------------------------
 
-    $startDateTime = new DateTimeExtended($_POST['date_from'].' '.$_POST['date_from_time'], $gPreferences['system_date'].' '.$gPreferences['system_time']);
+    $startDateTime = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_from'].' '.$_POST['date_from_time']);
+    if(!$startDateTime)
+    {
+        // Error: now check if date format or time format was wrong and show message
+        $startDateTime = DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_from']);
 
-    if($startDateTime->isValid())
-    {
-        // Datum & Uhrzeit formatiert zurueckschreiben
-        $date->setValue('dat_begin', $startDateTime->getDateTimeString());
-    }
-    else
-    {
-        // Fehler: pruefen, ob Datum oder Uhrzeit falsches Format hat
-        $startDateTime = new DateTimeExtended($_POST['date_from'], $gPreferences['system_date']);
-        if($startDateTime->isValid())
+        if(!$startDateTime)
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
         }
         else
         {
-            $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START'), $gPreferences['system_time']));
+        $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START'), $gPreferences['system_time']));
         }
     }
+    else
+    {
+        // now write date and time with database format to date object
+        $date->setValue('dat_begin', $startDateTime->format('Y-m-d H:i:s'));
+    }
 
-    // wenn Datum-bis nicht gefüllt ist, dann mit Datum-von nehmen
+    // if date-to is not filled then take date-from
     if(strlen($_POST['date_to'])   == 0)
     {
         $_POST['date_to'] = $_POST['date_from'];
@@ -162,18 +162,14 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         $_POST['date_to_time'] = $_POST['date_from_time'];
     }
 
-    $endDateTime = new DateTimeExtended($_POST['date_to'].' '.$_POST['date_to_time'], $gPreferences['system_date'].' '.$gPreferences['system_time']);
+    $endDateTime = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_to'].' '.$_POST['date_to_time']);
 
-    if($endDateTime->isValid())
+    if(!$endDateTime)
     {
-        // Datum & Uhrzeit formatiert zurueckschreiben
-        $date->setValue('dat_end', $endDateTime->getDateTimeString());
-    }
-    else
-    {
-        // Fehler: pruefen, ob Datum oder Uhrzeit falsches Format hat
-        $endDateTime = new DateTimeExtended($_POST['date_to'], $gPreferences['system_date']);
-        if($endDateTime->isValid())
+        // Error: now check if date format or time format was wrong and show message
+        $endDateTime = DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_to']);
+
+        if(!$endDateTime)
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
         }
@@ -182,9 +178,14 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
             $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END'), $gPreferences['system_time']));
         }
     }
+    else
+    {
+        // now write date and time with database format to date object
+        $date->setValue('dat_end', $endDateTime->format('Y-m-d H:i:s'));
+    }
 
     // DateTo should be greater than DateFrom (Timestamp must be less)
-    if($startDateTime < $endDateTime)
+    if($startDateTime > $endDateTime)
     {
         $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
     }
@@ -228,8 +229,8 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         {
             $sql = 'SELECT COUNT(dat_id) AS is_reserved
                       FROM '.TBL_DATES.'
-                     WHERE dat_begin  <= \''.$endDateTime->getDateTimeString().'\'
-                       AND dat_end    >= \''.$startDateTime->getDateTimeString().'\'
+                     WHERE dat_begin  <= \''.$endDateTime->format('Y-m-d H:i:s').'\'
+                       AND dat_end    >= \''.$startDateTime->format('Y-m-d H:i:s').'\'
                        AND dat_room_id = '.$_POST['dat_room_id'].'
                        AND dat_id     <> '.$getDateId;
             $result = $gDb->query($sql);
@@ -409,7 +410,16 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
         // if event exists and you could register to this event then we must check
         // if the data of the role must be changed
         $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
-        $roleName = $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$date->getValue('dat_id');
+
+        // only change name of role if no custom name was set
+        if(strpos($role->getValue('rol_name'), $gL10n->get('DAT_DATE')) !== false)
+        {
+            $roleName = $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$date->getValue('dat_id');
+        }
+        else
+        {
+            $roleName = $role->getValue('rol_name');
+        }
 
         if($role->getValue('rol_max_members') != $date->getValue('dat_max_members')
         || $role->getValue('role_name' != $roleName))

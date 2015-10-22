@@ -39,13 +39,13 @@ class TableAnnouncement extends TableAccess
         global $gCurrentOrganization;
 
         // Ankuendigung der eigenen Orga darf bearbeitet werden
-        if($this->getValue('ann_org_shortname') === $gCurrentOrganization->getValue('org_shortname'))
+        if($this->getValue('ann_org_id') === $gCurrentOrganization->getValue('org_id'))
         {
             return true;
         }
         // Ankuendigung von Kinder-Orgas darf bearbeitet werden, wenn diese als global definiert wurden
         elseif($this->getValue('ann_global') == true
-        && $gCurrentOrganization->isChildOrganization($this->getValue('ann_org_shortname')))
+        && $gCurrentOrganization->isChildOrganization($this->getValue('ann_org_id')))
         {
             return true;
         }
@@ -101,7 +101,7 @@ class TableAnnouncement extends TableAccess
 
         if($this->new_record)
         {
-            $this->setValue('ann_org_shortname', $gCurrentOrganization->getValue('org_shortname'));
+            $this->setValue('ann_org_id', $gCurrentOrganization->getValue('org_id'));
         }
 
         parent::save($updateFingerPrint);

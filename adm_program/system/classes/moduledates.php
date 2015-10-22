@@ -166,7 +166,7 @@ class ModuleDates extends Modules
 
             if($objDate->isValid())
             {
-                return substr($objDate->getDateTimeString(), 0, 10);
+                return $objDate->format('Y-m-d');
             }
             else
             {

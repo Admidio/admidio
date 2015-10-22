@@ -27,7 +27,7 @@
  */
 class ComponentUpdate extends Component
 {
-    private $updateFinished;        ///< Flag that will store if the update prozess of this version was successfully finished
+    private $updateFinished;        ///< Flag that will store if the update process of this version was successfully finished
     private $xmlObject;             ///< The SimpleXML object with all the update steps
     private $currentVersionArray;   ///< This is the version the component has actually before update. Each array element contains one part of the version.
     private $targetVersionArray;    ///< This is the version that is stored in the files of the component. Each array element contains one part of the version.
@@ -74,7 +74,7 @@ class ComponentUpdate extends Component
         {
             // if the sql statement is only for a special database and you do
             // not have this database then don't execute this statement
-            if(isset($xmlNode['database']) && $xmlNode['database'] !== $gDbType)
+            if(isset($xmlNode['database']) && $xmlNode['database'] != $gDbType)
             {
                 $executeSql = false;
             }

@@ -731,7 +731,6 @@ class HtmlForm extends HtmlFormBasic
         // add a nice modern datepicker to date inputs
         if($optionsAll['type'] === 'date' || $optionsAll['type'] === 'datetime' || $optionsAll['type'] === 'birthday')
         {
-            $attributes['data-provide'] = 'datepicker';
             $attributes['placeholder']  = DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']);
             $javascriptCode             = '';
             $datepickerOptions          = '';
@@ -739,23 +738,29 @@ class HtmlForm extends HtmlFormBasic
             // if you have a birthday field than start with the years selection
             if($optionsAll['type'] == 'birthday')
             {
+                $attributes['data-provide'] = 'datepicker-birthday';
                 $datepickerOptions = ' startView: 2, ';
             }
             else
             {
+                $attributes['data-provide'] = 'datepicker';
                 $datepickerOptions = ' todayBtn: "linked", ';
             }
 
-            if($this->datepickerInitialized === false)
+            if($this->datepickerInitialized === false || $optionsAll['type'] == 'birthday')
             {
                 $javascriptCode = '
-                    $("input[data-provide=\'datepicker\']").datepicker({
+                    $("input[data-provide=\''.$attributes['data-provide'].'\']").datepicker({
                         language: "'.$gL10n->getLanguageIsoCode().'",
                         format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
                         '.$datepickerOptions.'
                         todayHighlight: "true"
                     });';
-                $this->datepickerInitialized = true;
+
+                if($optionsAll['type'] !== 'birthday')
+                {
+                    $this->datepickerInitialized = true;
+                }
             }
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string

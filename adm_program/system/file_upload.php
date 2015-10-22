@@ -52,7 +52,7 @@ if($getModule === 'photos')
     }
 
     // check if album belongs to current organization
-    if($photoAlbum->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
+    if($photoAlbum->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }

@@ -104,6 +104,7 @@ if(file_exists('../../adm_my_files/config.php'))
     // now check if a valid installation exists.
     $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
     $pdoStatement = $db->query($sql, false);
+
     // Check the query for results in case installation is runnnig at this time and the config file is already created but database is not installed so far
     if($pdoStatement !== false && $pdoStatement->rowCount() > 0)
     {
