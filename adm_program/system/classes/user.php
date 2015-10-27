@@ -769,8 +769,17 @@ class User extends TableUsers
             {
                 if(count($this->rolesMembershipLeader) > 0)
                 {
-                    // check if current user is a group leader of a role where $user is only a member and not a leader
-                    $rolesMembership = $user->getRoleMembershipsNoLeader();
+                    // leaders are not allowed to edit profiles of other leaders but to edit their own profile
+                    if($user->getValue('usr_id') == $this->getValue('usr_id'))
+                    {
+                        // check if current user is a group leader of a role where $user is only a member
+                        $rolesMembership = $user->getRoleMemberships();
+                    }
+                    else
+                    {
+                        // check if current user is a group leader of a role where $user is only a member and not a leader
+                        $rolesMembership = $user->getRoleMembershipsNoLeader();
+                    }
 
                     foreach($this->rolesMembershipLeader as $roleId => $leaderRights)
                     {

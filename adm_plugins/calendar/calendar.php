@@ -2,7 +2,7 @@
 /******************************************************************************
  * Calendar
  *
- * Version 2.0.2
+ * Version 2.0.3
  *
  * Plugin shows the actual month with all the events and birthdays that are
  * coming. This plugin can be used to show the Admidio events and birthdays in a
@@ -159,14 +159,14 @@ elseif(isset($_SESSION['plugin_calendar_last_month']))
 }
 else
 {
-    // Aktuellen Monat anzeigen
+    // show current month
     $currentMonth = date('m');
     $currentYear = date('Y');
     $today = date('d');
 }
 
 $lastDayCurrentMonth = date('t', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
-$dateMonthStart = $currentYear.'-'.$currentMonth.'-01 00:00:00';
+$dateMonthStart = $currentYear.'-'.$currentMonth.'-01 00:00:01';    // add 1 second to ignore all day events that end at 00:00:00
 $dateMonthEnd   = $currentYear.'-'.$currentMonth.'-'.$lastDayCurrentMonth.' 23:59:59';
 $eventsMonthDayArray    = array();
 $birthdaysMonthDayArray = array();
@@ -178,7 +178,7 @@ if(isset($page) && is_object($page))
     $page->addCssFile($g_root_path.'/adm_plugins/calendar/calendar.css');
 }
 
-// Abfrage der Termine
+// query of all events
 if($plg_ter_aktiv == 1)
 {
     // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
@@ -234,7 +234,7 @@ if($plg_ter_aktiv == 1)
         $startDate = new DateTime($row['dat_begin']);
         $endDate   = new DateTime($row['dat_end']);
 
-        // Name der Standardkalender umsetzen, sonst Name lt. Datenbank
+        // set custom name of plugin for calendar or use default Admidio name
         if($plg_kal_cat_show == 1)
         {
             if(substr($row['cat_name'], 3, 1)=='_')
@@ -307,17 +307,28 @@ if($plg_ter_aktiv == 1)
     }
 }
 
-// Abfrage der Geburtstage
+// query of all birthdays
 if($plg_geb_aktiv == 1)
 {
-    // Datenbankabfrage nach Geburtstagen im Monat
+    if($gDbType === 'postgresql')
+    {
+        $sqlMonthOfBirthday = ' date_part(\'month\', timestamp birthday.usd_value) ';
+        $sqlDayOfBirthday   = ' date_part(\'day\', timestamp birthday.usd_value) ';
+    }
+    else
+    {
+        $sqlMonthOfBirthday = ' MONTH(birthday.usd_value) ';
+        $sqlDayOfBirthday   = ' DayOfMonth(birthday.usd_value) ';
+    }
+
+    // database query for all birthdays of this month
     $sql = 'SELECT DISTINCT
                    usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name,
                    birthday.usd_value AS birthday
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
               JOIN '. TBL_USER_DATA. ' AS birthday ON birthday.usd_usr_id = usr_id
                AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
-               AND MONTH(birthday.usd_value) = '.$currentMonth.'
+               AND '.$sqlMonthOfBirthday.' = '.$currentMonth.'
               LEFT JOIN '. TBL_USER_DATA. ' AS last_name ON last_name.usd_usr_id = usr_id
                AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
               LEFT JOIN '. TBL_USER_DATA. ' AS first_name ON first_name.usd_usr_id = usr_id
@@ -329,7 +340,8 @@ if($plg_geb_aktiv == 1)
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end    > \''.DATE_NOW.'\'
                AND usr_valid  = 1
-             ORDER BY Month(birthday.usd_value) ASC, DayOfMonth(birthday.usd_value) ASC, last_name, first_name';
+             ORDER BY '.$sqlMonthOfBirthday.' ASC, '.$sqlMonthOfBirthday.' ASC, last_name, first_name';
+
     $birthdayStatement = $gDb->query($sql);
 
     while($row = $birthdayStatement->fetch())
@@ -655,8 +667,8 @@ while($currentDay <= $lastDayCurrentMonth)
 
     $currentDay++;
 }
-echo '</table>
-';
+echo '</table>';
+
 if($currentMonth.$currentYear != date('mY'))
 {
     echo '<div id="plgCalendarReset"><a href="#" onclick="$.ajax({
