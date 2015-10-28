@@ -638,11 +638,11 @@ class User extends TableUsers
         $vcard .= (string) "VERSION:2.1\r\n";
         if($allowedToEditProfile || ($allowedToEditProfile == false && $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_hidden') == 0))
         {
-            $vcard .= (string) "N;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue('LAST_NAME')). ";". utf8_decode($this->getValue('FIRST_NAME')) . ";;;\r\n";
+            $vcard .= (string) "N;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue('LAST_NAME', 'database')). ";". utf8_decode($this->getValue('FIRST_NAME', 'database')) . ";;;\r\n";
         }
         if($allowedToEditProfile || ($allowedToEditProfile == false && $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_hidden') == 0))
         {
-            $vcard .= (string) "FN;CHARSET=ISO-8859-1:". utf8_decode($this->getValue('FIRST_NAME')) . " ". utf8_decode($this->getValue('LAST_NAME')) . "\r\n";
+            $vcard .= (string) "FN;CHARSET=ISO-8859-1:". utf8_decode($this->getValue('FIRST_NAME', 'database')) . " ". utf8_decode($this->getValue('LAST_NAME', 'database')) . "\r\n";
         }
         if (strlen($this->getValue('usr_login_name')) > 0)
         {
@@ -666,7 +666,7 @@ class User extends TableUsers
         if($allowedToEditProfile || ($allowedToEditProfile == false && $this->mProfileFieldsData->getProperty('ADDRESS', 'usf_hidden') == 0 && $this->mProfileFieldsData->getProperty('CITY', 'usf_hidden') == 0
         && $this->mProfileFieldsData->getProperty('POSTCODE', 'usf_hidden') == 0  && $this->mProfileFieldsData->getProperty('COUNTRY', 'usf_hidden') == 0))
         {
-            $vcard .= (string) "ADR;CHARSET=ISO-8859-1;HOME:;;" . utf8_decode($this->getValue('ADDRESS')). ";" . utf8_decode($this->getValue('CITY')). ";;" . utf8_decode($this->getValue('POSTCODE')). ";" . utf8_decode($this->getValue('COUNTRY')). "\r\n";
+            $vcard .= (string) "ADR;CHARSET=ISO-8859-1;HOME:;;" . utf8_decode($this->getValue('ADDRESS', 'database')). ";" . utf8_decode($this->getValue('CITY', 'database')). ";;" . utf8_decode($this->getValue('POSTCODE', 'database')). ";" . utf8_decode($this->getValue('COUNTRY', 'database')). "\r\n";
         }
         if (strlen($this->getValue('WEBSITE')) > 0
         && ($allowedToEditProfile || ($allowedToEditProfile == false && $this->mProfileFieldsData->getProperty('WEBSITE', 'usf_hidden') == 0)))
