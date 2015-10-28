@@ -18,7 +18,6 @@
 * Handle MS Exchange returning an invalid empty AUTH-type list in EHLO
 * Don't set name or filename properties on MIME parts that don't have one
 
->>>>>>> v3.0
 ## Version 5.2.10 (May 4th 2015)
 * Add custom header getter
 * Use `application/javascript` for .js attachments

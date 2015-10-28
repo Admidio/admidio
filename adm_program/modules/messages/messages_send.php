@@ -100,7 +100,7 @@ if($gPreferences['enable_pm_module'] != 1 && $getMsgType === 'PM')
 // if user is logged in then show sender name and email
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
-    $postName = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
+    $postName = $gCurrentUser->getValue('FIRST_NAME', 'database'). ' '. $gCurrentUser->getValue('LAST_NAME', 'database');
     $postFrom = $gCurrentUser->getValue('EMAIL');
 }
 
@@ -248,7 +248,7 @@ if ($getMsgType === 'EMAIL')
                     $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
                 }
 
-                $receiver[] = array($user->getValue('EMAIL'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
+                $receiver[] = array($user->getValue('EMAIL'), $user->getValue('FIRST_NAME', 'database').' '.$user->getValue('LAST_NAME', 'database'));
             }
             $ReceiverString .= ' | '.$value;
         }
@@ -270,9 +270,9 @@ if ($getMsgType === 'EMAIL')
     }
 
     // check sending attributes for user, to be sure that they are correct
-    if ($gValidLogin
-    && ($postFrom !== $gCurrentUser->getValue('EMAIL')
-       || $postName !== $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
+    if ($gValidLogin 
+    && ($postFrom !== $gCurrentUser->getValue('EMAIL') 
+       || $postName !== $gCurrentUser->getValue('FIRST_NAME', 'database').' '.$gCurrentUser->getValue('LAST_NAME', 'database')))
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
@@ -398,7 +398,7 @@ if ($getMsgType === 'EMAIL')
             else
             {
                 $user = new User($gDb, $gProfileFields, $value);
-                $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                $ReceiverName .= '; ' . $user->getValue('FIRST_NAME', 'database').' '.$user->getValue('LAST_NAME', 'database');
             }
         }
     }
@@ -411,7 +411,7 @@ if ($getMsgType === 'EMAIL')
         else
         {
             $user = new User($gDb, $gProfileFields, $ReceiverString);
-            $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+            $ReceiverName .= '; ' . $user->getValue('FIRST_NAME', 'database').' '.$user->getValue('LAST_NAME', 'database');
         }
     }
     $ReceiverName = substr($ReceiverName, 2);

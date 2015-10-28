@@ -93,7 +93,7 @@ class UserRegistration extends User
         {
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
-            $sysmail->addRecipient($this->getValue('EMAIL'), $this->getValue('FIRST_NAME').' '.$this->getValue('LAST_NAME'));
+            $sysmail->addRecipient($this->getValue('EMAIL'), $this->getValue('FIRST_NAME', 'database').' '.$this->getValue('LAST_NAME', 'database'));
             $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $this);
         }
 

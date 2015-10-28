@@ -40,18 +40,18 @@ $new_user = new User($gDb, $gProfileFields, $getNewUserId);
 if($gPreferences['system_search_similar'] == 1 && $gDbType === 'mysql')
 {
     $sql_similar_name =
-    '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $new_user->getValue('LAST_NAME').'\'), 1, 4)
-        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $new_user->getValue('FIRST_NAME').'\'), 1, 4) )
-     OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $new_user->getValue('FIRST_NAME').'\'), 1, 4)
-        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $new_user->getValue('LAST_NAME').'\'), 1, 4) ) )';
+    '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($new_user->getValue('LAST_NAME', 'database')).'\'), 1, 4)
+        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($new_user->getValue('FIRST_NAME', 'database')).'\'), 1, 4) )
+     OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($new_user->getValue('FIRST_NAME', 'database')).'\'), 1, 4)
+        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($new_user->getValue('LAST_NAME', 'database')).'\'), 1, 4) ) )';
 }
 else
 {
     $sql_similar_name =
-    '(  (   last_name.usd_value  LIKE \''. $new_user->getValue('LAST_NAME').'\'
-        AND first_name.usd_value LIKE \''. $new_user->getValue('FIRST_NAME').'\')
-     OR (   last_name.usd_value  LIKE \''. $new_user->getValue('FIRST_NAME').'\'
-        AND first_name.usd_value LIKE \''. $new_user->getValue('LAST_NAME').'\') )';
+    '(  (   last_name.usd_value  LIKE \''. $gDb->escapeString($new_user->getValue('LAST_NAME', 'database')).'\'
+        AND first_name.usd_value LIKE \''. $gDb->escapeString($new_user->getValue('FIRST_NAME', 'database')).'\')
+     OR (   last_name.usd_value  LIKE \''. $gDb->escapeString($new_user->getValue('FIRST_NAME', 'database')).'\'
+        AND first_name.usd_value LIKE \''. $gDb->escapeString($new_user->getValue('LAST_NAME', 'database')).'\') )';
 }
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben

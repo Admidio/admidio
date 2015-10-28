@@ -300,7 +300,7 @@ $page->addHtml('
                         $text = new TableText($gDb);
                         $form = new HtmlForm('system_notification_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=system_notification', $page, array('class' => 'form-preferences'));
                         $form->addCheckbox('enable_system_mails', $gL10n->get('ORG_ACTIVATE_SYSTEM_MAILS'), $form_values['enable_system_mails'], array('helpTextIdInline' => 'ORG_ACTIVATE_SYSTEM_MAILS_DESC'));
-                        $form->addInput('email_administrator', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $form_values['email_administrator'], array('type' => 'email', 'maxLength' => 50, 'helpTextIdInline' => array('ORG_SYSTEM_MAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST'])));
+                        $form->addInput('email_administrator', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $form_values['email_administrator'], array('type' => 'email', 'maxLength' => 50, 'helpTextIdInline' => 'ORG_SYSTEM_MAIL_ADDRESS_DESC'));
                         $form->addCheckbox('enable_email_notification', $gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES'), $form_values['enable_email_notification'], array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', '<i>'.$gPreferences['email_administrator'].'</i>')));
                         $form->addCustomContent($gL10n->get('SYS_SYSTEM_MAILS'),
                             '<p>'.$gL10n->get('ORG_SYSTEM_MAIL_TEXTS_DESC').':</p>
