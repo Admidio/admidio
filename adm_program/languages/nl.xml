@@ -86,7 +86,7 @@
         <text id="ORG_SHOW_ALL_USERS" development="new" translation="edited">Toon alle gebruikers</text>
         <text id="ORG_SHOW_ALL_USERS_DESC" development="new" translation="edited">Indien geactiveerd, zullen naast de actieve leden van de huidige organisatie ook de voormalige leden en leden van andere organisaties getoond worden. Anders worden alleen leden van de huidige organisatie weergegeven. Tijdens het aanmaken van nieuwe gebruikers of bij het toewijzen van nieuwe registraties, zullen alle organisaties gecontroleerd worden op bestaande gebruikers.</text>
         <text id="ORG_SYSTEM_MAIL_ADDRESS" development="changed" translation="edited">E-mail adres</text>
-        <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="changed" translation="edited">Dit veld dient een e-mailadres te bevatten van een administrator daar het gebruikt zal worden als afzender van de systeem meldingen, vb. voor bevestiging van registratie. (Standaard: webmaster@%VAR1%)</text>
+        <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="changed" translation="edited">Dit veld dient een e-mailadres te bevatten van een administrator daar het gebruikt zal worden als afzender van de systeem meldingen, vb. voor bevestiging van registratie.</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="changed" translation="edited">Meldingen van nieuwe inzendingen</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="changed" translation="edited">Hier kunnen systeem waarschuwingen worden ingeschakeld voor nieuwe vermeldingen in de modules. Het wordt gebruikt als een controlerende functie binnen Admidio. De beheerder heeft de mogelijkheid om te worden geïnformeerd over nieuwe vermeldingen in de modules via e-mail (alleen nieuwe items worden in aanmerking genomen). Een systeem waarschuwing zal worden verstuurd naar het e-mailadres %VAR1%. (Standaard: Nee)</text>
         <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="changed" translation="edited">Hier kunnen alle systeem berichten aangepast worden. De berichten zijn onderverdeeld in 2 stukken (onderwerp en inhoud) en worden geïndentificeerd bij #subject# en #content#. Deze worden gevolgd door de inhoud van deze velden.\n\nDe volgende wildcards kunnen worden gebruikt in elke e-mail. Zij zullen worden vervangen door de desbetreffende inhoud bij het uitvoeren</text>
@@ -724,7 +724,7 @@
         <text id="ORG_NO_FIELD_CREATED" development="new" translation="edited">Er zijn nog geen specifieke velden voor deze organistaie aangemaakt!</text>
         <text id="ORG_NOTIFY_WEBMASTER" development="new" translation="edited">Beheerder informeren over nieuwe registraties</text>
         <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="edited">Aantal items per pagina</text>
-        <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Bepaal het aantal die per pagina getoond wordt. Er ontstaat pagina-nummering wanneer er meer geplaatst wordt. Print voorbeeld en export functie worden niet beinvloed. Als aantal 0 is, zal alles getoond worden zonder pagina-nummering. (standaard: 0)</text>
+        <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Bepaal het aantal die per pagina getoond wordt. Er ontstaat pagina-nummering wanneer er meer geplaatst wordt. Print voorbeeld en export functie worden niet beinvloed. Als aantal 0 is, zal alles getoond worden zonder pagina-nummering. (standaard: 10)</text>
         <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="edited">Alleen voor ingelogde gebruikers</text>
         <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="edited">Hier kunt u algemene voorkeuren en voorkeuren per module beheren.</text>
         <text id="ORG_PARENT_ORGANIZATION" development="new" translation="edited">Hoofd organisatie</text>
@@ -741,7 +741,6 @@
         <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Stuur nieuw wachtwoord</text>
         <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">Systeem informatie</text>
         <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="edited">Systeem e-mail adres</text>
-        <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="edited">Vul e-mail adres van beheerder in. Dit adres wordt gebruikt als afzender van systeemberichten en bevestiging van registratie. (standaard: webmaster@%VAR1%)</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="new" translation="edited">Notificatie voor nieuwe berichten</text>
         <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="new" translation="edited">U kunt hier e-mail notificatie voor nieuwe module berichten activeren. De beheerder zal via e-mail geinformeerd worden. Het notificatie bericht zal gestuurd worden naar %VAR1%. (standaard: nee)</text>
         <text id="ORG_TIME_FORMAT" development="new" translation="edited">Formaat tijd</text>
