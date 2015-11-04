@@ -177,5 +177,3 @@ if($plg_photos_show_link)
 }
 
 echo '</div>';
-
-?>

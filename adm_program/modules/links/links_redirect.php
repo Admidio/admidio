@@ -75,5 +75,3 @@ else
 {
     header('Location:'.$weblink->getValue('lnk_url'));
 }
-
-?>

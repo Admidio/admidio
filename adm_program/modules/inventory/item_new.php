@@ -295,5 +295,3 @@ if($getNewItem == 0)
 
 $page->addHtml($form->show(false));
 $page->show();
-
-?>

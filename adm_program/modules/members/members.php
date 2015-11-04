@@ -353,5 +353,3 @@ $page->addHtml($membersTable->show(false));
 
 // show html of complete page
 $page->show();
-
-?>

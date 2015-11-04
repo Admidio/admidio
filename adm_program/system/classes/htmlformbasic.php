@@ -367,5 +367,3 @@ class HtmlFormBasic extends HtmlElement
         return parent::getHtmlElement();
     }
 }
-
-?>

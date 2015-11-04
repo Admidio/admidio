@@ -562,4 +562,3 @@ abstract class HtmlElement {
         return false;
     }
 }
-?>

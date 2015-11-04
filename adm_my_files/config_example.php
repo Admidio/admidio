@@ -41,5 +41,3 @@ $g_organization = 'Shortcut';
 // for an update of the Admidio database to a new version of Admidio.
 // For a more comfortable and easy update you can set this preference = 0.
 $gLoginForUpdate = 1;
-
-?>

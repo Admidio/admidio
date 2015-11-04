@@ -30,5 +30,3 @@ if(file_exists($imageServerPath))
     $image->copyToBrowser();
     $image->delete();
 }
-
-?>

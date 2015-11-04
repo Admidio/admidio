@@ -132,5 +132,3 @@ $form->addSubmitButton('btn_rename', $gL10n->get('SYS_SAVE'), array('icon' => TH
 
 $page->addHtml($form->show(false));
 $page->show();
-
-?>

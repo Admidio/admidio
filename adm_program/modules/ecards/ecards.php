@@ -237,5 +237,3 @@ $form->closeButtonGroup();
 // add form to html page and show page
 $page->addHtml($form->show(false));
 $page->show();
-
-?>

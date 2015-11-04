@@ -248,5 +248,3 @@ while($cat_row = $gDb->fetch_array($categoryResult))
 
 $page->addHtml($categoriesOverview->show(false));
 $page->show();
-
-?>

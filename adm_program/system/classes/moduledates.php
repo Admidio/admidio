@@ -569,4 +569,3 @@ class ModuleDates extends Modules
         return $sqlConditions;
     }
 }
-?>

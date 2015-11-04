@@ -166,5 +166,3 @@ $form->addHtml(admFuncShowCreateChangeInfoById($category->getValue('cat_usr_id_c
 // add form to html page and show page
 $page->addHtml($form->show(false));
 $page->show();
-
-?>

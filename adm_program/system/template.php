@@ -35,4 +35,3 @@ function admReadTemplateFile($filename)
         return '#message#';
     }
 }
-?>

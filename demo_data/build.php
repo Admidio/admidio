@@ -280,5 +280,3 @@ echo '<p>Database and testdata have the Admidio version '.$databaseVersion.'.<br
  Your files have Admidio version '.ADMIDIO_VERSION.'.<br /><br />
  Please perform an <a href="../adm_program/installation/update.php">update of your database</a>.</p>
  <p style="font-size: 9pt;">&copy; 2004 - 2015&nbsp;&nbsp;The Admidio team</p>';
-
-?>

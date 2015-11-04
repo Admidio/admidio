@@ -217,4 +217,3 @@ while($row = $gDb->fetch_array($resultFieldHistory))
 
 $page->addHtml($table->show(false));
 $page->show();
-?>

@@ -182,17 +182,17 @@ $page->addJavascript('
             }
         };
     }
-    
+
     function formSubmitEvent()
     {
         $(".button-membership-period-form").click(function(event) {
             var memberId  = $(this).attr("data-admidio");
             var dateStart = $("#membership_start_date_"+memberId).val();
-            var dateEnd   = $("#membership_end_date_"+memberId).val();    
+            var dateEnd   = $("#membership_end_date_"+memberId).val();
             var action    = $("#membership_period_form_"+memberId).attr("action")+"&membership_start_date_"+memberId+"="+dateStart+"&membership_end_date_"+memberId+"="+dateEnd;
 
             $("#membership_period_form_"+memberId+" .form-alert").hide();
-    
+
             $.ajax({
                 type:    "GET",
                 url:     action,
@@ -218,7 +218,7 @@ $page->addJavascript('
             });
         });
     }
-    
+
     ');
 $page->addJavascript('
     $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
@@ -827,4 +827,3 @@ if($gPreferences['profile_show_extern_roles'] == 1
 $page->addHtml(admFuncShowCreateChangeInfoById($user->getValue('usr_usr_id_create'), $user->getValue('usr_timestamp_create'), $user->getValue('usr_usr_id_change'), $user->getValue('usr_timestamp_change')));
 
 $page->show();
-?>

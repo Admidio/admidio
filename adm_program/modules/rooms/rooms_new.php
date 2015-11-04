@@ -85,4 +85,3 @@ $form->addHtml(admFuncShowCreateChangeInfoById($room->getValue('room_usr_id_crea
 // add form to html page and show page
 $page->addHtml($form->show(false));
 $page->show();
-?>

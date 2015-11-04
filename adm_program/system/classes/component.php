@@ -81,4 +81,3 @@ class Component extends TableAccess
         }
     }
 }
-?>

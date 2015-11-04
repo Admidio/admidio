@@ -47,4 +47,3 @@ else
 
     $gMessage->show($gL10n->get($getMessageCode));
 }
-?>

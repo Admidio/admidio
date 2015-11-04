@@ -143,4 +143,3 @@ $sql = 'UPDATE '.TBL_USER_FIELDS
         OR usf_name LIKE \'SYS_BIRTHDAY\'
         OR usf_name LIKE \'SYS_WEBSITE\'';
 $gDb->query($sql);
-?>

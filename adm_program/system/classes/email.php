@@ -535,4 +535,3 @@ class Email extends PHPMailer
         return true;
     }
 }
-?>

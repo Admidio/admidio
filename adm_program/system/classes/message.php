@@ -282,4 +282,3 @@ class Message
         $this->showTextOnly = $showText;
     }
 }
-?>

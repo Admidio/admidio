@@ -192,4 +192,3 @@ if($getInlineView)
 {
     echo '</div></div>';
 }
-?>

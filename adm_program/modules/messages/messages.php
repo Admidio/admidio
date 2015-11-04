@@ -199,5 +199,3 @@ $page->addHtml($table->show(false));
 
 // add form to html page and show page
 $page->show();
-
-?>

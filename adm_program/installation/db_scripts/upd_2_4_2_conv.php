@@ -31,5 +31,3 @@ else
     $sql = 'ALTER TABLE '.TBL_SESSIONS.' ALTER COLUMN ses_ip_address TYPE varchar(39)';
     $gDb->query($sql, false);
 }
-
-?>

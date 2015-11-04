@@ -79,5 +79,3 @@ while($row = $userFieldsStatement->fetch())
 
     $lastNameIntern = $row['usf_name_intern'];
 }
-
-?>

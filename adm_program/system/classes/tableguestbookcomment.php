@@ -121,4 +121,3 @@ class TableGuestbookComment extends TableAccess
         return parent::setValue($columnName, $newValue, $checkValue);
     }
 }
-?>

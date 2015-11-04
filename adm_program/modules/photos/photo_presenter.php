@@ -146,5 +146,3 @@ elseif($gPreferences['photo_show_mode'] == 2)
 
 // show html of complete page
 $page->show();
-
-?>

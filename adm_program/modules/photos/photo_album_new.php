@@ -143,5 +143,3 @@ $form->addHtml(admFuncShowCreateChangeInfoById($photoAlbum->getValue('pho_usr_id
 // add form to html page and show page
 $page->addHtml($form->show(false));
 $page->show();
-
-?>

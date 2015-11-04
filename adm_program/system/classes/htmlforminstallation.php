@@ -139,4 +139,3 @@ class HtmlFormInstallation extends HtmlForm
         }
     }
 }
-?>

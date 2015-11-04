@@ -63,4 +63,3 @@ $plg_sort_sql = 'desc';
 // 1 = (Default) Überschrift wird angezeigt
 // 0 = Überschrift wird nicht angezeigt
 $plg_show_headline = 1;
-?>

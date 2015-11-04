@@ -112,5 +112,3 @@ elseif($getMode == 2)
         echo 'done';
     }
 }
-
-?>

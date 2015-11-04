@@ -159,5 +159,3 @@ else
         $gMessage->show($gL10n->get('SYS_LOGIN_UNKNOWN'));
     }
 }
-
-?>

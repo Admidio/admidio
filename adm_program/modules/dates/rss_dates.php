@@ -113,5 +113,3 @@ if($datesResult['numResults'] > 0)
 }
 // jetzt nur noch den Feed generieren lassen
 $rss->buildFeed();
-
-?>

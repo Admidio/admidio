@@ -769,5 +769,3 @@ elseif($getMode === 'html' || $getMode === 'print')
     // show complete html page
     $page->show();
 }
-
-?>

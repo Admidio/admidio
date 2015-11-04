@@ -603,5 +603,3 @@ if(isset($list))
 
 // show page
 $page->show();
-
-?>

@@ -334,4 +334,3 @@ class Inventory extends TableInventory
     }
 
 }
-?>

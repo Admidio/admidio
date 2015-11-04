@@ -553,5 +553,3 @@ $page->addHtml(admFuncGeneratePagination($base_url, $albumsCount, $gPreferences[
 
 // show html of complete page
 $page->show();
-
-?>

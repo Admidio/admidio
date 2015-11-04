@@ -10,7 +10,7 @@
 
  /**
   * Autoloading function of class files. This function will be later registered
-  *.for default autoload implementation. Therefore the class name must be the same 
+  *.for default autoload implementation. Therefore the class name must be the same
   * as the file name except for case sensitive.
   * @param $className Name of the class for which the file should be loaded.
   * @return Return @b false if the file for the class wasn't found.
@@ -718,4 +718,3 @@ function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 
     return $array_files;
 }
-?>

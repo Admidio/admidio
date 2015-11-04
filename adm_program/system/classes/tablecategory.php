@@ -382,4 +382,3 @@ class TableCategory extends TableAccess
         return parent::setValue($columnName, $newValue, $checkValue);
     }
 }
-?>

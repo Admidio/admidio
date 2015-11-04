@@ -41,4 +41,3 @@ $plg_online_text = "Online sind:<br />";
 // 1 = (Default) Überschrift wird angezeigt
 // 0 = Überschrift wird nicht angezeigt
 $plg_show_headline = 1;
-?>

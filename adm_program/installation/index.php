@@ -21,4 +21,3 @@ else
 // redirect to installation or update page
 header('Location: '.$page);
 exit();
-?>

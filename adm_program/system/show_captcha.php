@@ -20,5 +20,3 @@ if($gPreferences['captcha_type'] === 'pic')
     $captcha = new Captcha();
     $captcha->getCaptcha();
 }
-
-?>

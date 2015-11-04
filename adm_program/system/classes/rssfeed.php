@@ -152,5 +152,3 @@ class RSSfeed
         echo '</rss>'.chr(10);
     }
 }
-
-?>

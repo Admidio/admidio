@@ -120,5 +120,3 @@ if (isset($comment_result))
             title="'.$gL10n->get('GBO_WRITE_COMMENT').'" />'.$gL10n->get('GBO_WRITE_COMMENT').'</button>';
     }
 }
-
-?>

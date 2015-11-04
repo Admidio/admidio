@@ -287,4 +287,3 @@ else
     $page->addHtml($html);
     $page->show();
 }
-?>

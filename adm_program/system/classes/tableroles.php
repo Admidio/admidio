@@ -499,4 +499,3 @@ class TableRoles extends TableAccess
         return false;
     }
 }
-?>

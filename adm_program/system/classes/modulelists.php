@@ -383,4 +383,3 @@ class ModuleLists extends Modules
         }
     }
 }
-?>

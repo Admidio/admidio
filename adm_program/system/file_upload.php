@@ -226,5 +226,3 @@ elseif($getMode == 'upload_files')
                                                          'image_versions' => array()));
     }
 }
-
-?>

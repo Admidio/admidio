@@ -33,5 +33,3 @@ while($rowMember = $gDb->fetch_array($resultMembers))
     $sql = 'delete from '.TBL_MEMBERS.' where mem_id = '.$rowMember['member_id'];
     $gDb->query($sql);
 }
-
-?>

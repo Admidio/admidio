@@ -456,4 +456,3 @@ else
 
     $page->show();
 }
-?>

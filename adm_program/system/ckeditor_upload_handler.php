@@ -102,5 +102,3 @@ catch(AdmException $e)
 {
     $e->showHtml();
 }
-
-?>

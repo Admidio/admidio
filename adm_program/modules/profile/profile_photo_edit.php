@@ -261,4 +261,3 @@ elseif($getMode == 'upload')
     $page->addHtml($form->show(false));
     $page->show();
 }
-?>

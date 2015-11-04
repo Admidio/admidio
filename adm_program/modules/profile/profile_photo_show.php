@@ -76,4 +76,3 @@ elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 1)
 header('Content-Type: '. $image->getMimeType());
 $image->copyToBrowser();
 $image->delete();
-?>

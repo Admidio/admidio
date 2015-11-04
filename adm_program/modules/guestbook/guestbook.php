@@ -388,5 +388,3 @@ $page->addHtml(admFuncGeneratePagination($base_url, $num_guestbook, $guestbook_e
 
 // show html of complete page
 $page->show();
-
-?>

@@ -147,5 +147,3 @@ else
 {
     $gMessage->show($gL10n->get('ECA_NOT_SUCCESSFULLY_SEND'));
 }
-
-?>

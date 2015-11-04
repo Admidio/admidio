@@ -78,4 +78,3 @@ elseif ($getMode == 2)
     }
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
 }
-?>

@@ -234,5 +234,3 @@ elseif ($getMode == 8)
         }
     }
 }
-
-?>

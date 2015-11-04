@@ -89,4 +89,3 @@ class TableLists extends TableAccess
         parent::save($updateFingerPrint);
     }
 }
-?>

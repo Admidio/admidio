@@ -24,5 +24,3 @@ if($nextUrl === '')
     $nextUrl = $gHomepage;
 }
 header('Location: '.$nextUrl);
-
-?>

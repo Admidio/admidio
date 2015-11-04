@@ -140,4 +140,3 @@ if($image != NULL)
     $image->copyToBrowser();
     $image->delete();
 }
-?>

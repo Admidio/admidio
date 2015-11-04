@@ -397,4 +397,3 @@ elseif($getMode == 9)
     }
     exit();
 }
-?>

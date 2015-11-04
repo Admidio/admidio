@@ -163,5 +163,3 @@ else
 
 // show html of complete page
 $page->show();
-
-?>

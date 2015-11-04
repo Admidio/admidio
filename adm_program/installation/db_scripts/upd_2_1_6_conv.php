@@ -47,5 +47,3 @@ $gDb->query($sql);
 $sql = 'UPDATE '. TBL_MEMBERS. ' SET mem_end = \'9999-12-31\'
          WHERE mem_end = \'\' OR mem_end = \'0000-00-00\' ';
 $gDb->query($sql);
-
-?>

@@ -144,4 +144,3 @@ class SystemMail extends Email
         return true;
     }
 }
-?>

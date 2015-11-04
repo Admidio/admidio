@@ -22,4 +22,3 @@ $plg_show_headline = 1;
 
 // if set to true then the upload timestamp will be shown next to each file
 $plg_show_upload_timestamp = true;
-?>

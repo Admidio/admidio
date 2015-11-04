@@ -139,5 +139,3 @@ elseif($getMode == 'create_backup')
 
 // show html of complete page
 $page->show();
-
-?>

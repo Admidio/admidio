@@ -66,5 +66,3 @@ $plg_link_class_date = 'date';
 
 // Welche CSS-Linkklasse soll bei Daten mit Geburtstagen und Terminen verwendet werden
 $plg_link_class_merge = 'merge';
-
-?>

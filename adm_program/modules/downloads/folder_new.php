@@ -83,5 +83,3 @@ $form->addSubmitButton('btn_create', $gL10n->get('DOW_CREATE_FOLDER'), array('ic
 // add form to html page and show page
 $page->addHtml($form->show(false));
 $page->show();
-
-?>

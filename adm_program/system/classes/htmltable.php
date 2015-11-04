@@ -483,4 +483,3 @@ class HtmlTable extends HtmlTableBasic
         }
     }
 }
-?>

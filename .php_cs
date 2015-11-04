@@ -20,5 +20,3 @@ return Symfony\CS\Config\Config::create()
     ->fixers($fixers)
     ->finder($finder)
 ;
-
-?>

@@ -32,5 +32,3 @@ $plg_max_char_per_word = 0;
 // 1 = (Default) Überschrift wird angezeigt
 // 0 = Überschrift wird nicht angezeigt
 $plg_show_headline = 1;
-
-?>

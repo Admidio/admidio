@@ -331,5 +331,3 @@ if(isset($htmlAdminTable))
 
 // show html of complete page
 $page->show();
-
-?>

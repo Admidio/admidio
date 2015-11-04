@@ -247,4 +247,3 @@ class TablePhotos extends TableAccess
         return $shuffle_image;
     }
 }
-?>

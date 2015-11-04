@@ -120,5 +120,3 @@
     }
 
     echo json_encode($log);
-
-?>

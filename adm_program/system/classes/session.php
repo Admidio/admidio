@@ -89,7 +89,7 @@ class Session extends TableAccess
         if(array_key_exists($objectName, $this->mObjectArray))
         {
             $objectVariables = get_object_vars($this->mObjectArray[$objectName]);
-            
+
             // if object has database connection add database object
             if(in_array('db', array_keys($objectVariables)))
             {
@@ -263,4 +263,3 @@ class Session extends TableAccess
         $this->db->query($sql);
     }
 }
-?>

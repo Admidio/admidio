@@ -747,4 +747,3 @@ class TableFolder extends TableAccess
         $this->db->endTransaction();
     }
 }
-?>

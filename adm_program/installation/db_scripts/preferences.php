@@ -158,4 +158,3 @@ $orga_preferences = array(
     // Inventory
     'enable_inventory_module'   => '0'
  );
-?>

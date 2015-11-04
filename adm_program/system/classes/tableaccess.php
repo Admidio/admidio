@@ -670,4 +670,3 @@ class TableAccess
         return false;
     }
 }
-?>

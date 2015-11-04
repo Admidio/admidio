@@ -327,4 +327,3 @@ class Image
         $this->imagePath = '';
     }
 }
-?>

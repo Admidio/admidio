@@ -277,5 +277,3 @@ function admStrIsValidFileName($filename, $checkExtension = false)
         throw new AdmException('SYS_FILENAME_EMPTY');
     }
 }
-
-?>

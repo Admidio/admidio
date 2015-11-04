@@ -213,4 +213,3 @@ elseif($getMode == 4)
     $category->moveSequence($getSequence);
     exit();
 }
-?>

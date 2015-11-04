@@ -261,4 +261,3 @@ class ModuleAnnouncements extends Modules
 
     }
 }
-?>

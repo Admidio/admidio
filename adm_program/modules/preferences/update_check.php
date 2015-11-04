@@ -192,5 +192,3 @@ if($getMode == 2)
         </p>
         <strong>'.$versionstext.'</strong>';
 }
-
-?>

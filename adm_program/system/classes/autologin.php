@@ -126,4 +126,3 @@ class AutoLogin extends TableAccess
         $this->db->query($sql);
     }
 }
-?>

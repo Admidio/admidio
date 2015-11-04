@@ -405,5 +405,3 @@ if($getNewUser == 0)
 
 $page->addHtml($form->show(false));
 $page->show();
-
-?>

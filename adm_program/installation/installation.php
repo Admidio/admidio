@@ -751,5 +751,3 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     $form->closeButtonGroup();
     $form->show();
 }
-
-?>

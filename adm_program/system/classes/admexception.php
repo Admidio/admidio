@@ -122,5 +122,3 @@ class AdmException extends Exception
         exit();
     }
 }
-
-?>

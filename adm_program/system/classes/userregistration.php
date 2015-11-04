@@ -217,4 +217,3 @@ class UserRegistration extends User
         }
     }
 }
-?>

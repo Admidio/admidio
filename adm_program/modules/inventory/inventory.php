@@ -125,5 +125,3 @@ $page->addHtml($itemsTable->show(false));
 
 // show html of complete page
 $page->show();
-
-?>

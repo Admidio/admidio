@@ -294,5 +294,3 @@ else
 {
     $gHomepage = $g_root_path . '/' . $gPreferences['homepage_logout'];
 }
-
-?>

@@ -532,5 +532,3 @@ class HtmlTableBasic extends HtmlElement {
         }
     }
 }
-
-?>

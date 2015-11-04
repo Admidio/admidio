@@ -1388,4 +1388,3 @@ class User extends TableUsers
         return $this->checkRolesRight('rol_inventory');
     }
 }
-?>

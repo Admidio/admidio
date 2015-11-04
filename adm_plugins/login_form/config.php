@@ -43,4 +43,3 @@ $plg_rank = array(
     '100' => $gL10n->get('PLG_LOGIN_SENIOR_ONLINE_MEMBER'),
     '200' => $gL10n->get('PLG_LOGIN_HONORARY_MEMBER')
     );
-?>

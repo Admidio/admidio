@@ -226,4 +226,3 @@ class FunctionClass
         return $returnCode;
     }
 }
-?>

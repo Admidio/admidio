@@ -240,4 +240,3 @@ class Folder
         return false;
     }
 }
-?>

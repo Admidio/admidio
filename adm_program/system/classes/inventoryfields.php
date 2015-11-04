@@ -559,4 +559,3 @@ class InventoryFields
         return $returnCode;
     }
 }
-?>

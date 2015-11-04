@@ -73,5 +73,3 @@ while($row_countries = $gDb->fetch_array($result_countries))
         }
     }
 }
-
-?>

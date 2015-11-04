@@ -186,5 +186,3 @@ class PasswordHashing
         return $results;
     }
 }
-
-?>

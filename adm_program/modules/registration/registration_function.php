@@ -171,5 +171,3 @@ elseif($getMode == 6)
     header('Location: '.$g_root_path.'/adm_program/modules/members/members_function.php?mode=4&usr_id='.$getUserId);
     exit();
 }
-
-?>

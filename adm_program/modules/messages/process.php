@@ -135,5 +135,3 @@ switch($postFunction)
 }
 
 echo json_encode($log);
-
-?>

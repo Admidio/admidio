@@ -158,5 +158,3 @@ elseif($getMode == 4)
     $itemField->moveSequence($getSequence);
     exit();
 }
-
-?>

@@ -504,5 +504,3 @@ elseif($getMode == 6)  // Termin im iCal-Format exportieren
     echo $date->getIcal($_SERVER['HTTP_HOST']);
     exit();
 }
-
-?>

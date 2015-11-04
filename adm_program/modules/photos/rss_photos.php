@@ -152,5 +152,3 @@ while ($row = $gDb->fetch_array($result))
 
 // jetzt nur noch den Feed generieren lassen
 $rss->buildFeed();
-
-?>

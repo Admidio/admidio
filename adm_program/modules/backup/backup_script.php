@@ -471,5 +471,3 @@ echo '<div class="alert alert-success form-alert"><span class="glyphicon glyphic
 
 OutputInformation('cancel_link', '');
 OutputInformation('topprogress', '');
-
-?>

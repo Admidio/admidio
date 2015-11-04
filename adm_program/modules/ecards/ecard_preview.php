@@ -57,4 +57,3 @@ echo '
     echo $funcClass->parseEcardTemplate($imageUrl, $ecardMessage, $ecardDataToParse, $nameRecipient, $emailRecipient);
 
 echo '</div>';
-?>

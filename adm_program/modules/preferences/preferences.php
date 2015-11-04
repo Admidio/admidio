@@ -652,7 +652,7 @@ $page->addHtml('
                         $form->addSelectBox('lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries, array('defaultValue' => $form_values['lists_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC'));
                         $form->addCheckbox('lists_hide_overview_details', $gL10n->get('LST_HIDE_DETAILS'), $form_values['lists_hide_overview_details'], array('helpTextIdInline' => 'LST_HIDE_DETAILS_DESC'));
                         // read all global lists
-                        $sql = 'SELECT lst_id, lst_name 
+                        $sql = 'SELECT lst_id, lst_name
                                   FROM '. TBL_LISTS. '
                                  WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
                                    AND lst_global = 1
@@ -823,5 +823,3 @@ $page->addHtml('
 </div>');
 
 $page->show();
-
-?>

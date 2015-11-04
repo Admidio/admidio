@@ -319,5 +319,3 @@ $page->addHtml($table->show(false));
 
 // show html of complete page
 $page->show();
-
-?>

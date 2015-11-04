@@ -214,4 +214,3 @@ class ModuleWeblinks extends Modules
         return $headline;
     }
 }
-?>

@@ -303,5 +303,3 @@ $form->addHtml(admFuncShowCreateChangeInfoById($date->getValue('dat_usr_id_creat
 // add form to html page and show page
 $page->addHtml($form->show(false));
 $page->show();
-
-?>

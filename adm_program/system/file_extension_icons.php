@@ -55,4 +55,3 @@ $icon_file_extension = array(
     'odg'  => 'page_white_openoffice.png',
     'odf'  => 'page_white_openoffice.png'
 );
-?>

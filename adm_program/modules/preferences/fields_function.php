@@ -178,5 +178,3 @@ elseif($getMode == 4)
     $userField->moveSequence($getSequence);
     exit();
 }
-
-?>

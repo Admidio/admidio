@@ -30,5 +30,3 @@ $sql = 'UPDATE '. TBL_ROLES. ' SET rol_timestamp_create = \''. $row_webmaster['t
                                  , rol_usr_id_create    = '. $row_webmaster['webmaster_id'].'
      WHERE rol_usr_id_create IS NULL ';
 $gDb->query($sql);
-
-?>

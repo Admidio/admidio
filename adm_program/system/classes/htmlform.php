@@ -654,7 +654,7 @@ class HtmlForm extends HtmlFormBasic
      * @param string $value   A value for the text field. The field will be created with this value.
      * @param array  $options (optional) An array with the following possible entries:
      *                        - @b type : Set the type if the field. Default will be @b text. Possible values are @b text,
-     *                          @b number, @b date, @b datetime or @b birthday. If @b date, @b datetime or @b birthday are set 
+     *                          @b number, @b date, @b datetime or @b birthday. If @b date, @b datetime or @b birthday are set
      *                          than a small calendar will be shown if the date field will be selected.
      *                        - @b maxLength : The maximum number of characters that are allowed in a text field.
      *                        - @b minNumber : The minimum number that is allowed in a number field.
@@ -1874,4 +1874,3 @@ class HtmlForm extends HtmlFormBasic
         }
     }
 }
-?>

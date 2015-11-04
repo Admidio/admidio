@@ -143,4 +143,3 @@ class DateTimeExtended extends DateTime
         return $destFormat;
     }
 }
-?>

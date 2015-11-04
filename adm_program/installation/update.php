@@ -474,5 +474,3 @@ elseif($getMode == 2)
     $form->closeButtonGroup();
     $form->show();
 }
-
-?>

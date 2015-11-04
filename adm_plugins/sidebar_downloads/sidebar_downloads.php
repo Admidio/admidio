@@ -153,4 +153,3 @@ if ($gPreferences['enable_download_module'] == 1)
     }
     echo '</div>';
 }
-?>

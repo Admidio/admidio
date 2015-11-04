@@ -34,7 +34,7 @@ class ProfileFields
     public function __construct(&$database, $organizationId)
     {
         $this->setDatabase($database);
-        
+
         $this->readProfileFields($organizationId);
         $this->mUserId = 0;
         $this->noValueCheck = false;
@@ -591,4 +591,3 @@ class ProfileFields
         return $returnCode;
     }
 }
-?>

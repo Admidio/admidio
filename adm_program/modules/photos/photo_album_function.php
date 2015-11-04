@@ -202,5 +202,3 @@ elseif($getMode == 'delete')
     }
     exit();
 }
-
-?>

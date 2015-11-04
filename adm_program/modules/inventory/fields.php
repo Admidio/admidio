@@ -230,5 +230,3 @@ while($row = $gDb->fetch_array($result))
 
 $page->addHtml($table->show(false));
 $page->show();
-
-?>

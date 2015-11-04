@@ -212,5 +212,3 @@ $page->addHtml('
 );
 
 $page->show();
-
-?>

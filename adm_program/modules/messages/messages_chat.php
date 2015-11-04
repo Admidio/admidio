@@ -80,5 +80,3 @@ $page->addHtml($form->show(false));
 
 // show page
 $page->show();
-
-?>

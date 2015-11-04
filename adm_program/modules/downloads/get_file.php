@@ -77,4 +77,3 @@ header('Pragma: public');
 
 // Datei ausgeben.
 echo readfile($completePath);
-?>

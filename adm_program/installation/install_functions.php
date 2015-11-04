@@ -83,5 +83,3 @@ function checkPhpVersion()
 
     return $message;
 }
-
-?>

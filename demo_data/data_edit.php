@@ -156,5 +156,3 @@ $db->query($sql);
 $sql = 'UPDATE '.TBL_LINKS.' SET lnk_timestamp_create = \''.addDaysToDate(-4).'\'
          WHERE lnk_id = 3 ';
 $db->query($sql);
-
-?>

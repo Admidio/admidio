@@ -70,4 +70,3 @@ class TableText extends TableAccess
         parent::save($updateFingerPrint);
     }
 }
-?>

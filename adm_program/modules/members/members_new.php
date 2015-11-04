@@ -69,5 +69,3 @@ echo '
     $form->addSubmitButton('btn_add', $gL10n->get('MEM_CREATE_USER'), array('icon' => THEME_PATH.'/icons/add.png', 'class' => ' col-sm-offset-3'));
     $form->show();
 echo '</div>';
-
-?>

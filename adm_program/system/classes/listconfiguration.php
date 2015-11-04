@@ -434,4 +434,3 @@ class ListConfiguration extends TableLists
         $this->db->endTransaction();
     }
 }
-?>

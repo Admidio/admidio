@@ -153,5 +153,3 @@ $gDb->query($sql);
 
 $sql = 'ALTER TABLE '. TBL_CATEGORIES. ' MODIFY COLUMN cat_timestamp_create datetime NOT NULL ';
 $gDb->query($sql);
-
-?>

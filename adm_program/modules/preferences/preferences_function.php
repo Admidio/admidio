@@ -372,4 +372,3 @@ case 4:
     echo phpinfo();
     break;
 }
-?>

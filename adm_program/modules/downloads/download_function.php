@@ -426,6 +426,3 @@ elseif ($getMode == 7)
         $e->showHtml();
     }
 }
-
-
-?>

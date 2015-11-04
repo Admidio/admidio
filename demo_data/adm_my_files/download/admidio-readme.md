@@ -1,10 +1,10 @@
 # Admidio
 
-Admidio is a free open source user management system for websites of 
-organizations and groups. The system has a flexible role model so that 
-it’s possible to reflect the structure and permissions of your organization. 
-You can create an individual profile for your members by adding or removing 
-fields. Additional to these functions the system contains several modules 
+Admidio is a free open source user management system for websites of
+organizations and groups. The system has a flexible role model so that
+it’s possible to reflect the structure and permissions of your organization.
+You can create an individual profile for your members by adding or removing
+fields. Additional to these functions the system contains several modules
 like member lists, event manager, guestbook, photo album or download area.
 
 ## Table of contents
@@ -31,8 +31,8 @@ like member lists, event manager, guestbook, photo album or download area.
 
 ## Installation
 
-You can install Admidio on your webspace if the script language [PHP](http://php.net/) in version 5.3.7 
-or higher is available. Admidio also needs a [MySql](http://www.mysql.com/) (version 5.0 or higher) or 
+You can install Admidio on your webspace if the script language [PHP](http://php.net/) in version 5.3.7
+or higher is available. Admidio also needs a [MySql](http://www.mysql.com/) (version 5.0 or higher) or
 [PostgreSQL](http://www.postgresql.org/) (version 9.0 or higher) database to run.
 
 For a successful installation please follow our [online instructions](http://www.admidio.org/dokuwiki/doku.php?id=en:2.0:installation).
@@ -60,7 +60,7 @@ The easiest way to support us will be [our forum](http://forum.admidio.org). The
 users with your knowledge and answer questions. Try to reproduce errors
 that other users report or give hints to some problems.
 
-Another way is [our documentation](http://admidio.org/dokuwiki/doku.php?id=de:2.0:index). We want to deliver a helpful documentation to 
+Another way is [our documentation](http://admidio.org/dokuwiki/doku.php?id=de:2.0:index). We want to deliver a helpful documentation to
 our users. But there is a lot work to do. You see our current state in the wiki.
 Just ask us for write permissions in the wiki and you can start.
 
@@ -68,7 +68,7 @@ We always need persons who [translate our software Admidio](http://admidio.org/d
 language or just update an existing language to the current version.
 We also need people you translate [our documentation](http://admidio.org/dokuwiki/doku.php?id=de:2.0:index) into english.
 
-If you habe knowledge in PHP programming and know something about HTML, CSS and 
+If you habe knowledge in PHP programming and know something about HTML, CSS and
 JavaScript then you can start to help us to improve the software Admidio.
 You will find our software at GitHub. The handling with GitHub and branches
 is described in [our wiki](http://admidio.org/dokuwiki/doku.php?id=de:entwickler:fehlerkorrekturen_in_mehreren_versionen).
@@ -83,14 +83,14 @@ Please visit our [changelog](http://admidio.org/index.php?page=changelog) for de
 
 ## Donation
 
-If you like the software and our project then we are happy if you [donate 
+If you like the software and our project then we are happy if you [donate
 some money](http://www.admidio.org/index.php?page=donate) to the project.
 
 ## Copyright and License
 
-Admidio is release under the [GNU General Public License 2](https://github.com/Admidio/admidio/blob/master/LICENSE.txt). You are 
-free to use, modify and distribute this software, as long as the copyright header 
-within the html page and source code is left intact. If you want to support 
+Admidio is release under the [GNU General Public License 2](https://github.com/Admidio/admidio/blob/master/LICENSE.txt). You are
+free to use, modify and distribute this software, as long as the copyright header
+within the html page and source code is left intact. If you want to support
 us we are happy if you don't remove the link to Admidio within the login
 dialog.
 
@@ -106,7 +106,7 @@ and sharing great software.
 - [Bootstrap](http://www.getbootstrap.com): HTML, CSS and JS framework
 - [jQuery](http://www.jquery.com): JavaScript-Library
 - [CKEditor](http://www.ckeditor.com): Javascript-Editor
-- [PHPMailer](https://github.com/PHPMailer/PHPMailer): Email sending library for PHP 
+- [PHPMailer](https://github.com/PHPMailer/PHPMailer): Email sending library for PHP
 - [Datatables](http://www.datatables.net): Table plugin for jQuery
 - [Select2](https://select2.github.io/): jQuery replacement for select boxes
 - [jQuery-File-Upload](https://blueimp.github.io/jQuery-File-Upload/): jQuery file upload plugin

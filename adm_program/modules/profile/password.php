@@ -157,5 +157,3 @@ elseif($getMode == 'html')
         $form->show();
     echo '</div>';
 }
-
-?>

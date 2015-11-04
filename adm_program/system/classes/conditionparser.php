@@ -475,4 +475,3 @@ class ConditionParser
         $this->mNotExistsSql = $sqlStatement;
     }
 }
-?>

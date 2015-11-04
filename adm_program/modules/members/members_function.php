@@ -224,4 +224,3 @@ elseif($getMode == 6)
 
 $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
 $gMessage->show($phrase);
-?>

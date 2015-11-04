@@ -238,4 +238,3 @@ if($getPhotoNr == null)
     }
 
 }
-?>

@@ -461,4 +461,3 @@ class Organization extends TableAccess
         return parent::setValue($columnName, $newValue, $checkValue);
     }
 }
-?>

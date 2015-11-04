@@ -224,5 +224,3 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
         return $roleMemHTML;
     }
 }
-
-?>

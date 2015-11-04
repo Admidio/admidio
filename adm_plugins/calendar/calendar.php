@@ -683,5 +683,3 @@ if($currentMonth.$currentYear != date('mY'))
         }); return false;">'.$gL10n->get('PLG_CALENDAR_CURRENT_MONTH').'</a></div>';
 }
 echo '</div>';
-
-?>

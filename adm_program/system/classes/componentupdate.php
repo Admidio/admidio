@@ -274,4 +274,3 @@ class ComponentUpdate extends Component
     }
 
 }
-?>

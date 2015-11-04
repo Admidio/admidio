@@ -74,5 +74,3 @@ if($announcements->getDataSetCount()>0)
 
 // jetzt nur noch den Feed generieren lassen
 $rss->buildFeed();
-
-?>

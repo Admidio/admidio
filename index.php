@@ -62,5 +62,3 @@ else
     // config file doesn't exists then show installation wizard
     header('Location: adm_program/installation/index.php');
 }
-
-?>

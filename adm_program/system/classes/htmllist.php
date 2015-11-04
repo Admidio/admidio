@@ -203,5 +203,3 @@ class HtmlList extends HtmlElement
     }
 
 }
-
-?>

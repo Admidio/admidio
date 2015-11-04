@@ -150,4 +150,3 @@ echo '
             <img src="'. THEME_PATH. '/icons/close.png" alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'
         </button>
 </div>';
-?>

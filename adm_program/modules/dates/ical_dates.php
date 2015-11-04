@@ -100,4 +100,3 @@ if($parameter['mode'] == 2)
     header('Pragma: public');
 }
 echo $iCal;
-?>

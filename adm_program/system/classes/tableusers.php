@@ -264,4 +264,3 @@ class TableUsers extends TableAccess
         $this->save(false); // Zeitstempel nicht aktualisieren
     }
 }
-?>

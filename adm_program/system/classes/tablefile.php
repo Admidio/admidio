@@ -161,4 +161,3 @@ class TableFile extends TableAccess
         parent::save($updateFingerPrint);
     }
 }
-?>

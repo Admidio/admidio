@@ -455,4 +455,3 @@ else
     // Falls der Mode unbekannt ist, ist natürlich auch Ende...
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
-?>

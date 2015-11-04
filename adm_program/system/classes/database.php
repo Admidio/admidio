@@ -806,5 +806,3 @@ class Database
         return null;
     }
 }
-
-?>

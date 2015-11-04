@@ -384,4 +384,3 @@ class TableDate extends TableAccess
         $this->visibleRoles = $arrVisibleRoles;
     }
 }
-?>

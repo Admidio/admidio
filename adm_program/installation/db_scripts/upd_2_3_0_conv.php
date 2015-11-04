@@ -153,5 +153,3 @@ if($pdoStatement->rowCount() > 0)
              WHERE cat_id = '.$rowCategory[0];
     $gDb->query($sql);
 }
-
-?>

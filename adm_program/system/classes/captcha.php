@@ -244,5 +244,3 @@ class Captcha
         imagedestroy($image);
     }
 }
-
-?>

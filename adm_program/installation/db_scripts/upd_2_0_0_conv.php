@@ -269,5 +269,3 @@ $sql = "ALTER TABLE ". TBL_USERS. " DROP COLUMN `usr_last_name`,
          DROP COLUMN `usr_email`,
          DROP COLUMN `usr_homepage` ";
 $gDb->query($sql);
-
-?>

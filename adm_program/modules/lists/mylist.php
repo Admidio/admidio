@@ -670,5 +670,3 @@ $form->addButton('btn_show_list', $gL10n->get('LST_SHOW_LIST'), array('icon' => 
 // add form to html page and show page
 $page->addHtml($form->show(false));
 $page->show();
-
-?>

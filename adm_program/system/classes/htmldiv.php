@@ -206,5 +206,3 @@ class HtmlDiv extends HtmlElement
         return parent::getHtmlElement();
     }
 }
-
-?>

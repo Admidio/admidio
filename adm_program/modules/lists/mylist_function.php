@@ -130,5 +130,3 @@ elseif ($getMode == 3)
     header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php');
     exit();
 }
-
-?>

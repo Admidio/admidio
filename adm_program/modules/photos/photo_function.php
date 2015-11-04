@@ -166,4 +166,3 @@ elseif($getJob == 'delete')
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';
 }
-?>

@@ -199,5 +199,3 @@ $page->addHtml(admFuncGeneratePagination($baseUrl, $weblinksCount, $weblinksPerP
 
 // show html of complete page
 $page->show();
-
-?>

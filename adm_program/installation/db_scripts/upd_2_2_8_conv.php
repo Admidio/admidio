@@ -37,5 +37,3 @@ while($row_orga = $gDb->fetch_array($result_orga))
         $counter++;
     }
 }
-
-?>

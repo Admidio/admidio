@@ -28,5 +28,3 @@ if(!$gValidLogin)
     header('Location: '.$g_root_path.'/adm_program/system/login.php');
     exit();
 }
-
-?>
