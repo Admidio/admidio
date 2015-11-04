@@ -24,6 +24,7 @@
         <text id="SYS_COPY_VAR" development="new" translation="todo">%VAR1% kopieren</text>
         <text id="SYS_DATABASE_NO_LOGIN" development="new" translation="todo">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n%VAR1%.</text>
         <text id="SYS_PHONE_INVALID_CHAR" development="new" translation="todo">Die Telefonnummer im Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</text>
+        <text id="SYS_VIEW" development="new" translation="todo">Ansicht</text>
     </version>
     <version id="3.0.3" translator="Stefan Weiß">
         <text id="MSG_SHOW_FORMER" development="new" translation="todo">E-Mails an Ehemalige senden</text>

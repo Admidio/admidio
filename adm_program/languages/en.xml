@@ -12,6 +12,7 @@
         <text id="SYS_CATEGORY_VAR" development="new" translation="edited">%VAR1%-category</text>
         <text id="SYS_COPY_VAR" development="new" translation="todo">Copy %VAR1%</text>
         <text id="SYS_DATABASE_NO_LOGIN" development="new" translation="todo">The connection to the database failed!\n\nThe following error occurred:\n%VAR1%.</text>
+        <text id="SYS_VIEW" development="new" translation="todo">Ansicht</text>
     </version>
     <version id="3.0.3" translator="Stefan Weiß">
         <text id="MSG_SHOW_FORMER" development="new" translation="todo">Send e-mails to former members</text>

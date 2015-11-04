@@ -22,6 +22,19 @@ h1 {
     border-bottom-width: 0;
 }
 
+.panel {
+    text-align: left;
+}
+
+.panel-primary > .panel-heading {
+    color: #555555;
+    border-bottom: 2px solid #555555;
+}
+
+.panel-primary > .panel-footer {
+    border-top: 2px solid #cccccc;
+}
+
 .table {
     width: 270mm;
     background-color: #ffffff;
@@ -45,6 +58,17 @@ h1 {
     letter-spacing: 0.5em;
     background-color: #eeeeee;
     border-bottom: 1px solid #dddddd;
+}
+
+/* Highlight events */
+
+tr.admidio-event-highlight,
+.admidio-event-highlight .panel-heading {
+    color: #000000;
+}
+
+.panel-primary.admidio-event-highlight > .panel-heading {
+    border-bottom: 4px solid #000000;
 }
 
 /**************************************
