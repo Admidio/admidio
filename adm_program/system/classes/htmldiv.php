@@ -105,7 +105,7 @@ class HtmlDiv extends HtmlElement
             $this->addAttribute('class', $class);
         }
         // raise level
-        ++$this->level ;
+        ++$this->level;
     }
 
     /**
@@ -186,7 +186,7 @@ class HtmlDiv extends HtmlElement
         if($parentElement == 'div')
         {
             // set new level
-            --$this->level ;
+            --$this->level;
         }
     }
 
@@ -198,7 +198,7 @@ class HtmlDiv extends HtmlElement
     public function getHtmlDiv()
     {
         // first check if open div elements exists and set all endtags if needed
-        for($this->level; $this->level > 2; --$this->level )
+        for($this->level; $this->level > 2; --$this->level)
         {
             $this->closeParentElement('div');
         }

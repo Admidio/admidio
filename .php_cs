@@ -40,13 +40,13 @@ $fixers = array(
     'no_empty_lines_after_phpdocs', // symfony
     'object_operator', // symfony
     //'operators_spaces', // symfony
-    //'phpdoc_indent', // symfony
+    'phpdoc_indent', // symfony
     //'phpdoc_inline_tag', // symfony
     //'phpdoc_no_access', // symfony
     //'phpdoc_no_empty_return', // symfony
     //'phpdoc_no_package', // symfony
     //'phpdoc_params', // symfony
-    //'phpdoc_scalar', // symfony
+    'phpdoc_scalar', // symfony
     //'phpdoc_separation', // symfony
     //'phpdoc_short_description', // symfony
     //'phpdoc_to_comment', // symfony

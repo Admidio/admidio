@@ -728,14 +728,14 @@ class User extends TableUsers
         return $vcard;
     }
 
-    /**
-     * Checks if the current user is allowed to edit the profile of the user of the parameter.
-     * If will check if user can generally edit all users or if he is a group leader and can edit users
-     * of a special role where @b $user is a member or if it's the own profile and he could edit this.
-     * @param  object $user            User object of the user that should be checked if the current user can edit his profile.
-     * @param  bool   $checkOwnProfile If set to @b false than this method don't check the role right to edit the own profile.
-     * @return bool   Return @b true if the current user is allowed to edit the profile of the user from @b $user.
-     */
+     /**
+      * Checks if the current user is allowed to edit the profile of the user of the parameter.
+      * If will check if user can generally edit all users or if he is a group leader and can edit users
+      * of a special role where @b $user is a member or if it's the own profile and he could edit this.
+      * @param  object $user            User object of the user that should be checked if the current user can edit his profile.
+      * @param  bool   $checkOwnProfile If set to @b false than this method don't check the role right to edit the own profile.
+      * @return bool   Return @b true if the current user is allowed to edit the profile of the user from @b $user.
+      */
      public function hasRightEditProfile(&$user, $checkOwnProfile = true)
     {
         $returnValue = false;

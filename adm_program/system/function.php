@@ -8,13 +8,13 @@
  *
  *****************************************************************************/
 
- /**
-  * Autoloading function of class files. This function will be later registered
-  *.for default autoload implementation. Therefore the class name must be the same
-  * as the file name except for case sensitive.
-  * @param $className Name of the class for which the file should be loaded.
-  * @return Return @b false if the file for the class wasn't found.
-  */
+/**
+ * Autoloading function of class files. This function will be later registered
+ * for default autoload implementation. Therefore the class name must be the same
+ * as the file name except for case sensitive.
+ * @param $className Name of the class for which the file should be loaded.
+ * @return Return @b false if the file for the class wasn't found.
+ */
 function admFuncAutoload($className)
 {
     $fileName = SERVER_PATH. '/adm_program/system/classes/'.strtolower($className).'.php';

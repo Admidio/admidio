@@ -952,7 +952,7 @@ else
             }
 
             $datePrint->addRow($row['dat_details'], array('class' => $className));
-            ++$numDateElements ;
+            ++$numDateElements;
         }
 
         // Define second body content
@@ -969,7 +969,7 @@ else
                 $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
             }
             $datePrint->addRow($row['dat_details'], array('class' => $className));
-            ++$numDateElements ;
+            ++$numDateElements;
         }
 
         // Define third body content for members only
@@ -990,7 +990,7 @@ else
                 }
 
                 $datePrint->addRow($row['dat_details'], array('class' => $className));
-                ++$numDateElements ;
+                ++$numDateElements;
             }
         }
     }

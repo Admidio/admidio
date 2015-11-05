@@ -8,15 +8,15 @@
  *
  *****************************************************************************/
 
- /**
-  * A method to create a simple html page that shows a custom text and a navigation button.
-  * This should be used to show notices or errors during installation or update.
-  * @param string $message    A (html) message that should be displayed.
-  * @param string $url        The url to which the user should be navigated if he clicks the button.
-  * @param string $buttonText The text of the button.
-  * @param string $buttonIcon The icon of the button.
-  * @param bool   $update
-  */
+/**
+ * A method to create a simple html page that shows a custom text and a navigation button.
+ * This should be used to show notices or errors during installation or update.
+ * @param string $message    A (html) message that should be displayed.
+ * @param string $url        The url to which the user should be navigated if he clicks the button.
+ * @param string $buttonText The text of the button.
+ * @param string $buttonIcon The icon of the button.
+ * @param bool   $update
+ */
 function showNotice($message, $url, $buttonText, $buttonIcon, $update = false)
 {
     global $gL10n;

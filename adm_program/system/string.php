@@ -32,7 +32,7 @@ function admStrToLower($string)
  * IMPORTANT: If the fallback is used, the conversion of umlauts not work!
  * @param string $string
  * @return string
-*/
+ */
 function admStrToUpper($string)
 {
     if(function_exists('mb_strtoupper'))
@@ -50,7 +50,7 @@ function admStrToUpper($string)
  * of string or all elements of array without ckeditor variables !!!
  * @param string[] $srcArray
  * @return string[]
-*/
+ */
 function admStrStripTagsSpecial($srcArray)
 {
     foreach($srcArray as $key => $value)
@@ -78,7 +78,7 @@ function admStrStripTagsSpecial($srcArray)
  * removes html, php code and whitespaces at beginning and end of string or all elements of array
  * @param string|string[] $value
  * @return string|string[]
-*/
+ */
 function strStripTags($value)
 {
     if(is_array($value))
@@ -101,7 +101,7 @@ function strStripTags($value)
  * fuegt Quotes einem mittels addslashes() gequoteten Array und String hinzu
  * @param string|string[] $value
  * @return string|string[]
-*/
+ */
 function strAddSlashesDeep($value)
 {
     if(is_array($value))
@@ -121,7 +121,7 @@ function strAddSlashesDeep($value)
  * Entfernt Quotes aus einem mittels addslashes() gequoteten Array und String
  * @param string|string[] $value
  * @return string|string[]
-*/
+ */
 function strStripSlashesDeep($value)
 {
     if(is_array($value))
@@ -147,7 +147,7 @@ function strStripSlashesDeep($value)
  * @param string $letter
  * @param bool $reverse
  * @return string
-*/
+ */
 function strNextLetter($letter, $reverse = false)
 {
     $ascii      = ord($letter);

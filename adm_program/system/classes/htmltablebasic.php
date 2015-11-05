@@ -191,7 +191,7 @@ class HtmlTableBasic extends HtmlElement {
         }
 
         $this->addData($data);
-        ++$this->columnCount ;
+        ++$this->columnCount;
     }
 
     /**

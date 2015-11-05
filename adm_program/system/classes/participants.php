@@ -112,7 +112,7 @@ class Participants
         {
             if($member['leader'] != 0)
             {
-                ++$leader ;
+                ++$leader;
             }
         }
         // check if class variables $count and $leader are set to default flag.

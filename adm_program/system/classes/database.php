@@ -489,8 +489,8 @@ class Database
 
     /**
      * Methods reads all columns and their properties from the database table.
-     * @param string  $table                Name of the database table for which the columns should be shown.
-     * @param boolean $showColumnProperties If this is set to @b false only the column names were returned.
+     * @param string $table                Name of the database table for which the columns should be shown.
+     * @param bool   $showColumnProperties If this is set to @b false only the column names were returned.
      * @return array Returns an array with each column and their properties if $showColumnProperties is set to @b true.
      *               The array has the following format:
      *               array (
