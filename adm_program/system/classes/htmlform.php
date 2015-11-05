@@ -71,9 +71,14 @@ class HtmlForm extends HtmlFormBasic
     public function __construct($id, $action, $htmlPage = null, $options = array())
     {
         // create array with all options
-        $optionsDefault = array('type'     => 'default', 'enableFileUpload' => false, 'showRequiredFields' => true,
-                                'setFocus' => true, 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'type'               => 'default',
+            'enableFileUpload'   => false,
+            'showRequiredFields' => true,
+            'setFocus'           => true,
+            'class'              => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // navbar forms should send the data as GET
         if($optionsAll['type'] === 'navbar')
@@ -326,9 +331,14 @@ class HtmlForm extends HtmlFormBasic
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('property'         => FIELD_DEFAULT, 'helpTextIdLabel' => '',
-                                'helpTextIdInline' => '', 'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'property'         => FIELD_DEFAULT,
+            'helpTextIdLabel'  => '',
+            'helpTextIdInline' => '',
+            'icon'             => '',
+            'class'            => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
         if($optionsAll['property'] === FIELD_DISABLED)
@@ -404,9 +414,14 @@ class HtmlForm extends HtmlFormBasic
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('referenceId' => '', 'helpTextIdLabel' => '', 'helpTextIdInline' => '',
-                                'icon'        => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'referenceId'      => '',
+            'helpTextIdLabel'  => '',
+            'helpTextIdInline' => '',
+            'icon'             => '',
+            'class'            => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // set specific css class for this field
 //        if($optionsAll['class'] !== '')
@@ -465,11 +480,17 @@ class HtmlForm extends HtmlFormBasic
         $flagLabelVertical = $this->type;
 
         // create array with all options
-        $optionsDefault = array('property'         => FIELD_DEFAULT, 'toolbar' => 'AdmidioDefault',
-                                'height'           => '300px', 'helpTextIdLabel' => '',
-                                'helpTextIdInline' => '', 'labelVertical' => true,
-                                'icon'             => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'property'         => FIELD_DEFAULT,
+            'toolbar'          => 'AdmidioDefault',
+            'height'           => '300px',
+            'helpTextIdLabel'  => '',
+            'helpTextIdInline' => '',
+            'labelVertical'    => true,
+            'icon'             => '',
+            'class'            => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         if($optionsAll['labelVertical'] === true)
         {
@@ -565,10 +586,19 @@ class HtmlForm extends HtmlFormBasic
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('property'         => FIELD_DEFAULT, 'maxUploadSize' => $gPreferences['max_file_upload_size'] * 1024 * 1024,
-                                'allowedMimeTypes' => array(), 'enableMultiUploads' => false, 'hideUploadField' => false, 'multiUploadLabel' => '',
-                                'helpTextIdLabel'  => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'property'           => FIELD_DEFAULT,
+            'maxUploadSize'      => $gPreferences['max_file_upload_size'] * 1024 * 1024,
+            'allowedMimeTypes'   => array(),
+            'enableMultiUploads' => false,
+            'hideUploadField'    => false,
+            'multiUploadLabel'   => '',
+            'helpTextIdLabel'    => '',
+            'helpTextIdInline'   => '',
+            'icon'               => '',
+            'class'              => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
         if($optionsAll['property'] === FIELD_DISABLED)
@@ -685,9 +715,20 @@ class HtmlForm extends HtmlFormBasic
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('type'     => 'text', 'minLength' => null, 'maxLength' => 0, 'minNumber' => null, 'maxNumber' => null, 'step' => 1,
-                                'property' => FIELD_DEFAULT, 'helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'type'             => 'text',
+            'minLength'        => null,
+            'maxLength'        => 0,
+            'minNumber'        => null,
+            'maxNumber'        => null,
+            'step'             => 1,
+            'property'         => FIELD_DEFAULT,
+            'helpTextIdLabel'  => '',
+            'helpTextIdInline' => '',
+            'icon'             => '',
+            'class'            => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // set min/max input length
         if($optionsAll['type'] === 'text' || $optionsAll['type'] === 'password' || $optionsAll['type'] === 'search' ||
@@ -858,9 +899,15 @@ class HtmlForm extends HtmlFormBasic
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('property'         => FIELD_DEFAULT, 'maxLength' => 0, 'helpTextIdLabel' => '',
-                                'helpTextIdInline' => '', 'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'property'         => FIELD_DEFAULT,
+            'maxLength'        => 0,
+            'helpTextIdLabel'  => '',
+            'helpTextIdInline' => '',
+            'icon'             => '',
+            'class'            => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
         if($optionsAll['property'] === FIELD_DISABLED)
@@ -956,9 +1003,16 @@ class HtmlForm extends HtmlFormBasic
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('property'        => FIELD_DEFAULT, 'defaultValue' => '', 'showNoValueButton' => false,
-                                'helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'property'          => FIELD_DEFAULT,
+            'defaultValue'      => '',
+            'showNoValueButton' => false,
+            'helpTextIdLabel'   => '',
+            'helpTextIdInline'  => '',
+            'icon'              => '',
+            'class'             => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
         if($optionsAll['property'] === FIELD_DISABLED)
@@ -1059,11 +1113,18 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // create array with all options
-        $optionsDefault = array('property'                       => FIELD_DEFAULT, 'defaultValue' => '',
-                                'showContextDependentFirstEntry' => true, 'firstEntry' => '',
-                                'multiselect'                    => false, 'helpTextIdLabel' => '',
-                                'helpTextIdInline'               => '', 'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'property'                       => FIELD_DEFAULT,
+            'defaultValue'                   => '',
+            'showContextDependentFirstEntry' => true,
+            'firstEntry'                     => '',
+            'multiselect'                    => false,
+            'helpTextIdLabel'                => '',
+            'helpTextIdInline'               => '',
+            'icon'                           => '',
+            'class'                          => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
         if($optionsAll['property'] === FIELD_DISABLED)
@@ -1391,11 +1452,18 @@ class HtmlForm extends HtmlFormBasic
         global $gCurrentOrganization, $gValidLogin, $gL10n;
 
         // create array with all options
-        $optionsDefault = array('property'                       => FIELD_DEFAULT, 'defaultValue' => '',
-                                'showContextDependentFirstEntry' => true, 'multiselect' => false,
-                                'showSystemCategory'             => true, 'helpTextIdLabel' => '',
-                                'helpTextIdInline'               => '', 'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'property'                       => FIELD_DEFAULT,
+            'defaultValue'                   => '',
+            'showContextDependentFirstEntry' => true,
+            'multiselect'                    => false,
+            'showSystemCategory'             => true,
+            'helpTextIdLabel'                => '',
+            'helpTextIdInline'               => '',
+            'icon'                           => '',
+            'class'                          => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         $sqlTables       = TBL_CATEGORIES;
         $sqlCondidtions  = '';

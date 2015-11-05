@@ -61,9 +61,16 @@ class ModuleMenu
      */
     public function addCategoryItem($id, $categoryType, $defaultCategory, $link, $text, $admin = false)
     {
-        $this->items[$id] = array('id'              => $id, 'type' => 'category', 'categoryType' => $categoryType,
-                                  'defaultCategory' => $defaultCategory, 'link' => $link, 'text' => $text,
-                                  'admin'           => $admin, 'subitems' => array());
+        $this->items[$id] = array(
+            'id'              => $id,
+            'type'            => 'category',
+            'categoryType'    => $categoryType,
+            'defaultCategory' => $defaultCategory,
+            'link'            => $link,
+            'text'            => $text,
+            'admin'           => $admin,
+            'subitems'        => array()
+        );
     }
 
     /**
@@ -246,8 +253,15 @@ class ModuleMenu
             $icon = THEME_PATH.'/icons/'.$icon;
         }
 
-        return array('id'   => $id, 'type' => $type, 'link' => $link, 'text' => $text,
-                     'icon' => $icon, 'subitems' => array(), 'js' => $js);
+        return array(
+            'id'       => $id,
+            'type'     => $type,
+            'link'     => $link,
+            'text'     => $text,
+            'icon'     => $icon,
+            'subitems' => array(),
+            'js'       => $js
+        );
     }
 
     /**

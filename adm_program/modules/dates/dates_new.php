@@ -274,8 +274,9 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
     {
         $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
     }
-    $form->addSelectBox('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $roles, array('property' => FIELD_REQUIRED,
-                        'defaultValue'                                                        => $dateRoles, 'multiselect' => true));
+    $form->addSelectBox('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $roles, array('property'     => FIELD_REQUIRED,
+                                                                                   'defaultValue' => $dateRoles,
+                                                                                   'multiselect'  => true));
 
     $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), $date->getValue('dat_highlight'));
 

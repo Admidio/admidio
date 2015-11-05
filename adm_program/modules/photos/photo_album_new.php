@@ -128,9 +128,10 @@ else
 $form = new HtmlForm('photo_album_edit_form', $g_root_path.'/adm_program/modules/photos/photo_album_function.php?pho_id='.$getPhotoId.'&amp;mode='.$getMode, $page);
 $form->addInput('pho_name', $gL10n->get('PHO_ALBUM'), $photoAlbum->getValue('pho_name'), array('property' => FIELD_REQUIRED, 'maxLength' => 50));
 subfolder(null, '', $photoAlbum, $getPhotoId);
-$form->addSelectBox('pho_pho_id_parent', $gL10n->get('PHO_PARENT_ALBUM'), $photoAlbumsArray, array('property' => FIELD_REQUIRED,
-                    'defaultValue'                                                                            => $parentAlbumId, 'showContextDependentFirstEntry' => false,
-                    'helpTextIdLabel'                                                                         => array('PHO_PARENT_ALBUM_DESC', $gL10n->get('PHO_PHOTO_ALBUMS'))));
+$form->addSelectBox('pho_pho_id_parent', $gL10n->get('PHO_PARENT_ALBUM'), $photoAlbumsArray, array('property'                       => FIELD_REQUIRED,
+                                                                                                   'defaultValue'                   => $parentAlbumId,
+                                                                                                   'showContextDependentFirstEntry' => false,
+                                                                                                   'helpTextIdLabel'                => array('PHO_PARENT_ALBUM_DESC', $gL10n->get('PHO_PHOTO_ALBUMS'))));
 $form->addInput('pho_begin', $gL10n->get('SYS_START'), $photoAlbum->getValue('pho_begin'), array('property' => FIELD_REQUIRED, 'type' => 'date', 'maxLength' => 10));
 $form->addInput('pho_end', $gL10n->get('SYS_END'), $photoAlbum->getValue('pho_end'), array('type' => 'date', 'maxLength' => 10));
 $form->addInput('pho_photographers', $gL10n->get('PHO_PHOTOGRAPHER'), $photoAlbum->getValue('pho_photographers'), array('maxLength' => 100));

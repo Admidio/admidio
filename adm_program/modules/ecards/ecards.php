@@ -220,8 +220,9 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
         $list[] = array($row['usr_id'], $row['first_name'].' '.$row['last_name']. ' ('.$row['email'].')', $gL10n->get('SYS_MEMBERS'));
     }
 
-    $form->addSelectBox('ecard_recipients', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_REQUIRED,
-                        'defaultValue'                                                     => $recipients, 'multiselect' => true));
+    $form->addSelectBox('ecard_recipients', $gL10n->get('SYS_TO'), $list, array('property'     => FIELD_REQUIRED,
+                                                                                'defaultValue' => $recipients,
+                                                                                'multiselect'  => true));
     $form->addLine();
     $form->addInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
     $form->addInput('mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
