@@ -157,9 +157,9 @@ class ConditionParser
      * @param string $columnName      The name of the database column for which the condition should be created
      * @param string $columnType      The type of the column. Valid types are @b string, @b int, @b date and @b checkbox
      * @param string $fieldName       The name of the profile field. This is used for error output to the end user
-     * @return string       Returns a valid SQL string with the condition for that column
      * @throws AdmException LST_NOT_VALID_DATE_FORMAT
      *                      LST_NOT_NUMERIC
+     * @return string       Returns a valid SQL string with the condition for that column
      */
     public function makeSqlStatement($sourceCondition, $columnName, $columnType, $fieldName)
     {

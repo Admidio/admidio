@@ -130,20 +130,20 @@ $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
     }
     else
     {
-        $form->addSelectBoxForCategories('inf_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'INF', 'EDIT_CATEGORIES', array( 'property' => FIELD_REQUIRED, 'defaultValue' => $itemField->getValue('cat_name')));
+        $form->addSelectBoxForCategories('inf_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'INF', 'EDIT_CATEGORIES', array('property' => FIELD_REQUIRED, 'defaultValue' => $itemField->getValue('cat_name')));
     }
 $form->closeGroupBox();
 $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
-    $itemFieldText = array('CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
-                           'DATE'     => $gL10n->get('SYS_DATE'),
-                           'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
-                           'EMAIL'    => $gL10n->get('SYS_EMAIL'),
+    $itemFieldText = array('CHECKBOX'     => $gL10n->get('SYS_CHECKBOX'),
+                           'DATE'         => $gL10n->get('SYS_DATE'),
+                           'DROPDOWN'     => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
+                           'EMAIL'        => $gL10n->get('SYS_EMAIL'),
                            'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
-                           'TEXT'     => $gL10n->get('SYS_TEXT').' (100 '.$gL10n->get('SYS_CHARACTERS').')',
-                           'TEXT_BIG' => $gL10n->get('SYS_TEXT').' (4000 '.$gL10n->get('SYS_CHARACTERS').')',
-                           'URL'      => $gL10n->get('ORG_URL'),
-                           'NUMBER'   => $gL10n->get('SYS_NUMBER'),
-                           'DECIMAL'  => $gL10n->get('SYS_DECIMAL_NUMBER'));
+                           'TEXT'         => $gL10n->get('SYS_TEXT').' (100 '.$gL10n->get('SYS_CHARACTERS').')',
+                           'TEXT_BIG'     => $gL10n->get('SYS_TEXT').' (4000 '.$gL10n->get('SYS_CHARACTERS').')',
+                           'URL'          => $gL10n->get('ORG_URL'),
+                           'NUMBER'       => $gL10n->get('SYS_NUMBER'),
+                           'DECIMAL'      => $gL10n->get('SYS_DECIMAL_NUMBER'));
 
     if($itemField->getValue('inf_system') == 1)
     {
@@ -153,7 +153,7 @@ $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
     else
     {
         // fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
-        $form->addSelectBox('inf_type', $gL10n->get('ORG_DATATYPE'), $itemFieldText, array( 'property' => FIELD_REQUIRED, 'defaultValue' => $itemField->getValue('inf_type')));
+        $form->addSelectBox('inf_type', $gL10n->get('ORG_DATATYPE'), $itemFieldText, array('property' => FIELD_REQUIRED, 'defaultValue' => $itemField->getValue('inf_type')));
     }
     $form->addMultilineTextInput('inf_value_list', $gL10n->get('ORG_VALUE_LIST'), $itemField->getValue('inf_value_list', 'database'), 6, array('property' => FIELD_REQUIRED, 'helpTextIdLabel' => 'ORG_VALUE_LIST_DESC'));
 $form->closeGroupBox();
@@ -166,7 +166,7 @@ $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-p
     $form->addEditor('inf_description', null, $itemField->getValue('inf_description'), array('property' => FIELD_DEFAULT, 'toolbar' => 'AdmidioDefault', 'height' => '200px'));
 $form->closeGroupBox();
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array( 'icon' => THEME_PATH.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($itemField->getValue('inf_usr_id_create'), $itemField->getValue('inf_timestamp_create'), $itemField->getValue('inf_usr_id_change'), $itemField->getValue('inf_timestamp_change')));
 
 // add form to html page and show page

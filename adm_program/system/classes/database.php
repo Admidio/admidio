@@ -303,7 +303,7 @@ class Database
         {
             $xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', 0, true);
             $node = $xmlDatabases->xpath("/databases/database[@id='".$this->engine."']/minversion");
-            $this->minRequiredVersion = (string)$node[0]; // explicit typcasting because of problem with simplexml and sessions
+            $this->minRequiredVersion = (string) $node[0]; // explicit typcasting because of problem with simplexml and sessions
         }
         return $this->minRequiredVersion;
     }
@@ -318,7 +318,7 @@ class Database
         {
             $xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', 0, true);
             $node = $xmlDatabases->xpath("/databases/database[@id='".$this->engine."']/name");
-            $this->databaseName = (string)$node[0]; // explicit typcasting because of problem with simplexml and sessions
+            $this->databaseName = (string) $node[0]; // explicit typcasting because of problem with simplexml and sessions
         }
         return $this->databaseName;
     }

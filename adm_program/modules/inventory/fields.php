@@ -185,16 +185,16 @@ while($row = $gDb->fetch_array($result))
         $mandatory = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/asterisk_gray.png" alt="'.$gL10n->get('ORG_FIELD_NOT_MANDATORY').'" title="'.$gL10n->get('ORG_FIELD_NOT_MANDATORY').'" />';
     }
 
-    $userFieldText = array('CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
-                            'DATE'     => $gL10n->get('SYS_DATE'),
-                            'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
-                            'EMAIL'    => $gL10n->get('SYS_EMAIL'),
+    $userFieldText = array('CHECKBOX'      => $gL10n->get('SYS_CHECKBOX'),
+                            'DATE'         => $gL10n->get('SYS_DATE'),
+                            'DROPDOWN'     => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
+                            'EMAIL'        => $gL10n->get('SYS_EMAIL'),
                             'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
-                            'TEXT'     => $gL10n->get('SYS_TEXT').' (50)',
-                            'TEXT_BIG' => $gL10n->get('SYS_TEXT').' (255)',
-                            'URL'      => $gL10n->get('ORG_URL'),
-                            'NUMBER'   => $gL10n->get('SYS_NUMBER'),
-                            'DECIMAL'  => $gL10n->get('SYS_DECIMAL_NUMBER'));
+                            'TEXT'         => $gL10n->get('SYS_TEXT').' (50)',
+                            'TEXT_BIG'     => $gL10n->get('SYS_TEXT').' (255)',
+                            'URL'          => $gL10n->get('ORG_URL'),
+                            'NUMBER'       => $gL10n->get('SYS_NUMBER'),
+                            'DECIMAL'      => $gL10n->get('SYS_DECIMAL_NUMBER'));
 
     $usfSystem = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/inventory/fields_new.php?inf_id='.$userField->getValue('inf_id').'"><img
                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';

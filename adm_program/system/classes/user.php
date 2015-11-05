@@ -263,10 +263,10 @@ class User extends TableUsers
      *                                            To use this functionality @b $updateSessionCookies must be set to true.
      * @param  bool         $updateSessionCookies The current session will be updated to a valid login.
      *                                            If set to false then the login is only valid for the current script.
-     * @return true         Return true if the correct password for this user was given to this method.
      * @throws AdmException SYS_LOGIN_FAILED
      *                                           SYS_LOGIN_FAILED
      *                                           SYS_PASSWORD_UNKNOWN
+     * @return true         Return true if the correct password for this user was given to this method.
      */
     public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true)
     {
@@ -1008,8 +1008,8 @@ class User extends TableUsers
      * If the user doesn't have the right to save data of this user than an exception will be thrown.
      * @param  bool         $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
      *                                         if table has columns like @b usr_id_create or @b usr_id_changed
-     * @return void
      * @throws AdmException
+     * @return void
      */
     public function save($updateFingerPrint = true)
     {

@@ -41,57 +41,57 @@ $fixers = array(
     'object_operator', // symfony
     //'operators_spaces', // symfony
     'phpdoc_indent', // symfony
-    //'phpdoc_inline_tag', // symfony
-    //'phpdoc_no_access', // symfony
+    'phpdoc_inline_tag', // symfony
+    'phpdoc_no_access', // symfony
     //'phpdoc_no_empty_return', // symfony
-    //'phpdoc_no_package', // symfony
+    'phpdoc_no_package', // symfony
     //'phpdoc_params', // symfony
     'phpdoc_scalar', // symfony
     //'phpdoc_separation', // symfony
     //'phpdoc_short_description', // symfony
-    //'phpdoc_to_comment', // symfony
+    'phpdoc_to_comment', // symfony
     'phpdoc_trim', // symfony
-    //'phpdoc_type_to_var', // symfony
-    //'phpdoc_types', // symfony
-    //'phpdoc_var_without_name', // symfony
+    'phpdoc_type_to_var', // symfony
+    'phpdoc_types', // symfony
+    'phpdoc_var_without_name', // symfony
     'pre_increment', // symfony
     'remove_leading_slash_use', // symfony
     'remove_lines_between_uses', // symfony
     //'return', // symfony
     'self_accessor', // symfony
-    //'single_array_no_trailing_comma', // symfony
-    //'single_blank_line_before_namespace', // symfony
+    'single_array_no_trailing_comma', // symfony
+    'single_blank_line_before_namespace', // symfony
     //'single_quote', // symfony
-    //'spaces_before_semicolon', // symfony
     'spaces_before_semicolon', // symfony
-    //'spaces_cast', // symfony
+    'spaces_before_semicolon', // symfony
+    'spaces_cast', // symfony
     'standardize_not_equal', // symfony
-    'ternary_spaces' // symfony
-    //'trim_array_spaces', // symfony
+    'ternary_spaces', // symfony
+    'trim_array_spaces', // symfony
     //'unalign_double_arrow', // symfony
     //'unalign_equals', // symfony
     //'unary_operators_spaces', // symfony
-    //'unused_use', // symfony
-    //'whitespacy_lines', // symfony
-    //'align_double_arrow', // contrib
+    'unused_use', // symfony
+    'whitespacy_lines', // symfony
+    'align_double_arrow', // contrib
     //'align_equals', // contrib
     //'concat_with_spaces', // contrib
-    //'ereg_to_preg', // contrib
+    'ereg_to_preg', // contrib
     //'header_comment', // contrib
     //'logical_not_operators_with_spaces', // contrib
     //'logical_not_operators_with_successor_space', // contrib
-    //'long_array_syntax', // contrib
-    //'multiline_spaces_before_semicolon', // contrib
-    //'newline_after_open_tag', // contrib
-    //'no_blank_lines_before_namespace', // contrib
-    //'ordered_use', // contrib
-    //'php4_constructor', // contrib
-    //'php_unit_construct', // contrib
-    //'php_unit_strict', // contrib
-    //'phpdoc_order', // contrib
-    //'phpdoc_var_to_type', // contrib
+    'long_array_syntax', // contrib
+    'multiline_spaces_before_semicolon', // contrib
+    'newline_after_open_tag', // contrib
+    'no_blank_lines_before_namespace', // contrib
+    'ordered_use', // contrib
+    'php4_constructor', // contrib
+    'php_unit_construct', // contrib
+    'php_unit_strict', // contrib
+    'phpdoc_order', // contrib
+    'phpdoc_var_to_type', // contrib
     //'short_array_syntax', // contrib
-    //'short_echo_tag', // contrib
+    'short_echo_tag', // contrib
     //'strict', // contrib
     //'strict_param', // contrib
 );

@@ -98,11 +98,11 @@ class PasswordHashing
     public static function passwordInfo($password)
     {
         $passwordInfo = array(
-            'length' => 0,
-            'number' => false,
+            'length'    => 0,
+            'number'    => false,
             'lowerCase' => false,
             'upperCase' => false,
-            'symbol' => false,
+            'symbol'    => false,
         );
 
         $passwordInfo['length'] = strlen($password);

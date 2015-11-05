@@ -574,7 +574,7 @@ elseif($getMode == 8) // Start installation
     $component->setValue('com_name', 'Admidio Core');
     $component->setValue('com_name_intern', 'CORE');
     $component->setValue('com_version', ADMIDIO_VERSION);
-    $component->setValue('com_beta', (string)ADMIDIO_VERSION_BETA);
+    $component->setValue('com_beta', (string) ADMIDIO_VERSION_BETA);
     $component->setValue('com_update_step', $component->getMaxUpdateStep());
     $component->save();
 

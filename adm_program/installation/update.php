@@ -317,7 +317,7 @@ elseif($getMode == 2)
     $mainVersion      = substr($installedDbVersion, 0, 1);
     $subVersion       = substr($installedDbVersion, 2, 1);
     $microVersion     = substr($installedDbVersion, 4, 1);
-    $microVersion     = (int)$microVersion + 1;
+    $microVersion     = (int) $microVersion + 1;
     $flagNextVersion  = true;
 
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
@@ -410,12 +410,12 @@ elseif($getMode == 2)
                 {
                     if($subVersion == 4) // we do not have more then 4 subversions with old updater
                     {
-                        $mainVersion = (int)$mainVersion + 1;
+                        $mainVersion = (int) $mainVersion + 1;
                         $subVersion  = 0;
                     }
                     else
                     {
-                        $subVersion  = (int)$subVersion + 1;
+                        $subVersion  = (int) $subVersion + 1;
                     }
 
                     $microVersion    = 0;

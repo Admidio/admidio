@@ -171,8 +171,8 @@ class ListConfiguration extends TableLists
      * @param int $memberStatus 0 - Nur aktive Rollenmitglieder
      *                          1 - Nur ehemalige Rollenmitglieder
      *                          2 - Aktive und ehemalige Rollenmitglieder
-     * @return string
      * @throws AdmException
+     * @return string
      */
     public function getSQL($roleIds, $memberStatus = 0)
     {
