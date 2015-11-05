@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************/
 /** @class HtmlTableBasic
  *  @brief  Create html tables
@@ -111,7 +112,6 @@
  *****************************************************************************/
 
 class HtmlTableBasic extends HtmlElement {
-
     protected $border;                   ///< String with border attribute and value of the table
     protected $lineChange;               ///< Integer value for class change mode for table rows.
     protected $class_1;                  ///< Class name for standard design of table rows

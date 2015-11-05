@@ -172,7 +172,7 @@ class PasswordHashing
         while ($time <= $maxTime && $cost <= 31) {
             $start = microtime(true);
             $options['cost'] = $cost;
-            PasswordHashing::hash($password, $algorithm, $options);
+            self::hash($password, $algorithm, $options);
             $end = microtime(true);
 
             $time = $end - $start;

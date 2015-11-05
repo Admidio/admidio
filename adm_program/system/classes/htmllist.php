@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************/
 /** @class HtmlList
  *  @brief  Create html lists
@@ -56,7 +57,6 @@
 
 class HtmlList extends HtmlElement
 {
-
     /**
      * Constructor creates the element
      *
@@ -64,7 +64,6 @@ class HtmlList extends HtmlElement
      * @param $id Id of the list
      * @param $class Class name of the list
      */
-
     public function __construct($list = 'ul', $id = '', $class = '')
     {
 

@@ -92,10 +92,11 @@ class TableMessage extends TableAccess
         return $row['user'];
     }
 
-    /** Deletes the selected message with all associated fields.
-     *  After that the class will be initialize.
-     *  @return @b 'done' if message is deleted or message with additional information if it is marked
-                for other user to delete. On error it is "delete not OK"
+    /**
+     * Deletes the selected message with all associated fields.
+     * After that the class will be initialize.
+     * @return @b 'done' if message is deleted or message with additional information if it is marked
+     *         for other user to delete. On error it is "delete not OK"
      */
     public function delete()
     {

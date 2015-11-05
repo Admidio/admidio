@@ -122,7 +122,6 @@
  * @endcode
  */
 abstract class HtmlElement {
-
     protected $arrParentElements;         ///< Array with opened child elements
     protected $currentElement;            ///< Internal pointer showing to actual element or child element
     protected $currentElementAttributes;  ///< Attributes of the current element

@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************/
 /** @class TableMembers
  *  @brief Handle memberships of roles and manage it in the database table adm_members

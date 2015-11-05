@@ -1,4 +1,5 @@
 <?php
+
 /******************************************************************************/
 /** @class Participants
  *  @brief This class gets information about participants and leaders of dates.

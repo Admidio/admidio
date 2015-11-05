@@ -64,7 +64,6 @@
  */
 class HtmlFormBasic extends HtmlElement
 {
-
     /**
      * Constructor creates the element
      *

@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************/
 /** @class ModuleLists
  *  @brief Class manages lists viewable for user
@@ -211,7 +212,6 @@ class ModuleLists extends Modules
 
     /** returns SQL condition
      *  @return SQL condition for category id
-     *
      */
     private function getCategorySql()
     {

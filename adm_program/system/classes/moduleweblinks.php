@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************/
 /** @class ModuleWeblinks
  *  @brief Class manages weblinks viewable for user
@@ -122,7 +123,6 @@ class ModuleWeblinks extends Modules
      *  @param $limit Number of elements returned max. Default NULL will take number from peferences.
      *  @return array with links and corresponding informations
      */
-
     public function getDataSet($startElement=0, $limit=NULL)
     {
         global $gCurrentOrganization, $gPreferences, $gProfileFields, $gDb, $gValidLogin;

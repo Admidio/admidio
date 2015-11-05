@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************/
 /** @class HtmlDiv
  *  @brief  Create html div elements
@@ -50,7 +51,6 @@
 
 class HtmlDiv extends HtmlElement
 {
-
     protected $level; ///< Integer value for the depth of nested div elements starting with level 1 for the main element
 
     /**
@@ -59,7 +59,6 @@ class HtmlDiv extends HtmlElement
      * @param $id Id of the main div
      * @param $class Class name of the main div
      */
-
     public function __construct($id = '', $class = '')
     {
 

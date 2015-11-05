@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************/
 /** @class ModuleAnnouncements
  *  @brief This class reads announcement recordsets from database

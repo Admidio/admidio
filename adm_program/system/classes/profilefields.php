@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************/
 /** @class ProfileFields
  *  @brief Reads the user fields structure out of database and give access to it
