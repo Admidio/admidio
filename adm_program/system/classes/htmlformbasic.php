@@ -164,7 +164,6 @@ class HtmlFormBasic extends HtmlElement
         $this->addData($string);
     }
 
-
     /**
      * Add a legend element in current fieldset.
      * @param string $legend Data for the element as string
@@ -173,7 +172,6 @@ class HtmlFormBasic extends HtmlElement
     {
         $this->addElement('legend', '', '', $legend);
     }
-
 
     /**
      * Add inline element into current division.

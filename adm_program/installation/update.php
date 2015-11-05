@@ -183,7 +183,6 @@ if($installedDbVersion === '')
                $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
 }
 
-
 if($getMode == 1)
 {
     // if database version is smaller then source version -> update

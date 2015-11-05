@@ -180,7 +180,6 @@ class Captcha
         //echo "<br>= $result (".$_SESSION['captchacode'].")";
     }
 
-
     private function generateNewCaptchaCode()
     {
         // neuen CaptchaCode erzeugen...
@@ -198,7 +197,6 @@ class Captcha
         // hier wird der Code jetzt in der Session gespeichert...
         $_SESSION['captchacode'] = $this->captchaCode;
     }
-
 
     private function makeCaptcha()
     {

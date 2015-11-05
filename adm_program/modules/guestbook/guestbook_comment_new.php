@@ -108,7 +108,6 @@ if($getGbcId == 0 && $gValidLogin)
     $guestbook_comment->setValue('gbc_email', $gCurrentUser->getValue('EMAIL'));
 }
 
-
 if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
 {
     // Falls er nicht eingeloggt ist, wird vor dem Ausfuellen des Formulars noch geprueft ob der

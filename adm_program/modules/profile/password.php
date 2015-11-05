@@ -44,7 +44,6 @@ if(!isMember($getUserId)
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-
 if($getMode === 'change')
 {
     $oldPassword        = $_POST['old_password'];

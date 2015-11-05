@@ -44,7 +44,6 @@ elseif($getMode == 'change')
     $headline = $gL10n->get('PHO_EDIT_ALBUM');
 }
 
-
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // Fotoalbumobjekt anlegen

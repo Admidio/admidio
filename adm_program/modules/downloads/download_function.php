@@ -82,7 +82,6 @@ if ($getMode == 2)
     unset($_SESSION['download_request']);
 }
 
-
 // Ordner erstellen
 elseif ($getMode == 3)
 {
@@ -157,7 +156,6 @@ elseif ($getMode == 3)
         $e->showHtml();
     }
 }
-
 
 //Datei / Ordner umbenennen
 elseif ($getMode == 4)
@@ -270,7 +268,6 @@ elseif ($getMode == 4)
     }
 }
 
-
 //Folder loeschen
 elseif ($getMode == 5)
 {
@@ -301,7 +298,6 @@ elseif ($getMode == 5)
 
     unset($_SESSION['download_request']);
 }
-
 
 //Datei / Ordner zur DB hinzufeuegen
 elseif ($getMode == 6)

@@ -183,7 +183,6 @@ if($getPhotoNr == null)
         }
     }
 
-
     $zip->close();
 
     header('Content-Type: application/zip');

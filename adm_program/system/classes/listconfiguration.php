@@ -214,7 +214,6 @@ class ListConfiguration extends TableLists
 
             $sqlSelect = $sqlSelect. $dbColumnName;
 
-
             $userFieldType = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type');
 
             // create a valid sort
@@ -245,7 +244,6 @@ class ListConfiguration extends TableLists
                     $sqlOrderBy = $sqlOrderBy. $dbColumnName. ' '. $listColumn->getValue('lsc_sort');
                 }
             }
-
 
             // Handle the conditions for the columns
             if(strlen($listColumn->getValue('lsc_filter')) > 0)

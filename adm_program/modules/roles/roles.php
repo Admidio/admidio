@@ -73,7 +73,6 @@ else
     $visibleRolesFlag  = '1';
 }
 
-
 // create html page object
 $page = new HtmlPage($headline);
 

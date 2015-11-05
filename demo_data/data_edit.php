@@ -124,11 +124,9 @@ $sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(31).' 17:00:00\'
          WHERE dat_id = 13 ';
 $db->query($sql);
 
-
 $sql = 'UPDATE '.TBL_FOLDERS.' SET fol_timestamp = \''.addDaysToDate(-7).'\'
          WHERE fol_id = 1 ';
 $db->query($sql);
-
 
 $sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_timestamp_create = \''.addDaysToDate(-14).' 12:14:42\'
          WHERE gbo_id = 1 ';
@@ -138,11 +136,9 @@ $sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_timestamp_create = \''.addDaysToDate(-5
          WHERE gbo_id = 2 ';
 $db->query($sql);
 
-
 $sql = 'UPDATE '.TBL_GUESTBOOK_COMMENTS.' SET gbc_timestamp_create = \''.addDaysToDate(-4).' 16:23:12\'
          WHERE gbc_id = 1 ';
 $db->query($sql);
-
 
 $sql = 'UPDATE '.TBL_LINKS.' SET lnk_timestamp_create = \''.addDaysToDate(-4).'\'
                                , lnk_timestamp_change = \''.addDaysToDate(-3).'\'

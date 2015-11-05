@@ -378,7 +378,6 @@ class HtmlForm extends HtmlFormBasic
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
 
-
     /**
      * Add custom html content to the form within the default field structure.
      * The Label will be set but instead of an form control you can define any html.
@@ -824,7 +823,6 @@ class HtmlForm extends HtmlFormBasic
     {
         $this->addHtml('<hr />');
     }
-
 
     /**
      * Add a new textarea field with a label to the form.

@@ -44,7 +44,6 @@ catch(AdmException $e)
 //kompletten Pfad der Datei holen
 $completePath = $file->getCompletePathOfFile();
 
-
 //pruefen ob File ueberhaupt physikalisch existiert
 if (!file_exists($completePath))
 {
@@ -54,7 +53,6 @@ if (!file_exists($completePath))
 //Downloadcounter inkrementieren
 $file->setValue('fil_counter', $file->getValue('fil_counter') + 1);
 $file->save();
-
 
 //Dateigroese ermitteln
 $fileSize   = filesize($completePath);

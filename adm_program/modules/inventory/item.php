@@ -156,7 +156,6 @@ if($gNavigation->count() > 1)
 $profileMenu->addItem('menu_item_new_entry', $g_root_path. '/adm_program/modules/inventory/item_new.php?item_id='.$inventory->getValue('inv_id'),
                 $gL10n->get('MEM_EDIT_USER'), 'edit.png');
 
-
 $profileMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
 
 if($gCurrentUser->isWebmaster())

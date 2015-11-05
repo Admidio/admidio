@@ -55,7 +55,6 @@ class ComponentUpdate extends Component
         return false;
     }
 
-
     /**
      * Will execute the specific update step that is set through the parameter $xmlNode.
      * If the step was successfully done the id will be stored in the component recordset

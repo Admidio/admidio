@@ -420,7 +420,6 @@ if ($getMsgType === 'EMAIL')
     // prepare body of email with note of sender and homepage
     $email->setSenderInText($postName, $postFrom, $ReceiverName);
 
-
     // set Text
     $email->setText($emailTemplate);
 

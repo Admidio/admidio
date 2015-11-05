@@ -114,7 +114,6 @@ class RSSfeed
         echo '<pubDate>'.date('r')."</pubDate>\n\n";
     }
 
-
     /**
      * @return void
      */

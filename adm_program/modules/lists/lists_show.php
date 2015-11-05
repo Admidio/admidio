@@ -84,7 +84,6 @@ else
     $roleIdLink       = '&rol_id='. $getRoleId;
 }
 
-
 // if no list parameter is set then load role default list configuration or system default list configuration
 if($getListId === 0 && $numberRoles === 1)
 {

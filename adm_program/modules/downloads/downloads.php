@@ -241,7 +241,6 @@ $downloadOverview->setDatatablesColumnsHide(array(1));
 $downloadOverview->setDatatablesOrderColumns(array(1, 3));
 $htmlDownloadOverview = $downloadOverview->show(false);
 
-
 /**************************************************************************/
 // Add Admin table to html page
 /**************************************************************************/

@@ -264,7 +264,6 @@ $sql = 'UPDATE '. TBL_USERS. ' SET usr_timestamp_create = \''.DATETIME_NOW.'\'
          WHERE usr_timestamp_create IS NULL ';
 $gDb->query($sql);
 
-
 // Datenstruktur nach Update anpassen
 $sql = 'ALTER TABLE '. TBL_USERS. ' MODIFY COLUMN usr_timestamp_create datetime NOT NULL ';
 $gDb->query($sql);
@@ -307,7 +306,6 @@ $sql = 'ALTER TABLE '. TBL_ROLES. '
         DROP rol_mail_logout';
 $gDb->query($sql);
 
-
 //Neues Inventarmodulrecht installieren
 //1. neue Spalte anlegen
     //passiert schon in upd_2_1_0_db.sql
@@ -316,8 +314,6 @@ $gDb->query($sql);
 $sql = 'UPDATE '. TBL_ROLES. ' SET rol_inventory = \'1\'
         WHERE rol_name = \'Webmaster\'';
 $gDb->query($sql);
-
-
 
 //Fototext updaten
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;

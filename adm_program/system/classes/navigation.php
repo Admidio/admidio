@@ -122,7 +122,6 @@ class Navigation
         }
     }
 
-
     /**
      * Returns html code that contain a link back to the previous url.
      * @param  string $id Optional you could set an id for the back link

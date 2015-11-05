@@ -52,7 +52,6 @@ if($getGboId == 0)
 }
 $gNavigation->addUrl(CURRENT_URL);
 
-
 // create html page object
 $page = new HtmlPage();
 
@@ -301,7 +300,6 @@ else
                            ORDER by gbc_timestamp_create asc';
                 $commentStatement = $gDb->query($sql);
 
-
                 // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...
                 if ($getGboId == 0 && $commentStatement->rowCount() > 0)
                 {
@@ -360,7 +358,6 @@ else
                         alt="'.$gL10n->get('GBO_WRITE_COMMENT').'" title="'.$gL10n->get('GBO_WRITE_COMMENT').'" />'.$gL10n->get('GBO_WRITE_COMMENT').'</button>');
                 }
 
-
                 // Falls eine ID uebergeben wurde und der dazugehoerige Eintrag existiert,
                 // werden unter dem Eintrag die dazugehoerigen Kommentare (falls welche da sind) angezeigt.
                 if ($countGuestbookEntries > 0 && $getGboId > 0)
@@ -380,7 +377,6 @@ else
         $page->addHtml('</div>');
     }  // Ende While-Schleife
 }
-
 
 // If necessary show links to navigate to next and previous recordsets of the query
 $base_url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline.'&amp;moderation='.$getModeration;

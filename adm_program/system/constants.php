@@ -31,7 +31,6 @@ else
     define('ADMIDIO_VERSION_TEXT', ADMIDIO_VERSION);
 }
 
-
 // different paths
 define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1));
 if(isset($g_root_path) && strpos($_SERVER['SCRIPT_FILENAME'], '/adm_') !== false)

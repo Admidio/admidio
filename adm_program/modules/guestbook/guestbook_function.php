@@ -66,8 +66,6 @@ if ($getMode == 2 || $getMode == 3 || $getMode == 4 || $getMode == 5 || $getMode
         require_once('../../system/login_valid.php');
     }
 
-
-
     if ($getMode == 2 || $getMode == 3 || $getMode == 5 || $getMode == 8)
     {
         // Fuer die modes 2,3,5,6,7 und 8 werden editGuestbook-Rechte benoetigt
@@ -110,7 +108,6 @@ else
         }
     }
 }
-
 
 if ($getMode == 1 || $getMode == 3)
 {

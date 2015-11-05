@@ -250,7 +250,6 @@ class TableInventoryField extends TableAccess
         parent::save($updateFingerPrint);
     }
 
-
     /** Set a new value for a column of the database table.
      *  The value is only saved in the object. You must call the method @b save to store the new value to the database
      *  @param $columnName The name of the database column whose value should get a new value

@@ -153,7 +153,6 @@ elseif($getMode == 2)
         }
     }
 
-
     // Zeitraum von/bis auf Gueltigkeit pruefen
 
     if(array_key_exists('rol_start_date', $_POST) && $_POST['rol_start_date'] !== '')

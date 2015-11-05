@@ -126,7 +126,6 @@ else
     $versionUpdate = checkVersion(ADMIDIO_VERSION, $stableVersion, $betaVersion, $betaRelease, ADMIDIO_VERSION_BETA);
 }
 
-
 // Nur im Anzeigemodus geht es weiter, ansonsten kann der aktuelle Updatestand
 // in der Variable $version_update abgefragt werden.
 // $version_update (0 = Kein Update, 1 = Neue stabile Version, 2 = Neue Beta-Version, 3 = Neue stabile + Beta Version, 99 = Keine Verbindung)

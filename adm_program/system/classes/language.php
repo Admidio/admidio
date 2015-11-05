@@ -257,7 +257,6 @@ class Language
         return $this->languageData->getLanguage($referenceLanguage);
     }
 
-
     /**
      * Creates an array with all languages that are possible in Admidio.
      * The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)

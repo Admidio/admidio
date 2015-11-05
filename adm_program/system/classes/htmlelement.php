@@ -484,7 +484,6 @@ abstract class HtmlElement {
         return $string;
     }
 
-
     /**
      * Create a valid html compatible string with all attributes and their values of the main element.
      * @return string Returns a string with all attributes and values.

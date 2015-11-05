@@ -187,7 +187,6 @@ class ModuleLists extends Modules
         $this->setMemberStatus();
     }
 
-
     /** Evaluates memberStatus an returns appropriate SQL conditions
      * @return string SQL for member status
      */

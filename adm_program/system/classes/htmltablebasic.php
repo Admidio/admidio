@@ -517,7 +517,6 @@ class HtmlTableBasic extends HtmlElement {
         return false;
     }
 
-
     /** Set a specific width for one column of the table. This is useful if you have one column
      *  that will not get a useful width automatically by the browser.
      *  @param $column The column number where you want to set the width. The columns of the table starts with 1 (not 0).

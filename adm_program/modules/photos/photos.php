@@ -79,7 +79,6 @@ if ($getPhotoId == 0)
 //URL auf Navigationstack ablegen
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-
 // pruefen, ob Album zur aktuellen Organisation gehoert
 if($getPhotoId > 0 && $photoAlbum->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
 {

@@ -362,7 +362,6 @@ case 3:
     $page->addHtml($form->show(false));
     $page->show();
 
-
     // clean up
     unset($_SESSION['add_organization_request']);
     break;

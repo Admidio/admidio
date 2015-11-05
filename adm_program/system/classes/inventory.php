@@ -44,7 +44,6 @@ class Inventory extends TableInventory
         parent::__construct($database, $itemId);
     }
 
-
     /**
      * Additional to the parent method the user profile fields and
      * all user rights and role memberships will be initialized

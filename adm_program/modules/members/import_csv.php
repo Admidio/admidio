@@ -68,7 +68,6 @@ if($firstRowTitle == true)
     $startRow = 1;
 }
 
-
 for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
 {
     $user->clear();
@@ -258,7 +257,6 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
             {
                 $user->setRoleMembership($depRole);
             }
-
 
         }
     }

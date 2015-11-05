@@ -205,7 +205,6 @@ class Message
             }
         }
 
-
         if($this->modalWindowMode)
         {
             $html .= '
@@ -260,7 +259,6 @@ class Message
     {
         $this->showHtmlTextOnly = $showText;
     }
-
 
     /**
      * If set no theme files will be integrated in the page.

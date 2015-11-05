@@ -460,7 +460,6 @@ class HtmlTable extends HtmlTableBasic
                     $this->datatablesInitParameters[] = '"columnDefs": ['.implode(',', $this->datatablesColumnDefs).']';
                 }
 
-
                 $this->htmlPage->addJavascript('
                     $.fn.dataTable.moment(formatPhpToMoment("'.$gPreferences['system_date'].'"));
                     $.fn.dataTable.moment(formatPhpToMoment("'.$gPreferences['system_date'].' '.$gPreferences['system_time'].'"));

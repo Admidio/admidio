@@ -8,7 +8,6 @@
  *
  *****************************************************************************/
 
-
 // E-Mail-Flags bei Rolle Webmaster per Default setzen, damit immer eine Rolle in Mail vorhanden ist
 ///ausserdemm sollte er automatisch mit dem Recht ausgestattet werden alle Listen einzusehen
 $sql = "UPDATE ". TBL_ROLES. " SET rol_mail_login  = 1
@@ -16,7 +15,6 @@ $sql = "UPDATE ". TBL_ROLES. " SET rol_mail_login  = 1
                                  , rol_all_lists_view = 1
          WHERE rol_name = 'Webmaster' ";
 $gDb->query($sql);
-
 
 // Allgemeine Kategorien anlegen
 $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
@@ -94,7 +92,6 @@ $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_s
                                    VALUES ($cat_id_stammdaten, 'URL',     'Homepage', 1, 13) ";
 $gDb->query($sql);
 $usf_id_homepage = $gDb->lastInsertId();
-
 
 // Termine auf "ganztaegig" konvertieren
 $sql = "UPDATE ". TBL_DATES. " SET dat_all_day = 1

@@ -68,7 +68,6 @@ $sql = 'SELECT cat.*, lnk.*, '.$additionalFields.'
          ORDER BY lnk_timestamp_create DESC';
 $result = $gDb->query($sql);
 
-
 // start defining the RSS Feed
 
 // create RSS feed object with channel information
@@ -96,7 +95,6 @@ while ($row = $gDb->fetch_array($result))
     // add entry to RSS feed
     $rss->addItem($title, $description, $link, $author, $pubDate);
 }
-
 
 // jetzt nur noch den Feed generieren lassen
 $rss->buildFeed();

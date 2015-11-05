@@ -712,7 +712,6 @@ class Database
         return $result;
     }
 
-
     /**
      * Fetch a result row as an associative array, a numeric array, or both.
      * @deprecated This method is deprecated and will be removed in future versions.
