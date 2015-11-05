@@ -222,7 +222,7 @@ while($row_usf = $gDb->fetch_array($result_usf))
              WHERE usf_id = ". $row_usf['usf_id'];
     $gDb->query($sql);
 
-    $sequence++;
+    ++$sequence;
 }
 
 // Reihenfolgenummern bei den Kategorien anlegen (USF existiert schon)
@@ -248,7 +248,7 @@ while($row_cat = $gDb->fetch_array($result_cat))
              WHERE cat_id = ". $row_cat['cat_id'];
     $gDb->query($sql);
 
-    $sequence++;
+    ++$sequence;
 }
 
 // alte User-Felder aus adm_users entfernen

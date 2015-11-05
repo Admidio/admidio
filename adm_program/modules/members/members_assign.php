@@ -139,7 +139,7 @@ echo '
                 <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'. THEME_PATH. '/icons/new_registrations.png"
                     alt="'.$gL10n->get('MEM_ASSIGN_ROLES').'" />'.$gL10n->get('MEM_ASSIGN_ROLES').'</button>';
             }
-            $i++;
+            ++$i;
         }
     echo '</div>
 </div>

@@ -201,7 +201,7 @@ class ConditionParser
             }
 
             // Zeichen fuer Zeichen aus dem Bedingungsstring wird hier verarbeitet
-            for($mCount = 0; $mCount < strlen($this->mSrcCond); $mCount++)
+            for($mCount = 0; $mCount < strlen($this->mSrcCond); ++$mCount)
             {
                 $character = $this->mSrcCondArray[$mCount];
 

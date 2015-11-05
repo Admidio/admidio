@@ -247,7 +247,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
     // create thumbnail container
     $page->addHtml('<div class="row album-container">');
 
-    for($actThumbnail = $firstPhotoNr; $actThumbnail <= $lastPhotoNr && $actThumbnail <= $photoAlbum->getValue('pho_quantity'); $actThumbnail++)
+    for($actThumbnail = $firstPhotoNr; $actThumbnail <= $lastPhotoNr && $actThumbnail <= $photoAlbum->getValue('pho_quantity'); ++$actThumbnail)
     {
         if($actThumbnail <= $photoAlbum->getValue('pho_quantity'))
         {
@@ -329,7 +329,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
     {
         $photoThumbnailTable_shown = false;
 
-        for ($hiddenPhotoNr = 1; $hiddenPhotoNr <= $photoAlbum->getValue('pho_quantity'); $hiddenPhotoNr++)
+        for ($hiddenPhotoNr = 1; $hiddenPhotoNr <= $photoAlbum->getValue('pho_quantity'); ++$hiddenPhotoNr)
         {
             if($hiddenPhotoNr >= $firstPhotoNr && $hiddenPhotoNr <= $actThumbnail)
             {
@@ -419,7 +419,7 @@ $childPhotoAlbum = new TablePhotos($gDb);
 
 $page->addHtml('<div class="row">');
 
-for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1 && $x < $albumsCount; $x++)
+for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1 && $x < $albumsCount; ++$x)
 {
     // Daten in ein Photo-Objekt uebertragen
     $childPhotoAlbum->clear();

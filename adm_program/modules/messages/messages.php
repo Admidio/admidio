@@ -125,7 +125,7 @@ if(isset($result))
         $ReceiverName = substr($ReceiverName, 2);
 
         $message = new TableMessage($gDb, $row['msg_id']);
-        $key++;
+        ++$key;
 
         $messageAdministration = $part1 . $key . '&amp;name='.urlencode($message->getValue('msg_subject')).'&amp;database_id=' . $message->getValue('msg_id') . $part2;
 
@@ -152,7 +152,7 @@ if(isset($result))
         }
         $ReceiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
         $message = new TableMessage($gDb, $row['msg_id']);
-        $key++;
+        ++$key;
 
         $messageAdministration = $part1 . $key . '&amp;name=' . urlencode($message->getValue('msg_subject')) . '&amp;database_id=' . $message->getValue('msg_id') . $part2;
 
@@ -180,7 +180,7 @@ if(isset($result))
 
         $ReceiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
         $message = new TableMessage($gDb, $row['msg_id']);
-        $key++;
+        ++$key;
 
         $messageAdministration = $part1 . $key . '&amp;name=' . urlencode($message->getValue('msg_subject')) . '&amp;database_id=' . $message->getValue('msg_id') . $part2;
 

@@ -186,7 +186,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
     {
         $init_page_max = ($total_pages > 3) ? 3 : $total_pages;
 
-        for($i = 1; $i < $init_page_max + 1; $i++)
+        for($i = 1; $i < $init_page_max + 1; ++$i)
         {
             if ($i === $on_page)
             {
@@ -207,7 +207,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
                 $init_page_min = ($on_page > 4) ? $on_page : 5;
                 $init_page_max = ($on_page < $total_pages - 4) ? $on_page : $total_pages - 4;
 
-                for($i = $init_page_min - 1; $i < $init_page_max + 2; $i++)
+                for($i = $init_page_min - 1; $i < $init_page_max + 2; ++$i)
                 {
                     if ($i === $on_page)
                     {
@@ -226,7 +226,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
                 $page_string .= ' ... ';
             }
 
-            for($i = $total_pages - 2; $i < $total_pages + 1; $i++)
+            for($i = $total_pages - 2; $i < $total_pages + 1; ++$i)
             {
                 if ($i === $on_page)
                 {
@@ -241,7 +241,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
     }
     else
     {
-        for($i = 1; $i < $total_pages + 1; $i++)
+        for($i = 1; $i < $total_pages + 1; ++$i)
         {
             if ($i === $on_page)
             {

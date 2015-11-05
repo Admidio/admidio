@@ -34,7 +34,7 @@ class FormElements
 
         $value = reset($entryArray);
         $arrayCountMax = count($entryArray);
-        for($arrayCount = 0; $arrayCount < $arrayCountMax; $arrayCount++)
+        for($arrayCount = 0; $arrayCount < $arrayCountMax; ++$arrayCount)
         {
             // create entry in html
             $selectBoxHtml .= '<option value="'.key($entryArray).'"';

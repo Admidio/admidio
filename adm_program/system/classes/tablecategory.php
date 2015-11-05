@@ -107,7 +107,7 @@ class TableCategory extends TableAccess
 
         if($categoriesStatement->rowCount() > 0)
         {
-            $index++;
+            ++$index;
             $newNameIntern = $this->getNewNameIntern($name, $index);
         }
         return $newNameIntern;

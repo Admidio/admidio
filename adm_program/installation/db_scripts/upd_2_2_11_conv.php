@@ -38,7 +38,7 @@ function validate_bbc($table, $idCol, $col)
         {
             //comepare number of opening and closeing tags
             $dif = substr_count($row->$col, $bbcode['o'])-substr_count($row->$col, $bbcode['c']);
-            for($x=0; $x<$dif; $x++)
+            for($x=0; $x<$dif; ++$x)
             {
                 $sql_append .= $bbcode['c'];
             }
@@ -68,7 +68,7 @@ $i = 0;
 
 while($row = $userFieldsStatement->fetch())
 {
-    $i++;
+    ++$i;
     if($row['usf_name_intern'] == $lastNameIntern)
     {
         $sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name_intern = \''.$row['usf_name_intern'].'_0'.$i.'\'

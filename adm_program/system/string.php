@@ -160,23 +160,23 @@ function strNextLetter($letter, $reverse = false)
     {
         if (!$reverse && ($ascii === $aLowerCase || $ascii === $aUpperCase))
         {
-            $ascii++;
+            ++$ascii;
         }
 
         if ($reverse && ($ascii === $zLowerCase || $ascii === $zUpperCase))
         {
-            $ascii--;
+            --$ascii;
         }
     }
     else
     {
         if ($reverse)
         {
-            $ascii--;
+            --$ascii;
         }
         else
         {
-            $ascii++;
+            ++$ascii;
         }
     }
 

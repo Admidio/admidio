@@ -191,7 +191,7 @@ class HtmlTableBasic extends HtmlElement {
         }
 
         $this->addData($data);
-        $this->columnCount ++;
+        ++$this->columnCount ;
     }
 
     /**
@@ -347,7 +347,7 @@ class HtmlTableBasic extends HtmlElement {
         // only increase rowcount if this is a data row and not the header
         if($col == 'td')
         {
-            $this->rowCount++;
+            ++$this->rowCount;
         }
     }
 

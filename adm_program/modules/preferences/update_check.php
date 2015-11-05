@@ -43,7 +43,7 @@ function getUpdateVersion($updateInfo, $search)
     // Version auslesen
     while($pointer !== "\n")
     {
-        $i++;
+        ++$i;
         $updateVersion = $updateVersion.$pointer;
         $pointer = substr($updateInfo, $currentVersionStart + $adding + $i, 1);
     }

@@ -44,7 +44,7 @@ foreach($_POST as $key=>$value)
 {
     if(preg_match('/^(role-)[0-9]+$/i', $key))
     {
-        $roleCount++;
+        ++$roleCount;
     }
 }
 
@@ -182,7 +182,7 @@ foreach($rolesList as $row)
         if($roleAssign == 1)
         {
             $user->setRoleMembership($row['rol_id'], DATE_NOW, '9999-12-31', $roleLeader);
-            $count_assigned++;
+            ++$count_assigned;
 
             // find the parent roles and assign user to parent roles
             $tmpRoles = RoleDependency::getParentRoles($gDb, $row['rol_id']);

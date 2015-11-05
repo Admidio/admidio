@@ -317,7 +317,7 @@ elseif (!isset($message_result))
                  ORDER BY cat_sequence, rol_name ';
 
         // add a selectbox where you can choose to which groups (active, former) you want to send the mail
-        for ($act_or = 0; $act_or <= 2; $act_or++)
+        for ($act_or = 0; $act_or <= 2; ++$act_or)
         {
             $act_group = '';
             $act_group_short = '';

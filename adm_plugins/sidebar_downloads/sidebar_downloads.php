@@ -131,7 +131,7 @@ if ($gPreferences['enable_download_module'] == 1)
                     src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/"
                     title="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/" />'.$plg_row->fil_name.$timestampHtml.'</a>';
 
-                $anzahl++;
+                ++$anzahl;
 
                 if ($anzahl == $plg_downloads_count)
                 {

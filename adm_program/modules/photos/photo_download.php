@@ -90,7 +90,7 @@ if($getPhotoNr == null)
     $zip = new ZipArchive();
     $zip->open($zipname, ZipArchive::CREATE);
 
-    for ($i = 1; $i <= $quantity; $i++)
+    for ($i = 1; $i <= $quantity; ++$i)
     {
         if ($takeOriginalsIfAvailable)
         {
@@ -141,7 +141,7 @@ if($getPhotoNr == null)
     // number of sub albums
     $albums = $gDb->num_rows($result_list);
 
-    for($x = 0; $x < $albums; $x++)
+    for($x = 0; $x < $albums; ++$x)
     {
         $adm_photo_list = $gDb->fetch_array($result_list);
 
@@ -155,7 +155,7 @@ if($getPhotoNr == null)
             // get number of photos in total
             $quantity = $photo_album->getValue('pho_quantity');
             $photo_album_name = $photo_album->getValue('pho_name');
-            for ($i = 1; $i <= $quantity; $i++)
+            for ($i = 1; $i <= $quantity; ++$i)
             {
                 if ($takeOriginalsIfAvailable)
                 {

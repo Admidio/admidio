@@ -136,7 +136,7 @@ if($datesTotalCount != 0)
             }
         }
 
-        $count++;
+        ++$count;
     }
 }
 
@@ -344,7 +344,7 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
                 {
                     if(strlen($value) > 3)
                     {
-                        $map_info_count++;
+                        ++$map_info_count;
                     }
                 }
 
@@ -863,7 +863,7 @@ else
                         $dateParticipation->addColumn($memberDate['surname'].' '.$memberDate['firstname'].';',
                                                       array('class' => 'left'), 'td');
                     }
-                    $memberCount++;
+                    ++$memberCount;
                 }
 
                 $tableParticipants = $dateParticipation->getHtmlTable();
@@ -900,7 +900,7 @@ else
                                                           $buffer['dat_endtime'],
                                                           $buffer['dat_headline'],
                                                           $tableParticipants);
-            $numElement++;
+            ++$numElement;
             unset($buffer);
         }  // end foreach
     }
@@ -952,7 +952,7 @@ else
             }
 
             $datePrint->addRow($row['dat_details'], array('class' => $className));
-            $numDateElements ++;
+            ++$numDateElements ;
         }
 
         // Define second body content
@@ -969,7 +969,7 @@ else
                 $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
             }
             $datePrint->addRow($row['dat_details'], array('class' => $className));
-            $numDateElements ++;
+            ++$numDateElements ;
         }
 
         // Define third body content for members only
@@ -990,7 +990,7 @@ else
                 }
 
                 $datePrint->addRow($row['dat_details'], array('class' => $className));
-                $numDateElements ++;
+                ++$numDateElements ;
             }
         }
     }

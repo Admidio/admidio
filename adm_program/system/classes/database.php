@@ -188,7 +188,7 @@ class Database
         // but count back the number of inner transactions
         if ($this->transactions > 1)
         {
-            $this->transactions--;
+            --$this->transactions;
             return true;
         }
 
@@ -691,7 +691,7 @@ class Database
         // but enclose the current one to not loose data (prevening auto commit)
         if ($this->transactions > 0)
         {
-            $this->transactions++;
+            ++$this->transactions;
             return true;
         }
 

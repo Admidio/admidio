@@ -293,7 +293,7 @@ if ($getMsgType === 'EMAIL')
                 }
                 $attachmentSize = 0;
                 // add now every attachment
-                for($currentAttachmentNo = 0; isset($_FILES['userfile']['name'][$currentAttachmentNo]); $currentAttachmentNo++)
+                for($currentAttachmentNo = 0; isset($_FILES['userfile']['name'][$currentAttachmentNo]); ++$currentAttachmentNo)
                 {
                     // check if Upload was OK
                     if (($_FILES['userfile']['error'][$currentAttachmentNo] != 0) && ($_FILES['userfile']['error'][$currentAttachmentNo] != 4))

@@ -130,7 +130,7 @@ $downloadOverview->setMessageIfNoRowsFound('DOW_FOLDER_NO_FILES', 'warning');
 if (isset($folderContent['folders']))
 {
     // First get possible sub folders
-    for($i=0; $i<count($folderContent['folders']); $i++)
+    for($i=0; $i<count($folderContent['folders']); ++$i)
     {
         $nextFolder = $folderContent['folders'][$i];
         $folderDescription = '';
@@ -177,7 +177,7 @@ if (isset($folderContent['folders']))
 // Get contained files
 if (isset($folderContent['files']))
 {
-    for($i=0; $i<count($folderContent['files']); $i++)
+    for($i=0; $i<count($folderContent['files']); ++$i)
     {
         $nextFile = $folderContent['files'][$i];
 
@@ -272,7 +272,7 @@ if ($gCurrentUser->editDownloadRight())
         // Get folders
         if (isset($folderContent['additionalFolders']))
         {
-            for($i=0; $i<count($folderContent['additionalFolders']); $i++)
+            for($i=0; $i<count($folderContent['additionalFolders']); ++$i)
             {
 
                 $nextFolder = $folderContent['additionalFolders'][$i];
@@ -288,7 +288,7 @@ if ($gCurrentUser->editDownloadRight())
         // Get files
         if (isset($folderContent['additionalFiles']))
         {
-            for($i=0; $i<count($folderContent['additionalFiles']); $i++)
+            for($i=0; $i<count($folderContent['additionalFiles']); ++$i)
             {
 
                 $nextFile = $folderContent['additionalFiles'][$i];

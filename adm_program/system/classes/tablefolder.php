@@ -440,7 +440,7 @@ class TableFolder extends TableAccess
 
                                 //Gucken ob das Verzeichnis bereits bei den regurlären Files dabei ist.
                                 if (isset($completeFolder['folders'])) {
-                                    for($i=0; $i<count($completeFolder['folders']); $i++)
+                                    for($i=0; $i<count($completeFolder['folders']); ++$i)
                                     {
                                         $nextFolder = $completeFolder['folders'][$i];
 
@@ -465,7 +465,7 @@ class TableFolder extends TableAccess
 
                                 //Gucken ob die Datei bereits bei den regurlären Files dabei ist.
                                 if (isset($completeFolder['files'])) {
-                                    for($i=0; $i<count($completeFolder['files']); $i++) {
+                                    for($i=0; $i<count($completeFolder['files']); ++$i) {
 
                                         $nextFile = $completeFolder['files'][$i];
 

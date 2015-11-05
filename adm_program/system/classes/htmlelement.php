@@ -433,7 +433,7 @@ abstract class HtmlElement {
         if(in_array($parentElement, $this->arrParentElements) && !$this->nesting)
         {
             // find position in log array
-            for($i = 0; $i < $totalCount-1; $i++)
+            for($i = 0; $i < $totalCount-1; ++$i)
             {
                 if($this->arrParentElements[$i] === $parentElement)
                 {
@@ -450,7 +450,7 @@ abstract class HtmlElement {
             else
             {
                 // all elements setted later must also be closed and removed from array
-                for($i = $totalCount-1; $i >= $position; $i--)
+                for($i = $totalCount-1; $i >= $position; --$i)
                 {
                     $this->htmlString .= '</' . $this->arrParentElements[$i] . '>';
                     unset($this->arrParentElements[$i]);
@@ -539,7 +539,7 @@ abstract class HtmlElement {
             if($nextLevel > 1)
             {
                 // bidimensional or assoc. array
-                for ($i = 0; $i < $numberEntries; $i++)
+                for ($i = 0; $i < $numberEntries; ++$i)
                 {
                     foreach ($data[$i] as $col => $value)
                     {

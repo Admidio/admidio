@@ -201,7 +201,7 @@ if($plg_ter_aktiv == 1)
     {
         // nur bestimmte Kalender anzeigen
         $sqlSyntax = ' AND cat_type = \'DAT\' AND ( ';
-        for($i=0;$i<count($plg_kal_cat);$i++)
+        for($i=0;$i<count($plg_kal_cat);++$i)
         {
             $sqlSyntax = $sqlSyntax. 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
         }
@@ -294,7 +294,7 @@ if($plg_ter_aktiv == 1)
             }
 
             // now add event to every relevant day of month
-            for($i = $firstDay; $i <= $lastDay; $i++)
+            for($i = $firstDay; $i <= $lastDay; ++$i)
             {
                 $eventsMonthDayArray[$i][] = array('dat_id'   => $row['dat_id'],
                                                    'time'     => $startDate->format($gPreferences['system_time']),
@@ -417,7 +417,7 @@ $i = 1;
 while($i < $firstWeekdayOfMonth)
 {
     echo '<td>&nbsp;</td>';
-    $i++;
+    ++$i;
 }
 
 $currentDay = 1;
@@ -487,7 +487,7 @@ while($currentDay <= $lastDayCurrentMonth)
                         $textContent .= $eventArray['time'].' '.$gL10n->get('SYS_CLOCK').' '.$eventArray['headline'].$eventArray['location'];
                     }
                 }
-                $countEvents++;
+                ++$countEvents;
             }
 
             if($countEvents > 0)
@@ -665,7 +665,7 @@ while($currentDay <= $lastDayCurrentMonth)
         $boolNewStart = true;
     }
 
-    $currentDay++;
+    ++$currentDay;
 }
 echo '</table>';
 

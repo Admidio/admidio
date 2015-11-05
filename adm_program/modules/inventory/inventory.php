@@ -118,7 +118,7 @@ while($row = $gDb->fetch_array($result_mgl))
 
     $itemsTable->addRowByArray($columnValues);
 
-    $irow++;
+    ++$irow;
 }
 
 $page->addHtml($itemsTable->show(false));

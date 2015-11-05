@@ -130,7 +130,7 @@ class Language
             $paramCount = func_num_args();
             $paramArray = func_get_args();
 
-            for($paramNumber = 1; $paramNumber < $paramCount; $paramNumber++)
+            for($paramNumber = 1; $paramNumber < $paramCount; ++$paramNumber)
             {
                 $text = str_replace('%VAR'.$paramNumber.'%', $paramArray[$paramNumber], $text);
                 $text = str_replace('%VAR'.$paramNumber.'_BOLD%', '<strong>'.$paramArray[$paramNumber].'</strong>', $text);
@@ -179,7 +179,7 @@ class Language
             xml_parser_free($p);
 
             $iMax = count($index['ISOCODE']);
-            for($i = 0; $i < $iMax; $i++)
+            for($i = 0; $i < $iMax; ++$i)
             {
                 $countries[$vals[$index['ISOCODE'][$i]]['value']] = $vals[$index['NAME'][$i]]['value'];
             }
@@ -272,7 +272,7 @@ class Language
             xml_parser_free($p);
 
             $iMax = count($index['ISOCODE']);
-            for($i = 0; $i < $iMax; $i++)
+            for($i = 0; $i < $iMax; ++$i)
             {
                 $this->languages[$vals[$index['ISOCODE'][$i]]['value']] = $vals[$index['NAME'][$i]]['value'];
             }

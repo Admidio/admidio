@@ -66,7 +66,7 @@ class TableInventoryField extends TableAccess
 
         if($pdoStatement->rowCount() > 0)
         {
-            $index++;
+            ++$index;
             $newNameIntern = $this->getNewNameIntern($name, $index);
         }
         return $newNameIntern;

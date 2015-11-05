@@ -65,11 +65,11 @@ if(isset($_SESSION['mylist_request']))
 
     // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden,
     // muessen diese nun direkt angelegt werden
-    for($i = $defaultColumnRows+1; $i > 0; $i++)
+    for($i = $defaultColumnRows+1; $i > 0; ++$i)
     {
         if(isset($formValues['column'.$i]))
         {
-            $defaultColumnRows++;
+            ++$defaultColumnRows;
         }
         else
         {
@@ -89,7 +89,7 @@ else
     {
         $defaultColumnRows = $list->countColumns();
 
-        for($number = 1; $number <= $list->countColumns(); $number++)
+        for($number = 1; $number <= $list->countColumns(); ++$number)
         {
             $column = $list->getColumnObject($number);
             if($column->getValue('lsc_usf_id') > 0)
@@ -280,7 +280,7 @@ foreach($gProfileFields->mProfileFields as $field)
         }
 
         $oldCategoryNameIntern = $field->getValue('cat_name_intern');
-        $i++;
+        ++$i;
     }
 }
 
@@ -313,7 +313,7 @@ $javascriptCode .= '
         user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('LST_MEMBERSHIP_START').'";
         user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('LST_MEMBERSHIP_START').'";';
 
-$i++;
+++$i;
 $javascriptCode .= '
         user_fields['. $i. '] = new Object();
         user_fields['. $i. ']["cat_id"]   = -1;
@@ -351,7 +351,7 @@ while(isset($formValues['column'. $actualColumnNumber]))
             default_fields['. $actualColumnNumber. ']["sort"]      = "'. $sortValue. '";
             default_fields['. $actualColumnNumber. ']["condition"] = "'. $conditionValue. '";';
 
-    $actualColumnNumber++;
+    ++$actualColumnNumber;
 }
 
 $javascriptCode .= '
@@ -568,7 +568,7 @@ foreach($configurations as $configuration)
     if(strlen($configuration['lst_name']) === 0)
     {
         $objListTimestamp = new DateTime($configuration['lst_timestamp']);
-        $numberLastConfigurations++;
+        ++$numberLastConfigurations;
 
         // only 5 configurations without a name should be saved for each user
         if($numberLastConfigurations > 5)

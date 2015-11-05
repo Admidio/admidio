@@ -353,7 +353,7 @@ else
 }
 
 // headlines for columns
-for($columnNumber = 1; $columnNumber <= $list->countColumns(); $columnNumber++)
+for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
 {
     $column = $list->getColumnObject($columnNumber);
 
@@ -474,7 +474,7 @@ foreach($membersList as $member)
     $columnValues = array();
 
     // Felder zu Datensatz
-    for($columnNumber = 1; $columnNumber <= $list->countColumns(); $columnNumber++)
+    for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
     {
         $column = $list->getColumnObject($columnNumber);
 
@@ -622,7 +622,7 @@ foreach($membersList as $member)
         $table->addRowByArray($columnValues, null, array('nobr' => 'true'));
     }
 
-    $listRowNumber++;
+    ++$listRowNumber;
 }  // End-While (jeder gefundene User)
 
 // Settings for export file

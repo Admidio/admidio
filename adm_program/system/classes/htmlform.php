@@ -161,7 +161,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addButton($id, $text, $options = array())
     {
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('icon' => '', 'link' => '', 'onClickText' => '', 'class' => '', 'type' => 'button', 'data-admidio' => '');
@@ -252,7 +252,7 @@ class HtmlForm extends HtmlFormBasic
         global $gL10n, $g_root_path;
 
         $attributes = array('class' => 'captcha');
-        $this->countElements++;
+        ++$this->countElements;
 
         // set specific css class for this field
         if($class !== '')
@@ -323,7 +323,7 @@ class HtmlForm extends HtmlFormBasic
         $htmlIcon     = '';
         $htmlHelpIcon = '';
         $cssClasses   = 'checkbox';
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('property' => FIELD_DEFAULT, 'helpTextIdLabel' => '',
@@ -401,7 +401,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addCustomContent($label, $content, $options = array())
     {
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('referenceId' => '', 'helpTextIdLabel' => '', 'helpTextIdInline' => '',
@@ -460,7 +460,7 @@ class HtmlForm extends HtmlFormBasic
     {
         global $gPreferences, $g_root_path, $gL10n;
 
-        $this->countElements++;
+        ++$this->countElements;
         $attributes = array('class' => 'editor');
         $flagLabelVertical = $this->type;
 
@@ -562,7 +562,7 @@ class HtmlForm extends HtmlFormBasic
     {
         global $gPreferences;
         $attributes = array('class' => 'form-control');
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('property' => FIELD_DEFAULT, 'maxUploadSize' => $gPreferences['max_file_upload_size'] * 1024 * 1024,
@@ -682,7 +682,7 @@ class HtmlForm extends HtmlFormBasic
         global $gL10n, $gPreferences, $g_root_path, $gDebug;
 
         $attributes = array('class' => 'form-control');
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('type' => 'text', 'minLength' => null, 'maxLength' => 0, 'minNumber' => null, 'maxNumber' => null, 'step' => 1,
@@ -855,7 +855,7 @@ class HtmlForm extends HtmlFormBasic
         global $gL10n, $g_root_path;
 
         $attributes = array('class' => 'form-control');
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('property' => FIELD_DEFAULT, 'maxLength' => 0, 'helpTextIdLabel' => '',
@@ -953,7 +953,7 @@ class HtmlForm extends HtmlFormBasic
     public function addRadioButton($id, $label, $values, $options = array())
     {
         $attributes = array('class' => '');
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('property' => FIELD_DEFAULT, 'defaultValue' => '', 'showNoValueButton' => false,
@@ -1055,7 +1055,7 @@ class HtmlForm extends HtmlFormBasic
 
         if(count($values) > 0)
         {
-            $this->countElements++;
+            ++$this->countElements;
         }
 
         // create array with all options
@@ -1139,7 +1139,7 @@ class HtmlForm extends HtmlFormBasic
         $arrayMax = count($values);
         $optionGroup = null;
 
-        for($arrayCount = 0; $arrayCount < $arrayMax; $arrayCount++)
+        for($arrayCount = 0; $arrayCount < $arrayMax; ++$arrayCount)
         {
             // create entry in html
             $defaultEntry = false;
@@ -1347,7 +1347,7 @@ class HtmlForm extends HtmlFormBasic
 
         // transform the two complex arrays to one simply array
         $arrayMax = count($index[$xmlValueTag]);
-        for($i = 0; $i < $arrayMax; $i++)
+        for($i = 0; $i < $arrayMax; ++$i)
         {
             $selectboxEntries[$vals[$index[$xmlValueTag][$i]]['value']] = $vals[$index[$xmlViewTag][$i]]['value'];
         }
@@ -1530,7 +1530,7 @@ class HtmlForm extends HtmlFormBasic
     public function addStaticControl($id, $label, $value, $options = array()) //, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = '')
     {
         $attributes = array('class' => 'form-control-static');
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');

@@ -80,7 +80,7 @@ class SystemMail extends Email
 
         // zusaetzliche Variablen ersetzen
         $iMax = count($this->smVariables);
-        for($i = 1; $i <= $iMax; $i++)
+        for($i = 1; $i <= $iMax; ++$i)
         {
             $mailSrcText = preg_replace('/%variable'.$i.'%/', $this->smVariables[$i], $mailSrcText);
         }

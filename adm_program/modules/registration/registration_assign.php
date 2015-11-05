@@ -195,7 +195,7 @@ while($row = $gDb->fetch_object($result_usr))
                 alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'</button>');
         }
     }
-    $i++;
+    ++$i;
 }
 $page->addHtml('
     </div>

@@ -113,7 +113,7 @@ class ListConfiguration extends TableLists
             if($all)
             {
                 // alle Spalten ab der Nummer werden entfernt
-                for($newColumnNumber = $this->countColumns(); $newColumnNumber >= $number; $newColumnNumber--)
+                for($newColumnNumber = $this->countColumns(); $newColumnNumber >= $number; --$newColumnNumber)
                 {
                     $this->columns[$newColumnNumber]->delete();
                     array_pop($this->columns);
@@ -122,7 +122,7 @@ class ListConfiguration extends TableLists
             else
             {
                 // es wird nur die einzelne Spalte entfernt und alle folgenden Spalten ruecken eins nach vorne
-                for($newColumnNumber = $number; $newColumnNumber < $this->countColumns(); $newColumnNumber++)
+                for($newColumnNumber = $number; $newColumnNumber < $this->countColumns(); ++$newColumnNumber)
                 {
                     $this->columns[$newColumnNumber]->setValue('lsc_usf_id', $this->columns[$newColumnNumber+1]->getValue('lsc_usf_id'));
                     $this->columns[$newColumnNumber]->setValue('lsc_special_field', $this->columns[$newColumnNumber+1]->getValue('lsc_special_field'));
@@ -402,7 +402,7 @@ class ListConfiguration extends TableLists
                 $this->columns[$number]->setValue('lsc_number', $newColumnNumber);
                 $this->columns[$number]->save();
             }
-            $newColumnNumber++;
+            ++$newColumnNumber;
         }
 
         // now restore columns with new numbers

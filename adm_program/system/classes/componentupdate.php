@@ -157,7 +157,7 @@ class ComponentUpdate extends Component
         $this->currentVersionArray = explode('.', $this->getValue('com_version'));
         $initialSubVersion = $this->currentVersionArray[1];
 
-        for($mainVersion = $this->currentVersionArray[0]; $mainVersion <= $this->targetVersionArray[0]; $mainVersion++)
+        for($mainVersion = $this->currentVersionArray[0]; $mainVersion <= $this->targetVersionArray[0]; ++$mainVersion)
         {
             // Set max subversion for iteration. If we are in the loop of the target main version
             // then set target subversion to the max version
@@ -170,7 +170,7 @@ class ComponentUpdate extends Component
                 $maxSubVersion = 20;
             }
 
-            for($subVersion = $initialSubVersion; $subVersion <= $maxSubVersion; $subVersion++)
+            for($subVersion = $initialSubVersion; $subVersion <= $maxSubVersion; ++$subVersion)
             {
                 // if version is not equal to current version then start update step with 0
                 if($mainVersion != $this->currentVersionArray[0]

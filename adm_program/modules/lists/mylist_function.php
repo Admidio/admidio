@@ -67,7 +67,7 @@ if($getMode != 2)
 if ($getMode == 1 || $getMode == 2)
 {
     // alle vorhandenen Spalten durchgehen
-    for($columnNumber = 1; isset($_POST['column'. $columnNumber]); $columnNumber++)
+    for($columnNumber = 1; isset($_POST['column'. $columnNumber]); ++$columnNumber)
     {
         if(strlen($_POST['column'. $columnNumber]) > 0)
         {

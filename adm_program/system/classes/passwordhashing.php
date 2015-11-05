@@ -178,7 +178,7 @@ class PasswordHashing
             $time = $end - $start;
 
             $results = array('cost' => $cost, 'time' => $time);
-            $cost++;
+            ++$cost;
         }
 
         array_pop($results);

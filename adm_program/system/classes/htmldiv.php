@@ -105,7 +105,7 @@ class HtmlDiv extends HtmlElement
             $this->addAttribute('class', $class);
         }
         // raise level
-        $this->level ++;
+        ++$this->level ;
     }
 
     /**
@@ -158,7 +158,7 @@ class HtmlDiv extends HtmlElement
         if(in_array($parentElement, $this->arrParentElements))
         {
             // find position in log array
-            for($i = 0; $i < $totalCount-1; $i++)
+            for($i = 0; $i < $totalCount-1; ++$i)
             {
                 if($this->arrParentElements[$i] == $parentElement)
                 {
@@ -175,7 +175,7 @@ class HtmlDiv extends HtmlElement
             else
             {
                 // all elements setted later must also be closed and removed from array
-                for($i = $totalCount-1; $i >= $position; $i--)
+                for($i = $totalCount-1; $i >= $position; --$i)
                 {
                     $this->htmlString .= '</' . $this->arrParentElements[$i] . '>';
                     unset($this->arrParentElements[$i]);
@@ -186,7 +186,7 @@ class HtmlDiv extends HtmlElement
         if($parentElement == 'div')
         {
             // set new level
-            $this->level --;
+            --$this->level ;
         }
     }
 
@@ -198,7 +198,7 @@ class HtmlDiv extends HtmlElement
     public function getHtmlDiv()
     {
         // first check if open div elements exists and set all endtags if needed
-        for($this->level; $this->level > 2; $this->level --)
+        for($this->level; $this->level > 2; --$this->level )
         {
             $this->closeParentElement('div');
         }

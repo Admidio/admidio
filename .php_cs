@@ -54,7 +54,7 @@ $fixers = array(
     //'phpdoc_type_to_var', // symfony
     //'phpdoc_types', // symfony
     //'phpdoc_var_without_name', // symfony
-    //'pre_increment', // symfony
+    'pre_increment', // symfony
     'remove_leading_slash_use', // symfony
     'remove_lines_between_uses', // symfony
     //'return', // symfony

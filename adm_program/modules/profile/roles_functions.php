@@ -202,7 +202,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                     </li>
                 </ul>
             </li>';
-            $countShowRoles++;
+            ++$countShowRoles;
         }
     }
     if($countShowRoles == 0)
