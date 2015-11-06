@@ -43,7 +43,7 @@ $getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
 $getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'print')));
-$getView     = admFuncVariableIsValid($_GET, 'view', 'string', array('defaultValue' => 'detail', 'validValues' => array('detail', 'compact')));
+$getView     = admFuncVariableIsValid($_GET, 'view', 'string', array('defaultValue' => $gPreferences['dates_viewmode'], 'validValues' => array('detail', 'compact')));
 
 // check if module is active
 if($gPreferences['enable_dates_module'] == 0)
@@ -265,9 +265,20 @@ else
     // Output table header for compact view
     if ($getView === 'compact')
     {
+
         $compactTable = new HtmlTable('events_compact_table', $page, $hoverRows, $datatable);
-        $columnHeading = array('&nbsp;', $gL10n->get('SYS_START'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('DAT_LOCATION'));
-        $compactTable->setColumnAlignByArray(array('center', 'left', 'left', 'left', 'left', 'left'));
+        
+        if($getViewMode === 'html')
+        {
+            $columnHeading = array('&nbsp;', $gL10n->get('SYS_START'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('DAT_LOCATION'), '&nbsp;');
+            $compactTable->setColumnAlignByArray(array('center', 'left', 'left', 'left', 'left', 'left', 'right'));
+            $compactTable->disableDatatablesColumnsSort(6);
+        }
+        else
+        {
+            $columnHeading = array('&nbsp;', $gL10n->get('SYS_START'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('DAT_LOCATION'));
+            $compactTable->setColumnAlignByArray(array('center', 'left', 'left', 'left', 'left', 'left'));
+        }
         $compactTable->addRowHeadingByArray($columnHeading);
     }
 
@@ -308,8 +319,7 @@ else
             {
                 $outputButtonIcal = '
                     <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id'). '&amp;mode=6">
-                        <img src="'.THEME_PATH.'/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" />
-                    </a>';
+                        <img src="'.THEME_PATH.'/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
             }
 
             // change and delete is only for users with additional rights
@@ -319,12 +329,10 @@ else
                 {
                     $outputButtonCopy = '
                         <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='.$date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$getHeadline.'">
-                            <img src="'.THEME_PATH.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" />
-                        </a>';
+                            <img src="'.THEME_PATH.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>';
                     $outputButtonEdit = '
                         <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='.$date->getValue('dat_id'). '&amp;headline='.$getHeadline.'">
-                            <img src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" />
-                        </a>';
+                            <img src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
                 }
 
                 // Deleting events is only allowed for group members
@@ -336,8 +344,7 @@ else
                             $date->getValue('dat_id').'&amp;name='.
                             urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.
                             $date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'">
-                            <img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" />
-                        </a>';
+                            <img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                 }
             }
         }
@@ -740,6 +747,11 @@ else
             else
             {
                 $columnValues[] = '';
+            }
+            
+            if($getViewMode === 'html')
+            {
+                $columnValues[] = $outputButtonIcal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete;
             }
 
             $compactTable->addRowByArray($columnValues, null, array('class' => $cssClass));
