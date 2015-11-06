@@ -714,7 +714,7 @@ class Database
 
     /**
      * Fetch a result row as an associative array, a numeric array, or both.
-     * @deprecated This method is deprecated and will be removed in future versions.
+     * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
      *             Please use the PHP class <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a>
      *             and the method <a href="http://php.net/manual/en/pdostatement.fetch.php">fetch</a> instead.
      * @param object $pdoStatement An object of the class PDOStatement. This should be set if multiple
@@ -742,7 +742,7 @@ class Database
 
     /**
      * Fetch a result row as an object.
-     * @deprecated This method is deprecated and will be removed in future versions.
+     * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
      *             Please use methods Database#fetchAll or Database#fetch instead.
      *             Please use the PHP class <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a>
      *             and the method <a href="http://php.net/manual/en/pdostatement.fetchobject.php">fetchObject</a> instead.
@@ -769,7 +769,7 @@ class Database
 
     /**
      * Returns the ID of the unique id column of the last INSERT operation.
-     * @deprecated This method is deprecated and will be removed in future versions.
+     * @deprecated 3.1.0:4.0.0 Renamed method to camelCase style.
      *             Please use methods Database#lastInsertId instead.
      * @return string Return ID value of the last INSERT operation.
      * @see Database#lastInsertId
@@ -781,7 +781,7 @@ class Database
 
     /**
      * Returns the number of rows of the last executed statement.
-     * @deprecated This method is deprecated and will be removed in future versions.
+     * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
      *             Please use the PHP class <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a>
      *             and the method <a href="http://php.net/manual/en/pdostatement.rowcount.php">rowCount</a> instead.
      * @param object $pdoStatement An object of the class PDOStatement. This should be set if multiple
