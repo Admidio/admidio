@@ -133,7 +133,7 @@ class Captcha
         $result = $number[0];
 
         // Rechenaufgabe erstellen
-        for($count = 1; $count <= 2; $count++)
+        for($count = 1; $count <= 2; ++$count)
         {
             $operator = rand(1, 2);
             if($operator === 1)
@@ -180,7 +180,6 @@ class Captcha
         //echo "<br>= $result (".$_SESSION['captchacode'].")";
     }
 
-
     private function generateNewCaptchaCode()
     {
         // neuen CaptchaCode erzeugen...
@@ -190,7 +189,7 @@ class Captcha
         $this->charCount = rand(4, 6);
 
         $this->captchaCode = '';
-        for ($i = 0; $i < $this->charCount; $i++)
+        for ($i = 0; $i < $this->charCount; ++$i)
         {
             $this->captchaCode = $this->captchaCode . $this->allowedChars{rand(0, strlen($this->allowedChars)-1)};
         }
@@ -198,7 +197,6 @@ class Captcha
         // hier wird der Code jetzt in der Session gespeichert...
         $_SESSION['captchacode'] = $this->captchaCode;
     }
-
 
     private function makeCaptcha()
     {
@@ -229,7 +227,7 @@ class Captcha
         // Jetzt wird dem Bild der eigentliche CaptchaCode hinzugefuegt...
         $xStartPosition = 15;
 
-        for ($i = 0; $i < $this->charCount; $i++)
+        for ($i = 0; $i < $this->charCount; ++$i)
         {
             $xPosition = intval($xStartPosition + $i * ($this->width / ($this->charCount + 1)));
 

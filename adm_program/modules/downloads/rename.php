@@ -57,7 +57,6 @@ if ((!$getFileId && !$getFolderId) or ($getFileId && $getFolderId))
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 if(isset($_SESSION['download_request']))

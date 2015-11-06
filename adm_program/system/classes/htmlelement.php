@@ -117,12 +117,11 @@
  * HtmlElement::addAttribute('value', 'submit');
  * // pass a whitespace because element has no content
  * HtmlElement::addData(' ', true);
-
+ 
  * echo HtmlElement::getHtmlElement();
  * @endcode
  */
 abstract class HtmlElement {
-
     protected $arrParentElements;         ///< Array with opened child elements
     protected $currentElement;            ///< Internal pointer showing to actual element or child element
     protected $currentElementAttributes;  ///< Attributes of the current element
@@ -431,10 +430,10 @@ abstract class HtmlElement {
             return false;
         }
 
-        if(in_array($parentElement, $this->arrParentElements) && !$this->nesting)
+        if(in_array($parentElement, $this->arrParentElements, true) && !$this->nesting)
         {
             // find position in log array
-            for($i = 0; $i < $totalCount-1; $i++)
+            for($i = 0; $i < $totalCount-1; ++$i)
             {
                 if($this->arrParentElements[$i] === $parentElement)
                 {
@@ -451,7 +450,7 @@ abstract class HtmlElement {
             else
             {
                 // all elements setted later must also be closed and removed from array
-                for($i = $totalCount-1; $i >= $position; $i--)
+                for($i = $totalCount-1; $i >= $position; --$i)
                 {
                     $this->htmlString .= '</' . $this->arrParentElements[$i] . '>';
                     unset($this->arrParentElements[$i]);
@@ -483,7 +482,6 @@ abstract class HtmlElement {
 
         return $string;
     }
-
 
     /**
      * Create a valid html compatible string with all attributes and their values of the main element.
@@ -541,7 +539,7 @@ abstract class HtmlElement {
             if($nextLevel > 1)
             {
                 // bidimensional or assoc. array
-                for ($i = 0; $i < $numberEntries; $i++)
+                for ($i = 0; $i < $numberEntries; ++$i)
                 {
                     foreach ($data[$i] as $col => $value)
                     {

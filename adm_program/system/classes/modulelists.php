@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************/
 /** @class ModuleLists
  *  @brief Class manages lists viewable for user
@@ -187,7 +188,6 @@ class ModuleLists extends Modules
         $this->setMemberStatus();
     }
 
-
     /** Evaluates memberStatus an returns appropriate SQL conditions
      * @return string SQL for member status
      */
@@ -212,7 +212,6 @@ class ModuleLists extends Modules
 
     /** returns SQL condition
      *  @return SQL condition for category id
-     *
      */
     private function getCategorySql()
     {

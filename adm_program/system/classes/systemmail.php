@@ -62,7 +62,7 @@ class SystemMail extends Email
         // read email text from text table in database
         if($this->smTextObject->getValue('txt_name') != $systemMailId)
         {
-            $this->smTextObject->readDataByColumns(array('txt_name' => $systemMailId,
+            $this->smTextObject->readDataByColumns(array('txt_name'   => $systemMailId,
                                                          'txt_org_id' => $this->smOrganization->getValue('org_id')));
         }
 
@@ -80,7 +80,7 @@ class SystemMail extends Email
 
         // zusaetzliche Variablen ersetzen
         $iMax = count($this->smVariables);
-        for($i = 1; $i <= $iMax; $i++)
+        for($i = 1; $i <= $iMax; ++$i)
         {
             $mailSrcText = preg_replace('/%variable'.$i.'%/', $this->smVariables[$i], $mailSrcText);
         }
@@ -121,8 +121,8 @@ class SystemMail extends Email
      * diese Methode sendet eine Systemmail nachdem der Mailtext ausgelesen und Platzhalter ersetzt wurden
      * @param  string       $systemMailId eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
      * @param  object       $user         Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
-     * @return true
      * @throws AdmException SYS_EMAIL_NOT_SEND
+     * @return true
      */
     public function sendSystemMail($systemMailId, &$user)
     {

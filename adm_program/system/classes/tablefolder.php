@@ -103,7 +103,6 @@ class TableFolder extends TableAccess
                         WHERE fol_id = '.$folderId;
         $this->db->query($sql_delete_folder);
 
-
         //Jetzt noch das Verzeichnis physikalisch von der Platte loeschen
         if (isset($folderPath))
         {
@@ -218,8 +217,6 @@ class TableFolder extends TableAccess
             parent::readData($condition);
         }
 
-
-
         //Gucken ob ueberhaupt ein Datensatz gefunden wurde...
         if ($this->getValue('fol_id'))
         {
@@ -266,7 +263,6 @@ class TableFolder extends TableAccess
         }
         throw new AdmException('DOW_FOLDER_NOT_FOUND', $folderId);
     }
-
 
     // Inhalt des aktuellen Ordners, abhaengig von den Benutzerrechten, als Array zurueckliefern...
     public function getFolderContentsForDownload()
@@ -345,7 +341,6 @@ class TableFolder extends TableAccess
                 }
             }
 
-
             if ($addToArray)
             {
                 $completeFolder['folders'][] = array(
@@ -404,7 +399,6 @@ class TableFolder extends TableAccess
                 }
             }
 
-
             if ($addToArray)
             {
                 $completeFolder['files'][] = array(
@@ -446,7 +440,7 @@ class TableFolder extends TableAccess
 
                                 //Gucken ob das Verzeichnis bereits bei den regurlären Files dabei ist.
                                 if (isset($completeFolder['folders'])) {
-                                    for($i=0; $i<count($completeFolder['folders']); $i++)
+                                    for($i=0; $i<count($completeFolder['folders']); ++$i)
                                     {
                                         $nextFolder = $completeFolder['folders'][$i];
 
@@ -471,7 +465,7 @@ class TableFolder extends TableAccess
 
                                 //Gucken ob die Datei bereits bei den regurlären Files dabei ist.
                                 if (isset($completeFolder['files'])) {
-                                    for($i=0; $i<count($completeFolder['files']); $i++) {
+                                    for($i=0; $i<count($completeFolder['files']); ++$i) {
 
                                         $nextFile = $completeFolder['files'][$i];
 
@@ -499,7 +493,6 @@ class TableFolder extends TableAccess
 
                 }
 
-
             }
 
         }
@@ -507,7 +500,6 @@ class TableFolder extends TableAccess
         // Das Array mit dem Ordnerinhalt zurueckgeben
         return $completeFolder;
     }
-
 
     //Gibt den kompletten Pfad des Ordners zurueck
     public function getCompletePathOfFolder()
@@ -519,7 +511,6 @@ class TableFolder extends TableAccess
 
         return $completePath;
     }
-
 
     //Gibt fuer das Downloadmodul eine HTML-Navigationsleiste fuer die Ordner zurueck
     public function getNavigationForDownload($folderId = 0, $currentNavigation = '')
@@ -571,7 +562,6 @@ class TableFolder extends TableAccess
             {
                 $currentNavigation = '<li><a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='.
                                        $currentFolderRow->fol_id. '">'. $currentFolderRow->fol_name. '</a></li>'. $currentNavigation;
-
 
                 //naechster Aufruf mit ParentFolder
                 return $this->getNavigationForDownload($currentFolderRow->fol_fol_id_parent, $currentNavigation);
@@ -668,7 +658,6 @@ class TableFolder extends TableAccess
                           SET fol_path = \''.$newPath.'\'
                         WHERE fol_id = '.$folderId;
         $this->db->query($sql_update);
-
 
         //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
         $sql_subfolders = 'SELECT *

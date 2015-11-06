@@ -67,7 +67,8 @@ class DateTimeExtended extends DateTime
     {
         global $gL10n;
 
-        $weekdays = array(1 => $gL10n->get('SYS_MONDAY'),
+        $weekdays = array(
+            1 => $gL10n->get('SYS_MONDAY'),
             2 => $gL10n->get('SYS_TUESDAY'),
             3 => $gL10n->get('SYS_WEDNESDAY'),
             4 => $gL10n->get('SYS_THURSDAY'),

@@ -78,7 +78,7 @@ $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
 $table->addAttribute('border', '0');
 $table->addTableHeader();
 
-$table->addRowHeadingByArray(array( $gL10n->get('SYS_CATEGORY'), $gL10n->get('MAI_SUBJECT'), $gL10n->get('MSG_OPPOSITE'), $gL10n->get('SYS_DATE'), $gL10n->get('SYS_FEATURES')));
+$table->addRowHeadingByArray(array($gL10n->get('SYS_CATEGORY'), $gL10n->get('MAI_SUBJECT'), $gL10n->get('MSG_OPPOSITE'), $gL10n->get('SYS_DATE'), $gL10n->get('SYS_FEATURES')));
 $key = 0;
 $part1 = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=msg&amp;element_id=row_message_';
 $part2 = '"><img src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MSG_REMOVE').'" title="'.$gL10n->get('MSG_REMOVE').'" /></a>';
@@ -125,11 +125,11 @@ if(isset($result))
         $ReceiverName = substr($ReceiverName, 2);
 
         $message = new TableMessage($gDb, $row['msg_id']);
-        $key++;
+        ++$key;
 
         $messageAdministration = $part1 . $key . '&amp;name='.urlencode($message->getValue('msg_subject')).'&amp;database_id=' . $message->getValue('msg_id') . $part2;
 
-        $table->addRowByArray(array( '<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') .'">
+        $table->addRowByArray(array('<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') .'">
                 <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />',
                 '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
                 $ReceiverName, $message->getValue('msg_timestamp'), $messageAdministration), 'row_message_'.$key);
@@ -152,7 +152,7 @@ if(isset($result))
         }
         $ReceiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
         $message = new TableMessage($gDb, $row['msg_id']);
-        $key++;
+        ++$key;
 
         $messageAdministration = $part1 . $key . '&amp;name=' . urlencode($message->getValue('msg_subject')) . '&amp;database_id=' . $message->getValue('msg_id') . $part2;
 
@@ -180,7 +180,7 @@ if(isset($result))
 
         $ReceiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
         $message = new TableMessage($gDb, $row['msg_id']);
-        $key++;
+        ++$key;
 
         $messageAdministration = $part1 . $key . '&amp;name=' . urlencode($message->getValue('msg_subject')) . '&amp;database_id=' . $message->getValue('msg_id') . $part2;
 

@@ -263,10 +263,10 @@ class User extends TableUsers
      *                                            To use this functionality @b $updateSessionCookies must be set to true.
      * @param  bool         $updateSessionCookies The current session will be updated to a valid login.
      *                                            If set to false then the login is only valid for the current script.
-     * @return true         Return true if the correct password for this user was given to this method.
      * @throws AdmException SYS_LOGIN_FAILED
      *                                           SYS_LOGIN_FAILED
      *                                           SYS_PASSWORD_UNKNOWN
+     * @return true         Return true if the correct password for this user was given to this method.
      */
     public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true)
     {
@@ -728,14 +728,14 @@ class User extends TableUsers
         return $vcard;
     }
 
-    /**
-     * Checks if the current user is allowed to edit the profile of the user of the parameter.
-     * If will check if user can generally edit all users or if he is a group leader and can edit users
-     * of a special role where @b $user is a member or if it's the own profile and he could edit this.
-     * @param  object $user            User object of the user that should be checked if the current user can edit his profile.
-     * @param  bool   $checkOwnProfile If set to @b false than this method don't check the role right to edit the own profile.
-     * @return bool   Return @b true if the current user is allowed to edit the profile of the user from @b $user.
-     */
+     /**
+      * Checks if the current user is allowed to edit the profile of the user of the parameter.
+      * If will check if user can generally edit all users or if he is a group leader and can edit users
+      * of a special role where @b $user is a member or if it's the own profile and he could edit this.
+      * @param  object $user            User object of the user that should be checked if the current user can edit his profile.
+      * @param  bool   $checkOwnProfile If set to @b false than this method don't check the role right to edit the own profile.
+      * @return bool   Return @b true if the current user is allowed to edit the profile of the user from @b $user.
+      */
      public function hasRightEditProfile(&$user, $checkOwnProfile = true)
     {
         $returnValue = false;
@@ -784,7 +784,7 @@ class User extends TableUsers
                     foreach($this->rolesMembershipLeader as $roleId => $leaderRights)
                     {
                         // is group leader of role and has the right to edit users ?
-                        if(in_array($roleId, $rolesMembership) && $leaderRights > 1)
+                        if(in_array($roleId, $rolesMembership, true) && $leaderRights > 1)
                         {
                             $returnValue = true;
                         }
@@ -934,7 +934,7 @@ class User extends TableUsers
      */
     public function isMemberOfRole($roleId)
     {
-        if(in_array($roleId, $this->rolesMembership))
+        if(in_array($roleId, $this->rolesMembership, true))
         {
             return true;
         }
@@ -1008,8 +1008,8 @@ class User extends TableUsers
      * If the user doesn't have the right to save data of this user than an exception will be thrown.
      * @param  bool         $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
      *                                         if table has columns like @b usr_id_create or @b usr_id_changed
-     * @return void
      * @throws AdmException
+     * @return void
      */
     public function save($updateFingerPrint = true)
     {

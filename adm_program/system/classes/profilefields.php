@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************/
 /** @class ProfileFields
  *  @brief Reads the user fields structure out of database and give access to it
@@ -368,7 +369,6 @@ class ProfileFields
     {
         $this->noValueCheck = true;
     }
-
 
     /** Reads the profile fields structure out of database table @b adm_user_fields
      *  and adds an object for each field structure to the @b mProfileFields array.

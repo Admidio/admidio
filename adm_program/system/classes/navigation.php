@@ -79,13 +79,13 @@ class Navigation
             {
                 // if the last but one url is equal to the current url then only remove the last url
                 array_pop($this->urlStack);
-                $this->count--;
+                --$this->count;
             }
             else
             {
                 // if the current url will not be the last or the last but one then add the current url to stack
                 $this->urlStack[$this->count] = array('url' => $url, 'text' => $text, 'icon' => $icon);
-                $this->count++;
+                ++$this->count;
             }
         }
     }
@@ -117,11 +117,10 @@ class Navigation
     {
         if($this->count > 0)
         {
-            $this->count--;
+            --$this->count;
             unset($this->urlStack[$this->count]);
         }
     }
-
 
     /**
      * Returns html code that contain a link back to the previous url.
@@ -164,7 +163,7 @@ class Navigation
     {
         $html = '';
 
-        for($i = 0; $i < $this->count; $i++)
+        for($i = 0; $i < $this->count; ++$i)
         {
             if(strlen($this->urlStack[$i]['text']) > 0)
             {

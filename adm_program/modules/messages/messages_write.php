@@ -183,8 +183,9 @@ if ($getMsgType === 'PM')
     if ($getUserId == 0)
     {
         $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
-        $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_REQUIRED,
-                            'multiselect' => true, 'helpTextIdLabel' => 'MSG_SEND_PM'));
+        $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'        => FIELD_REQUIRED,
+                                                                          'multiselect'     => true,
+                                                                          'helpTextIdLabel' => 'MSG_SEND_PM'));
         $form->closeGroupBox();
         $sendto = '';
     }
@@ -317,7 +318,7 @@ elseif (!isset($message_result))
                  ORDER BY cat_sequence, rol_name ';
 
         // add a selectbox where you can choose to which groups (active, former) you want to send the mail
-        for ($act_or = 0; $act_or <= 2; $act_or++)
+        for ($act_or = 0; $act_or <= 2; ++$act_or)
         {
             $act_group = '';
             $act_group_short = '';
@@ -440,8 +441,11 @@ elseif (!isset($message_result))
 
     }
 
-    $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_REQUIRED,
-        'showContextDependentFirstEntry' => false, 'multiselect' => true, 'helpTextIdLabel' => 'MAI_SEND_MAIL_TO_ROLE', 'defaultValue' => $preload_data));
+    $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'                       => FIELD_REQUIRED,
+                                                                      'showContextDependentFirstEntry' => false,
+                                                                      'multiselect'                    => true,
+                                                                      'helpTextIdLabel'                => 'MAI_SEND_MAIL_TO_ROLE',
+                                                                      'defaultValue'                   => $preload_data));
 
     $form->addLine();
 
@@ -476,8 +480,10 @@ elseif (!isset($message_result))
     // Nur eingeloggte User duerfen Attachments anhaengen...
     if (($gValidLogin) && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
     {
-        $form->addFileUpload('btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'), array('enableMultiUploads' => true, 'multiUploadLabel' => $gL10n->get('MAI_ADD_ATTACHEMENT'),
-            'hideUploadField' => true, 'helpTextIdLabel' => array('MAI_MAX_ATTACHMENT_SIZE', Email::getMaxAttachementSize('mib'))));
+        $form->addFileUpload('btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'), array('enableMultiUploads' => true,
+                                                                                         'multiUploadLabel'   => $gL10n->get('MAI_ADD_ATTACHEMENT'),
+                                                                                         'hideUploadField'    => true,
+                                                                                         'helpTextIdLabel'    => array('MAI_MAX_ATTACHMENT_SIZE', Email::getMaxAttachementSize('mib'))));
     }
 
     // add textfield or ckeditor to form

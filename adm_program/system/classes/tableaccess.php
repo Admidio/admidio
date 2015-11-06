@@ -136,9 +136,9 @@ class TableAccess
      */
     protected function connectAdditionalTable($table, $columnNameAdditionalTable, $columnNameClassTable)
     {
-        $this->additionalTables[] = array('table' => $table,
+        $this->additionalTables[] = array('table'                     => $table,
                                           'columnNameAdditionalTable' => $columnNameAdditionalTable,
-                                          'columnNameClassTable' => $columnNameClassTable);
+                                          'columnNameClassTable'      => $columnNameClassTable);
     }
 
     /**

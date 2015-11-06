@@ -183,7 +183,6 @@ if($installedDbVersion === '')
                $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
 }
 
-
 if($getMode == 1)
 {
     // if database version is smaller then source version -> update
@@ -318,7 +317,7 @@ elseif($getMode == 2)
     $mainVersion      = substr($installedDbVersion, 0, 1);
     $subVersion       = substr($installedDbVersion, 2, 1);
     $microVersion     = substr($installedDbVersion, 4, 1);
-    $microVersion     = (int)$microVersion + 1;
+    $microVersion     = (int) $microVersion + 1;
     $flagNextVersion  = true;
 
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
@@ -359,7 +358,7 @@ elseif($getMode == 2)
 
                 // in der Schleife wird geschaut ob es Scripte fuer eine Microversion (3.Versionsstelle) gibt
                 // Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
-                for($microVersion = $microVersion; $microVersion < 15; $microVersion++)
+                for($microVersion = $microVersion; $microVersion < 15; ++$microVersion)
                 {
                     $version = $mainVersion.'.'.$subVersion.'.'.$microVersion;
 
@@ -411,12 +410,12 @@ elseif($getMode == 2)
                 {
                     if($subVersion == 4) // we do not have more then 4 subversions with old updater
                     {
-                        $mainVersion = (int)$mainVersion + 1;
+                        $mainVersion = (int) $mainVersion + 1;
                         $subVersion  = 0;
                     }
                     else
                     {
-                        $subVersion  = (int)$subVersion + 1;
+                        $subVersion  = (int) $subVersion + 1;
                     }
 
                     $microVersion    = 0;

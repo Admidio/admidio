@@ -76,7 +76,7 @@ function getBacktrace()
         $args = array();
 
         // If include/require/include_once is not called, do not show arguments - they may contain sensible information
-        if (!in_array($trace['function'], array('include', 'require', 'include_once')))
+        if (!in_array($trace['function'], array('include', 'require', 'include_once'), true))
         {
             unset($trace['args']);
         }
@@ -155,7 +155,6 @@ if($gDbType === 'mysql')
     $db->query($sql);
 }
 
-
 $filename = 'db.sql';
 $file     = fopen($filename, 'r')
             or exit('<p style="color: #cc0000;">File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
@@ -174,7 +173,6 @@ foreach($sql_arr as $sql)
         $db->query($sql);
     }
 }
-
 
 $filename = 'data.sql';
 $file     = fopen($filename, 'r')

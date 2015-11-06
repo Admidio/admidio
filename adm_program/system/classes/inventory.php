@@ -23,7 +23,6 @@
 
 class Inventory extends TableInventory
 {
-
     public $mInventoryFieldsData;           ///< object with current user field structure
     protected $list_view_rights = array();  ///< Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
     protected $organizationId;              ///< the organization for which the rights are read, could be changed with method @b setOrganization
@@ -43,7 +42,6 @@ class Inventory extends TableInventory
         $this->organizationId = $gCurrentOrganization->getValue('org_id');
         parent::__construct($database, $itemId);
     }
-
 
     /**
      * Additional to the parent method the user profile fields and

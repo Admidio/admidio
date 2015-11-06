@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************/
 /** @class HtmlList
  *  @brief  Create html lists
@@ -56,7 +57,6 @@
 
 class HtmlList extends HtmlElement
 {
-
     /**
      * Constructor creates the element
      *
@@ -64,7 +64,6 @@ class HtmlList extends HtmlElement
      * @param $id Id of the list
      * @param $class Class name of the list
      */
-
     public function __construct($list = 'ul', $id = '', $class = '')
     {
 
@@ -91,7 +90,7 @@ class HtmlList extends HtmlElement
     public function addDatalist($id = '', $term = null, $description = null)
     {
         // First check whether open list item tag  must be closed before setting new item
-        if(in_array('dl', $this->arrParentElements))
+        if(in_array('dl', $this->arrParentElements, true))
         {
             $this->closeParentElement('dl');
         }
@@ -146,7 +145,7 @@ class HtmlList extends HtmlElement
         if($data != null && $term != null)
         {
             // First check whether open list item tag  must be closed before setting new item
-            if(in_array('li', $this->arrParentElements))
+            if(in_array('li', $this->arrParentElements, true))
             {
                 $this->closeParentElement('li');
             }

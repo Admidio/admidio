@@ -346,7 +346,7 @@ while($row = $gDb->fetch_array($result_mgl))
 
     $membersTable->addRowByArray($columnValues);
 
-    $irow++;
+    ++$irow;
 }
 
 $page->addHtml($membersTable->show(false));

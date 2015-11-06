@@ -124,7 +124,7 @@ if($onlineUsersStatement->rowCount() > 0)
         }
         else
         {
-            $count_visitors++;
+            ++$count_visitors;
         }
     }
 

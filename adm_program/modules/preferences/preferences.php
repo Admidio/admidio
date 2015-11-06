@@ -45,7 +45,7 @@ $showOptionValidModules = array('announcements', 'downloads', 'guestbook', 'ecar
                                 'photos', 'profile', 'events', 'links', 'user_management');
 
 // open the modules tab if the options of a module should be shown
-if(in_array($showOption, $showOptionValidModules))
+if(in_array($showOption, $showOptionValidModules, true))
 {
     $page->addJavascript('
         $("#tabs_nav_modules").attr("class", "active");
@@ -189,8 +189,9 @@ $page->addHtml('
                                      WHERE org_id <> '. $gCurrentOrganization->getValue('org_id'). '
                                        AND org_org_id_parent is NULL
                                      ORDER BY org_longname ASC, org_shortname ASC';
-                            $form->addSelectBoxFromSql('org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sql, array('defaultValue' => $form_values['org_org_id_parent'],
-                                                       'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_PARENT_ORGANIZATION_DESC'));
+                            $form->addSelectBoxFromSql('org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sql, array('defaultValue'                   => $form_values['org_org_id_parent'],
+                                                                                                                                      'showContextDependentFirstEntry' => false,
+                                                                                                                                      'helpTextIdInline'               => 'ORG_PARENT_ORGANIZATION_DESC'));
                         }
 
                         if($gCurrentOrganization->countAllRecords() > 1)
@@ -223,10 +224,12 @@ $page->addHtml('
                                                    array('property' => FIELD_REQUIRED, 'defaultValue' => $form_values['system_language'], 'showContextDependentFirstEntry' => true));
                         $form->addSelectBox('default_country', $gL10n->get('PRO_DEFAULT_COUNTRY'), $gL10n->getCountries(),
                                             array('defaultValue' => $form_values['default_country'], 'helpTextIdInline' => 'PRO_DEFAULT_COUNTRY_DESC'));
-                        $form->addInput('system_date', $gL10n->get('ORG_DATE_FORMAT'), $form_values['system_date'], array('maxLength' => 20,
-                            'helpTextIdInline' => array('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>'), 'class' => 'form-control-small'));
-                        $form->addInput('system_time', $gL10n->get('ORG_TIME_FORMAT'), $form_values['system_time'], array('maxLength' => 20,
-                            'helpTextIdInline' => array('ORG_TIME_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>'), 'class' => 'form-control-small'));
+                        $form->addInput('system_date', $gL10n->get('ORG_DATE_FORMAT'), $form_values['system_date'], array('maxLength'        => 20,
+                                                                                                                          'helpTextIdInline' => array('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>'),
+                                                                                                                          'class'            => 'form-control-small'));
+                        $form->addInput('system_time', $gL10n->get('ORG_TIME_FORMAT'), $form_values['system_time'], array('maxLength'        => 20,
+                                                                                                                          'helpTextIdInline' => array('ORG_TIME_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>'),
+                                                                                                                          'class'            => 'form-control-small'));
                         $form->addInput('system_currency', $gL10n->get('ORG_CURRENCY'), $form_values['system_currency'], array('maxLength' => 20, 'helpTextIdInline' => 'ORG_CURRENCY_DESC', 'class' => 'form-control-small'));
                         $form->addSubmitButton('btn_save_regional_settings', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
                         $page->addHtml($form->show(false));

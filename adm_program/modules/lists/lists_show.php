@@ -23,7 +23,7 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl' )));
+$getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
 $getListId      = admFuncVariableIsValid($_GET, 'lst_id', 'numeric');
 $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
@@ -83,7 +83,6 @@ else
     $htmlSubHeadline .= $role->getValue('cat_name');
     $roleIdLink       = '&rol_id='. $getRoleId;
 }
-
 
 // if no list parameter is set then load role default list configuration or system default list configuration
 if($getListId === 0 && $numberRoles === 1)
@@ -326,8 +325,13 @@ if($getMode != 'csv')
         $listsMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
 
         $form = new HtmlForm('navbar_export_to_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
-        $selectBoxEntries = array('' => $gL10n->get('LST_EXPORT_TO').' ...', 'csv-ms' => $gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')', 'pdf' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
-                                  'pdfl' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')', 'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')');
+        $selectBoxEntries = array(
+            ''       => $gL10n->get('LST_EXPORT_TO').' ...',
+            'csv-ms' => $gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')',
+            'pdf'    => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
+            'pdfl'   => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
+            'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')'
+        );
         $form->addSelectBox('export_list_to', null, $selectBoxEntries, array('showContextDependentFirstEntry' => false));
         $listsMenu->addForm($form->show(false));
 
@@ -354,7 +358,7 @@ else
 }
 
 // headlines for columns
-for($columnNumber = 1; $columnNumber <= $list->countColumns(); $columnNumber++)
+for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
 {
     $column = $list->getColumnObject($columnNumber);
 
@@ -475,7 +479,7 @@ foreach($membersList as $member)
     $columnValues = array();
 
     // Felder zu Datensatz
-    for($columnNumber = 1; $columnNumber <= $list->countColumns(); $columnNumber++)
+    for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
     {
         $column = $list->getColumnObject($columnNumber);
 
@@ -623,7 +627,7 @@ foreach($membersList as $member)
         $table->addRowByArray($columnValues, null, array('nobr' => 'true'));
     }
 
-    $listRowNumber++;
+    ++$listRowNumber;
 }  // End-While (jeder gefundene User)
 
 // Settings for export file

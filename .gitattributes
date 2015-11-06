@@ -1,0 +1,6 @@
+# Default
+* text=auto
+
+# Images
+*.png binary
+*.jpg binary

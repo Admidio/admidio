@@ -93,7 +93,6 @@ $sql = 'UPDATE '. TBL_ROLES. ' SET rol_webmaster = 1
          WHERE rol_name = \''.$gL10n->get('SYS_WEBMASTER').'\' ';
 $gDb->query($sql);
 
-
  // convert <br /> to a normal line feed
 $emailText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'));
 
@@ -112,7 +111,6 @@ $sql = 'INSERT INTO '. TBL_USER_DATA. ' (usd_usf_id, usd_usr_id, usd_value)
             VALUES ('.$usfRow['usf_id'].', '.$systemUser->getValue('usr_id').', \''.$gL10n->get('SYS_SYSTEM').'\')';
 $gDb->query($sql);
 
-
 $sql = 'UPDATE '. TBL_MEMBERS. ' SET mem_usr_id_create = '. $systemUser->getValue('usr_id'). '
                                    , mem_timestamp_create = \''.DATETIME_NOW.'\'';
 $gDb->query($sql);
@@ -120,7 +118,6 @@ $gDb->query($sql);
 $sql = 'UPDATE '. TBL_MEMBERS. ' SET mem_usr_id_create = '. $systemUser->getValue('usr_id'). '
                                    , mem_timestamp_create = \''.DATETIME_NOW.'\'';
 $gDb->query($sql);
-
 
 // write data for every organization
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS. ' ORDER BY org_id DESC';

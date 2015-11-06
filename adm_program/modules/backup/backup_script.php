@@ -126,7 +126,7 @@ $starttime = getmicrotime();
             foreach ($SelectedTables as $dbname => $value) {
                 echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables[$dbname]) / TABLES_PER_COL).'"><b>'.htmlentities($dbname).'</b></th></tr><tr><td nowrap valign="top">';
                 $tablecounter = 0;
-                for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
+                for ($t = 0; $t < count($SelectedTables[$dbname]); ++$t) {
                     if ($tablecounter++ >= TABLES_PER_COL) {
                         echo '</td><td nowrap valign="top">';
                         $tablecounter = 1;
@@ -144,7 +144,7 @@ $starttime = getmicrotime();
 
             $alltablesstructure = '';
             foreach ($SelectedTables as $dbname => $value) {
-                for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
+                for ($t = 0; $t < count($SelectedTables[$dbname]); ++$t) {
                     @set_time_limit(60);
                     OutputInformation('statusinfo', 'Creating structure for <b>'.htmlentities($dbname.'.'.$SelectedTables[$dbname][$t]).'</b>');
 
@@ -291,7 +291,7 @@ $starttime = getmicrotime();
                 $processedrows    = 0;
                 foreach ($SelectedTables as $dbname => $value) {
                     @set_time_limit(60);
-                    for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
+                    for ($t = 0; $t < count($SelectedTables[$dbname]); ++$t) {
                         $SQLquery  = 'SELECT *';
                         $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
                         $result = $gDb->query($SQLquery);
@@ -335,7 +335,7 @@ $starttime = getmicrotime();
                                             $data_len = strlen($data);
                                             if ($HexBLOBs && $data_len) {
                                                 $hexstring = '0x';
-                                                for ($i = 0; $i < $data_len; $i++) {
+                                                for ($i = 0; $i < $data_len; ++$i) {
                                                     $hexstring .= str_pad(dechex(ord($data{$i})), 2, '0', STR_PAD_LEFT);
                                                 }
                                                 $valuevalues[] = $hexstring;

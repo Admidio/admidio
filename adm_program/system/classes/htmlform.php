@@ -71,9 +71,14 @@ class HtmlForm extends HtmlFormBasic
     public function __construct($id, $action, $htmlPage = null, $options = array())
     {
         // create array with all options
-        $optionsDefault = array('type' => 'default', 'enableFileUpload' => false, 'showRequiredFields' => true,
-                                'setFocus' => true, 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'type'               => 'default',
+            'enableFileUpload'   => false,
+            'showRequiredFields' => true,
+            'setFocus'           => true,
+            'class'              => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // navbar forms should send the data as GET
         if($optionsAll['type'] === 'navbar')
@@ -161,7 +166,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addButton($id, $text, $options = array())
     {
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('icon' => '', 'link' => '', 'onClickText' => '', 'class' => '', 'type' => 'button', 'data-admidio' => '');
@@ -252,7 +257,7 @@ class HtmlForm extends HtmlFormBasic
         global $gL10n, $g_root_path;
 
         $attributes = array('class' => 'captcha');
-        $this->countElements++;
+        ++$this->countElements;
 
         // set specific css class for this field
         if($class !== '')
@@ -286,9 +291,9 @@ class HtmlForm extends HtmlFormBasic
         $this->closeControlStructure();
 
         // now add a row with a text field where the user can write the solution for the puzzle
-        $this->addInput($id, $captchaLabel, '', array('property' => FIELD_REQUIRED,
+        $this->addInput($id, $captchaLabel, '', array('property'        => FIELD_REQUIRED,
                                                       'helpTextIdLabel' => $captchaDescription,
-                                                      'class' => 'form-control-small'));
+                                                      'class'           => 'form-control-small'));
     }
 
     /**
@@ -323,12 +328,17 @@ class HtmlForm extends HtmlFormBasic
         $htmlIcon     = '';
         $htmlHelpIcon = '';
         $cssClasses   = 'checkbox';
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('property' => FIELD_DEFAULT, 'helpTextIdLabel' => '',
-                                'helpTextIdInline' => '', 'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'property'         => FIELD_DEFAULT,
+            'helpTextIdLabel'  => '',
+            'helpTextIdInline' => '',
+            'icon'             => '',
+            'class'            => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
         if($optionsAll['property'] === FIELD_DISABLED)
@@ -378,7 +388,6 @@ class HtmlForm extends HtmlFormBasic
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
 
-
     /**
      * Add custom html content to the form within the default field structure.
      * The Label will be set but instead of an form control you can define any html.
@@ -402,12 +411,17 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addCustomContent($label, $content, $options = array())
     {
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('referenceId' => '', 'helpTextIdLabel' => '', 'helpTextIdInline' => '',
-                                'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'referenceId'      => '',
+            'helpTextIdLabel'  => '',
+            'helpTextIdInline' => '',
+            'icon'             => '',
+            'class'            => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // set specific css class for this field
 //        if($optionsAll['class'] !== '')
@@ -461,16 +475,22 @@ class HtmlForm extends HtmlFormBasic
     {
         global $gPreferences, $g_root_path, $gL10n;
 
-        $this->countElements++;
+        ++$this->countElements;
         $attributes = array('class' => 'editor');
         $flagLabelVertical = $this->type;
 
         // create array with all options
-        $optionsDefault = array('property' => FIELD_DEFAULT, 'toolbar' => 'AdmidioDefault',
-                                'height' => '300px', 'helpTextIdLabel' => '',
-                                'helpTextIdInline' => '', 'labelVertical' => true,
-                                'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'property'         => FIELD_DEFAULT,
+            'toolbar'          => 'AdmidioDefault',
+            'height'           => '300px',
+            'helpTextIdLabel'  => '',
+            'helpTextIdInline' => '',
+            'labelVertical'    => true,
+            'icon'             => '',
+            'class'            => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         if($optionsAll['labelVertical'] === true)
         {
@@ -563,13 +583,22 @@ class HtmlForm extends HtmlFormBasic
     {
         global $gPreferences;
         $attributes = array('class' => 'form-control');
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('property' => FIELD_DEFAULT, 'maxUploadSize' => $gPreferences['max_file_upload_size'] * 1024 * 1024,
-                                'allowedMimeTypes' => array(), 'enableMultiUploads' => false, 'hideUploadField' => false, 'multiUploadLabel' => '',
-                                'helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'property'           => FIELD_DEFAULT,
+            'maxUploadSize'      => $gPreferences['max_file_upload_size'] * 1024 * 1024,
+            'allowedMimeTypes'   => array(),
+            'enableMultiUploads' => false,
+            'hideUploadField'    => false,
+            'multiUploadLabel'   => '',
+            'helpTextIdLabel'    => '',
+            'helpTextIdInline'   => '',
+            'icon'               => '',
+            'class'              => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
         if($optionsAll['property'] === FIELD_DISABLED)
@@ -683,12 +712,23 @@ class HtmlForm extends HtmlFormBasic
         global $gL10n, $gPreferences, $g_root_path, $gDebug;
 
         $attributes = array('class' => 'form-control');
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('type' => 'text', 'minLength' => null, 'maxLength' => 0, 'minNumber' => null, 'maxNumber' => null, 'step' => 1,
-                                'property' => FIELD_DEFAULT, 'helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'type'             => 'text',
+            'minLength'        => null,
+            'maxLength'        => 0,
+            'minNumber'        => null,
+            'maxNumber'        => null,
+            'step'             => 1,
+            'property'         => FIELD_DEFAULT,
+            'helpTextIdLabel'  => '',
+            'helpTextIdInline' => '',
+            'icon'             => '',
+            'class'            => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // set min/max input length
         if($optionsAll['type'] === 'text' || $optionsAll['type'] === 'password' || $optionsAll['type'] === 'search' ||
@@ -825,7 +865,6 @@ class HtmlForm extends HtmlFormBasic
         $this->addHtml('<hr />');
     }
 
-
     /**
      * Add a new textarea field with a label to the form.
      * @param string $id      Id of the input field. This will also be the name of the input field.
@@ -857,12 +896,18 @@ class HtmlForm extends HtmlFormBasic
         global $gL10n, $g_root_path;
 
         $attributes = array('class' => 'form-control');
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('property' => FIELD_DEFAULT, 'maxLength' => 0, 'helpTextIdLabel' => '',
-                                'helpTextIdInline' => '', 'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'property'         => FIELD_DEFAULT,
+            'maxLength'        => 0,
+            'helpTextIdLabel'  => '',
+            'helpTextIdInline' => '',
+            'icon'             => '',
+            'class'            => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
         if($optionsAll['property'] === FIELD_DISABLED)
@@ -955,12 +1000,19 @@ class HtmlForm extends HtmlFormBasic
     public function addRadioButton($id, $label, $values, $options = array())
     {
         $attributes = array('class' => '');
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('property' => FIELD_DEFAULT, 'defaultValue' => '', 'showNoValueButton' => false,
-                                'helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'property'          => FIELD_DEFAULT,
+            'defaultValue'      => '',
+            'showNoValueButton' => false,
+            'helpTextIdLabel'   => '',
+            'helpTextIdInline'  => '',
+            'icon'              => '',
+            'class'             => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
         if($optionsAll['property'] === FIELD_DISABLED)
@@ -1057,15 +1109,22 @@ class HtmlForm extends HtmlFormBasic
 
         if(count($values) > 0)
         {
-            $this->countElements++;
+            ++$this->countElements;
         }
 
         // create array with all options
-        $optionsDefault = array('property' => FIELD_DEFAULT, 'defaultValue' => '',
-                                'showContextDependentFirstEntry' => true, 'firstEntry' => '',
-                                'multiselect' => false, 'helpTextIdLabel' => '',
-                                'helpTextIdInline' => '', 'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'property'                       => FIELD_DEFAULT,
+            'defaultValue'                   => '',
+            'showContextDependentFirstEntry' => true,
+            'firstEntry'                     => '',
+            'multiselect'                    => false,
+            'helpTextIdLabel'                => '',
+            'helpTextIdInline'               => '',
+            'icon'                           => '',
+            'class'                          => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
         if($optionsAll['property'] === FIELD_DISABLED)
@@ -1141,7 +1200,7 @@ class HtmlForm extends HtmlFormBasic
         $arrayMax = count($values);
         $optionGroup = null;
 
-        for($arrayCount = 0; $arrayCount < $arrayMax; $arrayCount++)
+        for($arrayCount = 0; $arrayCount < $arrayMax; ++$arrayCount)
         {
             // create entry in html
             $defaultEntry = false;
@@ -1349,7 +1408,7 @@ class HtmlForm extends HtmlFormBasic
 
         // transform the two complex arrays to one simply array
         $arrayMax = count($index[$xmlValueTag]);
-        for($i = 0; $i < $arrayMax; $i++)
+        for($i = 0; $i < $arrayMax; ++$i)
         {
             $selectboxEntries[$vals[$index[$xmlValueTag][$i]]['value']] = $vals[$index[$xmlViewTag][$i]]['value'];
         }
@@ -1393,11 +1452,18 @@ class HtmlForm extends HtmlFormBasic
         global $gCurrentOrganization, $gValidLogin, $gL10n;
 
         // create array with all options
-        $optionsDefault = array('property' => FIELD_DEFAULT, 'defaultValue' => '',
-                                'showContextDependentFirstEntry' => true, 'multiselect' => false,
-                                'showSystemCategory' => true, 'helpTextIdLabel' => '',
-                                'helpTextIdInline' => '', 'icon' => '', 'class' => '');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $optionsDefault = array(
+            'property'                       => FIELD_DEFAULT,
+            'defaultValue'                   => '',
+            'showContextDependentFirstEntry' => true,
+            'multiselect'                    => false,
+            'showSystemCategory'             => true,
+            'helpTextIdLabel'                => '',
+            'helpTextIdInline'               => '',
+            'icon'                           => '',
+            'class'                          => ''
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         $sqlTables       = TBL_CATEGORIES;
         $sqlCondidtions  = '';
@@ -1532,7 +1598,7 @@ class HtmlForm extends HtmlFormBasic
     public function addStaticControl($id, $label, $value, $options = array()) //, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = '')
     {
         $attributes = array('class' => 'form-control-static');
-        $this->countElements++;
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');

@@ -126,7 +126,7 @@ while(!file_exists($picpath) && $i < 20 && $albumStatement->rowCount() > 0)
 
     //Bilpfad zusammensetzen
     $picpath = PLUGIN_PATH. '/../adm_my_files/photos/'.$album->getValue('pho_begin', 'Y-m-d').'_'.$album->getValue('pho_id').'/'.$picnr.'.jpg';
-    $i++;
+    ++$i;
 }
 
 if(!file_exists($picpath))
@@ -146,7 +146,7 @@ if($plg_photos_show_link && $plg_max_char_per_word > 0)
     //Linktext umbrechen wenn noetig
     $words = explode(' ', $album->getValue('pho_name'));
 
-    for($i = 0; $i < count($words); $i++)
+    for($i = 0; $i < count($words); ++$i)
     {
         if(strlen($words[$i]) > $plg_max_char_per_word)
         {

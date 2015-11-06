@@ -333,7 +333,6 @@ else
             alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
     }
 
-
     // create array with all column heading values
     $columnHeading = array(
         '<img class="admidio-icon-info"
@@ -427,14 +426,12 @@ else
             $htmlRoleLeader = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" class="memlist_checkbox memlist_leader" />';
         }
 
-
         //Geburtstag nur ausgeben wenn bekannt
         if(strlen($user['birthday']) > 0)
         {
             $birthdayDate = new DateTimeExtended($user['birthday'], 'Y-m-d');
             $htmlBirthday = $birthdayDate->format($gPreferences['system_date']);
         }
-
 
         // create array with all column values
         $columnValues = array(

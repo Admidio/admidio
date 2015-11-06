@@ -38,7 +38,7 @@ function validate_bbc($table, $idCol, $col)
         {
             //comepare number of opening and closeing tags
             $dif = substr_count($row->$col, $bbcode['o'])-substr_count($row->$col, $bbcode['c']);
-            for($x=0; $x<$dif; $x++)
+            for($x=0; $x<$dif; ++$x)
             {
                 $sql_append .= $bbcode['c'];
             }
@@ -60,7 +60,6 @@ validate_bbc(TBL_GUESTBOOK_COMMENTS, 'gbc_id', 'gbc_text');
 validate_bbc(TBL_LINKS, 'lnk_id', 'lnk_description');
 validate_bbc(TBL_ROOMS, 'room_id', 'room_description');
 
-
 // check internal fieldname if name is unique, if not add suffix to name
 $sql = 'SELECT usf_id, usf_name_intern FROM '.TBL_USER_FIELDS.' ORDER by usf_name_intern ';
 $userFieldsStatement = $gDb->query($sql);
@@ -69,7 +68,7 @@ $i = 0;
 
 while($row = $userFieldsStatement->fetch())
 {
-    $i++;
+    ++$i;
     if($row['usf_name_intern'] == $lastNameIntern)
     {
         $sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name_intern = \''.$row['usf_name_intern'].'_0'.$i.'\'

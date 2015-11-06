@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************/
 /** @class HtmlTableBasic
  *  @brief  Create html tables
@@ -111,7 +112,6 @@
  *****************************************************************************/
 
 class HtmlTableBasic extends HtmlElement {
-
     protected $border;                   ///< String with border attribute and value of the table
     protected $lineChange;               ///< Integer value for class change mode for table rows.
     protected $class_1;                  ///< Class name for standard design of table rows
@@ -191,7 +191,7 @@ class HtmlTableBasic extends HtmlElement {
         }
 
         $this->addData($data);
-        $this->columnCount ++;
+        ++$this->columnCount;
     }
 
     /**
@@ -211,7 +211,7 @@ class HtmlTableBasic extends HtmlElement {
         $this->columnCount = 0;
 
         // If row is active we must close it first before starting new one
-        if(in_array('tr', $this->arrParentElements))
+        if(in_array('tr', $this->arrParentElements, true))
         {
             $this->closeParentElement('tr');
         }
@@ -347,7 +347,7 @@ class HtmlTableBasic extends HtmlElement {
         // only increase rowcount if this is a data row and not the header
         if($col == 'td')
         {
-            $this->rowCount++;
+            ++$this->rowCount;
         }
     }
 
@@ -361,7 +361,7 @@ class HtmlTableBasic extends HtmlElement {
      */
     public function addTableBody($attribute = '', $value = '', $data = '', $col = 'td')
     {
-        if($this->tfoot != -1 && in_array('tfoot', $this->arrParentElements));
+        if($this->tfoot != -1 && in_array('tfoot', $this->arrParentElements, true));
         {
             $this->closeParentElement('tr');
         }
@@ -400,7 +400,7 @@ class HtmlTableBasic extends HtmlElement {
      */
     public function addTableFooter($attribute = '', $value = '', $data = '', $col = 'td')
     {
-        if($this->thead != -1 && in_array('thead', $this->arrParentElements));
+        if($this->thead != -1 && in_array('thead', $this->arrParentElements, true));
         {
             $this->closeParentElement('thead');
         }
@@ -516,7 +516,6 @@ class HtmlTableBasic extends HtmlElement {
         }
         return false;
     }
-
 
     /** Set a specific width for one column of the table. This is useful if you have one column
      *  that will not get a useful width automatically by the browser.

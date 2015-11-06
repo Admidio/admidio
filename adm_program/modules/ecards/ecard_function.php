@@ -39,7 +39,7 @@ class FunctionClass
                 if($file != '.' && $file != '..')
                 {
                     $array_files[$i] = $file;
-                    $i++;
+                    ++$i;
                 }
             }
         }

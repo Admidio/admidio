@@ -71,6 +71,5 @@ while ($row = $gDb->fetch_array($result))
     $rss->addItem($title, $description, $link, $author, $pubDate);
 }
 
-
 // jetzt nur noch den Feed generieren lassen
 $rss->buildFeed();

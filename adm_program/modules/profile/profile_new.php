@@ -303,8 +303,13 @@ foreach($gProfileFields->mProfileFields as $field)
 
             $form->addSelectBox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'),
                 $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),  $arrListValues,
-                array('property' => $fieldProperty, 'defaultValue' => $defaultValue, 'helpTextIdLabel' => $helpId,
-                'icon' => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
+                array(
+                    'property'        => $fieldProperty,
+                    'defaultValue'    => $defaultValue,
+                    'helpTextIdLabel' => $helpId,
+                    'icon'            => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')
+                )
+            );
         }
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'RADIO_BUTTON')
         {

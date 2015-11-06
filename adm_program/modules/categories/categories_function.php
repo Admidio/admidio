@@ -177,7 +177,7 @@ if($getMode == 1)
 
         while($row = $gDb->fetch_array($result))
         {
-            $sequence++;
+            ++$sequence;
             $sequenceCategory->clear();
             $sequenceCategory->setArray($row);
 

@@ -1,4 +1,5 @@
 <?php
+
 /******************************************************************************/
 /** @class Participants
  *  @brief This class gets information about participants and leaders of dates.
@@ -111,7 +112,7 @@ class Participants
         {
             if($member['leader'] != 0)
             {
-                $leader ++;
+                ++$leader;
             }
         }
         // check if class variables $count and $leader are set to default flag.
@@ -175,7 +176,7 @@ class Participants
 
         $this->checkId($rolId);
 
-        if(!in_array($order, array('ASC', 'DESC')))
+        if(!in_array($order, array('ASC', 'DESC'), true))
         {
             return false;
         }

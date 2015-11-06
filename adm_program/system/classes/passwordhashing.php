@@ -33,7 +33,7 @@ class PasswordHashing
      */
     public static function hash($password, $algorithm = PASSWORD_DEFAULT, $options = array())
     {
-        if (!in_array('cost', $options)) {
+        if (!in_array('cost', $options, true)) {
             $options['cost'] = 10;
         }
         if ($options['cost'] < 4) {
@@ -98,11 +98,11 @@ class PasswordHashing
     public static function passwordInfo($password)
     {
         $passwordInfo = array(
-            'length' => 0,
-            'number' => false,
+            'length'    => 0,
+            'number'    => false,
             'lowerCase' => false,
             'upperCase' => false,
-            'symbol' => false,
+            'symbol'    => false,
         );
 
         $passwordInfo['length'] = strlen($password);
@@ -172,13 +172,13 @@ class PasswordHashing
         while ($time <= $maxTime && $cost <= 31) {
             $start = microtime(true);
             $options['cost'] = $cost;
-            PasswordHashing::hash($password, $algorithm, $options);
+            self::hash($password, $algorithm, $options);
             $end = microtime(true);
 
             $time = $end - $start;
 
             $results = array('cost' => $cost, 'time' => $time);
-            $cost++;
+            ++$cost;
         }
 
         array_pop($results);

@@ -32,7 +32,7 @@ function admStrToLower($string)
  * IMPORTANT: If the fallback is used, the conversion of umlauts not work!
  * @param string $string
  * @return string
-*/
+ */
 function admStrToUpper($string)
 {
     if(function_exists('mb_strtoupper'))
@@ -50,7 +50,7 @@ function admStrToUpper($string)
  * of string or all elements of array without ckeditor variables !!!
  * @param string[] $srcArray
  * @return string[]
-*/
+ */
 function admStrStripTagsSpecial($srcArray)
 {
     foreach($srcArray as $key => $value)
@@ -78,7 +78,7 @@ function admStrStripTagsSpecial($srcArray)
  * removes html, php code and whitespaces at beginning and end of string or all elements of array
  * @param string|string[] $value
  * @return string|string[]
-*/
+ */
 function strStripTags($value)
 {
     if(is_array($value))
@@ -101,7 +101,7 @@ function strStripTags($value)
  * fuegt Quotes einem mittels addslashes() gequoteten Array und String hinzu
  * @param string|string[] $value
  * @return string|string[]
-*/
+ */
 function strAddSlashesDeep($value)
 {
     if(is_array($value))
@@ -121,7 +121,7 @@ function strAddSlashesDeep($value)
  * Entfernt Quotes aus einem mittels addslashes() gequoteten Array und String
  * @param string|string[] $value
  * @return string|string[]
-*/
+ */
 function strStripSlashesDeep($value)
 {
     if(is_array($value))
@@ -147,7 +147,7 @@ function strStripSlashesDeep($value)
  * @param string $letter
  * @param bool $reverse
  * @return string
-*/
+ */
 function strNextLetter($letter, $reverse = false)
 {
     $ascii      = ord($letter);
@@ -160,23 +160,23 @@ function strNextLetter($letter, $reverse = false)
     {
         if (!$reverse && ($ascii === $aLowerCase || $ascii === $aUpperCase))
         {
-            $ascii++;
+            ++$ascii;
         }
 
         if ($reverse && ($ascii === $zLowerCase || $ascii === $zUpperCase))
         {
-            $ascii--;
+            --$ascii;
         }
     }
     else
     {
         if ($reverse)
         {
-            $ascii--;
+            --$ascii;
         }
         else
         {
-            $ascii++;
+            ++$ascii;
         }
     }
 
@@ -240,10 +240,10 @@ function strValidCharacters($string, $checkType)
  * @param string $filename     Name of the file that should be checked.
  * @param bool $checkExtension If set to @b true then the extension will be checked against a blacklist of extensions:
  *                             php, php3, php4, php5, html, htm, htaccess, htpasswd, pl, js, vbs, asp, cgi, ssi
- * @return true Returns @true if filename contains only valid characters. Otherwise an AdmException is thrown
  * @throws AdmException SYS_FILENAME_EMPTY : Filename was empty
  *                      BAC_FILE_NAME_INVALID : Filename contains invalid characters
  *                      DOW_FILE_EXTENSION_INVALID : Filename contains invalid extension
+ * @return true Returns @true if filename contains only valid characters. Otherwise an AdmException is thrown
  */
 function admStrIsValidFileName($filename, $checkExtension = false)
 {

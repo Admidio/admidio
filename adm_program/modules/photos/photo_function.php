@@ -98,7 +98,7 @@ function deletePhoto($pho_id, $pic_nr)
         $new_pic_nr = $pic_nr;
         $thumbnail_delete = false;
 
-        for($act_pic_nr = 1; $act_pic_nr <= $photo_album->getValue('pho_quantity'); $act_pic_nr++)
+        for($act_pic_nr = 1; $act_pic_nr <= $photo_album->getValue('pho_quantity'); ++$act_pic_nr)
         {
             if(file_exists($album_path.'/'.$act_pic_nr.'.jpg'))
             {
@@ -107,7 +107,7 @@ function deletePhoto($pho_id, $pic_nr)
                     tryRename($album_path.'/'.$act_pic_nr.'.jpg', $album_path.'/'.$new_pic_nr.'.jpg');
                     tryRename($album_path.'/originals/'.$act_pic_nr.'.jpg', $album_path.'/originals/'.$new_pic_nr.'.jpg');
                     tryRename($album_path.'/originals/'.$act_pic_nr.'.png', $album_path.'/originals/'.$new_pic_nr.'.png');
-                    $new_pic_nr++;
+                    ++$new_pic_nr;
                 }
             }
             else

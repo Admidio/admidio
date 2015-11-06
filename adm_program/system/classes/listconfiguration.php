@@ -113,7 +113,7 @@ class ListConfiguration extends TableLists
             if($all)
             {
                 // alle Spalten ab der Nummer werden entfernt
-                for($newColumnNumber = $this->countColumns(); $newColumnNumber >= $number; $newColumnNumber--)
+                for($newColumnNumber = $this->countColumns(); $newColumnNumber >= $number; --$newColumnNumber)
                 {
                     $this->columns[$newColumnNumber]->delete();
                     array_pop($this->columns);
@@ -122,7 +122,7 @@ class ListConfiguration extends TableLists
             else
             {
                 // es wird nur die einzelne Spalte entfernt und alle folgenden Spalten ruecken eins nach vorne
-                for($newColumnNumber = $number; $newColumnNumber < $this->countColumns(); $newColumnNumber++)
+                for($newColumnNumber = $number; $newColumnNumber < $this->countColumns(); ++$newColumnNumber)
                 {
                     $this->columns[$newColumnNumber]->setValue('lsc_usf_id', $this->columns[$newColumnNumber+1]->getValue('lsc_usf_id'));
                     $this->columns[$newColumnNumber]->setValue('lsc_special_field', $this->columns[$newColumnNumber+1]->getValue('lsc_special_field'));
@@ -171,8 +171,8 @@ class ListConfiguration extends TableLists
      * @param int $memberStatus 0 - Nur aktive Rollenmitglieder
      *                          1 - Nur ehemalige Rollenmitglieder
      *                          2 - Aktive und ehemalige Rollenmitglieder
-     * @return string
      * @throws AdmException
+     * @return string
      */
     public function getSQL($roleIds, $memberStatus = 0)
     {
@@ -214,7 +214,6 @@ class ListConfiguration extends TableLists
 
             $sqlSelect = $sqlSelect. $dbColumnName;
 
-
             $userFieldType = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type');
 
             // create a valid sort
@@ -246,7 +245,6 @@ class ListConfiguration extends TableLists
                 }
             }
 
-
             // Handle the conditions for the columns
             if(strlen($listColumn->getValue('lsc_filter')) > 0)
             {
@@ -271,7 +269,7 @@ class ListConfiguration extends TableLists
 
                             // replace all field values with their internal numbers
                             $arrListValues = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_value_list', 'text');
-                            $value = array_search(admStrToLower($value), array_map('admStrToLower', $arrListValues));
+                            $value = array_search(admStrToLower($value), array_map('admStrToLower', $arrListValues), true);
                             break;
 
                         case 'NUMBER':
@@ -404,7 +402,7 @@ class ListConfiguration extends TableLists
                 $this->columns[$number]->setValue('lsc_number', $newColumnNumber);
                 $this->columns[$number]->save();
             }
-            $newColumnNumber++;
+            ++$newColumnNumber;
         }
 
         // now restore columns with new numbers

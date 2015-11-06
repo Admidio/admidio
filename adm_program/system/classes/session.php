@@ -91,11 +91,11 @@ class Session extends TableAccess
             $objectVariables = get_object_vars($this->mObjectArray[$objectName]);
 
             // if object has database connection add database object
-            if(in_array('db', array_keys($objectVariables)))
+            if(in_array('db', array_keys($objectVariables), true))
             {
                 $this->mObjectArray[$objectName]->setDatabase($this->db);
             }
-            if(in_array('mDb', array_keys($objectVariables)))
+            if(in_array('mDb', array_keys($objectVariables), true))
             {
                 $this->mObjectArray[$objectName]->setDatabase($this->db);
             }

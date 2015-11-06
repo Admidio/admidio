@@ -217,9 +217,9 @@ class Image
             $photo_rotate = imagecreatetruecolor($this->imageHeight, $this->imageWidth);
 
             //kopieren der Daten in neues Bild
-            for($y = 0; $y < $this->imageHeight; $y++)
+            for($y = 0; $y < $this->imageHeight; ++$y)
             {
-                for($x = 0; $x < $this->imageWidth; $x++)
+                for($x = 0; $x < $this->imageWidth; ++$x)
                 {
                     if($direction === 'right')
                     {

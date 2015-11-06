@@ -8,13 +8,13 @@
  *
  *****************************************************************************/
 
- /**
-  * Autoloading function of class files. This function will be later registered
-  *.for default autoload implementation. Therefore the class name must be the same
-  * as the file name except for case sensitive.
-  * @param $className Name of the class for which the file should be loaded.
-  * @return Return @b false if the file for the class wasn't found.
-  */
+/**
+ * Autoloading function of class files. This function will be later registered
+ * for default autoload implementation. Therefore the class name must be the same
+ * as the file name except for case sensitive.
+ * @param $className Name of the class for which the file should be loaded.
+ * @return Return @b false if the file for the class wasn't found.
+ */
 function admFuncAutoload($className)
 {
     $fileName = SERVER_PATH. '/adm_program/system/classes/'.strtolower($className).'.php';
@@ -186,7 +186,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
     {
         $init_page_max = ($total_pages > 3) ? 3 : $total_pages;
 
-        for($i = 1; $i < $init_page_max + 1; $i++)
+        for($i = 1; $i < $init_page_max + 1; ++$i)
         {
             if ($i === $on_page)
             {
@@ -207,7 +207,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
                 $init_page_min = ($on_page > 4) ? $on_page : 5;
                 $init_page_max = ($on_page < $total_pages - 4) ? $on_page : $total_pages - 4;
 
-                for($i = $init_page_min - 1; $i < $init_page_max + 2; $i++)
+                for($i = $init_page_min - 1; $i < $init_page_max + 2; ++$i)
                 {
                     if ($i === $on_page)
                     {
@@ -226,7 +226,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
                 $page_string .= ' ... ';
             }
 
-            for($i = $total_pages - 2; $i < $total_pages + 1; $i++)
+            for($i = $total_pages - 2; $i < $total_pages + 1; ++$i)
             {
                 if ($i === $on_page)
                 {
@@ -241,7 +241,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
     }
     else
     {
-        for($i = 1; $i < $total_pages + 1; $i++)
+        for($i = 1; $i < $total_pages + 1; ++$i)
         {
             if ($i === $on_page)
             {

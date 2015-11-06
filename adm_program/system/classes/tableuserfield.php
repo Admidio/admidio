@@ -106,7 +106,7 @@ class TableUserField extends TableAccess
 
         if($userFieldsStatement->rowCount() > 0)
         {
-            $index++;
+            ++$index;
             $newNameIntern = $this->getNewNameIntern($name, $index);
         }
         return $newNameIntern;
@@ -327,7 +327,6 @@ class TableUserField extends TableAccess
             $gCurrentSession->renewUserObject();
         }
     }
-
 
     /**
      * Set a new value for a column of the database table.

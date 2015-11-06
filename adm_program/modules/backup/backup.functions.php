@@ -150,7 +150,7 @@ function version_compare_replacement($version1, $version2, $operator='') {
     $parts1 = explode('.', $version1);
     $parts2 = explode('.', $version1);
     $parts_count = max(count($parts1), count($parts2));
-    for ($i = 0; $i < $parts_count; $i++) {
+    for ($i = 0; $i < $parts_count; ++$i) {
         $comparison = phpthumb_functions::version_compare_replacement_sub($version1, $version2, $operator);
         if ($comparison != 0) {
             return $comparison;
@@ -274,3 +274,4 @@ function EmailAttachment($from, $to, $subject, $textbody, &$attachmentdata, $att
 /////////////////////////////////////////////////////////////////////
 ///////////////////     END SUPPORT FUNCTIONS     ///////////////////
 /////////////////////////////////////////////////////////////////////
+

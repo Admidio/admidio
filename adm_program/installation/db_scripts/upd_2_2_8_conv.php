@@ -34,6 +34,6 @@ while($row_orga = $gDb->fetch_array($result_orga))
                  WHERE cat_id = '. $row_cat['cat_id'];
         $gDb->query($sql);
 
-        $counter++;
+        ++$counter;
     }
 }

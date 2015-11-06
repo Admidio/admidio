@@ -27,7 +27,7 @@ while($row_fields = $gDb->fetch_array($result_fields))
              WHERE usf_id = ". $row_fields['usf_id'];
     $gDb->query($sql);
 
-    $counter++;
+    ++$counter;
 }
 
 // Reihenfolge der Kategorien noch einmal komplett neu vergeben
@@ -56,6 +56,6 @@ while($row_orga = $gDb->fetch_array($result_orga))
                  WHERE cat_id = ". $row_cat['cat_id'];
         $gDb->query($sql);
 
-        $counter++;
+        ++$counter;
     }
 }

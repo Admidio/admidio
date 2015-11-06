@@ -43,7 +43,7 @@ function getUpdateVersion($updateInfo, $search)
     // Version auslesen
     while($pointer !== "\n")
     {
-        $i++;
+        ++$i;
         $updateVersion = $updateVersion.$pointer;
         $pointer = substr($updateInfo, $currentVersionStart + $adding + $i, 1);
     }
@@ -125,7 +125,6 @@ else
     // Auf Update prüfen
     $versionUpdate = checkVersion(ADMIDIO_VERSION, $stableVersion, $betaVersion, $betaRelease, ADMIDIO_VERSION_BETA);
 }
-
 
 // Nur im Anzeigemodus geht es weiter, ansonsten kann der aktuelle Updatestand
 // in der Variable $version_update abgefragt werden.

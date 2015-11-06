@@ -173,8 +173,8 @@ else
                 $page->addHtml('<div class="weblink-counter"><small>'.$gL10n->get('LNK_COUNTER'). ': '.$weblink->getValue('lnk_counter').'</small></div>
             </div>');
 
-            $j++;
-            $i++;
+            ++$j;
+            ++$i;
 
             // set current category to privious
             $previous_cat_id = $weblink->getValue('lnk_cat_id');

@@ -115,11 +115,11 @@ if ($getMsgType === 'EMAIL')
 {
     // put values into SESSION
     $_SESSION['message_request'] = array(
-        'name'        => $postName,
-        'msgfrom'     => $postFrom,
-        'subject'     => $postSubject,
-        'msg_body'    => $postBody,
-        'carbon_copy' => $postCarbonCopy,
+        'name'                  => $postName,
+        'msgfrom'               => $postFrom,
+        'subject'               => $postSubject,
+        'msg_body'              => $postBody,
+        'carbon_copy'           => $postCarbonCopy,
         'delivery_confirmation' => $postDeliveryConfirmation,
     );
 
@@ -293,7 +293,7 @@ if ($getMsgType === 'EMAIL')
                 }
                 $attachmentSize = 0;
                 // add now every attachment
-                for($currentAttachmentNo = 0; isset($_FILES['userfile']['name'][$currentAttachmentNo]); $currentAttachmentNo++)
+                for($currentAttachmentNo = 0; isset($_FILES['userfile']['name'][$currentAttachmentNo]); ++$currentAttachmentNo)
                 {
                     // check if Upload was OK
                     if (($_FILES['userfile']['error'][$currentAttachmentNo] != 0) && ($_FILES['userfile']['error'][$currentAttachmentNo] != 4))
@@ -419,7 +419,6 @@ if ($getMsgType === 'EMAIL')
 
     // prepare body of email with note of sender and homepage
     $email->setSenderInText($postName, $postFrom, $ReceiverName);
-
 
     // set Text
     $email->setText($emailTemplate);

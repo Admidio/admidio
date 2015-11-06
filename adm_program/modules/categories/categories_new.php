@@ -74,7 +74,6 @@ else
     $headline = $getTitle;
 }
 
-
 // set headline of the script
 if($getCatId > 0)
 {

@@ -68,8 +68,7 @@ if($firstRowTitle == true)
     $startRow = 1;
 }
 
-
-for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
+for($i = $startRow; $i < count($_SESSION['file_lines']); ++$i)
 {
     $user->clear();
     $columnArray = explode($_SESSION['value_separator'], $line);
@@ -135,7 +134,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
                             // if col_value is numeric than save position if col_value is equal to position
                             $user->setValue($field->getValue('usf_name_intern'), $columnValue);
                         }
-                        $position++;
+                        ++$position;
                     }
                 }
                 elseif($field->getValue('usf_type') == 'EMAIL')
@@ -236,12 +235,12 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
             // if user doesn't exists or should be duplicated then count as new user
             if($rowDuplicateUser['usr_id'] == 0 || $_SESSION['user_import_mode'] == USER_IMPORT_DUPLICATE)
             {
-                $countImportNewUser++;
+                ++$countImportNewUser;
             }
             // existing users count as edited if mode is displace or complete
             elseif($rowDuplicateUser['usr_id']  > 0 && $user->columnsValueChanged())
             {
-                $countImportEditUser++;
+                ++$countImportEditUser;
             }
 
             // save user data
@@ -250,7 +249,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
             // assign role membership to user
             if($user->setRoleMembership($_SESSION['rol_id']))
             {
-                $countImportEditRole++;
+                ++$countImportEditRole;
             }
 
             // assign dependent role memberships to user
@@ -258,7 +257,6 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
             {
                 $user->setRoleMembership($depRole);
             }
-
 
         }
     }
