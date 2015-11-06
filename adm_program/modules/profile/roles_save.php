@@ -188,7 +188,7 @@ foreach($rolesList as $row)
             $tmpRoles = RoleDependency::getParentRoles($gDb, $row['rol_id']);
             foreach($tmpRoles as $tmpRole)
             {
-                if(!in_array($tmpRole, $parentRoles))
+                if(!in_array($tmpRole, $parentRoles, true))
                 {
                     $parentRoles[] = $tmpRole;
                 }

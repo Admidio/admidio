@@ -430,7 +430,7 @@ abstract class HtmlElement {
             return false;
         }
 
-        if(in_array($parentElement, $this->arrParentElements) && !$this->nesting)
+        if(in_array($parentElement, $this->arrParentElements, true) && !$this->nesting)
         {
             // find position in log array
             for($i = 0; $i < $totalCount-1; ++$i)

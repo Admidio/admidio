@@ -269,7 +269,7 @@ class ListConfiguration extends TableLists
 
                             // replace all field values with their internal numbers
                             $arrListValues = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_value_list', 'text');
-                            $value = array_search(admStrToLower($value), array_map('admStrToLower', $arrListValues));
+                            $value = array_search(admStrToLower($value), array_map('admStrToLower', $arrListValues), true);
                             break;
 
                         case 'NUMBER':

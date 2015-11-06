@@ -155,7 +155,7 @@ class HtmlDiv extends HtmlElement
             return false;
         }
 
-        if(in_array($parentElement, $this->arrParentElements))
+        if(in_array($parentElement, $this->arrParentElements, true))
         {
             // find position in log array
             for($i = 0; $i < $totalCount-1; ++$i)

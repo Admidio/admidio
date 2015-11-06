@@ -90,7 +90,7 @@ class HtmlList extends HtmlElement
     public function addDatalist($id = '', $term = null, $description = null)
     {
         // First check whether open list item tag  must be closed before setting new item
-        if(in_array('dl', $this->arrParentElements))
+        if(in_array('dl', $this->arrParentElements, true))
         {
             $this->closeParentElement('dl');
         }
@@ -145,7 +145,7 @@ class HtmlList extends HtmlElement
         if($data != null && $term != null)
         {
             // First check whether open list item tag  must be closed before setting new item
-            if(in_array('li', $this->arrParentElements))
+            if(in_array('li', $this->arrParentElements, true))
             {
                 $this->closeParentElement('li');
             }

@@ -192,7 +192,7 @@ if($plg_ter_aktiv == 1)
     $plg_organizations = $plg_organizations. $gCurrentOrganization->getValue('org_id');
 
     // Ermitteln, welche Kalender angezeigt werden sollen
-    if(in_array('all', $plg_kal_cat))
+    if(in_array('all', $plg_kal_cat, true))
     {
         // alle Kalender anzeigen
         $sqlSyntax = '';

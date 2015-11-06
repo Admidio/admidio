@@ -284,7 +284,7 @@ elseif($getMode == 2)
         {
             foreach ($dbChildRoles as $dbChildRole)
             {
-                if(!in_array($dbChildRole, $sentChildRoles))
+                if(!in_array($dbChildRole, $sentChildRoles, true))
                 {
                     $roleDep->get($dbChildRole, $getRoleId);
                     $roleDep->delete();
@@ -297,7 +297,7 @@ elseif($getMode == 2)
         {
             foreach ($sentChildRoles as $sentChildRole)
             {
-                if($dbChildRoles != -1 && !in_array($sentChildRole, $dbChildRoles) && $sentChildRole > 0)
+                if($dbChildRoles != -1 && !in_array($sentChildRole, $dbChildRoles, true) && $sentChildRole > 0)
                 {
                     $roleDep->clear();
                     $roleDep->setChild($sentChildRole);

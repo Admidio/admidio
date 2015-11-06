@@ -211,7 +211,7 @@ class HtmlTableBasic extends HtmlElement {
         $this->columnCount = 0;
 
         // If row is active we must close it first before starting new one
-        if(in_array('tr', $this->arrParentElements))
+        if(in_array('tr', $this->arrParentElements, true))
         {
             $this->closeParentElement('tr');
         }
@@ -361,7 +361,7 @@ class HtmlTableBasic extends HtmlElement {
      */
     public function addTableBody($attribute = '', $value = '', $data = '', $col = 'td')
     {
-        if($this->tfoot != -1 && in_array('tfoot', $this->arrParentElements));
+        if($this->tfoot != -1 && in_array('tfoot', $this->arrParentElements, true));
         {
             $this->closeParentElement('tr');
         }
@@ -400,7 +400,7 @@ class HtmlTableBasic extends HtmlElement {
      */
     public function addTableFooter($attribute = '', $value = '', $data = '', $col = 'td')
     {
-        if($this->thead != -1 && in_array('thead', $this->arrParentElements));
+        if($this->thead != -1 && in_array('thead', $this->arrParentElements, true));
         {
             $this->closeParentElement('thead');
         }

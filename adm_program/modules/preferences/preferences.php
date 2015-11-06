@@ -45,7 +45,7 @@ $showOptionValidModules = array('announcements', 'downloads', 'guestbook', 'ecar
                                 'photos', 'profile', 'events', 'links', 'user_management');
 
 // open the modules tab if the options of a module should be shown
-if(in_array($showOption, $showOptionValidModules))
+if(in_array($showOption, $showOptionValidModules, true))
 {
     $page->addJavascript('
         $("#tabs_nav_modules").attr("class", "active");

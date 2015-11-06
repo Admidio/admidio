@@ -76,7 +76,7 @@ function getBacktrace()
         $args = array();
 
         // If include/require/include_once is not called, do not show arguments - they may contain sensible information
-        if (!in_array($trace['function'], array('include', 'require', 'include_once')))
+        if (!in_array($trace['function'], array('include', 'require', 'include_once'), true))
         {
             unset($trace['args']);
         }
