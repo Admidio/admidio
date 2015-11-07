@@ -13,7 +13,7 @@
  *
  * This class adds some functions that are used in the messages module to keep the
  * code easy to read and short
-
+ 
  * @par Examples
  * @code // check the given Array for charecter and split it.
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));

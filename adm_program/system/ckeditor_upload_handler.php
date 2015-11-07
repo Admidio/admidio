@@ -14,7 +14,6 @@
  * langCode        : language code
  ***********************************************************************************************
  */
-
 require_once('common.php');
 require_once('login_valid.php');
 

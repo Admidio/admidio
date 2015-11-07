@@ -13,7 +13,6 @@
  * msg_type  - set message type
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/template.php');
 

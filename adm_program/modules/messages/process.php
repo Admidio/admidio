@@ -14,7 +14,6 @@
  * state     - gives the number of entries in the list that the user can see
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 
 // check for valid login

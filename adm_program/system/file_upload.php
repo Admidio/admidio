@@ -16,7 +16,6 @@
  * id     : Id of the current object (folder, album) where the files should be uploaded
  ***********************************************************************************************
  */
-
 require_once('common.php');
 require_once('login_valid.php');
 

@@ -13,7 +13,6 @@
  * Beside the methods of the parent class there are the following additional methods:
  ***********************************************************************************************
  */
-
 class TableInventory extends TableAccess
 {
     /** Constructor that will create an object of a recordset of the table adm_invent.

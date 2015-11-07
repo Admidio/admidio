@@ -12,7 +12,6 @@
  * new_user_id : ID of user who should be assigned
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 

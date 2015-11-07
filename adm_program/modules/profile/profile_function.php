@@ -21,7 +21,6 @@
  * mem_id  : Id of role membership to should be edited
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('roles_functions.php');

@@ -13,7 +13,6 @@
  *           the profile of the current log will be shown.
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('roles_functions.php');

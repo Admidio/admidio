@@ -13,7 +13,6 @@
  * usr_id   ..  Id of the user who wants a new password
  ***********************************************************************************************
  */
-
 require_once('common.php');
 
 // Initialize and check the parameters

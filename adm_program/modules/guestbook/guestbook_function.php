@@ -22,7 +22,6 @@
  *            (Default) GBO_GUESTBOOK
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 
 // Initialize and check the parameters

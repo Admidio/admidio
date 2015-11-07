@@ -17,7 +17,6 @@
  * photo_nr:  Nr des Bildes welches verarbeitet werden soll
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 

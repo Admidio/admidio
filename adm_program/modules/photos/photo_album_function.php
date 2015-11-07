@@ -15,7 +15,6 @@
  *      - delete : delete a photo album
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 

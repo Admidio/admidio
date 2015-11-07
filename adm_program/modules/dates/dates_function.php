@@ -21,7 +21,6 @@
  * number_role_select : Nummer der Rollenauswahlbox, die angezeigt werden soll
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 
 // Initialize and check the parameters

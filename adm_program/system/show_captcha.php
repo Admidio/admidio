@@ -12,7 +12,6 @@
  * id : A random integer that is used for a unique call of this script
  ***********************************************************************************************
  */
-
 require('common.php');
 
 // creates a small picture that shows random characters

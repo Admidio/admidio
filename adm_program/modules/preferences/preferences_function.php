@@ -16,7 +16,6 @@
  * form         - The name of the form preferences that were submitted.
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 

@@ -12,7 +12,6 @@
  * usf_id : profile field id that should be edited
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 

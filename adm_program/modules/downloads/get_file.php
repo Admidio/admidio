@@ -12,7 +12,6 @@
  * file_id      :  Die Id der Datei, welche heruntergeladen werden soll
  ***********************************************************************************************
  */
-
 require('../../system/common.php');
 
 // Initialize and check the parameters

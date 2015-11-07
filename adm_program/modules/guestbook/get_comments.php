@@ -14,7 +14,6 @@
  *              1 - Moderation mode, every entry could be released
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 
 // Initialize and check the parameters

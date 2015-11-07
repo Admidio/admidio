@@ -15,7 +15,6 @@
  *                 (Default) Gaestebuch
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 
 // Initialize and check the parameters

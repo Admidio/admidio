@@ -19,7 +19,6 @@
  *             if no date information is delivered
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 
 unset($_SESSION['announcements_request']);

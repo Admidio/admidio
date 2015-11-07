@@ -23,7 +23,6 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
 class TableMembers extends TableAccess
 {
     /** Constructor that will create an object of a recordset of the table adm_members.

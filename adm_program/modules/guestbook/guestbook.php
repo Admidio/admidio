@@ -17,7 +17,6 @@
  *              1 - Moderation mode, every entry could be released
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 
 unset($_SESSION['guestbook_entry_request']);

@@ -12,7 +12,6 @@
  * message_code : ID of the message from language-XML-file, that is shown after login
  ***********************************************************************************************
  */
-
 require_once('common.php');
 
 // Initialize and check the parameters

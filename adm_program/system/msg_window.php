@@ -13,7 +13,6 @@
  * inline        - true : message should not be shown in separate window
  ***********************************************************************************************
  */
-
 require_once('common.php');
 
 // Initialize and check the parameters

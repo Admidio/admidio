@@ -18,7 +18,6 @@
  *                2 - show active and former members of role
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 

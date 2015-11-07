@@ -15,7 +15,6 @@
  *            1 - show all invisible roles
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 

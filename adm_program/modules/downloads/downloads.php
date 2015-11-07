@@ -12,7 +12,6 @@
  * folder_id : Id of the current folder that should be shown
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/file_extension_icons.php');
 

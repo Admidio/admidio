@@ -20,7 +20,6 @@
  *                1 - Only show the list without any other html unnecessary elements
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 
 // Initialize and check the parameters

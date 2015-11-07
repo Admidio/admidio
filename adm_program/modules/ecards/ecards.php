@@ -14,7 +14,6 @@
  * usr_id:      (optional) Id of the user who should receive the ecard
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('ecard_function.php');
 require_once('../../system/login_valid.php');

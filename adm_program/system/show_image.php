@@ -13,7 +13,6 @@
  * file   : Name of image file that should be shown (without path)
  ***********************************************************************************************
  */
-
 require('common.php');
 
 // Initialize and check the parameters

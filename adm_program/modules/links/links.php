@@ -14,7 +14,6 @@
  * id        : Show only one link.
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 
 unset($_SESSION['links_request']);

@@ -16,7 +16,6 @@
  * name   : (optional) Name of the list that should be used to save list
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 

@@ -15,7 +15,6 @@
  * moderate()       - guestbook entry will be published, if moderate mode is set
  ***********************************************************************************************
  */
-
 class TableGuestbookComment extends TableAccess
 {
     /** Constructor that will create an object of a recordset of the table adm_guestbook_comments.

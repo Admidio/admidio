@@ -14,7 +14,6 @@
  *             (Default) LNK_WEBLINKS
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 

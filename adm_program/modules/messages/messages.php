@@ -11,7 +11,6 @@
  *
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 
 // check if the call of the page was allowed

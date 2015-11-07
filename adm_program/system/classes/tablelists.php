@@ -15,7 +15,6 @@
  * setDefault()       - Aktuelle Liste wird zur Default-Liste der Organisation
  ***********************************************************************************************
  */
-
 class TableLists extends TableAccess
 {
     /** Constructor that will create an object of a recordset of the table adm_lists.

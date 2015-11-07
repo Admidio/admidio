@@ -19,7 +19,6 @@
  *        8 : Start installation
  ***********************************************************************************************
  */
-
 session_name('admidio_php_session_id');
 session_start();
 

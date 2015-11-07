@@ -13,7 +13,6 @@
  * pho_id   : Id of the album of the photo that should be shown
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 
 // Initialize and check the parameters

@@ -16,7 +16,6 @@
  *                        ungueltige Logins zuruecksetzen
  ***********************************************************************************************
  */
-
 require_once(SERVER_PATH.'/adm_program/system/classes/passwordhashing.php');
 
 /**

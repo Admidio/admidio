@@ -8,7 +8,6 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
 $icon_file_extension = array(
     'bmp'  => 'page_white_camera.png',
     'cdr'  => 'page_white_camera.png',

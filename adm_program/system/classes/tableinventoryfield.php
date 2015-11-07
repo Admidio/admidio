@@ -11,7 +11,6 @@
  * Use also methods from class TableAccess
  ***********************************************************************************************
  */
-
 class TableInventoryField extends TableAccess
 {
     /** Constructor that will create an object of a recordset of the table adm_invent_fields.

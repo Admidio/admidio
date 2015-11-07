@@ -13,7 +13,6 @@
  * file_id      :  Id of the file that should be renamed
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 

@@ -10,7 +10,6 @@
  * This class manages the set, update and delete in the table adm_messages
  ***********************************************************************************************
  */
-
 class TableMessage extends TableAccess
 {
     protected $msg_id;

@@ -15,7 +15,6 @@
  *               0 - inaktive Rollen auflisten
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 
 unset($_SESSION['mylist_request']);

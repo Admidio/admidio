@@ -14,7 +14,6 @@
  *           2 - delete room
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 
 // Initialize and check the parameters

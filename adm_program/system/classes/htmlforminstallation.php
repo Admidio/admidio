@@ -24,7 +24,6 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
 class HtmlFormInstallation extends HtmlForm
 {
     private $descriptionTitle;  ///< A title for the description of the form. This will be displayed as h2
