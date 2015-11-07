@@ -235,6 +235,7 @@ if($getViewMode === 'html')
     $form->addSelectBoxForCategories('cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES', array('defaultValue' => $dates->getParameter('cat_id')));
     $form->addInput('date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'), array('type' => 'date', 'maxLength' => 10));
     $form->addInput('date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'), array('type' => 'date', 'maxLength' => 10));
+    $form->addInput('view', '', $getView, array('class' => 'hide'));
     $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
     $FilterNavbar->addForm($form->show(false));
     $page->addHtml($FilterNavbar->show(false));
