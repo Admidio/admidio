@@ -1,18 +1,19 @@
 <?php
-/****************************************************************************************
+/**
+ ***********************************************************************************************
  * Show a list of all weblinks
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * start     : Position of query recordset where the visual output should start
  * headline  : Ueberschrift, die ueber den Links steht
  *             (Default) Links
  * cat_id    : show only links of this category id, if id is not set than show all links
  * id        : Show only one link.
- *
- ***************************************************************************************/
+ ***********************************************************************************************
+ */
 
 require_once('../../system/common.php');
 

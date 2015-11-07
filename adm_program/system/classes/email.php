@@ -1,11 +1,17 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Create and send a text or html email with attachments
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+require_once(SERVER_PATH.'/adm_program/libs/phpmailer/PHPMailerAutoload.php');
+
+/******************************************************************************
  * Mit dieser Klasse kann ein Email-Objekt erstellt
  * und anschliessend verschickt werden.
  *
@@ -55,11 +61,6 @@
  * function sendEmail();
  *
  *****************************************************************************/
-require_once(SERVER_PATH.'/adm_program/libs/phpmailer/PHPMailerAutoload.php');
-
-/**
- * Class Email
- */
 class Email extends PHPMailer
 {
     private $emText;     // plain text of email

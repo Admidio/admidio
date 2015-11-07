@@ -1,11 +1,15 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Class manages the AdmMyFiles folder
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+/******************************************************************************
  * This class supports the assignment of rights to every folder of adm_my_files
  * It's easy to create new folders and get detailed error messages if there are
  * problems with folder rights
@@ -18,7 +22,6 @@
  *                         if that folder doesn't exists than it will be created
  *
  *****************************************************************************/
-
 class MyFiles extends Folder
 {
     protected $module;      // name of the module and name of the folder in adm_my_files
@@ -28,7 +31,7 @@ class MyFiles extends Folder
     public $errorText, $errorPath;
 
     // module name should be the folder name in adm_my_files for this module
-    // Example: 'PHOTOS' , 'BACKUP', 'DOWNLOAD'
+    // Example: 'PHOTOS', 'BACKUP', 'DOWNLOAD'
     public function __construct($module)
     {
         global $g_root_path;

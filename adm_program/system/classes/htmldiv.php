@@ -1,54 +1,52 @@
 <?php
-
-/*****************************************************************************/
-/** @class HtmlDiv
- *  @brief  Create html div elements
- *
- *  This class creates html div elements.
- *  Create an instance of an div element and nest the inline elements.
- *  The class supports nesting of several div elements and allows you to configure all attributes programatically.
- *  The parsed div object with inline elements is returned as string.
- *
- *  @par Example: Creating a div element
- *  @code
- *   $testArray = array('Test_1', 'Test_2','Test_3');
- *  // Get the Instance for a new division element
- *  $div = new HtmlDiv('ID_Wrapper', 'Class_Wrapper');
- *  // add a headline
- *  $div->addInline('h1', '', '', 'Headline');
- *  // add a paragraph
- *  $div->addInline('p', 'ID_P', 'CLASS_TEXT', 'This is a demo of a pargraph element in the division block');
- *  // add a paragraph
- *  $div->addInline('p', '', 'CLASS_TEXT_ARRAY', $testArray);
- *  // very often you need to nest several div elements for styling, etc.
- *  // so just add a next div, or further divs
- *  $div->addDivElement('ID_PAGE', 'DIV_2');
- *  // now the inline element or elements
- *  $div->addInline('p', '', '', 'This is a demo of a pargraph element in a nested division block');
- *  // Example nesting more div elements.
- *  $div->addDivElement('ID_SECOND_LEVEL', 'DIV');
- *  $div->addDivElement('ID_THIRD_LEVEL', 'DIV');
- *  $div->addDivElement('ID_FOURTH_LEVEL', 'DIV');
- *  // now the inline element in fourth div element
- *  $div->addInline('p', '', '', 'This is a demo of a pargraph element nested in the fourth level');
- *  // If you want to close a div in the current level,...
- *  $div->closeParentElement('div');
- *  // now the current div is closed and the current level jumps to the third div element
- *  // here we can go on adding the inline elments
- *  $div->addInline('p', '', 'P_IN_3RD-DIVLEVEL', $testArray);
- *  // get the parsed block element -> all opened divs are closed automatically !
- *  echo $div->getHtmlDiv();
- *  @endcode
+/**
+ ***********************************************************************************************
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
  */
-/*****************************************************************************
- *
- *  Copyright    : (c) 2004 - 2015 The Admidio Team
- *  Author       : Thomas-RCV
- *  Homepage     : http://www.admidio.org
- *  License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
- *****************************************************************************/
 
+/**
+ * @class HtmlDiv
+ * @brief  Create html div elements
+ *
+ * This class creates html div elements.
+ * Create an instance of an div element and nest the inline elements.
+ * The class supports nesting of several div elements and allows you to configure all attributes programatically.
+ * The parsed div object with inline elements is returned as string.
+ *
+ * @par Example: Creating a div element
+ * @code
+ *  $testArray = array('Test_1', 'Test_2','Test_3');
+ * // Get the Instance for a new division element
+ * $div = new HtmlDiv('ID_Wrapper', 'Class_Wrapper');
+ * // add a headline
+ * $div->addInline('h1', '', '', 'Headline');
+ * // add a paragraph
+ * $div->addInline('p', 'ID_P', 'CLASS_TEXT', 'This is a demo of a pargraph element in the division block');
+ * // add a paragraph
+ * $div->addInline('p', '', 'CLASS_TEXT_ARRAY', $testArray);
+ * // very often you need to nest several div elements for styling, etc.
+ * // so just add a next div, or further divs
+ * $div->addDivElement('ID_PAGE', 'DIV_2');
+ * // now the inline element or elements
+ * $div->addInline('p', '', '', 'This is a demo of a pargraph element in a nested division block');
+ * // Example nesting more div elements.
+ * $div->addDivElement('ID_SECOND_LEVEL', 'DIV');
+ * $div->addDivElement('ID_THIRD_LEVEL', 'DIV');
+ * $div->addDivElement('ID_FOURTH_LEVEL', 'DIV');
+ * // now the inline element in fourth div element
+ * $div->addInline('p', '', '', 'This is a demo of a pargraph element nested in the fourth level');
+ * // If you want to close a div in the current level,...
+ * $div->closeParentElement('div');
+ * // now the current div is closed and the current level jumps to the third div element
+ * // here we can go on adding the inline elments
+ * $div->addInline('p', '', 'P_IN_3RD-DIVLEVEL', $testArray);
+ * // get the parsed block element -> all opened divs are closed automatically !
+ * echo $div->getHtmlDiv();
+ * @endcode
+ */
 class HtmlDiv extends HtmlElement
 {
     protected $level; ///< Integer value for the depth of nested div elements starting with level 1 for the main element

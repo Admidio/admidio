@@ -1,10 +1,11 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Create a custom list
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
  *
@@ -15,8 +16,8 @@
  * show_members : 0 - (Default) show active members of role
  *                1 - show former members of role
  *                2 - show active and former members of role
- *
- *****************************************************************************/
+ ***********************************************************************************************
+ */
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');

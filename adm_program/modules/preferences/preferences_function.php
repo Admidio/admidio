@@ -1,10 +1,11 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Save organization preferences
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
  *
@@ -13,8 +14,8 @@
  *            3 - create new organization
  *            4 - show phpinfo()
  * form         - The name of the form preferences that were submitted.
- *
- *****************************************************************************/
+ ***********************************************************************************************
+ */
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');

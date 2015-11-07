@@ -1,18 +1,19 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Handle image uploads from CKEditor
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
  *
  * CKEditor        : ID of textarea, that had triggered the upload
  * CKEditorFuncNum : function number, that will handle in the editor the new URL
  * langCode        : language code
- *
- *****************************************************************************/
+ ***********************************************************************************************
+ */
 
 require_once('common.php');
 require_once('login_valid.php');

@@ -1,4 +1,11 @@
 <?php
+/**
+ ***********************************************************************************************
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
 
 // provide forward compatibility with the password_* functions that ship with PHP 5.5
 require_once(SERVER_PATH.'/adm_program/libs/password_compat/password.php');

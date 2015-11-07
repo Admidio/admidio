@@ -1,3 +1,11 @@
+/**
+ ***********************************************************************************************
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
 -- fehlende Foreign-Keys zur Tabelle dates hinzufuegen
 alter table %PREFIX%_dates add constraint %PREFIX%_FK_DAT_ROL foreign key (dat_rol_id)
       references %PREFIX%_roles (rol_id) on delete restrict on update restrict;

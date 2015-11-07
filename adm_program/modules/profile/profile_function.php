@@ -1,10 +1,11 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * verschiedene Funktionen fuer das Profil
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
  *
@@ -18,8 +19,8 @@
  *           8 - Export vCard of role
  * user_id : Id of the user to be edited
  * mem_id  : Id of role membership to should be edited
- *
- *****************************************************************************/
+ ***********************************************************************************************
+ */
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');

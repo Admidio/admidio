@@ -1,11 +1,12 @@
 <?php
-/*****************************************************************************
- *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
- *****************************************************************************/
+/**
+ ***********************************************************************************************
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
 /**
  * @class Database
  * @brief Handle the connection to the database, send all sql statements and handle the returned rows.
@@ -18,7 +19,8 @@
  * after the last endTransaction was send.
  * @par Examples
  * To open a connection you can use the settings of the config.php of Admidio.
- * @code // create object and open connection to database
+ * @code
+ * // create object and open connection to database
  * try
  * {
  *     $gDb = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
@@ -26,9 +28,11 @@
  * catch (AdmException $e)
  * {
  *     $e->showText();
- * } @endcode
+ * }
+ * @endcode
  * Now you can use the new object @b $gDb to send a query to the database
- * @code // send sql to database and assign the returned PDOStatement
+ * @code
+ * // send sql to database and assign the returned PDOStatement
  * $organizationsStatement = $gDb->query('SELECT org_shortname, org_longname FROM adm_organizations');
  *
  * // now fetch all rows of the returned PDOStatement within one array
@@ -49,7 +53,8 @@
  * while ($organizationNames = $organizationsStatement->fetch())
  * {
  *     echo $organizationNames['shortname'].' '.$organizationNames['longname'];
- * } @endcode
+ * }
+ * @endcode
  */
 class Database
 {

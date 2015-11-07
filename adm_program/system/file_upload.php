@@ -1,10 +1,11 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Default file upload dialog
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
  *
@@ -13,8 +14,8 @@
  * mode   : choose_files - (Default) Show a dialog with controls to select files to upload
  *          upload_files - Upload the selected files
  * id     : Id of the current object (folder, album) where the files should be uploaded
- *
- *****************************************************************************/
+ ***********************************************************************************************
+ */
 
 require_once('common.php');
 require_once('login_valid.php');

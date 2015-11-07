@@ -1,11 +1,15 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Neuen User zuordnen - Funktionen
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+/******************************************************************************
  * mode: 1 - Registrierung einem Benutzer zuordnen, der bereits Mitglied der Orga ist
  *       2 - Registrierung einem Benutzer zuordnen, der noch KEIN Mitglied der Orga ist
  *       3 - Benachrichtigung an den User, dass er nun fuer die aktuelle Orga freigeschaltet wurde

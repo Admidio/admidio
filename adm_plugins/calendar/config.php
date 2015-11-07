@@ -1,18 +1,20 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Konfigurationsdatei fuer Sidebar-Kalender
  *
- * Version 1.8.1
+ * Version 2.0.3
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Compatible with Admidio version 2.3
+ * Compatible with Admidio version 3.0
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
- *****************************************************************************/
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
 
 // Einblenden per Ajaxbox (1) oder als normaler Link-Title (0)
 $plg_ajaxbox = 1;

@@ -1,16 +1,17 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Check if cookies could be created in current browser of the user
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
  *
  * message_code : ID of the message from language-XML-file, that is shown after login
- *
- *****************************************************************************/
+ ***********************************************************************************************
+ */
 
 require_once('common.php');
 

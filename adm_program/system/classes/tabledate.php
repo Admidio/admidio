@@ -1,11 +1,15 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Class manages access to database table adm_dates
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+/******************************************************************************
  * Diese Klasse dient dazu ein Terminobjekt zu erstellen.
  * Ein Termin kann ueber diese Klasse in der Datenbank verwaltet werden
  *
@@ -15,7 +19,6 @@
  * editRight()       - prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
  *
  *****************************************************************************/
-
 class TableDate extends TableAccess
 {
     protected $visibleRoles = array();

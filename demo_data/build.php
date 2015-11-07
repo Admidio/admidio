@@ -1,16 +1,17 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * This script imports a bunch of demo data into a Admidio database
  *
- * Copyright    : © 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
  *
  * lang : de (default) the language for the demo db
- *
- *****************************************************************************/
+ ***********************************************************************************************
+ */
 
 // embed config file
 if(file_exists('../adm_my_files/config.php'))
