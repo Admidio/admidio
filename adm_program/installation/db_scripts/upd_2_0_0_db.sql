@@ -1,3 +1,10 @@
+/**
+ ***********************************************************************************************
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
 
 -- Rollentabelle anpassen
 ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_moderation` `rol_assign_roles` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0;

@@ -1,3 +1,10 @@
+/**
+ ***********************************************************************************************
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
 
 -- Tabellen erweitern
 ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_default` tinyint (1) unsigned not null default 0 AFTER cat_system;

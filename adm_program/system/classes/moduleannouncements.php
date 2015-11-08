@@ -1,85 +1,84 @@
 <?php
-
-/*****************************************************************************/
-/** @class ModuleAnnouncements
- *  @brief This class reads announcement recordsets from database
- *
- *  This class reads all available recordsets from table announcements
- *  and returns an Array with results, recordsets and validated parameters from $_GET Array.
- *  @par Returned Array
- *  @code
- *  Array
- *  (
- *      [numResults] => 3
- *      [limit] => 10
- *      [totalCount] => 3
- *      [recordset] => Array
- *          (
- *              [0] => Array
- *                  (
- *                      [0] => 3
- *                      [ann_id] => 3
- *                      [1] => DEMO
- *                      [ann_org_id] => 1
- *                      [2] => 1
- *                      [ann_global] => 1
- *                      [3] => Willkommen im Demobereich
- *                      [ann_headline] => Willkommen im Demobereich
- *                      [4] => <p>In diesem Bereich kannst du mit Admidio herumspielen und schauen, ....</p>
- *                      [ann_description] => <p>In diesem Bereich kannst du mit Admidio herumspielen und schauen, ....</p>
- *                      [5] => 1
- *                      [ann_usr_id_create] => 1
- *                      [6] => 2013-07-18 00:00:00
- *                      [ann_timestamp_create] => 2013-07-18 00:00:00
- *                      [7] =>
- *                      [ann_usr_id_change] =>
- *                      [8] =>
- *                      [ann_timestamp_change] =>
- *                      [9] => Paul Webmaster
- *                      [create_name] => Paul Webmaster
- *                      [10] =>
- *                      [change_name] =>
- *                  )
- *          )
- *      [parameter] => Array
- *          (
- *              [active_role] => 1
- *              [calendar-selection] => 1
- *              [cat_id] => 0
- *              [category-selection] => 0,
- *              [date] => ''
- *              [daterange] => Array
- *                  (
- *                      [english] => Array
- *                          (
- *                              [start_date] => 2013-09-16 // current date
- *                              [end_date] => 9999-12-31
- *                          )
- *
- *                      [system] => Array
- *                          (
- *                              [start_date] => 16.09.2013 // current date
- *                              [end_date] => 31.12.9999
- *                          )
- *                  )
- *              [headline] => Ankündigungen
- *              [id] => 0
- *              [mode] => Default
- *              [order] => 'ASC'
- *              [startelement] => 0
- *              [view_mode] => Default
- *          )
- *  )
- *  @endcode
+/**
+ ***********************************************************************************************
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
  */
-/******************************************************************************
- *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
- ******************************************************************************/
 
+/**
+ * @class ModuleAnnouncements
+ * @brief This class reads announcement recordsets from database
+ *
+ * This class reads all available recordsets from table announcements
+ * and returns an Array with results, recordsets and validated parameters from $_GET Array.
+ * @par Returned Array
+ * @code
+ * Array
+ * (
+ *     [numResults] => 3
+ *     [limit] => 10
+ *     [totalCount] => 3
+ *     [recordset] => Array
+ *         (
+ *             [0] => Array
+ *                 (
+ *                     [0] => 3
+ *                     [ann_id] => 3
+ *                     [1] => DEMO
+ *                     [ann_org_id] => 1
+ *                     [2] => 1
+ *                     [ann_global] => 1
+ *                     [3] => Willkommen im Demobereich
+ *                     [ann_headline] => Willkommen im Demobereich
+ *                     [4] => <p>In diesem Bereich kannst du mit Admidio herumspielen und schauen, ....</p>
+ *                     [ann_description] => <p>In diesem Bereich kannst du mit Admidio herumspielen und schauen, ....</p>
+ *                     [5] => 1
+ *                     [ann_usr_id_create] => 1
+ *                     [6] => 2013-07-18 00:00:00
+ *                     [ann_timestamp_create] => 2013-07-18 00:00:00
+ *                     [7] =>
+ *                     [ann_usr_id_change] =>
+ *                     [8] =>
+ *                     [ann_timestamp_change] =>
+ *                     [9] => Paul Webmaster
+ *                     [create_name] => Paul Webmaster
+ *                     [10] =>
+ *                     [change_name] =>
+ *                 )
+ *         )
+ *     [parameter] => Array
+ *         (
+ *             [active_role] => 1
+ *             [calendar-selection] => 1
+ *             [cat_id] => 0
+ *             [category-selection] => 0,
+ *             [date] => ''
+ *             [daterange] => Array
+ *                 (
+ *                     [english] => Array
+ *                         (
+ *                             [start_date] => 2013-09-16 // current date
+ *                             [end_date] => 9999-12-31
+ *                         )
+ *
+ *                     [system] => Array
+ *                         (
+ *                             [start_date] => 16.09.2013 // current date
+ *                             [end_date] => 31.12.9999
+ *                         )
+ *                 )
+ *             [headline] => Ankündigungen
+ *             [id] => 0
+ *             [mode] => Default
+ *             [order] => 'ASC'
+ *             [startelement] => 0
+ *             [view_mode] => Default
+ *         )
+ * )
+ * @endcode
+ */
 class ModuleAnnouncements extends Modules
 {
     protected $getConditions;   ///< String with SQL condition

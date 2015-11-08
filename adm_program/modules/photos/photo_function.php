@@ -1,10 +1,11 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Photofunktionen
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
  *
@@ -14,9 +15,8 @@
  * direction: left  - Bild nach links drehen
  *            right - Bild nach rechts drehen
  * photo_nr:  Nr des Bildes welches verarbeitet werden soll
- *
- *****************************************************************************/
-
+ ***********************************************************************************************
+ */
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 

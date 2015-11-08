@@ -1,24 +1,24 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Installation and configuration of Admidio database and config file
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
  *
- * mode     = 1 : (Default) Choose language
- *            2 : Welcome to installation
- *            3 : Enter database access information
- *            4 : Creating organization
- *            5 : Creating administrator
- *            6 : Creating configuration file
- *            7 : Download configuration file
- *            8 : Start installation
- *
- *****************************************************************************/
-
+ * mode = 1 : (Default) Choose language
+ *        2 : Welcome to installation
+ *        3 : Enter database access information
+ *        4 : Creating organization
+ *        5 : Creating administrator
+ *        6 : Creating configuration file
+ *        7 : Download configuration file
+ *        8 : Start installation
+ ***********************************************************************************************
+ */
 session_name('admidio_php_session_id');
 session_start();
 

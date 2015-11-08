@@ -1,19 +1,19 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * PHP process for the Admidio CHAT
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
  *
  * function  - set the function of the call
  * message   - set the message for the CHAT entry
  * state     - gives the number of entries in the list that the user can see
- *
- *****************************************************************************/
-
+ ***********************************************************************************************
+ */
 require_once('../../system/common.php');
 
 // check for valid login

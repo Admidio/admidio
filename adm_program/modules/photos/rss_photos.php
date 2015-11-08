@@ -1,11 +1,15 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * RSS feed for photos
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+/******************************************************************************
  * Erzeugt einen RSS 2.0 - Feed mit Hilfe der RSS-Klasse fuer die 10 neuesten Fotoalben
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html

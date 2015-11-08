@@ -1,18 +1,19 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Handle update of Admidio database to a new version
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
  *
- * mode     = 1 : (Default) Check update status and show dialog with status
- *            2 : Perform update
- *            3 : Show result of update
- *
- *****************************************************************************/
+ * mode = 1 : (Default) Check update status and show dialog with status
+ *        2 : Perform update
+ *        3 : Show result of update
+ ***********************************************************************************************
+ */
 // embed config and constants file
 if(file_exists('../../adm_my_files/config.php'))
 {

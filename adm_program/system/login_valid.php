@@ -1,16 +1,16 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Dieses Script muss mit include() eingefuegt werden, wenn der User zum Aufruf
  * einer Seite eingeloggt sein MUSS
  *
  * Ist der User nicht eingeloggt, wird er automatisch auf die Loginseite weitergeleitet
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
- *****************************************************************************/
-
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'login_valid.php')
 {
     exit('This page may not be called directly !');

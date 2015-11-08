@@ -1,15 +1,15 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * This script should be linked to back buttons in forms. It will search for the
  * last url that should be shown. The script uses the navigation class to handle
  * the url stack.
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
- *****************************************************************************/
-
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
 include('common.php');
 
 // delete the last url from the stack. This should be the actual page.

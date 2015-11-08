@@ -1,11 +1,15 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Class manages the list configuration
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+/******************************************************************************
  * This class creates a list configuration object. With this object it's possible
  * to manage the configuration in the database. You can easily create new lists,
  * add new columns or remove columns.
@@ -22,10 +26,6 @@
  *                       - gibt das passende SQL-Statement zu der Liste zurueck
  *
  *****************************************************************************/
-
-/**
- * Class ListConfiguration
- */
 class ListConfiguration extends TableLists
 {
     protected $columns = array(); // Array ueber alle Listenspaltenobjekte

@@ -1,31 +1,31 @@
 <?php
-/******************************************************************************
-/** @class modulemessages
- *  @brief some functions for the messages module
- *
- *  This class adds some functions that are used in the messages module to keep the
- *  code easy to read and short
-
- *  @par Examples
- *  @code // check the given Array for charecter and split it.
- *  $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
- *
- *  // show a message and set a link to a page that should be shown after user click ok
- *  $gMessage->setForwardUrl('http://www.example.de/mypage.php');
- *  $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
- *
- *  // show a message with yes and no button and set a link to a page that should be shown after user click yes
- *  $gMessage->setForwardYesNo('http://www.example.de/mypage.php');
- *  $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID')); @endcode
+/**
+ ***********************************************************************************************
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
  */
- /*****************************************************************************
- *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
- *****************************************************************************/
 
+/**
+ * @class modulemessages
+ * @brief some functions for the messages module
+ *
+ * This class adds some functions that are used in the messages module to keep the
+ * code easy to read and short
+ 
+ * @par Examples
+ * @code // check the given Array for charecter and split it.
+ * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
+ *
+ * // show a message and set a link to a page that should be shown after user click ok
+ * $gMessage->setForwardUrl('http://www.example.de/mypage.php');
+ * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
+ *
+ * // show a message with yes and no button and set a link to a page that should be shown after user click yes
+ * $gMessage->setForwardYesNo('http://www.example.de/mypage.php');
+ * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID')); @endcode
+ */
 class ModuleMessages
 {
     /** Constructor that initialize the class member parameters

@@ -1,3 +1,10 @@
+/**
+ ***********************************************************************************************
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
 
 -- Texttabelle anpassen
 ALTER TABLE %PREFIX%_texts MODIFY COLUMN `txt_id` int(11) unsigned not null AUTO_INCREMENT;

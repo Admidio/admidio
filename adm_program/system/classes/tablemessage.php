@@ -1,15 +1,15 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Class manages access to database table adm_messages
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * This class manages the set, update and delete in the table adm_messages
- *
- *****************************************************************************/
-
+ ***********************************************************************************************
+ */
 class TableMessage extends TableAccess
 {
     protected $msg_id;

@@ -1,11 +1,16 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Class manages display of menus
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- * Description  : Create, modify and display menus. Each menu item is defined by
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+/******************************************************************************
+ * Create, modify and display menus. Each menu item is defined by
  *
  *      - $id   : identifier of the menu item
  *      - $link : URL, relative to the admidio root directory, starting with a /
@@ -16,7 +21,6 @@
  *      - $desc : (optional) long description of the menu item
  *
  *****************************************************************************/
-
 class Menu
 {
     protected $id;

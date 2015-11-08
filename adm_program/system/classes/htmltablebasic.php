@@ -1,116 +1,114 @@
 <?php
-
-/*****************************************************************************/
-/** @class HtmlTableBasic
- *  @brief  Create html tables
- *
- *  This class creates html tables.
- *  Create a table object, define the elements with optional attributes and pass your content.
- *  Several methods allows you to set table rows, columns, header and footer element. Also you can define an array with column widths.
- *  The class provides changing class in table rows of body elements using modulo.
- *  You can define the class names and the row number for line change.
- *  CSS classes are needed using this option for class change !
- *  This class supports strings, arrays, bi dimensional arrays and associative arrays for creating the table content.
- *  @par Notice
- *  Tables should be styled by CSS !
- *  Attributes, like 'align', 'bgcolor',... are worse style,
- *  and deprecated in HTML5. Please check the reference.
- *  @par Data array for example
- *  @code
- *  $dataArray = array('Data 1', 'Data 2', 'Data 3');
- *  @endcode
- *  @par Example_1
- *  @code
- *  // Example without defining table head and table foot elements.
- *  // Starting a row directly, all missing table elements are set automatically for semantic table.
- *  // Create an table instance with optional table ID, table class.
- *  $table = new HtmlTableBasic('Id_Example_1', 'tableClass');
- *  // For each key => value a column is to be defined in a table row.
- *  $table->addRow($dataArray);
- *  // get validated table
- *  echo $table->getHtmlTable();
- *  @endcode
- *  @par Example_2
- *  @code
- *  // Create an table instance with optional table ID, table class and border
- *  $table = new HtmlTableBasic('Id_Example_2', 'tableClass', 1);
- *  // we can also set further attributes for the table
- *  $table->addAttribute('style', 'width: 100%;');
- *  $table->addAttribute('summary', 'Example');
- *  // add table header with class attribute and a column as string
- *  $table->addTableHeader('class', 'name', 'columntext', 'th'); // $col paremeter 'th' is set by dafault to 'td'
- *  // add next row to the header
- *  $table->addRow('... some more text ...'); // optional parameters ( $content, $attribute, $value, $col = 'td')
- *  // Third row we can also pass single arrays, bidimensional arrays, and assoc. arrays
- *  // For each key => value a column is to be defined in a table row
- *  $table->addRow($dataArray);
- *  // add the table footer
- *  $table->addTableFooter('class', 'foot', 'Licensed by Admidio');
- *  // add a body element
- *  $table->addTableBody('class', 'body', $dataArray);
- *  // also we can set further body elements
- *  $table->addTableBody('class', 'nextBody', $dataArray);
- *  // in this body elemtent for example, we want to define the cols in a table row programmatically
- *  // define a new row
- *  $table->addRow(); // no data and no attributes for this row
- *  $table->addColumn('col1');
- *  $table->addColumn('col2', array('class' => 'secondColumn')); // this col has a class attribute
- *  $table->addColumn('col3');
- *  // also we can pass our Array at the end
- *  $table->addColumn($dataArray);
- *  // get validated table
- *  echo $table->getHtmlTable();
- *  @endcode
- *  @par Example 3
- *  @code
- *  // Example with fixed columns width and changing classes for rows in body element and table border
- *  $table = new HtmlTableBasic('Id_Example_3', 'tableClass', 1);
- *  // Set table width to 600px. Ok, we should do this in the class or id in CSS ! However,...
- *  $table->addAttribute('style', 'width: 600px;');
- *  // Define columms width as array
- *  $table->setColumnsWidth(array('20%', '20%', '60%'));
- *  // We also want to have changing class in every 3rd table row in the table body
- *  $table->setClassChange('class_1', 'class_2', 3); // Parameters: class names and integer for the line ( Default: 2 )
- *  // Define a table header with class="head" and define a column string (arrays are also possible)
- *  // and Set a header element for the column (Default: 'td')
- *  $table->addTableHeader('class', 'head', 'Headline_1', 'th');
- *  // 2 more columns ...
- *  $table->addColumn('Headline_2', null, 'th'); // no attribute/value in this example
- *  $table->addColumn('Headline_3', null, 'th'); // no attribute/value in this example
- *  // Define the footer with a string in center position
- *  $table->addTableFooter();
- *  // First mention that we do not want to have fixed columns in the footer. So we clear the array and set the text to center positon!
- *  $table->setColumnsWidth(array());
- *  // Define a new table row
- *  $table->addRow();
- *  // Add the column with colspan attribute
- *  $table->addColumn('', array('colspan' => '3')); // no data here, because first do the settings and after finishend pass the content !
- *  // Define center position for the text
- *  $table->addAttribute('align', 'center'); // ok, it is worse style!
- *  // Now we can set the data if all settings are done!
- *  $table->addData('Tablefooter');
- *  // Now set the body element of the table
- *  // Remember we deleted the columns width array, so we need to set it again
- *  $table->setColumnsWidth(array('20%', '20%', '60%'));
- *  // Define a table row with array or string for first column
- *  $table->addTableBody('class', 'body', $dataArray);
- *  // Some more rows with changeclass mode in body element
- *  $table->addRow($dataArray);
- *  $table->addRow($dataArray);
- *  $table->addRow($dataArray);
- *  $table->addRow($dataArray);
- *  echo $table->getHtmlTable();
- *  @endcode
+/**
+ ***********************************************************************************************
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
  */
-/*****************************************************************************
- *
- *  Copyright    : (c) 2004 - 2015 The Admidio Team
- *  Author       : Thomas-RCV
- *  Homepage     : http://www.admidio.org
- *  License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
- *****************************************************************************/
 
+/**
+ * @class HtmlTableBasic
+ * @brief  Create html tables
+ *
+ * This class creates html tables.
+ * Create a table object, define the elements with optional attributes and pass your content.
+ * Several methods allows you to set table rows, columns, header and footer element. Also you can define an array with column widths.
+ * The class provides changing class in table rows of body elements using modulo.
+ * You can define the class names and the row number for line change.
+ * CSS classes are needed using this option for class change !
+ * This class supports strings, arrays, bi dimensional arrays and associative arrays for creating the table content.
+ * @par Notice
+ * Tables should be styled by CSS !
+ * Attributes, like 'align', 'bgcolor',... are worse style,
+ * and deprecated in HTML5. Please check the reference.
+ * @par Data array for example
+ * @code
+ * $dataArray = array('Data 1', 'Data 2', 'Data 3');
+ * @endcode
+ * @par Example_1
+ * @code
+ * // Example without defining table head and table foot elements.
+ * // Starting a row directly, all missing table elements are set automatically for semantic table.
+ * // Create an table instance with optional table ID, table class.
+ * $table = new HtmlTableBasic('Id_Example_1', 'tableClass');
+ * // For each key => value a column is to be defined in a table row.
+ * $table->addRow($dataArray);
+ * // get validated table
+ * echo $table->getHtmlTable();
+ * @endcode
+ * @par Example_2
+ * @code
+ * // Create an table instance with optional table ID, table class and border
+ * $table = new HtmlTableBasic('Id_Example_2', 'tableClass', 1);
+ * // we can also set further attributes for the table
+ * $table->addAttribute('style', 'width: 100%;');
+ * $table->addAttribute('summary', 'Example');
+ * // add table header with class attribute and a column as string
+ * $table->addTableHeader('class', 'name', 'columntext', 'th'); // $col paremeter 'th' is set by dafault to 'td'
+ * // add next row to the header
+ * $table->addRow('... some more text ...'); // optional parameters ( $content, $attribute, $value, $col = 'td')
+ * // Third row we can also pass single arrays, bidimensional arrays, and assoc. arrays
+ * // For each key => value a column is to be defined in a table row
+ * $table->addRow($dataArray);
+ * // add the table footer
+ * $table->addTableFooter('class', 'foot', 'Licensed by Admidio');
+ * // add a body element
+ * $table->addTableBody('class', 'body', $dataArray);
+ * // also we can set further body elements
+ * $table->addTableBody('class', 'nextBody', $dataArray);
+ * // in this body elemtent for example, we want to define the cols in a table row programmatically
+ * // define a new row
+ * $table->addRow(); // no data and no attributes for this row
+ * $table->addColumn('col1');
+ * $table->addColumn('col2', array('class' => 'secondColumn')); // this col has a class attribute
+ * $table->addColumn('col3');
+ * // also we can pass our Array at the end
+ * $table->addColumn($dataArray);
+ * // get validated table
+ * echo $table->getHtmlTable();
+ * @endcode
+ * @par Example 3
+ * @code
+ * // Example with fixed columns width and changing classes for rows in body element and table border
+ * $table = new HtmlTableBasic('Id_Example_3', 'tableClass', 1);
+ * // Set table width to 600px. Ok, we should do this in the class or id in CSS ! However,...
+ * $table->addAttribute('style', 'width: 600px;');
+ * // Define columms width as array
+ * $table->setColumnsWidth(array('20%', '20%', '60%'));
+ * // We also want to have changing class in every 3rd table row in the table body
+ * $table->setClassChange('class_1', 'class_2', 3); // Parameters: class names and integer for the line ( Default: 2 )
+ * // Define a table header with class="head" and define a column string (arrays are also possible)
+ * // and Set a header element for the column (Default: 'td')
+ * $table->addTableHeader('class', 'head', 'Headline_1', 'th');
+ * // 2 more columns ...
+ * $table->addColumn('Headline_2', null, 'th'); // no attribute/value in this example
+ * $table->addColumn('Headline_3', null, 'th'); // no attribute/value in this example
+ * // Define the footer with a string in center position
+ * $table->addTableFooter();
+ * // First mention that we do not want to have fixed columns in the footer. So we clear the array and set the text to center positon!
+ * $table->setColumnsWidth(array());
+ * // Define a new table row
+ * $table->addRow();
+ * // Add the column with colspan attribute
+ * $table->addColumn('', array('colspan' => '3')); // no data here, because first do the settings and after finishend pass the content !
+ * // Define center position for the text
+ * $table->addAttribute('align', 'center'); // ok, it is worse style!
+ * // Now we can set the data if all settings are done!
+ * $table->addData('Tablefooter');
+ * // Now set the body element of the table
+ * // Remember we deleted the columns width array, so we need to set it again
+ * $table->setColumnsWidth(array('20%', '20%', '60%'));
+ * // Define a table row with array or string for first column
+ * $table->addTableBody('class', 'body', $dataArray);
+ * // Some more rows with changeclass mode in body element
+ * $table->addRow($dataArray);
+ * $table->addRow($dataArray);
+ * $table->addRow($dataArray);
+ * $table->addRow($dataArray);
+ * echo $table->getHtmlTable();
+ * @endcode
+ */
 class HtmlTableBasic extends HtmlElement {
     protected $border;                   ///< String with border attribute and value of the table
     protected $lineChange;               ///< Integer value for class change mode for table rows.

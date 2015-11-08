@@ -1,5 +1,6 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Calendar
  *
  * Version 2.0.3
@@ -10,13 +11,11 @@
  *
  * Compatible with Admidio version 3.0
  *
- * Parameters : date_id (Format MMJJJJ Beispiel: 052011 = Mai 2011)
- *              ajax_change (ist gesetzt bei Monatswechsel per Ajax)
- *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
- *****************************************************************************/
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
 
 // create path to plugin
 $plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;

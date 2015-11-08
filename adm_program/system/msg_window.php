@@ -1,17 +1,18 @@
 <?php
-/******************************************************************************
+/**
+ ***********************************************************************************************
  * Popup window with informations
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * message_id    - ID of language text, that should be shown
  * message_title - (optional) title of window (Default: Note)
  * message_var1  - (optional) text, that should be shown in the message
  * inline        - true : message should not be shown in separate window
- *****************************************************************************/
-
+ ***********************************************************************************************
+ */
 require_once('common.php');
 
 // Initialize and check the parameters
