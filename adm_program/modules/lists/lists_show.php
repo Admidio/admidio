@@ -137,17 +137,17 @@ switch ($getMode)
         break;
 }
 
-// Array um den Namen der Tabellen sinnvolle Texte zuzuweisen
+// Array to assign names to tables
 $arr_col_name = array('usr_login_name' => $gL10n->get('SYS_USERNAME'),
                       'usr_photo'      => $gL10n->get('PHO_PHOTO'),
                       'mem_begin'      => $gL10n->get('SYS_START'),
                       'mem_end'        => $gL10n->get('SYS_END'),
                       'mem_leader'     => $gL10n->get('SYS_LEADER')
-                      );
+);
 
-$mainSql      = '';   // enthaelt das Haupt-Sql-Statement fuer die Liste
-$str_csv      = '';   // enthaelt die komplette CSV-Datei als String
-$leiter       = 0;    // Gruppe besitzt Leiter
+$mainSql = ''; // Main SQL statement for lists
+$str_csv = ''; // CSV file as string
+$leiter  = 0;  // Group has leaders
 
 try
 {
@@ -245,7 +245,7 @@ if($getMode != 'csv')
         $pdf->SetHeaderMargin(10);
         $pdf->SetFooterMargin(0);
 
-        //headline for PDF
+        // headline for PDF
         $pdf->SetHeaderData('', '', $headline, '');
 
         // set font
@@ -362,10 +362,10 @@ for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
 {
     $column = $list->getColumnObject($columnNumber);
 
-    // den Namen des Feldes ermitteln
+    // Find name of the field
     if($column->getValue('lsc_usf_id') > 0)
     {
-        // benutzerdefiniertes Feld
+        // customs field
         $usf_id = $column->getValue('lsc_usf_id');
         $columnHeader = $gProfileFields->getPropertyById($usf_id, 'usf_name');
 
@@ -391,7 +391,7 @@ for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
         $columnAlign[] = 'left';
     }
 
-    // versteckte Felder duerfen nur von Leuten mit entsprechenden Rechten gesehen werden
+    // show hidden fields only for user with rights
     if($usf_id == 0
     || $gCurrentUser->editUsers()
     || $gProfileFields->getPropertyById($usf_id, 'usf_hidden') == 0)
@@ -400,7 +400,7 @@ for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
         {
             if($columnNumber == 1)
             {
-                // die Laufende Nummer noch davorsetzen
+                // add serial
                 $str_csv = $str_csv. $valueQuotes. $gL10n->get('SYS_ABR_NO'). $valueQuotes;
             }
             $str_csv = $str_csv. $separator. $valueQuotes. $columnHeader. $valueQuotes;
@@ -435,7 +435,7 @@ else
     $table->addTableBody();
 }
 
-$lastGroupHead = -1;             // Merker um Wechsel zwischen Leiter und Mitglieder zu merken
+$lastGroupHead = -1; // Mark for change between leader and member
 $listRowNumber = 1;
 
 foreach($membersList as $member)
@@ -478,18 +478,18 @@ foreach($membersList as $member)
 
     $columnValues = array();
 
-    // Felder zu Datensatz
+    // Fields of recordset
     for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
     {
         $column = $list->getColumnObject($columnNumber);
 
-        // da im SQL noch mem_leader und usr_id vor die eigentlichen Spalten kommen,
-        // muss der Index auf row direkt mit 2 anfangen
+        // in the SQL mem_leader and usr_id starts before the column
+        // the Index to the row must be set to 2 directly
         $sqlColumnNumber = $columnNumber + 1;
 
         if($column->getValue('lsc_usf_id') > 0)
         {
-            // pruefen, ob ein benutzerdefiniertes Feld und Kennzeichen merken
+            // check if customs field and remember
             $b_user_field = true;
             $usf_id = $column->getValue('lsc_usf_id');
         }
@@ -499,7 +499,7 @@ foreach($membersList as $member)
             $usf_id = 0;
         }
 
-        // versteckte Felder duerfen nur von Leuten mit entsprechenden Rechten gesehen werden
+        // hidden fields are only for users with rights
         if($usf_id == 0
         || $gCurrentUser->editUsers()
         || $gProfileFields->getPropertyById($usf_id, 'usf_hidden') == 0)
@@ -508,7 +508,7 @@ foreach($membersList as $member)
             {
                 if($columnNumber == 1)
                 {
-                    // die Laufende Nummer noch davorsetzen
+                    // add serial
                     $columnValues[] = $listRowNumber;
 
                     // in html mode we add an additional column with leader/member information to
@@ -530,7 +530,7 @@ foreach($membersList as $member)
             {
                 if($columnNumber == 1)
                 {
-                    // erste Spalte zeigt lfd. Nummer an
+                    // 1st column may show the serial
                     $str_csv = $str_csv. $valueQuotes. $listRowNumber. $valueQuotes;
                 }
             }
@@ -628,12 +628,12 @@ foreach($membersList as $member)
     }
 
     ++$listRowNumber;
-}  // End-While (jeder gefundene User)
+}  // End-While (end found User)
 
 // Settings for export file
 if($getMode == 'csv' || $getMode == 'pdf')
 {
-    //file name in the current directory...
+    // file name in the current directory...
     if(strlen($list->getValue('lst_name')) > 0)
     {
         $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $roleName). '-'. str_replace('.', '', $list->getValue('lst_name')).'.'.$getMode;
@@ -659,7 +659,7 @@ if($getMode == 'csv' || $getMode == 'pdf')
 
 if($getMode == 'csv')
 {
-    // nun die erstellte CSV-Datei an den User schicken
+    // download CSV file
     header('Content-Type: text/comma-separated-values; charset='.$charset);
 
     if($charset == 'iso-8859-1')
@@ -677,10 +677,10 @@ elseif($getMode == 'pdf')
     // output the HTML content
     $pdf->writeHTML($table->getHtmlTable(), true, false, true, false, '');
 
-    //Save PDF to file
+    // Save PDF to file
     $pdf->Output(SERVER_PATH. '/adm_my_files/'.$filename, 'F');
 
-    //Redirect
+    // Redirect
     header('Content-Type: application/pdf');
 
     readfile(SERVER_PATH. '/adm_my_files/'.$filename);
@@ -712,19 +712,19 @@ elseif($getMode === 'html' || $getMode === 'print')
                     $form = new HtmlForm('list_infobox_items', null);
                     $form->addStaticControl('infobox_category', $gL10n->get('SYS_CATEGORY'), $role->getValue('cat_name'));
 
-                    //Beschreibung
+                    // Description
                     if(strlen($role->getValue('rol_description')) > 0)
                     {
                         $form->addStaticControl('infobox_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'));
                     }
 
-                    //Zeitraum
+                    // Period
                     if(strlen($role->getValue('rol_start_date')) > 0)
                     {
                         $form->addStaticControl('infobox_period', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])));
                     }
 
-                    //Termin
+                    // Event
                     if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
                     {
                         if($role->getValue('rol_weekday') > 0)
@@ -739,25 +739,25 @@ elseif($getMode === 'html' || $getMode === 'print')
                         $form->addStaticControl('infobox_date', $gL10n->get('DAT_DATE'), $value);
                     }
 
-                    //Treffpunkt
+                    // Meeting Point
                     if(strlen($role->getValue('rol_location')) > 0)
                     {
                         $form->addStaticControl('infobox_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'));
                     }
 
-                    //Beitrag
+                    // Member Fee
                     if(strlen($role->getValue('rol_cost')) > 0)
                     {
                         $form->addStaticControl('infobox_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost'). ' '.$gPreferences['system_currency']);
                     }
 
-                    //Beitragszeitraum
+                    // Fee period
                     if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
                     {
                         $form->addStaticControl('infobox_contribution_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), $role->getCostPeriods($role->getValue('rol_cost_period')));
                     }
 
-                    //maximale Teilnehmerzahl
+                    // max participants
                     if(strlen($role->getValue('rol_max_members')) > 0)
                     {
                         $form->addStaticControl('infobox_max_participants', $gL10n->get('SYS_MAX_PARTICIPANTS'), $role->getValue('rol_max_members'));

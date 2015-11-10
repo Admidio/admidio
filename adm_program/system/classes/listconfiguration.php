@@ -46,7 +46,7 @@ class ListConfiguration extends TableLists
     }
 
     /**
-     * fuegt eine neue Spalte dem Spaltenarray hinzu
+     * Add new column to column array
      * @param int    $number
      * @param        $field
      * @param string $sort
@@ -55,18 +55,18 @@ class ListConfiguration extends TableLists
      */
     public function addColumn($number, $field, $sort = '', $filter = '')
     {
-        // MySQL kann nicht mehr als 61 Tabellen joinen
-        // Uebergaben muessen sinnvoll gefuellt sein
+        // can join max. 61 tables
+        // Passed parameters must be set carefully
         if(count($this->columns) < 57 && $number > 0 && $field !== '')
         {
-            // falls Spalte noch nicht existiert, dann Objekt anlegen
+            // If colum doesn't exist create object
             if(!isset($this->columns[$number]))
             {
                 $this->columns[$number] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
                 $this->columns[$number]->setValue('lsc_lsf_id', $this->getValue('lst_id'));
             }
 
-            // Spalteninhalte belegen
+            // Assign content of column
             $this->columns[$number]->setValue('lsc_number', $number);
             if(is_numeric($field))
             {
@@ -93,7 +93,7 @@ class ListConfiguration extends TableLists
     }
 
     /**
-     * Anzahl der Spalten der Liste zurueckgeben
+     * Return count of columns
      * @return int
      */
     public function countColumns()
@@ -102,9 +102,9 @@ class ListConfiguration extends TableLists
     }
 
     /**
-     * entfernt die entsprechende Spalte aus der Konfiguration
+     * Delete pointed columns out of configuration
      * @param int  $number
-     * @param bool $all gibt an, ob alle folgenden Spalten auch geloescht werden sollen
+     * @param bool $all Define all columns to be deleted
      */
     public function deleteColumn($number, $all = false)
     {
@@ -112,7 +112,7 @@ class ListConfiguration extends TableLists
         {
             if($all)
             {
-                // alle Spalten ab der Nummer werden entfernt
+                // Delete all columns starting with number
                 for($newColumnNumber = $this->countColumns(); $newColumnNumber >= $number; --$newColumnNumber)
                 {
                     $this->columns[$newColumnNumber]->delete();
@@ -121,7 +121,7 @@ class ListConfiguration extends TableLists
             }
             else
             {
-                // es wird nur die einzelne Spalte entfernt und alle folgenden Spalten ruecken eins nach vorne
+                // only 1 columns is deleted and following are going 1 step up
                 for($newColumnNumber = $number; $newColumnNumber < $this->countColumns(); ++$newColumnNumber)
                 {
                     $this->columns[$newColumnNumber]->setValue('lsc_usf_id', $this->columns[$newColumnNumber+1]->getValue('lsc_usf_id'));
@@ -166,15 +166,17 @@ class ListConfiguration extends TableLists
     }
 
     /**
-     * gibt das passende SQL-Statement zu der Liste zurueck
-     * @param $roleIds Array ueber alle Rollen-IDs, von denen Mitglieder in der Liste angezeigt werden sollen
-     * @param int $memberStatus 0 - Nur aktive Rollenmitglieder
-     *                          1 - Nur ehemalige Rollenmitglieder
-     *                          2 - Aktive und ehemalige Rollenmitglieder
+     * prepare SQL to list configuration
+     * @param $roleIds Array with all roles, which members are shown
+     * @param int $memberStatus 0 - Only active mebers of a role
+     *                          1 - Only former members
+     *                          2 - Active and former members of a role
+     * @param string|null $startDate
+     * @param string|null $endDate
      * @throws AdmException
      * @return string
      */
-    public function getSQL($roleIds, $memberStatus = 0)
+    public function getSQL($roleIds, $memberStatus = 0, $startDate = null, $endDate = null)
     {
         global $gL10n, $gProfileFields, $gCurrentOrganization, $gDbType;
         $sql = '';
@@ -187,7 +189,7 @@ class ListConfiguration extends TableLists
 
         foreach($this->columns as $number => $listColumn)
         {
-            // Spalte anhaengen
+            // add column
             if($sqlSelect !== '')
             {
                 $sqlSelect = $sqlSelect . ', ';
@@ -195,20 +197,20 @@ class ListConfiguration extends TableLists
 
             if($listColumn->getValue('lsc_usf_id') > 0)
             {
-                // dynamisches Profilfeld
+                // dynamic profile field
                 $tableAlias = 'row'. $listColumn->getValue('lsc_number'). 'id'. $listColumn->getValue('lsc_usf_id');
 
-                // JOIN - Syntax erstellen
+                // define JOIN - Syntax
                 $sqlJoin = $sqlJoin. ' LEFT JOIN '. TBL_USER_DATA .' '.$tableAlias.'
                                            ON '.$tableAlias.'.usd_usr_id = usr_id
                                           AND '.$tableAlias.'.usd_usf_id = '.$listColumn->getValue('lsc_usf_id');
 
-                // hierbei wird die usf_id als Tabellen-Alias benutzt und vorangestellt
+                // usf_id is prefix for the table
                 $dbColumnName = $tableAlias.'.usd_value';
             }
             else
             {
-                // Spezialfelder z.B. usr_photo, mem_begin ...
+                // Special fields like usr_photo, mem_begin ...
                 $dbColumnName = $listColumn->getValue('lsc_special_field');
             }
 
@@ -319,7 +321,7 @@ class ListConfiguration extends TableLists
             }
         }
 
-        // Rollen-IDs zusammensetzen
+        // Create role-IDs
         foreach($roleIds as $key => $value)
         {
             if(is_numeric($key))
@@ -332,18 +334,18 @@ class ListConfiguration extends TableLists
             }
         }
 
-        // Status der Mitgliedschaft setzen
-        if($memberStatus === 0)
+        // Set state of membership
+        if ($memberStatus === 0)
         {
             $sqlMemberStatus = ' AND mem_begin <= \''.DATE_NOW.'\'
                                  AND mem_end   >= \''.DATE_NOW.'\' ';
         }
-        elseif($memberStatus === 1)
+        elseif ($memberStatus === 1)
         {
             $sqlMemberStatus = ' AND mem_end < \''.DATE_NOW.'\' ';
         }
 
-        // SQL-Statement zusammenbasteln
+        // Set SQL-Statement
         $sql = 'SELECT mem_leader, usr_id, '.$sqlSelect.'
                   FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
                        '.$sqlJoin.'
@@ -366,7 +368,7 @@ class ListConfiguration extends TableLists
     }
 
     /**
-     * Daten der zugehoerigen Spalten einlesen und in Objekten speichern
+     * Read data of responsible columns and store in object
      */
     public function readColumns()
     {
@@ -419,7 +421,7 @@ class ListConfiguration extends TableLists
 
         parent::save($updateFingerPrint);
 
-        // jetzt noch die einzelnen Spalten sichern
+        // save columns
         foreach($this->columns as $number => $listColumn)
         {
             if($listColumn->getValue('lsc_lst_id') == 0)
