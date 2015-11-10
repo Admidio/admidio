@@ -17,12 +17,12 @@
  */
 require_once('../../system/common.php');
 
-unset($_SESSION['mylist_request']);
-
 // Initialize and check the parameters
 $getStart      = admFuncVariableIsValid($_GET, 'start', 'numeric');
 $getCatId      = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
 $getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', array('defaultValue' => 1));
+
+unset($_SESSION['mylist_filter_request']);
 
 // New Modulelist object
 $lists = new ModuleLists();

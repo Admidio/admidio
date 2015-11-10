@@ -337,8 +337,22 @@ class ListConfiguration extends TableLists
         // Set state of membership
         if ($memberStatus === 0)
         {
-            $sqlMemberStatus = ' AND mem_begin <= \''.DATE_NOW.'\'
-                                 AND mem_end   >= \''.DATE_NOW.'\' ';
+            if ($startDate === null)
+            {
+                $sqlMemberStatus = ' AND mem_begin <= \''.DATE_NOW.'\'';
+            }
+            else
+            {
+                $sqlMemberStatus = ' AND mem_begin <= \''.$endDate.' 23:59:59\'';
+            }
+            if ($endDate === null)
+            {
+                $sqlMemberStatus .= 'AND mem_end >= \''.DATE_NOW.'\'';
+            }
+            else
+            {
+                $sqlMemberStatus .= 'AND mem_end >= \''.$startDate.' 00:00:00\'';
+            }
         }
         elseif ($memberStatus === 1)
         {
