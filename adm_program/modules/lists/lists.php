@@ -17,14 +17,14 @@
  */
 require_once('../../system/common.php');
 
-unset($_SESSION['mylist_request']);
-
 // Initialize and check the parameters
 $getStart      = admFuncVariableIsValid($_GET, 'start', 'numeric');
 $getCatId      = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
 $getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', array('defaultValue' => 1));
 
-//New Modulelist object
+unset($_SESSION['mylist_filter_request']);
+
+// New Modulelist object
 $lists = new ModuleLists();
 $lists->setParameter('cat_id', $getCatId);
 
@@ -102,7 +102,7 @@ if($gCurrentUser->isWebmaster())
 
 $previousCategoryId   = 0;
 
-//Get Lists
+// Get Lists
 $getStart      = $lists->getStartElement();
 $listsResult   = $lists->getDataSet($getStart);
 $numberOfRoles = $lists->getDataSetCount();
@@ -111,7 +111,7 @@ if($numberOfRoles == 0)
 {
     if($gValidLogin == true)
     {
-        // wenn User eingeloggt, dann Meldung, falls doch keine Rollen zur Verfuegung stehen
+        // If login valid, than show message for non available roles
         if($getActiveRole == 0)
         {
             $gMessage->show($gL10n->get('LST_NO_ROLES_REMOVED'));
@@ -123,12 +123,12 @@ if($numberOfRoles == 0)
     }
     else
     {
-        // wenn User ausgeloggt, dann Login-Bildschirm anzeigen
+        // forward to login page
         require_once('../../system/login_valid.php');
     }
 }
 
-//Get list configurations
+// Get list configurations
 $listConfigurations = $lists->getListConfigurations();
 
 foreach($listConfigurations as &$rowConfigurations)
@@ -146,18 +146,18 @@ foreach($listConfigurations as &$rowConfigurations)
 // add list item for own list
 $listConfigurations[] = array('mylist', $gL10n->get('LST_CREATE_OWN_LIST'), $gL10n->get('LST_CONFIGURATION'));
 
-// Rollenobjekt anlegen
+// Create role object
 $role = new TableRoles($gDb);
 
 foreach($listsResult['recordset'] as $row)
 {
-    //Put data to Roleobject
+    // Put data to Roleobject
     $role->setArray($row);
 
-    //if category is different than previous, close old and open new one
+    // if category is different than previous, close old and open new one
     if($previousCategoryId != $role->getValue('cat_id'))
     {
-        //close only if previous category is not 0
+        // close only if previous category is not 0
         if($previousCategoryId != 0)
         {
             $page->addHtml('</div></div></div>');
@@ -247,7 +247,7 @@ foreach($listsResult['recordset'] as $row)
                     $form->addStaticControl('list_date', $gL10n->get('DAT_DATE'), $html);
                 }
 
-                //Treffpunkt
+                // Meeting point
                 if(strlen($role->getValue('rol_location')) > 0)
                 {
                     $form->addStaticControl('list_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'));
@@ -275,19 +275,19 @@ foreach($listsResult['recordset'] as $row)
                 }
                 $form->addStaticControl('list_participants', $gL10n->get('SYS_PARTICIPANTS'), $html);
 
-                //Leiter
+                // Leader of role
                 if($row['num_leader']>0)
                 {
                     $form->addStaticControl('list_leader', $gL10n->get('SYS_LEADER'), $row['num_leader']);
                 }
 
-                //Beitrag
+                // Member fee
                 if(strlen($role->getValue('rol_cost')) > 0)
                 {
                     $form->addStaticControl('list_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost').' '.$gPreferences['system_currency']);
                 }
 
-                //Beitragszeitraum
+                // Contributory period
                 if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
                 {
                     $form->addStaticControl('list_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), $role->getCostPeriods($role->getValue('rol_cost_period')));
