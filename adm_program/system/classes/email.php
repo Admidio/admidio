@@ -85,7 +85,7 @@ class Email extends PHPMailer
         //Versandmethode festlegen
         if($gPreferences['mail_send_method'] == 'SMTP')
         {
-            PHPMailerAutoload('smtp');
+            //PHPMailerAutoload('smtp');
             $this->IsSMTP();
 
             $this->Host        = $gPreferences['mail_smtp_host'];

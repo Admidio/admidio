@@ -369,17 +369,8 @@ elseif (!isset($message_result))
 
         // select Users
 
-        $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
-                                 email.usd_value as email, (SELECT count(1)
-                                 FROM '.TBL_MEMBERS.', '. TBL_ROLES. ', '. TBL_CATEGORIES. ' as temp
-                                 WHERE mem_usr_id = usr_id
-                                   AND mem_rol_id = rol_id
-                                   AND rol_cat_id = cat_id
-                                   AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-                                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                                       OR cat_org_id IS NULL )
-                                   AND mem_begin <= \''.DATE_NOW.'\'
-                                   AND mem_end   >= \''.DATE_NOW.'\') as mem_active
+	    $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
+                                 email.usd_value as email, rol_mail_this_role, rol_id, mem_begin, mem_end
                     FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_USERS. '
                     JOIN '. TBL_USER_DATA. ' as email
                       ON email.usd_usr_id = usr_id
@@ -398,8 +389,8 @@ elseif (!isset($message_result))
                      AND usr_valid   = 1
                      AND mem_rol_id  = rol_id
                      AND rol_id in ('.$list_rol_id.')
-                   GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
-                   ORDER BY last_name, first_name';
+                   GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value, rol_mail_this_role, rol_id
+                   ORDER BY usr_id, last_name, first_name, rol_mail_this_role desc';
 
         $result = $gDb->query($sql);
 		
@@ -408,16 +399,25 @@ elseif (!isset($message_result))
 		
         while ($row = $gDb->fetch_array($result))
         {
-            if ($row['mem_active'] > 0)
-            {
-                $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_ACTIVE_MEMBERS'));
-            }
-            elseif ($gPreferences['mail_show_former'] == 1)
-            {
-                $passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_FORMER_MEMBERS'));
-            }
+			if (!isset($act_usr_id) or $act_usr_id <> $row['usr_id'])
+			{
+				if ($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW && $row['rol_mail_this_role'] >= 2)
+				{
+					$active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_ACTIVE_MEMBERS'));
+					$act_usr_id = $row['usr_id'];
+				}
+				elseif ($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW && $row['rol_mail_this_role'] == 1 && in_array($row['rol_id'], $gCurrentUser->getRoleMemberships()))
+				{
+					$active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_ACTIVE_MEMBERS'));
+					$act_usr_id = $row['usr_id'];
+				}
+				elseif ($gPreferences['mail_show_former'] == 1)
+				{
+					$passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_FORMER_MEMBERS'));
+					$act_usr_id = $row['usr_id'];
+				}
+			}
         }
-
         $list =  array_merge($list, $active_list, $passive_list);
 
     }
