@@ -22,8 +22,6 @@ $getStart      = admFuncVariableIsValid($_GET, 'start', 'numeric');
 $getCatId      = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
 $getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', array('defaultValue' => 1));
 
-unset($_SESSION['mylist_filter_request']);
-
 // New Modulelist object
 $lists = new ModuleLists();
 $lists->setParameter('cat_id', $getCatId);
@@ -310,3 +308,4 @@ $page->addHtml(admFuncGeneratePagination($base_url, $numberOfRoles, $gPreference
 
 $page->addHtml('</div>');
 $page->show();
+?>

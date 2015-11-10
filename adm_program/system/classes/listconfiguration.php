@@ -339,11 +339,11 @@ class ListConfiguration extends TableLists
         {
             if ($startDate === null)
             {
-                $sqlMemberStatus = ' AND mem_begin <= \''.DATE_NOW.'\'';
+                $sqlMemberStatus = 'AND mem_begin <= \''.DATE_NOW.'\'';
             }
             else
             {
-                $sqlMemberStatus = ' AND mem_begin <= \''.$endDate.' 23:59:59\'';
+                $sqlMemberStatus = 'AND mem_begin <= \''.$endDate.' 23:59:59\'';
             }
             if ($endDate === null)
             {
@@ -356,7 +356,7 @@ class ListConfiguration extends TableLists
         }
         elseif ($memberStatus === 1)
         {
-            $sqlMemberStatus = ' AND mem_end < \''.DATE_NOW.'\' ';
+            $sqlMemberStatus = 'AND mem_end < \''.DATE_NOW.'\'';
         }
 
         // Set SQL-Statement
