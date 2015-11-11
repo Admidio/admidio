@@ -32,7 +32,6 @@
  * view      - Content output in different views like 'detail', 'list'
  *             (Default: according to preferences)
  *****************************************************************************/
-
 require_once('../../system/common.php');
 
 unset($_SESSION['dates_request']);
@@ -222,7 +221,6 @@ else
     // Output table header for compact view
     if ($getView === 'compact' || $getView === 'room' || $getView === 'participants' || $getView === 'description')
     {
-
         $compactTable = new HtmlTable('events_compact_table', $page, $hoverRows, $datatable);
 
         if($getView === 'compact')
@@ -418,7 +416,7 @@ else
             $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
             $outputNumberMembers = $participants->getCount();
             $outputNumberLeaders = $participants->getNumLeaders();
-            
+
             if($getView === 'participants')
             {
                 $participantsArray = $participants->getParticipantsArray($date->getValue('dat_rol_id'));
@@ -675,9 +673,9 @@ else
             $objDateEnd = new DateTime($row['dat_end']);
             $dateEnd = $objDateEnd->format($gPreferences['system_date']);
             $timeEnd = $date->getValue('dat_end', $gPreferences['system_time']);
-            
+
             $dateTimeValue = '';
-            
+
             if($dateBegin === $dateEnd)
             {
                 if ($date->getValue('dat_all_day') == 1)
@@ -733,12 +731,12 @@ else
                     {
                         $htmlParticipants = $outputNumberMembers.'&nbsp;';
                     }
-    
+
                     if($outputNumberMembers > 0)
                     {
                         $htmlParticipants .= $outputButtonParticipants.$outputButtonParticipantsEmail;
                     }
-    
+
                     $columnValues[] = $htmlParticipants;
                 }
                 else
