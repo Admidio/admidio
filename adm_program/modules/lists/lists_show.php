@@ -61,8 +61,8 @@ if($getRoleId > 0)
 }
 else
 {
-    $rolesIds = $_SESSION['role_ids'];  
-    $getRoleId = $rolesIds[0]; 
+    $rolesIds = $_SESSION['role_ids'];
+    $getRoleId = $rolesIds[0];
 }
 
 // determine all roles relevant data
@@ -311,10 +311,10 @@ if($getMode != 'csv')
             $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
             $form->addInput('date_from', $gL10n->get('SYS_START'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('date_to', $gL10n->get('SYS_END'), $dateTo, array('type' => 'date', 'maxLength' => 10));
-            $form->addInput('lst_id', '', $getListId , array('class' => 'hide'));
-            $form->addInput('rol_id', '', $getRoleId , array('class' => 'hide'));
-            $form->addInput('show_members', '', $getShowMembers , array('class' => 'hide'));
-            $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK')); 
+            $form->addInput('lst_id', '', $getListId, array('class' => 'hide'));
+            $form->addInput('rol_id', '', $getRoleId, array('class' => 'hide'));
+            $form->addInput('show_members', '', $getShowMembers, array('class' => 'hide'));
+            $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
             $filterNavbar->addForm($form->show(false));
             $page->addHtml($filterNavbar->show(false));
         }
@@ -812,4 +812,3 @@ elseif($getMode === 'html' || $getMode === 'print')
     // show complete html page
     $page->show();
 }
-?>
