@@ -395,19 +395,20 @@ class HtmlTable extends HtmlTableBasic
 
                 if($gDebug)
                 {
-                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.datatables.js');
-                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/datatables.bootstrap.js');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.dataTables.js');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/dataTables.bootstrap.js');
                     $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/moment/moment.js');
+                    $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/datatables/css/dataTables.bootstrap.css');
                 }
                 else
                 {
-                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.datatables.min.js');
-                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/datatables.bootstrap.min.js');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.dataTables.min.js');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/dataTables.bootstrap.min.js');
                     $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/moment/moment.min.js');
+                    $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/datatables/css/dataTables.bootstrap.min.css');
                 }
 
                 $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/moment/datetime-moment.js');
-                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/datatables/css/datatables.bootstrap.css');
 
                 if($this->rowCount > 10)
                 {
