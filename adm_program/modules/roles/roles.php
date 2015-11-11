@@ -107,7 +107,6 @@ $columnHeading = array(
     $gL10n->get('SYS_FEATURES')
 );
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));
-$table->setColumnWidth(3, '40%');
 $table->disableDatatablesColumnsSort(array(4, 5, 6));
 $table->setDatatablesAlternativOrderColumns(1, 2);
 $table->setDatatablesColumnsHide(2);

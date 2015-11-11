@@ -22,6 +22,7 @@
         <text id="SYS_CATEGORIES_VAR" development="new" translation="todo">%VAR1%-Kategorien</text>
         <text id="SYS_CATEGORY_VAR" development="new" translation="todo">%VAR1%-Kategorie</text>
         <text id="SYS_COPY_VAR" development="new" translation="todo">%VAR1% kopieren</text>
+        <text id="SYS_LEADERS" development="new" translation="todo">Leiter</text>
         <text id="SYS_DATABASE_NO_LOGIN" development="new" translation="todo">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n%VAR1%.</text>
         <text id="SYS_PHONE_INVALID_CHAR" development="new" translation="todo">Die Telefonnummer im Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</text>
         <text id="SYS_VIEW" development="new" translation="todo">Ansicht</text>

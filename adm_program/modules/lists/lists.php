@@ -278,7 +278,7 @@ foreach($listsResult['recordset'] as $row)
                 //Leiter
                 if($row['num_leader']>0)
                 {
-                    $form->addStaticControl('list_leader', $gL10n->get('SYS_LEADER'), $row['num_leader']);
+                    $form->addStaticControl('list_leader', $gL10n->get('SYS_LEADERS'), $row['num_leader']);
                 }
 
                 //Beitrag

@@ -142,7 +142,7 @@ $arr_col_name = array('usr_login_name' => $gL10n->get('SYS_USERNAME'),
                       'usr_photo'      => $gL10n->get('PHO_PHOTO'),
                       'mem_begin'      => $gL10n->get('SYS_START'),
                       'mem_end'        => $gL10n->get('SYS_END'),
-                      'mem_leader'     => $gL10n->get('SYS_LEADER')
+                      'mem_leader'     => $gL10n->get('SYS_LEADERS')
                       );
 
 $mainSql      = '';   // enthaelt das Haupt-Sql-Statement fuer die Liste
@@ -449,7 +449,7 @@ foreach($membersList as $member)
         {
             if($member['mem_leader'] == 1)
             {
-                $title = $gL10n->get('SYS_LEADER');
+                $title = $gL10n->get('SYS_LEADERS');
             }
             else
             {
@@ -517,7 +517,7 @@ foreach($membersList as $member)
                     {
                         if($member['mem_leader'] == 1)
                         {
-                            $columnValues[] = $gL10n->get('SYS_LEADER');
+                            $columnValues[] = $gL10n->get('SYS_LEADERS');
                         }
                         else
                         {
