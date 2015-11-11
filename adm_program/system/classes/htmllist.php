@@ -58,9 +58,9 @@ class HtmlList extends HtmlElement
     /**
      * Constructor creates the element
      *
-     * @param $list List element ( ul/ol Default: ul)
-     * @param $id Id of the list
-     * @param $class Class name of the list
+     * @param string $list List element ( ul/ol Default: ul)
+     * @param string $id Id of the list
+     * @param string $class Class name of the list
      */
     public function __construct($list = 'ul', $id = '', $class = '')
     {
@@ -79,11 +79,11 @@ class HtmlList extends HtmlElement
     }
 
     /**
-     *  @par Add datalist (dl).
+     * Add datalist (dl).
      *
-     *  @param $id id Attribute
-     *  @param $term term as string for datalist
-     *  @param $description description as string for data description
+     * @param string      $id id Attribute
+     * @param string|null $term term as string for datalist
+     * @param string|null $description description as string for data description
      */
     public function addDatalist($id = '', $term = null, $description = null)
     {
@@ -99,7 +99,7 @@ class HtmlList extends HtmlElement
             $this->addAttribute('id', $id);
         }
 
-        if($term != null && $description != null)
+        if($term !== null && $description !== null)
         {
             $this->addDataListItems($term, $description);
 
@@ -107,14 +107,16 @@ class HtmlList extends HtmlElement
     }
 
     /**
-     *  @par Add term and description to datalist (dl).
+     * Add term and description to datalist (dl).
      *
-     *  @param $term Term as string for datalist
-     *  @param $description Description as string for data
+     * @param string|null $term Term as string for datalist
+     * @param string|null $description Description as string for data
+     * @return false
+     * @throws Exception
      */
     public function addDataListItems($term = null, $description = null)
     {
-        if($term != null && $description != null)
+        if($term !== null && $description !== null)
         {
             // Arrays are not supported in datalists
             if(!is_array($term) && !is_array($description))
@@ -125,22 +127,22 @@ class HtmlList extends HtmlElement
             else
             {
                 // Arrays are not supported
-                throw new exception('Arrays are not supported in datalist items! Items are determined as string!');
+                throw new Exception('Arrays are not supported in datalist items! Items are determined as string!');
             }
         }
         return false;
     }
 
     /**
-     *  @par Add list item (li).
+     * Add list item (li).
      *
-     *  @param $id id Attribute
-     *  @param $data element data
-     *  @param $term optional term as string for nested datalist
+     * @param string      $id id Attribute
+     * @param string|null $data element data
+     * @param string|null $term optional term as string for nested datalist
      */
     public function addListItem($id = '', $data = null, $term = null)
     {
-        if($data != null && $term != null)
+        if($data !== null && $term !== null)
         {
             // First check whether open list item tag  must be closed before setting new item
             if(in_array('li', $this->arrParentElements, true))
@@ -162,7 +164,7 @@ class HtmlList extends HtmlElement
         }
         else
         {
-            if($data != null)
+            if($data !== null)
             {
                 $this->addElement('li');
 
@@ -191,7 +193,7 @@ class HtmlList extends HtmlElement
     /**
      * Get the parsed html list
      *
-     * @return Returns the validated html list as string
+     * @return string Returns the validated html list as string
      */
     public function getHtmlList()
     {
