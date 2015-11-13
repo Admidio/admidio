@@ -32,6 +32,8 @@ if($user->getValue('usr_activation_code') == $getActivationId)
     $user->setValue('usr_password', $user->getValue('usr_new_password'));
     $user->setValue('usr_new_password', '');
     $user->setValue('usr_activation_code', '');
+
+    $user->saveChangesWithoutRights();
     $user->save();
 
     $gMessage->setForwardUrl($g_root_path.'/adm_program/system/login.php', 2000);
