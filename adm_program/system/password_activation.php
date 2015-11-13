@@ -24,16 +24,15 @@ if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_r
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-$user = new TableUsers($gDb, $getUserId);
+// create table access object to bypass password encode on setValue
+$user = new TableAccess($gDb, TBL_USERS, 'usr', $getUserId);
 
 if($user->getValue('usr_activation_code') == $getActivationId)
 {
-    // das neue Passwort aktivieren
+    // activate new password
     $user->setValue('usr_password', $user->getValue('usr_new_password'));
     $user->setValue('usr_new_password', '');
     $user->setValue('usr_activation_code', '');
-
-    $user->saveChangesWithoutRights();
     $user->save();
 
     $gMessage->setForwardUrl($g_root_path.'/adm_program/system/login.php', 2000);
