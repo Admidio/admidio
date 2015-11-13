@@ -9,15 +9,17 @@
  *
  * Parameters:
  *
- * mode   : Output (html, print, csv-ms, csv-oo, pdf, pdfl)
- * lst_id : Id of the list configuration that should be shown.
- *          If id is null then the default list of the role will be shown.
- * rol_id : Id of the role whose members should be shown
- * show_members : 0 - (Default) show active members of role
- *                1 - show former members of role
- *                2 - show active and former members of role
- * full_screen  : 0 - (Default) show sidebar, head and page bottom of html page
- *                1 - Only show the list without any other html unnecessary elements
+ * mode:            Output(html, print, csv-ms, csv-oo, pdf, pdfl)
+ * date_from:       Value for the start date of the date range filter (default: current date)
+ * date_to:         Value for the end date of the date range filter (default: current date) 
+ * lst_id:          Id of the list configuration that should be shown.
+ *                  If id is null then the default list of the role will be shown.
+ * rol_id:          Id of the role whose members should be shown
+ * show_members:    0 - (Default) show active members of role
+ *                  1 - show former members of role
+ *                  2 - show active and former members of role
+ * full_screen:     0 - (Default) show sidebar, head and page bottom of html page
+ *                  1 - Only show the list without any other html unnecessary elements
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
@@ -26,7 +28,7 @@ unset($list);
 
 // Initialize and check the parameters
 $getDateFrom    = admFuncVariableIsValid($_GET, 'date_from', 'date', array('defaultValue' => DATE_NOW));
-$getDateTo      = admFuncVariableIsValid($_GET, 'date_to', 'date', array('defaultValue' => date('Y') + 10 .'-12-31'));
+$getDateTo      = admFuncVariableIsValid($_GET, 'date_to', 'date', array('defaultValue' => DATE_NOW));
 $getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
 $getListId      = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', array('defaultValue' => 1));
 $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
@@ -307,7 +309,7 @@ if($getMode != 'csv')
         if($getShowMembers === 0)
         {
             // create filter menu with elements for start-/enddate
-            $filterNavbar = new HtmlNavbar('menu_list_filter', $gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), null, 'filter');
+            $filterNavbar = new HtmlNavbar('menu_list_filter', 'Filter&nbsp;'.$gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), null, 'filter');
             $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
             $form->addInput('date_from', $gL10n->get('SYS_START'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('date_to', $gL10n->get('SYS_END'), $dateTo, array('type' => 'date', 'maxLength' => 10));
@@ -812,3 +814,4 @@ elseif($getMode === 'html' || $getMode === 'print')
     // show complete html page
     $page->show();
 }
+?>
