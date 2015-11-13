@@ -54,12 +54,11 @@ class HtmlDiv extends HtmlElement
     /**
      * Constructor creates the element
      *
-     * @param $id Id of the main div
-     * @param $class Class name of the main div
+     * @param string $id Id of the main div
+     * @param string $class Class name of the main div
      */
     public function __construct($id = '', $class = '')
     {
-
         parent::__construct('div', '', '', true);
 
         if($id !== '')
@@ -77,10 +76,10 @@ class HtmlDiv extends HtmlElement
     }
 
     /**
-     *  @par Add a datalist (dl).
+     * Add a datalist (dl).
      *
-     *  @param $id Id Attribute
-     *  @param $class Class Attribute
+     * @param string|null $id Id Attribute
+     * @param string|null $class Class Attribute
      */
     public function addDivElement($id = null, $class = null)
     {
@@ -93,12 +92,12 @@ class HtmlDiv extends HtmlElement
         // Define new div element
         $this->addParentElement('div');
 
-        if($id != null)
+        if($id !== null)
         {
             $this->addAttribute('id', $id);
         }
 
-        if($class != null)
+        if($class !== null)
         {
             $this->addAttribute('class', $class);
         }
@@ -107,48 +106,48 @@ class HtmlDiv extends HtmlElement
     }
 
     /**
-     *  @par Add inline element into current division.
+     * @par Add inline element into current division.
      *
-     *  @param $element The inline element
-     *  @param $id Id Attribute
-     *  @param $class Class Attribute
-     *  @param $data Data of the element (optional)
+     * @param string      $element The inline element
+     * @param string|null $id Id Attribute
+     * @param string|null $class Class Attribute
+     * @param string|null $data Data of the element (optional)
      */
     public function addInline($element, $id = null, $class = null, $data = null)
     {
         $this->addElement($element);
 
-        if($id != null)
+        if($id !== null)
         {
             $this->addAttribute('id', $id);
         }
 
-        if($class != null)
+        if($class !== null)
         {
             $this->addAttribute('class', $class);
         }
 
-        if($data != null)
+        if($data !== null)
         {
             $this->addData($data);
         }
     }
 
     /**
-     * @par Close parent element.
      * This method sets the endtag of the selected element and removes the entry from log array.
      * If nesting mode is not used, the methods looks for the entry in the array and determines that all setted elements after the selected element must be closed as well.
      * All end tags to position are closed automatically starting with last setted element tag.
      *
-     * @param $parentElement Parent element to be closed
+     * @param string $parentElement Parent element to be closed
+     * @return false|void
      */
     public function closeParentElement($parentElement)
     {
-        // intialize position and count entries in array
+        // initialize position and count entries in array
         $position = '';
         $totalCount = count($this->arrParentElements);
 
-        if($totalCount == 0)
+        if($totalCount === 0)
         {
             return false;
         }
@@ -158,14 +157,14 @@ class HtmlDiv extends HtmlElement
             // find position in log array
             for($i = 0; $i < $totalCount-1; ++$i)
             {
-                if($this->arrParentElements[$i] == $parentElement)
+                if($this->arrParentElements[$i] === $parentElement)
                 {
                     $position = $i;
                 }
             }
 
             // if last position set Endtag in string and remove from array
-            if($position == $totalCount)
+            if($position === $totalCount)
             {
                 $this->htmlString .= '</' . $this->arrParentElements[$totalCount] . '>';
                 unset($this->arrParentElements[$position]);
@@ -181,7 +180,7 @@ class HtmlDiv extends HtmlElement
             }
         }
 
-        if($parentElement == 'div')
+        if($parentElement === 'div')
         {
             // set new level
             --$this->level;
@@ -191,7 +190,7 @@ class HtmlDiv extends HtmlElement
     /**
      * Get the parsed html division (div)
      *
-     * @return Returns the validated html div as string
+     * @return string Returns the validated html div as string
      */
     public function getHtmlDiv()
     {
