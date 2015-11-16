@@ -132,7 +132,7 @@ if($image != NULL)
     {
         $font_c = imagecolorallocate($image->imageResource, 255, 255, 255);
         $font_ttf = THEME_SERVER_PATH.'/font.ttf';
-        $font_s = $getMaxWidth / 40;
+        $font_s = $getMaxWidth / $gPreferences['photo_image_text_size'];
         $font_x = $font_s;
         $font_y = $image->imageHeight-$font_s;
         $text = $gPreferences['photo_image_text'];
