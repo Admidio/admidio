@@ -1,21 +1,20 @@
 <?php
-
-/*****************************************************************************/
-/** @class ProfileFields
- *  @brief Reads the user fields structure out of database and give access to it
- *
- *  When an object is created than the actual profile fields structure will
- *  be read. In addition to this structure you can read the user values for
- *  all fields if you call @c readUserData . If you read field values than
- *  you will get the formated output. It's also possible to set user data and
- *  save this data to the database
- */
 /**
  ***********************************************************************************************
  * @copyright 2004-2015 The Admidio Team
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
+ */
+/**
+ * @class ProfileFields
+ * @brief Reads the user fields structure out of database and give access to it
+ *
+ * When an object is created than the actual profile fields structure will
+ * be read. In addition to this structure you can read the user values for
+ * all fields if you call @c readUserData . If you read field values than
+ * you will get the formated output. It's also possible to set user data and
+ * save this data to the database
  */
 class ProfileFields
 {
