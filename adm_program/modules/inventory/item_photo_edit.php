@@ -37,7 +37,7 @@ if($getMode == 'delete')
 }
 
 // checks if the server settings for file_upload are set to ON
-if (ini_get('file_uploads') != '1')
+if (ini_get('file_uploads') !== '1')
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
 }

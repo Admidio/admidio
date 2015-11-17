@@ -179,7 +179,7 @@ elseif($getMode === 2)  // Welcome to installation
     }
 
     // if safe mode is used then show a notice to the user
-    if(ini_get('safe_mode') == 1)
+    if(ini_get('safe_mode') === '1')
     {
         $message .= '
             <div class="alert alert-warning alert-small" role="alert">

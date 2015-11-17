@@ -55,7 +55,7 @@ if(isset($_SESSION['set_rol_id']))
 }
 else
 {
-    $setRoleId = NULL;
+    $setRoleId = null;
 }
 
 if($getInline == true)
