@@ -45,7 +45,7 @@ if(isset($_POST['ecard_recipients']) == false || is_array($_POST['ecard_recipien
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TO')));
 }
 
-if(strlen($_POST['ecard_message']) == 0)
+if(strlen($_POST['ecard_message']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_MESSAGE')));
 }

@@ -17,7 +17,7 @@ if(!$gCurrentUser->editUsers())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-if(count($_SESSION['file_lines']) == 0)
+if(count($_SESSION['file_lines']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
 }

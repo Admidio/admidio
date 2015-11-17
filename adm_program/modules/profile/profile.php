@@ -404,7 +404,7 @@ $page->addHtml('
                                     $route_url .= ',%20'. urlencode($user->getValue('POSTCODE'));
 
                                     // City and postcode should be shown in one line
-                                    if(strlen($user->getValue('CITY')) == 0
+                                    if(strlen($user->getValue('CITY')) === 0
                                     || ($gCurrentUser->hasRightEditProfile($user) == false && $gProfileFields->getProperty('CITY', 'usf_hidden') == 1))
                                     {
                                         $address   .= '<br />';

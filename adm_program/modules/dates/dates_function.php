@@ -79,27 +79,27 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     // pruefen ob alle notwendigen Felder gefuellt sind
     // ------------------------------------------------
 
-    if(strlen($_POST['dat_headline']) == 0)
+    if(strlen($_POST['dat_headline']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TITLE')));
     }
-    if(strlen($_POST['date_from']) == 0)
+    if(strlen($_POST['date_from']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_START')));
     }
-    if(strlen($_POST['date_to']) == 0 && $_POST['dat_repeat_type'] == 0)
+    if(strlen($_POST['date_to']) === 0 && $_POST['dat_repeat_type'] == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_END')));
     }
-    if(strlen($_POST['date_from_time']) == 0 && isset($_POST['dat_all_day']) == false)
+    if(strlen($_POST['date_from_time']) === 0 && isset($_POST['dat_all_day']) == false)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START')));
     }
-    if(strlen($_POST['date_to_time']) == 0 && isset($_POST['dat_all_day']) == false)
+    if(strlen($_POST['date_to_time']) === 0 && isset($_POST['dat_all_day']) == false)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END')));
     }
-    if(strlen($_POST['dat_cat_id']) == 0)
+    if(strlen($_POST['dat_cat_id']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_CALENDAR')));
     }
@@ -123,7 +123,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     }
 
     // das Land nur zusammen mit dem Ort abspeichern
-    if(strlen($_POST['dat_location']) == 0)
+    if(strlen($_POST['dat_location']) === 0)
     {
         $_POST['dat_country'] = '';
     }
@@ -154,11 +154,11 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     }
 
     // if date-to is not filled then take date-from
-    if(strlen($_POST['date_to'])   == 0)
+    if(strlen($_POST['date_to']) === 0)
     {
         $_POST['date_to'] = $_POST['date_from'];
     }
-    if(strlen($_POST['date_to_time']) == 0)
+    if(strlen($_POST['date_to_time']) === 0)
     {
         $_POST['date_to_time'] = $_POST['date_from_time'];
     }
@@ -345,7 +345,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     // ggf. Rolle fuer Anmeldungen wegschreiben
     // ----------------------------------------
 
-    if($_POST['date_registration_possible'] == 1 && strlen($date->getValue('dat_rol_id')) == 0)
+    if($_POST['date_registration_possible'] == 1 && strlen($date->getValue('dat_rol_id')) === 0)
     {
         // Kategorie fuer Terminbestaetigungen einlesen
         $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.'

@@ -25,7 +25,7 @@ if(!$gCurrentUser->editUsers())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-if(strlen($_FILES['userfile']['tmp_name'][0]) == 0)
+if(strlen($_FILES['userfile']['tmp_name'][0]) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_FILE')));
 }

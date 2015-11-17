@@ -931,7 +931,7 @@ else
     // Define tbody
     $datePrint->addTableBody('id', 'style0', $bodyHeadline_1, 'th');
 
-    if(isset($dateElements) && count($dateElements) == 0)
+    if(isset($dateElements) && count($dateElements) === 0)
     {
         $datePrint->addRow();
         // No events found
@@ -952,11 +952,11 @@ else
         {
             if($row['dat_highlight'] != 1)
             {
-                $className = (($numDateElements % 2) == 0) ? 'even' : 'odd';
+                $className = (($numDateElements % 2) === 0) ? 'even' : 'odd';
             }
             else
             {
-                $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
+                $className = (($numDateElements % 2) === 0) ? 'evenHighlight' : 'oddHighlight';
             }
 
             $datePrint->addRow($row['dat_details'], array('class' => $className));
@@ -970,11 +970,11 @@ else
         {
             if($row['dat_highlight'] != 1)
             {
-                $className = (($numDateElements % 2) == 0) ? 'even' : 'odd';
+                $className = (($numDateElements % 2) === 0) ? 'even' : 'odd';
             }
             else
             {
-                $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
+                $className = (($numDateElements % 2) === 0) ? 'evenHighlight' : 'oddHighlight';
             }
             $datePrint->addRow($row['dat_details'], array('class' => $className));
             ++$numDateElements;

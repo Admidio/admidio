@@ -160,7 +160,7 @@ if ($getMode == 1 || $getMode == 3)
 
         if($gValidLogin)
         {
-            if(strlen($guestbook->getValue('gbo_name')) == 0)
+            if(strlen($guestbook->getValue('gbo_name')) === 0)
             {
                 // Falls der User eingeloggt ist, wird die aktuelle UserId und der korrekte Name mitabgespeichert...
                 $guestbook->setValue('gbo_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));
@@ -340,13 +340,13 @@ elseif($getMode == 4 || $getMode == 8)
         $guestbook_comment->setValue('gbc_gbo_id', $getGboId);
     }
 
-    if (strlen($guestbook_comment->getValue('gbc_name')) > 0 && strlen($guestbook_comment->getValue('gbc_text'))  > 0)
+    if (strlen($guestbook_comment->getValue('gbc_name')) > 0 && strlen($guestbook_comment->getValue('gbc_text')) > 0)
     {
         // Gaestebuchkommentar speichern
 
         if($gValidLogin)
         {
-            if(strlen($guestbook_comment->getValue('gbc_name')) == 0)
+            if(strlen($guestbook_comment->getValue('gbc_name')) === 0)
             {
                 // Falls der User eingeloggt ist, wird die aktuelle UserId und der korrekte Name mitabgespeichert...
                 $guestbook_comment->setValue('gbc_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));

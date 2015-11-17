@@ -129,8 +129,8 @@ foreach($gProfileFields->mProfileFields as $field)
         {
             // Pflichtfelder muessen gefuellt sein
             // E-Mail bei Registrierung immer !!!
-            if(($field->getValue('usf_mandatory') == 1 && strlen($_POST[$post_id]) == 0)
-            || ($getNewUser == 2 && $field->getValue('usf_name_intern') == 'EMAIL' && strlen($_POST[$post_id]) == 0))
+            if(($field->getValue('usf_mandatory') == 1 && strlen($_POST[$post_id]) === 0)
+            || ($getNewUser == 2 && $field->getValue('usf_name_intern') == 'EMAIL' && strlen($_POST[$post_id]) === 0))
             {
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
             }

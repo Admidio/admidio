@@ -237,7 +237,7 @@ foreach($gProfileFields->mProfileFields as $field)
                     if(isMember($user->getValue('usr_id'))
                     && ($gCurrentUser->getValue('usr_id') == $user->getValue('usr_id')
                        || ($gCurrentUser->isWebmaster()
-                          && (strlen($user->getValue('usr_login_name')) == 0 || strlen($user->getValue('EMAIL')) == 0))))
+                          && (strlen($user->getValue('usr_login_name')) === 0 || strlen($user->getValue('EMAIL')) === 0))))
                     {
                         $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '
                             <a id="password_link" class="btn" data-toggle="modal" data-target="#admidio_modal"

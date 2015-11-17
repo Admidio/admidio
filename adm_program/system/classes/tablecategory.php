@@ -153,7 +153,7 @@ class TableCategory extends TableAccess
         if($columnName == 'cat_name' && $format != 'database')
         {
             // if text is a translation-id then translate it
-            if(strpos($value, '_') == 3)
+            if(strpos($value, '_') === 3)
             {
                 $value = $gL10n->get(admStrToUpper($value));
             }

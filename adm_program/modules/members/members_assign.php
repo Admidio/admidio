@@ -20,11 +20,11 @@ if (!$gCurrentUser->editUsers())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-if(strlen($_POST['lastname']) == 0)
+if(strlen($_POST['lastname']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LASTNAME')));
 }
-if(strlen($_POST['firstname']) == 0)
+if(strlen($_POST['firstname']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_FIRSTNAME')));
 }

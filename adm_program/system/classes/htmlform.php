@@ -1535,7 +1535,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             // if text is a translation-id then translate it
-            if(strpos($row['cat_name'], '_') == 3)
+            if(strpos($row['cat_name'], '_') === 3)
             {
                 $categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
             }
@@ -1555,7 +1555,7 @@ class HtmlForm extends HtmlFormBasic
             while($row = $database->fetch_array($result))
             {
                 // if text is a translation-id then translate it
-                if(strpos($row['cat_name'], '_') == 3)
+                if(strpos($row['cat_name'], '_') === 3)
                 {
                     $categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
                 }

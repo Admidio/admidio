@@ -27,7 +27,7 @@ $getName   = admFuncVariableIsValid($_GET, 'name', 'string');
 $_SESSION['mylist_request'] = $_POST;
 
 // Mindestens ein Feld sollte zugeordnet sein
-if(isset($_POST['column1']) == false || strlen($_POST['column1']) == 0)
+if(isset($_POST['column1']) == false || strlen($_POST['column1']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', 'Feld 1'));
 }

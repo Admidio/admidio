@@ -625,7 +625,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
         {
             $userNameCreated = trim($userNameCreated);
 
-            if(strlen($userNameCreated) == 0)
+            if(strlen($userNameCreated) === 0)
             {
                 $userNameCreated = $gL10n->get('SYS_DELETED_USER');
             }
@@ -645,7 +645,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
         {
             $userNameEdited = trim($userNameEdited);
 
-            if(strlen($userNameEdited) == 0)
+            if(strlen($userNameEdited) === 0)
             {
                 $userNameEdited = $gL10n->get('SYS_DELETED_USER');
             }

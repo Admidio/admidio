@@ -118,7 +118,7 @@ elseif ($getMode == 3)
                 // Ordner erstellen
                 $b_return = $targetFolder->createFolder($newFolderName);
 
-                if(strlen($b_return['text']) == 0)
+                if(strlen($b_return['text']) === 0)
                 {
                     //Jetzt noch den Ordner der DB hinzufuegen...
                     $newFolder = new TableFolder($gDb);

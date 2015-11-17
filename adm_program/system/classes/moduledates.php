@@ -509,7 +509,7 @@ class ModuleDates extends Modules
         //...otherwise get all additional events for a group
         else
         {
-            if(strlen($this->getParameter('dateStartFormatEnglish') == 0))
+            if(strlen($this->getParameter('dateStartFormatEnglish') === 0))
             {
                 $this->setDateRange();
             }

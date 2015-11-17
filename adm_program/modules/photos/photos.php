@@ -545,7 +545,7 @@ $page->addHtml('</div>');
 
 /****************************Leeres Album****************/
 //Falls das Album weder Fotos noch Unterordner enthaelt
-if(($photoAlbum->getValue('pho_quantity')=='0' || strlen($photoAlbum->getValue('pho_quantity')) == 0) && $albumsCount < 1)  // alle vorhandenen Albumen werden ignoriert
+if(($photoAlbum->getValue('pho_quantity')=='0' || strlen($photoAlbum->getValue('pho_quantity')) === 0) && $albumsCount < 1)  // alle vorhandenen Albumen werden ignoriert
 {
     $page->addHtml($gL10n->get('PHO_NO_ALBUM_CONTENT'));
 }

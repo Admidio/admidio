@@ -64,7 +64,7 @@ if($getPhotoId > 0 && $photo_album->getValue('pho_org_id') != $gCurrentOrganizat
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-if ($gValidLogin && strlen($gCurrentUser->getValue('EMAIL')) == 0)
+if ($gValidLogin && strlen($gCurrentUser->getValue('EMAIL')) === 0)
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
@@ -79,7 +79,7 @@ if ($getUserId > 0)
     // darf auf die User-Id zugegriffen werden
     if(($gCurrentUser->editUsers() == false
        && isMember($user->getValue('usr_id')) == false)
-    || strlen($user->getValue('usr_id')) == 0)
+    || strlen($user->getValue('usr_id')) === 0)
     {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
     }

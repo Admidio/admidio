@@ -225,7 +225,7 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
     {
         $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50, 'helpTextIdLabel' => 'DAT_LOCATION_LINK'));
 
-        if(strlen($date->getValue('dat_country')) == 0 && $getDateId == 0)
+        if(strlen($date->getValue('dat_country')) === 0 && $getDateId == 0)
         {
             $date->setValue('dat_country', $gPreferences['default_country']);
         }

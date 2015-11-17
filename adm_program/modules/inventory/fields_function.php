@@ -59,12 +59,12 @@ if($getMode == 1)
 
     // pruefen, ob Pflichtfelder gefuellt sind
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
-    if($itemField->getValue('inf_system') == 0 && strlen($_POST['inf_name']) == 0)
+    if($itemField->getValue('inf_system') == 0 && strlen($_POST['inf_name']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
     }
 
-    if($itemField->getValue('inf_system') == 0 && strlen($_POST['inf_type']) == 0)
+    if($itemField->getValue('inf_system') == 0 && strlen($_POST['inf_type']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATATYPE')));
     }

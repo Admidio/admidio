@@ -116,7 +116,7 @@ class TableInventoryField extends TableAccess
         && $format != 'database')
         {
             // if text is a translation-id then translate it
-            if(strpos($value, '_') == 3)
+            if(strpos($value, '_') === 3)
             {
                 $value = $gL10n->get(admStrToUpper($value));
             }
@@ -149,7 +149,7 @@ class TableInventoryField extends TableAccess
                             }
 
                             // if text is a translation-id then translate it
-                            if(strpos($listValueText, '_') == 3)
+                            if(strpos($listValueText, '_') === 3)
                             {
                                 $listValueText = $gL10n->get(admStrToUpper($listValueText));
                             }
@@ -189,7 +189,7 @@ class TableInventoryField extends TableAccess
                     }
 
                     // if text is a translation-id then translate it
-                    if(strpos($listValue, '_') == 3)
+                    if(strpos($listValue, '_') === 3)
                     {
                         $listValue = $gL10n->get(admStrToUpper($listValue));
                     }

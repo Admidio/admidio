@@ -74,7 +74,7 @@ $page->addJavascript('
         toggleDiv("admCommentsInvisible_" + commentId);
         toggleDiv("admCommentsVisible_" + commentId);
 
-        if (document.getElementById("comments_" + commentId).innerHTML.length == 0) {
+        if (document.getElementById("comments_" + commentId).innerHTML.length === 0) {
             getComments(commentId);
         }
         else {

@@ -74,7 +74,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
         {
             // Pflichtfelder muessen gefuellt sein
             // E-Mail bei Registrierung immer !!!
-            if($field->getValue('inf_mandatory') == 1 && strlen($_POST[$post_id]) == 0)
+            if($field->getValue('inf_mandatory') == 1 && strlen($_POST[$post_id]) === 0)
             {
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('inf_name')));
             }

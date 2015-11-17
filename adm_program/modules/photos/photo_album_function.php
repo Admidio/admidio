@@ -66,7 +66,7 @@ if($getMode == 'new' || $getMode == 'change')
         $_POST['pho_locked'] = 0;
     }
     //Album
-    if(strlen($_POST['pho_name']) == 0)
+    if(strlen($_POST['pho_name']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('PHO_ALBUM')));
     }
@@ -116,7 +116,7 @@ if($getMode == 'new' || $getMode == 'change')
     }
 
     //Photographen
-    if(strlen($_POST['pho_photographers']) == 0)
+    if(strlen($_POST['pho_photographers']) === 0)
     {
         $_POST['pho_photographers'] = $gL10n->get('SYS_UNKNOWN');
     }
@@ -147,7 +147,7 @@ if($getMode == 'new' || $getMode == 'change')
             $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
         }
 
-        if(strlen($error['text']) == 0)
+        if(strlen($error['text']) === 0)
         {
             // Benachrichtigungs-Email für neue Einträge
             $notification = new Email();
