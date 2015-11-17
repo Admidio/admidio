@@ -71,7 +71,7 @@ if($getDateId > 0)
     }
 }
 
-if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
+if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
 {
     $_SESSION['dates_request'] = $_POST;
 
@@ -323,7 +323,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
 
         $notification = new Email();
 
-        if($getMode == 1)
+        if($getMode === 1)
         {
             $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar)
                       .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
@@ -456,7 +456,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     header('Location: '. $gNavigation->getUrl());
     exit();
 }
-elseif($getMode == 2)  // Termin loeschen
+elseif($getMode === 2)  // Termin loeschen
 {
     // Termin loeschen, wenn dieser zur aktuellen Orga gehoert
     if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
@@ -468,7 +468,7 @@ elseif($getMode == 2)  // Termin loeschen
         echo 'done';
     }
 }
-elseif($getMode == 3)  // Benutzer zum Termin anmelden
+elseif($getMode === 3)  // Benutzer zum Termin anmelden
 {
     $member = new TableMembers($gDb);
     $member->startMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
@@ -476,7 +476,7 @@ elseif($getMode == 3)  // Benutzer zum Termin anmelden
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
 }
-elseif($getMode == 4)  // Benutzer vom Termin abmelden
+elseif($getMode === 4)  // Benutzer vom Termin abmelden
 {
     $member = new TableMembers($gDb);
     $member->deleteMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
@@ -484,7 +484,7 @@ elseif($getMode == 4)  // Benutzer vom Termin abmelden
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
 }
-elseif($getMode == 6)  // Termin im iCal-Format exportieren
+elseif($getMode === 6)  // Termin im iCal-Format exportieren
 {
     $filename = $date->getValue('dat_headline');
 

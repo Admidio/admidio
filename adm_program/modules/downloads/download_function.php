@@ -56,7 +56,7 @@ if($myFilesDownload->checkSettings() == false)
 }
 
 // Delete file
-if ($getMode == 2)
+if ($getMode === 2)
 {
     if($getFileId > 0)
     {
@@ -87,7 +87,7 @@ if ($getMode == 2)
 }
 
 // Ordner erstellen
-elseif ($getMode == 3)
+elseif ($getMode === 3)
 {
     if ($getFolderId == 0) {
         //FolderId ist zum Anlegen eines Unterordners erforderlich
@@ -162,7 +162,7 @@ elseif ($getMode == 3)
 }
 
 //Datei / Ordner umbenennen
-elseif ($getMode == 4)
+elseif ($getMode === 4)
 {
     if ((!$getFileId && !$getFolderId) or ($getFileId && $getFolderId))
     {
@@ -273,7 +273,7 @@ elseif ($getMode == 4)
 }
 
 //Folder loeschen
-elseif ($getMode == 5)
+elseif ($getMode === 5)
 {
     if (!$getFolderId)
     {
@@ -304,7 +304,7 @@ elseif ($getMode == 5)
 }
 
 //Datei / Ordner zur DB hinzufeuegen
-elseif ($getMode == 6)
+elseif ($getMode === 6)
 {
     if ($getFolderId == 0)
     {
@@ -366,7 +366,7 @@ elseif ($getMode == 6)
 }
 
 //Berechtigungen fuer einen Ordner speichern
-elseif ($getMode == 7)
+elseif ($getMode === 7)
 {
     if(!isset($_POST['adm_allowed_roles']))
     {

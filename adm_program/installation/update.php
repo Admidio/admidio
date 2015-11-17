@@ -184,7 +184,7 @@ if($installedDbVersion === '')
                $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
 }
 
-if($getMode == 1)
+if($getMode === 1)
 {
     // if database version is smaller then source version -> update
     // if database version is equal to source but beta has a difference -> update
@@ -242,7 +242,7 @@ if($getMode == 1)
                    $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
     }
 }
-elseif($getMode == 2)
+elseif($getMode === 2)
 {
     /**************************************/
     /* execute update script for database */

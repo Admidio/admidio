@@ -50,7 +50,7 @@ if($getAnnId > 0)
 
 $_SESSION['announcements_request'] = $_POST;
 
-if($getMode == 1)
+if($getMode === 1)
 {
     if(isset($_POST['ann_global']) == false)
     {
@@ -101,7 +101,7 @@ if($getMode == 1)
     header('Location: '. $gNavigation->getUrl());
     exit();
 }
-elseif($getMode == 2)
+elseif($getMode === 2)
 {
     // Ankuendigung loeschen, wenn diese zur aktuellen Orga gehoert
     if($announcement->getValue('ann_org_id') == $gCurrentOrganization->getValue('org_id'))

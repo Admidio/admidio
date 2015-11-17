@@ -194,7 +194,7 @@ elseif($getMode === 2)  // Welcome to installation
     $form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'layout/forward.png'));
     $form->show();
 }
-elseif($getMode == 3)  // Enter database access information
+elseif($getMode === 3)  // Enter database access information
 {
     // initialize form data
     if(isset($_SESSION['db_server']))
@@ -230,7 +230,7 @@ elseif($getMode == 3)  // Enter database access information
     $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'layout/forward.png'));
     $form->show();
 }
-elseif($getMode == 4)  // Creating organization
+elseif($getMode === 4)  // Creating organization
 {
     if(isset($_POST['db_server']))
     {
@@ -340,7 +340,7 @@ elseif($getMode == 4)  // Creating organization
     $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), array('icon' => 'layout/forward.png'));
     $form->show();
 }
-elseif($getMode == 5)  // Creating addministrator
+elseif($getMode === 5)  // Creating addministrator
 {
     if(isset($_POST['orga_shortname']))
     {
@@ -389,7 +389,7 @@ elseif($getMode == 5)  // Creating addministrator
     $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'layout/forward.png'));
     $form->show();
 }
-elseif($getMode == 6)  // Creating configuration file
+elseif($getMode === 6)  // Creating configuration file
 {
     if(isset($_POST['user_last_name']))
     {
@@ -506,7 +506,7 @@ elseif($getMode == 6)  // Creating configuration file
         $form->show();
     }
 }
-elseif($getMode == 7) // Download configuration file
+elseif($getMode === 7) // Download configuration file
 {
     $filename   = 'config.php';
     $fileLength = strlen($_SESSION['config_file_content']);
@@ -517,7 +517,7 @@ elseif($getMode == 7) // Download configuration file
     echo $_SESSION['config_file_content'];
     exit();
 }
-elseif($getMode == 8) // Start installation
+elseif($getMode === 8) // Start installation
 {
     // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
     if(!file_exists('../../adm_my_files/config.php'))

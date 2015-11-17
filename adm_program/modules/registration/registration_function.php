@@ -49,7 +49,7 @@ if($getUserId > 0)
     $user = new User($gDb, $gProfileFields, $getUserId);
 }
 
-if($getMode == 1 || $getMode == 2)
+if($getMode === 1 || $getMode === 2)
 {
     // User-Account einem existierenden Mitglied zuordnen
 
@@ -79,7 +79,7 @@ if($getMode == 1 || $getMode == 2)
     }
 }
 
-if($getMode == 2)
+if($getMode === 2)
 {
     // User existiert bereits, ist aber bisher noch kein Mitglied der aktuellen Orga,
     // deshalb erst einmal Rollen zuordnen und dann spaeter eine Mail schicken
@@ -88,7 +88,7 @@ if($getMode == 2)
     exit();
 }
 
-if($getMode == 1 || $getMode == 3)
+if($getMode === 1 || $getMode === 3)
 {
     $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/registration/registration.php');
 
@@ -114,7 +114,7 @@ if($getMode == 1 || $getMode == 3)
         $gMessage->show($gL10n->get('NWU_ASSIGN_LOGIN_SUCCESSFUL'));
     }
 }
-elseif($getMode == 4)
+elseif($getMode === 4)
 {
     try
     {
@@ -129,7 +129,7 @@ elseif($getMode == 4)
     // return successful delete for XMLHttpRequest
     echo 'done';
 }
-elseif($getMode == 5)
+elseif($getMode === 5)
 {
     try
     {
@@ -155,7 +155,7 @@ elseif($getMode == 5)
         $gMessage->show($gL10n->get('PRO_ASSIGN_REGISTRATION_SUCCESSFUL'));
     }
 }
-elseif($getMode == 6)
+elseif($getMode === 6)
 {
     // Der User existiert schon und besitzt auch ein Login
 

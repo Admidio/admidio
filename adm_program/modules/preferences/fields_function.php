@@ -55,7 +55,7 @@ if($getUsfId > 0)
     }
 }
 
-if($getMode == 1)
+if($getMode === 1)
 {
    // Feld anlegen oder updaten
 
@@ -160,7 +160,7 @@ if($getMode == 1)
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
-elseif($getMode == 2)
+elseif($getMode === 2)
 {
     if($userField->getValue('usf_system') == 1)
     {
@@ -176,7 +176,7 @@ elseif($getMode == 2)
     }
     exit();
 }
-elseif($getMode == 4)
+elseif($getMode === 4)
 {
     // Feldreihenfolge aktualisieren
     $userField->moveSequence($getSequence);

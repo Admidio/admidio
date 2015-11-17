@@ -40,7 +40,7 @@ $link = new TableWeblink($gDb, $getLinkId);
 
 $_SESSION['links_request'] = $_POST;
 
-if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0))
+if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
 {
     if(strlen(strStripTags($_POST['lnk_name'])) === 0)
     {
@@ -75,7 +75,7 @@ if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0))
     }
 
     // Link-Counter auf 0 setzen
-    if ($getMode == 1)
+    if ($getMode === 1)
     {
         $link->setValue('lnk_counter', '0');
     }
@@ -88,7 +88,7 @@ if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0))
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
-    if($return_code == 0 && $getMode == 1)
+    if($return_code == 0 && $getMode === 1)
     {
         // Benachrichtigungs-Email für neue Einträge
         $message = $gL10n->get('LNK_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
@@ -103,7 +103,7 @@ if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0))
     exit();
 }
 
-elseif ($getMode == 2 && $getLinkId > 0)
+elseif ($getMode === 2 && $getLinkId > 0)
 {
     // Loeschen von Weblinks...
     $link->delete();

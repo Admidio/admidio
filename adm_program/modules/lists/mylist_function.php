@@ -33,7 +33,7 @@ if(isset($_POST['column1']) == false || strlen($_POST['column1']) === 0)
 }
 
 // Rolle muss beim Anzeigen gefuellt sein
-if($getMode == 2
+if($getMode === 2
 && (isset($_POST['sel_roles_ids']) == false || $_POST['sel_roles_ids'] == 0 || is_array($_POST['sel_roles_ids']) == false))
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', 'Rolle'));
@@ -64,7 +64,7 @@ if($getMode != 2)
 }
 
 // Liste speichern
-if ($getMode == 1 || $getMode == 2)
+if ($getMode === 1 || $getMode === 2)
 {
     // alle vorhandenen Spalten durchgehen
     for($columnNumber = 1; isset($_POST['column'. $columnNumber]); ++$columnNumber)
@@ -96,7 +96,7 @@ if ($getMode == 1 || $getMode == 2)
 
     $list->save();
 
-    if($getMode == 1)
+    if($getMode === 1)
     {
         // save new id to session so that we can restore the configuration with new list name
         $_SESSION['mylist_request']['sel_select_configuation'] = $list->getValue('lst_id');
@@ -113,7 +113,7 @@ if ($getMode == 1 || $getMode == 2)
     header('Location: '.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$list->getValue('lst_id').'&mode=html&show_members='. $_POST['sel_show_members']);
     exit();
 }
-elseif ($getMode == 3)
+elseif ($getMode === 3)
 {
     try
     {
