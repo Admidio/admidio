@@ -44,7 +44,7 @@ $result_mgl  = $gDb->query($sql);
 $page = new HtmlPage($headline);
 
 $page->addJavascript('
-        $(".admidio-icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
+        $(".admidio-icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function() { $("#admButtonNo").focus(); }});
         ', true);
 
 // get module menu

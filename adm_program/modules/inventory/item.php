@@ -107,9 +107,9 @@ $page->addJavascript('
     }');
 $page->addJavascript('
     profileJS.init();
-    $(".admidio-icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
-    $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
-    $("#profile_authorizations_box_body").mouseout(function () { profileJS.deleteShowInfo()});
+    $(".admidio-icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function() { $("#admButtonNo").focus(); }});
+    $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)); });
+    $("#profile_authorizations_box_body").mouseout(function () { profileJS.deleteShowInfo(); });
 
     $(".admidio-form-membership-period").submit(function(event) {
         var id = $(this).attr("id");

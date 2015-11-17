@@ -99,7 +99,7 @@ $page->addJavascript('
     }
 
     setValueList();
-    $("#usf_type").click(function() {setValueList();});',
+    $("#usf_type").click(function() { setValueList(); });',
     true
 );
 

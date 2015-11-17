@@ -100,7 +100,7 @@ $page->addJavascript('
     }
 
     setValueList();
-    $("#inf_type").click(function() {setValueList();});', true);
+    $("#inf_type").click(function() { setValueList(); });', true);
 
 // add back link to module menu
 $profileFieldsEditMenu = $page->getMenu();

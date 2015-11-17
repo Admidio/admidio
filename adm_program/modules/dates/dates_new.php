@@ -190,10 +190,10 @@ $page->addJavascript('
     setDateParticipation();
     setLocationCountry();
 
-    $("#date_registration_possible").click(function() {setDateParticipation();});
-    $("#dat_all_day").click(function() {setAllDay();});
-    $("#dat_location").change(function() {setLocationCountry();});
-    $("#date_from").change(function() {setDateTo();});
+    $("#date_registration_possible").click(function() { setDateParticipation(); });
+    $("#dat_all_day").click(function() { setAllDay(); });
+    $("#dat_location").change(function() { setLocationCountry(); });
+    $("#date_from").change(function() { setDateTo(); });
 
     // if date participation should be removed than ask user
     $("#btn_save").click(function (event) {

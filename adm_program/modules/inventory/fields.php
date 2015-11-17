@@ -28,7 +28,7 @@ unset($_SESSION['fields_request']);
 // create html page object
 $page = new HtmlPage($headline);
 
-$page->addJavascript('$(".admidio-group-heading").click(function() {showHideBlock($(this).attr("id"));});', true);
+$page->addJavascript('$(".admidio-group-heading").click(function() { showHideBlock($(this).attr("id")); });', true);
 $page->addJavascript('
     function moveCategory(direction, usfID) {
         var actRow = document.getElementById("row_usf_" + usfID);

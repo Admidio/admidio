@@ -64,7 +64,7 @@ if($getInline == true)
 
     $html .= '<script type="text/javascript"><!--
     $(document).ready(function(){
-        $(".admidio-group-heading").click(function() {showHideBlock($(this).attr("id"));});
+        $(".admidio-group-heading").click(function() { showHideBlock($(this).attr("id")); });
 
         $("#roles_assignment_form").submit(function(event) {
             var action = $(this).attr("action");

@@ -496,13 +496,13 @@ $javascriptCode .= '
     }';
 $page->addJavascript($javascriptCode);
 $page->addJavascript('$(document).ready(function() {
-    $("#sel_select_configuation").change(function() {loadList();});
-    $("#btn_show_list").click(function() {send("show");});
-    $("#btn_add_column").click(function() {addColumn();});
-    $("#btn_save").click(function() {send("save_as");});
-    $("#btn_save_changes").click(function() {send("save");});
-    $("#btn_delete").click(function() {send("delete");});
-    $("#btn_copy").click(function() {send("save_as");});
+    $("#sel_select_configuation").change(function() { loadList(); });
+    $("#btn_show_list").click(function() { send("show"); });
+    $("#btn_add_column").click(function() { addColumn(); });
+    $("#btn_save").click(function() { send("save_as"); });
+    $("#btn_save_changes").click(function() { send("save"); });
+    $("#btn_delete").click(function() { send("delete"); });
+    $("#btn_copy").click(function() { send("save_as"); });
 
     for(var counter = 0; counter < '. $defaultColumnRows. '; counter++) {
         addColumn();
