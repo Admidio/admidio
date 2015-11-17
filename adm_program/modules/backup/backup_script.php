@@ -260,7 +260,7 @@ $starttime = getmicrotime();
                         $SQLquery  = 'SHOW TABLE STATUS LIKE "'.$gDb->escapeString($SelectedTables[$dbname][$t]).'"';
                         $tablestatusStatement = $gDb->query($SQLquery);
                         if (!($TableStatusRow = $tablestatusStatement->fetch())) {
-                            die('failed to execute "'.$SQLquery.'" on '.$dbname.'.'.$tablename);
+                            exit('failed to execute "'.$SQLquery.'" on '.$dbname.'.'.$tablename);
                         }
 
                         $tablestructure  = 'CREATE TABLE '.($CreateIfNotExists ? 'IF NOT EXISTS ' : '').($dbNameInCreate ? BACKTICKCHAR.$dbname.BACKTICKCHAR.'.' : '').BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR.' ('.LINE_TERMINATOR;

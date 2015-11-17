@@ -146,7 +146,7 @@ try
 }
 catch(AdmException $e)
 {
-    die('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()));
+    exit('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()));
 }
 
 if($gDbType === 'mysql')
