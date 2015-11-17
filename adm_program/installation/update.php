@@ -171,7 +171,7 @@ if($installedDbBetaVersion > 0)
     $installedDbVersion = $installedDbVersion . ' Beta ' . $installedDbBetaVersion;
 }
 
-// if databse version is not set then show notice
+// if database version is not set then show notice
 if($installedDbVersion === '')
 {
     $message = '
@@ -187,7 +187,7 @@ if($installedDbVersion === '')
 if($getMode == 1)
 {
     // if database version is smaller then source version -> update
-    // if database version is equal to source but beta has a differnce -> update
+    // if database version is equal to source but beta has a difference -> update
     if(version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT) === -1
     ||(version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT) === 0 && $maxUpdateStep > $currentUpdateStep))
     {
@@ -355,7 +355,7 @@ elseif($getMode == 2)
             if($mainVersion < 3)
             {
                 // until version 3 Admidio had sql and php files where the update statements where stored
-                // these files must be excecuted
+                // these files must be executed
 
                 // in der Schleife wird geschaut ob es Scripte fuer eine Microversion (3.Versionsstelle) gibt
                 // Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
@@ -446,7 +446,7 @@ elseif($getMode == 2)
 
     if($gDbType === 'mysql')
     {
-        // activate foreign key checks, so database is consistant
+        // activate foreign key checks, so database is consistent
         $sql = 'SET foreign_key_checks = 1 ';
         $gDb->query($sql);
     }

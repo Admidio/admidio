@@ -139,7 +139,7 @@ if(!$b_return)
 }
 echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';
 
- // connect to database
+// connect to database
 try
 {
     $db = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
@@ -240,7 +240,7 @@ $db->query($sql);
 
 if($gDbType === 'mysql')
 {
-    // activate foreign key checks, so database is consistant
+    // activate foreign key checks, so database is consistent
     $sql = 'SET foreign_key_checks = 1 ';
     $db->query($sql);
 }
