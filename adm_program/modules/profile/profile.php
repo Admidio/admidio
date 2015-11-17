@@ -572,7 +572,7 @@ if($gPreferences['profile_show_roles'] == 1)
                    AND '.$authorization_db_name.' = 1
                  ORDER BY cat_org_id, cat_sequence, rol_name';
         $result_role = $gDb->query($sql);
-        $berechtigungs_Herkunft[$authorization_db_name] = NULL;
+        $berechtigungs_Herkunft[$authorization_db_name] = null;
 
         while($row = $gDb->fetch_array($result_role))
         {

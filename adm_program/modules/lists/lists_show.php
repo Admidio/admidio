@@ -603,7 +603,7 @@ foreach($membersList as $member)
                 {
                     $content = '<img src="'.$g_root_path.'/adm_program/modules/profile/profile_photo_show.php?usr_id='.$member['usr_id'].'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
                 }
-                if ($getMode == 'csv' && $member[$sqlColumnNumber] != NULL)
+                if ($getMode === 'csv' && $member[$sqlColumnNumber] != null)
                 {
                     $content = $gL10n->get('LST_USER_PHOTO');
                 }
