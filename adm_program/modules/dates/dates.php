@@ -426,7 +426,7 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
             {
                 $numMembers = $row['dat_num_members'];
 
-                if($date->getValue('dat_max_members')!=0)
+                if($date->getValue('dat_max_members') != 0)
                 {
                     $maxMembers = $date->getValue('dat_max_members');
                 }

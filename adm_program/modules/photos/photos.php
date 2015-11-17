@@ -91,7 +91,7 @@ if($getPhotoId > 0 && $photoAlbum->getValue('pho_org_id') != $gCurrentOrganizati
 
 /*********************LOCKED************************************/
 //Falls gefordert und Foto-edit-rechte, aendern der Freigabe
-if($getLocked=='1' || $getLocked=='0')
+if($getLocked == '1' || $getLocked == '0')
 {
     // erst pruefen, ob der User Fotoberarbeitungsrechte hat
     if(!$gCurrentUser->editPhotoRight())
@@ -132,7 +132,7 @@ if($gCurrentUser->editPhotoRight())
 }
 
 // integrate bootstrap ekko lightbox addon
-if($gPreferences['photo_show_mode']==1)
+if($gPreferences['photo_show_mode'] == 1)
 {
     if($gDebug)
     {
@@ -191,7 +191,7 @@ if($gCurrentUser->editPhotoRight())
 }
 
 //show link to download photos if enabled
-if($gPreferences['photo_download_enabled']==1 && $photoAlbum->getValue('pho_quantity') > 0)
+if($gPreferences['photo_download_enabled'] == 1 && $photoAlbum->getValue('pho_quantity') > 0)
 {
         //show link to download photos
         $photosMenu->addItem('menu_item_download_photos', $g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId,
@@ -284,7 +284,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                     </a>';
                 }
 
-                if($gCurrentUser->editPhotoRight() || ($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled']==1)
+                if($gCurrentUser->editPhotoRight() || ($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled'] == 1)
                 {
                    $photoThumbnailTable .= '<div class="text-center" id="image_preferences_'.$actThumbnail.'">';
                 }
@@ -311,7 +311,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                         src="'. THEME_PATH. '/icons/ecard.png" alt="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" title="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" /></a>';
                 }
 
-                if($gPreferences['photo_download_enabled']==1)
+                if($gPreferences['photo_download_enabled'] == 1)
                 {
                     //show link to download photo
                     $photoThumbnailTable .= '
@@ -319,7 +319,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                                     src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'" title="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'"  /></a>';
                 }
 
-                if($gCurrentUser->editPhotoRight() || ($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled']==1)
+                if($gCurrentUser->editPhotoRight() || ($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled'] == 1)
                 {
                    $photoThumbnailTable .= '</div>';
                 }
@@ -521,13 +521,13 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
                                 data-pho-id="'.$childPhotoAlbum->getValue('pho_id').'" data-toggle="modal" data-target="#admidio_modal"><img
                                 src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" />'.$gL10n->get('PHO_UPLOAD_PHOTOS').'</button>');
 
-                            if($childPhotoAlbum->getValue('pho_locked')==1)
+                            if($childPhotoAlbum->getValue('pho_locked') == 1)
                             {
                                 $page->addHtml('
                                 <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;locked=0\'"><img
                                     src="'. THEME_PATH. '/icons/key.png"  alt="'.$gL10n->get('PHO_ALBUM_UNLOCK').'" />'.$gL10n->get('PHO_ALBUM_UNLOCK').'</button>');
                             }
-                            elseif($childPhotoAlbum->getValue('pho_locked')==0)
+                            elseif($childPhotoAlbum->getValue('pho_locked') == 0)
                             {
                                 $page->addHtml('
                                 <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;locked=1\'"><img
@@ -545,7 +545,7 @@ $page->addHtml('</div>');
 
 /****************************Leeres Album****************/
 //Falls das Album weder Fotos noch Unterordner enthaelt
-if(($photoAlbum->getValue('pho_quantity')=='0' || strlen($photoAlbum->getValue('pho_quantity')) === 0) && $albumsCount < 1)  // alle vorhandenen Albumen werden ignoriert
+if(($photoAlbum->getValue('pho_quantity') == '0' || strlen($photoAlbum->getValue('pho_quantity')) === 0) && $albumsCount < 1)  // alle vorhandenen Albumen werden ignoriert
 {
     $page->addHtml($gL10n->get('PHO_NO_ALBUM_CONTENT'));
 }

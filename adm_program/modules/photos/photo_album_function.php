@@ -160,7 +160,7 @@ if($getMode == 'new' || $getMode == 'change')
 
     /********************Aenderung des Ordners***********************************/
     // Wurde das Anfangsdatum bearbeitet, muss sich der Ordner aendern
-    elseif ($getMode=='change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
+    elseif ($getMode === 'change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
     {
         $newFolder = SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
 

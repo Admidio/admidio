@@ -60,7 +60,7 @@ $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 if ($gPreferences['enable_download_module'] == 1)
 {
     echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
-    if($plg_show_headline==1)
+    if($plg_show_headline == 1)
     {
         echo '<h3>'.$gL10n->get('PLG_DOWNLOADS_HEADLINE').'</h3>';
     }
@@ -107,7 +107,7 @@ if ($gPreferences['enable_download_module'] == 1)
             if($errorCode != 'DOW_FOLDER_NO_RIGHTS')
             {
                 //Ermittlung der Dateiendung
-                $fileExtension  = mb_strtolower(substr($plg_row->fil_name, strrpos($plg_row->fil_name, '.')+1), 'UTF-8');
+                $fileExtension = mb_strtolower(substr($plg_row->fil_name, strrpos($plg_row->fil_name, '.')+1), 'UTF-8');
 
                 //Auszugebendes Icon ermitteln
                 $iconFile = 'page_white_question.png';

@@ -82,7 +82,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
 
     while($row = $gDb->fetch_array($result_role))
     {
-        if($gCurrentUser->hasRightViewRole($row['mem_rol_id']) && $row['rol_visible']==1)
+        if($gCurrentUser->hasRightViewRole($row['mem_rol_id']) && $row['rol_visible'] == 1)
         {
             $formerMembership = false;
             $futureMembership = false;

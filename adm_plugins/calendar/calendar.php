@@ -236,7 +236,7 @@ if($plg_ter_aktiv == 1)
         // set custom name of plugin for calendar or use default Admidio name
         if($plg_kal_cat_show == 1)
         {
-            if(substr($row['cat_name'], 3, 1)=='_')
+            if(substr($row['cat_name'], 3, 1) == '_')
             {
                 $calendarName = $gL10n->get($row['cat_name']);
             }

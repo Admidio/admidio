@@ -91,7 +91,7 @@ $sql = $sql. " ORDER BY ses_usr_id ";
 $onlineUsersStatement = $gDb->query($sql);
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
-if($plg_show_headline==1)
+if($plg_show_headline == 1)
 {
     echo '<h3>'.$gL10n->get('PLG_ONLINE_HEADLINE').'</h3>';
 }

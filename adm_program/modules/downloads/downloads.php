@@ -195,7 +195,7 @@ if (isset($folderContent['files']))
         $timestamp = new DateTimeExtended($nextFile['fil_timestamp'], 'Y-m-d H:i:s');
 
         $fileDescription = '';
-        if($nextFile['fil_description']!='')
+        if($nextFile['fil_description'] != '')
         {
             $fileDescription = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/info.png" alt="'.$gL10n->get('SYS_FILE').'" title="'.$nextFile['fil_description'].'" />';
         }

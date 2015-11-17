@@ -284,7 +284,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
             $datum = $_POST['date_from']. ' - '.$_POST['date_to'];
         }
 
-        if($_POST['dat_all_day']!=0)
+        if($_POST['dat_all_day'] != 0)
         {
             $zeit = $gL10n->get('DAT_ALL_DAY');
         }

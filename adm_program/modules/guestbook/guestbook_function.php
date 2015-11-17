@@ -126,8 +126,8 @@ if ($getMode == 1 || $getMode == 3)
     {
         if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
         {
-            if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-            elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+            if($gPreferences['captcha_type'] == 'pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
+            elseif($gPreferences['captcha_type'] == 'calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
         }
     }
 
@@ -311,8 +311,8 @@ elseif($getMode == 4 || $getMode == 8)
     {
         if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
         {
-            if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-            elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+            if($gPreferences['captcha_type'] == 'pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
+            elseif($gPreferences['captcha_type'] == 'calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
         }
     }
 
