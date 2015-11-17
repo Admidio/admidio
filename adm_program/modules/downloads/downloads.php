@@ -134,7 +134,7 @@ if (isset($folderContent['folders']))
     {
         $nextFolder = $folderContent['folders'][$i];
         $folderDescription = '';
-        if($nextFolder['fol_description'] != '')
+        if($nextFolder['fol_description'] !== '')
         {
             $folderDescription = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/info.png" alt="'.$nextFolder['fol_description'].'" title="'.$nextFolder['fol_description'].'" />';
         }
@@ -208,7 +208,7 @@ if (isset($folderContent['files']))
             '<a href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">'. $nextFile['fil_name']. '</a>'.$fileDescription,
             $timestamp->format($gPreferences['system_date'].' '.$gPreferences['system_time']),
             $nextFile['fil_size']. ' kB&nbsp;',
-            ($nextFile['fil_counter'] != '') ? $nextFile['fil_counter'] : '0'
+            ($nextFile['fil_counter'] !== '') ? $nextFile['fil_counter'] : '0'
         );
 
         if ($gCurrentUser->editDownloadRight())

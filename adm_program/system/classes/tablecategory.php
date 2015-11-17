@@ -140,7 +140,7 @@ class TableCategory extends TableAccess
     {
         global $gL10n;
 
-        if($columnName == 'cat_name_intern')
+        if($columnName === 'cat_name_intern')
         {
             // internal name should be read with no conversion
             $value = parent::getValue($columnName, 'database');
@@ -150,7 +150,7 @@ class TableCategory extends TableAccess
             $value = parent::getValue($columnName, $format);
         }
 
-        if($columnName == 'cat_name' && $format != 'database')
+        if($columnName === 'cat_name' && $format !== 'database')
         {
             // if text is a translation-id then translate it
             if(strpos($value, '_') === 3)
@@ -179,7 +179,7 @@ class TableCategory extends TableAccess
         $row = $countCategoriesStatement->fetch();
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if(admStrToUpper($mode) == 'UP')
+        if(admStrToUpper($mode) === 'UP')
         {
             if($this->getValue('cat_org_id') == 0
             || $this->getValue('cat_sequence') > $row['count']+1)
@@ -195,7 +195,7 @@ class TableCategory extends TableAccess
             }
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif(admStrToUpper($mode) == 'DOWN')
+        elseif(admStrToUpper($mode) === 'DOWN')
         {
             if($this->getValue('cat_org_id') > 0
             || $this->getValue('cat_sequence') < $row['count'])
@@ -225,27 +225,27 @@ class TableCategory extends TableAccess
 
         if($returnValue)
         {
-            if($this->getValue('cat_type') == 'ROL')
+            if($this->getValue('cat_type') === 'ROL')
             {
                 $this->elementTable = TBL_ROLES;
                 $this->elementColumn = 'rol_cat_id';
             }
-            elseif($this->getValue('cat_type') == 'LNK')
+            elseif($this->getValue('cat_type') === 'LNK')
             {
                 $this->elementTable = TBL_LINKS;
                 $this->elementColumn = 'lnk_cat_id';
             }
-            elseif($this->getValue('cat_type') == 'USF')
+            elseif($this->getValue('cat_type') === 'USF')
             {
                 $this->elementTable = TBL_USER_FIELDS;
                 $this->elementColumn = 'usf_cat_id';
             }
-            elseif($this->getValue('cat_type') == 'DAT')
+            elseif($this->getValue('cat_type') === 'DAT')
             {
                 $this->elementTable = TBL_DATES;
                 $this->elementColumn = 'dat_cat_id';
             }
-            elseif($this->getValue('cat_type') == 'AWA')
+            elseif($this->getValue('cat_type') === 'AWA')
             {
                 $this->elementTable  = $g_tbl_praefix.'_user_awards';
                 $this->elementColumn = 'awa_cat_id';
@@ -269,22 +269,22 @@ class TableCategory extends TableAccess
 
         if($returnValue)
         {
-            if($this->getValue('cat_type') == 'ROL')
+            if($this->getValue('cat_type') === 'ROL')
             {
                 $this->elementTable = TBL_ROLES;
                 $this->elementColumn = 'rol_cat_id';
             }
-            elseif($this->getValue('cat_type') == 'LNK')
+            elseif($this->getValue('cat_type') === 'LNK')
             {
                 $this->elementTable = TBL_LINKS;
                 $this->elementColumn = 'lnk_cat_id';
             }
-            elseif($this->getValue('cat_type') == 'USF')
+            elseif($this->getValue('cat_type') === 'USF')
             {
                 $this->elementTable = TBL_USER_FIELDS;
                 $this->elementColumn = 'usf_cat_id';
             }
-            elseif($this->getValue('cat_type') == 'DAT')
+            elseif($this->getValue('cat_type') === 'DAT')
             {
                 $this->elementTable = TBL_DATES;
                 $this->elementColumn = 'dat_cat_id';
@@ -347,7 +347,7 @@ class TableCategory extends TableAccess
         parent::save($updateFingerPrint);
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
-        if($fields_changed && $this->getValue('cat_type') == 'USF' && is_object($gCurrentSession))
+        if($fields_changed && $this->getValue('cat_type') === 'USF' && is_object($gCurrentSession))
         {
             // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->renewUserObject();
@@ -368,11 +368,11 @@ class TableCategory extends TableAccess
         global $gCurrentOrganization;
 
         // Systemkategorien duerfen nicht umbenannt werden
-        if($columnName == 'cat_name' && $this->getValue('cat_system') == 1)
+        if($columnName === 'cat_name' && $this->getValue('cat_system') == 1)
         {
             return false;
         }
-        elseif($columnName == 'cat_default' && $newValue == '1')
+        elseif($columnName === 'cat_default' && $newValue == '1')
         {
             // es darf immer nur eine Default-Kategorie je Bereich geben
             $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_default = 0

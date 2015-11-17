@@ -97,14 +97,14 @@ if ($gPreferences['enable_download_module'] == 1)
             {
                 $errorCode = $e->getMessage();
 
-                if($errorCode != 'DOW_FOLDER_NO_RIGHTS')
+                if($errorCode !== 'DOW_FOLDER_NO_RIGHTS')
                 {
                     $e->showText();
                 }
             }
 
             // only show download if user has rights to view folder
-            if($errorCode != 'DOW_FOLDER_NO_RIGHTS')
+            if($errorCode !== 'DOW_FOLDER_NO_RIGHTS')
             {
                 //Ermittlung der Dateiendung
                 $fileExtension = mb_strtolower(substr($plg_row->fil_name, strrpos($plg_row->fil_name, '.')+1), 'UTF-8');

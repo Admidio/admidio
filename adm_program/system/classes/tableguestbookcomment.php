@@ -40,13 +40,13 @@ class TableGuestbookComment extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        if($columnName == 'gbc_text')
+        if($columnName === 'gbc_text')
         {
             if(isset($this->dbColumns['gbc_text']) == false)
             {
                 $value = '';
             }
-            elseif($format == 'database')
+            elseif($format === 'database')
             {
                 $value = html_entity_decode(strStripTags($this->dbColumns['gbc_text']));
             }
@@ -102,7 +102,7 @@ class TableGuestbookComment extends TableAccess
     {
         if($newValue !== '')
         {
-            if($columnName == 'gbc_email')
+            if($columnName === 'gbc_email')
             {
                 $newValue = admStrToLower($newValue);
                 if (!strValidCharacters($newValue, 'email'))
@@ -113,7 +113,7 @@ class TableGuestbookComment extends TableAccess
             }
         }
 
-        if($columnName == 'gbc_text')
+        if($columnName === 'gbc_text')
         {
             return parent::setValue($columnName, $newValue, false);
         }

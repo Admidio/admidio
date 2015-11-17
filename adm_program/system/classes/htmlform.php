@@ -776,7 +776,7 @@ class HtmlForm extends HtmlFormBasic
             $datepickerOptions          = '';
 
             // if you have a birthday field than start with the years selection
-            if($optionsAll['type'] == 'birthday')
+            if($optionsAll['type'] === 'birthday')
             {
                 $attributes['data-provide'] = 'datepicker-birthday';
                 $datepickerOptions = ' startView: 2, ';
@@ -787,7 +787,7 @@ class HtmlForm extends HtmlFormBasic
                 $datepickerOptions = ' todayBtn: "linked", ';
             }
 
-            if($this->datepickerInitialized === false || $optionsAll['type'] == 'birthday')
+            if($this->datepickerInitialized === false || $optionsAll['type'] === 'birthday')
             {
                 $javascriptCode = '
                     $("input[data-provide=\''.$attributes['data-provide'].'\']").datepicker({

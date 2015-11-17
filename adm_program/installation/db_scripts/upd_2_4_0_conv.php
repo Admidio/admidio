@@ -11,7 +11,7 @@
 require_once(SERVER_PATH. '/adm_program/system/classes/tableusers.php');
 
 // drop foreign keys to delete index
-if($gDbType == 'mysql')
+if($gDbType === 'mysql')
 {
     $sql = 'ALTER TABLE '.TBL_USERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_USR_ORG_REG';
     $gDb->query($sql, false);

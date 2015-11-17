@@ -149,11 +149,11 @@ elseif ($getMode == 3)
     }
     catch(AdmException $e)
     {
-        if($e->getMessage() == 'SYS_FILENAME_EMPTY')
+        if($e->getMessage() === 'SYS_FILENAME_EMPTY')
         {
             $e->setNewMessage('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME'));
         }
-        if($e->getMessage() == 'BAC_FILE_NAME_INVALID')
+        if($e->getMessage() === 'BAC_FILE_NAME_INVALID')
         {
             $e->setNewMessage('DOW_FOLDER_NAME_INVALID');
         }
@@ -260,11 +260,11 @@ elseif ($getMode == 4)
     // exception handling; replace some exception strings with better descriptions
     catch(AdmException $e)
     {
-        if($e->getMessage() == 'SYS_FILENAME_EMPTY')
+        if($e->getMessage() === 'SYS_FILENAME_EMPTY')
         {
             $e->setNewMessage('SYS_FIELD_EMPTY', $gL10n->get('DOW_NEW_NAME'));
         }
-        if($e->getMessage() == 'BAC_FILE_NAME_INVALID' && $getFolderId > 0)
+        if($e->getMessage() === 'BAC_FILE_NAME_INVALID' && $getFolderId > 0)
         {
             $e->setNewMessage('DOW_FOLDER_NAME_INVALID');
         }

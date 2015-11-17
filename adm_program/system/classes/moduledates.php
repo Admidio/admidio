@@ -539,7 +539,7 @@ class ModuleDates extends Modules
                                          AND mem2.mem_begin  <= dat_begin
                                          AND mem2.mem_end    >= dat_end) ) ';
             }
-            elseif($this->getParameter('show') == 'maybe_participate')
+            elseif($this->getParameter('show') === 'maybe_participate')
             {
                 $sqlConditions .= '
                 AND dat_rol_id IS NOT NULL
@@ -550,7 +550,7 @@ class ModuleDates extends Modules
                                          AND mem2.mem_begin  <= dat_begin
                                          AND mem2.mem_end    >= dat_end) ) ';
             }
-            elseif($this->getParameter('show') == 'only_participate')
+            elseif($this->getParameter('show') === 'only_participate')
             {
                 $sqlConditions .= '
                 AND dat_rol_id IS NOT NULL

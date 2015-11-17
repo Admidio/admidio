@@ -174,8 +174,8 @@ if($getViewMode === 'html' || $getViewMode === 'compact')
         function Datefilter() {
             var field_error = "'.$gL10n->get('ECA_FIELD_ERROR').'";
 
-            if (document.Formular.date_from.value == ""
-            ||  document.Formular.date_to.value   == "") {
+            if (document.Formular.date_from.value === ""
+            ||  document.Formular.date_to.value   === "") {
                 alert(field_error);
                 document.Formular.date_from.focus();
                 return false;

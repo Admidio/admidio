@@ -126,11 +126,11 @@ if ($getMode == 1 || $getMode == 3)
     {
         if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
         {
-            if($gPreferences['captcha_type'] == 'pic')
+            if($gPreferences['captcha_type'] === 'pic')
             {
                 $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
             }
-            elseif($gPreferences['captcha_type'] == 'calc')
+            elseif($gPreferences['captcha_type'] === 'calc')
             {
                 $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
             }
@@ -148,11 +148,11 @@ if ($getMode == 1 || $getMode == 3)
             if(!$guestbook->setValue($key, $value))
             {
                 // Daten wurden nicht uebernommen, Hinweis ausgeben
-                if($key == 'gbo_email')
+                if($key === 'gbo_email')
                 {
                     $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
                 }
-                elseif($key == 'gbo_homepage')
+                elseif($key === 'gbo_homepage')
                 {
                     $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE')));
                 }
@@ -317,11 +317,11 @@ elseif($getMode == 4 || $getMode == 8)
     {
         if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
         {
-            if($gPreferences['captcha_type'] == 'pic')
+            if($gPreferences['captcha_type'] === 'pic')
             {
                 $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
             }
-            elseif($gPreferences['captcha_type'] == 'calc')
+            elseif($gPreferences['captcha_type'] === 'calc')
             {
                 $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
             }
@@ -339,7 +339,7 @@ elseif($getMode == 4 || $getMode == 8)
             if(!$guestbook_comment->setValue($key, $value))
             {
                 // Daten wurden nicht uebernommen, Hinweis ausgeben
-                if($key == 'gbc_email')
+                if($key === 'gbc_email')
                 {
                     $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
                 }

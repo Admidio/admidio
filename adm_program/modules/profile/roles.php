@@ -78,7 +78,7 @@ if($getInline == true)
                 url:     action,
                 data:    $(this).serialize(),
                 success: function(data) {
-                    if(data == "success") {
+                    if(data === "success") {
                         $("#roles_assignment_form .form-alert").attr("class", "alert alert-success form-alert");
                         $("#roles_assignment_form .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                         $("#roles_assignment_form .form-alert").fadeIn("slow");

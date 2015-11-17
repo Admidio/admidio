@@ -35,11 +35,11 @@ if(!$gCurrentUser->editPhotoRight())
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
 }
 
-if($getMode == 'new')
+if($getMode === 'new')
 {
     $headline = $gL10n->get('PHO_CREATE_ALBUM');
 }
-elseif($getMode == 'change')
+elseif($getMode === 'change')
 {
     $headline = $gL10n->get('PHO_EDIT_ALBUM');
 }
@@ -50,7 +50,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $photoAlbum = new TablePhotos($gDb);
 
 // nur Daten holen, wenn Album editiert werden soll
-if ($getMode == 'change')
+if ($getMode === 'change')
 {
     $photoAlbum->readDataById($getPhotoId);
 
@@ -115,7 +115,7 @@ $page = new HtmlPage($headline);
 $photoAlbumMenu = $page->getMenu();
 $photoAlbumMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
-if($getMode == 'new')
+if($getMode === 'new')
 {
     $parentAlbumId = $getPhotoId;
 }

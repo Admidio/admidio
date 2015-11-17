@@ -428,7 +428,7 @@ class TableFolder extends TableAccess
                 $fileHandle    = opendir($this->getCompletePathOfFolder());
                 if($fileHandle) {
                     while($file = readdir($fileHandle)) {
-                        if ($file == '.' || $file == '..' || substr($file, 0, 1) == '.')
+                        if ($file === '.' || $file === '..' || substr($file, 0, 1) === '.')
                         {
                             continue;
                         }
@@ -635,7 +635,7 @@ class TableFolder extends TableAccess
     {
         $value = parent::getValue($columnName, $format);
 
-        if($columnName == 'fol_name')
+        if($columnName === 'fol_name')
         {
             // Konvertiert HTML-Auszeichnungen zurück in Buchstaben
             $value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');

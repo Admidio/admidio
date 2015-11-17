@@ -27,7 +27,7 @@ if($gCurrentUser->isWebmaster() == false)
 }
 
 // module not available for other databases except MySQL
-if($gDbType != 'mysql')
+if($gDbType !== 'mysql')
 {
     $gMessage->show($gL10n->get('BAC_ONLY_MYSQL'));
 }
@@ -60,7 +60,7 @@ $SuppressHTMLoutput = (@$_REQUEST['nohtml'] ? true : false); // disable all outp
 $Disable_mysqldump  = false; // LEAVE THIS AS "false"! If true, avoid use of "mysqldump" program to export databases which is *MUCH* *MUCH* faster than doing it row-by-row in PHP. If mysqldump is not available, will automatically fall back to slower row-by-row method. Highly recommended to leave this at "false" (i.e. do use mysqldump)
 $backuptimestamp    = '.'.date('Y-m-d.His'); // timestamp
 $backupabsolutepath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
-$fileextension = ((OUTPUT_COMPRESSION_TYPE == 'bzip2') ? '.bz2' : ((OUTPUT_COMPRESSION_TYPE == 'gzip') ? '.gz' : ''));
+$fileextension = ((OUTPUT_COMPRESSION_TYPE === 'bzip2') ? '.bz2' : ((OUTPUT_COMPRESSION_TYPE === 'gzip') ? '.gz' : ''));
 $fullbackupfilename = 'db_backup'.$backuptimestamp.'.sql'.$fileextension;
 $partbackupfilename = 'db_backup_partial'.$backuptimestamp.'.sql'.$fileextension;
 $strubackupfilename = 'db_backup_structure'.$backuptimestamp.'.sql'.$fileextension;
@@ -105,18 +105,18 @@ $starttime = getmicrotime();
                 exit('ERROR: OUTPUT_COMPRESSION_TYPE ('.htmlentities(OUTPUT_COMPRESSION_TYPE).') must be one of "bzip2", "gzip", "none"');
                 break;
         }
-        if (((OUTPUT_COMPRESSION_TYPE == 'gzip')  && ($zp = @gzopen($backupabsolutepath.$tempbackupfilename, 'wb'.OUTPUT_COMPRESSION_LEVEL))) ||
-            ((OUTPUT_COMPRESSION_TYPE == 'bzip2') && ($bp = @bzopen($backupabsolutepath.$tempbackupfilename, 'w'))) ||
-            ((OUTPUT_COMPRESSION_TYPE == 'none')  && ($fp = @fopen($backupabsolutepath.$tempbackupfilename, 'wb')))) {
+        if (((OUTPUT_COMPRESSION_TYPE === 'gzip')  && ($zp = @gzopen($backupabsolutepath.$tempbackupfilename, 'wb'.OUTPUT_COMPRESSION_LEVEL))) ||
+            ((OUTPUT_COMPRESSION_TYPE === 'bzip2') && ($bp = @bzopen($backupabsolutepath.$tempbackupfilename, 'w'))) ||
+            ((OUTPUT_COMPRESSION_TYPE === 'none')  && ($fp = @fopen($backupabsolutepath.$tempbackupfilename, 'wb')))) {
 
             $fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION_TEXT.' (http://www.admidio.org)'.LINE_TERMINATOR;
             $fileheaderline .= '-- '.$gL10n->get('BAC_BACKUP_FROM', date('d.m.Y'), date('G:i:s')).LINE_TERMINATOR.LINE_TERMINATOR;
             $fileheaderline .= '-- '.$gL10n->get('SYS_DATABASE').': '.$g_adm_db.LINE_TERMINATOR.LINE_TERMINATOR;
             $fileheaderline .= '-- '.$gL10n->get('SYS_USER').': '.$gCurrentUser->getValue('FIRST_NAME', 'database'). ' '. $gCurrentUser->getValue('LAST_NAME', 'database').LINE_TERMINATOR.LINE_TERMINATOR;
             $fileheaderline .= 'SET FOREIGN_KEY_CHECKS=0;'.LINE_TERMINATOR.LINE_TERMINATOR;
-            if (OUTPUT_COMPRESSION_TYPE == 'bzip2') {
+            if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
                 bzwrite($bp, $fileheaderline, strlen($fileheaderline));
-            } elseif (OUTPUT_COMPRESSION_TYPE == 'gzip') {
+            } elseif (OUTPUT_COMPRESSION_TYPE === 'gzip') {
                 gzwrite($zp, $fileheaderline, strlen($fileheaderline));
             } else {
                 fwrite($fp, $fileheaderline, strlen($fileheaderline));
@@ -205,7 +205,7 @@ $starttime = getmicrotime();
                             if (isset($row['Default']) && !is_null($row['Default'])) {
                                 if (preg_match('#^(tiny|medium|long)?(text|blob)#i', $row['Type'])) {
                                     // no default values
-                                } elseif ((strtolower($row['Type']) == 'timestamp') && (strtoupper($row['Default']) == 'CURRENT_TIMESTAMP')) {
+                                } elseif ((strtolower($row['Type']) === 'timestamp') && (strtoupper($row['Default']) === 'CURRENT_TIMESTAMP')) {
                                     $structureline .= ' DEFAULT '.$row['Default'];
                                 } else {
                                     $structureline .= ' DEFAULT \''.$row['Default'].'\'';
@@ -230,15 +230,15 @@ $starttime = getmicrotime();
                         }
                         foreach ($INDICES as $index_name => $columndata) {
                             $structureline  = '';
-                            if ($index_name == 'PRIMARY') {
+                            if ($index_name === 'PRIMARY') {
                                 $structureline .= 'PRIMARY ';
-                            } elseif ((@$columndata[1]['Index_type'] == 'FULLTEXT') || ($columndata[1]['Comment'] == 'FULLTEXT')) {
+                            } elseif ((@$columndata[1]['Index_type'] === 'FULLTEXT') || ($columndata[1]['Comment'] === 'FULLTEXT')) {
                                 $structureline .= 'FULLTEXT ';
                             } elseif (!$columndata[1]['Non_unique']) {
                                 $structureline .= 'UNIQUE ';
                             }
                             $structureline .= 'KEY';
-                            if ($index_name != 'PRIMARY') {
+                            if ($index_name !== 'PRIMARY') {
                                 $structureline .= ' '.BACKTICKCHAR.$index_name.BACKTICKCHAR;
                             }
                             $structureline .= ' (';
@@ -279,9 +279,9 @@ $starttime = getmicrotime();
 
                 } // end table structure backup
             }
-            if (OUTPUT_COMPRESSION_TYPE == 'bzip2') {
+            if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
                 bzwrite($bp, $alltablesstructure.LINE_TERMINATOR, strlen($alltablesstructure) + strlen(LINE_TERMINATOR));
-            } elseif (OUTPUT_COMPRESSION_TYPE == 'gzip') {
+            } elseif (OUTPUT_COMPRESSION_TYPE === 'gzip') {
                 gzwrite($zp, $alltablesstructure.LINE_TERMINATOR, strlen($alltablesstructure) + strlen(LINE_TERMINATOR));
             } else {
                 fwrite($fp, $alltablesstructure.LINE_TERMINATOR, strlen($alltablesstructure) + strlen(LINE_TERMINATOR));
@@ -290,7 +290,7 @@ $starttime = getmicrotime();
             $datastarttime = getmicrotime();
             OutputInformation('statusinfo', '');
 
-            if ($_REQUEST['StartBackup'] != 'structure') {
+            if ($_REQUEST['StartBackup'] !== 'structure') {
                 $processedrows    = 0;
                 foreach ($SelectedTables as $dbname => $value) {
                     @set_time_limit(60);
@@ -301,9 +301,9 @@ $starttime = getmicrotime();
                         $rows[$t] = $gDb->num_rows($result);
                         if ($rows[$t] > 0) {
                             $tabledatadumpline = '# dumping data for '.$dbname.'.'.$SelectedTables[$dbname][$t].LINE_TERMINATOR;
-                            if (OUTPUT_COMPRESSION_TYPE == 'bzip2') {
+                            if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
                                 bzwrite($bp, $tabledatadumpline, strlen($tabledatadumpline));
-                            } elseif (OUTPUT_COMPRESSION_TYPE == 'gzip') {
+                            } elseif (OUTPUT_COMPRESSION_TYPE === 'gzip') {
                                 gzwrite($zp, $tabledatadumpline, strlen($tabledatadumpline));
                             } else {
                                 fwrite($fp, $tabledatadumpline, strlen($tabledatadumpline));
@@ -312,7 +312,7 @@ $starttime = getmicrotime();
                         unset($fieldnames);
                         $fieldnames = $gDb->showColumns($gDb->escapeString($SelectedTables[$dbname][$t]), false);
 
-                        if ($_REQUEST['StartBackup'] == 'complete') {
+                        if ($_REQUEST['StartBackup'] === 'complete') {
                             $insertstatement = ($ReplaceInto ? 'REPLACE' : 'INSERT').' INTO '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR.' ('.BACKTICKCHAR.implode(BACKTICKCHAR.', '.BACKTICKCHAR, $fieldnames).BACKTICKCHAR.') VALUES (';
                         } else {
                             $insertstatement = ($ReplaceInto ? 'REPLACE' : 'INSERT').' INTO '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR.' VALUES (';
@@ -383,9 +383,9 @@ $starttime = getmicrotime();
                             $thistableinserts .= $insertstatement.implode(', ', $valuevalues).');'.LINE_TERMINATOR;
 
                             if (strlen($thistableinserts) >= BUFFER_SIZE) {
-                                if (OUTPUT_COMPRESSION_TYPE == 'bzip2') {
+                                if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
                                     bzwrite($bp, $thistableinserts, strlen($thistableinserts));
-                                } elseif (OUTPUT_COMPRESSION_TYPE == 'gzip') {
+                                } elseif (OUTPUT_COMPRESSION_TYPE === 'gzip') {
                                     gzwrite($zp, $thistableinserts, strlen($thistableinserts));
                                 } else {
                                     fwrite($fp, $thistableinserts, strlen($thistableinserts));
@@ -418,9 +418,9 @@ $starttime = getmicrotime();
                             OutputInformation('rows_'.$dbname.'_'.$SelectedTables[$dbname][$t], htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records, [100%])');
                             $processedrows += $rows[$t];
                         }
-                        if (OUTPUT_COMPRESSION_TYPE == 'bzip2') {
+                        if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
                             bzwrite($bp, $thistableinserts.LINE_TERMINATOR.LINE_TERMINATOR, strlen($thistableinserts) + strlen(LINE_TERMINATOR) + strlen(LINE_TERMINATOR));
-                        } elseif (OUTPUT_COMPRESSION_TYPE == 'gzip') {
+                        } elseif (OUTPUT_COMPRESSION_TYPE === 'gzip') {
                             gzwrite($zp, $thistableinserts.LINE_TERMINATOR.LINE_TERMINATOR, strlen($thistableinserts) + strlen(LINE_TERMINATOR) + strlen(LINE_TERMINATOR));
                         } else {
                             fwrite($fp, $thistableinserts.LINE_TERMINATOR.LINE_TERMINATOR, strlen($thistableinserts) + strlen(LINE_TERMINATOR) + strlen(LINE_TERMINATOR));
@@ -431,17 +431,17 @@ $starttime = getmicrotime();
 
             $activateForeignKeys = 'SET FOREIGN_KEY_CHECKS=1;'.LINE_TERMINATOR.LINE_TERMINATOR;
 
-            if (OUTPUT_COMPRESSION_TYPE == 'bzip2') {
+            if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
                 bzwrite($bp, $activateForeignKeys, strlen($activateForeignKeys));
-            } elseif (OUTPUT_COMPRESSION_TYPE == 'gzip') {
+            } elseif (OUTPUT_COMPRESSION_TYPE === 'gzip') {
                 gzwrite($zp, $activateForeignKeys, strlen($activateForeignKeys));
             } else {
                 fwrite($fp, $activateForeignKeys, strlen($activateForeignKeys));
             }
 
-            if (OUTPUT_COMPRESSION_TYPE == 'bzip2') {
+            if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
                 bzclose($bp);
-            } elseif (OUTPUT_COMPRESSION_TYPE == 'gzip') {
+            } elseif (OUTPUT_COMPRESSION_TYPE === 'gzip') {
                 gzclose($zp);
             } else {
                 fclose($fp);

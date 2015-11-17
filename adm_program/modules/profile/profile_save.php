@@ -130,16 +130,16 @@ foreach($gProfileFields->mProfileFields as $field)
             // Pflichtfelder muessen gefuellt sein
             // E-Mail bei Registrierung immer !!!
             if(($field->getValue('usf_mandatory') == 1 && strlen($_POST[$post_id]) === 0)
-            || ($getNewUser == 2 && $field->getValue('usf_name_intern') == 'EMAIL' && strlen($_POST[$post_id]) === 0))
+            || ($getNewUser == 2 && $field->getValue('usf_name_intern') === 'EMAIL' && strlen($_POST[$post_id]) === 0))
             {
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
             }
 
             // if social network then extract username from url
-            if($field->getValue('usf_name_intern') == 'FACEBOOK'
-            || $field->getValue('usf_name_intern') == 'GOOGLE_PLUS'
-            || $field->getValue('usf_name_intern') == 'TWITTER'
-            || $field->getValue('usf_name_intern') == 'XING')
+            if($field->getValue('usf_name_intern') === 'FACEBOOK'
+            || $field->getValue('usf_name_intern') === 'GOOGLE_PLUS'
+            || $field->getValue('usf_name_intern') === 'TWITTER'
+            || $field->getValue('usf_name_intern') === 'XING')
             {
                 if(strValidCharacters($_POST[$post_id], 'url')
                 && strpos($_POST[$post_id], '/') !== false)
@@ -171,27 +171,27 @@ foreach($gProfileFields->mProfileFields as $field)
             // Ausgabe der Fehlermeldung je nach Datentyp
             if($returnCode == false)
             {
-                if($field->getValue('usf_type') == 'CHECKBOX')
+                if($field->getValue('usf_type') === 'CHECKBOX')
                 {
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
                 }
-                elseif($field->getValue('usf_type') == 'DATE')
+                elseif($field->getValue('usf_type') === 'DATE')
                 {
                     $gMessage->show($gL10n->get('SYS_DATE_INVALID', $field->getValue('usf_name'), $gPreferences['system_date']));
                 }
-                elseif($field->getValue('usf_type') == 'EMAIL')
+                elseif($field->getValue('usf_type') === 'EMAIL')
                 {
                     $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
                 }
-                elseif($field->getValue('usf_type') == 'NUMBER' || $field->getValue('usf_type') == 'DECIMAL')
+                elseif($field->getValue('usf_type') === 'NUMBER' || $field->getValue('usf_type') === 'DECIMAL')
                 {
                     $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
                 }
-                elseif($field->getValue('usf_type') == 'PHONE')
+                elseif($field->getValue('usf_type') === 'PHONE')
                 {
                     $gMessage->show($gL10n->get('SYS_PHONE_INVALID_CHAR', $field->getValue('usf_name')));
                 }
-                elseif($field->getValue('usf_type') == 'URL')
+                elseif($field->getValue('usf_type') === 'URL')
                 {
                     $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $field->getValue('usf_name')));
                 }
@@ -200,7 +200,7 @@ foreach($gProfileFields->mProfileFields as $field)
         else
         {
             // Checkboxen uebergeben bei 0 keinen Wert, deshalb diesen hier setzen
-            if($field->getValue('usf_type') == 'CHECKBOX')
+            if($field->getValue('usf_type') === 'CHECKBOX')
             {
                 $user->setValue($field->getValue('usf_name_intern'), '0');
             }
@@ -254,11 +254,11 @@ if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1)
 {
     if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
     {
-        if($gPreferences['captcha_type'] == 'pic')
+        if($gPreferences['captcha_type'] === 'pic')
         {
             $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
         }
-        elseif($gPreferences['captcha_type'] == 'calc')
+        elseif($gPreferences['captcha_type'] === 'calc')
         {
             $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
         }

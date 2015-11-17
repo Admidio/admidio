@@ -59,7 +59,7 @@ if(isset($plg_show_icons) == false || is_numeric($plg_show_icons) == false)
     $plg_show_icons = 1;
 }
 
-if(isset($plg_link_target) && $plg_link_target != '_self')
+if(isset($plg_link_target) && $plg_link_target !== '_self')
 {
     $plg_link_target = ' target="'. strip_tags($plg_link_target). '" ';
 }

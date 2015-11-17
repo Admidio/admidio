@@ -23,7 +23,7 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
-if(isset($_GET['mode']) && $_GET['mode'] == 'assign')
+if(isset($_GET['mode']) && $_GET['mode'] === 'assign')
 {
     // ajax mode then only show text if error occurs
     $gMessage->showTextOnly(true);
@@ -66,7 +66,7 @@ if($getFilterRoleId > 0)
     }
 }
 
-if($getMode == 'assign')
+if($getMode === 'assign')
 {
     // change membership of that user
     // this must be called as ajax request
@@ -265,7 +265,7 @@ else
                 "member_"+userid+"="+member_checked+"&leader_"+userid+"="+leader_checked,
                 function(data){
                     // check if error occurs
-                    if(data != "success") {
+                    if(data !== "success") {
                         // reset checkbox status
                         if(checkbox.prop("checked") == true) {
                             checkbox.prop("checked", false);

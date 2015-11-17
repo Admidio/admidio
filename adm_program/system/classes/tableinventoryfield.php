@@ -87,13 +87,13 @@ class TableInventoryField extends TableAccess
     {
         global $gL10n;
 
-        if($columnName == 'inf_description')
+        if($columnName === 'inf_description')
         {
             if(isset($this->dbColumns['inf_description']) == false)
             {
                 $value = '';
             }
-            elseif($format == 'database')
+            elseif($format === 'database')
             {
                 $value = html_entity_decode(strStripTags($this->dbColumns['inf_description']), ENT_QUOTES, 'UTF-8');
             }
@@ -102,7 +102,7 @@ class TableInventoryField extends TableAccess
                 $value = $this->dbColumns['inf_description'];
             }
         }
-        elseif($columnName == 'inf_name_intern')
+        elseif($columnName === 'inf_name_intern')
         {
             // internal name should be read with no conversion
             $value = parent::getValue($columnName, 'database');
@@ -112,8 +112,8 @@ class TableInventoryField extends TableAccess
             $value = parent::getValue($columnName, $format);
         }
 
-        if(($columnName == 'inf_name' || $columnName == 'cat_name')
-        && $format != 'database')
+        if(($columnName === 'inf_name' || $columnName === 'cat_name')
+        && $format !== 'database')
         {
             // if text is a translation-id then translate it
             if(strpos($value, '_') === 3)
@@ -121,17 +121,17 @@ class TableInventoryField extends TableAccess
                 $value = $gL10n->get(admStrToUpper($value));
             }
         }
-        elseif($columnName == 'inf_value_list' && $format != 'database')
+        elseif($columnName === 'inf_value_list' && $format !== 'database')
         {
-            if($this->dbColumns['inf_type'] == 'DROPDOWN'
-            || $this->dbColumns['inf_type'] == 'RADIO_BUTTON')
+            if($this->dbColumns['inf_type'] === 'DROPDOWN'
+            || $this->dbColumns['inf_type'] === 'RADIO_BUTTON')
             {
                 $arrListValues = explode("\r\n", $value);
                 $arrListValuesWithKeys = array();     // array with list values and keys that represents the internal value
 
                 foreach($arrListValues as $key => &$listValue)
                 {
-                    if($this->dbColumns['inf_type'] == 'RADIO_BUTTON')
+                    if($this->dbColumns['inf_type'] === 'RADIO_BUTTON')
                     {
                         // if value is imagefile or imageurl then show image
                         if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
@@ -154,7 +154,7 @@ class TableInventoryField extends TableAccess
                                 $listValueText = $gL10n->get(admStrToUpper($listValueText));
                             }
 
-                            if($format == 'text')
+                            if($format === 'text')
                             {
                                 // if no image is wanted then return the text part or only the position of the entry
                                 if(strpos($listValue, '|') > 0)
@@ -209,7 +209,7 @@ class TableInventoryField extends TableAccess
     {
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if(admStrToUpper($mode) == 'UP')
+        if(admStrToUpper($mode) === 'UP')
         {
             $sql = 'UPDATE '. TBL_INVENT_FIELDS. ' SET inf_sequence = '.$this->getValue('inf_sequence').'
                      WHERE inf_cat_id   = '.$this->getValue('inf_cat_id').'
@@ -219,7 +219,7 @@ class TableInventoryField extends TableAccess
             $this->save();
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif(admStrToUpper($mode) == 'DOWN')
+        elseif(admStrToUpper($mode) === 'DOWN')
         {
             $sql = 'UPDATE '. TBL_INVENT_FIELDS. ' SET inf_sequence = '.$this->getValue('inf_sequence').'
                      WHERE inf_cat_id   = '.$this->getValue('inf_cat_id').'
@@ -260,12 +260,12 @@ class TableInventoryField extends TableAccess
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         // name, category and type couldn't be edited if it's a system field
-        if(($columnName == 'inf_name' || $columnName == 'inf_cat_id' || $columnName == 'inf_type')
+        if(($columnName === 'inf_name' || $columnName === 'inf_cat_id' || $columnName === 'inf_type')
         && $this->getValue('inf_system') == 1)
         {
             return false;
         }
-        elseif($columnName == 'inf_cat_id'
+        elseif($columnName === 'inf_cat_id'
         && $this->getValue($columnName) != $newValue)
         {
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
@@ -277,7 +277,7 @@ class TableInventoryField extends TableAccess
 
             $this->setValue('inf_sequence', $row['count'] + 1);
         }
-        elseif($columnName == 'inf_description')
+        elseif($columnName === 'inf_description')
         {
             return parent::setValue($columnName, $newValue, false);
         }

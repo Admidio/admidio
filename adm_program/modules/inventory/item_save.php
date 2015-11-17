@@ -85,23 +85,23 @@ foreach($gInventoryFields->mInventoryFields as $field)
             // Ausgabe der Fehlermeldung je nach Datentyp
             if($returnCode == false)
             {
-                if($field->getValue('inf_type') == 'CHECKBOX')
+                if($field->getValue('inf_type') === 'CHECKBOX')
                 {
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
                 }
-                elseif($field->getValue('inf_type') == 'DATE')
+                elseif($field->getValue('inf_type') === 'DATE')
                 {
                     $gMessage->show($gL10n->get('SYS_DATE_INVALID', $field->getValue('inf_name'), $gPreferences['system_date']));
                 }
-                elseif($field->getValue('inf_type') == 'EMAIL')
+                elseif($field->getValue('inf_type') === 'EMAIL')
                 {
                     $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $field->getValue('inf_name')));
                 }
-                elseif($field->getValue('inf_type') == 'NUMBER' || $field->getValue('inf_type') == 'DECIMAL')
+                elseif($field->getValue('inf_type') === 'NUMBER' || $field->getValue('inf_type') === 'DECIMAL')
                 {
                     $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('inf_name')));
                 }
-                elseif($field->getValue('inf_type') == 'URL')
+                elseif($field->getValue('inf_type') === 'URL')
                 {
                     $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $field->getValue('inf_name')));
                 }
@@ -110,7 +110,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
         else
         {
             // Checkboxen uebergeben bei 0 keinen Wert, deshalb diesen hier setzen
-            if($field->getValue('inf_type') == 'CHECKBOX')
+            if($field->getValue('inf_type') === 'CHECKBOX')
             {
                 $inventory->setValue($field->getValue('inf_name_intern'), '0');
             }

@@ -27,7 +27,7 @@ if(isset($_COOKIE[$gCookiePraefix.'_DATA']))
 }
 
 // if login organization is different to organization of config file then create new session variables
-if($g_organization != $gCurrentOrganization->getValue('org_shortname'))
+if($g_organization !== $gCurrentOrganization->getValue('org_shortname'))
 {
     // read organization of config file with their preferences
     $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));

@@ -98,7 +98,7 @@ switch($postFunction)
 
     case('send'):
         $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
-        if(($postMessage) != "\n")
+        if(($postMessage) !== "\n")
         {
             if(preg_match($reg_exUrl, $postMessage, $url))
             {

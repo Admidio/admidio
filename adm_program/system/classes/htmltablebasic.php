@@ -172,7 +172,7 @@ class HtmlTableBasic extends HtmlElement {
      */
     public function addColumn($data = '', $arrAttributes = null, $col = 'td')
     {
-        if($col == 'td' || $col == 'th')
+        if($col === 'td' || $col === 'th')
         {
             $this->addElement($col);
         }
@@ -214,7 +214,7 @@ class HtmlTableBasic extends HtmlElement {
             $this->closeParentElement('tr');
         }
 
-        if($this->lineChange == '' && empty($this->columnsWidth))
+        if($this->lineChange === '' && empty($this->columnsWidth))
         {
             $this->addParentElement('tr');
 
@@ -224,14 +224,14 @@ class HtmlTableBasic extends HtmlElement {
                 $this->setAttributesFromArray($arrAttributes);
             }
 
-            if($data != '')
+            if($data !== '')
             {
                 $this->addColumn($data, null, $col);
                 $this->closeParentElement('tr');
             }
 
         }
-        elseif($this->lineChange == '' && !empty($this->columnsWidth))
+        elseif($this->lineChange === '' && !empty($this->columnsWidth))
         {
             $this->addParentElement('tr');
 
@@ -241,7 +241,7 @@ class HtmlTableBasic extends HtmlElement {
                 $this->setAttributesFromArray($arrAttributes);
             }
 
-            if($data != '')
+            if($data !== '')
             {
                 if(is_array($data))
                 {
@@ -258,7 +258,7 @@ class HtmlTableBasic extends HtmlElement {
                 }
             }
         }
-        elseif($this->lineChange != '' && empty($this->columnsWidth))
+        elseif($this->lineChange !== '' && empty($this->columnsWidth))
         {
             $this->addParentElement('tr');
 
@@ -283,7 +283,7 @@ class HtmlTableBasic extends HtmlElement {
                 $this->addAttribute('class', $modulo, 'tr');
             }
 
-            if($data != '')
+            if($data !== '')
             {
                 if(is_array($data))
                 {
@@ -324,7 +324,7 @@ class HtmlTableBasic extends HtmlElement {
                 $this->addAttribute('class', $modulo, 'tr');
             }
 
-            if($data != '')
+            if($data !== '')
             {
                 if(is_array($data))
                 {
@@ -343,7 +343,7 @@ class HtmlTableBasic extends HtmlElement {
         }
 
         // only increase rowcount if this is a data row and not the header
-        if($col == 'td')
+        if($col === 'td')
         {
             ++$this->rowCount;
         }
@@ -376,12 +376,12 @@ class HtmlTableBasic extends HtmlElement {
 
         $this->addParentElement('tbody');
         $this->tbody = 1;
-        if($attribute != '' && $value != '')
+        if($attribute !== '' && $value !== '')
         {
             $this->addAttribute($attribute, $value);
         }
 
-        if($data != '')
+        if($data !== '')
         {
             $this->addRow($data, null, $col);
         }
@@ -409,12 +409,12 @@ class HtmlTableBasic extends HtmlElement {
             $this->addParentElement('tfoot');
             $this->tfoot = 1;
 
-            if($attribute != '' && $value != '')
+            if($attribute !== '' && $value !== '')
             {
                 $this->addAttribute($attribute, $value);
             }
 
-            if($data != '')
+            if($data !== '')
             {
                 $this->addRow($data, null, $col);
             }
@@ -440,12 +440,12 @@ class HtmlTableBasic extends HtmlElement {
             $this->addParentElement('thead');
             $this->thead = 1;
 
-            if($attribute != '' && $value != '')
+            if($attribute !== '' && $value !== '')
             {
                 $this->addAttribute($attribute, $value);
             }
 
-            if($data != '')
+            if($data !== '')
             {
                 $this->addRow($data, null, $col);
             }
@@ -502,7 +502,7 @@ class HtmlTableBasic extends HtmlElement {
         {
             foreach ($array as $column)
             {
-                if($column != '')
+                if($column !== '')
                 {
                     $this->columnsWidth[] =  $column;
                 }

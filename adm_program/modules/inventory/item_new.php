@@ -139,7 +139,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
         $form->addHtml('<a name="cat-'. $field->getValue('cat_id'). '"></a>');
         $form->openGroupBox('gb_category_name', $field->getValue('cat_name'));
 
-        if($field->getValue('cat_name_intern') == 'MASTER_DATA')
+        if($field->getValue('cat_name_intern') === 'MASTER_DATA')
         {
             if($getItemId > 0)
             {
@@ -184,18 +184,18 @@ foreach($gInventoryFields->mInventoryFields as $field)
 
         // code for different field types
 
-        if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'CHECKBOX')
+        if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'CHECKBOX')
         {
             $form->addCheckbox('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                 $inventory->getValue($field->getValue('inf_name_intern')), $fieldProperty, $helpId, null, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
         }
-        elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'DROPDOWN'
-            || $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name_intern') == 'ROOM_ID')
+        elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'DROPDOWN'
+            || $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name_intern') === 'ROOM_ID')
         {
             // set array with values and set default value
-            if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name_intern') == 'ROOM_ID')
+            if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name_intern') === 'ROOM_ID')
             {
-                if($gDbType == 'mysql')
+                if($gDbType === 'mysql')
                 {
                     $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') FROM '.TBL_ROOMS.' ORDER BY room_name';
                 }
@@ -220,7 +220,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
             }
 
         }
-        elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'RADIO_BUTTON')
+        elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'RADIO_BUTTON')
         {
             $arrListValues        = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_value_list');
             $showDummyRadioButton = false;
@@ -233,7 +233,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
             $form->addRadioButton('inf-'.$gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                 $arrListValues, $fieldProperty, $inventory->getValue($field->getValue('inf_name_intern'), 'database'), $showDummyRadioButton, $helpId, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
         }
-        elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'TEXT_BIG')
+        elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'TEXT_BIG')
         {
             $form->addMultilineTextInput('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                 $inventory->getValue($field->getValue('inf_name_intern')), 3, 4000, $fieldProperty, $helpId, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
@@ -242,28 +242,28 @@ foreach($gInventoryFields->mInventoryFields as $field)
         {
             $fieldType = 'text';
 
-            if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'DATE')
+            if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'DATE')
             {
                 $fieldType = 'date';
                 $maxlength = '10';
             }
-            elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'EMAIL')
+            elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'EMAIL')
             {
                 // email could not be longer than 254 characters
                 $fieldType = 'email';
                 $maxlength = '254';
             }
-            elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'URL')
+            elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'URL')
             {
                 // maximal browser compatible url length will be 2000 characters
                 $maxlength = '2000';
             }
-            elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'NUMBER')
+            elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'NUMBER')
             {
                 $fieldType = 'number';
                 $maxlength = array(0, 9999999999, 1);
             }
-            elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'cat_name_intern') == 'SOCIAL_NETWORKS')
+            elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'cat_name_intern') === 'SOCIAL_NETWORKS')
             {
                 $maxlength = '255';
             }

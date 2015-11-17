@@ -66,7 +66,7 @@ if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0))
             if($link->setValue($key, $value) == false)
             {
                 // Daten wurden nicht uebernommen, Hinweis ausgeben
-                if($key == 'lnk_url')
+                if($key === 'lnk_url')
                 {
                     $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE')));
                 }

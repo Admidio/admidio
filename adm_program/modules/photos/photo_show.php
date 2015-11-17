@@ -128,7 +128,7 @@ else
 if($image != null)
 {
     // Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
-    if (($getMaxWidth > 200) && $gPreferences['photo_image_text'] != '')
+    if (($getMaxWidth > 200) && $gPreferences['photo_image_text'] !== '')
     {
         $font_c = imagecolorallocate($image->imageResource, 255, 255, 255);
         $font_ttf = THEME_SERVER_PATH.'/font.ttf';

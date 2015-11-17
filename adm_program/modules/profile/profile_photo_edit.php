@@ -25,7 +25,7 @@ $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('requireVa
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'choose', 'validValues' => array('choose', 'save', 'dont_save', 'upload', 'delete')));
 
 // in ajax mode only return simple text on error
-if($getMode == 'delete')
+if($getMode === 'delete')
 {
     $gMessage->showHtmlTextOnly(true);
 }
@@ -61,7 +61,7 @@ if($user->getValue('usr_id') == 0)
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-if($getMode == 'save')
+if($getMode === 'save')
 {
     /*****************************Foto speichern*************************************/
 
@@ -103,7 +103,7 @@ if($getMode == 'save')
     header('Location: '.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$getUserId);
     exit();
 }
-elseif($getMode == 'dont_save')
+elseif($getMode === 'dont_save')
 {
     /*****************************Foto nicht speichern*************************************/
     //Ordnerspeicherung
@@ -124,7 +124,7 @@ elseif($getMode == 'dont_save')
     $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$getUserId, 2000);
     $gMessage->show($gL10n->get('SYS_PROCESS_CANCELED'));
 }
-elseif($getMode == 'delete')
+elseif($getMode === 'delete')
 {
     /***************************** Foto loeschen *************************************/
     //Ordnerspeicherung, Datei löschen
@@ -146,7 +146,7 @@ elseif($getMode == 'delete')
 }
 
 /*****************************Foto hochladen*************************************/
-if($getMode == 'choose')
+if($getMode === 'choose')
 {
     // set headline
     if($getUserId == $gCurrentUser->getValue('usr_id'))
@@ -177,7 +177,7 @@ if($getMode == 'choose')
     $page->addHtml($form->show(false));
     $page->show();
 }
-elseif($getMode == 'upload')
+elseif($getMode === 'upload')
 {
     /*****************************Foto zwischenspeichern bestaetigen***********************************/
 
@@ -195,7 +195,7 @@ elseif($getMode == 'upload')
 
     //Dateiendung
     $image_properties = getimagesize($_FILES['userfile']['tmp_name'][0]);
-    if ($image_properties['mime'] != 'image/jpeg' && $image_properties['mime'] != 'image/png')
+    if ($image_properties['mime'] !== 'image/jpeg' && $image_properties['mime'] !== 'image/png')
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_FORMAT_INVALID'));
     }

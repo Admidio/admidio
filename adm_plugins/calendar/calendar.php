@@ -105,7 +105,7 @@ if(isset($plg_link_class_merge) == false || ($plg_link_class_merge) =='')
 // /////////////////////////////////////////////////////// //
 // Prüfen, ob die Rollenbedingung gesetzt wurde            //
 // /////////////////////////////////////////////////////// //
-if(isset($plg_rolle_sql) == 'all' || ($plg_rolle_sql) == '')
+if(isset($plg_rolle_sql) === 'all' || ($plg_rolle_sql) === '')
 {
     $rol_sql = 'is not null';
 }
@@ -236,7 +236,7 @@ if($plg_ter_aktiv == 1)
         // set custom name of plugin for calendar or use default Admidio name
         if($plg_kal_cat_show == 1)
         {
-            if(substr($row['cat_name'], 3, 1) == '_')
+            if(substr($row['cat_name'], 3, 1) === '_')
             {
                 $calendarName = $gL10n->get($row['cat_name']);
             }
@@ -367,7 +367,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
 <h3>'.$gL10n->get('DAT_CALENDAR').'</h3>
 
 <script type="text/javascript"><!--
-    if ( typeof gTranslations == "undefined")
+    if ( typeof gTranslations === "undefined")
     {
         var gTranslations = new Array("'.$gL10n->get('SYS_MON').'","'.$gL10n->get('SYS_TUE').'","'.$gL10n->get('SYS_WED').'","'.$gL10n->get('SYS_THU').'","'.$gL10n->get('SYS_FRI').'","'.$gL10n->get('SYS_SAT').'","'.$gL10n->get('SYS_SUN').'","'.$gL10n->get('SYS_TODAY').'","'.$gL10n->get('SYS_LOADING_CONTENT').'");
     }
@@ -458,7 +458,7 @@ while($currentDay <= $lastDayCurrentMonth)
             {
                 if($plg_ajaxbox == 1 || $countEvents == 0)
                 {
-                    if($eventArray['location'] != '')
+                    if($eventArray['location'] !== '')
                     {
                         $eventArray['location'] = ', '. $eventArray['location'];
                     }
@@ -624,7 +624,7 @@ while($currentDay <= $lastDayCurrentMonth)
         {
             if($plg_ajaxbox == 1)
             {
-                if($ter_link != '' && $geb_link != '')
+                if($ter_link !== '' && $geb_link !== '')
                 {
                     $geb_link = '&'. $geb_link;
                 }
