@@ -108,8 +108,9 @@ $page = new HtmlPage($getHeadline);
 
 if($getViewMode === 'html')
 {
-    $datatable = true;
-    $hoverRows = true;
+    $datatable  = true;
+    $hoverRows  = true;
+    $classTable = 'table';
 
     if($gPreferences['enable_rss'] == 1 && $gPreferences['enable_dates_module'] == 1)
     {
@@ -195,13 +196,15 @@ if($getViewMode === 'html')
 }
 elseif($getViewMode === 'print')
 {
-    $datatable = false;
-    $hoverRows = false;
+    $datatable  = false;
+    $hoverRows  = false;
+    $classTable = 'table table-condensed table-striped';
 
     // create html page object without the custom theme files
     $page->hideThemeHtml();
     $page->hideMenu();
     $page->setPrintMode();
+    $page->addHtml('<h3>'.$gL10n->get('DAT_PERIOD_FROM_TO', $dates->getParameter('dateStartFormatAdmidio'), $dates->getParameter('dateEndFormatAdmidio')).'</h3>');
 }
 
 if($datesTotalCount == 0)
@@ -221,7 +224,7 @@ else
     // Output table header for compact view
     if ($getView === 'compact' || $getView === 'room' || $getView === 'participants' || $getView === 'description')
     {
-        $compactTable = new HtmlTable('events_compact_table', $page, $hoverRows, $datatable);
+        $compactTable = new HtmlTable('events_compact_table', $page, $hoverRows, $datatable, $classTable);
 
         if($getView === 'compact')
         {
