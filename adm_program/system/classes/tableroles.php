@@ -218,14 +218,26 @@ class TableRoles extends TableAccess
         {
             $this->db->startTransaction();
 
-            $sql    = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES. '
-                        WHERE rld_rol_id_parent = '. $this->getValue('rol_id'). '
-                           OR rld_rol_id_child  = '. $this->getValue('rol_id');
+            $sql = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES. '
+                     WHERE rld_rol_id_parent = '. $this->getValue('rol_id'). '
+                        OR rld_rol_id_child  = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
-            $sql    = 'DELETE FROM '. TBL_MEMBERS. '
-                        WHERE mem_rol_id = '. $this->getValue('rol_id');
+            $sql = 'DELETE FROM '. TBL_MEMBERS. '
+                     WHERE mem_rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
+
+            $sql = 'UPDATE '.TBL_DATES.' SET dat_rol_id = NULL
+                     WHERE dat_rol_id = '.$this->getValue('rol_id');
+            $this->db->query($sql);
+
+            $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
+                     WHERE dtr_rol_id = '.$this->getValue('rol_id');
+            $result = $this->db->query($sql);
+
+            $sql = 'DELETE FROM '.TBL_FOLDER_ROLES.'
+                     WHERE flr_rol_id = '.$this->getValue('rol_id');
+            $result = $this->db->query($sql);
 
             $return = parent::delete();
 
