@@ -164,7 +164,7 @@ if($getViewMode === 'html')
         {
             $DatesMenu->addItem('admMenuItemICal',
                                 $g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId,
-                                $gL10n->get('SYS_EXPORT_ICAL'), 'database_out.png', 'right', 'menu_item_extras');
+                                $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png', 'right', 'menu_item_extras');
         }
 
         if($gCurrentUser->isWebmaster())
