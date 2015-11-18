@@ -195,7 +195,8 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                         $form->addInput('membership_end_date_'.$member->getValue('mem_id'), $gL10n->get('SYS_END'), $member->getValue('mem_end', $gPreferences['system_date']), array('type' => 'date', 'maxLength' => 10));
                         $form->addButton('btn_send_'.$member->getValue('mem_id'), $gL10n->get('SYS_OK'), array('class' => 'button-membership-period-form', 'data-admidio' => $member->getValue('mem_id')));
                         $roleMemHTML .= $form->show(false);
-                    $roleMemHTML .= '</div></li>
+                        $roleMemHTML .= '<div class="form-alert" style="display: none">&nbsp;</div>
+                    </div></li>
                     <li class="list-group-item" id="member_info_'.$member->getValue('mem_id').'_Content" style="display: none;">';
                         // show informations about user who creates the recordset and changed it
                         $roleMemHTML .= admFuncShowCreateChangeInfoById($member->getValue('mem_usr_id_create'), $member->getValue('mem_timestamp_create'), $member->getValue('mem_usr_id_change'), $member->getValue('mem_timestamp_change')).'

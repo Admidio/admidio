@@ -134,8 +134,8 @@ elseif($getMode == 6)
 elseif($getMode == 7)
 {
     // save membership date changes
-    $getMembershipStart = admFuncVariableIsValid($_GET, 'membership_start_date_'.$getMemberId, 'date', array('requireValue' => true));
-    $getMembershipEnd   = admFuncVariableIsValid($_GET, 'membership_end_date_'.$getMemberId, 'date', array('requireValue' => true));
+    $getMembershipStart = admFuncVariableIsValid($_GET, 'membership_start_date_'.$getMemberId, 'string', array('requireValue' => true));
+    $getMembershipEnd   = admFuncVariableIsValid($_GET, 'membership_end_date_'.$getMemberId, 'string', array('requireValue' => true));
 
     $member = new TableMembers($gDb, $getMemberId);
     $role   = new TableRoles($gDb, $member->getValue('mem_rol_id'));
@@ -143,42 +143,43 @@ elseif($getMode == 7)
     // check if user has the right to edit this membership
     if($role->allowedToAssignMembers($gCurrentUser) == false)
     {
-        die($gL10n->get('SYS_NO_RIGHTS'));
+        exit($gL10n->get('SYS_NO_RIGHTS'));
     }
 
     $formatedStartDate = '';
     $formatedEndDate   = '';
 
     //Check das Beginn Datum
-    $startDate = new DateTimeExtended($getMembershipStart, $gPreferences['system_date'], 'date');
-    if($startDate->valid())
+    error_log($getMembershipStart.'::'.$getMembershipEnd);
+    $startDate = DateTime::createFromFormat($gPreferences['system_date'], $getMembershipStart);
+    if(!$startDate)
     {
-        // Datum formatiert zurueckschreiben
-        $formatedStartDate = $startDate->format('Y-m-d');
+        exit($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
     }
     else
     {
-        die($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
+        // Datum formatiert zurueckschreiben
+        $formatedStartDate = $startDate->format('Y-m-d');
     }
 
     //Falls gesetzt wird das Enddatum gecheckt
     if(strlen($getMembershipEnd) > 0)
     {
-        $endDate = new DateTimeExtended($getMembershipEnd, $gPreferences['system_date'], 'date');
-        if($endDate->valid())
+        $endDate = DateTime::createFromFormat($gPreferences['system_date'], $getMembershipEnd);
+        if(!$endDate)
+        {
+            exit($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
+        }
+        else
         {
             // Datum formatiert zurueckschreiben
             $formatedEndDate = $endDate->format('Y-m-d');
         }
-        else
-        {
-            die($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
-        }
 
-        // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
-        if ($startDate->getTimestamp() > $endDate->getTimestamp())
+        // end date must be greater than start date
+        if ($startDate > $endDate)
         {
-            die($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+            exit($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
         }
     }
     else

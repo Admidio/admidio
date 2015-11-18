@@ -198,11 +198,10 @@ $page->addJavascript('
                 url:     action,
                 success: function(data) {
                     if(data == "success") {
-                        $("#membership_period_form_"+memberId+" .form-alert").attr("class", "alert alert-success form-alert");
-                        $("#membership_period_form_"+memberId+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
-                        $("#membership_period_form_"+memberId+" .form-alert").fadeIn("slow");
-                        $("#membership_period_form_"+memberId+" .form-alert").animate({opacity: 1.0}, 2500);
-                        $("#membership_period_form_"+memberId+" .form-alert").fadeOut("slow");
+                        $("#membership_period_"+memberId+" .form-alert").attr("class", "alert alert-success form-alert");
+                        $("#membership_period_"+memberId+" .form-alert").css("display", "inline-block");
+                        $("#membership_period_"+memberId+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                        $("#membership_period_"+memberId+" .form-alert").fadeIn("slow");
                         $("#membership_period_"+memberId).animate({opacity: 1.0}, 2500);
                         $("#membership_period_"+memberId).fadeOut("slow");
                         profileJS.reloadRoleMemberships();
@@ -210,9 +209,10 @@ $page->addJavascript('
                         profileJS.reloadFutureRoleMemberships();
                     }
                     else {
-                        $("#membership_period_form_"+memberId+" .form-alert").attr("class", "alert alert-danger form-alert");
-                        $("#membership_period_form_"+memberId+" .form-alert").fadeIn();
-                        $("#membership_period_form_"+memberId+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
+                        $("#membership_period_"+memberId+" .form-alert").attr("class", "alert alert-danger form-alert");
+                        $("#membership_period_"+memberId+" .form-alert").fadeIn();
+                        $("#membership_period_"+memberId+" .form-alert").css("display", "inline-block");
+                        $("#membership_period_"+memberId+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                     }
                 }
             });
