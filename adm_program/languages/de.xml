@@ -21,6 +21,8 @@
         <text id="ORG_BROWSER_UPDATE_CHECK" development="new" translation="todo">Update Meldung für veraltete Browser</text>
         <text id="ORG_BROWSER_UPDATE_CHECK_DESC" development="new" translation="todo">Nach Aktivierung wird Benutzern mit veraltetem Browser geraten ein Browserupdate durchzuführen. Neuere Browser schützen besser vor Betrug, Viren, Trojanern, Datendiebstahl und anderen Bedrohungen Ihrer Privatsphäre und Sicherheit. Jede neue Browsergeneration verbessert die Geschwindigkeit und die Unterstützung neuer Webtechniken, mit der Webseiten besser dargestellt werden können. Hierzu wird das Service von https://browser-update.org/ verwendet.</text>
         <text id="ORG_FIELD_DISABLED_DESC" development="changed" translation="todo">Ein gesperrtes Feld kann vom Benutzer im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten. Leiter einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</text>
+        <text id="PHO_CAPTION_SIZE" development="new" translation="todo">Größe des Bildtextes</text>
+        <text id="PHO_CAPTION_SIZE_DESC" development="new" translation="todo">Die Größe des Bildtextes wird proportional zur Bildgröße, nach der Formel "Bildgröße/Devisior" berechnet. Durch Erhöhung des Devisors verringert sich die Schriftgröße. (Standard: 40)</text>
         <text id="SYS_CATEGORIES_VAR" development="new" translation="todo">%VAR1%-Kategorien</text>
         <text id="SYS_CATEGORY_VAR" development="new" translation="todo">%VAR1%-Kategorie</text>
         <text id="SYS_COPY_VAR" development="new" translation="todo">%VAR1% kopieren</text>

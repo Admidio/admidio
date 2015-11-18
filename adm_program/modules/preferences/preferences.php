@@ -189,9 +189,8 @@ $page->addHtml('
                                      WHERE org_id <> '. $gCurrentOrganization->getValue('org_id'). '
                                        AND org_org_id_parent is NULL
                                      ORDER BY org_longname ASC, org_shortname ASC';
-                            $form->addSelectBoxFromSql('org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sql, array('defaultValue'                   => $form_values['org_org_id_parent'],
-                                                                                                                                      'showContextDependentFirstEntry' => false,
-                                                                                                                                      'helpTextIdInline'               => 'ORG_PARENT_ORGANIZATION_DESC'));
+                            $form->addSelectBoxFromSql('org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sql, array('defaultValue'     => $form_values['org_org_id_parent'],
+                                                                                                                                      'helpTextIdInline' => 'ORG_PARENT_ORGANIZATION_DESC'));
                         }
 
                         if($gCurrentOrganization->countAllRecords() > 1)
@@ -578,6 +577,7 @@ $page->addHtml('
                         $form->addInput('photo_show_width', $gL10n->get('PHO_MAX_PHOTO_SIZE_WIDTH'), $form_values['photo_show_width'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999));
                         $form->addInput('photo_show_height', $gL10n->get('PHO_MAX_PHOTO_SIZE_HEIGHT'), $form_values['photo_show_height'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'PHO_MAX_PHOTO_SIZE_DESC'));
                         $form->addInput('photo_image_text', $gL10n->get('PHO_SHOW_CAPTION'), $form_values['photo_image_text'], array('maxLength' => 60, 'helpTextIdInline' => array('PHO_SHOW_CAPTION_DESC', $gCurrentOrganization->getValue('org_homepage'))));
+                        $form->addInput('photo_image_text_size', $gL10n->get('PHO_CAPTION_SIZE'), $form_values['photo_image_text_size'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'PHO_CAPTION_SIZE_DESC'));
                         $form->addCheckbox('photo_download_enabled', $gL10n->get('PHO_DOWNLOAD_ENABLED'), $form_values['photo_download_enabled'], array('helpTextIdInline' => array('PHO_DOWNLOAD_ENABLED_DESC', $gL10n->get('PHO_KEEP_ORIGINAL'))));
                         $form->addCheckbox('photo_keep_original', $gL10n->get('PHO_KEEP_ORIGINAL'), $form_values['photo_keep_original'], array('helpTextIdInline' => array('PHO_KEEP_ORIGINAL_DESC', $gL10n->get('PHO_DOWNLOAD_ENABLED'))));
                         $form->addSubmitButton('btn_save_photos', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
@@ -826,3 +826,4 @@ $page->addHtml('
 </div>');
 
 $page->show();
+?>
