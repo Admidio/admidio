@@ -192,13 +192,12 @@ $page->addJavascript('
 
     // if date participation should be removed than ask user
     $("#btn_save").click(function (event) {
+        event.preventDefault();
+
         if(dateRoleID > 0 && $("#date_registration_possible").is(":checked") == false) {
             var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
             if(msg_result) {
                 $("#dates_edit_form").submit();
-            }
-            else  {
-                event.preventDefault();
             }
         }
         else {
