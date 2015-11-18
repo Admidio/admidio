@@ -157,77 +157,78 @@ elseif($getMode === 2)
         }
     }
 
-    // Zeitraum von/bis auf Gueltigkeit pruefen
 
-    if(array_key_exists('rol_start_date', $_POST) && $_POST['rol_start_date'] !== '')
+    // ------------------------------------------------
+    // Check valid format of date input
+    // ------------------------------------------------
+
+    if(strlen($_POST['rol_start_date']) > 0)
     {
-        $startDate = new DateTimeExtended($_POST['rol_start_date'], $gPreferences['system_date']);
-
-        if($startDate->isValid())
-        {
-            $_POST['rol_start_date'] = $startDate->format('Y-m-d');
-
-            if(array_key_exists('rol_end_date', $_POST) && $_POST['rol_end_date'] !== '')
-            {
-                $endDate = new DateTimeExtended($_POST['rol_end_date'], $gPreferences['system_date']);
-
-                if($endDate->isValid())
-                {
-                    $_POST['rol_end_date'] = $endDate->format('Y-m-d');
-                }
-                else
-                {
-                    $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('ROL_VALID_TO'), $gPreferences['system_date']));
-                }
-
-                // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
-                if ($startDate < $endDate)
-                {
-                    $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
-                }
-            }
-            else
-            {
-                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ROL_VALID_TO')));
-            }
-        }
-        else
+        $validFromDate = DateTime::createFromFormat($gPreferences['system_date'], $_POST['rol_start_date']);
+        if(!$validFromDate)
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('ROL_VALID_FROM'), $gPreferences['system_date']));
         }
+        else
+        {
+            // now write date and time with database format to date object
+            $_POST['rol_start_date'] = $validFromDate->format('Y-m-d');
+        }
     }
 
-    // Uhrzeit von/bis auf Gueltigkeit pruefen
-
-    if(array_key_exists('rol_start_time', $_POST) && $_POST['rol_start_time'] !== '')
+    if(strlen($_POST['rol_end_date']) > 0)
     {
-        $startTime = new DateTimeExtended($_POST['rol_start_time'], $gPreferences['system_time']);
-
-        if($startTime->isValid())
+        $validToDate = DateTime::createFromFormat($gPreferences['system_date'], $_POST['rol_end_date']);
+        if(!$validToDate)
         {
-            $_POST['rol_start_time'] = $startTime->format('H:i:s');
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('ROL_VALID_TO'), $gPreferences['system_date']));
         }
         else
+        {
+            // now write date and time with database format to date object
+            $_POST['rol_end_date'] = $validToDate->format('Y-m-d');
+        }
+    }
+
+    // DateTo should be greater than DateFrom (Timestamp must be less)
+    if(strlen($_POST['rol_start_date']) > 0 && strlen($_POST['rol_end_date']) > 0)
+    {
+        if ($validFromDate > $validToDate)
+        {
+            $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+        }
+
+    }
+
+    // ------------------------------------------------
+    // Check valid format of time input
+    // ------------------------------------------------
+
+    if(strlen($_POST['rol_start_time']) > 0)
+    {
+        $validFromTime = DateTime::createFromFormat('Y-m-d '.$gPreferences['system_time'], DATE_NOW.' '.$_POST['date_to_time']);
+        if(!$validFromTime)
         {
             $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('ROL_TIME_FROM'), $gPreferences['system_time']));
         }
-
-        if(array_key_exists('rol_end_time', $_POST) && $_POST['rol_end_time'] !== '')
+        else
         {
-            $endTime = new DateTimeExtended($_POST['rol_end_time'], $gPreferences['system_time']);
+            // now write date and time with database format to date object
+            $_POST['rol_start_time'] = $validFromTime->format('H:i:s');
+        }
+    }
 
-            if($endTime->isValid())
-            {
-                $_POST['rol_end_time'] = $endTime->format('H:i:s');
-            }
-            else
-            {
-                $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('ROL_TIME_TO'), $gPreferences['system_time']));
-            }
+    if(strlen($_POST['rol_end_time']) > 0)
+    {
+        $validToTime = DateTime::createFromFormat('Y-m-d '.$gPreferences['system_time'], DATE_NOW.' '.$_POST['rol_end_time']);
+        if(!$validToTime)
+        {
+            $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('ROL_TIME_TO'), $gPreferences['system_time']));
         }
         else
         {
-            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ROL_TIME_TO')));
+            // now write date and time with database format to date object
+            $_POST['rol_end_time'] = $validToTime->format('H:i:s');
         }
     }
 

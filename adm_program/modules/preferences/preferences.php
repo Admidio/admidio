@@ -189,9 +189,8 @@ $page->addHtml('
                                      WHERE org_id <> '. $gCurrentOrganization->getValue('org_id'). '
                                        AND org_org_id_parent is NULL
                                      ORDER BY org_longname ASC, org_shortname ASC';
-                            $form->addSelectBoxFromSql('org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sql, array('defaultValue'                   => $form_values['org_org_id_parent'],
-                                                                                                                                      'showContextDependentFirstEntry' => false,
-                                                                                                                                      'helpTextIdInline'               => 'ORG_PARENT_ORGANIZATION_DESC'));
+                            $form->addSelectBoxFromSql('org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sql, array('defaultValue'     => $form_values['org_org_id_parent'],
+                                                                                                                                      'helpTextIdInline' => 'ORG_PARENT_ORGANIZATION_DESC'));
                         }
 
                         if($gCurrentOrganization->countAllRecords() > 1)

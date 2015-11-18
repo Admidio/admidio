@@ -243,6 +243,18 @@ class TableRoles extends TableAccess
                      WHERE mem_rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
+            $sql = 'UPDATE '.TBL_DATES.' SET dat_rol_id = NULL
+                     WHERE dat_rol_id = '.$this->getValue('rol_id');
+            $this->db->query($sql);
+
+            $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
+                     WHERE dtr_rol_id = '.$this->getValue('rol_id');
+            $result = $this->db->query($sql);
+
+            $sql = 'DELETE FROM '.TBL_FOLDER_ROLES.'
+                     WHERE flr_rol_id = '.$this->getValue('rol_id');
+            $result = $this->db->query($sql);
+
             $return = parent::delete();
 
             $this->db->endTransaction();
