@@ -31,13 +31,13 @@ if ($gCurrentUser->editInventory() == false)
 }
 
 // in ajax mode only return simple text on error
-if($getMode == 'delete')
+if($getMode === 'delete')
 {
     $gMessage->showHtmlTextOnly(true);
 }
 
 // checks if the server settings for file_upload are set to ON
-if (ini_get('file_uploads') != '1')
+if (ini_get('file_uploads') !== '1')
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
 }
@@ -62,7 +62,7 @@ if($inventory->getValue('inv_id') == 0)
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-if($getMode == 'save')
+if($getMode === 'save')
 {
     /*****************************Foto speichern*************************************/
 
@@ -104,7 +104,7 @@ if($getMode == 'save')
     header('Location: '.$g_root_path.'/adm_program/modules/inventory/item.php?item_id='.$getItemId);
     exit();
 }
-elseif($getMode == 'dont_save')
+elseif($getMode === 'dont_save')
 {
     /*****************************Foto nicht speichern*************************************/
     //Ordnerspeicherung
@@ -125,7 +125,7 @@ elseif($getMode == 'dont_save')
     $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/inventory/item.php?item_id='.$getItemId, 2000);
     $gMessage->show($gL10n->get('SYS_PROCESS_CANCELED'));
 }
-elseif($getMode == 'delete')
+elseif($getMode === 'delete')
 {
     /***************************** Foto loeschen *************************************/
     //Ordnerspeicherung, Datei löschen
@@ -147,7 +147,7 @@ elseif($getMode == 'delete')
 }
 
 /*****************************Foto hochladen*************************************/
-if($getMode == 'choose')
+if($getMode === 'choose')
 {
     // set headline
     if($getItemId == $gCurrentUser->getValue('inv_id'))
@@ -178,12 +178,12 @@ if($getMode == 'choose')
     $page->addHtml($form->show(false));
     $page->show();
 }
-elseif($getMode == 'upload')
+elseif($getMode === 'upload')
 {
     /*****************************Foto zwischenspeichern bestaetigen***********************************/
 
     //Dateigroesse
-    if ($_FILES['userfile']['error'][0]==1)
+    if ($_FILES['userfile']['error'][0] == 1)
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', round(admFuncMaxUploadSize()/pow(1024, 2))));
     }
@@ -196,7 +196,7 @@ elseif($getMode == 'upload')
 
     //Dateiendung
     $image_properties = getimagesize($_FILES['userfile']['tmp_name'][0]);
-    if ($image_properties['mime'] != 'image/jpeg' && $image_properties['mime'] != 'image/png')
+    if ($image_properties['mime'] !== 'image/jpeg' && $image_properties['mime'] !== 'image/png')
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_FORMAT_INVALID'));
     }

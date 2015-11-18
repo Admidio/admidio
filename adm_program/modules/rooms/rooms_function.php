@@ -33,7 +33,7 @@ if ($getRoomId > 0)
     $room->readDataById($getRoomId);
 }
 
-if ($getMode == 1)
+if ($getMode === 1)
 {
     $_SESSION['rooms_request'] = $_POST;
 
@@ -67,7 +67,7 @@ if ($getMode == 1)
     exit();
 }
 // Löschen des Raums
-elseif ($getMode == 2)
+elseif ($getMode === 2)
 {
     $sql = 'SELECT * FROM '.TBL_DATES.' WHERE dat_room_id = '.$getRoomId;
     $result = $gDb->query($sql);

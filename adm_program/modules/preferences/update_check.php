@@ -19,7 +19,7 @@ require_once('../../system/login_valid.php');
 // Initialize and check the parameters
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('defaultValue' => 1, 'directOutput' => true));
 
-if($getMode == 3 && !$gCurrentUser->isWebmaster())
+if($getMode === 3 && !$gCurrentUser->isWebmaster())
 {
     echo $gL10n->get('SYS_NO_RIGHTS');
     exit();
@@ -130,7 +130,7 @@ else
 // in der Variable $version_update abgefragt werden.
 // $version_update (0 = Kein Update, 1 = Neue stabile Version, 2 = Neue Beta-Version, 3 = Neue stabile + Beta Version, 99 = Keine Verbindung)
 
-if($getMode == 2)
+if($getMode === 2)
 {
     /***********************************************************************/
     /* Updateergebnis anzeigen */

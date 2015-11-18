@@ -427,7 +427,7 @@ $page->addHtml('
                         }
                         $form->addStaticControl('database_version', $gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
 
-                        if(ini_get('safe_mode') == 1)
+                        if(ini_get('safe_mode') === '1')
                         {
                             $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_ON').'</strong></span> &rarr; '.$gL10n->get('SYS_SAFE_MODE_PROBLEM');
                         }
@@ -455,7 +455,7 @@ $page->addHtml('
                             $form->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), $gL10n->get('SYS_NOT_SET'));
                         }
 
-                        if(ini_get('file_uploads') == 1)
+                        if(ini_get('file_uploads') === '1')
                         {
                             $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_ON').'</strong></span>';
                         }

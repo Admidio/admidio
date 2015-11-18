@@ -163,7 +163,7 @@ foreach($gProfileFields->mProfileFields as $field)
     // E-Mail ist Ausnahme und muss immer angezeigt werden
     if($getNewUser == 2
     && $gPreferences['registration_mode'] == 1
-    && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') == 'EMAIL'))
+    && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') === 'EMAIL'))
     {
         $show_field = true;
     }
@@ -196,7 +196,7 @@ foreach($gProfileFields->mProfileFields as $field)
         $form->addHtml('<a id="cat-'. $field->getValue('cat_id'). '"></a>');
         $form->openGroupBox('gb_category_'.$field->getValue('cat_name_intern'), $field->getValue('cat_name'));
 
-        if($field->getValue('cat_name_intern') == 'MASTER_DATA')
+        if($field->getValue('cat_name_intern') === 'MASTER_DATA')
         {
             if($getUserId > 0 || $getNewUser == 2)
             {
@@ -237,7 +237,7 @@ foreach($gProfileFields->mProfileFields as $field)
                     if(isMember($user->getValue('usr_id'))
                     && ($gCurrentUser->getValue('usr_id') == $user->getValue('usr_id')
                        || ($gCurrentUser->isWebmaster()
-                          && (strlen($user->getValue('usr_login_name')) == 0 || strlen($user->getValue('EMAIL')) == 0))))
+                          && (strlen($user->getValue('usr_login_name')) === 0 || strlen($user->getValue('EMAIL')) === 0))))
                     {
                         $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '
                             <a id="password_link" class="btn" data-toggle="modal" data-target="#admidio_modal"
@@ -276,12 +276,12 @@ foreach($gProfileFields->mProfileFields as $field)
 
         // code for different field types
 
-        if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'CHECKBOX')
+        if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') === 'CHECKBOX')
         {
             $form->addCheckbox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),
                 $user->getValue($field->getValue('usf_name_intern')), array('property' => $fieldProperty, 'helpTextIdLabel' => $helpId, 'icon' => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
         }
-        elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'DROPDOWN'
+        elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') === 'DROPDOWN'
             || $field->getValue('usf_name_intern') === 'COUNTRY')
         {
             // set array with values and set default value
@@ -315,7 +315,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 )
             );
         }
-        elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'RADIO_BUTTON')
+        elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') === 'RADIO_BUTTON')
         {
             $arrListValues        = $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_value_list');
             $showDummyRadioButton = false;
@@ -328,7 +328,7 @@ foreach($gProfileFields->mProfileFields as $field)
             $form->addRadioButton('usf-'.$gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),
                 $arrListValues, array('property' => $fieldProperty, 'defaultValue' => $user->getValue($field->getValue('usf_name_intern'), 'database'), 'showNoValueButton' => $showDummyRadioButton, 'helpTextIdLabel' => $helpId, 'icon' => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
         }
-        elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'TEXT_BIG')
+        elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') === 'TEXT_BIG')
         {
             $form->addMultilineTextInput('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),
                 $user->getValue($field->getValue('usf_name_intern')), 3, array('maxLength' => 4000, 'property' => $fieldProperty, 'helpTextIdLabel' => $helpId, 'icon' =>  $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
@@ -337,7 +337,7 @@ foreach($gProfileFields->mProfileFields as $field)
         {
             $fieldType = 'text';
 
-            if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'DATE')
+            if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') === 'DATE')
             {
                 if($field->getValue('usf_name_intern') === 'BIRTHDAY')
                 {
@@ -349,23 +349,23 @@ foreach($gProfileFields->mProfileFields as $field)
                 }
                 $maxlength = '10';
             }
-            elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'EMAIL')
+            elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') === 'EMAIL')
             {
                 // email could not be longer than 254 characters
                 $fieldType = 'email';
                 $maxlength = '254';
             }
-            elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'URL')
+            elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') === 'URL')
             {
                 // maximal browser compatible url length will be 2000 characters
                 $maxlength = '2000';
             }
-            elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'NUMBER')
+            elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') === 'NUMBER')
             {
                 $fieldType = 'number';
                 $maxlength = array(0, 9999999999, 1);
             }
-            elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'cat_name_intern') == 'SOCIAL_NETWORKS')
+            elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'cat_name_intern') === 'SOCIAL_NETWORKS')
             {
                 $maxlength = '255';
             }

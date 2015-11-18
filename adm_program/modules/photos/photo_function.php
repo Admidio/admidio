@@ -129,7 +129,7 @@ function deletePhoto($pho_id, $pic_nr)
 };
 
 // Foto um 90° drehen
-if($getJob == 'rotate')
+if($getJob === 'rotate')
 {
     // nur bei gueltigen Uebergaben weiterarbeiten
     if($getDirection !== '')
@@ -149,7 +149,7 @@ if($getJob == 'rotate')
         $image->delete();
     }
 }
-elseif($getJob == 'delete')
+elseif($getJob === 'delete')
 {
     // das entsprechende Bild wird physikalisch und in der DB geloescht
     deletePhoto($getPhotoId, $getPhotoNr);

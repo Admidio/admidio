@@ -18,7 +18,7 @@ if(!$gCurrentUser->editUsers())
 }
 
 //pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
-if (ini_get('file_uploads') != '1')
+if (ini_get('file_uploads') !== '1')
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
 }

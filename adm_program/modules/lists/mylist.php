@@ -243,8 +243,8 @@ foreach($gProfileFields->mProfileFields as $field)
 {
     // at the end of category master data save positions for loginname and username
     // they will be added after profile fields loop
-    if($oldCategoryNameIntern == 'MASTER_DATA'
-        && $field->getValue('cat_name_intern') != 'MASTER_DATA')
+    if($oldCategoryNameIntern === 'MASTER_DATA'
+        && $field->getValue('cat_name_intern') !== 'MASTER_DATA')
     {
         $posEndOfMasterData = $i;
         $i = $i + 2;
@@ -264,8 +264,8 @@ foreach($gProfileFields->mProfileFields as $field)
                 user_fields['. $i. ']["usf_value_list"] = new Object();';
 
         // get avaiable values for current field type and push to array
-        if($field->getValue('usf_type') == 'DROPDOWN'
-            || $field->getValue('usf_type') == 'RADIO_BUTTON')
+        if($field->getValue('usf_type') === 'DROPDOWN'
+            || $field->getValue('usf_type') === 'RADIO_BUTTON')
         {
             foreach($field->getValue('usf_value_list', 'text') as $key => $value)
             {
@@ -496,13 +496,13 @@ $javascriptCode .= '
     }';
 $page->addJavascript($javascriptCode);
 $page->addJavascript('$(document).ready(function() {
-    $("#sel_select_configuation").change(function() {loadList();});
-    $("#btn_show_list").click(function() {send("show");});
-    $("#btn_add_column").click(function() {addColumn();});
-    $("#btn_save").click(function() {send("save_as");});
-    $("#btn_save_changes").click(function() {send("save");});
-    $("#btn_delete").click(function() {send("delete");});
-    $("#btn_copy").click(function() {send("save_as");});
+    $("#sel_select_configuation").change(function() { loadList(); });
+    $("#btn_show_list").click(function() { send("show"); });
+    $("#btn_add_column").click(function() { addColumn(); });
+    $("#btn_save").click(function() { send("save_as"); });
+    $("#btn_save_changes").click(function() { send("save"); });
+    $("#btn_delete").click(function() { send("delete"); });
+    $("#btn_copy").click(function() { send("save_as"); });
 
     for(var counter = 0; counter < '. $defaultColumnRows. '; counter++) {
         addColumn();

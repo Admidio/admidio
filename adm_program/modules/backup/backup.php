@@ -34,7 +34,7 @@ if($gCurrentUser->isWebmaster() == false)
 }
 
 // module not available for other databases except MySQL
-if($gDbType != 'mysql')
+if($gDbType !== 'mysql')
 {
     $gMessage->show($gL10n->get('BAC_ONLY_MYSQL'));
 }
@@ -53,7 +53,7 @@ $page = new HtmlPage($headline);
 
 $backupabsolutepath = $myFilesBackup->getFolder().'/'; // make sure to include trailing slash
 
-if($getMode == 'show_list')
+if($getMode === 'show_list')
 {
     $existingBackupFiles = array();
 
@@ -128,7 +128,7 @@ if($getMode == 'show_list')
 
     $page->addHtml($table->show(false));
 }
-elseif($getMode == 'create_backup')
+elseif($getMode === 'create_backup')
 {
     ob_start();
     include(SERVER_PATH. '/adm_program/modules/backup/backup_script.php');

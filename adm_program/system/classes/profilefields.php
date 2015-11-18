@@ -1,21 +1,20 @@
 <?php
-
-/*****************************************************************************/
-/** @class ProfileFields
- *  @brief Reads the user fields structure out of database and give access to it
- *
- *  When an object is created than the actual profile fields structure will
- *  be read. In addition to this structure you can read the user values for
- *  all fields if you call @c readUserData . If you read field values than
- *  you will get the formated output. It's also possible to set user data and
- *  save this data to the database
- */
 /**
  ***********************************************************************************************
  * @copyright 2004-2015 The Admidio Team
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
+ */
+/**
+ * @class ProfileFields
+ * @brief Reads the user fields structure out of database and give access to it
+ *
+ * When an object is created than the actual profile fields structure will
+ * be read. In addition to this structure you can read the user values for
+ * all fields if you call @c readUserData . If you read field values than
+ * you will get the formated output. It's also possible to set user data and
+ * save this data to the database
  */
 class ProfileFields
 {
@@ -70,7 +69,7 @@ class ProfileFields
      */
     public function getProperty($fieldNameIntern, $column, $format = '')
     {
-        if($column == 'usf_icon')
+        if($column === 'usf_icon')
         {
             $value =$this->mProfileFields[$fieldNameIntern]->getValue($column, $format);
         }
@@ -121,7 +120,7 @@ class ProfileFields
             // create html for each field type
             $htmlValue = $value;
 
-            if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'CHECKBOX')
+            if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'CHECKBOX')
             {
                 if($value == 1)
                 {
@@ -132,7 +131,7 @@ class ProfileFields
                     $htmlValue = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
                 }
             }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'EMAIL')
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'EMAIL')
             {
                 // the value in db is only the position, now search for the text
                 if($value !== '')
@@ -161,8 +160,8 @@ class ProfileFields
                     }
                 }
             }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DROPDOWN'
-            || $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'RADIO_BUTTON')
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'DROPDOWN'
+            || $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'RADIO_BUTTON')
             {
                 $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
 
@@ -172,7 +171,7 @@ class ProfileFields
 
                 foreach($arrListValues as $key => &$listValue)
                 {
-                    if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'RADIO_BUTTON')
+                    if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'RADIO_BUTTON')
                     {
                         // if value is imagefile or imageurl then show image
                         if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
@@ -190,7 +189,7 @@ class ProfileFields
                             }
 
                             // if text is a translation-id then translate it
-                            if(strpos($listValueText, '_') == 3)
+                            if(strpos($listValueText, '_') === 3)
                             {
                                 $listValueText = $gL10n->get(admStrToUpper($listValueText));
                             }
@@ -215,7 +214,7 @@ class ProfileFields
                     }
 
                     // if text is a translation-id then translate it
-                    if(strpos($listValue, '_') == 3)
+                    if(strpos($listValue, '_') === 3)
                     {
                         $listValue = $gL10n->get(admStrToUpper($listValue));
                     }
@@ -225,14 +224,14 @@ class ProfileFields
                 }
                 $htmlValue = $arrListValuesWithKeys[$value];
             }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'PHONE')
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'PHONE')
             {
                 if($value !== '')
                 {
                     $htmlValue = '<a href="tel:'. str_replace(array('-', '/', ' ', '(', ')'), '', $value).'">'. $value. '</a>';
                 }
             }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'URL')
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'URL')
             {
                 if($value !== '')
                 {
@@ -246,7 +245,7 @@ class ProfileFields
                     }
                 }
             }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'TEXT_BIG')
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'TEXT_BIG')
             {
                 $htmlValue = nl2br($value);
             }
@@ -254,7 +253,7 @@ class ProfileFields
             // if field has url then create a link
             if(strlen($this->mProfileFields[$fieldNameIntern]->getValue('usf_url')))
             {
-                if($fieldNameIntern == 'FACEBOOK' && is_numeric($value))
+                if($fieldNameIntern === 'FACEBOOK' && is_numeric($value))
                 {
                     // facebook has two different profile urls (id and facebook name),
                     // we could only store one way in database (facebook name) and the other (id) is defined here :)
@@ -277,7 +276,7 @@ class ProfileFields
         {
             // special case for type CHECKBOX and no value is there, then show unchecked checkbox
             if(array_key_exists($fieldNameIntern, $this->mProfileFields) == true
-            && $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'CHECKBOX')
+            && $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'CHECKBOX')
             {
                 $value = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
 
@@ -311,12 +310,12 @@ class ProfileFields
         {
             $value = $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->getValue('usd_value', $format);
 
-            if($format != 'database')
+            if($format !== 'database')
             {
-                if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DATE' && $value !== '')
+                if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'DATE' && $value !== '')
                 {
                     // if no format or html is set then show date format from Admidio settings
-                    if($format === '' || $format == 'html')
+                    if($format === '' || $format === 'html')
                     {
                         $dateFormat = $gPreferences['system_date'];
                     }
@@ -333,18 +332,18 @@ class ProfileFields
                     }
                     $value = $date->format($dateFormat);
                 }
-                elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DROPDOWN'
-                    || $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'RADIO_BUTTON')
+                elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'DROPDOWN'
+                    || $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'RADIO_BUTTON')
                 {
                     // the value in db is only the position, now search for the text
-                    if($value > 0 && $format != 'html')
+                    if($value > 0 && $format !== 'html')
                     {
                         $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list');
                         $value = $arrListValues[$value];
 
                     }
                 }
-                elseif($fieldNameIntern == 'COUNTRY' && $value !== '')
+                elseif($fieldNameIntern === 'COUNTRY' && $value !== '')
                 {
                     // read the language name of the country
                     $value = $gL10n->getCountryByCode($value);
@@ -353,7 +352,7 @@ class ProfileFields
         }
 
         // get html output for that field type and value
-        if($format == 'html')
+        if($format === 'html')
         {
             $value = $this->getHtmlValue($fieldNameIntern, $value);
         }
@@ -407,7 +406,7 @@ class ProfileFields
      */
     public function readUserData($userId, $organizationId)
     {
-        if(count($this->mProfileFields) == 0)
+        if(count($this->mProfileFields) === 0)
         {
             $this->readProfileFields($organizationId);
         }
@@ -450,7 +449,7 @@ class ProfileFields
 
             // if value exists and new value is empty then delete entry
             if($this->mUserData[$key]->getValue('usd_id') > 0
-            && strlen($this->mUserData[$key]->getValue('usd_value')) == 0)
+            && strlen($this->mUserData[$key]->getValue('usd_value')) === 0)
             {
                 $this->mUserData[$key]->delete();
             }
@@ -485,7 +484,7 @@ class ProfileFields
 
         if($fieldValue !== '')
         {
-            if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'CHECKBOX')
+            if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'CHECKBOX')
             {
                 // Checkbox darf nur 1 oder 0 haben
                 if($fieldValue != 0 && $fieldValue != 1 && $this->noValueCheck != true)
@@ -493,7 +492,7 @@ class ProfileFields
                     return false;
                 }
             }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DATE')
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'DATE')
             {
                 // Datum muss gueltig sein und formatiert werden
                 $date = DateTime::createFromFormat($gPreferences['system_date'], $fieldValue);
@@ -509,7 +508,7 @@ class ProfileFields
                     $fieldValue = $date->format('Y-m-d');
                 }
             }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'EMAIL')
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'EMAIL')
             {
                 // Email darf nur gueltige Zeichen enthalten und muss einem festen Schema entsprechen
                 $fieldValue = admStrToLower($fieldValue);
@@ -518,7 +517,7 @@ class ProfileFields
                     return false;
                 }
             }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'NUMBER')
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'NUMBER')
             {
                 // A number must be numeric
                 if(is_numeric($fieldValue) == false && $this->noValueCheck != true)
@@ -531,7 +530,7 @@ class ProfileFields
                     $fieldValue = ltrim($fieldValue, '0');
                 }
             }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DECIMAL')
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'DECIMAL')
             {
                 // A number must be numeric
                 if(is_numeric(strtr($fieldValue, ',.', '00')) == false && $this->noValueCheck != true)
@@ -544,7 +543,7 @@ class ProfileFields
                     $fieldValue = ltrim($fieldValue, '0');
                 }
             }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'PHONE')
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'PHONE')
             {
                 // Homepage darf nur gueltige Zeichen enthalten
                 if (!strValidCharacters($fieldValue, 'phone') && $this->noValueCheck != true)
@@ -552,7 +551,7 @@ class ProfileFields
                     return false;
                 }
             }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'URL')
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'URL')
             {
                 // Homepage darf nur gueltige Zeichen enthalten
                 if (!strValidCharacters($fieldValue, 'url') && $this->noValueCheck != true)

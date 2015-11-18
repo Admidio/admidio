@@ -56,7 +56,7 @@ if($myFilesDownload->checkSettings() == false)
 }
 
 // Delete file
-if ($getMode == 2)
+if ($getMode === 2)
 {
     if($getFileId > 0)
     {
@@ -87,7 +87,7 @@ if ($getMode == 2)
 }
 
 // Ordner erstellen
-elseif ($getMode == 3)
+elseif ($getMode === 3)
 {
     if ($getFolderId == 0) {
         //FolderId ist zum Anlegen eines Unterordners erforderlich
@@ -118,7 +118,7 @@ elseif ($getMode == 3)
                 // Ordner erstellen
                 $b_return = $targetFolder->createFolder($newFolderName);
 
-                if(strlen($b_return['text']) == 0)
+                if(strlen($b_return['text']) === 0)
                 {
                     //Jetzt noch den Ordner der DB hinzufuegen...
                     $newFolder = new TableFolder($gDb);
@@ -149,11 +149,11 @@ elseif ($getMode == 3)
     }
     catch(AdmException $e)
     {
-        if($e->getMessage() == 'SYS_FILENAME_EMPTY')
+        if($e->getMessage() === 'SYS_FILENAME_EMPTY')
         {
             $e->setNewMessage('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME'));
         }
-        if($e->getMessage() == 'BAC_FILE_NAME_INVALID')
+        if($e->getMessage() === 'BAC_FILE_NAME_INVALID')
         {
             $e->setNewMessage('DOW_FOLDER_NAME_INVALID');
         }
@@ -162,7 +162,7 @@ elseif ($getMode == 3)
 }
 
 //Datei / Ordner umbenennen
-elseif ($getMode == 4)
+elseif ($getMode === 4)
 {
     if ((!$getFileId && !$getFolderId) or ($getFileId && $getFolderId))
     {
@@ -260,11 +260,11 @@ elseif ($getMode == 4)
     // exception handling; replace some exception strings with better descriptions
     catch(AdmException $e)
     {
-        if($e->getMessage() == 'SYS_FILENAME_EMPTY')
+        if($e->getMessage() === 'SYS_FILENAME_EMPTY')
         {
             $e->setNewMessage('SYS_FIELD_EMPTY', $gL10n->get('DOW_NEW_NAME'));
         }
-        if($e->getMessage() == 'BAC_FILE_NAME_INVALID' && $getFolderId > 0)
+        if($e->getMessage() === 'BAC_FILE_NAME_INVALID' && $getFolderId > 0)
         {
             $e->setNewMessage('DOW_FOLDER_NAME_INVALID');
         }
@@ -273,7 +273,7 @@ elseif ($getMode == 4)
 }
 
 //Folder loeschen
-elseif ($getMode == 5)
+elseif ($getMode === 5)
 {
     if (!$getFolderId)
     {
@@ -304,7 +304,7 @@ elseif ($getMode == 5)
 }
 
 //Datei / Ordner zur DB hinzufeuegen
-elseif ($getMode == 6)
+elseif ($getMode === 6)
 {
     if ($getFolderId == 0)
     {
@@ -366,7 +366,7 @@ elseif ($getMode == 6)
 }
 
 //Berechtigungen fuer einen Ordner speichern
-elseif ($getMode == 7)
+elseif ($getMode === 7)
 {
     if(!isset($_POST['adm_allowed_roles']))
     {

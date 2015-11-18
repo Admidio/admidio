@@ -83,7 +83,7 @@ class HtmlFormInstallation extends HtmlForm
         global $gL10n;
 
         // if no modus set then set installation modus
-        if(strlen($this->title) == 0)
+        if(strlen($this->title) === 0)
         {
             $this->setInstallationModus();
         }

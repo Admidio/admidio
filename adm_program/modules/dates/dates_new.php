@@ -190,10 +190,10 @@ $page->addJavascript('
     setDateParticipation();
     setLocationCountry();
 
-    $("#date_registration_possible").click(function() {setDateParticipation();});
-    $("#dat_all_day").click(function() {setAllDay();});
-    $("#dat_location").change(function() {setLocationCountry();});
-    $("#date_from").change(function() {setDateTo();});
+    $("#date_registration_possible").click(function() { setDateParticipation(); });
+    $("#dat_all_day").click(function() { setAllDay(); });
+    $("#dat_location").change(function() { setLocationCountry(); });
+    $("#date_from").change(function() { setDateTo(); });
 
     // if date participation should be removed than ask user
     $("#btn_save").click(function (event) {
@@ -225,7 +225,7 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
     {
         $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50, 'helpTextIdLabel' => 'DAT_LOCATION_LINK'));
 
-        if(strlen($date->getValue('dat_country')) == 0 && $getDateId == 0)
+        if(strlen($date->getValue('dat_country')) === 0 && $getDateId == 0)
         {
             $date->setValue('dat_country', $gPreferences['default_country']);
         }
@@ -239,7 +239,7 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
     // if room selection is activated then show a selectbox with all rooms
     if($gPreferences['dates_show_rooms'] == true)
     {
-        if($gDbType == 'mysql')
+        if($gDbType === 'mysql')
         {
             $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') FROM '.TBL_ROOMS.' ORDER BY room_name';
         }

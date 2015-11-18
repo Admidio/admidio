@@ -71,7 +71,7 @@ if($getDateId > 0)
     }
 }
 
-if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
+if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
 {
     $_SESSION['dates_request'] = $_POST;
 
@@ -79,27 +79,27 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     // pruefen ob alle notwendigen Felder gefuellt sind
     // ------------------------------------------------
 
-    if(strlen($_POST['dat_headline']) == 0)
+    if(strlen($_POST['dat_headline']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TITLE')));
     }
-    if(strlen($_POST['date_from']) == 0)
+    if(strlen($_POST['date_from']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_START')));
     }
-    if(strlen($_POST['date_to']) == 0 && $_POST['dat_repeat_type'] == 0)
+    if(strlen($_POST['date_to']) === 0 && $_POST['dat_repeat_type'] == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_END')));
     }
-    if(strlen($_POST['date_from_time']) == 0 && isset($_POST['dat_all_day']) == false)
+    if(strlen($_POST['date_from_time']) === 0 && isset($_POST['dat_all_day']) == false)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START')));
     }
-    if(strlen($_POST['date_to_time']) == 0 && isset($_POST['dat_all_day']) == false)
+    if(strlen($_POST['date_to_time']) === 0 && isset($_POST['dat_all_day']) == false)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END')));
     }
-    if(strlen($_POST['dat_cat_id']) == 0)
+    if(strlen($_POST['dat_cat_id']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_CALENDAR')));
     }
@@ -123,7 +123,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     }
 
     // das Land nur zusammen mit dem Ort abspeichern
-    if(strlen($_POST['dat_location']) == 0)
+    if(strlen($_POST['dat_location']) === 0)
     {
         $_POST['dat_country'] = '';
     }
@@ -154,11 +154,11 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     }
 
     // if date-to is not filled then take date-from
-    if(strlen($_POST['date_to'])   == 0)
+    if(strlen($_POST['date_to']) === 0)
     {
         $_POST['date_to'] = $_POST['date_from'];
     }
-    if(strlen($_POST['date_to_time']) == 0)
+    if(strlen($_POST['date_to_time']) === 0)
     {
         $_POST['date_to_time'] = $_POST['date_from_time'];
     }
@@ -284,7 +284,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
             $datum = $_POST['date_from']. ' - '.$_POST['date_to'];
         }
 
-        if($_POST['dat_all_day']!=0)
+        if($_POST['dat_all_day'] != 0)
         {
             $zeit = $gL10n->get('DAT_ALL_DAY');
         }
@@ -323,7 +323,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
 
         $notification = new Email();
 
-        if($getMode == 1)
+        if($getMode === 1)
         {
             $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar)
                       .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
@@ -345,7 +345,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     // ggf. Rolle fuer Anmeldungen wegschreiben
     // ----------------------------------------
 
-    if($_POST['date_registration_possible'] == 1 && strlen($date->getValue('dat_rol_id')) == 0)
+    if($_POST['date_registration_possible'] == 1 && strlen($date->getValue('dat_rol_id')) === 0)
     {
         // Kategorie fuer Terminbestaetigungen einlesen
         $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.'
@@ -456,7 +456,7 @@ if($getMode == 1 || $getMode == 5)  // Neuen Termin anlegen/aendern
     header('Location: '. $gNavigation->getUrl());
     exit();
 }
-elseif($getMode == 2)  // Termin loeschen
+elseif($getMode === 2)  // Termin loeschen
 {
     // Termin loeschen, wenn dieser zur aktuellen Orga gehoert
     if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
@@ -468,7 +468,7 @@ elseif($getMode == 2)  // Termin loeschen
         echo 'done';
     }
 }
-elseif($getMode == 3)  // Benutzer zum Termin anmelden
+elseif($getMode === 3)  // Benutzer zum Termin anmelden
 {
     $member = new TableMembers($gDb);
     $member->startMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
@@ -476,7 +476,7 @@ elseif($getMode == 3)  // Benutzer zum Termin anmelden
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
 }
-elseif($getMode == 4)  // Benutzer vom Termin abmelden
+elseif($getMode === 4)  // Benutzer vom Termin abmelden
 {
     $member = new TableMembers($gDb);
     $member->deleteMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
@@ -484,7 +484,7 @@ elseif($getMode == 4)  // Benutzer vom Termin abmelden
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
 }
-elseif($getMode == 6)  // Termin im iCal-Format exportieren
+elseif($getMode === 6)  // Termin im iCal-Format exportieren
 {
     $filename = $date->getValue('dat_headline');
 

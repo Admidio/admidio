@@ -35,7 +35,7 @@ $g_root_path = 'http://www.your-website.de/admidio';
 // Short description of the organization that is running Admidio
 // This short description must correspond to your input in the installation wizard !!!
 // Example: 'ADMIDIO'
-// Maximun of 10 characters !!!
+// Maximum of 10 characters !!!
 $g_organization = 'Shortcut';
 
 // If this flag is set = 1 then you must enter your loginname and password

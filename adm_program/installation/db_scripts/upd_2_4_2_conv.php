@@ -10,7 +10,7 @@
  */
 
 // alter ip columns for IPv6
-if($gDbType == 'mysql')
+if($gDbType === 'mysql')
 {
     $sql = 'ALTER TABLE '.TBL_AUTO_LOGIN.' MODIFY COLUMN atl_ip_address varchar(39) NOT NULL';
     $gDb->query($sql, false);

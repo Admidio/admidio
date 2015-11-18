@@ -17,7 +17,7 @@ if(!$gCurrentUser->editUsers())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-if(count($_SESSION['file_lines']) == 0)
+if(count($_SESSION['file_lines']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
 }
@@ -124,7 +124,7 @@ $htmlFieldTable = '
             $htmlFieldTable .= '<tr>
                 <td><label for="usf-'. $field->getValue('usf_id'). '">'.$field->getValue('usf_name');
                     // Lastname und first name are mandatory fields
-                    if($field->getValue('usf_name_intern') == 'LAST_NAME' || $field->getValue('usf_name_intern') == 'FIRST_NAME')
+                    if($field->getValue('usf_name_intern') === 'LAST_NAME' || $field->getValue('usf_name_intern') === 'FIRST_NAME')
                     {
                         $htmlFieldTable .= '&nbsp;&nbsp;<span class="text-danger">('.$gL10n->get('SYS_MANDATORY_FIELD').')</span>';
                     }

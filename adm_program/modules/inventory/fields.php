@@ -28,7 +28,7 @@ unset($_SESSION['fields_request']);
 // create html page object
 $page = new HtmlPage($headline);
 
-$page->addJavascript('$(".admidio-group-heading").click(function() {showHideBlock($(this).attr("id"));});', true);
+$page->addJavascript('$(".admidio-group-heading").click(function() { showHideBlock($(this).attr("id")); });', true);
 $page->addJavascript('
     function moveCategory(direction, usfID) {
         var actRow = document.getElementById("row_usf_" + usfID);
@@ -41,13 +41,13 @@ $page->addJavascript('
 
         // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
         for(i=0;i < childs.length; i++) {
-            if(childs[i].tagName == "TR") {
+            if(childs[i].tagName === "TR") {
                 actRowCount++;
                 if(actSequence > 0 && nextNode == null) {
                     nextNode = childs[i];
                 }
 
-                if(childs[i].id == "row_usf_" + usfID) {
+                if(childs[i].id === "row_usf_" + usfID) {
                     actSequence = actRowCount;
                 }
 
@@ -58,7 +58,7 @@ $page->addJavascript('
         }
 
         // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
-        if(direction == "up") {
+        if(direction === "up") {
             if(prevNode != null) {
                 actRow.parentNode.insertBefore(actRow, prevNode);
                 secondSequence = actSequence - 1;

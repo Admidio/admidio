@@ -139,14 +139,14 @@ if(!$b_return)
 }
 echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';
 
- // connect to database
+// connect to database
 try
 {
     $db = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
 }
 catch(AdmException $e)
 {
-    die('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()));
+    exit('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()));
 }
 
 if($gDbType === 'mysql')
@@ -240,14 +240,14 @@ $db->query($sql);
 
 if($gDbType === 'mysql')
 {
-    // activate foreign key checks, so database is consistant
+    // activate foreign key checks, so database is consistent
     $sql = 'SET foreign_key_checks = 1 ';
     $db->query($sql);
 }
 
 // create an installation unique cookie prefix and remove special characters
 $gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
-$gCookiePraefix = strtr($gCookiePraefix, ' .,;:', '_____');
+$gCookiePraefix = strtr($gCookiePraefix, ' .,;:[]', '_______');
 
 // start php session and remove session object with all data, so that
 // all data will be read after the update

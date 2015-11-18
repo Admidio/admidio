@@ -30,11 +30,11 @@ if(!$gCurrentUser->editUsers())
 }
 
 // Lastname und firstname are mandatory fields
-if(strlen($_POST['usf-'.$gProfileFields->getProperty('LAST_NAME', 'usf_id')]) == 0)
+if(strlen($_POST['usf-'.$gProfileFields->getProperty('LAST_NAME', 'usf_id')]) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gProfileFields->getProperty('LAST_NAME', 'usf_name')));
 }
-if(strlen($_POST['usf-'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]) == 0)
+if(strlen($_POST['usf-'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gProfileFields->getProperty('FIRST_NAME', 'usf_name')));
 }
@@ -92,31 +92,31 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); ++$i)
                     $importedFields[$field->getValue('usf_id')] = $field->getValue('usf_name_intern');
                 }
 
-                if($field->getValue('usf_name_intern') == 'COUNTRY')
+                if($field->getValue('usf_name_intern') === 'COUNTRY')
                 {
                     $user->setValue($field->getValue('usf_name_intern'), $gL10n->getCountryByName($columnValue));
                 }
-                elseif($field->getValue('usf_type') == 'CHECKBOX')
+                elseif($field->getValue('usf_type') === 'CHECKBOX')
                 {
-                    if($columnValueToLower == 'j'
-                    || $columnValueToLower == admStrToLower($gL10n->get('SYS_YES'))
-                    || $columnValueToLower == 'y'
-                    || $columnValueToLower == 'yes'
-                    || $columnValueToLower == '1')
+                    if($columnValueToLower === 'j'
+                    || $columnValueToLower === admStrToLower($gL10n->get('SYS_YES'))
+                    || $columnValueToLower === 'y'
+                    || $columnValueToLower === 'yes'
+                    || $columnValueToLower === '1')
                     {
                         $user->setValue($field->getValue('usf_name_intern'), '1');
                     }
-                    if($columnValueToLower == 'n'
-                    || $columnValueToLower == admStrToLower($gL10n->get('SYS_NO'))
-                    || $columnValueToLower == 'no'
-                    || $columnValueToLower  == '0'
+                    if($columnValueToLower === 'n'
+                    || $columnValueToLower === admStrToLower($gL10n->get('SYS_NO'))
+                    || $columnValueToLower === 'no'
+                    || $columnValueToLower === '0'
                     || $columnValue === '')
                     {
                         $user->setValue($field->getValue('usf_name_intern'), '0');
                     }
                 }
-                elseif($field->getValue('usf_type') == 'DROPDOWN'
-                    || $field->getValue('usf_type') == 'RADIO_BUTTON')
+                elseif($field->getValue('usf_type') === 'DROPDOWN'
+                    || $field->getValue('usf_type') === 'RADIO_BUTTON')
                 {
                     // save position of combobox
                     $arrListValues = $field->getValue('usf_value_list', 'text');
@@ -137,7 +137,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); ++$i)
                         ++$position;
                     }
                 }
-                elseif($field->getValue('usf_type') == 'EMAIL')
+                elseif($field->getValue('usf_type') === 'EMAIL')
                 {
                     $columnValue = admStrToLower($columnValue);
                     if(strValidCharacters($columnValue, 'email'))
@@ -145,7 +145,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); ++$i)
                         $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 255));
                     }
                 }
-                elseif($field->getValue('usf_type') == 'INTEGER')
+                elseif($field->getValue('usf_type') === 'INTEGER')
                 {
                     // number could contain dot and comma
                     if(is_numeric(strtr($columnValue, ',.', '00')) == true)
@@ -153,7 +153,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); ++$i)
                         $user->setValue($field->getValue('usf_name_intern'), $columnValue);
                     }
                 }
-                elseif($field->getValue('usf_type') == 'TEXT')
+                elseif($field->getValue('usf_type') === 'TEXT')
                 {
                     $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 50));
                 }
@@ -203,18 +203,18 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); ++$i)
                 {
                     if($duplicate_user->getValue($field_name_intern) != $user->getValue($field_name_intern))
                     {
-                        if($gProfileFields->getProperty($field_name_intern, 'usf_type') == 'DATE')
+                        if($gProfileFields->getProperty($field_name_intern, 'usf_type') === 'DATE')
                         {
                             // the date must be formated
                             $duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, $gPreferences['system_date']));
                         }
-                        elseif($field_name_intern == 'COUNTRY')
+                        elseif($field_name_intern === 'COUNTRY')
                         {
                             // we need the iso-code and not the name of the country
                             $duplicate_user->setValue($field_name_intern, $gL10n->getCountryByName($user->getValue($field_name_intern)));
                         }
-                        elseif($gProfileFields->getProperty($field_name_intern, 'usf_type') == 'DROPDOWN'
-                            || $gProfileFields->getProperty($field_name_intern, 'usf_type') == 'RADIO_BUTTON')
+                        elseif($gProfileFields->getProperty($field_name_intern, 'usf_type') === 'DROPDOWN'
+                            || $gProfileFields->getProperty($field_name_intern, 'usf_type') === 'RADIO_BUTTON')
                         {
                             // get number and not value of entry
                             $duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, 'database'));

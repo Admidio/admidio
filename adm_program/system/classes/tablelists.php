@@ -69,7 +69,7 @@ class TableLists extends TableAccess
         {
             $this->setValue('lst_timestamp', DATETIME_NOW);
             $this->setValue('lst_usr_id', $gCurrentUser->getValue('usr_id'));
-            if(strlen($this->getValue('lst_org_id')) == 0)
+            if(strlen($this->getValue('lst_org_id')) === 0)
             {
                 $this->setValue('lst_org_id', $gCurrentOrganization->getValue('org_id'));
             }

@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-if ('roles_functions.php' == basename($_SERVER['SCRIPT_FILENAME']))
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php')
 {
     exit('This page may not be called directly !');
 }
@@ -82,7 +82,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
 
     while($row = $gDb->fetch_array($result_role))
     {
-        if($gCurrentUser->hasRightViewRole($row['mem_rol_id']) && $row['rol_visible']==1)
+        if($gCurrentUser->hasRightViewRole($row['mem_rol_id']) && $row['rol_visible'] == 1)
         {
             $formerMembership = false;
             $futureMembership = false;

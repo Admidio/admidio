@@ -244,7 +244,7 @@ class ModuleLists extends Modules
      *  @param $limit Number of elements returned max. Default NULL will take number from peferences.
      *  @return array with list and corresponding informations
      */
-    public function getDataSet($startElement=0, $limit=NULL)
+    public function getDataSet($startElement = 0, $limit = null)
     {
         global $gCurrentOrganization;
         global $gPreferences;
@@ -252,7 +252,7 @@ class ModuleLists extends Modules
         global $gValidLogin;
 
          //Parameter
-        if($limit == NULL)
+        if($limit == null)
         {
             // Roles per page
             $limit = $gPreferences['lists_roles_per_page'];

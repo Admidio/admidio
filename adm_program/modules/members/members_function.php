@@ -64,7 +64,7 @@ if($getMode != 1)
     $user = new User($gDb, $gProfileFields, $getUserId);
 }
 
-if($getMode == 1)
+if($getMode === 1)
 {
     // create html page object
     $page = new HtmlPage($gL10n->get('MEM_REMOVE_USER'));
@@ -94,7 +94,7 @@ if($getMode == 1)
     $page->show();
     exit();
 }
-elseif($getMode == 2)
+elseif($getMode === 2)
 {
     // User NUR aus der aktuellen Organisation entfernen
 
@@ -137,7 +137,7 @@ elseif($getMode == 2)
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP_OK', $gCurrentOrganization->getValue('org_longname')));
 }
-elseif($getMode == 3)
+elseif($getMode === 3)
 {
     // User aus der Datenbank loeschen
 
@@ -160,7 +160,7 @@ elseif($getMode == 3)
     // User aus der Admidio Datenbank loeschen
     $user->delete();
 }
-elseif($getMode == 4)
+elseif($getMode === 4)
 {
     // nur Webmaster duerfen User neue Zugangsdaten zuschicken
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
@@ -196,13 +196,13 @@ elseif($getMode == 4)
         }
     }
 }
-elseif($getMode == 5)
+elseif($getMode === 5)
 {
     // Fragen, ob Zugangsdaten verschickt werden sollen
     $gMessage->setForwardYesNo($g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=4');
     $gMessage->show($gL10n->get('MEM_SEND_NEW_LOGIN', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')));
 }
-elseif($getMode == 6)
+elseif($getMode === 6)
 {
     if($this_orga == true && $other_orga == 0 && $gCurrentUser->isWebmaster())
     {

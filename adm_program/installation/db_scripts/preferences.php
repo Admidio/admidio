@@ -15,25 +15,25 @@
 $orga_preferences = array(
 
     // System
-    'enable_rss'                    => '1',
-    'enable_auto_login'             => '1',
-    'default_country'               => 'DEU',
-    'logout_minutes'                => '20',
-    'homepage_logout'               => 'adm_program/index.php',
-    'homepage_login'                => 'adm_program/index.php',
-    'theme'                         => 'modern',
-    'enable_password_recovery'      => '1',
-    'system_show_create_edit'       => '1',
-    'system_currency'               => '€',
-    'system_date'                   => 'd.m.Y',
-    'system_js_editor_enabled'      => '1',
-    'system_js_editor_color'        => '#96c4cb',
-    'system_language'               => 'de',
-    'system_organization_select'    => '0',
-    'system_search_similar'         => '1',
-    'system_time'                   => 'H:i',
-    'system_browser_update_check'   => '0',
-    'system_hashing_cost'           => '10',
+    'enable_rss'                     => '1',
+    'enable_auto_login'              => '1',
+    'default_country'                => 'DEU',
+    'logout_minutes'                 => '20',
+    'homepage_logout'                => 'adm_program/index.php',
+    'homepage_login'                 => 'adm_program/index.php',
+    'theme'                          => 'modern',
+    'enable_password_recovery'       => '1',
+    'system_show_create_edit'        => '1',
+    'system_currency'                => '€',
+    'system_date'                    => 'd.m.Y',
+    'system_js_editor_enabled'       => '1',
+    'system_js_editor_color'         => '#96c4cb',
+    'system_language'                => 'de',
+    'system_organization_select'     => '0',
+    'system_search_similar'          => '1',
+    'system_time'                    => 'H:i',
+    'system_browser_update_check'    => '0',
+    'system_hashing_cost'            => '10',
 
     // Registration
     'registration_mode'              => '1',
@@ -41,22 +41,22 @@ $orga_preferences = array(
     'enable_registration_admin_mail' => '1',
 
     // E-mail dispatch
-    'mail_send_method'              => 'phpmail',
-    'mail_bcc_count'                => '50',
-    'mail_sender_into_to'           => '0',
-    'mail_character_encoding'       => 'utf-8',
-    'mail_smtp_host'                => '',
-    'mail_smtp_auth'                => '1',
-    'mail_smtp_port'                => '25',
-    'mail_smtp_secure'              => '',
-    'mail_smtp_authentication_type' => 'LOGIN',
-    'mail_smtp_user'                => '',
-    'mail_smtp_password'            => '',
+    'mail_send_method'               => 'phpmail',
+    'mail_bcc_count'                 => '50',
+    'mail_sender_into_to'            => '0',
+    'mail_character_encoding'        => 'utf-8',
+    'mail_smtp_host'                 => '',
+    'mail_smtp_auth'                 => '1',
+    'mail_smtp_port'                 => '25',
+    'mail_smtp_secure'               => '',
+    'mail_smtp_authentication_type'  => 'LOGIN',
+    'mail_smtp_user'                 => '',
+    'mail_smtp_password'             => '',
 
     // System notifications
-    'enable_system_mails'       => '1',
-    'email_administrator'       => 'webmaster@'. $_SERVER['HTTP_HOST'],
-    'enable_email_notification' => '0',
+    'enable_system_mails'         => '1',
+    'email_administrator'         => 'webmaster@'. $_SERVER['HTTP_HOST'],
+    'enable_email_notification'   => '0',
 
     // Captcha
     'captcha_background_color'    => '#FFEFC4',
@@ -74,9 +74,9 @@ $orga_preferences = array(
     'announcements_per_page'      => '10',
 
     // User management
-    'members_users_per_page'     => '25',
-    'members_days_field_history' => '365',
-    'members_show_all_users'     => '1',
+    'members_users_per_page'      => '25',
+    'members_days_field_history'  => '365',
+    'members_show_all_users'      => '1',
 
     // Downloads
     'enable_download_module' => '1',
@@ -96,13 +96,13 @@ $orga_preferences = array(
     'photo_download_enabled' => '0',
 
     // Guestbook
-    'enable_guestbook_module'           => '1',
-    'guestbook_entries_per_page'        => '10',
-    'enable_guestbook_captcha'          => '1',
-    'flooding_protection_time'          => '60',
-    'enable_gbook_comments4all'         => '0',
-    'enable_intial_comments_loading'    => '0',
-    'enable_guestbook_moderation'       => '0',
+    'enable_guestbook_module'        => '1',
+    'guestbook_entries_per_page'     => '10',
+    'enable_guestbook_captcha'       => '1',
+    'flooding_protection_time'       => '60',
+    'enable_gbook_comments4all'      => '0',
+    'enable_intial_comments_loading' => '0',
+    'enable_guestbook_moderation'    => '0',
 
     // Lists
     'lists_roles_per_page'        => '10',
@@ -125,11 +125,11 @@ $orga_preferences = array(
     'mail_delivery_confirmation'  => '0',
 
     // E-Cards
-    'enable_ecard_module'         => '1',
-    'ecard_thumbs_scale'          => '250',
-    'ecard_card_picture_width'    => '400',
-    'ecard_card_picture_height'   => '250',
-    'ecard_template'              => 'postcard.tpl',
+    'enable_ecard_module'       => '1',
+    'ecard_thumbs_scale'        => '250',
+    'ecard_card_picture_width'  => '400',
+    'ecard_card_picture_height' => '250',
+    'ecard_template'            => 'postcard.tpl',
 
     // Profile
     'profile_log_edit_fields'   => '1',
@@ -140,14 +140,14 @@ $orga_preferences = array(
     'profile_photo_storage'     => '0',
 
     // Events
-    'enable_dates_module'        => '1',
-    'dates_per_page'             => '10',
-    'dates_view'                 => 'detail',
-    'dates_show_map_link'        => '1',
-    'dates_show_rooms'           => '0',
-    'enable_dates_ical'          => '1',
-    'dates_ical_days_past'       => '30',
-    'dates_ical_days_future'     => '365',
+    'enable_dates_module'       => '1',
+    'dates_per_page'            => '10',
+    'dates_view'                => 'detail',
+    'dates_show_map_link'       => '1',
+    'dates_show_rooms'          => '0',
+    'enable_dates_ical'         => '1',
+    'dates_ical_days_past'      => '30',
+    'dates_ical_days_future'    => '365',
 
     // Weblinks
     'enable_weblinks_module'    => '1',

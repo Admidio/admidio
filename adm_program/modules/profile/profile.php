@@ -47,14 +47,14 @@ function getFieldCode($fieldNameIntern, $user)
     $value = $user->getValue($fieldNameIntern, 'html');
 
     // if birthday then show age
-    if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'BIRTHDAY')
+    if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') === 'BIRTHDAY')
     {
         $birthday = new DateTimeExtended($user->getValue($fieldNameIntern, 'Y.m.d'), 'Y.m.d');
         $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' '.$gL10n->get('PRO_YEARS').')';
     }
 
     // Icons der Messenger anzeigen
-    if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'ICQ')
+    if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') === 'ICQ')
     {
         if(strlen($user->getValue($fieldNameIntern)) > 0)
         {
@@ -70,7 +70,7 @@ function getFieldCode($fieldNameIntern, $user)
                 title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
         }
     }
-    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'SKYPE')
+    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') === 'SKYPE')
     {
         if(strlen($user->getValue($fieldNameIntern)) > 0)
         {
@@ -88,7 +88,7 @@ function getFieldCode($fieldNameIntern, $user)
     }
 
     // show html of field, if user has a value for that field or it's a checkbox field
-    if(strlen($user->getValue($fieldNameIntern)) > 0 || $gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'CHECKBOX')
+    if(strlen($user->getValue($fieldNameIntern)) > 0 || $gProfileFields->getProperty($fieldNameIntern, 'usf_type') === 'CHECKBOX')
     {
         $html['label'] = $gProfileFields->getProperty($fieldNameIntern, 'usf_name');
         $html['value'] = $value;
@@ -358,7 +358,7 @@ $page->addHtml('
             foreach($gProfileFields->mProfileFields as $field)
             {
                 // nur Felder der Stammdaten anzeigen
-                if($field->getValue('cat_name_intern') == 'MASTER_DATA'
+                if($field->getValue('cat_name_intern') === 'MASTER_DATA'
                 && ($gCurrentUser->hasRightEditProfile($user) == true || $field->getValue('usf_hidden') == 0))
                 {
                     switch($field->getValue('usf_name_intern'))
@@ -404,7 +404,7 @@ $page->addHtml('
                                     $route_url .= ',%20'. urlencode($user->getValue('POSTCODE'));
 
                                     // City and postcode should be shown in one line
-                                    if(strlen($user->getValue('CITY')) == 0
+                                    if(strlen($user->getValue('CITY')) === 0
                                     || ($gCurrentUser->hasRightEditProfile($user) == false && $gProfileFields->getProperty('CITY', 'usf_hidden') == 1))
                                     {
                                         $address   .= '<br />';
@@ -500,13 +500,13 @@ foreach($gProfileFields->mProfileFields as $field)
 {
     // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
     // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
-    if($field->getValue('cat_name_intern') != 'MASTER_DATA'
+    if($field->getValue('cat_name_intern') !== 'MASTER_DATA'
     && ($gCurrentUser->hasRightEditProfile($user) == true
        || ($gCurrentUser->hasRightEditProfile($user) == false && $field->getValue('usf_hidden') == 0)))
     {
         // show new category header if new category and field has value or is a checkbox field
         if($category != $field->getValue('cat_name')
-        && (strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 || $field->getValue('usf_type') == 'CHECKBOX'))
+        && (strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 || $field->getValue('usf_type') === 'CHECKBOX'))
         {
             if($category !== '')
             {
@@ -526,7 +526,7 @@ foreach($gProfileFields->mProfileFields as $field)
         }
 
         // show html of field, if user has a value for that field or it's a checkbox field
-        if(strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 || $field->getValue('usf_type') == 'CHECKBOX')
+        if(strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 || $field->getValue('usf_type') === 'CHECKBOX')
         {
             $field = getFieldCode($field->getValue('usf_name_intern'), $user);
             if(strlen($field['value']) > 0)
@@ -572,7 +572,7 @@ if($gPreferences['profile_show_roles'] == 1)
                    AND '.$authorization_db_name.' = 1
                  ORDER BY cat_org_id, cat_sequence, rol_name';
         $result_role = $gDb->query($sql);
-        $berechtigungs_Herkunft[$authorization_db_name] = NULL;
+        $berechtigungs_Herkunft[$authorization_db_name] = null;
 
         while($row = $gDb->fetch_array($result_role))
         {

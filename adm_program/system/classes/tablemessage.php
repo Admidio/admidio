@@ -104,7 +104,7 @@ class TableMessage extends TableAccess
 
         $return = 'delete not OK';
 
-        if($this->getValue('msg_read') == 2 || $this->getValue('msg_type') == 'EMAIL')
+        if($this->getValue('msg_read') == 2 || $this->getValue('msg_type') === 'EMAIL')
         {
             $sql = "DELETE FROM ".TBL_MESSAGES_CONTENT."
              WHERE msc_msg_id = ". $this->getValue('msg_id');

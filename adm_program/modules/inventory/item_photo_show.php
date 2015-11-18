@@ -52,7 +52,7 @@ if($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 0)
 //Foto aus der Datenbank
 elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 0)
 {
-    if(strlen($inventory->getValue('inv_photo')) != NULL)
+    if(strlen($inventory->getValue('inv_photo')) != null)
     {
         $image = new Image();
         $image->setImageFromData($inventory->getValue('inv_photo'));

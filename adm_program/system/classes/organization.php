@@ -440,11 +440,11 @@ class Organization extends TableAccess
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         // org_shortname shouldn't be edited
-        if($columnName == 'org_shortname' && $this->new_record == false)
+        if($columnName === 'org_shortname' && $this->new_record == false)
         {
             return false;
         }
-        elseif($columnName == 'org_homepage' && $newValue !== '')
+        elseif($columnName === 'org_homepage' && $newValue !== '')
         {
             // Homepage darf nur gueltige Zeichen enthalten
             if (!strValidCharacters($newValue, 'url'))

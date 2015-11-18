@@ -33,7 +33,7 @@ echo '
             url:     action,
             data:    $(this).serialize(),
             success: function(data) {
-                if(data == "success") {
+                if(data === "success") {
                     $("#form_members_create_user .form-alert").attr("class", "alert alert-success form-alert");
                     $("#form_members_create_user .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('MEM_USER_COULD_BE_CREATED').'</strong>");
                     $("#form_members_create_user .form-alert").fadeIn("slow");

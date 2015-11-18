@@ -116,12 +116,12 @@ elseif($getModule === 'downloads')
 }
 
 // check if the server allow file uploads
-if (ini_get('file_uploads') != 1)
+if (ini_get('file_uploads') !== '1')
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
 }
 
-if($getMode == 'choose_files')
+if($getMode === 'choose_files')
 {
     // delete old stuff in upload folder
     $uploadFolder = new Folder(SERVER_PATH.'/adm_my_files/photos/upload');
@@ -155,7 +155,7 @@ if($getMode == 'choose_files')
             },
             done: function (e, data) {
                 $.each(data.result.files, function (index, file) {
-                    if(typeof file.error != "undefined") {
+                    if(typeof file.error !== "undefined") {
                         $("<p/>").html("<div class=\"alert alert-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>"
                             + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
                         countErrorFiles++;
@@ -208,7 +208,7 @@ if($getMode == 'choose_files')
         </div>');
     $page->show();
 }
-elseif($getMode == 'upload_files')
+elseif($getMode === 'upload_files')
 {
     // upload files to temp upload folder
     if($getModule === 'photos')

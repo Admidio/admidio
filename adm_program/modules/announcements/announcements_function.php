@@ -50,18 +50,18 @@ if($getAnnId > 0)
 
 $_SESSION['announcements_request'] = $_POST;
 
-if($getMode == 1)
+if($getMode === 1)
 {
     if(isset($_POST['ann_global']) == false)
     {
         $_POST['ann_global'] = 0;
     }
 
-    if(strlen($_POST['ann_headline']) == 0)
+    if(strlen($_POST['ann_headline']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_HEADLINE')));
     }
-    if(strlen($_POST['ann_description']) == 0)
+    if(strlen($_POST['ann_description']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TEXT')));
     }
@@ -101,7 +101,7 @@ if($getMode == 1)
     header('Location: '. $gNavigation->getUrl());
     exit();
 }
-elseif($getMode == 2)
+elseif($getMode === 2)
 {
     // Ankuendigung loeschen, wenn diese zur aktuellen Orga gehoert
     if($announcement->getValue('ann_org_id') == $gCurrentOrganization->getValue('org_id'))

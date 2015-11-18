@@ -101,7 +101,7 @@ if($datesResult['numResults'] > 0)
             }
         }
 
-        if ($date->getValue('dat_location') != '')
+        if ($date->getValue('dat_location') !== '')
         {
             $description = $description. '<br /><br />'.$gL10n->get('DAT_LOCATION').':&nbsp;'. $date->getValue('dat_location');
         }

@@ -55,7 +55,7 @@ if($getRoleId > 0)
 
 $_SESSION['roles_request'] = $_POST;
 
-if($getMode == 1)
+if($getMode === 1)
 {
     // create html page object
     $page = new HtmlPage($gL10n->get('ROL_ROLE_DELETE'));
@@ -86,7 +86,7 @@ if($getMode == 1)
     $page->show();
     exit();
 }
-elseif($getMode == 2)
+elseif($getMode === 2)
 {
     // Rolle anlegen oder updaten
 
@@ -325,7 +325,7 @@ elseif($getMode == 2)
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
-elseif($getMode == 3)
+elseif($getMode === 3)
 {
     // Rolle zur inaktiven Rolle machen
     $return_code = $role->setInactive();
@@ -338,7 +338,7 @@ elseif($getMode == 3)
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $gL10n->get('SYS_INACTIVE')));
 }
-elseif($getMode == 4)
+elseif($getMode === 4)
 {
     // delete role from database
     try
@@ -353,7 +353,7 @@ elseif($getMode == 4)
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_DELETE_DATA'));
 }
-elseif($getMode == 5)
+elseif($getMode === 5)
 {
     // Rolle wieder aktiv setzen
     $return_code = $role->setActive();
@@ -366,13 +366,13 @@ elseif($getMode == 5)
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $gL10n->get('SYS_ACTIVE')));
 }
-elseif($getMode == 6)
+elseif($getMode === 6)
 {
     // Fragen, ob die inaktive Rolle geloescht werden soll
     $gMessage->setForwardYesNo($g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$getRoleId.'&amp;mode=4');
     $gMessage->show($gL10n->get('ROL_ROLE_DELETE_DESC', $role->getValue('rol_name')));
 }
-elseif($getMode == 7)
+elseif($getMode === 7)
 {
     $role->setValue('rol_visible', 0);
     $role->save();
@@ -380,7 +380,7 @@ elseif($getMode == 7)
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $gL10n->get('SYS_INVISIBLE')));
 }
-elseif($getMode == 8)
+elseif($getMode === 8)
 {
     $role->setValue('rol_visible', 1);
     $role->save();
@@ -388,7 +388,7 @@ elseif($getMode == 8)
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $gL10n->get('SYS_VISIBLE')));
 }
-elseif($getMode == 9)
+elseif($getMode === 9)
 {
     if($role->hasFormerMembers() == true)
     {

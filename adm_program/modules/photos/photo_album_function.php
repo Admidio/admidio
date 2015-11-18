@@ -41,7 +41,7 @@ $_SESSION['photo_album_request'] = $_POST;
 // Fotoalbumobjekt anlegen
 $photo_album = new TablePhotos($gDb);
 
-if($getMode != 'new' && $getPhotoId > 0)
+if($getMode !== 'new' && $getPhotoId > 0)
 {
     $photo_album->readDataById($getPhotoId);
 
@@ -56,7 +56,7 @@ if($getMode != 'new' && $getPhotoId > 0)
 $ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
-if($getMode == 'new' || $getMode == 'change')
+if($getMode === 'new' || $getMode === 'change')
 {
     //Gesendete Variablen Uebernehmen und kontollieren
 
@@ -66,7 +66,7 @@ if($getMode == 'new' || $getMode == 'change')
         $_POST['pho_locked'] = 0;
     }
     //Album
-    if(strlen($_POST['pho_name']) == 0)
+    if(strlen($_POST['pho_name']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('PHO_ALBUM')));
     }
@@ -116,7 +116,7 @@ if($getMode == 'new' || $getMode == 'change')
     }
 
     //Photographen
-    if(strlen($_POST['pho_photographers']) == 0)
+    if(strlen($_POST['pho_photographers']) === 0)
     {
         $_POST['pho_photographers'] = $gL10n->get('SYS_UNKNOWN');
     }
@@ -131,7 +131,7 @@ if($getMode == 'new' || $getMode == 'change')
     }
 
     /********************neuen Datensatz anlegen***********************************/
-    if ($getMode == 'new')
+    if ($getMode === 'new')
     {
         // Album in Datenbank schreiben
         $photo_album->save();
@@ -147,7 +147,7 @@ if($getMode == 'new' || $getMode == 'change')
             $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
         }
 
-        if(strlen($error['text']) == 0)
+        if(strlen($error['text']) === 0)
         {
             // Benachrichtigungs-Email für neue Einträge
             $notification = new Email();
@@ -160,7 +160,7 @@ if($getMode == 'new' || $getMode == 'change')
 
     /********************Aenderung des Ordners***********************************/
     // Wurde das Anfangsdatum bearbeitet, muss sich der Ordner aendern
-    elseif ($getMode=='change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
+    elseif ($getMode === 'change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
     {
         $newFolder = SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
 
@@ -178,7 +178,7 @@ if($getMode == 'new' || $getMode == 'change')
 
     /********************Aenderung der Datenbankeinträge***********************************/
 
-    if($getMode == 'change')
+    if($getMode === 'change')
     {
         // geaenderte Daten in der Datenbank akutalisieren
         $photo_album->save();
@@ -193,7 +193,7 @@ if($getMode == 'new' || $getMode == 'change')
 
 /**************************************************************************/
 
-elseif($getMode == 'delete')
+elseif($getMode === 'delete')
 {
     // Album loeschen
     if($photo_album->delete())

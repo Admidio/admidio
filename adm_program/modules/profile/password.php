@@ -24,7 +24,7 @@ $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('requireVa
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'change')));
 
 // in ajax mode only return simple text on error
-if($getMode == 'change')
+if($getMode === 'change')
 {
     $gMessage->showHtmlTextOnly(true);
 }
@@ -102,7 +102,7 @@ if($getMode === 'change')
 
     echo $phrase;
 }
-elseif($getMode == 'html')
+elseif($getMode === 'html')
 {
     /***********************************************************************/
     /* Show password form */
@@ -120,7 +120,7 @@ elseif($getMode == 'html')
             event.preventDefault();
 
             $.post(action, $(this).serialize(), function(data) {
-                if(data == "success") {
+                if(data === "success") {
                     $("#password_form .form-alert").attr("class", "alert alert-success form-alert");
                     $("#password_form .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
                     $("#password_form .form-alert").fadeIn("slow");
