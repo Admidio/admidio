@@ -42,10 +42,10 @@ elseif($gPreferences['enable_guestbook_module'] == 2)
 }
 
 // Erst einmal pruefen ob die noetigen Berechtigungen vorhanden sind
-if ($getMode == 2 || $getMode == 3 || $getMode == 4 || $getMode == 5 || $getMode == 8)
+if ($getMode === 2 || $getMode === 3 || $getMode === 4 || $getMode === 5 || $getMode === 8)
 {
 
-    if ($getMode == 4)
+    if ($getMode === 4)
     {
         // Wenn nicht jeder kommentieren darf, muss man eingeloggt zu sein
         if ($gPreferences['enable_gbook_comments4all'] == 0)
@@ -66,7 +66,7 @@ if ($getMode == 2 || $getMode == 3 || $getMode == 4 || $getMode == 5 || $getMode
         require_once('../../system/login_valid.php');
     }
 
-    if ($getMode == 2 || $getMode == 3 || $getMode == 5 || $getMode == 8)
+    if ($getMode === 2 || $getMode === 3 || $getMode === 5 || $getMode === 8)
     {
         // Fuer die modes 2,3,5,6,7 und 8 werden editGuestbook-Rechte benoetigt
         if(!$gCurrentUser->editGuestbookRight())
@@ -76,7 +76,7 @@ if ($getMode == 2 || $getMode == 3 || $getMode == 4 || $getMode == 5 || $getMode
     }
 }
 
-if ($getMode == 1 || $getMode == 2 || $getMode == 3 || $getMode == 9)
+if ($getMode === 1 || $getMode === 2 || $getMode === 3 || $getMode === 9)
 {
     // Gaestebuchobjekt anlegen
     $guestbook = new TableGuestbook($gDb);
@@ -109,25 +109,31 @@ else
     }
 }
 
-if ($getMode == 1 || $getMode == 3)
+if ($getMode === 1 || $getMode === 3)
 {
     // Der Inhalt des Formulars wird nun in der Session gespeichert...
     $_SESSION['guestbook_entry_request'] = $_POST;
 
     // if login and new entry then fill name with login user
-    if($getMode == 1 && $gCurrentUser->getValue('usr_id') > 0)
+    if($getMode === 1 && $gCurrentUser->getValue('usr_id') > 0)
     {
         $_POST['gbo_name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
     }
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
-    if ($getMode == 1 && !$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
+    if ($getMode === 1 && !$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
     {
         if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
         {
-            if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-            elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+            if($gPreferences['captcha_type'] === 'pic')
+            {
+                $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
+            }
+            elseif($gPreferences['captcha_type'] === 'calc')
+            {
+                $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
+            }
         }
     }
 
@@ -142,11 +148,11 @@ if ($getMode == 1 || $getMode == 3)
             if(!$guestbook->setValue($key, $value))
             {
                 // Daten wurden nicht uebernommen, Hinweis ausgeben
-                if($key == 'gbo_email')
+                if($key === 'gbo_email')
                 {
                     $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
                 }
-                elseif($key == 'gbo_homepage')
+                elseif($key === 'gbo_homepage')
                 {
                     $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE')));
                 }
@@ -160,7 +166,7 @@ if ($getMode == 1 || $getMode == 3)
 
         if($gValidLogin)
         {
-            if(strlen($guestbook->getValue('gbo_name')) == 0)
+            if(strlen($guestbook->getValue('gbo_name')) === 0)
             {
                 // Falls der User eingeloggt ist, wird die aktuelle UserId und der korrekte Name mitabgespeichert...
                 $guestbook->setValue('gbo_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));
@@ -263,7 +269,7 @@ if ($getMode == 1 || $getMode == 3)
     }
 }
 
-elseif($getMode == 2)
+elseif($getMode === 2)
 {
     // den Gaestebucheintrag loeschen...
     $guestbook->delete();
@@ -271,7 +277,7 @@ elseif($getMode == 2)
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';
 }
-elseif ($getMode == 5)
+elseif ($getMode === 5)
 {
     //Gaestebuchkommentar loeschen...
     $guestbook_comment->delete();
@@ -280,39 +286,45 @@ elseif ($getMode == 5)
     echo 'done';
 }
 // Moderationsfunktion
-elseif ($getMode == 9)
+elseif ($getMode === 9)
 {
     // den Gaestebucheintrag freischalten...
     $guestbook->moderate();
     // Freischalten erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';
 }
-elseif ($getMode == 10)
+elseif ($getMode === 10)
 {
     // den Gaestebucheintrag freischalten...
     $guestbook_comment->moderate();
     // Freischalten erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';
 }
-elseif($getMode == 4 || $getMode == 8)
+elseif($getMode === 4 || $getMode === 8)
 {
     // Der Inhalt des Formulars wird nun in der Session gespeichert...
     $_SESSION['guestbook_comment_request'] = $_POST;
 
     // if login then fill name with login user
-    if($getMode == 4 && $gCurrentUser->getValue('usr_id') > 0)
+    if($getMode === 4 && $gCurrentUser->getValue('usr_id') > 0)
     {
         $_POST['gbc_name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
     }
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
-    if ($getMode == 4 && !$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
+    if ($getMode === 4 && !$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
     {
         if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
         {
-            if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-            elseif($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+            if($gPreferences['captcha_type'] === 'pic')
+            {
+                $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
+            }
+            elseif($gPreferences['captcha_type'] === 'calc')
+            {
+                $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
+            }
         }
     }
 
@@ -327,7 +339,7 @@ elseif($getMode == 4 || $getMode == 8)
             if(!$guestbook_comment->setValue($key, $value))
             {
                 // Daten wurden nicht uebernommen, Hinweis ausgeben
-                if($key == 'gbc_email')
+                if($key === 'gbc_email')
                 {
                     $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
                 }
@@ -335,18 +347,18 @@ elseif($getMode == 4 || $getMode == 8)
         }
     }
 
-    if($getMode == 4)
+    if($getMode === 4)
     {
         $guestbook_comment->setValue('gbc_gbo_id', $getGboId);
     }
 
-    if (strlen($guestbook_comment->getValue('gbc_name')) > 0 && strlen($guestbook_comment->getValue('gbc_text'))  > 0)
+    if (strlen($guestbook_comment->getValue('gbc_name')) > 0 && strlen($guestbook_comment->getValue('gbc_text')) > 0)
     {
         // Gaestebuchkommentar speichern
 
         if($gValidLogin)
         {
-            if(strlen($guestbook_comment->getValue('gbc_name')) == 0)
+            if(strlen($guestbook_comment->getValue('gbc_name')) === 0)
             {
                 // Falls der User eingeloggt ist, wird die aktuelle UserId und der korrekte Name mitabgespeichert...
                 $guestbook_comment->setValue('gbc_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));

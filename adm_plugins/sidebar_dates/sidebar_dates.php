@@ -78,7 +78,7 @@ if(isset($plg_kal_cat) == false)
 
 // Pr?fen ob the Link-URL gesetzt wurde oder leer ist
 // wenn leer, dann Standardpfad zum Admidio-Modul
-if(isset($plg_link_url) == false || ($plg_link_url) =="")
+if(isset($plg_link_url) == false || ($plg_link_url) === '')
 {
 $plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
 }
@@ -92,7 +92,7 @@ $plgDatesResult = $plgDates->getDataSet(0, $plg_dates_count);
 $plg_date = new TableDate($gDb);
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
-if($plg_show_headline==1)
+if($plg_show_headline == 1)
 {
     echo '<h3>'.$gL10n->get('PLG_DATES_HEADLINE').'</h3>';
 }

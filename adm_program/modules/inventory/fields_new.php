@@ -89,7 +89,7 @@ $page = new HtmlPage($headline);
 
 $page->addJavascript('
     function setValueList() {
-        if($("#inf_type").val() == "DROPDOWN" || $("#inf_type").val() == "RADIO_BUTTON") {
+        if($("#inf_type").val() === "DROPDOWN" || $("#inf_type").val() === "RADIO_BUTTON") {
             $("#inf_value_list_group").show("slow");
             $("#inf_value_list").attr("required", "required");
         }
@@ -100,7 +100,7 @@ $page->addJavascript('
     }
 
     setValueList();
-    $("#inf_type").click(function() {setValueList();});', true);
+    $("#inf_type").click(function() { setValueList(); });', true);
 
 // add back link to module menu
 $profileFieldsEditMenu = $page->getMenu();

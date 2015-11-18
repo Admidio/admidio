@@ -107,7 +107,7 @@ class ModuleAnnouncements extends Modules
      * Get all records and push it to the array
      * @return Returns the Array with results, recordsets and validated parameters from $_GET Array
      */
-    public function getDataSet($startElement=0, $limit=NULL)
+    public function getDataSet($startElement = 0, $limit = null)
     {
         global $gCurrentOrganization;
         global $gPreferences;
@@ -115,7 +115,7 @@ class ModuleAnnouncements extends Modules
         global $gDb;
 
         //Parameter
-        if($limit == NULL)
+        if($limit == null)
         {
             $announcementsPerPage = $gPreferences['announcements_per_page'];
         }

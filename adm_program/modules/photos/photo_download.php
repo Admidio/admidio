@@ -63,7 +63,7 @@ if($photo_album->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_
 }
 
 // check whether album is locked
-if($photo_album->getValue('pho_locked')==1 && (!$gCurrentUser->editPhotoRight()))
+if($photo_album->getValue('pho_locked') == 1 && (!$gCurrentUser->editPhotoRight()))
 {
     $gMessage->show($gL10n->get('PHO_ALBUM_NOT_APPROVED'));
 }
@@ -153,7 +153,7 @@ if($getPhotoNr == null)
         $photo_album->readDataById($adm_photo_list['pho_id']);
 
         // ignore locked albums owned by others
-        if($photo_album->getValue('pho_locked')==0 || $gCurrentUser->editPhotoRight())
+        if($photo_album->getValue('pho_locked') == 0 || $gCurrentUser->editPhotoRight())
         {
             $albumFolder = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
             // get number of photos in total

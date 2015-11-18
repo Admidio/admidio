@@ -210,12 +210,12 @@ else
 }
 
 // if html mode and last url was not a list view then save this url to navigation stack
-if($getMode == 'html' && strpos($gNavigation->getUrl(), 'lists_show.php') === false)
+if($getMode === 'html' && strpos($gNavigation->getUrl(), 'lists_show.php') === false)
 {
     $gNavigation->addUrl(CURRENT_URL);
 }
 
-if($getMode != 'csv')
+if($getMode !== 'csv')
 {
     $datatable = false;
     $hoverRows = false;
@@ -233,7 +233,7 @@ if($getMode != 'csv')
         $htmlSubHeadline .= ' - '. $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }
 
-    if($getMode == 'print')
+    if($getMode === 'print')
     {
         // create html page object without the custom theme files
         $page = new HtmlPage();
@@ -247,7 +247,7 @@ if($getMode != 'csv')
 
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
     }
-    elseif($getMode == 'pdf')
+    elseif($getMode === 'pdf')
     {
         require_once(SERVER_PATH. '/adm_program/libs/tcpdf/tcpdf.php');
         $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -289,7 +289,7 @@ if($getMode != 'csv')
         $table->addRow();
 
     }
-    elseif($getMode == 'html')
+    elseif($getMode === 'html')
     {
         $datatable = true;
         $hoverRows = true;
@@ -386,7 +386,7 @@ if($getMode != 'csv')
 }
 
 // initialize array parameters for table and set the first column for the counter
-if($getMode == 'html')
+if($getMode === 'html')
 {
     // in html mode we group leaders. Therefore we need a special hidden column.
     $columnAlign  = array('left', 'left');
@@ -410,13 +410,13 @@ for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
         $usf_id = $column->getValue('lsc_usf_id');
         $columnHeader = $gProfileFields->getPropertyById($usf_id, 'usf_name');
 
-        if($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX'
-        || $gProfileFields->getPropertyById($usf_id, 'usf_name_intern') == 'GENDER')
+        if($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX'
+        || $gProfileFields->getPropertyById($usf_id, 'usf_name_intern') === 'GENDER')
         {
             $columnAlign[] = 'center';
         }
-        elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'NUMBER'
-        || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DECIMAL')
+        elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'NUMBER'
+        || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'DECIMAL')
         {
             $columnAlign[] = 'right';
         }
@@ -437,7 +437,7 @@ for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
     || $gCurrentUser->editUsers()
     || $gProfileFields->getPropertyById($usf_id, 'usf_hidden') == 0)
     {
-        if($getMode == 'csv')
+        if($getMode === 'csv')
         {
             if($columnNumber == 1)
             {
@@ -446,7 +446,7 @@ for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
             }
             $str_csv = $str_csv. $separator. $valueQuotes. $columnHeader. $valueQuotes;
         }
-        elseif($getMode == 'pdf')
+        elseif($getMode === 'pdf')
         {
             if($columnNumber == 1)
             {
@@ -455,18 +455,18 @@ for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
 
             $table->addColumn($columnHeader, array('style' => 'text-align: '.$columnAlign[$columnNumber-1].';font-size:14;background-color:#C7C7C7;'), 'th');
         }
-        elseif($getMode == 'html' || $getMode == 'print')
+        elseif($getMode === 'html' || $getMode === 'print')
         {
             $columnValues[] = $columnHeader;
         }
     }
 }  // End-For
 
-if($getMode == 'csv')
+if($getMode === 'csv')
 {
     $str_csv = $str_csv. "\n";
 }
-elseif($getMode == 'html' || $getMode == 'print')
+elseif($getMode === 'html' || $getMode === 'print')
 {
     $table->setColumnAlignByArray($columnAlign);
     $table->addRowHeadingByArray($columnValues);
@@ -481,7 +481,7 @@ $listRowNumber = 1;
 
 foreach($membersList as $member)
 {
-    if($getMode == 'print' || $getMode == 'pdf')
+    if($getMode === 'print' || $getMode === 'pdf')
     {
         // in print preview and pdf we group the role leaders and the members and
         // add a specific header for them
@@ -505,7 +505,7 @@ foreach($membersList as $member)
     }
 
     // if html mode and the role has leaders then group all data between leaders and members
-    if($getMode == 'html')
+    if($getMode === 'html')
     {
         if($member['mem_leader'] != 0)
         {
@@ -545,7 +545,7 @@ foreach($membersList as $member)
         || $gCurrentUser->editUsers()
         || $gProfileFields->getPropertyById($usf_id, 'usf_hidden') == 0)
         {
-            if($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf')
+            if($getMode === 'html' || $getMode === 'print' || $getMode === 'pdf')
             {
                 if($columnNumber == 1)
                 {
@@ -554,7 +554,7 @@ foreach($membersList as $member)
 
                     // in html mode we add an additional column with leader/member information to
                     // enable the grouping function of jquery datatables
-                    if($getMode == 'html')
+                    if($getMode === 'html')
                     {
                         if($member['mem_leader'] == 1)
                         {
@@ -586,21 +586,21 @@ foreach($membersList as $member)
             {
                 $content = $gL10n->getCountryByCode($member[$sqlColumnNumber]);
             }
-            elseif($column->getValue('lsc_special_field') == 'usr_photo')
+            elseif($column->getValue('lsc_special_field') === 'usr_photo')
             {
                 // show user photo
-                if($getMode == 'html' || $getMode == 'print')
+                if($getMode === 'html' || $getMode === 'print')
                 {
                     $content = '<img src="'.$g_root_path.'/adm_program/modules/profile/profile_photo_show.php?usr_id='.$member['usr_id'].'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
                 }
-                if ($getMode == 'csv' && $member[$sqlColumnNumber] != NULL)
+                if ($getMode === 'csv' && $member[$sqlColumnNumber] != null)
                 {
                     $content = $gL10n->get('LST_USER_PHOTO');
                 }
             }
-            elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX')
+            elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX')
             {
-                if($getMode != 'html')
+                if($getMode !== 'html')
                 {
                     if($content == 1)
                     {
@@ -612,9 +612,9 @@ foreach($membersList as $member)
                     }
                 }
             }
-            elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DATE'
-            ||     $column->getValue('lsc_special_field') == 'mem_begin'
-            ||     $column->getValue('lsc_special_field') == 'mem_end')
+            elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'DATE'
+            ||     $column->getValue('lsc_special_field') === 'mem_begin'
+            ||     $column->getValue('lsc_special_field') === 'mem_end')
             {
                 if(strlen($member[$sqlColumnNumber]) > 0)
                 {
@@ -623,9 +623,9 @@ foreach($membersList as $member)
                     $content = $date->format($gPreferences['system_date']);
                 }
             }
-            elseif(($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
-                  || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON')
-            && $getMode == 'csv')
+            elseif(($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'DROPDOWN'
+                  || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'RADIO_BUTTON')
+            && $getMode === 'csv')
             {
                 if(strlen($member[$sqlColumnNumber]) > 0)
                 {
@@ -659,7 +659,7 @@ foreach($membersList as $member)
         }
     }
 
-    if($getMode == 'csv')
+    if($getMode === 'csv')
     {
         $str_csv = $str_csv. "\n";
     }
@@ -672,7 +672,7 @@ foreach($membersList as $member)
 }  // End-While (end found User)
 
 // Settings for export file
-if($getMode == 'csv' || $getMode == 'pdf')
+if($getMode === 'csv' || $getMode === 'pdf')
 {
     // file name in the current directory...
     if(strlen($list->getValue('lst_name')) > 0)
@@ -698,12 +698,12 @@ if($getMode == 'csv' || $getMode == 'pdf')
 
 }
 
-if($getMode == 'csv')
+if($getMode === 'csv')
 {
     // download CSV file
     header('Content-Type: text/comma-separated-values; charset='.$charset);
 
-    if($charset == 'iso-8859-1')
+    if($charset === 'iso-8859-1')
     {
         echo utf8_decode($str_csv);
     }
@@ -713,7 +713,7 @@ if($getMode == 'csv')
     }
 }
 // send the new PDF to the User
-elseif($getMode == 'pdf')
+elseif($getMode === 'pdf')
 {
     // output the HTML content
     $pdf->writeHTML($table->getHtmlTable(), true, false, true, false, '');
@@ -734,7 +734,7 @@ elseif($getMode === 'html' || $getMode === 'print')
     $page->addHtml($table->show(false));
 
     // create a infobox for the role
-    if($getMode == 'html' && $numberRoles === 1)
+    if($getMode === 'html' && $numberRoles === 1)
     {
         $htmlBox = '';
 

@@ -776,7 +776,7 @@ class HtmlForm extends HtmlFormBasic
             $datepickerOptions          = '';
 
             // if you have a birthday field than start with the years selection
-            if($optionsAll['type'] == 'birthday')
+            if($optionsAll['type'] === 'birthday')
             {
                 $attributes['data-provide'] = 'datepicker-birthday';
                 $datepickerOptions = ' startView: 2, ';
@@ -787,7 +787,7 @@ class HtmlForm extends HtmlFormBasic
                 $datepickerOptions = ' todayBtn: "linked", ';
             }
 
-            if($this->datepickerInitialized === false || $optionsAll['type'] == 'birthday')
+            if($this->datepickerInitialized === false || $optionsAll['type'] === 'birthday')
             {
                 $javascriptCode = '
                     $("input[data-provide=\''.$attributes['data-provide'].'\']").datepicker({
@@ -1535,7 +1535,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             // if text is a translation-id then translate it
-            if(strpos($row['cat_name'], '_') == 3)
+            if(strpos($row['cat_name'], '_') === 3)
             {
                 $categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
             }
@@ -1555,7 +1555,7 @@ class HtmlForm extends HtmlFormBasic
             while($row = $database->fetch_array($result))
             {
                 // if text is a translation-id then translate it
-                if(strpos($row['cat_name'], '_') == 3)
+                if(strpos($row['cat_name'], '_') === 3)
                 {
                     $categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
                 }

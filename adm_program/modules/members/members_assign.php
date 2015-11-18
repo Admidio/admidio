@@ -20,11 +20,11 @@ if (!$gCurrentUser->editUsers())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-if(strlen($_POST['lastname']) == 0)
+if(strlen($_POST['lastname']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LASTNAME')));
 }
-if(strlen($_POST['firstname']) == 0)
+if(strlen($_POST['firstname']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_FIRSTNAME')));
 }
@@ -34,7 +34,7 @@ $getLastname  = admFuncVariableIsValid($_POST, 'lastname', 'string', array('requ
 $getFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string', array('requireValue' => true));
 
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
-if($gPreferences['system_search_similar'] == 1 && $gDbType == 'mysql')
+if($gPreferences['system_search_similar'] == 1 && $gDbType === 'mysql')
 {
     $sql_similar_name =
     '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($getLastname).'\'), 1, 4)

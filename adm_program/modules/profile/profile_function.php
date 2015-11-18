@@ -32,7 +32,7 @@ $getMemberId = admFuncVariableIsValid($_GET, 'mem_id', 'numeric');
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric');
 
 // in ajax mode only return simple text on error
-if($getMode == 7)
+if($getMode === 7)
 {
     $gMessage->showHtmlTextOnly(true);
 }
@@ -40,7 +40,7 @@ if($getMode == 7)
 // create user object
 $user = new User($gDb, $gProfileFields, $getUserId);
 
-if($getMode == 1)
+if($getMode === 1)
 {
     // Export vCard of user
 
@@ -62,7 +62,7 @@ if($getMode == 1)
     // create vcard and check if user is allowed to edit profile, so he can see more data
     echo $user->getVCard($gCurrentUser->hasRightEditProfile($user));
 }
-elseif($getMode == 2)
+elseif($getMode === 2)
 {
     // Cancel membership of role
     $member = new TableMembers($gDb, $getMemberId);
@@ -77,7 +77,7 @@ elseif($getMode == 2)
         echo 'done';
     }
 }
-elseif($getMode == 3)
+elseif($getMode === 3)
 {
     // Remove former membership of role
     if($gCurrentUser->isWebmaster())
@@ -89,7 +89,7 @@ elseif($getMode == 3)
         echo 'done';
     }
 }
-elseif($getMode == 4)
+elseif($getMode === 4)
 {
     // reload role memberships
     $count_show_roles    = 0;
@@ -97,7 +97,7 @@ elseif($getMode == 4)
     $count_role        = $gDb->num_rows($result_role);
     getRoleMemberships('role_list', $user, $result_role, $count_role, true);
 }
-elseif($getMode == 5)
+elseif($getMode === 5)
 {
     // reload former role memberships
     $count_show_roles    = 0;
@@ -114,7 +114,7 @@ elseif($getMode == 5)
         echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'block\' })</script>';
     }
 }
-elseif($getMode == 6)
+elseif($getMode === 6)
 {
     // reload future role memberships
     $count_show_roles    = 0;
@@ -131,7 +131,7 @@ elseif($getMode == 6)
         echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'block\' })</script>';
     }
 }
-elseif($getMode == 7)
+elseif($getMode === 7)
 {
     // save membership date changes
     $getMembershipStart = admFuncVariableIsValid($_GET, 'membership_start_date_'.$getMemberId, 'date', array('requireValue' => true));
@@ -191,7 +191,7 @@ elseif($getMode == 7)
 
     echo 'success';
 }
-elseif ($getMode == 8)
+elseif ($getMode === 8)
 {
     // Export every member of a role into one vCard file
     if($gCurrentUser->hasRightViewRole($getRoleId))

@@ -32,7 +32,7 @@ if($gDebug)
     error_log('memory_used::' . memory_get_usage());
 }
 
- // default prefix is set to 'adm' because of compatibility to old versions
+// default prefix is set to 'adm' because of compatibility to old versions
 if($g_tbl_praefix === '')
 {
     $g_tbl_praefix = 'adm';
@@ -43,7 +43,7 @@ require_once(SERVER_PATH . '/adm_program/libs/htmlawed/htmlawed.php');
 require_once(SERVER_PATH . '/adm_program/system/function.php');
 require_once(SERVER_PATH . '/adm_program/system/string.php');
 
-// remove HMTL & PHP-Code from all parameters
+// remove HTML & PHP-Code from all parameters
 $_GET    = admStrStripTagsSpecial($_GET);
 $_POST   = admStrStripTagsSpecial($_POST);
 $_COOKIE = admStrStripTagsSpecial($_COOKIE);

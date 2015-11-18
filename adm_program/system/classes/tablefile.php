@@ -137,7 +137,7 @@ class TableFile extends TableAccess
         $value = parent::getValue($columnName, $format);
 
         // getValue transforms & to html chars. This must be undone.
-        if($columnName == 'fil_name')
+        if($columnName === 'fil_name')
         {
             $value = htmlspecialchars_decode($value);
         }

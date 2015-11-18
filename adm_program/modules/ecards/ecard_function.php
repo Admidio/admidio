@@ -37,7 +37,7 @@ class FunctionClass
         {
             while($file = readdir($curdir))
             {
-                if($file != '.' && $file != '..')
+                if($file !== '.' && $file !== '..')
                 {
                     $array_files[$i] = $file;
                     ++$i;
@@ -94,19 +94,19 @@ class FunctionClass
         global $gCurrentUser, $g_root_path;
 
         // Falls der Name des Empfaenger nicht vorhanden ist wird er fuer die Vorschau ersetzt
-        if(strip_tags(trim($recipientName)) == '')
+        if(strip_tags(trim($recipientName)) === '')
         {
           $recipientName  = '< '.$this->nameRecipientString.' >';
         }
 
         // Falls die Email des Empfaenger nicht vorhanden ist wird sie fuer die Vorschau ersetzt
-        if(strip_tags(trim($recipientEmail)) == '')
+        if(strip_tags(trim($recipientEmail)) === '')
         {
           $recipientEmail = '< '.$this->emailRecipientString.' >';
         }
 
         // Falls die Nachricht nicht vorhanden ist wird sie fuer die Vorschau ersetzt
-        if(trim($ecardMessage) == '')
+        if(trim($ecardMessage) === '')
         {
           $ecardMessage = '< '.$this->yourMessageString.' >';
         }
@@ -198,7 +198,7 @@ class FunctionClass
                 }
 
                 // Bild als Anhang an die Mail haengen
-                if($img_name != 'none.jpg' && $img_name !== '')
+                if($img_name !== 'none.jpg' && $img_name !== '')
                 {
                     $uid = md5(uniqid($img_name.time()));
                     try
@@ -217,7 +217,7 @@ class FunctionClass
         $email->setText($ecardHtmlData);
         $email->sendDataAsHtml();
 
-        if($returnCode==true)
+        if($returnCode == true)
         {
             $returnCode = $email->sendEmail();
         }

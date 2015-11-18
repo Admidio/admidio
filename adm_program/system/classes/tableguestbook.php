@@ -55,13 +55,13 @@ class TableGuestbook extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        if($columnName == 'gbo_text')
+        if($columnName === 'gbo_text')
         {
             if(isset($this->dbColumns['gbo_text']) == false)
             {
                 $value = '';
             }
-            elseif($format == 'database')
+            elseif($format === 'database')
             {
                 $value = html_entity_decode(strStripTags($this->dbColumns['gbo_text']));
             }
@@ -117,7 +117,7 @@ class TableGuestbook extends TableAccess
     {
         if($newValue !== '')
         {
-            if($columnName == 'gbo_email')
+            if($columnName === 'gbo_email')
             {
                 $newValue = admStrToLower($newValue);
                 if (!strValidCharacters($newValue, 'email'))
@@ -126,7 +126,7 @@ class TableGuestbook extends TableAccess
                     return false;
                 }
             }
-            elseif($columnName == 'gbo_homepage')
+            elseif($columnName === 'gbo_homepage')
             {
                 // Homepage darf nur gueltige Zeichen enthalten
                 if (!strValidCharacters($newValue, 'url'))
@@ -142,7 +142,7 @@ class TableGuestbook extends TableAccess
             }
         }
 
-        if($columnName == 'gbo_text')
+        if($columnName === 'gbo_text')
         {
             return parent::setValue($columnName, $newValue, false);
         }

@@ -79,7 +79,7 @@ if(!isset($plg_photos_show_link))
 $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
-if($plg_show_headline==1)
+if($plg_show_headline == 1)
 {
     echo '<h3>'.$gL10n->get('PLG_RANDOM_PHOTO_HEADLINE').'</h3>';
 }

@@ -59,7 +59,7 @@ function getFieldCode($fieldNameIntern, $item)
     }
 
     // show html of field, if user has a value for that field or it's a checkbox field
-    if(strlen($inventory->getValue($fieldNameIntern)) > 0 || $gInventoryFields->getProperty($fieldNameIntern, 'inf_type') == 'CHECKBOX')
+    if(strlen($inventory->getValue($fieldNameIntern)) > 0 || $gInventoryFields->getProperty($fieldNameIntern, 'inf_type') === 'CHECKBOX')
     {
         $html['label'] = $gInventoryFields->getProperty($fieldNameIntern, 'inf_name');
         $html['value'] = $value;
@@ -98,7 +98,7 @@ $page->addJavascript('
     function showHideMembershipInformation(element) {
         id = "#" + element.attr("id") + "_Content";
 
-        if($(id).css("display") == "none") {
+        if($(id).css("display") === "none") {
             $(id).show("fast");
         }
         else {
@@ -107,9 +107,9 @@ $page->addJavascript('
     }');
 $page->addJavascript('
     profileJS.init();
-    $(".admidio-icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
-    $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
-    $("#profile_authorizations_box_body").mouseout(function () { profileJS.deleteShowInfo()});
+    $(".admidio-icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function() { $("#admButtonNo").focus(); }});
+    $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)); });
+    $("#profile_authorizations_box_body").mouseout(function () { profileJS.deleteShowInfo(); });
 
     $(".admidio-form-membership-period").submit(function(event) {
         var id = $(this).attr("id");
@@ -125,7 +125,7 @@ $page->addJavascript('
             url:     action,
             data:    $(this).serialize(),
             success: function(data) {
-                if(data == "success") {
+                if(data === "success") {
                     $("#"+id+" .form-alert").attr("class", "alert alert-success form-alert");
                     $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                     $("#"+id+" .form-alert").fadeIn("slow");
@@ -188,14 +188,14 @@ $page->addHtml('
             foreach($gInventoryFields->mInventoryFields as $field)
             {
                 // nur Felder der Stammdaten anzeigen
-                if($field->getValue('cat_name_intern') == 'MASTER_DATA'
+                if($field->getValue('cat_name_intern') === 'MASTER_DATA'
                 && $field->getValue('inv_hidden') == 0)
                 {
                     switch($field->getValue('inf_name_intern'))
                     {
                         case 'ROOM_ID':
                             $field = getFieldCode($field->getValue('inf_name_intern'), $getItemId);
-                            if($gDbType == 'mysql')
+                            if($gDbType === 'mysql')
                             {
                                 $sql = 'SELECT CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') as name FROM '.TBL_ROOMS.' where room_id = ' . $field['value'];
                             }
@@ -267,13 +267,13 @@ foreach($gProfileFields->mProfileFields as $field)
 {
     // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
     // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
-    if($field->getValue('cat_name_intern') != 'MASTER_DATA'
+    if($field->getValue('cat_name_intern') !== 'MASTER_DATA'
     && ($gCurrentUser->editInventory($inventory) == true
        || ($gCurrentUser->editInventory($inventory) == false && $field->getValue('inf_hidden') == 0)))
     {
         // show new category header if new category and field has value or is a checkbox field
         if($category != $field->getValue('cat_name')
-        && (strlen($inventory->getValue($field->getValue('inf_name_intern'))) > 0 || $field->getValue('inf_type') == 'CHECKBOX'))
+        && (strlen($inventory->getValue($field->getValue('inf_name_intern'))) > 0 || $field->getValue('inf_type') === 'CHECKBOX'))
         {
             if($category !== '')
             {
@@ -293,7 +293,7 @@ foreach($gProfileFields->mProfileFields as $field)
         }
 
         // show html of field, if user has a value for that field or it's a checkbox field
-        if(strlen($inventory->getValue($field->getValue('inf_name_intern'))) > 0 || $field->getValue('inf_type') == 'CHECKBOX')
+        if(strlen($inventory->getValue($field->getValue('inf_name_intern'))) > 0 || $field->getValue('inf_type') === 'CHECKBOX')
         {
             $field = getFieldCode($field->getValue('inf_name_intern'), $inventory);
             if(strlen($field['value']) > 0)

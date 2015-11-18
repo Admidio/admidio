@@ -55,7 +55,7 @@ if(isset($_SESSION['set_rol_id']))
 }
 else
 {
-    $setRoleId = NULL;
+    $setRoleId = null;
 }
 
 if($getInline == true)
@@ -64,7 +64,7 @@ if($getInline == true)
 
     $html .= '<script type="text/javascript"><!--
     $(document).ready(function(){
-        $(".admidio-group-heading").click(function() {showHideBlock($(this).attr("id"));});
+        $(".admidio-group-heading").click(function() { showHideBlock($(this).attr("id")); });
 
         $("#roles_assignment_form").submit(function(event) {
             var action = $(this).attr("action");
@@ -78,7 +78,7 @@ if($getInline == true)
                 url:     action,
                 data:    $(this).serialize(),
                 success: function(data) {
-                    if(data == "success") {
+                    if(data === "success") {
                         $("#roles_assignment_form .form-alert").attr("class", "alert alert-success form-alert");
                         $("#roles_assignment_form .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                         $("#roles_assignment_form .form-alert").fadeIn("slow");

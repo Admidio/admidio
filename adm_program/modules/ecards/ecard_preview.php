@@ -18,7 +18,7 @@ require_once('ecard_function.php');
 $gMessage->showThemeBody(false);
 $gMessage->showInModaleWindow();
 
-if(strlen($_POST['ecard_template']) == 0)
+if(strlen($_POST['ecard_template']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ECA_TEMPLATE')));
 }

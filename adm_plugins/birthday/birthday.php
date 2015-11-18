@@ -77,7 +77,7 @@ if(isset($plg_show_future) == false || is_numeric($plg_show_names_extern) == fal
     $plg_show_future = 10;
 }
 // Prüfen, ob die Rollenbedingung gesetzt wurde            //
-if(isset($plg_rolle_sql) == false || ($plg_rolle_sql) == '')
+if(isset($plg_rolle_sql) == false || ($plg_rolle_sql) === '')
 {
     $rol_sql = 'is not null';
 }
@@ -87,7 +87,7 @@ else
 }
 
 // Prüfen, ob die Sotierbedingung gesetzt wurde            //
-if(isset($plg_sort_sql) == false || ($plg_sort_sql) == '')
+if(isset($plg_sort_sql) == false || ($plg_sort_sql) === '')
 {
     $sort_sql = 'desc';
 }
@@ -170,7 +170,7 @@ $birthdayStatement = $gDb->query($sql);
 $numberBirthdays = $birthdayStatement->rowCount();
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
-if($plg_show_headline==1)
+if($plg_show_headline == 1)
 {
     echo '<h3>'.$gL10n->get('PLG_BIRTHDAY_HEADLINE').'</h3>';
 }

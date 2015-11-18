@@ -51,7 +51,7 @@ if($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 0)
 //Foto aus der Datenbank
 elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 0)
 {
-    if(strlen($user->getValue('usr_photo')) != NULL)
+    if(strlen($user->getValue('usr_photo')) != null)
     {
         $image = new Image();
         $image->setImageFromData($user->getValue('usr_photo'));

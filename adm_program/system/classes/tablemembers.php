@@ -202,7 +202,7 @@ class TableMembers extends TableAccess
                     $this->setValue('mem_end', $newEndDate);
 
                     // stop leader
-                    if($this->getValue('mem_leader')==1)
+                    if($this->getValue('mem_leader') == 1)
                     {
                         $this->setValue('mem_leader', 0);
                     }

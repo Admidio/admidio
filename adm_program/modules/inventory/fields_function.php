@@ -51,7 +51,7 @@ if($getInfId > 0)
     }
 }
 
-if($getMode == 1)
+if($getMode === 1)
 {
    // Feld anlegen oder updaten
 
@@ -59,12 +59,12 @@ if($getMode == 1)
 
     // pruefen, ob Pflichtfelder gefuellt sind
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
-    if($itemField->getValue('inf_system') == 0 && strlen($_POST['inf_name']) == 0)
+    if($itemField->getValue('inf_system') == 0 && strlen($_POST['inf_name']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
     }
 
-    if($itemField->getValue('inf_system') == 0 && strlen($_POST['inf_type']) == 0)
+    if($itemField->getValue('inf_system') == 0 && strlen($_POST['inf_type']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATATYPE')));
     }
@@ -136,7 +136,7 @@ if($getMode == 1)
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
-elseif($getMode == 2)
+elseif($getMode === 2)
 {
     if($itemField->getValue('inf_system') == 1)
     {
@@ -152,7 +152,7 @@ elseif($getMode == 2)
     }
     exit();
 }
-elseif($getMode == 4)
+elseif($getMode === 4)
 {
     // Feldreihenfolge aktualisieren
     $itemField->moveSequence($getSequence);

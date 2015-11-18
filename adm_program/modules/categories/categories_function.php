@@ -85,7 +85,7 @@ else
     $category->setValue('cat_type', $getType);
 }
 
-if($getMode == 1)
+if($getMode === 1)
 {
     // Kategorie anlegen oder updaten
 
@@ -196,7 +196,7 @@ if($getMode == 1)
     header('Location: '. $gNavigation->getUrl());
     exit();
 }
-elseif($getMode == 2)
+elseif($getMode === 2)
 {
     // delete category
     try
@@ -211,7 +211,7 @@ elseif($getMode == 2)
         $e->showText();
     }
 }
-elseif($getMode == 4)
+elseif($getMode === 4)
 {
     // Kategoriereihenfolge aktualisieren
     $category->moveSequence($getSequence);
