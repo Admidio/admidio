@@ -309,10 +309,10 @@ if($getMode !== 'csv')
         if($getShowMembers === 0)
         {
             // create filter menu with elements for start-/enddate
-            $filterNavbar = new HtmlNavbar('menu_list_filter', 'Filter&nbsp;'.$gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), null, 'filter');
+            $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
             $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
-            $form->addInput('date_from', $gL10n->get('SYS_START'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
-            $form->addInput('date_to', $gL10n->get('SYS_END'), $dateTo, array('type' => 'date', 'maxLength' => 10));
+            $form->addInput('date_from', $gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
+            $form->addInput('date_to', $gL10n->get('LST_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('lst_id', '', $getListId, array('class' => 'hide'));
             $form->addInput('rol_id', '', $getRoleId, array('class' => 'hide'));
             $form->addInput('show_members', '', $getShowMembers, array('class' => 'hide'));
