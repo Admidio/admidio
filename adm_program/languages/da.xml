@@ -367,7 +367,6 @@
         <text id="BAC_DATABASE_BACKUP" development="new" translation="edited">Database-Backup</text>
         <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="todo">Opret og download database backups af Admidio tabeller.</text>
         <text id="BAC_DAYS_VAR" development="new" translation="edited">%VAR1% Dage</text>
-        <text id="BAC_FILE_NAME_INVALID" development="new" translation="edited">Filnavn indeholder ugyldige karakterer!</text>
         <text id="BAC_HOURS_VAR" development="new" translation="edited">%VAR1% timer</text>
         <text id="BAC_MINUTES_VAR" development="new" translation="edited">%VAR1% minutter</text>
         <text id="BAC_NO_BACKUP_FILE_EXISTS" development="new" translation="edited">Ingen backup fil tilstede!</text>
@@ -413,7 +412,6 @@
         <text id="DAT_PARTICIPANTS" development="new" translation="edited">Deltagere</text>
         <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="edited">Begrænset antal deltagere</text>
         <text id="DAT_PREVIOUS_DATES" development="new" translation="edited" description="Past events">Tidligere %VAR1%</text>
-        <text id="DAT_REGISTRATION_POSSIBLE" development="new" translation="edited">Registrering er åben.</text>
         <text id="DAT_REGISTRATION_NOT_POSSIBLE" development="new" translation="edited">Registrering er lukket.</text>
         <text id="DAT_REMOVE_APPLICATION" development="new" translation="edited">Vil du fjerne denne event? Alle deltagere vil blive fjernet sammen med eventen.</text>
         <text id="DAT_ROOM_INFORMATIONS" development="new" translation="edited">Lokale information</text>
@@ -463,14 +461,12 @@
         <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Brugere må kun overføre filer mindre end det her viste. Hvis du skriver 0 deaktiveres overførsler. (Standard: 3MB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="edited">Nyt fil navn</text>
         <text id="DOW_NEW_NAME" development="new" translation="edited">Nyt navn</text>
-        <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="edited">Dette panel tillader dig at konfigurere folder adgangs rettigheder. Adgangs rettigheder bliver sat som kaskade igennem underfoldere og alle eksisterende rettigheder bliver overskrevet. Tilladte roller skal have adgang til topfoldere.</text>
         <text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="edited">Sæt folder rettigheder</text>
         <text id="DOW_UNMANAGED_FILES" development="new" translation="edited">Filer uden ejer</text>
         <text id="DOW_EDIT_FILE" development="new" translation="edited">Rediger fil</text>
         <text id="DOW_EDIT_FOLDER" development="new" translation="edited">Rediger folder</text>
         <text id="DOW_PREVIOUS_NAME" development="new" translation="edited">Tidligere navn</text>
         <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="edited">Overfør fil til folder %VAR1_BOLD%</text>
-        <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Ulovlig side visning eller også så kunne filen ikke overføres.\nFil størrelsen har muligvis overskredet den tilladte server definerede størrelse på %VAR1%B!</text>
 
         <text id="ECA_A_ECARD_FROM" development="new" translation="edited">Postkort sendt af</text>
         <text id="ECA_ACTIVATE_GREETING_CARDS" development="new" translation="edited">Aktiverer postkort modul</text>
@@ -542,7 +538,6 @@
         <text id="INS_DATABASE_IS_UP_TO_DATE" development="new" translation="edited">Admidio's database er up to date</text>
         <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Updaterer database</text>
         <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Indtastning af database information</text>
-        <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="edited">Oplys database adgangs information her. Tabel prefix kan ændres hvis det er nødvendigt. Ændringerne er IKKE nødvendige hvis flere Admidio installationer bruger den samme database.</text>
         <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Opretter database</text>
         <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Organisationens Bestyrelse</text>
         <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Møder kan afholdes her. Lokale skal reserveres på forhånd. Projektor kan frit afbenyttes.</text>
@@ -695,14 +690,12 @@
         <text id="MAI_CAPTCHA_DESC" development="new" translation="edited">Hvis indstillingen er aktiv, kan brugere der er logget ind se et billede med en captcha kode eller et simpelt regnestykke. Det er nødvendigt at skrive den rigtige kode eller den rigtige løsning for at kunne sende e-mailen. Captcha er en del af antispam løsningen i Admidio. (Standard: Ja)</text>
         <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Venligst vælg en rolle som modtager af denne mail!</text>
         <text id="MAI_COUNT_BCC" development="new" translation="edited">Antal BCC modtagere</text>
-        <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% har sendt dig fra %VAR2% følgende besked:\nVenligst svar til %VAR3%.</text>
         <text id="MAI_EMAIL_DESC" development="new" translation="edited">E-mails kan sendes til forskellige roller såsom grupper, kurser, afdelinger.</text>
         <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Ubegrænset antal modtagere kan tilføjes. Total størrelse af alle vedhæftede filer må ikke overstige %VAR1% MB.</text>
         <text id="MAI_MESSAGE" development="new" translation="edited">Besked</text>
         <text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Den valgte rolle har ingen medlemmer med gyldige e-mail adresser!</text>
         <text id="MAI_SEND_COPY" development="new" translation="edited">Send kopi af e-mail til min egen adresse</text>
         <text id="MAI_SEND_EMAIL" development="new" translation="edited">Send e-mail</text>
-        <text id="MAI_SEND_MAIL_TO_ROLE" development="new" translation="edited">Din e-mail vil blive sendt til alle medlemmer med en e-mail adresse i den valgte rolle.\n\nYderligere roller som modtagere er kun tilgængelige for brugere der er logget ind.</text>
         <text id="MAI_SENDER_EMAIL" development="new" translation="edited">Afsenders e-mail</text>
         <text id="MAI_SENDER_EMAIL_ADDRESS_DESC" development="new" translation="edited">Nogen service leverandører tillader ikke uidentificeret afsender information. Derfor bedes du angive en e-mail addrese som bliver standard afsender der bliver brugt af e-mail modulet (f.eks. udbakke@%VAR1%).\nHvis feltet forbliver tomt, så vil afsenders registrerede e-mail addresse bruges istedet. (Standard: tom)</text>
         <text id="MAI_SENDER_NOT_LOGGED_IN" development="new" translation="edited">(Afsender var logget af. Derfor kan afsenders information være forkert.)</text>
@@ -726,7 +719,6 @@
         <text id="MEM_FORMAT" development="new" translation="edited">Format</text>
         <text id="MEM_IDENTIFY_USERS" development="new" translation="edited">Identifikation af eksisterende brugere beror på sammenligning af for og efternavn.</text>
         <text id="MEM_IMPORT" development="new" translation="edited">Importer</text>
-        <text id="MEM_IMPORT_SUCCESSFUL" development="new" translation="edited">Import af %VAR1% datapost(r) afsluttede successfuldt!</text>
         <text id="MEM_IMPORT_USERS" development="new" translation="edited">Importer bruger(e)</text>
         <text id="MEM_INPUT_FIRSTNAME_LASTNAME" development="new" translation="edited">Skriv fornavn og efternavn på den nye bruger. Et database check vil sikre at der ikke er en bruger med samme eller lignene navn.</text>
         <text id="MEM_MAKE_FORMER" development="new" translation="edited">En brugers status kan ændres til tidligere medlem. Dette vil bevare al bruger information inklusivt rolle medlemskab til senere brug.</text>
@@ -803,8 +795,6 @@
         <text id="ORG_ENABLE_RSS_FEEDS_DESC" development="new" translation="edited">Admidio kan levere et RSS-Feed for flere moduler (Beskeder, Events/Møder, Gæstebog, Billede galleri og weblinks) på oversigt siden for hvert modul. Abonnement er mulig via browser eller RSS reader. (Standard: Ja)</text>
         <text id="ORG_FAST_REGISTRATION" development="new" translation="edited">Kvik registrering</text>
         <text id="ORG_FIELD_DESCRIPTION" development="new" translation="edited">Definér antal eller ubegrænset yderligere felter. Felterne vil blive vist og kan redigeres i brugerens profil. Disse felter vil også være tilgængelige i egne lister.</text>
-        <text id="ORG_FIELD_DISABLED" development="new" translation="edited">Felt for brugere med rettighed til at 'redigere alle brugere' er redigerbart.</text>
-        <text id="ORG_FIELD_DISABLED_DESC" development="new" translation="edited">Låste felter i egen profil kan ikke redigeres af brugere. Redigering er kun mulig for brugere med rettighed til at 'redigere alle brugere'.</text>
         <text id="ORG_FIELD_DOWN" development="new" translation="edited">Flyt profil felt ned</text>
         <text id="ORG_FIELD_EXIST" development="new" translation="edited">Feltnavnet eksisterer allerede i denne kategori.</text>
         <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Feltet er kun synligt for godkendte brugere (egen profil &amp; rolle autorisation)</text>
@@ -867,7 +857,6 @@
         <text id="PHO_BACK_TO_ALBUM" development="new" translation="edited">Tilbage til album</text>
         <text id="PHO_CREATE_ALBUM" development="new" translation="edited">Opret album</text>
         <text id="PHO_DISPLAY_PHOTOS" development="new" translation="edited">Hvordan skal billederne vises</text>
-        <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="edited">Indstil hvordan billederne skal vises. Vælg popup vindue, JavaScript animeret (ColorBox) eller iHTML metode for at vise billeder på samme side. (Standard: ColorBox)</text>
         <text id="PHO_EDIT_ALBUM" development="new" translation="edited">Rediger album</text>
         <text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">Et nyt billede album blev oprettet</text>
         <text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">Et nyt billede album på %VAR1% blev oprettet.\n\nTitel: %VAR2%\nOprettet af: %VAR3%\nOprettet den: %VAR4%</text>
@@ -971,7 +960,6 @@
         <text id="ROL_ALL_GUESTS" development="new" translation="edited">Alle gæster på hjemmesiden</text>
         <text id="ROL_ALL_MEMBERS" development="new" translation="edited">Alle brugere som er logget ind</text>
         <text id="ROL_ANNUALLY" development="new" translation="todo">Årligt</text>
-        <text id="ROL_DELETE_ROLE" development="new" translation="edited">Ved at vælge %VAR1_BOLD% vil alle rolle og alle medlems tildelinger blive slettet. Slette information kan ikke åbnes eller genskabes.</text>
         <text id="ROL_DEPENDENCIES" development="new" translation="edited">Afhængigheder</text>
         <text id="ROL_DEPENDENT" development="new" translation="edited">Afhængig</text>
         <text id="ROL_EDIT_ROLE" development="new" translation="edited">Rediger rolle</text>
@@ -1069,7 +1057,6 @@
         <text id="SYS_CAPTCHA_CALC_PART3_HALF" development="new" translation="edited">det halve af</text>
         <text id="SYS_CAPTCHA_CALC_PART4" development="new" translation="edited">.</text>
         <text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">Resultatet af udregningen er forkert.</text>
-        <text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Skriv viste kode</text>
         <text id="SYS_CAPTCHA_CODE_INVALID" development="new" translation="edited">Godkendelses koden er ugyldig.</text>
         <text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Godkendelses kode</text>
         <text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="edited">Godkendelses kode er en del af captcha. En captcha bliver brugt for at forhindre elektronisk misbrug (spam). Billedet bliver brugt til at afgøre om det var et menneske eller et script (eller en spambot) der udfyldte formularen.\nUdfyld venligst rubrikken med teksten på billedet.</text>
@@ -1117,7 +1104,6 @@
         <text id="SYS_DONATE" development="new" translation="edited">Doner</text>
         <text id="SYS_EDIT" development="new" translation="edited">Rediger</text>
         <text id="SYS_EDIT_VAR" development="new" translation="edited">Rediger %VAR1%</text>
-        <text id="SYS_EDITED_BY" development="new" translation="edited">Sidst redigeret af %VAR1% den %VAR2%</text>
         <text id="SYS_EMAIL" development="new" translation="edited">E-mail</text>
         <text id="SYS_EMAIL_INVALID" development="new" translation="edited">E-mail adressen i feltet %VAR1_BOLD% mangler eller indeholder ugyldige karakterer.</text>
         <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Posten er synlig for flere organisationer</text>
@@ -1236,7 +1222,6 @@
         <text id="SYS_PHOTOS" development="new" translation="edited">Billeder</text>
         <text id="SYS_PHP_INFO" development="new" translation="todo">alle PHP indstillinger</text>
         <text id="SYS_PHP_VERSION" development="new" translation="todo">PHP version</text>
-        <text id="SYS_PHP_VERSION_REQUIRED" development="new" translation="todo">Admidio kræver 5.2 eller højere</text>
         <text id="SYS_PLEASE_CHOOSE" development="new" translation="edited">Vælg</text>
         <text id="SYS_PLEASE_WAIT" development="new" translation="edited">Vent venligst</text>
         <text id="SYS_POST_MAX_SIZE" development="new" translation="todo">max. POST størrelse</text>

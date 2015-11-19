@@ -5,9 +5,7 @@
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- */
-
-/** @class Language
+ *  @class Language
  *  @brief Reads language specific texts that are identified with text ids out of language xml files
  *
  *  The class will read a language specific text that is identified with their
@@ -304,8 +302,15 @@ class Language
 
         if(is_object($objectArray[$languagePath]))
         {
-            // text not in cache -> read from xml file
-            $node = $objectArray[$languagePath]->xpath("/language/version/text[@id='".$textId."']");
+            // text not in cache -> read from xml file in "Android Resource String" format
+            $node = $objectArray[$languagePath]->xpath("/resources/string[@name='".$textId."']");
+
+            if($node == false)
+            {
+                // fallback for old Admidio language format prior to version 3.1
+                $node = $objectArray[$languagePath]->xpath("/language/version/text[@id='".$textId."']");
+            }
+
             if($node != false)
             {
                 // set line break with html

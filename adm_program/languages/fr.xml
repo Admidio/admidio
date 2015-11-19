@@ -23,7 +23,6 @@
         <text id="BAC_DATABASE_BACKUP" development="new" translation="edited">Base de données - Fichier de sauvegarde</text>
         <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="edited">Créer et télécharger les tables de la base de données du fichier de sauvegarde de Admidio.</text>
         <text id="BAC_DAYS_VAR" development="new" translation="edited">%VAR1% Jours</text>
-        <text id="BAC_FILE_NAME_INVALID" development="new" translation="edited">Le nom du fichier contient des caractères invalides!</text>
         <text id="BAC_HOURS_VAR" development="new" translation="edited">%VAR1% heures</text>
         <text id="BAC_MINUTES_VAR" development="new" translation="edited">%VAR1% minutes</text>
         <text id="BAC_NO_BACKUP_FILE_EXISTS" development="new" translation="edited">Aucun fichier de sauvegarde présent!</text>
@@ -38,7 +37,6 @@
         <text id="CAT_CATEGORY_EXIST" development="new" translation="edited">Le nom de la catégorie existe déjà dans l'organisation sélectionnée.</text>
         <text id="CAT_CATEGORY_GLOBAL" development="new" translation="edited">Lorsque l'option est activée, les champs du profil de la catégorie apparaîtront et pourront être modifiés dans le panneau du profil des organisations suivantes: \n\n%VAR1_BOLD%\n\n S'il vous plaît désactiver l'option si les champs doivent figurer dans votre organisation seulement.</text>
         <text id="CAT_CATEGORY_NOT_DELETE" development="new" translation="edited">Vous ne pouvez pas supprimer toutes les catégories d'un module.\nVeuillez créer une nouvelle catégorie pour le module sélectionné.</text>
-        <text id="CAT_DELETE_CATEGORY" development="new" translation="edited">Voulez-vous supprimer les catégories suivantes: %VAR1% \n\nToutes les données de la catégorie sélectionnée seront supprimées (champs, rôles, liens, événements).</text>
         <text id="CAT_MOVE_DOWN" development="new" translation="edited">Descendre %VAR1%</text>
         <text id="CAT_MOVE_UP" development="new" translation="edited">Monter %VAR1%</text>
 
@@ -69,12 +67,9 @@
         <text id="DAT_MAX_MEMBERS" development="new" translation="edited">Réduire le nombre de participants pour cet événement. Veuillez laisser le champ vide pour un nombre de participants illimité.</text>
         <text id="DAT_ORGANIZER" development="new" translation="edited" description="The Person">Organisateur</text>
         <text id="DAT_ORGANIZERS" development="new" translation="edited" description="The Persons">Organiteurs</text>
-        <text id="DAT_PARTICIPATE_AT_DATE" development="new" translation="edited">Participation confirmée</text>
-        <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="new" translation="edited">Vous participez à cet événement en tant qu'administrateur et pouvez ajouter d'autres participants.</text>
         <text id="DAT_PARTICIPANTS" development="new" translation="edited">Participants</text>
         <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="edited">Nombre limité de participants</text>
         <text id="DAT_PREVIOUS_DATES" development="new" translation="edited" description="Past events">Précédent %VAR1%</text>
-        <text id="DAT_REGISTRATION_POSSIBLE" development="new" translation="edited">Inscriptions ouvertes.</text>
         <text id="DAT_REGISTRATION_NOT_POSSIBLE" development="new" translation="edited">Inscriptions fermées.</text>
         <text id="DAT_REMOVE_APPLICATION" development="new" translation="edited">Voulez-vous retirer cet événement? Tous les participants seront supprimés.</text>
         <text id="DAT_ROOM_INFORMATIONS" development="new" translation="edited">Informations des pièces</text>
@@ -125,14 +120,12 @@
         <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Les utilisateurs ne sont pas autorisés à télécharger des fichiers de plus petite taille que celles affichées ici. 0 pour désactiver le téléchargement. (defaut: 3MB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="edited">Nouveau nom de fichier</text>
         <text id="DOW_NEW_NAME" development="new" translation="edited">Nouveau nom</text>
-        <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="edited">Ce panneau vous permet de configurer les permissions d'accès aux dossiers. Les droits d'accès sont définis de façon récursive pour les sous-dossiers et toutes les autorisations sur les dossiers existants seront remplacés. Les rôles autorisés doivent avoir les permissions d'accès pour les dossiers plus haut.</text>
         <text id="DOW_SET_FOLER_PERMISSIONS" development="new" translation="edited">Appliquer les autorisations du dossier</text>
         <text id="DOW_UNMANAGED_FILES" development="new" translation="edited">Fichiers non gérés</text>
         <text id="DOW_UPLOAD_FILE" development="new" translation="edited">Télécharger le fichier</text>
         <text id="DOW_EDIT_FOLDER" development="new" translation="edited">Éditer le dossier</text>
         <text id="DOW_PREVIOUS_NAME" development="new" translation="edited">Nom précédent</text>
         <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="edited">Télécharger le fichier vers le dossier %VAR1_BOLD%</text>
-        <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Le fichier n'a pas pu être transféré. \ taille nDélais dépassé, taille de téléchargement du fichier %VAR1%B!</text>
 
 
         <!-- Phrases only in Ecardsmodule -->
@@ -206,7 +199,6 @@
         <text id="INS_DATABASE_IS_UP_TO_DATE" development="new" translation="edited">La base de données du bottin est à jour!</text>
         <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Mise à jour de la base de données en cours...</text>
         <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Saisie des informations de la base de données</text>
-        <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="edited">Fournissez votre accès à la base de données ici. Le préfixe de la table peut être personnalisé si nécessaire. La personnalisation ne devrait pas être nécessaire si plusieurs installations de Admidio utilisent la même base de données.</text>
         <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Création de la base de données</text>
         <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Tableau administratif des associations</text>
         <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Les rencontres peuvent prendre place ici. La salle doit d'abord être réservé avant la rencontre.</text>
@@ -329,7 +321,6 @@
         <text id="LST_SEARCH_AGE_DESC" development="new" translation="edited">Recherche des utilisateurs de moins de 18 ans</text>
         <text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="edited">01.03.1986</text>
         <text id="LST_SEARCH_DATE_DESC" development="new" translation="edited">Recherche des utilisateurs nés avant le 1er janvier 1986Searching for all users born after 1st January 1986</text>
-        <text id="LST_SEARCH_GENDER_DESC" development="new" translation="edited">Recherche d'un homme, femme and sexe non spécifié</text>
         <text id="LST_SEARCH_LASTNAME_BEGINS_EXAMPLE" development="new" translation="edited">Mei*</text>
         <text id="LST_SEARCH_LASTNAME_BEGINS_DESC" development="new" translation="edited">Recherche des utilisateurs avec un nom commençant par 'Mei'</text>
         <text id="LST_SEARCH_LASTNAME_EXAMPLE" development="new" translation="edited">Schmitz</text>
@@ -360,14 +351,12 @@
         <text id="MAI_CAPTCHA_DESC" development="new" translation="edited">Quand l'option est activé, les membres authentifiés recevrons une image avec un capcha ou un calcule simple. Il est important de remplir le champs demandé afin d'envoyer le courriel. (Par defaut: oui)</text>
         <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Veuillez sélectionner un rôle en tant que récipiendaire du courriel !</text>
         <text id="MAI_COUNT_BCC" development="new" translation="edited">Nombre si BCC récipiendaires</text>
-        <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% a envoyé de %VAR2% message suivant:\nVeuillez répondre à %VAR3%.</text>
         <text id="MAI_EMAIL_DESC" development="new" translation="edited">Système de courriel des membres.</text>
         <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Un nombre illimité de récipiendaire peut être ajouté. La taille total des fichiers ne doit pas dépasser %VAR1% MB.</text>
         <text id="MAI_MESSAGE" development="new" translation="edited">Message</text>
         <text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Le rôle sélectionné n'a aucun membre avec un courriel valide !</text>
         <text id="MAI_SEND_COPY" development="new" translation="edited">Envoyer une copy du courriel à mon adresse</text>
         <text id="MAI_SEND_EMAIL" development="new" translation="edited">Envoyer le courriel</text>
-        <text id="MAI_SEND_MAIL_TO_ROLE" development="new" translation="edited">Votre courriel sera envoyé à tous les membres du rôle avec un adresse courriel.</text>
         <text id="MAI_SENDER_EMAIL" development="new" translation="edited">Courriel de l'expéditeur</text>
         <text id="MAI_SENDER_EMAIL_ADDRESS_DESC" development="new" translation="edited">Certains services n'autorise pas les expéditeur non identifié. Veuillez s'il vous plait fournir un adresse courriel valide par défaut qui sera utilisé dans ce module (ex: cerclebleuets@%VAR1%). (Par default: vide)</text>
         <text id="MAI_SENDER_NOT_LOGGED_IN" development="new" translation="edited">(L'expéditeur c'est déconecté. Les informations de l'expéditeur peuvent être incorrect.)</text>
@@ -392,7 +381,6 @@
         <text id="MEM_FORMAT" development="new" translation="edited">Format</text>
         <text id="MEM_IDENTIFY_USERS" development="new" translation="edited">L'identification des usagers déjà existant sera fait par le nom et le nom de famille.</text>
         <text id="MEM_IMPORT" development="new" translation="edited">Importer</text>
-        <text id="MEM_IMPORT_SUCCESSFUL" development="new" translation="edited">Importation de %VAR1% donnée(s) d'enregistrement(s) réussie !</text>
         <text id="MEM_IMPORT_USERS" development="new" translation="edited">Importer un ou des usager(s)</text>
         <text id="MEM_INPUT_FIRSTNAME_LASTNAME" development="new" translation="edited">Veuillez fournir nom et nom de famille pour le nouvel usager. Une vérification à la base de donnée sera effectué pour vérifier si l'usager exite déjà.</text>
         <text id="MEM_MAKE_FORMER" development="new" translation="edited">Un usager peut être changer pour membre fondateur. Ceci aura comme impacte de préserver toutes les information incluant le rôle d'adhésion pour des besoin future.</text>
@@ -405,7 +393,6 @@
         <text id="MEM_REMOVE_USER_DESC" development="new" translation="edited">En choisissant %VAR1_BOLD%, toute l'information sera supprimé et ne sera plus accessible.</text>
         <text id="MEM_REPLACE" development="new" translation="edited">Remplacer</text>
         <text id="MEM_ROLE_SELECT_RIGHT" development="new" translation="edited">Vous n'avez pas les autorisations pour sélectionner le rôle %VAR1%.\nVeuillez choisir un autre rôle.</text>
-        <text id="MEM_SEND_NEW_LOGIN" development="new" translation="edited">Désirez-vous envoyer un courriel à %VAR1_BOLD% du nouveau nom d'usager et mot de passe ?</text>
         <text id="MEM_SEND_USERNAME_PASSWORD" development="new" translation="edited">Envoyer un courriel avec les information du nom d'usager et mot de passe.</text>
         <text id="MEM_SHOW_ALL_USERS" development="new" translation="edited">Afficher tous les usagers</text>
         <text id="MEM_UPDATED_ON" development="new" translation="edited">Mis à jour le</text>
@@ -435,8 +422,6 @@
         <!-- Phrases only in Organizationadministration -->
         <text id="ORG_ACCESS_TO_MODULE" development="new" translation="edited">Module d'accès</text>
         <text id="ORG_ACCESS_TO_MODULE_DESC" development="new" translation="edited">Le module peut être désactivée ou activée pour les utilisateurs connectés uniquement. Si le module est accessible uniquement aux utilisateurs connectés, il sera caché pour les utilisateurs déconnectés et flux RSS seront complètement désactivés pour les deux groupes d'utilisateurs. (par défaut: activé)</text>
-        <text id="ORG_ACTIVATE_SYSTEM_MAILS" development="new" translation="edited">Activer les messages du système</text>
-        <text id="ORG_ACTIVATE_SYSTEM_MAILS_DESC" development="new" translation="edited">Activer ou désactiver les messages du système Admidio. Les messages système sont générées par exemple en cas d'inscription nouvel utilisateur ou de validation d'inscription. Cette fonctionnalité devrait normalement être désactivé, mais seulement lorsque le serveur ne supporte pas l'envoi de tout courrier. Le module de courriel n'est pas affectée par cela. (par défaut: oui)</text>
         <text id="ORG_ADDITIONAL_VARIABLES" development="new" translation="edited">Les variables supplémentaires</text>
         <text id="ORG_ADMIDIO_THEME" development="new" translation="edited">Thèmes Admidio</text>
         <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="edited">Sélectionnez la disposition des Admidio. Tous les thèmes enregistrés dans le dossier adm_themes sont montrées. (par défaut: moderne)</text>
@@ -474,8 +459,6 @@
         <text id="ORG_ENABLE_RSS_FEEDS_DESC" development="new" translation="edited">Admidio est capable de fournir un service de flux RSS de plusieurs modules (annonces, rendez-vous, livre d'or, galerie de photos et de liens Internet) sur la page d'aperçu pour chaque module. L'abonnement est possible par le navigateur ou lecteur de flux. (par défaut: oui)</text>
         <text id="ORG_FAST_REGISTRATION" development="new" translation="edited">inscription rapide</text>
         <text id="ORG_FIELD_DESCRIPTION" development="new" translation="edited">Définir illimitée des champs supplémentaires. Les champs seront affichés et peuvent être édités dans le profil utilisateur. Ces champs seront disponibles en propre liste, aussi.</text>
-        <text id="ORG_FIELD_DISABLED" development="new" translation="edited">Champ pour les utilisateurs autorisés à "éditée tous les utilisateurs».</text>
-        <text id="ORG_FIELD_DISABLED_DESC" development="new" translation="edited">Les champs vérouillés dans votre propre profil ne peuvent pas être modifiés par les utilisateurs. Le montage est possible uniquement par les utilisateurs avec la permission d'éditer tous les utilisateurs.</text>
         <text id="ORG_FIELD_DOWN" development="new" translation="edited">Déplacer champ de profil bas</text>
         <text id="ORG_FIELD_EXIST" development="new" translation="edited">Terrain avec le même nom existe déjà dans cette catégorie.</text>
         <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Champ visible pour les utilisateurs autorisés seulement (même profil et le rôle d'autorisation)</text>
@@ -508,9 +491,6 @@
         <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="edited">Le mot de passe oublié régénéré peut être demandée par les utilisateurs à être envoyés automatiquement à la même adresse e-mail. En cas de désactivation, les utilisateurs sont en mesure de faire cette demande à l'administrateur uniquement. (Par défaut: oui)</text>
         <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Envoyer le nouveau mot de passe</text>
         <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">Informations système</text>
-        <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="edited">Adresse courriel du système</text>
-        <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="edited">Saisissez l'adresse courriel d'un administrateur. Cette adresse sera utilisée comme adresse d'expéditeur pour les messages système et des confirmations d'inscription.</text>
-        <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="new" translation="edited">S'il vous plaît, veuillez individualiser tous les messages du système ici. Les textes doivent comporter des paragraphes (sujet et contenu) qui sont identifiés par des titres comme contenu # et # # # sujet.\n\nCahque message peut avoir de l'espace libre pour les messages en cours.</text>
         <text id="ORG_TIME_FORMAT" development="new" translation="edited">Format du temps</text>
         <text id="ORG_TIME_FORMAT_DESC" development="new" translation="edited">Format respecté %VAR1 fonction PHP. (Par défaut: H: i)</text>
         <text id="ORG_URL" development="new" translation="edited">URL</text>
@@ -527,14 +507,11 @@
 
         <!-- Phrases seulement dans UpdateCheck -->
         <text id="UPD_ADMIDIO" development="new" translation="edited">Aller à la page de mise à jour Admidio</text>
-        <text id="UPD_BETA_VERSION" development="new" translation="edited">Version bêta actuelle</text>
         <text id="UPD_CONNECTION_ERROR" development="new" translation="edited">Connexion à la page mise à jour Admidio n'a pas pu être établie. S'il vous plaît vérifiez votre connexion Internet ou réessayez plus tard. Vous pouvez également consulter le site Web %VAR1% pour mise à jour manuelle.</text>
-        <text id="UPD_CURRENT_VERSION" development="new" translation="edited">Version installée</text>
         <text id="UPD_NEW" development="new" translation="edited">Une nouvelle version stable est disponible!</text>
         <text id="UPD_NEW_BETA" development="new" translation="edited">Une nouvelle version beta est disponible!</text>
         <text id="UPD_NEW_BOTH" development="new" translation="edited">Une nouvelle version stable et une nouvelle version bêta sont disponibles!</text>
         <text id="UPD_NO_NEW" development="new" translation="edited">Vous utilisez une version actuelle %VAR1% des Admidio!</text>
-        <text id="UPD_STABLE_VERSION" development="new" translation="edited">Versionactuelle stable Admidio</text>
         <text id="UPD_TITLE" development="new" translation="edited">Vérifier pour une mise à jour</text>
 
         <!-- Phrases seulement dans Photomodule -->
@@ -545,7 +522,6 @@
         <text id="PHO_BACK_TO_ALBUM" development="new" translation="edited">Revenir à l'album</text>
         <text id="PHO_CREATE_ALBUM" development="new" translation="edited">Créer un album</text>
         <text id="PHO_DISPLAY_PHOTOS" development="new" translation="edited">Comment afficher les photos</text>
-        <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="edited">Définir comment les photos doivent être affichés. Sélectionnez le mode fenêtre popup, JavaScript en mode animé (ColorBox) ou le mode d'affichage de photos iHTML sur la même page. (Par défaut: ColorBox)</text>
         <text id="PHO_EDIT_ALBUM" development="new" translation="edited">Modifier l'album</text>
         <text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">Un nouvel album photo a été créé</text>
         <text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">Un nouvel album photo à %VAR1% a été créée \n\nTitre: %VAR2% \nCréé par: %VAR3% \nCréé à: %VAR4%</text>
@@ -610,7 +586,6 @@
         <text id="PRO_MY_PROFILE" development="new" translation="edited">Mon profil</text>
         <text id="PRO_NEW_PASSWORD" development="new" translation="edited">Nouveau mot de passe</text>
         <text id="PRO_NEW_PICTURE" development="new" translation="edited">Photo de profil Nouvelle</text>
-        <text id="PRO_NO_DEFAULT_ROLE" development="new" translation="edited">Pas de rôle par défaut a été défini dans les préférences de l'organisation. S'il vous plaît contacter le webmestre.</text>
         <text id="PRO_PASSWORD_CHANGED" development="new" translation="edited">Le mot de passe a été changé avec succès.</text>
         <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="edited">Le mot de passe doit avoir au moins 8 caractères incluant des chiffres, lettres et caractères spéciaux. Pour des raisons de sécurité, quand mot de passe est enregistré, il ne peut plus être vu.</text>
         <text id="PRO_PASSWORD_LENGTH" development="new" translation="edited">Le mot de passe doit comporter au moins 8 caractères.</text>
@@ -652,7 +627,6 @@
         <text id="ROL_ALL_GUESTS" development="new" translation="edited">Tous les invités du site</text>
         <text id="ROL_ALL_MEMBERS" development="new" translation="edited">Tous les utilisateurs connectés</text>
         <text id="ROL_ANNUALLY" development="new" translation="edited">Chaque année</text>
-        <text id="ROL_DELETE_ROLE" development="new" translation="edited">En sélectionnant %VAR1_BOLD% tous les rôles et toutes les affectations de membres seront supprimés. Les informations supprimées ne peuvent pas être ouvertes ou récupérés à nouveau.</text>
         <text id="ROL_DEPENDENCIES" development="new" translation="edited">Dépendances</text>
         <text id="ROL_DEPENDENT" development="new" translation="edited">Dépendante</text>
         <text id="ROL_EDIT_ROLE" development="new" translation="edited">Modifier le rôle</text>
@@ -752,7 +726,6 @@
         <text id="SYS_CAPTCHA_CALC_PART3_HALF" development="new" translation="edited">la moitié de</text>
         <text id="SYS_CAPTCHA_CALC_PART4" development="new" translation="edited">.</text>
         <text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">Le résultat du calcul n'est pas correct.</text>
-        <text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Turing code</text>
         <text id="SYS_CAPTCHA_CODE_INVALID" development="new" translation="edited">Le code d'authentification est invalide.</text>
         <text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Code d'authentification</text>
         <text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="edited">L'authentification de code fait partie d'un captcha. Un captcha est utilisé pour la détection de spam. L'image est utilisée pour détecter si un utilisateur ou un script (ou spambot) rempli le formulaire. \nVeuillez remplir le résultat du code d'authentification dans le formulaire.</text>
@@ -800,10 +773,8 @@
         <text id="SYS_DONATE" development="new" translation="edited">Don</text>
         <text id="SYS_EDIT" development="new" translation="edited">Modifier</text>
         <text id="SYS_EDIT_VAR" development="new" translation="edited">Modifier %VAR1%</text>
-        <text id="SYS_EDITED_BY" development="new" translation="edited">Dernière édition par %VAR1% sur %VAR2%</text>
         <text id="SYS_EMAIL" development="new" translation="edited">Courriel</text>
         <text id="SYS_EMAIL_INVALID" development="new" translation="edited">L'adresse courriel dans le champ %VAR1_BOLD% comprend des caractères non valides ou est incomplet.</text>
-        <text id="SYS_EMAIL_NOT_SEND" development="new" translation="edited">Le courriel %VAR1_BOLD% n'a pas pu être envoyé.</text>
         <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Entrée visible pour de multiples organisations</text>
         <text id="SYS_EMAIL_NOTIFICATION_ACTIVATE" development="new" translation="edited">Activation de notification courriel</text>
         <text id="SYS_EMAIL_NOTIFICATION_CONFIG" development="new" translation="edited">Configurer la notification de courriel</text>
@@ -867,7 +838,6 @@
         <text id="SYS_LOGOUT" development="new" translation="edited">Déconnexion</text>
         <text id="SYS_LOGOUT_SUCCESSFUL" development="new" translation="edited">Vous êtes maintenant déconnecté !</text>
         <text id="SYS_LOSTPW_AREADY_LOGGED_ID" development="new" translation="edited">Vous êtes déjà authentifié !</text>
-        <text id="SYS_LOSTPW_EMAIL_ERROR" development="new" translation="edited">L'adresse courriel %VAR1% n'a pu être trouvée dans le système!</text>
         <text id="SYS_LOSTPW_SEND" development="new" translation="edited">Le nouveau mot de passe a été envoyé à l'e-mail address %VAR1%!</text>
         <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="edited">Une erreur s'est produite lors de l'envoi du courriel à des bénéficiaires %VAR1%! \nVeuillez réessayer plus tard!</text>
         <text id="SYS_MAP" development="new" translation="edited">Carte</text>
@@ -921,7 +891,6 @@
         <text id="SYS_PHOTOS" development="new" translation="edited">Photos</text>
         <text id="SYS_PHP_INFO" development="new" translation="edited">Tous les paramètres de PHP</text>
         <text id="SYS_PHP_VERSION" development="new" translation="edited">Version de PHP</text>
-        <text id="SYS_PHP_VERSION_REQUIRED" development="new" translation="edited">Admidio nécessite 5.2 ou supérieur</text>
         <text id="SYS_PLEASE_CHOOSE" development="new" translation="edited">Sélectionnez l'option</text>
         <text id="SYS_PLEASE_WAIT" development="new" translation="edited">S'il vous plaît veuillez patienter</text>
         <text id="SYS_POST_MAX_SIZE" development="new" translation="edited">Maximum de la taille post</text>
@@ -976,7 +945,6 @@
         <text id="SYS_SYSMAIL_NEW_PASSWORD" development="new" translation="edited">#subject# Logindaten für %organization_homepage%\n#content# Hallo %user_first_name%,\n\ndu erhälst deine Logindaten für %organization_homepage% .\nBenutzername: %user_login_name%\nPasswort: %variable1%\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf %organization_homepage% in deinem Profil ändern.\n\nViele Grüße\nDie Webmaster</text>
         <text id="SYS_SYSMAIL_REGISTRATION_USER" development="new" translation="edited">#subject# Anmeldung bei %organization_long_name%\n#content# Hallo %user_first_name%,\n\ndeine Anmeldung auf %organization_homepage% wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : %user_login_name%\nund dem Passwort auf der Homepage einloggen.\n\nSollten noch Fragen bestehen, schreib eine E-Mail an %webmaster_email% .\n\nViele Grüße\nDie Webmaster</text>
         <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="edited">#subject# Neue Registrierung bei %organization_long_name%\n#content# Es hat sich ein neuer Benutzer auf %organization_homepage% registriert.\n\nNachname: %user_last_name%\nVorname:  %user_first_name%\nE-Mail:   %user_email%\n\n\nDiese Nachricht wurde automatisch erzeugt.</text>
-        <text id="SYS_SYSTEM_MAILS" development="new" translation="edited">Système message</text>
         <text id="SYS_TEXT" development="new" translation="edited">Texte</text>
         <text id="SYS_THURSDAY" development="new" translation="edited">Jeudi</text>
         <text id="SYS_TIME" development="new" translation="edited">Temps</text>

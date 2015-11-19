@@ -143,7 +143,6 @@
     </version>
     <version id="2.3.0" translator="Guido vd Leest">
         <text id="CAT_DEFAULT_VAR" development="new" translation="edited">Standaard %VAR1%</text>
-        <text id="CAT_DELETE_CATEGORY" development="changed" translation="edited">Moet categorie %VAR1_BOLD% verwijderd worden?\n\nDeze categorie heeft %VAR2% afhankelijke items, die ook verwijderd worden.</text>
         <text id="DAT_ENABLE_ICAL" development="new" translation="edited">iCal inschakelen</text>
         <text id="DAT_ENABLE_ICAL_DESC" development="new" translation="edited">Als iCal ingeschakeld is kunnen afspraken binnen een opgegeven periode gedownload worden. Ook kunnen gebruikers zich opgeven voor afspraken via hun eigen kalender client software. (standaard: ja)</text>
         <text id="DAT_ICAL_DAYS_FUTURE" development="new" translation="edited">Aantal toekomstige iCal dagen</text>
@@ -151,7 +150,6 @@
         <text id="DAT_ICAL_DAYS_PAST" development="new" translation="edited">Aantal iCal dagen in het verleden</text>
         <text id="DAT_ICAL_DAYS_PAST_DESC" development="new" translation="edited">Deze waarde bepaalt hoeveel dagen in het verleden een iCal download of abonnement moet bevatten. (standaard: 60)</text>
         <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="edited">Registreren voor deze afspraak inschakelen.</text>
-        <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Afspraak goedkeuren</text>
         <text id="DAT_VISIBILITY" development="new" translation="edited">Zichtbaarheid</text>
         <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Uw database versie is %VAR1%.\nUpdate naar versie %VAR2% is noodzakelijk</text>
         <text id="INS_DATABASE_SYSTEM" development="new" translation="edited">Database systeem</text>
@@ -243,7 +241,6 @@
         <text id="BAC_DATABASE_BACKUP" development="new" translation="edited">Backup database</text>
         <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="edited">Hier kunt u een backup van de database maken of downloaden.</text>
         <text id="BAC_DAYS_VAR" development="new" translation="edited">%VAR1% dagen</text>
-        <text id="BAC_FILE_NAME_INVALID" development="new" translation="edited">Naam van bestand bevat onjuist karakter!</text>
         <text id="BAC_HOURS_VAR" development="new" translation="edited">%VAR1% uren</text>
         <text id="BAC_MINUTES_VAR" development="new" translation="edited">%VAR1% minuten</text>
         <text id="BAC_NO_BACKUP_FILE_EXISTS" development="new" translation="edited">Geen backup bestand aanwezig!</text>
@@ -287,7 +284,6 @@
         <text id="DAT_MAX_MEMBERS" development="new" translation="edited">Beperk aantal deelnemers aan dit evenement. Laat veld leeg voor onbeperkt aantal deelnemers.</text>
         <text id="DAT_ORGANIZER" development="new" translation="edited" description="The Person">Organisator</text>
         <text id="DAT_ORGANIZERS" development="new" translation="edited" description="The Persons">Organisatoren</text>
-        <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="new" translation="edited">U doet mee aan dit evenement als leider en u kunt andere deelnemers toevoegen.</text>
         <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="edited">Beperk aantal deelnemers</text>
         <text id="DAT_PREVIOUS_DATES" development="new" translation="edited" description="Past events">Eerdere %VAR1%</text>
         <text id="DAT_REGISTRATION_NOT_POSSIBLE" development="new" translation="edited">Registratie is gesloten.</text>
@@ -340,14 +336,12 @@
         <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Gebruikers mogen alleen bestanden uploaden die kleiner zijn dan hier staat. Als hier 0 staat, is uploaden gedeactiveerd. (standaard: 3MB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="edited">Naam nieuw bestand</text>
         <text id="DOW_NEW_NAME" development="new" translation="edited">Nieuwe naam</text>
-        <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="edited">Via dit panel kunt u toegangsrechten van mappen beheren. Toegangsrechten zijn van toepassing op sub-mappen en alle bestaande toegangsrechten worden overschreven. Toegestane rollen moeten toegang hebben tot hogere mappen.</text>
         <text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="edited">Instellingen toegangsrechten map</text>
         <text id="DOW_UNMANAGED_FILES" development="new" translation="edited">Onbeheerde bestanden</text>
         <text id="DOW_EDIT_FILE" development="new" translation="edited">Bewerk bestand</text>
         <text id="DOW_EDIT_FOLDER" development="new" translation="edited">Edit map</text>
         <text id="DOW_PREVIOUS_NAME" development="new" translation="edited">Vorige naam</text>
         <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="edited">Upload naar map %VAR1_BOLD%</text>
-        <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Onjuiste pagina weergave of bestand kon niet worden geupload.\nMogelijk is grootte van bestand overschreden. Toegestane upload groote is %VAR1%B!</text>
 
 
         <!-- Phrases only in Ecardsmodule -->
@@ -425,7 +419,6 @@
         <text id="INS_DATABASE_IS_UP_TO_DATE" development="new" translation="edited">Admidio's database is up to date</text>
         <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Updating database</text>
         <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Database informatie doorgeven</text>
-        <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="edited">Geef hier uw database informatie op. Table prefix kan aangepast worden, indien nodig. Aanpassing is niet nodig als meerdere Admidio installaties dezelfde database gebruiken.</text>
         <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Database maken</text>
         <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Bestuur van de organisatie</text>
         <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Hier kunnen vergaderingen plaatsvinden. Zaal moet van tevoren gereserveerd worden.</text>
@@ -549,7 +542,6 @@
         <text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="edited">01.03.1986</text>
         <text id="LST_SEARCH_DATE_DESC" development="new" translation="edited">Leden zoeken die geboren zijn na 1 maart 1986</text>
         <text id="LST_SEARCH_GENDER_EXAMPLE" development="new" translation="edited">M/F/U</text>
-        <text id="LST_SEARCH_GENDER_DESC" development="new" translation="edited">Zoeken naar man, vrouw en niet opgegeven</text>
         <text id="LST_SEARCH_LASTNAME_BEGINS_EXAMPLE" development="new" translation="edited">Mei*</text>
         <text id="LST_SEARCH_LASTNAME_BEGINS_DESC" development="new" translation="edited">Leden zoeken waarbij achternaam begint met 'Mei'</text>
         <text id="LST_SEARCH_LASTNAME_EXAMPLE" development="new" translation="edited">Schmitz</text>
@@ -585,7 +577,6 @@
         <text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Geselecteerde rol heeft geen lid met geldig e-mail adres!</text>
         <text id="MAI_SEND_COPY" development="new" translation="edited">Stuur kopie naar mijn e-mail adres</text>
         <text id="MAI_SEND_EMAIL" development="new" translation="edited">Stuur e-mail</text>
-        <text id="MAI_SEND_MAIL_TO_ROLE" development="new" translation="edited">Uw e-mail wordt gestuurd naar alle leden die de geselecteerde rol hebben.\n\nU kunt overige rollen alleen selecteren als u ingelogd bent.</text>
         <text id="MAI_SENDER_EMAIL" development="new" translation="edited">E-mail adres verstuurder</text>
         <text id="MAI_SENDER_EMAIL_ADDRESS_DESC" development="new" translation="edited">Sommige providers accepteren geen onbekende afzenders. Geef daarom een e-mail adres op wat als standaard e-mail adres wordt gebruik in deze module (b.v. outbox@%VAR1%).\nAls dit veld leeg blijft zal het e-mail adres van verstuurder als afzender gebruikt worden. (standaard: leeg)</text>
         <text id="MAI_SENDER_NOT_LOGGED_IN" development="new" translation="edited">(Verstuurder is uitgelogd. Daarom kan de informatie van verstuurder onjuist zijn.)</text>
@@ -622,7 +613,6 @@
         <text id="MEM_REMOVE_USER_DESC" development="new" translation="edited">Door %VAR1_BOLD% te kiezen, zullen alle gegevens verwijderd worden. Deze informatie zal niet langer beschikbaar zijn.</text>
         <text id="MEM_REPLACE" development="new" translation="edited">Herplaats</text>
         <text id="MEM_ROLE_SELECT_RIGHT" development="new" translation="edited">U heeft geen toestemming om rol %VAR1% te selecteren.\nKies svp een andere rol.</text>
-        <text id="MEM_SEND_NEW_LOGIN" development="new" translation="edited">Wilt u gebruiker %VAR1_BOLD% nieuwe gebruikersnaam en wachtwoord e-mailen?</text>
         <text id="MEM_SEND_USERNAME_PASSWORD" development="new" translation="edited">Verstuur e-mail met gebruikersnaam en wachtwoord.</text>
         <text id="MEM_SHOW_ALL_USERS" development="new" translation="edited">Toon alle gebruikers</text>
         <text id="MEM_UPDATED_ON" development="new" translation="edited">Geupdate op</text>
@@ -652,8 +642,6 @@
         <!-- Phrases only in Organizationadministration -->
         <text id="ORG_ACCESS_TO_MODULE" development="new" translation="edited">Module toegang</text>
         <text id="ORG_ACCESS_TO_MODULE_DESC" development="new" translation="edited">Module kan gedeactiveerd worden of is alleen toegankelijk voor ingelogde gebruikers. Als module alleen voor ingelogde gebruikers toegankelijk is, zal het niet zichtbaar zijn voor niet-ingelogde gebruikers en RSS is volledig uitgeschakeld voor beide gebruikersgroepen. (standaard: actief)</text>
-        <text id="ORG_ACTIVATE_SYSTEM_MAILS" development="new" translation="edited">Activeer systeem berichten</text>
-        <text id="ORG_ACTIVATE_SYSTEM_MAILS_DESC" development="new" translation="edited">Admidio systeemberichten in- of uitschakelen. Systeemberichten worden gemaakt bij nieuwe registraties van gebruikers of validatie van gebruikers. Deze optie moet uitgeschakeld worden als server geen e-mail ondersteund. Dit heeft geen invloed op de e-mail module. (standaard: ja)</text>
         <text id="ORG_ADDITIONAL_VARIABLES" development="new" translation="edited">Extra variabelen</text>
         <text id="ORG_ADMIDIO_THEME" development="new" translation="edited">Admidio-Thema</text>
         <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="edited">Kies layout van Admidio. Alle thema's die opgeslagen zijn in map adm_themes worden getoond. (standaard: modern)</text>
@@ -691,7 +679,6 @@
         <text id="ORG_ENABLE_RSS_FEEDS_DESC" development="new" translation="edited">Admidio kan voorzien in RSS-feed voor meerdere modules (mededelingen, afspraken, gastenboek, foto galerij en links) op de overzichtspagina van elke module. Inschrijven is mogelijk via browser of feed reader. (standaard: ja)</text>
         <text id="ORG_FAST_REGISTRATION" development="new" translation="edited">Snelle registratie</text>
         <text id="ORG_FIELD_DESCRIPTION" development="new" translation="edited">Maak onbeperkt aantal extra velden. Velden worden getoond en kunnen worden bewerkt in profiel van gebruiker. Deze velden zijn ook beschikbaar in eigen lijst.</text>
-        <text id="ORG_FIELD_DISABLED_DESC" development="new" translation="edited">Geblokkeerde velden in eigen profiel kunnen niet worden bewerkt door gebruikers. Bewerken is alleen mogelijk door gebruikers met rechten om alle gebruikers te bewerken.</text>
         <text id="ORG_FIELD_DOWN" development="new" translation="edited">Verplaats profielveld naar beneden</text>
         <text id="ORG_FIELD_EXIST" development="new" translation="edited">Er bestaat in deze categorie al een veld met dezelfde naam.</text>
         <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Veld is alleen zichtbaar voor geautoriseerde gebruikers (eigen prfiel &amp; rol autorisatie)</text>
@@ -725,9 +712,6 @@
         <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="edited">Vergeten en opnieuw aangemaakte wachtwoorden kunnen op verzoek van gebruiker naar eigen e-mail adres gestuurd worden. Bij deactivatie, kunnen gebruikers dit verzoek alleen bij de beheerder doen. (standaard: ja)</text>
         <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Stuur nieuw wachtwoord</text>
         <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">Systeem informatie</text>
-        <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="edited">Systeem e-mail adres</text>
-        <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="new" translation="edited">Notificatie voor nieuwe berichten</text>
-        <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="new" translation="edited">U kunt hier e-mail notificatie voor nieuwe module berichten activeren. De beheerder zal via e-mail geinformeerd worden. Het notificatie bericht zal gestuurd worden naar %VAR1%. (standaard: nee)</text>
         <text id="ORG_TIME_FORMAT" development="new" translation="edited">Formaat tijd</text>
         <text id="ORG_TIME_FORMAT_DESC" development="new" translation="edited">Formaat voldoet aan PHP functie %VAR1%. (standaard: H:i)</text>
         <text id="ORG_URL" development="new" translation="edited">URL</text>
@@ -759,7 +743,6 @@
         <text id="PHO_BACK_TO_ALBUM" development="new" translation="edited">terug naar album</text>
         <text id="PHO_CREATE_ALBUM" development="new" translation="edited">Album maken</text>
         <text id="PHO_DISPLAY_PHOTOS" development="new" translation="edited">Hoe foto's te tonen</text>
-        <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="edited">Stel in hoe foto's getoond moeten worden. Selecteer popup venster modus, JavaScript modus (ColorBox) of HTML modus om foto's in hetzefde venster te tonen. (standaard: ColorBox)</text>
         <text id="PHO_EDIT_ALBUM" development="new" translation="edited">Bewerk album</text>
         <text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">Nieuw foto album is gemaakt</text>
         <text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">Nieuw foto album op %VAR1% is gemaakt.\n\nTitel: %VAR2%\nGemaakt door: %VAR3%\nGemaakt op: %VAR4%</text>
@@ -824,7 +807,6 @@
         <text id="PRO_MY_PROFILE" development="new" translation="edited">Mijn profiel</text>
         <text id="PRO_NEW_PASSWORD" development="new" translation="edited">Nieuw wachtwoord</text>
         <text id="PRO_NEW_PICTURE" development="new" translation="edited">Nieuwe profielfoto</text>
-        <text id="PRO_NO_DEFAULT_ROLE" development="new" translation="edited">Geen standaard rol geselecteerd in de voorkeuren van organisatie. Neem voor hulp svp contact op met beheerder.</text>
         <text id="PRO_PASSWORD_CHANGED" development="new" translation="edited">Wachtwoord is succesvol gewijzigd.</text>
         <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="edited">Wachtwoord moet uit tenminste 8 karakters bestaan en kan uit letters en cijfers bestaan.\n\nOp grond van veiligheid wordt het wachtwoord gecodeerd opgeslagen. Het is later niet zichtbaar.</text>
         <text id="PRO_PASSWORD_LENGTH" development="new" translation="edited">Wachtwoord moet tenminste uit 8 karakters bestaan.</text>
@@ -866,7 +848,6 @@
         <text id="ROL_ALL_GUESTS" development="new" translation="edited">Alle gebruikers van de website</text>
         <text id="ROL_ALL_MEMBERS" development="new" translation="edited">Alle ingelogde gebruikers</text>
         <text id="ROL_ANNUALLY" development="new" translation="edited">Jaarlijks</text>
-        <text id="ROL_DELETE_ROLE" development="new" translation="edited">Door %VAR1_BOLD% te kiezen zullen alle rollen en alle hieraan gekoppelde leden verwijderd worden. Verwijderde informatie kan niet teruggehaald worden.</text>
         <text id="ROL_DEPENDENCIES" development="new" translation="edited">Afhankelijkheden</text>
         <text id="ROL_DEPENDENT" development="new" translation="edited">Afhankelijk</text>
         <text id="ROL_EDIT_ROLE" development="new" translation="edited">Bewerk rol</text>
@@ -1012,10 +993,8 @@
         <text id="SYS_DONATE" development="new" translation="edited">Doneer</text>
         <text id="SYS_EDIT" development="new" translation="edited">Bewerk</text>
         <text id="SYS_EDIT_VAR" development="new" translation="edited">Bewerk %VAR1%</text>
-        <text id="SYS_EDITED_BY" development="new" translation="edited">Laatst bewerkt door %VAR1% op %VAR2%</text>
         <text id="SYS_EMAIL" development="new" translation="edited">E-mail</text>
         <text id="SYS_EMAIL_INVALID" development="new" translation="edited">E-mail adres in veld %VAR1_BOLD% bevat onjuiste karakters of is niet compleet.</text>
-        <text id="SYS_EMAIL_NOT_SEND" development="new" translation="edited">E-mail naar %VAR1_BOLD% kon niet verzonden worden.</text>
         <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Bericht zichtbaar voor meerdere organisaties</text>
         <text id="SYS_END" development="new" translation="edited" description="Einddatum">Tot</text>
         <text id="SYS_ERROR" development="new" translation="edited">Foutmelding</text>
@@ -1078,7 +1057,6 @@
         <text id="SYS_LOGOUT" development="new" translation="edited">Uitloggen</text>
         <text id="SYS_LOGOUT_SUCCESSFUL" development="new" translation="edited">Uitloggen is gelukt.</text>
         <text id="SYS_LOSTPW_AREADY_LOGGED_ID" development="new" translation="edited">U bent al ingelogd. Daarom zou u het juiste wachtwoord al moeten hebben!</text>
-        <text id="SYS_LOSTPW_EMAIL_ERROR" development="new" translation="edited">E-mail adres %VAR1% is niet gevonden!</text>
         <text id="SYS_LOSTPW_SEND" development="new" translation="edited">Nieuw wachtwoord is gestuurd naar e-mail adres %VAR1%.</text>
         <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="edited">Foutmelding tijdens het verzenden van e-mail naar ontvangers %VAR1%!\nProbeer het svp later nog eens!</text>
         <text id="SYS_MAP" development="new" translation="edited">Kaart</text>
@@ -1185,7 +1163,6 @@
         <text id="SYS_SYSMAIL_NEW_PASSWORD" development="new" translation="edited">#subject# Inloggegevens voor website %organization_short_name%\n#content# Hallo %user_first_name%,\n\nUw nieuwe inloggegevens voor de website %organization_long_name%:\nGebruikersnaam: %user_login_name%\nWachtwoord: %variable1%\n\nHet wachtwoord is automatisch gegenereerd.\nDaarom kunt u inloggen op %organization_homepage% om het te wijzigen op uw profielpagina.\n\nGroeten,\nDe beheerder</text>
         <text id="SYS_SYSMAIL_REGISTRATION_USER" development="new" translation="edited">#subject# Registratie voor website %organization_short_name% goedgekeurd\n#content# Hallo %user_first_name%,\n\nUw registratie voor de website %organization_homepage% is goedgekeurd.\n\nU kunt nu inloggen met gebruikersnaam: %user_login_name% en uw wachtwoord.\n\nAls u vragen heeft neem gerust contact op met de beheerder via: %webmaster_email%.\n\nGroeten,\nDe beheerder</text>
         <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="edited">#subject# Nieuwe registratie voor website %organization_short_name%\n#content# Een nieuwe gebruiker heeft zich geregistreerd via de website %organization_homepage%.\n\nAchternaam: %user_last_name%\nVoornaam: %user_first_name%\nE-Mail: %user_email%\n\nDit bericht is automatisch gegenereerd.</text>
-        <text id="SYS_SYSTEM_MAILS" development="new" translation="edited">Systeem bericht</text>
         <text id="SYS_TEXT" development="new" translation="edited">Tekst</text>
         <text id="SYS_THURSDAY" development="new" translation="edited">Donderdag</text>
         <text id="SYS_TIME" development="new" translation="edited">Tijd</text>

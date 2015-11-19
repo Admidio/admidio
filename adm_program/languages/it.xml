@@ -353,7 +353,6 @@
         <text id="BAC_DATABASE_BACKUP" development="new" translation="edited">Backup del database</text>
         <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="edited">Crea e scarica il backup delle delle tabelle del database di Admidio.</text>
         <text id="BAC_DAYS_VAR" development="new" translation="edited">%VAR1% giorni</text>
-        <text id="BAC_FILE_NAME_INVALID" development="new" translation="edited">Il nome del file contiene caratteri non validi!</text>
         <text id="BAC_HOURS_VAR" development="new" translation="edited">%VAR1% ore</text>
         <text id="BAC_MINUTES_VAR" development="new" translation="edited">%VAR1% minuti</text>
         <text id="BAC_NO_BACKUP_FILE_EXISTS" development="new" translation="edited">Non è presente nessun file di backup!</text>
@@ -401,7 +400,6 @@
         <text id="DAT_PARTICIPANTS" development="new" translation="edited">Participanti</text>
         <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="edited">Numero massimo di partecipanti</text>
         <text id="DAT_PREVIOUS_DATES" development="new" translation="edited" description="Past events">Precedente %VAR1%</text>
-        <text id="DAT_REGISTRATION_POSSIBLE" development="new" translation="edited">Registrazione abilitata</text>
         <text id="DAT_REGISTRATION_NOT_POSSIBLE" development="new" translation="edited">La registrazione è chiusa.</text>
         <text id="DAT_REMOVE_APPLICATION" development="new" translation="edited">Ti piacerebbe cancellare questo evento? Tutti i partecipanti saranno cancellati.</text>
         <text id="DAT_ROOM_INFORMATIONS" development="new" translation="edited">Informazioni sulla stanza</text>
@@ -452,14 +450,12 @@
         <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Agli utenti è consentito caricare file di grandezza minore di quella visualizzata qui. Se è 0 il caricamento è disattivato. (predefinito: 3MB)</text>
         <text id="DOW_NEW_FILE_NAME" development="new" translation="edited">Nuovo nome del file</text>
         <text id="DOW_NEW_NAME" development="new" translation="edited">Nuovo nome</text>
-        <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="edited">Questo pannello ti consente di configurare i permessi di accesso alla cartella. I diritti di accesso sono impostati ricorsivamente per le sottocartelle e tutti i permessi delle sottocartelle esistenti saranno sovrascritti. I ruoli consentiti devono avere il permesso d'accesso per le cartelle più in alto.</text>
         <text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="edited">Imposta i permessi per la cartella</text>
         <text id="DOW_UNMANAGED_FILES" development="new" translation="edited">File non gestiti</text>
         <text id="DOW_EDIT_FILE" development="new" translation="edited">Modifica file</text>
         <text id="DOW_EDIT_FOLDER" development="new" translation="edited">Modifica cartella</text>
         <text id="DOW_PREVIOUS_NAME" development="new" translation="edited">Nome precedente</text>
         <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="edited">Carica il file nella cartella %VAR1_BOLD%</text>
-        <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Vista della pagina non consentita o il file non può essere caricato.\nE' possibile che il file superi la dimensione consentita dal server per il caricamento che è di %VAR1%B!</text>
 
 
         <!-- Phrases only in Ecardsmodule -->
@@ -533,7 +529,6 @@
         <text id="INS_DATABASE_IS_UP_TO_DATE" development="new" translation="edited">Il database di Admidio è aggiornato</text>
         <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Aggiornamento database</text>
         <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Inserisci le informazioni del database</text>
-        <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="edited">Fornisci qui le informazioni per l'accesso al database. Il prefisso delle tabelle può essere personalizzato se necessario. La personalizzazione potrebbe non essere necessaria se non ci sono installazioni multiple di Admidio che stanno usando lo stesso database.</text>
         <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Crea database</text>
         <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Consiglio di amministrazione dell'associazione</text>
         <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Le riunioni possono svolgersi qui. La stanza deve prima essere prenotata. L'uso è libero.</text>
@@ -687,14 +682,12 @@
         <text id="MAI_CAPTCHA_DESC" development="new" translation="edited">Quando l'opzione è attivata, gli utenti registrati riceveranno un'immagine con un codice captcha o con un semplice calcolo. Questa dovrà essere riempita con il codice corretto o con il risultato del calcolo perché l'email sia inviata. Il captcha è parte della soluzione anticpam di Admidio. (predefinito: sì)</text>
         <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Per favore seleziona un ruolo come destinatario dell'email!</text>
         <text id="MAI_COUNT_BCC" development="new" translation="edited">Numero dei destinatari BCC</text>
-        <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% ti ha inviato da %VAR2% i seguenti messaggi:\nPer favore rispondi a %VAR3%.</text>
         <text id="MAI_EMAIL_DESC" development="new" translation="edited">Le email possono essere inviate a ruoli differenti come i gruppi, i corsi o i dipartimenti.</text>
         <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Possono essere aggiunti un numero illimitato di destinatari. La grandezza totale di tutti gli allegati insieme non può eccedere i %VAR1% MB.</text>
         <text id="MAI_MESSAGE" development="new" translation="edited">Messaggio</text>
         <text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Il ruolo selezionato non ha alcun membro con un indirizzo email valido!</text>
         <text id="MAI_SEND_COPY" development="new" translation="edited">Invia copia dell'email al mio indirizzo</text>
         <text id="MAI_SEND_EMAIL" development="new" translation="edited">Invia email</text>
-        <text id="MAI_SEND_MAIL_TO_ROLE" development="new" translation="edited">La tua email sarà inviata a tutti i membri con l'indirizzo del ruolo selezionato.\n\nUlteriori ruoli come destinatari sono disponibili solo per gli utenti registrati.</text>
         <text id="MAI_SENDER_EMAIL" development="new" translation="edited">Email del mittente</text>
         <text id="MAI_SENDER_EMAIL_ADDRESS_DESC" development="new" translation="edited">Alcuni provider non ammettono mittente con informazioni non definite.  E' necessario per favore fornire un indirizzo email come mittente predefinito dell'email ad uso del modulo email (es. outbox@%VAR1%).\nSe il campo rimane vuoto, l'indirizzo email registrato del mittente apparirà come informazione sul mittente. (predefinito: vuoto)</text>
         <text id="MAI_SENDER_NOT_LOGGED_IN" development="new" translation="edited">(Il mittente è stato disconnesso. Inoltre le  informazioni del mittente potrebbero non essere corrette.)</text>
@@ -719,7 +712,6 @@
         <text id="MEM_FORMAT" development="new" translation="edited">Formato</text>
         <text id="MEM_IDENTIFY_USERS" development="new" translation="edited">L'identificazione degli utenti già esistenti è fatta sulla base del nome e del cognome.</text>
         <text id="MEM_IMPORT" development="new" translation="edited">Importa</text>
-        <text id="MEM_IMPORT_SUCCESSFUL" development="new" translation="edited">Importazione dei %VAR1% record di dati avvenuta con successo!</text>
         <text id="MEM_IMPORT_USERS" development="new" translation="edited">Importa utente(i)</text>
         <text id="MEM_INPUT_FIRSTNAME_LASTNAME" development="new" translation="edited">Per favore fornisci il nome e il cognome del nuovo utente. Sarà effettuata una verifica nel database se un utente con lo stesso nome o con un nome simile esiste già.</text>
         <text id="MEM_MAKE_FORMER" development="new" translation="edited">Un utente può essere cambiato allo stato di ex membro. Questo conserverà tutte le informazioni dell'utente compreso il ruolo nella membership per futuri utilizzi.</text>
@@ -798,8 +790,6 @@
         <text id="ORG_ENABLE_RSS_FEEDS_DESC" development="new" translation="edited">Admidio consente di avere il servizio RSS-Feed per i singoli moduli (annunci, appuntamenti, libro degli ospiti, galleria fotografica e collegamenti) sulla pagina di panoramica di ogni modulo. La sottoscrizione è possibile dal browser o dal feed reader. (predefinito: sì)</text>
         <text id="ORG_FAST_REGISTRATION" development="new" translation="edited">Registrazione veloce</text>
         <text id="ORG_FIELD_DESCRIPTION" development="new" translation="edited">Definisci campi aggiuntivi illimitati. I campi saranno visualizzati e possono essere modificati nel profilo dell'utente. Questi campi saranno disponibili anche in un proprio elenco.</text>
-        <text id="ORG_FIELD_DISABLED" development="new" translation="edited">Il campo per gli utenti autorizzati a "a cura di tutti gli utenti" è modificabile.</text>
-        <text id="ORG_FIELD_DISABLED_DESC" development="new" translation="edited">I campi bloccati nel proprio profilo non posso essere modificati dagli utenti. La modifica è possibile solo per gli utenti con il permesso 'modifica tutti gli utenti'.</text>
         <text id="ORG_FIELD_DOWN" development="new" translation="edited">Sposta sotto il campo del profilo</text>
         <text id="ORG_FIELD_EXIST" development="new" translation="edited">Un campo con lo stesso nome esiste già in questa categoria.</text>
         <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Campo visibile solo per gli utenti autorizzati (autorizzazione solo per il proprio profilo &amp; ruolo)</text>
@@ -864,7 +854,6 @@
         <text id="PHO_BACK_TO_ALBUM" development="new" translation="edited">indietro all'album</text>
         <text id="PHO_CREATE_ALBUM" development="new" translation="edited">Creazione album</text>
         <text id="PHO_DISPLAY_PHOTOS" development="new" translation="edited">Come visualizzare le foto</text>
-        <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="edited">Imposta la modalità di visualizzazione delle foto. Seleziona la modalità finestra a comparsa, la modalità animata Javascript (ColorBox) o la modalità iHTML per la visualizzazione delle foto sulla stessa pagina. (predefinito: ColorBox)</text>
         <text id="PHO_EDIT_ALBUM" development="new" translation="edited">Modifica album</text>
         <text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">Un nuovo album di foto è stato creato</text>
         <text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">Un nuovo album di foto è stato creato il %VAR1%.\n\nTitolo: %VAR2%\nCreato da: %VAR3%\nCreato il: %VAR4%</text>
@@ -969,7 +958,6 @@
         <text id="ROL_ALL_GUESTS" development="new" translation="edited">Tutti gli ospiti del sito</text>
         <text id="ROL_ALL_MEMBERS" development="new" translation="edited">Tutti gli utenti collegati</text>
         <text id="ROL_ANNUALLY" development="new" translation="edited">Annualmente</text>
-        <text id="ROL_DELETE_ROLE" development="new" translation="edited">Selezionando %VAR1_BOLD% tutti i ruoli e tutte le assegnazioni del membro saranno cancellate. Le informazioni cancellate non possono essere aperte o recuperate di nuovo.</text>
         <text id="ROL_DEPENDENCIES" development="new" translation="edited">Dipendenze</text>
         <text id="ROL_DEPENDENT" development="new" translation="edited">Dipendente</text>
         <text id="ROL_EDIT_ROLE" development="new" translation="edited">Modifica ruolo</text>
@@ -1070,7 +1058,6 @@
         <text id="SYS_CAPTCHA_CALC_PART3_THIRD" development="new" translation="edited">un terzo di</text>
         <text id="SYS_CAPTCHA_CALC_PART3_HALF" development="new" translation="edited">la metà di</text>
         <text id="SYS_CAPTCHA_CALC_PART4" development="new" translation="edited">.</text>
-        <text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Codice di Turing</text>
         <text id="SYS_CAPTCHA_CODE_INVALID" development="new" translation="edited">Il codice di autenticazione non è valido.</text>
         <text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Codice di autenticazione</text>
         <text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="edited">Il codice di autenticazione è parte del captcha. Il captcha viene utilizzato per il rilevamento dello spam. L'immagine viene utilizzata per rilevare se un utente o uno script (o uno spambot) ha riempito il modulo.\nNSi prega di inserire il risultato del codice di autenticazione nel modulo.</text>
@@ -1120,7 +1107,6 @@
         <text id="SYS_DONATE" development="new" translation="edited">Dona</text>
         <text id="SYS_EDIT" development="new" translation="edited">Modifica</text>
         <text id="SYS_EDIT_VAR" development="new" translation="edited">Modifica %VAR1%</text>
-        <text id="SYS_EDITED_BY" development="new" translation="edited">Ultima modifica di %VAR1% il %VAR2%</text>
         <text id="SYS_EMAIL" development="new" translation="edited">Email</text>
         <text id="SYS_EMAIL_INVALID" development="new" translation="edited">L'indirizzo email nel campo %VAR1_BOLD% include caratteri non validi o è incompleto.</text>
         <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Voce visibile per più organizzazioni</text>
@@ -1186,7 +1172,6 @@
         <text id="SYS_LOGOUT" development="new" translation="edited">Esci</text>
         <text id="SYS_LOGOUT_SUCCESSFUL" development="new" translation="edited">Uscita avvenuta con successo.</text>
         <text id="SYS_LOSTPW_AREADY_LOGGED_ID" development="new" translation="edited">Sei già registrato. Dunque devi già avere la pssword corretta!</text>
-        <text id="SYS_LOSTPW_EMAIL_ERROR" development="new" translation="edited">L'ndirizzo email %VAR1% non è stato trovato nel sistema!</text>
         <text id="SYS_LOSTPW_SEND" development="new" translation="edited">Una nuova password è stata inviata all'indirizzo e-mail %VAR1%!</text>
         <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="edited">Si è verificato un errore durante l'invio dell'email ai destinatari %VAR1%!\nRiprova più tardi!</text>
         <text id="SYS_MAP" development="new" translation="edited">Mappa</text>
@@ -1241,7 +1226,6 @@
         <text id="SYS_PHOTOS" development="new" translation="edited">Foto</text>
         <text id="SYS_PHP_INFO" development="new" translation="edited">Tutte le impostazioni PHP</text>
         <text id="SYS_PHP_VERSION" development="new" translation="edited">Versione PHP</text>
-        <text id="SYS_PHP_VERSION_REQUIRED" development="new" translation="edited">Admidio richiede la 5.2 o più alta</text>
         <text id="SYS_PLEASE_CHOOSE" development="new" translation="edited">Seleziona l'opzione</text>
         <text id="SYS_PLEASE_WAIT" development="new" translation="edited">Attendere prego</text>
         <text id="SYS_POST_MAX_SIZE" development="new" translation="edited">Massima dimensione del post</text>
