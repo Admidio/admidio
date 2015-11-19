@@ -171,16 +171,15 @@ class Language
                 return array();
             }
 
-            $data = implode('', file($file));
-            $p = xml_parser_create();
-            xml_parse_into_struct($p, $data, $vals, $index);
-            xml_parser_free($p);
+            // read all countries from xml file
+            $countriesXml = new SimpleXMLElement($file, 0, true);
 
-            $iMax = count($index['ISOCODE']);
-            for($i = 0; $i < $iMax; ++$i)
+            foreach($countriesXml->string as $stringNode)
             {
-                $countries[$vals[$index['ISOCODE'][$i]]['value']] = $vals[$index['NAME'][$i]]['value'];
+                $attributes = $stringNode->attributes();
+                $countries[(string)$attributes->name] = $stringNode;
             }
+
             $this->languageData->setCountriesArray($countries);
         }
         return $this->languageData->getCountriesArray();
