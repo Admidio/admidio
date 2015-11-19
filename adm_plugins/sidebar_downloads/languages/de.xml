@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="de_sie">
-    <version id="1.2.1">
-        <text id="PLG_DOWNLOADS_HEADLINE" development="new" translation="todo">Downloads</text>
-    </version>
-    <version id="1.1.0">
-        <text id="PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE" development="new" translation="todo">Es wurden noch keine Dateien zum Download hochgeladen.</text>
-    </version>
-</language>
+<resources>
+    <string name="PLG_DOWNLOADS_HEADLINE">Downloads</string>
+    <string name="PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE">Es wurden noch keine Dateien zum Download hochgeladen.</string>
+</resources>

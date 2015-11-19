@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="de_sie">
-    <version id="1.6.1">
-        <text id="PLG_SIDEBAR_DATES_MORE" development="new" translation="todo" description="Show 'more' content of this">mehr</text>
-    </version>
-    <version id="1.4.1">
-        <text id="PLG_DATES_HEADLINE" development="new" translation="todo">Termine</text>
-    </version>
-    <version id="1.3.0">
-        <text id="PLG_DATES_ALL_EVENTS" development="new" translation="todo">Alle Termine</text>
-    </version>
-</language>
+<resources>
+    <string name="PLG_DATES_ALL_EVENTS">Alle Termine</string>
+    <string name="PLG_DATES_HEADLINE">Termine</string>
+    <string name="PLG_SIDEBAR_DATES_MORE">mehr</string>
+</resources>
