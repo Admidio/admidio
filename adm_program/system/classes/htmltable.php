@@ -115,7 +115,7 @@ class HtmlTable extends HtmlTableBasic
         }
 
         $this->addTableHeader();
-        $this->addRow(null, $arrAttributes, 'th');
+        $this->addRow('', $arrAttributes, 'th');
 
         // now add each column to the row
         foreach($arrayColumnValues as $key => $value)
@@ -162,7 +162,7 @@ class HtmlTable extends HtmlTableBasic
             $this->addTableBody();
         }
 
-        $this->addRow(null, $arrAttributes);
+        $this->addRow('', $arrAttributes);
 
         // now add each column to the row
         foreach($arrayColumnValues as $key => $value)
