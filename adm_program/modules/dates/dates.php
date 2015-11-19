@@ -714,7 +714,15 @@ else
             }
 
             $columnValues[] = $dateTimeValue;
-            $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>';
+            
+            if($getViewMode === 'html')
+            {
+                $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>';
+            }
+            else
+            {
+                $columnValues[] = $date->getValue('dat_headline');
+            }
 
             if($getView === 'room')
             {
