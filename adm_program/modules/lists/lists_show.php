@@ -9,15 +9,17 @@
  *
  * Parameters:
  *
- * mode   : Output (html, print, csv-ms, csv-oo, pdf, pdfl)
- * lst_id : Id of the list configuration that should be shown.
- *          If id is null then the default list of the role will be shown.
- * rol_id : Id of the role whose members should be shown
- * show_members : 0 - (Default) show active members of role
- *                1 - show former members of role
- *                2 - show active and former members of role
- * full_screen  : 0 - (Default) show sidebar, head and page bottom of html page
- *                1 - Only show the list without any other html unnecessary elements
+ * mode:            Output(html, print, csv-ms, csv-oo, pdf, pdfl)
+ * date_from:       Value for the start date of the date range filter (default: current date)
+ * date_to:         Value for the end date of the date range filter (default: current date) 
+ * lst_id:          Id of the list configuration that should be shown.
+ *                  If id is null then the default list of the role will be shown.
+ * rol_id:          Id of the role whose members should be shown
+ * show_members:    0 - (Default) show active members of role
+ *                  1 - show former members of role
+ *                  2 - show active and former members of role
+ * full_screen:     0 - (Default) show sidebar, head and page bottom of html page
+ *                  1 - Only show the list without any other html unnecessary elements
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
@@ -26,20 +28,12 @@ unset($list);
 
 // Initialize and check the parameters
 $getDateFrom    = admFuncVariableIsValid($_GET, 'date_from', 'date', array('defaultValue' => DATE_NOW));
-$getDateTo      = admFuncVariableIsValid($_GET, 'date_to', 'date', array('defaultValue' => date('Y') + 10 .'-12-31'));
+$getDateTo      = admFuncVariableIsValid($_GET, 'date_to', 'date', array('defaultValue' => DATE_NOW));
 $getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
-$getListId      = admFuncVariableIsValid($_GET, 'lst_id', 'numeric');
+$getListId      = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', array('defaultValue' => 1));
 $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
 $getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen', 'numeric');
-
-// Store parameters in session for period filter form
-if(!isset($_SESSION['mylist_filter_request']))
-{
-    $_SESSION['mylist_filter_request']['lst_id']       = $getListId;
-    $_SESSION['mylist_filter_request']['rol_id']       = $getRoleId;
-    $_SESSION['mylist_filter_request']['show_members'] = $getShowMembers;
-}
 
 // Create date objects and format dates in system format
 $objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
@@ -65,20 +59,12 @@ unset($rolesIds);
 
 if($getRoleId > 0)
 {
-    $rolesIds[] = $_SESSION['mylist_filter_request']['rol_id'];
+    $rolesIds[] = $getRoleId;
 }
 else
 {
-    // Check request is from mylist
-    if(isset($_SESSION['role_ids']))
-    {
-        $rolesIds = $_SESSION['role_ids'];
-    }
-    else
-    {
-        $rolesIds[] = $_SESSION['mylist_filter_request']['rol_id'];
-    }
-    $_SESSION['mylist_filter_request']['rol_id'] = $rolesIds[0];
+    $rolesIds = $_SESSION['role_ids'];
+    $getRoleId = $rolesIds[0];
 }
 
 // determine all roles relevant data
@@ -110,10 +96,10 @@ if($numberRoles > 1)
 }
 else
 {
-    $role = new TableRoles($gDb, $_SESSION['mylist_filter_request']['rol_id']);
+    $role = new TableRoles($gDb, $getRoleId);
 
     // check if user has right to view role
-    if(!$gCurrentUser->hasRightViewRole($_SESSION['mylist_filter_request']['rol_id']))
+    if(!$gCurrentUser->hasRightViewRole($getRoleId))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -124,12 +110,12 @@ else
 }
 
 // if no list parameter is set then load role default list configuration or system default list configuration
-if($_SESSION['mylist_filter_request']['rol_id'] === 0 && $numberRoles === 1)
+if($getRoleId === 0 && $numberRoles === 1)
 {
     // set role default list configuration
-    $_SESSION['mylist_filter_request']['rol_id'] = $role->getDefaultList();
+    $getRoleId = $role->getDefaultList();
 
-    if($_SESSION['mylist_filter_request']['rol_id'] == 0)
+    if($getRoleId == 0)
     {
        $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
     }
@@ -192,7 +178,7 @@ $leiter  = 0;  // Group has leaders
 try
 {
     // create list configuration object and create a sql statement out of it
-    $list = new ListConfiguration($gDb, $_SESSION['mylist_filter_request']['lst_id']);
+    $list = new ListConfiguration($gDb, $getListId);
     $mainSql = $list->getSQL($rolesIds, $getShowMembers, $startDateEnglishFormat, $endDateEnglishFormat);
     // echo $mainSql; exit();
 }
@@ -235,15 +221,15 @@ if($getMode !== 'csv')
     $datatable = false;
     $hoverRows = false;
 
-    if($_SESSION['mylist_filter_request']['show_members'] == 0)
+    if($getShowMembers == 0)
     {
         $htmlSubHeadline .= ' - '. $gL10n->get('LST_ACTIVE_MEMBERS');
     }
-    elseif($_SESSION['mylist_filter_request']['show_members'] == 1)
+    elseif($getShowMembers == 1)
     {
         $htmlSubHeadline .= ' - '. $gL10n->get('LST_FORMER_MEMBERS');
     }
-    elseif($_SESSION['mylist_filter_request']['show_members'] == 2)
+    elseif($getShowMembers == 2)
     {
         $htmlSubHeadline .= ' - '. $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }
@@ -321,13 +307,17 @@ if($getMode !== 'csv')
         $page->setHeadline($headline);
 
         // Only for active members of a role
-        if($_SESSION['mylist_filter_request']['show_members'] === 0)
+        if($getShowMembers === 0)
         {
             // create filter menu with elements for start-/enddate
-            $filterNavbar = new HtmlNavbar('menu_list_filter', $gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), null, 'filter');
+            $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
             $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
-            $form->addInput('date_from', $gL10n->get('SYS_START'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
-            $form->addInput('date_to', $gL10n->get('SYS_END'), $dateTo, array('type' => 'date', 'maxLength' => 10));
+            $form->addInput('date_from', $gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
+            $form->addInput('date_to', $gL10n->get('LST_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
+            $form->addInput('lst_id', '', $getListId, array('class' => 'hide'));
+            $form->addInput('rol_id', '', $getRoleId, array('class' => 'hide'));
+            $form->addInput('show_members', '', $getShowMembers, array('class' => 'hide'));
+            $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
             $filterNavbar->addForm($form->show(false));
             $page->addHtml($filterNavbar->show(false));
         }
@@ -339,12 +329,12 @@ if($getMode !== 'csv')
                     var result = $(this).val();
                     $(this).prop("selectedIndex",0);
                     self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
-                        "lst_id='. $_SESSION['mylist_filter_request']['lst_id']. $roleIdLink. '&mode=" + result + "&show_members='.$getShowMembers.'";
+                        "lst_id='.$getListId. $roleIdLink. '&mode=" + result + "&show_members='.$getShowMembers.'";
                 }
             });
 
             $("#menu_item_print_view").click(function () {
-                window.open("'.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$_SESSION['mylist_filter_request']['lst_id']. $roleIdLink. '&mode=print&show_members='.$getShowMembers.'", "_blank");
+                window.open("'.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId. $roleIdLink. '&mode=print&show_members='.$getShowMembers.'", "_blank");
             });', true);
 
         // get module menu
@@ -354,12 +344,12 @@ if($getMode !== 'csv')
 
         if($getFullScreen == true)
         {
-            $listsMenu->addItem('menu_item_normal_picture', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$_SESSION['mylist_filter_request']['lst_id']. htmlspecialchars($roleIdLink). '&amp;mode=html&amp;show_members='.$_SESSION['mylist_filter_request']['show_members'].'&amp;full_screen=0',
+            $listsMenu->addItem('menu_item_normal_picture', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId. htmlspecialchars($roleIdLink). '&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=0',
                 $gL10n->get('SYS_NORMAL_PICTURE'), 'arrow_in.png');
         }
         else
         {
-            $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$_SESSION['mylist_filter_request']['lst_id']. htmlspecialchars($roleIdLink). '&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=1',
+            $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId. htmlspecialchars($roleIdLink). '&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=1',
                 $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png');
         }
 
@@ -825,3 +815,4 @@ elseif($getMode === 'html' || $getMode === 'print')
     // show complete html page
     $page->show();
 }
+?>

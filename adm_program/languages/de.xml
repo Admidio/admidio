@@ -14,7 +14,8 @@
         <text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="todo">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden in mit dieser Konfiguration angezeigt.</text>
         <text id="LST_VARIOUS_ROLES" development="new" translation="todo">Verschiedene Rollen</text>
         <text id="LST_ERROR_DELETE_DEFAULT_LIST" development="new" translation="todo">Die Liste %VAR1_BOLD% ist die Standardkonfiguration für Listen in dieser Organisation und kann nicht gelöscht werden. Wähle in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuche danach diese Konfiguration zu löschen.</text>
-        <text id="LST_ROLE_MEMBERSHIP_IN_PERIOD" development="new" translation="todo">Mitglieder dieser Gruppe im Zeitraum:</text>
+        <text id="LST_ROLE_MEMBERSHIP_IN_PERIOD" development="new" translation="todo">Mitglieder im Zeitraum:</text>
+        <text id="LST_ROLE_MEMBERSHIP_TO" development="new" translation="todo">bis</text>
         <text id="LST_SAVE_CHANGES" development="new" translation="todo">Änderungen speichern</text>
         <text id="LST_SELECT_CONFIGURATION" development="new" translation="todo">Konfiguration auswählen</text>
         <text id="LST_SELECT_MEMBERS" development="new" translation="todo">Mitglieder auswählen</text>
