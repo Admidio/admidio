@@ -179,7 +179,7 @@ class HtmlTableBasic extends HtmlElement {
 
         if(!empty($this->columnsWidth) && isset($this->columnsWidth[$this->columnCount]))
         {
-            $this->addAttribute('style', 'width:' . $this->columnsWidth[$this->columnCount]);
+            $this->addAttribute('style', 'width:' . $this->columnsWidth[$this->columnCount].';');
         }
 
         // Check optional attributes in associative array and set all attributes

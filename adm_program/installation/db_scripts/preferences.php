@@ -143,7 +143,7 @@ $orga_preferences = array(
     // Events
     'enable_dates_module'       => '1',
     'dates_per_page'            => '10',
-    'dates_viewmode'            => 'html',
+    'dates_view'                => 'detail',
     'dates_show_map_link'       => '1',
     'dates_show_rooms'          => '0',
     'enable_dates_ical'         => '1',

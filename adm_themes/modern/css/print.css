@@ -22,6 +22,19 @@ h1 {
     border-bottom-width: 0;
 }
 
+.panel {
+    text-align: left;
+}
+
+.panel-primary > .panel-heading {
+    color: #555555;
+    border-bottom: 2px solid #555555;
+}
+
+.panel-primary > .panel-footer {
+    border-top: 2px solid #cccccc;
+}
+
 .table {
     width: 270mm;
     background-color: #ffffff;
@@ -47,79 +60,13 @@ h1 {
     border-bottom: 1px solid #dddddd;
 }
 
-/**************************************
- * Style for printview of date module *
- **************************************/
+/* Highlight events */
 
-@media print{
-    .form {
-        display: none;
-    }
-}
-
-/* Settings for background colors of table rows */
-.even {
-    background-color: #eeeeee;
-}
-.odd {
-    background-color: #ffffff;
-}
-/* Settings for highlighted dates */
-.evenHighlight {
-    background-color: #eeeeee;
-    font-weight: bolder;
-}
-.oddHighlight {
-    background-color: #ffffff;
-    font-weight: bolder;
-}
-/* Settings for html table */
-.tableDateList {
-    margin: auto;
-    text-align: center;
-    top: 0 !important;
-    border-collapse: collapse;
-}
-.tableDateList thead{
-    background-color: #ffffff;
-}
-.tableDateList thead h1 {
-    margin: 8px 0 0 0;
-    font-size: 1.7em;
-}
-.tableDateList thead h3 {
-    margin: 5px 0 5px 0;
-}
-.tableDateList tfoot {
-
-}
-.tableDateList th {
+tr.admidio-event-highlight,
+.admidio-event-highlight .panel-heading {
     color: #000000;
-    font-family: arial, sans-serif;
-    font-size: .9em;
-    height: 35px;
-    background-color: #cccccc;
 }
-.tableDateList tr {
-    font-family: arial, sans-serif;
-    border: 1px;
-}
-.tableDateList td {
-    font-size: .9em;
-    text-align: center;
-}
-.tableDateList td .left {
-    text-align: left;
-}
-.dateParticipation thead {
-    display: none;
-}
-/* Set come columns in tablebody to align: left */
-#style0 :nth-child(5),
-#style0 :nth-child(6),
-#style0 :nth-child(7),
-#style1 :nth-child(5),
-#style1 :nth-child(6),
-#style2 :nth-child(5) {
-    text-align: left;
+
+.panel-primary.admidio-event-highlight > .panel-heading {
+    border-bottom: 4px solid #000000;
 }
