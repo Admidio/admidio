@@ -298,7 +298,6 @@
     <string name="INS_SKYPE_DESC">Geben Sie hier Ihren eindeutigen Skype-Namen ein. Haben Sie in Skype Ihren Online-Status freigegeben, so wird dieser später in Ihrem Profil angezeigt.</string>
     <string name="INS_TWITTER">Twitter</string>
     <string name="INS_TWITTER_DESC">Wollen Sie Ihr Twitter-Profil hier verlinken? Dazu benötigen Sie Ihren eindeutigen Namen bei Twitter. Melden Sie sich bei Twitter an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher aus Ihrem Profil direkt Ihr Twitter-Profil aufrufen.</string>
-    <string name="INS_WINDOWS_LIVE">Windows Live</string>
     <string name="INS_XING">Xing</string>
     <string name="INS_XING_DESC">Wollen Sie Ihr Xing-Profil hier verlinken? Dazu benötigen Sie Ihren eindeutigen Namen bei Xing. Melden Sie sich bei Xing an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher aus Ihrem Profil direkt Ihr Xing-Profil aufrufen.</string>
     <string name="LST_SEARCH_GENDER_DESC">Sucht alle männlichen Benutzer</string>

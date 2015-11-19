@@ -288,7 +288,6 @@
     <string name="INS_SKYPE_DESC">Enter your exact Skype name here. If your status can be shown on the web (enabled in ICQ), it will be displayed in your profile.</string>
     <string name="INS_TWITTER">Twitter</string>
     <string name="INS_TWITTER_DESC">Would you like to set a link to your Twitter profile? Your Twitter login name is required. Log in to your Twitter account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Twitter profile directly.</string>
-    <string name="INS_WINDOWS_LIVE">Windows Live</string>
     <string name="INS_XING">Xing</string>
     <string name="INS_XING_DESC">Would you like to set a link to your Xing profile? Your Xing login name is required. Log in to your Xing account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Xing profile directly.</string>
     <string name="LST_SEARCH_GENDER_DESC">Searching for all male users</string>

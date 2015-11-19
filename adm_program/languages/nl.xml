@@ -146,7 +146,6 @@
     <string name="INS_SKYPE_DESC">Toets hier uw Skype naam in. Als uw status online te zien is (ingeschakeld in Skype), zal het in uw profiel getoond worden.</string>
     <string name="INS_TWITTER">Twitter</string>
     <string name="INS_TWITTER_DESC">Wilt u een link naar uw Twitter profiel plaatsen? Uw Twitter login naam is noodzakelijk. Log in op uw Twitter account en ga naar uw profiel. Kopieer URL in dit veld en sla uw profiel op. Bezoekers van uw profiel kunnen nu uw Twitter profiel direct openen.</string>
-    <string name="INS_WINDOWS_LIVE">Windows Live</string>
     <string name="INS_XING">Xing</string>
     <string name="INS_XING_DESC">Wilt u een link naar uw Xing profiel plaatsen? Uw Xing login naam is noodzakelijk. Log in op uw Xing account en ga naar uw profiel. Kopieer URL in dit veld en sla uw profiel op. Bezoekers van uw profiel kunnen nu uw Xing profiel direct openen.</string>
     <string name="MAI_SUBJECT_ATTACHMENT">Onderwerp &amp; Attachment</string>

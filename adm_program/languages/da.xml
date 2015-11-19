@@ -273,7 +273,6 @@
     <string name="INS_SKYPE_DESC">Indtast dit præcise Skype navn her. Hvis din status kan vises på web (aktiveret i ICQ), så vil din status blive vist i din profil.</string>
     <string name="INS_TWITTER">Twitter</string>
     <string name="INS_TWITTER_DESC">Kunne du tænke dig at linke til din Twitter profil? For at gøre dette har du brug for dit Twitter login navn. Log ind i din Twitter konto og vis din profil. Kopier Twitter URL'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Twitter profil.</string>
-    <string name="INS_WINDOWS_LIVE">Windows Live</string>
     <string name="INS_XING">Xing</string>
     <string name="INS_XING_DESC">Kunne du tænke dig at linke til din Xing profil? For at gøre dette har du brug for dit Xing login navn. Log ind i din Xing konto og vis din profil. Kopier Xing URL'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Xing profil.</string>
     <string name="MAI_SUBJECT_ATTACHMENT">Emne &amp; Vedhæftning</string>

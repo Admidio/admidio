@@ -260,7 +260,6 @@
     <string name="INS_SKYPE_DESC">Inserisci il tuo esatto nome Skype qui. Se il tuo stato può essere mostrato sul web (abilitato in Skype), esso sarà visualizzato nel tuo profilo.</string>
     <string name="INS_TWITTER">Twitter</string>
     <string name="INS_TWITTER_DESC">Vorresti impostare un link al tuo profilo Twitter?  E' necessario il tuo username per l'accesso a Twitter. Accedi al tuo account Twitter e visualizza il tuo profilo. Copia l'URL in questo campo e salva il tuo profilo qui. I visitatori del tuo profilo sono ora abilitati ad aprire il tuo profilo Twitter direttamente.</string>
-    <string name="INS_WINDOWS_LIVE">Windows Live</string>
     <string name="INS_XING">Xing</string>
     <string name="INS_XING_DESC">Vorresti impostare un link al tuo profilo Xing?  E' necessario il tuo username per l'accesso a Xing. Accedi al tuo account Xing e visualizza il tuo profilo. Copia l'URL in questo campo e salva il tuo profilo qui. I visitatori del tuo profilo sono ora abilitati ad aprire il tuo profilo Xing direttamente.</string>
     <string name="LST_SEARCH_GENDER_DESC">Cerca fra tutti gli utenti maschi</string>
