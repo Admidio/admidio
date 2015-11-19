@@ -10,6 +10,9 @@
 
 require_once('common.php');
 
+// Initialize and check the parameters
+$postRecipientEmail = admFuncVariableIsValid($_POST, 'recipient_email', 'string');
+
 $headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
 
 // save url to navigation stack
@@ -37,7 +40,7 @@ if($gValidLogin)
     $gMessage->show($gL10n->get('SYS_LOSTPW_AREADY_LOGGED_ID'));
 }
 
-if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
+if($postRecipientEmail !== '' && !empty($_POST['captcha']))
 {
     try
     {
@@ -47,7 +50,7 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
                   JOIN '. TBL_USER_DATA. ' as email
                     ON email.usd_usr_id = usr_id
                    AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
-                   AND email.usd_value  = \''.$_POST['recipient_email'].'\'
+                   AND email.usd_value  = \''.$postRecipientEmail.'\'
                  WHERE rol_cat_id = cat_id
                    AND rol_valid   = 1
                    AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
