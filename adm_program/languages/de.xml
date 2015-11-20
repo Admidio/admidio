@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
     <version id="3.1.0" translator="Markus Faßbender">
+        <text id="ORG_TIMEZONE" development="new">Zeitzone</text>
+        <text id="ORG_TIMEZONE_DESC" development="new">Dies ist die festgelegte Zeitzone. Wird diese später in der Konfigurationsdatei config.php von Admidio geändert, so werden bereits erfasste Daten und Uhrzeiten nicht an die neue Zeitzone angepasst.</text>
+        <text id="INS_DATA_OF_ORGANIZATION" development="new">Daten der Organisation</text>
+        <text id="INS_NAME_OF_ORGANIZATION" development="deleted">Name der Organisation</text>
+
         <text id="BAC_FILE_NAME_INVALID" development="changed" translation="todo">Der ausgewählte Dateiname enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen $!?._+-()&amp; .</text>
         <text id="DAT_PERIOD_FROM_TO" development="new" translation="todo">Zeitraum vom %VAR1% bis %VAR2%</text>
         <text id="DOW_SELECT_FILES" development="new" translation="todo">Dateien auswählen</text>
@@ -601,7 +606,6 @@
         <text id="INS_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft</text>
         <text id="INS_MESSENGER" development="new" translation="todo">Messenger</text>
         <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden!</text>
-        <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="todo">Name der Organisation</text>
         <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="todo">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben!</text>
         <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="todo">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
         <text id="INS_PHONE_LIST" development="new" translation="todo">Telefonliste</text>

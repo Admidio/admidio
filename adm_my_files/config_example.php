@@ -38,6 +38,11 @@ $g_root_path = 'http://www.your-website.de/admidio';
 // Maximum of 10 characters !!!
 $g_organization = 'Shortcut';
 
+// The name of the timezone in which your organization is located.
+// This must be one of the strings that are defined here http://www.php.net/manual/en/timezones.php
+// Example: 'Europe/Berlin'
+$gTimezone = 'Europe/Berlin';
+
 // If this flag is set = 1 then you must enter your loginname and password
 // for an update of the Admidio database to a new version of Admidio.
 // For a more comfortable and easy update you can set this preference = 0.

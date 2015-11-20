@@ -302,7 +302,6 @@ elseif($getMode === 4)  // Creating organization
                 // valid installation exists -> exit installation
                 showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
             }
-
         }
     }
 
@@ -330,11 +329,19 @@ elseif($getMode === 4)  // Creating organization
         }
     }
 
+    // create array with possible PHP timezones
+    $allTimezones = DateTimeZone::listIdentifiers();
+    foreach($allTimezones as $timezone)
+    {
+        $timezones[$timezone] = $timezone;
+    }
+
     $form->setFormDescription($gL10n->get('ORG_NEW_ORGANIZATION_DESC'), $gL10n->get('INS_SET_ORGANIZATION'));
-    $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_NAME_OF_ORGANIZATION'));
+    $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATA_OF_ORGANIZATION'));
     $form->addInput('orga_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, array('maxLength' => 10, 'property' => $shortnameProperty, 'class' => 'form-control-small'));
     $form->addInput('orga_longname', $gL10n->get('SYS_NAME'), $orgaLongName, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('orga_email', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $orgaEmail, array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
+    $form->addSelectbox('orga_timezone', $gL10n->get('ORG_TIMEZONE'), $timezones, array('property' => FIELD_REQUIRED, 'defaultValue' => date_default_timezone_get()));
     $form->closeGroupBox();
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=3'));
     $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), array('icon' => 'layout/forward.png'));
@@ -348,6 +355,7 @@ elseif($getMode === 5)  // Creating addministrator
         $_SESSION['orga_shortname'] = strStripTags($_POST['orga_shortname']);
         $_SESSION['orga_longname']  = strStripTags($_POST['orga_longname']);
         $_SESSION['orga_email']     = strStripTags($_POST['orga_email']);
+        $_SESSION['orga_timezone']  = strStripTags($_POST['orga_timezone']);
 
         if($_SESSION['orga_shortname'] === ''
         || $_SESSION['orga_longname']  === ''
@@ -477,6 +485,7 @@ elseif($getMode === 6)  // Creating configuration file
     $configFileContent = str_replace('%DATABASE%', $_SESSION['db_database'], $configFileContent);
     $configFileContent = str_replace('%ROOT_PATH%', $rootPath, $configFileContent);
     $configFileContent = str_replace('%ORGANIZATION%', $_SESSION['orga_shortname'], $configFileContent);
+    $configFileContent = str_replace('%TIMEZONE%', $_SESSION['orga_timezone'], $configFileContent);
     $_SESSION['config_file_content'] = $configFileContent;
 
     // now save new configuration file in Admidio folder if user has write access to this folder
