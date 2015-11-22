@@ -268,12 +268,14 @@ class Language
     {
         if(count($this->languages) === 0)
         {
-            $languagesXml = new SimpleXMLElement(SERVER_PATH.'/adm_program/languages/languages.xml', null, true);
-
-            foreach($languagesXml->children() as $stringNode)
+            $data = implode('', file(SERVER_PATH.'/adm_program/languages/languages.xml'));
+            $p = xml_parser_create();
+            xml_parse_into_struct($p, $data, $vals, $index);
+            xml_parser_free($p);
+            $iMax = count($index['ISOCODE']);
+            for($i = 0; $i < $iMax; ++$i)
             {
-                $attributes = $stringNode->attributes();
-                $this->languages[(string) $attributes->name] = (string) $stringNode;
+                $this->languages[$vals[$index['ISOCODE'][$i]]['value']] = $vals[$index['NAME'][$i]]['value'];
             }
         }
         return $this->languages;
@@ -306,13 +308,13 @@ class Language
             // text not in cache -> read from xml file in "Android Resource String" format
             $node = $objectArray[$languagePath]->xpath('/resources/string[@name="'.$textId.'"]');
 
-            if($node === false)
+            if($node == false)
             {
                 // fallback for old Admidio language format prior to version 3.1
                 $node = $objectArray[$languagePath]->xpath('/language/version/text[@id="'.$textId.'"]');
             }
 
-            if($node !== false)
+            if($node != false)
             {
                 // set line break with html
                 $text = str_replace('\n', '<br />', $node[0]);
