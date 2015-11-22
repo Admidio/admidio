@@ -11,7 +11,7 @@
  *
  * mode:            Output(html, print, csv-ms, csv-oo, pdf, pdfl)
  * date_from:       Value for the start date of the date range filter (default: current date)
- * date_to:         Value for the end date of the date range filter (default: current date) 
+ * date_to:         Value for the end date of the date range filter (default: current date)
  * lst_id:          Id of the list configuration that should be shown.
  *                  If id is null then the default list of the role will be shown.
  * rol_id:          Id of the role whose members should be shown
@@ -168,7 +168,6 @@ $arr_col_name = array('usr_login_name' => $gL10n->get('SYS_USERNAME'),
                       'mem_begin'      => $gL10n->get('SYS_START'),
                       'mem_end'        => $gL10n->get('SYS_END'),
                       'mem_leader'     => $gL10n->get('SYS_LEADERS')
-                      );
 );
 
 $mainSql = ''; // Main SQL statement for lists
@@ -815,4 +814,3 @@ elseif($getMode === 'html' || $getMode === 'print')
     // show complete html page
     $page->show();
 }
-?>

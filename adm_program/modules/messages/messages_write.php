@@ -402,14 +402,14 @@ elseif (!isset($message_result))
 
         while ($row = $gDb->fetch_array($result))
         {
-            if (!isset($act_usr_id) or $act_usr_id <> $row['usr_id'])
+            if (!isset($act_usr_id) or $act_usr_id != $row['usr_id'])
             {
                 if ($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW && $row['rol_mail_this_role'] >= 2)
                 {
                     $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_ACTIVE_MEMBERS'));
                     $act_usr_id = $row['usr_id'];
                 }
-                elseif ($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW && $row['rol_mail_this_role'] == 1 && in_array($row['rol_id'], $gCurrentUser->getRoleMemberships()))
+                elseif ($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW && $row['rol_mail_this_role'] == 1 && in_array($row['rol_id'], $gCurrentUser->getRoleMemberships(), true))
                 {
                     $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_ACTIVE_MEMBERS'));
                     $act_usr_id = $row['usr_id'];

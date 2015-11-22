@@ -826,4 +826,3 @@ $page->addHtml('
 </div>');
 
 $page->show();
-?>
