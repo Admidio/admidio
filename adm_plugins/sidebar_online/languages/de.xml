@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="de">
-    <version id="1.4.1">
-        <text id="PLG_ONLINE_HEADLINE" development="new" translation="todo">Online</text>
-    </version>
-    <version id="1.3.1">
-        <text id="PLG_ONLINE_NO_VISITORS_ON_WEBSITE" development="new" translation="todo">Zur Zeit sind keine Besucher auf der Webseite.</text>
-    </version>
-    <version id="1.3.0">
-        <text id="PLG_ONLINE_VAR_NUM_VISITORS" development="new" translation="todo">%VAR1% Besucher</text>
-    </version>
-</language>
+<resources>
+    <string name="PLG_ONLINE_HEADLINE">Online</string>
+    <string name="PLG_ONLINE_NO_VISITORS_ON_WEBSITE">Zur Zeit sind keine Besucher auf der Webseite.</string>
+    <string name="PLG_ONLINE_VAR_NUM_VISITORS">%VAR1% Besucher</string>
+</resources>

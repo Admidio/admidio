@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="da">
-    <version id="1.3.0">
-        <text id="PLG_DATES_ALL_EVENTS" development="new" translation="todo">Alle events</text>
-    </version>
-</language>
+<resources>
+    <string name="PLG_DATES_ALL_EVENTS">Alle events</string>
+</resources>

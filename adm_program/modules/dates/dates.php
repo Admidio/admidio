@@ -340,7 +340,7 @@ else
             {
                 if(strlen($value) > 3)
                 {
-                    $countLocationWords++;
+                    ++$countLocationWords;
                 }
             }
 
@@ -714,7 +714,7 @@ else
             }
 
             $columnValues[] = $dateTimeValue;
-            
+
             if($getViewMode === 'html')
             {
                 $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>';

@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="da">
-    <version id="1.3.0">
-        <text id="PLG_ONLINE_VAR_NUM_VISITORS" development="new" translation="todo">%VAR1% Gæster</text>
-    </version>
-</language>
+<resources>
+    <string name="PLG_ONLINE_VAR_NUM_VISITORS">%VAR1% Gæster</string>
+</resources>

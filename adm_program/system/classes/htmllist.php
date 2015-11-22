@@ -111,8 +111,8 @@ class HtmlList extends HtmlElement
      *
      * @param string|null $term Term as string for datalist
      * @param string|null $description Description as string for data
-     * @return false
      * @throws Exception
+     * @return false
      */
     public function addDataListItems($term = null, $description = null)
     {
