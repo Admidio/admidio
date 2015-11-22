@@ -1,31 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<languagelist>
-    <language>
-        <isocode>da</isocode>
-        <name>Dansk</name>
-    </language>
-    <language>
-        <isocode>de</isocode>
-        <name>Deutsch (du)</name>
-    </language>
-    <language>
-        <isocode>de_sie</isocode>
-        <name>Deutsch (Sie)</name>
-    </language>
-    <language>
-        <isocode>en</isocode>
-        <name>English</name>
-    </language>
-    <language>
-        <isocode>fr</isocode>
-        <name>Français</name>
-    </language>
-    <language>
-        <isocode>it</isocode>
-        <name>Italiano</name>
-    </language>
-    <language>
-        <isocode>nl</isocode>
-        <name>Nederlands</name>
-    </language>
-</languagelist>
+<resources>
+    <string isocode="da">Dansk</string>
+    <string isocode="de">Deutsch (du)</string>
+    <string isocode="de_sie">Deutsch (Sie)</string>
+    <string isocode="en">English</string>
+    <string isocode="fr">Français</string>
+    <string isocode="it">Italiano</string>
+    <string isocode="nl">Nederlands</string>
+</resources>

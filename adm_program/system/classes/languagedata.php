@@ -64,7 +64,7 @@ class LanguageData
      */
     public function addLanguagePath($path)
     {
-        if(!in_array($path, $this->languageFilePath) && $path !== '')
+        if(!in_array($path, $this->languageFilePath, true) && $path !== '')
         {
             $this->languageFilePath[] = $path;
         }

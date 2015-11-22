@@ -155,33 +155,38 @@ class Language
     {
         $countries = $this->languageData->getCountriesArray();
 
-        if(count($countries) === 0)
+        if(count($countries) > 0)
         {
-            // set path to language file of countries
-            if(file_exists(SERVER_PATH.'/adm_program/languages/countries_'.$this->languageData->getLanguage().'.xml'))
-            {
-                $file = SERVER_PATH.'/adm_program/languages/countries_'.$this->languageData->getLanguage().'.xml';
-            }
-            elseif(file_exists(SERVER_PATH.'/adm_program/languages/countries_'.$this->languageData->getLanguage(true).'.xml'))
-            {
-                $file = SERVER_PATH.'/adm_program/languages/countries_'.$this->languageData->getLanguage(true).'.xml';
-            }
-            else
-            {
-                return array();
-            }
-
-            // read all countries from xml file
-            $countriesXml = new SimpleXMLElement($file, 0, true);
-
-            foreach($countriesXml->string as $stringNode)
-            {
-                $attributes = $stringNode->attributes();
-                $countries[(string)$attributes->name] = $stringNode;
-            }
-
-            $this->languageData->setCountriesArray($countries);
+            return $countries;
         }
+
+        // set path to language file of countries
+        $countriesFilesPath = SERVER_PATH.'/adm_program/languages/countries_';
+
+        if(file_exists($countriesFilesPath.$this->languageData->getLanguage().'.xml'))
+        {
+            $file = $countriesFilesPath.$this->languageData->getLanguage().'.xml';
+        }
+        elseif(file_exists($countriesFilesPath.$this->languageData->getLanguage(true).'.xml'))
+        {
+            $file = $countriesFilesPath.$this->languageData->getLanguage(true).'.xml';
+        }
+        else
+        {
+            return array();
+        }
+
+        // read all countries from xml file
+        $countriesXml = new SimpleXMLElement($file, null, true);
+
+        foreach($countriesXml->children() as $stringNode)
+        {
+            $attributes = $stringNode->attributes();
+            $countries[(string) $attributes->name] = (string) $stringNode;
+        }
+
+        $this->languageData->setCountriesArray($countries);
+
         return $this->languageData->getCountriesArray();
     }
 
@@ -259,19 +264,16 @@ class Language
      * The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)
      * @return array Return an array with all available languages.
      */
-    public function getAvaiableLanguages()
+    public function getAvailableLanguages()
     {
         if(count($this->languages) === 0)
         {
-            $data = implode('', file(SERVER_PATH.'/adm_program/languages/languages.xml'));
-            $p = xml_parser_create();
-            xml_parse_into_struct($p, $data, $vals, $index);
-            xml_parser_free($p);
+            $languagesXml = new SimpleXMLElement(SERVER_PATH.'/adm_program/languages/languages.xml', null, true);
 
-            $iMax = count($index['ISOCODE']);
-            for($i = 0; $i < $iMax; ++$i)
+            foreach($languagesXml->children() as $stringNode)
             {
-                $this->languages[$vals[$index['ISOCODE'][$i]]['value']] = $vals[$index['NAME'][$i]]['value'];
+                $attributes = $stringNode->attributes();
+                $this->languages[(string) $attributes->name] = (string) $stringNode;
             }
         }
         return $this->languages;
@@ -295,22 +297,22 @@ class Language
 
             if(file_exists($languageFile))
             {
-                $objectArray[$languagePath] = new SimpleXMLElement($languageFile, 0, true);
+                $objectArray[$languagePath] = new SimpleXMLElement($languageFile, null, true);
             }
         }
 
         if(is_object($objectArray[$languagePath]))
         {
             // text not in cache -> read from xml file in "Android Resource String" format
-            $node = $objectArray[$languagePath]->xpath("/resources/string[@name='".$textId."']");
+            $node = $objectArray[$languagePath]->xpath('/resources/string[@name="'.$textId.'"]');
 
-            if($node == false)
+            if($node === false)
             {
                 // fallback for old Admidio language format prior to version 3.1
-                $node = $objectArray[$languagePath]->xpath("/language/version/text[@id='".$textId."']");
+                $node = $objectArray[$languagePath]->xpath('/language/version/text[@id="'.$textId.'"]');
             }
 
-            if($node != false)
+            if($node !== false)
             {
                 // set line break with html
                 $text = str_replace('\n', '<br />', $node[0]);
