@@ -12,7 +12,6 @@
 /**************************************************/
 /* Basic Admidio layout classes */
 /**************************************************/
-
 body {
     color: #474b4c;
     margin: auto;
@@ -230,6 +229,10 @@ hr {
 
 .lead {
     font-size: 12pt;
+}
+
+.popover {
+    min-width: 270px;
 }
 
 .modal-footer {

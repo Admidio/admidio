@@ -75,10 +75,13 @@ if($gCurrentUser->isWebmaster())
 $table = new HtmlTable('adm_lists_table', $page, true, true);
 
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
-$table->addAttribute('border', '0');
-$table->addTableHeader();
 
-$table->addRowHeadingByArray(array($gL10n->get('SYS_CATEGORY'), $gL10n->get('MAI_SUBJECT'), $gL10n->get('MSG_OPPOSITE'), $gL10n->get('SYS_DATE'), $gL10n->get('SYS_FEATURES')));
+$table->addRowHeadingByArray(array('<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_CATEGORY').'" title="'.$gL10n->get('SYS_CATEGORY').'" />',
+                                   $gL10n->get('MAI_SUBJECT'),
+                                   $gL10n->get('MSG_OPPOSITE'),
+                                   $gL10n->get('SYS_DATE'),
+                                   ''));
+$table->disableDatatablesColumnsSort(5);
 $key = 0;
 $part1 = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=msg&amp;element_id=row_message_';
 $part2 = '"><img src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MSG_REMOVE').'" title="'.$gL10n->get('MSG_REMOVE').'" /></a>';

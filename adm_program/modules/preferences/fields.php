@@ -109,10 +109,7 @@ $table->setMessageIfNoRowsFound('ORG_NO_FIELD_CREATED');
 
 // create array with all column heading values
 $columnHeading = array(
-    $gL10n->get('SYS_FIELD').
-    '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-        href="'.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_DESCRIPTION&amp;inline=true"><img
-        src="'.THEME_PATH.'/icons/help.png" alt="Help" /></a>',
+    $gL10n->get('SYS_FIELD').HtmlForm::getHelpTextIcon('ORG_FIELD_DESCRIPTION'),
     '&nbsp;',
     $gL10n->get('SYS_DESCRIPTION'),
     '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />',
