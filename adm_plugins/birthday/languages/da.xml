@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="da">
-    <version id="1.6.0">
-        <text id="PLG_BIRTHDAY_FUTURE" development="new" translation="todo">%VAR1% bliver om %VAR2% dage %VAR3% år, den %VAR4%</text>
-        <text id="PLG_BIRTHDAY_MAN_VAR" development="new" translation="todo">Hr %VAR1%</text>
-        <text id="PLG_BIRTHDAY_MORE_USERS" development="new" translation="todo">Idag har %VAR1% brugere fødselsdag!</text>
-        <text id="PLG_BIRTHDAY_NO_USER" development="new" translation="todo">Idag har ingen brugere fødselsdag.</text>
-        <text id="PLG_BIRTHDAY_ONE_USER" development="new" translation="todo">Idag har én bruger fødselsdag!</text>
-        <text id="PLG_BIRTHDAY_PAST" development="new" translation="todo">%VAR1% blev for %VAR2% dage siden %VAR3% år, den %VAR4%</text>
-        <text id="PLG_BIRTHDAY_TODAY" development="new" translation="todo">%VAR1% bliver idag %VAR2%</text>
-        <text id="PLG_BIRTHDAY_TOMORROW" development="new" translation="todo">%VAR1% bliver imorgen %VAR3% år, den %VAR4%</text>
-        <text id="PLG_BIRTHDAY_WOMAN_VAR" development="new" translation="todo">Fru %VAR1%</text>
-        <text id="PLG_BIRTHDAY_YESTERDAY" development="new" translation="todo">%VAR1% blev igår %VAR3% år, den %VAR4%</text>
-    </version>
-</language>
+<resources>
+    <string name="PLG_BIRTHDAY_FUTURE">%VAR1% bliver om %VAR2% dage %VAR3% år, den %VAR4%</string>
+    <string name="PLG_BIRTHDAY_MAN_VAR">Hr %VAR1%</string>
+    <string name="PLG_BIRTHDAY_MORE_USERS">Idag har %VAR1% brugere fødselsdag!</string>
+    <string name="PLG_BIRTHDAY_NO_USER">Idag har ingen brugere fødselsdag.</string>
+    <string name="PLG_BIRTHDAY_ONE_USER">Idag har én bruger fødselsdag!</string>
+    <string name="PLG_BIRTHDAY_PAST">%VAR1% blev for %VAR2% dage siden %VAR3% år, den %VAR4%</string>
+    <string name="PLG_BIRTHDAY_TODAY">%VAR1% bliver idag %VAR2%</string>
+    <string name="PLG_BIRTHDAY_TOMORROW">%VAR1% bliver imorgen %VAR3% år, den %VAR4%</string>
+    <string name="PLG_BIRTHDAY_WOMAN_VAR">Fru %VAR1%</string>
+    <string name="PLG_BIRTHDAY_YESTERDAY">%VAR1% blev igår %VAR3% år, den %VAR4%</string>
+</resources>

@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="de_sie">
-    <version id="1.2.3">
-        <text id="PLG_BIRTHDAY_HEADLINE" development="new" translation="todo">Geburtstage</text>
-    </version>
-    <version id="1.1.0">
-        <text id="PLG_BIRTHDAY_FUTURE" development="new" translation="todo">%VAR1% wird in %VAR2% Tagen %VAR3% Jahre, am %VAR4%</text>
-        <text id="PLG_BIRTHDAY_MAN_VAR" development="new" translation="todo">Herr %VAR1%</text>
-        <text id="PLG_BIRTHDAY_MORE_USERS" development="new" translation="todo">Heute haben %VAR1% Benutzer Geburtstag !</text>
-        <text id="PLG_BIRTHDAY_NO_USER" development="new" translation="todo">Heute hat kein Benutzer Geburtstag.</text>
-        <text id="PLG_BIRTHDAY_ONE_USER" development="new" translation="todo">Heute hat ein Benutzer Geburtstag !</text>
-        <text id="PLG_BIRTHDAY_PAST" development="new" translation="todo">%VAR1% wurde vor %VAR2% Tagen %VAR3% Jahre, am %VAR4%</text>
-        <text id="PLG_BIRTHDAY_TODAY" development="new" translation="todo">%VAR1% wird heute %VAR2%</text>
-        <text id="PLG_BIRTHDAY_TOMORROW" development="new" translation="todo">%VAR1% wird morgen %VAR3% Jahre, am %VAR4%</text>
-        <text id="PLG_BIRTHDAY_WOMAN_VAR" development="new" translation="todo">Frau %VAR1%</text>
-        <text id="PLG_BIRTHDAY_YESTERDAY" development="new" translation="todo">%VAR1% wurde gestern %VAR3% Jahre, am %VAR4%</text>
-    </version>
-</language>
+<resources>
+    <string name="PLG_BIRTHDAY_FUTURE">%VAR1% wird in %VAR2% Tagen %VAR3% Jahre, am %VAR4%</string>
+    <string name="PLG_BIRTHDAY_HEADLINE">Geburtstage</string>
+    <string name="PLG_BIRTHDAY_MAN_VAR">Herr %VAR1%</string>
+    <string name="PLG_BIRTHDAY_MORE_USERS">Heute haben %VAR1% Benutzer Geburtstag !</string>
+    <string name="PLG_BIRTHDAY_NO_USER">Heute hat kein Benutzer Geburtstag.</string>
+    <string name="PLG_BIRTHDAY_ONE_USER">Heute hat ein Benutzer Geburtstag !</string>
+    <string name="PLG_BIRTHDAY_PAST">%VAR1% wurde vor %VAR2% Tagen %VAR3% Jahre, am %VAR4%</string>
+    <string name="PLG_BIRTHDAY_TODAY">%VAR1% wird heute %VAR2%</string>
+    <string name="PLG_BIRTHDAY_TOMORROW">%VAR1% wird morgen %VAR3% Jahre, am %VAR4%</string>
+    <string name="PLG_BIRTHDAY_WOMAN_VAR">Frau %VAR1%</string>
+    <string name="PLG_BIRTHDAY_YESTERDAY">%VAR1% wurde gestern %VAR3% Jahre, am %VAR4%</string>
+</resources>

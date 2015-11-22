@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="de_sie">
-    <version id="1.7.1">
-        <text id="PLG_SIDEBAR_ANNOUNCEMENTS_MORE" development="new" translation="todo" description="Show 'more' content of this">mehr</text>
-    </version>
-    <version id="1.5.1">
-        <text id="PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ANNOUNCEMENTS" development="new" translation="todo">Alle Ankündigungen</text>
-        <text id="PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE" development="new" translation="todo">Ankündigungen</text>
-    </version>
-</language>
+<resources>
+    <string name="PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ANNOUNCEMENTS">Alle Ankündigungen</string>
+    <string name="PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE">Ankündigungen</string>
+    <string name="PLG_SIDEBAR_ANNOUNCEMENTS_MORE">mehr</string>
+</resources>
