@@ -529,36 +529,36 @@ class ModuleDates extends Modules
         // add conditions for role permission
         if($gCurrentUser->getValue('usr_id') > 0)
         {
-            if($this->getParameter('show') === 'all')
+            switch ($this->getParameter('show'))
             {
-                $sqlConditions .= '
-                AND (  dtr_rol_id IS NULL
-                    OR dtr_rol_id IN (SELECT mem_rol_id
-                                        FROM '.TBL_MEMBERS.' mem2
-                                       WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
-                                         AND mem2.mem_begin  <= dat_begin
-                                         AND mem2.mem_end    >= dat_end) ) ';
-            }
-            elseif($this->getParameter('show') === 'maybe_participate')
-            {
-                $sqlConditions .= '
-                AND dat_rol_id IS NOT NULL
-                AND (  dtr_rol_id IS NULL
-                    OR dtr_rol_id IN (SELECT mem_rol_id
-                                        FROM '.TBL_MEMBERS.' mem2
-                                       WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
-                                         AND mem2.mem_begin  <= dat_begin
-                                         AND mem2.mem_end    >= dat_end) ) ';
-            }
-            elseif($this->getParameter('show') === 'only_participate')
-            {
-                $sqlConditions .= '
-                AND dat_rol_id IS NOT NULL
-                AND dat_rol_id IN (SELECT mem_rol_id
-                                     FROM '.TBL_MEMBERS.' mem2
-                                    WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
-                                      AND mem2.mem_begin  <= dat_begin
-                                      AND mem2.mem_end    >= dat_end) ';
+                case 'all':
+                    $sqlConditions .= '
+                    AND (  dtr_rol_id IS NULL
+                        OR dtr_rol_id IN (SELECT mem_rol_id
+                                            FROM '.TBL_MEMBERS.' mem2
+                                           WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
+                                             AND mem2.mem_begin  <= dat_begin
+                                             AND mem2.mem_end    >= dat_end) ) ';
+                    break;
+                case 'maybe_participate':
+                    $sqlConditions .= '
+                    AND dat_rol_id IS NOT NULL
+                    AND (  dtr_rol_id IS NULL
+                        OR dtr_rol_id IN (SELECT mem_rol_id
+                                            FROM '.TBL_MEMBERS.' mem2
+                                           WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
+                                             AND mem2.mem_begin  <= dat_begin
+                                             AND mem2.mem_end    >= dat_end) ) ';
+                    break;
+                case 'only_participate':
+                    $sqlConditions .= '
+                    AND dat_rol_id IS NOT NULL
+                    AND dat_rol_id IN (SELECT mem_rol_id
+                                         FROM '.TBL_MEMBERS.' mem2
+                                        WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
+                                          AND mem2.mem_begin  <= dat_begin
+                                          AND mem2.mem_end    >= dat_end) ';
+                    break;
             }
         }
         else

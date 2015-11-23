@@ -1474,27 +1474,26 @@ class HtmlForm extends HtmlFormBasic
         {
             $optionsAll['showContextDependentFirstEntry'] = false;
 
-            if($categoryType === 'DAT')
+            switch ($categoryType)
             {
-                $sqlTables = TBL_CATEGORIES.', '.TBL_DATES;
-                $sqlCondidtions = ' AND cat_id = dat_cat_id ';
-            }
-            elseif($categoryType === 'LNK')
-            {
-                $sqlTables = TBL_CATEGORIES.', '.TBL_LINKS;
-                $sqlCondidtions = ' AND cat_id = lnk_cat_id ';
-            }
-            elseif($categoryType === 'ROL')
-            {
-                // don't show system categories
-                $sqlTables = TBL_CATEGORIES.', '.TBL_ROLES;
-                $sqlCondidtions = ' AND cat_id = rol_cat_id
+                case 'DAT':
+                    $sqlTables = TBL_CATEGORIES.', '.TBL_DATES;
+                    $sqlCondidtions = ' AND cat_id = dat_cat_id ';
+                    break;
+                case 'LNK':
+                    $sqlTables = TBL_CATEGORIES.', '.TBL_LINKS;
+                    $sqlCondidtions = ' AND cat_id = lnk_cat_id ';
+                    break;
+                case 'ROL':
+                    // don't show system categories
+                    $sqlTables = TBL_CATEGORIES.', '.TBL_ROLES;
+                    $sqlCondidtions = ' AND cat_id = rol_cat_id
                                     AND rol_visible = 1 ';
-            }
-            elseif($categoryType === 'INF')
-            {
-                $sqlTables = TBL_CATEGORIES.', '.TBL_INVENT_FIELDS;
-                $sqlCondidtions = ' AND cat_id = inf_cat_id ';
+                    break;
+                case 'INF':
+                    $sqlTables = TBL_CATEGORIES.', '.TBL_INVENT_FIELDS;
+                    $sqlCondidtions = ' AND cat_id = inf_cat_id ';
+                    break;
             }
         }
 

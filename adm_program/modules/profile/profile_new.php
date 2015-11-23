@@ -275,11 +275,18 @@ foreach($gProfileFields->mProfileFields as $field)
         }
 
         // code for different field types
-
         if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') === 'CHECKBOX')
         {
-            $form->addCheckbox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),
-                $user->getValue($field->getValue('usf_name_intern')), array('property' => $fieldProperty, 'helpTextIdLabel' => $helpId, 'icon' => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
+            $form->addCheckbox(
+                'usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'),
+                $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),
+                $user->getValue($field->getValue('usf_name_intern')),
+                array(
+                    'property'        => $fieldProperty,
+                    'helpTextIdLabel' => $helpId,
+                    'icon'            => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')
+                )
+            );
         }
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') === 'DROPDOWN'
             || $field->getValue('usf_name_intern') === 'COUNTRY')

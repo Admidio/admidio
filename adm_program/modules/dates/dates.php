@@ -226,31 +226,30 @@ else
     {
         $compactTable = new HtmlTable('events_compact_table', $page, $hoverRows, $datatable, $classTable);
 
-        if($getView === 'compact')
+        switch ($getView)
         {
-            $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('DAT_LOCATION'));
-            $columnAlign   = array('center', 'left', 'left', 'left', 'left');
-            $compactTable->disableDatatablesColumnsSort(6);
-        }
-        elseif($getView === 'room')
-        {
-            $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_ROOM'), $gL10n->get('SYS_LEADERS'), $gL10n->get('SYS_PARTICIPANTS'));
-            $columnAlign   = array('center', 'left', 'left', 'left', 'left', 'left');
-            $compactTable->disableDatatablesColumnsSort(7);
-        }
-        elseif($getView === 'participants')
-        {
-            $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'));
-            $columnAlign   = array('center', 'left', 'left', 'left');
-            $compactTable->disableDatatablesColumnsSort(5);
-            $compactTable->setColumnWidth(4, '35%');
-        }
-        elseif($getView === 'description')
-        {
-            $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_DESCRIPTION'));
-            $columnAlign   = array('center', 'left', 'left', 'left');
-            $compactTable->disableDatatablesColumnsSort(5);
-            $compactTable->setColumnWidth(4, '35%');
+            case 'compact':
+                $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('DAT_LOCATION'));
+                $columnAlign   = array('center', 'left', 'left', 'left', 'left');
+                $compactTable->disableDatatablesColumnsSort(6);
+                break;
+            case 'room':
+                $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_ROOM'), $gL10n->get('SYS_LEADERS'), $gL10n->get('SYS_PARTICIPANTS'));
+                $columnAlign   = array('center', 'left', 'left', 'left', 'left', 'left');
+                $compactTable->disableDatatablesColumnsSort(7);
+                break;
+            case 'participants':
+                $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'));
+                $columnAlign   = array('center', 'left', 'left', 'left');
+                $compactTable->disableDatatablesColumnsSort(5);
+                $compactTable->setColumnWidth(4, '35%');
+                break;
+            case 'description':
+                $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_DESCRIPTION'));
+                $columnAlign   = array('center', 'left', 'left', 'left');
+                $compactTable->disableDatatablesColumnsSort(5);
+                $compactTable->setColumnWidth(4, '35%');
+                break;
         }
 
         if($getViewMode === 'html')

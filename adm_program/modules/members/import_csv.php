@@ -96,70 +96,69 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); ++$i)
                 {
                     $user->setValue($field->getValue('usf_name_intern'), $gL10n->getCountryByName($columnValue));
                 }
-                elseif($field->getValue('usf_type') === 'CHECKBOX')
-                {
-                    if($columnValueToLower === 'j'
-                    || $columnValueToLower === admStrToLower($gL10n->get('SYS_YES'))
-                    || $columnValueToLower === 'y'
-                    || $columnValueToLower === 'yes'
-                    || $columnValueToLower === '1')
-                    {
-                        $user->setValue($field->getValue('usf_name_intern'), '1');
-                    }
-                    if($columnValueToLower === 'n'
-                    || $columnValueToLower === admStrToLower($gL10n->get('SYS_NO'))
-                    || $columnValueToLower === 'no'
-                    || $columnValueToLower === '0'
-                    || $columnValue === '')
-                    {
-                        $user->setValue($field->getValue('usf_name_intern'), '0');
-                    }
-                }
-                elseif($field->getValue('usf_type') === 'DROPDOWN'
-                    || $field->getValue('usf_type') === 'RADIO_BUTTON')
-                {
-                    // save position of combobox
-                    $arrListValues = $field->getValue('usf_value_list', 'text');
-                    $position = 1;
-
-                    foreach($arrListValues as $key => $value)
-                    {
-                        if(strcmp(admStrToLower($columnValue), admStrToLower(trim($arrListValues[$position]))) == 0)
-                        {
-                            // if col_value is text than save position if text is equal to text of position
-                            $user->setValue($field->getValue('usf_name_intern'), $position);
-                        }
-                        elseif(is_numeric($columnValue) && !is_numeric($arrListValues[$position]) && $columnValue > 0 && $columnValue < 1000)
-                        {
-                            // if col_value is numeric than save position if col_value is equal to position
-                            $user->setValue($field->getValue('usf_name_intern'), $columnValue);
-                        }
-                        ++$position;
-                    }
-                }
-                elseif($field->getValue('usf_type') === 'EMAIL')
-                {
-                    $columnValue = admStrToLower($columnValue);
-                    if(strValidCharacters($columnValue, 'email'))
-                    {
-                        $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 255));
-                    }
-                }
-                elseif($field->getValue('usf_type') === 'INTEGER')
-                {
-                    // number could contain dot and comma
-                    if(is_numeric(strtr($columnValue, ',.', '00')) == true)
-                    {
-                        $user->setValue($field->getValue('usf_name_intern'), $columnValue);
-                    }
-                }
-                elseif($field->getValue('usf_type') === 'TEXT')
-                {
-                    $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 50));
-                }
                 else
                 {
-                    $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 255));
+                    switch ($field->getValue('usf_type'))
+                    {
+                        case 'CHECKBOX':
+                            if($columnValueToLower === 'j'
+                                || $columnValueToLower === admStrToLower($gL10n->get('SYS_YES'))
+                                || $columnValueToLower === 'y'
+                                || $columnValueToLower === 'yes'
+                                || $columnValueToLower === '1')
+                            {
+                                $user->setValue($field->getValue('usf_name_intern'), '1');
+                            }
+                            if($columnValueToLower === 'n'
+                                || $columnValueToLower === admStrToLower($gL10n->get('SYS_NO'))
+                                || $columnValueToLower === 'no'
+                                || $columnValueToLower === '0'
+                                || $columnValue === '')
+                            {
+                                $user->setValue($field->getValue('usf_name_intern'), '0');
+                            }
+                            break;
+                        case 'DROPDOWN':
+                        case 'RADIO_BUTTON':
+                            // save position of combobox
+                            $arrListValues = $field->getValue('usf_value_list', 'text');
+                            $position = 1;
+
+                            foreach($arrListValues as $key => $value)
+                            {
+                                if(strcmp(admStrToLower($columnValue), admStrToLower(trim($arrListValues[$position]))) == 0)
+                                {
+                                    // if col_value is text than save position if text is equal to text of position
+                                    $user->setValue($field->getValue('usf_name_intern'), $position);
+                                }
+                                elseif(is_numeric($columnValue) && !is_numeric($arrListValues[$position]) && $columnValue > 0 && $columnValue < 1000)
+                                {
+                                    // if col_value is numeric than save position if col_value is equal to position
+                                    $user->setValue($field->getValue('usf_name_intern'), $columnValue);
+                                }
+                                ++$position;
+                            }
+                            break;
+                        case 'EMAIL':
+                            $columnValue = admStrToLower($columnValue);
+                            if(strValidCharacters($columnValue, 'email'))
+                            {
+                                $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 255));
+                            }
+                            break;
+                        case 'INTEGER':
+                            // number could contain dot and comma
+                            if(is_numeric(strtr($columnValue, ',.', '00')) == true)
+                            {
+                                $user->setValue($field->getValue('usf_name_intern'), $columnValue);
+                            }
+                            break;
+                        case 'TEXT':
+                            $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 50));
+                            break;
+                        default:
+                            $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 255));
+                    }
                 }
             }
         }

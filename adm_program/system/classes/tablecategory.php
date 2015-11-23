@@ -225,30 +225,28 @@ class TableCategory extends TableAccess
 
         if($returnValue)
         {
-            if($this->getValue('cat_type') === 'ROL')
+            switch ($this->getValue('cat_type'))
             {
-                $this->elementTable = TBL_ROLES;
-                $this->elementColumn = 'rol_cat_id';
-            }
-            elseif($this->getValue('cat_type') === 'LNK')
-            {
-                $this->elementTable = TBL_LINKS;
-                $this->elementColumn = 'lnk_cat_id';
-            }
-            elseif($this->getValue('cat_type') === 'USF')
-            {
-                $this->elementTable = TBL_USER_FIELDS;
-                $this->elementColumn = 'usf_cat_id';
-            }
-            elseif($this->getValue('cat_type') === 'DAT')
-            {
-                $this->elementTable = TBL_DATES;
-                $this->elementColumn = 'dat_cat_id';
-            }
-            elseif($this->getValue('cat_type') === 'AWA')
-            {
-                $this->elementTable  = $g_tbl_praefix.'_user_awards';
-                $this->elementColumn = 'awa_cat_id';
+                case 'ROL':
+                    $this->elementTable = TBL_ROLES;
+                    $this->elementColumn = 'rol_cat_id';
+                    break;
+                case 'LNK':
+                    $this->elementTable = TBL_LINKS;
+                    $this->elementColumn = 'lnk_cat_id';
+                    break;
+                case 'USF':
+                    $this->elementTable = TBL_USER_FIELDS;
+                    $this->elementColumn = 'usf_cat_id';
+                    break;
+                case 'DAT':
+                    $this->elementTable = TBL_DATES;
+                    $this->elementColumn = 'dat_cat_id';
+                    break;
+                case 'AWA':
+                    $this->elementTable  = $g_tbl_praefix.'_user_awards';
+                    $this->elementColumn = 'awa_cat_id';
+                    break;
             }
         }
 
@@ -269,25 +267,24 @@ class TableCategory extends TableAccess
 
         if($returnValue)
         {
-            if($this->getValue('cat_type') === 'ROL')
+            switch ($this->getValue('cat_type'))
             {
-                $this->elementTable = TBL_ROLES;
-                $this->elementColumn = 'rol_cat_id';
-            }
-            elseif($this->getValue('cat_type') === 'LNK')
-            {
-                $this->elementTable = TBL_LINKS;
-                $this->elementColumn = 'lnk_cat_id';
-            }
-            elseif($this->getValue('cat_type') === 'USF')
-            {
-                $this->elementTable = TBL_USER_FIELDS;
-                $this->elementColumn = 'usf_cat_id';
-            }
-            elseif($this->getValue('cat_type') === 'DAT')
-            {
-                $this->elementTable = TBL_DATES;
-                $this->elementColumn = 'dat_cat_id';
+                case 'ROL':
+                    $this->elementTable = TBL_ROLES;
+                    $this->elementColumn = 'rol_cat_id';
+                    break;
+                case 'LNK':
+                    $this->elementTable = TBL_LINKS;
+                    $this->elementColumn = 'lnk_cat_id';
+                    break;
+                case 'USF':
+                    $this->elementTable = TBL_USER_FIELDS;
+                    $this->elementColumn = 'usf_cat_id';
+                    break;
+                case 'DAT':
+                    $this->elementTable = TBL_DATES;
+                    $this->elementColumn = 'dat_cat_id';
+                    break;
             }
         }
 

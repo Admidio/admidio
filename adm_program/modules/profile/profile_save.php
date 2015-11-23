@@ -171,29 +171,27 @@ foreach($gProfileFields->mProfileFields as $field)
             // Ausgabe der Fehlermeldung je nach Datentyp
             if($returnCode == false)
             {
-                if($field->getValue('usf_type') === 'CHECKBOX')
+                switch ($field->getValue('usf_type'))
                 {
-                    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-                }
-                elseif($field->getValue('usf_type') === 'DATE')
-                {
-                    $gMessage->show($gL10n->get('SYS_DATE_INVALID', $field->getValue('usf_name'), $gPreferences['system_date']));
-                }
-                elseif($field->getValue('usf_type') === 'EMAIL')
-                {
-                    $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
-                }
-                elseif($field->getValue('usf_type') === 'NUMBER' || $field->getValue('usf_type') === 'DECIMAL')
-                {
-                    $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
-                }
-                elseif($field->getValue('usf_type') === 'PHONE')
-                {
-                    $gMessage->show($gL10n->get('SYS_PHONE_INVALID_CHAR', $field->getValue('usf_name')));
-                }
-                elseif($field->getValue('usf_type') === 'URL')
-                {
-                    $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $field->getValue('usf_name')));
+                    case 'CHECKBOX':
+                        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+                        break;
+                    case 'DATE':
+                        $gMessage->show($gL10n->get('SYS_DATE_INVALID', $field->getValue('usf_name'), $gPreferences['system_date']));
+                        break;
+                    case 'EMAIL':
+                        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
+                        break;
+                    case 'NUMBER':
+                    case 'DECIMAL':
+                        $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
+                        break;
+                    case 'PHONE':
+                        $gMessage->show($gL10n->get('SYS_PHONE_INVALID_CHAR', $field->getValue('usf_name')));
+                        break;
+                    case 'URL':
+                        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $field->getValue('usf_name')));
+                        break;
                 }
             }
         }

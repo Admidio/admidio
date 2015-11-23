@@ -120,134 +120,131 @@ class ProfileFields
             // create html for each field type
             $htmlValue = $value;
 
-            if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'CHECKBOX')
+            switch ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type'))
             {
-                if($value == 1)
-                {
-                    $htmlValue = '<img src="'.THEME_PATH.'/icons/checkbox_checked.gif" alt="on" />';
-                }
-                else
-                {
-                    $htmlValue = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
-                }
-            }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'EMAIL')
-            {
-                // the value in db is only the position, now search for the text
-                if($value !== '')
-                {
-                    if($gPreferences['enable_mail_module'] != 1)
+                case 'CHECKBOX':
+                    if($value == 1)
                     {
-                        $emailLink = 'mailto:'.$value;
+                        $htmlValue = '<img src="'.THEME_PATH.'/icons/checkbox_checked.gif" alt="on" />';
                     }
                     else
                     {
-                        // set value2 to user id because we need a second parameter in the link to mail module
-                        if($value2 === '')
+                        $htmlValue = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
+                    }
+                    break;
+                case 'EMAIL':
+                    // the value in db is only the position, now search for the text
+                    if($value !== '')
+                    {
+                        if($gPreferences['enable_mail_module'] != 1)
                         {
-                            $value2 = $this->mUserId;
+                            $emailLink = 'mailto:'.$value;
                         }
-
-                        $emailLink = $g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='. $value2;
-                    }
-                    if(strlen($value) > 30)
-                    {
-                        $htmlValue = '<a href="'.$emailLink.'" title="'.$value.'">'.substr($value, 0, 30).'...</a>';
-                    }
-                    else
-                    {
-                        $htmlValue = '<a href="'.$emailLink.'" style="overflow: visible; display: inline;" title="'.$value.'">'.$value.'</a>';
-                    }
-                }
-            }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'DROPDOWN'
-            || $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'RADIO_BUTTON')
-            {
-                $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
-
-                // first replace windows new line with unix new line and then create an array
-                $valueFormated = str_replace("\r\n", "\n", $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', 'database'));
-                $arrListValues = explode("\n", $valueFormated);
-
-                foreach($arrListValues as $key => &$listValue)
-                {
-                    if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'RADIO_BUTTON')
-                    {
-                        // if value is imagefile or imageurl then show image
-                        if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
+                        else
                         {
-                            // if there is imagefile and text separated by | then explode them
-                            if(strpos($listValue, '|') > 0)
+                            // set value2 to user id because we need a second parameter in the link to mail module
+                            if($value2 === '')
                             {
-                                $listValueImage = substr($listValue, 0, strpos($listValue, '|'));
-                                $listValueText  = substr($listValue, strpos($listValue, '|') + 1);
-                            }
-                            else
-                            {
-                                $listValueImage = $listValue;
-                                $listValueText  = $this->getValue('usf_name');
+                                $value2 = $this->mUserId;
                             }
 
-                            // if text is a translation-id then translate it
-                            if(strpos($listValueText, '_') === 3)
-                            {
-                                $listValueText = $gL10n->get(admStrToUpper($listValueText));
-                            }
-
-                            try
-                            {
-                                // create html for optionbox entry
-                                if(strpos(admStrToLower($listValueImage), 'http') === 0 && strValidCharacters($listValueImage, 'url'))
-                                {
-                                    $listValue = '<img class="admidio-icon-info" src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
-                                }
-                                elseif(admStrIsValidFileName($listValueImage, true))
-                                {
-                                    $listValue = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
-                                }
-                            }
-                            catch(AdmException $e)
-                            {
-                                $e->showText();
-                            }
+                            $emailLink = $g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='. $value2;
+                        }
+                        if(strlen($value) > 30)
+                        {
+                            $htmlValue = '<a href="'.$emailLink.'" title="'.$value.'">'.substr($value, 0, 30).'...</a>';
+                        }
+                        else
+                        {
+                            $htmlValue = '<a href="'.$emailLink.'" style="overflow: visible; display: inline;" title="'.$value.'">'.$value.'</a>';
                         }
                     }
+                    break;
+                case 'DROPDOWN':
+                case 'RADIO_BUTTON':
+                    $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
 
-                    // if text is a translation-id then translate it
-                    if(strpos($listValue, '_') === 3)
-                    {
-                        $listValue = $gL10n->get(admStrToUpper($listValue));
-                    }
+                    // first replace windows new line with unix new line and then create an array
+                    $valueFormated = str_replace("\r\n", "\n", $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', 'database'));
+                    $arrListValues = explode("\n", $valueFormated);
 
-                    // save values in new array that starts with key = 1
-                    $arrListValuesWithKeys[++$key] = $listValue;
-                }
-                $htmlValue = $arrListValuesWithKeys[$value];
-            }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'PHONE')
-            {
-                if($value !== '')
-                {
-                    $htmlValue = '<a href="tel:'. str_replace(array('-', '/', ' ', '(', ')'), '', $value).'">'. $value. '</a>';
-                }
-            }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'URL')
-            {
-                if($value !== '')
-                {
-                    if(strlen($value) > 35)
+                    foreach($arrListValues as $key => &$listValue)
                     {
-                        $htmlValue = '<a href="'. $value.'" target="_blank" title="'. $value.'">'. substr($value, strpos($value, '//') + 2, 35). '...</a>';
+                        if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'RADIO_BUTTON')
+                        {
+                            // if value is imagefile or imageurl then show image
+                            if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
+                            {
+                                // if there is imagefile and text separated by | then explode them
+                                if(strpos($listValue, '|') > 0)
+                                {
+                                    $listValueImage = substr($listValue, 0, strpos($listValue, '|'));
+                                    $listValueText  = substr($listValue, strpos($listValue, '|') + 1);
+                                }
+                                else
+                                {
+                                    $listValueImage = $listValue;
+                                    $listValueText  = $this->getValue('usf_name');
+                                }
+
+                                // if text is a translation-id then translate it
+                                if(strpos($listValueText, '_') === 3)
+                                {
+                                    $listValueText = $gL10n->get(admStrToUpper($listValueText));
+                                }
+
+                                try
+                                {
+                                    // create html for optionbox entry
+                                    if(strpos(admStrToLower($listValueImage), 'http') === 0 && strValidCharacters($listValueImage, 'url'))
+                                    {
+                                        $listValue = '<img class="admidio-icon-info" src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                    }
+                                    elseif(admStrIsValidFileName($listValueImage, true))
+                                    {
+                                        $listValue = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                    }
+                                }
+                                catch(AdmException $e)
+                                {
+                                    $e->showText();
+                                }
+                            }
+                        }
+
+                        // if text is a translation-id then translate it
+                        if(strpos($listValue, '_') === 3)
+                        {
+                            $listValue = $gL10n->get(admStrToUpper($listValue));
+                        }
+
+                        // save values in new array that starts with key = 1
+                        $arrListValuesWithKeys[++$key] = $listValue;
                     }
-                    else
+                    $htmlValue = $arrListValuesWithKeys[$value];
+                    break;
+                case 'PHONE':
+                    if($value !== '')
                     {
-                        $htmlValue = '<a href="'. $value.'" target="_blank" title="'. $value.'">'. substr($value, strpos($value, '//') + 2). '</a>';
+                        $htmlValue = '<a href="tel:'. str_replace(array('-', '/', ' ', '(', ')'), '', $value).'">'. $value. '</a>';
                     }
-                }
-            }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'TEXT_BIG')
-            {
-                $htmlValue = nl2br($value);
+                    break;
+                case 'URL':
+                    if($value !== '')
+                    {
+                        if(strlen($value) > 35)
+                        {
+                            $htmlValue = '<a href="'. $value.'" target="_blank" title="'. $value.'">'. substr($value, strpos($value, '//') + 2, 35). '...</a>';
+                        }
+                        else
+                        {
+                            $htmlValue = '<a href="'. $value.'" target="_blank" title="'. $value.'">'. substr($value, strpos($value, '//') + 2). '</a>';
+                        }
+                    }
+                    break;
+                case 'TEXT_BIG':
+                    $htmlValue = nl2br($value);
+                    break;
             }
 
             // if field has url then create a link
@@ -312,41 +309,47 @@ class ProfileFields
 
             if($format !== 'database')
             {
-                if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'DATE' && $value !== '')
+                switch ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type'))
                 {
-                    // if no format or html is set then show date format from Admidio settings
-                    if($format === '' || $format === 'html')
-                    {
-                        $dateFormat = $gPreferences['system_date'];
-                    }
-                    else
-                    {
-                        $dateFormat = $format;
-                    }
+                    case 'DATE':
+                        if ($value !== '')
+                        {
+                            // if no format or html is set then show date format from Admidio settings
+                            if($format === '' || $format === 'html')
+                            {
+                                $dateFormat = $gPreferences['system_date'];
+                            }
+                            else
+                            {
+                                $dateFormat = $format;
+                            }
 
-                    // if date field then the current date format must be used
-                    $date = new DateTimeExtended($value, 'Y-m-d');
-                    if(!$date->isValid())
-                    {
-                        return $value;
-                    }
-                    $value = $date->format($dateFormat);
-                }
-                elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'DROPDOWN'
-                    || $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'RADIO_BUTTON')
-                {
-                    // the value in db is only the position, now search for the text
-                    if($value > 0 && $format !== 'html')
-                    {
-                        $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list');
-                        $value = $arrListValues[$value];
+                            // if date field then the current date format must be used
+                            $date = new DateTimeExtended($value, 'Y-m-d');
+                            if(!$date->isValid())
+                            {
+                                return $value;
+                            }
+                            $value = $date->format($dateFormat);
+                        }
+                        break;
+                    case 'DROPDOWN':
+                    case 'RADIO_BUTTON':
+                        // the value in db is only the position, now search for the text
+                        if($value > 0 && $format !== 'html')
+                        {
+                            $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list');
+                            $value = $arrListValues[$value];
 
-                    }
-                }
-                elseif($fieldNameIntern === 'COUNTRY' && $value !== '')
-                {
-                    // read the language name of the country
-                    $value = $gL10n->getCountryByCode($value);
+                        }
+                        break;
+                    case 'COUNTRY':
+                        if ($value !== '')
+                        {
+                            // read the language name of the country
+                            $value = $gL10n->getCountryByCode($value);
+                        }
+                        break;
                 }
             }
         }
@@ -484,86 +487,82 @@ class ProfileFields
 
         if($fieldValue !== '')
         {
-            if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'CHECKBOX')
+            switch ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type'))
             {
-                // Checkbox darf nur 1 oder 0 haben
-                if($fieldValue != 0 && $fieldValue != 1 && $this->noValueCheck != true)
-                {
-                    return false;
-                }
-            }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'DATE')
-            {
-                // Datum muss gueltig sein und formatiert werden
-                $date = DateTime::createFromFormat($gPreferences['system_date'], $fieldValue);
-                if($date == false)
-                {
-                    if($this->noValueCheck != true)
+                case 'CHECKBOX':
+                    // Checkbox darf nur 1 oder 0 haben
+                    if($fieldValue != 0 && $fieldValue != 1 && $this->noValueCheck != true)
                     {
                         return false;
                     }
-                }
-                else
-                {
-                    $fieldValue = $date->format('Y-m-d');
-                }
-            }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'EMAIL')
-            {
-                // Email darf nur gueltige Zeichen enthalten und muss einem festen Schema entsprechen
-                $fieldValue = admStrToLower($fieldValue);
-                if (!strValidCharacters($fieldValue, 'email') && $this->noValueCheck != true)
-                {
-                    return false;
-                }
-            }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'NUMBER')
-            {
-                // A number must be numeric
-                if(is_numeric($fieldValue) == false && $this->noValueCheck != true)
-                {
-                    return false;
-                }
-                else
-                {
-                    // numbers don't have leading zero
-                    $fieldValue = ltrim($fieldValue, '0');
-                }
-            }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'DECIMAL')
-            {
-                // A number must be numeric
-                if(is_numeric(strtr($fieldValue, ',.', '00')) == false && $this->noValueCheck != true)
-                {
-                    return false;
-                }
-                else
-                {
-                    // numbers don't have leading zero
-                    $fieldValue = ltrim($fieldValue, '0');
-                }
-            }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'PHONE')
-            {
-                // Homepage darf nur gueltige Zeichen enthalten
-                if (!strValidCharacters($fieldValue, 'phone') && $this->noValueCheck != true)
-                {
-                    return false;
-                }
-            }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'URL')
-            {
-                // Homepage darf nur gueltige Zeichen enthalten
-                if (!strValidCharacters($fieldValue, 'url') && $this->noValueCheck != true)
-                {
-                    return false;
-                }
-                // Homepage noch mit http vorbelegen
-                if(strpos(admStrToLower($fieldValue), 'http://')  === false
-                && strpos(admStrToLower($fieldValue), 'https://') === false)
-                {
-                    $fieldValue = 'http://'. $fieldValue;
-                }
+                    break;
+                case 'DATE':
+                    // Datum muss gueltig sein und formatiert werden
+                    $date = DateTime::createFromFormat($gPreferences['system_date'], $fieldValue);
+                    if($date == false)
+                    {
+                        if($this->noValueCheck != true)
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        $fieldValue = $date->format('Y-m-d');
+                    }
+                    break;
+                case 'EMAIL':
+                    // Email darf nur gueltige Zeichen enthalten und muss einem festen Schema entsprechen
+                    $fieldValue = admStrToLower($fieldValue);
+                    if (!strValidCharacters($fieldValue, 'email') && $this->noValueCheck != true)
+                    {
+                        return false;
+                    }
+                    break;
+                case 'NUMBER':
+                    // A number must be numeric
+                    if(is_numeric($fieldValue) == false && $this->noValueCheck != true)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        // numbers don't have leading zero
+                        $fieldValue = ltrim($fieldValue, '0');
+                    }
+                    break;
+                case 'DECIMAL':
+                    // A number must be numeric
+                    if(is_numeric(strtr($fieldValue, ',.', '00')) == false && $this->noValueCheck != true)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        // numbers don't have leading zero
+                        $fieldValue = ltrim($fieldValue, '0');
+                    }
+                    break;
+                case 'PHONE':
+                    // Homepage darf nur gueltige Zeichen enthalten
+                    if (!strValidCharacters($fieldValue, 'phone') && $this->noValueCheck != true)
+                    {
+                        return false;
+                    }
+                    break;
+                case 'URL':
+                    // Homepage darf nur gueltige Zeichen enthalten
+                    if (!strValidCharacters($fieldValue, 'url') && $this->noValueCheck != true)
+                    {
+                        return false;
+                    }
+                    // Homepage noch mit http vorbelegen
+                    if(strpos(admStrToLower($fieldValue), 'http://')  === false
+                        && strpos(admStrToLower($fieldValue), 'https://') === false)
+                    {
+                        $fieldValue = 'http://'. $fieldValue;
+                    }
+                    break;
             }
 
         }
