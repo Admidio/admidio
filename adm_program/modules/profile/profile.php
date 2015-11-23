@@ -785,10 +785,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
                     $page->addHtml('
                     <div class="panel panel-default" id="profile_other_orga_roles_box">
                         <div class="panel-heading">'.
-                            $gL10n->get('PRO_ROLE_MEMBERSHIP_OTHER_ORG').'
-                            <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_VIEW_ROLES_OTHER_ORGAS&amp;inline=true"><img
-                                src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
+                            $gL10n->get('PRO_ROLE_MEMBERSHIP_OTHER_ORG').HtmlForm::getHelpTextIcon('PRO_VIEW_ROLES_OTHER_ORGAS').'
                         </div>
                         <div class="panel-body" id="profile_other_orga_roles_box_body">
                             <ul class="list-group admidio-list-roles-assign">');

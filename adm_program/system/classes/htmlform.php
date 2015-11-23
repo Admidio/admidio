@@ -1863,7 +1863,7 @@ class HtmlForm extends HtmlFormBasic
      *                              be the unique text id and the second entry will be a parameter of the text id.
      * @return string|void  Return a html snippet that contains a help icon with a link to a popup box that shows the message.
      */
-    protected function getHelpTextIcon($textId)
+    public static function getHelpTextIcon($textId)
     {
         global $g_root_path, $gL10n, $gProfileFields;
 
@@ -1893,10 +1893,8 @@ class HtmlForm extends HtmlFormBasic
 
         if($parameters !== null)
         {
-            return '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true"><img
-                        src="'. THEME_PATH. '/icons/help.png" alt="Help" />
-                    </a>';
+            return '<img class="admidio-icon-help" src="'. THEME_PATH. '/icons/help.png" data-toggle="popover" data-html="true" data-trigger="hover"
+                data-placement="auto" title="'.$gL10n->get('SYS_NOTE').'" data-content="'.htmlspecialchars($text).'" alt="Help" />';
         }
     }
 

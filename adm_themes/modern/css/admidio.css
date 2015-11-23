@@ -12,7 +12,6 @@
 /**************************************************/
 /* Basic Admidio layout classes */
 /**************************************************/
-
 body {
     color: #474b4c;
     margin: auto;
@@ -232,6 +231,10 @@ hr {
     font-size: 12pt;
 }
 
+.popover {
+    min-width: 270px;
+}
+
 .modal-footer {
     text-align: left;
 }
@@ -292,6 +295,7 @@ a.btn {
 
 .admidio-icon-link img,
 .admidio-icon-info,
+.admidio-icon-help,
 .btn img,
 .dropdown-toggle span.glyphicon {
     border: none;
@@ -308,7 +312,8 @@ a.btn {
     margin-right: 5px;
 }
 
-.admidio-icon-info {
+.admidio-icon-info,
+.admidio-icon-help {
     cursor: help;
     margin-right: 2px;
 }

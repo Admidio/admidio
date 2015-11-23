@@ -158,7 +158,7 @@ $columnHeading = array(
     '&nbsp;',
     $htmlIconLoginUser,
     '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" />',
-    $gL10n->get('SYS_FEATURES')
+    '&nbsp;'
 );
 $categoriesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
 $categoriesOverview->addRowHeadingByArray($columnHeading);

@@ -188,7 +188,7 @@ $columnHeading = array(
     $gL10n->get('SYS_GENDER'),
     $gL10n->get('SYS_BIRTHDAY'),
     $gL10n->get('MEM_UPDATED_ON'),
-    $gL10n->get('SYS_FEATURES')
+    '&nbsp;'
 );
 
 $membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
@@ -297,10 +297,6 @@ while($row = $gDb->fetch_array($result_mgl))
                 src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>';
         }
     }
-    else
-    {
-        $userAdministration = '&nbsp;<img class="admidio-icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
-    }
 
     if(strlen($row['email']) > 0)
     {
@@ -324,10 +320,6 @@ while($row = $gDb->fetch_array($result_mgl))
         $userAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='. $row['usr_id']. '"><img
                                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
     }
-    else
-    {
-        $userAdministration .= '&nbsp;<img class="admidio-icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
-    }
 
     // Mitglieder entfernen
     if((($row['member_other_orga'] == 0 && $gCurrentUser->isWebmaster()) // kein Mitglied einer anderen Orga, dann duerfen Webmaster loeschen
@@ -336,10 +328,6 @@ while($row = $gDb->fetch_array($result_mgl))
     {
         $userAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
                                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
-    }
-    else
-    {
-        $userAdministration .= '&nbsp;<img class="admidio-icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
     }
 
     $columnValues[] = $userAdministration;

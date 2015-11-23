@@ -202,16 +202,16 @@ foreach($gProfileFields->mProfileFields as $field)
             {
                 // add username to form
                 $fieldProperty = FIELD_DEFAULT;
-                $fieldHelpId   = null;
+                $fieldHelpId   = 'PRO_USERNAME_DESCRIPTION';
 
                 if($gCurrentUser->isWebmaster() == false && $getNewUser == 0)
                 {
                     $fieldProperty = FIELD_DISABLED;
+                    $fieldHelpId   = '';
                 }
                 elseif($getNewUser > 0)
                 {
                     $fieldProperty = FIELD_REQUIRED;
-                    $fieldHelpId   = 'PRO_USERNAME_DESCRIPTION';
                 }
 
                 $form->addInput('usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'), array('maxLength' => 35, 'property' => $fieldProperty, 'helpTextIdLabel' => $fieldHelpId, 'class' => 'form-control-small'));

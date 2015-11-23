@@ -70,7 +70,7 @@ $columnHeading = array(
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_ROOM'),
     $gL10n->get('MEM_UPDATED_ON'),
-    $gL10n->get('SYS_FEATURES')
+    '&nbsp;'
 );
 
 $itemsTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));

@@ -118,7 +118,7 @@ $columnHeading = array(
 
 if ($gCurrentUser->editDownloadRight())
 {
-    $columnHeading[] = $gL10n->get('SYS_FEATURES');
+    $columnHeading[] = '&nbsp;';
     $downloadOverview->disableDatatablesColumnsSort(7);
 }
 
@@ -245,28 +245,23 @@ $htmlDownloadOverview = $downloadOverview->show(false);
 // Add Admin table to html page
 /**************************************************************************/
 
-//If user is download Admin show further files contained in this folder.
+// If user is download Admin show further files contained in this folder.
 if ($gCurrentUser->editDownloadRight())
 {
     // Check whether additional content was found in the folder
     if (isset($folderContent['additionalFolders']) || isset($folderContent['additionalFiles']))
     {
+        $htmlAdminTableHeadline = '<h2>'.$gL10n->get('DOW_UNMANAGED_FILES').HtmlForm::getHelpTextIcon('DOW_ADDITIONAL_FILES').'</h2>';
 
-        $htmlAdminTableHeadline = '<h2>
-                                    '.$gL10n->get('DOW_UNMANAGED_FILES').'
-                                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_ADDITIONAL_FILES&amp;inline=true"><img
-                                        src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
-                                </h2>';
-
-        //Create table object
+        // Create table object
         $adminTable = new HtmlTable('tbl_downloads', $page, true);
+        $adminTable->setColumnAlignByArray(array('left', 'left', 'left', 'right'));
 
         // create array with all column heading values
         $columnHeading = array('<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" />',
                                $gL10n->get('SYS_NAME'),
                                $gL10n->get('SYS_SIZE'),
-                               $gL10n->get('SYS_FEATURES'));
+                               '&nbsp;');
         $adminTable->addRowHeadingByArray($columnHeading);
 
         // Get folders
@@ -279,6 +274,7 @@ if ($gCurrentUser->editDownloadRight())
 
                 $columnValues = array('<img src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').'" title="'.$gL10n->get('SYS_FOLDER').'" />',
                                       $nextFolder['fol_name'],
+                                      '',
                                       '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id='.$getFolderId.'&amp;name='. urlencode($nextFolder['fol_name']). '">
                                           <img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" title="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" /></a>');
                 $adminTable->addRowByArray($columnValues);

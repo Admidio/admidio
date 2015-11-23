@@ -83,7 +83,7 @@ $columnHeading = array(
     $gL10n->get('SYS_REGISTRATION'),
     $gL10n->get('SYS_USERNAME'),
     $gL10n->get('SYS_EMAIL'),
-    $gL10n->get('SYS_FEATURES')
+    '&nbsp;'
 );
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
 $table->setDatatablesOrderColumns(1);
