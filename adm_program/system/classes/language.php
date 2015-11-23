@@ -268,16 +268,15 @@ class Language
     {
         if(count($this->languages) === 0)
         {
-            $data = implode('', file(SERVER_PATH.'/adm_program/languages/languages.xml'));
-            $p = xml_parser_create();
-            xml_parse_into_struct($p, $data, $vals, $index);
-            xml_parser_free($p);
-            $iMax = count($index['ISOCODE']);
-            for($i = 0; $i < $iMax; ++$i)
+            $languagesXml = new SimpleXMLElement(SERVER_PATH.'/adm_program/languages/languages.xml', null, true);
+
+            foreach($languagesXml->children() as $stringNode)
             {
-                $this->languages[$vals[$index['ISOCODE'][$i]]['value']] = $vals[$index['NAME'][$i]]['value'];
+                $attributes = $stringNode->children();
+                $this->languages[(string) $attributes->isocode] = (string) $attributes->name;
             }
         }
+
         return $this->languages;
     }
 
