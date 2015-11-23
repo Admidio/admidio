@@ -60,8 +60,7 @@ $page->addJavascript('
 
         if($(this).val() === "mylist") {
             self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + roleId + "&active_role='.$getActiveRole.'";
-        }
-        else {
+        } else {
             self.location.href = gRootPath + "/adm_program/modules/lists/lists_show.php?mode=html&lst_id=" + $(this).val() + "&rol_id=" + roleId;
         }
     });', true);

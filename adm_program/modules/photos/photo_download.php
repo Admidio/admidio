@@ -115,7 +115,8 @@ if($getPhotoNr == null)
         }
 
         $path = $albumFolder.'/'.$i.'.jpg';
-        if(file_exists($path)){
+        if(file_exists($path))
+        {
             $zip->addFromString(basename($path),  file_get_contents($path));
         }
     }
@@ -233,7 +234,8 @@ if($getPhotoNr == null)
 
     $path = $albumFolder.'/'.$getPhotoNr.'.jpg';
 
-    if(file_exists($path)){
+    if(file_exists($path))
+    {
         header('Content-Type: application/jpeg');
         header('Content-disposition: attachment; filename="'.$getPhotoNr.'.jpg"');
         $fp = fopen($path, 'rb');

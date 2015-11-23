@@ -123,7 +123,7 @@ if($gCurrentUser->editPhotoRight())
     $page->addJavascript('
         // rotate image
         function imgrotate(img, direction) {
-            $.get("'.$g_root_path.'/adm_program/modules/photos/photo_function.php", {pho_id: '.$getPhotoId.', photo_nr: img, job: "rotate", direction: direction}, function(data){
+            $.get("'.$g_root_path.'/adm_program/modules/photos/photo_function.php", {pho_id: '.$getPhotoId.', photo_nr: img, job: "rotate", direction: direction}, function(data) {
                 //Anhängen der Zufallszahl ist nötig um den Browsercache zu überlisten
                 $("#img_"+img).attr("src", "photo_show.php?pho_id='.$getPhotoId.'&photo_nr="+img+"&thumb=1&rand="+Math.random());
                 return false;
@@ -152,7 +152,7 @@ $page->addJavascript('
     $("body").on("hidden.bs.modal", ".modal", function () { $(this).removeData("bs.modal"); location.reload(); });
     $("#menu_item_upload_photo").attr("data-toggle", "modal");
     $("#menu_item_upload_photo").attr("data-target", "#admidio_modal");
-    $(".admidio-btn-album-upload").click(function(event){
+    $(".admidio-btn-album-upload").click(function(event) {
         $.get("'.$g_root_path.'/adm_program/system/file_upload.php?module=photos&id=" + $(this).attr("data-pho-id"),
             function(response) {
                 $(".modal-content").html(response);

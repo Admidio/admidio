@@ -70,7 +70,8 @@ class TableFolder extends TableAccess
         {
             $folderId = $this->getValue('fol_id');
 
-            if (!strlen($this->getValue('fol_name')) > 0) {
+            if (!strlen($this->getValue('fol_name')) > 0)
+            {
                return false;
             }
             $folderPath = $this->getCompletePathOfFolder();
@@ -115,7 +116,8 @@ class TableFolder extends TableAccess
 
         //Auch wenn das physikalische Löschen fehl schlägt, wird in der DB alles gelöscht...
 
-        if ($folderId == $this->getValue('fol_id')) {
+        if ($folderId == $this->getValue('fol_id'))
+        {
             $returnCode = parent::delete();
         }
 
@@ -383,21 +385,25 @@ class TableFolder extends TableAccess
             }
 
             //Jetzt noch pruefen ob das File physikalisch vorhanden ist
-            if (file_exists(SERVER_PATH. $this->getValue('fol_path'). '/'. $this->getValue('fol_name'). '/'. $row_files->fil_name)) {
+            if (file_exists(SERVER_PATH. $this->getValue('fol_path'). '/'. $this->getValue('fol_name'). '/'. $row_files->fil_name))
+            {
                 $fileExists = true;
 
                 // compute filesize
                 $fileSize = round(filesize(SERVER_PATH. $this->getValue('fol_path'). '/'. $this->getValue('fol_name'). '/'. $row_files->fil_name)/1024);
             }
-            else {
+            else
+            {
                 $fileExists = false;
                 $fileSize   = 0;
 
-                if ($gCurrentUser->editDownloadRight()) {
+                if ($gCurrentUser->editDownloadRight())
+                {
                     //falls das File physikalisch nicht existiert wird es nur im Falle von AdminRechten dem Array hinzugefuegt
                     $addToArray = true;
                 }
-                else {
+                else
+                {
                     $addToArray = false;
                 }
             }
@@ -419,15 +425,17 @@ class TableFolder extends TableAccess
 
         //Falls der User Downloadadmin ist, wird jetzt noch im physikalischen Verzeichnis geschaut,
         //ob Sachen drin sind die nicht in der DB sind...
-        if ($gCurrentUser->editDownloadRight()) {
-
+        if ($gCurrentUser->editDownloadRight())
+        {
             //pruefen ob der Ordner wirklich existiert
             if (file_exists($this->getCompletePathOfFolder()))
             {
 
                 $fileHandle    = opendir($this->getCompletePathOfFolder());
-                if($fileHandle) {
-                    while($file = readdir($fileHandle)) {
+                if($fileHandle)
+                {
+                    while($file = readdir($fileHandle))
+                    {
                         if ($file === '.' || $file === '..' || substr($file, 0, 1) === '.')
                         {
                             continue;
@@ -442,7 +450,8 @@ class TableFolder extends TableAccess
                                 $alreadyAdded = false;
 
                                 //Gucken ob das Verzeichnis bereits bei den regurlären Files dabei ist.
-                                if (isset($completeFolder['folders'])) {
+                                if (isset($completeFolder['folders']))
+                                {
                                     for($i=0; $i<count($completeFolder['folders']); ++$i)
                                     {
                                         $nextFolder = $completeFolder['folders'][$i];
@@ -467,16 +476,16 @@ class TableFolder extends TableAccess
                                 $alreadyAdded = false;
 
                                 //Gucken ob die Datei bereits bei den regurlären Files dabei ist.
-                                if (isset($completeFolder['files'])) {
-                                    for($i=0; $i<count($completeFolder['files']); ++$i) {
-
+                                if (isset($completeFolder['files']))
+                                {
+                                    for($i=0; $i<count($completeFolder['files']); ++$i)
+                                    {
                                         $nextFile = $completeFolder['files'][$i];
 
-                                        if ($nextFile['fil_name'] == $file) {
-
+                                        if ($nextFile['fil_name'] == $file)
+                                        {
                                             $alreadyAdded = true;
                                         }
-
                                     }
                                 }
 
@@ -528,7 +537,8 @@ class TableFolder extends TableAccess
             $folderId = $this->getValue('fol_id');
             $parentId = $this->getValue('fol_fol_id_parent');
 
-            if ($parentId) {
+            if ($parentId)
+            {
 
                 //wenn der Ordner einen Mutterordner hat muss der Rootordner ermittelt werden
                 $sql_rootFolder = 'SELECT * FROM '. TBL_FOLDERS. '
@@ -547,8 +557,8 @@ class TableFolder extends TableAccess
 
                 $currentNavigation = $this->getNavigationForDownload($parentId, $currentNavigation);
             }
-            else {
-
+            else
+            {
                 //Wenn es keinen Elternordner gibt, wird auch keine Navigationsleite benoetigt
                 return '';
             }

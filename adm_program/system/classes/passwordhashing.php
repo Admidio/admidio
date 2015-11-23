@@ -40,10 +40,12 @@ class PasswordHashing
      */
     public static function hash($password, $algorithm = PASSWORD_DEFAULT, $options = array())
     {
-        if (!in_array('cost', $options, true)) {
+        if (!in_array('cost', $options, true))
+        {
             $options['cost'] = 10;
         }
-        if ($options['cost'] < 4) {
+        if ($options['cost'] < 4)
+        {
             $options['cost'] = 4;
         }
 
@@ -171,12 +173,14 @@ class PasswordHashing
         $time = 0;
         $results = array();
 
-        if ($cost < 4) {
+        if ($cost < 4)
+        {
             $cost = 4;
         }
 
         // loop through the cost value until the needed hashing time reaches the maximum set time
-        while ($time <= $maxTime && $cost <= 31) {
+        while ($time <= $maxTime && $cost <= 31)
+        {
             $start = microtime(true);
             $options['cost'] = $cost;
             self::hash($password, $algorithm, $options);

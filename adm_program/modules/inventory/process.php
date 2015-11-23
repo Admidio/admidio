@@ -22,13 +22,13 @@ $postLines    = admFuncVariableIsValid($_POST, 'state', 'number');
 $log = array();
 
 echo '<script>
-$(function(){
-    $("button#submit").click(function(){
+$(function() {
+    $("button#submit").click(function() {
         $.ajax({
             url: "process.php",
             type: "POST",
             data: $("#template-form").serialize(),
-            success: function(data){
+            success: function(data) {
                  $("#responsestatus").val(data);
                  $("#subscription-confirm").modal("show");
             }

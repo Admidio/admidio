@@ -89,7 +89,8 @@ if ($getMode === 2)
 // Ordner erstellen
 elseif ($getMode === 3)
 {
-    if ($getFolderId == 0) {
+    if ($getFolderId == 0)
+    {
         //FolderId ist zum Anlegen eines Unterordners erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
@@ -208,7 +209,8 @@ elseif ($getMode === 4)
                         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
                         $gMessage->show($gL10n->get('DOW_FILE_RENAME', $oldName));
                     }
-                    else {
+                    else
+                    {
                         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
                         $gMessage->show($gL10n->get('DOW_FILE_RENAME_ERROR', $oldName));
                     }
@@ -249,7 +251,8 @@ elseif ($getMode === 4)
                         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
                         $gMessage->show($gL10n->get('DOW_FOLDER_RENAME', $oldName));
                     }
-                    else {
+                    else
+                    {
                         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
                         $gMessage->show($gL10n->get('DOW_FOLDER_RENAME_ERROR', $oldName));
                     }
@@ -326,7 +329,8 @@ elseif ($getMode === 6)
     }
 
     //Pruefen ob das neue Element eine Datei order ein Ordner ist.
-    if (is_file($targetFolder->getCompletePathOfFolder(). '/'. $getName)) {
+    if (is_file($targetFolder->getCompletePathOfFolder(). '/'. $getName))
+    {
         //Datei hinzufuegen
         $newFile = new TableFile($gDb);
         $newFile->setValue('fil_fol_id', $targetFolder->getValue('fol_id'));
@@ -341,7 +345,8 @@ elseif ($getMode === 6)
         header($location);
         exit();
     }
-    elseif (is_dir($targetFolder->getCompletePathOfFolder(). '/'. $getName)) {
+    elseif (is_dir($targetFolder->getCompletePathOfFolder(). '/'. $getName))
+    {
 
         //Ordner der DB hinzufuegen
         $newFolder = new TableFolder($gDb);

@@ -255,7 +255,8 @@ class ListConfiguration extends TableLists
                 // custom profile field
                 if($listColumn->getValue('lsc_usf_id') > 0)
                 {
-                    switch ($userFieldType) {
+                    switch ($userFieldType)
+                    {
                         case 'CHECKBOX':
                             $type = 'checkbox';
 
@@ -289,7 +290,8 @@ class ListConfiguration extends TableLists
                 }
                 else
                 {
-                    switch ($listColumn->getValue('lsc_special_field')) {
+                    switch ($listColumn->getValue('lsc_special_field'))
+                    {
                         case 'mem_begin':
                         case 'mem_end':
                             $type = 'date';

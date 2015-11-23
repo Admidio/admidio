@@ -51,7 +51,8 @@ class ConditionParser
             $date = new DateTimeExtended(date('Y').'-'.date('m').'-'.date('d'), 'Y-m-d');
             $ageCondition = '';
 
-            switch ($operator) {
+            switch ($operator)
+            {
                 case '=':
                     // first remove = from destination condition
                     $this->mDestCond = substr($this->mDestCond, 0, strlen($this->mDestCond) - 4);
@@ -253,7 +254,8 @@ class ConditionParser
                             $bStartCondition = true;
                         }
 
-                        switch ($character) {
+                        switch ($character)
+                        {
                             case '=':
                                 if ($columnType === 'string')
                                 {

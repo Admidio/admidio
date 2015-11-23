@@ -443,7 +443,8 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
         }
     }
 
-    switch ($datatype) {
+    switch ($datatype)
+    {
         case 'file':
             try
             {

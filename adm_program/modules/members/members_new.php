@@ -40,12 +40,10 @@ echo '
                     setTimeout(function () {
                         self.location.href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
                     },2500);
-                }
-                else {
+                } else {
                     if(data.length > 1000) {
                         $(".modal-body").html(data);
-                    }
-                    else {
+                    } else {
                         $("#form_members_create_user .form-alert").attr("class", "alert alert-danger form-alert");
                         $("#form_members_create_user .form-alert").fadeIn();
                         $("#form_members_create_user .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);

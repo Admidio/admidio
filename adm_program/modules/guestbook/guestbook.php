@@ -76,8 +76,7 @@ $page->addJavascript('
 
         if (document.getElementById("comments_" + commentId).innerHTML.length === 0) {
             getComments(commentId);
-        }
-        else {
+        } else {
             toggleDiv("comments_" + commentId);
         }
     }
@@ -85,8 +84,7 @@ $page->addJavascript('
     function toggleDiv(objectId) {
         if($("#" + objectId).is(":hidden")) {
             $("#" + objectId).show();
-        }
-        else {
+        } else {
             $("#" + objectId).hide();
         }
     }

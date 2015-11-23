@@ -100,8 +100,7 @@ $page->addJavascript('
 
         if($(id).css("display") === "none") {
             $(id).show("fast");
-        }
-        else {
+        } else {
             $(id).hide("fast");
         }
     }');
@@ -133,8 +132,7 @@ $page->addJavascript('
                     $("#"+id+" .form-alert").fadeOut("slow");
                     $("#"+parentId).animate({opacity: 1.0}, 2500);
                     $("#"+parentId).fadeOut("slow");
-                }
-                else {
+                } else {
                     $("#"+id+" .form-alert").attr("class", "alert alert-danger form-alert");
                     $("#"+id+" .form-alert").fadeIn();
                     $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);

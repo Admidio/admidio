@@ -144,8 +144,7 @@ $page->addJavascript('
         if ($("#dat_all_day:checked").val() !== undefined) {
             $("#date_from_time").hide();
             $("#date_to_time").hide();
-        }
-        else {
+        } else {
             $("#date_from_time").show("slow");
             $("#date_to_time").show("slow");
         }
@@ -155,8 +154,7 @@ $page->addJavascript('
         if ($("#date_registration_possible:checked").val() !== undefined) {
             $("#date_current_user_assigned_group").show("slow");
             $("#dat_max_members_group").show("slow");
-        }
-        else {
+        } else {
             $("#date_current_user_assigned_group").hide();
             $("#dat_max_members_group").hide();
         }
@@ -177,8 +175,7 @@ $page->addJavascript('
         if($("#dat_location").val().length > 0) {
             $("#dat_country_group").show();
             $("#dat_country").focus();
-        }
-        else {
+        } else {
             $("#dat_country_group").hide();
         }
     }');
@@ -204,8 +201,7 @@ $page->addJavascript('
             if(msg_result) {
                 $("#dates_edit_form").submit();
             }
-        }
-        else {
+        } else {
             $("#dates_edit_form").submit();
         }
     });', true);

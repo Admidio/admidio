@@ -528,7 +528,7 @@ class HtmlForm extends HtmlFormBasic
             {
                 $this->addHtml('
                     <script type="text/javascript">
-                        $(document).ready(function(){
+                        $(document).ready(function() {
                             '.$javascriptCode.'
                         });
                     </script>');
@@ -947,7 +947,7 @@ class HtmlForm extends HtmlFormBasic
             {
                 $this->addHtml('
                     <script type="text/javascript">
-                        $(document).ready(function(){
+                        $(document).ready(function() {
                             '.$javascriptCode.'
                         });
                     </script>');

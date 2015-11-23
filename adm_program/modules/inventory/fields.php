@@ -63,8 +63,7 @@ $page->addJavascript('
                 actRow.parentNode.insertBefore(actRow, prevNode);
                 secondSequence = actSequence - 1;
             }
-        }
-        else {
+        } else {
             if(nextNode != null) {
                 actRow.parentNode.insertBefore(nextNode, actRow);
                 secondSequence = actSequence + 1;

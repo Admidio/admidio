@@ -63,7 +63,7 @@ if($getInline == true)
     header('Content-type: text/html; charset=utf-8');
 
     $html .= '<script type="text/javascript"><!--
-    $(document).ready(function(){
+    $(document).ready(function() {
         $(".admidio-group-heading").click(function() { showHideBlock($(this).attr("id")); });
 
         $("#roles_assignment_form").submit(function(event) {
@@ -87,8 +87,7 @@ if($getInline == true)
                         profileJS.reloadRoleMemberships();
                         profileJS.reloadFormerRoleMemberships();
                         profileJS.reloadFutureRoleMemberships();
-                    }
-                    else {
+                    } else {
                         $("#roles_assignment_form .form-alert").attr("class", "alert alert-danger form-alert");
                         $("#roles_assignment_form .form-alert").fadeIn();
                         $("#roles_assignment_form .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);

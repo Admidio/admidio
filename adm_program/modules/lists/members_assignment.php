@@ -223,22 +223,21 @@ else
         $("#menu_item_create_user").attr("data-target", "#admidio_modal");
 
         // change mode of users that should be shown
-        $("#filter_rol_id").change(function(){
+        $("#filter_rol_id").change(function() {
             window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$getRoleId.'&filter_rol_id=" + $("#filter_rol_id").val() + "&mem_show_all=0");
         });
 
         // change mode of users that should be shown
-        $("#mem_show_all").click(function(){
+        $("#mem_show_all").click(function() {
             if($("#mem_show_all").is(":checked")) {
                 window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$getRoleId.'&mem_show_all=1");
-            }
-            else {
+            } else {
                 window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$getRoleId.'&mem_show_all=0");
             }
         });
 
         // if checkbox of user is clicked then change membership
-        $("input[type=checkbox].memlist_checkbox").click(function(){
+        $("input[type=checkbox].memlist_checkbox").click(function() {
             var checkbox = $(this);
             // get user id
             var row_id = $(this).parent().parent().attr("id");
@@ -249,13 +248,13 @@ else
             var leader_checked = $("input[type=checkbox]#leader_"+userid).prop("checked");
 
             //Bei Leiter Checkbox setzten, muss Member mit gesetzt werden
-            if(checkbox.hasClass("memlist_leader") && leader_checked){
+            if(checkbox.hasClass("memlist_leader") && leader_checked) {
                 $("input[type=checkbox]#member_"+userid).prop("checked", true);
                 member_checked = true;
             }
 
             //Bei entfernen der Mitgliedschaft endet auch das Leiterdasein
-            if(checkbox.hasClass("memlist_member") && member_checked == false){
+            if(checkbox.hasClass("memlist_member") && member_checked == false) {
                 $("input[type=checkbox]#leader_"+userid).prop("checked", false);
                 leader_checked = false;
             }
@@ -263,7 +262,7 @@ else
             // change data in database
             $.post("'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?mode=assign&rol_id='.$getRoleId.'&usr_id="+userid,
                 "member_"+userid+"="+member_checked+"&leader_"+userid+"="+leader_checked,
-                function(data){
+                function(data) {
                     // check if error occurs
                     if(data !== "success") {
                         // reset checkbox status
@@ -272,8 +271,7 @@ else
                             if(checkbox.hasClass("memlist_leader")) {
                                 $("input[type=checkbox]#member_"+userid).prop("checked", false);
                             }
-                        }
-                        else {
+                        } else {
                             checkbox.prop("checked", true);
                         }
 

@@ -145,8 +145,7 @@ $page->addJavascript('
 
         if($(id).css("display") == "none") {
             $(id).show("fast");
-        }
-        else {
+        } else {
             $(id).hide("fast");
         }
     }
@@ -208,8 +207,7 @@ $page->addJavascript('
                         profileJS.reloadRoleMemberships();
                         profileJS.reloadFormerRoleMemberships();
                         profileJS.reloadFutureRoleMemberships();
-                    }
-                    else {
+                    } else {
                         $("#membership_period_form_"+memberId+" .form-alert").attr("class", "alert alert-danger form-alert");
                         $("#membership_period_form_"+memberId+" .form-alert").fadeIn();
                         $("#membership_period_form_"+memberId+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);

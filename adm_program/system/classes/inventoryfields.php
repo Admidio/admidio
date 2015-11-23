@@ -109,7 +109,8 @@ class InventoryFields
 
             $infType = $this->mInventoryFields[$fieldNameIntern]->getValue('inf_type');
 
-            switch ($infType) {
+            switch ($infType)
+            {
                 case 'CHECKBOX':
                     if($value == 1)
                     {
@@ -459,7 +460,8 @@ class InventoryFields
 
         if($fieldValue !== '')
         {
-            switch ($this->mInventoryFields[$fieldNameIntern]->getValue('inf_type')) {
+            switch ($this->mInventoryFields[$fieldNameIntern]->getValue('inf_type'))
+            {
                 case 'CHECKBOX':
                     // Checkbox darf nur 1 oder 0 haben
                     if($fieldValue != 0 && $fieldValue != 1 && !$this->noValueCheck)

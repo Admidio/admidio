@@ -118,7 +118,7 @@ $page->addJavascript('
         $(this).find(".modal-dialog").css({width: "800px"});
     });
 
-    $("#btn_ecard_preview").click(function(event){
+    $("#btn_ecard_preview").click(function(event) {
         event.preventDefault();
         $("#ecard_form input[id=\'submit_action\']").val("preview");
         $("#ecard_form textarea[name=\'ecard_message\']").text( CKEDITOR.instances.ecard_message.getData() );

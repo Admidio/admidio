@@ -92,8 +92,7 @@ $page->addJavascript('
         if($("#inf_type").val() === "DROPDOWN" || $("#inf_type").val() === "RADIO_BUTTON") {
             $("#inf_value_list_group").show("slow");
             $("#inf_value_list").attr("required", "required");
-        }
-        else {
+        } else {
             $("#inf_value_list").removeAttr("required");
             $("#inf_value_list_group").hide();
         }

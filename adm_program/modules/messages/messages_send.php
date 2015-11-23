@@ -477,7 +477,8 @@ else
     $sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
             VALUES ('".$getMsgId."', '".$PMId2."', '".$gCurrentUser->getValue('usr_id')."', '".$postBodySQL."', CURRENT_TIMESTAMP)";
 
-    if ($gDb->query($sql)) {
+    if ($gDb->query($sql))
+    {
       $sendResult = true;
     }
 }

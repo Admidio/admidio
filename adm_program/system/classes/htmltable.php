@@ -448,8 +448,7 @@ class HtmlTable extends HtmlTableBasic
                             var currentOrder = table.order()[0];
                             if ( currentOrder[0] === '.$this->groupedColumn.' && currentOrder[1] === "asc" ) {
                                 table.order( [ '.$this->groupedColumn.', "desc" ] ).draw();
-                            }
-                            else {
+                            } else {
                                 table.order( [ '.$this->groupedColumn.', "asc" ] ).draw();
                             }
                         } );';

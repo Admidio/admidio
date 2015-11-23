@@ -98,7 +98,7 @@ $page->addJavascript('
     $("#link_check_for_update").click(function() {
         $("#admidio_version_content").empty();
         $("#admidio_version_content").prepend("<img src=\''.THEME_PATH.'/icons/loader_inline.gif\' id=\'loadindicator\'/>").show();
-        $.get("'.$g_root_path.'/adm_program/modules/preferences/update_check.php", {mode:"2"}, function(htmlVersion){
+        $.get("'.$g_root_path.'/adm_program/modules/preferences/update_check.php", {mode:"2"}, function(htmlVersion) {
             $("#admidio_version_content").empty();
             $("#admidio_version_content").append(htmlVersion);
         });

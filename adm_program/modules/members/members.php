@@ -131,7 +131,7 @@ $page->addJavascript('
     $("#menu_item_create_user").attr("data-target", "#admidio_modal");
 
     // change mode of users that should be shown
-    $("#mem_show_all").click(function(){
+    $("#mem_show_all").click(function() {
         window.location.replace("'.$g_root_path.'/adm_program/modules/members/members.php?members='.$flagShowMembers.'");
     });', true);
 
