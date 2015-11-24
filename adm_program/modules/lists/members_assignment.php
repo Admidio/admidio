@@ -60,7 +60,7 @@ if($getMembersShowAll == 1)
 
 if($getFilterRoleId > 0)
 {
-    if($gCurrentUser->hasRightViewRole($getFilterRoleId) == false)
+    if(!$gCurrentUser->hasRightViewRole($getFilterRoleId))
     {
         $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
     }

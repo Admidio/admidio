@@ -61,7 +61,7 @@ switch($getNewUser)
 {
     case 0:
         // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-        if($gCurrentUser->hasRightEditProfile($user) == false)
+        if(!$gCurrentUser->hasRightEditProfile($user))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }

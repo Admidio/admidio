@@ -43,7 +43,7 @@ switch($getNewItem)
 {
     case 0:
         // prueft, ob der User die notwendigen Rechte hat, das entsprechende Item zu aendern
-        if($gCurrentUser->editInventory($inventory) == false)
+        if(!$gCurrentUser->editInventory($inventory))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
@@ -68,7 +68,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
     $post_id = 'inf-'. $field->getValue('inf_id');
 
     // check and save only fields that aren't disabled
-    if($gCurrentUser->editUsers() == true || $field->getValue('inf_disabled') == 0 || ($field->getValue('inf_disabled') == 1 && $getNewItem > 0))
+    if($gCurrentUser->editUsers() || $field->getValue('inf_disabled') == 0 || ($field->getValue('inf_disabled') == 1 && $getNewItem > 0))
     {
         if(isset($_POST[$post_id]))
         {

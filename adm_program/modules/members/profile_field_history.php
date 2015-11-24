@@ -48,7 +48,7 @@ $sqlConditions  = '';
 // then the profile field history will be shown otherwise show error
 if ($gPreferences['profile_log_edit_fields'] == 0
     || ($getUserId == 0 && !$gCurrentUser->editUsers())
-    || ($getUserId > 0  && $gCurrentUser->hasRightEditProfile($user) == false))
+    || ($getUserId > 0  && !$gCurrentUser->hasRightEditProfile($user)))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

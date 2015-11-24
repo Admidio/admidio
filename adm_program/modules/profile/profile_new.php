@@ -83,7 +83,7 @@ switch($getNewUser)
 {
     case 0:
         // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-        if($gCurrentUser->hasRightEditProfile($user) == false)
+        if(!$gCurrentUser->hasRightEditProfile($user))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
@@ -258,7 +258,7 @@ foreach($gProfileFields->mProfileFields as $field)
         $helpId        = '';
 
         if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_disabled') == 1
-        && $gCurrentUser->hasRightEditProfile($user, false) == false && $getNewUser == 0)
+        && !$gCurrentUser->hasRightEditProfile($user, false) && $getNewUser == 0)
         {
             // disable field if this is configured in profile field configuration
             $fieldProperty = FIELD_DISABLED;

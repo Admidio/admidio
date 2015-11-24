@@ -237,7 +237,7 @@ $page->addHtml('
             $page->addHtml('<img id="profile_photo" class="thumbnail" src="item_photo_show.php?inv_id='.$inventory->getValue('inv_id').'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
 
             // Nur berechtigte User duerfen das Profilfoto editieren
-            if($gCurrentUser->editInventory($inventory) == true)
+            if($gCurrentUser->editInventory($inventory))
             {
                 $page->addHtml('<div id="profile_picture_links" class="btn-group-vertical" role="group">
                     <a class="btn" href="'.$g_root_path.'/adm_program/modules/inventory/item_photo_edit.php?inv_id='.$inventory->getValue('inv_id').'"><img
@@ -266,8 +266,8 @@ foreach($gProfileFields->mProfileFields as $field)
     // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
     // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
     if($field->getValue('cat_name_intern') !== 'MASTER_DATA'
-    && ($gCurrentUser->editInventory($inventory) == true
-       || ($gCurrentUser->editInventory($inventory) == false && $field->getValue('inf_hidden') == 0)))
+    && ($gCurrentUser->editInventory($inventory)
+       || (!$gCurrentUser->editInventory($inventory) && $field->getValue('inf_hidden') == 0)))
     {
         // show new category header if new category and field has value or is a checkbox field
         if($category != $field->getValue('cat_name')

@@ -59,7 +59,7 @@ switch($getNewItem)
 {
     case 0:
         // prueft, ob der user die notwendigen Rechte hat, das entsprechende Profil zu aendern
-        if($gCurrentUser->editInventory($inventory) == false)
+        if(!$gCurrentUser->editInventory($inventory))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }

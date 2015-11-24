@@ -504,7 +504,7 @@ else
             }
 
             // Link to send email to participants
-            if($gValidLogin && $gCurrentUser->hasRightSendMailToRole($date->getValue('dat_rol_id')) == true)
+            if($gValidLogin && $gCurrentUser->hasRightSendMailToRole($date->getValue('dat_rol_id')))
             {
                 if($outputNumberMembers > 0 || $outputNumberLeaders > 0)
                 {

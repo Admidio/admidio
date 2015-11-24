@@ -43,7 +43,7 @@ elseif($postRoleId == 0)
 // evtl. ein Rollenzuordnungsrecht bekommt, wenn er es vorher nicht hatte
 $role = new TableRoles($gDb, $postRoleId);
 
-if($gCurrentUser->hasRightViewRole($role->getValue('rol_id')) == false
+if(!$gCurrentUser->hasRightViewRole($role->getValue('rol_id'))
 || (!$gCurrentUser->manageRoles() && $role->getValue('rol_assign_roles') == false))
 {
     $gMessage->show($gL10n->get('MEM_ROLE_SELECT_RIGHT', $role->getValue('rol_name')));

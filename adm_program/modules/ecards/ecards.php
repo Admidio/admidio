@@ -77,7 +77,7 @@ if ($getUserId > 0)
     $user = new User($gDb, $gProfileFields, $getUserId);
 
     // darf auf die User-Id zugegriffen werden
-    if((!$gCurrentUser->editUsers() && isMember($user->getValue('usr_id')) == false)
+    if((!$gCurrentUser->editUsers() && !isMember($user->getValue('usr_id')))
     || strlen($user->getValue('usr_id')) === 0)
     {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
