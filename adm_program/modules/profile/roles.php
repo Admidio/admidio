@@ -33,7 +33,7 @@ $getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean');
 $html       = '';
 
 // if user is allowed to assign at least one role then allow access
-if($gCurrentUser->assignRoles() == false)
+if(!$gCurrentUser->assignRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

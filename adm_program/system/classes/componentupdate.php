@@ -48,7 +48,7 @@ class ComponentUpdate extends Component
 
             if(file_exists($updateFile))
             {
-                $this->xmlObject = new SimpleXMLElement($updateFile, 0, true);
+                $this->xmlObject = new SimpleXMLElement($updateFile, null, true);
                 return true;
             }
         }

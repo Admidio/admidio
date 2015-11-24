@@ -69,7 +69,7 @@ switch($getNewUser)
 
     case 1:
         // prueft, ob der User die notwendigen Rechte hat, neue User anzulegen
-        if($gCurrentUser->editUsers() == false)
+        if(!$gCurrentUser->editUsers())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
@@ -226,7 +226,7 @@ if($gCurrentUser->isWebmaster() || $getNewUser > 0)
             {
                 $row = $pdoStatement->fetch();
 
-                if(strcmp($row['usr_id'], $getUserId) != 0)
+                if(strcmp($row['usr_id'], $getUserId) !== 0)
                 {
                     $gMessage->show($gL10n->get('PRO_LOGIN_NAME_EXIST'));
                 }

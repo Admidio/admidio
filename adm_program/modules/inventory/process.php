@@ -9,7 +9,7 @@
 require_once('../../system/common.php');
 
 // only users with the right to edit inventory could use this script
-if ($gCurrentUser->editInventory() == false)
+if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

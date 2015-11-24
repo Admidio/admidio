@@ -27,19 +27,19 @@ $getName   = admFuncVariableIsValid($_GET, 'name', 'string');
 $_SESSION['mylist_request'] = $_POST;
 
 // Mindestens ein Feld sollte zugeordnet sein
-if(isset($_POST['column1']) == false || strlen($_POST['column1']) === 0)
+if(!isset($_POST['column1']) || strlen($_POST['column1']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', 'Feld 1'));
 }
 
 // Rolle muss beim Anzeigen gefuellt sein
 if($getMode === 2
-&& (isset($_POST['sel_roles_ids']) == false || $_POST['sel_roles_ids'] == 0 || is_array($_POST['sel_roles_ids']) == false))
+&& (!isset($_POST['sel_roles_ids']) || $_POST['sel_roles_ids'] == 0 || !is_array($_POST['sel_roles_ids'])))
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', 'Rolle'));
 }
 
-if(isset($_POST['sel_show_members']) == false)
+if(!isset($_POST['sel_show_members']))
 {
     $_POST['sel_show_members'] = 0;
 }
@@ -51,7 +51,7 @@ $list = new ListConfiguration($gDb, $getListId);
 if($getMode != 2)
 {
     // globale Listen duerfen nur von Webmastern editiert werden
-    if($list->getValue('lst_global') == 1 && $gCurrentUser->isWebmaster() == false)
+    if($list->getValue('lst_global') == 1 && !$gCurrentUser->isWebmaster())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }

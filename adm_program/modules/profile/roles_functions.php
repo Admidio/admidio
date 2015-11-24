@@ -95,7 +95,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
             $role->setArray($row);
 
             // if membership will not end, then don't show end date
-            if(strcmp($member->getValue('mem_end', 'Y-m-d'), '9999-12-31') != 0)
+            if(strcmp($member->getValue('mem_end', 'Y-m-d'), '9999-12-31') !== 0)
             {
                    $showRoleEndDate = true;
             }

@@ -31,22 +31,22 @@ $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
-if(isset($plg_time_online) == false || is_numeric($plg_time_online) == false)
+if(!isset($plg_time_online) || !is_numeric($plg_time_online))
 {
     $plg_time_online = 10;
 }
 
-if(isset($plg_show_visitors) == false || is_numeric($plg_show_visitors) == false)
+if(!isset($plg_show_visitors) || !is_numeric($plg_show_visitors))
 {
     $plg_show_visitors = 1;
 }
 
-if(isset($plg_show_self) == false || is_numeric($plg_show_self) == false)
+if(!isset($plg_show_self) || !is_numeric($plg_show_self))
 {
     $plg_show_self = 1;
 }
 
-if(isset($plg_show_users_side_by_side) == false || is_numeric($plg_show_users_side_by_side) == false)
+if(!isset($plg_show_users_side_by_side) || !is_numeric($plg_show_users_side_by_side))
 {
     $plg_show_users_side_by_side = 0;
 }

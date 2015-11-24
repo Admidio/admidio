@@ -40,7 +40,7 @@ $getHeadline   = admFuncVariableIsValid($_GET, 'headline', 'string', array('defa
 $getGboId      = admFuncVariableIsValid($_GET, 'id', 'numeric');
 $getModeration = admFuncVariableIsValid($_GET, 'moderation', 'boolean');
 
-if($getModeration == 1 && $gCurrentUser->editGuestbookRight() == false)
+if($getModeration == 1 && !$gCurrentUser->editGuestbookRight())
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }

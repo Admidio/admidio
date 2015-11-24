@@ -110,7 +110,7 @@ else
 }
 
 // if user id was not set and own profile should be shown then initialize navigation
-if(isset($_GET['user_id']) == false)
+if(!isset($_GET['user_id']))
 {
     $gNavigation->clear();
 }

@@ -39,7 +39,7 @@ if(!$gValidLogin)
 $senderName  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
 $senderEmail = $gCurrentUser->getValue('EMAIL');
 
-if(isset($_POST['ecard_recipients']) == false || is_array($_POST['ecard_recipients'] == false))
+if(!isset($_POST['ecard_recipients']) || !is_array($_POST['ecard_recipients']))
 {
     $_SESSION['ecard_request']['ecard_recipients'] = '';
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TO')));

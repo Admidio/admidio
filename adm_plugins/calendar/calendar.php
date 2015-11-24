@@ -36,43 +36,43 @@ if(isset($_GET['ajax_change']) && $plg_ajax_change == 1)
 }
 
 // Auf gesetzte Standardwerte aus config.php überprüfen und notfalls setzen
-if(isset($plg_ajaxbox) == false)
+if(!isset($plg_ajaxbox))
 {
     $plg_ajaxbox = 1;
 }
-if(isset($plg_link_target_termin) == false)
+if(!isset($plg_link_target_termin))
 {
     $plg_link_target_termin = '_self';
 }
-if(isset($plg_link_target_geb) == false)
+if(!isset($plg_link_target_geb))
 {
     $plg_link_target_geb = '_self';
 }
-if(isset($plg_ter_aktiv) == false)
+if(!isset($plg_ter_aktiv))
 {
     $plg_ter_aktiv = 1;
 }
-if(isset($plg_ter_login) == false)
+if(!isset($plg_ter_login))
 {
     $plg_ter_login = 0;
 }
-if(isset($plg_geb_aktiv) == false)
+if(!isset($plg_geb_aktiv))
 {
     $plg_geb_aktiv = 0;
 }
-if(isset($plg_geb_login) == false)
+if(!isset($plg_geb_login))
 {
     $plg_geb_login = 0;
 }
-if(isset($plg_geb_icon) == false)
+if(!isset($plg_geb_icon))
 {
     $plg_geb_icon = 0;
 }
-if(isset($plg_kal_cat) == false)
+if(!isset($plg_kal_cat))
 {
     $plg_kal_cat = array('all');
 }
-if(isset($plg_kal_cat_show) == false)
+if(!isset($plg_kal_cat_show))
 {
     $plg_kal_cat_show = 1;
 }
@@ -80,7 +80,7 @@ if(isset($plg_kal_cat_show) == false)
 // Prüfen ob the Link-URL gesetzt wurde oder leer ist
 // wenn leer, dann Standardpfad zum Admidio-Modul
 
-if(isset($plg_link_url) == false || $plg_link_url === '')
+if(!isset($plg_link_url) || $plg_link_url === '')
 {
     $plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
 }
@@ -89,15 +89,15 @@ if(isset($plg_link_url) == false || $plg_link_url === '')
 // Prüfen ob the CSS Link-Klassen gesetzt wurden         //
 // ///////////////////////////////////////////////////// //
 
-if(isset($plg_link_class_geb) == false || $plg_link_class_geb === '')
+if(!isset($plg_link_class_geb) || $plg_link_class_geb === '')
 {
     $plg_link_class_geb = 'geb';
 }
-if(isset($plg_link_class_date) == false || $plg_link_class_date === '')
+if(!isset($plg_link_class_date) || $plg_link_class_date === '')
 {
     $plg_link_class_date = 'date';
 }
-if(isset($plg_link_class_merge) == false || $plg_link_class_merge === '')
+if(!isset($plg_link_class_merge) || $plg_link_class_merge === '')
 {
     $plg_link_class_date = 'merge';
 }
@@ -129,7 +129,7 @@ $lastDayCurrentMonth = '';
 // Date ID auslesen oder aktuellen Monat und Jahr erzeugen
 if(array_key_exists('date_id', $_GET))
 {
-    if(is_numeric($_GET['date_id']) == false)
+    if(!is_numeric($_GET['date_id']))
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }

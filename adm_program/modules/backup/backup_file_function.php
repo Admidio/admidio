@@ -22,7 +22,7 @@ $getJob      = admFuncVariableIsValid($_GET, 'job', 'string', array('requireValu
 $getFilename = admFuncVariableIsValid($_GET, 'filename', 'file', array('requireValue' => true));
 
 // nur Webmaster duerfen ein Backup starten
-if($gCurrentUser->isWebmaster() == false)
+if(!$gCurrentUser->isWebmaster())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

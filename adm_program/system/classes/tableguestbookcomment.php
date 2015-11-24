@@ -42,7 +42,7 @@ class TableGuestbookComment extends TableAccess
     {
         if($columnName === 'gbc_text')
         {
-            if(isset($this->dbColumns['gbc_text']) == false)
+            if(!isset($this->dbColumns['gbc_text']))
             {
                 $value = '';
             }

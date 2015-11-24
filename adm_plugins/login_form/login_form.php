@@ -39,22 +39,22 @@ require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
-if(isset($plg_show_register_link) == false || is_numeric($plg_show_register_link) == false)
+if(!isset($plg_show_register_link) || !is_numeric($plg_show_register_link))
 {
     $plg_show_register_link = 1;
 }
 
-if(isset($plg_show_email_link) == false || is_numeric($plg_show_email_link) == false)
+if(!isset($plg_show_email_link) || !is_numeric($plg_show_email_link))
 {
     $plg_show_email_link = 1;
 }
 
-if(isset($plg_show_logout_link) == false || is_numeric($plg_show_logout_link) == false)
+if(!isset($plg_show_logout_link) || !is_numeric($plg_show_logout_link))
 {
     $plg_show_logout_link = 1;
 }
 
-if(isset($plg_show_icons) == false || is_numeric($plg_show_icons) == false)
+if(!isset($plg_show_icons) || !is_numeric($plg_show_icons))
 {
     $plg_show_icons = 1;
 }
@@ -68,7 +68,7 @@ else
     $plg_link_target = '';
 }
 
-if(isset($plg_rank) == false)
+if(!isset($plg_rank))
 {
     $plg_rank = array();
 }

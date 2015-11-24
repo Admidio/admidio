@@ -21,7 +21,7 @@ $getItemId  = admFuncVariableIsValid($_GET, 'item_id', 'numeric');
 $getNewItem = admFuncVariableIsValid($_GET, 'new_item', 'numeric');
 
 // only users with the right to edit inventory could use this script
-if ($gCurrentUser->editInventory() == false)
+if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -51,7 +51,7 @@ switch($getNewItem)
 
     case 1:
         // prueft, ob der User die notwendigen Rechte hat, neue Items anzulegen
-        if($gCurrentUser->editInventory() == false)
+        if(!$gCurrentUser->editInventory())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }

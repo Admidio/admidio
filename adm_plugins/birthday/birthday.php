@@ -33,17 +33,17 @@ $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
-if(isset($plg_show_names_extern) == false || is_numeric($plg_show_names_extern) == false)
+if(!isset($plg_show_names_extern) || !is_numeric($plg_show_names_extern))
 {
     $plg_show_names_extern = 1;
 }
 
-if(isset($plg_show_email_extern) == false || is_numeric($plg_show_email_extern) == false)
+if(!isset($plg_show_email_extern) || !is_numeric($plg_show_email_extern))
 {
     $plg_show_email_extern = 0;
 }
 
-if(isset($plg_show_names) == false || is_numeric($plg_show_names) == false)
+if(!isset($plg_show_names) || !is_numeric($plg_show_names))
 {
     $plg_show_names = 1;
 }
@@ -57,27 +57,27 @@ else
     $plg_link_target = '_self';
 }
 
-if(isset($plg_show_hinweis_keiner) == false || is_numeric($plg_show_names_extern) == false)
+if(!isset($plg_show_hinweis_keiner) || !is_numeric($plg_show_names_extern))
 {
     $plg_show_names_extern = 0;
 }
 
-if(isset($plg_show_alter_anrede) == false || is_numeric($plg_show_names_extern) == false)
+if(!isset($plg_show_alter_anrede) || !is_numeric($plg_show_names_extern))
 {
     $plg_show_names_extern = 18;
 }
 
-if(isset($plg_show_zeitraum) == false || is_numeric($plg_show_names_extern) == false)
+if(!isset($plg_show_zeitraum) || !is_numeric($plg_show_names_extern))
 {
     $plg_show_zeitraum = 5;
 }
 
-if(isset($plg_show_future) == false || is_numeric($plg_show_names_extern) == false)
+if(!isset($plg_show_future) || !is_numeric($plg_show_names_extern))
 {
     $plg_show_future = 10;
 }
 // Prüfen, ob die Rollenbedingung gesetzt wurde            //
-if(isset($plg_rolle_sql) == false || $plg_rolle_sql === '')
+if(!isset($plg_rolle_sql) || $plg_rolle_sql === '')
 {
     $rol_sql = 'is not null';
 }
@@ -87,7 +87,7 @@ else
 }
 
 // Prüfen, ob die Sotierbedingung gesetzt wurde            //
-if(isset($plg_sort_sql) == false || $plg_sort_sql === '')
+if(!isset($plg_sort_sql) || $plg_sort_sql === '')
 {
     $sort_sql = 'desc';
 }

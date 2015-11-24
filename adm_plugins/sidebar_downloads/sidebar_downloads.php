@@ -34,7 +34,7 @@ $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
-if(isset($plg_downloads_count) == false || is_numeric($plg_downloads_count) == false)
+if(!isset($plg_downloads_count) || !is_numeric($plg_downloads_count))
 {
     $plg_downloads_count = 10;
 }

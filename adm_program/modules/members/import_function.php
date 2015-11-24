@@ -44,7 +44,7 @@ elseif($postRoleId == 0)
 $role = new TableRoles($gDb, $postRoleId);
 
 if($gCurrentUser->hasRightViewRole($role->getValue('rol_id')) == false
-|| ($gCurrentUser->manageRoles() == false && $role->getValue('rol_assign_roles') == false))
+|| (!$gCurrentUser->manageRoles() && $role->getValue('rol_assign_roles') == false))
 {
     $gMessage->show($gL10n->get('MEM_ROLE_SELECT_RIGHT', $role->getValue('rol_name')));
 }

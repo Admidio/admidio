@@ -20,7 +20,7 @@ require_once('../../system/login_valid.php');
 $getItemId = admFuncVariableIsValid($_GET, 'item_id', 'numeric');
 
 // only users with the right to edit inventory could use this script
-if ($gCurrentUser->editInventory() == false)
+if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -74,7 +74,7 @@ unset($_SESSION['profile_request']);
 $headline = $gL10n->get('PRO_PROFILE_FROM', $inventory->getValue('ITEM_NAME'));
 
 // if user id was not set and own profile should be shown then initialize navigation
-if(isset($_GET['item_id']) == false)
+if(!isset($_GET['item_id']))
 {
     $gNavigation->clear();
 }

@@ -99,8 +99,7 @@ elseif($getMode === 2)
     // User NUR aus der aktuellen Organisation entfernen
 
     // Es duerfen keine Webmaster entfernt werden
-    if($gCurrentUser->isWebmaster() == false
-    && $user->isWebmaster()           == true)
+    if(!$gCurrentUser->isWebmaster() && $user->isWebmaster())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -142,7 +141,7 @@ elseif($getMode === 3)
     // User aus der Datenbank loeschen
 
     // nur Webmaster duerfen dies
-    if($gCurrentUser->isWebmaster() == false)
+    if(!$gCurrentUser->isWebmaster())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -165,9 +164,7 @@ elseif($getMode === 4)
     // nur Webmaster duerfen User neue Zugangsdaten zuschicken
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
     // nur an Mitglieder der eigenen Organisation schicken
-    if($gCurrentUser->isWebmaster() == false
-    || $gPreferences['enable_system_mails'] != 1
-    || $this_orga == false)
+    if(!$gCurrentUser->isWebmaster() || $gPreferences['enable_system_mails'] != 1 || $this_orga == false)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }

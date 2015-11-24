@@ -64,7 +64,7 @@ if(isset($_SESSION['import_csv_request']))
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
     $form_values = $_SESSION['import_csv_request'];
     unset($_SESSION['import_csv_request']);
-    if(isset($form['first_row']) == false)
+    if(!isset($form['first_row']))
     {
         $form_values['first_row'] = 0;
     }

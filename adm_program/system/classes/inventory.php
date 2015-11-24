@@ -246,7 +246,7 @@ class Inventory extends TableInventory
             // user data from adm_user_fields table
 
             // only to a update if value has changed
-            if(strcmp($newValue, $oldFieldValue) != 0)
+            if(strcmp($newValue, $oldFieldValue) !== 0)
             {
                 // Disabled fields can only be edited by users with the right "edit_users" except on registration.
                 // Here is no need to check hidden fields because we check on save() method that only users who

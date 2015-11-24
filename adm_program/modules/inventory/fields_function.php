@@ -25,7 +25,7 @@ $getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireVa
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
 
 // only users with the right to edit inventory could use this script
-if ($gCurrentUser->editInventory() == false)
+if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -100,11 +100,11 @@ if($getMode === 1)
     {
         $_POST['inf_hidden'] = 1;
     }
-    if(isset($_POST['inf_disabled']) == false)
+    if(!isset($_POST['inf_disabled']))
     {
         $_POST['inf_disabled'] = 0;
     }
-    if(isset($_POST['inf_mandatory']) == false)
+    if(!isset($_POST['inf_mandatory']))
     {
         $_POST['inf_mandatory'] = 0;
     }

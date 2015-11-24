@@ -33,22 +33,22 @@ $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
-if(isset($plg_dates_count) == false || is_numeric($plg_dates_count) == false)
+if(!isset($plg_dates_count) || !is_numeric($plg_dates_count))
 {
     $plg_dates_count = 2;
 }
 
-if(isset($plg_dates_show_preview) == false || is_numeric($plg_dates_show_preview) == false)
+if(!isset($plg_dates_show_preview) || !is_numeric($plg_dates_show_preview))
 {
     $plg_dates_show_preview = 0;
 }
 
-if(isset($plg_show_date_end) == false || is_numeric($plg_show_date_end) == false)
+if(!isset($plg_show_date_end) || !is_numeric($plg_show_date_end))
 {
     $plg_show_date_end = 1;
 }
 
-if(isset($plg_max_char_per_word) == false || is_numeric($plg_max_char_per_word) == false)
+if(!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word))
 {
     $plg_max_char_per_word = 0;
 }
@@ -71,14 +71,14 @@ else
     $plg_link_target = '_self';
 }
 
-if(isset($plg_kal_cat) == false)
+if(!isset($plg_kal_cat))
 {
     $plg_kal_cat = array('all');
 }
 
 // Prüfen ob the Link-URL gesetzt wurde oder leer ist
 // wenn leer, dann Standardpfad zum Admidio-Modul
-if(isset($plg_link_url) == false || $plg_link_url === '')
+if(!isset($plg_link_url) || $plg_link_url === '')
 {
     $plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
 }

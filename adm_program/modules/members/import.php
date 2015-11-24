@@ -60,12 +60,12 @@ $form->addSelectBox('import_coding', $gL10n->get('MEM_CODING'), $selectBoxEntrie
 // first read all relevant roles from database and create an array with them
 $condition = '';
 
-if($gCurrentUser->manageRoles() == false)
+if(!$gCurrentUser->manageRoles())
 {
     // keine Rollen mit Rollenzuordnungsrecht anzeigen
     $condition .= ' AND rol_assign_roles = 0 ';
 }
-if($gCurrentUser->isWebmaster() == false)
+if(!$gCurrentUser->isWebmaster())
 {
     // Webmasterrolle nicht anzeigen
     $condition .= ' AND rol_webmaster = 0 ';

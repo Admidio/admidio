@@ -30,11 +30,11 @@ require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
-if(isset($plg_announcements_count) == false || is_numeric($plg_announcements_count) == false)
+if(!isset($plg_announcements_count) || !is_numeric($plg_announcements_count))
 {
     $plg_announcements_count = 2;
 }
-if(isset($plg_max_char_per_word) == false || is_numeric($plg_max_char_per_word) == false)
+if(!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word))
 {
     $plg_max_char_per_word = 0;
 }
@@ -57,7 +57,7 @@ else
     $plg_link_target = '_self';
 }
 
-if(isset($plg_show_preview) == false || is_numeric($plg_show_preview) == false)
+if(!isset($plg_show_preview) || !is_numeric($plg_show_preview))
 {
     $plg_show_preview = 0;
 }

@@ -91,7 +91,7 @@ switch($getNewUser)
 
     case 1:
         // prueft, ob der User die notwendigen Rechte hat, neue User anzulegen
-        if($gCurrentUser->editUsers() == false)
+        if(!$gCurrentUser->editUsers())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
@@ -204,7 +204,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 $fieldProperty = FIELD_DEFAULT;
                 $fieldHelpId   = 'PRO_USERNAME_DESCRIPTION';
 
-                if($gCurrentUser->isWebmaster() == false && $getNewUser == 0)
+                if(!$gCurrentUser->isWebmaster() && $getNewUser == 0)
                 {
                     $fieldProperty = FIELD_DISABLED;
                     $fieldHelpId   = '';

@@ -23,7 +23,7 @@ $getNewItem   = admFuncVariableIsValid($_GET, 'new_item', 'numeric');
 $registrationOrgId = $gCurrentOrganization->getValue('org_id');
 
 // only users with the right to edit inventory could use this script
-if ($gCurrentUser->editInventory() == false)
+if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -67,7 +67,7 @@ switch($getNewItem)
 
     case 1:
         // prueft, ob der inventory die notwendigen Rechte hat, neue items anzulegen
-        if($gCurrentUser->editInventory() == false)
+        if(!$gCurrentUser->editInventory())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
@@ -147,7 +147,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
                 $fieldProperty = FIELD_DEFAULT;
                 $fieldHelpId   = null;
 
-                if($gCurrentUser->isWebmaster() == false && $getNewItem == 0)
+                if(!$gCurrentUser->isWebmaster() && $getNewItem == 0)
                 {
                     $fieldProperty = FIELD_DISABLED;
                 }
@@ -166,7 +166,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
         $fieldProperty = FIELD_DEFAULT;
         $helpId        = null;
 
-        if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_disabled') == 1 && $gCurrentUser->editUsers() == false && $getNewUser == 0)
+        if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_disabled') == 1 && !$gCurrentUser->editUsers() && $getNewUser == 0)
         {
             // disable field if this is configured in profile field configuration
             $fieldProperty = FIELD_DISABLED;

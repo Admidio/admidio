@@ -28,7 +28,7 @@ require_once('backup.functions.php');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'show_list', 'validValues' => array('show_list', 'create_backup')));
 
 // only webmaster are allowed to start backup
-if($gCurrentUser->isWebmaster() == false)
+if(!$gCurrentUser->isWebmaster())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

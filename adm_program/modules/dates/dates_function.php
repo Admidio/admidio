@@ -91,11 +91,11 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_END')));
     }
-    if(strlen($_POST['date_from_time']) === 0 && isset($_POST['dat_all_day']) == false)
+    if(strlen($_POST['date_from_time']) === 0 && !isset($_POST['dat_all_day']))
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START')));
     }
-    if(strlen($_POST['date_to_time']) === 0 && isset($_POST['dat_all_day']) == false)
+    if(strlen($_POST['date_to_time']) === 0 && !isset($_POST['dat_all_day']))
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END')));
     }
@@ -116,7 +116,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         $date->setValue('dat_all_day', 0);
     }
 
-    if(isset($_POST['date_roles']) == false || array_count_values($_POST['date_roles']) == 0)
+    if(!isset($_POST['date_roles']) || array_count_values($_POST['date_roles']) == 0)
     {
         $_SESSION['dates_request']['date_roles'] = '';
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
@@ -191,28 +191,28 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
     }
 
-    if(isset($_POST['dat_highlight']) == false)
+    if(!isset($_POST['dat_highlight']))
     {
         $_POST['dat_highlight'] = 0;
     }
-    if(isset($_POST['dat_global']) == false)
+    if(!isset($_POST['dat_global']))
     {
         $_POST['dat_global'] = 0;
     }
-    if(isset($_POST['dat_all_day']) == false)
+    if(!isset($_POST['dat_all_day']))
     {
         $_POST['dat_all_day'] = 0;
     }
-    if(isset($_POST['date_registration_possible']) == false)
+    if(!isset($_POST['date_registration_possible']))
     {
         $_POST['date_registration_possible'] = 0;
     }
-    if(isset($_POST['dat_room_id']) == false)
+    if(!isset($_POST['dat_room_id']))
     {
         $_POST['dat_room_id'] = 0;
     }
 
-    if(is_numeric($_POST['dat_max_members']) == false)
+    if(!is_numeric($_POST['dat_max_members']))
     {
         $_POST['dat_max_members'] = 0;
     }
@@ -439,7 +439,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         $member = new TableMembers($gDb);
         $member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'), 1);
     }
-    elseif(isset($_POST['date_current_user_assigned']) == false
+    elseif(!isset($_POST['date_current_user_assigned'])
     && $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')) == true)
     {
         // user does't want to participate as leader -> remove his participation as leader from the event,

@@ -89,7 +89,7 @@ class TableInventoryField extends TableAccess
 
         if($columnName === 'inf_description')
         {
-            if(isset($this->dbColumns['inf_description']) == false)
+            if(!isset($this->dbColumns['inf_description']))
             {
                 $value = '';
             }

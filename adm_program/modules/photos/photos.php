@@ -399,7 +399,7 @@ if($getPhotoId > 0)
 {
     $sql = $sql.' AND pho_pho_id_parent = '.$getPhotoId.'';
 }
-if($gCurrentUser->editPhotoRight() == false)
+if(!$gCurrentUser->editPhotoRight())
 {
     $sql = $sql.' AND pho_locked = 0 ';
 }

@@ -52,7 +52,7 @@ $_SESSION['announcements_request'] = $_POST;
 
 if($getMode === 1)
 {
-    if(isset($_POST['ann_global']) == false)
+    if(!isset($_POST['ann_global']))
     {
         $_POST['ann_global'] = 0;
     }

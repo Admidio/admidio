@@ -61,7 +61,7 @@ if($getMode === 'new' || $getMode === 'change')
     //Gesendete Variablen Uebernehmen und kontollieren
 
     //Freigabe(muss zuerst gemacht werden da diese nicht gesetzt sein koennte)
-    if(isset($_POST['pho_locked']) == false)
+    if(!isset($_POST['pho_locked']))
     {
         $_POST['pho_locked'] = 0;
     }

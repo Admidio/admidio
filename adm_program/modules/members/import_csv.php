@@ -126,7 +126,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); ++$i)
 
                             foreach($arrListValues as $key => $value)
                             {
-                                if(strcmp(admStrToLower($columnValue), admStrToLower(trim($arrListValues[$position]))) == 0)
+                                if(strcmp(admStrToLower($columnValue), admStrToLower(trim($arrListValues[$position]))) === 0)
                                 {
                                     // if col_value is text than save position if text is equal to text of position
                                     $user->setValue($field->getValue('usf_name_intern'), $position);

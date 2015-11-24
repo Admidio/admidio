@@ -26,7 +26,7 @@ $image         = null;
 $picpath       = THEME_SERVER_PATH. '/images/no_profile_pic.png';
 
 // only users with the right to edit inventory could use this script
-if ($gCurrentUser->editInventory() == false)
+if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

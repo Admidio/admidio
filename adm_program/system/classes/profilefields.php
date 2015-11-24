@@ -392,7 +392,7 @@ class ProfileFields
 
         while($row = $userFieldsStatement->fetch())
         {
-            if(isset($this->mProfileFields[$row['usf_name_intern']]) == false)
+            if(!isset($this->mProfileFields[$row['usf_name_intern']]))
             {
                 $this->mProfileFields[$row['usf_name_intern']] = new TableUserField($this->mDb);
             }
@@ -427,7 +427,7 @@ class ProfileFields
 
             while($row = $userDataStatement->fetch())
             {
-                if(isset($this->mUserData[$row['usd_usf_id']]) == false)
+                if(!isset($this->mUserData[$row['usd_usf_id']]))
                 {
                     $this->mUserData[$row['usd_usf_id']] = new TableAccess($this->mDb, TBL_USER_DATA, 'usd');
                 }
@@ -521,7 +521,7 @@ class ProfileFields
                     break;
                 case 'NUMBER':
                     // A number must be numeric
-                    if(is_numeric($fieldValue) == false && $this->noValueCheck != true)
+                    if(!is_numeric($fieldValue) && $this->noValueCheck != true)
                     {
                         return false;
                     }
@@ -533,7 +533,7 @@ class ProfileFields
                     break;
                 case 'DECIMAL':
                     // A number must be numeric
-                    if(is_numeric(strtr($fieldValue, ',.', '00')) == false && $this->noValueCheck != true)
+                    if(!is_numeric(strtr($fieldValue, ',.', '00')) && $this->noValueCheck != true)
                     {
                         return false;
                     }

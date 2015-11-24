@@ -1142,7 +1142,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['multiple'] = 'multiple';
             $name = $id.'[]';
 
-            if($optionsAll['defaultValue'] !== '' && is_array($optionsAll['defaultValue']) === false)
+            if($optionsAll['defaultValue'] !== '' && !is_array($optionsAll['defaultValue']))
             {
                 $optionsAll['defaultValue'] = array($optionsAll['defaultValue']);
             }

@@ -195,7 +195,7 @@ if ($getMode === 1 || $getMode === 3)
 
         // Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
         if(($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
-        || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
+        || ($gPreferences['enable_guestbook_moderation'] == 2 && !$gCurrentUser->editGuestbookRight()))
         {
             $guestbook->setValue('gbo_locked', '1');
         }
@@ -247,7 +247,7 @@ if ($getMode === 1 || $getMode === 3)
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
         if(($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
-        || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
+        || ($gPreferences['enable_guestbook_moderation'] == 2 && !$gCurrentUser->editGuestbookRight()))
         {
             $gMessage->setForwardUrl($url);
             $gMessage->show($gL10n->get('GBO_ENTRY_QUEUED'));
@@ -386,7 +386,7 @@ elseif($getMode === 4 || $getMode === 8)
 
         // Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
         if(($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
-        || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
+        || ($gPreferences['enable_guestbook_moderation'] == 2 && !$gCurrentUser->editGuestbookRight()))
         {
             $guestbook_comment->setValue('gbc_locked', '1');
         }
@@ -438,7 +438,7 @@ elseif($getMode === 4 || $getMode === 8)
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
         if(($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
-        || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
+        || ($gPreferences['enable_guestbook_moderation'] == 2 && !$gCurrentUser->editGuestbookRight()))
         {
             $gMessage->setForwardUrl($url);
             $gMessage->show($gL10n->get('GBO_ENTRY_QUEUED'));

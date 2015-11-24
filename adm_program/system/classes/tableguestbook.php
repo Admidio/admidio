@@ -57,7 +57,7 @@ class TableGuestbook extends TableAccess
     {
         if($columnName === 'gbo_text')
         {
-            if(isset($this->dbColumns['gbo_text']) == false)
+            if(!isset($this->dbColumns['gbo_text']))
             {
                 $value = '';
             }
