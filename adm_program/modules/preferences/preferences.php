@@ -178,7 +178,7 @@ $page->addHtml('
                     <div class="panel-body">');
                         // show form
                         $form = new HtmlForm('organization_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=organization', $page, array('class' => 'form-preferences'));
-                        $form->addStaticControl('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $form_values['org_shortname'], array('class' => 'form-control-small'));
+                        $form->addInput('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $form_values['org_shortname'], array('property' => FIELD_DISABLED, 'class' => 'form-control-small'));
                         $form->addInput('org_longname', $gL10n->get('SYS_NAME'), $form_values['org_longname'], array('maxLength' => 60, 'property' => FIELD_REQUIRED));
                         $form->addInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $form_values['org_homepage'], array('maxLength' => 60));
 
@@ -219,8 +219,9 @@ $page->addHtml('
                     <div class="panel-body">');
                         // show form
                         $form = new HtmlForm('regional_settings_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=regional_settings', $page, array('class' => 'form-preferences'));
-                        $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME',
-                                                   array('property' => FIELD_REQUIRED, 'defaultValue' => $form_values['system_language'], 'showContextDependentFirstEntry' => true));
+                        $form->addInput('system_timezone', $gL10n->get('ORG_TIMEZONE'), $gTimezone, array('property' => FIELD_DISABLED, 'class' => 'form-control-small', 'helpTextIdInline' => 'ORG_TIMEZONE_DESC'));
+                        $form->addSelectBox('system_language', $gL10n->get('SYS_LANGUAGE'), $gL10n->getAvailableLanguages(),
+                                            array('property' => FIELD_REQUIRED, 'defaultValue' => $form_values['system_language']));
                         $form->addSelectBox('default_country', $gL10n->get('PRO_DEFAULT_COUNTRY'), $gL10n->getCountries(),
                                             array('defaultValue' => $form_values['default_country'], 'helpTextIdInline' => 'PRO_DEFAULT_COUNTRY_DESC'));
                         $form->addInput('system_date', $gL10n->get('ORG_DATE_FORMAT'), $form_values['system_date'], array('maxLength'        => 20,

@@ -231,6 +231,7 @@
     <string name="INS_DATA_DO_NOT_MATCH">Die Daten aus der %VAR1_BOLD% stimmen nicht mit den Angaben des Installationsassistenten überein.\n\nPrüfe bitte deine config.php und ändere die Daten entsprechend den gerade getätigten Angaben.</string>
     <string name="INS_DATA_OF_ADMINISTRATOR">Daten des Administrators</string>
     <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Gib in diesem Formular Name, E-Mail und die Zugangsdaten des Administrators an. Mit diesem Benutzer kannst du dich nach der Installation bei Admidio anmelden.</string>
+    <string name="INS_DATA_OF_ORGANIZATION">Daten der Organisation</string>
     <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Eine Aktualisierung der Datenbank ist nicht erforderlich</string>
     <string name="INS_DATABASE_FILE_NOT_FOUND">Die Datei %VAR1_BOLD% konnte nicht im Verzeichnis %VAR2_BOLD% gefunden werden.</string>
     <string name="INS_DATABASE_IS_UPDATED">Datenbank wird aktualisiert</string>
@@ -262,7 +263,6 @@
     <string name="INS_MEMBERSHIP">Mitgliedschaft</string>
     <string name="INS_MESSENGER">Messenger</string>
     <string name="INS_MYSQL_LOGIN_NOT_COMPLETELY">Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden!</string>
-    <string name="INS_NAME_OF_ORGANIZATION">Name der Organisation</string>
     <string name="INS_NO_INSTALLED_VERSION_FOUND">Die bereits installierte Version konnte nicht ermittelt werden. Falls du bisher noch Version 1.x von Admidio genutzt hast, aktualisiere zuerst auf Version 2.x und starte danach das Update auf Version %VAR1%. Falls du bereits Version 2.x oder neuer installiert hast, prüfe bitte die Konsistenz deiner Datenbank.</string>
     <string name="INS_ORGA_SHORTNAME_EXISTS">Eine Organisation mit dem Namen %VAR1_BOLD% existiert bereits. Wähle bitte einen anderen Namen aus.</string>
     <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben!</string>
@@ -688,6 +688,8 @@
     <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</string>
     <string name="ORG_TIME_FORMAT">Zeitformat</string>
     <string name="ORG_TIME_FORMAT_DESC">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: H:i)</string>
+    <string name="ORG_TIMEZONE">Zeitzone</string>
+    <string name="ORG_TIMEZONE_DESC">Dies ist die festgelegte Zeitzone. Wird diese später in der Konfigurationsdatei config.php von Admidio geändert, so werden bereits erfasste Daten und Uhrzeiten nicht an die neue Zeitzone angepasst.</string>
     <string name="ORG_URL">URL</string>
     <string name="ORG_VALUE_LIST">Werteliste</string>
     <string name="ORG_VALUE_LIST_DESC">In diesem Feld kannst du die Einträge für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Pro Zeile kann hier ein Eintrag des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Text gespeichert, sondern die ausgewählte Position aus der Liste. Ändert man somit den Text in einer Zeile, so erhalten alle bereits zugeordneten Benutzer sofort den neuen Text in ihrem Profil. Verschiebt man allerdings einen Eintrag in eine andere Zeile, so wird bei den Benutzern evtl. ein anderer Eintrag angezeigt.\n\nBei einem Optionsfeld kann anstelle eines Textes auch ein Icon angezeigt werden. Dazu kann der Name eines Icons aus dem Themeordner (Bsp.: ok.png) oder die Url eines externen Bildes (Bsp.: http://www.example.com/example.jpg) angegeben werden. Über einen senkrechten Trennstrich kann optional noch ein Tooltip zum Icon gesetzt werden (Bsp.: female.png|weiblich).</string>

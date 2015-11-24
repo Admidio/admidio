@@ -44,8 +44,14 @@ else
     define('CURRENT_URL', 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 }
 
-// default timezone so that there are no errors in php5 until Admidio supports timezones
-date_default_timezone_set('Europe/Berlin');
+// set default timezone that could be defined in the config.php
+if(!isset($gTimezone))
+{
+    $gTimezone = 'Europe/Berlin';
+}
+
+date_default_timezone_set($gTimezone);
+
 // date and time for use in scripts
 define('DATE_NOW', date('Y-m-d', time()));
 define('DATETIME_NOW', date('Y-m-d H:i:s', time()));
