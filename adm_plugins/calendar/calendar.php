@@ -80,7 +80,7 @@ if(isset($plg_kal_cat_show) == false)
 // Prüfen ob the Link-URL gesetzt wurde oder leer ist
 // wenn leer, dann Standardpfad zum Admidio-Modul
 
-if(isset($plg_link_url) == false || ($plg_link_url) =='')
+if(isset($plg_link_url) == false || $plg_link_url === '')
 {
     $plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
 }
@@ -89,15 +89,15 @@ if(isset($plg_link_url) == false || ($plg_link_url) =='')
 // Prüfen ob the CSS Link-Klassen gesetzt wurden         //
 // ///////////////////////////////////////////////////// //
 
-if(isset($plg_link_class_geb) == false || ($plg_link_class_geb) =='')
+if(isset($plg_link_class_geb) == false || $plg_link_class_geb === '')
 {
     $plg_link_class_geb = 'geb';
 }
-if(isset($plg_link_class_date) == false || ($plg_link_class_date) =='')
+if(isset($plg_link_class_date) == false || $plg_link_class_date === '')
 {
     $plg_link_class_date = 'date';
 }
-if(isset($plg_link_class_merge) == false || ($plg_link_class_merge) =='')
+if(isset($plg_link_class_merge) == false || $plg_link_class_merge === '')
 {
     $plg_link_class_date = 'merge';
 }
@@ -105,7 +105,7 @@ if(isset($plg_link_class_merge) == false || ($plg_link_class_merge) =='')
 // /////////////////////////////////////////////////////// //
 // Prüfen, ob die Rollenbedingung gesetzt wurde            //
 // /////////////////////////////////////////////////////// //
-if(isset($plg_rolle_sql) === 'all' || ($plg_rolle_sql) === '')
+if(isset($plg_rolle_sql) === 'all' || $plg_rolle_sql === '')
 {
     $rol_sql = 'is not null';
 }

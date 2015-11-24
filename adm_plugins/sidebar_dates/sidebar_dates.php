@@ -78,7 +78,7 @@ if(isset($plg_kal_cat) == false)
 
 // Prüfen ob the Link-URL gesetzt wurde oder leer ist
 // wenn leer, dann Standardpfad zum Admidio-Modul
-if(isset($plg_link_url) == false || ($plg_link_url) === '')
+if(isset($plg_link_url) == false || $plg_link_url === '')
 {
     $plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
 }
