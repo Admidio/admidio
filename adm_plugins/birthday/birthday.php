@@ -97,7 +97,7 @@ else
 }
 
 // ist der Benutzer ausgeloggt und soll nur die Anzahl der Geb-Kinder angezeigt werden, dann Zeitraum auf 0 Tage setzen
-if($plg_show_names_extern == 0 && $gValidLogin == 0)
+if($plg_show_names_extern == 0 && !$gValidLogin)
 {
     $plg_show_zeitraum = 0;
     $plg_show_future = 0;
@@ -177,7 +177,7 @@ if($plg_show_headline == 1)
 
 if($numberBirthdays > 0)
 {
-    if($plg_show_names_extern == 1 || $gValidLogin == 1)
+    if($plg_show_names_extern == 1 || $gValidLogin)
     {
 
         echo '<ul id="plgBirthdayNameList">';
@@ -202,8 +202,7 @@ if($numberBirthdays > 0)
                 }
 
                 // ab einem festgelegten Alter wird fuer ausgeloggte Besucher nur der Nachname mit Anrede angezeigt
-                if($gValidLogin == false
-                && $plg_show_alter_anrede <= $row['age'])
+                if(!$gValidLogin && $plg_show_alter_anrede <= $row['age'])
                 {
                     if (($row['gender']) > 1)
                     {
@@ -237,7 +236,7 @@ if($numberBirthdays > 0)
                 }
 
                 // Soll das Alter auch für nicht angemeldete Benutzer angezeigt werden?
-                if($plg_show_names_extern < 2 || $gValidLogin == true)
+                if($plg_show_names_extern < 2 || $gValidLogin)
                 {
                     // Geburtstagskinder am aktuellen Tag bekommen anderen Text
                     if($row['days_to_bdate'] == 0)

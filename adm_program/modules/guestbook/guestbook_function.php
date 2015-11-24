@@ -194,7 +194,7 @@ if ($getMode === 1 || $getMode === 3)
         }
 
         // Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
-        if(($gPreferences['enable_guestbook_moderation'] == 1 && $gValidLogin == false)
+        if(($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
         || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
         {
             $guestbook->setValue('gbo_locked', '1');
@@ -246,7 +246,7 @@ if ($getMode === 1 || $getMode === 3)
         $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline;
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
-        if(($gPreferences['enable_guestbook_moderation'] == 1 && $gValidLogin == false)
+        if(($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
         || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
         {
             $gMessage->setForwardUrl($url);
@@ -385,7 +385,7 @@ elseif($getMode === 4 || $getMode === 8)
         }
 
         // Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
-        if(($gPreferences['enable_guestbook_moderation'] == 1 && $gValidLogin == false)
+        if(($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
         || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
         {
             $guestbook_comment->setValue('gbc_locked', '1');
@@ -437,7 +437,7 @@ elseif($getMode === 4 || $getMode === 8)
         $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook_comment->getValue('gbc_gbo_id'). '&headline='. $getHeadline;
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
-        if(($gPreferences['enable_guestbook_moderation'] == 1 && $gValidLogin == false)
+        if(($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
         || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
         {
             $gMessage->setForwardUrl($url);

@@ -262,7 +262,7 @@ class ModuleLists extends Modules
         $sql_conditions = $this->getCategorySql().$this->getVisibleRolesSql();
 
         //provoke empty result for not logged in users
-        if($gValidLogin == false)
+        if(!$gValidLogin)
         {
             $sql_conditions .= ' AND cat_hidden = 0 ';
         }
@@ -317,7 +317,7 @@ class ModuleLists extends Modules
         //assemble conditions
         $sql_conditions = $this->getCategorySql().$this->getVisibleRolesSql();
         //provoke empty result for not logged in users
-        if($gValidLogin == false)
+        if(!$gValidLogin)
         {
             $sql_conditions= ' AND cat_hidden = 0 ';
         }

@@ -284,7 +284,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                     </a>';
                 }
 
-                if($gCurrentUser->editPhotoRight() || ($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled'] == 1)
+                if($gCurrentUser->editPhotoRight() || ($gValidLogin && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled'] == 1)
                 {
                    $photoThumbnailTable .= '<div class="text-center" id="image_preferences_'.$actThumbnail.'">';
                 }
@@ -304,7 +304,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 
                 }
 
-                if($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1)
+                if($gValidLogin && $gPreferences['enable_ecard_module'] == 1)
                 {
                     $photoThumbnailTable .= '
                     <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/ecards/ecards.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getPhotoNr.'"><img
@@ -319,7 +319,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                                     src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'" title="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'"  /></a>';
                 }
 
-                if($gCurrentUser->editPhotoRight() || ($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled'] == 1)
+                if($gCurrentUser->editPhotoRight() || ($gValidLogin && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled'] == 1)
                 {
                    $photoThumbnailTable .= '</div>';
                 }

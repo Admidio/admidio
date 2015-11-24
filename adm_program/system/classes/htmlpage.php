@@ -167,7 +167,7 @@ class HtmlPage
             $this->menu->addItem('menu_item_download', '/adm_program/modules/downloads/downloads.php',
                                 $gL10n->get('DOW_DOWNLOADS'), 'download.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
         }
-        if($gPreferences['enable_mail_module'] == 1 && $gValidLogin == false)
+        if($gPreferences['enable_mail_module'] == 1 && !$gValidLogin)
         {
             $this->menu->addItem('menu_item_email', '/adm_program/modules/messages/messages_write.php',
                                 $gL10n->get('SYS_EMAIL'), 'email.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');

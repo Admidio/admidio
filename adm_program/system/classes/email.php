@@ -337,7 +337,7 @@ class Email extends PHPMailer
 
         $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_RECEIVER', $senderCode, $gCurrentOrganization->getValue('org_homepage'), $receivers);
 
-        if($gValidLogin == false)
+        if(!$gValidLogin)
         {
             $senderText = $senderText."\r\n".$gL10n->get('MAI_SENDER_NOT_LOGGED_IN');
         }

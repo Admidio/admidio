@@ -90,7 +90,7 @@ echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
         echo '<h3>'.$gL10n->get('SYS_LOGIN').'</h3>';
     }
 
-if($gValidLogin == 1)
+if($gValidLogin)
 {
     if($plg_link_target !== '' && strpos($plg_link_target, '_') === false)
     {

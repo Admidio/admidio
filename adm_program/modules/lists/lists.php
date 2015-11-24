@@ -106,7 +106,7 @@ $numberOfRoles = $lists->getDataSetCount();
 
 if($numberOfRoles == 0)
 {
-    if($gValidLogin == true)
+    if($gValidLogin)
     {
         // If login valid, than show message for non available roles
         if($getActiveRole == 0)

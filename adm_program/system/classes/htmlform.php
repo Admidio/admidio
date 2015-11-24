@@ -1502,7 +1502,7 @@ class HtmlForm extends HtmlFormBasic
             $sqlCondidtions .= ' AND cat_system = 0 ';
         }
 
-        if($gValidLogin === false)
+        if(!$gValidLogin)
         {
             $sqlCondidtions .= ' AND cat_hidden = 0 ';
         }

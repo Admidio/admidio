@@ -53,7 +53,7 @@ else
 }
 
 // if current user has no login then only show registration dialog
-if($gValidLogin == false)
+if(!$gValidLogin)
 {
     $getNewUser = 2;
 }

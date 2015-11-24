@@ -38,7 +38,7 @@ $weblink = new TableWeblink($gDb, $getLinkId);
 
 // Wenn kein Link gefunden wurde Fehler ausgeben
 if(strlen($weblink->getValue('lnk_url')) === 0
-|| ($gValidLogin == false && $weblink->getValue('cat_hidden') == 1))
+|| (!$gValidLogin && $weblink->getValue('cat_hidden') == 1))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }

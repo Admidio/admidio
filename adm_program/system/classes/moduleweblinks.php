@@ -141,7 +141,7 @@ class ModuleWeblinks extends Modules
         {
             $this->getConditions = ' AND cat_id = '. $this->getParameter('cat_id');
         }
-        if($gValidLogin == false)
+        if(!$gValidLogin)
         {
             // if user isn't logged in, then don't show hidden categories
             $this->getConditions .= ' AND cat_hidden = 0 ';

@@ -27,7 +27,7 @@ $getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric');
 
 // if current user has no login then only show registration dialog
-if($gValidLogin == false)
+if(!$gValidLogin)
 {
     $getNewUser = 2;
 }
