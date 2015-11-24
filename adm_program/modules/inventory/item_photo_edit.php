@@ -51,7 +51,7 @@ if($gPreferences['profile_photo_storage'] == 1)
 {
     // ggf. Ordner für Userfotos in adm_my_files anlegen
     $myFilesProfilePhotos = new MyFiles('USER_PROFILE_PHOTOS');
-    if($myFilesProfilePhotos->checkSettings() == false)
+    if(!$myFilesProfilePhotos->checkSettings())
     {
         $gMessage->show($gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
     }
@@ -189,7 +189,7 @@ elseif($getMode === 'upload')
     }
 
     //Kontrolle ob Fotos ausgewaehlt wurden
-    if(file_exists($_FILES['userfile']['tmp_name'][0]) == false)
+    if(!file_exists($_FILES['userfile']['tmp_name'][0]))
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_NOT_CHOOSEN'));
     }

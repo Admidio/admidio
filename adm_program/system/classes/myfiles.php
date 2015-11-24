@@ -46,31 +46,31 @@ class MyFiles extends Folder
     // Return: true/false - if false than check the parameters $errorText, $errorPath
     public function checkSettings()
     {
-        if(is_writeable($this->modulePath) == false)
+        if(!is_writable($this->modulePath))
         {
-            if(file_exists($this->modulePath) == false)
+            if(!file_exists($this->modulePath))
             {
-                if(is_writeable(SERVER_PATH. '/adm_my_files') == false)
+                if(!is_writable(SERVER_PATH. '/adm_my_files'))
                 {
-                    if(file_exists(SERVER_PATH. '/adm_my_files') == false)
+                    if(!file_exists(SERVER_PATH. '/adm_my_files'))
                     {
                         // create folder adm_my_files
                         if(@mkdir(SERVER_PATH. '/adm_my_files', 0777) == false)
                         {
                             $this->errorText = 'SYS_FOLDER_NOT_CREATED';
                             $this->errorPath = $this->webPath;
-                            return 0;
+                            return false;
                         }
                     }
 
-                    if(is_writeable(SERVER_PATH. '/adm_my_files') == false)
+                    if(!is_writable(SERVER_PATH. '/adm_my_files'))
                     {
                         // set adm_my_files writable
                         if(@chmod(SERVER_PATH. '/adm_my_files', 0777) == false)
                         {
                             $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
                             $this->errorPath = $this->webPath;
-                            return 0;
+                            return false;
                         }
                     }
                 }
@@ -79,7 +79,7 @@ class MyFiles extends Folder
                 if(@mkdir($this->modulePath, 0777))
                 {
                     // create htaccess file for folder adm_my_files if necessary
-                    if (file_exists(SERVER_PATH. '/adm_my_files/.htaccess') == false)
+                    if (!file_exists(SERVER_PATH. '/adm_my_files/.htaccess'))
                     {
                         $protection = new Htaccess(SERVER_PATH. '/adm_my_files');
                         $protection->protectFolder();
@@ -89,18 +89,18 @@ class MyFiles extends Folder
                 {
                     $this->errorText = 'SYS_FOLDER_NOT_CREATED';
                     $this->errorPath = $this->webPath;
-                    return 0;
+                    return false;
                 }
             }
 
-            if(is_writeable($this->modulePath) == false)
+            if(!is_writable($this->modulePath))
             {
                 // set module folder writable
                 if(@chmod($this->folderWithPath, 0777) == false)
                 {
                     $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
                     $this->errorPath = $this->webPath;
-                    return 0;
+                    return false;
                 }
             }
         }
@@ -122,9 +122,9 @@ class MyFiles extends Folder
         if(admStrIsValidFileName($folder))
         {
             $tempPath = $this->modulePath. '/'. $folder;
-            if(is_writeable($tempPath) == false)
+            if(!is_writable($tempPath))
             {
-                if(file_exists($tempPath) == false)
+                if(!file_exists($tempPath))
                 {
                     // create folder
                     if(@mkdir($tempPath, 0777) == false)
@@ -136,7 +136,7 @@ class MyFiles extends Folder
                 }
             }
 
-            if(is_writeable($tempPath) == false)
+            if(!is_writable($tempPath))
             {
                 // set folder writable
                 if(@chmod($tempPath, 0777) == false)

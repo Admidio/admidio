@@ -50,7 +50,7 @@ $_SESSION['download_request'] = $_POST;
 
 // Pfad in adm_my_files pruefen und ggf. anlegen
 $myFilesDownload = new MyFiles('DOWNLOAD');
-if($myFilesDownload->checkSettings() == false)
+if(!$myFilesDownload->checkSettings())
 {
     $gMessage->show($gL10n->get($myFilesDownload->errorText, $myFilesDownload->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
 }

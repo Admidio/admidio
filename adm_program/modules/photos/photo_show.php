@@ -90,7 +90,7 @@ if($getThumbnail)
         if(!file_exists($ordner.'/thumbnails/'.$getPhotoNr.'.jpg') || $thumb_length !=$gPreferences['photo_thumbs_scale'])
         {
             //Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
-            if(file_exists($ordner.'/thumbnails') == false)
+            if(!file_exists($ordner.'/thumbnails'))
             {
                 $folder = new Folder($ordner);
                 $folder->createFolder('thumbnails', true);
@@ -116,7 +116,7 @@ if($getThumbnail)
 }
 else
 {
-    if(file_exists($picpath) == false)
+    if(!file_exists($picpath))
     {
         $picpath = THEME_SERVER_PATH. '/images/nopix.jpg';
     }

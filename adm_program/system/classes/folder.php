@@ -92,7 +92,7 @@ class Folder
         if($writable)
         {
             // der Ordner existiert, aber die Schreibrechte noch nicht
-            if(!is_writeable($newPath))
+            if(!is_writable($newPath))
             {
                 $retCode = @chmod($newPath, 0777);
             }

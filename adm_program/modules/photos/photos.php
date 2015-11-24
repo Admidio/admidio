@@ -502,7 +502,7 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
                     </div>');
 
                     // Notice for users with foto edit rights that the folder of the album doesn't exists
-                    if(file_exists($ordner) == false && $childPhotoAlbum->hasChildAlbums() == false && $gCurrentUser->editPhotoRight())
+                    if(!file_exists($ordner) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->editPhotoRight())
                     {
                         $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('PHO_FOLDER_NOT_FOUND').'</div>');
                     }

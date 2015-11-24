@@ -41,7 +41,7 @@ if($gDbType !== 'mysql')
 
 // check backup path in adm_my_files and create it if necessary
 $myFilesBackup = new MyFiles('BACKUP');
-if($myFilesBackup->checkSettings() == false)
+if(!$myFilesBackup->checkSettings())
 {
     $gMessage->show($gL10n->get($myFilesBackup->errorText, $myFilesBackup->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
 }

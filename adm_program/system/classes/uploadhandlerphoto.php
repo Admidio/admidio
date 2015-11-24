@@ -54,7 +54,7 @@ class UploadHandlerPhoto extends UploadHandler
                 $albumFolder  = SERVER_PATH.'/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
 
                 // create folder if not exists
-                if(file_exists($albumFolder) === false)
+                if(!file_exists($albumFolder))
                 {
                     $error = $photoAlbum->createFolder();
 

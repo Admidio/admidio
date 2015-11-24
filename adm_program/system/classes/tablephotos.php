@@ -77,7 +77,7 @@ class TablePhotos extends TableAccess
 
         // Pfad in adm_my_files pruefen und ggf. anlegen
         $myFilesPhotos = new MyFiles('PHOTOS');
-        if($myFilesPhotos->checkSettings() == false)
+        if(!$myFilesPhotos->checkSettings())
         {
             $error['text'] = $myFilesPhotos->errorText;
             $error['path'] = $myFilesPhotos->errorPath;
@@ -160,7 +160,7 @@ class TablePhotos extends TableAccess
      */
     public function hasChildAlbums()
     {
-        if($this->hasChildAlbums == null)
+        if($this->hasChildAlbums === null)
         {
             $sql     = 'SELECT COUNT(1) FROM '. TBL_PHOTOS. '
                          WHERE pho_pho_id_parent = '.$this->getValue('pho_id');
