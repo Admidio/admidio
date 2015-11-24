@@ -276,7 +276,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
         }
     }
 
-    $page_string = '<ul class="pagination">' . $page_string. '</ul>';
+    $page_string = '<ul class="pagination">' . $page_string . '</ul>';
 
     return $page_string;
 }
@@ -330,7 +330,7 @@ function admFuncProcessableImageSize()
         $memory_limit = '8M';
     }
     //falls in php.ini abgeschaltet
-    if($memory_limit == -1)
+    if($memory_limit === '-1')
     {
         $memory_limit = '128M';
     }
@@ -574,7 +574,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
 
                 if($gPreferences['system_show_create_edit'] == 1)
                 {
-                    $htmlEditName = $userEdit->getValue('FIRST_NAME'). ' '. $userEdit->getValue('LAST_NAME');
+                    $htmlEditName = $userEdit->getValue('FIRST_NAME') . ' ' . $userEdit->getValue('LAST_NAME');
                 }
                 else
                 {

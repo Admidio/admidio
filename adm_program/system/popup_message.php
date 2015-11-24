@@ -141,12 +141,12 @@ echo '
 </div>
 <div class="modal-footer">
         <button id="btn_yes" class="btn btn-default" type="button" onclick="callUrlHideElement(\''.$get_element_id.'\', \''.$url.'\''.$callbackFunction.')">
-            <img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;
+            <img src="'.THEME_PATH.'/icons/ok.png" alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;
         </button>
         <button id="btn_no" class="btn btn-default" type="button" data-dismiss="modal">
-            <img src="'. THEME_PATH. '/icons/error.png" alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'
+            <img src="'.THEME_PATH.'/icons/error.png" alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'
         </button>
         <button id="btn_close" class="btn btn-default hidden" type="button" data-dismiss="modal">
-            <img src="'. THEME_PATH. '/icons/close.png" alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'
+            <img src="'.THEME_PATH.'/icons/close.png" alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'
         </button>
 </div>';

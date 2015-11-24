@@ -124,11 +124,13 @@ class ListConfiguration extends TableLists
                 // only 1 columns is deleted and following are going 1 step up
                 for($newColumnNumber = $number; $newColumnNumber < $this->countColumns(); ++$newColumnNumber)
                 {
-                    $this->columns[$newColumnNumber]->setValue('lsc_usf_id', $this->columns[$newColumnNumber+1]->getValue('lsc_usf_id'));
-                    $this->columns[$newColumnNumber]->setValue('lsc_special_field', $this->columns[$newColumnNumber+1]->getValue('lsc_special_field'));
-                    $this->columns[$newColumnNumber]->setValue('lsc_sort',   $this->columns[$newColumnNumber+1]->getValue('lsc_sort'));
-                    $this->columns[$newColumnNumber]->setValue('lsc_filter', $this->columns[$newColumnNumber+1]->getValue('lsc_filter'));
-                    $this->columns[$newColumnNumber]->save();
+                    $newColumn = $this->columns[$newColumnNumber];
+                    $oldColumn = $this->columns[$newColumnNumber+1];
+                    $newColumn->setValue('lsc_usf_id',        $oldColumn->getValue('lsc_usf_id'));
+                    $newColumn->setValue('lsc_special_field', $oldColumn->getValue('lsc_special_field'));
+                    $newColumn->setValue('lsc_sort',          $oldColumn->getValue('lsc_sort'));
+                    $newColumn->setValue('lsc_filter',        $oldColumn->getValue('lsc_filter'));
+                    $newColumn->save();
                 }
                 $this->columns[$newColumnNumber]->delete();
                 array_pop($this->columns);

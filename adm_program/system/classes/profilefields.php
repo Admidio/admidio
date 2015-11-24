@@ -114,8 +114,7 @@ class ProfileFields
     {
         global $gPreferences, $g_root_path, $gL10n;
 
-        if($value !== ''
-        && array_key_exists($fieldNameIntern, $this->mProfileFields) == true)
+        if($value !== '' && array_key_exists($fieldNameIntern, $this->mProfileFields))
         {
             // create html for each field type
             $htmlValue = $value;
@@ -272,7 +271,7 @@ class ProfileFields
         else
         {
             // special case for type CHECKBOX and no value is there, then show unchecked checkbox
-            if(array_key_exists($fieldNameIntern, $this->mProfileFields) == true
+            if(array_key_exists($fieldNameIntern, $this->mProfileFields)
             && $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'CHECKBOX')
             {
                 $value = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';

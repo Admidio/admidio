@@ -250,7 +250,7 @@ class Database
         foreach ($backtrace as $number => $trace)
         {
             // We skip the first one, because it only shows this file/function
-            if ($number == 0)
+            if ($number === 0)
             {
                 continue;
             }
@@ -306,8 +306,8 @@ class Database
     {
         if ($this->minRequiredVersion === '')
         {
-            $xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', 0, true);
-            $node = $xmlDatabases->xpath("/databases/database[@id='".$this->engine."']/minversion");
+            $xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', null, true);
+            $node = $xmlDatabases->xpath('/databases/database[@id="'.$this->engine.'"]/minversion');
             $this->minRequiredVersion = (string) $node[0]; // explicit typcasting because of problem with simplexml and sessions
         }
         return $this->minRequiredVersion;
@@ -321,8 +321,8 @@ class Database
     {
         if ($this->databaseName === '')
         {
-            $xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', 0, true);
-            $node = $xmlDatabases->xpath("/databases/database[@id='".$this->engine."']/name");
+            $xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', null, true);
+            $node = $xmlDatabases->xpath('/databases/database[@id="'.$this->engine.'"]/name');
             $this->databaseName = (string) $node[0]; // explicit typcasting because of problem with simplexml and sessions
         }
         return $this->databaseName;

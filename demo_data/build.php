@@ -186,7 +186,7 @@ echo 'Read file data.sql ...<br />';
 
 foreach($sql_arr as $sql)
 {
-    if(strlen(trim($sql)) > 0)
+    if(trim($sql) !== '')
     {
         // set prefix for all tables and execute sql statement
         $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);

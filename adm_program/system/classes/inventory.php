@@ -285,7 +285,7 @@ class Inventory extends TableInventory
 
         if(is_object($item))
         {
-            //Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
+            // Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
             if($gCurrentUser->editInventory($item) == 0)
             {
                 $viewProfile = true;
@@ -299,16 +299,16 @@ class Inventory extends TableInventory
                 }
                 else
                 {
-                    $sql    = 'SELECT rol_id, rol_this_list_view
-                                 FROM '. TBL_INVENTORY. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                                WHERE mem_usr_id = '.$item->getValue('inv_id'). '
-                                  AND mem_begin <= \''.DATE_NOW.'\'
-                                  AND mem_end    > \''.DATE_NOW.'\'
-                                  AND mem_rol_id = rol_id
-                                  AND rol_valid  = 1
-                                  AND rol_cat_id = cat_id
-                                  AND (  cat_org_id = '.$this->organizationId.'
-                                      OR cat_org_id IS NULL ) ';
+                    $sql = 'SELECT rol_id, rol_this_list_view
+                              FROM '. TBL_INVENTORY. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                             WHERE mem_usr_id = '.$item->getValue('inv_id'). '
+                               AND mem_begin <= \''.DATE_NOW.'\'
+                               AND mem_end    > \''.DATE_NOW.'\'
+                               AND mem_rol_id = rol_id
+                               AND rol_valid  = 1
+                               AND rol_cat_id = cat_id
+                               AND (  cat_org_id = '.$this->organizationId.'
+                                   OR cat_org_id IS NULL ) ';
                     $pdoStatement = $this->db->query($sql);
 
                     if($pdoStatement->rowCount() > 0)

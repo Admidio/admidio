@@ -73,7 +73,7 @@ class ComponentUpdate extends Component
         {
             // if the sql statement is only for a special database and you do
             // not have this database then don't execute this statement
-            if(isset($xmlNode['database']) && $xmlNode['database'] != $gDbType)
+            if(isset($xmlNode['database']) && $xmlNode['database'] !== $gDbType)
             {
                 $executeSql = false;
             }
@@ -173,8 +173,7 @@ class ComponentUpdate extends Component
             for($subVersion = $initialSubVersion; $subVersion <= $maxSubVersion; ++$subVersion)
             {
                 // if version is not equal to current version then start update step with 0
-                if($mainVersion != $this->currentVersionArray[0]
-                || $subVersion  != $this->currentVersionArray[1])
+                if($mainVersion != $this->currentVersionArray[0] || $subVersion != $this->currentVersionArray[1])
                 {
                     $this->setValue('com_update_step', 0);
                     $this->save();

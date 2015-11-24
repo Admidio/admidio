@@ -110,7 +110,7 @@ $gL10n = new Language();
 if(array_key_exists('gCurrentSession', $_SESSION))
 {
     // read session object from PHP session
-    $gCurrentSession       = $_SESSION['gCurrentSession'];
+    $gCurrentSession = $_SESSION['gCurrentSession'];
     $gCurrentSession->setDatabase($gDb);
     // reload session data and if necessary the organization object
     $gCurrentSession->refreshSession();
@@ -120,7 +120,7 @@ if(array_key_exists('gCurrentSession', $_SESSION))
     $gL10n->addLanguageData($gCurrentSession->getObject('gLanguageData'));
     // read organization data from session object
     $gCurrentOrganization =& $gCurrentSession->getObject('gCurrentOrganization');
-    $gPreferences          = $gCurrentOrganization->getPreferences();
+    $gPreferences = $gCurrentOrganization->getPreferences();
 
     // compute time in ms from last activity in session until now
     $time_gap = time() - strtotime($gCurrentSession->getValue('ses_timestamp', 'Y-m-d H:i:s'));
@@ -131,7 +131,7 @@ if(array_key_exists('gCurrentSession', $_SESSION))
     {
         // restore user from auto login session
         $autoLogin = new AutoLogin($gDb, $gSessionId);
-        $autoLogin->setValidLogin($gCurrentSession, $_COOKIE[$gCookiePraefix. '_DATA']);
+        $autoLogin->setValidLogin($gCurrentSession, $_COOKIE[$gCookiePraefix . '_DATA']);
         $userIdAutoLogin = $autoLogin->getValue('atl_usr_id');
     }
 }

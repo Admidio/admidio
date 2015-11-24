@@ -82,6 +82,7 @@ class Image
     public function setImageFromData($imageData)
     {
         $this->imageResource = imagecreatefromstring($imageData);
+
         if($this->imageResource !== false)
         {
             $this->imageWidth  = imagesx($this->imageResource);

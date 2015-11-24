@@ -100,7 +100,7 @@ class Email extends PHPMailer
 
             if($gDebug)
             {
-                $this->SMTPDebug  = 2;
+                $this->SMTPDebug = 2;
             }
         }
         else
@@ -130,7 +130,7 @@ class Email extends PHPMailer
         {
             //$this->emBccArray[] = '"'. $asciiName. '" <'. $address. '>';
             $this->emBccArray[] = array('name' => $asciiName, 'address' => $address);
-            $this->emAddresses = $this->emAddresses. $name. ', '.$address."\r\n";
+            $this->emAddresses = $this->emAddresses.$name.', '.$address."\r\n";
             return true;
         }
         return false;
@@ -157,7 +157,8 @@ class Email extends PHPMailer
            return $e->errorMessage();
         }
 
-        $this->emAddresses = $this->emAddresses. $name. ', '. $address. "\r\n";
+        $this->emAddresses = $this->emAddresses.$name.', '.$address."\r\n";
+
         return true;
     }
 
@@ -182,7 +183,7 @@ class Email extends PHPMailer
            return $e->errorMessage();
         }
 
-        $this->emAddresses = $this->emAddresses. $name. ', '. $address. "\r\n";
+        $this->emAddresses = $this->emAddresses.$name.', '.$address."\r\n";
 
         return true;
     }
@@ -388,7 +389,7 @@ class Email extends PHPMailer
             }
 
             // Set Subject
-            $this->setSubject($gCurrentOrganization->getValue('org_shortname'). ': '.$subject);
+            $this->setSubject($gCurrentOrganization->getValue('org_shortname').': '.$subject);
 
             // send html if preference is set
             if($gPreferences['mail_html_registered_users'] == 1)
@@ -436,7 +437,7 @@ class Email extends PHPMailer
         if (isset($this->emBccArray))
         {
             // Bcc Array in Päckchen zerlegen
-            $bccArrays =  array_chunk($this->emBccArray, $gPreferences['mail_bcc_count']);
+            $bccArrays = array_chunk($this->emBccArray, $gPreferences['mail_bcc_count']);
 
             foreach($bccArrays as $bccArray)
             {

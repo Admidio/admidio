@@ -366,7 +366,7 @@ class ConditionParser
                             {
                                 if($this->getFormatDate($date, $operator) !== '')
                                 {
-                                    $this->mDestCond = $this->mDestCond. $this->getFormatDate($date, $operator);
+                                    $this->mDestCond = $this->mDestCond.$this->getFormatDate($date, $operator);
                                 }
                                 else
                                 {
