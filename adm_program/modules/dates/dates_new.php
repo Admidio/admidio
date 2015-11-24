@@ -110,7 +110,7 @@ else
         $dateRoles = $date->getVisibleRoles();
 
         // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-        if($date->editRight() == false)
+        if(!$date->editRight())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }

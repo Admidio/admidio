@@ -390,7 +390,7 @@ elseif($getMode === 8)
 }
 elseif($getMode === 9)
 {
-    if($role->hasFormerMembers() == true)
+    if($role->hasFormerMembers())
     {
         echo '1';
     }

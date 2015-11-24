@@ -148,7 +148,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); ++$i)
                             break;
                         case 'INTEGER':
                             // number could contain dot and comma
-                            if(is_numeric(strtr($columnValue, ',.', '00')) == true)
+                            if(is_numeric(strtr($columnValue, ',.', '00')))
                             {
                                 $user->setValue($field->getValue('usf_name_intern'), $columnValue);
                             }

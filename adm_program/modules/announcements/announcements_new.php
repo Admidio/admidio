@@ -54,7 +54,7 @@ if($getAnnId > 0)
     $announcement->readDataById($getAnnId);
 
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-    if($announcement->editRight() == false)
+    if(!$announcement->editRight())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }

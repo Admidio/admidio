@@ -128,7 +128,7 @@ echo '
                 }
             echo '</p>';
 
-            if(isMember($row['usr_id']) == false)
+            if(!isMember($row['usr_id']))
             {
                 // gefundene User ist noch KEIN Mitglied dieser Organisation
                 $link = $g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$row['usr_id'];

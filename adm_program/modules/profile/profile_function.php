@@ -141,7 +141,7 @@ elseif($getMode === 7)
     $role   = new TableRoles($gDb, $member->getValue('mem_rol_id'));
 
     // check if user has the right to edit this membership
-    if($role->allowedToAssignMembers($gCurrentUser) == false)
+    if(!$role->allowedToAssignMembers($gCurrentUser))
     {
         exit($gL10n->get('SYS_NO_RIGHTS'));
     }

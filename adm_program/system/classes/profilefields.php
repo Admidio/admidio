@@ -571,7 +571,7 @@ class ProfileFields
         {
             $returnCode = $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->setValue('usd_value', $fieldValue);
         }
-        elseif(isset($this->mProfileFields[$fieldNameIntern]) == true && $fieldValue !== '')
+        elseif(isset($this->mProfileFields[$fieldNameIntern]) && $fieldValue !== '')
         {
             $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')] = new TableAccess($this->mDb, TBL_USER_DATA, 'usd');
             $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->setValue('usd_usf_id', $this->mProfileFields[$fieldNameIntern]->getValue('usf_id'));

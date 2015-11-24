@@ -65,7 +65,7 @@ if($getDateId > 0)
     $date->readDataById($getDateId);
 
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-    if($date->editRight() == false)
+    if(!$date->editRight())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -433,14 +433,14 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
 
     // check if flag is set that current user wants to participate as leader to the date
     if(isset($_POST['date_current_user_assigned']) && $_POST['date_current_user_assigned'] == 1
-    && $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')) == false)
+    && !$gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')))
     {
         // user wants to participate -> add him to date
         $member = new TableMembers($gDb);
         $member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'), 1);
     }
     elseif(!isset($_POST['date_current_user_assigned'])
-    && $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')) == true)
+    && $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')))
     {
         // user does't want to participate as leader -> remove his participation as leader from the event,
         // dont remove the participation itself!

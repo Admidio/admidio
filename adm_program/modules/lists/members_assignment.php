@@ -48,7 +48,7 @@ if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') &&
 }
 
 // check if user is allowed to assign members to this role
-if($role->allowedToAssignMembers($gCurrentUser) == false)
+if(!$role->allowedToAssignMembers($gCurrentUser))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
