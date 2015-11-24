@@ -1,54 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="en">
-    <version id="3.1.0" translator="Markus Faßbender">
-        <text id="DEMO_DAT_TEAM_TRAINING" development="new" translation="todo">Team training</text>
-        <text id="DEMO_DAT_TEAM_TRAINING_LOCATION" development="new" translation="todo">Sports hall Alpenstraße Salzburg</text>
-    </version>
-    <version id="2.4.0" translator="Markus Faßbender">
-        <text id="DEMO_CHAIRMAN" development="new" translation="todo">Chairman</text>
-        <text id="DEMO_ANN_WELCOME" development="new" translation="todo">Welcome to the demo area</text>
-        <text id="DEMO_ANN_WELCOME_CONTENT" development="new" translation="todo">[p]In this area you can play around with Admidio and see if the features of the program to fit your needs.[/p][p]We have also provided a couple of test data, so you can see in the individual modules, how this could look on your page later. You are welcome to play with this installation.[/p][p]We have created a few test accounts with different rights:[/p][p][span style="color:#008080;"][strong]Webmaster[/strong][/span][/p][table border="0" cellpadding="1" cellspacing="1" style="width: 100%;"][tbody][tr][td]Username:[/td][td][strong]Admin[/strong][/td][/tr][tr][td]Password:[/td][td][strong]Admidio[/strong][/td][/tr][tr][td]Rights:[/td][td]Can see and edit everything. More rights are not possible :)[/td][/tr][/tbody][/table][p][span style="color:#008080;"][strong]Chairman[/strong][/span][/p][table border="0" cellpadding="1" cellspacing="1" style="width: 100%;"][tbody][tr][td]Username:[/td][td][strong]Chairman[/strong][/td][/tr][tr][td]Password:[/td][td][strong]Admidio[/strong][/td][/tr][tr][td]Rights:[/td][td]Can edit and view everything, except assigning roles and changing program/module settings.[/td][/tr][/tbody][/table][p][span style="color:#008080;"][strong]Member[/strong][/span][/p][table border="0" cellpadding="1" cellspacing="1" style="width: 100%;"][tbody][tr][td]Username:[/td][td][strong]Member[/strong][/td][/tr][tr][td]Password:[/td][td][strong]Admidio[/strong][/td][/tr][tr][td]Rechte:[/td][td]Can edit his profile and view lists of roles, where he is a member.[/td][/tr][/tbody][/table][p]Have fun trying ![br /]The Admidio Team[/p]</text>
-        <text id="DEMO_ANN_NEW_JERSEYS" development="new" translation="todo">New jerseys</text>
-        <text id="DEMO_ANN_NEW_JERSEYS_CONTENT" development="new" translation="todo">Starting next season, there are new jerseys for all active players. These can be picked up before the first training at the trainer.</text>
-        <text id="DEMO_ANN_AEROBICS_COURSE" development="new" translation="todo">Aerobics course</text>
-        <text id="DEMO_ANN_AEROBICS_COURSE_CONTENT" development="new" translation="todo">During the holidays we offer a [i]aerobic course[/i] to all interested members.\n\nRegistrations are accepted on our [b]homepage[/b] or in our [b]office[/b].</text>
-        <text id="DEMO_DAT_YOUTH_TRAINING" development="new" translation="todo">Youth training 1</text>
-        <text id="DEMO_DAT_YOUTH_TRAINING_LOCATION" development="new" translation="todo">Sports field Norwich</text>
-        <text id="DEMO_DAT_YOUTH_TRAINING_CONTENT" development="new" translation="todo">Today we will put the focus on physical fitness and stamina.\n\nPlease appear all in time with running shoes on the sports field!</text>
-        <text id="DEMO_DAT_BARBECUE" development="new" translation="todo">Barbecue</text>
-        <text id="DEMO_DAT_BARBECUE_CONTENT" development="new" translation="todo">Today we have our barbecue. In addition to crisp sausages, chops and bacon, there are also various salads.</text>
-        <text id="DEMO_DAT_TRAINER_COURSE" development="new" translation="todo">Trainer course</text>
-        <text id="DEMO_DAT_TRAINER_COURSE_LOCATION" development="new" translation="todo">Youth hostel Lyon</text>
-        <text id="DEMO_DAT_TRAINER_COURSE_CONTENT" development="new" translation="todo">A four-day training course for youth coaches from the tennis department :)</text>
-        <text id="DEMO_DAT_COMPUTER_COURSE" development="new" translation="todo">Computer course</text>
-        <text id="DEMO_DAT_COMPUTER_COURSE_LOCATION" development="new" translation="todo">Munich Marienplatz</text>
-        <text id="DEMO_DAT_COMPUTER_COURSE_CONTENT" development="new" translation="todo">The focus of this course lies with the Office products.</text>
-        <text id="DEMO_DAT_TRIP_AMSTERDAM" development="new" translation="todo">Trip to Amsterdam</text>
-        <text id="DEMO_DAT_TRIP_AMSTERDAM_LOCATION" development="new" translation="todo">Amsterdam Gracht</text>
-        <text id="DEMO_DAT_TRIP_AMSTERDAM_CONTENT" development="new" translation="todo">On this hopefully sunny day it goes to Amsterdam.\n\nA canal cruise and a shopping trip are planned.</text>
-        <text id="DEMO_GBO_WEBMASTER_WELCOME" development="new" translation="todo">Welcome to the guestbook of the demo area.\n\nHere you can play around and test the capabilities of Admidio.\n\nWe hope you enjoy it and that we can convince you of this great program.</text>
-        <text id="DEMO_GBO_GUEST_ENTRY1" development="new" translation="todo">Then I'm going to look at the program.</text>
-        <text id="DEMO_GBO_WEBMASTER_COMMENT1" development="new" translation="todo">For more information about the program look in the [a href="http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index"]documentation[/a].\n\nFor questions and suggestions just visit our [a href="http://forum.admidio.org"]forum[/a].</text>
-        <text id="DEMO_LNK_SAMPLE_PAGE" development="new" translation="todo">Sample page</text>
-        <text id="DEMO_LNK_SAMPLE_PAGE_CONTENT" development="new" translation="todo">On this site there's not much news :(</text>
-        <text id="DEMO_LNK_ADMIDIO_CONTENT" development="new" translation="todo">The homepage of the [b]best[/b] open source membership management in the net.</text>
-        <text id="DEMO_LNK_FORUM" development="new" translation="todo">Forum</text>
-        <text id="DEMO_LNK_FORUM_CONTENT" development="new" translation="todo">The forum for the online membership management software. Here get's everyone support, who has encountered a problem while installing or setting up Admidio. But also suggestions and tips can be posted here.</text>
-        <text id="DEMO_LNK_DOCUMENTATION" development="new" translation="todo">Documentation</text>
-        <text id="DEMO_LNK_DOCUMENTATION_CONTENT" development="new" translation="todo">The documentation for Admidio with valuable help and tips.</text>
-        <text id="DEMO_PHO_CROATIA" development="new" translation="todo">Croatia</text>
-        <text id="DEMO_PHO_STEVEN_SMITH" development="new" translation="todo">Steven Smith and others</text>
-        <text id="DEMO_PHO_PLITVICE_LAKES" development="new" translation="todo">Plitvice lakes</text>
-        <text id="DEMO_PRO_MEMBERSHIP_NUMBER" development="new" translation="todo">Membership number</text>
-        <text id="DEMO_PRO_FAVORITE_COLOR" development="new" translation="todo">Favorite color</text>
-        <text id="DEMO_PRO_FAVORITE_COLOR_CONTENT" development="new" translation="todo">Any member may enter his favorite color</text>
-        <text id="DEMO_ROL_1_YOUTH_TEAM" development="new" translation="todo">1. youth team</text>
-        <text id="DEMO_ROL_1_YOUTH_TEAM_CONTENT" development="new" translation="todo">Young people between 12 and 15 years</text>
-        <text id="DEMO_ROL_2_YOUTH_TEAM" development="new" translation="todo">2. youth team</text>
-        <text id="DEMO_ROL_2_YOUTH_TEAM_CONTENT" development="new" translation="todo">Young people between 16 and 18 years</text>
-        <text id="DEMO_ROOM_MEETING_ROOM" development="new" translation="todo">Meeting room</text>
-        <text id="DEMO_ROOM_MEETING_ROOM_CONTENT" development="new" translation="todo">In this room meetings can take place. The room must be reserved in advance. A projector is available.</text>
-        <text id="DEMO_ROOM_FUNCTION_ROOM" development="new" translation="todo">Function room</text>
-        <text id="DEMO_ROOM_FUNCTION_ROOM_CONTENT" development="new" translation="todo">The function room can be used for birthday parties, annual meetings or party's. Advance booking is desirable.</text>
-    </version>
-</language>
+<resources>
+    <string name="DEMO_DAT_TEAM_TRAINING">Team training</string>
+    <string name="DEMO_DAT_TEAM_TRAINING_LOCATION">Sports hall Alpenstraße Salzburg</string>
+    <string name="DEMO_CHAIRMAN">Chairman</string>
+    <string name="DEMO_ANN_WELCOME">Welcome to the demo area</string>
+    <string name="DEMO_ANN_WELCOME_CONTENT">[p]In this area you can play around with Admidio and see if the features of the program to fit your needs.[/p][p]We have also provided a couple of test data, so you can see in the individual modules, how this could look on your page later. You are welcome to play with this installation.[/p][p]We have created a few test accounts with different rights:[/p][p][span style="color:#008080;"][strong]Webmaster[/strong][/span][/p][table border="0" cellpadding="1" cellspacing="1" style="width: 100%;"][tbody][tr][td]Username:[/td][td][strong]Admin[/strong][/td][/tr][tr][td]Password:[/td][td][strong]Admidio[/strong][/td][/tr][tr][td]Rights:[/td][td]Can see and edit everything. More rights are not possible :)[/td][/tr][/tbody][/table][p][span style="color:#008080;"][strong]Chairman[/strong][/span][/p][table border="0" cellpadding="1" cellspacing="1" style="width: 100%;"][tbody][tr][td]Username:[/td][td][strong]Chairman[/strong][/td][/tr][tr][td]Password:[/td][td][strong]Admidio[/strong][/td][/tr][tr][td]Rights:[/td][td]Can edit and view everything, except assigning roles and changing program/module settings.[/td][/tr][/tbody][/table][p][span style="color:#008080;"][strong]Member[/strong][/span][/p][table border="0" cellpadding="1" cellspacing="1" style="width: 100%;"][tbody][tr][td]Username:[/td][td][strong]Member[/strong][/td][/tr][tr][td]Password:[/td][td][strong]Admidio[/strong][/td][/tr][tr][td]Rechte:[/td][td]Can edit his profile and view lists of roles, where he is a member.[/td][/tr][/tbody][/table][p]Have fun trying ![br /]The Admidio Team[/p]</string>
+    <string name="DEMO_ANN_NEW_JERSEYS">New jerseys</string>
+    <string name="DEMO_ANN_NEW_JERSEYS_CONTENT">Starting next season, there are new jerseys for all active players. These can be picked up before the first training at the trainer.</string>
+    <string name="DEMO_ANN_AEROBICS_COURSE">Aerobics course</string>
+    <string name="DEMO_ANN_AEROBICS_COURSE_CONTENT">During the holidays we offer a [i]aerobic course[/i] to all interested members.\n\nRegistrations are accepted on our [b]homepage[/b] or in our [b]office[/b].</string>
+    <string name="DEMO_DAT_YOUTH_TRAINING">Youth training 1</string>
+    <string name="DEMO_DAT_YOUTH_TRAINING_LOCATION">Sports field Norwich</string>
+    <string name="DEMO_DAT_YOUTH_TRAINING_CONTENT">Today we will put the focus on physical fitness and stamina.\n\nPlease appear all in time with running shoes on the sports field!</string>
+    <string name="DEMO_DAT_BARBECUE">Barbecue</string>
+    <string name="DEMO_DAT_BARBECUE_CONTENT">Today we have our barbecue. In addition to crisp sausages, chops and bacon, there are also various salads.</string>
+    <string name="DEMO_DAT_TRAINER_COURSE">Trainer course</string>
+    <string name="DEMO_DAT_TRAINER_COURSE_LOCATION">Youth hostel Lyon</string>
+    <string name="DEMO_DAT_TRAINER_COURSE_CONTENT">A four-day training course for youth coaches from the tennis department :)</string>
+    <string name="DEMO_DAT_COMPUTER_COURSE">Computer course</string>
+    <string name="DEMO_DAT_COMPUTER_COURSE_LOCATION">Munich Marienplatz</string>
+    <string name="DEMO_DAT_COMPUTER_COURSE_CONTENT">The focus of this course lies with the Office products.</string>
+    <string name="DEMO_DAT_TRIP_AMSTERDAM">Trip to Amsterdam</string>
+    <string name="DEMO_DAT_TRIP_AMSTERDAM_LOCATION">Amsterdam Gracht</string>
+    <string name="DEMO_DAT_TRIP_AMSTERDAM_CONTENT">On this hopefully sunny day it goes to Amsterdam.\n\nA canal cruise and a shopping trip are planned.</string>
+    <string name="DEMO_GBO_WEBMASTER_WELCOME">Welcome to the guestbook of the demo area.\n\nHere you can play around and test the capabilities of Admidio.\n\nWe hope you enjoy it and that we can convince you of this great program.</string>
+    <string name="DEMO_GBO_GUEST_ENTRY1">Then I'm going to look at the program.</string>
+    <string name="DEMO_GBO_WEBMASTER_COMMENT1">For more information about the program look in the [a href="http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index"]documentation[/a].\n\nFor questions and suggestions just visit our [a href="http://forum.admidio.org"]forum[/a].</string>
+    <string name="DEMO_LNK_SAMPLE_PAGE">Sample page</string>
+    <string name="DEMO_LNK_SAMPLE_PAGE_CONTENT">On this site there's not much news :(</string>
+    <string name="DEMO_LNK_ADMIDIO_CONTENT">The homepage of the [b]best[/b] open source membership management in the net.</string>
+    <string name="DEMO_LNK_FORUM">Forum</string>
+    <string name="DEMO_LNK_FORUM_CONTENT">The forum for the online membership management software. Here get's everyone support, who has encountered a problem while installing or setting up Admidio. But also suggestions and tips can be posted here.</string>
+    <string name="DEMO_LNK_DOCUMENTATION">Documentation</string>
+    <string name="DEMO_LNK_DOCUMENTATION_CONTENT">The documentation for Admidio with valuable help and tips.</string>
+    <string name="DEMO_PHO_CROATIA">Croatia</string>
+    <string name="DEMO_PHO_STEVEN_SMITH">Steven Smith and others</string>
+    <string name="DEMO_PHO_PLITVICE_LAKES">Plitvice lakes</string>
+    <string name="DEMO_PRO_MEMBERSHIP_NUMBER">Membership number</string>
+    <string name="DEMO_PRO_FAVORITE_COLOR">Favorite color</string>
+    <string name="DEMO_PRO_FAVORITE_COLOR_CONTENT">Any member may enter his favorite color</string>
+    <string name="DEMO_ROL_1_YOUTH_TEAM">1. youth team</string>
+    <string name="DEMO_ROL_1_YOUTH_TEAM_CONTENT">Young people between 12 and 15 years</string>
+    <string name="DEMO_ROL_2_YOUTH_TEAM">2. youth team</string>
+    <string name="DEMO_ROL_2_YOUTH_TEAM_CONTENT">Young people between 16 and 18 years</string>
+    <string name="DEMO_ROOM_MEETING_ROOM">Meeting room</string>
+    <string name="DEMO_ROOM_MEETING_ROOM_CONTENT">In this room meetings can take place. The room must be reserved in advance. A projector is available.</string>
+    <string name="DEMO_ROOM_FUNCTION_ROOM">Function room</string>
+    <string name="DEMO_ROOM_FUNCTION_ROOM_CONTENT">The function room can be used for birthday parties, annual meetings or party's. Advance booking is desirable.</string>
+</resources>
