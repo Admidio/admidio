@@ -6,3 +6,14 @@
 !/adm_my_files/mail_templates/
 !/adm_my_files/config_example.php
 !/adm_my_files/index.html
+
+# Only allow commit of official plugins
+/adm_plugins/
+!/adm_plugins/birthday/
+!/adm_plugins/calendar/
+!/adm_plugins/login_form/
+!/adm_plugins/random_photo/
+!/adm_plugins/sidebar_announcements/
+!/adm_plugins/sidebar_dates/
+!/adm_plugins/sidebar_downloads/
+!/adm_plugins/sidebar_online/
