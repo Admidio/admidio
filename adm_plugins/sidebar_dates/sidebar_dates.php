@@ -76,11 +76,11 @@ if(isset($plg_kal_cat) == false)
     $plg_kal_cat = array('all');
 }
 
-// Pr?fen ob the Link-URL gesetzt wurde oder leer ist
+// Prüfen ob the Link-URL gesetzt wurde oder leer ist
 // wenn leer, dann Standardpfad zum Admidio-Modul
 if(isset($plg_link_url) == false || ($plg_link_url) === '')
 {
-$plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
+    $plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
 }
 
 //create Object
@@ -145,7 +145,7 @@ if($plgDatesResult['numResults'] > 0)
                 if(strlen($plg_value) > $plg_max_char_per_word)
                 {
                     $plg_new_headline = $plg_new_headline.' '. substr($plg_value, 0, $plg_max_char_per_word). '-<br />'.
-                                    substr($plg_value, $plg_max_char_per_word);
+                                        substr($plg_value, $plg_max_char_per_word);
                 }
                 else
                 {

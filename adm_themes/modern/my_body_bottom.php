@@ -93,7 +93,7 @@
 
                     // Administration Menu
                     if($gCurrentUser->approveUsers() || $gCurrentUser->editUsers()
-                    || $gCurrentUser->manageRoles() || $gCurrentUser->isWebmaster())
+                    || $gCurrentUser->manageRoles()  || $gCurrentUser->isWebmaster())
                     {
                         $adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
 
