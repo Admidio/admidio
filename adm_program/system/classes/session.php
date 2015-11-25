@@ -245,22 +245,22 @@ class Session extends TableAccess
 
     /**
      * Deletes all sessions in table admSessions that are inactive since @b $maxInactiveTime minutes..
-     * @param int $maxInactiveTime Time in Minutes after that a session will be deleted. Minimum 30 minutes.
+     * @param int $maxInactiveMinutes Time in Minutes after that a session will be deleted. Minimum 30 minutes.
      */
-    public function tableCleanup($maxInactiveTime)
+    public function tableCleanup($maxInactiveMinutes)
     {
         // determine time when sessions should be deleted (min. 30 minutes)
-        if($maxInactiveTime > 30)
+        if($maxInactiveMinutes > 30)
         {
-            $date_session_delete = time() - $maxInactiveTime * 60;
-        }
-        else
-        {
-            $date_session_delete = time() - 30 * 60;
+            $maxInactiveMinutes = 30;
         }
 
-        $sql = 'DELETE FROM '. TBL_SESSIONS. '
-                 WHERE ses_timestamp < \''. date('Y.m.d H:i:s', $date_session_delete). '\'
+        $now = new DateTime();
+        $minutesBack = new DateInterval('PT'.$maxInactiveMinutes.'M');
+        $timestamp = $now->sub($minutesBack)->format('Y-m-d H:i:s');
+
+        $sql = 'DELETE FROM '.TBL_SESSIONS.'
+                 WHERE ses_timestamp < \''.$timestamp.'\'
                    AND ses_session_id NOT LIKE \''.$this->getValue('ses_session_id').'\' ';
         $this->db->query($sql);
     }

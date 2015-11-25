@@ -326,7 +326,7 @@ class TableDate extends TableAccess
             // nun alle Rollenzuordnungen wegschreiben
             $date_role = new TableAccess($this->db, TBL_DATE_ROLE, 'dtr');
 
-            foreach($this->visibleRoles as $key => $roleID)
+            foreach($this->visibleRoles as $roleID)
             {
                 if(is_numeric($roleID))
                 {

@@ -453,23 +453,22 @@ class ProfileFields
     {
         $this->mDb->startTransaction();
 
-        foreach($this->mUserData as $key => $value)
+        foreach($this->mUserData as $value)
         {
             // if new user than set user id
             if($this->mUserId == 0)
             {
-                $this->mUserData[$key]->setValue('usd_usr_id', $userId);
+                $value->setValue('usd_usr_id', $userId);
             }
 
             // if value exists and new value is empty then delete entry
-            if($this->mUserData[$key]->getValue('usd_id') > 0
-            && strlen($this->mUserData[$key]->getValue('usd_value')) === 0)
+            if($value->getValue('usd_id') > 0 && strlen($value->getValue('usd_value')) === 0)
             {
-                $this->mUserData[$key]->delete();
+                $value->delete();
             }
             else
             {
-                $this->mUserData[$key]->save();
+                $value->save();
             }
         }
 

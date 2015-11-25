@@ -374,15 +374,15 @@ class ModuleLists extends Modules
     {
         switch ($status)
         {
-            case 'active':
-            default:
-                $this->memberStatus = 'active';
-                break;
             case 'inactive':
                 $this->memberStatus = 'inactive';
                 break;
             case 'both':
                 $this->memberStatus = 'both';
+                break;
+            case 'active':
+            default:
+                $this->memberStatus = 'active';
                 break;
         }
     }
