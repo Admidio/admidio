@@ -204,7 +204,7 @@ if ($getMsgType === 'EMAIL')
                 // damit er die Mail nicht an sich selber schickt.
                 if ($gValidLogin)
                 {
-                    $sql =$sql. ' AND usr_id <> '. $gCurrentUser->getValue('usr_id');
+                    $sql = $sql. ' AND usr_id <> '. $gCurrentUser->getValue('usr_id');
                 }
                 $result = $gDb->query($sql);
 

@@ -89,12 +89,12 @@ while ($row = $gDb->fetch_array($result))
     $weblink->setArray($row);
 
     // set data for attributes of this entry
-    $title     = $weblink->getValue('lnk_name');
+    $title = $weblink->getValue('lnk_name');
     $description = '<a href="'.$weblink->getValue('lnk_url').'" target="_blank">'.$weblink->getValue('lnk_url').'</a>'.
                    '<br /><br />'. $weblink->getValue('lnk_description');
-    $link     = $g_root_path. '/adm_program/modules/links/links.php?id='. $weblink->getValue('lnk_id');
-    $author     = $row['create_name'];
-    $pubDate     = date('r', strtotime($weblink->getValue('lnk_timestamp_create')));
+    $link    = $g_root_path. '/adm_program/modules/links/links.php?id='. $weblink->getValue('lnk_id');
+    $author  = $row['create_name'];
+    $pubDate = date('r', strtotime($weblink->getValue('lnk_timestamp_create')));
 
     // add entry to RSS feed
     $rss->addItem($title, $description, $link, $author, $pubDate);

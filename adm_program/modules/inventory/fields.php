@@ -117,11 +117,11 @@ $categoryId = 0;
 $userField  = new TableUserField($gDb);
 
 // Intialize variables
-$description    = '';
-$hidden         = '';
-$disable        = '';
-$mandatory      = '';
-$usfSystem      = '';
+$description = '';
+$hidden      = '';
+$disable     = '';
+$mandatory   = '';
+$usfSystem   = '';
 
 while($row = $gDb->fetch_array($result))
 {

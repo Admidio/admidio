@@ -310,7 +310,8 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
 
         if($_POST['dat_room_id'] == 0)
         {
-            $raum = 'n/a';}
+            $raum = 'n/a';
+        }
 
         if(strlen($_POST['dat_max_members']) > 0)
         {

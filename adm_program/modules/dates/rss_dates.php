@@ -72,10 +72,10 @@ if($datesResult['numResults'] > 0)
         {
             $title = $title. ' - '. $date->getValue('dat_end', $gPreferences['system_date']);
         }
-        $title     = $title. ' '. $date->getValue('dat_headline');
-        $link     = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id');
-        $author     = $row['create_name'];
-        $pubDate     = date('r', strtotime($date->getValue('dat_timestamp_create')));
+        $title   = $title. ' '. $date->getValue('dat_headline');
+        $link    = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id');
+        $author  = $row['create_name'];
+        $pubDate = date('r', strtotime($date->getValue('dat_timestamp_create')));
 
         // add additional information about the event to the description
         $descDateTo   = '';

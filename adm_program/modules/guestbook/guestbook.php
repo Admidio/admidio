@@ -272,9 +272,9 @@ else
                 {
                     $page->addHtml('
                     <div class="btn-group" role="group">
-                        <button class="btn btn-default" onclick="javascript:callUrlHideElement(\'gbo_'.$guestbook->getValue('gbo_id').'\', \'guestbook_function.php?mode=9&id='.$guestbook->getValue('gbo_id').'\')"><img
+                        <button class="btn btn-default" onclick="callUrlHideElement(\'gbo_'.$guestbook->getValue('gbo_id').'\', \'guestbook_function.php?mode=9&id='.$guestbook->getValue('gbo_id').'\')"><img
                             src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</button>
-                        <button class="btn btn-default" onclick="javascript:callUrlHideElement(\'gbo_'.$guestbook->getValue('gbo_id').'\', \'guestbook_function.php?mode=2&id='.$guestbook->getValue('gbo_id').'\')"><img
+                        <button class="btn btn-default" onclick="callUrlHideElement(\'gbo_'.$guestbook->getValue('gbo_id').'\', \'guestbook_function.php?mode=2&id='.$guestbook->getValue('gbo_id').'\')"><img
                             src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</button>
                     </div>');
                 }

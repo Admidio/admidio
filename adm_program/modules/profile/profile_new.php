@@ -161,14 +161,12 @@ foreach($gProfileFields->mProfileFields as $field)
 
     // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
     // E-Mail ist Ausnahme und muss immer angezeigt werden
-    if($getNewUser == 2
-    && $gPreferences['registration_mode'] == 1
+    if($getNewUser == 2 && $gPreferences['registration_mode'] == 1
     && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') === 'EMAIL'))
     {
         $show_field = true;
     }
-    elseif($getNewUser == 2
-    && $gPreferences['registration_mode'] == 2)
+    elseif($getNewUser == 2 && $gPreferences['registration_mode'] == 2)
     {
         // bei der vollstaendigen Registrierung alle Felder anzeigen
         $show_field = true;
@@ -183,8 +181,7 @@ foreach($gProfileFields->mProfileFields as $field)
 
     // Kategorienwechsel den Kategorienheader anzeigen
     // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-    if($category != $field->getValue('cat_name')
-    && $show_field == true)
+    if($category != $field->getValue('cat_name') && $show_field == true)
     {
         if($category !== '')
         {

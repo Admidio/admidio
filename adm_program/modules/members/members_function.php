@@ -148,8 +148,7 @@ elseif($getMode === 3)
 
     // User darf in keiner anderen Orga aktiv sein
     // kein Suizid ermoeglichen
-    if($other_orga > 0
-    || $gCurrentUser->getValue('usr_id') == $getUserId)
+    if($other_orga > 0 || $gCurrentUser->getValue('usr_id') == $getUserId)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }

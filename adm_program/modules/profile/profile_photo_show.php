@@ -22,8 +22,8 @@ $getUserId   = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('require
 $getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'boolean');
 
 // lokale Variablen der Uebergabevariablen initialisieren
-$image         = null;
-$picpath       = THEME_SERVER_PATH. '/images/no_profile_pic.png';
+$image   = null;
+$picpath = THEME_SERVER_PATH. '/images/no_profile_pic.png';
 
 // read user data and show error if user doesn't exists
 $user = new User($gDb, $gProfileFields, $getUserId);

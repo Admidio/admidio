@@ -78,6 +78,7 @@ class FunctionClass
             }
             fclose($fpread);
         }
+
         return $file_data;
     }
 
@@ -235,6 +236,7 @@ class FunctionClass
 
         // nun noch das von der Groesse angepasste Bild loeschen
         unlink($img_photo_path);
+
         return $returnCode;
     }
 }
