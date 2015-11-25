@@ -223,10 +223,11 @@ class TableCategory extends TableAccess
         }
     }
 
-    /** Reads a category out of the table in database selected by the unique category id in the table.
-     *  Per default all columns of adm_categories will be read and stored in the object.
-     *  @param $id Unique cat_id
-     *  @return Returns @b true if one record is found
+    /**
+     * Reads a category out of the table in database selected by the unique category id in the table.
+     * Per default all columns of adm_categories will be read and stored in the object.
+     * @param $cat_id Unique cat_id
+     * @return Returns @b true if one record is found
      */
     public function readDataById($cat_id)
     {
@@ -264,13 +265,14 @@ class TableCategory extends TableAccess
         return $returnValue;
     }
 
-    /** Reads a category out of the table in database selected by different columns in the table.
-     *  The columns are commited with an array where every element index is the column name and the value is the column value.
-     *  The columns and values must be selected so that they identify only one record.
-     *  If the sql will find more than one record the method returns @b false.
-     *  Per default all columns of adm_categories will be read and stored in the object.
-     *  @param $columnArray An array where every element index is the column name and the value is the column value
-     *  @return Returns @b true if one record is found
+    /**
+     * Reads a category out of the table in database selected by different columns in the table.
+     * The columns are commited with an array where every element index is the column name and the value is the column value.
+     * The columns and values must be selected so that they identify only one record.
+     * If the sql will find more than one record the method returns @b false.
+     * Per default all columns of adm_categories will be read and stored in the object.
+     * @param array $columnArray An array where every element index is the column name and the value is the column value
+     * @return Returns @b true if one record is found
      */
     public function readDataByColumns($columnArray)
     {
@@ -302,12 +304,13 @@ class TableCategory extends TableAccess
         return $returnValue;
     }
 
-    /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     *  a new record or if only an update is necessary. The update statement will only update
-     *  the changed columns. If the table has columns for creator or editor than these column
-     *  with their timestamp will be updated.
-     *  If a new record is inserted than the next free sequence will be determined.
-     *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+    /**
+     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * a new record or if only an update is necessary. The update statement will only update
+     * the changed columns. If the table has columns for creator or editor than these column
+     * with their timestamp will be updated.
+     * If a new record is inserted than the next free sequence will be determined.
+     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
      */
     public function save($updateFingerPrint = true)
     {
@@ -364,12 +367,13 @@ class TableCategory extends TableAccess
         $this->db->endTransaction();
     }
 
-    /** Set a new value for a column of the database table.
-     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
-     *  @param $columnName The name of the database column whose value should get a new value
-     *  @param $newValue The new value that should be stored in the database field
-     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+    /**
+     * Set a new value for a column of the database table.
+     * The value is only saved in the object. You must call the method @b save to store the new value to the database
+     * @param string $columnName The name of the database column whose value should get a new value
+     * @param        $newValue   The new value that should be stored in the database field
+     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @return Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {

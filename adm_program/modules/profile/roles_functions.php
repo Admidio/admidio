@@ -13,7 +13,11 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php')
     exit('This page may not be called directly !');
 }
 
-// get all memberships where the user is assigned
+/**
+ * get all memberships where the user is assigned
+ * @param $user_id
+ * @return object
+ */
 function getRolesFromDatabase($user_id)
 {
     global $gDb, $gCurrentOrganization;
@@ -33,7 +37,11 @@ function getRolesFromDatabase($user_id)
     return $gDb->query($sql);
 }
 
-// get all memberships where the user will be assigned
+/**
+ * get all memberships where the user will be assigned
+ * @param $user_id
+ * @return object
+ */
 function getFutureRolesFromDatabase($user_id)
 {
     global $gDb, $gCurrentOrganization;
@@ -52,7 +60,11 @@ function getFutureRolesFromDatabase($user_id)
     return $gDb->query($sql);
 }
 
-// get all memberships where the user was assigned
+/**
+ * get all memberships where the user was assigned
+ * @param $user_id
+ * @return object
+ */
 function getFormerRolesFromDatabase($user_id)
 {
     global $gDb, $gCurrentOrganization;
@@ -71,6 +83,14 @@ function getFormerRolesFromDatabase($user_id)
     return $gDb->query($sql);
 }
 
+/**
+ * @param $htmlListId
+ * @param $user
+ * @param $result_role
+ * @param $count_role
+ * @param $directOutput
+ * @return string
+ */
 function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $directOutput)
 {
     global $gDb, $gL10n, $gCurrentUser, $gPreferences, $g_root_path, $gProfileFields;

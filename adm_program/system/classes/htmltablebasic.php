@@ -492,9 +492,10 @@ class HtmlTableBasic extends HtmlElement {
         $this->class_2 = $class_2;
     }
 
-    /** Set a specific width for all columns of the table. This is useful if the automatically
-     *  that will be set by the browser doesn't fit your needs.
-     *  @param $array Array with all width values of each column. Here you can set all valid CSS values e.g. '100%' or '300px'
+    /**
+     * Set a specific width for all columns of the table. This is useful if the automatically
+     * that will be set by the browser doesn't fit your needs.
+     * @param array $array Array with all width values of each column. Here you can set all valid CSS values e.g. '100%' or '300px'
      */
     public function setColumnsWidth($array)
     {
@@ -515,10 +516,11 @@ class HtmlTableBasic extends HtmlElement {
         return false;
     }
 
-    /** Set a specific width for one column of the table. This is useful if you have one column
-     *  that will not get a useful width automatically by the browser.
-     *  @param $column The column number where you want to set the width. The columns of the table starts with 1 (not 0).
-     *  @param $width  The new width of the column. Here you can set all valid CSS values e.g. '100%' or '300px'
+    /**
+     * Set a specific width for one column of the table. This is useful if you have one column
+     * that will not get a useful width automatically by the browser.
+     * @param int    $column The column number where you want to set the width. The columns of the table starts with 1 (not 0).
+     * @param string $width  The new width of the column. Here you can set all valid CSS values e.g. '100%' or '300px'
      */
     public function setColumnWidth($column, $width)
     {

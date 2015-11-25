@@ -233,9 +233,9 @@ class HtmlTable extends HtmlTableBasic
      * This method will set for a selected column other columns that should be used to order the datatables.
      * For example if you will click the name column than you could set the columns lastname and firstname
      * as alternative order columns and the table will be ordered by lastname and firstname.
-     * @param int   $selectedColumn    This is the column the user clicked to be sorted.
-     * @param array $arrayOrderColumns This are the columns the table will internal be sorted. If you have more
-     *                                 than 1 column this must be an array. The columns of the table starts with 1 (not 0).
+     * @param int       $selectedColumn    This is the column the user clicked to be sorted.
+     * @param int|array $arrayOrderColumns This are the columns the table will internal be sorted. If you have more
+     *                                     than 1 column this must be an array. The columns of the table starts with 1 (not 0).
      */
     public function setDatatablesAlternativOrderColumns($selectedColumn, $arrayOrderColumns)
     {

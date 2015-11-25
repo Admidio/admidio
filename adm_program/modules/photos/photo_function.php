@@ -38,9 +38,11 @@ if (!$gCurrentUser->editPhotoRight())
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
 }
 
-//Loeschen eines Thumbnails
-// photo_album : Referenz auf Objekt des relevanten Albums
-// pic_nr      : Nr des Bildes dessen Thumbnail geloescht werden soll
+/**
+ * Loeschen eines Thumbnails
+ * @param $photo_album Referenz auf Objekt des relevanten Albums
+ * @param $pic_nr      Nr des Bildes dessen Thumbnail geloescht werden soll
+ */
 function deleteThumbnail(&$photo_album, $pic_nr)
 {
     if(is_numeric($pic_nr))
@@ -57,6 +59,9 @@ function deleteThumbnail(&$photo_album, $pic_nr)
     }
 }
 
+/**
+ * @param string $path
+ */
 function tryDelete($path)
 {
     if(file_exists($path))
@@ -66,6 +71,10 @@ function tryDelete($path)
     }
 };
 
+/**
+ * @param string $path
+ * @param string $newPath
+ */
 function tryRename($path, $newPath)
 {
     if(file_exists($path))
@@ -75,7 +84,11 @@ function tryRename($path, $newPath)
     }
 };
 
-//Loeschen eines Bildes
+/**
+ * Loeschen eines Bildes
+ * @param $pho_id
+ * @param $pic_nr
+ */
 function deletePhoto($pho_id, $pic_nr)
 {
     global $gDb;

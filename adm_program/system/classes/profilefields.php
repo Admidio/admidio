@@ -91,9 +91,9 @@ class ProfileFields
 
     /**
      * returns for field id (usf_id) the value of the column from table adm_user_fields
-     * @param $fieldId Expects the @b usf_id of table @b adm_user_fields
-     * @param $column The column name of @b adm_user_field for which you want the value
-     * @param $format Optional the format (is necessary for timestamps)
+     * @param        $fieldId Expects the @b usf_id of table @b adm_user_fields
+     * @param string $column The column name of @b adm_user_field for which you want the value
+     * @param string $format Optional the format (is necessary for timestamps)
      * @return
      */
     public function getPropertyById($fieldId, $column, $format = '')
@@ -111,8 +111,8 @@ class ProfileFields
     /**
      * Returns the value of the field in html format with consideration of all layout parameters
      * @param $fieldNameIntern Internal profile field name of the field that should be html formated
-     * @param $value The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
-     * @param $value2 An optional parameter that is necessary for some special fields like email to commit the user id
+     * @param $value           The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
+     * @param $value2          An optional parameter that is necessary for some special fields like email to commit the user id
      * @return string Returns an html formated string that considered the profile field settings
      */
     public function getHtmlValue($fieldNameIntern, $value, $value2 = '')
