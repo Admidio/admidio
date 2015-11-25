@@ -198,8 +198,8 @@ class TableRoles extends TableAccess
     /**
      * Deletes the selected role of the table and all references in other tables.
      * After that the class will be initialize.
-     * @return bool @b true if no error occurred
      * @throws AdmException
+     * @return bool @b true if no error occurred
      */
     public function delete()
     {

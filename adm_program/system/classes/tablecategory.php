@@ -42,8 +42,8 @@ class TableCategory extends TableAccess
      * Deletes the selected record of the table and all references in other tables.
      * After that the class will be initialize. The method throws exceptions if
      * the category couldn't be deleted.
-     * @return @b true if no error occurred
      * @throws AdmException
+     * @return @b true if no error occurred
      */
     public function delete()
     {

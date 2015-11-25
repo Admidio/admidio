@@ -159,8 +159,8 @@ class TableMembers extends TableAccess
      * the last membership of a webmaster role should be stopped then throw an exception.
      * @param int $roleId Stops the membership of this role
      * @param int $userId The user who should loose the member of the role.
-     * @return bool Return @b true if the membership removal was successful.
      * @throws AdmException
+     * @return bool Return @b true if the membership removal was successful.
      */
     public function stopMembership($roleId = 0, $userId = 0)
     {

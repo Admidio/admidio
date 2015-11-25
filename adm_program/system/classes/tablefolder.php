@@ -212,8 +212,8 @@ class TableFolder extends TableAccess
      * Reads the folder recordset from database table @b adm_folders and throws an
      * AdmException if the user has no right to see the folder or the folder id doesn't exists.
      * @param $folderId The id of the folder. If the id is 0 then the root folder will be shown.
-     * @return true Returns @b true if everything is ok otherwise an AdmException is thrown.
      * @throws AdmException
+     * @return true Returns @b true if everything is ok otherwise an AdmException is thrown.
      */
     public function getFolderForDownload($folderId)
     {
