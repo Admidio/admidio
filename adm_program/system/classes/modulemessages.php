@@ -28,14 +28,18 @@
  */
 class ModuleMessages
 {
-    /** Constructor that initialize the class member parameters
+    /**
+     * Constructor that initialize the class member parameters
      */
     public function __construct()
     {
 
     }
 
-    /** check for Group and give back a string with groupname and if it is active, inactive or both.
+    /**
+     * check for Group and give back a string with groupname and if it is active, inactive or both.
+     * @param $groupstring
+     * @return string
      */
     public function msgGroupNameSplit($groupstring)
     {
@@ -71,7 +75,10 @@ class ModuleMessages
         return $ReceiverNameLong;
     }
 
-    /** check for Group and give back a array with group ID[0] and if it is active, inactive or both [1].
+    /**
+     * check for Group and give back a array with group ID[0] and if it is active, inactive or both [1].
+     * @param $groupstring
+     * @return array
      */
     public function msgGroupSplit($groupstring)
     {
@@ -90,7 +97,10 @@ class ModuleMessages
         return $group;
     }
 
-    /** return an array with all Email-Messages of the given user.
+    /**
+     * return an array with all Email-Messages of the given user.
+     * @param $user
+     * @return array
      */
     public function msgGetUserEmails($user)
     {
@@ -104,7 +114,10 @@ class ModuleMessages
         return $gDb->query($sql);
     }
 
-    /** return an array with all unread Messages of the given user.
+    /**
+     * return an array with all unread Messages of the given user.
+     * @param $userId
+     * @return array
      */
     public function msgGetUserUnread($userId)
     {
@@ -120,7 +133,10 @@ class ModuleMessages
         return $gDb->query($sql);
     }
 
-    /** return an array with all unread Messages of the given user.
+    /**
+     * return an array with all unread Messages of the given user.
+     * @param $userId
+     * @return array
      */
     public function msgGetUser($userId)
     {
@@ -137,7 +153,9 @@ class ModuleMessages
         return $gDb->query($sql);
     }
 
-    /** return the message ID of the admidio chat.
+    /**
+     * return the message ID of the admidio chat.
+     * @return
      */
     public function msgGetChatId()
     {

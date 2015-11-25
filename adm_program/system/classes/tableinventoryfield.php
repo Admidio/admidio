@@ -13,10 +13,11 @@
  */
 class TableInventoryField extends TableAccess
 {
-    /** Constructor that will create an object of a recordset of the table adm_invent_fields.
-     *  If the id is set than the specific item field will be loaded.
-     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
-     *  @param int    $inf_id   The recordset of the item field with this id will be loaded. If id isn't set than an empty object of the table is created.
+    /**
+     * Constructor that will create an object of a recordset of the table adm_invent_fields.
+     * If the id is set than the specific item field will be loaded.
+     * @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int    $inf_id   The recordset of the item field with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$database, $inf_id = 0)
     {
@@ -26,9 +27,10 @@ class TableInventoryField extends TableAccess
         parent::__construct($database, TBL_INVENT_FIELDS, 'inf', $inf_id);
     }
 
-    /** Deletes the selected field and all references in other tables. Also
-     *  the gap in sequence will be closed. After that the class will be initialize.
-     *  @return @b true if no error occurred
+    /**
+     * Deletes the selected field and all references in other tables.
+     * Also the gap in sequence will be closed. After that the class will be initialize.
+     * @return @b true if no error occurred
      */
     public function delete()
     {
@@ -41,7 +43,7 @@ class TableInventoryField extends TableAccess
                    AND inf_sequence > '. $this->getValue('inf_sequence');
         $this->db->query($sql);
 
-        $sql    = 'DELETE FROM '. TBL_INVENT_DATA. '
+        $sql = 'DELETE FROM '. TBL_INVENT_DATA. '
                     WHERE ind_inf_id = '. $this->getValue('inf_id');
         $this->db->query($sql);
 
@@ -51,9 +53,14 @@ class TableInventoryField extends TableAccess
         return $return;
     }
 
-    // diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
-    // dieser bildet sich aus dem Namen in Grossbuchstaben und der naechsten freien Nummer (index)
-    // Beispiel: 'Mitgliedsnummer' => 'MITGLIEDSNUMMER_2'
+    /**
+     * diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
+     * dieser bildet sich aus dem Namen in Grossbuchstaben und der naechsten freien Nummer (index)
+     * Beispiel: 'Mitgliedsnummer' => 'MITGLIEDSNUMMER_2'
+     * @param string $name
+     * @param int    $index
+     * @return string
+     */
     private function getNewNameIntern($name, $index)
     {
         $newNameIntern = strtoupper(str_replace(' ', '_', $name));
@@ -72,16 +79,17 @@ class TableInventoryField extends TableAccess
         return $newNameIntern;
     }
 
-    /** Get the value of a column of the database table.
-     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
-     *  @param $columnName The name of the database column whose value should be read
-     *  @param $format For column @c usf_value_list the following format is accepted: @n
-     *                 @b database returns database value of usf_value_list; @n
-     *                 @b text extract only text from usf_value_list, image infos will be ignored @n
-     *                 For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011' @n
-     *                 For text columns the format can be @b database that would be the database value without any transformations
-     *  @return Returns the value of the database column.
-     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
+    /**
+     * Get the value of a column of the database table.
+     * If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @param string $columnName The name of the database column whose value should be read
+     * @param string $format     For column @c usf_value_list the following format is accepted: @n
+     *                           @b database returns database value of usf_value_list; @n
+     *                           @b text extract only text from usf_value_list, image infos will be ignored @n
+     *                           For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011' @n
+     *                           For text columns the format can be @b database that would be the database value without any transformations
+     * @return Returns the value of the database column.
+     *         If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
@@ -112,8 +120,7 @@ class TableInventoryField extends TableAccess
             $value = parent::getValue($columnName, $format);
         }
 
-        if(($columnName === 'inf_name' || $columnName === 'cat_name')
-        && $format !== 'database')
+        if(($columnName === 'inf_name' || $columnName === 'cat_name') && $format !== 'database')
         {
             // if text is a translation-id then translate it
             if(strpos($value, '_') === 3)
@@ -123,8 +130,7 @@ class TableInventoryField extends TableAccess
         }
         elseif($columnName === 'inf_value_list' && $format !== 'database')
         {
-            if($this->dbColumns['inf_type'] === 'DROPDOWN'
-            || $this->dbColumns['inf_type'] === 'RADIO_BUTTON')
+            if($this->dbColumns['inf_type'] === 'DROPDOWN' || $this->dbColumns['inf_type'] === 'RADIO_BUTTON')
             {
                 $arrListValues = explode("\r\n", $value);
                 $arrListValuesWithKeys = array();     // array with list values and keys that represents the internal value
@@ -204,7 +210,10 @@ class TableInventoryField extends TableAccess
         return $value;
     }
 
-    // das Feld wird um eine Position in der Reihenfolge verschoben
+    /**
+     * das Feld wird um eine Position in der Reihenfolge verschoben
+     * @param string $mode
+     */
     public function moveSequence($mode)
     {
 
@@ -230,12 +239,13 @@ class TableInventoryField extends TableAccess
         }
     }
 
-    /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     *  a new record or if only an update is necessary. The update statement will only update
-     *  the changed columns. If the table has columns for creator or editor than these column
-     *  with their timestamp will be updated.
-     *  For new records the name intern will be set per default.
-     *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+    /**
+     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * a new record or if only an update is necessary. The update statement will only update
+     * the changed columns. If the table has columns for creator or editor than these column
+     * with their timestamp will be updated.
+     * For new records the name intern will be set per default.
+     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
      */
     public function save($updateFingerPrint = true)
     {
@@ -250,12 +260,13 @@ class TableInventoryField extends TableAccess
         parent::save($updateFingerPrint);
     }
 
-    /** Set a new value for a column of the database table.
-     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
-     *  @param $columnName The name of the database column whose value should get a new value
-     *  @param $newValue The new value that should be stored in the database field
-     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+    /**
+     * Set a new value for a column of the database table.
+     * The value is only saved in the object. You must call the method @b save to store the new value to the database
+     * @param string $columnName The name of the database column whose value should get a new value
+     * @param        $newValue   The new value that should be stored in the database field
+     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @return Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
@@ -265,8 +276,7 @@ class TableInventoryField extends TableAccess
         {
             return false;
         }
-        elseif($columnName === 'inf_cat_id'
-        && $this->getValue($columnName) != $newValue)
+        elseif($columnName === 'inf_cat_id' && $this->getValue($columnName) != $newValue)
         {
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) as count FROM '. TBL_INVENT_FIELDS. '

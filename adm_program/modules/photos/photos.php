@@ -358,7 +358,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
         $page->addHtml($photoThumbnailTable);
     }
 
-    // show additional album informations
+    // show additional album information
     $datePeriod = $photoAlbum->getValue('pho_begin', $gPreferences['system_date']);
 
     if($photoAlbum->getValue('pho_end') != $photoAlbum->getValue('pho_begin')
@@ -377,7 +377,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
         <div class="col-sm-4 col-xs-8"><strong>'.$photoAlbum->getValue('pho_photographers').'</strong></div>
     </div>');
 
-    // show informations about user who creates the recordset and changed it
+    // show information about user who creates the recordset and changed it
     $page->addHtml(admFuncShowCreateChangeInfoById($photoAlbum->getValue('pho_usr_id_create'), $photoAlbum->getValue('pho_timestamp_create'), $photoAlbum->getValue('pho_usr_id_change'), $photoAlbum->getValue('pho_timestamp_change')));
 
     // show page navigations through thumbnails

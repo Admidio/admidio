@@ -77,7 +77,7 @@ if($datesResult['numResults'] > 0)
         $author     = $row['create_name'];
         $pubDate     = date('r', strtotime($date->getValue('dat_timestamp_create')));
 
-        // add additional informations about the event to the description
+        // add additional information about the event to the description
         $descDateTo   = '';
         $descDateFrom = $date->getValue('dat_begin', $gPreferences['system_date']);
         $description  = $descDateFrom;

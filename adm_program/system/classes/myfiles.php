@@ -30,20 +30,25 @@ class MyFiles extends Folder
     protected $webPath;     // the path starts with adm_my_file
     public $errorText, $errorPath;
 
-    // module name should be the folder name in adm_my_files for this module
-    // Example: 'PHOTOS', 'BACKUP', 'DOWNLOAD'
+    /**
+     * module name should be the folder name in adm_my_files for this module
+     * Example: 'PHOTOS', 'BACKUP', 'DOWNLOAD'
+     * @param string $module
+     */
     public function __construct($module)
     {
         global $g_root_path;
         $this->module = $module;
-        $this->modulePath   = SERVER_PATH. '/adm_my_files/'. strtolower($module);
-        $this->currentPath  = SERVER_PATH. '/adm_my_files/'. strtolower($module);
-        $this->webPath      = $g_root_path. '/adm_my_files';
+        $this->modulePath  = SERVER_PATH. '/adm_my_files/'. strtolower($module);
+        $this->currentPath = SERVER_PATH. '/adm_my_files/'. strtolower($module);
+        $this->webPath     = $g_root_path. '/adm_my_files';
     }
 
-    // method checks if adm_my_files folder has all necessary rights
-    // the method is designed to make as little as possible checks
-    // Return: true/false - if false than check the parameters $errorText, $errorPath
+    /**
+     * method checks if adm_my_files folder has all necessary rights
+     * the method is designed to make as little as possible checks
+     * @return bool if false than check the parameters $errorText, $errorPath
+     */
     public function checkSettings()
     {
         if(!is_writable($this->modulePath))
@@ -109,14 +114,20 @@ class MyFiles extends Folder
         return true;
     }
 
-    // returns the current path
+    /**
+     * @return string returns the current path
+     */
     public function getServerPath()
     {
         return $this->currentPath;
     }
 
-    // open a folder in the current module folder
-    // if that folder doesn't exists than it will be created
+    /**
+     * open a folder in the current module folder
+     * if that folder doesn't exists than it will be created
+     * @param string $folder
+     * @return int
+     */
     public function setSubFolder($folder)
     {
         if(admStrIsValidFileName($folder))

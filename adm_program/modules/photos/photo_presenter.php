@@ -124,7 +124,7 @@ if($gPreferences['photo_show_mode'] == 0)
 }
 elseif($gPreferences['photo_show_mode'] == 2)
 {
-    // if no popup mode then show additional album informations
+    // if no popup mode then show additional album information
     $datePeriod = $photoAlbum->getValue('pho_begin', $gPreferences['system_date']);
 
     if($photoAlbum->getValue('pho_end') != $photoAlbum->getValue('pho_begin')

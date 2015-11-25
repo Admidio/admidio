@@ -21,10 +21,11 @@
  */
 class TableAnnouncement extends TableAccess
 {
-    /** Constructor that will create an object of a recordset of the table adm_announcements.
-     *  If the id is set than the specific announcement will be loaded.
-     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
-     *  @param int    $ann_id   The recordset of the announcement with this id will be loaded. If id isn't set than an empty object of the table is created.
+    /**
+     * Constructor that will create an object of a recordset of the table adm_announcements.
+     * If the id is set than the specific announcement will be loaded.
+     * @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int    $ann_id   The recordset of the announcement with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$database, $ann_id = 0)
     {
@@ -112,8 +113,8 @@ class TableAnnouncement extends TableAccess
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
-     * @param $newValue The new value that should be stored in the database field
-     * @param bool $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @param        $newValue   The new value that should be stored in the database field
+     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
      * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)

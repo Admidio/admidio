@@ -34,8 +34,8 @@ class SystemMail extends Email
     private $smVariables = array(); // speichert zusaetzliche Variablen fuer den Mailtext
 
     /**
-     *  Constructor that will create an object of a SystemMail to handle all system notifications.
-     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     * Constructor that will create an object of a SystemMail to handle all system notifications.
+     * @param object $database Object of the class Database. This should be the default global object @b $gDb.
      */
     public function __construct(&$database)
     {
@@ -46,8 +46,9 @@ class SystemMail extends Email
 
     /**
      * diese Methode liest den Mailtext aus der DB und ersetzt vorkommende Platzhalter durch den gewuenschten Inhalt
-     * @param  string $systemMailId eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
-     * @param  object $user         Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
+     * @param string $systemMailId eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
+     * @param object $user         Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
+     * @return
      */
     public function getMailText($systemMailId, &$user)
     {

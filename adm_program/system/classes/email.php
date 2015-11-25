@@ -318,7 +318,7 @@ class Email extends PHPMailer
     }
 
     /**
-     * write a short text with sender informations in text of email
+     * write a short text with sender information in text of email
      * @param string $senderName
      * @param string $senderEmail
      * @param string $receivers

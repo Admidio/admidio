@@ -197,7 +197,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                         $roleMemHTML .= $form->show(false);
                     $roleMemHTML .= '</div></li>
                     <li class="list-group-item" id="member_info_'.$member->getValue('mem_id').'_Content" style="display: none;">';
-                        // show informations about user who creates the recordset and changed it
+                        // show information about user who creates the recordset and changed it
                         $roleMemHTML .= admFuncShowCreateChangeInfoById($member->getValue('mem_usr_id_create'), $member->getValue('mem_timestamp_create'), $member->getValue('mem_usr_id_change'), $member->getValue('mem_timestamp_change')).'
                     </li>
                 </ul>

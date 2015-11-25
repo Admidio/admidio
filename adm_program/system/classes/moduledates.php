@@ -207,7 +207,7 @@ class ModuleDates extends Modules
                                   cha_username.usr_login_name as change_name ';
         }
 
-        //read dates from database
+        // read dates from database
         $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.mem_leader,'.$additionalFields.'
                   FROM '.TBL_DATE_ROLE.' dtr, '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
                        '.$this->sqlAdditionalTablesGet('data').'
@@ -224,7 +224,7 @@ class ModuleDates extends Modules
                        '.$this->sqlConditionsGet()
                         . ' ORDER BY dat_begin '.$this->order;
 
-         //Parameter
+        // Parameter
         if($limit > 0)
         {
             $sql .= ' LIMIT '.$limit;
@@ -236,7 +236,7 @@ class ModuleDates extends Modules
 
         $datesStatement = $gDb->query($sql);
 
-        //array for results
+        // array for results
         $dates['recordset']  = $datesStatement->fetchAll();
         $dates['numResults'] = $datesStatement->rowCount();
         $dates['limit']      = $limit;
@@ -352,7 +352,7 @@ class ModuleDates extends Modules
         {
             $yearEnd = date('Y') + 10;
 
-            //set date_from and date_to regarding to current mode
+            // set date_from and date_to regarding to current mode
             switch($this->mode)
             {
                 case 'actual':
@@ -506,7 +506,7 @@ class ModuleDates extends Modules
         {
             $sqlConditions .= ' AND dat_id = '.$this->getParameter('id');
         }
-        //...otherwise get all additional events for a group
+        // ...otherwise get all additional events for a group
         else
         {
             if(strlen($this->getParameter('dateStartFormatEnglish') === 0))

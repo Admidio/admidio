@@ -367,7 +367,7 @@ else
                 }
             $page->addHtml('</div>');
 
-            // show informations about user who edit the recordset
+            // show information about user who edit the recordset
             if(strlen($guestbook->getValue('gbo_usr_id_change')) > 0)
             {
                 $page->addHtml('<div class="panel-footer">'.admFuncShowCreateChangeInfoById(0, '', $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change')).'</div>');

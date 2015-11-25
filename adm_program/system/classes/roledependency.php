@@ -74,7 +74,6 @@ class RoleDependency
      */
     public function get($childRoleId, $parentRoleId)
     {
-
         $this->clear();
 
         if(is_numeric($childRoleId) && is_numeric($parentRoleId) && $childRoleId > 0 && $parentRoleId > 0)
@@ -92,7 +91,6 @@ class RoleDependency
                 $this->comment          = $row->rld_comment;
                 $this->timestamp        = $row->rld_timestamp;
                 $this->usr_id           = $row->rld_usr_id;
-
                 $this->roleIdParentOrig = $row->rld_rol_id_parent;
                 $this->roleIdChildOrig  = $row->rld_rol_id_child;
             }
@@ -108,8 +106,9 @@ class RoleDependency
     }
 
     /**
-     * @param  object $db
-     * @param  int    $parentId
+     * @param object $db
+     * @param int    $parentId
+     * @return array
      */
     public static function getChildRoles(&$db, $parentId)
     {
@@ -135,8 +134,9 @@ class RoleDependency
     }
 
     /**
-     * @param  object $db
-     * @param  int    $childId
+     * @param object $db
+     * @param int    $childId
+     * @return array
      */
     public static function getParentRoles(&$db, $childId)
     {
@@ -162,7 +162,8 @@ class RoleDependency
     }
 
     /**
-     * @param  int $login_user_id
+     * @param int $login_user_id
+     * @return
      */
     public function insert($login_user_id)
     {
@@ -180,6 +181,9 @@ class RoleDependency
         return -1;
     }
 
+    /**
+     * @return bool
+     */
     public function isEmpty()
     {
         if ($this->roleIdParent === 0 && $this->roleIdChild === 0)
@@ -193,8 +197,9 @@ class RoleDependency
     }
 
     /**
-     * @param  object $db
-     * @param  int    $parentId
+     * @param object $db
+     * @param int    $parentId
+     * @return
      */
     public static function removeChildRoles(&$db, $parentId)
     {
@@ -211,7 +216,8 @@ class RoleDependency
     }
 
     /**
-     * @param  int $parentId
+     * @param int $parentId
+     * @return
      */
     public function setParent($parentId)
     {
@@ -227,7 +233,8 @@ class RoleDependency
     }
 
     /**
-     * @param  int $childId
+     * @param int $childId
+     * @return
      */
     public function setChild($childId)
     {
@@ -244,7 +251,8 @@ class RoleDependency
 
     /**
      * Es muss die ID des eingeloggten Users uebergeben werden, damit die Aenderung protokolliert werden kann
-     * @param  int $login_user_id
+     * @param int $login_user_id
+     * @return
      */
     public function update($login_user_id)
     {

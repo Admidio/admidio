@@ -149,7 +149,7 @@ else
 
             '</div>
             <div class="panel-footer">'.
-                // show informations about user who creates the recordset and changed it
+                // show information about user who creates the recordset and changed it
                 admFuncShowCreateChangeInfoByName($row['create_name'], $announcement->getValue('ann_timestamp_create'),
                     $row['change_name'], $announcement->getValue('ann_timestamp_change'), $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_usr_id_change')).'
             </div>

@@ -36,10 +36,11 @@ class TableRoles extends TableAccess
     protected $countLeaders;    ///< number of leaders of this role
     protected $countMembers;    ///< number of members (without leaders) of this role
 
-    /** Constructor that will create an object of a recordset of the table adm_roles.
-     *  If the id is set than the specific role will be loaded.
-     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
-     *  @param int    $rol_id   The recordset of the role with this id will be loaded. If id isn't set than an empty object of the table is created.
+    /**
+     * Constructor that will create an object of a recordset of the table adm_roles.
+     * If the id is set than the specific role will be loaded.
+     * @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int    $rol_id   The recordset of the role with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$database, $rol_id = 0)
     {
@@ -148,7 +149,7 @@ class TableRoles extends TableAccess
 
     /**
      * Method determines the number of active members (without leaders) of this role
-     * @param exceptUserId UserId witch shoudn't be counted
+     * @param $exceptUserId UserId witch shouldn't be counted
      * @return int Returns the number of members of this role
      */
     public function countMembers($exceptUserId = null)
@@ -197,8 +198,8 @@ class TableRoles extends TableAccess
     /**
      * Deletes the selected role of the table and all references in other tables.
      * After that the class will be initialize.
-     * @throws AdmException
      * @return bool @b true if no error occurred
+     * @throws AdmException
      */
     public function delete()
     {

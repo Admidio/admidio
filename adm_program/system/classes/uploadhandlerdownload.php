@@ -7,6 +7,8 @@
  ***********************************************************************************************
  */
 
+require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/UploadHandler.php');
+
 /**
  * @class UploadHandlerDownload
  * @brief Improved checks and update of database after upload of files.
@@ -21,13 +23,11 @@
  *                                                  'upload_url' => $uploadUrl,
  *                                                  'image_versions' => array())); @endcode
  */
-require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/UploadHandler.php');
-
 class UploadHandlerDownload extends UploadHandler
 {
     /**
      * Override the default method to handle the specific things of the download module and
-     * update the database after file was succesful uploaded.
+     * update the database after file was successful uploaded.
      * This method has the same parameters as the default.
      * @param  $uploaded_file
      * @param  $name

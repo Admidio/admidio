@@ -26,9 +26,10 @@ class ProfileFields
     protected $noValueCheck;            ///< if true, than no value will be checked if method setValue is called
     public $columnsValueChanged;        ///< flag if a value of one field had changed
 
-    /** constructor that will initialize variables and read the profile field structure
-     *  @param object $database       Database object (should be @b $gDb)
-     *  @param int    $organizationId The id of the organization for which the profile field structure should be read
+    /**
+     * constructor that will initialize variables and read the profile field structure
+     * @param object $database       Database object (should be @b $gDb)
+     * @param int    $organizationId The id of the organization for which the profile field structure should be read
      */
     public function __construct(&$database, $organizationId)
     {
@@ -41,17 +42,18 @@ class ProfileFields
     }
 
     /**
-     *  Called on serialization of this object. The database object could not
-     *  be serialized and should be ignored.
-     *  @return Returns all class variables that should be serialized.
+     * Called on serialization of this object. The database object could not
+     * be serialized and should be ignored.
+     * @return array Returns all class variables that should be serialized.
      */
     public function __sleep()
     {
         return array_diff(array_keys(get_object_vars($this)), array('mDb'));
     }
 
-    /** user data of all profile fields will be initialized
-     *  the fields array will not be renewed
+    /**
+     * user data of all profile fields will be initialized
+     * the fields array will not be renewed
      */
     public function clearUserData()
     {
@@ -87,10 +89,12 @@ class ProfileFields
         return '';
     }
 
-    /** returns for field id (usf_id) the value of the column from table adm_user_fields
-     *  @param $fieldId Expects the @b usf_id of table @b adm_user_fields
-     *  @param $column The column name of @b adm_user_field for which you want the value
-     *  @param $format Optional the format (is necessary for timestamps)
+    /**
+     * returns for field id (usf_id) the value of the column from table adm_user_fields
+     * @param $fieldId Expects the @b usf_id of table @b adm_user_fields
+     * @param $column The column name of @b adm_user_field for which you want the value
+     * @param $format Optional the format (is necessary for timestamps)
+     * @return
      */
     public function getPropertyById($fieldId, $column, $format = '')
     {
@@ -104,11 +108,12 @@ class ProfileFields
         return '';
     }
 
-    /** Returns the value of the field in html format with consideration of all layout parameters
-     *  @param $fieldNameIntern Internal profile field name of the field that should be html formated
-     *  @param $value The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
-     *  @param $value2 An optional parameter that is necessary for some special fields like email to commit the user id
-     *  @return Returns an html formated string that considered the profile field settings
+    /**
+     * Returns the value of the field in html format with consideration of all layout parameters
+     * @param $fieldNameIntern Internal profile field name of the field that should be html formated
+     * @param $value The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
+     * @param $value2 An optional parameter that is necessary for some special fields like email to commit the user id
+     * @return string Returns an html formated string that considered the profile field settings
      */
     public function getHtmlValue($fieldNameIntern, $value, $value2 = '')
     {
@@ -282,17 +287,19 @@ class ProfileFields
                     $value = '<a href="'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_url').'" target="_blank">'.$value.'</a>';
                 }
             }
-
         }
+
         return $value;
     }
 
-    /** Returns the user value for this column @n
-     *  format = 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function @n
-     *  format = 'html'  : returns the value in html-format if this is necessary for that field type @n
-     *  format = 'database' : returns the value that is stored in database with no format applied
-     *  @param $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
-     *  @param $format Returns the field value in a special format @b text, @b html, @b database or datetime (detailed description in method description)
+    /**
+     * Returns the user value for this column @n
+     * format = 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function @n
+     * format = 'html'  : returns the value in html-format if this is necessary for that field type @n
+     * format = 'database' : returns the value that is stored in database with no format applied
+     * @param $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
+     * @param string $format Returns the field value in a special format @b text, @b html, @b database or datetime (detailed description in method description)
+     * @return
      */
     public function getValue($fieldNameIntern, $format = '')
     {
@@ -362,18 +369,20 @@ class ProfileFields
         return $value;
     }
 
-    /** If this method is called than all further calls of method @b setValue will not check the values.
-     *  The values will be stored in database without any inspections !
+    /**
+     * If this method is called than all further calls of method @b setValue will not check the values.
+     * The values will be stored in database without any inspections !
      */
     public function noValueCheck()
     {
         $this->noValueCheck = true;
     }
 
-    /** Reads the profile fields structure out of database table @b adm_user_fields
-     *  and adds an object for each field structure to the @b mProfileFields array.
-     *  @param $organizationId The id of the organization for which the profile fields
-     *                         structure should be read.
+    /**
+     * Reads the profile fields structure out of database table @b adm_user_fields
+     * and adds an object for each field structure to the @b mProfileFields array.
+     * @param $organizationId The id of the organization for which the profile fields
+     *                        structure should be read.
      */
     public function readProfileFields($organizationId)
     {
@@ -399,12 +408,13 @@ class ProfileFields
         }
     }
 
-    /** Reads the user data of all profile fields out of database table @b adm_user_data
-     *  and adds an object for each field data to the @b mUserData array.
-     *  If profile fields structure wasn't read, this will be done before.
-     *  @param $userId         The id of the user for which the user data should be read.
-     *  @param $organizationId The id of the organization for which the profile fields
-     *                         structure should be read if necessary.
+    /**
+     * Reads the user data of all profile fields out of database table @b adm_user_data
+     * and adds an object for each field data to the @b mUserData array.
+     * If profile fields structure wasn't read, this will be done before.
+     * @param $userId         The id of the user for which the user data should be read.
+     * @param $organizationId The id of the organization for which the profile fields
+     *                        structure should be read if necessary.
      */
     public function readUserData($userId, $organizationId)
     {
@@ -435,8 +445,10 @@ class ProfileFields
         }
     }
 
-    // save data of every user field
-    // userId : id is necessary if new user, that id was not known before
+    /**
+     * save data of every user field
+     * @param $userId id is necessary if new user, that id was not known before
+     */
     public function saveUserData($userId)
     {
         $this->mDb->startTransaction();
@@ -467,8 +479,8 @@ class ProfileFields
     }
 
     /**
-     *  Set the database object for communication with the database of this class.
-     *  @param object $database An object of the class Database. This should be the global $gDb object.
+     * Set the database object for communication with the database of this class.
+     * @param object $database An object of the class Database. This should be the global $gDb object.
      */
     public function setDatabase(&$database)
     {
@@ -478,7 +490,12 @@ class ProfileFields
         }
     }
 
-    // set value for column usd_value of field
+    /**
+     * set value for column usd_value of field
+     * @param $fieldNameIntern
+     * @param $fieldValue
+     * @return bool
+     */
     public function setValue($fieldNameIntern, $fieldValue)
     {
         global $gPreferences;

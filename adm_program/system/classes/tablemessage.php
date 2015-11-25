@@ -14,10 +14,11 @@ class TableMessage extends TableAccess
 {
     protected $msg_id;
 
-    /** Constructor that will create an object of a recordset of the table adm_messages.
-     *  If the id is set than the specific message will be loaded.
-     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
-     *  @param int    $msg_id   The recordset of the message with this conversation id will be loaded. If id isn't set than an empty object of the table is created.
+    /**
+     * Constructor that will create an object of a recordset of the table adm_messages.
+     * If the id is set than the specific message will be loaded.
+     * @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int    $msg_id   The recordset of the message with this conversation id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$database, $msg_id = 0)
     {
@@ -26,8 +27,10 @@ class TableMessage extends TableAccess
         parent::__construct($database, TBL_MESSAGES, 'msg', $this->msg_id);
     }
 
-    /** Reads the number of all unread messages of this table
-     *  @return Number of unread messages of this table
+    /**
+     * Reads the number of all unread messages of this table
+     * @param $usr_id
+     * @return Number of unread messages of this table
      */
     public function countUnreadMessageRecords($usr_id)
     {
@@ -37,8 +40,9 @@ class TableMessage extends TableAccess
         return $row['count'];
     }
 
-    /** Reads the number of all conversations in this table
-     *  @return Number of conversations in this table
+    /**
+     * Reads the number of all conversations in this table
+     * @return Number of conversations in this table
      */
     public function countMessageConversations()
     {
@@ -48,8 +52,9 @@ class TableMessage extends TableAccess
         return $row['count'];
     }
 
-    /** Reads the number of all messages in actual conversation
-     *  @return Number of all messages in actual conversation
+    /**
+     * Reads the number of all messages in actual conversation
+     * @return Number of all messages in actual conversation
      */
     public function countMessageParts()
     {
@@ -60,9 +65,10 @@ class TableMessage extends TableAccess
         return $row['count'];
     }
 
-    /** Set a new value for a column of the database table.
-     *  @param $usr_id of the receiver - just for security reasons.
-     *  @return Returns @b answer of the SQL execution
+    /**
+     * Set a new value for a column of the database table.
+     * @param $usr_id of the receiver - just for security reasons.
+     * @return Returns @b answer of the SQL execution
      */
     public function setReadValue($usr_id)
     {
@@ -72,10 +78,11 @@ class TableMessage extends TableAccess
         return $this->db->query($sql);
     }
 
-    /** Set a new value for a column of the database table.
-     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
-     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     *  @return Returns @b ID of the user that is partner in the actual conversation
+    /**
+     * Set a new value for a column of the database table.
+     * The value is only saved in the object. You must call the method @b save to store the new value to the database
+     * @param $usr_id
+     * @return Returns @b ID of the user that is partner in the actual conversation
      */
     public function getConversationPartner($usr_id)
     {

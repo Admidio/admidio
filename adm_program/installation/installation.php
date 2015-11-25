@@ -214,7 +214,7 @@ elseif($getMode === 3)  // Enter database access information
         $prefix   = 'adm';
     }
 
-    // create a page to enter all necessary database connection informations
+    // create a page to enter all necessary database connection information
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=4');
     $form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));

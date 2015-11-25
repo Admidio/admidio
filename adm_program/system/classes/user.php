@@ -746,8 +746,7 @@ class User extends TableUsers
         {
             // edit own profile ?
             if($user->getValue('usr_id') === $this->getValue('usr_id')
-            && $this->getValue('usr_id') > 0
-            && $checkOwnProfile)
+            && $this->getValue('usr_id') > 0 && $checkOwnProfile)
             {
                 $edit_profile = $this->checkRolesRight('rol_profile');
 

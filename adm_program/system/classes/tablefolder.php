@@ -28,10 +28,11 @@ class TableFolder extends TableAccess
 {
     protected $folderPath;
 
-    /** Constructor that will create an object of a recordset of the table adm_folders.
-     *  If the id is set than the specific folder will be loaded.
-     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
-     *  @param int    $folderId The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
+    /**
+     * Constructor that will create an object of a recordset of the table adm_folders.
+     * If the id is set than the specific folder will be loaded.
+     * @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int    $folderId The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$database, $folderId = 0)
     {
@@ -40,7 +41,11 @@ class TableFolder extends TableAccess
         $this->folderPath = new Folder();
     }
 
-    // Legt einen neuen Ordner im Dateisystem an
+    /**
+     * Legt einen neuen Ordner im Dateisystem an
+     * @param string $folderName
+     * @return array
+     */
     public function createFolder($folderName)
     {
         $error = array('text' => '', 'path' => '');
@@ -57,10 +62,12 @@ class TableFolder extends TableAccess
         return $error;
     }
 
-    /** Deletes the selected record of the table and all references in other tables.
-     *  Also all files, subfolders and the selected folder will be deleted in the file system.
-     *  After that the class will be initialize.
-     *  @return @b true if no error occurred
+    /**
+     * Deletes the selected record of the table and all references in other tables.
+     * Also all files, subfolders and the selected folder will be deleted in the file system.
+     * After that the class will be initialize.
+     * @param int $folderId
+     * @return @b true if no error occurred
      */
     public function delete($folderId = 0)
     {
@@ -72,7 +79,7 @@ class TableFolder extends TableAccess
 
             if (!strlen($this->getValue('fol_name')) > 0)
             {
-               return false;
+                return false;
             }
             $folderPath = $this->getCompletePathOfFolder();
 
@@ -125,8 +132,12 @@ class TableFolder extends TableAccess
         return $returnCode;
     }
 
-    // Setzt das Lockedflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
-    // und allen darin enthaltenen Unterordnern und Dateien rekursiv
+    /**
+     * Setzt das Lockedflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
+     * und allen darin enthaltenen Unterordnern und Dateien rekursiv
+     * @param $locked_flag
+     * @param int $folderId
+     */
     public function editLockedFlagOnFolder($locked_flag, $folderId = 0)
     {
         if ($folderId == 0)
@@ -166,8 +177,8 @@ class TableFolder extends TableAccess
 
     /**
      * Set the public flag to a folder and all subfolders.
-     * @param bool $public   If set to @b 1 then all users could see this folder.
-     * @param int  $folderId The id of the folder where the public flag should be set.
+     * @param bool $public_flag If set to @b 1 then all users could see this folder.
+     * @param int  $folderId    The id of the folder where the public flag should be set.
      */
     public function editPublicFlagOnFolder($public_flag, $folderId = 0)
     {
@@ -197,10 +208,12 @@ class TableFolder extends TableAccess
 
     }
 
-    /** Reads the folder recordset from database table @b adm_folders and throws an
-     *  AdmException if the user has no right to see the folder or the folder id doesn't exists.
-     *  @param $folderId The id of the folder. If the id is 0 then the root folder will be shown.
-     *  @return Returns @b true if everything is ok otherwise an AdmException is thrown.
+    /**
+     * Reads the folder recordset from database table @b adm_folders and throws an
+     * AdmException if the user has no right to see the folder or the folder id doesn't exists.
+     * @param $folderId The id of the folder. If the id is 0 then the root folder will be shown.
+     * @return true Returns @b true if everything is ok otherwise an AdmException is thrown.
+     * @throws AdmException
      */
     public function getFolderForDownload($folderId)
     {
@@ -269,7 +282,9 @@ class TableFolder extends TableAccess
         throw new AdmException('DOW_FOLDER_NOT_FOUND', $folderId);
     }
 
-    // Inhalt des aktuellen Ordners, abhaengig von den Benutzerrechten, als Array zurueckliefern...
+    /**
+     * Inhalt des aktuellen Ordners, abhaengig von den Benutzerrechten, als Array zurueckliefern...
+     */
     public function getFolderContentsForDownload()
     {
         global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
@@ -513,7 +528,10 @@ class TableFolder extends TableAccess
         return $completeFolder;
     }
 
-    //Gibt den kompletten Pfad des Ordners zurueck
+    /**
+     * Gibt den kompletten Pfad des Ordners zurueck
+     * @return string
+     */
     public function getCompletePathOfFolder()
     {
         //Pfad zusammen setzen
@@ -524,7 +542,12 @@ class TableFolder extends TableAccess
         return $completePath;
     }
 
-    //Gibt fuer das Downloadmodul eine HTML-Navigationsleiste fuer die Ordner zurueck
+    /**
+     * Gibt fuer das Downloadmodul eine HTML-Navigationsleiste fuer die Ordner zurueck
+     * @param int $folderId
+     * @param string $currentNavigation
+     * @return string
+     */
     public function getNavigationForDownload($folderId = 0, $currentNavigation = '')
     {
         global $gCurrentOrganization, $g_root_path, $gL10n;
@@ -601,8 +624,8 @@ class TableFolder extends TableAccess
     /**
      * Creates an array with all roles ids that have the right to view the folder.
      * If you need also the name of the folder then set the parameter to true.
-     * @param bool In addition to the id also read the name of the role and return them.
-     * @return Returns an array with all roles ids that have the right to view the folder.
+     * @param bool $readRolesName In addition to the id also read the name of the role and return them.
+     * @return array Returns an array with all roles ids that have the right to view the folder.
      */
     public function getRoleArrayOfFolder($readRolesName = false)
     {
@@ -633,13 +656,14 @@ class TableFolder extends TableAccess
         return $roleArray;
     }
 
-    /** Get the value of a column of the database table.
-     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
-     *  @param $columnName The name of the database column whose value should be read
-     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                 For text columns the format can be @b database that would return the original database value without any transformations
-     *  @return Returns the value of the database column.
-     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
+    /**
+     * Get the value of a column of the database table.
+     * If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @param string $columnName The name of the database column whose value should be read
+     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                           For text columns the format can be @b database that would return the original database value without any transformations
+     * @return Returns the value of the database column.
+     *         If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
@@ -650,11 +674,16 @@ class TableFolder extends TableAccess
             // Konvertiert HTML-Auszeichnungen zurück in Buchstaben
             $value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
         }
+
         return $value;
     }
 
-    //benennt eine Ordnerinstanz um
-    //und sorgt dafür das bei allen Unterordnern der Pfad angepasst wird
+    /**
+     * Benennt eine Ordnerinstanz um und sorgt dafür das bei allen Unterordnern der Pfad angepasst wird
+     * @param string $newName
+     * @param string $newPath
+     * @param int $folderId
+     */
     public function rename($newName, $newPath, $folderId = 0)
     {
         if ($folderId == 0)
@@ -687,12 +716,13 @@ class TableFolder extends TableAccess
         $this->db->endTransaction();
     }
 
-    /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     *  a new record or if only an update is necessary. The update statement will only update
-     *  the changed columns. If the table has columns for creator or editor than these column
-     *  with their timestamp will be updated.
-     *  For new records the user, organization and timestamp will be set per default.
-     *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+    /**
+     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * a new record or if only an update is necessary. The update statement will only update
+     * the changed columns. If the table has columns for creator or editor than these column
+     * with their timestamp will be updated.
+     * For new records the user, organization and timestamp will be set per default.
+     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
      */
     public function save($updateFingerPrint = true)
     {
@@ -707,8 +737,12 @@ class TableFolder extends TableAccess
         parent::save($updateFingerPrint);
     }
 
-    // Setzt Berechtigungen fuer Rollen auf einer vorhandenen Ordnerinstanz
-    // und all seinen Unterordnern rekursiv
+    /**
+     * Setzt Berechtigungen fuer Rollen auf einer vorhandenen Ordnerinstanz
+     * und all seinen Unterordnern rekursiv
+     * @param array $rolesArray
+     * @param int   $folderId
+     */
     public function setRolesOnFolder($rolesArray, $folderId = 0)
     {
         if ($folderId == 0)

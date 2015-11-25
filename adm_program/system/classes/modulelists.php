@@ -1,6 +1,12 @@
 <?php
+/**
+ ***********************************************************************************************
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
 
-/*****************************************************************************/
 /** @class ModuleLists
  *  @brief Class manages lists viewable for user
  *
@@ -161,19 +167,12 @@
  *  )
  *  @endcode
  */
-/**
- ***********************************************************************************************
- * @copyright 2004-2015 The Admidio Team
- * @see http://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
 class ModuleLists extends Modules
 {
     private $memberStatus;
 
     /**
-     *  creates an new ModuleLists object
+     * creates an new ModuleLists object
      */
     public function __construct()
     {
@@ -187,7 +186,8 @@ class ModuleLists extends Modules
         $this->setMemberStatus();
     }
 
-    /** Evaluates memberStatus an returns appropriate SQL conditions
+    /**
+     * Evaluates memberStatus an returns appropriate SQL conditions
      * @return string SQL for member status
      */
     private function getMemberStatusSql()
@@ -209,8 +209,9 @@ class ModuleLists extends Modules
         return $sql;
     }
 
-    /** returns SQL condition
-     *  @return SQL condition for category id
+    /**
+     * returns SQL condition
+     * @return string SQL condition for category id
      */
     private function getCategorySql()
     {
@@ -221,8 +222,9 @@ class ModuleLists extends Modules
         return '';
     }
 
-    /** assembles SQL roles visible for current user
-     *  @return string SQL condition visible for current user
+    /**
+     * assembles SQL roles visible for current user
+     * @return string SQL condition visible for current user
      */
     private function getVisibleRolesSql()
     {
@@ -239,10 +241,11 @@ class ModuleLists extends Modules
         }
     }
 
-    /** Function returns a set of lists with corresponding informations
-     *  @param $startElement Start element of result. First (and default) is 0.
-     *  @param $limit Number of elements returned max. Default NULL will take number from peferences.
-     *  @return array with list and corresponding informations
+    /**
+     * Function returns a set of lists with corresponding information
+     * @param int      $startElement Start element of result. First (and default) is 0.
+     * @param int|null $limit Number of elements returned max. Default NULL will take number from preferences.
+     * @return array with list and corresponding information
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
@@ -258,10 +261,10 @@ class ModuleLists extends Modules
             $limit = $gPreferences['lists_roles_per_page'];
         }
 
-        //assemble conditions
+        // assemble conditions
         $sql_conditions = $this->getCategorySql().$this->getVisibleRolesSql();
 
-        //provoke empty result for not logged in users
+        // provoke empty result for not logged in users
         if(!$gValidLogin)
         {
             $sql_conditions .= ' AND cat_hidden = 0 ';
@@ -295,7 +298,7 @@ class ModuleLists extends Modules
 
         $listsStatement = $gDb->query($sql);
 
-        //array for results
+        // array for results
         $lists['recordset']  = $listsStatement->fetchAll();
         $lists['numResults'] = $listsStatement->rowCount();
         $lists['limit']      = $limit;
@@ -305,8 +308,9 @@ class ModuleLists extends Modules
         return $lists;
     }
 
-    /** Function to get total number of lists limited by current conditions.
-     *  @return int Number of lists.
+    /**
+     * Function to get total number of lists limited by current conditions.
+     * @return int Number of lists.
      */
     public function getDataSetCount()
     {
@@ -314,9 +318,9 @@ class ModuleLists extends Modules
         global $gDb;
         global $gValidLogin;
 
-        //assemble conditions
+        // assemble conditions
         $sql_conditions = $this->getCategorySql().$this->getVisibleRolesSql();
-        //provoke empty result for not logged in users
+        // provoke empty result for not logged in users
         if(!$gValidLogin)
         {
             $sql_conditions= ' AND cat_hidden = 0 ';
@@ -337,8 +341,9 @@ class ModuleLists extends Modules
         return $row['numrows'];
     }
 
-    /** Function to get list configurations accessible by current user
-     *  @return array with accessible list configurations
+    /**
+     * Function to get list configurations accessible by current user
+     * @return array with accessible list configurations
      */
     public function getListConfigurations()
     {
@@ -361,10 +366,11 @@ class ModuleLists extends Modules
         return $configurations;
     }
 
-    /** Sets the status of role members to be shown
-     *  @param string status active(default), inactive, both
+    /**
+     * Sets the status of role members to be shown
+     * @param string $status active(default), inactive, both
      */
-    public function setMemberStatus($status='active')
+    public function setMemberStatus($status = 'active')
     {
         switch ($status)
         {

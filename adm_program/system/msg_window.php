@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Popup window with informations
+ * Popup window with information
  *
  * @copyright 2004-2015 The Admidio Team
  * @see http://www.admidio.org/
@@ -79,7 +79,6 @@ switch ($getMessageId)
         break;
 
     // Eigene Listen
-
     case 'mylist_condition':
         echo '
             <p>'.$gL10n->get('LST_MYLIST_CONDITION_DESC').'</p>
@@ -157,8 +156,7 @@ switch ($getMessageId)
             </table>';
         break;
 
-    //Profil
-
+    // Profil
     case 'profile_photo_up_help':
         echo '
             <h3>'.$gL10n->get('SYS_RESTRICTIONS').'</h3>

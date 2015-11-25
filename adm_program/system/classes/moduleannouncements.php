@@ -105,7 +105,9 @@ class ModuleAnnouncements extends Modules
 
     /**
      * Get all records and push it to the array
-     * @return Returns the Array with results, recordsets and validated parameters from $_GET Array
+     * @param int      $startElement
+     * @param int|null $limit
+     * @return array Returns the Array with results, recordsets and validated parameters from $_GET Array
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
@@ -120,7 +122,7 @@ class ModuleAnnouncements extends Modules
             $announcementsPerPage = $gPreferences['announcements_per_page'];
         }
 
-        //Bedingungen
+        // Bedingungen
         if($this->getParameter('id') > 0)
         {
             $this->getConditions = 'AND ann_id ='. $this->getParameter('id');
@@ -163,7 +165,7 @@ class ModuleAnnouncements extends Modules
                 ON cha_username.usr_id = ann_usr_id_change ';
         }
 
-        //read announcements from database
+        // read announcements from database
         $sql = 'SELECT ann.*, '.$additionalFields.'
                   FROM '. TBL_ANNOUNCEMENTS. ' ann
                        '.$additionalTables.'
@@ -195,13 +197,14 @@ class ModuleAnnouncements extends Modules
         return $announcements;
     }
 
-    /** Set a date range in which the dates should be searched. The method will fill
-     *  4 parameters @b dateStartFormatEnglish, @b dateStartFormatEnglish,
-     *  @b dateEndFormatEnglish and @b dateEndFormatAdmidio that could be read with
-     *  getParameter and could be used in the script.
-     *  @param $dateRangeStart A date in english or Admidio format that will be the start date of the range.
-     *  @param $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
-     *  @return Returns false if invalid date format is submitted
+    /**
+     * Set a date range in which the dates should be searched. The method will fill
+     * 4 parameters @b dateStartFormatEnglish, @b dateStartFormatEnglish,
+     * @b dateEndFormatEnglish and @b dateEndFormatAdmidio that could be read with
+     * getParameter and could be used in the script.
+     * @param string $dateRangeStart A date in english or Admidio format that will be the start date of the range.
+     * @param string $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
+     * @return false|void Returns false if invalid date format is submitted
      */
     public function setDateRange($dateRangeStart, $dateRangeEnd)
     {
@@ -209,8 +212,8 @@ class ModuleAnnouncements extends Modules
 
         if($dateRangeStart === '')
         {
-            $dateRangeStart  = '1970-01-01';
-            $dateRangeEnd    = DATE_NOW;
+            $dateRangeStart = '1970-01-01';
+            $dateRangeEnd   = DATE_NOW;
         }
 
         // Create date object and format date_from in English format and system format and push to daterange array

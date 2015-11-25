@@ -7,6 +7,8 @@
  ***********************************************************************************************
  */
 
+require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/UploadHandler.php');
+
 /**
  * @class UploadHandlerPhoto
  * @brief Improved checks and update of database after upload of photos.
@@ -23,8 +25,6 @@
  *                                               'accept_file_types' => '/\.(jpe?g|png)$/i'), true,
  *                                               'array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID'))); @endcode
  */
-require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/UploadHandler.php');
-
 class UploadHandlerPhoto extends UploadHandler
 {
     /**

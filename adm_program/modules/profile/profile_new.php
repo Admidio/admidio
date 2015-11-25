@@ -415,7 +415,7 @@ $form->addSubmitButton('btn_save', $btn_text, array('icon' => THEME_PATH.'/icons
 
 if($getNewUser == 0)
 {
-    // show informations about user who creates the recordset and changed it
+    // show information about user who creates the recordset and changed it
     $form->addHtml(admFuncShowCreateChangeInfoById($user->getValue('usr_usr_id_create'), $user->getValue('usr_timestamp_create'), $user->getValue('usr_usr_id_change'), $user->getValue('usr_timestamp_change')));
 }
 

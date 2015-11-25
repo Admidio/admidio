@@ -144,7 +144,7 @@ class Message
 
             if(!$this->includeThemeBody)
             {
-                // dont show custom html of the current theme
+                // don't show custom html of the current theme
                 $page->hideThemeHtml();
             }
 

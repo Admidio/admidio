@@ -288,7 +288,7 @@ $form->addSubmitButton('btn_save', $btn_text, array('icon' => THEME_PATH.'/icons
 
 if($getNewItem == 0)
 {
-    // show informations about inventory who creates the recordset and changed it
+    // show information about inventory who creates the recordset and changed it
     $form->addHtml(admFuncShowCreateChangeInfoById($inventory->getValue('inv_usr_id_create'), $inventory->getValue('inv_timestamp_create'), $inventory->getValue('inv_usr_id_change'), $inventory->getValue('inv_timestamp_change')));
 }
 

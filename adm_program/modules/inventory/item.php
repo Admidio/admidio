@@ -309,7 +309,7 @@ if($category !== '')
     $page->addHtml('</div></div>');
 }
 
-// show informations about user who creates the recordset and changed it
+// show information about user who creates the recordset and changed it
 $page->addHtml(admFuncShowCreateChangeInfoById($inventory->getValue('inv_usr_id_create'), $inventory->getValue('inv_timestamp_create'), $inventory->getValue('inv_usr_id_change'), $inventory->getValue('inv_timestamp_change')));
 
 $page->show();

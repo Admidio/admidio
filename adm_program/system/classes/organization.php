@@ -378,7 +378,7 @@ class Organization extends TableAccess
             $this->bCheckChildOrganizations = true;
         }
 
-        // if no orga was set in parameter then check the orga of this object
+        // if no organization was set in parameter then check the organization of this object
         if($organizationId === 0)
         {
             $organizationId = $this->getValue('org_id');

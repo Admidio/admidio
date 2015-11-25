@@ -17,19 +17,21 @@
  */
 class TableLists extends TableAccess
 {
-    /** Constructor that will create an object of a recordset of the table adm_lists.
-     *  If the id is set than the specific list will be loaded.
-     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
-     *  @param int    $lst_id   The recordset of the list with this id will be loaded. If id isn't set than an empty object of the table is created.
+    /**
+     * Constructor that will create an object of a recordset of the table adm_lists.
+     * If the id is set than the specific list will be loaded.
+     * @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int    $lst_id   The recordset of the list with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$database, $lst_id = 0)
     {
         parent::__construct($database, TBL_LISTS, 'lst', $lst_id);
     }
 
-    /** Deletes the selected list with all associated fields.
-     *  After that the class will be initialize.
-     *  @return @b true if no error occurred
+    /**
+     * Deletes the selected list with all associated fields.
+     * After that the class will be initialize.
+     * @return @b true if no error occurred
      */
     public function delete()
     {
@@ -53,12 +55,13 @@ class TableLists extends TableAccess
         return $return;
     }
 
-    /** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     *  a new record or if only an update is necessary. The update statement will only update
-     *  the changed columns. If the table has columns for creator or editor than these column
-     *  with their timestamp will be updated.
-     *  Per default the organization, user and timestamp will be set.
-     *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+    /**
+     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * a new record or if only an update is necessary. The update statement will only update
+     * the changed columns. If the table has columns for creator or editor than these column
+     * with their timestamp will be updated.
+     * Per default the organization, user and timestamp will be set.
+     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
      */
     public function save($updateFingerPrint = true)
     {

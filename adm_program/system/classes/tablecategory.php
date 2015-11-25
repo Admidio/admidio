@@ -27,20 +27,23 @@ class TableCategory extends TableAccess
     protected $elementTable;
     protected $elementColumn;
 
-    /** Constructor that will create an object of a recordset of the table adm_category.
-     *  If the id is set than the specific category will be loaded.
-     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
-     *  @param int    $cat_id   The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
+    /**
+     * Constructor that will create an object of a recordset of the table adm_category.
+     * If the id is set than the specific category will be loaded.
+     * @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int    $cat_id   The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$database, $cat_id = 0)
     {
         parent::__construct($database, TBL_CATEGORIES, 'cat', $cat_id);
     }
 
-    /** Deletes the selected record of the table and all references in other tables.
-     *  After that the class will be initialize. The method throws exceptions if
-     *  the category couldn't be deleted.
-     *  @return @b true if no error occurred
+    /**
+     * Deletes the selected record of the table and all references in other tables.
+     * After that the class will be initialize. The method throws exceptions if
+     * the category couldn't be deleted.
+     * @return @b true if no error occurred
+     * @throws AdmException
      */
     public function delete()
     {
@@ -95,9 +98,14 @@ class TableCategory extends TableAccess
         }
     }
 
-    // diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
-    // dieser bildet sich aus dem Namen in Grossbuchstaben und der naechsten freien Nummer (index)
-    // Beispiel: 'Gruppen' => 'GRUPPEN_2'
+    /**
+     * diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
+     * dieser bildet sich aus dem Namen in Grossbuchstaben und der naechsten freien Nummer (index)
+     * Beispiel: 'Gruppen' => 'GRUPPEN_2'
+     * @param $name
+     * @param $index
+     * @return string
+     */
     private function getNewNameIntern($name, $index)
     {
         $newNameIntern = strtoupper(str_replace(' ', '_', $name));
@@ -113,28 +121,32 @@ class TableCategory extends TableAccess
             ++$index;
             $newNameIntern = $this->getNewNameIntern($name, $index);
         }
+
         return $newNameIntern;
     }
 
-    /** Read number of child recordsets of this category.
-     *  @return Returns the number of child elements of this category
+    /**
+     * Read number of child recordsets of this category.
+     * @return Returns the number of child elements of this category
      */
     public function getNumberElements()
     {
-        $sql    = 'SELECT COUNT(1) FROM '.$this->elementTable.'
-                    WHERE '.$this->elementColumn.' = '. $this->getValue('cat_id');
+        $sql = 'SELECT COUNT(1) FROM '.$this->elementTable.'
+                 WHERE '.$this->elementColumn.' = '. $this->getValue('cat_id');
         $elementsStatement = $this->db->query($sql);
         $row = $elementsStatement->fetch();
+
         return $row[0];
     }
 
-    /** Get the value of a column of the database table.
-     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
-     *  @param $columnName The name of the database column whose value should be read
-     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                 For text columns the format can be @b database that would return the original database value without any transformations
-     *  @return Returns the value of the database column.
-     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
+    /**
+     * Get the value of a column of the database table.
+     * If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @param string $columnName The name of the database column whose value should be read
+     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                           For text columns the format can be @b database that would return the original database value without any transformations
+     * @return Returns the value of the database column.
+     *         If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
@@ -162,8 +174,9 @@ class TableCategory extends TableAccess
         return $value;
     }
 
-    /** Change the internal sequence of this category. It can be moved one place up or down
-     *  @param $mode This could be @b UP or @b DOWN.
+    /**
+     * Change the internal sequence of this category. It can be moved one place up or down
+     * @param string $mode This could be @b UP or @b DOWN.
      */
     public function moveSequence($mode)
     {
@@ -181,8 +194,7 @@ class TableCategory extends TableAccess
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
         if(admStrToUpper($mode) === 'UP')
         {
-            if($this->getValue('cat_org_id') == 0
-            || $this->getValue('cat_sequence') > $row['count']+1)
+            if($this->getValue('cat_org_id') == 0 || $this->getValue('cat_sequence') > $row['count']+1)
             {
                 $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '.$this->getValue('cat_sequence').'
                          WHERE cat_type = \''. $this->getValue('cat_type'). '\'
@@ -197,8 +209,7 @@ class TableCategory extends TableAccess
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
         elseif(admStrToUpper($mode) === 'DOWN')
         {
-            if($this->getValue('cat_org_id') > 0
-            || $this->getValue('cat_sequence') < $row['count'])
+            if($this->getValue('cat_org_id') > 0 || $this->getValue('cat_sequence') < $row['count'])
             {
                 $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '.$this->getValue('cat_sequence').'
                          WHERE cat_type = \''. $this->getValue('cat_type'). '\'
