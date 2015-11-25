@@ -57,8 +57,8 @@ if($getMode != 1)
                   AND mem_begin  <= \''.DATE_NOW.'\'
                   AND mem_end     > \''.DATE_NOW.'\'
                   AND mem_usr_id  = '. $getUserId;
-    $result = $gDb->query($sql);
-    $other_orga = $gDb->num_rows($result);
+    $statement = $gDb->query($sql);
+    $other_orga = $statement->rowCount();
 
     // User-Objekt anlegen
     $user = new User($gDb, $gProfileFields, $getUserId);
@@ -124,9 +124,9 @@ elseif($getMode === 2)
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end    > \''.DATE_NOW.'\'
                AND mem_usr_id = '. $getUserId;
-    $result_mgl = $gDb->query($sql);
+    $mglStatement = $gDb->query($sql);
 
-    while($row = $gDb->fetch_array($result_mgl))
+    while($row = $mglStatement->fetch())
     {
         // alle Rollen der aktuellen Gliedgemeinschaft auf ungueltig setzen
         $member->setArray($row);

@@ -46,8 +46,8 @@ switch($postFunction)
           FROM ". TBL_MESSAGES."
           where msg_converation_id = 0";
 
-        $result = $gDb->query($sql);
-        $row = $gDb->fetch_array($result);
+        $statement = $gDb->query($sql);
+        $row = $statement->fetch();
         $MsgId = $row['max_id'];
 
         if($MsgId+25 < $postLines)
@@ -85,8 +85,8 @@ switch($postFunction)
                AND msg_part_id  > ".$postLines. "
              ORDER BY msg_part_id";
 
-            $result = $gDb->query($sql);
-            while($row = $gDb->fetch_array($result))
+            $statement = $gDb->query($sql);
+            while($row = $statement->fetch())
             {
                 $text[] = '<time>'.date("d.m - H:i", strtotime($row['msg_timestamp'])).'</time><span>'.$row['msg_subject'].'</span>'.$row['msg_message'];
             }
@@ -110,8 +110,8 @@ switch($postFunction)
           FROM ". TBL_MESSAGES."
           where msg_converation_id = 0";
 
-        $result = $gDb->query($sql);
-        $row = $gDb->fetch_array($result);
+        $statement = $gDb->query($sql);
+        $row = $statement->fetch();
         $MsgId = $row['max_id'] + 1;
 
         $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read)

@@ -92,17 +92,17 @@ elseif($getMode === 3)
 elseif($getMode === 4)
 {
     // reload role memberships
-    $count_show_roles    = 0;
-    $result_role        = getRolesFromDatabase($getUserId);
-    $count_role        = $gDb->num_rows($result_role);
+    $count_show_roles = 0;
+    $roleStatement    = getRolesFromDatabase($getUserId);
+    $count_role       = $roleStatement->rowCount();
     getRoleMemberships('role_list', $user, $result_role, $count_role, true);
 }
 elseif($getMode === 5)
 {
     // reload former role memberships
-    $count_show_roles    = 0;
-    $result_role        = getFormerRolesFromDatabase($getUserId);
-    $count_role        = $gDb->num_rows($result_role);
+    $count_show_roles = 0;
+    $roleStatement    = getFormerRolesFromDatabase($getUserId);
+    $count_role       = $roleStatement->rowCount();
     getRoleMemberships('former_role_list', $user, $result_role, $count_role, true);
 
     if($count_role == 0)
@@ -117,9 +117,9 @@ elseif($getMode === 5)
 elseif($getMode === 6)
 {
     // reload future role memberships
-    $count_show_roles    = 0;
-    $result_role        = getFutureRolesFromDatabase($getUserId);
-    $count_role        = $gDb->num_rows($result_role);
+    $count_show_roles = 0;
+    $roleStatement    = getFutureRolesFromDatabase($getUserId);
+    $count_role       = $roleStatement->rowCount();
     getRoleMemberships('future_role_list', $user, $result_role, $count_role, true);
 
     if($count_role == 0)
@@ -214,18 +214,18 @@ elseif ($getMode === 8)
         header('Pragma: public');
 
         // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-        $sql    =  'SELECT
-                        bm.mem_usr_id
-                    FROM
-                        '. TBL_MEMBERS. ' bm
-                    WHERE
-                        bm.mem_rol_id = '.$getRoleId.'
-                        AND bm.mem_begin <= \''.DATE_NOW.'\'
-                        AND bm.mem_end > \''.DATE_NOW.'\'';
+        $sql = 'SELECT
+                    bm.mem_usr_id
+                FROM
+                    '. TBL_MEMBERS. ' bm
+                WHERE
+                    bm.mem_rol_id = '.$getRoleId.'
+                    AND bm.mem_begin <= \''.DATE_NOW.'\'
+                    AND bm.mem_end > \''.DATE_NOW.'\'';
 
-        $result   = $gDb->query($sql);
+        $statement = $gDb->query($sql);
 
-        while($row = $gDb->fetch_array($result))
+        while($row = $statement->fetch())
         {
            // create user object
            $user = new User($gDb, $gProfileFields, $row['mem_usr_id']);

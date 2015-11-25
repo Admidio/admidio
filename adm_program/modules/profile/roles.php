@@ -173,11 +173,11 @@ else
                      OR cat_org_id IS NULL )
              ORDER BY cat_sequence, cat_id, rol_name';
 }
-$result   = $gDb->query($sql);
-$category = '';
-$role     = new TableRoles($gDb);
+$statement = $gDb->query($sql);
+$category  = '';
+$role      = new TableRoles($gDb);
 
-while($row = $gDb->fetch_array($result))
+while($row = $statement->fetch())
 {
     $columnValues   = array();
     $memberChecked  = '';

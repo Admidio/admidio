@@ -99,9 +99,9 @@ function subfolder($parent_id, $vorschub, $photoAlbum, $pho_id)
              WHERE pho_id <> '. $photoAlbum->getValue('pho_id').
                    $sqlConditionParentId.'
                AND pho_org_id = '.$gCurrentOrganization->getValue('org_id');
-    $result_child = $gDb->query($sql);
+    $childStatement = $gDb->query($sql);
 
-    while($adm_photo_child = $gDb->fetch_array($result_child))
+    while($adm_photo_child = $childStatement->fetch())
     {
         $parentPhotoAlbum->clear();
         $parentPhotoAlbum->setArray($adm_photo_child);

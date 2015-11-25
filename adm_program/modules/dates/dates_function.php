@@ -234,8 +234,8 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
                        AND dat_end    >= \''.$startDateTime->format('Y-m-d H:i:s').'\'
                        AND dat_room_id = '.$_POST['dat_room_id'].'
                        AND dat_id     <> '.$getDateId;
-            $result = $gDb->query($sql);
-            $row = $gDb->fetch_object($result);
+            $datesStatement = $gDb->query($sql);
+            $row = $datesStatement->fetchObject();
             if($row->is_reserved)
             {
                 $gMessage->show($gL10n->get('DAT_ROOM_RESERVED'));

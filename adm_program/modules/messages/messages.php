@@ -89,10 +89,10 @@ $href  = 'href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php
 $modulemessages = new ModuleMessages();
 
 // find all own Email messages
-$result = $modulemessages->msgGetUserEmails($gCurrentUser->getValue('usr_id'));
+$statement = $modulemessages->msgGetUserEmails($gCurrentUser->getValue('usr_id'));
 if(isset($result))
 {
-    while ($row = $gDb->fetch_array($result))
+    while ($row = $statement->fetch())
     {
         $ReceiverName = '';
         if (strpos($row['user'], '|') > 0)
@@ -138,10 +138,10 @@ if(isset($result))
 }
 
 // find all unread PM messages
-$result = $modulemessages->msgGetUserUnread($gCurrentUser->getValue('usr_id'));
+$statement = $modulemessages->msgGetUserUnread($gCurrentUser->getValue('usr_id'));
 if(isset($result))
 {
-    while ($row = $gDb->fetch_array($result))
+    while ($row = $statement->fetch())
     {
         if($row['msg_usr_id_sender'] == $gCurrentUser->getValue('usr_id'))
         {
@@ -165,10 +165,10 @@ if(isset($result))
 }
 
 // find all read or own PM messages
-$result = $modulemessages->msgGetUser($gCurrentUser->getValue('usr_id'));
+$statement = $modulemessages->msgGetUser($gCurrentUser->getValue('usr_id'));
 if(isset($result))
 {
-    while ($row = $gDb->fetch_array($result))
+    while ($row = $statement->fetch())
     {
         if($row['msg_usr_id_sender'] == $gCurrentUser->getValue('usr_id'))
         {

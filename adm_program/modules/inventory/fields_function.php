@@ -82,8 +82,8 @@ if($getMode === 1)
                     WHERE inf_name LIKE \''.$_POST['inf_name'].'\'
                       AND inf_cat_id  = '.$_POST['inf_cat_id'].'
                       AND inf_id     <> '.$getInfId;
-        $result = $gDb->query($sql);
-        $row    = $gDb->fetch_array($result);
+        $statement = $gDb->query($sql);
+        $row = $statement->fetch();
 
         if($row['count'] > 0)
         {

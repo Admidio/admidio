@@ -70,8 +70,8 @@ if ($getMode === 1)
 elseif ($getMode === 2)
 {
     $sql = 'SELECT * FROM '.TBL_DATES.' WHERE dat_room_id = '.$getRoomId;
-    $result = $gDb->query($sql);
-    $row = $gDb->num_rows($result);
+    $statement = $gDb->query($sql);
+    $row = $statement->rowCount();
     if($row === 0)
     {
         $room->delete();

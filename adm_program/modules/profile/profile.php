@@ -569,10 +569,10 @@ if($gPreferences['profile_show_roles'] == 1)
                        OR cat_org_id IS NULL )
                    AND '.$authorization_db_name.' = 1
                  ORDER BY cat_org_id, cat_sequence, rol_name';
-        $result_role = $gDb->query($sql);
+        $roleStatement = $gDb->query($sql);
         $berechtigungs_Herkunft[$authorization_db_name] = null;
 
-        while($row = $gDb->fetch_array($result_role))
+        while($row = $roleStatement->fetch())
         {
             $berechtigungs_Herkunft[$authorization_db_name] = $berechtigungs_Herkunft[$authorization_db_name].', '.$row['rol_name'];
         }
@@ -662,8 +662,8 @@ if($gPreferences['profile_show_roles'] == 1)
 
     // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
     $count_show_roles = 0;
-    $result_role = getRolesFromDatabase($user->getValue('usr_id'));
-    $count_role  = $gDb->num_rows($result_role);
+    $roleStatement = getRolesFromDatabase($user->getValue('usr_id'));
+    $count_role  = $roleStatement->rowCount();
 
     //Ausgabe
     $page->addHtml('
@@ -681,8 +681,8 @@ if($gPreferences['profile_show_roles'] == 1)
     // *******************************************************************************
 
     $count_show_roles = 0;
-    $result_role = getFutureRolesFromDatabase($user->getValue('usr_id'));
-    $count_role  = $gDb->num_rows($result_role);
+    $roleStatement = getFutureRolesFromDatabase($user->getValue('usr_id'));
+    $count_role  = $roleStatement->rowCount();
     $visible     = "";
 
     if($count_role == 0)
@@ -712,8 +712,8 @@ if($gPreferences['profile_show_former_roles'] == 1)
     // Alle Rollen auflisten, die dem Mitglied zugeordnet waren
 
     $count_show_roles = 0;
-    $result_role = getFormerRolesFromDatabase($user->getValue('usr_id'));
-    $count_role  = $gDb->num_rows($result_role);
+    $roleStatement = getFormerRolesFromDatabase($user->getValue('usr_id'));
+    $count_role  = $roleStatement->rowCount();
     $visible     = "";
 
     if($count_role == 0)
@@ -755,15 +755,15 @@ if($gPreferences['profile_show_extern_roles'] == 1
                AND cat_org_id  = org_id
                AND org_id    <> '. $gCurrentOrganization->getValue('org_id'). '
              ORDER BY org_shortname, cat_sequence, rol_name';
-    $result_role = $gDb->query($sql);
+    $roleStatement = $gDb->query($sql);
 
-    if($gDb->num_rows($result_role) > 0)
+    if($roleStatement->rowCount() > 0)
     {
         $showRolesOtherOrganizations = false;
         $actualOrganization = 0;
         $role = new TableRoles($gDb);
 
-        while($row = $gDb->fetch_array($result_role))
+        while($row = $roleStatement->fetch())
         {
             // if roles of new organization than read the rights of this organization
             if($actualOrganization != $row['org_id'])

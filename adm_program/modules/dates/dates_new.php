@@ -262,10 +262,10 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
                AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
              ORDER BY cat_sequence, rol_name';
-    $resultList = $gDb->query($sql);
+    $statement = $gDb->query($sql);
     $roles = array(array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null));
 
-    while($row = $gDb->fetch_array($resultList))
+    while($row = $statement->fetch())
     {
         $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
     }

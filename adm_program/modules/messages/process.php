@@ -44,8 +44,8 @@ $sql = "SELECT MAX(msc_part_id) as max_id
           FROM ". TBL_MESSAGES_CONTENT."
           where msc_msg_id = '".$msg_id."'";
 
-$result = $gDb->query($sql);
-$row = $gDb->fetch_array($result);
+$statement = $gDb->query($sql);
+$row = $statement->fetch();
 $MsgId = $row['max_id'];
 if(!$MsgId)
 {
@@ -89,8 +89,8 @@ switch($postFunction)
                AND msc_part_id > ".$postLines. "
              ORDER BY msc_part_id";
 
-            $result = $gDb->query($sql);
-            while($row = $gDb->fetch_array($result))
+            $statement = $gDb->query($sql);
+            while($row = $statement->fetch())
             {
                 $user = new User($gDb, $gProfileFields, $row['msc_usr_id']);
                 $date = new DateTimeExtended($row['msc_timestamp'], 'Y-m-d H:i:s');

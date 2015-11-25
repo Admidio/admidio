@@ -69,29 +69,29 @@ function getFormerRolesFromDatabase($user_id)
 {
     global $gDb, $gCurrentOrganization;
 
-    $sql    = 'SELECT *
-                 FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                WHERE mem_rol_id  = rol_id
-                  AND mem_end     < \''.DATE_NOW.'\'
-                  AND mem_usr_id  = '.$user_id.'
-                  AND rol_valid   = 1
-                  AND rol_visible = 1
-                  AND rol_cat_id  = cat_id
-                  AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                      OR cat_org_id IS NULL )
-                ORDER BY cat_org_id, cat_sequence, rol_name';
+    $sql = 'SELECT *
+              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+             WHERE mem_rol_id  = rol_id
+               AND mem_end     < \''.DATE_NOW.'\'
+               AND mem_usr_id  = '.$user_id.'
+               AND rol_valid   = 1
+               AND rol_visible = 1
+               AND rol_cat_id  = cat_id
+               AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+                   OR cat_org_id IS NULL )
+             ORDER BY cat_org_id, cat_sequence, rol_name';
     return $gDb->query($sql);
 }
 
 /**
  * @param $htmlListId
  * @param $user
- * @param $result_role
+ * @param $roleStatement
  * @param $count_role
  * @param $directOutput
  * @return string
  */
-function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $directOutput)
+function getRoleMemberships($htmlListId, $user, $roleStatement, $count_role, $directOutput)
 {
     global $gDb, $gL10n, $gCurrentUser, $gPreferences, $g_root_path, $gProfileFields;
 
@@ -100,7 +100,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
     $role   = new TableRoles($gDb);
     $roleMemHTML = '<ul class="list-group admidio-list-roles-assign" id="'.$htmlListId.'">';
 
-    while($row = $gDb->fetch_array($result_role))
+    while($row = $roleStatement->fetch())
     {
         if($gCurrentUser->hasRightViewRole($row['mem_rol_id']) && $row['rol_visible'] == 1)
         {

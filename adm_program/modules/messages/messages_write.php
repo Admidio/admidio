@@ -84,7 +84,7 @@ if ($getMsgId > 0)
              WHERE msc_msg_id = ". $getMsgId ."
              ORDER BY msc_part_id DESC";
 
-    $message_result = $gDb->query($sql);
+    $messageStatement = $gDb->query($sql);
 }
 
 $recept_number = 1;
@@ -120,11 +120,11 @@ if ($getMsgType === 'PM')
                   GROUP BY usr_id, name, usr_login_name
                   ORDER BY LAST_NAME.usd_value, FIRST_NAME.usd_value";
 
-    $drop_result = $gDb->query($sql);
+    $dropStatement = $gDb->query($sql);
 
     if ($gValidLogin)
     {
-        while ($row = $gDb->fetch_array($drop_result))
+        while ($row = $dropStatement->fetch())
         {
             $list[] = array($row['usr_id'], $row['name'].' (' .$row['usr_login_name'].')', '');
         }
@@ -241,8 +241,8 @@ elseif (!isset($message_result))
                  WHERE rol_cat_id    = cat_id
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL) AND rol_id = '.$getRoleId;
-        $result = $gDb->query($sql);
-        $row    = $gDb->fetch_array($result);
+        $statement = $gDb->query($sql);
+        $row = $statement->fetch();
 
         // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
         // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
@@ -344,8 +344,8 @@ elseif (!isset($message_result))
                 $act_number = '';
             }
 
-            $result = $gDb->query($sql);
-            while ($row = $gDb->fetch_array($result))
+            $statement = $gDb->query($sql);
+            while ($row = $statement->fetch())
             {
                 if($act_number === '' || ($row['former'] > 0 && $gPreferences['mail_show_former'] == 1))
                 {
@@ -373,34 +373,34 @@ elseif (!isset($message_result))
 
         // select Users
 
-        $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
-                                 email.usd_value as email, rol_mail_this_role, rol_id, mem_begin, mem_end
-                    FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_USERS. '
-                    JOIN '. TBL_USER_DATA. ' as email
-                      ON email.usd_usr_id = usr_id
-                     AND LENGTH(email.usd_value) > 0
-                    JOIN '.TBL_USER_FIELDS.' as field
-                      ON field.usf_id = email.usd_usf_id
-                     AND field.usf_type = \'EMAIL\'
-                    LEFT JOIN '. TBL_USER_DATA. ' as last_name
-                      ON last_name.usd_usr_id = usr_id
-                     AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-                    LEFT JOIN '. TBL_USER_DATA. ' as first_name
-                      ON first_name.usd_usr_id = usr_id
-                     AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-                   WHERE mem_usr_id  = usr_id
-                     AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
-                     AND usr_valid   = 1
-                     AND mem_rol_id  = rol_id
-                     AND rol_id in ('.$list_rol_id.')
-                   GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value, rol_mail_this_role, rol_id
-                   ORDER BY usr_id, last_name, first_name, rol_mail_this_role desc';
-        $result = $gDb->query($sql);
+        $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
+                               email.usd_value as email, rol_mail_this_role, rol_id, mem_begin, mem_end
+                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_USERS. '
+                  JOIN '. TBL_USER_DATA. ' as email
+                    ON email.usd_usr_id = usr_id
+                   AND LENGTH(email.usd_value) > 0
+                  JOIN '.TBL_USER_FIELDS.' as field
+                    ON field.usf_id = email.usd_usf_id
+                   AND field.usf_type = \'EMAIL\'
+                  LEFT JOIN '. TBL_USER_DATA. ' as last_name
+                    ON last_name.usd_usr_id = usr_id
+                   AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+                  LEFT JOIN '. TBL_USER_DATA. ' as first_name
+                    ON first_name.usd_usr_id = usr_id
+                   AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+                 WHERE mem_usr_id  = usr_id
+                   AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
+                   AND usr_valid   = 1
+                   AND mem_rol_id  = rol_id
+                   AND rol_id in ('.$list_rol_id.')
+                 GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value, rol_mail_this_role, rol_id
+                 ORDER BY usr_id, last_name, first_name, rol_mail_this_role desc';
+        $statement = $gDb->query($sql);
 
         $passive_list = array();
         $active_list = array();
 
-        while ($row = $gDb->fetch_array($result))
+        while ($row = $statement->fetch())
         {
             if (!isset($act_usr_id) or $act_usr_id != $row['usr_id'])
             {
@@ -437,8 +437,8 @@ elseif (!isset($message_result))
                    AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                  ORDER BY cat_sequence, rol_name ';
 
-        $result = $gDb->query($sql);
-        while($row = $gDb->fetch_array($result))
+        $statement = $gDb->query($sql);
+        while($row = $statement->fetch())
         {
             $list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], '');
         }
@@ -519,7 +519,7 @@ elseif (!isset($message_result))
 if (isset($message_result))
 {
     $page->addHtml('<br>');
-    while ($row = $gDb->fetch_array($message_result))
+    while ($row = $messageStatement->fetch())
     {
         if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))
         {

@@ -125,9 +125,9 @@ $sql = 'SELECT usl_usr_id, last_name.usd_value as last_name, first_name.usd_valu
          WHERE usl_timestamp_create BETWEEN \''.$dateFromIntern.' 00:00:00\' AND \''.$dateToIntern.' 23:59:59\' '.
                $sqlConditions.'
          ORDER BY usl_timestamp_create DESC ';
-$resultFieldHistory = $gDb->query($sql);
+$fieldHistoryStatement = $gDb->query($sql);
 
-if($gDb->num_rows($resultFieldHistory) == 0)
+if($fieldHistoryStatement->rowCount() === 0)
 {
     // message is shown, so delete this page from navigation stack
     $gNavigation->deleteLastUrl();
@@ -181,7 +181,7 @@ $columnHeading[] = $gL10n->get('SYS_CHANGED_AT');
 
 $table->addRowHeadingByArray($columnHeading);
 
-while($row = $gDb->fetch_array($resultFieldHistory))
+while($row = $fieldHistoryStatement->fetch())
 {
     $timestampCreate = new DateTimeExtended($row['usl_timestamp_create'], 'Y-m-d H:i:s');
     $columnValues    = array();

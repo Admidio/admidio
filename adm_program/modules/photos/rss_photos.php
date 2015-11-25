@@ -75,7 +75,7 @@ $sql = 'SELECT pho.*, '.$additionalFields.'
                AND pho_locked = 0)
          ORDER BY pho_timestamp_create DESC
          LIMIT 10';
-$result = $gDb->query($sql);
+$statement = $gDb->query($sql);
 
 $photo_album = new TablePhotos($gDb);
 
@@ -88,7 +88,7 @@ $rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHea
             $gCurrentOrganization->getValue('org_longname'));
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-while ($row = $gDb->fetch_array($result))
+while ($row = $statement->fetch())
 {
     // Daten in ein Photo-Objekt uebertragen
     $photo_album->clear();
@@ -103,11 +103,11 @@ while ($row = $gDb->fetch_array($result))
     while($pho_parent_id > 0)
     {
         //Erfassen des Eltern Albums
-        $sql=' SELECT *
-                 FROM '. TBL_PHOTOS. '
-                WHERE pho_id = '.$pho_parent_id;
-        $result_parents = $gDb->query($sql);
-        $adm_photo_parent = $gDb->fetch_array($result_parents);
+        $sql = ' SELECT *
+                  FROM '. TBL_PHOTOS. '
+                 WHERE pho_id = '.$pho_parent_id;
+        $parentsStatement = $gDb->query($sql);
+        $adm_photo_parent = $parentsStatement->fetch();
 
         //Link zusammensetzen
         $parents = $adm_photo_parent['pho_name'].' > '.$parents;

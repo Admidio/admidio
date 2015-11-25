@@ -179,9 +179,9 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
                AND rol_cat_id = cat_id
                AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
              ORDER BY rol_name ';
+    $statement = $gDb->query($sql);
 
-    $result = $gDb->query($sql);
-    while($row = $gDb->fetch_array($result))
+    while($row = $statement->fetch())
     {
         $list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], $gL10n->get('SYS_ROLES'));
     }
@@ -212,9 +212,9 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
                  AND usr_valid   = 1
             GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
             ORDER BY first_name, last_name';
-    $result = $gDb->query($sql);
+    $statement = $gDb->query($sql);
 
-    while ($row = $gDb->fetch_array($result))
+    while ($row = $statement->fetch())
     {
         $list[] = array($row['usr_id'], $row['first_name'].' '.$row['last_name']. ' ('.$row['email'].')', $gL10n->get('SYS_MEMBERS'));
     }

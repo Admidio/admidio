@@ -169,14 +169,14 @@ $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
             AND cat_type   = \''.$getType.'\'
             ORDER BY cat_sequence ASC ';
 
-$categoryResult = $gDb->query($sql);
+$categoryStatement = $gDb->query($sql);
 $flagTbodyWritten = false;
 $flagTbodyAllOrgasWritten = false;
 
 $category = new TableCategory($gDb);
 
 // Get data
-while($cat_row = $gDb->fetch_array($categoryResult))
+while($cat_row = $categoryStatement->fetch())
 {
     $category->clear();
     $category->setArray($cat_row);

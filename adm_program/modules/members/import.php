@@ -79,10 +79,10 @@ $sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                OR cat_org_id IS NULL )'.
                $condition.'
          ORDER BY cat_sequence, rol_name';
-$resultList = $gDb->query($sql);
+$statement = $gDb->query($sql);
 $roles = array();
 
-while($row = $gDb->fetch_array($resultList))
+while($row = $statement->fetch())
 {
     $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
 }

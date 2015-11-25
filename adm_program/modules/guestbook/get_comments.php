@@ -40,7 +40,7 @@ if ($getGbcId > 0)
                   AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id').
                       $conditions.'
                 ORDER by gbc_timestamp_create asc';
-    $comment_result = $gDb->query($sql);
+    $commentStatement = $gDb->query($sql);
 }
 
 if (isset($comment_result))
@@ -48,7 +48,7 @@ if (isset($comment_result))
     $gbComment = new TableGuestbookComment($gDb);
 
     // Jetzt nur noch die Kommentare auflisten
-    while ($row = $gDb->fetch_array($comment_result))
+    while ($row = $commentStatement->fetch())
     {
         // GBComment-Objekt initialisieren und neuen DS uebergeben
         $gbComment->clear();

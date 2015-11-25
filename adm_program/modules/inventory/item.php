@@ -201,9 +201,9 @@ $page->addHtml('
                             {
                                 $sql = 'SELECT room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' as name FROM '.TBL_ROOMS.' where room_id = ' . $field['value'];
                             }
-                            $result = $gDb->query($sql);
-                            $row    = $gDb->fetch_array($result);
-                            if($gDb->num_rows($result) > 0)
+                            $statement = $gDb->query($sql);
+                            $row = $statement->fetch();
+                            if($statement->rowCount() > 0)
                             {
                                 $form->addStaticControl('address', $field['label'], $row['name']);
                             }

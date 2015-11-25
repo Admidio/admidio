@@ -95,7 +95,7 @@ $sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_INVENT_FIELDS. '
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )
          ORDER BY cat_sequence ASC, inf_sequence ASC ';
-$result = $gDb->query($sql);
+$statement = $gDb->query($sql);
 
 // Create table
 $table = new HtmlTable('tbl_profile_fields', $page, true);
@@ -123,7 +123,7 @@ $disable     = '';
 $mandatory   = '';
 $usfSystem   = '';
 
-while($row = $gDb->fetch_array($result))
+while($row = $statement->fetch())
 {
     $userField->clear();
     $userField->setArray($row);

@@ -99,8 +99,8 @@ if($getMode === 1)
                  WHERE usf_name LIKE \''.$_POST['usf_name'].'\'
                    AND usf_cat_id  = '.$_POST['usf_cat_id'].'
                    AND usf_id     <> '.$getUsfId;
-        $result = $gDb->query($sql);
-        $row    = $gDb->fetch_array($result);
+        $statement = $gDb->query($sql);
+        $row = $statement->fetch();
 
         if($row['count'] > 0)
         {

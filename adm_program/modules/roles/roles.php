@@ -123,12 +123,12 @@ $sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
              AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                   OR cat_org_id IS NULL )
          ORDER BY cat_sequence ASC, rol_name ASC ';
-$rol_result = $gDb->query($sql);
+$rolStatement = $gDb->query($sql);
 
 // Create role object
 $role = new TableRoles($gDb);
 
-while($row = $gDb->fetch_array($rol_result))
+while($row = $rolStatement->fetch())
 {
     $assignRoles        = '';
     $listView           = '';

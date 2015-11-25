@@ -74,9 +74,9 @@ $sql = 'SELECT room.*, '.$additionalFields.'
           FROM '.TBL_ROOMS.' room
                '.$additionalTables.'
          ORDER BY room_name';
-$rooms_result = $gDb->query($sql);
+$roomsStatement = $gDb->query($sql);
 
-if($gDb->num_rows($rooms_result) === 0)
+if($roomsStatement->rowCount() === 0)
 {
     // Keine Räume gefunden
     $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
@@ -85,7 +85,7 @@ else
 {
     $room = new TableRooms($gDb);
     // Räume auflisten
-    while($row = $gDb->fetch_array($rooms_result))
+    while($row = $roomsStatement->fetch())
     {
         // GB-Objekt initialisieren und neuen DS uebergeben
         $room->clear();

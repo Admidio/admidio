@@ -146,8 +146,8 @@ if ($getMsgType === 'EMAIL')
                            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                                OR cat_org_id IS NULL)
                            AND rol_id = '.$group[0];
-                $result = $gDb->query($sql);
-                $row    = $gDb->fetch_array($result);
+                $statement = $gDb->query($sql);
+                $row = $statement->fetch();
 
                 // logged in user is just allowed to send to role with permission
                 // logged out ones just to role with permission level "all visitors"
@@ -206,9 +206,9 @@ if ($getMsgType === 'EMAIL')
                 {
                     $sql = $sql. ' AND usr_id <> '. $gCurrentUser->getValue('usr_id');
                 }
-                $result = $gDb->query($sql);
+                $statement = $gDb->query($sql);
 
-                if($gDb->num_rows($result) > 0)
+                if($statement->rowCount() > 0)
                 {
                     // normaly we need no To-address and set "undisclosed recipients", but if
                     // that won't work than the From-address will be set
@@ -219,7 +219,7 @@ if ($getMsgType === 'EMAIL')
                     }
 
                     // all role members will be attached as BCC
-                    while ($row = $gDb->fetch_object($result))
+                    while ($row = $statement->fetchObject())
                     {
                         $receiver[] = array($row->email, $row->first_name.' '.$row->last_name);
                     }

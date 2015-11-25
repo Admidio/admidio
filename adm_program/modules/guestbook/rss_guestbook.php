@@ -46,7 +46,7 @@ $sql = 'SELECT * FROM '. TBL_GUESTBOOK. '
           AND gbo_locked = 0
         ORDER BY gbo_timestamp_create DESC
         LIMIT 10 ';
-$result = $gDb->query($sql);
+$statement = $gDb->query($sql);
 
 // ab hier wird der RSS-Feed zusammengestellt
 
@@ -58,7 +58,7 @@ $rss = new RSSfeed($gCurrentOrganization->getValue('org_longname'). ' - '.$getHe
 $guestbook = new TableGuestbook($gDb);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-while ($row = $gDb->fetch_array($result))
+while ($row = $statement->fetch())
 {
     // ausgelesene Gaestebuchdaten in Guestbook-Objekt schieben
     $guestbook->clear();

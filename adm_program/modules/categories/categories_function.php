@@ -124,8 +124,8 @@ if($getMode === 1)
                    AND cat_name LIKE \''. $_POST['cat_name']. '\'
                    AND cat_id     <> '.$getCatId.
                        $sqlSearchOrga;
-        $result = $gDb->query($sql);
-        $row    = $gDb->fetch_array($result);
+        $categoriesStatement = $gDb->query($sql);
+        $row = $categoriesStatement->fetch();
 
         if($row['count'] > 0)
         {
@@ -177,9 +177,9 @@ if($getMode === 1)
                    AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
                  ORDER BY cat_org_id ASC, cat_sequence ASC';
-        $result = $gDb->query($sql);
+        $categoriesStatement = $gDb->query($sql);
 
-        while($row = $gDb->fetch_array($result))
+        while($row = $categoriesStatement->fetch())
         {
             ++$sequence;
             $sequenceCategory->clear();

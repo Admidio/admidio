@@ -179,8 +179,8 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); ++$i)
                    AND first_name.usd_usf_id = '.  $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
                    AND first_name.usd_value  = \''. $gDb->escapeString($user->getValue('FIRST_NAME', 'database')). '\'
                  WHERE usr_valid = 1 ';
-        $result = $gDb->query($sql);
-        $rowDuplicateUser = $gDb->fetch_array($result);
+        $statement = $gDb->query($sql);
+        $rowDuplicateUser = $statement->fetch();
         if($rowDuplicateUser['usr_id'] > 0)
         {
             $duplicate_user = new User($gDb, $gProfileFields, $rowDuplicateUser['usr_id']);

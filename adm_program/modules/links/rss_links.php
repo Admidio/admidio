@@ -70,7 +70,7 @@ $sql = 'SELECT cat.*, lnk.*, '.$additionalFields.'
            AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
            AND cat_type = \'LNK\'
          ORDER BY lnk_timestamp_create DESC';
-$result = $gDb->query($sql);
+$statement = $gDb->query($sql);
 
 // start defining the RSS Feed
 
@@ -82,7 +82,7 @@ $rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHea
 $weblink = new TableWeblink($gDb);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-while ($row = $gDb->fetch_array($result))
+while ($row = $statement->fetch())
 {
     // submit links to object
     $weblink->clear();

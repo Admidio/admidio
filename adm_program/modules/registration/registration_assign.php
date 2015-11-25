@@ -80,8 +80,8 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
            AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
          WHERE usr_valid = 1
            AND '.$sql_similar_name;
-$result_usr   = $gDb->query($sql);
-$members_found = $gDb->num_rows($result_usr);
+$usrStatement = $gDb->query($sql);
+$members_found = $usrStatement->rowCount();
 
 // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
 if($gCurrentUser->editUsers())
@@ -118,7 +118,7 @@ $page->addHtml('
 
 // show all found users with their address who have a similar name and show link for further handling
 $i = 0;
-while($row = $gDb->fetch_object($result_usr))
+while($row = $usrStatement->fetchObject())
 {
     if($i > 0)
     {

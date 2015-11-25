@@ -183,8 +183,8 @@ if ($getMode === 1 || $getMode === 3)
                          WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
                            AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                            AND gbo_ip_address = \''. $guestbook->getValue('gbo_ip_adress'). '\'';
-                $result = $gDb->query($sql);
-                $row    = $gDb->fetch_array($result);
+                $statement = $gDb->query($sql);
+                $row = $statement->fetch();
                 if($row[0] > 0)
                 {
                     //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
@@ -374,8 +374,8 @@ elseif($getMode === 4 || $getMode === 8)
                 $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK_COMMENTS. '
                          WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
                            AND gbc_ip_address = \''. $guestbook_comment->getValue('gbc_ip_adress'). '\'';
-                $result = $gDb->query($sql);
-                $row = $gDb->fetch_array($result);
+                $statement = $gDb->query($sql);
+                $row = $statement->fetch();
                 if($row[0] > 0)
                 {
                     //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...

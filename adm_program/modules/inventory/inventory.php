@@ -38,7 +38,7 @@ $sql    = 'SELECT inv_id, item_name.ind_value as item_name, room_id.ind_value as
               AND room_id.ind_inf_id = '. $gInventoryFields->getProperty('ROOM_ID', 'inf_id'). '
             WHERE inv_valid = 1
             ORDER BY item_name.ind_value, room_id.ind_value ';
-$result_mgl  = $gDb->query($sql);
+$mglStatement = $gDb->query($sql);
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -81,7 +81,7 @@ $itemsTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 
 $irow = 1;  // count for line in table
 
-while($row = $gDb->fetch_array($result_mgl))
+while($row = $mglStatement->fetch())
 {
     $timestampChange = new DateTimeExtended($row['timestamp'], 'Y-m-d H:i:s');
 

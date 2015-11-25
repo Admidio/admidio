@@ -108,7 +108,7 @@ $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value
             WHERE usr_valid = 1
                   '.$memberCondition.'
             ORDER BY last_name.usd_value, first_name.usd_value ';
-$result_mgl  = $gDb->query($sql);
+$mglStatement = $gDb->query($sql);
 
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
 if($getMembers == 1)
@@ -205,7 +205,7 @@ $membersTable->setDatatablesColumnsHide(7);
 
 $irow = 1;  // Zahler fuer die jeweilige Zeile
 
-while($row = $gDb->fetch_array($result_mgl))
+while($row = $mglStatement->fetch())
 {
     $timestampChange = new DateTimeExtended($row['timestamp'], 'Y-m-d H:i:s');
 

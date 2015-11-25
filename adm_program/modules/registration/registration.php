@@ -52,8 +52,8 @@ $sql = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value as las
            AND reg_usr_id = usr_id
            AND reg_org_id = '.$gCurrentOrganization->getValue('org_id').'
          ORDER BY last_name, first_name ';
-$usr_result   = $gDb->query($sql);
-$members_found = $gDb->num_rows($usr_result);
+$usrStatement = $gDb->query($sql);
+$members_found = $usrStatement->rowCount();
 
 if ($members_found === 0)
 {
@@ -89,7 +89,7 @@ $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
 $table->setDatatablesOrderColumns(1);
 $table->addRowHeadingByArray($columnHeading);
 
-while($row = $gDb->fetch_array($usr_result))
+while($row = $usrStatement->fetch())
 {
     $timestampCreate = new DateTimeExtended($row['reg_timestamp'], 'Y-m-d H:i:s');
     $datetimeCreate  = $timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']);

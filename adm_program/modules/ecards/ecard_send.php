@@ -110,9 +110,9 @@ if(count($arrayRoles) > 0)
                AND usr_valid        = 1
                AND email.usd_usr_id = email.usd_usr_id
              ORDER BY last_name, first_name';
-    $resultUsers = $gDb->query($sql);
+    $usersStatement = $gDb->query($sql);
 
-    while($row = $gDb->fetch_array($resultUsers))
+    while($row = $usersStatement->fetch())
     {
         if($ecardSendResult == true)
         {

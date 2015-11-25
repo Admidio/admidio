@@ -141,14 +141,14 @@ if($getPhotoNr == null)
     }
 
     $sql = $sql.' ORDER BY pho_begin DESC ';
-    $result_list = $gDb->query($sql);
+    $statement = $gDb->query($sql);
 
     // number of sub albums
-    $albums = $gDb->num_rows($result_list);
+    $albums = $statement->rowCount();
 
     for($x = 0; $x < $albums; ++$x)
     {
-        $adm_photo_list = $gDb->fetch_array($result_list);
+        $adm_photo_list = $statement->fetch();
 
         // get id of album
         $photo_album->readDataById($adm_photo_list['pho_id']);
