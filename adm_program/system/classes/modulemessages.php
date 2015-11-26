@@ -53,8 +53,8 @@ class ModuleMessages
                        AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                            OR cat_org_id IS NULL)
                        AND rol_id = '.$group[0];
-        $result = $gDb->query($sql);
-        $row    = $gDb->fetch_array($result);
+        $statement = $gDb->query($sql);
+        $row = $statement->fetch();
 
         if($group[1] == 1)
         {
@@ -162,8 +162,8 @@ class ModuleMessages
         global $gDb;
 
         $sql = "SELECT msg_id FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT'";
-        $result = $gDb->query($sql);
-        $row = $gDb->fetch_array($result);
+        $statement = $gDb->query($sql);
+        $row = $statement->fetch();
 
         return $row['msg_id'];
     }

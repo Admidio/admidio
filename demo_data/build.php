@@ -224,9 +224,9 @@ include('data_edit.php');
 if($gDbType === 'postgresql')
 {
     $sql = 'SELECT c.relname FROM pg_class c WHERE c.relkind = \'S\' ';
-    $sqlResult = $db->query($sql);
+    $sqlStatement = $db->query($sql);
 
-    while($row = $db->fetch_array($sqlResult))
+    while($row = $sqlStatement->fetch())
     {
         $sql = 'SELECT setval(\''.$row['relname'].'\', 1000000)';
         $db->query($sql);

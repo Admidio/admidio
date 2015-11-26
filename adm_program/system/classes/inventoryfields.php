@@ -367,9 +367,9 @@ class InventoryFields
                    AND (  cat_org_id IS NULL
                        OR cat_org_id  = '.$organizationId.' )
                  ORDER BY cat_sequence ASC, inf_sequence ASC ';
-        $usfResult = $this->mDb->query($sql);
+        $usfStatement = $this->mDb->query($sql);
 
-        while($row = $this->mDb->fetch_array($usfResult))
+        while($row = $usfStatement->fetch())
         {
             if(!isset($this->mInventoryFields[$row['inf_name_intern']]))
             {
@@ -403,9 +403,9 @@ class InventoryFields
             $sql = 'SELECT * FROM '.TBL_INVENT_DATA.', '. TBL_INVENT_FIELDS. '
                      WHERE ind_inf_id = inf_id
                        AND ind_itm_id = '.$itemId;
-            $usdResult = $this->mDb->query($sql);
+            $usdStatement = $this->mDb->query($sql);
 
-            while($row = $this->mDb->fetch_array($usdResult))
+            while($row = $usdStatement->fetch())
             {
                 if(!isset($this->mInventoryData[$row['ind_inf_id']]))
                 {

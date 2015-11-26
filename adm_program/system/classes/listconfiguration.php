@@ -393,9 +393,9 @@ class ListConfiguration extends TableLists
         $sql = 'SELECT * FROM '. TBL_LIST_COLUMNS. '
                  WHERE lsc_lst_id = '. $this->getValue('lst_id'). '
                  ORDER BY lsc_number ASC ';
-        $lsc_result = $this->db->query($sql);
+        $lscStatement = $this->db->query($sql);
 
-        while($lsc_row = $this->db->fetch_array($lsc_result))
+        while($lsc_row = $lscStatement->fetch())
         {
             $this->columns[$lsc_row['lsc_number']] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
             $this->columns[$lsc_row['lsc_number']]->setArray($lsc_row);

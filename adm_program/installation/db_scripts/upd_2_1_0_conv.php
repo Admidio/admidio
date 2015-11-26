@@ -74,9 +74,9 @@ $gDb->query($sql);
 
 // Texte fuer Systemmails pflegen
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS. ' ORDER BY org_id DESC';
-$result_orga = $gDb->query($sql);
+$orgaStatement = $gDb->query($sql);
 
-while($row_orga = $gDb->fetch_array($result_orga))
+while($row_orga = $orgaStatement->fetch())
 {
     $sql = 'INSERT INTO '. TBL_TEXTS. ' (txt_org_id, txt_name, txt_text)
                  VALUES ('.$row_orga['org_id'].', \'SYSMAIL_REGISTRATION_USER\', \''.$systemmails_texts['SYSMAIL_REGISTRATION_USER'].'\')
@@ -107,8 +107,8 @@ while($row_orga = $gDb->fetch_array($result_orga))
                AND rol_cat_id = cat_id
                AND rol_name   = \'Webmaster\'
                AND mem_rol_id = rol_id ';
-    $result = $gDb->query($sql);
-    $row_webmaster = $gDb->fetch_array($result);
+    $statement = $gDb->query($sql);
+    $row_webmaster = $statement->fetch();
 
     $sql = 'UPDATE '. TBL_PHOTOS. ' SET pho_usr_id_create = '. $row_webmaster['webmaster_id']. '
              WHERE pho_usr_id_create IS NULL
@@ -122,10 +122,10 @@ while($row_orga = $gDb->fetch_array($result_orga))
     $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
              WHERE cat_org_id = '.$row_orga['org_id']. '
                AND cat_type   = \'ROL\'';
-    $result = $gDb->query($sql);
+    $statement = $gDb->query($sql);
 
     $all_cat_ids = array();
-    while($row_cat = $gDb->fetch_array($result))
+    while($row_cat = $statement->fetch())
     {
         $all_cat_ids[] = $row_cat['cat_id'];
     }
@@ -146,44 +146,44 @@ while($row_orga = $gDb->fetch_array($result_orga))
     $gDb->query($sql);
 
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Nachname\' ';
-    $result = $gDb->query($sql);
-    $rowNachname = $gDb->fetch_array($result);
+    $statement = $gDb->query($sql);
+    $rowNachname = $statement->fetch();
 
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Vorname\' ';
-    $result = $gDb->query($sql);
-    $rowVorname = $gDb->fetch_array($result);
+    $statement = $gDb->query($sql);
+    $rowVorname = $statement->fetch();
 
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Geburtstag\' ';
-    $result = $gDb->query($sql);
-    $rowGeburtstag = $gDb->fetch_array($result);
+    $statement = $gDb->query($sql);
+    $rowGeburtstag = $statement->fetch();
 
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Adresse\' ';
-    $result = $gDb->query($sql);
-    $rowAdresse = $gDb->fetch_array($result);
+    $statement = $gDb->query($sql);
+    $rowAdresse = $statement->fetch();
 
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'PLZ\' ';
-    $result = $gDb->query($sql);
-    $rowPLZ = $gDb->fetch_array($result);
+    $statement = $gDb->query($sql);
+    $rowPLZ = $statement->fetch();
 
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Ort\' ';
-    $result = $gDb->query($sql);
-    $rowOrt = $gDb->fetch_array($result);
+    $statement = $gDb->query($sql);
+    $rowOrt = $statement->fetch();
 
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Telefon\' ';
-    $result = $gDb->query($sql);
-    $rowTelefon = $gDb->fetch_array($result);
+    $statement = $gDb->query($sql);
+    $rowTelefon = $statement->fetch();
 
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Handy\' ';
-    $result = $gDb->query($sql);
-    $rowHandy = $gDb->fetch_array($result);
+    $statement = $gDb->query($sql);
+    $rowHandy = $statement->fetch();
 
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'E-Mail\' ';
-    $result = $gDb->query($sql);
-    $rowEMail = $gDb->fetch_array($result);
+    $statement = $gDb->query($sql);
+    $rowEMail = $statement->fetch();
 
     $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Fax\' ';
-    $result = $gDb->query($sql);
-    $rowFax = $gDb->fetch_array($result);
+    $statement = $gDb->query($sql);
+    $rowFax = $statement->fetch();
 
     // Default-Listen-Konfigurationen anlegen
 
@@ -317,16 +317,16 @@ $gDb->query($sql);
 
 //Fototext updaten
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
-$result_orga = $gDb->query($sql);
-while($row_orga = $gDb->fetch_array($result_orga))
+$orgaStatement = $gDb->query($sql);
+while($row_orga = $orgaStatement->fetch())
 {
     //erstmal gucken ob die Funktion bisher aktiviert war
     $sql = 'SELECT prf_value
               FROM '. TBL_PREFERENCES. '
              WHERE prf_org_id = '. $row_orga['org_id']. '
                AND prf_name   = \'photo_image_text\' ';
-    $result = $gDb->query($sql);
-    $row_photo_image_text = $gDb->fetch_array($result);
+    $statement = $gDb->query($sql);
+    $row_photo_image_text = $statement->fetch();
 
     //wenn ja
     if($row_photo_image_text['prf_value'] == 1)

@@ -193,8 +193,8 @@ class ModuleWeblinks extends Modules
                 AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                 AND cat_type = \'LNK\'
         '.$this->getConditions;
-        $result = $gDb->query($sql);
-        $row    = $gDb->fetch_array($result);
+        $statement = $gDb->query($sql);
+        $row = $statement->fetch();
         return $row['count'];
     }
 

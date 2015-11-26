@@ -65,9 +65,9 @@ function hasRole($roleName, $userId = 0)
                AND rol_cat_id = cat_id
                AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )';
-    $result = $gDb->query($sql);
+    $statement = $gDb->query($sql);
 
-    if($gDb->num_rows($result) === 1)
+    if($statement->rowCount() === 1)
     {
         return 1;
     }
@@ -98,9 +98,9 @@ function isMember($userId)
                    AND rol_cat_id = cat_id
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )';
-        $result = $gDb->query($sql);
+        $statement = $gDb->query($sql);
 
-        $row = $gDb->fetch_array($result);
+        $row = $statement->fetch();
         $rowCount = $row[0];
 
         if($rowCount > 0)
@@ -140,9 +140,9 @@ function isGroupLeader($userId, $roleId = 0)
         {
             $sql .= ' AND mem_rol_id = '.$roleId;
         }
-        $result = $gDb->query($sql);
+        $statement = $gDb->query($sql);
 
-        if($gDb->num_rows($result) > 0)
+        if($statement->rowCount() > 0)
         {
             return true;
         }

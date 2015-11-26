@@ -110,9 +110,9 @@ $gDb->query($sql);
 
 // Userdaten in adm_user_fields kopieren
 $sql = "SELECT * FROM ". TBL_USERS;
-$result_usr = $gDb->query($sql);
+$usrStatement = $gDb->query($sql);
 
-while($row_usr = $gDb->fetch_object($result_usr))
+while($row_usr = $usrStatement->fetchObject())
 {
     $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
                                      VALUES ($row_usr->usr_id, $usf_id_last_name, '". addslashes($row_usr->usr_last_name). "')
@@ -147,11 +147,11 @@ $gDb->query($sql);
 
 // Orga-spezifische Kategorie anlegen
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
-$result_orga = $gDb->query($sql);
+$orgaStatement = $gDb->query($sql);
 
-while($row_orga = $gDb->fetch_object($result_orga))
+while($row_orga = $orgaStatement->fetchObject())
 {
-    if($gDb->num_rows($result_orga) > 1)
+    if($orgaStatement->rowCount() > 1)
     {
         $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
                                           VALUES ($row_orga->org_id, 'USF', 'Zusätzliche Daten', 0, 2)";
@@ -208,11 +208,11 @@ $gDb->query($sql);
 $sql = "SELECT * FROM ". TBL_USER_FIELDS. "
          WHERE usf_sequence = 0
          ORDER BY usf_cat_id, usf_name ";
-$result_usf = $gDb->query($sql);
+$usfStatement = $gDb->query($sql);
 $cat_id_merker = 0;
 $sequence      = 1;
 
-while($row_usf = $gDb->fetch_array($result_usf))
+while($row_usf = $usfStatement->fetch())
 {
     if($row_usf['usf_cat_id'] != $cat_id_merker)
     {
@@ -231,12 +231,12 @@ $sql = "SELECT * FROM ". TBL_CATEGORIES. "
          WHERE cat_sequence = 0
            AND cat_type    <> 'USF'
          ORDER BY cat_type, cat_org_id, cat_name ";
-$result_cat = $gDb->query($sql);
+$catStatement = $gDb->query($sql);
 $type_merker   = "";
 $org_id_merker = 0;
 $sequence      = 1;
 
-while($row_cat = $gDb->fetch_array($result_cat))
+while($row_cat = $catStatement->fetch())
 {
     if($row_cat['cat_org_id'] != $org_id_merker
     || $row_cat['cat_type']   != $type_merker)

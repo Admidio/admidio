@@ -335,8 +335,8 @@ class ModuleLists extends Modules
                OR cat_org_id IS NULL )
                '.$sql_conditions;
 
-        $result = $gDb->query($sql);
-        $row = $gDb->fetch_array($result);
+        $statement = $gDb->query($sql);
+        $row = $statement->fetch();
 
         return $row['numrows'];
     }
@@ -357,9 +357,10 @@ class ModuleLists extends Modules
                        OR lst_global = 1)
                    AND lst_name IS NOT NULL
                  ORDER BY lst_global ASC, lst_name ASC';
-        $result = $gDb->query($sql);
-        $configurations=array();
-        while($row = $gDb->fetch_array($result))
+        $statement = $gDb->query($sql);
+
+        $configurations = array();
+        while($row = $statement->fetch())
         {
             $configurations[] = array($row['lst_id'], $row['lst_name'], $row['lst_global']);
         }

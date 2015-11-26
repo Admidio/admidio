@@ -80,9 +80,9 @@ unset($tables);
 
 // create a list with all tables with configured table prefix
 $sql    = 'SHOW TABLES LIKE \''.$g_tbl_praefix.'\_%\'';
-$result = $gDb->query($sql);
+$statement = $gDb->query($sql);
 
-while($table = $gDb->fetch_array($result))
+while($table = $statement->fetch())
 {
     $tables[] = $table[0];
 }
@@ -291,14 +291,14 @@ $starttime = getmicrotime();
             OutputInformation('statusinfo', '');
 
             if ($_REQUEST['StartBackup'] !== 'structure') {
-                $processedrows    = 0;
+                $processedrows = 0;
                 foreach ($SelectedTables as $dbname => $value) {
                     @set_time_limit(60);
                     for ($t = 0; $t < count($SelectedTables[$dbname]); ++$t) {
                         $SQLquery  = 'SELECT *';
                         $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
-                        $result = $gDb->query($SQLquery);
-                        $rows[$t] = $gDb->num_rows($result);
+                        $statement = $gDb->query($SQLquery);
+                        $rows[$t] = $statement->rowCount();
                         if ($rows[$t] > 0) {
                             $tabledatadumpline = '# dumping data for '.$dbname.'.'.$SelectedTables[$dbname][$t].LINE_TERMINATOR;
                             if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
@@ -319,7 +319,7 @@ $starttime = getmicrotime();
                         }
                         $currentrow       = 0;
                         $thistableinserts = '';
-                        while ($row = $gDb->fetch_array($result)) {
+                        while ($row = $statement->fetch()) {
                             unset($valuevalues);
                             foreach ($fieldnames as $key => $val) {
                                 if ($row[$key] === null) {

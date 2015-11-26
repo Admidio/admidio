@@ -290,8 +290,7 @@ class RoleDependency
                        AND mem_end    > \''.DATE_NOW.'\'';
             $membershipStatement = $this->db->query($sql);
 
-            $num_rows = $membershipStatement->rowCount();
-            if ($num_rows)
+            if ($membershipStatement->rowCount())
             {
                 $member = new TableMembers($this->db);
 

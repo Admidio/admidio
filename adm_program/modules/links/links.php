@@ -119,7 +119,7 @@ else
     $weblinksDataSet = $weblinks->getDataSet($getStart);
     $weblink = new TableWeblink($gDb);
 
-    $j = 0;         // counter for fetch_object
+    $j = 0;         // counter for fetchObject
     $i = 0;         // counter for links in category
     $previous_cat_id = -1;  // previous Cat Id
     $new_category = true;   // maybe new category

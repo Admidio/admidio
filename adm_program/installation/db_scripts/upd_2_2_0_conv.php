@@ -11,8 +11,8 @@
 
 // eine Orga-ID einlesen
 $sql = 'SELECT MIN(org_id) as org_id FROM '. TBL_ORGANIZATIONS. ' ORDER BY org_id DESC';
-$result_orga = $gDb->query($sql);
-$row_orga = $gDb->fetch_array($result_orga);
+$orgaStatement = $gDb->query($sql);
+$row_orga = $orgaStatement->fetch();
 
 // die Erstellungs-ID mit Webmaster befuellen, damit das Feld auf NOT NULL gesetzt werden kann
 $sql = 'SELECT min(mem_usr_id) as webmaster_id
@@ -21,8 +21,8 @@ $sql = 'SELECT min(mem_usr_id) as webmaster_id
            AND rol_cat_id = cat_id
            AND rol_name   = \'Webmaster\'
            AND mem_rol_id = rol_id ';
-$result = $gDb->query($sql);
-$row_webmaster = $gDb->fetch_array($result);
+$statement = $gDb->query($sql);
+$row_webmaster = $statement->fetch();
 
 //Defaultraum fuer Raummodul in der DB anlegen:
 $sql = 'INSERT INTO '. TBL_ROOMS. ' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
@@ -109,8 +109,8 @@ $gDb->query($sql);
 
 // Max. Rol-Kategorien-Sequenz einlesen
 $sql = 'SELECT MAX(cat_sequence) as sequence FROM '. TBL_CATEGORIES. ' WHERE cat_type = \'ROL\' ';
-$result_orga = $gDb->query($sql);
-$row_cat = $gDb->fetch_array($result_orga);
+$orgaStatement = $gDb->query($sql);
+$row_cat = $orgaStatement->fetch();
 
 // neue Kategorie fuer Terminbestaetigungen
 $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
@@ -119,9 +119,9 @@ $gDb->query($sql);
 
 // Daten pro Organisation wegschreiben
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS. ' ORDER BY org_id DESC';
-$result_orga = $gDb->query($sql);
+$orgaStatement = $gDb->query($sql);
 
-while($row_orga = $gDb->fetch_array($result_orga))
+while($row_orga = $orgaStatement->fetch())
 {
     // ID eines Webmasters ermitteln
     $sql = 'SELECT min(mem_usr_id) as webmaster_id
@@ -130,8 +130,8 @@ while($row_orga = $gDb->fetch_array($result_orga))
                AND rol_cat_id = cat_id
                AND rol_name   = \'Webmaster\'
                AND mem_rol_id = rol_id ';
-    $result = $gDb->query($sql);
-    $row_webmaster = $gDb->fetch_array($result);
+    $statement = $gDb->query($sql);
+    $row_webmaster = $statement->fetch();
 
     $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_usr_id_create = '. $row_webmaster['webmaster_id']. '
                                            , usf_timestamp_create = \''.DATETIME_NOW.'\'';

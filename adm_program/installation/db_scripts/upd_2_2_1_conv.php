@@ -11,9 +11,9 @@
 
 // englische Bezeichnung der Bereiche in Systememails einbauen
 $sql = 'SELECT * FROM '. TBL_TEXTS. ' ORDER BY txt_id DESC';
-$result_texts = $gDb->query($sql);
+$textsStatement = $gDb->query($sql);
 
-while($row_texts = $gDb->fetch_array($result_texts))
+while($row_texts = $textsStatement->fetch())
 {
     $row_texts['txt_text'] = preg_replace('/#Betreff#/', '#subject#', $row_texts['txt_text']);
     $row_texts['txt_text'] = preg_replace('/#Inhalt#/', '#content#', $row_texts['txt_text']);
@@ -40,9 +40,9 @@ $sql = 'SELECT distinct usd_value, usd_usf_id FROM '.TBL_USER_DATA.', '.TBL_USER
          WHERE usf_name_intern LIKE \'COUNTRY\'
            AND usd_usf_id = usf_id
            AND length(usd_value) > 0 ';
-$result_countries = $gDb->query($sql);
+$countriesStatement = $gDb->query($sql);
 
-while($row_countries = $gDb->fetch_array($result_countries))
+while($row_countries = $countriesStatement->fetch())
 {
     foreach($gL10n->getCountries() as $key => $value)
     {
@@ -59,9 +59,9 @@ while($row_countries = $gDb->fetch_array($result_countries))
 // Laenderbezeichnung durch ISOCODES ersetzen, damit die Laender sprachabhaengig angezeigt werden
 $sql = 'SELECT distinct dat_country, dat_id FROM '.TBL_DATES.'
          WHERE length(dat_country) > 0 ';
-$result_countries = $gDb->query($sql);
+$countriesStatement = $gDb->query($sql);
 
-while($row_countries = $gDb->fetch_array($result_countries))
+while($row_countries = $countriesStatement->fetch())
 {
     foreach($gL10n->getCountries() as $key => $value)
     {

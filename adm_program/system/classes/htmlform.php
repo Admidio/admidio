@@ -1336,10 +1336,10 @@ class HtmlForm extends HtmlFormBasic
         $selectboxEntries = array();
 
         // execute the sql statement
-        $result = $database->query($sql);
+        $statement = $database->query($sql);
 
         // create array from sql result
-        while($row = $database->fetch_array($result))
+        while($row = $statement->fetch())
         {
             // if result has 3 columns then create a array in array
             if(array_key_exists(2, $row))
@@ -1515,8 +1515,8 @@ class HtmlForm extends HtmlFormBasic
                    AND cat_type   = \''.$categoryType.'\'
                        '.$sqlCondidtions.'
                  ORDER BY cat_sequence ASC ';
-        $result = $database->query($sql);
-        $countCategories = $database->num_rows($result);
+        $statement = $database->query($sql);
+        $countCategories = $statement->rowCount();
 
         // if only one category exists then select this if not in filter modus
         if($countCategories === 1)
@@ -1527,7 +1527,7 @@ class HtmlForm extends HtmlFormBasic
                 return null;
             }
 
-            $row = $database->fetch_array($result);
+            $row = $statement->fetch();
             if($optionsAll['defaultValue'] === null)
             {
                 $optionsAll['defaultValue'] = $row['cat_id'];
@@ -1551,7 +1551,7 @@ class HtmlForm extends HtmlFormBasic
                 $categoriesArray[0] = $gL10n->get('SYS_ALL');
             }
 
-            while($row = $database->fetch_array($result))
+            while($row = $statement->fetch())
             {
                 // if text is a translation-id then translate it
                 if(strpos($row['cat_name'], '_') === 3)

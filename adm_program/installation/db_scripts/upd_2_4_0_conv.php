@@ -121,9 +121,9 @@ $gDb->query($sql);
 
 // write data for every organization
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS. ' ORDER BY org_id DESC';
-$result_orga = $gDb->query($sql);
+$orgaStatement = $gDb->query($sql);
 
-while($row_orga = $gDb->fetch_array($result_orga))
+while($row_orga = $orgaStatement->fetch())
 {
     $sql = 'INSERT INTO '. TBL_TEXTS. ' (txt_org_id, txt_name, txt_text)
                 VALUES ('.$row_orga['org_id'].', \'SYSMAIL_REFUSE_REGISTRATION\', \''.$emailText.'\')';

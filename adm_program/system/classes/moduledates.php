@@ -301,8 +301,8 @@ class ModuleDates extends Modules
                        AND dat_id = dtr_dat_id'
                        .$this->sqlConditionsGet();
 
-            $result = $gDb->query($sql);
-            $row    = $gDb->fetch_array($result);
+            $statement = $gDb->query($sql);
+            $row = $statement->fetch();
 
             return $row['count'];
         }

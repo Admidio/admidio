@@ -11,9 +11,9 @@
 
 // Reihenfolge der Kategorien noch einmal komplett neu vergeben
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
-$result_orga = $gDb->query($sql);
+$orgaStatement = $gDb->query($sql);
 
-while($row_orga = $gDb->fetch_array($result_orga))
+while($row_orga = $orgaStatement->fetch())
 {
     $last_cat_type = '';
     $counter       = 0;
@@ -21,9 +21,9 @@ while($row_orga = $gDb->fetch_array($result_orga))
              WHERE (  cat_org_id = '. $row_orga['org_id']. '
                    OR cat_org_id IS NULL )
              ORDER BY cat_type, cat_org_id, cat_sequence ';
-    $result_cat = $gDb->query($sql);
+    $catStatement = $gDb->query($sql);
 
-    while($row_cat = $gDb->fetch_array($result_cat))
+    while($row_cat = $catStatement->fetch())
     {
         if($row_cat['cat_type'] != $last_cat_type)
         {

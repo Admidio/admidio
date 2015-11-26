@@ -264,22 +264,22 @@ elseif($getMode === 2)
                 $sqlWebmaster = ' AND rol_webmaster = 1 ';
             }
 
-            $sql    = 'SELECT DISTINCT usr_id
-                         FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                        WHERE UPPER(usr_login_name) LIKE UPPER(\''.$loginName.'\')
-                          AND usr_valid      = 1
-                          AND mem_usr_id     = usr_id
-                          AND mem_rol_id     = rol_id
-                          AND mem_begin     <= \''.DATE_NOW.'\'
-                          AND mem_end        > \''.DATE_NOW.'\'
-                          AND rol_valid      = 1
-                              '.$sqlWebmaster.'
-                          AND rol_cat_id     = cat_id
-                          AND cat_org_id     = '.$gCurrentOrganization->getValue('org_id');
-            $result = $gDb->query($sql);
+            $sql = 'SELECT DISTINCT usr_id
+                      FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                     WHERE UPPER(usr_login_name) LIKE UPPER(\''.$loginName.'\')
+                       AND usr_valid      = 1
+                       AND mem_usr_id     = usr_id
+                       AND mem_rol_id     = rol_id
+                       AND mem_begin     <= \''.DATE_NOW.'\'
+                       AND mem_end        > \''.DATE_NOW.'\'
+                       AND rol_valid      = 1
+                           '.$sqlWebmaster.'
+                       AND rol_cat_id     = cat_id
+                       AND cat_org_id     = '.$gCurrentOrganization->getValue('org_id');
+            $statement = $gDb->query($sql);
 
-            $userFound = $gDb->num_rows($result);
-            $userRow   = $gDb->fetch_array($result);
+            $userFound = $statement->rowCount();
+            $userRow   = $statement->fetch();
 
             if ($userFound === 1)
             {
@@ -329,9 +329,9 @@ elseif($getMode === 2)
     $orga_preferences['system_hashing_cost'] = $benchmarkResults['cost'];
 
     $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
-    $result_orga = $gDb->query($sql);
+    $orgaStatement = $gDb->query($sql);
 
-    while($row_orga = $gDb->fetch_array($result_orga))
+    while($row_orga = $orgaStatement->fetch())
     {
         $gCurrentOrganization->setValue('org_id', $row_orga['org_id']);
         $gCurrentOrganization->setPreferences($orga_preferences, false);

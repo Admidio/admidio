@@ -83,10 +83,10 @@ $sql = 'SELECT DISTINCT usr_id
            AND rol_valid      = 1
            AND rol_cat_id     = cat_id
            AND cat_org_id     = '.$organizationId;
-$result = $gDb->query($sql);
+$statement = $gDb->query($sql);
 
-$userFound = $gDb->num_rows($result);
-$userRow   = $gDb->fetch_array($result);
+$userFound = $statement->rowCount();
+$userRow   = $statement->fetch();
 
 if ($userFound === 1)
 {
@@ -148,9 +148,9 @@ else
                AND usr_valid  = 0
                AND reg_usr_id = usr_id
                AND reg_org_id = '.$gCurrentOrganization->getValue('org_id');
-    $result = $gDb->query($sql);
+    $statement = $gDb->query($sql);
 
-    if($gDb->num_rows($result) === 1)
+    if($statement->rowCount() === 1)
     {
         $gMessage->show($gL10n->get('SYS_LOGIN_NOT_ACTIVATED'));
     }

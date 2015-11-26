@@ -26,10 +26,10 @@ $sql = 'select mem5.mem_id as member_id
                                          and mem2.mem_end = mem.mem_end
                                          and mem2.mem_id <> mem.mem_id )
                         group by mem.mem_rol_id, mem.mem_usr_id, mem.mem_end)';
-$resultMembers = $gDb->query($sql);
+$membersStatement = $gDb->query($sql);
 
 // do a loop over all members because mysql don't support subqueries in delete statements
-while($rowMember = $gDb->fetch_array($resultMembers))
+while($rowMember = $membersStatement->fetch())
 {
     $sql = 'delete from '.TBL_MEMBERS.' where mem_id = '.$rowMember['member_id'];
     $gDb->query($sql);

@@ -98,8 +98,8 @@ class ModuleAnnouncements extends Modules
                        OR (   ann_global = 1
                           AND ann_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                        '.$this->getConditions;
-        $result = $gDb->query($sql);
-        $row    = $gDb->fetch_array($result);
+        $statement = $gDb->query($sql);
+        $row = $statement->fetch();
         return $row['count'];
     }
 

@@ -11,17 +11,17 @@
 
 // Fotoeinstellungen anpassen
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
-$result_orga = $gDb->query($sql);
+$orgaStatement = $gDb->query($sql);
 
-while($row_orga = $gDb->fetch_array($result_orga))
+while($row_orga = $orgaStatement->fetch())
 {
     // erstmal die Fotoskalierung fuer den Upload auslesen
     $sql = 'SELECT prf_value
               FROM '. TBL_PREFERENCES. '
              WHERE prf_org_id = '. $row_orga['org_id']. '
                AND prf_name   = \'photo_save_scale\' ';
-    $result = $gDb->query($sql);
-    $row_photo_image_text = $gDb->fetch_array($result);
+    $statement = $gDb->query($sql);
+    $row_photo_image_text = $statement->fetch();
 
     // ist die Fotoskalierung kleiner 1030 Pixel, dann die Anzeige darauf anpassen
     if($row_photo_image_text['prf_value'] < 1030)

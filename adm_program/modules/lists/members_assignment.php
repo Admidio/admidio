@@ -206,7 +206,7 @@ else
              AND mem.mem_usr_id  = usr_id
             WHERE '. $memberCondition. '
             ORDER BY last_name, first_name ';
-    $resultUser = $gDb->query($sql);
+    $userStatement = $gDb->query($sql);
 
     // create html page object
     $page = new HtmlPage($headline);
@@ -361,7 +361,7 @@ else
     $table->setDatatablesColumnsHide(7);
 
     // show rows with all organization users
-    while($user = $gDb->fetch_array($resultUser))
+    while($user = $userStatement->fetch())
     {
         $addressText  = ' ';
         $htmlAddress  = '&nbsp;';
