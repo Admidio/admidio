@@ -49,7 +49,7 @@ define('MYSQL_RECONNECT_INTERVAL', 100000);  // disconnect and reconnect to MySQ
 define('OUTPUT_COMPRESSION_TYPE',  'gzip');  // 'bzip2', 'gzip', 'none'; best at "bzip2" for mysqldump-based backups, "gzip" for PHP-based backups
 define('OUTPUT_COMPRESSION_LEVEL', 6);       // bzip2/gzip compression level (1=fastest,9=best)
 
-//Some Config
+// Some Config
 $DHTMLenabled       = true;  // set $DHTMLenabled = FALSE to prevent JavaScript errors in incompatible browsers
                              // set $DHTMLenabled = TRUE to get the nice DHTML display in recent browsers
 $dbNameInCreate     = true;  // if true: "CREATE TABLE `database`.`table`", if false: "CREATE TABLE `table`"

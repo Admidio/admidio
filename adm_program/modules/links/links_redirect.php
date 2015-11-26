@@ -55,7 +55,7 @@ if ($gPreferences['weblinks_redirect_seconds'] > 0)
     // add special header for automatic redirection after x seconds
     $page->addHeader('<meta http-equiv="refresh" content="'. $gPreferences['weblinks_redirect_seconds'].'; url='.$weblink->getValue('lnk_url').'">');
 
-    //Counter zählt die sekunden bis zur Weiterleitung runter
+    // Counter zählt die sekunden bis zur Weiterleitung runter
     $page->addJavascript('
         function countDown(init) {
             if (init || --document.getElementById("counter").firstChild.nodeValue > 0 ) {

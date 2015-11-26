@@ -130,7 +130,7 @@ while($row_orga = $orgaStatement->fetch())
     $gDb->query($sql);
 }
 
-//Make all Profilefilds deletable, except FIRSTNAME, LASTNAME, EMAIL
+// Make all Profilefilds deletable, except FIRSTNAME, LASTNAME, EMAIL
 $sql = 'UPDATE '.TBL_USER_FIELDS
      .' SET usf_system = 0
         WHERE usf_name LIKE \'SYS_ADDRESS\'

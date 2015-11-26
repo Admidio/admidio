@@ -10,7 +10,7 @@
  */
 
 // E-Mail-Flags bei Rolle Webmaster per Default setzen, damit immer eine Rolle in Mail vorhanden ist
-///ausserdemm sollte er automatisch mit dem Recht ausgestattet werden alle Listen einzusehen
+// ausserdemm sollte er automatisch mit dem Recht ausgestattet werden alle Listen einzusehen
 $sql = "UPDATE ". TBL_ROLES. " SET rol_mail_login  = 1
                                  , rol_mail_logout = 1
                                  , rol_all_lists_view = 1
@@ -182,7 +182,7 @@ while($row_orga = $orgaStatement->fetchObject())
                                        VALUES ($row_orga->org_id, 'db_version', '2.0.0') ";
     $gDb->query($sql);
 
-    //Fuer das neue Downloadmodul wird der Root-Ordner in die DB eingetragen
+    // Fuer das neue Downloadmodul wird der Root-Ordner in die DB eingetragen
     $sql = "INSERT INTO ". TBL_FOLDERS. " (fol_org_id, fol_type, fol_name, fol_path,
                                            fol_locked, fol_public, fol_timestamp)
                                    VALUES ($row_orga->org_id, 'DOWNLOAD', 'download', '/adm_my_files',

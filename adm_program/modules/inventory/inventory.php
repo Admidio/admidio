@@ -61,7 +61,7 @@ if($gCurrentUser->isWebmaster())
     $itemsAdministrationMenu->addItem('menu_item_maintain_inventory_fields', $g_root_path. '/adm_program/modules/inventory/fields.php', $gL10n->get('PRO_MAINTAIN_ITEM_FIELDS'), 'application_form_edit.png');
 }
 
-//Create table object
+// Create table object
 $itemsTable = new HtmlTable('tbl_invent', $page, true, true, 'table table-condensed');
 
 // create array with all column heading values

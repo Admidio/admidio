@@ -52,7 +52,7 @@ if ($gPreferences['enable_dates_ical'] != 1)
     $gMessage->show($gL10n->get('SYS_ICAL_DISABLED'));
 }
 
-//create Object
+// create Object
 $dates = new ModuleDates();
 // get parameters fom $_GET Array stored in class
 $parameter = $dates->getParameters();
@@ -65,7 +65,7 @@ $parameter['date_to'] = date('Y-m-d', time()+$gPreferences['dates_ical_days_futu
 // read events for output
 $datesResult = $dates->getDataset();
 
-//Headline für Dateinamen
+// Headline für Dateinamen
 if($dates->getCatId() > 0)
 {
     $calendar = new TableCategory($gDb, $dates->getCatId());

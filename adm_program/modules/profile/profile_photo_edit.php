@@ -69,7 +69,7 @@ if($getMode === 'save')
     {
         // Foto im Dateisystem speichern
 
-        //Nachsehen ob fuer den User ein Photo gespeichert war
+        // Nachsehen ob fuer den User ein Photo gespeichert war
         if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
         {
             if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
@@ -84,10 +84,10 @@ if($getMode === 'save')
     {
         // Foto in der Datenbank speichern
 
-        //Nachsehen ob fuer den User ein Photo gespeichert war
+        // Nachsehen ob fuer den User ein Photo gespeichert war
         if(strlen($gCurrentSession->getValue('ses_binary')) > 0)
         {
-            //Fotodaten in User-Tabelle schreiben
+            // Fotodaten in User-Tabelle schreiben
             $user->setValue('usr_photo', $gCurrentSession->getValue('ses_binary'));
             $user->save();
 
@@ -106,7 +106,7 @@ if($getMode === 'save')
 elseif($getMode === 'dont_save')
 {
     /*****************************Foto nicht speichern*************************************/
-    //Ordnerspeicherung
+    // Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
         if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
@@ -114,7 +114,7 @@ elseif($getMode === 'dont_save')
             unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg');
         }
     }
-    //Datenbankspeicherung
+    // Datenbankspeicherung
     else
     {
         $gCurrentSession->setValue('ses_binary', '');
@@ -127,12 +127,12 @@ elseif($getMode === 'dont_save')
 elseif($getMode === 'delete')
 {
     /***************************** Foto loeschen *************************************/
-    //Ordnerspeicherung, Datei löschen
+    // Ordnerspeicherung, Datei löschen
     if($gPreferences['profile_photo_storage'] == 1)
     {
         unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
     }
-    //Datenbankspeicherung, Daten aus Session entfernen
+    // Datenbankspeicherung, Daten aus Session entfernen
     else
     {
         $user->setValue('usr_photo', '');
@@ -181,26 +181,26 @@ elseif($getMode === 'upload')
 {
     /*****************************Foto zwischenspeichern bestaetigen***********************************/
 
-    //Dateigroesse
+    // Dateigroesse
     if ($_FILES['userfile']['error'][0] == 1)
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', round(admFuncMaxUploadSize()/pow(1024, 2))));
     }
 
-    //Kontrolle ob Fotos ausgewaehlt wurden
+    // Kontrolle ob Fotos ausgewaehlt wurden
     if(!file_exists($_FILES['userfile']['tmp_name'][0]))
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_NOT_CHOOSEN'));
     }
 
-    //Dateiendung
+    // Dateiendung
     $image_properties = getimagesize($_FILES['userfile']['tmp_name'][0]);
     if ($image_properties['mime'] !== 'image/jpeg' && $image_properties['mime'] !== 'image/png')
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_FORMAT_INVALID'));
     }
 
-    //Auflösungskontrolle
+    // Auflösungskontrolle
     $image_dimensions = $image_properties[0]*$image_properties[1];
     if($image_dimensions > admFuncProcessableImageSize())
     {
@@ -212,15 +212,15 @@ elseif($getMode === 'upload')
     $user_image->setImageType('jpeg');
     $user_image->scale(130, 170);
 
-    //Ordnerspeicherung
+    // Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
         $user_image->copyToFile(null, SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg');
     }
-    //Datenbankspeicherung
+    // Datenbankspeicherung
     else
     {
-        //Foto in PHP-Temp-Ordner übertragen
+        // Foto in PHP-Temp-Ordner übertragen
         $user_image->copyToFile(null, ($_FILES['userfile']['tmp_name'][0]));
         // Foto aus PHP-Temp-Ordner einlesen
         $user_image_data = fread(fopen($_FILES['userfile']['tmp_name'][0], 'r'), $_FILES['userfile']['size'][0]);
@@ -230,7 +230,7 @@ elseif($getMode === 'upload')
         $gCurrentSession->save();
     }
 
-    //Image-Objekt löschen
+    // Image-Objekt löschen
     $user_image->delete();
 
     if($getUserId == $gCurrentUser->getValue('usr_id'))

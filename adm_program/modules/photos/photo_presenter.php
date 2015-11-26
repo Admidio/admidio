@@ -31,7 +31,7 @@ elseif($gPreferences['enable_photo_module'] == 2)
     require_once('../../system/login_valid.php');
 }
 
-//erfassen des Albums falls noch nicht in Session gespeichert
+// erfassen des Albums falls noch nicht in Session gespeichert
 if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
     $photoAlbum =& $_SESSION['photo_album'];
@@ -43,12 +43,12 @@ else
     $_SESSION['photo_album'] = $photoAlbum;
 }
 
-//Ordnerpfad zusammensetzen
+// Ordnerpfad zusammensetzen
 $ordner_foto = '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
 $ordner      = SERVER_PATH. $ordner_foto;
 $ordner_url  = $g_root_path. $ordner_foto;
 
-//Naechstes und Letztes Bild
+// Naechstes und Letztes Bild
 $previousImage = $getPhotoNr - 1;
 $nextImage = $getPhotoNr + 1;
 $urlPreviousImage = '#';
@@ -67,7 +67,7 @@ if($nextImage <= $photoAlbum->getValue('pho_quantity'))
 // create html page object
 $page = new HtmlPage($photoAlbum->getValue('pho_name'));
 
-//wenn Popupmode oder Colorbox, dann normalen Kopf unterdruecken
+// wenn Popupmode oder Colorbox, dann normalen Kopf unterdruecken
 if($gPreferences['photo_show_mode'] == 0)
 {
     $page->hideThemeHtml();

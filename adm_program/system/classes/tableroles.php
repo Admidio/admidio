@@ -308,7 +308,7 @@ class TableRoles extends TableAccess
         global $gCurrentOrganization, $gPreferences;
         $defaultListId = $this->getValue('rol_lst_id');
 
-        //if default list is not set
+        // if default list is not set
         if($defaultListId <= 0 || $defaultListId === null)
         {
             // read and set system default list configuration

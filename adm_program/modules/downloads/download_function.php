@@ -91,7 +91,7 @@ elseif ($getMode === 3)
 {
     if ($getFolderId == 0)
     {
-        //FolderId ist zum Anlegen eines Unterordners erforderlich
+        // FolderId ist zum Anlegen eines Unterordners erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
@@ -109,7 +109,7 @@ elseif ($getMode === 3)
             $newFolderName        = $_POST['new_folder'];
             $newFolderDescription = $_POST['new_description'];
 
-            //Test ob der Ordner schon existiert im Filesystem
+            // Test ob der Ordner schon existiert im Filesystem
             if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$newFolderName))
             {
                 $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolderName));
@@ -121,7 +121,7 @@ elseif ($getMode === 3)
 
                 if(strlen($b_return['text']) === 0)
                 {
-                    //Jetzt noch den Ordner der DB hinzufuegen...
+                    // Jetzt noch den Ordner der DB hinzufuegen...
                     $newFolder = new TableFolder($gDb);
 
                     $newFolder->setValue('fol_fol_id_parent', $targetFolder->getValue('fol_id'));
@@ -133,7 +133,7 @@ elseif ($getMode === 3)
                     $newFolder->setValue('fol_public', $targetFolder->getValue('fol_public'));
                     $newFolder->save();
 
-                    //Ordnerberechtigungen des ParentOrdners uebernehmen
+                    // Ordnerberechtigungen des ParentOrdners uebernehmen
                     $newFolder->setRolesOnFolder($targetFolder->getRoleArrayOfFolder());
                 }
                 else
@@ -162,13 +162,13 @@ elseif ($getMode === 3)
     }
 }
 
-//Datei / Ordner umbenennen
+// Datei / Ordner umbenennen
 elseif ($getMode === 4)
 {
     if ((!$getFileId && !$getFolderId) or ($getFileId && $getFolderId))
     {
-        //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
-        //beides ist auch nicht erlaubt
+        // Es muss entweder eine FileID ODER eine FolderId uebergeben werden
+        // beides ist auch nicht erlaubt
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
@@ -189,7 +189,7 @@ elseif ($getMode === 4)
                 $newFile        = $_POST['new_name'].admFuncGetFilenameExtension($oldFile);
                 $newDescription = $_POST['new_description'];
 
-                //Test ob die Datei schon existiert im Filesystem
+                // Test ob die Datei schon existiert im Filesystem
                 if ($newFile != $file->getValue('fil_name')
                  && file_exists(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
                 {
@@ -232,7 +232,7 @@ elseif ($getMode === 4)
                 $newFolder      = $_POST['new_name'];
                 $newDescription = $_POST['new_description'];
 
-                //Test ob der Ordner schon existiert im Filesystem
+                // Test ob der Ordner schon existiert im Filesystem
                 if ($newFolder != $folder->getValue('fol_name')
                 && file_exists(SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
                 {
@@ -275,12 +275,12 @@ elseif ($getMode === 4)
     }
 }
 
-//Folder loeschen
+// Folder loeschen
 elseif ($getMode === 5)
 {
     if (!$getFolderId)
     {
-        //Es muss eine FolderId uebergeben werden
+        // Es muss eine FolderId uebergeben werden
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     elseif ($getFolderId > 0)
@@ -306,12 +306,12 @@ elseif ($getMode === 5)
     unset($_SESSION['download_request']);
 }
 
-//Datei / Ordner zur DB hinzufeuegen
+// Datei / Ordner zur DB hinzufeuegen
 elseif ($getMode === 6)
 {
     if ($getFolderId == 0)
     {
-        //FolderId ist zum hinzufuegen erforderlich
+        // FolderId ist zum hinzufuegen erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
@@ -328,10 +328,10 @@ elseif ($getMode === 6)
         $e->showHtml();
     }
 
-    //Pruefen ob das neue Element eine Datei order ein Ordner ist.
+    // Pruefen ob das neue Element eine Datei order ein Ordner ist.
     if (is_file($targetFolder->getCompletePathOfFolder(). '/'. $getName))
     {
-        //Datei hinzufuegen
+        // Datei hinzufuegen
         $newFile = new TableFile($gDb);
         $newFile->setValue('fil_fol_id', $targetFolder->getValue('fol_id'));
         $newFile->setValue('fil_name', $getName);
@@ -339,7 +339,7 @@ elseif ($getMode === 6)
         $newFile->setValue('fil_counter', '0');
         $newFile->save();
 
-        //Zurueck zur letzten Seite
+        // Zurueck zur letzten Seite
         $gNavigation->addUrl(CURRENT_URL);
         $location = 'Location: '.$g_root_path.'/adm_program/system/back.php';
         header($location);
@@ -348,7 +348,7 @@ elseif ($getMode === 6)
     elseif (is_dir($targetFolder->getCompletePathOfFolder(). '/'. $getName))
     {
 
-        //Ordner der DB hinzufuegen
+        // Ordner der DB hinzufuegen
         $newFolder = new TableFolder($gDb);
         $newFolder->setValue('fol_fol_id_parent', $targetFolder->getValue('fol_id'));
         $newFolder->setValue('fol_type', 'DOWNLOAD');
@@ -358,10 +358,10 @@ elseif ($getMode === 6)
         $newFolder->setValue('fol_public', $targetFolder->getValue('fol_public'));
         $newFolder->save();
 
-        //Ordnerberechtigungen des ParentOrdners uebernehmen
+        // Ordnerberechtigungen des ParentOrdners uebernehmen
         $newFolder->setRolesOnFolder($targetFolder->getRoleArrayOfFolder());
 
-        //Zurueck zur letzten Seite
+        // Zurueck zur letzten Seite
         $gNavigation->addUrl(CURRENT_URL);
         $location = 'Location: '.$g_root_path.'/adm_program/system/back.php';
         header($location);
@@ -370,7 +370,7 @@ elseif ($getMode === 6)
 
 }
 
-//Berechtigungen fuer einen Ordner speichern
+// Berechtigungen fuer einen Ordner speichern
 elseif ($getMode === 7)
 {
     if(!isset($_POST['adm_allowed_roles']))
@@ -380,7 +380,7 @@ elseif ($getMode === 7)
 
     if ($getFolderId == 0 || !is_array($_POST['adm_allowed_roles']))
     {
-        //FolderId ist zum hinzufuegen erforderlich
+        // FolderId ist zum hinzufuegen erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 

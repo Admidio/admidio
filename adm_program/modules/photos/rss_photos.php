@@ -67,7 +67,7 @@ else
         ON cre_username.usr_id = pho_usr_id_create ';
 }
 
-//read albums from database
+// read albums from database
 $sql = 'SELECT pho.*, '.$additionalFields.'
           FROM '. TBL_PHOTOS. ' pho
                '.$additionalTables.'
@@ -102,17 +102,17 @@ while ($row = $statement->fetch())
 
     while($pho_parent_id > 0)
     {
-        //Erfassen des Eltern Albums
+        // Erfassen des Eltern Albums
         $sql = ' SELECT *
                   FROM '. TBL_PHOTOS. '
                  WHERE pho_id = '.$pho_parent_id;
         $parentsStatement = $gDb->query($sql);
         $adm_photo_parent = $parentsStatement->fetch();
 
-        //Link zusammensetzen
+        // Link zusammensetzen
         $parents = $adm_photo_parent['pho_name'].' > '.$parents;
 
-        //Elternveranst
+        // Elternveranst
         $pho_parent_id=$adm_photo_parent['pho_pho_id_parent'];
     }
 
@@ -121,9 +121,9 @@ while ($row = $statement->fetch())
     $author  = $row['create_name'];
     $pubDate = date('r', strtotime($photo_album->getValue('pho_timestamp_create')));
 
-    //Inhalt zusammensetzen
+    // Inhalt zusammensetzen
     $description = $gL10n->get('SYS_DATE').': '.$photo_album->getValue('pho_begin', $gPreferences['system_date']);
-    //Enddatum nur wenn anders als startdatum
+    // Enddatum nur wenn anders als startdatum
     if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin'))
     {
         $description = $gL10n->get('SYS_DATE_FROM_TO', $description, $photo_album->getValue('pho_end', $gPreferences['system_date']));

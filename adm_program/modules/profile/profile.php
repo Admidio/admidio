@@ -23,7 +23,7 @@ $getUserId = admFuncVariableIsValid($_GET, 'user_id', 'numeric', array('defaultV
 // create user object
 $user = new User($gDb, $gProfileFields, $getUserId);
 
-//Testen ob Recht besteht Profil einzusehn
+// Testen ob Recht besteht Profil einzusehn
 if(!$gCurrentUser->hasRightViewProfile($user))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -474,7 +474,7 @@ $page->addHtml('
                 $page->addHtml('<div id="profile_picture_links" class="btn-group-vertical" role="group">
                     <a class="btn" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><img
                         src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a>');
-                //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
+                // Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
                 if((strlen($user->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
                     || file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$user->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
                 {
@@ -548,13 +548,13 @@ if($gPreferences['profile_show_roles'] == 1)
     // Authorizations block
     // *******************************************************************************
 
-    //Array mit allen Berechtigungen
+    // Array mit allen Berechtigungen
     $authorizations = array('rol_assign_roles','rol_approve_users','rol_edit_user',
                             'rol_mail_to_all','rol_profile','rol_announcements',
                             'rol_dates','rol_photo','rol_download','rol_guestbook',
                             'rol_guestbook_comments','rol_weblinks', 'rol_all_lists_view');
 
-    //Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
+    // Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
     foreach($authorizations as $authorization_db_name)
     {
         $sql = 'SELECT rol_name
@@ -665,7 +665,7 @@ if($gPreferences['profile_show_roles'] == 1)
     $roleStatement = getRolesFromDatabase($user->getValue('usr_id'));
     $count_role  = $roleStatement->rowCount();
 
-    //Ausgabe
+    // Ausgabe
     $page->addHtml('
     <div class="panel panel-default" id="profile_roles_box">
         <div class="panel-heading">

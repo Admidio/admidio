@@ -24,7 +24,7 @@ $sql = 'SELECT min(mem_usr_id) as webmaster_id
 $statement = $gDb->query($sql);
 $row_webmaster = $statement->fetch();
 
-//Defaultraum fuer Raummodul in der DB anlegen:
+// Defaultraum fuer Raummodul in der DB anlegen:
 $sql = 'INSERT INTO '. TBL_ROOMS. ' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
                                 VALUES (\'Besprechnungsraum\', \'Hier können Besprechungen stattfinden. Der Raum muss vorher
                                          reserviert werden. Ein Beamer steht zur Verfügung.\', 15, '.

@@ -86,13 +86,13 @@ if($getMode === 'assign')
             $leadership = 1;
         }
 
-        //Member
+        // Member
         $member = new TableMembers($gDb);
 
-        //Datensatzupdate
+        // Datensatzupdate
         $mem_count = $role->countMembers($getUserId);
 
-        //Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
+        // Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
         if($leadership == 1 || ($leadership == 0 && $membership == 1 && ($role->getValue('rol_max_members') > $mem_count || $role->getValue('rol_max_members') == 0 || $role->getValue('rol_max_members') == 0)))
         {
             $member->startMembership($role->getValue('rol_id'), $getUserId, $leadership);
@@ -247,13 +247,13 @@ else
             var member_checked = $("input[type=checkbox]#member_"+userid).prop("checked");
             var leader_checked = $("input[type=checkbox]#leader_"+userid).prop("checked");
 
-            //Bei Leiter Checkbox setzten, muss Member mit gesetzt werden
+            // Bei Leiter Checkbox setzten, muss Member mit gesetzt werden
             if(checkbox.hasClass("memlist_leader") && leader_checked) {
                 $("input[type=checkbox]#member_"+userid).prop("checked", true);
                 member_checked = true;
             }
 
-            //Bei entfernen der Mitgliedschaft endet auch das Leiterdasein
+            // Bei entfernen der Mitgliedschaft endet auch das Leiterdasein
             if(checkbox.hasClass("memlist_member") && member_checked == false) {
                 $("input[type=checkbox]#leader_"+userid).prop("checked", false);
                 leader_checked = false;
@@ -417,7 +417,7 @@ else
             $htmlAddress = '<img class="admidio-icon-info" src="'. THEME_PATH.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
         }
 
-        //Haekchen setzen ob jemand Leiter ist oder nicht
+        // Haekchen setzen ob jemand Leiter ist oder nicht
         if($user['leader_this_role'])
         {
             $htmlRoleLeader = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_leader" />';
@@ -427,7 +427,7 @@ else
             $htmlRoleLeader = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" class="memlist_checkbox memlist_leader" />';
         }
 
-        //Geburtstag nur ausgeben wenn bekannt
+        // Geburtstag nur ausgeben wenn bekannt
         if(strlen($user['birthday']) > 0)
         {
             $birthdayDate = new DateTimeExtended($user['birthday'], 'Y-m-d');

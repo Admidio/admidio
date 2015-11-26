@@ -37,7 +37,7 @@ if ($gPreferences['enable_ecard_module'] != 1)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-//URL auf Navigationstack ablegen
+// URL auf Navigationstack ablegen
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
@@ -73,7 +73,7 @@ if ($gValidLogin && strlen($gCurrentUser->getValue('EMAIL')) === 0)
 
 if ($getUserId > 0)
 {
-    //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
+    // usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
     $user = new User($gDb, $gProfileFields, $getUserId);
 
     // darf auf die User-Id zugegriffen werden

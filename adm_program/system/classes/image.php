@@ -217,7 +217,7 @@ class Image
             // Erzeugung neues Bild
             $photo_rotate = imagecreatetruecolor($this->imageHeight, $this->imageWidth);
 
-            //kopieren der Daten in neues Bild
+            // kopieren der Daten in neues Bild
             for($y = 0; $y < $this->imageHeight; ++$y)
             {
                 for($x = 0; $x < $this->imageWidth; ++$x)
@@ -233,10 +233,10 @@ class Image
                 }
             }
 
-            //speichern
+            // speichern
             $this->copyToFile($photo_rotate);
 
-            //Loeschen des Bildes aus Arbeitsspeicher
+            // Loeschen des Bildes aus Arbeitsspeicher
             imagedestroy($photo_rotate);
         }
     }

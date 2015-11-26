@@ -13,24 +13,24 @@
 // bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert))
 $plg_max_char_per_word = 0;
 
-//Maximale Photobreite
-//Angabe in px, (Default = 150)
+// Maximale Photobreite
+// Angabe in px, (Default = 150)
 $plg_photos_max_width = 150;
 
-//Maximale Photohoehe
-//Angabe in px, (Default = 200)
+// Maximale Photohoehe
+// Angabe in px, (Default = 200)
 $plg_photos_max_height = 200;
 
-//Zahl der Alben aus denen das Foto kommen darf, gezählt wird ab dem Aktuellsten
-//Default = 0 (Keine Einschraenkung)
+// Zahl der Alben aus denen das Foto kommen darf, gezählt wird ab dem Aktuellsten
+// Default = 0 (Keine Einschraenkung)
 $plg_photos_albums = 0;
 
-//Bildauswahl
+// Bildauswahl
 // 0 : (Default) Zufallsbild
 // 1 : erstes Bild etc.
 $plg_photos_picnr = 0;
 
-//Soll der Link zum Album unter dem Bild angezeigt werden?
+// Soll der Link zum Album unter dem Bild angezeigt werden?
 $plg_photos_show_link = true;
 
 // Name einer CSS-Klasse fuer Links

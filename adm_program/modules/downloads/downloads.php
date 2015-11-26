@@ -103,7 +103,7 @@ if($gCurrentUser->isWebmaster())
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
-//Create table object
+// Create table object
 $downloadOverview = new HtmlTable('tbl_downloads', $page, true, true);
 
 // create array with all column heading values
@@ -151,7 +151,7 @@ if (isset($folderContent['folders']))
 
         if ($gCurrentUser->editDownloadRight())
         {
-            //Links for change and delete
+            // Links for change and delete
             $noteFolderNotExists = '';
 
             if($nextFolder['fol_exists'] == false)
@@ -213,7 +213,7 @@ if (isset($folderContent['files']))
 
         if ($gCurrentUser->editDownloadRight())
         {
-            //Links for change and delete
+            // Links for change and delete
             $noteFileNotExists = '';
 
             if($nextFile['fil_exists'] == false)
@@ -236,7 +236,7 @@ if (isset($folderContent['files']))
     }
 }
 
-//Create download table
+// Create download table
 $downloadOverview->setDatatablesColumnsHide(array(1));
 $downloadOverview->setDatatablesOrderColumns(array(1, 3));
 $htmlDownloadOverview = $downloadOverview->show(false);

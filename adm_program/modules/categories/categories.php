@@ -149,7 +149,7 @@ $categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10
 $categoriesMenu->addItem('admMenuItemNewCategory', $g_root_path.'/adm_program/modules/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
                          $gL10n->get('SYS_CREATE_VAR', $addButtonText), 'add.png');
 
-//Create table object
+// Create table object
 $categoriesOverview = new HtmlTable('tbl_categories', $page, true);
 
 // create array with all column heading values

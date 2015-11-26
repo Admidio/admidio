@@ -40,7 +40,7 @@ if ($gPreferences['enable_announcements_module'] != 1)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-//Objekt anlegen
+// Objekt anlegen
 $announcements = new ModuleAnnouncements();
 
 /*** ab hier wird der RSS-Feed zusammengestellt**/
@@ -51,7 +51,7 @@ $rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHea
             $gL10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', $gCurrentOrganization->getValue('org_longname')),
             $gCurrentOrganization->getValue('org_longname'));
 
-//Wenn Ankündigungen vorhanden laden
+// Wenn Ankündigungen vorhanden laden
 if($announcements->getDataSetCount()>0)
 {
     $announcement = new TableAnnouncement($gDb);

@@ -187,7 +187,7 @@ if ($getMode === 1 || $getMode === 3)
                 $row = $statement->fetch();
                 if($row[0] > 0)
                 {
-                    //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
+                    // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
                     $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));
                 }
             }
@@ -279,7 +279,7 @@ elseif($getMode === 2)
 }
 elseif ($getMode === 5)
 {
-    //Gaestebuchkommentar loeschen...
+    // Gaestebuchkommentar loeschen...
     $guestbook_comment->delete();
 
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
@@ -378,7 +378,7 @@ elseif($getMode === 4 || $getMode === 8)
                 $row = $statement->fetch();
                 if($row[0] > 0)
                 {
-                    //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
+                    // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
                     $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));
                 }
             }

@@ -88,7 +88,7 @@ if($getMode === 'show_list')
     $backupMenu->addItem('admMenuItemNewBackup', $g_root_path.'/adm_program/modules/backup/backup.php?mode=create_backup',
                          $gL10n->get('BAC_START_BACKUP'), 'database_save.png');
 
-    //Define table
+    // Define table
     $table = new HtmlTable('tableList', $page, true);
     $table->setMessageIfNoRowsFound('BAC_NO_BACKUP_FILE_EXISTS');
 

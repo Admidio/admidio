@@ -62,7 +62,7 @@ else
         ON cre_username.usr_id = lnk_usr_id_create ';
 }
 
-//read weblinks from database
+// read weblinks from database
 $sql = 'SELECT cat.*, lnk.*, '.$additionalFields.'
           FROM '. TBL_CATEGORIES .' cat, '. TBL_LINKS. ' lnk
                '.$additionalTables.'

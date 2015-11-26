@@ -324,12 +324,12 @@ function admFuncMaxUploadSize()
 function admFuncProcessableImageSize()
 {
     $memory_limit = trim(ini_get('memory_limit'));
-    //falls in php.ini nicht gesetzt
+    // falls in php.ini nicht gesetzt
     if(!$memory_limit || $memory_limit === '')
     {
         $memory_limit = '8M';
     }
-    //falls in php.ini abgeschaltet
+    // falls in php.ini abgeschaltet
     if($memory_limit === '-1')
     {
         $memory_limit = '128M';
@@ -343,13 +343,13 @@ function admFuncProcessableImageSize()
      case 'k':
          $memory_limit *= 1024;
     }
-    //Für jeden Pixel werden 3Byte benötigt (RGB)
-    //der Speicher muss doppelt zur Verfügung stehen
-    //nach ein paar tests hat sich 2,5Fach als sichrer herausgestellt
+    // Für jeden Pixel werden 3Byte benötigt (RGB)
+    // der Speicher muss doppelt zur Verfügung stehen
+    // nach ein paar tests hat sich 2,5Fach als sichrer herausgestellt
     return $memory_limit / (3*2.5);
 }
 
-/// Verify the content of an array element if it's the expected datatype
+// Verify the content of an array element if it's the expected datatype
 /**
  * The function is designed to check the content of @b $_GET and @b $_POST elements and should be used at the
  * beginning of a script. If the value of the defined datatype is not valid then an error will be shown. If no

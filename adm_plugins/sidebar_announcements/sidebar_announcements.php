@@ -65,7 +65,7 @@ if(!isset($plg_show_preview) || !is_numeric($plg_show_preview))
 // Sprachdatei des Plugins einbinden
 $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
-//Objekt anlegen
+// Objekt anlegen
 $plg_announcements = new ModuleAnnouncements();
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
@@ -80,7 +80,7 @@ if($plg_announcements->getDataSetCount() == 0)
 }
 else
 {
-    //Daten holen
+    // Daten holen
     $plg_getAnnouncements = $plg_announcements->getDataSet(0, $plg_announcements_count);
     $plg_announcement = new TableAnnouncement($gDb);
 

@@ -29,7 +29,7 @@ if (!$gCurrentUser->editInventory())
 $gInventoryFields = new InventoryFields($gDb, $gCurrentOrganization->getValue('org_id'));
 $inventory = new Inventory($gDb, $gInventoryFields, $getItemId);
 
-//Testen ob Recht besteht Profil einzusehn
+// Testen ob Recht besteht Profil einzusehn
 if($gPreferences['enable_inventory_module'] >= 0 && !$gValidLogin)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -242,7 +242,7 @@ $page->addHtml('
                 $page->addHtml('<div id="profile_picture_links" class="btn-group-vertical" role="group">
                     <a class="btn" href="'.$g_root_path.'/adm_program/modules/inventory/item_photo_edit.php?inv_id='.$inventory->getValue('inv_id').'"><img
                             src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a>');
-                //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
+                // Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
                 if((strlen($inventory->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
                     || file_exists(SERVER_PATH. '/adm_my_files/item_photos/'.$inventory->getValue('inv_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
                 {

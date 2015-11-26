@@ -40,7 +40,7 @@ if($inventory->getValue('inv_id') == 0)
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-//Foto aus adm_my_files
+// Foto aus adm_my_files
 if($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 0)
 {
     if(file_exists(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg'))
@@ -49,7 +49,7 @@ if($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 0)
     }
     $image = new Image($picpath);
 }
-//Foto aus der Datenbank
+// Foto aus der Datenbank
 elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 0)
 {
     if(strlen($inventory->getValue('inv_photo')) != null)
@@ -62,13 +62,13 @@ elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 0)
         $image = new Image($picpath);
     }
 }
-//neues Foto, Ordnerspeicherung
+// neues Foto, Ordnerspeicherung
 elseif($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 1)
 {
     $picpath = SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg';
     $image = new Image($picpath);
 }
-//neues Foto, Datenbankspeicherung
+// neues Foto, Datenbankspeicherung
 elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 1)
 {
     $image = new Image();

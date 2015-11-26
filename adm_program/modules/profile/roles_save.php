@@ -141,7 +141,7 @@ foreach($rolesList as $row)
 
             $row_members = $pdoStatement->fetch();
 
-            //Bedingungen fuer Abbruch und Abbruch
+            // Bedingungen fuer Abbruch und Abbruch
             if($row_members[0] >= $row['rol_max_members']
             && isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == false
             && isset($_POST['role-'.$row['rol_id']])   && $_POST['role-'.$row['rol_id']]   == true)

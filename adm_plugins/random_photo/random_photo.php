@@ -93,7 +93,7 @@ $sql='      SELECT *
             AND pho_quantity > 0
             ORDER BY pho_begin DESC';
 
-//Limit setzen falls gefordert
+// Limit setzen falls gefordert
 if($plg_photos_albums != 0)
 {
     $sql = $sql.' LIMIT '.$plg_photos_albums;
@@ -112,10 +112,10 @@ $album = new TablePhotos($gDb);
 // Schleife, falls nicht direkt ein Bild gefunden wird, aber auf 20 Durchlaeufe begrenzen
 while(!file_exists($picpath) && $i < 20 && $albumStatement->rowCount() > 0)
 {
-    //Ausgewähltendatendatz holen
+    // Ausgewähltendatendatz holen
     $album->setArray($albumList[mt_rand(0, $albumStatement->rowCount()-1)]);
 
-    //Falls gewuensch Bild per Zufall auswaehlen
+    // Falls gewuensch Bild per Zufall auswaehlen
     if($plg_photos_picnr ==0)
     {
         $picnr = mt_rand(1, $album->getValue('pho_quantity'));
@@ -125,7 +125,7 @@ while(!file_exists($picpath) && $i < 20 && $albumStatement->rowCount() > 0)
         $picnr = $plg_photos_picnr;
     }
 
-    //Bilpfad zusammensetzen
+    // Bilpfad zusammensetzen
     $picpath = PLUGIN_PATH. '/../adm_my_files/photos/'.$album->getValue('pho_begin', 'Y-m-d').'_'.$album->getValue('pho_id').'/'.$picnr.'.jpg';
     ++$i;
 }
@@ -135,16 +135,16 @@ if(!file_exists($picpath))
     $picpath = THEME_SERVER_PATH. '/images/nopix.jpg';
 }
 
-//Ermittlung der Original Bildgroesse
+// Ermittlung der Original Bildgroesse
 $bildgroesse = getimagesize($picpath);
 
-//Popupfenstergröße
+// Popupfenstergröße
 $popup_height = $gPreferences['photo_show_height']+210;
 $popup_width  = $gPreferences['photo_show_width']+70;
 
 if($plg_photos_show_link && $plg_max_char_per_word > 0)
 {
-    //Linktext umbrechen wenn noetig
+    // Linktext umbrechen wenn noetig
     $words = explode(' ', $album->getValue('pho_name'));
 
     for($i = 0; $i < count($words); ++$i)
@@ -165,13 +165,13 @@ else
     $link_text = $album->getValue('pho_name');
 }
 
-//Ausgabe
+// Ausgabe
 $pho_id = $album->getValue('pho_id');
 echo '<a class="'.$plg_link_class.'" href="'. $g_root_path. '/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'&amp;photo_nr='.$picnr.'" target="'. $plg_link_target. '"><img
     class="thumbnail" alt="'.$link_text.'" title="'.$link_text.'"
     src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;photo_nr='.$picnr.'&amp;pho_begin='.$album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$plg_photos_max_width.'&amp;max_height='.$plg_photos_max_height.'" /></a>';
 
-//Link zum Album
+// Link zum Album
 if($plg_photos_show_link)
 {
     echo'<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'" target="'.$plg_link_target.'">'.$link_text.'</a>';

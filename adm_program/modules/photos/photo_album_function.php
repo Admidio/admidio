@@ -35,7 +35,7 @@ if(!$gCurrentUser->editPhotoRight())
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
 }
 
-//Gepostete Variablen in Session speichern
+// Gepostete Variablen in Session speichern
 $_SESSION['photo_album_request'] = $_POST;
 
 // Fotoalbumobjekt anlegen
@@ -52,26 +52,26 @@ if($getMode !== 'new' && $getPhotoId > 0)
     }
 }
 
-//Speicherort mit dem Pfad aus der Datenbank
+// Speicherort mit dem Pfad aus der Datenbank
 $ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
 if($getMode === 'new' || $getMode === 'change')
 {
-    //Gesendete Variablen Uebernehmen und kontollieren
+    // Gesendete Variablen Uebernehmen und kontollieren
 
-    //Freigabe(muss zuerst gemacht werden da diese nicht gesetzt sein koennte)
+    // Freigabe(muss zuerst gemacht werden da diese nicht gesetzt sein koennte)
     if(!isset($_POST['pho_locked']))
     {
         $_POST['pho_locked'] = 0;
     }
-    //Album
+    // Album
     if(strlen($_POST['pho_name']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('PHO_ALBUM')));
     }
 
-    //Beginn
+    // Beginn
     if(strlen($_POST['pho_begin']) > 0)
     {
         $startDate = new DateTimeExtended($_POST['pho_begin'], $gPreferences['system_date']);
@@ -90,7 +90,7 @@ if($getMode === 'new' || $getMode === 'change')
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_START')));
     }
 
-    //Ende
+    // Ende
     if(strlen($_POST['pho_end']) > 0)
     {
         $endDate = new DateTimeExtended($_POST['pho_end'], $gPreferences['system_date']);
@@ -109,13 +109,13 @@ if($getMode === 'new' || $getMode === 'change')
         $_POST['pho_end'] = $_POST['pho_begin'];
     }
 
-    //Anfang muss vor oder gleich Ende sein
+    // Anfang muss vor oder gleich Ende sein
     if(strlen($_POST['pho_end']) > 0 && $_POST['pho_end'] < $_POST['pho_begin'])
     {
         $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
     }
 
-    //Photographen
+    // Photographen
     if(strlen($_POST['pho_photographers']) === 0)
     {
         $_POST['pho_photographers'] = $gL10n->get('SYS_UNKNOWN');

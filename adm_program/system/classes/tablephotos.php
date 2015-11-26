@@ -140,7 +140,7 @@ class TablePhotos extends TableAccess
         // nun DB-Eintrag und Ordner loeschen
         if($return_code)
         {
-            //Ordnerpfad zusammensetzen
+            // Ordnerpfad zusammensetzen
             $folder = SERVER_PATH. '/adm_my_files/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$photo_id;
 
             // aktuellen Ordner incl. Unterordner und Dateien loeschen, falls er existiert

@@ -37,7 +37,7 @@ if ($gPreferences['enable_download_module'] != 1)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-//nur von eigentlicher OragHompage erreichbar
+// nur von eigentlicher OragHompage erreichbar
 if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0)
 {
     // das Modul ist deaktiviert
@@ -52,8 +52,8 @@ if (!$gCurrentUser->editDownloadRight())
 
 if ((!$getFileId && !$getFolderId) or ($getFileId && $getFolderId))
 {
-    //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
-    //beides ist auch nicht erlaubt
+    // Es muss entweder eine FileID ODER eine FolderId uebergeben werden
+    // beides ist auch nicht erlaubt
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 

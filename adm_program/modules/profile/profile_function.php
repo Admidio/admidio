@@ -149,7 +149,7 @@ elseif($getMode === 7)
     $formatedStartDate = '';
     $formatedEndDate   = '';
 
-    //Check das Beginn Datum
+    // Check das Beginn Datum
     $startDate = new DateTimeExtended($getMembershipStart, $gPreferences['system_date']);
     if($startDate->isValid())
     {
@@ -161,7 +161,7 @@ elseif($getMode === 7)
         exit($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
     }
 
-    //Falls gesetzt wird das Enddatum gecheckt
+    // Falls gesetzt wird das Enddatum gecheckt
     if($getMembershipEnd !== '')
     {
         $endDate = new DateTimeExtended($getMembershipEnd, $gPreferences['system_date']);

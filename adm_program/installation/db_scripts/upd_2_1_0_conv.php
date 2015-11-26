@@ -280,47 +280,47 @@ $gDb->query($sql);
 $sql = 'ALTER TABLE '. TBL_DATES. ' DROP COLUMN dat_org_shortname ';
 $gDb->query($sql);
 
-//Neu Mailrechte installieren
-//1. neue Spalten anlegen
-    //passiert schon in upd_2_1_0_db.sql
+// Neu Mailrechte installieren
+// 1. neue Spalten anlegen
+    // passiert schon in upd_2_1_0_db.sql
 
-//2.Webmaster mit globalem Mailsenderecht ausstatten
+// 2.Webmaster mit globalem Mailsenderecht ausstatten
 $sql = 'UPDATE '. TBL_ROLES. ' SET rol_mail_to_all = \'1\'
         WHERE rol_name = \'Webmaster\'';
 $gDb->query($sql);
 
-//3. alte Mailrechte Übertragen
-//3.1 eingeloggte konnten bisher eine Mail an diese Rolle schreiben
+// 3. alte Mailrechte Übertragen
+// 3.1 eingeloggte konnten bisher eine Mail an diese Rolle schreiben
 $sql = 'UPDATE '. TBL_ROLES. ' SET rol_mail_this_role = \'2\'
         WHERE rol_mail_login = 1';
 $gDb->query($sql);
 
-//3.2 ausgeloggte konnten bisher eine Mail an diese Rolle schreiben
+// 3.2 ausgeloggte konnten bisher eine Mail an diese Rolle schreiben
 $sql = 'UPDATE '. TBL_ROLES. ' SET rol_mail_this_role = \'3\'
         WHERE rol_mail_logout = 1';
 $gDb->query($sql);
 
-//4. Überflüssige Spalten löschen
+// 4. Überflüssige Spalten löschen
 $sql = 'ALTER TABLE '. TBL_ROLES. '
         DROP rol_mail_login,
         DROP rol_mail_logout';
 $gDb->query($sql);
 
-//Neues Inventarmodulrecht installieren
-//1. neue Spalte anlegen
-    //passiert schon in upd_2_1_0_db.sql
+// Neues Inventarmodulrecht installieren
+// 1. neue Spalte anlegen
+    // passiert schon in upd_2_1_0_db.sql
 
-//2.Webmaster mit Inventarverwaltungsrecht ausstatten
+// 2.Webmaster mit Inventarverwaltungsrecht ausstatten
 $sql = 'UPDATE '. TBL_ROLES. ' SET rol_inventory = \'1\'
         WHERE rol_name = \'Webmaster\'';
 $gDb->query($sql);
 
-//Fototext updaten
+// Fototext updaten
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
 $orgaStatement = $gDb->query($sql);
 while($row_orga = $orgaStatement->fetch())
 {
-    //erstmal gucken ob die Funktion bisher aktiviert war
+    // erstmal gucken ob die Funktion bisher aktiviert war
     $sql = 'SELECT prf_value
               FROM '. TBL_PREFERENCES. '
              WHERE prf_org_id = '. $row_orga['org_id']. '
@@ -328,7 +328,7 @@ while($row_orga = $orgaStatement->fetch())
     $statement = $gDb->query($sql);
     $row_photo_image_text = $statement->fetch();
 
-    //wenn ja
+    // wenn ja
     if($row_photo_image_text['prf_value'] == 1)
     {
         $sql = 'UPDATE '. TBL_PREFERENCES. '
@@ -336,7 +336,7 @@ while($row_orga = $orgaStatement->fetch())
                    WHERE prf_org_id = '. $row_orga['org_id']. '
                    AND prf_name   = \'photo_image_text\' ';
     }
-    //wenn nicht
+    // wenn nicht
     else
     {
         $sql = 'UPDATE '. TBL_PREFERENCES. '

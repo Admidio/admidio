@@ -27,7 +27,7 @@ if ($gPreferences['enable_download_module'] != 1)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-//nur von eigentlicher OragHompage erreichbar
+// nur von eigentlicher OragHompage erreichbar
 if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0)
 {
     // das Modul ist deaktiviert
@@ -53,7 +53,7 @@ catch(AdmException $e)
     $e->showHtml();
 }
 
-//Parentordner holen
+// Parentordner holen
 $parentRoleSet = array();
 
 if ($folder->getValue('fol_fol_id_parent'))
@@ -75,8 +75,8 @@ if ($folder->getValue('fol_fol_id_parent'))
 
 if (count($parentRoleSet) === 0)
 {
-    //wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
-    //alle aus der DB aus lesen
+    // wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
+    // alle aus der DB aus lesen
     $sql_roles = 'SELECT *
                      FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                     WHERE rol_valid  = 1
@@ -90,7 +90,7 @@ if (count($parentRoleSet) === 0)
 
     while($row_roles = $rolesStatement->fetchObject())
     {
-        //Jede Rolle wird nun dem Array hinzugefuegt
+        // Jede Rolle wird nun dem Array hinzugefuegt
         $parentRoleSet[] = array($row_roles->rol_id, $row_roles->rol_name, $row_roles->cat_name);
     }
 }

@@ -47,7 +47,7 @@ if($getInline == 0)
 {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 }
-//Testen ob Feste Rolle gesetzt ist
+// Testen ob Feste Rolle gesetzt ist
 if(isset($_SESSION['set_rol_id']))
 {
     $setRoleId = $_SESSION['set_rol_id'];

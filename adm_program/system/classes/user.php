@@ -838,7 +838,7 @@ class User extends TableUsers
     {
         if(is_object($user))
         {
-            //Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
+            // Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
             if($this->hasRightEditProfile($user))
             {
                 return true;

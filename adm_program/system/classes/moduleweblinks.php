@@ -127,7 +127,7 @@ class ModuleWeblinks extends Modules
     {
         global $gCurrentOrganization, $gPreferences, $gProfileFields, $gDb, $gValidLogin;
 
-        //Parameter
+        // Parameter
         if($limit == null)
         {
             $limit = $gPreferences['weblinks_per_page'];

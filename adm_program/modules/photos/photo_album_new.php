@@ -84,7 +84,7 @@ function subfolder($parent_id, $vorschub, $photoAlbum, $pho_id)
     $sqlConditionParentId = '';
     $parentPhotoAlbum = new TablePhotos($gDb);
 
-    //Erfassen des auszugebenden Albums
+    // Erfassen des auszugebenden Albums
     if($parent_id > 0)
     {
         $sqlConditionParentId .= ' AND pho_pho_id_parent = \''.$parent_id.'\' ';

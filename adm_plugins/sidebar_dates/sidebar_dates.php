@@ -83,7 +83,7 @@ if(!isset($plg_link_url) || $plg_link_url === '')
     $plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
 }
 
-//create Object
+// create Object
 $plgDates = new ModuleDates();
 
 // read events for output

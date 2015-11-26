@@ -74,13 +74,13 @@ else
     $headline = $getHeadline;
 }
 
-//Wurde keine Album uebergeben kann das Navigationsstack zurueckgesetzt werden
+// Wurde keine Album uebergeben kann das Navigationsstack zurueckgesetzt werden
 if ($getPhotoId == 0)
 {
     $gNavigation->clear();
 }
 
-//URL auf Navigationstack ablegen
+// URL auf Navigationstack ablegen
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
@@ -90,7 +90,7 @@ if($getPhotoId > 0 && $photoAlbum->getValue('pho_org_id') != $gCurrentOrganizati
 }
 
 /*********************LOCKED************************************/
-//Falls gefordert und Foto-edit-rechte, aendern der Freigabe
+// Falls gefordert und Foto-edit-rechte, aendern der Freigabe
 if($getLocked == '1' || $getLocked == '0')
 {
     // erst pruefen, ob der User Fotoberarbeitungsrechte hat
@@ -102,7 +102,7 @@ if($getLocked == '1' || $getLocked == '0')
     $photoAlbum->setValue('pho_locked', $getLocked);
     $photoAlbum->save();
 
-    //Zurueck zum Elternalbum
+    // Zurueck zum Elternalbum
     $getPhotoId = $photoAlbum->getValue('pho_pho_id_parent');
     $photoAlbum->readDataById($getPhotoId);
 }
@@ -124,7 +124,7 @@ if($gCurrentUser->editPhotoRight())
         // rotate image
         function imgrotate(img, direction) {
             $.get("'.$g_root_path.'/adm_program/modules/photos/photo_function.php", {pho_id: '.$getPhotoId.', photo_nr: img, job: "rotate", direction: direction}, function(data) {
-                //Anhängen der Zufallszahl ist nötig um den Browsercache zu überlisten
+                // Anhängen der Zufallszahl ist nötig um den Browsercache zu überlisten
                 $("#img_"+img).attr("src", "photo_show.php?pho_id='.$getPhotoId.'&photo_nr="+img+"&thumb=1&rand="+Math.random());
                 return false;
             });
@@ -190,10 +190,10 @@ if($gCurrentUser->editPhotoRight())
     }
 }
 
-//show link to download photos if enabled
+// show link to download photos if enabled
 if($gPreferences['photo_download_enabled'] == 1 && $photoAlbum->getValue('pho_quantity') > 0)
 {
-        //show link to download photos
+        // show link to download photos
         $photosMenu->addItem('menu_item_download_photos', $g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId,
                                                 $gL10n->get('PHO_DOWNLOAD_PHOTOS'), 'page_white_compressed.png');
 }
@@ -205,7 +205,7 @@ if($gCurrentUser->isWebmaster())
                                 $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
-//Breadcrump bauen
+// Breadcrump bauen
 $navilink = '';
 $pho_parent_id = $photoAlbum->getValue('pho_pho_id_parent');
 $photoAlbum_parent = new TablePhotos($gDb);
@@ -215,17 +215,17 @@ while ($pho_parent_id > 0)
     // Einlesen des Eltern Albums
     $photoAlbum_parent->readDataById($pho_parent_id);
 
-    //Link zusammensetzen
+    // Link zusammensetzen
     $navilink = '<li><a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photoAlbum_parent->getValue('pho_id').'">'.
         $photoAlbum_parent->getValue('pho_name').'</a></li>'.$navilink;
 
-    //Elternveranst
+    // Elternveranst
     $pho_parent_id = $photoAlbum_parent->getValue('pho_pho_id_parent');
 }
 
 if($getPhotoId > 0)
 {
-    //Ausgabe des Linkpfads
+    // Ausgabe des Linkpfads
     $page->addHtml('<ol class="breadcrumb">
             <li><a href="'.$g_root_path.'/adm_program/modules/photos/photos.php"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('PHO_PHOTO_ALBUMS').'" /></a>
             <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php">'.$gL10n->get('PHO_PHOTO_ALBUMS').'</a></li>'.$navilink.'
@@ -234,14 +234,14 @@ if($getPhotoId > 0)
 }
 
 /*************************THUMBNAILS**********************************/
-//Nur wenn uebergebenes Album Bilder enthaelt
+// Nur wenn uebergebenes Album Bilder enthaelt
 if($photoAlbum->getValue('pho_quantity') > 0)
 {
     $photoThumbnailTable = '';
     $firstPhotoNr        = 1;
     $lastPhotoNr         = $gPreferences['photo_thumbs_page'];
 
-    //Wenn Bild übergeben wurde richtige Albenseite öffnen
+    // Wenn Bild übergeben wurde richtige Albenseite öffnen
     if($getPhotoNr > 0)
     {
         $firstPhotoNr = (round(($getPhotoNr-1)/$gPreferences['photo_thumbs_page'], 0) * $gPreferences['photo_thumbs_page']) + 1;
@@ -289,7 +289,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                    $photoThumbnailTable .= '<div class="text-center" id="image_preferences_'.$actThumbnail.'">';
                 }
 
-                //Buttons fuer Moderatoren
+                // Buttons fuer Moderatoren
                 if($gCurrentUser->editPhotoRight())
                 {
                    $photoThumbnailTable .= '
@@ -313,7 +313,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 
                 if($gPreferences['photo_download_enabled'] == 1)
                 {
-                    //show link to download photo
+                    // show link to download photo
                     $photoThumbnailTable .= '
                     <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$actThumbnail.'"><img
                                     src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'" title="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'"  /></a>';
@@ -387,7 +387,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 }
 /************************Albumliste*************************************/
 
-//erfassen der Alben die in der Albentabelle ausgegeben werden sollen
+// erfassen der Alben die in der Albentabelle ausgegeben werden sollen
 $sql = 'SELECT *
           FROM '. TBL_PHOTOS. '
          WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
@@ -409,7 +409,7 @@ $sql = $sql.' ORDER BY pho_begin DESC ';
 $albumStatement = $gDb->query($sql);
 $albumList      = $albumStatement->fetchAll();
 
-//Gesamtzahl der auszugebenden Alben
+// Gesamtzahl der auszugebenden Alben
 $albumsCount = $albumStatement->rowCount();
 
 // falls zum aktuellen Album Fotos und Unteralben existieren,
@@ -439,7 +439,7 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
         // Zufallsbild fuer die Vorschau ermitteln
         $shuffle_image = $childPhotoAlbum->shuffleImage();
 
-        //Album angaben
+        // Album angaben
         if(file_exists($ordner) || $childPhotoAlbum->hasChildAlbums())
         {
             $albumTitle = '<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'">'.$childPhotoAlbum->getValue('pho_name').'</a><br />';
@@ -544,7 +544,7 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
 $page->addHtml('</div>');
 
 /****************************Leeres Album****************/
-//Falls das Album weder Fotos noch Unterordner enthaelt
+// Falls das Album weder Fotos noch Unterordner enthaelt
 if(($photoAlbum->getValue('pho_quantity') == '0' || strlen($photoAlbum->getValue('pho_quantity')) === 0) && $albumsCount < 1)  // alle vorhandenen Albumen werden ignoriert
 {
     $page->addHtml($gL10n->get('PHO_NO_ALBUM_CONTENT'));

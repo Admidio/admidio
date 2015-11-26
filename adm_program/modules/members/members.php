@@ -172,7 +172,7 @@ if($gCurrentUser->isWebmaster())
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
 }
 
-//Create table object
+// Create table object
 $membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-condensed');
 
 // create array with all column heading values

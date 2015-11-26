@@ -139,7 +139,7 @@ if($getViewMode === 'html')
     // get module menu
     $DatesMenu = $page->getMenu();
 
-    //Add new event
+    // Add new event
     if($gCurrentUser->editDates())
     {
         $DatesMenu->addItem('admMenuItemAdd',
@@ -159,7 +159,7 @@ if($getViewMode === 'html')
 
         $DatesMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
 
-        //ical Download
+        // ical Download
         if($gPreferences['enable_dates_ical'] == 1)
         {
             $DatesMenu->addItem('admMenuItemICal',
@@ -295,7 +295,7 @@ else
 
         if($getViewMode === 'html')
         {
-            //ical Download
+            // ical Download
             if($gPreferences['enable_dates_ical'] == 1)
             {
                 $outputButtonIcal = '

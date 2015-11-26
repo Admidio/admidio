@@ -106,10 +106,10 @@ if ($gPreferences['enable_download_module'] == 1)
             // only show download if user has rights to view folder
             if($errorCode !== 'DOW_FOLDER_NO_RIGHTS')
             {
-                //Ermittlung der Dateiendung
+                // Ermittlung der Dateiendung
                 $fileExtension = mb_strtolower(substr($plg_row->fil_name, strrpos($plg_row->fil_name, '.')+1), 'UTF-8');
 
-                //Auszugebendes Icon ermitteln
+                // Auszugebendes Icon ermitteln
                 $iconFile = 'page_white_question.png';
                 if(array_key_exists($fileExtension, $icon_file_extension))
                 {

@@ -31,7 +31,7 @@ if(strlen($_FILES['userfile']['tmp_name'][0]) === 0)
 }
 elseif($_FILES['userfile']['error'][0] == 1)
 {
-    //Dateigroesse ueberpruefen Servereinstellungen
+    // Dateigroesse ueberpruefen Servereinstellungen
     $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', $gPreferences['max_file_upload_size']));
 }
 elseif($postRoleId == 0)

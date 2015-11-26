@@ -9,7 +9,7 @@
  ***********************************************************************************************
  */
 
-//validate old bb-codes before update
+// validate old bb-codes before update
 function validate_bbc($table, $idCol, $col)
 {
     global $gDb;
@@ -23,28 +23,28 @@ function validate_bbc($table, $idCol, $col)
                     array('o' => '[url', 'c' => '[/url]'),
                     array('o' => '[email', 'c' => '[/email]'));
 
-    //get all entrys with bb-codes
+    // get all entrys with bb-codes
     $sql = 'SELECT '.$idCol.', '.$col.'
             FROM '.$table. '
             WHERE '.$col.' LIKE \'%[%\'';
     $bbcodeStatement = $gDb->query($sql);
 
-    //walk through all results
+    // walk through all results
     while($row = $bbcodeStatement->fetchObject())
     {
         $sql_append = $row->$col;
 
-        //once for each bb-code-type
+        // once for each bb-code-type
         foreach($bbcodes as $bbcode)
         {
-            //comepare number of opening and closeing tags
+            // comepare number of opening and closeing tags
             $dif = substr_count($row->$col, $bbcode['o'])-substr_count($row->$col, $bbcode['c']);
             for($x=0; $x<$dif; ++$x)
             {
                 $sql_append .= $bbcode['c'];
             }
         }
-        //update if nessecary
+        // update if nessecary
         if($sql_append != $row->$col)
         {
             $sql_update = 'UPDATE '.$table. '

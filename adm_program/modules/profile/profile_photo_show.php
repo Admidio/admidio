@@ -33,13 +33,13 @@ if($user->getValue('usr_id') == 0)
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-//Testen ob Recht besteht Profil einzusehn
+// Testen ob Recht besteht Profil einzusehn
 if(!$gCurrentUser->hasRightViewProfile($user))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-//Foto aus adm_my_files
+// Foto aus adm_my_files
 if($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 0)
 {
     if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
@@ -48,7 +48,7 @@ if($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 0)
     }
     $image = new Image($picpath);
 }
-//Foto aus der Datenbank
+// Foto aus der Datenbank
 elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 0)
 {
     if(strlen($user->getValue('usr_photo')) != null)
@@ -61,13 +61,13 @@ elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 0)
         $image = new Image($picpath);
     }
 }
-//neues Foto, Ordnerspeicherung
+// neues Foto, Ordnerspeicherung
 elseif($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 1)
 {
     $picpath = SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg';
     $image = new Image($picpath);
 }
-//neues Foto, Datenbankspeicherung
+// neues Foto, Datenbankspeicherung
 elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 1)
 {
     $image = new Image();

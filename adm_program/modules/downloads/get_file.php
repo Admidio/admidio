@@ -17,13 +17,13 @@ require('../../system/common.php');
 // Initialize and check the parameters
 $getFileId = admFuncVariableIsValid($_GET, 'file_id', 'numeric', array('requireValue' => true));
 
-//pruefen ob das Modul ueberhaupt aktiviert ist
+// pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
-//nur von eigentlicher OragHompage erreichbar
+// nur von eigentlicher OragHompage erreichbar
 if($gCurrentOrganization->getValue('org_shortname')!= $g_organization)
 {
     // das Modul ist deaktiviert
@@ -41,20 +41,20 @@ catch(AdmException $e)
     $e->showHtml();
 }
 
-//kompletten Pfad der Datei holen
+// kompletten Pfad der Datei holen
 $completePath = $file->getCompletePathOfFile();
 
-//pruefen ob File ueberhaupt physikalisch existiert
+// pruefen ob File ueberhaupt physikalisch existiert
 if (!file_exists($completePath))
 {
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
 }
 
-//Downloadcounter inkrementieren
+// Downloadcounter inkrementieren
 $file->setValue('fil_counter', $file->getValue('fil_counter') + 1);
 $file->save();
 
-//Dateigroese ermitteln
+// Dateigroese ermitteln
 $fileSize   = filesize($completePath);
 $filename   = $file->getValue('fil_name');
 

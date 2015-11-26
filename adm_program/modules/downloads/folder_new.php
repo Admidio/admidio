@@ -26,7 +26,7 @@ if ($gPreferences['enable_download_module'] != 1)
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
-//nur von eigentlicher OragHompage erreichbar
+// nur von eigentlicher OragHompage erreichbar
 if($gCurrentOrganization->getValue('org_shortname')!= $g_organization)
 {
     // das Modul ist deaktiviert

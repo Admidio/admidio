@@ -254,7 +254,7 @@ class ModuleLists extends Modules
         global $gDb;
         global $gValidLogin;
 
-         //Parameter
+        // Parameter
         if($limit == null)
         {
             // Roles per page

@@ -40,7 +40,7 @@ if ($gPreferences['enable_dates_module'] != 1)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-//create Object
+// create Object
 $dates = new ModuleDates();
 
 // read events for output
@@ -108,7 +108,7 @@ if($datesResult['numResults'] > 0)
 
         $description = $description. '<br /><br />'. $date->getValue('dat_description');
 
-        //i-cal downloadlink
+        // i-cal downloadlink
         $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id').'&mode=6">'.$gL10n->get('DAT_ADD_DATE_TO_CALENDAR').'</a>';
 
         // add entry to RSS feed

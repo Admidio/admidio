@@ -116,7 +116,7 @@ class ModuleAnnouncements extends Modules
         global $gProfileFields;
         global $gDb;
 
-        //Parameter
+        // Parameter
         if($limit == null)
         {
             $announcementsPerPage = $gPreferences['announcements_per_page'];
@@ -187,7 +187,7 @@ class ModuleAnnouncements extends Modules
 
         $announcementsStatement = $gDb->query($sql);
 
-        //array for results
+        // array for results
         $announcements['recordset']  = $announcementsStatement->fetchAll();
         $announcements['numResults'] = $announcementsStatement->rowCount();
         $announcements['limit']      = $limit;

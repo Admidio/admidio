@@ -49,7 +49,7 @@ else
     $headline = $gL10n->get('GBO_EDIT_COMMENT');
 }
 
-//Erst einmal die Rechte abklopfen...
+// Erst einmal die Rechte abklopfen...
 if(($gPreferences['enable_guestbook_module'] == 2 || $gPreferences['enable_gbook_comments4all'] == 0)
 && $getGboId > 0)
 {
@@ -122,7 +122,7 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
     $row = $statement->fetch();
     if($row[0] > 0)
     {
-          //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
+          // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
           $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));
     }
 }

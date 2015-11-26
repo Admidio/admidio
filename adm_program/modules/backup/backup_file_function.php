@@ -29,10 +29,10 @@ if(!$gCurrentUser->isWebmaster())
 
 $backupAbsolutePath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
 
-//kompletten Pfad der Datei holen
+// kompletten Pfad der Datei holen
 $completePath = $backupAbsolutePath.$getFilename;
 
-//pruefen ob File ueberhaupt physikalisch existiert
+// pruefen ob File ueberhaupt physikalisch existiert
 if(!file_exists($completePath))
 {
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
@@ -41,7 +41,7 @@ if(!file_exists($completePath))
 switch($getJob)
 {
     case 'get_file':
-        //Dateigroese ermitteln
+        // Dateigroese ermitteln
         $fileSize   = filesize($completePath);
 
         // for IE the filename must have special chars in hexadecimal
