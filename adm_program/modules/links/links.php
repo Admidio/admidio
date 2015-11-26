@@ -59,6 +59,7 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->enableModal();
 
 if($gPreferences['enable_rss'] == 1)
 {

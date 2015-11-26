@@ -5,9 +5,6 @@
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- */
-
-/**
  * @class HtmlPage
  * @brief Creates an Admidio specific complete html page
  *
@@ -34,6 +31,7 @@ class HtmlPage
     protected $menu;            ///< An object of the menu of this page
     protected $header;          ///< Additional header that could not be set with the other methods. This content will be add to head of html page without parsing.
     protected $hasNavbar;       ///< Flag if the current page has a navbar.
+    protected $showModal;       ///< If set to true then html code for a modal window will be included.
     protected $showMenu;        ///< If set to true then the menu will be included.
     protected $showThemeHtml;   ///< If set to true then the custom html code of the theme for each page will be included.
     protected $cssFiles;        ///< An array with all necessary cascading style sheets files for the html page.
@@ -54,6 +52,7 @@ class HtmlPage
         $this->headline      = $headline;
         $this->menu          = new HtmlNavbar('menu_main_script', $headline, $this);
         $this->showMenu      = true;
+        $this->showModal     = false;
         $this->showThemeHtml = true;
         $this->printMode     = false;
         $this->hasNavbar     = false;
@@ -286,6 +285,15 @@ class HtmlPage
         }
     }
 
+    /*
+     * Adds the html code for a modal window to the current script.
+     * The link must have the following attributes: data-toggle="modal" data-target="#admidio_modal"
+     */
+    public function enableModal()
+    {
+        $this->showModal = true;
+    }
+
     /**
      * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
      * @return string Returns the headline of the current Admidio page.
@@ -486,10 +494,13 @@ class HtmlPage
         }
 
         // add code for a modal window
-        $this->addJavascript('$("body").on("hidden.bs.modal", ".modal", function () { $(this).removeData("bs.modal"); });', true);
-        $this->addHtml('<div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog"><div class="modal-content"></div></div>
-                        </div>');
+        if($this->showModal)
+        {
+            $this->addJavascript('$("body").on("hidden.bs.modal", ".modal", function () { $(this).removeData("bs.modal"); });', true);
+            $this->addHtml('<div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog"><div class="modal-content"></div></div>
+                            </div>');
+        }
 
         // add javascript code to page
         if($this->javascriptContent !== '')

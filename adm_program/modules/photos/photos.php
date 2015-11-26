@@ -111,6 +111,7 @@ if($getLocked == '1' || $getLocked == '0')
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->enableModal();
 
 // add rss feed to announcements
 if($gPreferences['enable_rss'] == 1)

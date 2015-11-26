@@ -70,6 +70,7 @@ $navigationBar = $currentFolder->getNavigationForDownload();
 // create html page object
 $page = new HtmlPage($headline);
 
+$page->enableModal();
 $page->addJavascript('
     $("body").on("hidden.bs.modal", ".modal", function () { $(this).removeData("bs.modal"); location.reload(); });
     $("#menu_item_upload_files").attr("data-toggle", "modal");

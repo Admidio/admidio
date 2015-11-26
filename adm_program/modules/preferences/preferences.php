@@ -41,6 +41,8 @@ foreach($gPreferences as $key => $value)
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->enableModal();
+
 $showOptionValidModules = array('announcements', 'downloads', 'guestbook', 'ecards', 'lists', 'messages',
                                 'photos', 'profile', 'events', 'links', 'user_management');
 

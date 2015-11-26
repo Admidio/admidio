@@ -50,6 +50,7 @@ $headline = $gL10n->get('BAC_DATABASE_BACKUP');
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->enableModal();
 
 $backupabsolutepath = $myFilesBackup->getFolder().'/'; // make sure to include trailing slash
 

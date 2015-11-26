@@ -105,6 +105,7 @@ if($getViewMode !== 'print')
 
 // create html page object
 $page = new HtmlPage($getHeadline);
+$page->enableModal();
 
 if($getViewMode === 'html')
 {

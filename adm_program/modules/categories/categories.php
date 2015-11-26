@@ -85,6 +85,7 @@ unset($_SESSION['categories_request']);
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->enableModal();
 
 $page->addJavascript('
     function moveCategory(direction, catID) {

@@ -107,6 +107,7 @@ else
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->enableModal();
 
 $page->addJavascriptFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.min.js');
 

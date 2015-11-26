@@ -54,6 +54,7 @@ $gNavigation->addUrl(CURRENT_URL);
 
 // create html page object
 $page = new HtmlPage();
+$page->enableModal();
 
 // add rss feed to guestbook
 if($gPreferences['enable_rss'] == 1)
