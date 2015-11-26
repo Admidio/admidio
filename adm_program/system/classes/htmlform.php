@@ -1102,7 +1102,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addSelectBox($id, $label, $values, $options = array())
     {
-        global $gL10n, $g_root_path;
+        global $gL10n, $g_root_path, $gDebug;
 
         $attributes = array('class' => 'form-control');
         $name       = $id;
@@ -1248,7 +1248,9 @@ class HtmlForm extends HtmlFormBasic
 
         if($optionsAll['multiselect'] === true)
         {
-            $javascriptCode = '$("#'.$id.'").select2();';
+            $javascriptCode = '$("#'.$id.'").select2({
+                theme: "bootstrap"
+            });';
 
             // add default values to multi select
             if(is_array($optionsAll['defaultValue']) && array_count_values($optionsAll['defaultValue']) > 0)
@@ -1266,9 +1268,19 @@ class HtmlForm extends HtmlFormBasic
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if(is_object($this->htmlPage))
             {
-                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/dist/css/select2.css');
-                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/dist/css/select2-bootstrap.css');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/dist/js/select2.min.js');
+                if($gDebug)
+                {
+                    $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/dist/css/select2.css');
+                    $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/dist/css/select2-bootstrap.css');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/dist/js/select2.js');
+                }
+                else
+                {
+                    $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/dist/css/select2.min.css');
+                    $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/dist/css/select2-bootstrap.min.css');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/dist/js/select2.min.js');
+                }
+
                 $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/dist/js/i18n/'.$gL10n->getLanguageIsoCode().'.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
             }

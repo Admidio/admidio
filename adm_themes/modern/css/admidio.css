@@ -473,9 +473,8 @@ input[type="file"] {
 }
 
 .form-control:focus,
-.select2-container-active,
-.select2-choices,
-.select2-drop {
+.select2-container--focus .select2-selection,
+.select2-results__options {
     border-color: #409099 !important;
     background-color: #fff8a0 !important;
     box-shadow: none !important;
@@ -485,8 +484,8 @@ select.form-control {
     width: auto;
 }
 
-select[multiple] {
-    min-width: 250px;
+.select2 {
+    min-width: 100%;
 }
 
 .select2-results {
