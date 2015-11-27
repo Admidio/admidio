@@ -62,7 +62,7 @@ if ($getMode === 2)
     {
         try
         {
-            // get recordset of current file from databse
+            // get recordset of current file from database
             $file = new TableFile($gDb);
             $file->getFileForDownload($getFileId);
         }
@@ -97,7 +97,7 @@ elseif ($getMode === 3)
 
     try
     {
-        // get recordset of current folder from databse
+        // get recordset of current folder from database
         $targetFolder = new TableFolder($gDb);
         $targetFolder->getFolderForDownload($getFolderId);
 
@@ -287,7 +287,7 @@ elseif ($getMode === 5)
     {
         try
         {
-            // get recordset of current folder from databse
+            // get recordset of current folder from database
             $folder = new TableFolder($gDb);
             $folder->getFolderForDownload($getFolderId);
         }
@@ -319,7 +319,7 @@ elseif ($getMode === 6)
     {
         $getName = urldecode($getName);
 
-        // get recordset of current folder from databse
+        // get recordset of current folder from database
         $targetFolder = new TableFolder($gDb);
         $targetFolder->getFolderForDownload($getFolderId);
     }
@@ -392,7 +392,7 @@ elseif ($getMode === 7)
 
         if ($targetFolder->getValue('fol_fol_id_parent'))
         {
-            // get recordset of parent folder from databse
+            // get recordset of parent folder from database
             $parentFolder = new TableFolder($gDb);
             $parentFolder->getFolderForDownload($targetFolder->getValue('fol_fol_id_parent'));
         }
