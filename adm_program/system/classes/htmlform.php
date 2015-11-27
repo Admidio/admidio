@@ -1087,6 +1087,8 @@ class HtmlForm extends HtmlFormBasic
      *                        - @b multiselect : If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
      *                          where the user could select multiple values from the selectbox. Then an array will be
      *                          created within the $_POST array.
+     *                        - @b maximumSelectionNumber : If @b multiselect is enabled then you can configure the maximum number
+     *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
@@ -1102,7 +1104,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addSelectBox($id, $label, $values, $options = array())
     {
-        global $gL10n, $g_root_path, $gDebug;
+        global $gL10n, $g_root_path, $gDebug, $gPreferences;
 
         $attributes = array('class' => 'form-control');
         $name       = $id;
@@ -1119,6 +1121,7 @@ class HtmlForm extends HtmlFormBasic
             'showContextDependentFirstEntry' => true,
             'firstEntry'                     => '',
             'multiselect'                    => false,
+            'maximumSelectionNumber'         => 0,
             'helpTextIdLabel'                => '',
             'helpTextIdInline'               => '',
             'icon'                           => '',
@@ -1141,6 +1144,7 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['multiple'] = 'multiple';
             $name = $id.'[]';
+            $placeholder = '';
 
             if($optionsAll['defaultValue'] !== '' && !is_array($optionsAll['defaultValue']))
             {
@@ -1149,7 +1153,7 @@ class HtmlForm extends HtmlFormBasic
 
             if($optionsAll['showContextDependentFirstEntry'] === true && $optionsAll['property'] === FIELD_REQUIRED)
             {
-                $attributes['placeholder'] = $gL10n->get('SYS_PLEASE_CHOOSE');
+                $placeholder = $gL10n->get('SYS_SELECT_FROM_LIST');
 
                 // reset the preferences so the logic for not multiselect will not be performed
                 $optionsAll['showContextDependentFirstEntry'] = false;
@@ -1246,10 +1250,21 @@ class HtmlForm extends HtmlFormBasic
             $this->closeOptionGroup();
         }
 
-        if($optionsAll['multiselect'] === true)
+        if($optionsAll['multiselect'])
         {
+            $maximumSelectionNumber = '';
+
+            if($optionsAll['maximumSelectionNumber'] > 0)
+            {
+                $maximumSelectionNumber = ' maximumSelectionLength: '.$optionsAll['maximumSelectionNumber'].', ';
+            }
+
             $javascriptCode = '$("#'.$id.'").select2({
-                theme: "bootstrap"
+                theme: "bootstrap",
+                allowClear: true,
+                '.$maximumSelectionNumber.'
+                placeholder: "'.$placeholder.'",
+                language: "'.$gPreferences['system_language'].'"
             });';
 
             // add default values to multi select
@@ -1323,6 +1338,8 @@ class HtmlForm extends HtmlFormBasic
      *                        - @b multiselect : If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
      *                          where the user could select multiple values from the selectbox. Then an array will be
      *                          created within the $_POST array.
+     *                        - @b maximumSelectionNumber : If @b multiselect is enabled then you can configure the maximum number
+     *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
@@ -1395,6 +1412,8 @@ class HtmlForm extends HtmlFormBasic
      *                        - @b multiselect : If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
      *                          where the user could select multiple values from the selectbox. Then an array will be
      *                          created within the $_POST array.
+     *                        - @b maximumSelectionNumber : If @b multiselect is enabled then you can configure the maximum number
+     *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
