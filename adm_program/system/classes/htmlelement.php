@@ -117,7 +117,7 @@
  * HtmlElement::addAttribute('value', 'submit');
  * // pass a whitespace because element has no content
  * HtmlElement::addData(' ', true);
- 
+
  * echo HtmlElement::getHtmlElement();
  * @endcode
  */
@@ -477,7 +477,14 @@ abstract class HtmlElement {
 
         foreach($this->currentElementAttributes as $key => $value)
         {
-            $string .= ' '.$key.'="'.$value.'" ';
+            if($key !== $value)
+            {
+                $string .= ' '.$key.'="'.$value.'" ';
+            }
+            else
+            {
+                $string .= ' '.$key.' ';
+            }
         }
 
         return $string;
@@ -493,7 +500,14 @@ abstract class HtmlElement {
 
         foreach($this->mainElementAttributes as $key => $value)
         {
-            $string .= ' '.$key.'="'.$value.'" ';
+            if($key !== $value)
+            {
+                $string .= ' '.$key.'="'.$value.'" ';
+            }
+            else
+            {
+                $string .= ' '.$key.' ';
+            }
         }
 
         return $string;
