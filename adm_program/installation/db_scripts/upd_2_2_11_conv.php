@@ -62,7 +62,7 @@ validate_bbc(TBL_LINKS, 'lnk_id', 'lnk_description');
 validate_bbc(TBL_ROOMS, 'room_id', 'room_description');
 
 // check internal fieldname if name is unique, if not add suffix to name
-$sql = 'SELECT usf_id, usf_name_intern FROM '.TBL_USER_FIELDS.' ORDER BY usf_name_intern ';
+$sql = 'SELECT usf_id, usf_name_intern FROM '.TBL_USER_FIELDS.' ORDER by usf_name_intern ';
 $userFieldsStatement = $gDb->query($sql);
 $lastNameIntern = '';
 $i = 0;

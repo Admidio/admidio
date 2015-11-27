@@ -19,16 +19,16 @@ require_once('ecard_function.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',    'numeric', array('requireValue' => true));
-$getUserId  = admFuncVariableIsValid($_GET, 'usr_id',    'numeric');
-$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr',  'numeric', array('requireValue' => true));
-$showPage   = admFuncVariableIsValid($_GET, 'show_page', 'numeric', array('defaultValue' => 1));
+$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', array('requireValue' => true));
+$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
+$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', array('requireValue' => true));
+$showPage    = admFuncVariableIsValid($_GET, 'show_page', 'numeric', array('defaultValue' => 1));
 
 // Initialisierung lokaler Variablen
-$funcClass = new FunctionClass($gL10n);
-$templates = admFuncGetDirectoryEntries(THEME_SERVER_PATH. '/ecard_templates/', 'both');
-$template  = THEME_SERVER_PATH. '/ecard_templates/';
-$headline  = $gL10n->get('ECA_GREETING_CARD_EDIT');
+$funcClass     = new FunctionClass($gL10n);
+$templates   = $funcClass->getFileNames(THEME_SERVER_PATH. '/ecard_templates/');
+$template    = THEME_SERVER_PATH. '/ecard_templates/';
+$headline    = $gL10n->get('ECA_GREETING_CARD_EDIT');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_ecard_module'] != 1)
@@ -149,9 +149,9 @@ if($gCurrentUser->isWebmaster())
 
 // show form
 $form = new HtmlForm('ecard_form', 'ecard_send.php', $page);
-$form->addInput('submit_action', null, '',          array('type' => 'hidden'));
-$form->addInput('photo_id',      null, $getPhotoId, array('type' => 'hidden'));
-$form->addInput('photo_nr',      null, $getPhotoNr, array('type' => 'hidden'));
+$form->addInput('submit_action', null, '', array('type' => 'hidden'));
+$form->addInput('photo_id', null, $getPhotoId, array('type' => 'hidden'));
+$form->addInput('photo_nr', null, $getPhotoNr, array('type' => 'hidden'));
 
 $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
     $form->addCustomContent($gL10n->get('SYS_PHOTO'), '

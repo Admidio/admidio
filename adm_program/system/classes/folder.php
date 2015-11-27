@@ -125,27 +125,26 @@ class Folder
 
         if($b_return)
         {
-            $dirHandle = @opendir($sourceFolder);
-            if($dirHandle)
+            $dh = @opendir($sourceFolder);
+            if($dh)
             {
-                while (($entry = readdir($dirHandle)) !== false)
+                while (false !== ($filename = readdir($dh)))
                 {
-                    if($entry !== '.' && $entry !== '..')
+                    if($filename !== '.' && $filename !== '..')
                     {
-                        $srcResource = $sourceFolder . '/' . $entry;
-                        $dstResource = $destinationFolder . '/' . $entry;
+                        $act_folder_entry = $sourceFolder.'/'.$filename;
 
-                        if(is_dir($srcResource))
+                        if(is_dir($act_folder_entry))
                         {
                             // nun Inhalt des entsprechenden Ordners loeschen
-                            $this->copy($dstResource, $srcResource);
+                            $this->copy($destinationFolder.'/'.$filename, $act_folder_entry);
                         }
                         else
                         {
                             // die Datei loeschen
-                            if(file_exists($srcResource))
+                            if(file_exists($act_folder_entry))
                             {
-                                if(!copy($srcResource, $dstResource))
+                                if(!copy($act_folder_entry, $destinationFolder.'/'.$filename))
                                 {
                                     return false;
                                 }
@@ -153,11 +152,15 @@ class Folder
                         }
                     }
                 }
-                closedir($dirHandle);
+                closedir($dh);
             }
-            return true;
         }
-        return false;
+        else
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -174,26 +177,26 @@ class Folder
             $folder = $this->folderWithPath;
         }
 
-        $dirHandle = @opendir($folder);
-        if($dirHandle)
+        $dh = @opendir($folder);
+        if($dh)
         {
-            while (($entry = readdir($dirHandle)) !== false)
+            while (false !== ($filename = readdir($dh)))
             {
-                if($entry !== '.' && $entry !== '..')
+                if($filename !== '.' && $filename !== '..')
                 {
-                    $resource = $folder . '/' . $entry;
+                    $act_folder_entry = $folder.'/'.$filename;
 
-                    if(is_dir($resource))
+                    if(is_dir($act_folder_entry))
                     {
                         // deletes the content of the folder
-                        $this->delete($resource, false);
+                        $this->delete($act_folder_entry, false);
                     }
                     else
                     {
                         // deletes the file
-                        if(file_exists($resource))
+                        if(file_exists($act_folder_entry))
                         {
-                            if(!@unlink($resource))
+                            if(!@unlink($act_folder_entry))
                             {
                                 return false;
                             }
@@ -201,7 +204,7 @@ class Folder
                     }
                 }
             }
-            closedir($dirHandle);
+            closedir($dh);
         }
 
         if(!$onlyDeleteContent)

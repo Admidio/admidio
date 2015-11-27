@@ -44,7 +44,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 try
 {
-    // get recordset of current folder from database
+    // get recordset of current folder from databse
     $folder = new TableFolder($gDb);
     $folder->getFolderForDownload($getFolderId);
 }
@@ -60,7 +60,7 @@ if ($folder->getValue('fol_fol_id_parent'))
 {
     try
     {
-        // get recordset of parent folder from database
+        // get recordset of parent folder from databse
         $parentFolder = new TableFolder($gDb);
         $parentFolder->getFolderForDownload($folder->getValue('fol_fol_id_parent'));
     }

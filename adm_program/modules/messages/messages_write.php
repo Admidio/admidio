@@ -395,7 +395,7 @@ elseif (!isset($message_result))
                    AND mem_rol_id  = rol_id
                    AND rol_id in ('.$list_rol_id.')
                  GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value, rol_mail_this_role, rol_id
-                 ORDER BY usr_id, last_name, first_name, rol_mail_this_role DESC';
+                 ORDER BY usr_id, last_name, first_name, rol_mail_this_role desc';
         $statement = $gDb->query($sql);
 
         $passive_list = array();

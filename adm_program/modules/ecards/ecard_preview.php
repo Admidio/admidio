@@ -25,10 +25,10 @@ if(strlen($_POST['ecard_template']) === 0)
 
 // Initialize and check the parameters
 $ecardMessage     = '';
-$postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template',  'file',    array('requireValue' => true));
-$postPhotoId      = admFuncVariableIsValid($_POST, 'photo_id',        'numeric', array('requireValue' => true));
-$postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr',        'numeric', array('requireValue' => true));
-$nameRecipient    = admFuncVariableIsValid($_POST, 'name_recipient',  'string');
+$postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', array('requireValue' => true));
+$postPhotoId      = admFuncVariableIsValid($_POST, 'photo_id', 'numeric', array('requireValue' => true));
+$postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr', 'numeric', array('requireValue' => true));
+$nameRecipient    = admFuncVariableIsValid($_POST, 'name_recipient', 'string');
 $emailRecipient   = admFuncVariableIsValid($_POST, 'email_recipient', 'string');
 
 if(isset($_POST['ecard_message']))

@@ -445,19 +445,20 @@ class TableFolder extends TableAccess
             // pruefen ob der Ordner wirklich existiert
             if (file_exists($this->getCompletePathOfFolder()))
             {
-                $dirHandle = opendir($this->getCompletePathOfFolder());
-                if($dirHandle)
+
+                $fileHandle    = opendir($this->getCompletePathOfFolder());
+                if($fileHandle)
                 {
-                    while(($entry = readdir($dirHandle)) !== false)
+                    while($file = readdir($fileHandle))
                     {
-                        if ($entry === '.' || $entry === '..' || substr($entry, 0, 1) === '.')
+                        if ($file === '.' || $file === '..' || substr($file, 0, 1) === '.')
                         {
                             continue;
                         }
                         else
                         {
                             // Gucken ob Datei oder Ordner
-                            $fileFolderPath = $this->getCompletePathOfFolder() . '/' . $entry;
+                            $fileFolderPath = $this->getCompletePathOfFolder(). '/'. $file;
 
                             if(is_dir($fileFolderPath))
                             {
@@ -470,18 +471,20 @@ class TableFolder extends TableAccess
                                     {
                                         $nextFolder = $completeFolder['folders'][$i];
 
-                                        if ($nextFolder['fol_name'] === $entry)
+                                        if ($nextFolder['fol_name'] == $file)
                                         {
                                             $alreadyAdded = true;
                                         }
+
                                     }
                                 }
 
                                 // wenn nicht bereits enthalten wird es nun hinzugefuegt
                                 if (!$alreadyAdded)
                                 {
-                                    $completeFolder['additionalFolders'][] = array('fol_name' => $entry);
+                                    $completeFolder['additionalFolders'][] = array('fol_name' => $file);
                                 }
+
                             }
                             elseif (is_file($fileFolderPath))
                             {
@@ -494,7 +497,7 @@ class TableFolder extends TableAccess
                                     {
                                         $nextFile = $completeFolder['files'][$i];
 
-                                        if ($nextFile['fil_name'] === $entry)
+                                        if ($nextFile['fil_name'] == $file)
                                         {
                                             $alreadyAdded = true;
                                         }
@@ -507,15 +510,18 @@ class TableFolder extends TableAccess
                                     // compute filesize
                                     $fileSize = round(filesize($fileFolderPath)/1024);
 
-                                    $completeFolder['additionalFiles'][] = array('fil_name' => $entry, 'fil_size' => $fileSize);
+                                    $completeFolder['additionalFiles'][] = array('fil_name' => $file, 'fil_size' => $fileSize);
                                 }
                             }
-                        }
+                         }
                     }
 
-                   closedir($dirHandle);
+                   closedir($fileHandle);
+
                 }
+
             }
+
         }
 
         // Das Array mit dem Ordnerinhalt zurueckgeben
