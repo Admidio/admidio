@@ -33,6 +33,30 @@ class FunctionClass
     }
 
     /**
+     * @param string $directory
+     * @return array
+     */
+    public function getFileNames($directory)
+    {
+        $array_files = array();
+        $i = 0;
+        if($curdir = opendir($directory))
+        {
+            while($file = readdir($curdir))
+            {
+                if($file !== '.' && $file !== '..')
+                {
+                    $array_files[$i] = $file;
+                    ++$i;
+                }
+            }
+        }
+        closedir($curdir);
+
+        return $array_files;
+    }
+
+    /**
      * Diese Funktion holt das Template aus dem uebergebenen Verzeichnis und liefert die Daten und einen error state zurueck
      * @param string $template_name der Name des Template
      * @param string $tmpl_folder   der Name des Ordner wo das Template vorhanden ist
@@ -60,20 +84,20 @@ class FunctionClass
 
     /**
      * Diese Funktion ersetzt alle im Template enthaltenen Platzhalter durch die dementsprechenden Informationen
-     * @param string $imageName
-     * @param string $ecardMessage
-     * @param string $ecard_data      geparste Information von dem Grußkarten Template
-     * @param string $recipientName  der Name des Empfaengers
-     * @param string $recipientEmail die Email des Empfaengers
+     * @param $imageName
+     * @param $ecardMessage
+     * @param $ecard_data     geparste Information von dem Grußkarten Template
+     * @param $recipientName  der Name des Empfaengers
+     * @param $recipientEmail die Email des Empfaengers
      *
      * Ersetzt werden folgende Platzhalter
-     *     Admidio Pfad:         <%g_root_path%>
-     *     Template Verzeichnis: <%template_root_path%>
-     *     Style Eigenschaften:  <%ecard_font%>              <%ecard_font_size%>         <%ecard_font_color%> <%ecard_font_bold%> <%ecard_font_italic%>
-     *     Empfaenger Daten:     <%ecard_reciepient_email%>  <%ecard_reciepient_name%>
-     *     Sender Daten:         <%ecard_sender_id%>         <%ecard_sender_email%>      <%ecard_sender_name%>
-     *     Bild Daten:           <%ecard_image_width%>       <%ecard_image_height%>      <%ecard_image_name%>
-     *     Nachricht:            <%ecard_message%>
+     *     Admidio Pfad:           <%g_root_path%>
+     *     Template Verzeichnis    <%template_root_path%>
+     *     Style Eigenschaften:    <%ecard_font%>              <%ecard_font_size%>         <%ecard_font_color%> <%ecard_font_bold%> <%ecard_font_italic%>
+     *     Empfaenger Daten:       <%ecard_reciepient_email%>  <%ecard_reciepient_name%>
+     *     Sender Daten:           <%ecard_sender_id%>         <%ecard_sender_email%>      <%ecard_sender_name%>
+     *     Bild Daten:             <%ecard_image_width%>       <%ecard_image_height%>      <%ecard_image_name%>
+     *     Nachricht:              <%ecard_message%>
      */
     public function parseEcardTemplate($imageName, $ecardMessage, $ecard_data, $recipientName, $recipientEmail)
     {
@@ -131,12 +155,12 @@ class FunctionClass
 
     /**
      * Diese Funktion ruft die Mail Klasse auf und uebergibt ihr die zu sendenden Daten
-     * @param string $senderName
-     * @param string $senderEmail
-     * @param        $ecardHtmlData   geparste Daten vom Template
-     * @param string $recipientName   der Name des Empfaengers
-     * @param string $recipientEmail  die Email des Empfaengers
-     * @param string $photoServerPath der Pfad wo die Bilder in der Grußkarte am Server liegen
+     * @param $senderName
+     * @param $senderEmail
+     * @param $ecardHtmlData   geparste Daten vom Template
+     * @param $recipientName   der Name des Empfaengers
+     * @param $recipientEmail  die Email des Empfaengers
+     * @param $photoServerPath der Pfad wo die Bilder in der Grußkarte am Server liegen
      */
     public function sendEcard($senderName, $senderEmail, $ecardHtmlData, $recipientName, $recipientEmail, $photoServerPath)
     {

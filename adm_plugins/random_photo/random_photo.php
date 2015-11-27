@@ -139,8 +139,8 @@ if(!file_exists($picpath))
 $bildgroesse = getimagesize($picpath);
 
 // Popupfenstergröße
-$popup_height = $gPreferences['photo_show_height'] + 210;
-$popup_width  = $gPreferences['photo_show_width'] + 70;
+$popup_height = $gPreferences['photo_show_height']+210;
+$popup_width  = $gPreferences['photo_show_width']+70;
 
 if($plg_photos_show_link && $plg_max_char_per_word > 0)
 {

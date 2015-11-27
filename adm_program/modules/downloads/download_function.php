@@ -62,7 +62,7 @@ if ($getMode === 2)
     {
         try
         {
-            // get recordset of current file from database
+            // get recordset of current file from databse
             $file = new TableFile($gDb);
             $file->getFileForDownload($getFileId);
         }
@@ -97,7 +97,7 @@ elseif ($getMode === 3)
 
     try
     {
-        // get recordset of current folder from database
+        // get recordset of current folder from databse
         $targetFolder = new TableFolder($gDb);
         $targetFolder->getFolderForDownload($getFolderId);
 
@@ -186,12 +186,12 @@ elseif ($getMode === 4)
             // check filename and throw exception if something is wrong
             if(admStrIsValidFileName($_POST['new_name'], true))
             {
-                $newFile        = $_POST['new_name'] . '.' . pathinfo($oldFile, PATHINFO_EXTENSION);
+                $newFile        = $_POST['new_name'].admFuncGetFilenameExtension($oldFile);
                 $newDescription = $_POST['new_description'];
 
                 // Test ob die Datei schon existiert im Filesystem
                 if ($newFile != $file->getValue('fil_name')
-                && file_exists(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
+                 && file_exists(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
                 {
                     $gMessage->show($gL10n->get('DOW_FILE_EXIST', $newFile));
                 }
@@ -287,7 +287,7 @@ elseif ($getMode === 5)
     {
         try
         {
-            // get recordset of current folder from database
+            // get recordset of current folder from databse
             $folder = new TableFolder($gDb);
             $folder->getFolderForDownload($getFolderId);
         }
@@ -319,7 +319,7 @@ elseif ($getMode === 6)
     {
         $getName = urldecode($getName);
 
-        // get recordset of current folder from database
+        // get recordset of current folder from databse
         $targetFolder = new TableFolder($gDb);
         $targetFolder->getFolderForDownload($getFolderId);
     }
@@ -392,7 +392,7 @@ elseif ($getMode === 7)
 
         if ($targetFolder->getValue('fol_fol_id_parent'))
         {
-            // get recordset of parent folder from database
+            // get recordset of parent folder from databse
             $parentFolder = new TableFolder($gDb);
             $parentFolder->getFolderForDownload($targetFolder->getValue('fol_fol_id_parent'));
         }

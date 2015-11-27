@@ -37,7 +37,7 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
 
 try
 {
-    // get recordset of current folder from database
+    // get recordset of current folder from databse
     $currentFolder = new TableFolder($gDb);
     $currentFolder->getFolderForDownload($getFolderId);
 }

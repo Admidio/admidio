@@ -32,7 +32,7 @@ if($gCurrentOrganization->getValue('org_shortname')!= $g_organization)
 
 try
 {
-    // get recordset of current file from database
+    // get recordset of current file from databse
     $file = new TableFile($gDb);
     $file->getFileForDownload($getFileId);
 }
