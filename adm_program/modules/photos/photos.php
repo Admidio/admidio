@@ -36,12 +36,12 @@ elseif ($gPreferences['enable_photo_module'] == 2)
 }
 
 // Initialize and check the parameters
-$getPhotoId  = admFuncVariableIsValid($_GET, 'pho_id', 'numeric');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
-$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric');
+$getPhotoId        = admFuncVariableIsValid($_GET, 'pho_id',          'numeric');
+$getHeadline       = admFuncVariableIsValid($_GET, 'headline',        'string',  array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
+$getStart          = admFuncVariableIsValid($_GET, 'start',           'numeric');
 $getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'numeric', array('defaultValue' => 1));
-$getLocked   = admFuncVariableIsValid($_GET, 'locked', 'numeric', array('defaultValue' => -1));
-$getPhotoNr  = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric');
+$getLocked         = admFuncVariableIsValid($_GET, 'locked',          'numeric', array('defaultValue' => -1));
+$getPhotoNr        = admFuncVariableIsValid($_GET, 'photo_nr',        'numeric');
 
 unset($_SESSION['photo_album_request']);
 unset($_SESSION['ecard_request']);

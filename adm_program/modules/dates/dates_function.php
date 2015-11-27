@@ -25,9 +25,9 @@ require_once('../../system/common.php');
 
 // Initialize and check the parameters
 $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric');
-$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
+$getMode   = admFuncVariableIsValid($_GET, 'mode',   'numeric', array('requireValue' => true));
 $getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
-$getCopy   = admFuncVariableIsValid($_GET, 'copy', 'boolean');
+$getCopy   = admFuncVariableIsValid($_GET, 'copy',   'boolean');
 $getNumberRoleSelect = admFuncVariableIsValid($_GET, 'number_role_select', 'numeric');
 
 $originalDateId = 0;

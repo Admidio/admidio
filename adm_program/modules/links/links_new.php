@@ -18,7 +18,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getLinkId   = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric');
+$getLinkId   = admFuncVariableIsValid($_GET, 'lnk_id',   'numeric');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('LNK_WEBLINKS')));
 
 // check if the module is enabled for use

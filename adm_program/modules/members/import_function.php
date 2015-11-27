@@ -12,8 +12,8 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$postImportCoding   = admFuncVariableIsValid($_POST, 'import_coding', 'string', array('requireValue' => true, 'validValues' => array('iso-8859-1', 'utf-8')));
-$postRoleId         = admFuncVariableIsValid($_POST, 'import_role_id', 'numeric');
+$postImportCoding   = admFuncVariableIsValid($_POST, 'import_coding',    'string',  array('requireValue' => true, 'validValues' => array('iso-8859-1', 'utf-8')));
+$postRoleId         = admFuncVariableIsValid($_POST, 'import_role_id',   'numeric');
 $postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'numeric', array('requireValue' => true));
 
 $_SESSION['import_request'] = $_POST;

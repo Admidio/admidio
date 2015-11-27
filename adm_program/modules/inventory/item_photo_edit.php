@@ -22,7 +22,7 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getItemId = admFuncVariableIsValid($_GET, 'inv_id', 'numeric', array('requireValue' => true));
-$getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'choose', 'validValues' => array('choose', 'save', 'dont_save', 'upload', 'delete')));
+$getMode   = admFuncVariableIsValid($_GET, 'mode',   'string',  array('defaultValue' => 'choose', 'validValues' => array('choose', 'save', 'dont_save', 'upload', 'delete')));
 
 // only users with the right to edit inventory could use this script
 if (!$gCurrentUser->editInventory())

@@ -26,9 +26,9 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
+$getUserId  = admFuncVariableIsValid($_GET, 'usr_id',   'numeric');
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric');
-$getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean');
+$getInline  = admFuncVariableIsValid($_GET, 'inline',   'boolean');
 
 // in ajax mode only return simple text on error
 if($getInline == true)

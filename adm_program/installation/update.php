@@ -255,7 +255,7 @@ elseif($getMode === 2)
             // check name and password
             // user must have membership of one role of the organization
             $loginName    = admFuncVariableIsValid($_POST, 'login_name', 'string', array('requireValue' => true, 'directOutput' => true));
-            $password     = admFuncVariableIsValid($_POST, 'password', 'string', array('requireValue' => true, 'directOutput' => true));
+            $password     = admFuncVariableIsValid($_POST, 'password',   'string', array('requireValue' => true, 'directOutput' => true));
             $sqlWebmaster = '';
 
             // only check for webmaster role if version > 2.3 because before we don't have that flag

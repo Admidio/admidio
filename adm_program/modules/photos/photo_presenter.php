@@ -16,7 +16,7 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', array('requireValue' => true));
+$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',   'numeric', array('requireValue' => true));
 $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', array('requireValue' => true));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist

@@ -18,7 +18,7 @@ require_once('../../system/common.php');
 
 // Initialize and check the parameters
 $getRoomId = admFuncVariableIsValid($_GET, 'room_id', 'numeric');
-$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
+$getMode   = admFuncVariableIsValid($_GET, 'mode',    'numeric', array('requireValue' => true));
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$gCurrentUser->isWebmaster())

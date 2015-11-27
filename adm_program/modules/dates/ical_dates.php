@@ -29,9 +29,9 @@ require_once('../../system/common.php');
 unset($_SESSION['dates_request']);
 
 // Initialize and check the parameters
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
+$getMode     = admFuncVariableIsValid($_GET, 'mode',     'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'numeric');
 
 // prüfen ob das Modul überhaupt aktiviert ist
 if($gPreferences['enable_dates_module'] == 0)

@@ -29,12 +29,12 @@ require_once('../../system/common.php');
 $formerMembers = 0;
 
 // Initialize and check the parameters
-$getMsgType     = admFuncVariableIsValid($_GET, 'msg_type', 'string');
-$getUserId      = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
-$getSubject     = admFuncVariableIsValid($_GET, 'subject', 'html');
-$getMsgId       = admFuncVariableIsValid($_GET, 'msg_id', 'numeric');
-$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
-$getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy', 'boolean', array('defaultValue' => 0));
+$getMsgType     = admFuncVariableIsValid($_GET, 'msg_type',     'string');
+$getUserId      = admFuncVariableIsValid($_GET, 'usr_id',       'numeric');
+$getSubject     = admFuncVariableIsValid($_GET, 'subject',      'html');
+$getMsgId       = admFuncVariableIsValid($_GET, 'msg_id',       'numeric');
+$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'numeric');
+$getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy',  'boolean', array('defaultValue' => 0));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'boolean');
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
 

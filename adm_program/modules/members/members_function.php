@@ -27,7 +27,7 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('requireValue' => true));
-$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
+$getMode   = admFuncVariableIsValid($_GET, 'mode',   'numeric', array('requireValue' => true));
 
 // nur berechtigte User duerfen Funktionen aufrufen
 if(!$gCurrentUser->editUsers())

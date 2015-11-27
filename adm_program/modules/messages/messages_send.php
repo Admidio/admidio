@@ -17,14 +17,14 @@ require_once('../../system/common.php');
 require_once('../../system/template.php');
 
 // Initialize and check the parameters
-$getMsgId       = admFuncVariableIsValid($_GET, 'msg_id', 'numeric');
-$getMsgType     = admFuncVariableIsValid($_GET, 'msg_type', 'string');
+$getMsgId   = admFuncVariableIsValid($_GET, 'msg_id',   'numeric');
+$getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 
 // Check form values
 $postFrom       = admFuncVariableIsValid($_POST, 'mailfrom', 'string');
-$postName       = admFuncVariableIsValid($_POST, 'name', 'string');
-$postSubject    = admFuncVariableIsValid($_POST, 'subject', 'html');
-$postSubjectSQL = admFuncVariableIsValid($_POST, 'subject', 'string');
+$postName       = admFuncVariableIsValid($_POST, 'name',     'string');
+$postSubject    = admFuncVariableIsValid($_POST, 'subject',  'html');
+$postSubjectSQL = admFuncVariableIsValid($_POST, 'subject',  'string');
 $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postBodySQL    = admFuncVariableIsValid($_POST, 'msg_body', 'string');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'boolean');

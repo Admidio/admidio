@@ -37,17 +37,17 @@ require_once('../../system/common.php');
 unset($_SESSION['dates_request']);
 
 // Initialize and check the parameters
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
-$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
-$getId       = admFuncVariableIsValid($_GET, 'id', 'numeric');
-$getShow     = admFuncVariableIsValid($_GET, 'show', 'string', array('defaultValue' => 'all', 'validValues' => array('all', 'maybe_participate', 'only_participate')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',      'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
+$getStart    = admFuncVariableIsValid($_GET, 'start',     'numeric');
+$getHeadline = admFuncVariableIsValid($_GET, 'headline',  'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'numeric');
+$getId       = admFuncVariableIsValid($_GET, 'id',        'numeric');
+$getShow     = admFuncVariableIsValid($_GET, 'show',      'string', array('defaultValue' => 'all', 'validValues' => array('all', 'maybe_participate', 'only_participate')));
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'numeric');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
-$getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
+$getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
 $getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'print')));
-$getView     = admFuncVariableIsValid($_GET, 'view', 'string', array('defaultValue' => $gPreferences['dates_view'], 'validValues' => array('detail', 'compact', 'room', 'participants', 'description')));
+$getView     = admFuncVariableIsValid($_GET, 'view',      'string', array('defaultValue' => $gPreferences['dates_view'], 'validValues' => array('detail', 'compact', 'room', 'participants', 'description')));
 
 // check if module is active
 if($gPreferences['enable_dates_module'] == 0)

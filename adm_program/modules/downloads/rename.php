@@ -18,7 +18,7 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric');
-$getFileId   = admFuncVariableIsValid($_GET, 'file_id', 'numeric');
+$getFileId   = admFuncVariableIsValid($_GET, 'file_id',   'numeric');
 
 // set headline of the script
 if($getFileId > 0)

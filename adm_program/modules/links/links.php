@@ -19,10 +19,10 @@ require_once('../../system/common.php');
 unset($_SESSION['links_request']);
 
 // Initialize and check the parameters
-$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric');
+$getStart    = admFuncVariableIsValid($_GET, 'start',    'numeric');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('LNK_WEBLINKS')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
-$getLinkId   = admFuncVariableIsValid($_GET, 'id', 'numeric');
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'numeric');
+$getLinkId   = admFuncVariableIsValid($_GET, 'id',       'numeric');
 
 // check if the module is enabled for use
 if ($gPreferences['enable_weblinks_module'] == 0)

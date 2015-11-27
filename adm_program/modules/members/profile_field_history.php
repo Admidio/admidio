@@ -24,9 +24,9 @@ $filterDateFrom = new DateTimeExtended(DATE_NOW, 'Y-m-d');
 $filterDateFrom->modify('-'.$gPreferences['members_days_field_history'].' day');
 
 // Initialize and check the parameters
-$getUserId   = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
+$getUserId   = admFuncVariableIsValid($_GET, 'usr_id',           'numeric');
 $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gPreferences['system_date'])));
-$getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
+$getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to',   'date', array('defaultValue' => DATE_NOW));
 
 // create a user object from the user parameter
 $user = new User($gDb, $gProfileFields, $getUserId);
