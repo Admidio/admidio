@@ -82,7 +82,7 @@ try
 
         if ($form_values['new_name'] == null)
         {
-            $form_values['new_name'] = admFuncGetFilenameWithoutExtension($originalName);
+            $form_values['new_name'] = pathinfo($originalName, PATHINFO_FILENAME);
         }
 
         if ($form_values['new_description'] == null)
