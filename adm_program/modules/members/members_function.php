@@ -36,7 +36,7 @@ if(!$gCurrentUser->editUsers())
 }
 
 // nun erst einmal allgemein pruefen, ob der User zur aktuellen Orga gehoert
-if(isMember($getUserId) == true)
+if(isMember($getUserId))
 {
     $this_orga = true;
 }

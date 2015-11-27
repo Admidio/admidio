@@ -500,7 +500,7 @@ foreach($gProfileFields->mProfileFields as $field)
     // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
     if($field->getValue('cat_name_intern') !== 'MASTER_DATA'
     && ($gCurrentUser->hasRightEditProfile($user)
-       || (!$gCurrentUser->hasRightEditProfile($user) && $field->getValue('usf_hidden') == 0)))
+        || (!$gCurrentUser->hasRightEditProfile($user) && $field->getValue('usf_hidden') == 0)))
     {
         // show new category header if new category and field has value or is a checkbox field
         if($category != $field->getValue('cat_name')
@@ -736,7 +736,7 @@ if($gPreferences['profile_show_former_roles'] == 1)
 
 if($gPreferences['profile_show_extern_roles'] == 1
 && ($gCurrentOrganization->getValue('org_org_id_parent') > 0
-   || $gCurrentOrganization->hasChildOrganizations()))
+    || $gCurrentOrganization->hasChildOrganizations()))
 {
     // *******************************************************************************
     // Block with roles from other organizations

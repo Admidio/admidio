@@ -267,7 +267,7 @@ foreach($gProfileFields->mProfileFields as $field)
     // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
     if($field->getValue('cat_name_intern') !== 'MASTER_DATA'
     && ($gCurrentUser->editInventory($inventory)
-       || (!$gCurrentUser->editInventory($inventory) && $field->getValue('inf_hidden') == 0)))
+        || (!$gCurrentUser->editInventory($inventory) && $field->getValue('inf_hidden') == 0)))
     {
         // show new category header if new category and field has value or is a checkbox field
         if($category != $field->getValue('cat_name')

@@ -121,10 +121,10 @@ $page->addJavascript('
     // checked   - true destRight wird auf checked gesetzt
     //             false destRight wird auf unchecked gesetzt
     function markRoleRight(srcRight, destRight, checked) {
-        if (document.getElementById(srcRight).checked == true && checked == true) {
+        if (document.getElementById(srcRight).checked && checked) {
             document.getElementById(destRight).checked = true;
         }
-        if (document.getElementById(srcRight).checked == false && checked == false) {
+        if (!document.getElementById(srcRight).checked && !checked) {
             document.getElementById(destRight).checked = false;
         }
     }'

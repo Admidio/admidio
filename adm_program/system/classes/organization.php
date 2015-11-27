@@ -344,7 +344,7 @@ class Organization extends TableAccess
      */
     public function hasChildOrganizations()
     {
-        if($this->bCheckChildOrganizations == false)
+        if(!$this->bCheckChildOrganizations)
         {
             // Daten erst einmal aus DB einlesen
             $this->childOrganizations = $this->getOrganizationsInRelationship(true, false);
@@ -371,7 +371,7 @@ class Organization extends TableAccess
     {
         $returnCode = false;
 
-        if($this->bCheckChildOrganizations == false)
+        if(!$this->bCheckChildOrganizations)
         {
             // read parent organization from database
             $this->childOrganizations = $this->getOrganizationsInRelationship(true, false);
@@ -408,8 +408,7 @@ class Organization extends TableAccess
         {
             if(array_key_exists($key, $db_preferences))
             {
-                if($update == true
-                && $value  != $db_preferences[$key])
+                if($update && $value != $db_preferences[$key])
                 {
                     // Pref existiert in DB, aber Wert hat sich geaendert
                     $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''.$value.'\'

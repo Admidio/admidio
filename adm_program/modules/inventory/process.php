@@ -50,7 +50,7 @@ switch($postFunction)
         $row = $statement->fetch();
         $MsgId = $row['max_id'];
 
-        if($MsgId+25 < $postLines)
+        if($MsgId + 25 < $postLines)
         {
             $postLines = $postLines - 50;
         }
@@ -102,7 +102,7 @@ switch($postFunction)
         {
             if(preg_match($reg_exUrl, $postMessage, $url))
             {
-                   $postMessage = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
+                $postMessage = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
             }
             fwrite(fopen('chat.txt', 'a'), "<span>". $postNickname . "</span>" . $postMessage = str_replace("\n", " ", $postMessage) . "\n");
         }

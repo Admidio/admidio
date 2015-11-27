@@ -168,7 +168,7 @@ foreach($rolesList as $row)
     // but don't change their own membership, because there must be at least one webmaster
     if($row['rol_webmaster'] == 0
     || ($row['rol_webmaster'] == 1 && $gCurrentUser->isWebmaster()
-       && $getUserId != $gCurrentUser->getValue('usr_id')))
+        && $getUserId != $gCurrentUser->getValue('usr_id')))
     {
         $roleAssign = 0;
         if(isset($_POST['role-'.$row['rol_id']]) && $_POST['role-'.$row['rol_id']] == 1)

@@ -272,7 +272,7 @@ if ($getMsgType === 'EMAIL')
     // check sending attributes for user, to be sure that they are correct
     if ($gValidLogin
     && ($postFrom !== $gCurrentUser->getValue('EMAIL')
-       || $postName !== $gCurrentUser->getValue('FIRST_NAME', 'database').' '.$gCurrentUser->getValue('LAST_NAME', 'database')))
+        || $postName !== $gCurrentUser->getValue('FIRST_NAME', 'database').' '.$gCurrentUser->getValue('LAST_NAME', 'database')))
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
