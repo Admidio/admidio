@@ -95,7 +95,7 @@ elseif($getModule === 'downloads')
 
     try
     {
-        // get recordset of current folder from databse
+        // get recordset of current folder from database
         $folder = new TableFolder($gDb);
         $folder->getFolderForDownload($getId);
         $uploadDir = $folder->getCompletePathOfFolder().'/';

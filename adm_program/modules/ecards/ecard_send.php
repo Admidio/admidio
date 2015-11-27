@@ -12,9 +12,9 @@ require_once('../../system/common.php');
 require_once('ecard_function.php');
 
 // Initialize and check the parameters
-$postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', array('requireValue' => true));
-$postPhotoId      = admFuncVariableIsValid($_POST, 'photo_id', 'numeric', array('requireValue' => true));
-$postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr', 'numeric', array('requireValue' => true));
+$postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file',    array('requireValue' => true));
+$postPhotoId      = admFuncVariableIsValid($_POST, 'photo_id',       'numeric', array('requireValue' => true));
+$postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr',       'numeric', array('requireValue' => true));
 
 $funcClass       = new FunctionClass($gL10n);
 $photoAlbum      = new TablePhotos($gDb, $postPhotoId);

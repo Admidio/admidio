@@ -74,7 +74,7 @@ try
 {
     if ($getFileId)
     {
-        // get recordset of current file from databse
+        // get recordset of current file from database
         $file = new TableFile($gDb);
         $file->getFileForDownload($getFileId);
 
@@ -82,7 +82,7 @@ try
 
         if ($form_values['new_name'] == null)
         {
-            $form_values['new_name'] = admFuncGetFilenameWithoutExtension($originalName);
+            $form_values['new_name'] = pathinfo($originalName, PATHINFO_FILENAME);
         }
 
         if ($form_values['new_description'] == null)
@@ -93,7 +93,7 @@ try
     }
     else
     {
-        // get recordset of current folder from databses
+        // get recordset of current folder from databases
         $folder = new TableFolder($gDb);
         $folder->getFolderForDownload($getFolderId);
 
