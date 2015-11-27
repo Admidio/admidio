@@ -295,7 +295,7 @@ else
                 $sql    = 'SELECT * FROM '. TBL_GUESTBOOK_COMMENTS. '
                            WHERE gbc_gbo_id = '.$guestbook->getValue('gbo_id').'
                                  '.$conditions.'
-                           ORDER by gbc_timestamp_create asc';
+                           ORDER BY gbc_timestamp_create ASC';
                 $commentStatement = $gDb->query($sql);
 
                 // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...
