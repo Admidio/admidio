@@ -479,7 +479,7 @@ else
 
     if ($gDb->query($sql))
     {
-      $sendResult = true;
+        $sendResult = true;
     }
 }
 

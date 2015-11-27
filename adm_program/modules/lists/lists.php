@@ -132,11 +132,11 @@ foreach($listConfigurations as &$rowConfigurations)
 {
     if($rowConfigurations[2] == 0)
     {
-       $rowConfigurations[2] = $gL10n->get('LST_YOUR_LISTS');
+        $rowConfigurations[2] = $gL10n->get('LST_YOUR_LISTS');
     }
     else
     {
-       $rowConfigurations[2] = $gL10n->get('LST_GENERAL_LISTS');
+        $rowConfigurations[2] = $gL10n->get('LST_GENERAL_LISTS');
     }
 }
 

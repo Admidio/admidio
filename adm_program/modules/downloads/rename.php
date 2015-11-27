@@ -61,13 +61,13 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 if(isset($_SESSION['download_request']))
 {
-   $form_values = strStripSlashesDeep($_SESSION['download_request']);
-   unset($_SESSION['download_request']);
+    $form_values = strStripSlashesDeep($_SESSION['download_request']);
+    unset($_SESSION['download_request']);
 }
 else
 {
-   $form_values['new_name'] = null;
-   $form_values['new_description'] = null;
+    $form_values['new_name'] = null;
+    $form_values['new_description'] = null;
 }
 
 try

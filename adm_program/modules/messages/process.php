@@ -108,7 +108,7 @@ switch($postFunction)
         {
             if(preg_match($reg_exUrl, $postMessage, $url))
             {
-                   $postMessage = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
+                $postMessage = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
             }
         }
 

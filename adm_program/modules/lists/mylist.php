@@ -371,11 +371,11 @@ $javascriptCode .= '
 
         for (key in arr_user_fields)
         {
-           if(arr_user_fields[key]["usf_name"] == columnName)
-           {
-               if(arr_user_fields[key]["usf_type"] == "DROPDOWN"
+            if(arr_user_fields[key]["usf_name"] == columnName)
+            {
+                if(arr_user_fields[key]["usf_type"] == "DROPDOWN"
                   || arr_user_fields[key]["usf_type"] == "RADIO_BUTTON")
-               {
+                {
                     html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" class=\"ListConditionField\" name=\"condition" + fieldNumberShow + "\">" +
                     "<option value=\"\">&nbsp;</option>";
 

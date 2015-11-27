@@ -159,7 +159,7 @@ foreach($gProfileFields->mProfileFields as $field)
                         $_POST[$post_id] = substr($_POST[$post_id], strrpos($_POST[$post_id], '/') + 1);
                         if(strrpos($_POST[$post_id], '?') > 0)
                         {
-                           $_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '?'));
+                            $_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '?'));
                         }
                     }
                 }

@@ -89,7 +89,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>');
 $form = new HtmlForm('import_assign_fields_form', $g_root_path. '/adm_program/modules/members/import_csv.php', $page, array('type' => 'vertical'));
 $form->addCheckbox('first_row', $gL10n->get('MEM_FIRST_LINE_COLUMN_NAME'), $form_values['first_row']);
 $htmlFieldTable = '
-   <table class="table table-condensed">
+    <table class="table table-condensed">
         <thead>
             <tr>
                 <th>'.$gL10n->get('MEM_PROFILE_FIELD').'</th>

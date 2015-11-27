@@ -105,7 +105,7 @@ class Email extends PHPMailer
         }
         else
         {
-             $this->IsMail();
+            $this->IsMail();
         }
 
         // set language for error reporting
@@ -154,7 +154,7 @@ class Email extends PHPMailer
         }
         catch (phpmailerException $e)
         {
-           return $e->errorMessage();
+            return $e->errorMessage();
         }
 
         $this->emAddresses = $this->emAddresses.$name.', '.$address."\r\n";
@@ -180,7 +180,7 @@ class Email extends PHPMailer
         }
         catch (phpmailerException $e)
         {
-           return $e->errorMessage();
+            return $e->errorMessage();
         }
 
         $this->emAddresses = $this->emAddresses.$name.', '.$address."\r\n";
@@ -265,7 +265,7 @@ class Email extends PHPMailer
         }
         catch (phpmailerException $e)
         {
-           return $e->errorMessage();
+            return $e->errorMessage();
         }
 
         return true;
@@ -394,7 +394,7 @@ class Email extends PHPMailer
             // send html if preference is set
             if($gPreferences['mail_html_registered_users'] == 1)
             {
-               $this->sendDataAsHtml();
+                $this->sendDataAsHtml();
             }
             else
             {
@@ -461,11 +461,11 @@ class Email extends PHPMailer
                     }
 
                     // now send mail
-                   $this->Send();
+                    $this->Send();
                 }
                 catch (phpmailerException $e)
                 {
-                   return $e->errorMessage();
+                    return $e->errorMessage();
                 }
             }
         }
@@ -474,11 +474,11 @@ class Email extends PHPMailer
         {
             try
             {
-              $this->Send();
+                $this->Send();
             }
             catch (phpmailerException $e)
             {
-               return $e->errorMessage();
+                return $e->errorMessage();
             }
         }
 
@@ -499,8 +499,8 @@ class Email extends PHPMailer
             // die einzelnen Empfaenger aufgelistet:
             if ($this->emListRecipients)
             {
-                 $copyHeader = $this->emAddresses."\r\n".$copyHeader;
-                 $copyHeader = $gL10n->get('MAI_MESSAGE_WENT_TO').':'."\r\n"."\r\n".$copyHeader;
+                $copyHeader = $this->emAddresses."\r\n".$copyHeader;
+                $copyHeader = $gL10n->get('MAI_MESSAGE_WENT_TO').':'."\r\n"."\r\n".$copyHeader;
             }
 
             $this->emText = $copyHeader.$this->emText;
@@ -520,11 +520,11 @@ class Email extends PHPMailer
             $this->AddAddress($this->emSender['address'], $this->emSender['name']);
             try
             {
-               $this->Send();
+                $this->Send();
             }
             catch (phpmailerException $e)
             {
-               return $e->errorMessage();
+                return $e->errorMessage();
             }
         }
 

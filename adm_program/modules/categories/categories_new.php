@@ -112,7 +112,7 @@ if(isset($_SESSION['categories_request']))
     $category->setArray($_SESSION['categories_request']);
     if(!isset($_SESSION['categories_request']['show_in_several_organizations']))
     {
-       $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
+        $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
     }
     unset($_SESSION['categories_request']);
 }

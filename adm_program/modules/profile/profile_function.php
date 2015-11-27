@@ -227,10 +227,10 @@ elseif ($getMode === 8)
 
         while($row = $statement->fetch())
         {
-           // create user object
-           $user = new User($gDb, $gProfileFields, $row['mem_usr_id']);
-           // create vcard and check if user is allowed to edit profile, so he can see more data
-           echo $user->getVCard($gCurrentUser->hasRightEditProfile($user));
+            // create user object
+            $user = new User($gDb, $gProfileFields, $row['mem_usr_id']);
+            // create vcard and check if user is allowed to edit profile, so he can see more data
+            echo $user->getVCard($gCurrentUser->hasRightEditProfile($user));
         }
     }
 }

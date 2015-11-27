@@ -117,7 +117,7 @@ if($getRoleId === 0 && $numberRoles === 1)
 
     if($getRoleId == 0)
     {
-       $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
+        $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
     }
 }
 
@@ -260,7 +260,7 @@ if($getMode !== 'csv')
         // remove default header/footer
         $pdf->setPrintHeader(true);
         $pdf->setPrintFooter(false);
-         // set header and footer fonts
+        // set header and footer fonts
         $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 

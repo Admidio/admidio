@@ -32,7 +32,7 @@ $getUserId    = admFuncVariableIsValid($_GET, 'user_id',     'numeric');
 // nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
 if(!$gCurrentUser->approveUsers())
 {
-   $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // pruefen, ob Modul aufgerufen werden darf

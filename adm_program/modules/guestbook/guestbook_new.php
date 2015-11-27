@@ -99,8 +99,8 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
     $row = $statement->fetch();
     if($row[0] > 0)
     {
-          // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-          $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));
+        // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
+        $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));
     }
 }
 

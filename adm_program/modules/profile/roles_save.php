@@ -39,7 +39,7 @@ if($getInline == true)
 // if user is allowed to assign at least one role then allow access
 if(!$gCurrentUser->assignRoles())
 {
-   $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // detect number of selected roles

@@ -286,13 +286,13 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 
                 if($gCurrentUser->editPhotoRight() || ($gValidLogin && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled'] == 1)
                 {
-                   $photoThumbnailTable .= '<div class="text-center" id="image_preferences_'.$actThumbnail.'">';
+                    $photoThumbnailTable .= '<div class="text-center" id="image_preferences_'.$actThumbnail.'">';
                 }
 
                 // Buttons fuer Moderatoren
                 if($gCurrentUser->editPhotoRight())
                 {
-                   $photoThumbnailTable .= '
+                    $photoThumbnailTable .= '
                     <a class="admidio-icon-link"  href="javascript:void(0)" onclick="return imgrotate('.$actThumbnail.', \'left\')"><img
                         src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" /></a>
                     <a class="admidio-icon-link" href="javascript:void(0)" onclick="return imgrotate('.$actThumbnail.', \'right\')"><img
@@ -321,7 +321,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 
                 if($gCurrentUser->editPhotoRight() || ($gValidLogin && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled'] == 1)
                 {
-                   $photoThumbnailTable .= '</div>';
+                    $photoThumbnailTable .= '</div>';
                 }
             $photoThumbnailTable .= '</div>';
         }
@@ -337,11 +337,11 @@ if($photoAlbum->getValue('pho_quantity') > 0)
         {
             if($hiddenPhotoNr >= $firstPhotoNr && $hiddenPhotoNr <= $actThumbnail)
             {
-                    if($photoThumbnailTable_shown == false)
-                    {
-                        $page->addHtml($photoThumbnailTable);
-                        $photoThumbnailTable_shown = true;
-                    }
+                if($photoThumbnailTable_shown == false)
+                {
+                    $page->addHtml($photoThumbnailTable);
+                    $photoThumbnailTable_shown = true;
+                }
             }
             else
             {

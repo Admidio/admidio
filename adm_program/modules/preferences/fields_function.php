@@ -57,7 +57,7 @@ if($getUsfId > 0)
 
 if($getMode === 1)
 {
-   // Feld anlegen oder updaten
+    // Feld anlegen oder updaten
 
     $_SESSION['fields_request'] = $_POST;
 

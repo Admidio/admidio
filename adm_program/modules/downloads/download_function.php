@@ -366,8 +366,7 @@ elseif ($getMode === 6)
         $location = 'Location: '.$g_root_path.'/adm_program/system/back.php';
         header($location);
         exit();
-   }
-
+    }
 }
 
 // Berechtigungen fuer einen Ordner speichern

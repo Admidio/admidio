@@ -142,7 +142,7 @@ if ($gPreferences['enable_download_module'] == 1)
 
         echo '</div>';
 
-         if ($anzahl == 0)
+        if ($anzahl == 0)
         {
             echo $gL10n->get('PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE');
         }

@@ -29,8 +29,8 @@ $(function() {
             type: "POST",
             data: $("#template-form").serialize(),
             success: function(data) {
-                 $("#responsestatus").val(data);
-                 $("#subscription-confirm").modal("show");
+                $("#responsestatus").val(data);
+                $("#subscription-confirm").modal("show");
             }
         });
     });
