@@ -33,30 +33,6 @@ class FunctionClass
     }
 
     /**
-     * @param string $directory
-     * @return array
-     */
-    public function getFileNames($directory)
-    {
-        $array_files = array();
-        $i = 0;
-        if($curdir = opendir($directory))
-        {
-            while($file = readdir($curdir))
-            {
-                if($file !== '.' && $file !== '..')
-                {
-                    $array_files[$i] = $file;
-                    ++$i;
-                }
-            }
-        }
-        closedir($curdir);
-
-        return $array_files;
-    }
-
-    /**
      * Diese Funktion holt das Template aus dem uebergebenen Verzeichnis und liefert die Daten und einen error state zurueck
      * @param string $template_name der Name des Template
      * @param string $tmpl_folder   der Name des Ordner wo das Template vorhanden ist
