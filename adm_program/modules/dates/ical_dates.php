@@ -62,8 +62,10 @@ $parameter['view_mode'] = 'period';
 $parameter['date_from'] = date('Y-m-d', time()-$gPreferences['dates_ical_days_past']*86400);
 $parameter['date_to'] = date('Y-m-d', time()+$gPreferences['dates_ical_days_future']*86400);
 
+// set date range  
+$dates->setDaterange($parameter['date_from'], $parameter['date_to']);  
 // read events for output
-$datesResult = $dates->getDataset();
+$datesResult = $dates->getDataset(0, 0);
 
 // Headline für Dateinamen
 if($dates->getCatId() > 0)
@@ -104,3 +106,4 @@ if($parameter['mode'] == 2)
     header('Pragma: public');
 }
 echo $iCal;
+?>
