@@ -117,7 +117,7 @@
  * HtmlElement::addAttribute('value', 'submit');
  * // pass a whitespace because element has no content
  * HtmlElement::addData(' ', true);
-
+ *
  * echo HtmlElement::getHtmlElement();
  * @endcode
  */

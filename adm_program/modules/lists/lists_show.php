@@ -653,10 +653,10 @@ foreach($membersList as $member)
                 }
                 else
                 {
-                    if($getMode == 'print'
-                    && (  $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'EMAIL'
-                       || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'PHONE'
-                       || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'URL'))
+                    if($getMode === 'print'
+                    &&   ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'EMAIL'
+                       || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'PHONE'
+                       || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'URL'))
                     {
                         $columnValues[] = $content;
                     }
