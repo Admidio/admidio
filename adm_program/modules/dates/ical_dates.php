@@ -61,7 +61,7 @@ $parameter['date_to'] = date('Y-m-d', time()+$gPreferences['dates_ical_days_futu
 // set date range
 $dates->setDaterange($parameter['date_from'], $parameter['date_to']);
 // read events for output
-$datesResult = $dates->getDataset('', '', true);
+$datesResult = $dates->getDataset(0, 0);
 
 //Headline für Dateinamen
 if($dates->getCatId() > 0)

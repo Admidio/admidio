@@ -174,10 +174,9 @@ class ModuleDates extends Modules
     /** SQL query returns an array with available dates.
      *  @param $startelement Defines the offset of the query (default: 0)
      *  @param $limit Limit of query rows (default: 0)
-     *  @param $ical Flag for ICal Export. If is set then the offset and the limit for dates per page is disabled (default: false)
      *  @return Array with all results, dates and parameters.
      */
-    public function getDataSet($startElement=0, $limit=NULL, $ical=false)
+    public function getDataSet($startElement=0, $limit=NULL)
     {
         global $gCurrentOrganization;
         global $gCurrentUser;
@@ -220,19 +219,17 @@ class ModuleDates extends Modules
                    AND dat_id = dtr_dat_id
                        '.$this->sqlConditionsGet()
                         . ' ORDER BY dat_begin '.$this->order;
-                        
-        if($ical === false)
-        {                   
-             // Parameter
-            if($limit > 0)
-            {
-                $sql .= ' LIMIT '.$limit;
-            }
-            if($startElement != 0)
-            {
-                $sql .= ' OFFSET '.$startElement;
-            }
+                                    
+        // Parameter
+        if($limit > 0)
+        {
+            $sql .= ' LIMIT '.$limit;
         }
+        if($startElement != 0)
+        {
+            $sql .= ' OFFSET '.$startElement;
+        }
+        
         $result = $gDb->query($sql);
 
         //array for results
@@ -559,4 +556,5 @@ class ModuleDates extends Modules
         return $sqlConditions;        
     }       
 }  
-?> 
+?>
+ 
