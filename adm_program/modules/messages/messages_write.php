@@ -222,7 +222,7 @@ elseif (!isset($message_result))
             $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
         }
 
-        $userEmail = $user->getValue('EMAIL');
+        $userEmail = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
     }
     elseif ($getRoleId > 0)
     {
@@ -370,7 +370,7 @@ elseif (!isset($message_result))
         // select Users
 
 	    $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
-                                 email.usd_value as email, rol_mail_this_role, rol_id, mem_begin, mem_end
+                         rol_mail_this_role, rol_id, mem_begin, mem_end
                     FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_USERS. '
                     JOIN '. TBL_USER_DATA. ' as email
                       ON email.usd_usr_id = usr_id
@@ -403,17 +403,17 @@ elseif (!isset($message_result))
 			{
 				if ($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW && $row['rol_mail_this_role'] >= 2)
 				{
-					$active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_ACTIVE_MEMBERS'));
+					$active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
 					$act_usr_id = $row['usr_id'];
 				}
 				elseif ($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW && $row['rol_mail_this_role'] == 1 && in_array($row['rol_id'], $gCurrentUser->getRoleMemberships()))
 				{
-					$active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_ACTIVE_MEMBERS'));
+					$active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
 					$act_usr_id = $row['usr_id'];
 				}
 				elseif ($gPreferences['mail_show_former'] == 1)
 				{
-					$passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('LST_FORMER_MEMBERS'));
+					$passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
 					$act_usr_id = $row['usr_id'];
 				}
 			}
