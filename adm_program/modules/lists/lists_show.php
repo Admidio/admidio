@@ -20,7 +20,7 @@
  *                1 - Only show the list without any other html unnecessary elements
  *
  *****************************************************************************/
- 
+
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
@@ -58,7 +58,7 @@ if($getListId == 0)
 {
     // set role default list configuration
     $getListId = $role->getDefaultList();
-    
+
     if($getListId == 0)
     {
        $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
@@ -167,7 +167,7 @@ if($getMode != 'csv')
 {
     $datatable = false;
     $hoverRows = false;
-    
+
     if($getShowMembers == 0)
     {
         $memberStatus = $gL10n->get('LST_ACTIVE_MEMBERS');
@@ -188,10 +188,10 @@ if($getMode != 'csv')
         $page->hideThemeHtml();
         $page->hideMenu();
         $page->setPrintMode();
-                
+
         $page->setTitle($title);
         $page->setHeadline($headline);
-        
+
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
     }
     elseif($getMode == 'pdf')
@@ -210,7 +210,7 @@ if($getMode != 'csv')
          // set header and footer fonts
         $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        
+
         // set auto page breaks
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
         $pdf->SetMargins(10, 20, 10);
@@ -219,13 +219,13 @@ if($getMode != 'csv')
 
         //headline for PDF
         $pdf->SetHeaderData('', '', $headline, '');
-        
+
         // set font
         $pdf->SetFont('times', '', 10);
 
         // add a page
         $pdf->AddPage();
-        
+
         // Create table object for display
         $table = new HtmlTable('adm_lists_table', $pdf, $hoverRows, $datatable, $classTable);
         $table->addAttribute('border', '1');
@@ -251,7 +251,7 @@ if($getMode != 'csv')
 
         $page->setTitle($title);
         $page->setHeadline($headline);
-        
+
         $page->addHtml('<h5>'.$role->getValue('cat_name').' - '.$memberStatus.'</h5>');
         $page->addJavascript('
             $("#export_list_to").change(function () {
@@ -262,11 +262,11 @@ if($getMode != 'csv')
                         "lst_id='. $getListId. '&rol_id='. $getRoleId. '&mode=" + result + "&show_members='.$getShowMembers.'";
                 }
             });
-            
+
             $("#menu_item_print_view").click(function () {
                 window.open("'.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&mode=print&rol_id='.$getRoleId.'&show_members='.$getShowMembers.'", "_blank");
             });', true);
-        
+
         // get module menu
         $listsMenu = $page->getMenu();
 
@@ -282,17 +282,17 @@ if($getMode != 'csv')
             $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;mode=html&amp;rol_id='.$getRoleId.'&amp;show_members='.$getShowMembers.'&amp;full_screen=1',
                 $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png');
         }
-        
+
         // link to assign or remove members if you are allowed to do it
         if($role->allowedToAssignMembers($gCurrentUser))
         {
             $listsMenu->addItem('menu_item_assign_members', $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='. $role->getValue('rol_id'),
                 $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png');
         }
-        
+
         // link to print overlay and exports
         $listsMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
-        
+
         $form = new HtmlForm('navbar_export_to_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
         $selectBoxEntries = array('' => $gL10n->get('LST_EXPORT_TO').' ...', 'csv-ms' => $gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')', 'pdf' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
                                   'pdfl' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')', 'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')');
@@ -375,7 +375,7 @@ for($columnNumber = 1; $columnNumber <= $list->countColumns(); $columnNumber++)
             {
                 $table->addColumn($gL10n->get('SYS_ABR_NO'), array('style' => 'text-align: '.$columnAlign[$columnNumber-1].';font-size:14;background-color:#C7C7C7;'), 'th');
             }
-            
+
             $table->addColumn($columnHeader, array('style' => 'text-align: '.$columnAlign[$columnNumber-1].';font-size:14;background-color:#C7C7C7;'), 'th');
         }
         elseif($getMode == 'html' || $getMode == 'print')
@@ -438,7 +438,7 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
                     $listRowNumber = 1;
                     $title = $gL10n->get('SYS_PARTICIPANTS');
                 }
-                
+
                 $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), 1, ($list->countColumns() + 1));
                 $lastGroupHead = $row['mem_leader'];
             }
@@ -491,7 +491,7 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
                     {
                         // die Laufende Nummer noch davorsetzen
                         $columnValues[] = $listRowNumber;
-                        
+
                         // in html mode we add an additional column with leader/member information to
                         // enable the grouping function of jquery datatables
                         if($getMode == 'html')
@@ -583,7 +583,16 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
                 // create output in html layout
                 else
                 {
-                    $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $row['usr_id']);
+                    if($getMode == 'print'
+                    && (  $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'EMAIL'
+                       || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'URL'))
+                    {
+                        $columnValues[] = $content;
+                    }
+                    else
+                    {
+                        $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $row['usr_id']);
+                    }
                 }
             }
         }
@@ -617,7 +626,7 @@ if($getMode == 'csv' || $getMode == 'pdf')
     {
         $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')).'.'.$getMode;
     }
-    
+
      // for IE the filename must have special chars in hexadecimal
     if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
     {
@@ -625,11 +634,11 @@ if($getMode == 'csv' || $getMode == 'pdf')
     }
 
     header('Content-Disposition: attachment; filename="'.$filename.'"');
-    
+
     // neccessary for IE6 to 8, because without it the download with SSL has problems
     header('Cache-Control: private');
     header('Pragma: public');
-    
+
 }
 
 if($getMode == 'csv')
@@ -651,10 +660,10 @@ elseif($getMode == 'pdf')
 {
     // output the HTML content
     $pdf->writeHTML($table->getHtmlTable(), true, false, true, false, '');
-    
+
     //Save PDF to file
     $pdf->Output(SERVER_PATH. '/adm_my_files/'.$filename, 'F');
-    
+
     //Redirect
     header('Content-Type: application/pdf');
 
@@ -667,12 +676,12 @@ elseif($getMode == 'html' || $getMode == 'print')
     // add table list to the page
     $page->addHtml($table->show(false));
 
-    
+
     // create a infobox for the role
     if($getMode == 'html')
     {
         $htmlBox = '';
-         
+
         // only show infobox if additional role information fields are filled
         if(strlen($role->getValue('rol_start_date')) > 0
         || $role->getValue('rol_weekday') > 0
@@ -687,19 +696,19 @@ elseif($getMode == 'html' || $getMode == 'print')
                 <div class="panel-body">';
                     $form = new HtmlForm('list_infobox_items', null);
                     $form->addStaticControl('infobox_category', $gL10n->get('SYS_CATEGORY'), $role->getValue('cat_name'));
-    
+
                     //Beschreibung
                     if(strlen($role->getValue('rol_description')) > 0)
                     {
                         $form->addStaticControl('infobox_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'));
                     }
-    
+
                     //Zeitraum
                     if(strlen($role->getValue('rol_start_date')) > 0)
                     {
                         $form->addStaticControl('infobox_period', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])));
                     }
-    
+
                     //Termin
                     if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
                     {
@@ -711,28 +720,28 @@ elseif($getMode == 'html' || $getMode == 'print')
                         {
                             $value = $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
                         }
-    
+
                         $form->addStaticControl('infobox_date', $gL10n->get('DAT_DATE'), $value);
                     }
-    
+
                     //Treffpunkt
                     if(strlen($role->getValue('rol_location')) > 0)
                     {
                         $form->addStaticControl('infobox_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'));
                     }
-    
+
                     //Beitrag
                     if(strlen($role->getValue('rol_cost')) > 0)
                     {
                         $form->addStaticControl('infobox_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost'). ' '.$gPreferences['system_currency']);
                     }
-    
+
                     //Beitragszeitraum
                     if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
                     {
                         $form->addStaticControl('infobox_contribution_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), $role->getCostPeriods($role->getValue('rol_cost_period')));
                     }
-    
+
                     //maximale Teilnehmerzahl
                     if(strlen($role->getValue('rol_max_members')) > 0)
                     {
@@ -742,10 +751,10 @@ elseif($getMode == 'html' || $getMode == 'print')
                 $htmlBox .= '</div>
             </div>';
         } // end of infobox
-        
+
         $page->addHtml($htmlBox);
     }
-        
+
     // show complete html page
     $page->show();
 }
