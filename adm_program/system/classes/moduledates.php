@@ -174,9 +174,10 @@ class ModuleDates extends Modules
     /** SQL query returns an array with available dates.
      *  @param $startelement Defines the offset of the query (default: 0)
      *  @param $limit Limit of query rows (default: 0)
+     *  @param $ical Flag for ICal Export. If is set then the offset and the limit for dates per page is disabled (default: false)
      *  @return Array with all results, dates and parameters.
      */
-    public function getDataSet($startElement=0, $limit=NULL)
+    public function getDataSet($startElement=0, $limit=NULL, $ical=false)
     {
         global $gCurrentOrganization;
         global $gCurrentUser;
@@ -203,7 +204,7 @@ class ModuleDates extends Modules
                                   cha_username.usr_login_name as change_name ';
         }
 
-        //read dates from database
+        // Read dates from database
         $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.mem_leader,'.$additionalFields.'
                   FROM '.TBL_DATE_ROLE.' dtr, '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
                        '.$this->sqlAdditionalTablesGet('data').'
@@ -219,16 +220,19 @@ class ModuleDates extends Modules
                    AND dat_id = dtr_dat_id
                        '.$this->sqlConditionsGet()
                         . ' ORDER BY dat_begin '.$this->order;
-         //Parameter
-        if($limit > 0)
-        {
-            $sql .= ' LIMIT '.$limit;
+                        
+        if($ical === false)
+        {                   
+             // Parameter
+            if($limit > 0)
+            {
+                $sql .= ' LIMIT '.$limit;
+            }
+            if($startElement != 0)
+            {
+                $sql .= ' OFFSET '.$startElement;
+            }
         }
-        if($startElement != 0)
-        {
-            $sql .= ' OFFSET '.$startElement;
-        }
-
         $result = $gDb->query($sql);
 
         //array for results
@@ -555,4 +559,4 @@ class ModuleDates extends Modules
         return $sqlConditions;        
     }       
 }  
-?>
+?> 
