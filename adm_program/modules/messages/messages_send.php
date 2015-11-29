@@ -418,7 +418,7 @@ if ($getMsgType === 'EMAIL')
     $emailTemplate = str_replace('#receiver#', $ReceiverName, $emailTemplate);
 
     // prepare body of email with note of sender and homepage
-    $email->setSenderInText($postName, $postFrom, $ReceiverName);
+    $email->setSenderInText($postName, $ReceiverName);
 
     // set Text
     $email->setText($emailTemplate);

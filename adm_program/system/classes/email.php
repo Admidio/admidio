@@ -130,7 +130,7 @@ class Email extends PHPMailer
         {
             //$this->emBccArray[] = '"'. $asciiName. '" <'. $address. '>';
             $this->emBccArray[] = array('name' => $asciiName, 'address' => $address);
-            $this->emAddresses = $this->emAddresses.$name.', '.$address."\r\n";
+            $this->emAddresses = $this->emAddresses.$name."\r\n";
             return true;
         }
         return false;
@@ -157,7 +157,7 @@ class Email extends PHPMailer
             return $e->errorMessage();
         }
 
-        $this->emAddresses = $this->emAddresses.$name.', '.$address."\r\n";
+        $this->emAddresses = $this->emAddresses.$name."\r\n";
 
         return true;
     }
@@ -183,7 +183,7 @@ class Email extends PHPMailer
             return $e->errorMessage();
         }
 
-        $this->emAddresses = $this->emAddresses.$name.', '.$address."\r\n";
+        $this->emAddresses = $this->emAddresses.$name."\r\n";
 
         return true;
     }
@@ -318,25 +318,15 @@ class Email extends PHPMailer
     }
 
     /**
-     * write a short text with sender information in text of email
-     * @param string $senderName
-     * @param string $senderEmail
-     * @param string $receivers
+     * Write a short text with sender information in text of email
+     * @param string $senderName Firstname and lastname of email sender
+     * @param string $receivers  List with firstname and lastname of all recipients of this mail
      */
-    public function setSenderInText($senderName, $senderEmail, $receivers)
+    public function setSenderInText($senderName, $receivers)
     {
         global $gL10n, $gValidLogin, $gCurrentOrganization;
 
-        if($this->emSendAsHTML)
-        {
-            $senderCode = '<a href="mailto:'.$senderEmail.'">'.$senderName.'</a>';
-        }
-        else
-        {
-            $senderCode = $senderName.' ('.$senderEmail.')';
-        }
-
-        $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_RECEIVER', $senderCode, $gCurrentOrganization->getValue('org_homepage'), $receivers);
+        $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_RECEIVER', $senderName, $gCurrentOrganization->getValue('org_homepage'), $receivers);
 
         if(!$gValidLogin)
         {
