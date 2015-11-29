@@ -12,6 +12,7 @@ define('FIELD_DEFAULT', 0);
 define('FIELD_REQUIRED', 1);
 define('FIELD_DISABLED', 2);
 define('FIELD_READONLY', 3);
+define('FIELD_HIDDEN', 4);
 
 /**
  * @class HtmlForm
@@ -694,6 +695,7 @@ class HtmlForm extends HtmlFormBasic
      *                          + @b FIELD_DEFAULT  : The field can accept an input.
      *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
      *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
+     *                          + @b FIELD_HIDDEN   : The field will not be shown. Useful to transport additional informations.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
@@ -749,17 +751,24 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // disable field
-        if($optionsAll['property'] === FIELD_DISABLED)
+        switch($optionsAll['property'])
         {
-            $attributes['disabled'] = 'disabled';
-        }
-        if($optionsAll['property'] === FIELD_READONLY)
-        {
-            $attributes['readonly'] = 'readonly';
-        }
-        elseif($optionsAll['property'] === FIELD_REQUIRED)
-        {
-            $attributes['required'] = 'required';
+            case FIELD_DISABLED:
+                $attributes['disabled'] = 'disabled';
+                break;
+
+            case FIELD_READONLY:
+                $attributes['readonly'] = 'readonly';
+                break;
+
+            case FIELD_REQUIRED:
+                $attributes['required'] = 'required';
+                break;
+
+            case FIELD_HIDDEN:
+                $attributes['hidden'] = 'hidden';
+                $attributes['class'] .= ' hide';
+                break;
         }
 
         // set specific css class for this field
@@ -826,8 +835,11 @@ class HtmlForm extends HtmlFormBasic
             }
         }
 
-        // now create html for the field
-        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
+        if($optionsAll['property'] !== FIELD_HIDDEN)
+        {
+            // now create html for the field
+            $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
+        }
 
         // if datetime then add a time field behind the date field
         if($optionsAll['type'] === 'datetime')
@@ -854,7 +866,11 @@ class HtmlForm extends HtmlFormBasic
             }
             $this->addSimpleInput($optionsAll['type'], $id, $id, $value, $attributes);
         }
-        $this->closeControlStructure($optionsAll['helpTextIdInline']);
+
+        if($optionsAll['property'] !== FIELD_HIDDEN)
+        {
+            $this->closeControlStructure($optionsAll['helpTextIdInline']);
+        }
     }
 
     /**
