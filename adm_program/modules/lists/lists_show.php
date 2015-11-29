@@ -653,7 +653,17 @@ foreach($membersList as $member)
                 }
                 else
                 {
-                    $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member['usr_id']);
+                    if($getMode == 'print'
+                    && (  $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'EMAIL'
+                       || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'PHONE'
+                       || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'URL'))
+                    {
+                        $columnValues[] = $content;
+                    }
+                    else
+                    {
+                        $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member['usr_id']);
+                    }
                 }
             }
         }
