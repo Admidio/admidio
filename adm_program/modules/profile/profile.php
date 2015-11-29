@@ -672,7 +672,7 @@ if($gPreferences['profile_show_roles'] == 1)
             '.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'
         </div>
         <div class="panel-body" id="profile_roles_box_body">
-            '.getRoleMemberships('role_list', $user, $result_role, $count_role, false).'
+            '.getRoleMemberships('role_list', $user, $roleStatement, $count_role, false).'
         </div>
     </div>');
 
@@ -698,7 +698,7 @@ if($gPreferences['profile_show_roles'] == 1)
     <div class="panel panel-default" id="profile_future_roles_box" '.$visible.'>
         <div class="panel-heading">'.$gL10n->get('PRO_FUTURE_ROLE_MEMBERSHIP').'</div>
         <div class="panel-body" id="profile_future_roles_box_body">
-            '.getRoleMemberships('future_role_list', $user, $result_role, $count_role, false).'
+            '.getRoleMemberships('future_role_list', $user, $roleStatement, $count_role, false).'
         </div>
     </div>');
 }
@@ -729,7 +729,7 @@ if($gPreferences['profile_show_former_roles'] == 1)
     <div class="panel panel-default" id="profile_former_roles_box" '.$visible.'>
         <div class="panel-heading">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'</div>
         <div class="panel-body" id="profile_former_roles_box_body">
-            '.getRoleMemberships('former_role_list', $user, $result_role, $count_role, false).'
+            '.getRoleMemberships('former_role_list', $user, $roleStatement, $count_role, false).'
         </div>
     </div>');
 }
