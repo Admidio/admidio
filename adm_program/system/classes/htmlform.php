@@ -1283,7 +1283,7 @@ class HtmlForm extends HtmlFormBasic
             if(is_object($this->htmlPage))
             {
                 $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/dist/css/select2.css');
-                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/dist/css/select2-bootstrap.css');
+                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2-bootstrap-theme/dist/css/select2-bootstrap.min.css');
                 $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/dist/js/select2.min.js');
                 $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/dist/js/i18n/'.$gL10n->getLanguageIsoCode().'.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
