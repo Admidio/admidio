@@ -22,8 +22,6 @@
 
 require_once('../../system/common.php');
 
-$formerMembers = 0;
-
 // Initialize and check the parameters
 $getMsgType     = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 $getUserId      = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
@@ -41,14 +39,8 @@ if ($getMsgId > 0)
 }
 
 // check if the call of the page was allowed by settings
-if ($gPreferences['enable_mail_module'] != 1 && $getMsgType != 'PM')
-{
-    // message if the sending of PM is not allowed
-    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-}
-
-// check if the call of the page was allowed by settings
-if ($gPreferences['enable_pm_module'] != 1 && $getMsgType == 'PM')
+if (($gPreferences['enable_mail_module'] != 1 && $getMsgType != 'PM')
+ || ($gPreferences['enable_pm_module'] != 1 && $getMsgType == 'PM'))
 {
     // message if the sending of PM is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -74,13 +66,7 @@ if ($getMsgId > 0)
 
     $getSubject = $message->getValue('msg_subject');
     $getUserId = $message->getConversationPartner($gCurrentUser->getValue('usr_id'));
-
-    $sql = "SELECT msc_usr_id, msc_message, msc_timestamp
-                  FROM ". TBL_MESSAGES_CONTENT. "
-                 WHERE msc_msg_id = ". $getMsgId ."
-                 ORDER BY msc_part_id DESC";
-
-    $message_result = $gDb->query($sql);
+    $message_result = $message->getConversation($getMsgId);
 }
 
 $recept_number = 1;
@@ -91,17 +77,17 @@ if ($gPreferences['mail_max_receiver'] > 0 and $getMsgType != 'PM')
 
 $list = array();
 
-if ($getMsgType == 'PM')
+if ($gValidLogin && $getMsgType == 'PM')
 {
 
-    $sql = "SELECT usr_id, CONCAT(LAST_NAME.usd_value, ' ', FIRST_NAME.usd_value) as name, usr_login_name
-                  FROM ".TBL_ROLES.", ".TBL_CATEGORIES.", ".TBL_MEMBERS.", ".TBL_USERS."
-                        LEFT JOIN ".TBL_USER_DATA." LAST_NAME
-                                       ON LAST_NAME.usd_usr_id = usr_id
-                                          AND LAST_NAME.usd_usf_id = 1
-                        LEFT JOIN ".TBL_USER_DATA." FIRST_NAME
-                                       ON FIRST_NAME.usd_usr_id = usr_id
-                                          AND FIRST_NAME.usd_usf_id = 2
+    $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name, usr_login_name
+                  FROM '.TBL_ROLES.', '.TBL_CATEGORIES.', '.TBL_MEMBERS.', '.TBL_USERS.'
+                   LEFT JOIN '.TBL_USER_DATA.' LAST_NAME
+                     ON LAST_NAME.usd_usr_id = usr_id
+                    AND LAST_NAME.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+                   LEFT JOIN '.TBL_USER_DATA.' FIRST_NAME
+                     ON FIRST_NAME.usd_usr_id = usr_id
+                    AND FIRST_NAME.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). "
                  WHERE rol_cat_id = cat_id
                    AND cat_name_intern <> 'CONFIRMATION_OF_PARTICIPATION'
                    AND (  cat_org_id = ". $gCurrentOrganization->getValue('org_id')."
@@ -113,17 +99,13 @@ if ($getMsgType == 'PM')
                    AND usr_id <> ".$gCurrentUser->getValue('usr_id')."
                    AND usr_valid  = 1
                    AND usr_login_name IS NOT NULL
-                  GROUP BY usr_id, name, usr_login_name
+                  GROUP BY usr_id, LAST_NAME.usd_value, FIRST_NAME.usd_value, usr_login_name
                   ORDER BY LAST_NAME.usd_value, FIRST_NAME.usd_value";
 
     $drop_result = $gDb->query($sql);
-
-    if ($gValidLogin)
+    while ($row = $gDb->fetch_array($drop_result))
     {
-        while ($row = $gDb->fetch_array($drop_result))
-        {
-            $list[] = array($row['usr_id'], $row['name'].' (' .$row['usr_login_name'].')', '');
-        }
+        $list[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'].' (' .$row['usr_login_name'].')', '');
     }
 }
 
@@ -227,32 +209,20 @@ elseif (!isset($message_result))
     elseif ($getRoleId > 0)
     {
         // wird eine bestimmte Rolle aufgerufen, dann pruefen, ob die Rechte dazu vorhanden sind
-
-        $sql = 'SELECT rol_mail_this_role, rol_name, rol_id,
-                       (SELECT COUNT(1)
-                          FROM '.TBL_MEMBERS.'
-                         WHERE mem_rol_id = rol_id
-                           AND (  mem_begin > \''.DATE_NOW.'\'
-                               OR mem_end   < \''.DATE_NOW.'\')) as former
-                  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                 WHERE rol_cat_id    = cat_id
-                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
-                       OR cat_org_id IS NULL) AND rol_id = '.$getRoleId;
-        $result = $gDb->query($sql);
-        $row    = $gDb->fetch_array($result);
+        $role = new TableRoles($gDb);
+		$role->readDataById($getRoleId);
 
         // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
         // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
         // Rollen muessen zur aktuellen Organisation gehoeren
-        if(($gValidLogin == false && $row['rol_mail_this_role'] != 3)
-        || ($gValidLogin == true  && $gCurrentUser->hasRightSendMailToRole($row['rol_id']) == false)
-        || $row['rol_id']  == null)
+        if(($gValidLogin == false && $role->getValue('rol_mail_this_role') != 3)
+        || ($gValidLogin == true  && $gCurrentUser->hasRightSendMailToRole($getRoleId) == false)
+        || $role->getValue('rol_id') == null)
         {
             $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         }
 
-        $rollenName = $row['rol_name'];
-        $formerMembers = $row['former'];
+        $rollenName = $role->getValue('rol_name');
     }
 
     // Wenn die letzte URL in der Zuruecknavigation die des Scriptes message_send.php ist,
@@ -303,19 +273,6 @@ elseif (!isset($message_result))
     // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
     if ($gValidLogin)
     {
-        // alle Rollen auflisten,
-        // an die im eingeloggten Zustand Mails versendet werden duerfen
-        $sql = 'SELECT rol_id, rol_name, cat_name,
-                    (SELECT COUNT(1)
-                         FROM '.TBL_MEMBERS.'
-                        WHERE mem_rol_id = rol_id
-                         AND (  mem_begin > \''.DATE_NOW.'\'
-                        OR mem_end   < \''.DATE_NOW.'\')) as former
-                  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                 WHERE rol_valid   = 1
-                   AND rol_cat_id  = cat_id
-                   AND cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                 ORDER BY cat_sequence, rol_name ';
 
         // add a selectbox where you can choose to which groups (active, former) you want to send the mail
         for ($act_or = 0; $act_or <= 2; $act_or++)
@@ -339,19 +296,20 @@ elseif (!isset($message_result))
                 $act_group = $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_ACTIVE_MEMBERS') . ')';
                 $act_number = '';
             }
-
-            $result = $gDb->query($sql);
-            while ($row = $gDb->fetch_array($result))
-            {
-                if($act_number == '' || ($row['former'] > 0 && $gPreferences['mail_show_former'] == 1))
+            // list array with all roles where user is allowed to send mail to
+			$send_roles = $gCurrentUser->getAllMailRoles();
+			
+			foreach ($send_roles as &$allowed_role) {
+				// Rollenobjekt anlegen
+				$role = new TableRoles($gDb);
+				$role->readDataById($allowed_role);
+				
+				if($act_number == '' || ($role->hasFormerMembers($allowed_role) > 0 && $gPreferences['mail_show_former'] == 1))
                 {
-                    if($gCurrentUser->hasRightSendMailToRole($row['rol_id']))
-                    {
-                        $list[] = array('groupID: '.$row['rol_id'].$act_number, $row['rol_name'].' '.$act_group_short, $act_group);
-                        $list_rol_id_array[] = $row['rol_id'];
-                    }
+                    $list[] = array('groupID: '.$allowed_role.$act_number, $role->getValue('rol_name').' '.$act_group_short, $act_group);
+                    $list_rol_id_array[] = $allowed_role;
                 }
-            }
+			}
 
         }
         
@@ -369,8 +327,8 @@ elseif (!isset($message_result))
 
         // select Users
 
-	    $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
-                         rol_mail_this_role, rol_id, mem_begin, mem_end
+	    $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name, usr_login_name,
+                         email.usd_value as email, rol_mail_this_role, rol_id, mem_begin, mem_end
                     FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_USERS. '
                     JOIN '. TBL_USER_DATA. ' as email
                       ON email.usd_usr_id = usr_id
