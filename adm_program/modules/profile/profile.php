@@ -540,10 +540,21 @@ if($gPreferences['profile_show_roles'] == 1)
     // *******************************************************************************
 
     // Array mit allen Berechtigungen
-    $authorizations = array('rol_assign_roles','rol_approve_users','rol_edit_user',
-                            'rol_mail_to_all','rol_profile','rol_announcements',
-                            'rol_dates','rol_photo','rol_download','rol_guestbook',
-                            'rol_guestbook_comments','rol_weblinks', 'rol_all_lists_view');
+    $authorizations = array(
+        'rol_assign_roles',
+        'rol_approve_users',
+        'rol_edit_user',
+        'rol_mail_to_all',
+        'rol_profile',
+        'rol_announcements',
+        'rol_dates',
+        'rol_photo',
+        'rol_download',
+        'rol_guestbook',
+        'rol_guestbook_comments',
+        'rol_weblinks',
+        'rol_all_lists_view'
+    );
 
     // Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
     foreach($authorizations as $authorization_db_name)

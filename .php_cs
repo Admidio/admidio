@@ -1,6 +1,6 @@
 <?php
 
-// PHP-CS-Fixer v1.10
+// PHP-CS-Fixer v1.11
 
 $level = Symfony\CS\FixerInterface::NONE_LEVEL;
 
@@ -25,6 +25,8 @@ $fixers = array(
     //'single_line_after_imports',                  // [PSR-2] not necessary now
     'trailing_spaces',                              // [PSR-2]
     'visibility',                                   // [PSR-2]
+    'array_element_no_space_before_comma',          // [symfony]
+    'array_element_white_space_after_comma',        // [symfony]
     'blankline_after_open_tag',                     // [symfony]
     //'concat_without_spaces',                      // [symfony] {concat_with_spaces} not specified now
     'double_arrow_multiline_whitespaces',           // [symfony]
@@ -57,10 +59,12 @@ $fixers = array(
     'phpdoc_types',                                 // [symfony]
     //'phpdoc_var_without_name',                    // [symfony] not specified now
     'pre_increment',                                // [symfony]
+    //'print_to_echo',                              // [symfony] {echo_to_print}
     //'remove_leading_slash_use',                   // [symfony] not necessary now
     //'remove_lines_between_uses',                  // [symfony] not necessary now
     //'return',                                     // [symfony] maybe used in future
     'self_accessor',                                // [symfony]
+    'short_bool_cast',                              // [symfony]
     'single_array_no_trailing_comma',               // [symfony]
     //'single_blank_line_before_namespace',         // [symfony] {no_blank_lines_before_namespace} not necessary now
     //'single_quote',                               // [symfony] maybe used in future
@@ -72,11 +76,13 @@ $fixers = array(
     //'unalign_double_arrow',                       // [symfony] {align_double_arrow} otherwise specified
     //'unalign_equals',                             // [symfony] {align_equals} not specified now
     //'unary_operators_spaces',                     // [symfony] maybe used in future (in combination with operators_spaces)
+    'unneeded_control_parentheses',                 // [symfony]
     //'unused_use',                                 // [symfony] not necessary now
     'whitespacy_lines',                             // [symfony]
     'align_double_arrow',                           // [contrib] {unalign_double_arrow}
     //'align_equals',                               // [contrib] {unalign_equals} not specified now
     //'concat_with_spaces',                         // [contrib] {concat_without_spaces} not specified now
+    //'echo_to_print',                              // [contrib] {print_to_echo}
     'ereg_to_preg',                                 // [contrib]
     //'header_comment',                             // [contrib] maybe used in future (config needed)
     //'logical_not_operators_with_spaces',          // [contrib] will not used in future

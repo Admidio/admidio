@@ -135,7 +135,7 @@ if($getMode === 1)
 
     // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
     // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
-    $checkboxes = array('cat_hidden','cat_default');
+    $checkboxes = array('cat_hidden', 'cat_default');
 
     foreach($checkboxes as $key => $value)
     {

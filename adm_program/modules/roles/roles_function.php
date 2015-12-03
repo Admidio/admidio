@@ -132,21 +132,21 @@ elseif($getMode === 2)
     // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
     // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
 
-    $checkboxes = array('rol_assign_roles'
-                       ,'rol_approve_users'
-                       ,'rol_announcements'
-                       ,'rol_dates'
-                       ,'rol_default_registration'
-                       ,'rol_photo'
-                       ,'rol_download'
-                       ,'rol_guestbook'
-                       ,'rol_guestbook_comments'
-                       ,'rol_edit_user'
-                       ,'rol_weblinks'
-                       ,'rol_all_lists_view'
-                       ,'rol_mail_to_all'
-                       ,'rol_profile'
-                       ,'rol_inventory'
+    $checkboxes = array(
+        'rol_assign_roles',
+        'rol_approve_users',
+        'rol_announcements',
+        'rol_dates',
+        'rol_default_registration',
+        'rol_photo', 'rol_download',
+        'rol_guestbook',
+        'rol_guestbook_comments',
+        'rol_edit_user',
+        'rol_weblinks',
+        'rol_all_lists_view',
+        'rol_mail_to_all',
+        'rol_profile',
+        'rol_inventory'
     );
 
     foreach($checkboxes as $key => $value)
