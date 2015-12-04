@@ -1261,7 +1261,6 @@
     <string name="SYS_SIZE">Größe</string>
     <string name="SYS_SOCIAL_NETWORKS">Soziale Netzwerke</string>
     <string name="SYS_START" description="Start of a date">Beginn</string>
-    <string name="SYS_STATUS">Status</string>
     <string name="SYS_STILL_X_CHARACTERS">noch %VAR1% Zeichen</string>
     <string name="SYS_STOP">Stop</string>
     <string name="SYS_SUNDAY">Sonntag</string>

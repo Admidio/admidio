@@ -181,27 +181,19 @@ $columnHeading = array(
     '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/profile.png"
         alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
         title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
-    $gL10n->get('SYS_STATUS'),
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_USER'),
     '<img class="admidio-icon-info" alt="'.$gL10n->get('SYS_GENDER').'" title="" src="'.THEME_PATH.'/icons/gender.png" data-original-title="'.$gL10n->get('SYS_GENDER').'">',
-    $gL10n->get('SYS_GENDER'),
     $gL10n->get('SYS_BIRTHDAY'),
     $gL10n->get('MEM_UPDATED_ON'),
     '&nbsp;'
 );
 
-$membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
-$membersTable->disableDatatablesColumnsSort(10);
+$membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
+$membersTable->disableDatatablesColumnsSort(8);
 $membersTable->addRowHeadingByArray($columnHeading);
 $membersTable->setDatatablesRowsPerPage($gPreferences['members_users_per_page']);
 $membersTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
-// set alternative order column for member status icons
-$membersTable->setDatatablesAlternativOrderColumns(2, 3);
-$membersTable->setDatatablesColumnsHide(3);
-// set alternative order column for gender icons
-$membersTable->setDatatablesAlternativOrderColumns(6, 7);
-$membersTable->setDatatablesColumnsHide(7);
 
 $irow = 1;  // Zahler fuer die jeweilige Zeile
 
@@ -233,9 +225,9 @@ while($row = $mglStatement->fetch())
     // create array with all column values
     $columnValues = array(
         $irow,
-        '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
+        array('value' => '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
              src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
-        $memberOfThisOrganization,
+              'order' => $memberOfThisOrganization),
         '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '">'. $row['last_name']. ',&nbsp;'. $row['first_name']. '</a>',
     );
 
@@ -252,13 +244,11 @@ while($row = $mglStatement->fetch())
     {
         // show selected text of optionfield or combobox
         $arrListValues  = $gProfileFields->getProperty('GENDER', 'usf_value_list');
-        $columnValues[] = $arrListValues[$row['gender']];
-        $columnValues[] = $row['gender'];
+        $columnValues[] = array('value' => $arrListValues[$row['gender']], 'order' => $row['gender']);
     }
     else
     {
-        $columnValues[] = '';
-        $columnValues[] = '0';
+        $columnValues[] = array('value' => '', 'order' => '0');
     }
 
     if(strlen($row['birthday']) > 0)
