@@ -54,7 +54,7 @@ else
 
 try
 {
-    // get recordset of current folder from database
+    // get recordset of current folder from databse
     $folder = new TableFolder($gDb);
     $folder->getFolderForDownload($getFolderId);
 }

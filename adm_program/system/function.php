@@ -13,8 +13,8 @@
  * Autoloading function of class files. This function will be later registered
  * for default autoload implementation. Therefore the class name must be the same
  * as the file name except for case sensitive.
- * @param string $className Name of the class for which the file should be loaded.
- * @return void|false Return @b false if the file for the class wasn't found.
+ * @param $className Name of the class for which the file should be loaded.
+ * @return Return @b false if the file for the class wasn't found.
  */
 function admFuncAutoload($className)
 {
@@ -693,41 +693,30 @@ function admFuncGetFilenameWithoutExtension($filename)
 /**
  * Search all files or directories in the specified directory.
  * @param string $directory  The directory where the files or directories should be searched.
- * @param string $searchType This could be @b file, @b dir, @b both or @b all and represent
- *                           the type of entries that should be searched.
- * @return string[]|false Returns an array with all found entries or false if an error occurs.
+ * @param string $searchType This could be @b file or @b dir and represent the type of entries that should be searched.
+ * @return string[] Returns an array with all found entries.
  */
 function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 {
-    $dirHandle = opendir($directory);
-    if ($dirHandle)
+    $array_files = array();
+
+    $curdir = opendir($directory);
+    if($curdir)
     {
-        $entries = array();
-
-        while (($entry = readdir($dirHandle)) !== false)
+        while($filename = readdir($curdir))
         {
-            if ($searchType === 'all')
+            if(strpos($filename, '.') !== 0)
             {
-                $entries[$entry] = $entry; // $entries[] = $entry;
-            }
-            elseif ($entry !== '.' && $entry !== '..')
-            {
-                $resource = $directory . '/' . $entry;
-
-                if ($searchType === 'both'
-                || ($searchType === 'file' && is_file($resource))
-                || ($searchType === 'dir'  && is_dir($resource)))
+                if(($searchType === 'file' && is_file($directory.'/'.$filename))
+                || ($searchType === 'dir'  && is_dir($directory.'/'.$filename)))
                 {
-                    $entries[$entry] = $entry; // $entries[] = $entry;
+                    $array_files[$filename] = $filename;
                 }
             }
         }
-        closedir($dirHandle);
-
-        asort($entries); // sort($entries);
-
-        return $entries;
     }
+    closedir($curdir);
+    asort($array_files);
 
-    return false;
+    return $array_files;
 }

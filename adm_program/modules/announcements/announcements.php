@@ -55,6 +55,7 @@ $gNavigation->addStartUrl(CURRENT_URL, $getHeadline);
 
 // create html page object
 $page = new HtmlPage($getHeadline);
+$page->enableModal();
 
 // add rss feed to announcements
 if($gPreferences['enable_rss'] == 1)

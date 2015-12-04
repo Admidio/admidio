@@ -87,10 +87,10 @@ if ($getMsgId > 0)
     $messageStatement = $gDb->query($sql);
 }
 
-$recept_number = 1;
+$maxNumberRecipients = 1;
 if ($gPreferences['mail_max_receiver'] > 0 && $getMsgType !== 'PM')
 {
-    $recept_number = $gPreferences['mail_max_receiver'];
+    $maxNumberRecipients = $gPreferences['mail_max_receiver'];
 }
 
 $list = array();
@@ -187,9 +187,10 @@ if ($getMsgType === 'PM')
     if ($getUserId == 0)
     {
         $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
-        $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'        => FIELD_REQUIRED,
-                                                                          'multiselect'     => true,
-                                                                          'helpTextIdLabel' => 'MSG_SEND_PM'));
+        $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'               => FIELD_REQUIRED,
+                                                                          'multiselect'            => true,
+                                                                          'maximumSelectionNumber' => $maxNumberRecipients,
+                                                                          'helpTextIdLabel'        => 'MSG_SEND_PM'));
         $form->closeGroupBox();
         $sendto = '';
     }
@@ -392,7 +393,7 @@ elseif (!isset($message_result))
                    AND mem_rol_id  = rol_id
                    AND rol_id in ('.$list_rol_id.')
                  GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value, rol_mail_this_role, rol_id
-                 ORDER BY usr_id, last_name, first_name, rol_mail_this_role DESC';
+                 ORDER BY usr_id, last_name, first_name, rol_mail_this_role desc';
         $statement = $gDb->query($sql);
 
         $passive_list = array();
@@ -425,7 +426,7 @@ elseif (!isset($message_result))
     }
     else
     {
-        $recept_number = 1;
+        $maxNumberRecipients = 1;
         // list all roles where guests could send mails to
         $sql = 'SELECT rol_id, rol_name, cat_name
                   FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
@@ -444,8 +445,8 @@ elseif (!isset($message_result))
     }
 
     $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'                       => FIELD_REQUIRED,
-                                                                      'showContextDependentFirstEntry' => false,
                                                                       'multiselect'                    => true,
+                                                                      'maximumSelectionNumber'         => $maxNumberRecipients,
                                                                       'helpTextIdLabel'                => 'MAI_SEND_MAIL_TO_ROLE',
                                                                       'defaultValue'                   => $preload_data));
 
@@ -591,22 +592,6 @@ if (isset($message_result))
             '.$ReceiverName.'
         </div>');
     }
-}
-
-// add JS code for the drop down to find email addresses and groups
-if(isset($list))
-{
-    $page->addHtml(
-    '<script>
-        $(document).ready(function () {
-            $("#msg_to").select2({
-                placeholder: "'.$gL10n->get('SYS_SELECT_FROM_LIST').'",
-                allowClear: true,
-                maximumSelectionSize: '.$recept_number.',
-                separator: ";"
-            });
-        });
-    </script>');
 }
 
 // show page

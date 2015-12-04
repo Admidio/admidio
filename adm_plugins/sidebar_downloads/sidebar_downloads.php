@@ -89,7 +89,7 @@ if ($gPreferences['enable_download_module'] == 1)
 
             try
             {
-                // get recordset of current file from database
+                // get recordset of current file from databse
                 $file = new TableFile($gDb);
                 $file->getFileForDownload($plg_row->fil_id);
             }

@@ -141,6 +141,7 @@ if(isset($_SESSION['profile_request']))
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->enableModal();
 
 // add back link to module menu
 $profileEditMenu = $page->getMenu();

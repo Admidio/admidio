@@ -50,8 +50,9 @@ $headline = $gL10n->get('BAC_DATABASE_BACKUP');
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->enableModal();
 
-$backupAbsolutePath = $myFilesBackup->getFolder().'/'; // make sure to include trailing slash
+$backupabsolutepath = $myFilesBackup->getFolder().'/'; // make sure to include trailing slash
 
 if($getMode === 'show_list')
 {
@@ -61,22 +62,21 @@ if($getMode === 'show_list')
     $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
     // create a list with all valid files in the backup folder
-    $dirHandle = opendir($backupAbsolutePath);
-    if ($dirHandle)
+    if ($handle = opendir($backupabsolutepath))
     {
-        while (($entry = readdir($dirHandle)) !== false)
+        while (false !== ($file = readdir($handle)))
         {
             try
             {
-                admStrIsValidFileName($entry, true);
-                $existingBackupFiles[] = $entry;
+                admStrIsValidFileName($file, true);
+                $existingBackupFiles[] = $file;
             }
-            catch (AdmException $e)
+            catch(AdmException $e)
             {
                 $temp = 1;
             }
         }
-        closedir($dirHandle);
+        closedir($handle);
     }
 
     // sort files (filename/date)
@@ -110,15 +110,15 @@ if($getMode === 'show_list')
         $columnValues = array(
             '<a href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '"><img
                 src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" />'. $old_backup_file. '</a>',
-            date($gPreferences['system_date'].' '.$gPreferences['system_time'], filemtime($backupAbsolutePath.$old_backup_file)),
-            round(filesize($backupAbsolutePath.$old_backup_file)/1024). ' kB',
+            date($gPreferences['system_date'].' '.$gPreferences['system_time'], filemtime($backupabsolutepath.$old_backup_file)),
+            round(filesize($backupabsolutepath.$old_backup_file)/1024). ' kB',
             '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                 href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
                 $key.'&amp;name='.urlencode($old_backup_file).'&amp;database_id='.$old_backup_file.'"><img
                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
         $table->addRowByArray($columnValues, 'row_file_'.$key);
 
-        $backup_size_sum = $backup_size_sum + round(filesize($backupAbsolutePath.$old_backup_file)/1024);
+        $backup_size_sum = $backup_size_sum + round(filesize($backupabsolutepath.$old_backup_file)/1024);
     }
 
     if(count($existingBackupFiles) > 0)

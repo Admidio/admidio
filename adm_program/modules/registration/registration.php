@@ -63,6 +63,7 @@ if ($members_found === 0)
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->enableModal();
 
 if($gCurrentUser->isWebmaster())
 {

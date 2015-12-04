@@ -54,6 +54,7 @@ $gNavigation->addUrl(CURRENT_URL);
 
 // create html page object
 $page = new HtmlPage();
+$page->enableModal();
 
 // add rss feed to guestbook
 if($gPreferences['enable_rss'] == 1)
@@ -295,7 +296,7 @@ else
                 $sql    = 'SELECT * FROM '. TBL_GUESTBOOK_COMMENTS. '
                            WHERE gbc_gbo_id = '.$guestbook->getValue('gbo_id').'
                                  '.$conditions.'
-                           ORDER BY gbc_timestamp_create ASC';
+                           ORDER by gbc_timestamp_create asc';
                 $commentStatement = $gDb->query($sql);
 
                 // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...

@@ -44,6 +44,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->enableModal();
 
 // get module menu for emails
 $EmailMenu = $page->getMenu();

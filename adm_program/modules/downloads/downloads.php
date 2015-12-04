@@ -37,7 +37,7 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
 
 try
 {
-    // get recordset of current folder from database
+    // get recordset of current folder from databse
     $currentFolder = new TableFolder($gDb);
     $currentFolder->getFolderForDownload($getFolderId);
 }
@@ -70,6 +70,7 @@ $navigationBar = $currentFolder->getNavigationForDownload();
 // create html page object
 $page = new HtmlPage($headline);
 
+$page->enableModal();
 $page->addJavascript('
     $("body").on("hidden.bs.modal", ".modal", function () { $(this).removeData("bs.modal"); location.reload(); });
     $("#menu_item_upload_files").attr("data-toggle", "modal");

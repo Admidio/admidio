@@ -125,6 +125,7 @@ else
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->enableModal();
 
 $page->addJavascript('
     $("#menu_item_create_user").attr("data-toggle", "modal");
