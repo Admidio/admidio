@@ -21,8 +21,8 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getListId = admFuncVariableIsValid($_GET, 'lst_id', 'numeric');
-$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
-$getName   = admFuncVariableIsValid($_GET, 'name', 'string');
+$getMode   = admFuncVariableIsValid($_GET, 'mode',   'numeric', array('requireValue' => true));
+$getName   = admFuncVariableIsValid($_GET, 'name',   'string');
 
 $_SESSION['mylist_request'] = $_POST;
 

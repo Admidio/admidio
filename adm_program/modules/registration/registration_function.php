@@ -25,14 +25,14 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getMode      = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
+$getMode      = admFuncVariableIsValid($_GET, 'mode',        'numeric', array('requireValue' => true));
 $getNewUserId = admFuncVariableIsValid($_GET, 'new_user_id', 'numeric', array('requireValue' => true));
-$getUserId    = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
+$getUserId    = admFuncVariableIsValid($_GET, 'user_id',     'numeric');
 
 // nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
 if(!$gCurrentUser->approveUsers())
 {
-   $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // pruefen, ob Modul aufgerufen werden darf

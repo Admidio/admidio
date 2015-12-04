@@ -83,8 +83,8 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage($headline);
 
-$page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
 $page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/datepicker3.css');
+$page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gPreferences['system_language'].'.js');
 
@@ -267,7 +267,7 @@ foreach($gProfileFields->mProfileFields as $field)
     // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
     if($field->getValue('cat_name_intern') !== 'MASTER_DATA'
     && ($gCurrentUser->editInventory($inventory)
-       || (!$gCurrentUser->editInventory($inventory) && $field->getValue('inf_hidden') == 0)))
+        || (!$gCurrentUser->editInventory($inventory) && $field->getValue('inf_hidden') == 0)))
     {
         // show new category header if new category and field has value or is a checkbox field
         if($category != $field->getValue('cat_name')

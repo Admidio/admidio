@@ -41,10 +41,10 @@ if (!$gCurrentUser->editDownloadRight())
 }
 
 // Initialize and check the parameters
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
+$getMode     = admFuncVariableIsValid($_GET, 'mode',      'numeric', array('requireValue' => true));
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric');
-$getFileId   = admFuncVariableIsValid($_GET, 'file_id', 'numeric');
-$getName     = admFuncVariableIsValid($_GET, 'name', 'file');
+$getFileId   = admFuncVariableIsValid($_GET, 'file_id',   'numeric');
+$getName     = admFuncVariableIsValid($_GET, 'name',      'file');
 
 $_SESSION['download_request'] = $_POST;
 
@@ -366,8 +366,7 @@ elseif ($getMode === 6)
         $location = 'Location: '.$g_root_path.'/adm_program/system/back.php';
         header($location);
         exit();
-   }
-
+    }
 }
 
 // Berechtigungen fuer einen Ordner speichern

@@ -18,7 +18,7 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric');
-$getFileId   = admFuncVariableIsValid($_GET, 'file_id', 'numeric');
+$getFileId   = admFuncVariableIsValid($_GET, 'file_id',   'numeric');
 
 // set headline of the script
 if($getFileId > 0)
@@ -61,13 +61,13 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 if(isset($_SESSION['download_request']))
 {
-   $form_values = strStripSlashesDeep($_SESSION['download_request']);
-   unset($_SESSION['download_request']);
+    $form_values = strStripSlashesDeep($_SESSION['download_request']);
+    unset($_SESSION['download_request']);
 }
 else
 {
-   $form_values['new_name'] = null;
-   $form_values['new_description'] = null;
+    $form_values['new_name'] = null;
+    $form_values['new_description'] = null;
 }
 
 try

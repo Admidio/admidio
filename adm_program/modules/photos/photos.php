@@ -36,12 +36,12 @@ elseif ($gPreferences['enable_photo_module'] == 2)
 }
 
 // Initialize and check the parameters
-$getPhotoId  = admFuncVariableIsValid($_GET, 'pho_id', 'numeric');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
-$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric');
+$getPhotoId        = admFuncVariableIsValid($_GET, 'pho_id',          'numeric');
+$getHeadline       = admFuncVariableIsValid($_GET, 'headline',        'string',  array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
+$getStart          = admFuncVariableIsValid($_GET, 'start',           'numeric');
 $getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'numeric', array('defaultValue' => 1));
-$getLocked   = admFuncVariableIsValid($_GET, 'locked', 'numeric', array('defaultValue' => -1));
-$getPhotoNr  = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric');
+$getLocked         = admFuncVariableIsValid($_GET, 'locked',          'numeric', array('defaultValue' => -1));
+$getPhotoNr        = admFuncVariableIsValid($_GET, 'photo_nr',        'numeric');
 
 unset($_SESSION['photo_album_request']);
 unset($_SESSION['ecard_request']);
@@ -135,16 +135,8 @@ if($gCurrentUser->editPhotoRight())
 // integrate bootstrap ekko lightbox addon
 if($gPreferences['photo_show_mode'] == 1)
 {
-    if($gDebug)
-    {
-        $page->addCssFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.css');
-        $page->addJavascriptFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.js');
-    }
-    else
-    {
-        $page->addCssFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.min.css');
-        $page->addJavascriptFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.min.js');
-    }
+    $page->addCssFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.css');
+    $page->addJavascriptFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.js');
 
     $page->addJavascript('$(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) { event.preventDefault(); $(this).ekkoLightbox(); });', true);
 }
@@ -287,13 +279,13 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 
                 if($gCurrentUser->editPhotoRight() || ($gValidLogin && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled'] == 1)
                 {
-                   $photoThumbnailTable .= '<div class="text-center" id="image_preferences_'.$actThumbnail.'">';
+                    $photoThumbnailTable .= '<div class="text-center" id="image_preferences_'.$actThumbnail.'">';
                 }
 
                 // Buttons fuer Moderatoren
                 if($gCurrentUser->editPhotoRight())
                 {
-                   $photoThumbnailTable .= '
+                    $photoThumbnailTable .= '
                     <a class="admidio-icon-link"  href="javascript:void(0)" onclick="return imgrotate('.$actThumbnail.', \'left\')"><img
                         src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" /></a>
                     <a class="admidio-icon-link" href="javascript:void(0)" onclick="return imgrotate('.$actThumbnail.', \'right\')"><img
@@ -322,7 +314,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 
                 if($gCurrentUser->editPhotoRight() || ($gValidLogin && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled'] == 1)
                 {
-                   $photoThumbnailTable .= '</div>';
+                    $photoThumbnailTable .= '</div>';
                 }
             $photoThumbnailTable .= '</div>';
         }
@@ -338,11 +330,11 @@ if($photoAlbum->getValue('pho_quantity') > 0)
         {
             if($hiddenPhotoNr >= $firstPhotoNr && $hiddenPhotoNr <= $actThumbnail)
             {
-                    if($photoThumbnailTable_shown == false)
-                    {
-                        $page->addHtml($photoThumbnailTable);
-                        $photoThumbnailTable_shown = true;
-                    }
+                if($photoThumbnailTable_shown == false)
+                {
+                    $page->addHtml($photoThumbnailTable);
+                    $photoThumbnailTable_shown = true;
+                }
             }
             else
             {

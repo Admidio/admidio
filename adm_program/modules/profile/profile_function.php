@@ -27,9 +27,9 @@ require_once('roles_functions.php');
 
 // Initialize and check the parameters
 $getUserId   = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
-$getRoleId   = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
-$getMemberId = admFuncVariableIsValid($_GET, 'mem_id', 'numeric');
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric');
+$getRoleId   = admFuncVariableIsValid($_GET, 'rol_id',  'numeric');
+$getMemberId = admFuncVariableIsValid($_GET, 'mem_id',  'numeric');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',    'numeric');
 
 // in ajax mode only return simple text on error
 if($getMode === 7)
@@ -95,7 +95,7 @@ elseif($getMode === 4)
     $count_show_roles = 0;
     $roleStatement    = getRolesFromDatabase($getUserId);
     $count_role       = $roleStatement->rowCount();
-    getRoleMemberships('role_list', $user, $result_role, $count_role, true);
+    getRoleMemberships('role_list', $user, $roleStatement, $count_role, true);
 }
 elseif($getMode === 5)
 {
@@ -103,7 +103,7 @@ elseif($getMode === 5)
     $count_show_roles = 0;
     $roleStatement    = getFormerRolesFromDatabase($getUserId);
     $count_role       = $roleStatement->rowCount();
-    getRoleMemberships('former_role_list', $user, $result_role, $count_role, true);
+    getRoleMemberships('former_role_list', $user, $roleStatement, $count_role, true);
 
     if($count_role == 0)
     {
@@ -120,7 +120,7 @@ elseif($getMode === 6)
     $count_show_roles = 0;
     $roleStatement    = getFutureRolesFromDatabase($getUserId);
     $count_role       = $roleStatement->rowCount();
-    getRoleMemberships('future_role_list', $user, $result_role, $count_role, true);
+    getRoleMemberships('future_role_list', $user, $roleStatement, $count_role, true);
 
     if($count_role == 0)
     {
@@ -135,7 +135,7 @@ elseif($getMode === 7)
 {
     // save membership date changes
     $getMembershipStart = admFuncVariableIsValid($_GET, 'membership_start_date_'.$getMemberId, 'date', array('requireValue' => true));
-    $getMembershipEnd   = admFuncVariableIsValid($_GET, 'membership_end_date_'.$getMemberId, 'date', array('requireValue' => true));
+    $getMembershipEnd   = admFuncVariableIsValid($_GET, 'membership_end_date_'.$getMemberId,   'date', array('requireValue' => true));
 
     $member = new TableMembers($gDb, $getMemberId);
     $role   = new TableRoles($gDb, $member->getValue('mem_rol_id'));
@@ -227,10 +227,10 @@ elseif ($getMode === 8)
 
         while($row = $statement->fetch())
         {
-           // create user object
-           $user = new User($gDb, $gProfileFields, $row['mem_usr_id']);
-           // create vcard and check if user is allowed to edit profile, so he can see more data
-           echo $user->getVCard($gCurrentUser->hasRightEditProfile($user));
+            // create user object
+            $user = new User($gDb, $gProfileFields, $row['mem_usr_id']);
+            // create vcard and check if user is allowed to edit profile, so he can see more data
+            echo $user->getVCard($gCurrentUser->hasRightEditProfile($user));
         }
     }
 }

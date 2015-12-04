@@ -24,9 +24,9 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUsfId    = admFuncVariableIsValid($_GET, 'usf_id', 'numeric');
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
-$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
+$getUsfId    = admFuncVariableIsValid($_GET, 'usf_id',   'numeric');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',     'numeric', array('requireValue' => true));
+$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string',  array('validValues' => array('UP', 'DOWN')));
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$gCurrentUser->isWebmaster())
@@ -57,7 +57,7 @@ if($getUsfId > 0)
 
 if($getMode === 1)
 {
-   // Feld anlegen oder updaten
+    // Feld anlegen oder updaten
 
     $_SESSION['fields_request'] = $_POST;
 

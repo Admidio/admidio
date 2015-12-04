@@ -135,7 +135,7 @@ if(isset($result))
                 <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />',
                 '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
                 $ReceiverName, $message->getValue('msg_timestamp'), $messageAdministration), 'row_message_'.$key);
-   }
+    }
 }
 
 // find all unread PM messages
@@ -162,7 +162,7 @@ if(isset($result))
                 <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/pm.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />',
                 '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
                 $ReceiverName, $message->getValue('msg_timestamp'), $messageAdministration), 'row_message_'.$key, array('style' => 'font-weight: bold'));
-   }
+    }
 }
 
 // find all read or own PM messages

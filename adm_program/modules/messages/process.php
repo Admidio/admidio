@@ -30,8 +30,8 @@ if ($gPreferences['enable_chat_module'] != 1)
 }
 
 $postFunction = admFuncVariableIsValid($_POST, 'function', 'string');
-$postMessage  = admFuncVariableIsValid($_POST, 'message', 'string');
-$postLines    = admFuncVariableIsValid($_POST, 'state', 'number');
+$postMessage  = admFuncVariableIsValid($_POST, 'message',  'string');
+$postLines    = admFuncVariableIsValid($_POST, 'state',    'number');
 
 $log = array();
 
@@ -108,7 +108,7 @@ switch($postFunction)
         {
             if(preg_match($reg_exUrl, $postMessage, $url))
             {
-                   $postMessage = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
+                $postMessage = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
             }
         }
 

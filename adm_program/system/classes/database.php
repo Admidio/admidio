@@ -664,7 +664,7 @@ class Database
         // in debug mode show error in log file
         if ($gDebug === 1)
         {
-             error_log($this->pdo->errorCode().': '.$errorInfo[1]."\n".$errorInfo[2]);
+            error_log($this->pdo->errorCode().': '.$errorInfo[1]."\n".$errorInfo[2]);
         }
 
         // display database error to user

@@ -219,7 +219,7 @@ class FunctionClass
                     }
                     catch (phpmailerException $e)
                     {
-                       $returnCode = $e->errorMessage();
+                        $returnCode = $e->errorMessage();
                     }
                     $ecardHtmlData = str_replace($matchArray[2][$i], 'cid:'.$uid, $ecardHtmlData);
                 }

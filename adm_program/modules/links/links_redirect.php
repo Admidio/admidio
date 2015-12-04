@@ -19,7 +19,7 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getLinkId   = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', array('requireValue' => true));
+$getLinkId = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', array('requireValue' => true));
 
 // check if the module is enabled for use
 if ($gPreferences['enable_weblinks_module'] == 0)

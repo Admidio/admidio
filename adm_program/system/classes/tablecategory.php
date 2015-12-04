@@ -327,7 +327,7 @@ class TableCategory extends TableAccess
             }
             else
             {
-               $org_condition = ' AND cat_org_id IS NULL ';
+                $org_condition = ' AND cat_org_id IS NULL ';
             }
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) as count FROM '. TBL_CATEGORIES. '

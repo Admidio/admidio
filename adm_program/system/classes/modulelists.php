@@ -217,7 +217,7 @@ class ModuleLists extends Modules
     {
         if($this->catId > 0)
         {
-           return ' AND cat_id  = '.$this->catId;
+            return ' AND cat_id  = '.$this->catId;
         }
         return '';
     }

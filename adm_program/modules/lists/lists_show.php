@@ -27,13 +27,13 @@ require_once('../../system/common.php');
 unset($list);
 
 // Initialize and check the parameters
-$getDateFrom    = admFuncVariableIsValid($_GET, 'date_from', 'date', array('defaultValue' => DATE_NOW));
-$getDateTo      = admFuncVariableIsValid($_GET, 'date_to', 'date', array('defaultValue' => DATE_NOW));
-$getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
-$getListId      = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', array('defaultValue' => 1));
-$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
+$getDateFrom    = admFuncVariableIsValid($_GET, 'date_from',    'date',    array('defaultValue' => DATE_NOW));
+$getDateTo      = admFuncVariableIsValid($_GET, 'date_to',      'date',    array('defaultValue' => DATE_NOW));
+$getMode        = admFuncVariableIsValid($_GET, 'mode',         'string',  array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
+$getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'numeric', array('defaultValue' => 1));
+$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'numeric');
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
-$getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen', 'numeric');
+$getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen',  'numeric');
 
 // Create date objects and format dates in system format
 $objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
@@ -117,7 +117,7 @@ if($getRoleId === 0 && $numberRoles === 1)
 
     if($getRoleId == 0)
     {
-       $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
+        $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
     }
 }
 
@@ -260,7 +260,7 @@ if($getMode !== 'csv')
         // remove default header/footer
         $pdf->setPrintHeader(true);
         $pdf->setPrintFooter(false);
-         // set header and footer fonts
+        // set header and footer fonts
         $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
@@ -313,9 +313,9 @@ if($getMode !== 'csv')
             $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
             $form->addInput('date_from', $gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('date_to', $gL10n->get('LST_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
-            $form->addInput('lst_id', '', $getListId, array('class' => 'hide'));
-            $form->addInput('rol_id', '', $getRoleId, array('class' => 'hide'));
-            $form->addInput('show_members', '', $getShowMembers, array('class' => 'hide'));
+            $form->addInput('lst_id', '', $getListId, array('property' => FIELD_HIDDEN));
+            $form->addInput('rol_id', '', $getRoleId, array('property' => FIELD_HIDDEN));
+            $form->addInput('show_members', '', $getShowMembers, array('property' => FIELD_HIDDEN));
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
             $filterNavbar->addForm($form->show(false));
             $page->addHtml($filterNavbar->show(false));
@@ -653,7 +653,17 @@ foreach($membersList as $member)
                 }
                 else
                 {
-                    $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member['usr_id']);
+                    if($getMode === 'print'
+                    &&   ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'EMAIL'
+                       || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'PHONE'
+                       || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'URL'))
+                    {
+                        $columnValues[] = $content;
+                    }
+                    else
+                    {
+                        $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member['usr_id']);
+                    }
                 }
             }
         }

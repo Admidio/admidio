@@ -23,7 +23,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric');
+$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',   'numeric');
 $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric');
 
 // tempfolder

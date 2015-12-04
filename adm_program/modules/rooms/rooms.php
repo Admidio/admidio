@@ -129,7 +129,7 @@ else
 
                 if(strlen($room->getValue('room_description')) > 0)
                 {
-                   $page->addHtml($room->getValue('room_description'));
+                    $page->addHtml($room->getValue('room_description'));
                 }
             $page->addHtml('</div>
             <div class="panel-footer">'.

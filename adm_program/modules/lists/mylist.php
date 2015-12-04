@@ -22,9 +22,9 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getListId      = admFuncVariableIsValid($_GET, 'lst_id', 'numeric');
-$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
-$getActiveRole  = admFuncVariableIsValid($_GET, 'active_role', 'boolean', array('defaultValue' => 1));
+$getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'numeric');
+$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'numeric');
+$getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'boolean', array('defaultValue' => 1));
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
 
 // falls ehemalige Rolle, dann auch nur ehemalige Mitglieder anzeigen
@@ -372,11 +372,11 @@ $javascriptCode .= '
 
         for (key in arr_user_fields)
         {
-           if(arr_user_fields[key]["usf_name"] == columnName)
-           {
-               if(arr_user_fields[key]["usf_type"] == "DROPDOWN"
+            if(arr_user_fields[key]["usf_name"] == columnName)
+            {
+                if(arr_user_fields[key]["usf_type"] == "DROPDOWN"
                   || arr_user_fields[key]["usf_type"] == "RADIO_BUTTON")
-               {
+                {
                     html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" class=\"ListConditionField\" name=\"condition" + fieldNumberShow + "\">" +
                     "<option value=\"\">&nbsp;</option>";
 

@@ -21,7 +21,7 @@ $getNewUserId = admFuncVariableIsValid($_GET, 'new_user_id', 'numeric', array('r
 // nur Webmaster duerfen User zuordnen, ansonsten Seite verlassen
 if(!$gCurrentUser->approveUsers())
 {
-   $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // pruefen, ob Modul aufgerufen werden darf
@@ -126,7 +126,7 @@ while($row = $usrStatement->fetchObject())
     }
     $page->addHtml('<p>
         <a class="btn" href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row->usr_id.'"><img
-             src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row->first_name.' '.$row->last_name.'</a><br />');
+            src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row->first_name.' '.$row->last_name.'</a><br />');
 
         if($row->address !== '')
         {

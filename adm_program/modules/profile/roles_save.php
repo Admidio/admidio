@@ -26,9 +26,9 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
+$getUserId  = admFuncVariableIsValid($_GET, 'usr_id',   'numeric');
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric');
-$getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean');
+$getInline  = admFuncVariableIsValid($_GET, 'inline',   'boolean');
 
 // in ajax mode only return simple text on error
 if($getInline == true)
@@ -39,7 +39,7 @@ if($getInline == true)
 // if user is allowed to assign at least one role then allow access
 if(!$gCurrentUser->assignRoles())
 {
-   $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // detect number of selected roles
@@ -168,7 +168,7 @@ foreach($rolesList as $row)
     // but don't change their own membership, because there must be at least one webmaster
     if($row['rol_webmaster'] == 0
     || ($row['rol_webmaster'] == 1 && $gCurrentUser->isWebmaster()
-       && $getUserId != $gCurrentUser->getValue('usr_id')))
+        && $getUserId != $gCurrentUser->getValue('usr_id')))
     {
         $roleAssign = 0;
         if(isset($_POST['role-'.$row['rol_id']]) && $_POST['role-'.$row['rol_id']] == 1)

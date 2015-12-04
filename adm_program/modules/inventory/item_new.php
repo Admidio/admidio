@@ -17,8 +17,8 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getItemId    = admFuncVariableIsValid($_GET, 'item_id', 'numeric');
-$getNewItem   = admFuncVariableIsValid($_GET, 'new_item', 'numeric');
+$getItemId  = admFuncVariableIsValid($_GET, 'item_id',  'numeric');
+$getNewItem = admFuncVariableIsValid($_GET, 'new_item', 'numeric');
 
 $registrationOrgId = $gCurrentOrganization->getValue('org_id');
 

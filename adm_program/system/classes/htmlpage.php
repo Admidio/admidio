@@ -62,22 +62,32 @@ class HtmlPage
 
         $this->setHeadline($headline);
 
-        if($gDebug)
-        {
-            $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.css');
-            $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.js',
-                                    $g_root_path.'/adm_program/system/js/common_functions.js',
-                                    $g_root_path.'/adm_program/libs/bootstrap/js/bootstrap.js');
-        }
-        else
-        {
-            // if not in debug mode only load the minified files
-            $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.min.css');
-            $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.min.js',
-                                    $g_root_path.'/adm_program/system/js/common_functions.js',
-                                    $g_root_path.'/adm_program/libs/bootstrap/js/bootstrap.min.js');
-        }
+        $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.css');
+        $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.js',
+                                $g_root_path.'/adm_program/system/js/common_functions.js',
+                                $g_root_path.'/adm_program/libs/bootstrap/js/bootstrap.js');
         $this->rssFiles = array();
+    }
+
+    /**
+     * @param string $filepath
+     * @return string
+     */
+    private function getDebugOrMinFilepath($filepath)
+    {
+        global $gDebug;
+
+        $fileInfo = pathinfo($filepath);
+        $filename = basename($fileInfo['filename'], '.min');
+
+        $filepathDebug = $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
+        $filepathMin   = $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
+
+        if (!$gDebug && file_exists($filepathMin))
+        {
+            return $filepathMin;
+        }
+        return $filepathDebug;
     }
 
     /**
@@ -88,7 +98,7 @@ class HtmlPage
     {
         if(!in_array($file, $this->cssFiles, true))
         {
-            $this->cssFiles[] = $file;
+            $this->cssFiles[] = self::getDebugOrMinFilepath($file);
         }
     }
 
@@ -138,7 +148,7 @@ class HtmlPage
     {
         if(!in_array($file, $this->jsFiles, true))
         {
-            $this->jsFiles[] = $file;
+            $this->jsFiles[] = self::getDebugOrMinFilepath($file);
         }
     }
 

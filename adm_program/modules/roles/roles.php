@@ -19,7 +19,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getInactive  = admFuncVariableIsValid($_GET, 'inactive', 'boolean');
+$getInactive  = admFuncVariableIsValid($_GET, 'inactive',  'boolean');
 $getInvisible = admFuncVariableIsValid($_GET, 'invisible', 'boolean');
 
 // only users with the special right are allowed to manage roles
@@ -100,16 +100,13 @@ $table = new HtmlTable('roles_table', $page, true, true);
 // create array with all column heading values
 $columnHeading = array(
     $gL10n->get('SYS_CATEGORY'),
-    'ORDER',
     $listDescription,
     $gL10n->get('SYS_AUTHORIZATION'),
     $gL10n->get('ROL_PREF'),
     $gL10n->get('SYS_FEATURES')
 );
-$table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));
-$table->disableDatatablesColumnsSort(array(4, 5, 6));
-$table->setDatatablesAlternativOrderColumns(1, 2);
-$table->setDatatablesColumnsHide(2);
+$table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
+$table->disableDatatablesColumnsSort(array(3, 4, 5));
 $table->setDatatablesGroupColumn(1);
 $table->addRowHeadingByArray($columnHeading);
 
@@ -302,8 +299,7 @@ while($row = $rolStatement->fetch())
 
     // create array with all column values
     $columnValues = array(
-        $categoryName,
-        $role->getValue('cat_sequence'),
+        array('value' => $categoryName, 'order' => $role->getValue('cat_sequence')),
         '<a href="'.$g_root_path.'/adm_program/modules/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'" title="'.$role->getValue('rol_description').'">'.$role->getValue('rol_name').'</a>',
         $assignRoles,
         $listView,

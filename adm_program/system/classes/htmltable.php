@@ -142,7 +142,10 @@ class HtmlTable extends HtmlTableBasic
 
     /**
      * Adds a complete row with all columns to the table. Each column element will be a value of the array parameter.
-     * @param array  $arrayColumnValues Array with the values for each column.
+     * @param array  $arrayColumnValues Array with the values for each column. If you use datatables than you could set
+     *                                  an array for each value with the following entries:
+     *                                  array('value' => $yourValue, 'order' => $sortingValue, 'search' => $searchingValue)
+     *                                  With this you can specify special values for sorting and searching.
      * @param string $id                (optional) Set an unique id for the column.
      * @param array  $arrAttributes     (optional) Further attributes as array with key/value pairs
      * @param int    $startColspan      (optional) Number of column where the colspan should start. The first column of a table will be 1.
@@ -165,7 +168,7 @@ class HtmlTable extends HtmlTableBasic
         $this->addRow('', $arrAttributes);
 
         // now add each column to the row
-        foreach($arrayColumnValues as $key => $value)
+        foreach($arrayColumnValues as $key => $columnProperties)
         {
             $columnAttributes = array();
 
@@ -180,8 +183,27 @@ class HtmlTable extends HtmlTableBasic
                 $columnAttributes['style'] = 'text-align: '.$this->columnAlign[$key];
             }
 
+            // if is array than check for sort or search values
+            if(is_array($columnProperties))
+            {
+                $columnValue = $columnProperties['value'];
+
+                if(isset($columnProperties['order']))
+                {
+                    $columnAttributes['data-order'] = $columnProperties['order'];
+                }
+                if(isset($columnProperties['search']))
+                {
+                    $columnAttributes['data-search'] = $columnProperties['search'];
+                }
+            }
+            else
+            {
+                $columnValue = $columnProperties;
+            }
+
             // now add column to row
-            $this->addColumn($value, $columnAttributes, 'td');
+            $this->addColumn($columnValue, $columnAttributes, 'td');
         }
 
         $this->columnCount = count($arrayColumnValues);
@@ -393,22 +415,11 @@ class HtmlTable extends HtmlTableBasic
                 $javascriptGroup = '';
                 $javascriptGroupFunction = '';
 
-                if($gDebug)
-                {
-                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.dataTables.js');
-                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/dataTables.bootstrap.js');
-                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/moment/moment.js');
-                    $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/datatables/css/dataTables.bootstrap.css');
-                }
-                else
-                {
-                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.dataTables.min.js');
-                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/dataTables.bootstrap.min.js');
-                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/moment/moment.min.js');
-                    $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/datatables/css/dataTables.bootstrap.min.css');
-                }
-
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.dataTables.js');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/dataTables.bootstrap.js');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/moment/moment.js');
                 $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/moment/datetime-moment.js');
+                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/datatables/css/dataTables.bootstrap.css');
 
                 if($this->rowCount > 10)
                 {

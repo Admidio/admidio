@@ -28,8 +28,8 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getCatId = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
-$getType  = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
-$getTitle = admFuncVariableIsValid($_GET, 'title', 'string');
+$getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
+$getTitle = admFuncVariableIsValid($_GET, 'title',  'string');
 
 // Modus und Rechte pruefen
 if($getType === 'ROL' && !$gCurrentUser->manageRoles())
@@ -112,7 +112,7 @@ if(isset($_SESSION['categories_request']))
     $category->setArray($_SESSION['categories_request']);
     if(!isset($_SESSION['categories_request']['show_in_several_organizations']))
     {
-       $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
+        $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
     }
     unset($_SESSION['categories_request']);
 }

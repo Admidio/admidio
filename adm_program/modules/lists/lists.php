@@ -18,8 +18,8 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getStart      = admFuncVariableIsValid($_GET, 'start', 'numeric');
-$getCatId      = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
+$getStart      = admFuncVariableIsValid($_GET, 'start',       'numeric');
+$getCatId      = admFuncVariableIsValid($_GET, 'cat_id',      'numeric');
 $getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', array('defaultValue' => 1));
 
 // New Modulelist object
@@ -132,11 +132,11 @@ foreach($listConfigurations as &$rowConfigurations)
 {
     if($rowConfigurations[2] == 0)
     {
-       $rowConfigurations[2] = $gL10n->get('LST_YOUR_LISTS');
+        $rowConfigurations[2] = $gL10n->get('LST_YOUR_LISTS');
     }
     else
     {
-       $rowConfigurations[2] = $gL10n->get('LST_GENERAL_LISTS');
+        $rowConfigurations[2] = $gL10n->get('LST_GENERAL_LISTS');
     }
 }
 

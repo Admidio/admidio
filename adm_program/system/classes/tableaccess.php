@@ -203,7 +203,7 @@ class TableAccess
         {
             if($format !== 'database'
             && (strpos($this->columnsInfos[$columnName]['type'], 'char') !== false
-               || strpos($this->columnsInfos[$columnName]['type'], 'text') !== false))
+                || strpos($this->columnsInfos[$columnName]['type'], 'text') !== false))
             {
                 return htmlspecialchars($columnValue, ENT_QUOTES);
             }

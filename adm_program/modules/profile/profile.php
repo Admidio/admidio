@@ -120,18 +120,9 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage($headline);
 $page->enableModal();
 
-if($gDebug)
-{
-    $page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.css');
-    $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
-}
-else
-{
-    $page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.min.css');
-    $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js');
-}
-
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/locales/bootstrap-datepicker.'.$gL10n->getLanguageIsoCode().'.min.js');
+$page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.css');
+$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
+$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/locales/bootstrap-datepicker.'.$gL10n->getLanguageIsoCode().'.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
 
 $page->addJavascript('
@@ -501,7 +492,7 @@ foreach($gProfileFields->mProfileFields as $field)
     // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
     if($field->getValue('cat_name_intern') !== 'MASTER_DATA'
     && ($gCurrentUser->hasRightEditProfile($user)
-       || (!$gCurrentUser->hasRightEditProfile($user) && $field->getValue('usf_hidden') == 0)))
+        || (!$gCurrentUser->hasRightEditProfile($user) && $field->getValue('usf_hidden') == 0)))
     {
         // show new category header if new category and field has value or is a checkbox field
         if($category != $field->getValue('cat_name')
@@ -550,10 +541,21 @@ if($gPreferences['profile_show_roles'] == 1)
     // *******************************************************************************
 
     // Array mit allen Berechtigungen
-    $authorizations = array('rol_assign_roles','rol_approve_users','rol_edit_user',
-                            'rol_mail_to_all','rol_profile','rol_announcements',
-                            'rol_dates','rol_photo','rol_download','rol_guestbook',
-                            'rol_guestbook_comments','rol_weblinks', 'rol_all_lists_view');
+    $authorizations = array(
+        'rol_assign_roles',
+        'rol_approve_users',
+        'rol_edit_user',
+        'rol_mail_to_all',
+        'rol_profile',
+        'rol_announcements',
+        'rol_dates',
+        'rol_photo',
+        'rol_download',
+        'rol_guestbook',
+        'rol_guestbook_comments',
+        'rol_weblinks',
+        'rol_all_lists_view'
+    );
 
     // Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
     foreach($authorizations as $authorization_db_name)
@@ -673,7 +675,7 @@ if($gPreferences['profile_show_roles'] == 1)
             '.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'
         </div>
         <div class="panel-body" id="profile_roles_box_body">
-            '.getRoleMemberships('role_list', $user, $result_role, $count_role, false).'
+            '.getRoleMemberships('role_list', $user, $roleStatement, $count_role, false).'
         </div>
     </div>');
 
@@ -699,7 +701,7 @@ if($gPreferences['profile_show_roles'] == 1)
     <div class="panel panel-default" id="profile_future_roles_box" '.$visible.'>
         <div class="panel-heading">'.$gL10n->get('PRO_FUTURE_ROLE_MEMBERSHIP').'</div>
         <div class="panel-body" id="profile_future_roles_box_body">
-            '.getRoleMemberships('future_role_list', $user, $result_role, $count_role, false).'
+            '.getRoleMemberships('future_role_list', $user, $roleStatement, $count_role, false).'
         </div>
     </div>');
 }
@@ -730,14 +732,14 @@ if($gPreferences['profile_show_former_roles'] == 1)
     <div class="panel panel-default" id="profile_former_roles_box" '.$visible.'>
         <div class="panel-heading">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'</div>
         <div class="panel-body" id="profile_former_roles_box_body">
-            '.getRoleMemberships('former_role_list', $user, $result_role, $count_role, false).'
+            '.getRoleMemberships('former_role_list', $user, $roleStatement, $count_role, false).'
         </div>
     </div>');
 }
 
 if($gPreferences['profile_show_extern_roles'] == 1
 && ($gCurrentOrganization->getValue('org_org_id_parent') > 0
-   || $gCurrentOrganization->hasChildOrganizations()))
+    || $gCurrentOrganization->hasChildOrganizations()))
 {
     // *******************************************************************************
     // Block with roles from other organizations

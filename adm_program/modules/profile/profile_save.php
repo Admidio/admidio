@@ -23,7 +23,7 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
+$getUserId  = admFuncVariableIsValid($_GET, 'user_id',  'numeric');
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric');
 
 // if current user has no login then only show registration dialog
@@ -159,7 +159,7 @@ foreach($gProfileFields->mProfileFields as $field)
                         $_POST[$post_id] = substr($_POST[$post_id], strrpos($_POST[$post_id], '/') + 1);
                         if(strrpos($_POST[$post_id], '?') > 0)
                         {
-                           $_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '?'));
+                            $_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '?'));
                         }
                     }
                 }

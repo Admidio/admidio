@@ -506,7 +506,7 @@ class ProfileFields
             {
                 case 'CHECKBOX':
                     // Checkbox darf nur 1 oder 0 haben
-                    if($fieldValue != 0 && $fieldValue != 1 && $this->noValueCheck != true)
+                    if($fieldValue != 0 && $fieldValue != 1 && !$this->noValueCheck)
                     {
                         return false;
                     }
@@ -516,7 +516,7 @@ class ProfileFields
                     $date = DateTime::createFromFormat($gPreferences['system_date'], $fieldValue);
                     if($date == false)
                     {
-                        if($this->noValueCheck != true)
+                        if(!$this->noValueCheck)
                         {
                             return false;
                         }
@@ -529,14 +529,14 @@ class ProfileFields
                 case 'EMAIL':
                     // Email darf nur gueltige Zeichen enthalten und muss einem festen Schema entsprechen
                     $fieldValue = admStrToLower($fieldValue);
-                    if (!strValidCharacters($fieldValue, 'email') && $this->noValueCheck != true)
+                    if (!strValidCharacters($fieldValue, 'email') && !$this->noValueCheck)
                     {
                         return false;
                     }
                     break;
                 case 'NUMBER':
                     // A number must be numeric
-                    if(!is_numeric($fieldValue) && $this->noValueCheck != true)
+                    if(!is_numeric($fieldValue) && !$this->noValueCheck)
                     {
                         return false;
                     }
@@ -548,7 +548,7 @@ class ProfileFields
                     break;
                 case 'DECIMAL':
                     // A number must be numeric
-                    if(!is_numeric(strtr($fieldValue, ',.', '00')) && $this->noValueCheck != true)
+                    if(!is_numeric(strtr($fieldValue, ',.', '00')) && !$this->noValueCheck)
                     {
                         return false;
                     }
@@ -560,14 +560,14 @@ class ProfileFields
                     break;
                 case 'PHONE':
                     // Homepage darf nur gueltige Zeichen enthalten
-                    if (!strValidCharacters($fieldValue, 'phone') && $this->noValueCheck != true)
+                    if (!strValidCharacters($fieldValue, 'phone') && !$this->noValueCheck)
                     {
                         return false;
                     }
                     break;
                 case 'URL':
                     // Homepage darf nur gueltige Zeichen enthalten
-                    if (!strValidCharacters($fieldValue, 'url') && $this->noValueCheck != true)
+                    if (!strValidCharacters($fieldValue, 'url') && !$this->noValueCheck)
                     {
                         return false;
                     }

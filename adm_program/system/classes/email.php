@@ -105,7 +105,7 @@ class Email extends PHPMailer
         }
         else
         {
-             $this->IsMail();
+            $this->IsMail();
         }
 
         // set language for error reporting
@@ -130,7 +130,7 @@ class Email extends PHPMailer
         {
             //$this->emBccArray[] = '"'. $asciiName. '" <'. $address. '>';
             $this->emBccArray[] = array('name' => $asciiName, 'address' => $address);
-            $this->emAddresses = $this->emAddresses.$name.', '.$address."\r\n";
+            $this->emAddresses = $this->emAddresses.$name."\r\n";
             return true;
         }
         return false;
@@ -154,10 +154,10 @@ class Email extends PHPMailer
         }
         catch (phpmailerException $e)
         {
-           return $e->errorMessage();
+            return $e->errorMessage();
         }
 
-        $this->emAddresses = $this->emAddresses.$name.', '.$address."\r\n";
+        $this->emAddresses = $this->emAddresses.$name."\r\n";
 
         return true;
     }
@@ -180,10 +180,10 @@ class Email extends PHPMailer
         }
         catch (phpmailerException $e)
         {
-           return $e->errorMessage();
+            return $e->errorMessage();
         }
 
-        $this->emAddresses = $this->emAddresses.$name.', '.$address."\r\n";
+        $this->emAddresses = $this->emAddresses.$name."\r\n";
 
         return true;
     }
@@ -265,7 +265,7 @@ class Email extends PHPMailer
         }
         catch (phpmailerException $e)
         {
-           return $e->errorMessage();
+            return $e->errorMessage();
         }
 
         return true;
@@ -318,25 +318,15 @@ class Email extends PHPMailer
     }
 
     /**
-     * write a short text with sender information in text of email
-     * @param string $senderName
-     * @param string $senderEmail
-     * @param string $receivers
+     * Write a short text with sender information in text of email
+     * @param string $senderName Firstname and lastname of email sender
+     * @param string $receivers  List with firstname and lastname of all recipients of this mail
      */
-    public function setSenderInText($senderName, $senderEmail, $receivers)
+    public function setSenderInText($senderName, $receivers)
     {
         global $gL10n, $gValidLogin, $gCurrentOrganization;
 
-        if($this->emSendAsHTML)
-        {
-            $senderCode = '<a href="mailto:'.$senderEmail.'">'.$senderName.'</a>';
-        }
-        else
-        {
-            $senderCode = $senderName.' ('.$senderEmail.')';
-        }
-
-        $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_RECEIVER', $senderCode, $gCurrentOrganization->getValue('org_homepage'), $receivers);
+        $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_RECEIVER', $senderName, $gCurrentOrganization->getValue('org_homepage'), $receivers);
 
         if(!$gValidLogin)
         {
@@ -394,7 +384,7 @@ class Email extends PHPMailer
             // send html if preference is set
             if($gPreferences['mail_html_registered_users'] == 1)
             {
-               $this->sendDataAsHtml();
+                $this->sendDataAsHtml();
             }
             else
             {
@@ -461,11 +451,11 @@ class Email extends PHPMailer
                     }
 
                     // now send mail
-                   $this->Send();
+                    $this->Send();
                 }
                 catch (phpmailerException $e)
                 {
-                   return $e->errorMessage();
+                    return $e->errorMessage();
                 }
             }
         }
@@ -474,11 +464,11 @@ class Email extends PHPMailer
         {
             try
             {
-              $this->Send();
+                $this->Send();
             }
             catch (phpmailerException $e)
             {
-               return $e->errorMessage();
+                return $e->errorMessage();
             }
         }
 
@@ -499,8 +489,8 @@ class Email extends PHPMailer
             // die einzelnen Empfaenger aufgelistet:
             if ($this->emListRecipients)
             {
-                 $copyHeader = $this->emAddresses."\r\n".$copyHeader;
-                 $copyHeader = $gL10n->get('MAI_MESSAGE_WENT_TO').':'."\r\n"."\r\n".$copyHeader;
+                $copyHeader = $this->emAddresses."\r\n".$copyHeader;
+                $copyHeader = $gL10n->get('MAI_MESSAGE_WENT_TO').':'."\r\n"."\r\n".$copyHeader;
             }
 
             $this->emText = $copyHeader.$this->emText;
@@ -520,11 +510,11 @@ class Email extends PHPMailer
             $this->AddAddress($this->emSender['address'], $this->emSender['name']);
             try
             {
-               $this->Send();
+                $this->Send();
             }
             catch (phpmailerException $e)
             {
-               return $e->errorMessage();
+                return $e->errorMessage();
             }
         }
 

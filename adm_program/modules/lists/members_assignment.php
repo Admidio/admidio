@@ -30,11 +30,11 @@ if(isset($_GET['mode']) && $_GET['mode'] === 'assign')
 }
 
 // Initialize and check the parameters
-$getMode           = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
-$getRoleId         = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', array('requireValue' => true, 'directOutput' => true));
-$getUserId         = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('directOutput' => true));
+$getMode           = admFuncVariableIsValid($_GET, 'mode',          'string',  array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
+$getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'numeric', array('requireValue' => true, 'directOutput' => true));
+$getUserId         = admFuncVariableIsValid($_GET, 'usr_id',        'numeric', array('directOutput' => true));
 $getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'numeric');
-$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'boolean');
+$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'boolean');
 
 $_SESSION['set_rol_id'] = $getRoleId;
 
@@ -340,26 +340,18 @@ else
         '<img class="admidio-icon-info"
             src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
             title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
-        $gL10n->get('SYS_STATUS'),
         $gL10n->get('SYS_MEMBER'),
         $gL10n->get('SYS_LASTNAME'),
         $gL10n->get('SYS_FIRSTNAME'),
         '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/map.png"
             alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />',
-        $gL10n->get('SYS_ADDRESS'),
         $gL10n->get('SYS_BIRTHDAY'),
         $htmlLeaderColumn);
 
-    $table->setColumnAlignByArray(array('left', 'left', 'center', 'left', 'left', 'left', 'left', 'left', 'center'));
-    $table->setDatatablesOrderColumns(array(4, 5));
+    $table->setColumnAlignByArray(array('left', 'center', 'left', 'left', 'left', 'left', 'left', 'center'));
+    $table->setDatatablesOrderColumns(array(3, 4));
     $table->addRowHeadingByArray($columnHeading);
-    $table->disableDatatablesColumnsSort(array(3, 9));
-    // set alternative order column for member status icons
-    $table->setDatatablesAlternativOrderColumns(1, 2);
-    $table->setDatatablesColumnsHide(2);
-    // set alternative order column for address icons
-    $table->setDatatablesAlternativOrderColumns(6, 7);
-    $table->setDatatablesColumnsHide(7);
+    $table->disableDatatablesColumnsSort(array(2, 7));
 
     // show rows with all organization users
     while($user = $userStatement->fetch())
@@ -437,13 +429,12 @@ else
 
         // create array with all column values
         $columnValues = array(
-            '<img class="admidio-icon-info" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
-            $memberOfThisOrganization,
+            array('value' => '<img class="admidio-icon-info" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
+                  'order' => $memberOfThisOrganization),
             $htmlMemberStatus,
             '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['last_name'].'</a>',
             '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['first_name'].'</a>',
-            $htmlAddress,
-            $addressText,
+            array('value' => $htmlAddress, 'order' => $addressText),
             $htmlBirthday,
             $htmlRoleLeader.'<b id="loadindicator_leader_'.$user['usr_id'].'"></b>');
 
