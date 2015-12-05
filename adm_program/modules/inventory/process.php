@@ -40,8 +40,7 @@ $(function() {
 
 switch($postFunction)
 {
-    case('update'):
-
+    case 'update':
         $sql = "SELECT MAX(msg_part_id) as max_id
           FROM ". TBL_MESSAGES."
           where msg_converation_id = 0";
@@ -96,9 +95,9 @@ switch($postFunction)
         }
         break;
 
-    case('send'):
-        $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
-        if(($postMessage) !== "\n")
+    case 'send':
+        $reg_exUrl = '/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/';
+        if($postMessage !== "\n")
         {
             if(preg_match($reg_exUrl, $postMessage, $url))
             {
@@ -119,7 +118,8 @@ switch($postFunction)
 
         $gDb->query($sql);
         break;
-    case('delete'):
+
+    case 'delete':
         $sql = "DELETE FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT' and msg_converation_id = 0";
         $gDb->query($sql);
         break;
