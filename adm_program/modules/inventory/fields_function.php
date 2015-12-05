@@ -77,11 +77,11 @@ if($getMode === 1)
     if(isset($_POST['inf_name']) && $itemField->getValue('inf_name') != $_POST['inf_name'])
     {
         // Schauen, ob das Feld bereits existiert
-        $sql    = 'SELECT COUNT(*) as count
-                     FROM '. TBL_INVENT_FIELDS. '
-                    WHERE inf_name LIKE \''.$_POST['inf_name'].'\'
-                      AND inf_cat_id  = '.$_POST['inf_cat_id'].'
-                      AND inf_id     <> '.$getInfId;
+        $sql = 'SELECT COUNT(*) as count
+                  FROM '. TBL_INVENT_FIELDS. '
+                 WHERE inf_name LIKE \''.$_POST['inf_name'].'\'
+                   AND inf_cat_id  = '.$_POST['inf_cat_id'].'
+                   AND inf_id     <> '.$getInfId;
         $statement = $gDb->query($sql);
         $row = $statement->fetch();
 

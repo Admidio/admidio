@@ -91,7 +91,7 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
     // einen GB-Eintrag erzeugt hat...
     $ipAddress = $_SERVER['REMOTE_ADDR'];
 
-    $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK. '
+    $sql = 'SELECT COUNT(*) FROM '. TBL_GUESTBOOK. '
              WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
                AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                AND gbo_ip_address = \''. $guestbook->getValue('gbo_ip_address'). '\'';

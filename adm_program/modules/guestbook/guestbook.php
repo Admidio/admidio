@@ -166,10 +166,10 @@ if($getGboId > 0 || $getModeration == 1)
 if($getModeration == 0 && $gCurrentUser->editGuestbookRight() && $gPreferences['enable_guestbook_moderation'] > 0)
 {
     // show link to moderation with number of entries that must be moderated
-    $sql = 'SELECT (SELECT count(1) FROM '. TBL_GUESTBOOK. '
+    $sql = 'SELECT (SELECT COUNT(*) FROM '. TBL_GUESTBOOK. '
                      WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        AND gbo_locked = 1) AS count_locked_guestbook,
-                   (SELECT count(1) FROM '. TBL_GUESTBOOK. ', '.TBL_GUESTBOOK_COMMENTS.'
+                   (SELECT COUNT(*) FROM '. TBL_GUESTBOOK. ', '.TBL_GUESTBOOK_COMMENTS.'
                      WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        AND gbo_id = gbc_gbo_id
                        AND gbc_locked = 1) AS count_locked_comments

@@ -68,7 +68,7 @@ if($getMembers == 1)
 $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name,
                   email.usd_value as email, gender.usd_value as gender, birthday.usd_value as birthday,
                   usr_login_name, COALESCE(usr_timestamp_change, usr_timestamp_create) as timestamp,
-                  (SELECT count(*)
+                  (SELECT COUNT(*)
                      FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
                     WHERE rol_valid   = 1
                       AND rol_cat_id  = cat_id
@@ -79,7 +79,7 @@ $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value
                       AND mem_begin  <= \''.DATE_NOW.'\'
                       AND mem_end     > \''.DATE_NOW.'\'
                       AND mem_usr_id  = usr_id) as member_this_orga,
-                  (SELECT count(*)
+                  (SELECT COUNT(*)
                      FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
                     WHERE rol_valid   = 1
                       AND rol_cat_id  = cat_id

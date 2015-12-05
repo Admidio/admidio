@@ -117,7 +117,7 @@ foreach($rolesList as $row)
     if($row['rol_max_members'] > 0)
     {
         // erst einmal schauen, ob der Benutzer dieser Rolle bereits zugeordnet ist
-        $sql = 'SELECT COUNT(*)
+        $sql = 'SELECT COUNT(*) as count
                   FROM '. TBL_MEMBERS.'
                  WHERE mem_rol_id = '.$row['rol_id'].'
                    AND mem_usr_id = '.$getUserId.'
@@ -128,10 +128,10 @@ foreach($rolesList as $row)
 
         $row_usr = $pdoStatement->fetch();
 
-        if($row_usr[0] == 0)
+        if($row_usr['count'] === 0)
         {
             // Benutzer ist der Rolle noch nicht zugeordnet, dann schauen, ob die Anzahl ueberschritten wird
-            $sql = 'SELECT COUNT(*)
+            $sql = 'SELECT COUNT(*) as count
                       FROM '. TBL_MEMBERS.'
                      WHERE mem_rol_id = '.$row['rol_id'].'
                        AND mem_leader = 0
@@ -142,7 +142,7 @@ foreach($rolesList as $row)
             $row_members = $pdoStatement->fetch();
 
             // Bedingungen fuer Abbruch und Abbruch
-            if($row_members[0] >= $row['rol_max_members']
+            if($row_members['count'] >= $row['rol_max_members']
             && isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == false
             && isset($_POST['role-'.$row['rol_id']])   && $_POST['role-'.$row['rol_id']]   == true)
             {

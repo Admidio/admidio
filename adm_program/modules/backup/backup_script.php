@@ -79,7 +79,7 @@ unset($SelectedTables);
 unset($tables);
 
 // create a list with all tables with configured table prefix
-$sql    = 'SHOW TABLES LIKE \''.$g_tbl_praefix.'\_%\'';
+$sql = 'SHOW TABLES LIKE \''.$g_tbl_praefix.'\_%\'';
 $statement = $gDb->query($sql);
 
 while($table = $statement->fetch())

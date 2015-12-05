@@ -208,7 +208,7 @@ class TableRoles extends TableAccess
         if($this->getValue('rol_default_registration') == 1)
         {
             // checks if at least one other role has this flag, if not than this role couldn't be deleted
-            $sql = 'SELECT COUNT(1) AS count FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+            $sql = 'SELECT COUNT(*) AS count FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
                      WHERE rol_default_registration = 1
                        AND rol_id    <> '.$this->getValue('rol_id').'
                        AND rol_cat_id = cat_id
@@ -349,7 +349,7 @@ class TableRoles extends TableAccess
      */
     public function hasFormerMembers()
     {
-        $sql = 'SELECT COUNT(1) AS count
+        $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = '.$this->getValue('rol_id').'
                    AND (  mem_begin > \''.DATE_NOW.'\'
@@ -450,7 +450,7 @@ class TableRoles extends TableAccess
         if($columnName === 'rol_default_registration' && $newValue == '0' && $this->dbColumns[$columnName] == '1')
         {
             // checks if at least one other role has this flag
-            $sql = 'SELECT COUNT(1) AS count
+            $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
                      WHERE rol_default_registration = 1
                        AND rol_id    <> '.$this->getValue('rol_id').'

@@ -85,14 +85,14 @@ class ModuleAnnouncements extends Modules
 
     /**
      * Get number of available announcements
-     * @Return Returns the total count and push it in the array
+     * @Return int Returns the total count and push it in the array
      */
     public function getDataSetCount()
     {
         global $gCurrentOrganization;
         global $gDb;
 
-        $sql = 'SELECT COUNT(1) as count
+        $sql = 'SELECT COUNT(*) as count
                   FROM '. TBL_ANNOUNCEMENTS. '
                  WHERE (  ann_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR (   ann_global = 1

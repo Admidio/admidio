@@ -98,7 +98,7 @@ if($getUserId > 0)
 }
 
 // get total count of relevant profile field changes
-$sql = 'SELECT COUNT(1) as count
+$sql = 'SELECT COUNT(*) as count
           FROM '.TBL_USER_LOG.'
          WHERE 1 = 1 '.
                $sqlConditions;

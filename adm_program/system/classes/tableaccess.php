@@ -143,11 +143,11 @@ class TableAccess
 
     /**
      * Reads the number of all records of this table
-     * @return Number of records of this table
+     * @return int Number of records of this table
      */
     public function countAllRecords()
     {
-        $sql = 'SELECT COUNT(1) as count FROM '.$this->tableName;
+        $sql = 'SELECT COUNT(*) as count FROM '.$this->tableName;
         $countStatement = $this->db->query($sql);
         $row = $countStatement->fetch();
         return $row['count'];

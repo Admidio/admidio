@@ -56,7 +56,7 @@ class TableCategory extends TableAccess
         }
 
         // checks if there exists another category of this type. Don't delete the last category of a type!
-        $sql = 'SELECT count(1) AS count_categories FROM '. TBL_CATEGORIES. '
+        $sql = 'SELECT COUNT(*) AS count_categories FROM '. TBL_CATEGORIES. '
                  WHERE (  cat_org_id = '. $gCurrentSession->getValue('ses_org_id'). '
                        OR cat_org_id IS NULL )
                    AND cat_type     = \''. $this->getValue('cat_type'). '\'';
@@ -131,7 +131,7 @@ class TableCategory extends TableAccess
      */
     public function getNumberElements()
     {
-        $sql = 'SELECT COUNT(1) FROM '.$this->elementTable.'
+        $sql = 'SELECT COUNT(*) FROM '.$this->elementTable.'
                  WHERE '.$this->elementColumn.' = '. $this->getValue('cat_id');
         $elementsStatement = $this->db->query($sql);
         $row = $elementsStatement->fetch();
@@ -184,7 +184,7 @@ class TableCategory extends TableAccess
 
         // count all categories that are organization independent because these categories should not
         // be mixed with the organization categories. Hidden categories are sidelined.
-        $sql = 'SELECT COUNT(1) as count FROM '. TBL_CATEGORIES. '
+        $sql = 'SELECT COUNT(*) as count FROM '. TBL_CATEGORIES. '
                  WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                    AND cat_name_intern NOT LIKE \'CONFIRMATION_OF_PARTICIPATION\'
                    AND cat_org_id IS NULL ';

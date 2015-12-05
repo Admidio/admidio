@@ -115,9 +115,10 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
     // einen GB-Eintrag erzeugt hat...
     $ipAddress = $_SERVER['REMOTE_ADDR'];
 
-    $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK_COMMENTS. '
-            where unix_timestamp(gbc_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
-              and gbc_ip_address = \''. $guestbook_comment->getValue('gbc_ip_address'). '\'';
+    $sql = 'SELECT COUNT(*)
+              FROM '. TBL_GUESTBOOK_COMMENTS. '
+             WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
+               AND gbc_ip_address = \''. $guestbook_comment->getValue('gbc_ip_address'). '\'';
     $statement = $gDb->query($sql);
     $row = $statement->fetch();
     if($row[0] > 0)

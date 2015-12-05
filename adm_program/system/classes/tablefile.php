@@ -99,7 +99,7 @@ class TableFile extends TableAccess
             elseif (!$gCurrentUser->editDownloadRight() && !$this->getValue('fol_public'))
             {
                 // Wenn der Ordner nicht public ist und der Benutzer keine Downloadadminrechte hat, muessen die Rechte untersucht werden
-                $sql_rights = 'SELECT count(*)
+                $sql_rights = 'SELECT COUNT(*) as count
                          FROM '. TBL_FOLDER_ROLES. ', '. TBL_MEMBERS. '
                         WHERE flr_fol_id = '. $this->getValue('fol_id'). '
                           AND flr_rol_id = mem_rol_id
@@ -108,7 +108,7 @@ class TableFile extends TableAccess
                           AND mem_end    > \''.DATE_NOW.'\'';
                 $rightsStatement = $this->db->query($sql_rights);
                 $row_rights = $rightsStatement->fetch();
-                $row_count  = $row_rights[0];
+                $row_count  = $row_rights['count'];
 
                 // Falls der User in keiner Rolle Mitglied ist, die Rechte an dem Ordner besitzt
                 // wird auch kein Ordner geliefert.

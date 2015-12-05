@@ -163,7 +163,7 @@ else
     $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday,
                    city.usd_value as city, address.usd_value as address, zip_code.usd_value as zip_code, country.usd_value as country,
                    mem_usr_id as member_this_role, mem_leader as leader_this_role,
-                      (SELECT count(*)
+                      (SELECT COUNT(*)
                          FROM '. TBL_ROLES. ' rol2, '. TBL_CATEGORIES. ' cat2, '. TBL_MEMBERS. ' mem2
                         WHERE rol2.rol_valid   = 1
                           AND rol2.rol_cat_id  = cat2.cat_id
