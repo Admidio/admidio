@@ -223,7 +223,7 @@ class TablePhotos extends TableAccess
         $shuffle_image = array('shuffle_pho_id' => 0, 'shuffle_img_nr' => 0, 'shuffle_img_begin' => '');
 
         // wurde keine ID uebergeben, dann versuchen das Zufallsbild aus dem aktuellen Album zu nehmen
-        if($pho_id == 0)
+        if($pho_id === 0)
         {
             $pho_id = $this->getValue('pho_id');
             $shuffle_image['shuffle_pho_id']    = $this->getValue('pho_id');

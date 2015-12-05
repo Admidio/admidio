@@ -255,7 +255,7 @@ class ModuleLists extends Modules
         global $gValidLogin;
 
         // Parameter
-        if($limit == null)
+        if($limit === null)
         {
             // Roles per page
             $limit = $gPreferences['lists_roles_per_page'];
@@ -291,7 +291,7 @@ class ModuleLists extends Modules
         {
             $sql .= ' LIMIT '.$limit;
         }
-        if($startElement != 0)
+        if($startElement > 0)
         {
             $sql .= ' OFFSET '.$startElement;
         }

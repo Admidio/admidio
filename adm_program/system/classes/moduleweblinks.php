@@ -128,7 +128,7 @@ class ModuleWeblinks extends Modules
         global $gCurrentOrganization, $gPreferences, $gProfileFields, $gDb, $gValidLogin;
 
         // Parameter
-        if($limit == null)
+        if($limit === null)
         {
             $limit = $gPreferences['weblinks_per_page'];
         }
@@ -160,7 +160,7 @@ class ModuleWeblinks extends Modules
         {
             $sql .= ' LIMIT '.$limit;
         }
-        if($startElement != 0)
+        if($startElement > 0)
         {
             $sql .= ' OFFSET '.$startElement;
         }

@@ -117,7 +117,7 @@ class ModuleAnnouncements extends Modules
         global $gDb;
 
         // Parameter
-        if($limit == null)
+        if($limit === null)
         {
             $announcementsPerPage = $gPreferences['announcements_per_page'];
         }
@@ -180,7 +180,7 @@ class ModuleAnnouncements extends Modules
         {
             $sql .= ' LIMIT '.$limit;
         }
-        if($startElement != 0)
+        if($startElement > 0)
         {
             $sql .= ' OFFSET '.$startElement;
         }
