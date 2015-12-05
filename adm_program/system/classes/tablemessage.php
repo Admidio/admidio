@@ -78,6 +78,19 @@ class TableMessage extends TableAccess
         return $this->db->query($sql);
     }
 
+    /** get a list with all messages of an conversation.
+     *  @param $MsgId of the conversation - just for security reasons.
+     *  @return Returns @b answer of the SQL execution
+     */
+    public function getConversation($MsgId)
+    {
+        $sql = "SELECT msc_usr_id, msc_message, msc_timestamp
+                  FROM ". TBL_MESSAGES_CONTENT. "
+                 WHERE msc_msg_id = ". $MsgId ."
+                 ORDER BY msc_part_id DESC";
+        return $this->db->query($sql);
+    }
+
     /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
