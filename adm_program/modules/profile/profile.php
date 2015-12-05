@@ -135,7 +135,7 @@ $page->addJavascript('
     function showHideMembershipInformation(element) {
         id = "#" + element.attr("id") + "_Content";
 
-        if($(id).css("display") == "none") {
+        if($(id).css("display") === "none") {
             $(id).show("fast");
         } else {
             $(id).hide("fast");
@@ -188,7 +188,7 @@ $page->addJavascript('
                 type:    "GET",
                 url:     action,
                 success: function(data) {
-                    if(data == "success") {
+                    if(data === "success") {
                         $("#membership_period_form_"+memberId+" .form-alert").attr("class", "alert alert-success form-alert");
                         $("#membership_period_form_"+memberId+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                         $("#membership_period_form_"+memberId+" .form-alert").fadeIn("slow");
