@@ -31,7 +31,7 @@ $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric');
 $getInline  = admFuncVariableIsValid($_GET, 'inline',   'boolean');
 
 // in ajax mode only return simple text on error
-if($getInline == true)
+if($getInline)
 {
     $gMessage->showHtmlTextOnly(true);
 }
@@ -252,7 +252,7 @@ if(strpos($gNavigation->getUrl(), 'new_user_assign.php') > 0)
     $gNavigation->deleteLastUrl();
 }
 
-if($getInline == true)
+if($getInline)
 {
     echo 'success';
 }

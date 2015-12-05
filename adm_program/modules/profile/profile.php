@@ -781,7 +781,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
                 $role->clear();
                 $role->setArray($row);
 
-                if($showRolesOtherOrganizations == false)
+                if(!$showRolesOtherOrganizations)
                 {
                     $page->addHtml('
                     <div class="panel panel-default" id="profile_other_orga_roles_box">
@@ -814,7 +814,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
 
         $gCurrentUser->setOrganization($gCurrentOrganization->getValue('org_id'));
 
-        if($showRolesOtherOrganizations == true)
+        if($showRolesOtherOrganizations)
         {
             $page->addHtml('</ul></div></div>');
         }

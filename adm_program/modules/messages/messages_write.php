@@ -218,8 +218,8 @@ elseif (!isset($message_result))
         // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
         // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
         // Rollen muessen zur aktuellen Organisation gehoeren
-        if(($gValidLogin == false && $role->getValue('rol_mail_this_role') != 3)
-        || ($gValidLogin == true  && $gCurrentUser->hasRightSendMailToRole($getRoleId) == false)
+        if((!$gValidLogin && $role->getValue('rol_mail_this_role') != 3)
+        || ($gValidLogin  && !$gCurrentUser->hasRightSendMailToRole($getRoleId))
         || $role->getValue('rol_id') == null)
         {
            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));

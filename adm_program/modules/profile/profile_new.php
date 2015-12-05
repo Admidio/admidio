@@ -158,31 +158,31 @@ $category = '';
 
 foreach($gProfileFields->mProfileFields as $field)
 {
-    $show_field = false;
+    $showField = false;
 
     // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
     // E-Mail ist Ausnahme und muss immer angezeigt werden
     if($getNewUser == 2 && $gPreferences['registration_mode'] == 1
     && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') === 'EMAIL'))
     {
-        $show_field = true;
+        $showField = true;
     }
     elseif($getNewUser == 2 && $gPreferences['registration_mode'] == 2)
     {
         // bei der vollstaendigen Registrierung alle Felder anzeigen
-        $show_field = true;
+        $showField = true;
     }
     elseif($getNewUser != 2
     && ($getUserId == $gCurrentUser->getValue('usr_id') || $gCurrentUser->hasRightEditProfile($user)))
     {
         // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
         // Leiter duerfen dies nicht !!!
-        $show_field = true;
+        $showField = true;
     }
 
     // Kategorienwechsel den Kategorienheader anzeigen
     // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-    if($category != $field->getValue('cat_name') && $show_field == true)
+    if($category != $field->getValue('cat_name') && $showField)
     {
         if($category !== '')
         {
@@ -249,7 +249,7 @@ foreach($gProfileFields->mProfileFields as $field)
     }
 
     // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-    if($show_field == true)
+    if($showField)
     {
         // add profile fields to form
         $fieldProperty = FIELD_DEFAULT;

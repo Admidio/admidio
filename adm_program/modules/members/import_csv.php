@@ -61,7 +61,7 @@ $depRoles = array();
 // Abhängige Rollen ermitteln
 $depRoles = RoleDependency::getParentRoles($gDb, $_SESSION['rol_id']);
 
-if($firstRowTitle == true)
+if($firstRowTitle)
 {
     // erste Zeile ueberspringen, da hier die Spaltenbezeichnungen stehen
     $line = next($_SESSION['file_lines']);

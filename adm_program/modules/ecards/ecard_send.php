@@ -114,7 +114,7 @@ if(count($arrayRoles) > 0)
 
     while($row = $usersStatement->fetch())
     {
-        if($ecardSendResult == true)
+        if($ecardSendResult)
         {
             // create and send ecard
             $ecardHtmlData   = $funcClass->parseEcardTemplate($imageUrl, $_POST['ecard_message'], $ecardDataToParse, $row['first_name'].' '.$row['last_name'], $row['email']);
@@ -127,7 +127,7 @@ if(count($arrayUsers) > 0)
 {
     foreach($arrayUsers as $userId)
     {
-        if($ecardSendResult == true)
+        if($ecardSendResult)
         {
             $user = new User($gDb, $gProfileFields, $userId);
 
@@ -139,7 +139,7 @@ if(count($arrayUsers) > 0)
 }
 
 // show result
-if($ecardSendResult == true)
+if($ecardSendResult)
 {
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
     $gMessage->show($gL10n->get('ECA_SUCCESSFULLY_SEND'));

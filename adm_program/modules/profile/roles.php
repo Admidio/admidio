@@ -43,7 +43,7 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 // set headline of the script
 $headline = $gL10n->get('ROL_ROLE_ASSIGNMENT', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
 
-if($getInline == 0)
+if(!$getInline)
 {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 }
@@ -58,7 +58,7 @@ else
     $setRoleId = null;
 }
 
-if($getInline == true)
+if($getInline)
 {
     header('Content-type: text/html; charset=utf-8');
 
@@ -281,7 +281,7 @@ $html .= '
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>';
 
-if($getInline == true)
+if($getInline)
 {
     echo $html.'</div>';
 }

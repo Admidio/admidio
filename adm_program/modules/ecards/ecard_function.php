@@ -229,7 +229,7 @@ class FunctionClass
         $email->setText($ecardHtmlData);
         $email->sendDataAsHtml();
 
-        if($returnCode == true)
+        if($returnCode)
         {
             $returnCode = $email->sendEmail();
         }

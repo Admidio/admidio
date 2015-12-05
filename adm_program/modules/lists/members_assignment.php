@@ -267,7 +267,7 @@ else
                     // check if error occurs
                     if(data !== "success") {
                         // reset checkbox status
-                        if(checkbox.prop("checked") == true) {
+                        if(checkbox.prop("checked")) {
                             checkbox.prop("checked", false);
                             if(checkbox.hasClass("memlist_leader")) {
                                 $("input[type=checkbox]#member_"+userid).prop("checked", false);

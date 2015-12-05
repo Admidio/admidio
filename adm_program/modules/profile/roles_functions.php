@@ -158,11 +158,11 @@ function getRoleMemberships($htmlListId, $user, $roleStatement, $count_role, $di
                             $roleMemHTML .= '&nbsp;
                         </span>
                         <span class="pull-right text-right">';
-                            if($showRoleEndDate == true)
+                            if($showRoleEndDate)
                             {
                                 $roleMemHTML .= $gL10n->get('SYS_SINCE_TO', $member->getValue('mem_begin', $gPreferences['system_date']), $member->getValue('mem_end', $gPreferences['system_date']));
                             }
-                            elseif($futureMembership == true)
+                            elseif($futureMembership)
                             {
                                 $roleMemHTML .= $gL10n->get('SYS_FROM', $member->getValue('mem_begin', $gPreferences['system_date']));
                             }
