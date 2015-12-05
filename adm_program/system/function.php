@@ -13,8 +13,8 @@
  * Autoloading function of class files. This function will be later registered
  * for default autoload implementation. Therefore the class name must be the same
  * as the file name except for case sensitive.
- * @param $className Name of the class for which the file should be loaded.
- * @return Return @b false if the file for the class wasn't found.
+ * @param string $className Name of the class for which the file should be loaded.
+ * @return void|false Return @b false if the file for the class wasn't found.
  */
 function admFuncAutoload($className)
 {
@@ -674,6 +674,8 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
  * Returns the extension of a given filename
  * @param string $filename given filename
  * @return string Returns the extension including "."
+ * @deprecated use pathinfo($filename, PATHINFO_EXTENSION) instead
+ *             important: return extension without "."
  */
 function admFuncGetFilenameExtension($filename)
 {
@@ -684,6 +686,7 @@ function admFuncGetFilenameExtension($filename)
  * Returns the name of a given filename without extension
  * @param string $filename given filename
  * @return string Returns name without extension
+ * @deprecated use pathinfo($filename, PATHINFO_FILENAME) instead
  */
 function admFuncGetFilenameWithoutExtension($filename)
 {
