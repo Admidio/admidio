@@ -46,16 +46,16 @@ $sql = "SELECT MAX(msc_part_id) as max_id
 
 $statement = $gDb->query($sql);
 $row = $statement->fetch();
-$MsgId = $row['max_id'];
-if(!$MsgId)
+$msgId = $row['max_id'];
+if(!$msgId)
 {
-    $MsgId = 0;
+    $msgId = 0;
 }
 
 switch($postFunction)
 {
     case 'update':
-        if($MsgId + 25 < $postLines)
+        if($msgId + 25 < $postLines)
         {
             $postLines = $postLines - 50;
         }
@@ -71,10 +71,10 @@ switch($postFunction)
             $gDb->query($sql);
 
             $postLines = $postLines - 50;
-            $MsgId = $MsgId - 50;
+            $msgId = $msgId - 50;
         }
 
-        if($postLines == $MsgId)
+        if($postLines == $msgId)
         {
             $log['state'] = $postLines;
             $log['text']  = false;
@@ -97,7 +97,7 @@ switch($postFunction)
                 $text[] = '<time>'.$date->format($gPreferences['system_date'].' '.$gPreferences['system_time']).'</time><span>'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'</span>'.$row['msc_message'];
             }
 
-            $log['state'] = $MsgId;
+            $log['state'] = $msgId;
             $log['text']  = $text;
         }
         break;
@@ -112,22 +112,23 @@ switch($postFunction)
             }
         }
 
-        if($MsgId == 0)
+        if($msgId === 0)
         {
             $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-            VALUES ('CHAT', 'DUMMY', '1', '".$MsgId."', CURRENT_TIMESTAMP, '0')";
+            VALUES ('CHAT', 'DUMMY', '1', '".$msgId."', CURRENT_TIMESTAMP, '0')";
             $gDb->query($sql);
             $msg_id = $modulemessages->msgGetChatId();
         }
 
-        $MsgId += 1;
+        $msgId += 1;
 
         $sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-            VALUES ('".$msg_id."', '".$MsgId."', '".$gCurrentUser->getValue('usr_id')."', '".$postMessage."', CURRENT_TIMESTAMP)";
+            VALUES ('".$msg_id."', '".$msgId."', '".$gCurrentUser->getValue('usr_id')."', '".$postMessage."', CURRENT_TIMESTAMP)";
 
         $gDb->query($sql);
-        $log['state'] = $MsgId;
+        $log['state'] = $msgId;
         break;
+
     case 'delete':
         $sql = "DELETE FROM ". TBL_MESSAGES_CONTENT. " WHERE msc_msg_id = '".$msg_id."'";
         $gDb->query($sql);
