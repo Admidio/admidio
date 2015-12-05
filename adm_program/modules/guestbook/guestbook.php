@@ -346,7 +346,7 @@ else
                     $page->addHtml('</div>');
                 }
 
-                if ($getGboId == 0 && $commentStatement->rowCount() == 0
+                if ($getGboId == 0 && $commentStatement->rowCount() === 0
                 && ($gCurrentUser->commentGuestbookRight() || $gPreferences['enable_gbook_comments4all'] == 1)
                 && $getModeration == 0)
                 {

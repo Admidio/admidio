@@ -21,7 +21,7 @@ $user      = new User($gDb, $gProfileFields, $getUserId);
 $userPhoto = $user->getValue('usr_photo');
 
 // if user has no photo or current user is not allowed to see photos then show default photo
-if(strlen($userPhoto) == 0 || !$gCurrentUser->hasRightViewProfile($user))
+if(strlen($userPhoto) === 0 || !$gCurrentUser->hasRightViewProfile($user))
 {
     header('Content-Type: image/png');
     echo readfile(THEME_SERVER_PATH. '/images/no_profile_pic.png');

@@ -90,7 +90,7 @@ if($gCurrentUser->isWebmaster())
                                 $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
-if($announcementsCount == 0)
+if($announcementsCount === 0)
 {
     // no announcements found
     if($getId > 0)

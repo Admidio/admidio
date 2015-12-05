@@ -52,7 +52,7 @@ $rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHea
             $gCurrentOrganization->getValue('org_longname'));
 
 // Wenn Ankündigungen vorhanden laden
-if($announcements->getDataSetCount()>0)
+if($announcements->getDataSetCount() > 0)
 {
     $announcement = new TableAnnouncement($gDb);
     $rows = $announcements->getDataset(0, 10);

@@ -76,11 +76,11 @@ if($getMode === 'assign')
         $membership = 0;
         $leadership = 0;
 
-        if(isset($_POST['member_'.$getUserId]) && $_POST['member_'.$getUserId] == 'true')
+        if(isset($_POST['member_'.$getUserId]) && $_POST['member_'.$getUserId] === 'true')
         {
             $membership = 1;
         }
-        if(isset($_POST['leader_'.$getUserId]) && $_POST['leader_'.$getUserId] == 'true')
+        if(isset($_POST['leader_'.$getUserId]) && $_POST['leader_'.$getUserId] === 'true')
         {
             $membership = 1;
             $leadership = 1;
@@ -93,12 +93,12 @@ if($getMode === 'assign')
         $mem_count = $role->countMembers($getUserId);
 
         // Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
-        if($leadership == 1 || ($leadership == 0 && $membership == 1 && ($role->getValue('rol_max_members') > $mem_count || $role->getValue('rol_max_members') == 0 || $role->getValue('rol_max_members') == 0)))
+        if($leadership === 1 || ($leadership === 0 && $membership == 1 && ($role->getValue('rol_max_members') > $mem_count || $role->getValue('rol_max_members') == 0 || $role->getValue('rol_max_members') == 0)))
         {
             $member->startMembership($role->getValue('rol_id'), $getUserId, $leadership);
             echo 'success';
         }
-        elseif($leadership == 0 && $membership == 0)
+        elseif($leadership === 0 && $membership == 0)
         {
             $member->stopMembership($role->getValue('rol_id'), $getUserId);
             echo 'success';

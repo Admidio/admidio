@@ -79,7 +79,7 @@ if($getThumbnail)
             $bildgroesse = getimagesize($ordner.'/thumbnails/'.$getPhotoNr.'.jpg');
 
             $thumb_length = $bildgroesse[1];
-            if($bildgroesse[0]>$bildgroesse[1])
+            if($bildgroesse[0] > $bildgroesse[1])
             {
                 $thumb_length = $bildgroesse[0];
             }

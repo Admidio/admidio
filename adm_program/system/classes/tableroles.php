@@ -216,7 +216,7 @@ class TableRoles extends TableAccess
             $countRolesStatement = $this->db->query($sql);
             $row = $countRolesStatement->fetch();
 
-            if($row['count'] == 0)
+            if($row['count'] === 0)
             {
                 throw new AdmException('ROL_DELETE_NO_DEFAULT_ROLE', $this->getValue('rol_name'), $gL10n->get('ROL_DEFAULT_REGISTRATION'));
             }
@@ -459,7 +459,7 @@ class TableRoles extends TableAccess
             $countRolesStatement = $this->db->query($sql);
             $row = $countRolesStatement->fetch();
 
-            if($row['count'] == 0)
+            if($row['count'] === 0)
             {
                 return false;
             }

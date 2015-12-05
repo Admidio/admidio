@@ -287,7 +287,7 @@ if($numberBirthdays > 0)
     }
     else
     {
-        if($numberBirthdays == 1)
+        if($numberBirthdays === 1)
         {
             echo '<p>'.$gL10n->get('PLG_BIRTHDAY_ONE_USER').'</p>';
         }

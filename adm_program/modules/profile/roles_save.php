@@ -53,7 +53,7 @@ foreach($_POST as $key=>$value)
 }
 
 // if no role is selected than show notice
-if($roleCount == 0)
+if($roleCount === 0)
 {
     if($getInline == 0)
     {

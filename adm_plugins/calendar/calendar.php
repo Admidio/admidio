@@ -456,7 +456,7 @@ while($currentDay <= $lastDayCurrentMonth)
 
             foreach($eventsMonthDayArray[$currentDay] as $eventArray)
             {
-                if($plg_ajaxbox == 1 || $countEvents == 0)
+                if($plg_ajaxbox == 1 || $countEvents === 0)
                 {
                     if($eventArray['location'] !== '')
                     {
@@ -590,17 +590,17 @@ while($currentDay <= $lastDayCurrentMonth)
         ';
         $boolNewStart = false;
     }
-    $rest = ($currentDay+$firstWeekdayOfMonth-1)%7;
+    $rest = ($currentDay + $firstWeekdayOfMonth - 1) % 7;
     if($currentDay == $today)
     {
         echo '<td align="center" class="plgCalendarToday">';
     }
-    elseif($rest == 6)
+    elseif($rest === 6)
     {
         // CSS aus der Linkklassenbestimmung verwenden
         echo '<td align="center" class="'.$plg_link_class_saturday.'">';
     }
-    elseif($rest == 0)
+    elseif($rest === 0)
     {
         // CSS aus der Linkklassenbestimmung verwenden
         echo '<td align="center" class="'.$plg_link_class_sunday.'">';
@@ -644,11 +644,11 @@ while($currentDay <= $lastDayCurrentMonth)
             echo '<span class="plgCalendarToday">'.$currentDay.'</span>';
         }
     }
-    elseif($rest == 6)
+    elseif($rest === 6)
     {
         echo '<span class="plgCalendarSaturday">'.$currentDay.'</span>';
     }
-    elseif($rest == 0)
+    elseif($rest === 0)
     {
         echo '<span class="plgCalendarSunday">'.$currentDay.'</span>';
     }
@@ -657,7 +657,7 @@ while($currentDay <= $lastDayCurrentMonth)
         echo $currentDay;
     }
     echo '</td>';
-    if($rest == 0 || $currentDay == $lastDayCurrentMonth)
+    if($rest === 0 || $currentDay == $lastDayCurrentMonth)
     {
         echo '</tr>
         ';

@@ -155,8 +155,8 @@ $javascriptCode = '
 
             var selected = "";
             // bei einer neuen Liste sind Vorname und Nachname in den ersten Spalten vorbelegt
-            if((  (fieldNumberIntern == 0 && arr_user_fields[counter]["usf_name_intern"] == "LAST_NAME")
-               || (fieldNumberIntern == 1 && arr_user_fields[counter]["usf_name_intern"] == "FIRST_NAME"))
+            if((  (fieldNumberIntern === 0 && arr_user_fields[counter]["usf_name_intern"] === "LAST_NAME")
+               || (fieldNumberIntern === 1 && arr_user_fields[counter]["usf_name_intern"] === "FIRST_NAME"))
             && listId == 0)
             {
                 selected = " selected=\"selected\" ";
@@ -183,16 +183,16 @@ $javascriptCode = '
 
         if(arr_default_fields[fieldNumberShow])
         {
-            if(arr_default_fields[fieldNumberShow]["sort"] == "ASC")
+            if(arr_default_fields[fieldNumberShow]["sort"] === "ASC")
             {
                 selectAsc = " selected=\"selected\" ";
             }
-            if(arr_default_fields[fieldNumberShow]["sort"] == "DESC")
+            if(arr_default_fields[fieldNumberShow]["sort"] === "DESC")
             {
                 selectDesc = " selected=\"selected\" ";
             }
         }
-        else if(fieldNumberIntern == 0)
+        else if(fieldNumberIntern === 0)
         {
             selectAsc = " selected=\"selected\" ";
         }
@@ -374,8 +374,8 @@ $javascriptCode .= '
         {
             if(arr_user_fields[key]["usf_name"] == columnName)
             {
-                if(arr_user_fields[key]["usf_type"] == "DROPDOWN"
-                  || arr_user_fields[key]["usf_type"] == "RADIO_BUTTON")
+                if(arr_user_fields[key]["usf_type"] === "DROPDOWN"
+                  || arr_user_fields[key]["usf_type"] === "RADIO_BUTTON")
                 {
                     html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" class=\"ListConditionField\" name=\"condition" + fieldNumberShow + "\">" +
                     "<option value=\"\">&nbsp;</option>";
@@ -397,7 +397,7 @@ $javascriptCode .= '
                     }
                 }
 
-                if(arr_user_fields[key]["usf_type"] == "CHECKBOX")
+                if(arr_user_fields[key]["usf_type"] === "CHECKBOX")
                 {
                     html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\">" +
                     "<option value=\"\">&nbsp;</option>";

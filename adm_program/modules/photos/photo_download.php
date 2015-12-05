@@ -63,7 +63,7 @@ if($photo_album->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_
 }
 
 // check whether album is locked
-if($photo_album->getValue('pho_locked') == 1 && (!$gCurrentUser->editPhotoRight()))
+if($photo_album->getValue('pho_locked') == 1 && !$gCurrentUser->editPhotoRight())
 {
     $gMessage->show($gL10n->get('PHO_ALBUM_NOT_APPROVED'));
 }

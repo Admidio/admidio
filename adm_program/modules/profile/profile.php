@@ -159,7 +159,7 @@ $page->addJavascript('
     function callbackFormerRoles() {
         if(profileJS) {
             profileJS.formerRoleCount--;
-            if(profileJS.formerRoleCount == 0) {
+            if(profileJS.formerRoleCount === 0) {
                 $("#profile_former_roles_box").fadeOut("slow");
             }
         };
@@ -168,7 +168,7 @@ $page->addJavascript('
     function callbackFutureRoles() {
         if(profileJS) {
             profileJS.futureRoleCount--;
-            if(profileJS.futureRoleCount == 0) {
+            if(profileJS.futureRoleCount === 0) {
                 $("#profile_future_roles_box").fadeOut("slow");
             }
         };
@@ -684,11 +684,11 @@ if($gPreferences['profile_show_roles'] == 1)
     // *******************************************************************************
 
     $count_show_roles = 0;
-    $roleStatement = getFutureRolesFromDatabase($user->getValue('usr_id'));
-    $count_role  = $roleStatement->rowCount();
-    $visible     = "";
+    $roleStatement    = getFutureRolesFromDatabase($user->getValue('usr_id'));
+    $count_role       = $roleStatement->rowCount();
+    $visible          = '';
 
-    if($count_role == 0)
+    if($count_role === 0)
     {
         $visible = ' style="display: none;" ';
     }
@@ -715,11 +715,11 @@ if($gPreferences['profile_show_former_roles'] == 1)
     // Alle Rollen auflisten, die dem Mitglied zugeordnet waren
 
     $count_show_roles = 0;
-    $roleStatement = getFormerRolesFromDatabase($user->getValue('usr_id'));
-    $count_role  = $roleStatement->rowCount();
-    $visible     = "";
+    $roleStatement    = getFormerRolesFromDatabase($user->getValue('usr_id'));
+    $count_role       = $roleStatement->rowCount();
+    $visible          = '';
 
-    if($count_role == 0)
+    if($count_role === 0)
     {
         $visible = ' style="display: none;" ';
     }

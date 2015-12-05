@@ -105,7 +105,7 @@ elseif($getMode === 5)
     $count_role       = $roleStatement->rowCount();
     getRoleMemberships('former_role_list', $user, $roleStatement, $count_role, true);
 
-    if($count_role == 0)
+    if($count_role === 0)
     {
         echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'none\' })</script>';
     }
@@ -122,7 +122,7 @@ elseif($getMode === 6)
     $count_role       = $roleStatement->rowCount();
     getRoleMemberships('future_role_list', $user, $roleStatement, $count_role, true);
 
-    if($count_role == 0)
+    if($count_role === 0)
     {
         echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'none\' })</script>';
     }

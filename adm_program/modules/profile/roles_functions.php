@@ -95,7 +95,7 @@ function getRoleMemberships($htmlListId, $user, $roleStatement, $count_role, $di
 {
     global $gDb, $gL10n, $gCurrentUser, $gPreferences, $g_root_path, $gProfileFields;
 
-    $countShowRoles  = 0;
+    $countShowRoles = 0;
     $member = new TableMembers($gDb);
     $role   = new TableRoles($gDb);
     $roleMemHTML = '<ul class="list-group admidio-list-roles-assign" id="'.$htmlListId.'">';
@@ -225,7 +225,7 @@ function getRoleMemberships($htmlListId, $user, $roleStatement, $count_role, $di
             ++$countShowRoles;
         }
     }
-    if($countShowRoles == 0)
+    if($countShowRoles === 0)
     {
         $roleMemHTML = '<div class="block-padding">'.$gL10n->get('PRO_NO_ROLES_VISIBLE').'</div>';
     }

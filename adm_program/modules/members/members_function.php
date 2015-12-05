@@ -45,7 +45,7 @@ else
     $this_orga = false;
 }
 
-if($getMode != 1)
+if($getMode !== 1)
 {
     // pruefen, ob der User noch in anderen Organisationen aktiv ist
     $sql    = 'SELECT rol_id
@@ -58,7 +58,7 @@ if($getMode != 1)
                   AND mem_end     > \''.DATE_NOW.'\'
                   AND mem_usr_id  = '. $getUserId;
     $statement = $gDb->query($sql);
-    $other_orga = $statement->rowCount();
+    $otherOrgaCount = $statement->rowCount();
 
     // User-Objekt anlegen
     $user = new User($gDb, $gProfileFields, $getUserId);
@@ -148,7 +148,7 @@ elseif($getMode === 3)
 
     // User darf in keiner anderen Orga aktiv sein
     // kein Suizid ermoeglichen
-    if($other_orga > 0 || $gCurrentUser->getValue('usr_id') == $getUserId)
+    if($otherOrgaCount > 0 || $gCurrentUser->getValue('usr_id') == $getUserId)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -200,14 +200,14 @@ elseif($getMode === 5)
 }
 elseif($getMode === 6)
 {
-    if($this_orga == true && $other_orga == 0 && $gCurrentUser->isWebmaster())
+    if($this_orga && $otherOrgaCount === 0 && $gCurrentUser->isWebmaster())
     {
         // nur Webmaster duerfen dies
         // User ist NUR Mitglied der aktuellen Orga -> dann fragen, ob Ehemaliger oder ganz loeschen
         header('Location: '.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=1');
         exit();
     }
-    elseif($this_orga == false && $other_orga == 0 && $gCurrentUser->isWebmaster())
+    elseif(!$this_orga && $otherOrgaCount === 0 && $gCurrentUser->isWebmaster())
     {
         // nur Webmaster duerfen dies
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden

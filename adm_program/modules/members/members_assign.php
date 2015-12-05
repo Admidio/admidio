@@ -78,9 +78,9 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
          WHERE usr_valid = 1
            AND '.$sql_similar_name;
 $usrStatement = $gDb->query($sql);
-$member_found = $usrStatement->rowCount();
+$memberCount = $usrStatement->rowCount();
 
-if($member_found == 0)
+if($memberCount === 0)
 {
     // no user with that name found so go back and allow to create a new user
     echo 'success';

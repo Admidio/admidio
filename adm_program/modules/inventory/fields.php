@@ -52,7 +52,7 @@ $page->addJavascript('
                     actSequence = actRowCount;
                 }
 
-                if(actSequence == 0) {
+                if(actSequence === 0) {
                     prevNode = childs[i];
                 }
             }

@@ -191,7 +191,7 @@ class TableMembers extends TableAccess
                                AND mem_usr_id <> '.$userId.'
                                AND \''.DATE_NOW.'\' BETWEEN mem_begin AND mem_end ';
                     $memberStatement = $this->db->query($sql);
-                    if($memberStatement->rowCount() == 0)
+                    if($memberStatement->rowCount() === 0)
                     {
                         throw new AdmException('LST_MUST_HAVE_WEBMASTER');
                     }
