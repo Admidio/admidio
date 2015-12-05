@@ -73,7 +73,7 @@ class TableFolder extends TableAccess
     {
         $returnCode = true;
 
-        if ($folderId == 0)
+        if ($folderId === 0)
         {
             $folderId = $this->getValue('fol_id');
 
@@ -140,7 +140,7 @@ class TableFolder extends TableAccess
      */
     public function editLockedFlagOnFolder($locked_flag, $folderId = 0)
     {
-        if ($folderId == 0)
+        if ($folderId === 0)
         {
             $folderId = $this->getValue('fol_id');
             $this->setValue('fol_locked', $locked_flag);
@@ -554,7 +554,7 @@ class TableFolder extends TableAccess
 
         $originalCall = false;
 
-        if ($folderId == 0)
+        if ($folderId === 0)
         {
             $originalCall = true;
             $folderId = $this->getValue('fol_id');
@@ -686,7 +686,7 @@ class TableFolder extends TableAccess
      */
     public function rename($newName, $newPath, $folderId = 0)
     {
-        if ($folderId == 0)
+        if ($folderId === 0)
         {
             $folderId = $this->getValue('fol_id');
             $this->setValue('fol_name', $newName);
@@ -745,7 +745,7 @@ class TableFolder extends TableAccess
      */
     public function setRolesOnFolder($rolesArray, $folderId = 0)
     {
-        if ($folderId == 0)
+        if ($folderId === 0)
         {
             $folderId = $this->getValue('fol_id');
         }
