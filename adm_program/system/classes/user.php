@@ -525,7 +525,7 @@ class User extends TableUsers
 
     /**
      * Creates an array with all roles where the user has the right to mail them
-     * @return Array with role ids where user has the right to mail them
+     * @return array Array with role ids where user has the right to mail them
      */
     public function getAllMailRoles()
     {
