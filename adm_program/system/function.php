@@ -424,9 +424,10 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
 
     if($datatype === 'boolean')
     {
-        // boolean type must be 0 or 1 otherwise throw error
+        // boolean type must be 0 or 1 otherwise throw error.
+        // No explicit check because parameters through GET are almost strings.
         // do not check with in_array because this function don't work properly
-        if($array[$variableName] !== '0'     && $array[$variableName] !== '1'
+        if($array[$variableName] != '0'      && $array[$variableName] != '1'
         && $array[$variableName] !== 'false' && $array[$variableName] !== 'true')
         {
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
