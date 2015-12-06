@@ -252,7 +252,7 @@ class TableInventoryField extends TableAccess
         $fields_changed = $this->columnsValueChanged;
 
         // if new field than generate new name intern, otherwise no change will be made
-        if($this->new_record == true)
+        if($this->new_record)
         {
             $this->setValue('inf_name_intern', $this->getNewNameIntern($this->getValue('inf_name', 'database'), 1));
         }

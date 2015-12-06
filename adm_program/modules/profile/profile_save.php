@@ -169,7 +169,7 @@ foreach($gProfileFields->mProfileFields as $field)
             $returnCode = $user->setValue($field->getValue('usf_name_intern'), $_POST[$post_id]);
 
             // Ausgabe der Fehlermeldung je nach Datentyp
-            if($returnCode == false)
+            if(!$returnCode)
             {
                 switch ($field->getValue('usf_type'))
                 {

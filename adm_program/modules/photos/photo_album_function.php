@@ -169,7 +169,7 @@ if($getMode === 'new' || $getMode === 'change')
         $b_return = $albumFolder->move($newFolder);
 
         // Verschieben war nicht erfolgreich, Schreibrechte vorhanden ?
-        if($b_return == false)
+        if(!$b_return)
         {
             $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
             $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));

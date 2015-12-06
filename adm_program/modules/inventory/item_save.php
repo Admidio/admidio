@@ -83,7 +83,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
             $returnCode = $inventory->setValue($field->getValue('inf_name_intern'), $_POST[$post_id]);
 
             // Ausgabe der Fehlermeldung je nach Datentyp
-            if($returnCode == false)
+            if(!$returnCode)
             {
                 switch ($field->getValue('inf_type'))
                 {

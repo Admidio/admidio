@@ -93,7 +93,7 @@ class TablePhotos extends TableAccess
 
         // nun den Ordner fuer die Veranstaltung anlegen
         $folderName = $this->getValue('pho_begin', 'Y-m-d'). '_'. $this->getValue('pho_id');
-        if($myFilesPhotos->createFolder($folderName, true) == false)
+        if(!$myFilesPhotos->createFolder($folderName, true))
         {
             $error['text'] = 'SYS_FOLDER_NOT_CREATED';
             $error['path'] = 'adm_my_files/photos/'.$folderName;

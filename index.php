@@ -39,7 +39,7 @@ if(file_exists('adm_my_files/config.php'))
 
     // if database doesn't contain the components table then link to update wizard
     // because database Admidio version is lower then 3.0
-    if($gDb->query('SELECT 1 FROM '.TBL_COMPONENTS, false) == false)
+    if($gDb->query('SELECT 1 FROM '.TBL_COMPONENTS, false) === false)
     {
         header('Location: adm_program/installation/update.php');
     }

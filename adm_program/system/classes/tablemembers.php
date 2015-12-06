@@ -125,7 +125,7 @@ class TableMembers extends TableAccess
             // Leiter sollte nicht ueberschrieben werden, wenn nicht uebergeben wird
             if($leader === '')
             {
-                if($this->new_record == true)
+                if($this->new_record)
                 {
                     $this->setValue('mem_leader', 0);
                 }
@@ -172,7 +172,7 @@ class TableMembers extends TableAccess
             $this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
         }
 
-        if($this->new_record == false && $this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)
+        if(!$this->new_record && $this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)
         {
             // subtract one day, so that user leaves role immediately
             $newEndDate = date('Y-m-d', time() - (24 * 60 * 60));

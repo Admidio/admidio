@@ -46,7 +46,7 @@ class TableWeblink extends TableAccess
 
         if($columnName === 'lnk_description')
         {
-            if(isset($this->dbColumns['lnk_description']) === false)
+            if(!isset($this->dbColumns['lnk_description']))
             {
                 $value = '';
             }

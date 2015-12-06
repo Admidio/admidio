@@ -439,7 +439,7 @@ class Organization extends TableAccess
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         // org_shortname shouldn't be edited
-        if($columnName === 'org_shortname' && $this->new_record == false)
+        if($columnName === 'org_shortname' && !$this->new_record)
         {
             return false;
         }

@@ -53,7 +53,7 @@ class TableFolder extends TableAccess
         $this->folderPath->setFolder($this->getCompletePathOfFolder());
         $b_return = $this->folderPath->createFolder($folderName, true);
 
-        if($this->folderPath->createFolder($folderName, true) == false)
+        if(!$this->folderPath->createFolder($folderName, true))
         {
             $error['text'] = 'SYS_FOLDER_NOT_CREATED';
             $error['path'] = $this->getCompletePathOfFolder().'/'.$folderName;

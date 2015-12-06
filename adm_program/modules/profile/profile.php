@@ -363,7 +363,7 @@ $page->addHtml('
                         case 'POSTCODE':
                         case 'CITY':
                         case 'COUNTRY':
-                            if($bAddressOutput == false // output of address only once
+                            if(!$bAddressOutput // output of address only once
                             && (strlen($user->getValue('ADDRESS')) > 0 || strlen($user->getValue('POSTCODE')) > 0
                                || strlen($user->getValue('CITY')) > 0 || strlen($user->getValue('COUNTRY')) > 0))
                             {

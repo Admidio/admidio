@@ -41,7 +41,7 @@ class TableRooms extends TableAccess
     {
         if($columnName === 'room_description')
         {
-            if(isset($this->dbColumns['room_description']) === false)
+            if(!isset($this->dbColumns['room_description']))
             {
                 $value = '';
             }

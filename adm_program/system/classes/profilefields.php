@@ -514,7 +514,7 @@ class ProfileFields
                 case 'DATE':
                     // Datum muss gueltig sein und formatiert werden
                     $date = DateTime::createFromFormat($gPreferences['system_date'], $fieldValue);
-                    if($date == false)
+                    if($date === false)
                     {
                         if(!$this->noValueCheck)
                         {

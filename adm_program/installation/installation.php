@@ -37,7 +37,7 @@ if(!isset($_SESSION['create_config_file']))
     $_SESSION['create_config_file'] = true;
 }
 
-if(isset($g_tbl_praefix) === false)
+if(!isset($g_tbl_praefix))
 {
     if(isset($_SESSION['prefix']))
     {

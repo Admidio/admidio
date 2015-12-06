@@ -252,7 +252,7 @@ elseif($getMode === 2)
             $returnCode = $role->setValue($key, $value);
 
             // at least one role must have this flag otherwise show error
-            if($returnCode == false && $key === 'rol_default_registration')
+            if(!$returnCode && $key === 'rol_default_registration')
             {
                 $gMessage->show($gL10n->get('ROL_NO_DEFAULT_ROLE', $gL10n->get('ROL_DEFAULT_REGISTRATION')));
             }
