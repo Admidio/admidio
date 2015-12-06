@@ -80,7 +80,7 @@ $list = array();
 if ($gValidLogin && $getMsgType == 'PM')
 {
 
-    $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name, usr_login_name
+    $sql = 'SELECT usr_id, FIRST_NAME.usd_value as first_name, LAST_NAME.usd_value as last_name, usr_login_name
                   FROM '.TBL_ROLES.', '.TBL_CATEGORIES.', '.TBL_MEMBERS.', '.TBL_USERS.'
                    LEFT JOIN '.TBL_USER_DATA.' LAST_NAME
                      ON LAST_NAME.usd_usr_id = usr_id
@@ -298,32 +298,25 @@ elseif (!isset($message_result))
             }
             // list array with all roles where user is allowed to send mail to
 			$send_roles = $gCurrentUser->getAllMailRoles();
-			
-			foreach ($send_roles as &$allowed_role) {
+
+			foreach ($send_roles as &$allowed_role)
+			{
 				// Rollenobjekt anlegen
 				$role = new TableRoles($gDb);
 				$role->readDataById($allowed_role);
-				
-				if($act_number == '' || ($role->hasFormerMembers($allowed_role) > 0 && $gPreferences['mail_show_former'] == 1))
+
+                if($role->getValue('cat_name_intern') !== 'CONFIRMATION_OF_PARTICIPATION')
                 {
-                    $list[] = array('groupID: '.$allowed_role.$act_number, $role->getValue('rol_name').' '.$act_group_short, $act_group);
-                    $list_rol_id_array[] = $allowed_role;
+    				if($act_number == '' || ($role->hasFormerMembers($allowed_role) > 0 && $gPreferences['mail_show_former'] == 1))
+                    {
+                        $list[] = array('groupID: '.$allowed_role.$act_number, $role->getValue('rol_name').' '.$act_group_short, $act_group);
+                        $list_rol_id_array[] = $allowed_role;
+                    }
                 }
 			}
+        }
 
-        }
-        
-        foreach(array_unique($list_rol_id_array) as $key) 
-        {   
-            if(isset($list_rol_id))
-            {
-                $list_rol_id .= ", '".$key."'";
-            }
-            else
-            {
-                $list_rol_id = "'".$key."'";
-            }
-        }
+        $listVisibleRoleArray = array_intersect($list_rol_id_array, $gCurrentUser->getAllVisibleRoles());
 
         // select Users
 
@@ -346,15 +339,15 @@ elseif (!isset($message_result))
                      AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
                      AND usr_valid   = 1
                      AND mem_rol_id  = rol_id
-                     AND rol_id in ('.$list_rol_id.')
+                     AND rol_id in ('.implode(',', $listVisibleRoleArray).')
                    GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value, rol_mail_this_role, rol_id
                    ORDER BY usr_id, last_name, first_name, rol_mail_this_role desc';
 
         $result = $gDb->query($sql);
-		
+
 		$passive_list = array();
 		$active_list = array();
-		
+
         while ($row = $gDb->fetch_array($result))
         {
 			if (!isset($act_usr_id) or $act_usr_id <> $row['usr_id'])
