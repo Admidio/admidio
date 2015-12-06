@@ -63,7 +63,7 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
     {
         if(strpos($key, 'lnk_') === 0)
         {
-            if($link->setValue($key, $value) == false)
+            if(!$link->setValue($key, $value))
             {
                 // Daten wurden nicht uebernommen, Hinweis ausgeben
                 if($key === 'lnk_url')

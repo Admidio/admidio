@@ -168,7 +168,7 @@ if (((OUTPUT_COMPRESSION_TYPE === 'gzip')  && ($zp = @gzopen($backupabsolutepath
 
             $SQLquery  = 'SHOW CREATE TABLE '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
             $showcreatetableStatement = $gDb->query($SQLquery);
-            if ($showcreatetableStatement->rowCount() == 1)
+            if ($showcreatetableStatement->rowCount() === 1)
             {
                 $row = $showcreatetableStatement->fetch();
                 $tablestructure = $row['Create Table'];

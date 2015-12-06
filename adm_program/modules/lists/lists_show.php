@@ -18,8 +18,8 @@
  * show_members:    0 - (Default) show active members of role
  *                  1 - show former members of role
  *                  2 - show active and former members of role
- * full_screen:     0 - (Default) show sidebar, head and page bottom of html page
- *                  1 - Only show the list without any other html unnecessary elements
+ * full_screen:     false - (Default) show sidebar, head and page bottom of html page
+ *                  true  - Only show the list without any other html unnecessary elements
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
@@ -33,7 +33,7 @@ $getMode        = admFuncVariableIsValid($_GET, 'mode',         'string',  array
 $getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'numeric', array('defaultValue' => 1));
 $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'numeric');
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
-$getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen',  'numeric');
+$getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen',  'boolean');
 
 // Create date objects and format dates in system format
 $objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
@@ -297,7 +297,7 @@ if($getMode !== 'csv')
         // create html page object
         $page = new HtmlPage();
 
-        if($getFullScreen == true)
+        if($getFullScreen)
         {
             $page->hideThemeHtml();
         }
@@ -341,14 +341,14 @@ if($getMode !== 'csv')
 
         $listsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
-        if($getFullScreen == true)
+        if($getFullScreen)
         {
-            $listsMenu->addItem('menu_item_normal_picture', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId. htmlspecialchars($roleIdLink). '&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=0',
+            $listsMenu->addItem('menu_item_normal_picture', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId. htmlspecialchars($roleIdLink). '&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=false',
                 $gL10n->get('SYS_NORMAL_PICTURE'), 'arrow_in.png');
         }
         else
         {
-            $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId. htmlspecialchars($roleIdLink). '&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=1',
+            $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId. htmlspecialchars($roleIdLink). '&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=true',
                 $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png');
         }
 
