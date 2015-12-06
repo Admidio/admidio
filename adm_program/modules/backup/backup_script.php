@@ -91,13 +91,15 @@ $SelectedTables[$g_adm_db] = $tables;
 
 $starttime = getmicrotime();
 
-switch (OUTPUT_COMPRESSION_TYPE) {
+switch (OUTPUT_COMPRESSION_TYPE)
+{
     case 'gzip':
     case 'none':
         // great
         break;
     case 'bzip2':
-        if (!function_exists('bzopen')) {
+        if (!function_exists('bzopen'))
+        {
             exit('ERROR: PHP-bzip2 support does not appear to be installed, please change OUTPUT_COMPRESSION_TYPE to one of "gzip" or "none"');
         }
         break;
@@ -107,18 +109,24 @@ switch (OUTPUT_COMPRESSION_TYPE) {
 }
 if (((OUTPUT_COMPRESSION_TYPE === 'gzip')  && ($zp = @gzopen($backupabsolutepath.$tempbackupfilename, 'wb'.OUTPUT_COMPRESSION_LEVEL))) ||
     ((OUTPUT_COMPRESSION_TYPE === 'bzip2') && ($bp = @bzopen($backupabsolutepath.$tempbackupfilename, 'w'))) ||
-    ((OUTPUT_COMPRESSION_TYPE === 'none')  && ($fp = @fopen($backupabsolutepath.$tempbackupfilename, 'wb')))) {
+    ((OUTPUT_COMPRESSION_TYPE === 'none')  && ($fp = @fopen($backupabsolutepath.$tempbackupfilename, 'wb'))))
+{
 
     $fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION_TEXT.' (http://www.admidio.org)'.LINE_TERMINATOR;
     $fileheaderline .= '-- '.$gL10n->get('BAC_BACKUP_FROM', date('d.m.Y'), date('G:i:s')).LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= '-- '.$gL10n->get('SYS_DATABASE').': '.$g_adm_db.LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= '-- '.$gL10n->get('SYS_USER').': '.$gCurrentUser->getValue('FIRST_NAME', 'database'). ' '. $gCurrentUser->getValue('LAST_NAME', 'database').LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= 'SET FOREIGN_KEY_CHECKS=0;'.LINE_TERMINATOR.LINE_TERMINATOR;
-    if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
+    if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
+    {
         bzwrite($bp, $fileheaderline, strlen($fileheaderline));
-    } elseif (OUTPUT_COMPRESSION_TYPE === 'gzip') {
+    }
+    elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
+    {
         gzwrite($zp, $fileheaderline, strlen($fileheaderline));
-    } else {
+    }
+    else
+    {
         fwrite($fp, $fileheaderline, strlen($fileheaderline));
     }
 
@@ -126,11 +134,14 @@ if (((OUTPUT_COMPRESSION_TYPE === 'gzip')  && ($zp = @gzopen($backupabsolutepath
 
     OutputInformation('', '<br><span id="topprogress" style="font-weight: bold;">Overall Progress:</span><br>');
     $overallrows = 0;
-    foreach ($SelectedTables as $dbname => $value) {
+    foreach ($SelectedTables as $dbname => $value)
+    {
         echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables[$dbname]) / TABLES_PER_COL).'"><b>'.htmlentities($dbname).'</b></th></tr><tr><td nowrap valign="top">';
         $tablecounter = 0;
-        for ($t = 0; $t < count($SelectedTables[$dbname]); ++$t) {
-            if ($tablecounter++ >= TABLES_PER_COL) {
+        for ($t = 0; $t < count($SelectedTables[$dbname]); ++$t)
+        {
+            if ($tablecounter++ >= TABLES_PER_COL)
+            {
                 echo '</td><td nowrap valign="top">';
                 $tablecounter = 1;
             }
@@ -146,8 +157,10 @@ if (((OUTPUT_COMPRESSION_TYPE === 'gzip')  && ($zp = @gzopen($backupabsolutepath
     }
 
     $alltablesstructure = '';
-    foreach ($SelectedTables as $dbname => $value) {
-        for ($t = 0; $t < count($SelectedTables[$dbname]); ++$t) {
+    foreach ($SelectedTables as $dbname => $value)
+    {
+        for ($t = 0; $t < count($SelectedTables[$dbname]); ++$t)
+        {
             @set_time_limit(60);
             OutputInformation('statusinfo', 'Creating structure for <b>'.htmlentities($dbname.'.'.$SelectedTables[$dbname][$t]).'</b>');
 
@@ -155,31 +168,39 @@ if (((OUTPUT_COMPRESSION_TYPE === 'gzip')  && ($zp = @gzopen($backupabsolutepath
 
             $SQLquery  = 'SHOW CREATE TABLE '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
             $showcreatetableStatement = $gDb->query($SQLquery);
-            if ($showcreatetableStatement->rowCount() == 1) {
+            if ($showcreatetableStatement->rowCount() == 1)
+            {
                 $row = $showcreatetableStatement->fetch();
                 $tablestructure = $row['Create Table'];
 
                 $SQLquery  = 'SHOW FULL FIELDS';
                 $SQLquery .= ' FROM '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
                 $showfieldsStatement = $gDb->query($SQLquery);
-                while ($row = $showfieldsStatement->fetch()) {
-                    if (preg_match('#^[a-z]+#i', $row['Type'], $matches)) {
+                while ($row = $showfieldsStatement->fetch())
+                {
+                    if (preg_match('#^[a-z]+#i', $row['Type'], $matches))
+                    {
                         $RowTypes[$dbname][$SelectedTables[$dbname][$t]][$row['Field']] = $matches[0];
                     }
                     $fieldnames[] = $row['Field'];
                 }
-            } else {
+            }
+            else
+            {
                 $structurelines = array();
                 $SQLquery  = 'SHOW FULL FIELDS';
                 $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
                 $showfieldsStatement = $gDb->query($SQLquery);
-                while ($row = $showfieldsStatement->fetch()) {
+                while ($row = $showfieldsStatement->fetch())
+                {
                     $structureline  = BACKTICKCHAR.$row['Field'].BACKTICKCHAR;
                     $structureline .= ' '.$row['Type'];
-                    if (isset($row['Collation']) && !is_null($row['Collation']) && !empty($row['Collation'])) {
+                    if (isset($row['Collation']) && !is_null($row['Collation']) && !empty($row['Collation']))
+                    {
                         $structureline .= ' COLLATE '.$row['Collation'];
                     }
-                    switch (strtoupper($row['Null'])) {
+                    switch (strtoupper($row['Null']))
+                    {
                         case '1':
                         case 'YES':
                             $field_is_null = true;
@@ -191,23 +212,35 @@ if (((OUTPUT_COMPRESSION_TYPE === 'gzip')  && ($zp = @gzopen($backupabsolutepath
                             $field_is_null = false;
                             break;
                     }
-                    if (!preg_match('#^(tiny|medium|long)?(text|blob)#i', $row['Type'])) {
-                        if ($field_is_null && is_null($row['Default'])) {
+                    if (!preg_match('#^(tiny|medium|long)?(text|blob)#i', $row['Type']))
+                    {
+                        if ($field_is_null && is_null($row['Default']))
+                        {
                             $structureline .= ' DEFAULT NULL';
-                        } elseif ($field_is_null) {
+                        }
+                        elseif ($field_is_null)
+                        {
                             $structureline .= ' NULL';
-                        } else {
+                        }
+                        else
+                        {
                             $structureline .= ' NOT NULL';
                         }
                     }
                     preg_match('#^[a-z]+#i', $row['Type'], $matches);
                     $RowTypes[$dbname][$SelectedTables[$dbname][$t]][$row['Field']] = $matches[0];
-                    if (isset($row['Default']) && !is_null($row['Default'])) {
-                        if (preg_match('#^(tiny|medium|long)?(text|blob)#i', $row['Type'])) {
+                    if (isset($row['Default']) && !is_null($row['Default']))
+                    {
+                        if (preg_match('#^(tiny|medium|long)?(text|blob)#i', $row['Type']))
+                        {
                             // no default values
-                        } elseif ((strtolower($row['Type']) === 'timestamp') && (strtoupper($row['Default']) === 'CURRENT_TIMESTAMP')) {
+                        }
+                        elseif ((strtolower($row['Type']) === 'timestamp') && (strtoupper($row['Default']) === 'CURRENT_TIMESTAMP'))
+                        {
                             $structureline .= ' DEFAULT '.$row['Default'];
-                        } else {
+                        }
+                        else
+                        {
                             $structureline .= ' DEFAULT \''.$row['Default'].'\'';
                         }
                     }
@@ -225,30 +258,41 @@ if (((OUTPUT_COMPRESSION_TYPE === 'gzip')  && ($zp = @gzopen($backupabsolutepath
                 $SQLquery .= ' FROM '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
                 $showindexStatement = $gDb->query($SQLquery);
                 $INDICES = array();
-                while ($row = $showindexStatement->fetch()) {
+                while ($row = $showindexStatement->fetch())
+                {
                     $INDICES[$row['Key_name']][$row['Seq_in_index']] = $row;
                 }
-                foreach ($INDICES as $index_name => $columndata) {
+                foreach ($INDICES as $index_name => $columndata)
+                {
                     $structureline  = '';
-                    if ($index_name === 'PRIMARY') {
+                    if ($index_name === 'PRIMARY')
+                    {
                         $structureline .= 'PRIMARY ';
-                    } elseif ((@$columndata[1]['Index_type'] === 'FULLTEXT') || ($columndata[1]['Comment'] === 'FULLTEXT')) {
+                    }
+                    elseif ((@$columndata[1]['Index_type'] === 'FULLTEXT') || ($columndata[1]['Comment'] === 'FULLTEXT'))
+                    {
                         $structureline .= 'FULLTEXT ';
-                    } elseif (!$columndata[1]['Non_unique']) {
+                    }
+                    elseif (!$columndata[1]['Non_unique'])
+                    {
                         $structureline .= 'UNIQUE ';
                     }
                     $structureline .= 'KEY';
-                    if ($index_name !== 'PRIMARY') {
+                    if ($index_name !== 'PRIMARY')
+                    {
                         $structureline .= ' '.BACKTICKCHAR.$index_name.BACKTICKCHAR;
                     }
                     $structureline .= ' (';
                     $firstkeyname = true;
-                    foreach ($columndata as $seq_in_index => $row) {
-                        if (!$firstkeyname) {
+                    foreach ($columndata as $seq_in_index => $row)
+                    {
+                        if (!$firstkeyname)
+                        {
                             $structureline .= ',';
                         }
                         $structureline .= BACKTICKCHAR.$row['Column_name'].BACKTICKCHAR;
-                        if ($row['Sub_part']) {
+                        if ($row['Sub_part'])
+                        {
                             $structureline .= '('.$row['Sub_part'].')';
                         }
                         $firstkeyname = false;
@@ -259,17 +303,20 @@ if (((OUTPUT_COMPRESSION_TYPE === 'gzip')  && ($zp = @gzopen($backupabsolutepath
 
                 $SQLquery  = 'SHOW TABLE STATUS LIKE "'.$gDb->escapeString($SelectedTables[$dbname][$t]).'"';
                 $tablestatusStatement = $gDb->query($SQLquery);
-                if (!($TableStatusRow = $tablestatusStatement->fetch())) {
+                if (!($TableStatusRow = $tablestatusStatement->fetch()))
+                {
                     exit('failed to execute "'.$SQLquery.'" on '.$dbname.'.'.$tablename);
                 }
 
                 $tablestructure  = 'CREATE TABLE '.($CreateIfNotExists ? 'IF NOT EXISTS ' : '').($dbNameInCreate ? BACKTICKCHAR.$dbname.BACKTICKCHAR.'.' : '').BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR.' ('.LINE_TERMINATOR;
                 $tablestructure .= '  '.implode(','.LINE_TERMINATOR.'  ', $structurelines).LINE_TERMINATOR;
                 $tablestructure .= ') '.strtoupper($TypeEngineKey).'='.$TableStatusRow[$TypeEngineKey];
-                if (isset($TableStatusRow['Collation']) && !is_null($TableStatusRow['Collation']) && !empty($TableStatusRow['Collation'])) {
+                if (isset($TableStatusRow['Collation']) && !is_null($TableStatusRow['Collation']) && !empty($TableStatusRow['Collation']))
+                {
                     $tablestructure .= ' COLLATE='.$TableStatusRow['Collation'];
                 }
-                if ($TableStatusRow['Auto_increment'] !== null) {
+                if ($TableStatusRow['Auto_increment'] !== null)
+                {
                     $tablestructure .= ' AUTO_INCREMENT='.$TableStatusRow['Auto_increment'];
                 }
             }
@@ -279,56 +326,76 @@ if (((OUTPUT_COMPRESSION_TYPE === 'gzip')  && ($zp = @gzopen($backupabsolutepath
 
         } // end table structure backup
     }
-    if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
+    if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
+    {
         bzwrite($bp, $alltablesstructure.LINE_TERMINATOR, strlen($alltablesstructure) + strlen(LINE_TERMINATOR));
-    } elseif (OUTPUT_COMPRESSION_TYPE === 'gzip') {
+    }
+    elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
+    {
         gzwrite($zp, $alltablesstructure.LINE_TERMINATOR, strlen($alltablesstructure) + strlen(LINE_TERMINATOR));
-    } else {
+    }
+    else
+    {
         fwrite($fp, $alltablesstructure.LINE_TERMINATOR, strlen($alltablesstructure) + strlen(LINE_TERMINATOR));
     }
 
     $datastarttime = getmicrotime();
     OutputInformation('statusinfo', '');
 
-    if ($_REQUEST['StartBackup'] !== 'structure') {
+    if ($_REQUEST['StartBackup'] !== 'structure')
+    {
         $processedrows = 0;
-        foreach ($SelectedTables as $dbname => $value) {
+        foreach ($SelectedTables as $dbname => $value)
+        {
             @set_time_limit(60);
-            for ($t = 0; $t < count($SelectedTables[$dbname]); ++$t) {
+            for ($t = 0; $t < count($SelectedTables[$dbname]); ++$t)
+            {
                 $SQLquery  = 'SELECT *';
                 $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
                 $statement = $gDb->query($SQLquery);
                 $rows[$t] = $statement->rowCount();
-                if ($rows[$t] > 0) {
+                if ($rows[$t] > 0)
+                {
                     $tabledatadumpline = '# dumping data for '.$dbname.'.'.$SelectedTables[$dbname][$t].LINE_TERMINATOR;
-                    if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
+                    if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
+                    {
                         bzwrite($bp, $tabledatadumpline, strlen($tabledatadumpline));
-                    } elseif (OUTPUT_COMPRESSION_TYPE === 'gzip') {
+                    }
+                    elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
+                    {
                         gzwrite($zp, $tabledatadumpline, strlen($tabledatadumpline));
-                    } else {
+                    }
+                    else
+                    {
                         fwrite($fp, $tabledatadumpline, strlen($tabledatadumpline));
                     }
                 }
                 unset($fieldnames);
                 $fieldnames = $gDb->showColumns($gDb->escapeString($SelectedTables[$dbname][$t]), false);
 
-                if ($_REQUEST['StartBackup'] === 'complete') {
+                if ($_REQUEST['StartBackup'] === 'complete')
+                {
                     $insertstatement = ($ReplaceInto ? 'REPLACE' : 'INSERT').' INTO '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR.' ('.BACKTICKCHAR.implode(BACKTICKCHAR.', '.BACKTICKCHAR, $fieldnames).BACKTICKCHAR.') VALUES (';
-                } else {
+                }
+                else
+                {
                     $insertstatement = ($ReplaceInto ? 'REPLACE' : 'INSERT').' INTO '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR.' VALUES (';
                 }
                 $currentrow       = 0;
                 $thistableinserts = '';
-                while ($row = $statement->fetch()) {
+                while ($row = $statement->fetch())
+                {
                     unset($valuevalues);
-                    foreach ($fieldnames as $key => $val) {
-                        if ($row[$key] === null) {
-
+                    foreach ($fieldnames as $key => $val)
+                    {
+                        if ($row[$key] === null)
+                        {
                             $valuevalues[] = 'NULL';
-
-                        } else {
-
-                            switch ($RowTypes[$dbname][$SelectedTables[$dbname][$t]][$val]) {
+                        }
+                        else
+                        {
+                            switch ($RowTypes[$dbname][$SelectedTables[$dbname][$t]][$val])
+                            {
                                 // binary data dump, two hex characters per byte
                                 case 'tinyblob':
                                 case 'blob':
@@ -336,13 +403,17 @@ if (((OUTPUT_COMPRESSION_TYPE === 'gzip')  && ($zp = @gzopen($backupabsolutepath
                                 case 'longblob':
                                     $data = $row[$key];
                                     $data_len = strlen($data);
-                                    if ($HexBLOBs && $data_len) {
+                                    if ($HexBLOBs && $data_len)
+                                    {
                                         $hexstring = '0x';
-                                        for ($i = 0; $i < $data_len; ++$i) {
+                                        for ($i = 0; $i < $data_len; ++$i)
+                                        {
                                             $hexstring .= str_pad(dechex(ord($data{$i})), 2, '0', STR_PAD_LEFT);
                                         }
                                         $valuevalues[] = $hexstring;
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         $valuevalues[] = QUOTECHAR.$gDb->escapeString($data).QUOTECHAR;
                                     }
                                     break;
@@ -382,47 +453,64 @@ if (((OUTPUT_COMPRESSION_TYPE === 'gzip')  && ($zp = @gzopen($backupabsolutepath
                     }
                     $thistableinserts .= $insertstatement.implode(', ', $valuevalues).');'.LINE_TERMINATOR;
 
-                    if (strlen($thistableinserts) >= BUFFER_SIZE) {
-                        if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
+                    if (strlen($thistableinserts) >= BUFFER_SIZE)
+                    {
+                        if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
+                        {
                             bzwrite($bp, $thistableinserts, strlen($thistableinserts));
-                        } elseif (OUTPUT_COMPRESSION_TYPE === 'gzip') {
+                        }
+                        elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
+                        {
                             gzwrite($zp, $thistableinserts, strlen($thistableinserts));
-                        } else {
+                        }
+                        else
+                        {
                             fwrite($fp, $thistableinserts, strlen($thistableinserts));
                         }
                         $thistableinserts = '';
                     }
-                    if ((++$currentrow % STATS_INTERVAL) == 0) {
+                    if ((++$currentrow % STATS_INTERVAL) == 0)
+                    {
                         @set_time_limit(60);
-                        if ($DHTMLenabled) {
+                        if ($DHTMLenabled)
+                        {
                             OutputInformation('rows_'.$dbname.'_'.$SelectedTables[$dbname][$t], '<b>'.htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records, ['.number_format(($currentrow / $rows[$t])*100).'%])</b>');
                             $elapsedtime = getmicrotime() - $datastarttime;
                             $percentprocessed = ($processedrows + $currentrow) / $overallrows;
                             $overallprogress = 'Overall Progress: '.number_format($processedrows + $currentrow).' / '.number_format($overallrows).' ('.number_format($percentprocessed * 100, 1).'% done) ['.FormattedTimeRemaining($elapsedtime).' elapsed';
-                            if (($percentprocessed > 0) && ($percentprocessed < 1)) {
+                            if (($percentprocessed > 0) && ($percentprocessed < 1))
+                            {
                                 $overallprogress .= ', '.FormattedTimeRemaining(abs($elapsedtime - ($elapsedtime / $percentprocessed))).' remaining';
                             }
                             $overallprogress .= ']';
                             OutputInformation('topprogress', $overallprogress);
                         }
                     }
-                    if (($currentrow % MYSQL_RECONNECT_INTERVAL) == 0) {
+                    if (($currentrow % MYSQL_RECONNECT_INTERVAL) == 0)
+                    {
                         $gDb->close();
-                        if (!@$gDb->connect(DB_HOST, DB_USER, DB_PASS)) {
+                        if (!@$gDb->connect(DB_HOST, DB_USER, DB_PASS))
+                        {
                             mail(ADMIN_EMAIL, 'backupDB: FAILURE! Failed to connect to MySQL database (line '.__LINE__.')', 'Failed to reconnect to SQL database (row #'.$currentrow.') on line '.__LINE__.' in file '.@$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].LINE_TERMINATOR.$gDb->db_error());
                             exit('There was a problem connecting to the database:<br>'.LINE_TERMINATOR.$gDb->db_error());
                         }
                     }
                 }
-                if ($DHTMLenabled) {
+                if ($DHTMLenabled)
+                {
                     OutputInformation('rows_'.$dbname.'_'.$SelectedTables[$dbname][$t], htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records, [100%])');
                     $processedrows += $rows[$t];
                 }
-                if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
+                if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
+                {
                     bzwrite($bp, $thistableinserts.LINE_TERMINATOR.LINE_TERMINATOR, strlen($thistableinserts) + strlen(LINE_TERMINATOR) + strlen(LINE_TERMINATOR));
-                } elseif (OUTPUT_COMPRESSION_TYPE === 'gzip') {
+                }
+                elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
+                {
                     gzwrite($zp, $thistableinserts.LINE_TERMINATOR.LINE_TERMINATOR, strlen($thistableinserts) + strlen(LINE_TERMINATOR) + strlen(LINE_TERMINATOR));
-                } else {
+                }
+                else
+                {
                     fwrite($fp, $thistableinserts.LINE_TERMINATOR.LINE_TERMINATOR, strlen($thistableinserts) + strlen(LINE_TERMINATOR) + strlen(LINE_TERMINATOR));
                 }
             }
@@ -431,36 +519,49 @@ if (((OUTPUT_COMPRESSION_TYPE === 'gzip')  && ($zp = @gzopen($backupabsolutepath
 
     $activateForeignKeys = 'SET FOREIGN_KEY_CHECKS=1;'.LINE_TERMINATOR.LINE_TERMINATOR;
 
-    if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
+    if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
+    {
         bzwrite($bp, $activateForeignKeys, strlen($activateForeignKeys));
-    } elseif (OUTPUT_COMPRESSION_TYPE === 'gzip') {
+    }
+    elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
+    {
         gzwrite($zp, $activateForeignKeys, strlen($activateForeignKeys));
-    } else {
+    }
+    else
+    {
         fwrite($fp, $activateForeignKeys, strlen($activateForeignKeys));
     }
 
-    if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
+    if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
+    {
         bzclose($bp);
-    } elseif (OUTPUT_COMPRESSION_TYPE === 'gzip') {
+    }
+    elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
+    {
         gzclose($zp);
-    } else {
+    }
+    else
+    {
         fclose($fp);
     }
 
-    if (file_exists($newfullfilename)) {
+    if (file_exists($newfullfilename))
+    {
         unlink($newfullfilename); // Windows won't allow overwriting via rename
     }
     rename($backupabsolutepath.$tempbackupfilename, $newfullfilename);
-
-} else {
-
+}
+else
+{
     echo '<b>Warning:</b> failed to open '.$backupabsolutepath.$tempbackupfilename.' for writing!<br><br>';
-    if (is_dir($backupabsolutepath)) {
+    if (is_dir($backupabsolutepath))
+    {
         echo '<i>CHMOD 777</i> on the directory ('.htmlentities($backupabsolutepath).') should fix that.';
-    } else {
+    }
+    else
+    {
         echo 'The specified directory does not exist: "'.htmlentities($backupabsolutepath).'"';
     }
-
 }
 
 // End original backupDB
