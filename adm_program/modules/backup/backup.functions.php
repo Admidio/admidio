@@ -16,8 +16,15 @@
  *
  *****************************************************************************/
 
+/////////////////////////////////////////////////////////////////////
+///////////////////       SUPPORT FUNCTIONS       ///////////////////
+/////////////////////////////////////////////////////////////////////
+
 if (!function_exists('getmicrotime'))
 {
+    /**
+     * @return float
+     */
     function getmicrotime()
     {
         list($usec, $sec) = explode(' ', microtime());
@@ -238,7 +245,12 @@ function bzip2Version()
 }
 
 // MFA Anpassungen
-function FormattedTimeRemaining($seconds, $precision=1)
+/**
+ * @param int $seconds
+ * @param int $precision
+ * @return string
+ */
+function FormattedTimeRemaining($seconds, $precision = 1)
 {
     global $gL10n;
 
@@ -258,6 +270,11 @@ function FormattedTimeRemaining($seconds, $precision=1)
 }
 // Ende : MFA
 
+/**
+ * @param int $filesize
+ * @param int $precision
+ * @return string
+ */
 function FileSizeNiceDisplay($filesize, $precision = 2)
 {
     if ($filesize < 1000)
@@ -283,12 +300,18 @@ function FileSizeNiceDisplay($filesize, $precision = 2)
     return number_format($filesize, $precision).' '.$sizeunit;
 }
 
+/**
+ * @param $id
+ * @param $dhtml
+ * @param string $text
+ * @return bool
+ */
 function OutputInformation($id, $dhtml, $text = '')
 {
     global $DHTMLenabled;
     if ($DHTMLenabled)
     {
-        if (!$dhtml === null)
+        if (!is_null($dhtml))
         {
             if ($id)
             {

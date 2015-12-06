@@ -9,12 +9,11 @@
  ***********************************************************************************************
  */
 
-/******************************************************************************
+/**********************************************************************************
  * Based on backupDB Version 1.2.7-201104261502
  * by James Heinrich <info@silisoftware.com>
- * available at http://www.silisoftware.com
- *
- *****************************************************************************/
+ * available at http://www.silisoftware.com/scripts/index.php?scriptname=backupDB
+ *********************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
@@ -91,6 +90,7 @@ $SelectedTables[$g_adm_db] = $tables;
 
 $starttime = getmicrotime();
 
+// Start original backupDB
 switch (OUTPUT_COMPRESSION_TYPE)
 {
     case 'gzip':
@@ -107,9 +107,9 @@ switch (OUTPUT_COMPRESSION_TYPE)
         exit('ERROR: OUTPUT_COMPRESSION_TYPE ('.htmlentities(OUTPUT_COMPRESSION_TYPE).') must be one of "bzip2", "gzip", "none"');
         break;
 }
-if (((OUTPUT_COMPRESSION_TYPE === 'gzip')  && ($zp = @gzopen($backupabsolutepath.$tempbackupfilename, 'wb'.OUTPUT_COMPRESSION_LEVEL))) ||
-    ((OUTPUT_COMPRESSION_TYPE === 'bzip2') && ($bp = @bzopen($backupabsolutepath.$tempbackupfilename, 'w'))) ||
-    ((OUTPUT_COMPRESSION_TYPE === 'none')  && ($fp = @fopen($backupabsolutepath.$tempbackupfilename, 'wb'))))
+if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$tempbackupfilename, 'wb'.OUTPUT_COMPRESSION_LEVEL))) ||
+    (OUTPUT_COMPRESSION_TYPE === 'bzip2' && ($bp = @bzopen($backupabsolutepath.$tempbackupfilename, 'w'))) ||
+    (OUTPUT_COMPRESSION_TYPE === 'none'  && ($fp = @fopen($backupabsolutepath.$tempbackupfilename, 'wb'))))
 {
 
     $fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION_TEXT.' (http://www.admidio.org)'.LINE_TERMINATOR;
@@ -563,11 +563,10 @@ else
         echo 'The specified directory does not exist: "'.htmlentities($backupabsolutepath).'"';
     }
 }
-
 // End original backupDB
 
 echo '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.
-        $gL10n->get('BAC_BACKUP_COMPLETED', FormattedTimeRemaining(getmicrotime() - $starttime, 2)).'.</strong><br /><br />
+    $gL10n->get('BAC_BACKUP_COMPLETED', FormattedTimeRemaining(getmicrotime() - $starttime, 2)).'.</strong><br /><br />
 
 '.$gL10n->get('BAC_BACKUP_FILE').' <a href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
 ('.FileSizeNiceDisplay(filesize($newfullfilename), 2).')</div>';
