@@ -28,12 +28,12 @@ $_SESSION['ecard_request'] = $_POST;
 if ($gPreferences['enable_ecard_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $gMessage($gL10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 // pruefen ob User eingeloggt ist
 if(!$gValidLogin)
 {
-    $gMessage($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 $senderName  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
@@ -56,7 +56,7 @@ $ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName, $template);
 // if template was not found then show error
 if($ecardDataToParse === '')
 {
-    $gMessage($gL10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 // check if user has right to send mail to selected roles and users
