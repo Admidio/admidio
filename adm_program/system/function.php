@@ -412,7 +412,11 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
         else
         {
             // no value set then initialize the parameter
-            if($datatype === 'boolean' || $datatype === 'numeric')
+            if($datatype === 'boolean')
+            {
+                $value = false;
+            }
+            elseif($datatype === 'numeric')
             {
                 $value = 0;
             }
@@ -425,17 +429,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
         }
     }
 
-    if($datatype === 'boolean')
-    {
-        // boolean type must be 0 or 1 otherwise throw error
-        // do not check with in_array because this function don't work properly
-        if($value !=  '0'     && $value !=  '1'
-        && $value !== 'false' && $value !== 'true')
-        {
-            $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-        }
-    }
-    elseif($optionsAll['validValues'] !== null)
+    if($optionsAll['validValues'] !== null)
     {
         // check if parameter has a valid value
         // do a strict check with in_array because the function don't work properly
@@ -478,9 +472,19 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
             }
             break;
 
-        case 'numeric':
+        case 'bool':
+        case 'boolean':
+            $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            if ($valid === null)
+            {
+                $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+            }
+            $value = $valid;
+            break;
+
         case 'int':
         case 'float':
+        case 'numeric':
             // numeric datatype should only contain numbers
             if (!is_numeric($value))
             {
@@ -488,13 +492,13 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
             }
             else
             {
-                if ($datatype === 'int' && is_int($value))
+                if ($datatype === 'int')
                 {
-                    $value = (int) $value;
+                    $value = filter_var($value, FILTER_VALIDATE_INT);
                 }
-                elseif ($datatype === 'float' && is_float($value))
+                elseif ($datatype === 'float')
                 {
-                    $value = (float) $value;
+                    $value = filter_var($value, FILTER_VALIDATE_FLOAT);
                 }
                 else
                 {
