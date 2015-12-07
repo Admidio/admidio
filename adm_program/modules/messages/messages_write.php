@@ -274,49 +274,40 @@ elseif (!isset($message_result))
     // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
     if ($gValidLogin)
     {
+        // list array with all roles where user is allowed to send mail to
+		$sql = 'SELECT rol_id, rol_name
+		          FROM '.TBL_ROLES.'
+		          JOIN '.TBL_CATEGORIES.' ON cat_id = rol_cat_id
+		         WHERE rol_id IN ('.implode(',',$gCurrentUser->getAllMailRoles()).')
+		           AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+		         ORDER BY rol_name ASC ';
+        $gDb->query($sql);
 
-        // add a selectbox where you can choose to which groups (active, former) you want to send the mail
-        for ($act_or = 0; $act_or <= 2; $act_or++)
+        while($row = $gDb->fetch_array())
         {
-            $act_group = '';
-            $act_group_short = '';
-            if ($act_or == 1)
-            {
-                $act_group = $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_FORMER_MEMBERS') . ')';
-                $act_group_short = '('.$gL10n->get('SYS_FORMER_PL').')';
-                $act_number = '-1';
-            }
-            elseif ($act_or == 2)
-            {
-                $act_group = $gL10n->get('SYS_ROLES'). ' (' . $gL10n->get('LST_ACTIVE_FORMER_MEMBERS') . ')';
-                $act_group_short = '('.$gL10n->get('MSG_ACTIVE_FORMER_SHORT').')';
-                $act_number = '-2';
-            }
-            else
-            {
-                $act_group = $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_ACTIVE_MEMBERS') . ')';
-                $act_number = '';
-            }
-            // list array with all roles where user is allowed to send mail to
-			$send_roles = $gCurrentUser->getAllMailRoles();
-
-			foreach ($send_roles as &$allowed_role)
-			{
-				// Rollenobjekt anlegen
-				$role = new TableRoles($gDb);
-				$role->readDataById($allowed_role);
-
-                if($role->getValue('cat_name_intern') !== 'CONFIRMATION_OF_PARTICIPATION')
-                {
-    				if($act_number == '' || ($role->hasFormerMembers($allowed_role) > 0 && $gPreferences['mail_show_former'] == 1))
-                    {
-                        $list[] = array('groupID: '.$allowed_role.$act_number, $role->getValue('rol_name').' '.$act_group_short, $act_group);
-                        $list_rol_id_array[] = $allowed_role;
-                    }
-                }
-			}
+            $rolesArray[] = $row;
         }
 
+        foreach($rolesArray as $roleArray)
+        {
+			// Rollenobjekt anlegen
+			$role = new TableRoles($gDb);
+			$role->setArray($roleArray);
+
+            $list[] = array('groupID: '.$roleArray['rol_id'], $roleArray['rol_name'], $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_ACTIVE_MEMBERS') . ')');
+            $list_rol_id_array[] = $roleArray['rol_id'];
+
+            if($role->hasFormerMembers() > 0 && $gPreferences['mail_show_former'] == 1)
+            {
+                // list role with former members
+                $listFormer[] = array('groupID: '.$roleArray['rol_id'].'-1', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_FORMER_PL').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_FORMER_MEMBERS') . ')');
+
+                // list role with active and former members
+                $listActiveAndFormer[] = array('groupID: '.$roleArray['rol_id'].'-2', $roleArray['rol_name'].' '.'('.$gL10n->get('MSG_ACTIVE_FORMER_SHORT').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_ACTIVE_FORMER_MEMBERS') . ')');
+            }
+        }
+
+        $list = array_merge($list, $listFormer, $listActiveAndFormer);
         $listVisibleRoleArray = array_intersect($list_rol_id_array, $gCurrentUser->getAllVisibleRoles());
 
         // select Users
