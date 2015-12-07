@@ -216,11 +216,11 @@ class Database
 
     /**
      * Escapes special characters within the input string.
-     * In contrast to the <a href="http://php.net/manual/en/pdo.quote.php">quote</a> method,
+     * In contrast to the <a href="https://secure.php.net/manual/en/pdo.quote.php">quote</a> method,
      * the returned string has no quotes around the input string!
      * @param string $string The string to be quoted.
      * @return string Returns a quoted string that is theoretically safe to pass into an SQL statement.
-     * @see <a href="http://php.net/manual/en/pdo.quote.php">PDO::quote</a>
+     * @see <a href="https://secure.php.net/manual/en/pdo.quote.php">PDO::quote</a>
      */
     public function escapeString($string)
     {
@@ -377,7 +377,7 @@ class Database
      * @param bool $throwError Default will be @b true and if an error the script will be terminated and
      *                         occurred the error with a backtrace will be send to the browser. If set to
      *                         @b false no error will be shown and the script will be continued.
-     * @return object For @b SELECT statements an object of <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
+     * @return object For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
      *                This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
      */
     public function query($sql, $throwError = true)
@@ -720,14 +720,14 @@ class Database
     /**
      * Fetch a result row as an associative array, a numeric array, or both.
      * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
-     *             Please use the PHP class <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a>
-     *             and the method <a href="http://php.net/manual/en/pdostatement.fetch.php">fetch</a> instead.
+     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a>
+     *             and the method <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">fetch</a> instead.
      * @param object $pdoStatement An object of the class PDOStatement. This should be set if multiple
      *                             rows where selected and other sql statements are also send to the database.
      * @param int    $fetchType    Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
      *                             @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
      * @return object|null Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
-     * @see <a href="http://php.net/manual/en/pdostatement.fetch.php">PDOStatement::fetch</a>
+     * @see <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">PDOStatement::fetch</a>
      */
     public function fetch_array($pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
     {
@@ -749,12 +749,12 @@ class Database
      * Fetch a result row as an object.
      * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
      *             Please use methods Database#fetchAll or Database#fetch instead.
-     *             Please use the PHP class <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a>
-     *             and the method <a href="http://php.net/manual/en/pdostatement.fetchobject.php">fetchObject</a> instead.
+     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a>
+     *             and the method <a href="https://secure.php.net/manual/en/pdostatement.fetchobject.php">fetchObject</a> instead.
      * @param object $pdoStatement An object of the class PDOStatement. This should be set if multiple
      *                             rows where selected and other sql statements are also send to the database.
      * @return object|null Returns an object that corresponds to the fetched row and moves the internal data pointer ahead.
-     * @see <a href="http://php.net/manual/en/pdostatement.fetchobject.php">PDOStatement::fetchObject</a>
+     * @see <a href="https://secure.php.net/manual/en/pdostatement.fetchobject.php">PDOStatement::fetchObject</a>
      */
     public function fetch_object($pdoStatement = null)
     {
@@ -787,12 +787,12 @@ class Database
     /**
      * Returns the number of rows of the last executed statement.
      * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
-     *             Please use the PHP class <a href="http://php.net/manual/en/class.pdostatement.php">PDOStatement</a>
-     *             and the method <a href="http://php.net/manual/en/pdostatement.rowcount.php">rowCount</a> instead.
+     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a>
+     *             and the method <a href="https://secure.php.net/manual/en/pdostatement.rowcount.php">rowCount</a> instead.
      * @param object $pdoStatement An object of the class PDOStatement. This should be set if multiple
      *                             rows where selected and other sql statements are also send to the database.
      * @return int|null Return the number of rows of the result of the sql statement.
-     * @see <a href="http://php.net/manual/en/pdostatement.rowcount.php">PDOStatement::rowCount</a>
+     * @see <a href="https://secure.php.net/manual/en/pdostatement.rowcount.php">PDOStatement::rowCount</a>
      */
     public function num_rows($pdoStatement = null)
     {

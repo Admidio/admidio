@@ -64,8 +64,8 @@ function getFieldCode($fieldNameIntern, $user)
 
             // ICQ Onlinestatus anzeigen
             $value = '
-            <a class="admidio-icon-link" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
-                src="http://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
+            <a class="admidio-icon-link" href="https://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
+                src="https://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
                 alt="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
                 title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
         }
@@ -75,7 +75,7 @@ function getFieldCode($fieldNameIntern, $user)
         if(strlen($user->getValue($fieldNameIntern)) > 0)
         {
             // Skype Onlinestatus anzeigen
-            $value = '<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
+            $value = '<script type="text/javascript" src="https://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
             <a class="admidio-icon-link" href="skype:'.$user->getValue($fieldNameIntern).'?add"><img
                 src="http://mystatus.skype.com/smallicon/'.$user->getValue($fieldNameIntern).'"
                 title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
@@ -370,8 +370,8 @@ $page->addHtml('
                                 $bAddressOutput = true;
                                 $htmlAddress    = '';
                                 $address        = '';
-                                $map_url        = 'http://maps.google.com/?q=';
-                                $route_url      = 'http://maps.google.com/?f=d&amp;saddr='.
+                                $map_url        = 'https://maps.google.com/?q=';
+                                $route_url      = 'https://maps.google.com/?f=d&amp;saddr='.
                                     urlencode($gCurrentUser->getValue('ADDRESS')).
                                     ',%20'. urlencode($gCurrentUser->getValue('POSTCODE')).
                                     ',%20'. urlencode($gCurrentUser->getValue('CITY')).

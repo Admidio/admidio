@@ -258,7 +258,7 @@ class ProfileFields
                 {
                     // facebook has two different profile urls (id and facebook name),
                     // we could only store one way in database (facebook name) and the other (id) is defined here :)
-                    $htmlValue = '<a href="http://www.facebook.com/profile.php?id='.$value.'" target="_blank">'.$htmlValue.'</a>';
+                    $htmlValue = '<a href="https://www.facebook.com/profile.php?id='.$value.'" target="_blank">'.$htmlValue.'</a>';
                 }
                 else
                 {

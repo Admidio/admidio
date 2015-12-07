@@ -92,7 +92,7 @@ if($pdoStatement->rowCount() > 0)
         $sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_ICQ\'
                                              , usf_icon = \'icq.png\'
                                              , usf_description = \''.$gL10n->get('INS_ICQ_DESC').'\'
-                                             , usf_url = \'http://www.icq.com/people/%user_content%\'
+                                             , usf_url = \'https://www.icq.com/people/%user_content%\'
                  WHERE usf_id = '.$rowProfileField[0];
         $gDb->query($sql);
     }
@@ -144,8 +144,8 @@ if($pdoStatement->rowCount() > 0)
     }
 
     $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_url, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-                                       VALUES ('.$rowCategory[0].', \'TEXT\', \'FACEBOOK\', \'INS_FACEBOOK\', \''.$gL10n->get('INS_FACEBOOK_DESC').'\', \'facebook.png\', \'http://www.facebook.com/%user_content%\', 0, 7, '.$rowWebmaster[0].',\''. DATETIME_NOW.'\')
-                                            , ('.$rowCategory[0].', \'TEXT\', \'TWITTER\', \'INS_TWITTER\', \''.$gL10n->get('INS_TWITTER_DESC').'\', \'twitter.png\', \'http://twitter.com/#!/%user_content%\', 0, 8, '.$rowWebmaster[0].',\''. DATETIME_NOW.'\')
+                                       VALUES ('.$rowCategory[0].', \'TEXT\', \'FACEBOOK\', \'INS_FACEBOOK\', \''.$gL10n->get('INS_FACEBOOK_DESC').'\', \'facebook.png\', \'https://www.facebook.com/%user_content%\', 0, 7, '.$rowWebmaster[0].',\''. DATETIME_NOW.'\')
+                                            , ('.$rowCategory[0].', \'TEXT\', \'TWITTER\', \'INS_TWITTER\', \''.$gL10n->get('INS_TWITTER_DESC').'\', \'twitter.png\', \'https://twitter.com/%user_content%\', 0, 8, '.$rowWebmaster[0].',\''. DATETIME_NOW.'\')
                                             , ('.$rowCategory[0].', \'TEXT\', \'XING\', \'INS_XING\', \''.$gL10n->get('INS_XING_DESC').'\', \'xing.png\', \'https://www.xing.com/profile/%user_content%\', 0, 9, '.$rowWebmaster[0].',\''. DATETIME_NOW.'\') ';
     $gDb->query($sql);
 

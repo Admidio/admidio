@@ -311,7 +311,7 @@
     <string name="MAI_YOUR_NAME">Ihr Name</string>
     <string name="MEM_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n%VAR1% neue Benutzer wurden angelegt.\n%VAR2% Benutzer wurden bearbeitet.\n%VAR3% Rollenmitgliedschaften wurden zugeordnet.</string>
     <string name="ORG_FIELD_DISABLED">Feld nur für Benutzer mit dem Recht %VAR1_BOLD% editierbar</string>
-    <string name="ORG_FIELD_URL_DESC">Die eingegebene URL verlinkt später im Profil den Inhalt, den der Benutzer in dieses Feld eingegeben hat. Optional kann noch der Platzhalter %user_content% in die URL eingebaut werden. Dies ist dann der Inhalt, den der Benutzer im Feld eingegeben hat.\n\nBeispiel:\nUrl: http://www.google.de/search?q=%user_content%\nFeldinhalt: Admidio\nLink im Profil: http://www.google.de/search?q=Admidio</string>
+    <string name="ORG_FIELD_URL_DESC">Die eingegebene URL verlinkt später im Profil den Inhalt, den der Benutzer in dieses Feld eingegeben hat. Optional kann noch der Platzhalter %user_content% in die URL eingebaut werden. Dies ist dann der Inhalt, den der Benutzer im Feld eingegeben hat.\n\nBeispiel:\nUrl: https://www.google.de/search?q=%user_content%\nFeldinhalt: Admidio\nLink im Profil: https://www.google.de/search?q=Admidio</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Farbe Javascript-Editor</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Hier wird die Hintergrundfarbe des Javascripteditors angegeben. Dies kann ein hexadezimaler Farbwert sein z.B. #ffa500 oder ein RGB-Wert z.B. rgb(255, 185,0).</string>
     <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Javascript-Editor benutzen</string>

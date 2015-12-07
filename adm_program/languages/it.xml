@@ -273,7 +273,7 @@
     <string name="MAI_YOUR_NAME">Il tuo nome</string>
     <string name="MEM_IMPORT_SUCCESSFUL">L'importazione ha avuto successo..\n\n%VAR1% nuovi utenti sono stati creati.\n%VAR2% utenti sono stati modificati.\n%VAR3% ruoli di membership sono stati assegnati.</string>
     <string name="ORG_FIELD_DISABLED">Il campo è modificabile solo per l'utente con il permesso %VAR1_BOLD%</string>
-    <string name="ORG_FIELD_URL_DESC">Questo URL collegherà il contenuto con il profilo, definito dall'utente in questo campo. Il segnaposto %user_content% può essere integrato nell'URL se necessario. Questo contenuto è stato definito dall'utente.\n\nEsempio:\nURL: http://www.google.de/search?q=%user_content%\nContent: Admidio\nCollegamento nel profilo: http://www.google.de/search?q=Admidio</string>
+    <string name="ORG_FIELD_URL_DESC">Questo URL collegherà il contenuto con il profilo, definito dall'utente in questo campo. Il segnaposto %user_content% può essere integrato nell'URL se necessario. Questo contenuto è stato definito dall'utente.\n\nEsempio:\nURL: https://www.google.it/search?q=%user_content%\nContent: Admidio\nCollegamento nel profilo: https://www.google.it/search?q=Admidio</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Colore dell'editor JavaScript</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Definisci il colore di background dell'editor JavaScript qui. Il valore puo essere di tipo esadecimale come #ffa500 o un valore RGB come (255, 185, 0).</string>
     <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Usa l'editor JavaScript</string>

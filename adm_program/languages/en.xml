@@ -301,7 +301,7 @@
     <string name="MAI_YOUR_NAME">Your name</string>
     <string name="MEM_IMPORT_SUCCESSFUL">Import was successful..\n\n%VAR1% new users have been created.\n%VAR2% users have been edited.\n%VAR3% role memberships have been assigned.</string>
     <string name="ORG_FIELD_DISABLED">Field editable only for user with permission %VAR1_BOLD%</string>
-    <string name="ORG_FIELD_URL_DESC">This URL will link the content with the profile, provided by the user in this field. Placeholder %user_content% can be integrated into the URL if needed. This content has been provided by the user.\n\nExample:\nURL: http://www.google.de/search?q=%user_content%\nContent: Admidio\nLink in the profil: http://www.google.de/search?q=Admidio</string>
+    <string name="ORG_FIELD_URL_DESC">This URL will link the content with the profile, provided by the user in this field. Placeholder %user_content% can be integrated into the URL if needed. This content has been provided by the user.\n\nExample:\nURL: https://www.google.com/search?q=%user_content%\nContent: Admidio\nLink in the profil: https://www.google.com/search?q=Admidio</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Colour of the JavaScript editor</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Define background colour of the JavaScript editor here. The value can be a hexadecimal colour value like #ffa500 or RGB value like (255, 185, 0).</string>
     <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Using the JavaScript editor</string>

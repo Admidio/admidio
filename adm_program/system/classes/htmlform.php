@@ -557,7 +557,7 @@ class HtmlForm extends HtmlFormBasic
      *                          + @b FIELD_DEFAULT  : The field can accept an input.
      *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
      *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
-     *                        - @b allowedMimeTypes : An array with the allowed MIME types (http://wiki.selfhtml.org/wiki/Referenz:MIME-Typen).
+     *                        - @b allowedMimeTypes : An array with the allowed MIME types (https://wiki.selfhtml.org/wiki/Referenz:MIME-Typen).
      *                          If this is set then the user can only choose the specified files with the browser file dialog.
      *                          You should check the uploaded file against the MIME type because the file could be manipulated.
      *                        - @b maxUploadSize : The size in byte that could be maximum uploaded.

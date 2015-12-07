@@ -158,7 +158,7 @@
     <string name="MAI_YOUR_NAME">Uw naam</string>
     <string name="MEM_IMPORT_SUCCESSFUL">Importeren is gelukt..\n\n%VAR1% nieuwe gebruikers zijn gemaakt.\n%VAR2% gebruikers zijn bewerkt.\n%VAR3% rol lidmaatschappen zijn toegewezen.</string>
     <string name="ORG_FIELD_DISABLED">Veld is alleen te bewerken door gebruiker met recht %VAR1_BOLD%</string>
-    <string name="ORG_FIELD_URL_DESC">Hier kan een URL opgegeven worden. Eventueel kan de aanduiding %user_content% in deze URL vermeld worden. Selecteer dan wel veldtype 'Tekst'. \n\nVoorbeeld:\nURL: http://www.google.nl/search?q=%user_content%\nGebruiker vult in op profielpagina: Admidio\nLink die in profiel gebruiker komt te staan: http://www.google.nl/search?q=Admidio</string>
+    <string name="ORG_FIELD_URL_DESC">Hier kan een URL opgegeven worden. Eventueel kan de aanduiding %user_content% in deze URL vermeld worden. Selecteer dan wel veldtype 'Tekst'. \n\nVoorbeeld:\nURL: https://www.google.nl/search?q=%user_content%\nGebruiker vult in op profielpagina: Admidio\nLink die in profiel gebruiker komt te staan: https://www.google.nl/search?q=Admidio</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Kleur van de JavaScript editor</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Bepaal hier de achtergrond kleur van de JavaScript editor. Deze waarde kan een hexadecimale kleur zijn zoals #ffa500 of een RGB waarde zoals (255, 185, 0).</string>
     <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">JavaScript editor gebruiken</string>

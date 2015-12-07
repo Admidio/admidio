@@ -39,7 +39,7 @@ $g_root_path = 'http://www.your-website.de/admidio';
 $g_organization = 'Shortcut';
 
 // The name of the timezone in which your organization is located.
-// This must be one of the strings that are defined here http://www.php.net/manual/en/timezones.php
+// This must be one of the strings that are defined here https://secure.php.net/manual/en/timezones.php
 // Example: 'Europe/Berlin'
 $gTimezone = 'Europe/Berlin';
 

@@ -285,7 +285,7 @@
     <string name="MAI_YOUR_NAME">Dit navn</string>
     <string name="MEM_IMPORT_SUCCESSFUL">Importen forløb succesfuldt..\n\n%VAR1% nye brugere er blevet oprettet.\n%VAR2% Brugere er blevet rettet.\n%VAR3% rolle medlemskaber er blevet tildelt.</string>
     <string name="ORG_FIELD_DISABLED">Feltet kan kun redigeres af brugere med følgende rettigheder %VAR1_BOLD%</string>
-    <string name="ORG_FIELD_URL_DESC">Denne URL vil linke indholdet med profilen, leveret af brugeren i dette felt. En pladsholder %user_content% kan integreres ind i URLen om nødvendigt. Dette indhold er blevet leveret af brugeren.\n\nEksempel:\nURL: http://www.google.de/search?q=%user_content%\nContent: Admidio\nLink i profil: http://www.google.de/search?q=Admidio</string>
+    <string name="ORG_FIELD_URL_DESC">Denne URL vil linke indholdet med profilen, leveret af brugeren i dette felt. En pladsholder %user_content% kan integreres ind i URLen om nødvendigt. Dette indhold er blevet leveret af brugeren.\n\nEksempel:\nURL: https://www.google.dk/search?q=%user_content%\nContent: Admidio\nLink i profil: https://www.google.dk/search?q=Admidio</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Baggrunds farve på JavaScript editoren</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Definer baggrunds farven på JavaScript editoreren. Værdien kan være en hexadecimal farve værdi som #ffa500 eller en RGB værdi som (255, 185, 0).</string>
     <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Brug af JavaScript editoren</string>

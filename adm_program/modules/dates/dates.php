@@ -1,16 +1,12 @@
 <?php
 /**
  ***********************************************************************************************
+ * Show a list of all events
+ *
  * @copyright 2004-2015 The Admidio Team
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- * Show a list of all events
- *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
  * Parameters:
  *
  * mode      - actual : (Default) shows actual dates and all events in future
