@@ -356,10 +356,10 @@ function admFuncProcessableImageSize()
  * value was set then the parameter will be initialized. The function can be used with every array and their elements.
  * You can set several flags (like required value, datatype …) that should be checked.
  *
- * @param array $array         The array with the element that should be checked
+ * @param array  $array        The array with the element that should be checked
  * @param string $variableName Name of the array element that should be checked
- * @param string $datatype     The datatype like @b string, @b numeric, @b boolean, @b html, @b date or @b file that
- *                             is expected and which will be checked.
+ * @param string $datatype     The datatype like @b string, @b numeric, @b int, @b float, @b boolean, @b html,
+ *                             @b date or @b file that is expected and which will be checked.
  *                             Datatype @b date expects a date that has the Admidio default format from the
  *                             preferences or the english date format @b Y-m-d
  * @param array $options       (optional) An array with the following possible entries:
@@ -373,14 +373,16 @@ function admFuncProcessableImageSize()
  * @return mixed|null Returns the value of the element or the error message if a test failed
  *
  * @par Examples
- * @code   // numeric value that would get a default value 0 if not set
+ * @code
+ * // numeric value that would get a default value 0 if not set
  * $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', array('defaultValue' => 0));
  *
  * // string that will be initialized with text of id DAT_DATES
  * $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $g_l10n->get('DAT_DATES')));
  *
  * // string initialized with actual and the only allowed values are actual and old
- * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old'))); @endcode
+ * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old')));
+ * @endcode
  */
 function admFuncVariableIsValid($array, $variableName, $datatype, $options = array())
 {
@@ -392,9 +394,10 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
 
     $errorMessage = '';
     $datatype = admStrToLower($datatype);
+    $value = $array[$variableName];
 
     // set default value for each datatype if no value is given and no value was required
-    if(!isset($array[$variableName]) || $array[$variableName] === '')
+    if(!isset($value) || $value === '')
     {
         if($optionsAll['requireValue'])
         {
@@ -404,31 +407,30 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
         elseif($optionsAll['defaultValue'] !== null)
         {
             // if a default value was set then take this value
-            $array[$variableName] = $optionsAll['defaultValue'];
+            $value = $optionsAll['defaultValue'];
         }
         else
         {
             // no value set then initialize the parameter
             if($datatype === 'boolean' || $datatype === 'numeric')
             {
-                $array[$variableName] = 0;
+                $value = 0;
             }
             else
             {
-                $array[$variableName] = '';
+                $value = '';
             }
 
-            return $array[$variableName];
+            return $value;
         }
     }
 
     if($datatype === 'boolean')
     {
-        // boolean type must be 0 or 1 otherwise throw error.
-        // No explicit check because parameters through GET are almost strings.
+        // boolean type must be 0 or 1 otherwise throw error
         // do not check with in_array because this function don't work properly
-        if($array[$variableName] != '0'      && $array[$variableName] != '1'
-        && $array[$variableName] !== 'false' && $array[$variableName] !== 'true')
+        if($value !=  '0'     && $value !=  '1'
+        && $value !== 'false' && $value !== 'true')
         {
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
         }
@@ -437,8 +439,8 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
     {
         // check if parameter has a valid value
         // do a strict check with in_array because the function don't work properly
-        if(!in_array(admStrToUpper($array[$variableName]), $optionsAll['validValues'], true)
-        && !in_array(admStrToLower($array[$variableName]), $optionsAll['validValues'], true))
+        if(!in_array(admStrToUpper($value), $optionsAll['validValues'], true)
+        && !in_array(admStrToLower($value), $optionsAll['validValues'], true))
         {
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
         }
@@ -449,9 +451,9 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
         case 'file':
             try
             {
-                if($array[$variableName] !== '')
+                if($value !== '')
                 {
-                    admStrIsValidFileName($array[$variableName]);
+                    admStrIsValidFileName($value);
                 }
             }
             catch(AdmException $e)
@@ -462,12 +464,12 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
 
         case 'date':
             // check if date is a valid Admidio date format
-            $objAdmidioDate = DateTime::createFromFormat($gPreferences['system_date'], $array[$variableName]);
+            $objAdmidioDate = DateTime::createFromFormat($gPreferences['system_date'], $value);
 
             if(!$objAdmidioDate)
             {
                 // check if date has english format
-                $objEnglishDate = DateTime::createFromFormat('Y-m-d', $array[$variableName]);
+                $objEnglishDate = DateTime::createFromFormat('Y-m-d', $value);
 
                 if(!$objEnglishDate)
                 {
@@ -477,31 +479,45 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
             break;
 
         case 'numeric':
+        case 'int':
+        case 'float':
             // numeric datatype should only contain numbers
-            if (!is_numeric($array[$variableName]))
+            if (!is_numeric($value))
             {
                 $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
             }
             else
             {
-                $array[$variableName] = (int) $array[$variableName];
+                if ($datatype === 'int' && is_int($value))
+                {
+                    $value = (int) $value;
+                }
+                elseif ($datatype === 'float' && is_float($value))
+                {
+                    $value = (float) $value;
+                }
+                else
+                {
+                    // https://secure.php.net/manual/en/function.is-numeric.php#107326
+                    $value = $value + 0;
+                }
             }
             break;
 
         case 'string':
-            $array[$variableName] = strStripTags(htmlspecialchars($array[$variableName], ENT_COMPAT, 'UTF-8'));
+            $value = strStripTags(htmlspecialchars($value, ENT_COMPAT, 'UTF-8'));
             break;
 
         case 'html':
             // check html string vor invalid tags and scripts
-            $array[$variableName] = htmLawed(stripslashes($array[$variableName]), array('safe' => 1));
+            $value = htmLawed(stripslashes($value), array('safe' => 1));
             break;
     }
 
     // wurde kein Fehler entdeckt, dann den Inhalt der Variablen zurueckgeben
     if($errorMessage === '')
     {
-        return $array[$variableName];
+        return $value;
     }
     else
     {
