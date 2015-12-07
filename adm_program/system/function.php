@@ -358,7 +358,7 @@ function admFuncProcessableImageSize()
  *
  * @param array  $array        The array with the element that should be checked
  * @param string $variableName Name of the array element that should be checked
- * @param string $datatype     The datatype like @b string, @b numeric, @b int, @b float, @b boolean, @b html,
+ * @param string $datatype     The datatype like @b string, @b numeric, @b int, @b float, @b bool, @b boolean, @b html,
  *                             @b date or @b file that is expected and which will be checked.
  *                             Datatype @b date expects a date that has the Admidio default format from the
  *                             preferences or the english date format @b Y-m-d
@@ -412,13 +412,17 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
         else
         {
             // no value set then initialize the parameter
-            if($datatype === 'boolean')
+            if($datatype === 'bool' || $datatype === 'boolean')
             {
                 $value = false;
             }
-            elseif($datatype === 'numeric')
+            elseif($datatype === 'numeric' || $datatype === 'int')
             {
                 $value = 0;
+            }
+            elseif($datatype === 'float')
+            {
+                $value = 0.0;
             }
             else
             {
