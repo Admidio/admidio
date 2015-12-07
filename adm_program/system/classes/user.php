@@ -37,17 +37,17 @@ class User extends TableUsers
 {
     protected $webmaster;
 
-    public $mProfileFieldsData;                 ///< object with current user field structure
-    public $roles_rights = array();             ///< Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
-    protected $list_view_rights = array();      ///< Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
-    protected $role_mail_rights = array();      ///< Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
-    protected $rolesMembership  = array();      ///< Array with all roles who the user is assigned
-    protected $rolesMembershipLeader = array(); ///< Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
+    public $mProfileFieldsData;                   ///< object with current user field structure
+    public $roles_rights = array();               ///< Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
+    protected $list_view_rights = array();        ///< Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
+    protected $role_mail_rights = array();        ///< Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
+    protected $rolesMembership  = array();        ///< Array with all roles who the user is assigned
+    protected $rolesMembershipLeader = array();   ///< Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
     protected $rolesMembershipNoLeader = array(); ///< Array with all roles who the user is assigned and is not a leader of the role
-    protected $organizationId;                  ///< the organization for which the rights are read, could be changed with method @b setOrganization
-    protected $assignRoles;                     ///< Flag if the user has the right to assign at least one role
-    protected $saveChangesWithoutRights;        ///< If this flag is set then a user can save changes to the user if he hasn't the necessary rights
-    protected $usersEditAllowed = array();      ///< Array with all user ids where the current user is allowed to edit the profile.
+    protected $organizationId;                    ///< the organization for which the rights are read, could be changed with method @b setOrganization
+    protected $assignRoles;                       ///< Flag if the user has the right to assign at least one role
+    protected $saveChangesWithoutRights;          ///< If this flag is set then a user can save changes to the user if he hasn't the necessary rights
+    protected $usersEditAllowed = array();        ///< Array with all user ids where the current user is allowed to edit the profile.
 
     /**
      * Constructor that will create an object of a recordset of the users table.
@@ -119,14 +119,22 @@ class User extends TableUsers
             if(count($this->roles_rights) === 0)
             {
                 $this->assignRoles = false;
-                $tmp_roles_rights  = array('rol_assign_roles'  => '0', 'rol_approve_users' => '0',
-                                           'rol_announcements' => '0', 'rol_dates' => '0',
-                                           'rol_download'      => '0', 'rol_edit_user' => '0',
-                                           'rol_guestbook'     => '0', 'rol_guestbook_comments' => '0',
-                                           'rol_mail_to_all'   => '0',
-                                           'rol_photo'         => '0', 'rol_profile' => '0',
-                                           'rol_weblinks'      => '0', 'rol_all_lists_view' => '0',
-                                           'rol_inventory'     => '0');
+                $tmp_roles_rights  = array(
+                    'rol_assign_roles'       => '0',
+                    'rol_approve_users'      => '0',
+                    'rol_announcements'      => '0',
+                    'rol_dates'              => '0',
+                    'rol_download'           => '0',
+                    'rol_edit_user'          => '0',
+                    'rol_guestbook'          => '0',
+                    'rol_guestbook_comments' => '0',
+                    'rol_mail_to_all'        => '0',
+                    'rol_photo'              => '0',
+                    'rol_profile'            => '0',
+                    'rol_weblinks'           => '0',
+                    'rol_all_lists_view'     => '0',
+                    'rol_inventory'          => '0'
+                );
 
                 // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
                 $sql = 'SELECT *
