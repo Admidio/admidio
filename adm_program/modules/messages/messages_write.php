@@ -274,6 +274,10 @@ elseif (!isset($message_result))
     // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
     if ($gValidLogin)
     {
+        $list = array();
+        $listFormer = array();
+        $listActiveAndFormer = array();
+
         // list array with all roles where user is allowed to send mail to
 		$sql = 'SELECT rol_id, rol_name
 		          FROM '.TBL_ROLES.'
