@@ -10,8 +10,8 @@
  * Parameters:
  *
  * usr_id    : id of user whose photo should be changed
- * new_photo : 0 (Default) show current stored user photo
- *             1 show uploaded photo of current session
+ * new_photo : false - show current stored user photo
+ *             true  - show uploaded photo of current session
  ***********************************************************************************************
  */
 require('../../system/common.php');

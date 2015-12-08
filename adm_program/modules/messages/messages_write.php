@@ -16,8 +16,8 @@
  * subject   - subject of the message
  * msg_id    - ID of the message -> just for answers
  * rol_id    - Statt einem Rollennamen/Kategorienamen kann auch eine RollenId uebergeben werden
- * carbon_copy - 1 (Default) Checkbox "Kopie an mich senden" ist gesetzt
- *             - 0 Checkbox "Kopie an mich senden" ist NICHT gesetzt
+ * carbon_copy - false - (Default) Checkbox "Kopie an mich senden" ist NICHT gesetzt
+ *             - true  - Checkbox "Kopie an mich senden" ist gesetzt
  * show_members : 0 - (Default) show active members of role
  *                1 - show former members of role
  *                2 - show active and former members of role

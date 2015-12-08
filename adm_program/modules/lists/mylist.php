@@ -11,8 +11,8 @@
  *
  * lst_id : Id of the list configuration that should be shown
  * rol_id : (Optional) If a role id is set then the form field will be preassigned.
- * active_role  : 1 - (Default) List only active roles
- *                0 - List only deactivated roles
+ * active_role  : true  - (Default) List only active roles
+ *                false - List only deactivated roles
  * show_members : 0 - (Default) show active members of role
  *                1 - show former members of role
  *                2 - show active and former members of role

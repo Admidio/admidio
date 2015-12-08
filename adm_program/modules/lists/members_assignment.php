@@ -12,12 +12,12 @@
 /******************************************************************************
  * Parameters:
  *
- * mode    - html   : Default mode to show a html list with all users to add them to the role
- *           assign : Add membership of a specific user to the role.
- * rol_id           : Id of role to which members should be assigned or removed
- * usr_id           : Id of the user whose membership should be assigned or removed
- * mem_show_all - 1 : (Default) Show only active members of the current organization
- *                0 : Show active and inactive members of all organizations in database
+ * mode        - html   : Default mode to show a html list with all users to add them to the role
+ *               assign : Add membership of a specific user to the role.
+ * rol_id               : Id of role to which members should be assigned or removed
+ * usr_id               : Id of the user whose membership should be assigned or removed
+ * mem_show_all - true  : (Default) Show only active members of the current organization
+ *                false : Show active and inactive members of all organizations in database
  *
  *****************************************************************************/
 require_once('../../system/common.php');

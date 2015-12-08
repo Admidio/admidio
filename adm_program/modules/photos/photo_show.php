@@ -16,7 +16,7 @@
  * photo_nr  : Nummer des Bildes, das angezeigt werden soll
  * max_width : maximale Breite auf die das Bild skaliert werden kann
  * max_height: maximale Hoehe auf die das Bild skaliert werden kann
- * thumb     : ist thumb == 1 wird ein Thumnail in der Größe der
+ * thumb     : ist thumb === true wird ein Thumbnail in der Größe der
  *             Voreinstellung zurückgegeben
  *
  *****************************************************************************/

@@ -9,10 +9,10 @@
  *
  * Parameters:
  *
- * inactive:  0 - (Default) show all active roles
- *            1 - show all inactive roles
- * invisible: 0 - (Default) show all visible roles
- *            1 - show all invisible roles
+ * inactive:  false - (Default) show all active roles
+ *            true  - show all inactive roles
+ * invisible: false - (Default) show all visible roles
+ *            true  - show all invisible roles
  ***********************************************************************************************
  */
 require_once('../../system/common.php');

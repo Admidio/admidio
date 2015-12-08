@@ -19,7 +19,7 @@
  *              3 - assign/accept a registration
  * lastname   : (Optional) Lastname could be set and will than be preassigned for new users
  * firstname  : (Optional) First name could be set and will than be preassigned for new users
- * remove_url : 1 - Removes the last url from navigation cache
+ * remove_url : true - Removes the last url from navigation cache
  *
  *****************************************************************************/
 

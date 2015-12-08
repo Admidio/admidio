@@ -10,8 +10,8 @@
  * Parameters:
  *
  * inv_id    : id of inventory whose photo should be changed
- * new_photo : 0 (Default) show current stored inventory photo
- *             1 show uploaded photo of current session
+ * new_photo : false (Default) show current stored inventory photo
+ *             true  show uploaded photo of current session
  ***********************************************************************************************
  */
 require('../../system/common.php');

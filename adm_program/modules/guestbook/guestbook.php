@@ -13,8 +13,8 @@
  * headline   - Title of the guestbook module. This will be shown in the whole module.
  *              (Default) GBO_GUESTBOOK
  * id         - Id of one guestbook entry that should be shown
- * moderation : 0 (Default) - Guestbookviww
- *              1 - Moderation mode, every entry could be released
+ * moderation : false (Default) - Guestbookviww
+ *              true - Moderation mode, every entry could be released
  ***********************************************************************************************
  */
 require_once('../../system/common.php');

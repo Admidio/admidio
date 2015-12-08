@@ -10,8 +10,8 @@
  * Parameters:
  *
  * cid        : Id of the corresponding guestbook entry
- * moderation : 0 (Default) - Guestbookviww
- *              1 - Moderation mode, every entry could be released
+ * moderation : false - (Default) - Guestbookviww
+ *              true  - Moderation mode, every entry could be released
  ***********************************************************************************************
  */
 require_once('../../system/common.php');

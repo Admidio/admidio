@@ -9,8 +9,8 @@
  *
  * Parameters:
  *
- * members - 1 : (Default) Show only active members of the current organization
- *           0 : Show active and inactive members of all organizations in database
+ * members - false : (Default) Show only active members of the current organization
+ *           true  : Show active and inactive members of all organizations in database
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
