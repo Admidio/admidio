@@ -192,18 +192,20 @@ while($row = $fieldHistoryStatement->fetch())
     }
 
     $columnValues[] = $gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name');
-    if(strlen($gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new'], 'html')) > 0)
+    $uslValueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new']);
+    if($uslValueNew !== '')
     {
-        $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new'], 'html');
+        $columnValues[] = $uslValueNew;
     }
     else
     {
         $columnValues[] = '&nbsp;';
     }
 
-    if(strlen($gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old'], 'html')) > 0)
+    $uslValueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old']);
+    if($uslValueOld !== '')
     {
-        $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old'], 'html');
+        $columnValues[] = $uslValueOld;
     }
     else
     {

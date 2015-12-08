@@ -29,7 +29,7 @@ class InventoryFields
     /**
      * constructor that will initialize variables and read the inventory field structure
      * @param object $database       Object of the class Database. This should be the default global object @b $gDb.
-     * @param        $organizationId The id of the organization for which the
+     * @param int    $organizationId The id of the organization for which the
      *                               profile field structure should be read
      */
     public function __construct(&$database, $organizationId)
@@ -94,12 +94,12 @@ class InventoryFields
 
     /**
      * Returns the value of the field in html format with consideration of all layout parameters
-     * @param string      $fieldNameIntern Internal profile field name of the field that should be html formated
-     * @param string|bool $value           The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
-     * @param string      $value2          An optional parameter that is necessary for some special fields like email to commit the user id
+     * @param string $fieldNameIntern Internal profile field name of the field that should be html formated
+     * @param        $value           The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
+     * @param int    $value2          An optional parameter that is necessary for some special fields like email to commit the user id
      * @return string Returns an html formated string that considered the profile field settings
      */
-    public function getHtmlValue($fieldNameIntern, $value, $value2 = '')
+    public function getHtmlValue($fieldNameIntern, $value, $value2 = null)
     {
         global $gPreferences, $g_root_path, $gL10n;
 
@@ -134,7 +134,7 @@ class InventoryFields
                         else
                         {
                             // set value2 to user id because we need a second parameter in the link to mail module
-                            if($value2 === '')
+                            if($value2 === null)
                             {
                                 $value2 = $this->mItemId;
                             }
@@ -153,7 +153,7 @@ class InventoryFields
                     break;
 
                 case 'DROPDOWN':
-                    case 'RADIO_BUTTON':
+                case 'RADIO_BUTTON':
                     $arrListValues = explode("\r\n", $this->mInventoryFields[$fieldNameIntern]->getValue('inf_value_list', 'database'));
                     $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
 
@@ -450,8 +450,8 @@ class InventoryFields
 
     /**
      * set value for column usd_value of field
-     * @param $fieldNameIntern
-     * @param $fieldValue
+     * @param string $fieldNameIntern
+     * @param        $fieldValue
      * @return bool
      */
     public function setValue($fieldNameIntern, $fieldValue)

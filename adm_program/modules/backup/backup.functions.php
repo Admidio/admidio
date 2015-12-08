@@ -301,8 +301,8 @@ function FileSizeNiceDisplay($filesize, $precision = 2)
 }
 
 /**
- * @param $id
- * @param $dhtml
+ * @param string $id
+ * @param string $dhtml
  * @param string $text
  * @return bool
  */

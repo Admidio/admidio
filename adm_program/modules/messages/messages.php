@@ -32,7 +32,14 @@ if ($getMsgId != 0)
 
     // Function to delete message
     $delete = $delMessage->delete();
-    echo $delete;
+    if ($delete)
+    {
+        echo 'done';
+    }
+    else
+    {
+        echo 'delete not OK';
+    }
     exit();
 }
 

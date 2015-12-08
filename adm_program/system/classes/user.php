@@ -1222,12 +1222,12 @@ class User extends TableUsers
      * otherwise the value of the profile field of the table adm_user_data will set.
      * If the user log is activated than the change of the value will be logged in @b adm_user_log.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
-     * @param  string $columnName The name of the database column whose value should get a new value or the
+     * @param string $columnName The name of the database column whose value should get a new value or the
      *                            internal unique profile field name
-     * @param  mixed  $newValue   The new value that should be stored in the database field
-     * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will
+     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will
      *                            not be checked.
-     * @return bool   Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      * @par Examples
      * @code  // set data of adm_users column
      *                           $gCurrentUser->getValue('usr_login_name', 'Admidio');

@@ -91,10 +91,10 @@ class ProfileFields
 
     /**
      * returns for field id (usf_id) the value of the column from table adm_user_fields
-     * @param        $fieldId Expects the @b usf_id of table @b adm_user_fields
+     * @param int    $fieldId Expects the @b usf_id of table @b adm_user_fields
      * @param string $column The column name of @b adm_user_field for which you want the value
      * @param string $format Optional the format (is necessary for timestamps)
-     * @return
+     * @return string
      */
     public function getPropertyById($fieldId, $column, $format = '')
     {
@@ -110,12 +110,12 @@ class ProfileFields
 
     /**
      * Returns the value of the field in html format with consideration of all layout parameters
-     * @param $fieldNameIntern Internal profile field name of the field that should be html formated
-     * @param $value           The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
-     * @param $value2          An optional parameter that is necessary for some special fields like email to commit the user id
+     * @param string $fieldNameIntern Internal profile field name of the field that should be html formated
+     * @param        $value           The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
+     * @param int    $value2          An optional parameter that is necessary for some special fields like email to commit the user id
      * @return string Returns an html formated string that considered the profile field settings
      */
-    public function getHtmlValue($fieldNameIntern, $value, $value2 = '')
+    public function getHtmlValue($fieldNameIntern, $value, $value2 = null)
     {
         global $gPreferences, $g_root_path, $gL10n;
 
@@ -147,7 +147,7 @@ class ProfileFields
                         else
                         {
                             // set value2 to user id because we need a second parameter in the link to mail module
-                            if($value2 === '')
+                            if($value2 === null)
                             {
                                 $value2 = $this->mUserId;
                             }
@@ -297,7 +297,7 @@ class ProfileFields
      * format = 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function @n
      * format = 'html'  : returns the value in html-format if this is necessary for that field type @n
      * format = 'database' : returns the value that is stored in database with no format applied
-     * @param $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
+     * @param string $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
      * @param string $format Returns the field value in a special format @b text, @b html, @b database or datetime (detailed description in method description)
      * @return
      */
@@ -381,8 +381,8 @@ class ProfileFields
     /**
      * Reads the profile fields structure out of database table @b adm_user_fields
      * and adds an object for each field structure to the @b mProfileFields array.
-     * @param $organizationId The id of the organization for which the profile fields
-     *                        structure should be read.
+     * @param int $organizationId The id of the organization for which the profile fields
+     *                            structure should be read.
      */
     public function readProfileFields($organizationId)
     {
@@ -412,9 +412,9 @@ class ProfileFields
      * Reads the user data of all profile fields out of database table @b adm_user_data
      * and adds an object for each field data to the @b mUserData array.
      * If profile fields structure wasn't read, this will be done before.
-     * @param $userId         The id of the user for which the user data should be read.
-     * @param $organizationId The id of the organization for which the profile fields
-     *                        structure should be read if necessary.
+     * @param int $userId         The id of the user for which the user data should be read.
+     * @param int $organizationId The id of the organization for which the profile fields
+     *                            structure should be read if necessary.
      */
     public function readUserData($userId, $organizationId)
     {
@@ -447,7 +447,7 @@ class ProfileFields
 
     /**
      * save data of every user field
-     * @param $userId id is necessary if new user, that id was not known before
+     * @param int $userId id is necessary if new user, that id was not known before
      */
     public function saveUserData($userId)
     {
@@ -491,8 +491,8 @@ class ProfileFields
 
     /**
      * set value for column usd_value of field
-     * @param $fieldNameIntern
-     * @param $fieldValue
+     * @param string $fieldNameIntern
+     * @param        $fieldValue
      * @return bool
      */
     public function setValue($fieldNameIntern, $fieldValue)

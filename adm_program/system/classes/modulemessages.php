@@ -99,16 +99,16 @@ class ModuleMessages
 
     /**
      * return an array with all Email-Messages of the given user.
-     * @param $user
+     * @param int $userId
      * @return array
      */
-    public function msgGetUserEmails($user)
+    public function msgGetUserEmails($userId)
     {
         global $gDb;
 
         $sql = "SELECT msg_id, msg_usr_id_receiver AS user
         FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'EMAIL' and msg_usr_id_sender = ". $user ."
+         WHERE msg_type = 'EMAIL' and msg_usr_id_sender = ". $userId ."
          ORDER BY msg_id DESC";
 
         return $gDb->query($sql);
@@ -116,7 +116,7 @@ class ModuleMessages
 
     /**
      * return an array with all unread Messages of the given user.
-     * @param $userId
+     * @param int $userId
      * @return array
      */
     public function msgGetUserUnread($userId)
@@ -135,7 +135,7 @@ class ModuleMessages
 
     /**
      * return an array with all unread Messages of the given user.
-     * @param $userId
+     * @param int $userId
      * @return array
      */
     public function msgGetUser($userId)

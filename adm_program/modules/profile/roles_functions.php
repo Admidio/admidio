@@ -84,7 +84,7 @@ function getFormerRolesFromDatabase($userId)
 }
 
 /**
- * @param        $htmlListId
+ * @param string $htmlListId
  * @param object $user
  * @param object $roleStatement
  * @param        $count_role

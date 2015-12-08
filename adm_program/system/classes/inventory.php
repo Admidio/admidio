@@ -32,10 +32,10 @@ class Inventory extends TableInventory
     /**
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
-     * @param object $database   Object of the class database. This could be the default object @b $gDb.
-     * @param        $userFields An object of the ProfileFields class with the profile field structure
-     *                           of the current organization. This could be the default object @b $gProfileFields.
-     * @param        $userId     The id of the user who should be loaded. If id isn't set than an empty object with no specific user is created.
+     * @param object $database        Object of the class database. This could be the default object @b $gDb.
+     * @param object $inventoryFields An object of the ProfileFields class with the profile field structure
+     *                                of the current organization. This could be the default object @b $gProfileFields.
+     * @param int    $itemId          The id of the user who should be loaded. If id isn't set than an empty object with no specific user is created.
      */
     public function __construct(&$database, $inventoryFields, $itemId = 0)
     {
@@ -152,7 +152,7 @@ class Inventory extends TableInventory
     /**
      * Reads a user record out of the table adm_users in database selected by the unique user id.
      * Also all profile fields of the object @b mProfileFieldsData will be read.
-     * @param $userId Unique id of the user that should be read
+     * @param int $itemId Unique id of the user that should be read
      * @return bool Returns @b true if one record is found
      */
     public function readDataById($itemId)
@@ -227,13 +227,15 @@ class Inventory extends TableInventory
      * If the user log is activated than the change of the value will be logged in @b adm_user_log.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value or the internal unique profile field name
-     * @param $newValue The new value that should be stored in the database field
+     * @param mixed  $newValue   The new value that should be stored in the database field
      * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      * @par Examples
-     * @code  // set data of adm_users column
+     * @code
+     * // set data of adm_users column
      * $gCurrentUser->getValue('usr_login_name', 'Admidio');
      * // reads data of adm_user_fields
-     * $gCurrentUser->getValue('EMAIL', 'webmaster@admidio.org'); @endcode
+     * $gCurrentUser->getValue('EMAIL', 'webmaster@admidio.org');
+     * @endcode
      */
     public function setValue($columnName, $newValue)
     {
@@ -276,8 +278,8 @@ class Inventory extends TableInventory
      * Checks if the current user is allowed to view the profile of the user of the parameter.
      * If will check if user has edit rights with method editProfile or if the user is a member
      * of a role where the current user has the right to view profiles.
-     * @param $user User object of the user that should be checked if the current user can view his profile.
-     * @return Return @b true if the current user is allowed to view the profile of the user from @b $user.
+     * @param $item User object of the user that should be checked if the current user can view his profile.
+     * @return bool Return @b true if the current user is allowed to view the profile of the user from @b $user.
      */
     public function hasRightViewItem($item)
     {

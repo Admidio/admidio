@@ -124,8 +124,8 @@ class HtmlTableBasic extends HtmlElement {
 
     /**
      * Constructor initializing all class variables
-     * @param $id Id of the table
-     * @param $class Class name of the table
+     * @param string $id Id of the table
+     * @param string $class Class name of the table
      * @param $border Set table border
      */
     public function __construct($id = '', $class = '', $border = 0)
@@ -164,9 +164,9 @@ class HtmlTableBasic extends HtmlElement {
      * The data can be passed as string or array. Using Arrays, for each key/value a new column is set.
      * You can define an attribute for each column. If you need further attributes for the column first do the settings with addAttribute();
      * If all settings are done for the column use the addData(); to define your column content.
-     * @param $data Content for the column as string, or array
-     * @param $arrAttributes Further attributes as array with key/value pairs
-     * @param $col Column element 'td' or 'th' (Default: 'td')
+     * @param string|array $data          Content for the column as string, or array
+     * @param array        $arrAttributes Further attributes as array with key/value pairs
+     * @param string       $col           Column element 'td' or 'th' (Default: 'td')
      */
     public function addColumn($data = '', $arrAttributes = null, $col = 'td')
     {
@@ -181,7 +181,7 @@ class HtmlTableBasic extends HtmlElement {
         }
 
         // Check optional attributes in associative array and set all attributes
-        if($arrAttributes != null && is_array($arrAttributes))
+        if($arrAttributes !== null && is_array($arrAttributes))
         {
             $this->setAttributesFromArray($arrAttributes);
         }
@@ -197,9 +197,9 @@ class HtmlTableBasic extends HtmlElement {
      * You can define 1 attribute/value pair for the row, calling the method. If you need further attributes for the new row, use method addAttribute(), before passing the content.
      * The element and attributes are stored in buffer first and will be parsed and written in the output string if the content is defined.
      * After all settings are done use addColumn(); to define your columns with content.
-     * @param $data          Content for the table row as string, or array
-     * @param $arrAttributes Further attributes as array with key/value pairs
-     * @param $col           Column element 'td' or 'th' (Default: 'td')
+     * @param string|array $data          Content for the table row as string, or array
+     * @param array        $arrAttributes Further attributes as array with key/value pairs
+     * @param string       $col           Column element 'td' or 'th' (Default: 'td')
      */
     public function addRow($data = '', $arrAttributes = null, $col = 'td')
     {
@@ -217,7 +217,7 @@ class HtmlTableBasic extends HtmlElement {
             $this->addParentElement('tr');
 
             // Check optional attributes in associative array and set all attributes
-            if($arrAttributes != null && is_array($arrAttributes))
+            if($arrAttributes !== null && is_array($arrAttributes))
             {
                 $this->setAttributesFromArray($arrAttributes);
             }
@@ -350,9 +350,10 @@ class HtmlTableBasic extends HtmlElement {
     /**
      * Define table body.
      * Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
-     * @param $attribute Attribute
-     * @param $value Value of the attribute
-     * @param $data Content for the element as string, or array
+     * @param string       $attribute Attribute
+     * @param string       $value     Value of the attribute
+     * @param string|array $data      Content for the element as string, or array
+     * @param string       $col
      */
     public function addTableBody($attribute = '', $value = '', $data = '', $col = 'td')
     {
@@ -387,10 +388,11 @@ class HtmlTableBasic extends HtmlElement {
     /**
      * @par Define table footer
      * Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
-     * @param $attribute Attribute
-     * @param $value Value of the attribute
-     * @param $data Content for the element as string, or array
-     * @return Returns @b false if tfoot element is already set
+     * @param string       $attribute Attribute
+     * @param string       $value     Value of the attribute
+     * @param string|array $data      Content for the element as string, or array
+     * @param string       $col
+     * @return bool Returns @b false if tfoot element is already set
      */
     public function addTableFooter($attribute = '', $value = '', $data = '', $col = 'td')
     {
@@ -422,10 +424,11 @@ class HtmlTableBasic extends HtmlElement {
     /**
      * Define table header
      * Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
-     * @param $attribute Attribute
-     * @param $value Value of the attribute
-     * @param $data Content for the element as string, or array
-     * @return Returns @b false if thead element is already set
+     * @param string       $attribute Attribute
+     * @param string       $value     Value of the attribute
+     * @param string|array $data      Content for the element as string, or array
+     * @param string       $col
+     * @return bool Returns @b false if thead element is already set
      */
     public function addTableHeader($attribute = '', $value = '', $data = '', $col = 'td')
     {
@@ -451,8 +454,7 @@ class HtmlTableBasic extends HtmlElement {
 
     /**
      * Get the parsed html table
-     *
-     * @return Returns the validated html table as string
+     * @return string Returns the validated html table as string
      */
     public function getHtmlTable()
     {
@@ -468,9 +470,10 @@ class HtmlTableBasic extends HtmlElement {
      * The first class name is the standard class and the second name is the class used if the class is changed regarding the counter.
      * As default value, every second row is to be changed.
      *
-     * @param $class_1 Name of the standard class used for lineChange mode
-     * @param $class_2 Name of the change class used for lineChange mode
-     * @param $line Number (integer) of the line that is changed to Class_2 (Default: 2)
+     * @param string $class_1 Name of the standard class used for lineChange mode
+     * @param string $class_2 Name of the change class used for lineChange mode
+     * @param int    $line    Number of the line that is changed to Class_2 (Default: 2)
+     * @return void|false
      */
     public function setClassChange($class_1 = '', $class_2 = '', $line = 2)
     {
@@ -500,15 +503,14 @@ class HtmlTableBasic extends HtmlElement {
             {
                 if($column !== '')
                 {
-                    $this->columnsWidth[] =  $column;
+                    $this->columnsWidth[] = $column;
                 }
                 else
                 {
-                    $this->columnsWidth[] =  '';
+                    $this->columnsWidth[] = '';
                 }
             }
         }
-        return false;
     }
 
     /**
