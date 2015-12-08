@@ -75,7 +75,7 @@ class InventoryFields
 
     /**
      * returns for field id (usf_id) the value of the column from table adm_user_fields
-     * @param $fieldId Expects the @b usf_id of table @b adm_user_fields
+     * @param int    $fieldId Expects the @b usf_id of table @b adm_user_fields
      * @param string $column The column name of @b adm_user_field for which you want the value
      * @param string $format Optional the format (is necessary for timestamps)
      * @return
@@ -352,8 +352,8 @@ class InventoryFields
     /**
      * Reads the profile fields structure out of database table @b adm_user_fields
      * and adds an object for each field structure to the @b mInventoryFields array.
-     * @param $organizationId The id of the organization for which the profile fields
-     *                        structure should be read.
+     * @param int $organizationId The id of the organization for which the profile fields
+     *                            structure should be read.
      */
     public function readInventoryFields($organizationId)
     {
@@ -383,9 +383,9 @@ class InventoryFields
      * Reads the user data of all profile fields out of database table @b adm_user_data
      * and adds an object for each field data to the @b mInventoryData array.
      * If profile fields structure wasn't read, this will be done before.
-     * @param $itemId         The id of the user for which the user data should be read.
-     * @param $organizationId The id of the organization for which the profile fields
-     *                        structure should be read if necessary.
+     * @param int $itemId         The id of the user for which the user data should be read.
+     * @param int $organizationId The id of the organization for which the profile fields
+     *                            structure should be read if necessary.
      */
     public function readInventoryData($itemId, $organizationId)
     {
@@ -418,7 +418,7 @@ class InventoryFields
 
     /**
      * save data of every user field
-     * @param $itemId id is necessary if new user, that id was not known before
+     * @param int $itemId id is necessary if new user, that id was not known before
      */
     public function saveInventoryData($itemId)
     {

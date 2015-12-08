@@ -169,8 +169,8 @@ class ListConfiguration extends TableLists
 
     /**
      * prepare SQL to list configuration
-     * @param $roleIds Array with all roles, which members are shown
-     * @param int $memberStatus 0 - Only active mebers of a role
+     * @param array $roleIds Array with all roles, which members are shown
+     * @param int   $memberStatus 0 - Only active mebers of a role
      *                          1 - Only former members
      *                          2 - Active and former members of a role
      * @param string|null $startDate

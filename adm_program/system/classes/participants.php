@@ -48,18 +48,17 @@ class Participants
     /**
      * This function checks the passed Id if it is numeric and compares it to the current object variable
      * If the values are different the current object variable will be updated with the new value
-     * @param $rolId
+     * @param int $rolId
      * @return bool
      */
     private function checkId($rolId)
     {
         // check passed parameter and compare to current object
-        if(is_numeric($rolId) && $this->rolId == -1 || is_numeric($rolId) && $this->rolId == 0 && $this->rolId != $rolId)
+        if(is_numeric($rolId) && ($this->rolId === -1 || ($this->rolId === 0 && $this->rolId !== $rolId)))
         {
             $this->rolId = $rolId;
             return true;
         }
-
         else
         {
             return false;
@@ -71,21 +70,21 @@ class Participants
      */
     public function clear()
     {
-        $this->count      =  -1;
-        $this->leader     =  -1;
-        $this->rolId      =  -1;
-        $this->order      =  '';
-        $this->memberDate =  '';
+        $this->count      = -1;
+        $this->leader     = -1;
+        $this->rolId      = -1;
+        $this->order      = '';
+        $this->memberDate = '';
     }
 
     /**
      * Count participants of the date.
-     * @param $rolId
-     * @return Returns the result of counted participants as numeric value in current object. Leaders are not counted!
+     * @param int $rolId
+     * @return int|void Returns the result of counted participants as numeric value in current object. Leaders are not counted!
      */
     public function getCount($rolId = 0)
     {
-        if($rolId != 0)
+        if($rolId !== 0)
         {
             $this->clear();
             $this->checkId($rolId);
@@ -115,7 +114,7 @@ class Participants
             }
         }
         // check if class variables $count and $leader are set to default flag.
-        if($this->count == -1 && $this->leader == -1)
+        if($this->count === -1 && $this->leader === -1)
         {
             // Then Store the results in class variables.
             $this->count = count($numParticipants);
@@ -127,13 +126,13 @@ class Participants
 
     /**
      * Get the limit of participants.
-     * @param $rolId
-     * @return Returns the limit of participants as numeric value of the current object. Leaders are not counted!
+     * @param int $rolId
+     * @return int Returns the limit of participants as numeric value of the current object. Leaders are not counted!
      */
     public function getLimit($rolId = 0)
     {
         // check if class variables $count and $leader are set to default flag.
-        if($this->count == -1 && $this->leader == -1)
+        if($this->count === -1 && $this->leader === -1)
         {
             // get data from database
             $this->getCount($rolId);
@@ -147,13 +146,13 @@ class Participants
 
     /**
      * Get the number of leaders.
-     * @param $rolId
-     * @return Returns the number of leaders as numeric value of the current object.
+     * @param int $rolId
+     * @return int Returns the number of leaders as numeric value of the current object.
      */
     public function getNumLeaders($rolId = 0)
     {
         // check if class variables $count and $leader are set to default flag.
-        if($this->count == -1 && $this->leader == -1)
+        if($this->count === -1 && $this->leader === -1)
         {
             // get data from database
             $this->getCount($rolId);
@@ -167,9 +166,9 @@ class Participants
 
     /**
      * Return all participants with surname,firstname and leader status as array
-     * @param $rolId
+     * @param int    $rolId
      * @param string $order Values ASC/DESC Default: 'ASC'
-     * @return Returns all participants in an array with fieldnames ['surname'], ['firstname'], ['leader'].
+     * @return array|false Returns all participants in an array with fieldnames ['surname'], ['firstname'], ['leader'].
      */
     public function getParticipantsArray($rolId = 0, $order = 'ASC')
     {

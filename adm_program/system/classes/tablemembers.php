@@ -98,12 +98,12 @@ class TableMembers extends TableAccess
      * Starts a membership for the assigned role and user from now until 31.12.9999.
      * An existing membership will be extended if necessary. If the user is the
      * current user then initiate a refresh of his role cache.
-     * @param int $roleId Assign the membership to this role
-     * @param int $userId The user who should get a member of the role.
-     * @param     $leader If value @b 1 then the user will be a leader of the role and get more rights.
+     * @param int  $roleId Assign the membership to this role
+     * @param int  $userId The user who should get a member of the role.
+     * @param bool $leader If value @b 1 then the user will be a leader of the role and get more rights.
      * @return bool Return @b true if the assignment was successful.
      */
-    public function startMembership($roleId = 0, $userId = 0, $leader = '')
+    public function startMembership($roleId = 0, $userId = 0, $leader = null)
     {
         global $gCurrentUser;
 
@@ -123,11 +123,11 @@ class TableMembers extends TableAccess
             }
 
             // Leiter sollte nicht ueberschrieben werden, wenn nicht uebergeben wird
-            if($leader === '')
+            if($leader === null)
             {
                 if($this->new_record)
                 {
-                    $this->setValue('mem_leader', 0);
+                    $this->setValue('mem_leader', false);
                 }
             }
             else

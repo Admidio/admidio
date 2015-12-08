@@ -28,8 +28,8 @@ class RoleDependency
     public $persisted;
 
     /**
-     *  Constructor that will create an object of a recordset of the specified table.
-     *  @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     * Constructor that will create an object of a recordset of the specified table.
+     * @param object $database Object of the class Database. This should be the default global object @b $gDb.
      */
     public function __construct(&$database)
     {
@@ -38,7 +38,7 @@ class RoleDependency
     }
 
     /**
-     *  Initializes all class parameters and deletes all read data.
+     * Initializes all class parameters and deletes all read data.
      */
     public function clear()
     {

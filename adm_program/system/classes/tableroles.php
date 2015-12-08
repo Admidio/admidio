@@ -149,7 +149,7 @@ class TableRoles extends TableAccess
 
     /**
      * Method determines the number of active members (without leaders) of this role
-     * @param $exceptUserId UserId witch shouldn't be counted
+     * @param int $exceptUserId UserId witch shouldn't be counted
      * @return int Returns the number of members of this role
      */
     public function countMembers($exceptUserId = null)

@@ -5,32 +5,32 @@
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- *  @class Language
- *  @brief Reads language specific texts that are identified with text ids out of language xml files
+ * @class Language
+ * @brief Reads language specific texts that are identified with text ids out of language xml files
  *
- *  The class will read a language specific text that is identified with their
- *  text id out of an language xml file. The access will be manages with the
- *  SimpleXMLElement which search through xml files. An object of this class
- *  can't be stored in a PHP session because it creates PHP core objects which
- *  couldn't be stored in sessions. Therefore an object of @b LanguageData
- *  should be assigned to this class that stored all necessary data and can be
- *  stored in a session.
- *  @par Examples
- *  @code // show how to use this class with the language data class and sessions
- *  script_a.php
- *  // create a language data object and assign it to the language object
- *  $language = new Language();
- *  $languageData = new LanguageData('de');
- *  $language->addLanguageData($languageData);
- *  $session->addObject('languageData', $languageData);
+ * The class will read a language specific text that is identified with their
+ * text id out of an language xml file. The access will be manages with the
+ * SimpleXMLElement which search through xml files. An object of this class
+ * can't be stored in a PHP session because it creates PHP core objects which
+ * couldn't be stored in sessions. Therefore an object of @b LanguageData
+ * should be assigned to this class that stored all necessary data and can be
+ * stored in a session.
+ * @par Examples
+ * @code // show how to use this class with the language data class and sessions
+ * script_a.php
+ * // create a language data object and assign it to the language object
+ * $language = new Language();
+ * $languageData = new LanguageData('de');
+ * $language->addLanguageData($languageData);
+ * $session->addObject('languageData', $languageData);
  *
- *  script_b.php
- *  // read language data from session and add it to language object
- *  $language = new Language();
- *  $language->addLanguageData($session->getObject('languageData'));
+ * script_b.php
+ * // read language data from session and add it to language object
+ * $language = new Language();
+ * $language->addLanguageData($session->getObject('languageData'));
  *
- *  // read and display a language specific text with placeholders for individual content
- *  echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Webmaster');@endcode
+ * // read and display a language specific text with placeholders for individual content
+ * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Webmaster');@endcode
  */
 class Language
 {

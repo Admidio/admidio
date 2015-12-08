@@ -78,15 +78,16 @@ class TableMessage extends TableAccess
         return $this->db->query($sql);
     }
 
-    /** get a list with all messages of an conversation.
-     *  @param $MsgId of the conversation - just for security reasons.
-     *  @return Returns @b answer of the SQL execution
+    /**
+     * get a list with all messages of an conversation.
+     * @param int $msgId of the conversation - just for security reasons.
+     * @return Returns @b answer of the SQL execution
      */
-    public function getConversation($MsgId)
+    public function getConversation($msgId)
     {
         $sql = "SELECT msc_usr_id, msc_message, msc_timestamp
                   FROM ". TBL_MESSAGES_CONTENT. "
-                 WHERE msc_msg_id = ". $MsgId ."
+                 WHERE msc_msg_id = ". $msgId ."
                  ORDER BY msc_part_id DESC";
         return $this->db->query($sql);
     }

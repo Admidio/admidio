@@ -135,15 +135,15 @@ class TableFolder extends TableAccess
     /**
      * Setzt das Lockedflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
      * und allen darin enthaltenen Unterordnern und Dateien rekursiv
-     * @param $locked_flag
+     * @param bool $lockedFlag
      * @param int $folderId
      */
-    public function editLockedFlagOnFolder($locked_flag, $folderId = 0)
+    public function editLockedFlagOnFolder($lockedFlag, $folderId = 0)
     {
         if ($folderId === 0)
         {
             $folderId = $this->getValue('fol_id');
-            $this->setValue('fol_locked', $locked_flag);
+            $this->setValue('fol_locked', $lockedFlag);
         }
 
         $this->db->startTransaction();
@@ -157,18 +157,18 @@ class TableFolder extends TableAccess
         while($row_subfolders = $subfoldersStatement->fetchObject())
         {
             // rekursiver Aufruf mit jedem einzelnen Unterordner
-            $this->editLockedFlagOnFolder($locked_flag, $row_subfolders->fol_id);
+            $this->editLockedFlagOnFolder($lockedFlag, $row_subfolders->fol_id);
         }
 
         // Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
         $sql_update = 'UPDATE '. TBL_FOLDERS. '
-                          SET fol_locked = \''.$locked_flag.'\'
+                          SET fol_locked = \''.$lockedFlag.'\'
                         WHERE fol_id = '.$folderId;
         $this->db->query($sql_update);
 
         //...und natuerlich auch fuer alle Files die in diesem Ordner sind
         $sql_update = 'UPDATE '. TBL_FILES. '
-                          SET fil_locked = \''.$locked_flag.'\'
+                          SET fil_locked = \''.$lockedFlag.'\'
                         WHERE fil_fol_id = '.$folderId;
         $this->db->query($sql_update);
 
@@ -211,7 +211,7 @@ class TableFolder extends TableAccess
     /**
      * Reads the folder recordset from database table @b adm_folders and throws an
      * AdmException if the user has no right to see the folder or the folder id doesn't exists.
-     * @param $folderId The id of the folder. If the id is 0 then the root folder will be shown.
+     * @param int $folderId The id of the folder. If the id is 0 then the root folder will be shown.
      * @throws AdmException
      * @return true Returns @b true if everything is ok otherwise an AdmException is thrown.
      */

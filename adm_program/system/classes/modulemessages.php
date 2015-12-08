@@ -38,14 +38,14 @@ class ModuleMessages
 
     /**
      * check for Group and give back a string with groupname and if it is active, inactive or both.
-     * @param $groupstring
+     * @param string $groupString
      * @return string
      */
-    public function msgGroupNameSplit($groupstring)
+    public function msgGroupNameSplit($groupString)
     {
         global $gCurrentOrganization, $gL10n, $gDb;
 
-        $group = $this->msgGroupSplit($groupstring);
+        $group = $this->msgGroupSplit($groupString);
 
         $sql = 'SELECT rol_name, rol_id
                       FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
@@ -77,20 +77,20 @@ class ModuleMessages
 
     /**
      * check for Group and give back a array with group ID[0] and if it is active, inactive or both [1].
-     * @param $groupstring
+     * @param string $groupString
      * @return array
      */
-    public function msgGroupSplit($groupstring)
+    public function msgGroupSplit($groupString)
     {
-        $groupsplit = explode(':', $groupstring);
+        $groupSplit = explode(':', $groupString);
 
-        if (strpos($groupsplit[1], '-') > 0)
+        if (strpos($groupSplit[1], '-') > 0)
         {
-            $group = explode('-', $groupsplit[1]);
+            $group = explode('-', $groupSplit[1]);
         }
         else
         {
-            $group[0] = $groupsplit[1];
+            $group[0] = $groupSplit[1];
             $group[1] = 0;
         }
 

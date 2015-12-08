@@ -6,19 +6,20 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-/** @class Organization
- *  @brief Handle organization data of Admidio and is connected to database table adm_organizations
+/**
+ * @class Organization
+ * @brief Handle organization data of Admidio and is connected to database table adm_organizations
  *
- *  This class creates the organization object and manages the access to the
- *  organization specific preferences of the table adm_preferences. There
- *  are also some method to read the relationship of organizations if the
- *  database contains more then one organization.
- *  @par Examples
- *  @code // create object and read the value of the language preference
- *  $organization = new Organization($gDb, $organizationId);
- *  $preferences  = $organization->getPreferences();
- *  $language     = $preferences['system_language'];
- *  // language = 'de' @endcode
+ * This class creates the organization object and manages the access to the
+ * organization specific preferences of the table adm_preferences. There
+ * are also some method to read the relationship of organizations if the
+ * database contains more then one organization.
+ * @par Examples
+ * @code // create object and read the value of the language preference
+ * $organization = new Organization($gDb, $organizationId);
+ * $preferences  = $organization->getPreferences();
+ * $language     = $preferences['system_language'];
+ * // language = 'de' @endcode
  */
 class Organization extends TableAccess
 {
@@ -64,8 +65,8 @@ class Organization extends TableAccess
     /**
      * Creates all necessary data for a new organization. This method can only be called once for an organization.
      * It will create the basic categories, lists, roles, systemmails etc.
-     * @param $userId The id of the webmaster who creates the new organization.
-     *                This will be the first valid user of the new organization.
+     * @param int $userId The id of the webmaster who creates the new organization.
+     *                    This will be the first valid user of the new organization.
      */
     public function createBasicData($userId)
     {

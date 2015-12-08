@@ -573,8 +573,8 @@ class TableAccess
     }
 
     /**
-     *  Set the database object for communication with the database of this class.
-     *  @param object $database An object of the class Database. This should be the global $gDb object.
+     * Set the database object for communication with the database of this class.
+     * @param object $database An object of the class Database. This should be the global $gDb object.
      */
     public function setDatabase(&$database)
     {

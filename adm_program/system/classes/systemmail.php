@@ -110,8 +110,8 @@ class SystemMail extends Email
 
     /**
      * die Methode setzt den Inhalt fuer spezielle Variablen
-     * @param $number
-     * @param $value
+     * @param int    $number
+     * @param string $value
      */
     public function setVariable($number, $value)
     {

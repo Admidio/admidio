@@ -117,7 +117,8 @@ class TablePhotos extends TableAccess
 
     /**
      * Rekursive Funktion die die uebergebene Veranstaltung und alle Unterveranstaltungen loescht
-     * @param $photo_id
+     * @param int $photo_id
+     * @return
      */
     public function deleteInDatabase($photo_id)
     {
@@ -125,8 +126,8 @@ class TablePhotos extends TableAccess
         $this->db->startTransaction();
 
         // erst einmal rekursiv zur tiefsten Tochterveranstaltung gehen
-        $sql     = 'SELECT pho_id FROM '. TBL_PHOTOS. '
-                     WHERE pho_pho_id_parent = '.$photo_id;
+        $sql = 'SELECT pho_id FROM '. TBL_PHOTOS. '
+                 WHERE pho_pho_id_parent = '.$photo_id;
         $childAlbumStatement = $this->db->query($sql);
 
         while($row = $childAlbumStatement->fetch())

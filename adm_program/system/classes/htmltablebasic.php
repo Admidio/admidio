@@ -124,7 +124,6 @@ class HtmlTableBasic extends HtmlElement {
 
     /**
      * Constructor initializing all class variables
-     *
      * @param $id Id of the table
      * @param $class Class name of the table
      * @param $border Set table border
@@ -160,15 +159,14 @@ class HtmlTableBasic extends HtmlElement {
     }
 
     /**
-     *  @par Add Columns to current table row.
-     *  This method defines the columns for the current table row.
-     *  The data can be passed as string or array. Using Arrays, for each key/value a new column is set.
-     *  You can define an attribute for each column. If you need further attributes for the column first do the settings with addAttribute();
-     *  If all settings are done for the column use the addData(); to define your column content.
-     *
-     *  @param $data Content for the column as string, or array
-     *  @param $arrAttributes Further attributes as array with key/value pairs
-     *  @param $col Column element 'td' or 'th' (Default: 'td')
+     * Add Columns to current table row.
+     * This method defines the columns for the current table row.
+     * The data can be passed as string or array. Using Arrays, for each key/value a new column is set.
+     * You can define an attribute for each column. If you need further attributes for the column first do the settings with addAttribute();
+     * If all settings are done for the column use the addData(); to define your column content.
+     * @param $data Content for the column as string, or array
+     * @param $arrAttributes Further attributes as array with key/value pairs
+     * @param $col Column element 'td' or 'th' (Default: 'td')
      */
     public function addColumn($data = '', $arrAttributes = null, $col = 'td')
     {
@@ -193,15 +191,15 @@ class HtmlTableBasic extends HtmlElement {
     }
 
     /**
-     *  @par Add new table row.
-     *  Starting the table directly with a row, the class automatically defines 'thead' and 'tfoot' element with an empty row.
-     *  The method checks if a row is already defined and must be closed first.
-     *  You can define 1 attribute/value pair for the row, calling the method. If you need further attributes for the new row, use method addAttribute(), before passing the content.
-     *  The element and attributes are stored in buffer first and will be parsed and written in the output string if the content is defined.
-     *  After all settings are done use addColumn(); to define your columns with content.
-     *  @param $data          Content for the table row as string, or array
-     *  @param $arrAttributes Further attributes as array with key/value pairs
-     *  @param $col           Column element 'td' or 'th' (Default: 'td')
+     * Add new table row.
+     * Starting the table directly with a row, the class automatically defines 'thead' and 'tfoot' element with an empty row.
+     * The method checks if a row is already defined and must be closed first.
+     * You can define 1 attribute/value pair for the row, calling the method. If you need further attributes for the new row, use method addAttribute(), before passing the content.
+     * The element and attributes are stored in buffer first and will be parsed and written in the output string if the content is defined.
+     * After all settings are done use addColumn(); to define your columns with content.
+     * @param $data          Content for the table row as string, or array
+     * @param $arrAttributes Further attributes as array with key/value pairs
+     * @param $col           Column element 'td' or 'th' (Default: 'td')
      */
     public function addRow($data = '', $arrAttributes = null, $col = 'td')
     {
@@ -350,12 +348,11 @@ class HtmlTableBasic extends HtmlElement {
     }
 
     /**
-     *  @par Define table body.
-     *  Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
-     *
-     *  @param $attribute Attribute
-     *  @param $value Value of the attribute
-     *  @param $data Content for the element as string, or array
+     * Define table body.
+     * Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
+     * @param $attribute Attribute
+     * @param $value Value of the attribute
+     * @param $data Content for the element as string, or array
      */
     public function addTableBody($attribute = '', $value = '', $data = '', $col = 'td')
     {
@@ -388,13 +385,12 @@ class HtmlTableBasic extends HtmlElement {
     }
 
     /**
-     *  @par Define table footer
-     *  Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
-     *
-     *  @param $attribute Attribute
-     *  @param $value Value of the attribute
-     *  @param $data Content for the element as string, or array
-     *  @return Returns @b false if tfoot element is already set
+     * @par Define table footer
+     * Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
+     * @param $attribute Attribute
+     * @param $value Value of the attribute
+     * @param $data Content for the element as string, or array
+     * @return Returns @b false if tfoot element is already set
      */
     public function addTableFooter($attribute = '', $value = '', $data = '', $col = 'td')
     {
@@ -424,13 +420,12 @@ class HtmlTableBasic extends HtmlElement {
     }
 
     /**
-     *  @par Define table header
-     *  Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
-     *
-     *  @param $attribute Attribute
-     *  @param $value Value of the attribute
-     *  @param $data Content for the element as string, or array
-     *  @return Returns @b false if thead element is already set
+     * Define table header
+     * Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
+     * @param $attribute Attribute
+     * @param $value Value of the attribute
+     * @param $data Content for the element as string, or array
+     * @return Returns @b false if thead element is already set
      */
     public function addTableHeader($attribute = '', $value = '', $data = '', $col = 'td')
     {

@@ -1268,11 +1268,10 @@ class User extends TableUsers
 
         $newFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
 
-        /*  Nicht alle Aenderungen werden geloggt. Ausnahmen:
-         *  usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
-         *  Felder, die mit usr_ beginnen, werden nicht geloggt
-         *  Falls die Feldwerte sich nicht geaendert haben, wird natuerlich ebenfalls nicht geloggt
-         */
+        // Nicht alle Aenderungen werden geloggt. Ausnahmen:
+        // usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
+        // Felder, die mit usr_ beginnen, werden nicht geloggt
+        // Falls die Feldwerte sich nicht geaendert haben, wird natuerlich ebenfalls nicht geloggt
         if($gPreferences['profile_log_edit_fields'] == 1 && $this->getValue('usr_id') != 0
         && strpos($columnName, 'usr_') === false && $newFieldValue !== $oldFieldValue)
         {

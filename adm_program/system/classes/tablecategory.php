@@ -102,8 +102,8 @@ class TableCategory extends TableAccess
      * diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
      * dieser bildet sich aus dem Namen in Grossbuchstaben und der naechsten freien Nummer (index)
      * Beispiel: 'Gruppen' => 'GRUPPEN_2'
-     * @param $name
-     * @param $index
+     * @param string $name
+     * @param int    $index
      * @return string
      */
     private function getNewNameIntern($name, $index)
@@ -226,8 +226,8 @@ class TableCategory extends TableAccess
     /**
      * Reads a category out of the table in database selected by the unique category id in the table.
      * Per default all columns of adm_categories will be read and stored in the object.
-     * @param $cat_id Unique cat_id
-     * @return Returns @b true if one record is found
+     * @param int $cat_id Unique cat_id
+     * @return bool Returns @b true if one record is found
      */
     public function readDataById($cat_id)
     {

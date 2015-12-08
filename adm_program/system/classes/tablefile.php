@@ -71,8 +71,9 @@ class TableFile extends TableAccess
     /**
      * Reads the file recordset from database table @b adm_folders and throws an AdmException
      * if the user has no right to see the corresponding folder or the file id doesn't exists.
-     * @param $fileId The id of the file.
-     * @return Returns @b true if everything is ok otherwise an AdmException is thrown.
+     * @param int $fileId The id of the file.
+     * @return true Returns @b true if everything is ok otherwise an AdmException is thrown.
+     * @throws AdmException
      */
     public function getFileForDownload($fileId)
     {
