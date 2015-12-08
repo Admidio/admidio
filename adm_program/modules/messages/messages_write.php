@@ -286,7 +286,7 @@ elseif (!isset($message_result))
         $sql = 'SELECT rol_id, rol_name
                   FROM '.TBL_ROLES.'
                   JOIN '.TBL_CATEGORIES.' ON cat_id = rol_cat_id
-                 WHERE rol_id IN ('.implode(',',$gCurrentUser->getAllMailRoles()).')
+                 WHERE rol_id IN ('.implode(',', $gCurrentUser->getAllMailRoles()).')
                    AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
                  ORDER BY rol_name ASC ';
         $rolesStatement = $gDb->query($sql);
