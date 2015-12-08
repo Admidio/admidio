@@ -25,10 +25,10 @@ $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', array('requir
 $showPage    = admFuncVariableIsValid($_GET, 'show_page', 'numeric', array('defaultValue' => 1));
 
 // Initialisierung lokaler Variablen
-$funcClass     = new FunctionClass($gL10n);
-$templates   = $funcClass->getFileNames(THEME_SERVER_PATH. '/ecard_templates/');
-$template    = THEME_SERVER_PATH. '/ecard_templates/';
-$headline    = $gL10n->get('ECA_GREETING_CARD_EDIT');
+$funcClass = new FunctionClass($gL10n);
+$templates = $funcClass->getFileNames(THEME_SERVER_PATH. '/ecard_templates/');
+$template  = THEME_SERVER_PATH. '/ecard_templates/';
+$headline  = $gL10n->get('ECA_GREETING_CARD_EDIT');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_ecard_module'] != 1)

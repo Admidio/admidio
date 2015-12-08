@@ -30,7 +30,7 @@ $getUserId  = admFuncVariableIsValid($_GET, 'usr_id',   'numeric');
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric');
 $getInline  = admFuncVariableIsValid($_GET, 'inline',   'boolean');
 
-$html       = '';
+$html = '';
 
 // if user is allowed to assign at least one role then allow access
 if(!$gCurrentUser->assignRoles())

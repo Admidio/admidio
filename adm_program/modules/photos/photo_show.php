@@ -72,7 +72,7 @@ if($getThumbnail)
 {
     if($getPhotoNr > 0)
     {
-        $thumb_length=1;
+        $thumb_length = 1;
         if(file_exists($ordner.'/thumbnails/'.$getPhotoNr.'.jpg'))
         {
             // Ermittlung der Original Bildgroesse
@@ -87,7 +87,7 @@ if($getThumbnail)
 
         // Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
         // Wenn nicht anlegen
-        if(!file_exists($ordner.'/thumbnails/'.$getPhotoNr.'.jpg') || $thumb_length !=$gPreferences['photo_thumbs_scale'])
+        if(!file_exists($ordner.'/thumbnails/'.$getPhotoNr.'.jpg') || $thumb_length != $gPreferences['photo_thumbs_scale'])
         {
             // Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
             if(!file_exists($ordner.'/thumbnails'))

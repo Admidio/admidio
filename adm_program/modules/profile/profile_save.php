@@ -121,7 +121,7 @@ foreach($gProfileFields->mProfileFields as $field)
     $post_id = 'usf-'. $field->getValue('usf_id');
 
     // check and save only fields that aren't disabled
-    if($field->getValue('usf_disabled') == 0
+    if ($field->getValue('usf_disabled') == 0
     || ($field->getValue('usf_disabled') == 1 && $gCurrentUser->hasRightEditProfile($user, false))
     || ($field->getValue('usf_disabled') == 1 && $getNewUser > 0))
     {
@@ -141,8 +141,7 @@ foreach($gProfileFields->mProfileFields as $field)
             || $field->getValue('usf_name_intern') === 'TWITTER'
             || $field->getValue('usf_name_intern') === 'XING')
             {
-                if(strValidCharacters($_POST[$post_id], 'url')
-                && strpos($_POST[$post_id], '/') !== false)
+                if(strValidCharacters($_POST[$post_id], 'url') && strpos($_POST[$post_id], '/') !== false)
                 {
                     if(strrpos($_POST[$post_id], '/profile.php?id=') > 0)
                     {

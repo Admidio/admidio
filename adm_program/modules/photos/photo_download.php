@@ -202,7 +202,8 @@ if($getPhotoNr == null)
     fpassthru($fp);
 
     unlink($zipname);
-} else
+}
+else
 {
     // download single file
     header('Content-Description: File Transfer');

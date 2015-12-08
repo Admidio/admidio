@@ -22,8 +22,8 @@ $getItemId   = admFuncVariableIsValid($_GET, 'inv_id',    'numeric', array('requ
 $getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'boolean');
 
 // lokale Variablen der Uebergabevariablen initialisieren
-$image         = null;
-$picpath       = THEME_SERVER_PATH. '/images/no_profile_pic.png';
+$image   = null;
+$picpath = THEME_SERVER_PATH. '/images/no_profile_pic.png';
 
 // only users with the right to edit inventory could use this script
 if (!$gCurrentUser->editInventory())
