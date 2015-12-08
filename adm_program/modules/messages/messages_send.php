@@ -98,6 +98,17 @@ if ($gCurrentUser->getValue('usr_id') > 0)
     $postName = $gCurrentUser->getValue('FIRST_NAME', 'database'). ' '. $gCurrentUser->getValue('LAST_NAME', 'database');
     $postFrom = $gCurrentUser->getValue('EMAIL');
 }
+else
+{
+    if($postName == '')
+    {
+            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('MAI_YOUR_NAME')));
+    }
+    elseif(!strValidCharacters($postFrom, 'email'))
+    {
+            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_YOUR_EMAIL')));
+    }
+}
 
 // if no User is set, he is not able to ask for delivery confirmation 
 if(!($gCurrentUser->getValue('usr_id')>0 && $gPreferences['mail_delivery_confirmation']==2) && $gPreferences['mail_delivery_confirmation']!=1)
