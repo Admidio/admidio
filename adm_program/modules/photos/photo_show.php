@@ -125,7 +125,7 @@ else
     $image->scale($getMaxWidth, $getMaxHeight);
 }
 
-if($image != null)
+if($image !== null)
 {
     // Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
     if (($getMaxWidth > 200) && $gPreferences['photo_image_text'] !== '')

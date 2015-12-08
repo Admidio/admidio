@@ -34,7 +34,7 @@ elseif($_FILES['userfile']['error'][0] == 1)
     // Dateigroesse ueberpruefen Servereinstellungen
     $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', $gPreferences['max_file_upload_size']));
 }
-elseif($postRoleId == 0)
+elseif($postRoleId === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROLE')));
 }

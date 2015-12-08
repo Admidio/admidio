@@ -74,7 +74,7 @@ switch($postFunction)
             $msgId = $msgId - 50;
         }
 
-        if($postLines == $msgId)
+        if($postLines === $msgId)
         {
             $log['state'] = $postLines;
             $log['text']  = false;

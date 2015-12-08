@@ -69,7 +69,7 @@ if($getGboId > 0)
 
 // Wenn keine ID uebergeben wurde, der User aber eingeloggt ist koennen zumindest
 // Name, Emailadresse und Homepage vorbelegt werden...
-if ($getGboId == 0 && $gValidLogin)
+if ($getGboId === 0 && $gValidLogin)
 {
     $guestbook->setValue('gbo_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));
     $guestbook->setValue('gbo_email', $gCurrentUser->getValue('EMAIL'));

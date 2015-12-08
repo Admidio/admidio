@@ -80,12 +80,12 @@ try
 
         $originalName = $file->getValue('fil_name');
 
-        if ($form_values['new_name'] == null)
+        if ($form_values['new_name'] === null)
         {
             $form_values['new_name'] = pathinfo($originalName, PATHINFO_FILENAME);
         }
 
-        if ($form_values['new_description'] == null)
+        if ($form_values['new_description'] === null)
         {
             $form_values['new_description'] = $file->getValue('fil_description');
         }

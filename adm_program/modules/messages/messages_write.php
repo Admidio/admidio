@@ -43,15 +43,15 @@ if ($getMsgId > 0)
 }
 
 // check if the call of the page was allowed by settings
-if ($gPreferences['enable_mail_module'] != 1 && $getMsgType != 'PM'
-   || $gPreferences['enable_pm_module'] != 1 && $getMsgType == 'PM')
+if ($gPreferences['enable_mail_module'] != 1 && $getMsgType !== 'PM'
+   || $gPreferences['enable_pm_module'] != 1 && $getMsgType === 'PM')
 {
     // message if the sending of PM is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 // check for valid login
-if (!$gValidLogin && $getUserId == 0 && $getMsgType === 'PM')
+if (!$gValidLogin && $getUserId === 0 && $getMsgType === 'PM')
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -167,7 +167,7 @@ if ($getMsgType === 'PM')
     // show form
     $form = new HtmlForm('pm_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
 
-    if ($getUserId == 0)
+    if ($getUserId === 0)
     {
         $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
         $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'               => FIELD_REQUIRED,

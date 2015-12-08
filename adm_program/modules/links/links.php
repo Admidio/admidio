@@ -102,7 +102,7 @@ if($weblinks->getId() == 0)
     $LinksMenu->addForm($navbarForm->show(false));
 }
 
-if ($weblinksCount == 0)
+if ($weblinksCount === 0)
 {
     // no weblink found
     if ($weblinks->getId() > 0)

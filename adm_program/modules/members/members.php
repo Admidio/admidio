@@ -29,7 +29,7 @@ $getMembers = admFuncVariableIsValid($_GET, 'members', 'boolean', array('default
 // if only active members should be shown then set parameter
 if($gPreferences['members_show_all_users'] == 0)
 {
-    $getMembers = 1;
+    $getMembers = true;
 }
 
 // only legitimate users are allowed to call the user management
@@ -47,7 +47,7 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 $memberCondition = '';
 
 // Create condition if only active members should be shown
-if($getMembers == 1)
+if($getMembers)
 {
     $memberCondition = ' AND EXISTS
         (SELECT 1
@@ -111,7 +111,7 @@ $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value
 $mglStatement = $gDb->query($sql);
 
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
-if($getMembers == 1)
+if($getMembers)
 {
     $flagShowMembers = 0;
     $htmlShowMembers = '';

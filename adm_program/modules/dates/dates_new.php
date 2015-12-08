@@ -92,7 +92,7 @@ if(isset($_SESSION['dates_request']))
 else
 {
     // read all roles that could see this event
-    if($getDateId == 0)
+    if($getDateId === 0)
     {
         // bei neuem Termin Datum mit aktuellen Daten vorbelegen
         $date->setValue('dat_begin', date('Y-m-d H:00:00', time()+3600));
@@ -220,7 +220,7 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
     {
         $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50, 'helpTextIdLabel' => 'DAT_LOCATION_LINK'));
 
-        if(strlen($date->getValue('dat_country')) === 0 && $getDateId == 0)
+        if(strlen($date->getValue('dat_country')) === 0 && $getDateId === 0)
         {
             $date->setValue('dat_country', $gPreferences['default_country']);
         }

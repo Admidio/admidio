@@ -144,7 +144,7 @@ if($getViewMode === 'html')
                             $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
     }
 
-    if($getId == 0)
+    if($getId === 0)
     {
         $form = new HtmlForm('navbar_change_view_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
         $selectBoxEntries = array('detail' => $gL10n->get('DAT_VIEW_MODE_DETAIL'), 'compact' => $gL10n->get('DAT_VIEW_MODE_COMPACT'), 'room' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_ROOM'), 'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'), 'description' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION'));

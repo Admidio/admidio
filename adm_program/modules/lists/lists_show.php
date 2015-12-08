@@ -115,7 +115,7 @@ if($getRoleId === 0 && $numberRoles === 1)
     // set role default list configuration
     $getRoleId = $role->getDefaultList();
 
-    if($getRoleId == 0)
+    if($getRoleId === 0)
     {
         $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
     }
@@ -220,15 +220,15 @@ if($getMode !== 'csv')
     $datatable = false;
     $hoverRows = false;
 
-    if($getShowMembers == 0)
+    if($getShowMembers === 0)
     {
         $htmlSubHeadline .= ' - '. $gL10n->get('LST_ACTIVE_MEMBERS');
     }
-    elseif($getShowMembers == 1)
+    elseif($getShowMembers === 1)
     {
         $htmlSubHeadline .= ' - '. $gL10n->get('LST_FORMER_MEMBERS');
     }
-    elseif($getShowMembers == 2)
+    elseif($getShowMembers === 2)
     {
         $htmlSubHeadline .= ' - '. $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }

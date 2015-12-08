@@ -135,7 +135,7 @@ try
         // der User wird gerade angelegt und die ID kann erst danach in das Create-Feld gesetzt werden
         $inventory->save();
 
-        if($getNewItem == 1)
+        if($getNewItem === 1)
         {
             $inventory->setValue('inv_usr_id_create', $gCurrentUser->getValue('inv_id'));
         }
@@ -164,7 +164,7 @@ $gNavigation->deleteLastUrl();
 // je nach Aufrufmodus auf die richtige Seite weiterleiten
 /*------------------------------------------------------------*/
 
-if($getNewItem == 1)
+if($getNewItem === 1)
 {
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));

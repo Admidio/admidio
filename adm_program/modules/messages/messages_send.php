@@ -42,7 +42,7 @@ else
 
 $message = new TableMessage($gDb, $getMsgId);
 
-if ($getMsgId != 0)
+if ($getMsgId > 0)
 {
     $getMsgType = $message->getValue('msg_type');
 }

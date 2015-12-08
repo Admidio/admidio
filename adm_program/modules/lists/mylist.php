@@ -28,7 +28,7 @@ $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'boolean', array
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
 
 // falls ehemalige Rolle, dann auch nur ehemalige Mitglieder anzeigen
-if($getActiveRole == 0)
+if(!$getActiveRole)
 {
     $getShowMembers = 1;
 }
@@ -36,7 +36,7 @@ if($getActiveRole == 0)
 // set headline of the script
 $headline = $gL10n->get('LST_MY_LIST').' - '.$gL10n->get('LST_CONFIGURATION');
 
-if($getRoleId == 0)
+if($getRoleId === 0)
 {
     // Navigation faengt hier im Modul an
     $gNavigation->clear();

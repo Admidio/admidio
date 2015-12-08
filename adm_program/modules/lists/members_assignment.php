@@ -53,7 +53,7 @@ if(!$role->allowedToAssignMembers($gCurrentUser))
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-if($getMembersShowAll == 1)
+if($getMembersShowAll)
 {
     $getFilterRoleId = 0;
 }
@@ -73,17 +73,17 @@ if($getMode === 'assign')
 
     try
     {
-        $membership = 0;
-        $leadership = 0;
+        $membership = false;
+        $leadership = false;
 
         if(isset($_POST['member_'.$getUserId]) && $_POST['member_'.$getUserId] === 'true')
         {
-            $membership = 1;
+            $membership = true;
         }
         if(isset($_POST['leader_'.$getUserId]) && $_POST['leader_'.$getUserId] === 'true')
         {
-            $membership = 1;
-            $leadership = 1;
+            $membership = true;
+            $leadership = true;
         }
 
         // Member
@@ -93,12 +93,12 @@ if($getMode === 'assign')
         $mem_count = $role->countMembers($getUserId);
 
         // Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
-        if($leadership === 1 || ($leadership === 0 && $membership == 1 && ($role->getValue('rol_max_members') > $mem_count || $role->getValue('rol_max_members') == 0 || $role->getValue('rol_max_members') == 0)))
+        if($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $mem_count || $role->getValue('rol_max_members') == 0 || $role->getValue('rol_max_members') == 0)))
         {
             $member->startMembership($role->getValue('rol_id'), $getUserId, $leadership);
             echo 'success';
         }
-        elseif($leadership === 0 && $membership == 0)
+        elseif(!$leadership && !$membership)
         {
             $member->stopMembership($role->getValue('rol_id'), $getUserId);
             echo 'success';
@@ -129,7 +129,7 @@ else
     // create sql for all relevant users
     $memberCondition = '';
 
-    if($getMembersShowAll == 1)
+    if($getMembersShowAll)
     {
         // Falls gefordert, aufrufen alle Benutzer aus der Datenbank
         $memberCondition = ' usr_valid = 1 ';
@@ -214,7 +214,7 @@ else
 
     $javascriptCode = '';
 
-    if($getMembersShowAll == 1)
+    if($getMembersShowAll)
     {
         $javascriptCode .= '$("#mem_show_all").prop("checked", true);';
     }

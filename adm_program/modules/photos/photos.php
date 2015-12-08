@@ -75,7 +75,7 @@ else
 }
 
 // Wurde keine Album uebergeben kann das Navigationsstack zurueckgesetzt werden
-if ($getPhotoId == 0)
+if ($getPhotoId === 0)
 {
     $gNavigation->clear();
 }
@@ -91,7 +91,7 @@ if($getPhotoId > 0 && $photoAlbum->getValue('pho_org_id') != $gCurrentOrganizati
 
 /*********************LOCKED************************************/
 // Falls gefordert und Foto-edit-rechte, aendern der Freigabe
-if($getLocked == '1' || $getLocked == '0')
+if($getLocked === 0 || $getLocked === 1)
 {
     // erst pruefen, ob der User Fotoberarbeitungsrechte hat
     if(!$gCurrentUser->editPhotoRight())
@@ -384,7 +384,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 $sql = 'SELECT *
           FROM '. TBL_PHOTOS. '
          WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
-if($getPhotoId == 0)
+if($getPhotoId === 0)
 {
     $sql = $sql.' AND (pho_pho_id_parent IS NULL) ';
 }

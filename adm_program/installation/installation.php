@@ -137,7 +137,7 @@ elseif(file_exists('../../config.php'))
     exit();
 }
 
-if($getMode === 1)  // (Default) Choose language
+if($getMode === 1) // (Default) Choose language
 {
     session_destroy();
 

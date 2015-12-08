@@ -50,8 +50,7 @@ else
 }
 
 // Erst einmal die Rechte abklopfen...
-if(($gPreferences['enable_guestbook_module'] == 2 || $gPreferences['enable_gbook_comments4all'] == 0)
-&& $getGboId > 0)
+if(($gPreferences['enable_guestbook_module'] == 2 || $gPreferences['enable_gbook_comments4all'] == 0) && $getGboId > 0)
 {
     // Falls anonymes kommentieren nicht erlaubt ist, muss der User eingeloggt sein zum kommentieren
     require_once('../../system/login_valid.php');
@@ -102,7 +101,7 @@ if(isset($_SESSION['guestbook_comment_request']))
 
 // Wenn der User eingeloggt ist und keine cid uebergeben wurde
 // koennen zumindest Name und Emailadresse vorbelegt werden...
-if($getGbcId == 0 && $gValidLogin)
+if($getGbcId === 0 && $gValidLogin)
 {
     $guestbook_comment->setValue('gbc_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));
     $guestbook_comment->setValue('gbc_email', $gCurrentUser->getValue('EMAIL'));

@@ -268,7 +268,7 @@ elseif($getMode === 2)
     }
 
     // holt die Role ID des letzten Insert Statements
-    if($getRoleId == 0)
+    if($getRoleId === 0)
     {
         $getRoleId = $role->getValue('rol_id');
     }

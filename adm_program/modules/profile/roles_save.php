@@ -55,7 +55,7 @@ foreach($_POST as $key=>$value)
 // if no role is selected than show notice
 if($roleCount === 0)
 {
-    if($getInline == 0)
+    if(!$getInline)
     {
         exit($gMessage->show($gL10n->get('PRO_ROLE_NOT_ASSIGNED')));
     }
@@ -108,7 +108,7 @@ else
 $rolesStatement = $gDb->query($sql);
 $rolesList      = $rolesStatement->fetchAll();
 
-$count_assigned = 0;
+$assignedCount = 0;
 $parentRoles = array();
 
 // Ergebnisse durchlaufen und kontrollieren ob maximale Teilnehmerzahl ueberschritten wuerde
@@ -146,7 +146,7 @@ foreach($rolesList as $row)
             && isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == false
             && isset($_POST['role-'.$row['rol_id']])   && $_POST['role-'.$row['rol_id']]   == true)
             {
-                if($getInline == 0)
+                if(!$getInline)
                 {
                     $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']));
                 }
@@ -186,7 +186,7 @@ foreach($rolesList as $row)
         if($roleAssign == 1)
         {
             $user->setRoleMembership($row['rol_id'], DATE_NOW, '9999-12-31', $roleLeader);
-            ++$count_assigned;
+            ++$assignedCount;
 
             // find the parent roles and assign user to parent roles
             $tmpRoles = RoleDependency::getParentRoles($gDb, $row['rol_id']);
@@ -222,7 +222,7 @@ if(count($parentRoles) > 0)
 }
 
 // if role selection was a separate page then delete this page from the navigation stack
-if($getInline == 0)
+if(!$getInline)
 {
     $gNavigation->deleteLastUrl();
 }
@@ -232,10 +232,10 @@ if($getInline == 0)
 $gCurrentSession->renewUserObject();
 
 // Check if a new user get's at least one role
-if($getNewUser > 0 && $count_assigned == 0)
+if($getNewUser > 0 && $assignedCount === 0)
 {
     // Neuem User wurden keine Rollen zugewiesen
-    if($getInline == 0)
+    if(!$getInline)
     {
         $gMessage->show($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
     }
@@ -258,7 +258,7 @@ if($getInline)
 }
 else
 {
-    if($getNewUser == 3)
+    if($getNewUser === 3)
     {
         $messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
     }

@@ -97,7 +97,7 @@ else
     // Gaestebuchobjekt anlegen
     $guestbook_comment = new TableGuestbookComment($gDb);
 
-    if($getGboId > 0 && $getMode != 4)
+    if($getGboId > 0 && $getMode !== 4)
     {
         $guestbook_comment->readDataById($getGboId);
 

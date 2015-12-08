@@ -39,14 +39,14 @@ if($gPreferences['enable_dates_module'] == 0)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-if($getMode != 6 || $gPreferences['enable_dates_module'] == 2)
+if($getMode !== 6 || $gPreferences['enable_dates_module'] == 2)
 {
     // Alle Funktionen, ausser Exportieren und anmelden, duerfen nur eingeloggte User
     require_once('../../system/login_valid.php');
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
-if(!$gCurrentUser->editDates() && $getMode != 3 && $getMode != 4 && $getMode != 6)
+if(!$gCurrentUser->editDates() && $getMode !== 3 && $getMode !== 4 && $getMode !== 6)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
