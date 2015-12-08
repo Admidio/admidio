@@ -21,10 +21,10 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId   = admFuncVariableIsValid($_GET, 'pho_id',    'numeric', array('requireValue' => true));
-$getJob       = admFuncVariableIsValid($_GET, 'job',       'string',  array('requireValue' => true, 'validValues' => array('delete', 'rotate')));
-$getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',  'numeric', array('requireValue' => true));
-$getDirection = admFuncVariableIsValid($_GET, 'direction', 'string',  array('validValues' => array('left', 'right')));
+$getPhotoId   = admFuncVariableIsValid($_GET, 'pho_id',    'int',    array('requireValue' => true));
+$getJob       = admFuncVariableIsValid($_GET, 'job',       'string', array('requireValue' => true, 'validValues' => array('delete', 'rotate')));
+$getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',  'int',    array('requireValue' => true));
+$getDirection = admFuncVariableIsValid($_GET, 'direction', 'string', array('validValues' => array('left', 'right')));
 
 if ($gPreferences['enable_photo_module'] == 0)
 {

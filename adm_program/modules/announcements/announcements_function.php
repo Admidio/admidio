@@ -31,8 +31,8 @@ if(!$gCurrentUser->editAnnouncements())
 }
 
 // Initialize and check the parameters
-$getAnnId = admFuncVariableIsValid($_GET, 'ann_id', 'numeric');
-$getMode  = admFuncVariableIsValid($_GET, 'mode',   'numeric', array('requireValue' => true));
+$getAnnId = admFuncVariableIsValid($_GET, 'ann_id', 'int');
+$getMode  = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
 
 // Ankuendigungsobjekt anlegen
 $announcement = new TableAnnouncement($gDb);

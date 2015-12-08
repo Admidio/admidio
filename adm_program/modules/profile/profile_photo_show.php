@@ -18,8 +18,8 @@ require('../../system/common.php');
 require('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserId   = admFuncVariableIsValid($_GET, 'usr_id',    'numeric', array('requireValue' => true));
-$getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'boolean');
+$getUserId   = admFuncVariableIsValid($_GET, 'usr_id',    'int', array('requireValue' => true));
+$getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'bool');
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $image   = null;

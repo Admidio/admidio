@@ -65,7 +65,7 @@ require_once(SERVER_PATH.'/adm_program/system/function.php');
 // Initialize and check the parameters
 
 define('THEME_PATH', 'layout');
-$getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('defaultValue' => 1));
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
 $message = '';
 
 // Default-DB-Type ist immer MySql

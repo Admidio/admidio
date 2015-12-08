@@ -19,9 +19,9 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getDateId   = admFuncVariableIsValid($_GET, 'dat_id',   'numeric');
+$getDateId   = admFuncVariableIsValid($_GET, 'dat_id',   'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
-$getCopy     = admFuncVariableIsValid($_GET, 'copy',     'boolean');
+$getCopy     = admFuncVariableIsValid($_GET, 'copy',     'bool');
 
 // check if module is active
 if($gPreferences['enable_dates_module'] == 0)

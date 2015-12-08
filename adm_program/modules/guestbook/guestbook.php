@@ -35,10 +35,10 @@ elseif($gPreferences['enable_guestbook_module'] == 2)
 }
 
 // Initialize and check the parameters
-$getStart      = admFuncVariableIsValid($_GET, 'start',      'numeric');
+$getStart      = admFuncVariableIsValid($_GET, 'start',      'int');
 $getHeadline   = admFuncVariableIsValid($_GET, 'headline',   'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
-$getGboId      = admFuncVariableIsValid($_GET, 'id',         'numeric');
-$getModeration = admFuncVariableIsValid($_GET, 'moderation', 'boolean');
+$getGboId      = admFuncVariableIsValid($_GET, 'id',         'int');
+$getModeration = admFuncVariableIsValid($_GET, 'moderation', 'bool');
 
 if($getModeration && !$gCurrentUser->editGuestbookRight())
 {

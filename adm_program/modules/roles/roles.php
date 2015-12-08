@@ -19,8 +19,8 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getInactive  = admFuncVariableIsValid($_GET, 'inactive',  'boolean');
-$getInvisible = admFuncVariableIsValid($_GET, 'invisible', 'boolean');
+$getInactive  = admFuncVariableIsValid($_GET, 'inactive',  'bool');
+$getInvisible = admFuncVariableIsValid($_GET, 'invisible', 'bool');
 
 // only users with the special right are allowed to manage roles
 if(!$gCurrentUser->manageRoles())

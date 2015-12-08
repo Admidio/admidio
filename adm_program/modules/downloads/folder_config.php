@@ -16,7 +16,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric', array('requireValue' => true));
+$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int', array('requireValue' => true));
 
 $headline = $gL10n->get('DOW_SET_FOLDER_PERMISSIONS');
 

@@ -18,9 +18,9 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getStart      = admFuncVariableIsValid($_GET, 'start',       'numeric');
-$getCatId      = admFuncVariableIsValid($_GET, 'cat_id',      'numeric');
-$getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', array('defaultValue' => 1));
+$getStart      = admFuncVariableIsValid($_GET, 'start',       'int');
+$getCatId      = admFuncVariableIsValid($_GET, 'cat_id',      'int');
+$getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 
 // New Modulelist object
 $lists = new ModuleLists();

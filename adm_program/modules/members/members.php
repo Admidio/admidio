@@ -24,7 +24,7 @@ if (isset($_POST['admSearchMembers']) && strlen($_POST['admSearchMembers']) > 0)
 }
 
 // Initialize and check the parameters
-$getMembers = admFuncVariableIsValid($_GET, 'members', 'boolean', array('defaultValue' => 1));
+$getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));
 
 // if only active members should be shown then set parameter
 if($gPreferences['members_show_all_users'] == 0)

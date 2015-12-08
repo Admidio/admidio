@@ -17,7 +17,7 @@ require_once('../../system/common.php');
 require_once('../../system/template.php');
 
 // Initialize and check the parameters
-$getMsgId   = admFuncVariableIsValid($_GET, 'msg_id',   'numeric');
+$getMsgId   = admFuncVariableIsValid($_GET, 'msg_id',   'int');
 $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 
 // Check form values
@@ -27,7 +27,7 @@ $postSubject    = admFuncVariableIsValid($_POST, 'subject',  'html');
 $postSubjectSQL = admFuncVariableIsValid($_POST, 'subject',  'string');
 $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postBodySQL    = admFuncVariableIsValid($_POST, 'msg_body', 'string');
-$postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'boolean');
+$postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
 $postCaptcha    = admFuncVariableIsValid($_POST, 'captcha', 'string');
 
 if (isset($_POST['msg_to']))
@@ -61,7 +61,7 @@ if ($getMsgType !== 'PM')
     // allow option to send a copy to your email address only for registered users because of spam abuse
     if($gValidLogin)
     {
-        $postCarbonCopy = admFuncVariableIsValid($_POST, 'carbon_copy', 'boolean');
+        $postCarbonCopy = admFuncVariableIsValid($_POST, 'carbon_copy', 'bool');
     }
     else
     {

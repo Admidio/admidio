@@ -24,7 +24,7 @@ if (!$gValidLogin)
 }
 
 // Initialize and check the parameters
-$getMsgId = admFuncVariableIsValid($_GET, 'msg_id', 'numeric', array('defaultValue' => 0));
+$getMsgId = admFuncVariableIsValid($_GET, 'msg_id', 'int', array('defaultValue' => 0));
 
 if ($getMsgId > 0)
 {

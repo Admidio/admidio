@@ -15,7 +15,7 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
-$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('requireValue' => true, 'directOutput' => true));
+$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('requireValue' => true, 'directOutput' => true));
 
 $user      = new User($gDb, $gProfileFields, $getUserId);
 $userPhoto = $user->getValue('usr_photo');

@@ -30,11 +30,11 @@ if(isset($_GET['mode']) && $_GET['mode'] === 'assign')
 }
 
 // Initialize and check the parameters
-$getMode           = admFuncVariableIsValid($_GET, 'mode',          'string',  array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
-$getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'numeric', array('requireValue' => true, 'directOutput' => true));
-$getUserId         = admFuncVariableIsValid($_GET, 'usr_id',        'numeric', array('directOutput' => true));
-$getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'numeric');
-$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'boolean');
+$getMode           = admFuncVariableIsValid($_GET, 'mode',          'string', array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
+$getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'int',    array('requireValue' => true, 'directOutput' => true));
+$getUserId         = admFuncVariableIsValid($_GET, 'usr_id',        'int',    array('directOutput' => true));
+$getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
+$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'bool');
 
 $_SESSION['set_rol_id'] = $getRoleId;
 

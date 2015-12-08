@@ -22,10 +22,10 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'numeric');
-$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'numeric');
-$getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'boolean', array('defaultValue' => 1));
-$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
+$getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'int');
+$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
+$getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'bool', array('defaultValue' => true));
+$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
 // falls ehemalige Rolle, dann auch nur ehemalige Mitglieder anzeigen
 if(!$getActiveRole)

@@ -41,9 +41,9 @@ if (!$gCurrentUser->editDownloadRight())
 }
 
 // Initialize and check the parameters
-$getMode     = admFuncVariableIsValid($_GET, 'mode',      'numeric', array('requireValue' => true));
-$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric');
-$getFileId   = admFuncVariableIsValid($_GET, 'file_id',   'numeric');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',      'int', array('requireValue' => true));
+$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
+$getFileId   = admFuncVariableIsValid($_GET, 'file_id',   'int');
 $getName     = admFuncVariableIsValid($_GET, 'name',      'file');
 
 $_SESSION['download_request'] = $_POST;
