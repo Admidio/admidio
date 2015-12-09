@@ -401,7 +401,7 @@ elseif (!isset($message_result))
     else
     {
         $form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $form_values['name'], array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-        $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $form_values['mailfrom'], array('maxLength' => 50, 'property' => FIELD_REQUIRED));
+        $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $form_values['mailfrom'], array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
     }
 
     // show option to send a copy to your email address only for registered users because of spam abuse
