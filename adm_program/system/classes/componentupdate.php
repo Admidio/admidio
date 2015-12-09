@@ -69,7 +69,9 @@ class ComponentUpdate extends Component
 
         $executeSql = true;
 
-        if(trim($xmlNode[0]) !== '')
+        $updateStepContent = trim((string) $xmlNode);
+
+        if($updateStepContent !== '')
         {
             // if the sql statement is only for a special database and you do
             // not have this database then don't execute this statement
@@ -80,12 +82,12 @@ class ComponentUpdate extends Component
 
             // if a method of this class was set in the update step
             // then call this function and don't execute a SQL statement
-            if(strpos($xmlNode[0], 'ComponentUpdate') !== false)
+            if(strpos($updateStepContent, 'ComponentUpdate') !== false)
             {
                 $executeSql = false;
 
                 // get the method name
-                $function = substr($xmlNode[0], strpos($xmlNode[0], '::')+2);
+                $function = substr($updateStepContent, strpos($updateStepContent, '::')+2);
                 // now call the method
                 $this->{$function}();
             }
@@ -93,7 +95,7 @@ class ComponentUpdate extends Component
             if($executeSql)
             {
                 // replace prefix with installation specific table prefix
-                $sql = str_replace('%PREFIX%', $g_tbl_praefix, $xmlNode[0]);
+                $sql = str_replace('%PREFIX%', $g_tbl_praefix, $updateStepContent);
 
                 $this->db->query($sql);
             }
