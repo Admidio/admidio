@@ -395,8 +395,35 @@ elseif (!isset($message_result))
 
     if ($gCurrentUser->getValue('usr_id') > 0)
     {
-        $form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
-        $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
+		$sql = 'SELECT count(*)
+                  FROM '. TBL_USER_FIELDS. '
+                 WHERE usf_type = \'EMAIL\' ';
+		
+		$pdoStatement = $gDb->query($sql);
+        $possible_emails = $pdoStatement->fetchColumn();
+		
+		$form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
+		
+		if($possible_emails > 1)
+		{
+			$sql   = 'SELECT email.usd_value as ID, email.usd_value as email
+                FROM '. TBL_USERS. '
+                JOIN '. TBL_USER_DATA. ' as email
+                  ON email.usd_usr_id = usr_id
+                 AND LENGTH(email.usd_value) > 0
+                JOIN '. TBL_USER_FIELDS. ' as field
+                  ON field.usf_id = email.usd_usf_id
+                 AND field.usf_type = \'EMAIL\'
+               WHERE usr_id = '. $gCurrentUser->getValue('usr_id'). '
+                 AND usr_valid   = 1
+            GROUP BY email.usd_value, email.usd_value';
+			
+			$form->addSelectBoxFromSql('mailfromid', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sql, array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false));
+		}
+		else
+		{
+			$form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
+        }
     }
     else
     {
