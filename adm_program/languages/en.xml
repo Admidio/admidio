@@ -638,7 +638,7 @@
   <string name="ORG_FIELD_NOT_HIDDEN">Field to see for all users.</string>
   <string name="ORG_FIELD_NOT_MANDATORY">Field is mandatory. It must be filled in.</string>
   <string name="ORG_FIELD_UP">Move profile field up</string>
-  <string name="ORG_FIELD_URL_DESC">This URL will link the content with the profile, provided by the user in this field. Placeholder %user_content% can be integrated into the URL if needed. This content has been provided by the user.\n\nExample:\nURL: http://www.google.de/search?q=%user_content%\nContent: Admidio\nLink in the profil: http://www.google.de/search?q=Admidio</string>
+  <string name="ORG_FIELD_URL_DESC">This URL will link the content with the profile, provided by the user in this field. Placeholder %user_content% can be integrated into the URL if needed. This content has been provided by the user.\n\nExample:\nURL: https://www.google.de/search?q=%user_content%\nContent: Admidio\nLink in the profil: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/index.php)</string>
   <string name="ORG_INVALID_THEME">Could not find a valid theme.</string>
