@@ -161,7 +161,7 @@ if($getMode === 'choose_files')
                         countErrorFiles++;
                     } else {
                         var message = "'.$textFileUploaded.'";
-                        var newMessage = message.replace("%VAR1_BOLD%", "<strong>" + file.name + "</strong>");
+                        var newMessage = message.replace("#VAR1_BOLD#", "<strong>" + file.name + "</strong>");
                         $("<p/>").html(newMessage).appendTo("#files");
                         countFiles++
                     }

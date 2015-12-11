@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="PLG_ONLINE_VAR_NUM_VISITORS">%VAR1% Gæster</string>
+    <string name="PLG_ONLINE_VAR_NUM_VISITORS">#VAR1# Gæster</string>
 </resources>

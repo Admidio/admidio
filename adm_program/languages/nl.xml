@@ -7,37 +7,37 @@
     <string name="SYS_LANDSCAPE" description="Format for printing">Liggend</string>
     <string name="SYS_PDF">PDF</string>
     <string name="SYS_PORTRAIT" description="Format for printing">Staand</string>
-    <string name="DAT_VIEW_MODE_DESC">Weergave modus voor evenementen. Met modus %VAR1_BOLD% zal alle evenement informatie worden weergegeven in een container. Met modus %VAR2_BOLD% zal de belangrijkste evenement gegevens worden weergegeven in een compacte lijst. (Standaard: Uitgebreid)</string>
+    <string name="DAT_VIEW_MODE_DESC">Weergave modus voor evenementen. Met modus #VAR1_BOLD# zal alle evenement informatie worden weergegeven in een container. Met modus #VAR2_BOLD# zal de belangrijkste evenement gegevens worden weergegeven in een compacte lijst. (Standaard: Uitgebreid)</string>
     <string name="PHO_DOWNLOAD_PHOTOS">Foto's downloaden</string>
     <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Foto opslaan</string>
     <string name="PHO_DOWNLOAD_ENABLED">Download toestaan</string>
-    <string name="PHO_DOWNLOAD_ENABLED_DESC">Sta toe op foto per foto of volledige albums als zip bestand te downloaden. Een hyperlink zal worden weergegeven voor elke foto of album. Indien optie %VAR1_BOLD% actief is, zullen alle de originele foto's worden gedownload.</string>
+    <string name="PHO_DOWNLOAD_ENABLED_DESC">Sta toe op foto per foto of volledige albums als zip bestand te downloaden. Een hyperlink zal worden weergegeven voor elke foto of album. Indien optie #VAR1_BOLD# actief is, zullen alle de originele foto's worden gedownload.</string>
     <string name="PHO_KEEP_ORIGINAL">Bewaar bovendien de originele foto's</string>
-    <string name="PHO_KEEP_ORIGINAL_DESC">Bewaar elke foto, niet alleen in de opgegeven resolutie maar ook de originelen. Indien optie %VAR1_BOLD% actief is zullen alle originele foto's worden gedownload. Deze optie vereist beduidend meer website ruimte en dient daarom alleen geseleceteerd te worden indien je over voldoende ruimte beschikt.</string>
+    <string name="PHO_KEEP_ORIGINAL_DESC">Bewaar elke foto, niet alleen in de opgegeven resolutie maar ook de originelen. Indien optie #VAR1_BOLD# actief is zullen alle originele foto's worden gedownload. Deze optie vereist beduidend meer website ruimte en dient daarom alleen geseleceteerd te worden indien je over voldoende ruimte beschikt.</string>
     <string name="SYS_DATABASE_VERSION">Database versie</string>
     <string name="DAT_PARTICIPATE_AT_DATE">Neem deel als organisator aan het event</string>
     <string name="DAT_PARTICIPATE_AT_DATE_DESC">U wordt de organisator van het evenement en kan deelnemers toevoegen/verwijderen. Tevens kunt u extra personen toevoegen als organisator.</string>
     <string name="DAT_VIEW_MODE">Standaard weergave</string>
     <string name="DAT_VIEW_MODE_DETAIL">Uitgebreid</string>
     <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
-    <string name="ROL_DELETE_NO_DEFAULT_ROLE">U kan de rol %VAR1_BOLD% niet verwijderen. Ten minste één rol dient de instelling %VAR2_BOLD% te bezitten.</string>
-    <string name="ROL_DELETE_SYSTEM_ROLE">U kunt de systeemrol %VAR1_BOLD% niet verwijderen.</string>
-    <string name="ROL_DELETE_ROLE">U kunt de rol %VAR1_BOLD% niet verwijderen.</string>
-    <string name="CAT_DELETE_CATEGORY">Bent u zeker dat u categorie %VAR1_BOLD% wenst te verwijderen?</string>
-    <string name="CAT_DONT_DELETE_CATEGORY">Kon categorie %VAR1_BOLD% niet verwijderen vermits %VAR2% ervan afhankelijk is.</string>
+    <string name="ROL_DELETE_NO_DEFAULT_ROLE">U kan de rol #VAR1_BOLD# niet verwijderen. Ten minste één rol dient de instelling #VAR2_BOLD# te bezitten.</string>
+    <string name="ROL_DELETE_SYSTEM_ROLE">U kunt de systeemrol #VAR1_BOLD# niet verwijderen.</string>
+    <string name="ROL_DELETE_ROLE">U kunt de rol #VAR1_BOLD# niet verwijderen.</string>
+    <string name="CAT_DELETE_CATEGORY">Bent u zeker dat u categorie #VAR1_BOLD# wenst te verwijderen?</string>
+    <string name="CAT_DONT_DELETE_CATEGORY">Kon categorie #VAR1_BOLD# niet verwijderen vermits #VAR2# ervan afhankelijk is.</string>
     <string name="DAT_HIGHLIGHT_DATE">Markeer datum</string>
-    <string name="DOW_FOLDER_NOT_FOUND">Folder (ID %VAR1%) niet gevonden.</string>
-    <string name="LST_NOT_VALID_DATE_FORMAT">Gelieve een geldig datum te gebruiken als voorwaarde voor het veld %VAR1_BOLD%.</string>
-    <string name="LST_NOT_NUMERIC">Gelieve een geldig nummer te gebruiken als voorwaarde voor het veld %VAR1_BOLD%.</string>
+    <string name="DOW_FOLDER_NOT_FOUND">Folder (ID #VAR1#) niet gevonden.</string>
+    <string name="LST_NOT_VALID_DATE_FORMAT">Gelieve een geldig datum te gebruiken als voorwaarde voor het veld #VAR1_BOLD#.</string>
+    <string name="LST_NOT_NUMERIC">Gelieve een geldig nummer te gebruiken als voorwaarde voor het veld #VAR1_BOLD#.</string>
     <string name="LST_EMPTY_EXAMPLE_DESC">Zoek alle gebruikers met zonder e-mail adres</string>
     <string name="LST_EXCLUDE_EXAMPLE">Stefan</string>
     <string name="LST_EXCLUDE_EXAMPLE_DESC">Zoek alle gebruikers met de naam Stefan</string>
     <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Zoek alle gebruikers met ingevuld e-mail adres</string>
     <string name="MAI_DELIVERY_CONFIRMATION">Vraag om ontvangstbevestiging</string>
     <string name="MAI_DELIVERY_CONFIRMATION_DESC">Indien ingeschakeld, kan de auteur van de e-mail een ontvangstbevestiging aanvragen. Het hangt echter af van de ontvanger zijn e-mail programma of een ontvangstbevestiging word verzonden.</string>
-    <string name="MAI_EMAIL_SEND_TO_ROLE_ACTIVE">%VAR1% heeft volgende mail verstuurd naar alle actieve leden van rol %VAR3% in %VAR2%:</string>
-    <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">%VAR1% heeft volgende mail verstuurd naar alle oud-leden van rol %VAR3% in %VAR2%:</string>
-    <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">%VAR1% heeft volgende mail verstuurd naar alle actieve en oud-leden van rol %VAR3% in %VAR2%:</string>
+    <string name="MAI_EMAIL_SEND_TO_ROLE_ACTIVE">#VAR1# heeft volgende mail verstuurd naar alle actieve leden van rol #VAR3# in #VAR2#:</string>
+    <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# heeft volgende mail verstuurd naar alle oud-leden van rol #VAR3# in #VAR2#:</string>
+    <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# heeft volgende mail verstuurd naar alle actieve en oud-leden van rol #VAR3# in #VAR2#:</string>
     <string name="MAI_PHP_MAIL">PHP mail()</string>
     <string name="MAI_SEND_METHOD">Stuur via</string>
     <string name="MAI_SEND_METHOD_DESC">De PHP mail() functie word door sommige provider beperkt en kan af en toe leiden tot mogelijke spam. Daarom wordt het aangeraden om e-mail te versturen via SMTP server. De SMTP instellingen kunnen hieronder worden opgegeven. (Standaard: PHP mail())</string>
@@ -65,10 +65,10 @@
     <string name="MAI_SMTP_USER">SMTP Gebruikersnaam</string>
     <string name="MAI_SMTP_USER_DESC">De gebruikersnaam gebruikt voor de SMTP authenticatie.</string>
     <string name="MEM_CHANGE_HISTORY">Wijziging historiek</string>
-    <string name="MEM_CHANGE_HISTORY_OF">Wijziging historiek %VAR1%</string>
+    <string name="MEM_CHANGE_HISTORY_OF">Wijziging historiek #VAR1#</string>
     <string name="MEM_NO_CHANGES">Er zijn geen wijzigingen geregistreerd.</string>
-    <string name="MEM_NO_CHANGES_PROFIL">Geen wijzigingen werden geregistreerd voor %VAR1_BOLD% .</string>
-    <string name="MEM_SEND_NEW_LOGIN">Wenst u %VAR1_BOLD% een e-mail te versturen met de huidige gebruikersnaam en een nieuw wachtwoord?</string>
+    <string name="MEM_NO_CHANGES_PROFIL">Geen wijzigingen werden geregistreerd voor #VAR1_BOLD# .</string>
+    <string name="MEM_SEND_NEW_LOGIN">Wenst u #VAR1_BOLD# een e-mail te versturen met de huidige gebruikersnaam en een nieuw wachtwoord?</string>
     <string name="ORG_SHOW_CREATE_EDIT">Toon maker en tijdstip</string>
     <string name="ORG_SHOW_CREATE_EDIT_DESC">Een veld is normaal zichtbaar voor alle gebruikers. Indien deze functie niet is geselecteerd, zijn de gegevens alleen zichtbaar voor gebruikers die de rechten hebben om alle gebruikers te bewerken. Gebruikers kunnen de gegevens zien en aanpassen in hun eigen profiel.</string>
     <string name="ORG_ACTIVATE_SYSTEM_MAILS">Systeem berichten inschakelen</string>
@@ -79,7 +79,7 @@
     <string name="ORG_SYSTEM_MAIL_ADDRESS">E-mail adres</string>
     <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Dit veld dient een e-mailadres te bevatten van een administrator daar het gebruikt zal worden als afzender van de systeem meldingen, vb. voor bevestiging van registratie.</string>
     <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Meldingen van nieuwe inzendingen</string>
-    <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kunnen systeem waarschuwingen worden ingeschakeld voor nieuwe vermeldingen in de modules. Het wordt gebruikt als een controlerende functie binnen Admidio. De beheerder heeft de mogelijkheid om te worden geïnformeerd over nieuwe vermeldingen in de modules via e-mail (alleen nieuwe items worden in aanmerking genomen). Een systeem waarschuwing zal worden verstuurd naar het e-mailadres %VAR1%. (Standaard: Nee)</string>
+    <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kunnen systeem waarschuwingen worden ingeschakeld voor nieuwe vermeldingen in de modules. Het wordt gebruikt als een controlerende functie binnen Admidio. De beheerder heeft de mogelijkheid om te worden geïnformeerd over nieuwe vermeldingen in de modules via e-mail (alleen nieuwe items worden in aanmerking genomen). Een systeem waarschuwing zal worden verstuurd naar het e-mailadres #VAR1#. (Standaard: Nee)</string>
     <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier kunnen alle systeem berichten aangepast worden. De berichten zijn onderverdeeld in 2 stukken (onderwerp en inhoud) en worden geïndentificeerd bij #subject# en #content#. Deze worden gevolgd door de inhoud van deze velden.\n\nDe volgende wildcards kunnen worden gebruikt in elke e-mail. Zij zullen worden vervangen door de desbetreffende inhoud bij het uitvoeren</string>
     <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL"> Registratie werd bevestig. De gebruiker kan nu aanloggen in het systeem.</string>
     <string name="PRO_FUTURE_ROLE_MEMBERSHIP">Toekomstige rol lidmaatschappen</string>
@@ -98,7 +98,7 @@
     <string name="ROL_LEADER_ASSIGN_MEMBERS">De beheerder van deze rol kan nieuwe leden toevoegen of bestaande leden verwijderen.</string>
     <string name="ROL_LEADER_RIGHTS_DESC">Rollen leden kunnen worden benoemd als beheerders van een rol en krijgen optioneel uitgebreide rechten.\nZe kunnen de rechten bekomen om  de profielgegevens van alle leden van de rol te bewerken en/of het recht om rollen toe te voegen of te verwijderen. Echter met beide rechten, zouden ze in staat zijn om informatie van alle leden te bewerken.</string>
     <string name="ROL_NO_ADDITIONAL_RIGHTS">Geen bijkomstige rechten</string>
-    <string name="ROL_NO_DEFAULT_ROLE">De instelling %VAR1_BOLD% kan niet worden verwijderd vermits er minstens één rol als standaard instelling moet zijn ingesteld.</string>
+    <string name="ROL_NO_DEFAULT_ROLE">De instelling #VAR1_BOLD# kan niet worden verwijderd vermits er minstens één rol als standaard instelling moet zijn ingesteld.</string>
     <string name="ROL_SYSTEM_DEFAULT_LIST">Standaard lijst voor het hele systeem</string>
     <string name="SYS_CHANGED_AT">Laatst aangepast</string>
     <string name="SYS_DELETE_LAST_CATEGORY">Er is geen andere categorie voor dit gebied. Om deze reden kan de categorie niet worden verwijderd.</string>
@@ -107,13 +107,13 @@
     <string name="SYS_DONT_SHOW">Niet weergeven</string>
     <string name="SYS_EDIT_MEMBERS">Gebruikers aanpassen</string>
     <string name="SYS_EDITED_BY">Laatst aangepast door</string>
-    <string name="SYS_EMAIL_NOT_SEND">De e-mail kon niet worden verzonden naar %VAR1_BOLD%.\n\nDe volgende fout trad op:\n%VAR2%</string>
+    <string name="SYS_EMAIL_NOT_SEND">De e-mail kon niet worden verzonden naar #VAR1_BOLD#.\n\nDe volgende fout trad op:\n#VAR2#</string>
     <string name="SYS_EMPTY">Leeg</string>
     <string name="SYS_FIRSTNAME_LASTNAME">voornaam en achternaam</string>
-    <string name="SYS_FROM">van %VAR1%</string>
+    <string name="SYS_FROM">van #VAR1#</string>
     <string name="SYS_INFORMATIONS">informatie</string>
     <string name="SYS_MAIL_DISPATCH">E-mail verzenden</string>
-    <string name="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY">Deze module is alleen toegankelijke vanaf de startpagina van de gekozen organisatie bij het inloggen (%VAR1%).</string>
+    <string name="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY">Deze module is alleen toegankelijke vanaf de startpagina van de gekozen organisatie bij het inloggen (#VAR1#).</string>
     <string name="SYS_MODULE_PREFERENCES">Module instellingen</string>
     <string name="SYS_MORE_FEATURES">Aanvullende functies</string>
     <string name="SYS_NEW_VALUE">Nieuwe waarde</string>
@@ -124,10 +124,10 @@
     <string name="SYS_SYSTEM_MAILS">Systeem berichten</string>
     <string name="MAI_COUNT_BCC_DESC">E-mails naar rollen met meerdere leden zullen als blind Carbon Copy worden verstuurd (BCC). Op deze manier zullen de ontvangers niet in staat zijn om te zien wie nog dit bericht heeft ontvangen. Het getal in het huidige veld definieert het maximum aantal geadresseerden van een e-mailbericht. Het maximum aantal geadresseerden kan ook worden beperkt door de hosting provider. In het geval van meer geadresseerden dan toegestaan, zullen meerdere e-mailberichten worden gegenereerd. Moest de waarde zijn ingesteld op 1, zal elk geadresseerde een afzonderlijk bericht ontvangen. Het aantal uitgaande e-mailberichten binnen een bepaald tijdsbestek kan ook zijn beperkt door de hosting provider. (Standaard: 50)</string>
     <string name="MAI_SENDER_INTO_TO">Afzender als geadresseerde</string>
-    <string name="INS_ORGA_SHORTNAME_EXISTS">Organisatie %VAR1_BOLD% bestaat reeds. Gelieve een andere naam te gebruiken.</string>
-    <string name="SYS_LOSTPW_EMAIL_ERROR">Er kon geen geldige registratie worden gevonden voor het e-mail adres %VAR1_BOLD%!</string>
-    <string name="SYS_LOSTPW_SEVERAL_EMAIL">Het e-mail adres %VAR1_BOLD% werd meerdere malen toegewezen. Er kon geen unieke gebruiker worden gevonden.</string>
-    <string name="CAT_DEFAULT_VAR">Standaard %VAR1%</string>
+    <string name="INS_ORGA_SHORTNAME_EXISTS">Organisatie #VAR1_BOLD# bestaat reeds. Gelieve een andere naam te gebruiken.</string>
+    <string name="SYS_LOSTPW_EMAIL_ERROR">Er kon geen geldige registratie worden gevonden voor het e-mail adres #VAR1_BOLD#!</string>
+    <string name="SYS_LOSTPW_SEVERAL_EMAIL">Het e-mail adres #VAR1_BOLD# werd meerdere malen toegewezen. Er kon geen unieke gebruiker worden gevonden.</string>
+    <string name="CAT_DEFAULT_VAR">Standaard #VAR1#</string>
     <string name="DAT_ENABLE_ICAL">iCal inschakelen</string>
     <string name="DAT_ENABLE_ICAL_DESC">Als iCal ingeschakeld is kunnen afspraken binnen een opgegeven periode gedownload worden. Ook kunnen gebruikers zich opgeven voor afspraken via hun eigen kalender client software. (standaard: ja)</string>
     <string name="DAT_ICAL_DAYS_FUTURE">Aantal toekomstige iCal dagen</string>
@@ -136,7 +136,7 @@
     <string name="DAT_ICAL_DAYS_PAST_DESC">Deze waarde bepaalt hoeveel dagen in het verleden een iCal download of abonnement moet bevatten. (standaard: 60)</string>
     <string name="DAT_REGISTRATION_POSSIBLE">Registreren voor deze afspraak inschakelen.</string>
     <string name="DAT_VISIBILITY">Zichtbaarheid</string>
-    <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Uw database versie is %VAR1%.\nUpdate naar versie %VAR2% is noodzakelijk</string>
+    <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Uw database versie is #VAR1#.\nUpdate naar versie #VAR2# is noodzakelijk</string>
     <string name="INS_DATABASE_SYSTEM">Database systeem</string>
     <string name="INS_FACEBOOK">Facebook</string>
     <string name="INS_FACEBOOK_DESC">Wilt u een link naar uw Facebook profiel plaatsen? Uw Facebook login naam is noodzakelijk. Log in op uw Facebook account en ga naar uw profiel. Kopieer URL in dit veld en sla uw profiel op. Bezoekers van uw profiel kunnen nu uw Facebook profiel direct openen.</string>
@@ -151,13 +151,13 @@
     <string name="MAI_SUBJECT_ATTACHMENT">Onderwerp &amp; Attachment</string>
     <string name="MAI_CHARACTER_ENCODING">Karakter codering</string>
     <string name="MAI_CHARACTER_ENCODING_DESC">Er wordt codering van karakters gebruikt bij het versturen van Admidio e-mails. Niet alle e-mail clients ondersteunen UTF-8. ISO-8859-1 kan als alternatief gebruikt worden.</string>
-    <string name="MAI_EMAIL_SEND_TO_USER">%VAR1% van %VAR2% heeft jou de volgende e-mail gestuurd:</string>
+    <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# van #VAR2# heeft jou de volgende e-mail gestuurd:</string>
     <string name="MAI_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
     <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">Het maken en versturen van op HTML gebaseerde e-mails kan ingeschakeld worden voor geregistreerde gebruikers. Een JavaScript editor wordt getoond voor comfortabel bewerken, in plaats van het standaard tekst veld. Deze optie is voor gasten in verband met veiligheid niet mogelijk.</string>
     <string name="MAI_YOUR_EMAIL">Uw e-mail</string>
     <string name="MAI_YOUR_NAME">Uw naam</string>
-    <string name="MEM_IMPORT_SUCCESSFUL">Importeren is gelukt..\n\n%VAR1% nieuwe gebruikers zijn gemaakt.\n%VAR2% gebruikers zijn bewerkt.\n%VAR3% rol lidmaatschappen zijn toegewezen.</string>
-    <string name="ORG_FIELD_DISABLED">Veld is alleen te bewerken door gebruiker met recht %VAR1_BOLD%</string>
+    <string name="MEM_IMPORT_SUCCESSFUL">Importeren is gelukt..\n\n#VAR1# nieuwe gebruikers zijn gemaakt.\n#VAR2# gebruikers zijn bewerkt.\n#VAR3# rol lidmaatschappen zijn toegewezen.</string>
+    <string name="ORG_FIELD_DISABLED">Veld is alleen te bewerken door gebruiker met recht #VAR1_BOLD#</string>
     <string name="ORG_FIELD_URL_DESC">Hier kan een URL opgegeven worden. Eventueel kan de aanduiding %user_content% in deze URL vermeld worden. Selecteer dan wel veldtype 'Tekst'. \n\nVoorbeeld:\nURL: https://www.google.nl/search?q=%user_content%\nGebruiker vult in op profielpagina: Admidio\nLink die in profiel gebruiker komt te staan: https://www.google.nl/search?q=Admidio</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Kleur van de JavaScript editor</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Bepaal hier de achtergrond kleur van de JavaScript editor. Deze waarde kan een hexadecimale kleur zijn zoals #ffa500 of een RGB waarde zoals (255, 185, 0).</string>
@@ -170,7 +170,7 @@
     <string name="SYS_CHECKBOX">Selectiebox</string>
     <string name="SYS_CONFIRMATION_OF_INPUT">Bevestig waarde</string>
     <string name="SYS_CONTACT_DETAILS">Contact informatie</string>
-    <string name="SYS_DATABASE_VERSION_REQUIRED">Admidio heeft %VAR1% of hoger nodig</string>
+    <string name="SYS_DATABASE_VERSION_REQUIRED">Admidio heeft #VAR1# of hoger nodig</string>
     <string name="SYS_DESIGNATION">Naam</string>
     <string name="SYS_DROPDOWN_LISTBOX">Drop-down box</string>
     <string name="SYS_ICAL_DISABLED">iCal is uitgeschakeld door de beheerder.</string>
@@ -179,61 +179,61 @@
     <string name="SYS_INTERNAL_NAME_DESC">De interne naam wordt gebruikt om een bepaald veld te identificeren. Het is echter niet relevant tijdens het gebruik van het programma. Tijdens de software ontwikkeling moet deze naam echter gebruikt worden om bijvoorbeeld een veld middels de getValue methode aan te spreken. De interne naam wordt automatisch ingevuld tijdens het maken van een veld.</string>
     <string name="SYS_ORGANIZATION">Organisatie</string>
     <string name="SYS_PERIOD">Tijdvlak</string>
-    <string name="SYS_PHP_VERSION_REQUIRED">Admidio heeft %VAR1% of hoger nodig</string>
+    <string name="SYS_PHP_VERSION_REQUIRED">Admidio heeft #VAR1# of hoger nodig</string>
     <string name="SYS_PRESENTATION">Toon</string>
     <string name="SYS_RADIO_BUTTON">Selectiebox</string>
     <string name="SYS_SOCIAL_NETWORKS">Social media</string>
-    <string name="SYS_URL_INVALID_CHAR">De URL in veld %VAR1_BOLD% bevat ongeldige karakters.\n\nAlleen alfabetische karakters, umlauts, nummers van 0 tot 9 en speciale karakters .-_:/#?=% kunnen gebruikt worden.</string>
+    <string name="SYS_URL_INVALID_CHAR">De URL in veld #VAR1_BOLD# bevat ongeldige karakters.\n\nAlleen alfabetische karakters, umlauts, nummers van 0 tot 9 en speciale karakters .-_:/#?=% kunnen gebruikt worden.</string>
     <string name="SYS_VERSION">Versie</string>
-    <string name="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update">De database versie %VAR1% is lager dan de versie van Admidio scripts %VAR2%.\n\nMaak svp een %VAR3% database update naar versie %VAR4%.</string>
-    <string name="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download">De database versie %VAR1% is hoger dan de versie van Admidio scripts %VAR2%.\n\nMaak svp een update van uw Admidio bestanden op de server %VAR3% door een nieuwere versie te gebruiken van Admidio (%VAR4%).</string>
+    <string name="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update">De database versie #VAR1# is lager dan de versie van Admidio scripts #VAR2#.\n\nMaak svp een #VAR3# database update naar versie #VAR4#.</string>
+    <string name="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download">De database versie #VAR1# is hoger dan de versie van Admidio scripts #VAR2#.\n\nMaak svp een update van uw Admidio bestanden op de server #VAR3# door een nieuwere versie te gebruiken van Admidio (#VAR4#).</string>
     <string name="UPD_BETA_VERSION">Beschikbaar Beta</string>
     <string name="UPD_CURRENT_VERSION">Geïnstalleerd</string>
     <string name="UPD_STABLE_VERSION">Beschikbaar</string>
-    <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Nieuwste mededelingen van organisatie %VAR1%</string>
-    <string name="DAT_CURRENT_DATES_OF_ORGA">Huidige afspraken van organisatie %VAR1%</string>
-    <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">Nieuwste berichten in gastenboek van organisatie %VAR1%</string>
+    <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Nieuwste mededelingen van organisatie #VAR1#</string>
+    <string name="DAT_CURRENT_DATES_OF_ORGA">Huidige afspraken van organisatie #VAR1#</string>
+    <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">Nieuwste berichten in gastenboek van organisatie #VAR1#</string>
     <string name="MAI_CARBON_COPY">Carbon copy (CC)</string>
     <string name="MAI_COPY_OF_YOUR_EMAIL">Uw gevraagde kopie van het bericht</string>
     <string name="MAI_MESSAGE_WENT_TO">Bericht is gestuurd naar</string>
-    <string name="PHO_RECENT_ALBUMS_OF_ORGA">Nieuwste foto album van organisatie %VAR1%</string>
-    <string name="SYS_FIELD_INVALID_CHAR">In veld %VAR1_BOLD% staan onjuiste karakters.\n\nToegestaan zijn letters 'a' tot 'z' en 'A' to 'Z', nummers van 0 tot 9 en speciale karakters zoals .-_+@ .</string>
+    <string name="PHO_RECENT_ALBUMS_OF_ORGA">Nieuwste foto album van organisatie #VAR1#</string>
+    <string name="SYS_FIELD_INVALID_CHAR">In veld #VAR1_BOLD# staan onjuiste karakters.\n\nToegestaan zijn letters 'a' tot 'z' en 'A' to 'Z', nummers van 0 tot 9 en speciale karakters zoals .-_+@ .</string>
     <string name="SYS_LOADING_CONTENT">Laden...</string>
     <string name="SYS_REGISTRATION_SAVED">Uw gegevens zijn opgeslagen.\n\nNa goedkeuring kunt u inloggen. U zult per e-mail hierover worden geinformeerd.</string>
-    <string name="SYS_RSS_FEED_FOR_VAR">RSS-Feed voor %VAR1%</string>
+    <string name="SYS_RSS_FEED_FOR_VAR">RSS-Feed voor #VAR1#</string>
     <!-- Phrases only in Announcementmodule -->
     <string name="ANN_ANNOUNCEMENT">Mededeling</string>
     <string name="ANN_ANNOUNCEMENTS">Mededelingen</string>
     <string name="ANN_ANNOUNCEMENTS_DESC">Plaats of bewerk mededelingen, nieuws of andere informatie.</string>
     <string name="ANN_EMAIL_NOTIFICATION_TITLE">Nieuwe mededeling</string>
-    <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">Nieuwe mededeling op %VAR1%.\n\nTitel: %VAR2%\nGemaakt door: %VAR3%\nGemaakt op: %VAR4%</string>
+    <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">Nieuwe mededeling op #VAR1#.\n\nTitel: #VAR2#\nGemaakt door: #VAR3#\nGemaakt op: #VAR4#</string>
 
     <!-- Phrases only in Backupmodule -->
     <string name="BAC_BACK_TO_BACKUP_PAGE">Terug naar hoofdpagina</string>
-    <string name="BAC_BACKUP_COMPLETED">Backup gemaakt in %VAR1%</string>
+    <string name="BAC_BACKUP_COMPLETED">Backup gemaakt in #VAR1#</string>
     <string name="BAC_BACKUP_FILE">Backup bestand</string>
-    <string name="BAC_BACKUP_FROM">Backup gemaakt op %VAR1% om %VAR2%</string>
-    <string name="BAC_COMPLETED_VAR">%VAR1% gemaakt</string>
+    <string name="BAC_BACKUP_FROM">Backup gemaakt op #VAR1# om #VAR2#</string>
+    <string name="BAC_COMPLETED_VAR">#VAR1# gemaakt</string>
     <string name="BAC_CREATION_DATE">Gemaakt op</string>
     <string name="BAC_DATABASE_BACKUP">Backup database</string>
     <string name="BAC_DATABASE_BACKUP_DESC">Hier kunt u een backup van de database maken of downloaden.</string>
-    <string name="BAC_DAYS_VAR">%VAR1% dagen</string>
-    <string name="BAC_HOURS_VAR">%VAR1% uren</string>
-    <string name="BAC_MINUTES_VAR">%VAR1% minuten</string>
+    <string name="BAC_DAYS_VAR">#VAR1# dagen</string>
+    <string name="BAC_HOURS_VAR">#VAR1# uren</string>
+    <string name="BAC_MINUTES_VAR">#VAR1# minuten</string>
     <string name="BAC_NO_BACKUP_FILE_EXISTS">Geen backup bestand aanwezig!</string>
     <string name="BAC_OVERALL_PROGRESS">Voortgang</string>
-    <string name="BAC_RECORDS_VAR">%VAR1% bestanden</string>
-    <string name="BAC_PASSED_VAR">%VAR1% verwerkt</string>
+    <string name="BAC_RECORDS_VAR">#VAR1# bestanden</string>
+    <string name="BAC_PASSED_VAR">#VAR1# verwerkt</string>
     <string name="BAC_START_BACKUP">Start backup proces</string>
     <string name="BAC_SUM">Totaal</string>
-    <string name="BAC_SECONDS_VAR">%VAR1% seconden</string>
+    <string name="BAC_SECONDS_VAR">#VAR1# seconden</string>
 
     <!-- Phrases only in Category-Administration -->
     <string name="CAT_CATEGORY_EXIST">Naam van categorie bestaat al in de geselecteerde organisatie.</string>
-    <string name="CAT_CATEGORY_GLOBAL">Als deze optie is geactiveerd, zullen profielvelden van categorie verschijnen die kunnen worden bewerkt in het profiel van de volgende organisaties:\n\n%VAR1_BOLD%\n\n Deactiveer als velden alleen in uw eigen organisatie getoond moeten worden.</string>
+    <string name="CAT_CATEGORY_GLOBAL">Als deze optie is geactiveerd, zullen profielvelden van categorie verschijnen die kunnen worden bewerkt in het profiel van de volgende organisaties:\n\n#VAR1_BOLD#\n\n Deactiveer als velden alleen in uw eigen organisatie getoond moeten worden.</string>
     <string name="CAT_CATEGORY_NOT_DELETE">U kunt niet alle categorieën van een module verwijderen.\nMaak svp eerst een nieuwe categorie aan voor de geselecteerde module.</string>
-    <string name="CAT_MOVE_DOWN">Plaats %VAR1% omlaag</string>
-    <string name="CAT_MOVE_UP">Plaats %VAR1% omhoog</string>
+    <string name="CAT_MOVE_DOWN">Plaats #VAR1# omlaag</string>
+    <string name="CAT_MOVE_UP">Plaats #VAR1# omhoog</string>
 
     <!-- Phrases only in Datesmodule - 49 items -->
     <string name="DAT_ADD_DATE_TO_CALENDAR">Plaats evenement op kalender</string>
@@ -241,18 +241,18 @@
     <string name="DAT_ALL_DAY">Full time</string>
     <string name="DAT_ASSIGN_PARTICIPANTS">Voeg deelnemers toe</string>
     <string name="DAT_ATTEND">Deelnemen</string>
-    <string name="DAT_ATTEND_DATE">U heeft uw deelname bevestigd voor %VAR1_BOLD% op %VAR2%.</string>
+    <string name="DAT_ATTEND_DATE">U heeft uw deelname bevestigd voor #VAR1_BOLD# op #VAR2#.</string>
     <string name="DAT_CALENDAR">Kalender</string>
     <string name="DAT_CANCEL">Annuleer</string>
-    <string name="DAT_CANCEL_DATE">U heeft uw deelname geannuleerd voor %VAR1_BOLD% op %VAR2%.</string>
+    <string name="DAT_CANCEL_DATE">U heeft uw deelname geannuleerd voor #VAR1_BOLD# op #VAR2#.</string>
     <string name="DAT_DATE">Evenement</string>
     <string name="DAT_DATES">Evenementen</string>
     <string name="DAT_DATES_DESC">Hier kunt u evenementen maken en bewerken. Gebruikers kunnen zich opgeven hiervoor.</string>
     <string name="DAT_EDIT_ROOMS">Bewerk vergaderzaal</string>
     <string name="DAT_EMAIL_NOTIFICATION_TITLE">Een nieuwe afspraak is gemaakt</string>
-    <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">Nieuwe afspraak op %VAR1% is gemaakt.\n\nTitel: %VAR2%\nDatum: %VAR3%\nKalender: %VAR4%\n</string>
-    <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Locatie: %VAR1%\nVergaderzaal: %VAR2%\nDeelnemers: %VAR3%\nGemaakt door: %VAR4%\n</string>
-    <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Gemaakt op: %VAR1%</string>
+    <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">Nieuwe afspraak op #VAR1# is gemaakt.\n\nTitel: #VAR2#\nDatum: #VAR3#\nKalender: #VAR4#\n</string>
+    <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Locatie: #VAR1#\nVergaderzaal: #VAR2#\nDeelnemers: #VAR3#\nGemaakt door: #VAR4#\n</string>
+    <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Gemaakt op: #VAR1#</string>
     <string name="DAT_EXPORT_ICAL">Exporteer (iCal)</string>
     <string name="DAT_LOCATION" description="Locatie van afspraak">Locatie</string>
     <string name="DAT_LOCATION_LINK">Als er genoeg informatie over de locatie wordt opgegeven (straat, plaats, etc), kan Google Maps de route berekenen.</string>
@@ -262,7 +262,7 @@
     <string name="DAT_ORGANIZER" description="The Person">Organisator</string>
     <string name="DAT_ORGANIZERS" description="The Persons">Organisatoren</string>
     <string name="DAT_PARTICIPANTS_LIMIT">Beperk aantal deelnemers</string>
-    <string name="DAT_PREVIOUS_DATES" description="Past events">Eerdere %VAR1%</string>
+    <string name="DAT_PREVIOUS_DATES" description="Past events">Eerdere #VAR1#</string>
     <string name="DAT_REGISTRATION_NOT_POSSIBLE">Registratie is gesloten.</string>
     <string name="DAT_REMOVE_APPLICATION">Wilt u dit evenement verwijderen? Alle deelnemers zullen verwijderd worden.</string>
     <string name="DAT_ROOM_INFORMATIONS">Zaal informatie</string>
@@ -289,26 +289,26 @@
     <string name="DOW_DOWNLOADS">Downloads</string>
     <string name="DOW_DOWNLOADS_DESC">U kunt hier verschillende soorten bestanden als download aanbieden. Downloads kunnen in mappen verdeeld worden en hieraan kunnen toegangsrechten gekoppeld worden.</string>
     <string name="DOW_EMAIL_NOTIFICATION_TITLE">Nieuw bestand geupload</string>
-    <string name="DOW_EMAIL_NOTIFICATION_MESSAGE">Nieuw bestand geupload op %VAR1%\n\nBestand: %VAR2%\nGeupload door: %VAR3%\nGeupload op: %VAR4%</string>
+    <string name="DOW_EMAIL_NOTIFICATION_MESSAGE">Nieuw bestand geupload op #VAR1#\n\nBestand: #VAR2#\nGeupload door: #VAR3#\nGeupload op: #VAR4#</string>
     <string name="DOW_ENABLE_DOWNLOAD_MODULE">Activeer download module</string>
     <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">Download module kan hier gedeactiveerd worden. Na deactivering zal module niet meer in overzicht getoond worden. (standaard: ja)</string>
-    <string name="DOW_FILE_EXIST">Bestand %VAR1% bestaat al!\n\nKies svp andere bestandsnaam.</string>
+    <string name="DOW_FILE_EXIST">Bestand #VAR1# bestaat al!\n\nKies svp andere bestandsnaam.</string>
     <string name="DOW_FILE_EXTENSION_INVALID">Type bestand is niet toegestaan op deze server.</string>
     <string name="DOW_FILE_NAME_RULES">Bestandsnaam moet indicatie van inhoud geven. Bestandsnaam is van invloed op volgorde in overzicht. Bestanden in b.v. mappen met procedures moeten beginnen met datum (jaar-maand-dag).</string>
     <string name="DOW_FILE_NOT_EXISTS">Bestand is niet meer beschikbaar op de server. Het is verwijderd uit de database.</string>
-    <string name="DOW_FILE_RENAME">Bestand %VAR1% is hernoemd.</string>
-    <string name="DOW_FILE_RENAME_ERROR">Foutmelding tijdens hernoemen van bestand %VAR1%.</string>
-    <string name="DOW_FILE_TO_LARGE">De grootte van bestanden die geupload moeten worden is groter dan toegestaan (maximale grootte: %VAR1% MB).</string>
+    <string name="DOW_FILE_RENAME">Bestand #VAR1# is hernoemd.</string>
+    <string name="DOW_FILE_RENAME_ERROR">Foutmelding tijdens hernoemen van bestand #VAR1#.</string>
+    <string name="DOW_FILE_TO_LARGE">De grootte van bestanden die geupload moeten worden is groter dan toegestaan (maximale grootte: #VAR1# MB).</string>
     <string name="DOW_FILE_TYPE">Type bestand</string>
-    <string name="DOW_FILE_UPLOADED">Bestand %VAR1_BOLD% is geupload.</string>
-    <string name="DOW_FOLDER_CREATED">Map %VAR1_BOLD% aangemaakt.</string>
-    <string name="DOW_FOLDER_EXISTS">Map %VAR1% bestaat al!\n\nKies svp andere naam.</string>
+    <string name="DOW_FILE_UPLOADED">Bestand #VAR1_BOLD# is geupload.</string>
+    <string name="DOW_FOLDER_CREATED">Map #VAR1_BOLD# aangemaakt.</string>
+    <string name="DOW_FOLDER_EXISTS">Map #VAR1# bestaat al!\n\nKies svp andere naam.</string>
     <string name="DOW_FOLDER_NAME_INVALID">Naam van map bevat onjuiste karakters!\n\nKies svp een andere naam.</string>
     <string name="DOW_FOLDER_NO_FILES">Niets gevonden.</string>
     <string name="DOW_FOLDER_NO_RIGHTS">U heeft geen toegang tot de geselecteerde map.</string>
     <string name="DOW_FOLDER_NOT_EXISTS">Map is niet meer beschikbaar op server. Het is verwijderd uit de database.</string>
-    <string name="DOW_FOLDER_RENAME">Map %VAR1% is hernoemd.</string>
-    <string name="DOW_FOLDER_RENAME_ERROR">Foutmelding tijdens hernomen van map %VAR1%.</string>
+    <string name="DOW_FOLDER_RENAME">Map #VAR1# is hernoemd.</string>
+    <string name="DOW_FOLDER_RENAME_ERROR">Foutmelding tijdens hernomen van map #VAR1#.</string>
     <string name="DOW_MAXIMUM_FILE_SIZE">Maximale grootte van bestand</string>
     <string name="DOW_MAXIMUM_FILE_SIZE_DESC">Gebruikers mogen alleen bestanden uploaden die kleiner zijn dan hier staat. Als hier 0 staat, is uploaden gedeactiveerd. (standaard: 3MB)</string>
     <string name="DOW_NEW_FILE_NAME">Naam nieuw bestand</string>
@@ -318,7 +318,7 @@
     <string name="DOW_EDIT_FILE">Bewerk bestand</string>
     <string name="DOW_EDIT_FOLDER">Edit map</string>
     <string name="DOW_PREVIOUS_NAME">Vorige naam</string>
-    <string name="DOW_UPLOAD_FILE_TO_FOLDER">Upload naar map %VAR1_BOLD%</string>
+    <string name="DOW_UPLOAD_FILE_TO_FOLDER">Upload naar map #VAR1_BOLD#</string>
 
 
     <!-- Phrases only in Ecardsmodule -->
@@ -342,20 +342,20 @@
     <!-- Phrases only in Guestbookmodule -->
     <string name="GBO_BACK_TO_GUESTBOOK">Terug naar gastenboek</string>
     <string name="GBO_CAPTCHA_DESC">Als deze optie is geactiveerd zullen niet ingelogde bezoekers een afbeelding zien met captcha code of een simpele rekensom. Het is noodzakelijk om de juiste code of oplossing in te vullen. Captcha is onderdeel van antispam oplossing van Admidio. (standaard: ja)</string>
-    <string name="GBO_COMMENT_BY">Reactie van %VAR1%</string>
+    <string name="GBO_COMMENT_BY">Reactie van #VAR1#</string>
     <string name="GBO_COMMENTS4ALL">Anonieme reacties toestaan</string>
     <string name="GBO_COMMENTS4ALL_DESC">Als u deze optie activeert kunnen niet-geregistreerde bezoekers reacties plaatsen in gastenboek. Alle andere rechten in het rollen beheersysteem zullen genegeerd worden. (standaard: nee)</string>
     <string name="GBO_CREATE_COMMENT">Plaats reactie</string>
     <string name="GBO_CREATE_ENTRY">Plaats bericht</string>
-    <string name="GBO_CREATE_VAR_ENTRY">Plaats %VAR1% bericht</string>
+    <string name="GBO_CREATE_VAR_ENTRY">Plaats #VAR1# bericht</string>
     <string name="GBO_EDIT_COMMENT">Bewerk reactie</string>
-    <string name="GBO_EDIT_ENTRY">Bewerk %VAR1% bericht</string>
+    <string name="GBO_EDIT_ENTRY">Bewerk #VAR1# bericht</string>
     <string name="GBO_EMAIL_NOTIFICATION_GBC_TITLE">Nieuwe reactie in gastenboek aangemaakt</string>
-    <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">Nieuwe reactie in gastenboek van %VAR1% aangemaakt.\n\nTekst: %VAR2%\nGemaakt door: %VAR3%\nGemaakt op: %VAR4%</string>
+    <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">Nieuwe reactie in gastenboek van #VAR1# aangemaakt.\n\nTekst: #VAR2#\nGemaakt door: #VAR3#\nGemaakt op: #VAR4#</string>
     <string name="GBO_EMAIL_NOTIFICATION_TITLE">Nieuwe bericht in gastenboek aangemaakt</string>
-    <string name="GBO_EMAIL_NOTIFICATION_MESSAGE">Nieuw bericht in gastenboek van %VAR1% aangemaakt.\n\nTekst: %VAR2%\nGemaakt door: %VAR3%\nGemaakt op: %VAR4%</string>
+    <string name="GBO_EMAIL_NOTIFICATION_MESSAGE">Nieuw bericht in gastenboek van #VAR1# aangemaakt.\n\nTekst: #VAR2#\nGemaakt door: #VAR3#\nGemaakt op: #VAR4#</string>
     <string name="GBO_ENTRY_QUEUED">Bericht opgeslagen. Het wordt getoond na goedkeuring.</string>
-    <string name="GBO_FLOODING_PROTECTION">Uw laatste bericht is minder dan %VAR1% seconden aangemaakt.</string>
+    <string name="GBO_FLOODING_PROTECTION">Uw laatste bericht is minder dan #VAR1# seconden aangemaakt.</string>
     <string name="GBO_FLOODING_PROTECTION_INTERVALL">Interval berichten</string>
     <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Berichten van niet-geregistreerde gebruikers worden gechecked. Te veel berichten tijdens de gegeven tijdsinterval zijn niet toegestaan. Deze optie geeft u controle over ongewenste berichten. Als interval op 0 staat: geen controle. (standaard: 60 seconden)</string>
     <string name="GBO_GUESTBOOK">Gastenboek</string>
@@ -366,10 +366,10 @@
     <string name="GBO_INITIAL_COMMENTS_LOADING">Toon reactie direct</string>
     <string name="GBO_INITIAL_COMMENTS_LOADING_DESC">Als deze optie actief is en een pagina uit gastenboek wordt geladen, worden reacties op deze pagina ook direct geladen. Anders moeten gebruikers op link klikken om reacties te tonen. (standaard: nee)</string>
     <string name="GBO_MODERATE_ENTRIES">Beheer berichten</string>
-    <string name="GBO_MODERATE_VARS">Beheer %VAR1%</string>
+    <string name="GBO_MODERATE_VARS">Beheer #VAR1#</string>
     <string name="GBO_ONLY_VISITORS">Alleen bezoekers</string>
     <string name="GBO_SHOW_COMMENTS">Toon reacties</string>
-    <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Toon %VAR1% reactie(s) van dit bericht in gastenboek</string>
+    <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Toon #VAR1# reactie(s) van dit bericht in gastenboek</string>
     <string name="GBO_WRITE_COMMENT">Plaats reactie</string>
 
     <!-- Phrases only in Installation -->
@@ -384,15 +384,15 @@
     <string name="INS_CHOOSE_LANGUAGE">Kies taal</string>
     <string name="INS_CITY">Plaats</string>
     <string name="INS_CONFERENCE_ROOM">Vergaderzaal</string>
-    <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Bestand %VAR1_BOLD% niet gevonden in hoofd directory van Admidio!\n\nDownload het bestand svp opnieuw en plaats het in de vermelde directory.</string>
+    <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Bestand #VAR1_BOLD# niet gevonden in hoofd directory van Admidio!\n\nDownload het bestand svp opnieuw en plaats het in de vermelde directory.</string>
     <string name="INS_COURSES">Opleidingen</string>
     <string name="INS_CREATE_ADMINISTRATOR">Beheerder aanmaken</string>
     <string name="INS_CREATE_CONFIGURATION_FILE">Configuratie bestand maken</string>
-    <string name="INS_DATA_DO_NOT_MATCH">Gegevens van %VAR1_BOLD% komen niet overeen met informatie die is gegeven tijdens installatie wizard.\n\nCheck config.php en alle overige informatie.</string>
+    <string name="INS_DATA_DO_NOT_MATCH">Gegevens van #VAR1_BOLD# komen niet overeen met informatie die is gegeven tijdens installatie wizard.\n\nCheck config.php en alle overige informatie.</string>
     <string name="INS_DATA_OF_ADMINISTRATOR">Gegevens beheerder</string>
     <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Vermeld hier naam, e-mail en toegangsinformatie van beheerder. Log in als dezelfde gebruiker na installatie.</string>
     <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Database update is niet nodig</string>
-    <string name="INS_DATABASE_FILE_NOT_FOUND">Bestand %VAR1_BOLD% is niet gevonden in map %VAR2_BOLD%.</string>
+    <string name="INS_DATABASE_FILE_NOT_FOUND">Bestand #VAR1_BOLD# is niet gevonden in map #VAR2_BOLD#.</string>
     <string name="INS_DATABASE_IS_UP_TO_DATE">Admidio's database is up to date</string>
     <string name="INS_DATABASE_IS_UPDATED">Updating database</string>
     <string name="INS_DATABASE_LOGIN">Database informatie doorgeven</string>
@@ -402,14 +402,14 @@
     <string name="INS_DESCRIPTION_MEMBER">Alle leden</string>
     <string name="INS_DESCRIPTION_WEBMASTER">Groep beheerders</string>
     <string name="INS_ENTER_LOGIN_TO_DATABASE">Geef database toegangsinformatie door</string>
-    <string name="INS_ERROR_OPEN_FILE">Bestand %VAR1_BOLD% kan niet geopend worden.</string>
-    <string name="INS_FOLDER_NOT_WRITABLE">Map %VAR1_BOLD% kan niet beschreven worden. Stel schrijfrechten in zodat u foto's en bestanden kunt uploaden.</string>
+    <string name="INS_ERROR_OPEN_FILE">Bestand #VAR1_BOLD# kan niet geopend worden.</string>
+    <string name="INS_FOLDER_NOT_WRITABLE">Map #VAR1_BOLD# kan niet beschreven worden. Stel schrijfrechten in zodat u foto's en bestanden kunt uploaden.</string>
     <string name="INS_GROUPS">Groepen</string>
     <string name="INS_ICQ" development="new1">ICQ</string>
     <string name="INS_INSTALL_ADMIDIO">Installeer Admidio</string>
     <string name="INS_INSTALLATION">Installatie</string>
     <string name="INS_INSTALLATION_SUCCESSFUL">Installatie en configuratie van Admidio database is klaar, systeem is klaar voor gebruik. Log svp in met de toegangsinformatie van de beheerder.</string>
-    <string name="INS_INSTALLATION_VERSION">Installatie van versie %VAR1%</string>
+    <string name="INS_INSTALLATION_VERSION">Installatie van versie #VAR1#</string>
     <string name="INS_INSTALLATION_WAS_SUCCESSFUL">Installatie succesvol</string>
     <string name="INS_INTERN">Interne</string>
     <string name="INS_LANGUAGE_NOT_CHOOSEN">Geen taal geselecteerd.</string>
@@ -420,8 +420,8 @@
     <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Doorgegeven naar van organisatie is niet volledig!</string>
     <string name="INS_PASSWORDS_NOT_EQUAL">Doorgegeven wachtwoorden zijn niet gelijk.</string>
     <string name="INS_PHONE_LIST">Telefoonlijst</string>
-    <string name="INS_WRONG_MYSQL_VERSION">Admidio %VAR1% heeft minimaal MySQL versie %VAR2% nodig. Probeer svp uw MySQL database te updaten of gebruik een %VAR3%oudere Admidio versie%VAR4% voor optimaal gebruik.</string>
-    <string name="INS_WRONG_PHP_VERSION">Admidio %VAR1% heeft minimaal PHP versie %VAR2% nodig. Probeer svp uw PHP versie te updaten of grbuik een %VAR3%oudere Admidio versie%VAR4% voor optimaal gebruik.</string>
+    <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# heeft minimaal MySQL versie #VAR2# nodig. Probeer svp uw MySQL database te updaten of gebruik een #VAR3#oudere Admidio versie#VAR4# voor optimaal gebruik.</string>
+    <string name="INS_WRONG_PHP_VERSION">Admidio #VAR1# heeft minimaal PHP versie #VAR2# nodig. Probeer svp uw PHP versie te updaten of grbuik een #VAR3#oudere Admidio versie#VAR4# voor optimaal gebruik.</string>
     <string name="INS_SET_ORGANIZATION">Maak organisatie</string>
     <string name="INS_SET_UP_ORGANIZATION">Configureer organisatie</string>
     <string name="INS_SETUP_WAS_SUCCESSFUL">Configuratie succesvol</string>
@@ -433,8 +433,8 @@
     <string name="INS_TRAINING">Training</string>
     <string name="INS_UPDATE">Update</string>
     <string name="INS_UPDATE_DATABASE">Update database</string>
-    <string name="INS_UPDATE_TO_VERSION_SUCCESSFUL">Admidio database is succesvol geupdate naar versie %VAR1%.\nU kunt gerust inloggen en Admidio opnieuw te gebruiken.</string>
-    <string name="INS_UPDATE_VERSION">Update naar versie %VAR1%</string>
+    <string name="INS_UPDATE_TO_VERSION_SUCCESSFUL">Admidio database is succesvol geupdate naar versie #VAR1#.\nU kunt gerust inloggen en Admidio opnieuw te gebruiken.</string>
+    <string name="INS_UPDATE_VERSION">Update naar versie #VAR1#</string>
     <string name="INS_UPDATING_WAS_SUCCESSFUL">Update proces gelukt</string>
     <string name="INS_WARNING_BETA_VERSION">U gebruikt een BETA versie van Admidio.\n\nProblemen zoals instabiliteit en verlies van gegevens kunnen voorkomen. Gebruik deze versie svp alleen voor testdoeleinden!</string>
     <string name="INS_WARNING_SAFE_MODE">Veilige modus op de server is actief. Dit kan later problemen veroorzaken wanneer u bepaalde functies gebruikt.</string>
@@ -448,16 +448,16 @@
     <string name="LNK_DISPLAY_REDIRECT">Toon doorsturen</string>
     <string name="LNK_DISPLAY_REDIRECT_DESC">Activeer automatisch doorsturen van links. Als gebruiker op een link klikt zal hij/zij gewaarschuwd worden middels een bericht wanneer hij/zij de pagina's van Admidio verlaat. De link waarop geklikt wordt zal geopend worden na een vooraf ingestelde tijd. Als doorsturen op 0 staat, zal link geopend worden zonder waarschuwing vooraf. (standaard: 10 seconden)</string>
     <string name="LNK_EMAIL_NOTIFICATION_TITLE">Nieuwe link gemaakt</string>
-    <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">Nieuwe link op website %VAR1% gemaakt.\n\nLink adres: %VAR2%\nGemaakt door: %VAR3%\nGemaakt op: %VAR4%</string>
-    <string name="LNK_GO_TO">Ga naar %VAR1%</string>
+    <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">Nieuwe link op website #VAR1# gemaakt.\n\nLink adres: #VAR2#\nGemaakt door: #VAR3#\nGemaakt op: #VAR4#</string>
+    <string name="LNK_GO_TO">Ga naar #VAR1#</string>
     <string name="LNK_LINK_ADDRESS">Link URL</string>
     <string name="LNK_LINK_NAME">Link naam</string>
     <string name="LNK_LINK_TARGET">Link doel</string>
     <string name="LNK_LINK_TARGET_DESC">Kies of geselecteerde website getoond moet worden in venster van Admidio of in nieuw venster.</string>
-    <string name="LNK_LINKS_FROM">Links van %VAR1%</string>
+    <string name="LNK_LINKS_FROM">Links van #VAR1#</string>
     <string name="LNK_NEW_WINDOW">Nieuw venster</string>
     <string name="LNK_REDIRECT">Doorsturen</string>
-    <string name="LNK_REDIRECT_DESC">U verlaat de website van %VAR1_BOLD% en wordt doorgestuurd naar %VAR3% over %VAR2% seconden.\n\nAls het automatische doorsturen niet werkt klik %VAR4%!</string>
+    <string name="LNK_REDIRECT_DESC">U verlaat de website van #VAR1_BOLD# en wordt doorgestuurd naar #VAR3# over #VAR2# seconden.\n\nAls het automatische doorsturen niet werkt klik #VAR4#!</string>
     <string name="LNK_SAME_WINDOW">Zelfde venster</string>
     <string name="LNK_WEBLINKS">Links</string>
     <string name="LNK_WEBLINKS_DESC">Hier kunt u links vinden en ze per categorie indelen.</string>
@@ -483,7 +483,7 @@
     <string name="LST_EMAIL_TO_MEMBERS">E-mail leden</string>
     <string name="LST_EXPORT_TO">Exporteer</string>
     <string name="LST_FORMER_MEMBERS">Voormalige leden</string>
-    <string name="LST_FROM_TO">van %VAR1% tot %VAR2%</string>
+    <string name="LST_FROM_TO">van #VAR1# tot #VAR2#</string>
     <string name="LST_GENERAL_LISTS">Algemene lijsten</string>
     <string name="LST_HIDE_DETAILS">Verberg details in overzicht</string>
     <string name="LST_HIDE_DETAILS_DESC">Activeer deze optie om details in het lijst-overzicht te verbergen. Details zullen getoond worden na activering door gebruiker. (standaard: nee)</string>
@@ -493,7 +493,7 @@
     <string name="LST_LISTS">Ledenlijst</string>
     <string name="LST_LISTS_DESC">Hier kunt u leden zoeken en vinden. U kunt ook een eigen lijst maken.</string>
     <string name="LST_LIST_VIEW">Overzicht lijsten</string>
-    <string name="LST_MAX">van maximaal. %VAR1%</string>
+    <string name="LST_MAX">van maximaal. #VAR1#</string>
     <string name="LST_MEMBERS_PER_PAGE">Aantal leden per pagina</string>
     <string name="LST_MEMBER_ASSIGNMENT">Leden toewijzen</string>
     <string name="LST_MEMBERSHIP_END">Einde lidmaatschap</string>
@@ -550,12 +550,12 @@
     <string name="MAI_CHOOSE_ROLE">Selecteer svp rol als ontvanger van de e-mail!</string>
     <string name="MAI_COUNT_BCC">Aantal BCC ontvangers</string>
     <string name="MAI_EMAIL_DESC">Er kunnen e-mails gestuurd worden naar verschillende rollen, personen, groepen of afdelingen. </string>
-    <string name="MAI_MAX_ATTACHMENT_SIZE">Onbeperkt aantal ontvangers kan toegevoegd worden. Totale grootte van alle attachments mag niet meer zijn dan %VAR1% MB.</string>
+    <string name="MAI_MAX_ATTACHMENT_SIZE">Onbeperkt aantal ontvangers kan toegevoegd worden. Totale grootte van alle attachments mag niet meer zijn dan #VAR1# MB.</string>
     <string name="MAI_ROLE_NO_EMAILS">Geselecteerde rol heeft geen lid met geldig e-mail adres!</string>
     <string name="MAI_SEND_COPY">Stuur kopie naar mijn e-mail adres</string>
     <string name="MAI_SEND_EMAIL">Stuur e-mail</string>
     <string name="MAI_SENDER_EMAIL">E-mail adres verstuurder</string>
-    <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Sommige providers accepteren geen onbekende afzenders. Geef daarom een e-mail adres op wat als standaard e-mail adres wordt gebruik in deze module (b.v. outbox@%VAR1%).\nAls dit veld leeg blijft zal het e-mail adres van verstuurder als afzender gebruikt worden. (standaard: leeg)</string>
+    <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Sommige providers accepteren geen onbekende afzenders. Geef daarom een e-mail adres op wat als standaard e-mail adres wordt gebruik in deze module (b.v. outbox@#VAR1#).\nAls dit veld leeg blijft zal het e-mail adres van verstuurder als afzender gebruikt worden. (standaard: leeg)</string>
     <string name="MAI_SENDER_NOT_LOGGED_IN">(Verstuurder is uitgelogd. Daarom kan de informatie van verstuurder onjuist zijn.)</string>
     <string name="MAI_SHOW_CAPTCHA_DESC">Als gebruikers uitgelogd zijn zal bij het contactformulier een captcha verschijnen als deze module is geactiveerd. Dit is tegen misbruik van spammers. (standaard: ja)</string>
     <string name="MAI_SUBJECT">Onderwerp</string>
@@ -581,19 +581,19 @@
     <string name="MEM_IMPORT_USERS">Importeer gebruiker(s)</string>
     <string name="MEM_INPUT_FIRSTNAME_LASTNAME">Geef svp voor- en achternaam van nieuwe gebruiker op. Er vindt een controle in de database plaats indien er reeds een gebruiker bestaat met dezelfde naam.</string>
     <string name="MEM_MAKE_FORMER">Een gebruiker kan status voormalige gebruiker krijgen. Hierdoor blijft alle informatie inclusief rollen bewaard, voor eventueel later gebruik.</string>
-    <string name="MEM_NO_MEMBERSHIP">De gebruiker is nog geen lid van organisatie %VAR1%.</string>
+    <string name="MEM_NO_MEMBERSHIP">De gebruiker is nog geen lid van organisatie #VAR1#.</string>
     <string name="MEM_NOT_EDIT">Niet bewerken</string>
     <string name="MEM_PROFILE_FIELD">Profielveld</string>
-    <string name="MEM_REMOVE_MEMBERSHIP">Wilt u lidmaatschap van gebruiker %VAR1% beeindigen in %VAR2%?</string>
-    <string name="MEM_REMOVE_MEMBERSHIP_OK">Lidmaatschap van gebruiker %VAR1% is beeindigd!</string>
+    <string name="MEM_REMOVE_MEMBERSHIP">Wilt u lidmaatschap van gebruiker #VAR1# beeindigen in #VAR2#?</string>
+    <string name="MEM_REMOVE_MEMBERSHIP_OK">Lidmaatschap van gebruiker #VAR1# is beeindigd!</string>
     <string name="MEM_REMOVE_USER">Verwijder gebruiker</string>
-    <string name="MEM_REMOVE_USER_DESC">Door %VAR1_BOLD% te kiezen, zullen alle gegevens verwijderd worden. Deze informatie zal niet langer beschikbaar zijn.</string>
+    <string name="MEM_REMOVE_USER_DESC">Door #VAR1_BOLD# te kiezen, zullen alle gegevens verwijderd worden. Deze informatie zal niet langer beschikbaar zijn.</string>
     <string name="MEM_REPLACE">Herplaats</string>
-    <string name="MEM_ROLE_SELECT_RIGHT">U heeft geen toestemming om rol %VAR1% te selecteren.\nKies svp een andere rol.</string>
+    <string name="MEM_ROLE_SELECT_RIGHT">U heeft geen toestemming om rol #VAR1# te selecteren.\nKies svp een andere rol.</string>
     <string name="MEM_SEND_USERNAME_PASSWORD">Verstuur e-mail met gebruikersnaam en wachtwoord.</string>
     <string name="MEM_SHOW_ALL_USERS">Toon alle gebruikers</string>
     <string name="MEM_UPDATED_ON">Geupdate op</string>
-    <string name="MEM_USER_DELETE">Wilt u %VAR1_BOLD% verwijderen?\n\nGebruiker wordt daadwerkelijk verwijderd uit de database.</string>
+    <string name="MEM_USER_DELETE">Wilt u #VAR1_BOLD# verwijderen?\n\nGebruiker wordt daadwerkelijk verwijderd uit de database.</string>
     <string name="MEM_USER_MANAGEMENT">Gebruikersbeheer</string>
     <string name="MEM_USER_MANAGEMENT_DESC">Hier worden alle actieve en voormalige leden getoond. U kunt leden importeren uit een bestand, aanmaken of beheren.</string>
 
@@ -607,10 +607,10 @@
     <string name="NWU_DELETE_REGISTRATION">Registratie verwijderen</string>
     <string name="NWU_MANAGE_NEW_REGISTRATIONS_DESC">Hier kunt u nieuwe registraties beheren, goedkeuren of afkeuren.</string>
     <string name="NWU_NEW_REGISTRATIONS">Nieuwe registraties</string>
-    <string name="NWU_NO_MEMBERSHIP">Gebruiker is geen lid van organisatie %VAR1% maar er is al inlog informatie toegewezen.</string>
-    <string name="NWU_NO_MEMBERSHIP_NO_LOGIN">Gebruiker is geen lid van organisatie %VAR1% en er is geen inlog informatie toegewezen.</string>
+    <string name="NWU_NO_MEMBERSHIP">Gebruiker is geen lid van organisatie #VAR1# maar er is al inlog informatie toegewezen.</string>
+    <string name="NWU_NO_MEMBERSHIP_NO_LOGIN">Gebruiker is geen lid van organisatie #VAR1# en er is geen inlog informatie toegewezen.</string>
     <string name="NWU_NO_REGISTRATIONS">Geen nieuwe registraties beschikbaar.</string>
-    <string name="NWU_REGISTERED_ON">Geregistreerd op %VAR1%</string>
+    <string name="NWU_REGISTERED_ON">Geregistreerd op #VAR1#</string>
     <string name="NWU_REMINDER_SEND_LOGIN">Wilt u gebruikers inlog infomatie en wachtwoord doorgeven?</string>
     <string name="NWU_SEND_LOGIN">Verstuur inlog informatie</string>
     <string name="NWU_USER_NO_VALID_LOGIN">Gebruiker heeft nog geen inlog gegevens.\nWilt u de informatie over deze registratie toewijzen aan de gebruiker?</string>
@@ -624,7 +624,7 @@
     <string name="ORG_ADMIDIO_THEME_DESC">Kies layout van Admidio. Alle thema's die opgeslagen zijn in map adm_themes worden getoond. (standaard: modern)</string>
     <string name="ORG_ADVANCED_REGISTRATION">Uitgebreide registratie</string>
     <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Automatisch uitloggen na</string>
-    <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Bepaal de tijd nadat het systeem een inactieve gebruiker automatisch uitlogd. Een gebruiker is inactief als voor een bepaalde tijd geen pagina geladen is. Deze configuratie wordt genegeerd wanneer gebruiker %VAR1_BOLD% gekozen heeft. (standaard: 20 minuten)</string>
+    <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Bepaal de tijd nadat het systeem een inactieve gebruiker automatisch uitlogd. Een gebruiker is inactief als voor een bepaalde tijd geen pagina geladen is. Deze configuratie wordt genegeerd wanneer gebruiker #VAR1_BOLD# gekozen heeft. (standaard: 20 minuten)</string>
     <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Achtergrond kleur</string>
     <string name="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT">Kies achtergrond kleur (hex) voor captcha code. (standaard: #FFEFC4)</string>
     <string name="ORG_CAPTCHA_FONT">Kies font type voor captcha code. (standaard: Theme font)</string>
@@ -647,10 +647,10 @@
     <string name="ORG_CURRENCY_DESC">Selecteer valuta. Type valuta zal na alle getoonde bedragen vermeld worden.</string>
     <string name="ORG_DATATYPE">Type</string>
     <string name="ORG_DATE_FORMAT">Datum formaat</string>
-    <string name="ORG_DATE_FORMAT_DESC">Formaat voldoet aan PHP functie %VAR1%. (standaard: d.m.Y)</string>
+    <string name="ORG_DATE_FORMAT_DESC">Formaat voldoet aan PHP functie #VAR1#. (standaard: d.m.Y)</string>
     <string name="ORG_EDIT_PROFILE_FIELD"> Bewerk profielveld</string>
     <string name="ORG_EMAIL_ALERTS">E-mail alert</string>
-    <string name="ORG_EMAIL_ALERTS_DESC">Alle leden van rollen met rechten voor %VAR1_BOLD% ontvangen een e-mail zodra nieuwe gebruiker zich registreert. (standaard: ja)</string>
+    <string name="ORG_EMAIL_ALERTS_DESC">Alle leden van rollen met rechten voor #VAR1_BOLD# ontvangen een e-mail zodra nieuwe gebruiker zich registreert. (standaard: ja)</string>
     <string name="ORG_ENABLE_CAPTCHA">Captcha activatie</string>
     <string name="ORG_ENABLE_RSS_FEEDS">RSS activatie</string>
     <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kan voorzien in RSS-feed voor meerdere modules (mededelingen, afspraken, gastenboek, foto galerij en links) op de overzichtspagina van elke module. Inschrijven is mogelijk via browser of feed reader. (standaard: ja)</string>
@@ -690,7 +690,7 @@
     <string name="ORG_SEND_NEW_PASSWORD">Stuur nieuw wachtwoord</string>
     <string name="ORG_SYSTEM_INFORMATIONS">Systeem informatie</string>
     <string name="ORG_TIME_FORMAT">Formaat tijd</string>
-    <string name="ORG_TIME_FORMAT_DESC">Formaat voldoet aan PHP functie %VAR1%. (standaard: H:i)</string>
+    <string name="ORG_TIME_FORMAT_DESC">Formaat voldoet aan PHP functie #VAR1#. (standaard: H:i)</string>
     <string name="ORG_URL">URL</string>
     <string name="ORG_VARIABLE_ACTIVATION_LINK">Activatie link voor nieuw wachtwoord</string>
     <string name="ORG_VARIABLE_EMAIL">E-mail adres gebruiker</string>
@@ -705,11 +705,11 @@
 
     <!-- Phrases only in Updatecheck -->
     <string name="UPD_ADMIDIO">Ga naar Admidio update pagina</string>
-    <string name="UPD_CONNECTION_ERROR">Verbinding met Admidio update pagina niet gelukt. Check svp uw internet verbinding of probeer het later opnieuw. U kunt ook de %VAR1% website bezoeken voor een update.</string>
+    <string name="UPD_CONNECTION_ERROR">Verbinding met Admidio update pagina niet gelukt. Check svp uw internet verbinding of probeer het later opnieuw. U kunt ook de #VAR1# website bezoeken voor een update.</string>
     <string name="UPD_NEW">Een nieuwe stabiele versie is beschikbaar!</string>
     <string name="UPD_NEW_BETA">Een nieuwe beta versie is beschikbaar!</string>
     <string name="UPD_NEW_BOTH">Een nieuwe stabiele versie en beta versie zijn beschikbaar!</string>
-    <string name="UPD_NO_NEW">U gebruikt momenteel een %VAR1%versie van Admidio!</string>
+    <string name="UPD_NO_NEW">U gebruikt momenteel een #VAR1#versie van Admidio!</string>
     <string name="UPD_TITLE">Update check</string>
 
     <!-- Phrases only in Photomodule -->
@@ -722,20 +722,20 @@
     <string name="PHO_DISPLAY_PHOTOS">Hoe foto's te tonen</string>
     <string name="PHO_EDIT_ALBUM">Bewerk album</string>
     <string name="PHO_EMAIL_NOTIFICATION_TITLE">Nieuw foto album is gemaakt</string>
-    <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">Nieuw foto album op %VAR1% is gemaakt.\n\nTitel: %VAR2%\nGemaakt door: %VAR3%\nGemaakt op: %VAR4%</string>
+    <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">Nieuw foto album op #VAR1# is gemaakt.\n\nTitel: #VAR2#\nGemaakt door: #VAR3#\nGemaakt op: #VAR4#</string>
     <string name="PHO_FOLDER_NOT_FOUND">Map is niet gevonden. Als map via FTP is verwijderd of als het niet toegankelijk is, verwijder map dan in Admidio.\nGebruikers zonder foto rechten mogen het geselecteerde album niet bekijken.</string>
     <string name="PHO_MAX_PHOTO_SIZE_DESC">Waarden om de maximale grootte te bepalen van een foto die door gebruiker getoond wordt. Grootte van popup en ColorBox venster wordt automatisch bijgesteld. Ideale grootte is in verhouding tot de originele grootte. (standaard: 640 x 400 pixels)</string>
     <string name="PHO_NEXT_PHOTO">volgende foto</string>
     <string name="PHO_NO_ALBUM_CONTENT">Geen foto's in album.</string>
-    <string name="PHO_NO_FILES_OR_TO_LARGE">Ongeldige pagina weergave of het bestand kon niet geupload worden.\nMogelijk is bestand groter dan de vooraf ingestelde %VAR1%B!</string>
+    <string name="PHO_NO_FILES_OR_TO_LARGE">Ongeldige pagina weergave of het bestand kon niet geupload worden.\nMogelijk is bestand groter dan de vooraf ingestelde #VAR1#B!</string>
     <string name="PHO_NO_FILES_SELECTED">Geen foto's geselecteerd die toegevoegd moeten worden.</string>
     <string name="PHO_NO_RIGHTS">U heeft geen rechten om dit te doen.\n\nAlleen ingelogde gebruikers met foto rechten mogen foto's beheren.</string>
     <string name="PHO_NUMBER_OF_PHOTOS">Aantal foto's</string>
     <string name="PHO_PARENT_ALBUM">Hoofd album</string>
     <string name="PHO_PHOTO_ALBUMS">Foto albums</string>
     <string name="PHO_PHOTO_DELETE">verwijder foto</string>
-    <string name="PHO_PHOTO_DESTINATION">Foto's komen in album %VAR1_BOLD%.</string>
-    <string name="PHO_PHOTO_FILES_TO_LARGE">Totale grootte van bestand is mogelijk meer dan de vooraf ingestelde upload grootte van %VAR1% MB.</string>
+    <string name="PHO_PHOTO_DESTINATION">Foto's komen in album #VAR1_BOLD#.</string>
+    <string name="PHO_PHOTO_FILES_TO_LARGE">Totale grootte van bestand is mogelijk meer dan de vooraf ingestelde upload grootte van #VAR1# MB.</string>
     <string name="PHO_PHOTO_FORMAT_INVALID">Alleen JPG en PNG foto's zijn toegestaan.</string>
     <string name="PHO_PHOTO_PROCESSING_ERROR">Foutmelding tijdens verwerken</string>
     <string name="PHO_PHOTO_ROTATE_LEFT">Foto naar links draaien</string>
@@ -754,7 +754,7 @@
     <string name="PHO_SCALE_THUMBNAILS">Thumbnail schalen</string>
     <string name="PHO_SCALE_THUMBNAILS_DESC">Bepaal grootte van de lange zijde van thumbnails. Attentie: maak breedte niet te groot om problemen met thumbnail kolommen te voorkomen. Of probeer thumbnail instellingen (rij en kolom) aan te passen. (standaard: 160 pixels)</string>
     <string name="PHO_SHOW_CAPTION">Toon watermerk</string>
-    <string name="PHO_SHOW_CAPTION_DESC">Tekst wordt getoond in alle foto's die breder zijn dan 200 pixels. (standaard: &#169; %VAR1%)</string>
+    <string name="PHO_SHOW_CAPTION_DESC">Tekst wordt getoond in alle foto's die breder zijn dan 200 pixels. (standaard: &#169; #VAR1#)</string>
     <string name="PHO_SHOWN_ON_READY" >Foto's zijn succesvol toegevoegd aan album als ze op deze pagina getoond worden. </string>
     <string name="PHO_UPLOAD_MORE">Meer foto's uploaden</string>
     <string name="PHO_UPLOAD_PHOTOS">Upload foto's</string>
@@ -773,9 +773,9 @@
     <string name="PRO_EDIT_MY_PROFILE_PICTURE">Bewerk eigen profielfoto</string>
     <string name="PRO_EDIT_PASSWORD">Bewerk wachtwoord</string>
     <string name="PRO_EDIT_PROFILE">Bewerk profiel</string>
-    <string name="PRO_EDIT_PROFILE_PIC_FROM">Bewerk profielfoto van %VAR1% %VAR2%</string>
-    <string name="PRO_EXPORT_VCARD_FROM_VAR">Exporteer vCard van %VAR1%</string>
-    <string name="PRO_FIELD_NUMERIC">In veld %VAR1_BOLD% zijn alleen nummers toegestaan.\nPas svp uw gegevens aan.</string>
+    <string name="PRO_EDIT_PROFILE_PIC_FROM">Bewerk profielfoto van #VAR1# #VAR2#</string>
+    <string name="PRO_EXPORT_VCARD_FROM_VAR">Exporteer vCard van #VAR1#</string>
+    <string name="PRO_FIELD_NUMERIC">In veld #VAR1_BOLD# zijn alleen nummers toegestaan.\nPas svp uw gegevens aan.</string>
     <string name="PRO_FORMER_ROLE_MEMBERSHIP">Eerder lid van rol</string>
     <string name="PRO_LOCATION_PROFILE_PICTURES">Locatie waar profielfoto's opgeslagen worden</string>
     <string name="PRO_LOCATION_PROFILE_PICTURES_DESC">Kies svp de locatie waar profielfoto's opgeslagen worden (in database of in map adm_my_files). Wanneer dit wijzigt, zullen huidige foto's niet verplaatst worden naar de nieuwe locatie. (standaard: database)</string>
@@ -790,17 +790,17 @@
     <string name="PRO_PASSWORD_OLD_WRONG">Oude wachtwoord is onjuist.</string>
     <string name="PRO_PASSWORDS_NOT_EQUAL">De ingevoerde wachtwoorden zijn verschillend.</string>
     <string name="PRO_PHOTO_DELETED">Profielfoto is verwijderd.</string>
-    <string name="PRO_PHOTO_FILE_TO_LARGE">Grootte van geuploade foto is groter dan toegestane grootte van %VAR1% B.</string>
+    <string name="PRO_PHOTO_FILE_TO_LARGE">Grootte van geuploade foto is groter dan toegestane grootte van #VAR1# B.</string>
     <string name="PRO_PHOTO_FORMAT_INVALID">Alleen foto's in JPG en PNG formaat zijn toegestaan.</string>
     <string name="PRO_PHOTO_NOT_CHOOSEN">Geen fotobestand geselecteerd.</string>
-    <string name="PRO_PHOTO_RESOLUTION_TO_LARGE">Grootte van geuploade foto is groter dan toegestane resolutie van %VAR1% megapixels.</string>
+    <string name="PRO_PHOTO_RESOLUTION_TO_LARGE">Grootte van geuploade foto is groter dan toegestane resolutie van #VAR1# megapixels.</string>
     <string name="PRO_PHOTO_SAVED">Nieuwe profielfoto is succesvol opgeslagen.</string>
     <string name="PRO_PROFILE">Profiel</string>
-    <string name="PRO_PROFILE_FROM">Profiel van %VAR1% %VAR2%</string>
+    <string name="PRO_PROFILE_FROM">Profiel van #VAR1# #VAR2#</string>
     <string name="PRO_RESTRICTIONS_HELP_1">U moet zelf op de foto staan.</string>
     <string name="PRO_RESTRICTIONS_HELP_2">Foto moet opgeslagen worden als JPG of PNG.</string>
-    <string name="PRO_RESTRICTIONS_HELP_3">De server accepteert foto's met een maximale afmeting van %VAR1% megapixels.</string>
-    <string name="PRO_RESTRICTIONS_HELP_4">Geuploade bestanden moeten groter zijn dan %VAR1% MB.</string>
+    <string name="PRO_RESTRICTIONS_HELP_3">De server accepteert foto's met een maximale afmeting van #VAR1# megapixels.</string>
+    <string name="PRO_RESTRICTIONS_HELP_4">Geuploade bestanden moeten groter zijn dan #VAR1# MB.</string>
     <string name="PRO_ROLE_MEMBERSHIP_OTHER_ORG">Rol lidmaatschappen van andere organisaties</string>
     <string name="PRO_ROLE_NOT_ASSIGNED">Gegevens niet opgeslagen.\nEr is geen rol aan gebruiker toegewezen.</string>
     <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP">Toon voormalige rol lidmaatschappen</string>
@@ -812,9 +812,9 @@
     <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Toon rol van andere organisaties</string>
     <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Als gebruiker een rol in een andere organisatie heeft, wordt een box getoond met alle rollen en registratie data. (standaard: ja)</string>
     <string name="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS">ga naar profiel voorkeuren</string>
-    <string name="PRO_TO_ADD">Voeg %VAR1% aan %VAR2% toe</string>
-    <string name="PRO_UPLOAD_HELP_1">Klik op de knop %VAR1_BOLD% om foto's te selecteren die u vanaf uw harde schijf wilt uploaden.</string>
-    <string name="PRO_UPLOAD_HELP_2">Klik dan op %VAR1_BOLD% en wacht rustig af.</string>
+    <string name="PRO_TO_ADD">Voeg #VAR1# aan #VAR2# toe</string>
+    <string name="PRO_UPLOAD_HELP_1">Klik op de knop #VAR1_BOLD# om foto's te selecteren die u vanaf uw harde schijf wilt uploaden.</string>
+    <string name="PRO_UPLOAD_HELP_2">Klik dan op #VAR1_BOLD# en wacht rustig af.</string>
     <string name="PRO_UPLOAD_PHOTO">Upload foto</string>
     <string name="PRO_USERNAME_DESCRIPTION">Middels deze gebruikersnaam kunt u inloggen.\n\nAls de gewenste gebruikersnaam niet meer beschikbaar is, probeer svp een alternatief zoals Jan78 of JanT.</string>
     <string name="PRO_WANT_DELETE_PHOTO">Wilt u de geselecteerde foto verwijderen?</string>
@@ -833,9 +833,9 @@
     <string name="ROL_INACTIV_ROLE_DESC">U kunt de rol deactiveren. Hierdoor wordt informatie over lidmaatschap bewaard zodat later nagekeken kan worden wie lid waren. Deze rol zal echter niet meer in overzichten getoond worden.</string>
     <string name="ROL_INACTIV_ROLES">Inactieve rollen</string>
     <string name="ROL_INVISIBLE_ROLES">Onzichtbare rollen</string>
-    <string name="ROL_LINK_MEMBERSHIP_DEL">Wilt u rol %VAR1_BOLD% terugplaatsen naar huidige rollen?</string>
+    <string name="ROL_LINK_MEMBERSHIP_DEL">Wilt u rol #VAR1_BOLD# terugplaatsen naar huidige rollen?</string>
     <string name="ROL_MEETINGS">Afspraken</string>
-    <string name="ROL_MEMBERSHIP_DEL">Wilt u het lidmaatschap beeindigen van de groep %VAR1_BOLD%?</string>
+    <string name="ROL_MEMBERSHIP_DEL">Wilt u het lidmaatschap beeindigen van de groep #VAR1_BOLD#?</string>
     <string name="ROL_MONTHLY">Maandelijks</string>
     <string name="ROL_NEW_ROLE">Nieuwe rol</string>
     <string name="ROL_ONLY_ROLE_MEMBERS">Alleen leden van rol</string>
@@ -852,22 +852,22 @@
     <string name="ROL_RIGHT_EDIT_USER_DESC">Leden met rol waarvan deze optie geactiveerd is mogen profiel beheren van andere leden (behalve wachtwoorden).\nHiernaast mogen ze nieuwe gebruikers maken en oude gebruikers verwijderen.</string>
     <string name="ROL_RIGHT_GUESTBOOK">Berichten gastenboek bewerken en verwijderen</string>
     <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Reacties plaatsen in gastenboek</string>
-    <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Bepaal wie berichten kan versturen naar deze rol via de e-mail module. Rol met rechten %VAR1_BOLD% staat boven deze instelling.</string>
+    <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Bepaal wie berichten kan versturen naar deze rol via de e-mail module. Rol met rechten #VAR1_BOLD# staat boven deze instelling.</string>
     <string name="ROL_RIGHT_MAIL_TO_ALL">E-mail naar alle leden sturen</string>
     <string name="ROL_RIGHT_PHOTO">Foto's uploaden en bewerken</string>
     <string name="ROL_RIGHT_PROFILE">Bewerk eigen profiel</string>
-    <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Bepaal wie lijsten en gebruikersprofielen kan zien van leden van huidige rol. Rol met rechten %VAR1_BOLD% staat boven deze instelling.</string>
+    <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Bepaal wie lijsten en gebruikersprofielen kan zien van leden van huidige rol. Rol met rechten #VAR1_BOLD# staat boven deze instelling.</string>
     <string name="ROL_RIGHT_WEBLINKS">Links maken en bewerken</string>
     <string name="ROL_ROLE">Rol</string>
     <string name="ROL_ROLE_ADMINISTRATION">Beheer rol en categorie</string>
     <string name="ROL_ROLE_ADMINISTRATION_DESC">Hier kunt u een rol (functie) en categorie beheren. Ook kunt u rechten beheren die aan een rol gekoppeld zijn.</string>
     <string name="ROL_ROLE_DELETE">Rol verwijderen</string>
-    <string name="ROL_ROLE_DELETE_DESC">Wilt u rol %VAR1% verwijderen?\n\nAlle lidmaatschappen worden dan ook verwijderd.</string>
-    <string name="ROL_ROLE_DEPENDENCIES">Een lid van een afhankelijke rol zal automatisch lid worden van %VAR1%.\n\nAls deze afhankelijkheid is ingesteld zullen alle bestaande leden met deze rol lid worden van %VAR1%. Als de afhankelijkheid verwijderd wordt, zullen lidmaatschappen hetzelfde blijven.</string>
+    <string name="ROL_ROLE_DELETE_DESC">Wilt u rol #VAR1# verwijderen?\n\nAlle lidmaatschappen worden dan ook verwijderd.</string>
+    <string name="ROL_ROLE_DEPENDENCIES">Een lid van een afhankelijke rol zal automatisch lid worden van #VAR1#.\n\nAls deze afhankelijkheid is ingesteld zullen alle bestaande leden met deze rol lid worden van #VAR1#. Als de afhankelijkheid verwijderd wordt, zullen lidmaatschappen hetzelfde blijven.</string>
     <string name="ROL_ROLE_MEMBERSHIPS">Lid van rol</string>
     <string name="ROL_ROLE_MEMBERSHIPS_CHANGE">Verander lidmaatschap</string>
     <string name="ROL_ROLE_NAME_EXISTS">Rol met dezelfde naam bestaat al in deze categorie.</string>
-    <string name="ROL_ROLE_SET_MODE">Rol %VAR1_BOLD% is veranderd naar %VAR2_BOLD%.</string>
+    <string name="ROL_ROLE_SET_MODE">Rol #VAR1_BOLD# is veranderd naar #VAR2_BOLD#.</string>
     <string name="ROL_SAVE_ROLES">Als u dit opslaat zullen ingestelde afhankelijkheden van rollen mogelijk verloren gaan.</string>
     <string name="ROL_SEE_ROLE_MEMBERSHIP">Toon rol lidmaatschap</string>
     <string name="ROL_SEMIYEARLY">Tweemaal per jaar</string>
@@ -905,7 +905,7 @@
     <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
     <string name="SYS_ADMIDIO_VERSION">Admidio versie</string>
     <string name="SYS_ADMINISTRATION">Administratie</string>
-    <string name="SYS_AJAX_REQUEST_ERROR">Ajax foutmelding.\nDetails foutmelding: %VAR1%</string>
+    <string name="SYS_AJAX_REQUEST_ERROR">Ajax foutmelding.\nDetails foutmelding: #VAR1#</string>
     <string name="SYS_ALL">Iedereen</string>
     <string name="SYS_ALSO_VISITORS">ook bezoekers</string>
     <string name="SYS_ASSIGN_MEMBERS">Leden toewijzen</string>
@@ -942,40 +942,40 @@
     <string name="SYS_CONTENT">Inhoud</string>
     <string name="SYS_CONTRIBUTION">Contributie</string>
     <string name="SYS_CONTRIBUTION_PERIOD">Contributie periode</string>
-    <string name="SYS_COOKIE_NOT_SET">Inlog-fout! Uw browser accepteert geen cookies!\n\nOm in te kunnen loggen moet u uw browser cookies laten accepteren van %VAR1_BOLD%.</string>
+    <string name="SYS_COOKIE_NOT_SET">Inlog-fout! Uw browser accepteert geen cookies!\n\nOm in te kunnen loggen moet u uw browser cookies laten accepteren van #VAR1_BOLD#.</string>
     <string name="SYS_COPY">Kopieer</string>
     <string name="SYS_COUNTRY">Land</string>
     <string name="SYS_CREATE">Maak</string>
-    <string name="SYS_CREATE_VAR">Maak %VAR1%</string>
+    <string name="SYS_CREATE_VAR">Maak #VAR1#</string>
     <string name="SYS_CREATE_NEW_USER">Voeg nieuwe gebruiker toe</string>
     <string name="SYS_CREATE_NOT_FOUND_USER">U kunt nieuwe gebruiker aanmaken, als deze gebruiker niet voorkomt in de lijst met gevonden gebruikers.</string>
     <string name="SYS_CREATE_ROLE">Maak rol</string>
-    <string name="SYS_CREATED_BY">Gemaakt door %VAR1% op %VAR2%</string>
-    <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Ongeldig e-mail adres doorgegeven!\n\nGeef svp een e-mail adres door voor uw %VAR1%profiel%VAR1%.</string>
+    <string name="SYS_CREATED_BY">Gemaakt door #VAR1# op #VAR2#</string>
+    <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Ongeldig e-mail adres doorgegeven!\n\nGeef svp een e-mail adres door voor uw #VAR1#profiel#VAR1#.</string>
     <string name="SYS_DATABASE">Database</string>
     <string name="SYS_DATABASE_ERROR">Database fout</string>
     <string name="SYS_DATE">Datum</string>
     <string name="SYS_DATE_END_BEFORE_BEGIN">Einddatum ligt voor startdatum.</string>
-    <string name="SYS_DATE_FROM_TO" description="Gebruikt in datum-context: 2010/01/10 tot 2010/01/12">%VAR1% tot %VAR2%</string>
-    <string name="SYS_DATA_GLOBAL">Indien actief zullen alle data zichtbaar zijn op de websites van de volgende organisaties, waar ze bewerkt kunnen worden door geautoriseerde gebruikers:\n\n%VAR1_BOLD%</string>
-    <string name="SYS_DATE_INVALID">Ongeldige datum in veld %VAR1_BOLD%.\n\nDatum moet dit formaat hebben: %VAR2_BOLD%.</string>
+    <string name="SYS_DATE_FROM_TO" description="Gebruikt in datum-context: 2010/01/10 tot 2010/01/12">#VAR1# tot #VAR2#</string>
+    <string name="SYS_DATA_GLOBAL">Indien actief zullen alle data zichtbaar zijn op de websites van de volgende organisaties, waar ze bewerkt kunnen worden door geautoriseerde gebruikers:\n\n#VAR1_BOLD#</string>
+    <string name="SYS_DATE_INVALID">Ongeldige datum in veld #VAR1_BOLD#.\n\nDatum moet dit formaat hebben: #VAR2_BOLD#.</string>
     <string name="SYS_DATE_MODIFIED">Aangepast op datum</string>
     <string name="SYS_DATE_TO">tot</string>
     <string name="SYS_DEACTIVATED">Inactief</string>
     <string name="SYS_DEBUG_MODUS">Debug modus</string>
     <string name="SYS_DELETE">Verwijder</string>
     <string name="SYS_DELETE_DATA">Gegevens zijn verwijderd.</string>
-    <string name="SYS_DELETE_ENTRY">Wilt u %VAR1_BOLD% verwijderen?</string>
+    <string name="SYS_DELETE_ENTRY">Wilt u #VAR1_BOLD# verwijderen?</string>
     <string name="SYS_DESCRIPTION">Omschrijving</string>
     <string name="SYS_DONATE">Doneer</string>
     <string name="SYS_EDIT">Bewerk</string>
-    <string name="SYS_EDIT_VAR">Bewerk %VAR1%</string>
+    <string name="SYS_EDIT_VAR">Bewerk #VAR1#</string>
     <string name="SYS_EMAIL">E-mail</string>
-    <string name="SYS_EMAIL_INVALID">E-mail adres in veld %VAR1_BOLD% bevat onjuiste karakters of is niet compleet.</string>
+    <string name="SYS_EMAIL_INVALID">E-mail adres in veld #VAR1_BOLD# bevat onjuiste karakters of is niet compleet.</string>
     <string name="SYS_ENTRY_MULTI_ORGA">Bericht zichtbaar voor meerdere organisaties</string>
     <string name="SYS_END" description="Einddatum">Tot</string>
     <string name="SYS_ERROR">Foutmelding</string>
-    <string name="SYS_ERROR_DATABASE_ACCESS">Foutmelding toegang database:\n\n%VAR1%</string>
+    <string name="SYS_ERROR_DATABASE_ACCESS">Foutmelding toegang database:\n\n#VAR1#</string>
     <string name="SYS_ERROR_PAGE_NOT_FOUND">Foutmelding 404 - Pagina niet gevonden!</string>
     <string name="SYS_EXAMPLE">Voorbeeld</string>
     <string name="SYS_EXAMPLES">Voorbeelden</string>
@@ -984,19 +984,19 @@
     <string name="SYS_FEATURES">Opties</string>
     <string name="SYS_FEMALE">Vrouw</string>
     <string name="SYS_FIELD">Veld</string>
-    <string name="SYS_FIELD_EMPTY">Veld %VAR1_BOLD% is leeg.</string>
+    <string name="SYS_FIELD_EMPTY">Veld #VAR1_BOLD# is leeg.</string>
     <string name="SYS_FIELDS_EMPTY">Enkele velden zijn leeg.</string>
     <string name="SYS_FILE">Bestand</string>
     <string name="SYS_FILE_NOT_EXIST">Geselecteerde bestand bestaat niet op de server.</string>
     <string name="SYS_FILE_PROGRESS">%0 van %1 geupload</string>
     <string name="SYS_FILE_TO_LARGE">Grootte bestand is te groot.</string>
-    <string name="SYS_FILE_TO_LARGE_SERVER">Grootte van geuploade bestand is groter dan door server gedefinieerde maximale grootte %VAR1% MB.</string>
+    <string name="SYS_FILE_TO_LARGE_SERVER">Grootte van geuploade bestand is groter dan door server gedefinieerde maximale grootte #VAR1# MB.</string>
     <string name="SYS_FILE_UPLOADS">Bestand uploads</string>
     <string name="SYS_FIRSTNAME">Voornaam</string>
-    <string name="SYS_FROM_TO">van %VAR1% tot %VAR2%</string>
+    <string name="SYS_FROM_TO">van #VAR1# tot #VAR2#</string>
     <string name="SYS_FOLDER">Map</string>
-    <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Map %VAR1_BOLD% kan niet gemaakt worden.\n\nVraag svp hulp bij %VAR2%beheerder%VAR3% om schrijfrechten te checken van hoofdmap.</string>
-    <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Map %VAR1_BOLD% kan niet gemaakt worden inclusief schrijfrechten.\n\nVraag svp hulp bij %VAR2%beheerder%VAR3% om schrijfrechten te checken (via FTP rechten veranderen naar 0777 of drwxrwxrwx).</string>
+    <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet gemaakt worden.\n\nVraag svp hulp bij #VAR2#beheerder#VAR3# om schrijfrechten te checken van hoofdmap.</string>
+    <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet gemaakt worden inclusief schrijfrechten.\n\nVraag svp hulp bij #VAR2#beheerder#VAR3# om schrijfrechten te checken (via FTP rechten veranderen naar 0777 of drwxrwxrwx).</string>
     <string name="SYS_FORMER">Voormalig</string>
     <string name="SYS_FORMER_PL">Voormalig</string>
     <string name="SYS_FONT">Font</string>
@@ -1017,11 +1017,11 @@
     <string name="SYS_IO_ERROR">I/O fout</string>
     <string name="SYS_ISO_8859_1">ISO-8859-1</string>
     <string name="SYS_LANGUAGE">Taal</string>
-    <string name="SYS_LAST_EDITED_BY">Als laatste bewerkt door %VAR1% op %VAR2%</string>
+    <string name="SYS_LAST_EDITED_BY">Als laatste bewerkt door #VAR1# op #VAR2#</string>
     <string name="SYS_LASTNAME">Achternaam</string>
     <string name="SYS_LATER">Later</string>
     <string name="SYS_LEADER">Leider</string>
-    <string name="SYS_LINK_TO">Link naar %VAR1%</string>
+    <string name="SYS_LINK_TO">Link naar #VAR1#</string>
     <string name="SYS_LOCATION" description="Location of a date">Plaats</string>
     <string name="SYS_LOCK">Blokkeer</string>
     <string name="SYS_LOCKED">Geblokkeerd</string>
@@ -1034,8 +1034,8 @@
     <string name="SYS_LOGOUT">Uitloggen</string>
     <string name="SYS_LOGOUT_SUCCESSFUL">Uitloggen is gelukt.</string>
     <string name="SYS_LOSTPW_AREADY_LOGGED_ID">U bent al ingelogd. Daarom zou u het juiste wachtwoord al moeten hebben!</string>
-    <string name="SYS_LOSTPW_SEND">Nieuw wachtwoord is gestuurd naar e-mail adres %VAR1%.</string>
-    <string name="SYS_LOSTPW_SEND_ERROR">Foutmelding tijdens het verzenden van e-mail naar ontvangers %VAR1%!\nProbeer het svp later nog eens!</string>
+    <string name="SYS_LOSTPW_SEND">Nieuw wachtwoord is gestuurd naar e-mail adres #VAR1#.</string>
+    <string name="SYS_LOSTPW_SEND_ERROR">Foutmelding tijdens het verzenden van e-mail naar ontvangers #VAR1#!\nProbeer het svp later nog eens!</string>
     <string name="SYS_MAP">Kaart</string>
     <string name="SYS_MAINTAIN_CATEGORIES">Beheer categorie</string>
     <string name="SYS_MALE">Man</string>
@@ -1045,7 +1045,7 @@
     <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">Max. grootte van afbeelding</string>
     <string name="SYS_MEGA_PIXEL">Megapixels</string>
     <string name="SYS_MEMBER">Lid</string>
-    <string name="SYS_MEMBER_OF_ORGANIZATION">Lid van organisatie %VAR1%</string>
+    <string name="SYS_MEMBER_OF_ORGANIZATION">Lid van organisatie #VAR1#</string>
     <string name="SYS_MEMBERS">Leden</string>
     <string name="SYS_MEMORY_LIMIT">Geheugen limiet</string>
     <string name="SYS_MESSAGE">Bericht</string>
@@ -1065,7 +1065,7 @@
     <string name="SYS_NOBODY">Niemand</string>
     <string name="SYS_NONE">Geen</string>
     <string name="SYS_NOTE">Bericht</string>
-    <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">U bent geen lid van organisatie %VAR1%</string>
+    <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">U bent geen lid van organisatie #VAR1#</string>
     <string name="SYS_NOT_REGISTERED">Niet geregistreerd</string>
     <string name="SYS_NOT_SET">Niet ingesteld</string>
     <string name="SYS_NUMBER">Aantal</string>
@@ -1106,7 +1106,7 @@
     <string name="SYS_REPEAT">Herhaal</string>
     <string name="SYS_RESTRICTIONS">Voorwaarden</string>
     <string name="SYS_ROLE">Rol</string>
-    <string name="SYS_ROLE_MAX_MEMBERS">Opslaan niet mogelijk. Maximaal aantal leden van rol %VAR1_BOLD% overschrijdt vooraf ingestelde limiet.</string>
+    <string name="SYS_ROLE_MAX_MEMBERS">Opslaan niet mogelijk. Maximaal aantal leden van rol #VAR1_BOLD# overschrijdt vooraf ingestelde limiet.</string>
     <string name="SYS_ROOM">Vergaderzaal</string>
     <string name="SYS_RSS_DISABLED">RSS optie uitgeschakeld door beheerder.</string>
     <string name="SYS_SAFE_MODE">Veilige modus</string>
@@ -1117,7 +1117,7 @@
     <string name="SYS_SECONDS">Seconden</string>
     <string name="SYS_SECURITY_ERROR">Veiligheidsfout</string>
     <string name="SYS_SEND">Verstuur</string>
-    <string name="SYS_SEND_EMAIL_TO">Stuur e-mail naar %VAR1%</string>
+    <string name="SYS_SEND_EMAIL_TO">Stuur e-mail naar #VAR1#</string>
     <string name="SYS_SEARCH">Zoek</string>
     <string name="SYS_SEND_NEW_PW">Stuur nieuw wachtwoord</string>
     <string name="SYS_SENDER">Verstuurder</string>
@@ -1128,9 +1128,9 @@
     <string name="SYS_SHOW_CALENDAR">Toon kalender</string>
     <string name="SYS_SHOW_PROFILE">Toon profiel</string>
     <string name="SYS_SHOW_ROUTE">Toon route</string>
-    <string name="SYS_SIMILAR_USERS_FOUND">Tenminste 1 gebruiker met dezelfde naam (%VAR1_BOLD% ) is in de database gevonden.</string>
-    <string name="SYS_SINCE">sinds %VAR1%</string>
-    <string name="SYS_SINCE_TO">vanaf %VAR1% tot %VAR2%</string>
+    <string name="SYS_SIMILAR_USERS_FOUND">Tenminste 1 gebruiker met dezelfde naam (#VAR1_BOLD# ) is in de database gevonden.</string>
+    <string name="SYS_SINCE">sinds #VAR1#</string>
+    <string name="SYS_SINCE_TO">vanaf #VAR1# tot #VAR2#</string>
     <string name="SYS_SIZE">Formaat</string>
     <string name="SYS_START" description="Start of a date">Vanaf</string>
     <string name="SYS_STATUS">Status</string>
@@ -1144,7 +1144,7 @@
     <string name="SYS_THURSDAY">Donderdag</string>
     <string name="SYS_TIME">Tijd</string>
     <string name="SYS_TIME_FROM">Tijd vanaf</string>
-    <string name="SYS_TIME_INVALID">Tijd fout in veld %VAR1_BOLD%.\n\nTijd moet het volgende formaat hebben: %VAR2_BOLD%.</string>
+    <string name="SYS_TIME_INVALID">Tijd fout in veld #VAR1_BOLD#.\n\nTijd moet het volgende formaat hebben: #VAR2_BOLD#.</string>
     <string name="SYS_TIME_TO">Tijd tot</string>
     <string name="SYS_TITLE">Titel</string>
     <string name="SYS_TO">Naar</string>
@@ -1160,12 +1160,12 @@
     <string name="SYS_UPLOAD_NAME_ERROR">Bestandsnaam kan niet "Submit" heten.</string>
     <string name="SYS_USER">gebruiker</string>
     <string name="SYS_USER_ID_NOT_FOUND">Geen gebruiker kon gevonden worden met deze ID!</string>
-    <string name="SYS_USER_NO_EMAIL">Gebruiker %VAR1_BOLD% heeft geen geldig e-mail adres in zijn profiel!</string>
+    <string name="SYS_USER_NO_EMAIL">Gebruiker #VAR1_BOLD# heeft geen geldig e-mail adres in zijn profiel!</string>
     <string name="SYS_USERNAME">Gebruikersnaam</string>
     <string name="SYS_USERS_FOUND">Gebruiker gevonden</string>
     <string name="SYS_UTF8">UTF-8</string>
     <string name="SYS_VISIBLE">Zichtbaar</string>
-    <string name="SYS_VISIBLE_TO_USERS">%VAR1% is alleen zichtbaar voor ingelogde gebruikers</string>
+    <string name="SYS_VISIBLE_TO_USERS">#VAR1# is alleen zichtbaar voor ingelogde gebruikers</string>
     <string name="SYS_VISITORS">Bezoekers</string>
     <string name="SYS_WANT_REGISTER">Ik wil me inschrijven!</string>
     <string name="SYS_WARNING">Waarschuwing</string>

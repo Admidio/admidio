@@ -70,8 +70,8 @@ class Language
      *
      * param  string $param1,$param2... The function accepts an undefined number of values which will be used
      *                                  to replace the placeholder in the text.
-     *                                  $param1 will replace @b %%VAR1% or @b %%VAR1_BOLD%,
-     *                                  $param2 will replace @b %%VAR2% or @b %%VAR2_BOLD% etc.
+     *                                  $param1 will replace @b #VAR1# or @b #VAR1_BOLD#,
+     *                                  $param2 will replace @b #VAR2# or @b #VAR2_BOLD# etc.
      * @return string Returns the text string with replaced placeholders of the text id.
      * @par Examples
      * @code // display a text without placeholders
@@ -130,8 +130,8 @@ class Language
 
             for($paramNumber = 1; $paramNumber < $paramCount; ++$paramNumber)
             {
-                $text = str_replace('%VAR'.$paramNumber.'%', $paramArray[$paramNumber], $text);
-                $text = str_replace('%VAR'.$paramNumber.'_BOLD%', '<strong>'.$paramArray[$paramNumber].'</strong>', $text);
+                $text = str_replace('#VAR'.$paramNumber.'#', $paramArray[$paramNumber], $text);
+                $text = str_replace('#VAR'.$paramNumber.'_BOLD#', '<strong>'.$paramArray[$paramNumber].'</strong>', $text);
             }
 
             // replace square brackets with html tags
