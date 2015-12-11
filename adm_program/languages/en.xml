@@ -62,7 +62,7 @@
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">A new event at %VAR1% was created.\n\nTitle: %VAR2%\nDate: %VAR3%\nCalendar: %VAR4%\n</string>
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Location: %VAR1%\nRoom: %VAR2%\nParticipants: %VAR3%\nCreated by: %VAR4%\n</string>
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Created at: %VAR1%</string>
-  <string name="DAT_ENABLE_ICAL">Enablie iCal function</string>
+  <string name="DAT_ENABLE_ICAL">Enable iCal function</string>
   <string name="DAT_ENABLE_ICAL_DESC">If iCal is enabled, individual events or all events within a given time period can be downloaded. Also, users will be able to subscribe to events by using their own calendar client software . (default: yes)</string>
   <string name="DAT_EXPORT_ICAL">Export (iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">Highlight date</string>
