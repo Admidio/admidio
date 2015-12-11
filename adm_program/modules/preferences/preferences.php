@@ -309,14 +309,14 @@ $page->addHtml('
                         $form->addCheckbox('enable_email_notification', $gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES'), $form_values['enable_email_notification'], array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', '<i>'.$gPreferences['email_administrator'].'</i>')));
                         $form->addCustomContent($gL10n->get('SYS_SYSTEM_MAILS'),
                             '<p>'.$gL10n->get('ORG_SYSTEM_MAIL_TEXTS_DESC').':</p>
-                            <p><strong>%user_first_name%</strong> - '.$gL10n->get('ORG_VARIABLE_FIRST_NAME').'<br />
-                            <strong>%user_last_name%</strong> - '.$gL10n->get('ORG_VARIABLE_LAST_NAME').'<br />
-                            <strong>%user_login_name%</strong> - '.$gL10n->get('ORG_VARIABLE_USERNAME').'<br />
-                            <strong>%user_email%</strong> - '.$gL10n->get('ORG_VARIABLE_EMAIL').'<br />
-                            <strong>%webmaster_email%</strong> - '.$gL10n->get('ORG_VARIABLE_EMAIL_ORGANIZATION').'<br />
-                            <strong>%organization_short_name%</strong> - '.$gL10n->get('ORG_VARIABLE_SHORTNAME_ORGANIZATION').'<br />
-                            <strong>%organization_long_name%</strong> - '.$gL10n->get('ORG_VARIABLE_NAME_ORGANIZATION').'<br />
-                            <strong>%organization_homepage%</strong> - '.$gL10n->get('ORG_VARIABLE_URL_ORGANIZATION').'</p>');
+                            <p><strong>#user_first_name#</strong> - '.$gL10n->get('ORG_VARIABLE_FIRST_NAME').'<br />
+                            <strong>#user_last_name#</strong> - '.$gL10n->get('ORG_VARIABLE_LAST_NAME').'<br />
+                            <strong>#user_login_name#</strong> - '.$gL10n->get('ORG_VARIABLE_USERNAME').'<br />
+                            <strong>#user_email#</strong> - '.$gL10n->get('ORG_VARIABLE_EMAIL').'<br />
+                            <strong>#webmaster_email#</strong> - '.$gL10n->get('ORG_VARIABLE_EMAIL_ORGANIZATION').'<br />
+                            <strong>#organization_short_name#</strong> - '.$gL10n->get('ORG_VARIABLE_SHORTNAME_ORGANIZATION').'<br />
+                            <strong>#organization_long_name#</strong> - '.$gL10n->get('ORG_VARIABLE_NAME_ORGANIZATION').'<br />
+                            <strong>#organization_homepage#</strong> - '.$gL10n->get('ORG_VARIABLE_URL_ORGANIZATION').'</p>');
 
                         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_WEBMASTER', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
                         $form->addMultilineTextInput('SYSMAIL_REGISTRATION_WEBMASTER', $gL10n->get('ORG_NOTIFY_WEBMASTER'), $text->getValue('txt_text'), 7);
@@ -326,12 +326,12 @@ $page->addHtml('
                         $form->addMultilineTextInput('SYSMAIL_REFUSE_REGISTRATION', $gL10n->get('ORG_REFUSE_REGISTRATION'), $text->getValue('txt_text'), 7);
                         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
                         $form->addMultilineTextInput('SYSMAIL_NEW_PASSWORD', $gL10n->get('ORG_SEND_NEW_PASSWORD'), $text->getValue('txt_text'), 7,
-                            array('helpTextIdInline' => $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br /><strong>%variable1%</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD')));
+                            array('helpTextIdInline' => $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br /><strong>#variable1#</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD')));
                         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_ACTIVATION_LINK', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
                         $form->addMultilineTextInput('SYSMAIL_ACTIVATION_LINK', $gL10n->get('ORG_NEW_PASSWORD_ACTIVATION_LINK'), $text->getValue('txt_text'), 7,
                             array('helpTextIdInline' => $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br />
-                            <strong>%variable1%</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD').'<br />
-                            <strong>%variable2%</strong> - '.$gL10n->get('ORG_VARIABLE_ACTIVATION_LINK')));
+                            <strong>#variable1#</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD').'<br />
+                            <strong>#variable2#</strong> - '.$gL10n->get('ORG_VARIABLE_ACTIVATION_LINK')));
 
                         $form->addSubmitButton('btn_save_system_notification', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
                         $page->addHtml($form->show(false));

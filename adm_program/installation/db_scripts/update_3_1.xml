@@ -29,5 +29,15 @@
     <step id="270" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'dates_viewmode' AND pr1.prf_name LIKE 'dates_view'</step>
     <step id="280">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'dates_viewmode'</step>
     <step id="290">UPDATE %PREFIX%_preferences SET prf_value = 'detail' WHERE prf_name = 'dates_view' AND prf_value = 'html'</step>
+    <step id="300">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%organization_long_name%', '#organization_long_name#')</step>
+    <step id="310">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%user_first_name%', '#user_first_name#')</step>
+    <step id="320">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%user_last_name%', '#user_last_name#')</step>
+    <step id="330">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%user_login_name%', '#user_login_name#')</step>
+    <step id="340">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%user_email%', '#user_email#')</step>
+    <step id="350">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%webmaster_email%', '#webmaster_email#')</step>
+    <step id="360">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%organization_short_name%', '#organization_short_name#')</step>
+    <step id="370">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%organization_homepage%', '#organization_homepage#')</step>
+    <step id="380">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%variable1%', '#variable1#')</step>
+    <step id="390">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%variable2%', '#variable2#')</step>
     <step>stop</step>
 </update>

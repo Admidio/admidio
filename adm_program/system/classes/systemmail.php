@@ -70,20 +70,20 @@ class SystemMail extends Email
         $mailSrcText = $this->smTextObject->getValue('txt_text');
 
         // now replace all parameters in email text
-        $mailSrcText = preg_replace('/%user_first_name%/', $user->getValue('FIRST_NAME', 'database'),  $mailSrcText);
-        $mailSrcText = preg_replace('/%user_last_name%/',  $user->getValue('LAST_NAME', 'database'), $mailSrcText);
-        $mailSrcText = preg_replace('/%user_login_name%/', $user->getValue('usr_login_name'), $mailSrcText);
-        $mailSrcText = preg_replace('/%user_email%/', $user->getValue('EMAIL'),   $mailSrcText);
-        $mailSrcText = preg_replace('/%webmaster_email%/', $gPreferences['email_administrator'],  $mailSrcText);
-        $mailSrcText = preg_replace('/%organization_short_name%/', $this->smOrganization->getValue('org_shortname'), $mailSrcText);
+        $mailSrcText = preg_replace('/#user_first_name#/', $user->getValue('FIRST_NAME', 'database'),  $mailSrcText);
+        $mailSrcText = preg_replace('/#user_last_name#/',  $user->getValue('LAST_NAME', 'database'), $mailSrcText);
+        $mailSrcText = preg_replace('/#user_login_name#/', $user->getValue('usr_login_name'), $mailSrcText);
+        $mailSrcText = preg_replace('/#user_email#/', $user->getValue('EMAIL'),   $mailSrcText);
+        $mailSrcText = preg_replace('/#webmaster_email#/', $gPreferences['email_administrator'],  $mailSrcText);
+        $mailSrcText = preg_replace('/#organization_short_name#/', $this->smOrganization->getValue('org_shortname'), $mailSrcText);
         $mailSrcText = preg_replace('/%organization_long_name%/',  $this->smOrganization->getValue('org_longname'), $mailSrcText);
-        $mailSrcText = preg_replace('/%organization_homepage%/',   $this->smOrganization->getValue('org_homepage'), $mailSrcText);
+        $mailSrcText = preg_replace('/#organization_homepage#/',   $this->smOrganization->getValue('org_homepage'), $mailSrcText);
 
         // zusaetzliche Variablen ersetzen
         $iMax = count($this->smVariables);
         for($i = 1; $i <= $iMax; ++$i)
         {
-            $mailSrcText = preg_replace('/%variable'.$i.'%/', $this->smVariables[$i], $mailSrcText);
+            $mailSrcText = preg_replace('/#variable'.$i.'#/', $this->smVariables[$i], $mailSrcText);
         }
 
         // Betreff und Inhalt anhand von Kennzeichnungen splitten oder ggf. Default-Inhalte nehmen
