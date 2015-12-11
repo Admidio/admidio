@@ -711,7 +711,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addInput($id, $label, $value, $options = array())
     {
-        global $gL10n, $gPreferences, $g_root_path, $gDebug;
+        global $gL10n, $gPreferences, $g_root_path;
 
         $attributes = array('class' => 'form-control');
         ++$this->countElements;
@@ -1111,7 +1111,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addSelectBox($id, $label, $values, $options = array())
     {
-        global $gL10n, $g_root_path, $gDebug, $gPreferences;
+        global $gL10n, $g_root_path, $gPreferences;
 
         $attributes = array('class' => 'form-control');
         $name       = $id;
