@@ -12,12 +12,12 @@
 /******************************************************************************
  * Parameters:
  *
- * mode    - html   : Default mode to show a html list with all users to add them to the role
- *           assign : Add membership of a specific user to the role.
- * rol_id           : Id of role to which members should be assigned or removed
- * usr_id           : Id of the user whose membership should be assigned or removed
- * mem_show_all - 1 : (Default) Show only active members of the current organization
- *                0 : Show active and inactive members of all organizations in database
+ * mode        - html   : Default mode to show a html list with all users to add them to the role
+ *               assign : Add membership of a specific user to the role.
+ * rol_id               : Id of role to which members should be assigned or removed
+ * usr_id               : Id of the user whose membership should be assigned or removed
+ * mem_show_all - true  : (Default) Show only active members of the current organization
+ *                false : Show active and inactive members of all organizations in database
  *
  *****************************************************************************/
 require_once('../../system/common.php');
@@ -30,11 +30,11 @@ if(isset($_GET['mode']) && $_GET['mode'] === 'assign')
 }
 
 // Initialize and check the parameters
-$getMode           = admFuncVariableIsValid($_GET, 'mode',          'string',  array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
-$getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'numeric', array('requireValue' => true, 'directOutput' => true));
-$getUserId         = admFuncVariableIsValid($_GET, 'usr_id',        'numeric', array('directOutput' => true));
-$getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'numeric');
-$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'boolean');
+$getMode           = admFuncVariableIsValid($_GET, 'mode',          'string', array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
+$getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'int',    array('requireValue' => true, 'directOutput' => true));
+$getUserId         = admFuncVariableIsValid($_GET, 'usr_id',        'int',    array('directOutput' => true));
+$getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
+$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'bool');
 
 $_SESSION['set_rol_id'] = $getRoleId;
 
@@ -53,7 +53,7 @@ if(!$role->allowedToAssignMembers($gCurrentUser))
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-if($getMembersShowAll == 1)
+if($getMembersShowAll)
 {
     $getFilterRoleId = 0;
 }
@@ -73,17 +73,17 @@ if($getMode === 'assign')
 
     try
     {
-        $membership = 0;
-        $leadership = 0;
+        $membership = false;
+        $leadership = false;
 
         if(isset($_POST['member_'.$getUserId]) && $_POST['member_'.$getUserId] === 'true')
         {
-            $membership = 1;
+            $membership = true;
         }
         if(isset($_POST['leader_'.$getUserId]) && $_POST['leader_'.$getUserId] === 'true')
         {
-            $membership = 1;
-            $leadership = 1;
+            $membership = true;
+            $leadership = true;
         }
 
         // Member
@@ -93,12 +93,12 @@ if($getMode === 'assign')
         $mem_count = $role->countMembers($getUserId);
 
         // Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
-        if($leadership === 1 || ($leadership === 0 && $membership == 1 && ($role->getValue('rol_max_members') > $mem_count || $role->getValue('rol_max_members') == 0 || $role->getValue('rol_max_members') == 0)))
+        if($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $mem_count || $role->getValue('rol_max_members') == 0 || $role->getValue('rol_max_members') == 0)))
         {
             $member->startMembership($role->getValue('rol_id'), $getUserId, $leadership);
             echo 'success';
         }
-        elseif($leadership === 0 && $membership == 0)
+        elseif(!$leadership && !$membership)
         {
             $member->stopMembership($role->getValue('rol_id'), $getUserId);
             echo 'success';
@@ -129,7 +129,7 @@ else
     // create sql for all relevant users
     $memberCondition = '';
 
-    if($getMembersShowAll == 1)
+    if($getMembersShowAll)
     {
         // Falls gefordert, aufrufen alle Benutzer aus der Datenbank
         $memberCondition = ' usr_valid = 1 ';
@@ -214,7 +214,7 @@ else
 
     $javascriptCode = '';
 
-    if($getMembersShowAll == 1)
+    if($getMembersShowAll)
     {
         $javascriptCode .= '$("#mem_show_all").prop("checked", true);';
     }

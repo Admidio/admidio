@@ -17,8 +17,8 @@
  *            1 - Edit roles of a new user
  *            2 - (not relevant)
  *            3 - Edit roles of a registration
- * inline   : 0 - (Default) wird als eigene Seite angezeigt
- *            1 - nur "body" HTML Code
+ * inline   : false - wird als eigene Seite angezeigt
+ *            true  - nur "body" HTML Code
  *
  *****************************************************************************/
 
@@ -26,11 +26,11 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserId  = admFuncVariableIsValid($_GET, 'usr_id',   'numeric');
-$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric');
-$getInline  = admFuncVariableIsValid($_GET, 'inline',   'boolean');
+$getUserId  = admFuncVariableIsValid($_GET, 'usr_id',   'int');
+$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'int');
+$getInline  = admFuncVariableIsValid($_GET, 'inline',   'bool');
 
-$html       = '';
+$html = '';
 
 // if user is allowed to assign at least one role then allow access
 if(!$gCurrentUser->assignRoles())

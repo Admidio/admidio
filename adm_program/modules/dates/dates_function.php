@@ -24,11 +24,11 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric');
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'numeric', array('requireValue' => true));
-$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
-$getCopy   = admFuncVariableIsValid($_GET, 'copy',   'boolean');
-$getNumberRoleSelect = admFuncVariableIsValid($_GET, 'number_role_select', 'numeric');
+$getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'int');
+$getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
+$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'int');
+$getCopy   = admFuncVariableIsValid($_GET, 'copy',   'bool');
+$getNumberRoleSelect = admFuncVariableIsValid($_GET, 'number_role_select', 'int');
 
 $originalDateId = 0;
 
@@ -39,14 +39,14 @@ if($gPreferences['enable_dates_module'] == 0)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-if($getMode != 6 || $gPreferences['enable_dates_module'] == 2)
+if($getMode !== 6 || $gPreferences['enable_dates_module'] == 2)
 {
     // Alle Funktionen, ausser Exportieren und anmelden, duerfen nur eingeloggte User
     require_once('../../system/login_valid.php');
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
-if(!$gCurrentUser->editDates() && $getMode != 3 && $getMode != 4 && $getMode != 6)
+if(!$gCurrentUser->editDates() && $getMode !== 3 && $getMode !== 4 && $getMode !== 6)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

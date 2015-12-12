@@ -41,9 +41,9 @@ if (!$gCurrentUser->editDownloadRight())
 }
 
 // Initialize and check the parameters
-$getMode     = admFuncVariableIsValid($_GET, 'mode',      'numeric', array('requireValue' => true));
-$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric');
-$getFileId   = admFuncVariableIsValid($_GET, 'file_id',   'numeric');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',      'int', array('requireValue' => true));
+$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
+$getFileId   = admFuncVariableIsValid($_GET, 'file_id',   'int');
 $getName     = admFuncVariableIsValid($_GET, 'name',      'file');
 
 $_SESSION['download_request'] = $_POST;
@@ -89,7 +89,7 @@ if ($getMode === 2)
 // Ordner erstellen
 elseif ($getMode === 3)
 {
-    if ($getFolderId == 0)
+    if ($getFolderId === 0)
     {
         // FolderId ist zum Anlegen eines Unterordners erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -165,7 +165,7 @@ elseif ($getMode === 3)
 // Datei / Ordner umbenennen
 elseif ($getMode === 4)
 {
-    if ((!$getFileId && !$getFolderId) or ($getFileId && $getFolderId))
+    if ((!$getFileId && !$getFolderId) || ($getFileId && $getFolderId))
     {
         // Es muss entweder eine FileID ODER eine FolderId uebergeben werden
         // beides ist auch nicht erlaubt
@@ -278,7 +278,7 @@ elseif ($getMode === 4)
 // Folder loeschen
 elseif ($getMode === 5)
 {
-    if (!$getFolderId)
+    if ($getFolderId === 0)
     {
         // Es muss eine FolderId uebergeben werden
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -309,7 +309,7 @@ elseif ($getMode === 5)
 // Datei / Ordner zur DB hinzufeuegen
 elseif ($getMode === 6)
 {
-    if ($getFolderId == 0)
+    if ($getFolderId === 0)
     {
         // FolderId ist zum hinzufuegen erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -377,7 +377,7 @@ elseif ($getMode === 7)
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
     }
 
-    if ($getFolderId == 0 || !is_array($_POST['adm_allowed_roles']))
+    if ($getFolderId === 0 || !is_array($_POST['adm_allowed_roles']))
     {
         // FolderId ist zum hinzufuegen erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));

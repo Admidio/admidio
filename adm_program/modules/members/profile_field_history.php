@@ -24,7 +24,7 @@ $filterDateFrom = new DateTimeExtended(DATE_NOW, 'Y-m-d');
 $filterDateFrom->modify('-'.$gPreferences['members_days_field_history'].' day');
 
 // Initialize and check the parameters
-$getUserId   = admFuncVariableIsValid($_GET, 'usr_id',           'numeric');
+$getUserId   = admFuncVariableIsValid($_GET, 'usr_id',           'int');
 $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gPreferences['system_date'])));
 $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to',   'date', array('defaultValue' => DATE_NOW));
 
@@ -47,8 +47,8 @@ $sqlConditions  = '';
 // if profile log is activated and current user is allowed to edit users
 // then the profile field history will be shown otherwise show error
 if ($gPreferences['profile_log_edit_fields'] == 0
-    || ($getUserId == 0 && !$gCurrentUser->editUsers())
-    || ($getUserId > 0  && !$gCurrentUser->hasRightEditProfile($user)))
+    || ($getUserId === 0 && !$gCurrentUser->editUsers())
+    || ($getUserId > 0   && !$gCurrentUser->hasRightEditProfile($user)))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -163,7 +163,7 @@ $table = new HtmlTable('profile_field_history_table', $page, true, true);
 
 $columnHeading = array();
 
-if($getUserId == 0)
+if($getUserId === 0)
 {
     $table->setDatatablesOrderColumns(array(array(6, 'desc')));
     $columnHeading[] = $gL10n->get('SYS_NAME');
@@ -186,7 +186,7 @@ while($row = $fieldHistoryStatement->fetch())
     $timestampCreate = new DateTimeExtended($row['usl_timestamp_create'], 'Y-m-d H:i:s');
     $columnValues    = array();
 
-    if($getUserId == 0)
+    if($getUserId === 0)
     {
         $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usl_usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a>';
     }

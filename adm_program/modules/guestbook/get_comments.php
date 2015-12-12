@@ -10,22 +10,22 @@
  * Parameters:
  *
  * cid        : Id of the corresponding guestbook entry
- * moderation : 0 (Default) - Guestbookviww
- *              1 - Moderation mode, every entry could be released
+ * moderation : false - (Default) - Guestbookviww
+ *              true  - Moderation mode, every entry could be released
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getGbcId      = admFuncVariableIsValid($_GET, 'cid',        'numeric');
-$getModeration = admFuncVariableIsValid($_GET, 'moderation', 'boolean');
+$getGbcId      = admFuncVariableIsValid($_GET, 'cid',        'int');
+$getModeration = admFuncVariableIsValid($_GET, 'moderation', 'bool');
 
 if ($getGbcId > 0)
 {
     $conditions = '';
 
     // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
-    if($gPreferences['enable_guestbook_moderation'] > 0 && $getModeration == 1)
+    if($gPreferences['enable_guestbook_moderation'] > 0 && $getModeration)
     {
         $conditions .= ' AND gbc_locked = 1 ';
     }
@@ -90,7 +90,7 @@ if (isset($comment_result))
                 $gbComment->getValue('gbc_text');
 
                 // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
-                if($getModeration == 1)
+                if($getModeration)
                 {
                     echo '
                     <div class="btn-group" role="group">
@@ -110,8 +110,7 @@ if (isset($comment_result))
         echo '</div>';
     }
 
-    if (($gCurrentUser->commentGuestbookRight() || $gPreferences['enable_gbook_comments4all'] == 1)
-    && $getModeration == 0)
+    if (!$getModeration && ($gCurrentUser->commentGuestbookRight() || $gPreferences['enable_gbook_comments4all'] == 1))
     {
         // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
         echo '

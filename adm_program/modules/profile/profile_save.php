@@ -23,8 +23,8 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getUserId  = admFuncVariableIsValid($_GET, 'user_id',  'numeric');
-$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric');
+$getUserId  = admFuncVariableIsValid($_GET, 'user_id',  'int');
+$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'int');
 
 // if current user has no login then only show registration dialog
 if(!$gValidLogin)
@@ -45,7 +45,7 @@ if(!isset($_POST['reg_org_id']))
 }
 
 // read user data
-if($getNewUser == 2 || $getNewUser == 3)
+if($getNewUser === 2 || $getNewUser === 3)
 {
     // create user registration object and set requested organization
     $user = new UserRegistration($gDb, $gProfileFields, $getUserId);
@@ -90,7 +90,7 @@ switch($getNewUser)
 /*------------------------------------------------------------*/
 
 // bei Registrierung muss Loginname und Pw geprueft werden
-if($getNewUser == 2)
+if($getNewUser === 2)
 {
     if($_POST['usr_login_name'] === '')
     {
@@ -121,7 +121,7 @@ foreach($gProfileFields->mProfileFields as $field)
     $post_id = 'usf-'. $field->getValue('usf_id');
 
     // check and save only fields that aren't disabled
-    if($field->getValue('usf_disabled') == 0
+    if ($field->getValue('usf_disabled') == 0
     || ($field->getValue('usf_disabled') == 1 && $gCurrentUser->hasRightEditProfile($user, false))
     || ($field->getValue('usf_disabled') == 1 && $getNewUser > 0))
     {
@@ -129,8 +129,8 @@ foreach($gProfileFields->mProfileFields as $field)
         {
             // Pflichtfelder muessen gefuellt sein
             // E-Mail bei Registrierung immer !!!
-            if(($field->getValue('usf_mandatory') == 1 && strlen($_POST[$post_id]) === 0)
-            || ($getNewUser == 2 && $field->getValue('usf_name_intern') === 'EMAIL' && strlen($_POST[$post_id]) === 0))
+            if((strlen($_POST[$post_id]) === 0 && $field->getValue('usf_mandatory') == 1)
+            || (strlen($_POST[$post_id]) === 0 && $field->getValue('usf_name_intern') === 'EMAIL' && $getNewUser === 2))
             {
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
             }
@@ -141,8 +141,7 @@ foreach($gProfileFields->mProfileFields as $field)
             || $field->getValue('usf_name_intern') === 'TWITTER'
             || $field->getValue('usf_name_intern') === 'XING')
             {
-                if(strValidCharacters($_POST[$post_id], 'url')
-                && strpos($_POST[$post_id], '/') !== false)
+                if(strValidCharacters($_POST[$post_id], 'url') && strpos($_POST[$post_id], '/') !== false)
                 {
                     if(strrpos($_POST[$post_id], '/profile.php?id=') > 0)
                     {
@@ -213,7 +212,7 @@ foreach($gProfileFields->mProfileFields as $field)
 if($gCurrentUser->isWebmaster() || $getNewUser > 0)
 {
     // Loginname darf nur vom Webmaster bzw. bei Neuanlage geaendert werden
-    if($_POST['usr_login_name'] != $user->getValue('usr_login_name'))
+    if($_POST['usr_login_name'] !== $user->getValue('usr_login_name'))
     {
         if(strlen($_POST['usr_login_name']) > 0)
         {
@@ -241,14 +240,14 @@ if($gCurrentUser->isWebmaster() || $getNewUser > 0)
 }
 
 // falls Registrierung, dann die entsprechenden Felder noch besetzen
-if($getNewUser == 2)
+if($getNewUser === 2)
 {
     $user->setPassword($_POST['usr_password']);
 }
 
 // Falls der User sich registrieren wollte, aber ein Captcha geschaltet ist,
 // muss natuerlich der Code ueberprueft werden
-if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1)
+if ($getNewUser === 2 && $gPreferences['enable_registration_captcha'] == 1)
 {
     if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
     {
@@ -295,11 +294,11 @@ $gNavigation->deleteLastUrl();
 // je nach Aufrufmodus auf die richtige Seite weiterleiten
 /*------------------------------------------------------------*/
 
-if($getNewUser == 1 || $getNewUser == 3)
+if($getNewUser === 1 || $getNewUser === 3)
 {
     // assign a registration or create a new user
 
-    if($getNewUser == 3)
+    if($getNewUser === 3)
     {
         try
         {
@@ -334,13 +333,13 @@ if($getNewUser == 1 || $getNewUser == 3)
         $gMessage->show($gL10n->get($messageId));
     }
 }
-elseif($getNewUser == 2)
+elseif($getNewUser === 2)
 {
     // registration was successful then go to homepage
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_REGISTRATION_SAVED'));
 }
-elseif($getNewUser == 0 && $user->getValue('usr_valid') == 0)
+elseif($getNewUser === 0 && $user->getValue('usr_valid') == 0)
 {
     // a registration was edited then go back to profile view
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);

@@ -16,7 +16,7 @@
  * photo_nr  : Nummer des Bildes, das angezeigt werden soll
  * max_width : maximale Breite auf die das Bild skaliert werden kann
  * max_height: maximale Hoehe auf die das Bild skaliert werden kann
- * thumb     : ist thumb == 1 wird ein Thumnail in der Größe der
+ * thumb     : ist thumb === true wird ein Thumbnail in der Größe der
  *             Voreinstellung zurückgegeben
  *
  *****************************************************************************/
@@ -24,11 +24,11 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getPhotoId   = admFuncVariableIsValid($_GET, 'pho_id',     'numeric', array('requireValue' => true));
-$getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',   'numeric');
-$getMaxWidth  = admFuncVariableIsValid($_GET, 'max_width',  'numeric');
-$getMaxHeight = admFuncVariableIsValid($_GET, 'max_height', 'numeric');
-$getThumbnail = admFuncVariableIsValid($_GET, 'thumb',      'boolean');
+$getPhotoId   = admFuncVariableIsValid($_GET, 'pho_id',     'int', array('requireValue' => true));
+$getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',   'int');
+$getMaxWidth  = admFuncVariableIsValid($_GET, 'max_width',  'int');
+$getMaxHeight = admFuncVariableIsValid($_GET, 'max_height', 'int');
+$getThumbnail = admFuncVariableIsValid($_GET, 'thumb',      'bool');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_photo_module'] == 0)
@@ -72,7 +72,7 @@ if($getThumbnail)
 {
     if($getPhotoNr > 0)
     {
-        $thumb_length=1;
+        $thumb_length = 1;
         if(file_exists($ordner.'/thumbnails/'.$getPhotoNr.'.jpg'))
         {
             // Ermittlung der Original Bildgroesse
@@ -87,7 +87,7 @@ if($getThumbnail)
 
         // Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
         // Wenn nicht anlegen
-        if(!file_exists($ordner.'/thumbnails/'.$getPhotoNr.'.jpg') || $thumb_length !=$gPreferences['photo_thumbs_scale'])
+        if(!file_exists($ordner.'/thumbnails/'.$getPhotoNr.'.jpg') || $thumb_length != $gPreferences['photo_thumbs_scale'])
         {
             // Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
             if(!file_exists($ordner.'/thumbnails'))
@@ -125,7 +125,7 @@ else
     $image->scale($getMaxWidth, $getMaxHeight);
 }
 
-if($image != null)
+if($image !== null)
 {
     // Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
     if (($getMaxWidth > 200) && $gPreferences['photo_image_text'] !== '')

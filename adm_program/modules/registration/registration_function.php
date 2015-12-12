@@ -25,9 +25,9 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getMode      = admFuncVariableIsValid($_GET, 'mode',        'numeric', array('requireValue' => true));
-$getNewUserId = admFuncVariableIsValid($_GET, 'new_user_id', 'numeric', array('requireValue' => true));
-$getUserId    = admFuncVariableIsValid($_GET, 'user_id',     'numeric');
+$getMode      = admFuncVariableIsValid($_GET, 'mode',        'int', array('requireValue' => true));
+$getNewUserId = admFuncVariableIsValid($_GET, 'new_user_id', 'int', array('requireValue' => true));
+$getUserId    = admFuncVariableIsValid($_GET, 'user_id',     'int');
 
 // nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
 if(!$gCurrentUser->approveUsers())

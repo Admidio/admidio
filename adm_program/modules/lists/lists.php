@@ -11,16 +11,16 @@
  *
  * start    : Position of query recordset where the visual output should start
  * cat_id   : show only roles of this category id, if id is not set than show all roles
- * active_role : 1 - (Default) aktive Rollen auflisten
- *               0 - inaktive Rollen auflisten
+ * active_role : true  - (Default) aktive Rollen auflisten
+ *               false - inaktive Rollen auflisten
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getStart      = admFuncVariableIsValid($_GET, 'start',       'numeric');
-$getCatId      = admFuncVariableIsValid($_GET, 'cat_id',      'numeric');
-$getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', array('defaultValue' => 1));
+$getStart      = admFuncVariableIsValid($_GET, 'start',       'int');
+$getCatId      = admFuncVariableIsValid($_GET, 'cat_id',      'int');
+$getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 
 // New Modulelist object
 $lists = new ModuleLists();

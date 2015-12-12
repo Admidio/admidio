@@ -31,7 +31,7 @@ unset($_SESSION['dates_request']);
 // Initialize and check the parameters
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'numeric');
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
 
 // prüfen ob das Modul überhaupt aktiviert ist
 if($gPreferences['enable_dates_module'] == 0)
@@ -60,9 +60,9 @@ $parameter = $dates->getParameters();
 $parameter['mode'] = 2;
 $parameter['view_mode'] = 'period';
 $parameter['date_from'] = date('Y-m-d', time()-$gPreferences['dates_ical_days_past']*86400);
-$parameter['date_to'] = date('Y-m-d', time()+$gPreferences['dates_ical_days_future']*86400);
+$parameter['date_to']   = date('Y-m-d', time()+$gPreferences['dates_ical_days_future']*86400);
 
-// set date range  
+// set date range
 $dates->setDaterange($parameter['date_from'], $parameter['date_to']);
 // read events for output
 $datesResult = $dates->getDataset(0, 0);

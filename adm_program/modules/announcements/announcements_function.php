@@ -31,8 +31,8 @@ if(!$gCurrentUser->editAnnouncements())
 }
 
 // Initialize and check the parameters
-$getAnnId = admFuncVariableIsValid($_GET, 'ann_id', 'numeric');
-$getMode  = admFuncVariableIsValid($_GET, 'mode',   'numeric', array('requireValue' => true));
+$getAnnId = admFuncVariableIsValid($_GET, 'ann_id', 'int');
+$getMode  = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
 
 // Ankuendigungsobjekt anlegen
 $announcement = new TableAnnouncement($gDb);
@@ -87,7 +87,7 @@ if($getMode === 1)
     }
     else
     {
-        if($getAnnId == 0)
+        if($getAnnId === 0)
         {
             $message = $gL10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
             $notification = new Email();

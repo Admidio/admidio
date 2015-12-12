@@ -31,7 +31,7 @@ if ($gPreferences['enable_chat_module'] != 1)
 
 $postFunction = admFuncVariableIsValid($_POST, 'function', 'string');
 $postMessage  = admFuncVariableIsValid($_POST, 'message',  'string');
-$postLines    = admFuncVariableIsValid($_POST, 'state',    'number');
+$postLines    = admFuncVariableIsValid($_POST, 'state',    'int');
 
 $log = array();
 
@@ -74,7 +74,7 @@ switch($postFunction)
             $msgId = $msgId - 50;
         }
 
-        if($postLines == $msgId)
+        if($postLines === $msgId)
         {
             $log['state'] = $postLines;
             $log['text']  = false;
