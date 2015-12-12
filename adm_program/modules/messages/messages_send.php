@@ -101,10 +101,10 @@ if($gPreferences['enable_pm_module'] != 1 && $getMsgType === 'PM')
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
     $postName = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
-	if(!strValidCharacters($postFrom, 'email'))
-	{
+    if(!strValidCharacters($postFrom, 'email'))
+    {
         $postFrom = $gCurrentUser->getValue('EMAIL');
-	}
+    }
 }
 else
 {

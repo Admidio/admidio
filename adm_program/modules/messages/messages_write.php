@@ -310,7 +310,7 @@ elseif (!isset($message_result))
 
         $list = array_merge($list, $listFormer, $listActiveAndFormer);
         $listVisibleRoleArray = array_intersect($list_rol_id_array, $gCurrentUser->getAllVisibleRoles());
-+
+
         // select Users
 
         $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
@@ -395,21 +395,21 @@ elseif (!isset($message_result))
 
     if ($gCurrentUser->getValue('usr_id') > 0)
     {
-		$sql = 'SELECT count(*)
+        $sql = 'SELECT COUNT(*)
                   FROM '. TBL_USER_FIELDS. '
                   JOIN '. TBL_USER_DATA .' ON usd_usf_id = usf_id
                  WHERE usf_type = \'EMAIL\'
                    AND usd_usr_id = '.$gCurrentUser->getValue('usr_id').'
                    AND usd_value IS NOT NULL';
 
-		$pdoStatement = $gDb->query($sql);
+        $pdoStatement = $gDb->query($sql);
         $possible_emails = $pdoStatement->fetchColumn();
 
-		$form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
+        $form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
 
-		if($possible_emails > 1)
-		{
-			$sql   = 'SELECT email.usd_value as ID, email.usd_value as email
+        if($possible_emails > 1)
+        {
+            $sql   = 'SELECT email.usd_value as ID, email.usd_value as email
                 FROM '. TBL_USERS. '
                 JOIN '. TBL_USER_DATA. ' as email
                   ON email.usd_usr_id = usr_id
@@ -421,11 +421,11 @@ elseif (!isset($message_result))
                  AND usr_valid   = 1
             GROUP BY email.usd_value, email.usd_value';
 
-			$form->addSelectBoxFromSql('mailfromid', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sql, array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false));
-		}
-		else
-		{
-			$form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
+            $form->addSelectBoxFromSql('mailfromid', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sql, array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false));
+        }
+        else
+        {
+            $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
         }
     }
     else
