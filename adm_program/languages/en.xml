@@ -622,7 +622,7 @@
   <string name="ORG_FIELD_NOT_HIDDEN">Field to see for all users.</string>
   <string name="ORG_FIELD_NOT_MANDATORY">Field is mandatory. It must be filled in.</string>
   <string name="ORG_FIELD_UP">Move profile field up</string>
-  <string name="ORG_FIELD_URL_DESC">This URL will link the content with the profile, provided by the user in this field. Placeholder %user_content% can be integrated into the URL if needed. This content has been provided by the user.\n\nExample:\nURL: https://www.google.de/search?q=%user_content%\nContent: Admidio\nLink in the profil: https://www.google.de/search?q=Admidio</string>
+  <string name="ORG_FIELD_URL_DESC">This URL will link the content with the profile, provided by the user in this field. Placeholder %user_content% can be integrated into the URL if needed. This content has been provided by the user.\n\nExample:\nURL: https://www.google.com/search?q=%user_content%\nContent: Admidio\nLink in the profil: https://www.google.com/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/index.php)</string>
   <string name="ORG_INVALID_THEME">Could not find a valid theme.</string>
@@ -632,7 +632,7 @@
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">A full-featured JavaScript editor is being used in many modules of Admidio. Events, Announcements etc. can be edited in a comfortable way by the user. In case the editor has been activated, a simple multi-lin text box is being displayed.</string>
   <string name="ORG_LAST_UPDATE_STEP">Last step of update</string>
   <string name="ORG_LOGIN_AUTOMATICALLY">Login automatically</string>
-  <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Users are able to define at login if login information and session should be saved on their computers. This way, they will be logged in at ththeir visit automatically. However this can lead to unwanted access and misuse of unauthorized persons. (default: yes)</string>
+  <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Users are able to define at login if login information and session should be saved on their computers. This way, they will be logged in at their visit automatically. However this can lead to unwanted access and misuse of unauthorized persons. (default: yes)</string>
   <string name="ORG_NEW_ORGANIZATION">New organization</string>
   <string name="ORG_NEW_ORGANIZATION_DESC">Enter the abbreviation, the official name and the email address for the organization you want to add. The email address should be a general one. It will be used as sender address when sending automatic system notifications.</string>
   <string name="ORG_NEW_PASSWORD_ACTIVATION_LINK">New password and activation link.</string>
