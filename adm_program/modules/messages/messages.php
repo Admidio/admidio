@@ -98,7 +98,7 @@ $modulemessages = new ModuleMessages();
 
 // find all own Email messages
 $statement = $modulemessages->msgGetUserEmails($gCurrentUser->getValue('usr_id'));
-if(isset($result))
+if(isset($statement))
 {
     while ($row = $statement->fetch())
     {
@@ -147,7 +147,7 @@ if(isset($result))
 
 // find all unread PM messages
 $statement = $modulemessages->msgGetUserUnread($gCurrentUser->getValue('usr_id'));
-if(isset($result))
+if(isset($statement))
 {
     while ($row = $statement->fetch())
     {
@@ -174,7 +174,7 @@ if(isset($result))
 
 // find all read or own PM messages
 $statement = $modulemessages->msgGetUser($gCurrentUser->getValue('usr_id'));
-if(isset($result))
+if(isset($statement))
 {
     while ($row = $statement->fetch())
     {

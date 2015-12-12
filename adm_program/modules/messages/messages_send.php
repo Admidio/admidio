@@ -235,6 +235,10 @@ if ($getMsgType === 'EMAIL')
                     // all role members will be attached as BCC
                     while ($row = $statement->fetchObject())
                     {
+                        if (!strValidCharacters($row->email, 'email'))
+                        {
+                            $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $row->first_name.' '.$row->last_name));
+                        }
                         $receiver[] = array($row->email, $row->first_name.' '.$row->last_name);
                     }
 
