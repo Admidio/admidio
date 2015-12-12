@@ -32,7 +32,7 @@ $getUserId      = admFuncVariableIsValid($_GET, 'usr_id',       'int');
 $getSubject     = admFuncVariableIsValid($_GET, 'subject',      'html');
 $getMsgId       = admFuncVariableIsValid($_GET, 'msg_id',       'int');
 $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
-$getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy',  'bool', array('defaultValue' => false));
+$getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy',  'bool', array('defaultValue' => 0));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
@@ -397,13 +397,16 @@ elseif (!isset($message_result))
     {
 		$sql = 'SELECT count(*)
                   FROM '. TBL_USER_FIELDS. '
-                 WHERE usf_type = \'EMAIL\' ';
-		
+                  JOIN '. TBL_USER_DATA .' ON usd_usf_id = usf_id
+                 WHERE usf_type = \'EMAIL\'
+                   AND usd_usr_id = '.$gCurrentUser->getValue('usr_id').'
+                   AND usd_value IS NOT NULL';
+
 		$pdoStatement = $gDb->query($sql);
         $possible_emails = $pdoStatement->fetchColumn();
-		
+
 		$form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
-		
+
 		if($possible_emails > 1)
 		{
 			$sql   = 'SELECT email.usd_value as ID, email.usd_value as email
@@ -417,7 +420,7 @@ elseif (!isset($message_result))
                WHERE usr_id = '. $gCurrentUser->getValue('usr_id'). '
                  AND usr_valid   = 1
             GROUP BY email.usd_value, email.usd_value';
-			
+
 			$form->addSelectBoxFromSql('mailfromid', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sql, array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false));
 		}
 		else
