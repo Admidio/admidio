@@ -23,8 +23,8 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',   'int');
-$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
+$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',   'numeric');
+$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric');
 
 // tempfolder
 // change this value if your provider requires the usage of special directories (e.g. HostEurope)
@@ -127,7 +127,7 @@ if($getPhotoNr == null)
     $sql = 'SELECT *
               FROM '. TBL_PHOTOS. '
              WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
-    if($getPhotoId === 0)
+    if($getPhotoId == 0)
     {
         $sql = $sql.' AND (pho_pho_id_parent IS NULL) ';
     }
@@ -202,8 +202,7 @@ if($getPhotoNr == null)
     fpassthru($fp);
 
     unlink($zipname);
-}
-else
+} else
 {
     // download single file
     header('Content-Description: File Transfer');

@@ -17,8 +17,8 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getItemId  = admFuncVariableIsValid($_GET, 'item_id',  'int');
-$getNewItem = admFuncVariableIsValid($_GET, 'new_item', 'int');
+$getItemId  = admFuncVariableIsValid($_GET, 'item_id',  'numeric');
+$getNewItem = admFuncVariableIsValid($_GET, 'new_item', 'numeric');
 
 $registrationOrgId = $gCurrentOrganization->getValue('org_id');
 
@@ -29,13 +29,13 @@ if (!$gCurrentUser->editInventory())
 }
 
 // if new_inventory isn't set and no inventory id is set then show dialog to create a inventory
-if($getItemId === 0 && $getNewItem === 0)
+if($getItemId == 0 && $getNewItem == 0)
 {
     $getNewItem = 1;
 }
 
 // set headline of the script
-if($getNewItem === 1)
+if($getNewItem == 1)
 {
     $headline = $gL10n->get('PRO_ADD_inventory');
 }
@@ -45,7 +45,7 @@ else
 }
 
 // inventory-ID nur uebernehmen, wenn ein vorhandener Benutzer auch bearbeitet wird
-if($getItemId > 0 && $getNewItem === 1)
+if($getItemId > 0 && $getNewItem != 0)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -147,7 +147,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
                 $fieldProperty = FIELD_DEFAULT;
                 $fieldHelpId   = null;
 
-                if(!$gCurrentUser->isWebmaster() && $getNewItem === 0)
+                if(!$gCurrentUser->isWebmaster() && $getNewItem == 0)
                 {
                     $fieldProperty = FIELD_DISABLED;
                 }

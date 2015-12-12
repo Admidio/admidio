@@ -16,7 +16,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'int');
+$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
 
 // Initialize local parameters
 $showSystemCategory = false;

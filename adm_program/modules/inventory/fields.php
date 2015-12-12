@@ -44,7 +44,7 @@ $page->addJavascript('
         for(i=0;i < childs.length; i++) {
             if(childs[i].tagName === "TR") {
                 actRowCount++;
-                if(actSequence > 0 && nextNode === null) {
+                if(actSequence > 0 && nextNode == null) {
                     nextNode = childs[i];
                 }
 

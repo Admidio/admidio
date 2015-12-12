@@ -16,8 +16,8 @@
 require_once('common.php');
 
 // Initialize and check the parameters
-$getActivationId = admFuncVariableIsValid($_GET, 'aid',    'string', array('requireValue' => true));
-$getUserId       = admFuncVariableIsValid($_GET, 'usr_id', 'int',    array('requireValue' => true));
+$getActivationId = admFuncVariableIsValid($_GET, 'aid',    'string',  array('requireValue' => true));
+$getUserId       = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('requireValue' => true));
 
 // Systemmails und Passwort zusenden muessen aktiviert sein
 if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_recovery'] != 1)

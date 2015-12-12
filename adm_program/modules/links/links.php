@@ -19,10 +19,10 @@ require_once('../../system/common.php');
 unset($_SESSION['links_request']);
 
 // Initialize and check the parameters
-$getStart    = admFuncVariableIsValid($_GET, 'start',    'int');
+$getStart    = admFuncVariableIsValid($_GET, 'start',    'numeric');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('LNK_WEBLINKS')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
-$getLinkId   = admFuncVariableIsValid($_GET, 'id',       'int');
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'numeric');
+$getLinkId   = admFuncVariableIsValid($_GET, 'id',       'numeric');
 
 // check if the module is enabled for use
 if ($gPreferences['enable_weblinks_module'] == 0)
@@ -102,7 +102,7 @@ if($weblinks->getId() == 0)
     $LinksMenu->addForm($navbarForm->show(false));
 }
 
-if ($weblinksCount === 0)
+if ($weblinksCount == 0)
 {
     // no weblink found
     if ($weblinks->getId() > 0)

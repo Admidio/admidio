@@ -16,10 +16,10 @@
 require_once('common.php');
 
 // Initialize and check the parameters
-$getMessageId    = admFuncVariableIsValid($_GET, 'message_id',    'string', array('directOutput' => true, 'requireValue' => true));
-$getMessageTitle = admFuncVariableIsValid($_GET, 'message_title', 'string', array('directOutput' => true, 'defaultValue' => 'SYS_NOTE'));
-$getMessageVar1  = admFuncVariableIsValid($_GET, 'message_var1',  'string', array('directOutput' => true));
-$getInlineView   = admFuncVariableIsValid($_GET, 'inline',        'bool',   array('directOutput' => true));
+$getMessageId    = admFuncVariableIsValid($_GET, 'message_id',    'string',  array('directOutput' => true, 'requireValue' => true));
+$getMessageTitle = admFuncVariableIsValid($_GET, 'message_title', 'string',  array('directOutput' => true, 'defaultValue' => 'SYS_NOTE'));
+$getMessageVar1  = admFuncVariableIsValid($_GET, 'message_var1',  'string',  array('directOutput' => true));
+$getInlineView   = admFuncVariableIsValid($_GET, 'inline',        'boolean', array('directOutput' => true));
 
 header('Content-type: text/html; charset=utf-8');
 

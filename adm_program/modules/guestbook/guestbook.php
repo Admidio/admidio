@@ -13,8 +13,8 @@
  * headline   - Title of the guestbook module. This will be shown in the whole module.
  *              (Default) GBO_GUESTBOOK
  * id         - Id of one guestbook entry that should be shown
- * moderation : false (Default) - Guestbookviww
- *              true - Moderation mode, every entry could be released
+ * moderation : 0 (Default) - Guestbookviww
+ *              1 - Moderation mode, every entry could be released
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
@@ -35,18 +35,18 @@ elseif($gPreferences['enable_guestbook_module'] == 2)
 }
 
 // Initialize and check the parameters
-$getStart      = admFuncVariableIsValid($_GET, 'start',      'int');
+$getStart      = admFuncVariableIsValid($_GET, 'start',      'numeric');
 $getHeadline   = admFuncVariableIsValid($_GET, 'headline',   'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
-$getGboId      = admFuncVariableIsValid($_GET, 'id',         'int');
-$getModeration = admFuncVariableIsValid($_GET, 'moderation', 'bool');
+$getGboId      = admFuncVariableIsValid($_GET, 'id',         'numeric');
+$getModeration = admFuncVariableIsValid($_GET, 'moderation', 'boolean');
 
-if($getModeration && !$gCurrentUser->editGuestbookRight())
+if($getModeration == 1 && !$gCurrentUser->editGuestbookRight())
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // Navigation faengt hier im Modul an, wenn keine Eintrag direkt aufgerufen wird
-if($getGboId === 0)
+if($getGboId == 0)
 {
     $gNavigation->clear();
 }
@@ -92,7 +92,7 @@ $page->addJavascript('
 ');
 
 // add headline and title of module
-if($getModeration)
+if($getModeration == 1)
 {
     $page->setHeadline($gL10n->get('GBO_MODERATE_VAR', $getHeadline));
 }
@@ -114,7 +114,7 @@ if ($getGboId > 0)
 // pruefen ob das Modul Moderation aktiviert ist
 if ($gPreferences['enable_guestbook_moderation'] > 0)
 {
-    if($getModeration)
+    if($getModeration == 1)
     {
         $conditions .= ' AND (  gbo_locked = 1
                              OR EXISTS (SELECT 1 FROM '.TBL_GUESTBOOK_COMMENTS.'
@@ -149,21 +149,21 @@ else
 // get module menu
 $guestbookMenu = $page->getMenu();
 
-if($getGboId === 0 && !$getModeration)
+if($getGboId == 0 && $getModeration == 0)
 {
     // show link to create new guestbook entry
     $guestbookMenu->addItem('admMenuItemNewEntry', $g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?headline='. $getHeadline,
                             $gL10n->get('GBO_CREATE_ENTRY'), 'add.png');
 }
 
-if($getGboId > 0 || $getModeration)
+if($getGboId > 0 || $getModeration == 1)
 {
     // show link to navigate back to guestbook
     $guestbookMenu->addItem('admMenuItemNavigateBack', $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline,
                             $gL10n->get('GBO_BACK_TO_GUESTBOOK'), 'back.png');
 }
 
-if(!$getModeration && $gCurrentUser->editGuestbookRight() && $gPreferences['enable_guestbook_moderation'] > 0)
+if($getModeration == 0 && $gCurrentUser->editGuestbookRight() && $gPreferences['enable_guestbook_moderation'] > 0)
 {
     // show link to moderation with number of entries that must be moderated
     $sql = 'SELECT (SELECT COUNT(*) FROM '. TBL_GUESTBOOK. '
@@ -269,7 +269,7 @@ else
                 $guestbook->getValue('gbo_text'));
 
                 // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
-                if($getModeration && $guestbook->getValue('gbo_locked') == 1)
+                if($getModeration == 1 && $guestbook->getValue('gbo_locked') == 1)
                 {
                     $page->addHtml('
                     <div class="btn-group" role="group">
@@ -283,7 +283,7 @@ else
                 $conditions = '';
 
                 // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
-                if ($gPreferences['enable_guestbook_moderation'] > 0 && $getModeration)
+                if ($gPreferences['enable_guestbook_moderation'] > 0 && $getModeration == 1)
                 {
                     $conditions .= ' AND gbc_locked = 1 ';
                 }
@@ -300,9 +300,9 @@ else
                 $commentStatement = $gDb->query($sql);
 
                 // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...
-                if ($getGboId === 0 && $commentStatement->rowCount() > 0)
+                if ($getGboId == 0 && $commentStatement->rowCount() > 0)
                 {
-                    if($gPreferences['enable_intial_comments_loading'] == 1 || $getModeration)
+                    if($gPreferences['enable_intial_comments_loading'] == 1 || $getModeration == 1)
                     {
                         $visibility_show_comments = 'hidden';
                         $display_show_comments    = 'none';
@@ -331,7 +331,7 @@ else
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
                     $page->addHtml('<div id="comments_'. $gboId. '" class="admidio-guestbook-comments">');
-                        if($gPreferences['enable_intial_comments_loading'] == 1 || $getModeration)
+                        if($gPreferences['enable_intial_comments_loading'] == 1 || $getModeration == 1)
                         {
                             // Get setzen da diese Datei eigentlich als Aufruf ueber Javascript gedacht ist
                             $_GET['cid'] = $gboId;
@@ -346,9 +346,9 @@ else
                     $page->addHtml('</div>');
                 }
 
-                if ($getGboId === 0 && $commentStatement->rowCount() === 0
+                if ($getGboId == 0 && $commentStatement->rowCount() === 0
                 && ($gCurrentUser->commentGuestbookRight() || $gPreferences['enable_gbook_comments4all'] == 1)
-                && !$getModeration)
+                && $getModeration == 0)
                 {
                     // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
                     $load_url = $g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$guestbook->getValue('gbo_id');

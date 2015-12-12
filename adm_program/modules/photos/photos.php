@@ -36,12 +36,12 @@ elseif ($gPreferences['enable_photo_module'] == 2)
 }
 
 // Initialize and check the parameters
-$getPhotoId        = admFuncVariableIsValid($_GET, 'pho_id',          'int');
-$getHeadline       = admFuncVariableIsValid($_GET, 'headline',        'string', array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
-$getStart          = admFuncVariableIsValid($_GET, 'start',           'int');
-$getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'int', array('defaultValue' => 1));
-$getLocked         = admFuncVariableIsValid($_GET, 'locked',          'int', array('defaultValue' => -1));
-$getPhotoNr        = admFuncVariableIsValid($_GET, 'photo_nr',        'int');
+$getPhotoId        = admFuncVariableIsValid($_GET, 'pho_id',          'numeric');
+$getHeadline       = admFuncVariableIsValid($_GET, 'headline',        'string',  array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
+$getStart          = admFuncVariableIsValid($_GET, 'start',           'numeric');
+$getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'numeric', array('defaultValue' => 1));
+$getLocked         = admFuncVariableIsValid($_GET, 'locked',          'numeric', array('defaultValue' => -1));
+$getPhotoNr        = admFuncVariableIsValid($_GET, 'photo_nr',        'numeric');
 
 unset($_SESSION['photo_album_request']);
 unset($_SESSION['ecard_request']);
@@ -75,7 +75,7 @@ else
 }
 
 // Wurde keine Album uebergeben kann das Navigationsstack zurueckgesetzt werden
-if ($getPhotoId === 0)
+if ($getPhotoId == 0)
 {
     $gNavigation->clear();
 }
@@ -91,7 +91,7 @@ if($getPhotoId > 0 && $photoAlbum->getValue('pho_org_id') != $gCurrentOrganizati
 
 /*********************LOCKED************************************/
 // Falls gefordert und Foto-edit-rechte, aendern der Freigabe
-if($getLocked === 0 || $getLocked === 1)
+if($getLocked == '1' || $getLocked == '0')
 {
     // erst pruefen, ob der User Fotoberarbeitungsrechte hat
     if(!$gCurrentUser->editPhotoRight())
@@ -384,7 +384,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 $sql = 'SELECT *
           FROM '. TBL_PHOTOS. '
          WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
-if($getPhotoId === 0)
+if($getPhotoId == 0)
 {
     $sql = $sql.' AND (pho_pho_id_parent IS NULL) ';
 }

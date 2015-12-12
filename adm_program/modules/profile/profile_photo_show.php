@@ -10,16 +10,16 @@
  * Parameters:
  *
  * usr_id    : id of user whose photo should be changed
- * new_photo : false - show current stored user photo
- *             true  - show uploaded photo of current session
+ * new_photo : 0 (Default) show current stored user photo
+ *             1 show uploaded photo of current session
  ***********************************************************************************************
  */
 require('../../system/common.php');
 require('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserId   = admFuncVariableIsValid($_GET, 'usr_id',    'int', array('requireValue' => true));
-$getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'bool');
+$getUserId   = admFuncVariableIsValid($_GET, 'usr_id',    'numeric', array('requireValue' => true));
+$getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'boolean');
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $image   = null;
@@ -40,7 +40,7 @@ if(!$gCurrentUser->hasRightViewProfile($user))
 }
 
 // Foto aus adm_my_files
-if($gPreferences['profile_photo_storage'] == 1 && !$getNewPhoto)
+if($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 0)
 {
     if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
     {
@@ -49,7 +49,7 @@ if($gPreferences['profile_photo_storage'] == 1 && !$getNewPhoto)
     $image = new Image($picpath);
 }
 // Foto aus der Datenbank
-elseif($gPreferences['profile_photo_storage'] == 0 && !$getNewPhoto)
+elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 0)
 {
     if(strlen($user->getValue('usr_photo')) != null)
     {
@@ -62,13 +62,13 @@ elseif($gPreferences['profile_photo_storage'] == 0 && !$getNewPhoto)
     }
 }
 // neues Foto, Ordnerspeicherung
-elseif($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto)
+elseif($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 1)
 {
     $picpath = SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg';
     $image = new Image($picpath);
 }
 // neues Foto, Datenbankspeicherung
-elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto)
+elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 1)
 {
     $image = new Image();
     $image->setImageFromData($gCurrentSession->getValue('ses_binary'));

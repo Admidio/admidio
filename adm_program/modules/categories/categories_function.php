@@ -30,11 +30,11 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
-$getType     = admFuncVariableIsValid($_GET, 'type',     'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
-$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
-$getTitle    = admFuncVariableIsValid($_GET, 'title',    'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
-$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'numeric');
+$getType     = admFuncVariableIsValid($_GET, 'type',     'string',  array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
+$getMode     = admFuncVariableIsValid($_GET, 'mode',     'numeric', array('requireValue' => true));
+$getTitle    = admFuncVariableIsValid($_GET, 'title',    'string',  array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
+$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string',  array('validValues' => array('UP', 'DOWN')));
 
 // Modus und Rechte pruefen
 if($getType === 'ROL' && !$gCurrentUser->manageRoles())
