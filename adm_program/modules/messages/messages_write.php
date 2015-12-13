@@ -71,7 +71,7 @@ if ($getMsgId > 0)
     $getSubject = $message->getValue('msg_subject');
     $getUserId  = $message->getConversationPartner($gCurrentUser->getValue('usr_id'));
 
-    $message_result = $message->getConversation($getMsgId);
+    $messageStatement = $message->getConversation($getMsgId);
 }
 
 $maxNumberRecipients = 1;
@@ -200,7 +200,7 @@ if ($getMsgType === 'PM')
     // add form to html page
     $page->addHtml($form->show(false));
 }
-elseif (!isset($message_result))
+elseif (!isset($messageStatement))
 {
     if ($getUserId > 0)
     {
@@ -486,11 +486,10 @@ elseif (!isset($message_result))
     $page->addHtml($form->show(false));
 }
 
-if (isset($message_result))
+if (isset($messageStatement))
 {
-    error_log("jetzt aber");
     $page->addHtml('<br>');
-    while ($row = $message_result->fetch())
+    while ($row = $messageStatement->fetch())
     {
         if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))
         {

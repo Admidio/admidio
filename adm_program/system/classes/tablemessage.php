@@ -68,7 +68,7 @@ class TableMessage extends TableAccess
     /**
      * Set a new value for a column of the database table.
      * @param int $usrId of the receiver - just for security reasons.
-     * @return Returns @b answer of the SQL execution
+     * @return object Returns @b answer of the SQL execution
      */
     public function setReadValue($usrId)
     {
@@ -81,7 +81,7 @@ class TableMessage extends TableAccess
     /**
      * get a list with all messages of an conversation.
      * @param int $msgId of the conversation - just for security reasons.
-     * @return Returns @b answer of the SQL execution
+     * @return object Returns @b answer of the SQL execution
      */
     public function getConversation($msgId)
     {
