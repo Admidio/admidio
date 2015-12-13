@@ -81,6 +81,7 @@
   <string name="DAT_PARTICIPANTS_LIMIT">Limited number of participants</string>
   <string name="DAT_PARTICIPATE_AT_DATE">Join the event as organizer</string>
   <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">You will be the event organiser and are allowed to add/remove further participants or name them as additional organiser.</string>
+  <string name="DAT_PERIOD_FROM_TO">Time period from #VAR1# to #VAR2# </string>
   <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Previous #VAR1#</string>
   <string name="DAT_REGISTRATION_NOT_POSSIBLE">Registration is closed.</string>
   <string name="DAT_REGISTRATION_POSSIBLE">Enable registration to this event.</string>
@@ -129,6 +130,9 @@
   <string name="DOW_FILE_TO_LARGE">Uploaded files size is greater than allowed (maximum file size: #VAR1# MB).</string>
   <string name="DOW_FILE_TYPE">File type</string>
   <string name="DOW_FILE_UPLOADED">File #VAR1_BOLD# was uploaded.</string>
+  <string name="DOW_FILES_UPLOAD_SUCCESSFUL">All files were uploaded successfully.\n\nDialog can be closed.</string>
+  <string name="DOW_FILES_UPLOAD_NOT_SUCCESSFUL">Not all files were uploaded successfully.</string>
+  <string name="DOW_FILES_UPLOAD_DESC">Please select all files to be uploaded into the folder #VAR1_BOLD#</string>
   <string name="DOW_FILES_UPLOADED">#VAR1# files have been uploaded successfully.</string>
   <string name="DOW_FOLDER_CREATED">Folder #VAR1_BOLD# was created.</string>
   <string name="DOW_FOLDER_EXISTS">Folder #VAR1# already exists!\n\nPlease select different folder name.</string>
@@ -144,9 +148,12 @@
   <string name="DOW_NEW_FILE_NAME">New file name</string>
   <string name="DOW_NEW_NAME">New name</string>
   <string name="DOW_PREVIOUS_NAME">Previous name</string>
+  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">On this page you can adjust the visibility and enable downloads for the folder #VAR1_BOLD#. The permissions are inherited to all subfolders and existing permissions in the subfolders will be overwritten. There are only roles available that have access to the parent folder.</string>
+  <string name="DOW_SELECT_FILES">Select files</string>
   <string name="DOW_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
   <string name="DOW_UNMANAGED_FILES">Unmanaged files</string>
   <string name="DOW_UPLOAD_FILE_TO_FOLDER">Upload file to folder #VAR1_BOLD#</string>
+  <string name="DOW_UPLOAD_FILES">Upload files</string>
   <string name="DOW_UPLOAD_POST_EMPTY">File could not be uploaded or invalid page call.\n\nProbably the maximum file upload size has been exeeded (#VAR1#B for this server).</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Greeting card sent by</string>
@@ -194,6 +201,7 @@
   <string name="GBO_INITIAL_COMMENTS_LOADING_DESC">If this option is active and a guestbook page is being loaded, comments on this page will be loaded right away. Otherwise user has to click a hyperlink in order to reveal comments. (default: no)</string>
   <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">Latest guestbook entries of organisation #VAR1#</string>
   <string name="GBO_MODERATE_ENTRIES">Moderate posts</string>
+  <string name="GBO_MODERATE_VAR">Moderate #VAR1#</string>
   <string name="GBO_ONLY_VISITORS">Visitors only</string>
   <string name="GBO_SHOW_COMMENTS">Display comments</string>
   <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Display #VAR1# comment(s) of this guest book entry</string>
@@ -223,6 +231,7 @@
   <string name="INS_DATA_DO_NOT_MATCH">Data from #VAR1_BOLD# does not comply with information provided in installation wizard.\n\nCheck config.php and all other information.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Administrator\'s details</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Provide here administrator\'s name, e-mail and access information. Log in with same user after installation.</string>
+  <string name="INS_DATA_OF_ORGANIZATION">Data of the organization</string>
   <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Database update is not required</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">File #VAR1_BOLD# could not be found in folder #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_IS_UPDATED">Updating database</string>
@@ -254,7 +263,6 @@
   <string name="INS_MEMBERSHIP">Membership</string>
   <string name="INS_MESSENGER">Messenger</string>
   <string name="INS_MYSQL_LOGIN_NOT_COMPLETELY">Not all MySQL database access information has been provided!</string>
-  <string name="INS_NAME_OF_ORGANIZATION">Organization name</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Could not find the current installation. If you\'ve used Admidio 1.x update to Admidio 2.x first. Afterwards you can update the version to #VAR1#. If you are already using Admidio 2.x or higher please check the consistency of your database.</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Organisation #VAR1_BOLD# already exists. Please select another name.</string>
   <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Provided organization name is not complete!</string>
@@ -319,6 +327,7 @@
   <string name="LST_ACTIVE_MEMBERS">Active Members</string>
   <string name="LST_ACTIVE_ROLES">Overview of active roles</string>
   <string name="LST_ADD_COLUMN">Add column</string>
+  <string name="LST_ADD_COLUMNS_DESC">Assign any number of columns corresponding to profile fields in the table below. In addition, you can specify the default sorting and add conditions under which the respective members are to be filtered.</string>
   <string name="LST_CHOOSE_LIST">Choose list</string>
   <string name="LST_CHOOSE_ROLE">Choose role for selected list.</string>
   <string name="LST_COLUMN">Column</string>
@@ -331,10 +340,13 @@
   <string name="LST_COUNTRY_ISO" translation="edited">The country needs to be specified as Code ISO 3166 ALPHA-3 (3 characters)</string>
   <string name="LST_CREATE_NEW_CONFIGURATION">Creating new configuration</string>
   <string name="LST_CREATE_OWN_LIST">Create own list</string>
+  <string name="LST_DEFAULT_CONFIGURATION">Default configuration</string>
+  <string name="LST_DEFAULT_CONFIGURATION_DESC">One of the predefined configurations here can be set to the default configuration for lists of this organization. Membership lists of roles not having a predefined  list configuration, are also displayed in this configuration.</string>
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">No default list configuration set defined by the administrator!\n\nContact system administrator for help.</string>
   <string name="LST_DELETE_CONFIGURATION">Delete configuration</string>
   <string name="LST_EMAIL_TO_MEMBERS">E-mail to members</string>
   <string name="LST_EMPTY_EXAMPLE_DESC">Find all users with an empty address field</string>
+  <string name="LST_ERROR_DELETE_DEFAULT_LIST">The list configuration #VAR1_BOLD# is the default configuration for lists in this organization and can not be deleted. Choose a different configuration to the standard configuration in the module settings and try to delete this configuration afterwards.</string>
   <string name="LST_EXCLUDE_EXAMPLE">Steve</string>
   <string name="LST_EXCLUDE_EXAMPLE_DESC">Find all users who are not named Steve</string>
   <string name="LST_EXPORT_TO">Export to</string>
@@ -374,6 +386,7 @@
   <string name="LST_PRESET_CONFIGURATION_DESC">As webmaster you are able to define the default configuration for all users. Configure rows and columns and save it by naming the configuration set.</string>
   <string name="LST_PRINT_PREVIEW">Print preview</string>
   <string name="LST_ROLE_INFORMATION">Role information</string>
+  <string name="LST_ROLE_MEMBERSHIP_IN_PERIOD">Members in period:</string>
   <string name="LST_ROLE_MEMBERSHIP_TO">to</string>
   <string name="LST_SAVE_CHANGES">Save changes</string>
   <string name="LST_SAVE_CONFIGURATION">Save configuration</string>
@@ -530,6 +543,8 @@
   <string name="MSG_ACTIVATE_PM_MODULE_DESC">This option allows to deactivate private messages. The module will neither be callable nor listed in the overview. (Default: Activated)</string>
   <string name="MSG_ACTIVE_FORMER_SHORT">Active and former</string>
   <string name="MSG_CHAT">Chat</string>
+  <string name="MSG_DELETE_DESC">Should message #VAR1_BOLD# now be removed?</string>
+  <string name="MSG_DELETE_PM">Because it is a private message, the message is only marked for deletion and is waiting for an action of the conversation partner.</string>
   <string name="MSG_FORMER_MEMBERS">Former members</string>
   <string name="MSG_OPPOSITE">Business partner</string>
   <string name="MSG_PM_SEND">Private message has been send to #VAR1_BOLD#.</string>
@@ -612,6 +627,7 @@
   <string name="ORG_FAST_REGISTRATION">Quick registration</string>
   <string name="ORG_FIELD_DESCRIPTION">Define unlimited additional fields. Fields will be displayed and can be edited in user\'s profile. These fields will be available in own list, too.</string>
   <string name="ORG_FIELD_DISABLED">Field editable only for user with permission #VAR1_BOLD#</string>
+  <string name="ORG_FIELD_DISABLED_DESC">A locked profile field can no longer be edited by the user in its own profile. It can be edited only by users who have the permission to edit all users. The Leaders of a role with the permission to edit profiles of the role members, can also edit this profile field.</string>
   <string name="ORG_FIELD_DOWN">Move profile field down</string>
   <string name="ORG_FIELD_EXIST">Field with same name already exists in this category.</string>
   <string name="ORG_FIELD_HIDDEN">Field viewable for authorized users only (own profile &amp; role authorization)</string>
@@ -622,7 +638,7 @@
   <string name="ORG_FIELD_NOT_HIDDEN">Field to see for all users.</string>
   <string name="ORG_FIELD_NOT_MANDATORY">Field is mandatory. It must be filled in.</string>
   <string name="ORG_FIELD_UP">Move profile field up</string>
-  <string name="ORG_FIELD_URL_DESC">This URL will link the content with the profile, provided by the user in this field. Placeholder %user_content% can be integrated into the URL if needed. This content has been provided by the user.\n\nExample:\nURL: https://www.google.com/search?q=%user_content%\nContent: Admidio\nLink in the profil: https://www.google.com/search?q=Admidio</string>
+  <string name="ORG_FIELD_URL_DESC">This URL will link the content with the profile, provided by the user in this field. Placeholder %user_content% can be integrated into the URL if needed. This content has been provided by the user.\n\nExample:\nURL: https://www.google.de/search?q=%user_content%\nContent: Admidio\nLink in the profil: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/index.php)</string>
   <string name="ORG_INVALID_THEME">Could not find a valid theme.</string>
@@ -672,6 +688,8 @@
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Here you can justify the text of each system notification. The texts are divided into two parts (subject and content) and are identified by #subject# and #content#. The content for each section follows it.\n\nIn each mail the following wildcards can be used. They will be replaced with the corresponding content at runtime</string>
   <string name="ORG_TIME_FORMAT">Time format</string>
   <string name="ORG_TIME_FORMAT_DESC">Format complies with PHP function #VAR1#. (default: H:i)</string>
+  <string name="ORG_TIMEZONE">Time zone</string>
+  <string name="ORG_TIMEZONE_DESC">This is the set time zone. If this is changed later in the config.php file of Admidio, so already recorded dates and times are not adjusted to the new time zone.</string>
   <string name="ORG_URL">URL</string>
   <string name="ORG_VALUE_LIST">Value list</string>
   <string name="ORG_VALUE_LIST_DESC">Define the items of the drop-down menu or the option boxes here.  Provide one drop-down or radio button item per line.\n\nInstead of the text, the selected position in the list will be stored in the profile. If text in a line should change, all assigned users will be able to see the new text in their profiles right away. If a menu item is being moved to another line, another entry might be shown in the user\'s profile.\n\nIn case of a radio button, an icon can be displayed instead of a text element, too. In order to do this, the name of an icon in the theme folder can be provided (e.g. ok.png) or the external URL of a picture files (e.g. http://www.example.com/example.jpg). By using a pipe, additional tool tip can be used with the icon set (e.g. female.png|female)</string>
@@ -705,6 +723,8 @@
   <string name="PHO_ALBUM_UNLOCK">Unlock album</string>
   <string name="PHO_ALBUM_WRITE_SUCCESS">Album has been successfully created / changed.</string>
   <string name="PHO_BACK_TO_ALBUM">back to album</string>
+  <string name="PHO_CAPTION_SIZE">Caption size</string>
+  <string name="PHO_CAPTION_SIZE_DESC">The size of the caption is proportional to the image size, calculated by the formula \"Image size / Devisior\". By increasing the devisor,  the font size will be reduced. (Default: 40)</string>
   <string name="PHO_CREATE_ALBUM">Create album</string>
   <string name="PHO_DISPLAY_PHOTOS">Photo display</string>
   <string name="PHO_DISPLAY_PHOTOS_DESC">With this option you can define how the images will be displayed within the foto module. This can be done with a modal window which will be opened as seperate browser window. The image preview will stay active in the background. If the image should be displayed in the same window the currenct image preview will be closed. The third option allows to show the image in a popup window which can be used in addition to the image preview. (Default: Modal window)</string>
@@ -857,6 +877,7 @@
   <string name="ROL_DEPENDENT">Dependent</string>
   <string name="ROL_EDIT_ROLE">Edit role</string>
   <string name="ROL_ENABLE_ROLE">Activate role</string>
+  <string name="ROL_HINT_DELETE_ROLE">If you select #VAR1_BOLD# the role and the assignment of members to it will definitely be deleted in the database. It will not be possible to show data of this role anymore.</string>
   <string name="ROL_INACTIV_ROLE">Inactive role</string>
   <string name="ROL_INACTIV_ROLE_DESC">You are able to deactivate the role. This way, membership information will be preserved and later it will be still possible to check who was a member of the current role. However this role will not appear anymore in general overviews.</string>
   <string name="ROL_INACTIV_ROLES">Inactive roles</string>
@@ -1176,6 +1197,7 @@
   <string name="SYS_PERIOD">Time period</string>
   <string name="SYS_PDF">PDF</string>
   <string name="SYS_PHONE">Phone</string>
+  <string name="SYS_PHONE_INVALID_CHAR">The phone number in the field #VAR1_BOLD# has invalid characters.\n\nAllowed are only numbers 0-9 and the special characters +-/ ().</string>
   <string name="SYS_PHOTO">Photo</string>
   <string name="SYS_PHOTOS">Photos</string>
   <string name="SYS_PHP_INFO">All PHP settings</string>
@@ -1239,7 +1261,6 @@
   <string name="SYS_SIZE">Size</string>
   <string name="SYS_SOCIAL_NETWORKS">Social media</string>
   <string name="SYS_START" description="Start of a date">Start</string>
-  <string name="SYS_STATUS">Status</string>
   <string name="SYS_STILL_X_CHARACTERS">still #VAR1# characters</string>
   <string name="SYS_STOP">Stop</string>
   <string name="SYS_SUNDAY">Sunday</string>
