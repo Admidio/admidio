@@ -266,9 +266,9 @@ class ProfileFields
                 }
 
                 // replace a variable in url with user value
-                if(strpos($this->mProfileFields[$fieldNameIntern]->getValue('usf_url'), '%user_content%') !== false)
+                if(strpos($this->mProfileFields[$fieldNameIntern]->getValue('usf_url'), '#user_content#') !== false)
                 {
-                    $htmlValue = preg_replace('/%user_content%/', $value, $htmlValue);
+                    $htmlValue = preg_replace('/#user_content#/', $value, $htmlValue);
                 }
             }
             $value = $htmlValue;
