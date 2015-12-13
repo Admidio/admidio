@@ -520,7 +520,7 @@
     <string name="MEM_NOT_EDIT">Nicht bearbeiten</string>
     <string name="MEM_PROFILE_FIELD">Profilfeld</string>
     <string name="MEM_REMOVE_MEMBERSHIP">Willst du die Mitgliedschaft des Benutzers #VAR1# bei #VAR2# beenden?</string>
-    <string name="MEM_REMOVE_MEMBERSHIP_OK">Die Mitgliedschaft des Benutzers bei #VAR1# wurde erfolgreich beendet!</string>
+    <string name="MEM_REMOVE_MEMBERSHIP_OK">Die Mitgliedschaft des Benutzers #VAR1_BOLD# bei #VAR2_BOLD# wurde erfolgreich beendet!</string>
     <string name="MEM_REMOVE_USER">Benutzer entfernen</string>
     <string name="MEM_REMOVE_USER_DESC">Wenn du #VAR1_BOLD# auswählst, wird der Datensatz unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.</string>
     <string name="MEM_REPLACE">Ersetzen</string>
