@@ -1072,8 +1072,6 @@
     <string name="SYS_FIELDS_EMPTY">Es sind nicht alle Felder gefüllt worden.</string>
     <string name="SYS_FILE">Datei</string>
     <string name="SYS_FILE_NOT_EXIST">Die ausgewählte Datei existiert nicht auf dem Server.</string>
-    <string name="SYS_FILE_PROGRESS">%0 von %1 übertragen</string>
-    <string name="SYS_FILE_TO_LARGE">Datei ist zu groß.</string>
     <string name="SYS_FILE_TO_LARGE_SERVER">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von #VAR1# MB.</string>
     <string name="SYS_FILE_UPLOADS">Dateiuploads</string>
     <string name="SYS_FILENAME_EMPTY">Es wurde kein Dateiname angegeben!</string>
@@ -1097,7 +1095,6 @@
     <string name="SYS_HELP">Hilfe</string>
     <string name="SYS_HIDE">Ausblenden</string>
     <string name="SYS_HOMEPAGE">Startseite</string>
-    <string name="SYS_HTTP_ERROR">HTTP Fehler (%1)</string>
     <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Webmaster deaktiviert.</string>
     <string name="SYS_ICON">Icon</string>
     <string name="SYS_INACTIVE">Inaktiv</string>
@@ -1280,8 +1277,6 @@
     <string name="SYS_TIME_TO">Uhrzeit bis</string>
     <string name="SYS_TITLE">Titel</string>
     <string name="SYS_TO" description="E-Mail">An</string>
-    <string name="SYS_TO_MANY_FILES">Du kannst maximal %0 Dateien hinzufügen.</string>
-    <string name="SYS_TOTAL_PROGRESS">übertrage Datei %0 von %1</string>
     <string name="SYS_TUESDAY">Dienstag</string>
     <string name="SYS_TYPE">Typ</string>
     <string name="SYS_UNKNOWN">Unbekannt</string>
@@ -1290,7 +1285,7 @@
     <string name="SYS_UPDATE">Aktualisieren</string>
     <string name="SYS_UPLOAD_MAX_FILESIZE">max. Uploadgröße</string>
     <string name="SYS_UPLOAD_NAME_ERROR">Der Dateiname darf nicht "submit" heißen.</string>
-    <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-_:/#?=% .</string>
+    <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-+_:/#?= .</string>
     <string name="SYS_USER">Benutzer</string>
     <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</string>
     <string name="SYS_USER_NO_EMAIL">Der Benutzer #VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
