@@ -39,5 +39,6 @@
     <step id="370">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%organization_homepage%', '#organization_homepage#')</step>
     <step id="380">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%variable1%', '#variable1#')</step>
     <step id="390">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%variable2%', '#variable2#')</step>
+    <step id="400">UPDATE %PREFIX%_user_fields SET usf_url = REPLACE(usf_url, '%user_content%', '#user_content#') WHERE usf_url LIKE '%user_content%'</step>
     <step>stop</step>
 </update>
