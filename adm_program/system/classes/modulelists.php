@@ -158,7 +158,7 @@
  *
  *                      )
  *
- *                  [headline] => �bersicht der aktiven Rollen
+ *                  [headline] => Übersicht der aktiven Rollen
  *                  [id] => 0
  *                  [mode] => Default
  *                  [order] => ASC

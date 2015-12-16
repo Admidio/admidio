@@ -233,7 +233,7 @@ elseif (!isset($messageStatement))
     // dann soll das Formular gefuellt werden mit den Werten aus der Session
     if (strpos($gNavigation->getUrl(), 'message_send.php') > 0 && isset($_SESSION['message_request']))
     {
-        // Das Formular wurde also schon einmal ausgef�llt,
+        // Das Formular wurde also schon einmal ausgefüllt,
         // da der User hier wieder gelandet ist nach der Mailversand-Seite
         $form_values = strStripSlashesDeep($_SESSION['message_request']);
         unset($_SESSION['message_request']);
@@ -385,11 +385,11 @@ elseif (!isset($messageStatement))
 
     }
 
-    $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'                       => FIELD_REQUIRED,
-                                                                      'multiselect'                    => true,
-                                                                      'maximumSelectionNumber'         => $maxNumberRecipients,
-                                                                      'helpTextIdLabel'                => 'MAI_SEND_MAIL_TO_ROLE',
-                                                                      'defaultValue'                   => $preload_data));
+    $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'               => FIELD_REQUIRED,
+                                                                      'multiselect'            => true,
+                                                                      'maximumSelectionNumber' => $maxNumberRecipients,
+                                                                      'helpTextIdLabel'        => 'MAI_SEND_MAIL_TO_ROLE',
+                                                                      'defaultValue'           => $preload_data));
 
     $form->addLine();
 
@@ -500,33 +500,33 @@ if (isset($messageStatement))
             $sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
         }
 
-        $ReceiverName = '';
-        $message_text = htmlspecialchars_decode($row['msc_message']);
+        $receiverName = '';
+        $messageText = htmlspecialchars_decode($row['msc_message']);
         if ($getMsgType === 'PM')
         {
             // list history of this PM
-            $message_text = nl2br($row['msc_message']);
+            $messageText = nl2br($row['msc_message']);
         }
         else
         {
             $message = new TableMessage($gDb, $getMsgId);
             $receivers = $message->getValue('msg_usr_id_receiver');
             // open some additonal functions for messages
-            $modulemessages = new ModuleMessages();
-            $ReceiverName = '';
+            $moduleMessages = new ModuleMessages();
+            $receiverName = '';
             if (strpos($receivers, '|') > 0)
             {
-                $reciversplit = explode('|', $receivers);
-                foreach ($reciversplit as $value)
+                $receiverSplit = explode('|', $receivers);
+                foreach ($receiverSplit as $value)
                 {
                     if (strpos($value, ':') > 0)
                     {
-                        $ReceiverName .= '; ' . $modulemessages->msgGroupNameSplit($value);
+                        $receiverName .= '; ' . $moduleMessages->msgGroupNameSplit($value);
                     }
                     else
                     {
                         $user = new User($gDb, $gProfileFields, $value);
-                        $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                        $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
                     }
                 }
             }
@@ -534,15 +534,15 @@ if (isset($messageStatement))
             {
                 if (strpos($receivers, ':') > 0)
                 {
-                    $ReceiverName .= '; ' . $modulemessages->msgGroupNameSplit($receivers);
+                    $receiverName .= '; ' . $moduleMessages->msgGroupNameSplit($receivers);
                 }
                 else
                 {
                     $user = new User($gDb, $gProfileFields, $receivers);
-                    $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                    $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
                 }
             }
-            $ReceiverName = '<div class="panel-footer">'.$gL10n->get('MSG_OPPOSITE').': '.substr($ReceiverName, 2).'</div>';
+            $receiverName = '<div class="panel-footer">'.$gL10n->get('MSG_OPPOSITE').': '.substr($receiverName, 2).'</div>';
         }
 
         $date = new DateTimeExtended($row['msc_timestamp'], 'Y-m-d H:i:s');
@@ -558,9 +558,9 @@ if (isset($messageStatement))
                 </div>
             </div>
             <div class="panel-body">'.
-                $message_text.'
+                $messageText.'
             </div>
-            '.$ReceiverName.'
+            '.$receiverName.'
         </div>');
     }
 }

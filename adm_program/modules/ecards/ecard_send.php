@@ -85,7 +85,7 @@ foreach($_POST['ecard_recipients'] as $key => $value)
 $ecardSendResult = true;
 
 if(count($arrayRoles) > 0)
-// Wenn schon dann alle Namen und die dazugeh�rigen Emails auslesen und in die versand Liste hinzuf�gen
+// Wenn schon dann alle Namen und die dazugehörigen Emails auslesen und in die versand Liste hinzufügen
 {
     $sql = 'SELECT DISTINCT first_name.usd_value as first_name, last_name.usd_value as last_name,
                    email.usd_value as email, rol_name

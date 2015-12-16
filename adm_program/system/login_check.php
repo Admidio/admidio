@@ -19,38 +19,35 @@ $organizationId = $gCurrentOrganization->getValue('org_id');
 
 // Filter parameters
 // parameters could be from login dialog or login plugin !!!
-if(array_key_exists('usr_login_name', $_POST) && $_POST['usr_login_name'] !== '')
+/**
+ * @param string $prefix
+ */
+function initLoginParams($prefix = '')
 {
-    $loginname = $_POST['usr_login_name'];
-    $password  = $_POST['usr_password'];
+    global $bAutoLogin, $loginname, $password, $organizationId, $gPreferences;
 
-    if($gPreferences['enable_auto_login'] == 1 && array_key_exists('auto_login', $_POST) && $_POST['auto_login'] == 1)
+    $loginname = $_POST[$prefix.'usr_login_name'];
+    $password  = $_POST[$prefix.'usr_password'];
+
+    if($gPreferences['enable_auto_login'] == 1 && array_key_exists($prefix.'auto_login', $_POST) && $_POST[$prefix.'auto_login'] == 1)
     {
         $bAutoLogin = true;
     }
-
     // if user can choose organization then save the selection
-    if(array_key_exists('org_id', $_POST) && is_numeric($_POST['org_id']) && $_POST['org_id'] > 0)
+    if(array_key_exists($prefix.'org_id', $_POST) && is_numeric($_POST[$prefix.'org_id']) && $_POST[$prefix.'org_id'] > 0)
     {
-        $organizationId = $_POST['org_id'];
+        $organizationId = $_POST[$prefix.'org_id'];
     }
+}
+
+if(array_key_exists('usr_login_name', $_POST) && $_POST['usr_login_name'] !== '')
+{
+    initLoginParams('');
 }
 
 if(array_key_exists('plg_usr_login_name', $_POST) && $_POST['plg_usr_login_name'] !== '')
 {
-    $loginname = $_POST['plg_usr_login_name'];
-    $password  = $_POST['plg_usr_password'];
-
-    if($gPreferences['enable_auto_login'] == 1 && array_key_exists('plg_auto_login', $_POST) && $_POST['plg_auto_login'] == 1)
-    {
-        $bAutoLogin = true;
-    }
-
-    // if user can choose organization then save the selection
-    if(array_key_exists('plg_org_id', $_POST) && is_numeric($_POST['plg_org_id']) && $_POST['plg_org_id'] > 0)
-    {
-        $organizationId = $_POST['plg_org_id'];
-    }
+    initLoginParams('plg_');
 }
 
 if($loginname === '')
@@ -73,20 +70,23 @@ if($password === '')
 // user must have membership of one role of the organization
 
 $sql = 'SELECT DISTINCT usr_id
-          FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-         WHERE UPPER(usr_login_name) LIKE UPPER(\''.$loginname.'\')
-           AND usr_valid      = 1
-           AND mem_usr_id     = usr_id
-           AND mem_rol_id     = rol_id
-           AND mem_begin     <= \''.DATE_NOW.'\'
-           AND mem_end        > \''.DATE_NOW.'\'
-           AND rol_valid      = 1
-           AND rol_cat_id     = cat_id
-           AND cat_org_id     = '.$organizationId;
-$statement = $gDb->query($sql);
+          FROM '.TBL_MEMBERS.'
+    INNER JOIN '.TBL_USERS.'
+            ON usr_id = mem_usr_id
+    INNER JOIN '.TBL_ROLES.'
+            ON rol_id = mem_rol_id
+    INNER JOIN '.TBL_CATEGORIES.'
+            ON cat_id = rol_cat_id
+         WHERE UPPER(usr_login_name) = UPPER(\''.$loginname.'\')
+           AND usr_valid  = 1
+           AND rol_valid  = 1
+           AND mem_begin <= \''.DATE_NOW.'\'
+           AND mem_end    > \''.DATE_NOW.'\'
+           AND cat_org_id = '.$organizationId;
+$userStatement = $gDb->query($sql);
 
-$userFound = $statement->rowCount();
-$userRow   = $statement->fetch();
+$userFound = $userStatement->rowCount();
+$userRow   = $userStatement->fetch();
 
 if ($userFound === 1)
 {
@@ -143,14 +143,15 @@ else
 {
     // now check if login is not released or doesn't exists
     $sql = 'SELECT usr_id
-              FROM '. TBL_USERS. ', '.TBL_REGISTRATIONS.'
-             WHERE usr_login_name LIKE \''. $loginname. '\'
+              FROM '.TBL_USERS.'
+        INNER JOIN '.TBL_REGISTRATIONS.'
+                ON usr_id = reg_usr_id
+             WHERE UPPER(usr_login_name) = UPPER(\''. $loginname. '\')
                AND usr_valid  = 0
-               AND reg_usr_id = usr_id
                AND reg_org_id = '.$gCurrentOrganization->getValue('org_id');
-    $statement = $gDb->query($sql);
+    $userStatement = $gDb->query($sql);
 
-    if($statement->rowCount() === 1)
+    if($userStatement->rowCount() === 1)
     {
         $gMessage->show($gL10n->get('SYS_LOGIN_NOT_ACTIVATED'));
     }
