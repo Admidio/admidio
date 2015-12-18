@@ -41,11 +41,12 @@ if ($gPreferences['enable_guestbook_module'] != 1)
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // die 10 letzten Eintraege aus der DB fischen...
-$sql = 'SELECT * FROM '.TBL_GUESTBOOK.'
-        WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id').'
-          AND gbo_locked = 0
-        ORDER BY gbo_timestamp_create DESC
-        LIMIT 10 ';
+$sql = 'SELECT *
+          FROM '.TBL_GUESTBOOK.'
+         WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id').'
+           AND gbo_locked = 0
+         ORDER BY gbo_timestamp_create DESC
+         LIMIT 10';
 $statement = $gDb->query($sql);
 
 // ab hier wird der RSS-Feed zusammengestellt

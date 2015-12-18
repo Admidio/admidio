@@ -71,7 +71,8 @@ if(!$gCurrentUser->isWebmaster())
     $condition .= ' AND rol_webmaster = 0 ';
 }
 
-$sql = 'SELECT * FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+$sql = 'SELECT *
+          FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
          WHERE rol_valid   = 1
            AND rol_visible = 1
            AND rol_cat_id  = cat_id

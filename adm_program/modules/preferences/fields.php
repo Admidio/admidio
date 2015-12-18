@@ -96,7 +96,8 @@ $fieldsMenu->addItem('menu_item_new_field', $g_root_path.'/adm_program/modules/p
 $fieldsMenu->addItem('menu_item_maintain_category', $g_root_path.'/adm_program/modules/categories/categories.php?type=USF',
                      $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
 
-$sql = 'SELECT * FROM '.TBL_CATEGORIES.', '.TBL_USER_FIELDS.'
+$sql = 'SELECT *
+          FROM '.TBL_CATEGORIES.', '.TBL_USER_FIELDS.'
          WHERE cat_type   = \'USF\'
            AND usf_cat_id = cat_id
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '

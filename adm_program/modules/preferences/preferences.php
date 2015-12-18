@@ -187,7 +187,8 @@ $page->addHtml('
                         // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
                         if(!$gCurrentOrganization->hasChildOrganizations())
                         {
-                            $sql = 'SELECT org_id, org_longname FROM '.TBL_ORGANIZATIONS.'
+                            $sql = 'SELECT org_id, org_longname
+                                      FROM '.TBL_ORGANIZATIONS.'
                                      WHERE org_id <> '. $gCurrentOrganization->getValue('org_id'). '
                                        AND org_org_id_parent is NULL
                                      ORDER BY org_longname ASC, org_shortname ASC';

@@ -217,7 +217,8 @@ if($gCurrentUser->isWebmaster() || $getNewUser > 0)
         if(strlen($_POST['usr_login_name']) > 0)
         {
             // pruefen, ob der Benutzername bereits vergeben ist
-            $sql = 'SELECT usr_id FROM '.TBL_USERS.'
+            $sql = 'SELECT usr_id
+                      FROM '.TBL_USERS.'
                      WHERE usr_login_name LIKE \''. $_POST['usr_login_name']. '\'';
             $pdoStatement = $gDb->query($sql);
 

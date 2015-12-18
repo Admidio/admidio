@@ -294,7 +294,8 @@ else
         $membersAssignmentMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
     }
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
-    $sql = 'SELECT rol_id, rol_name, cat_name FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+    $sql = 'SELECT rol_id, rol_name, cat_name
+              FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
              WHERE rol_valid   = 1
                AND rol_visible = 1
                AND rol_cat_id  = cat_id

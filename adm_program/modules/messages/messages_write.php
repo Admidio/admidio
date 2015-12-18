@@ -409,17 +409,17 @@ elseif (!isset($messageStatement))
 
         if($possible_emails > 1)
         {
-            $sql   = 'SELECT email.usd_value as ID, email.usd_value as email
-                FROM '.TBL_USERS.'
-                JOIN '.TBL_USER_DATA.' as email
-                  ON email.usd_usr_id = usr_id
-                 AND LENGTH(email.usd_value) > 0
-                JOIN '.TBL_USER_FIELDS.' as field
-                  ON field.usf_id = email.usd_usf_id
-                 AND field.usf_type = \'EMAIL\'
-               WHERE usr_id = '. $gCurrentUser->getValue('usr_id'). '
-                 AND usr_valid   = 1
-            GROUP BY email.usd_value, email.usd_value';
+            $sql = 'SELECT email.usd_value as ID, email.usd_value as email
+                      FROM '.TBL_USERS.'
+                      JOIN '.TBL_USER_DATA.' as email
+                        ON email.usd_usr_id = usr_id
+                       AND LENGTH(email.usd_value) > 0
+                      JOIN '.TBL_USER_FIELDS.' as field
+                        ON field.usf_id = email.usd_usf_id
+                       AND field.usf_type = \'EMAIL\'
+                     WHERE usr_id = '. $gCurrentUser->getValue('usr_id'). '
+                       AND usr_valid   = 1
+                     GROUP BY email.usd_value, email.usd_value';
 
             $form->addSelectBoxFromSql('mailfromid', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sql, array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false));
         }

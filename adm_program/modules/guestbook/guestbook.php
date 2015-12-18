@@ -117,7 +117,8 @@ if ($gPreferences['enable_guestbook_moderation'] > 0)
     if($getModeration)
     {
         $conditions .= ' AND (  gbo_locked = 1
-                             OR EXISTS (SELECT 1 FROM '.TBL_GUESTBOOK_COMMENTS.'
+                             OR EXISTS (SELECT 1
+                                          FROM '.TBL_GUESTBOOK_COMMENTS.'
                                          WHERE gbc_gbo_id = gbo_id
                                            AND gbc_locked = 1)) ';
     }
@@ -166,10 +167,12 @@ if($getGboId > 0 || $getModeration)
 if(!$getModeration && $gCurrentUser->editGuestbookRight() && $gPreferences['enable_guestbook_moderation'] > 0)
 {
     // show link to moderation with number of entries that must be moderated
-    $sql = 'SELECT (SELECT COUNT(*) FROM '.TBL_GUESTBOOK.'
+    $sql = 'SELECT (SELECT COUNT(*)
+                      FROM '.TBL_GUESTBOOK.'
                      WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        AND gbo_locked = 1) AS count_locked_guestbook,
-                   (SELECT COUNT(*) FROM '.TBL_GUESTBOOK.', '.TBL_GUESTBOOK_COMMENTS.'
+                   (SELECT COUNT(*)
+                      FROM '.TBL_GUESTBOOK.', '.TBL_GUESTBOOK_COMMENTS.'
                      WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        AND gbo_id = gbc_gbo_id
                        AND gbc_locked = 1) AS count_locked_comments
@@ -293,10 +296,11 @@ else
                 }
 
                 // Alle Kommentare zu diesem Eintrag werden nun aus der DB geholt...
-                $sql    = 'SELECT * FROM '.TBL_GUESTBOOK_COMMENTS.'
-                           WHERE gbc_gbo_id = '.$guestbook->getValue('gbo_id').'
-                                 '.$conditions.'
-                           ORDER by gbc_timestamp_create asc';
+                $sql = 'SELECT *
+                          FROM '.TBL_GUESTBOOK_COMMENTS.'
+                         WHERE gbc_gbo_id = '.$guestbook->getValue('gbo_id').'
+                               '.$conditions.'
+                         ORDER BY gbc_timestamp_create ASC';
                 $commentStatement = $gDb->query($sql);
 
                 // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...

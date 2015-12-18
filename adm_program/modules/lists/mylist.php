@@ -538,7 +538,8 @@ $actualGroup                 = '';
 $configurationsArray[]       = array(0, $gL10n->get('LST_CREATE_NEW_CONFIGURATION'), null);
 $numberLastConfigurations    = 0;
 
-$sql = 'SELECT lst_id, lst_name, lst_global, lst_timestamp FROM '.TBL_LISTS.'
+$sql = 'SELECT lst_id, lst_name, lst_global, lst_timestamp
+          FROM '.TBL_LISTS.'
          WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
            AND (  lst_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                OR lst_global = 1)
