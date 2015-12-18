@@ -91,11 +91,7 @@ class Session extends TableAccess
             $objectVariables = get_object_vars($this->mObjectArray[$objectName]);
 
             // if object has database connection add database object
-            if(in_array('db', array_keys($objectVariables), true))
-            {
-                $this->mObjectArray[$objectName]->setDatabase($this->db);
-            }
-            if(in_array('mDb', array_keys($objectVariables), true))
+            if(method_exists($this->mObjectArray[$objectName], 'setDatabase'))
             {
                 $this->mObjectArray[$objectName]->setDatabase($this->db);
             }
@@ -180,7 +176,7 @@ class Session extends TableAccess
         // check if current connection has same ip address as of session initialization
         if($this->getValue('ses_ip_address') !== $_SERVER['REMOTE_ADDR'])
         {
-            die('Session has wrong ip address!');
+            die('The IP address doesnot match with the IP address the current session was started! For safety reasons the current session was closed.');
         }
 
         $sesRenew = $this->getValue('ses_renew');
