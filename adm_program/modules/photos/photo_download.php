@@ -23,8 +23,8 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',   'numeric');
-$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric');
+$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',   'int');
+$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
 
 // tempfolder
 // change this value if your provider requires the usage of special directories (e.g. HostEurope)
@@ -63,7 +63,7 @@ if($photo_album->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_
 }
 
 // check whether album is locked
-if($photo_album->getValue('pho_locked') == 1 && (!$gCurrentUser->editPhotoRight()))
+if($photo_album->getValue('pho_locked') == 1 && !$gCurrentUser->editPhotoRight())
 {
     $gMessage->show($gL10n->get('PHO_ALBUM_NOT_APPROVED'));
 }
@@ -125,9 +125,9 @@ if($getPhotoNr == null)
 
     // get sub albums
     $sql = 'SELECT *
-              FROM '. TBL_PHOTOS. '
+              FROM '.TBL_PHOTOS.'
              WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
-    if($getPhotoId == 0)
+    if($getPhotoId === 0)
     {
         $sql = $sql.' AND (pho_pho_id_parent IS NULL) ';
     }
@@ -140,7 +140,7 @@ if($getPhotoNr == null)
         $sql = $sql.' AND pho_locked = 0 ';
     }
 
-    $sql = $sql.' ORDER BY pho_begin DESC ';
+    $sql = $sql.' ORDER BY pho_begin DESC';
     $statement = $gDb->query($sql);
 
     // number of sub albums
@@ -202,7 +202,8 @@ if($getPhotoNr == null)
     fpassthru($fp);
 
     unlink($zipname);
-} else
+}
+else
 {
     // download single file
     header('Content-Description: File Transfer');

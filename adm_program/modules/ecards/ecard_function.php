@@ -18,7 +18,7 @@ class FunctionClass
     public $greetingCardString       = '';
 
     /**
-     * @param $gL10n
+     * @param object $gL10n
      */
     public function __construct($gL10n)
     {
@@ -84,11 +84,11 @@ class FunctionClass
 
     /**
      * Diese Funktion ersetzt alle im Template enthaltenen Platzhalter durch die dementsprechenden Informationen
-     * @param $imageName
-     * @param $ecardMessage
-     * @param $ecard_data     geparste Information von dem Grußkarten Template
-     * @param $recipientName  der Name des Empfaengers
-     * @param $recipientEmail die Email des Empfaengers
+     * @param string $imageName
+     * @param string $ecardMessage
+     * @param        $ecard_data     geparste Information von dem Grußkarten Template
+     * @param string $recipientName  der Name des Empfaengers
+     * @param string $recipientEmail die Email des Empfaengers
      *
      * Ersetzt werden folgende Platzhalter
      *     Admidio Pfad:           <%g_root_path%>
@@ -155,12 +155,12 @@ class FunctionClass
 
     /**
      * Diese Funktion ruft die Mail Klasse auf und uebergibt ihr die zu sendenden Daten
-     * @param $senderName
-     * @param $senderEmail
-     * @param $ecardHtmlData   geparste Daten vom Template
-     * @param $recipientName   der Name des Empfaengers
-     * @param $recipientEmail  die Email des Empfaengers
-     * @param $photoServerPath der Pfad wo die Bilder in der Grußkarte am Server liegen
+     * @param string $senderName
+     * @param string $senderEmail
+     * @param        $ecardHtmlData   geparste Daten vom Template
+     * @param string $recipientName   der Name des Empfaengers
+     * @param string $recipientEmail  die Email des Empfaengers
+     * @param string $photoServerPath der Pfad wo die Bilder in der Grußkarte am Server liegen
      */
     public function sendEcard($senderName, $senderEmail, $ecardHtmlData, $recipientName, $recipientEmail, $photoServerPath)
     {
@@ -229,7 +229,7 @@ class FunctionClass
         $email->setText($ecardHtmlData);
         $email->sendDataAsHtml();
 
-        if($returnCode == true)
+        if($returnCode)
         {
             $returnCode = $email->sendEmail();
         }

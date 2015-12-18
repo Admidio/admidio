@@ -18,7 +18,7 @@ require_once('../../system/login_valid.php');
 require_once('roles_functions.php');
 
 // Initialize and check the parameters
-$getUserId = admFuncVariableIsValid($_GET, 'user_id', 'numeric', array('defaultValue' => $gCurrentUser->getValue('usr_id')));
+$getUserId = admFuncVariableIsValid($_GET, 'user_id', 'int', array('defaultValue' => $gCurrentUser->getValue('usr_id')));
 
 // create user object
 $user = new User($gDb, $gProfileFields, $getUserId);
@@ -64,8 +64,8 @@ function getFieldCode($fieldNameIntern, $user)
 
             // ICQ Onlinestatus anzeigen
             $value = '
-            <a class="admidio-icon-link" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
-                src="http://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
+            <a class="admidio-icon-link" href="https://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
+                src="https://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
                 alt="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
                 title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
         }
@@ -75,7 +75,7 @@ function getFieldCode($fieldNameIntern, $user)
         if(strlen($user->getValue($fieldNameIntern)) > 0)
         {
             // Skype Onlinestatus anzeigen
-            $value = '<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
+            $value = '<script type="text/javascript" src="https://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
             <a class="admidio-icon-link" href="skype:'.$user->getValue($fieldNameIntern).'?add"><img
                 src="http://mystatus.skype.com/smallicon/'.$user->getValue($fieldNameIntern).'"
                 title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
@@ -135,7 +135,7 @@ $page->addJavascript('
     function showHideMembershipInformation(element) {
         id = "#" + element.attr("id") + "_Content";
 
-        if($(id).css("display") == "none") {
+        if($(id).css("display") === "none") {
             $(id).show("fast");
         } else {
             $(id).hide("fast");
@@ -159,7 +159,7 @@ $page->addJavascript('
     function callbackFormerRoles() {
         if(profileJS) {
             profileJS.formerRoleCount--;
-            if(profileJS.formerRoleCount == 0) {
+            if(profileJS.formerRoleCount === 0) {
                 $("#profile_former_roles_box").fadeOut("slow");
             }
         };
@@ -168,7 +168,7 @@ $page->addJavascript('
     function callbackFutureRoles() {
         if(profileJS) {
             profileJS.futureRoleCount--;
-            if(profileJS.futureRoleCount == 0) {
+            if(profileJS.futureRoleCount === 0) {
                 $("#profile_future_roles_box").fadeOut("slow");
             }
         };
@@ -188,7 +188,7 @@ $page->addJavascript('
                 type:    "GET",
                 url:     action,
                 success: function(data) {
-                    if(data == "success") {
+                    if(data === "success") {
                         $("#membership_period_form_"+memberId+" .form-alert").attr("class", "alert alert-success form-alert");
                         $("#membership_period_form_"+memberId+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                         $("#membership_period_form_"+memberId+" .form-alert").fadeIn("slow");
@@ -363,15 +363,15 @@ $page->addHtml('
                         case 'POSTCODE':
                         case 'CITY':
                         case 'COUNTRY':
-                            if($bAddressOutput == false // output of address only once
+                            if(!$bAddressOutput // output of address only once
                             && (strlen($user->getValue('ADDRESS')) > 0 || strlen($user->getValue('POSTCODE')) > 0
                                || strlen($user->getValue('CITY')) > 0 || strlen($user->getValue('COUNTRY')) > 0))
                             {
                                 $bAddressOutput = true;
                                 $htmlAddress    = '';
                                 $address        = '';
-                                $map_url        = 'http://maps.google.com/?q=';
-                                $route_url      = 'http://maps.google.com/?f=d&amp;saddr='.
+                                $map_url        = 'https://maps.google.com/?q=';
+                                $route_url      = 'https://maps.google.com/?f=d&amp;saddr='.
                                     urlencode($gCurrentUser->getValue('ADDRESS')).
                                     ',%20'. urlencode($gCurrentUser->getValue('POSTCODE')).
                                     ',%20'. urlencode($gCurrentUser->getValue('CITY')).
@@ -561,13 +561,15 @@ if($gPreferences['profile_show_roles'] == 1)
     foreach($authorizations as $authorization_db_name)
     {
         $sql = 'SELECT rol_name
-                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES.'
-                 WHERE mem_rol_id = rol_id
+                  FROM '.TBL_MEMBERS.'
+            INNER JOIN '.TBL_ROLES.'
+                    ON rol_id = mem_rol_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE rol_valid  = 1
                    AND mem_begin <= \''.DATE_NOW.'\'
                    AND mem_end    > \''.DATE_NOW.'\'
                    AND mem_usr_id = '.$user->getValue('usr_id').'
-                   AND rol_valid  = 1
-                   AND rol_cat_id = cat_id
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
                    AND '.$authorization_db_name.' = 1
@@ -684,11 +686,11 @@ if($gPreferences['profile_show_roles'] == 1)
     // *******************************************************************************
 
     $count_show_roles = 0;
-    $roleStatement = getFutureRolesFromDatabase($user->getValue('usr_id'));
-    $count_role  = $roleStatement->rowCount();
-    $visible     = "";
+    $roleStatement    = getFutureRolesFromDatabase($user->getValue('usr_id'));
+    $count_role       = $roleStatement->rowCount();
+    $visible          = '';
 
-    if($count_role == 0)
+    if($count_role === 0)
     {
         $visible = ' style="display: none;" ';
     }
@@ -715,11 +717,11 @@ if($gPreferences['profile_show_former_roles'] == 1)
     // Alle Rollen auflisten, die dem Mitglied zugeordnet waren
 
     $count_show_roles = 0;
-    $roleStatement = getFormerRolesFromDatabase($user->getValue('usr_id'));
-    $count_role  = $roleStatement->rowCount();
-    $visible     = "";
+    $roleStatement    = getFormerRolesFromDatabase($user->getValue('usr_id'));
+    $count_role       = $roleStatement->rowCount();
+    $visible          = '';
 
-    if($count_role == 0)
+    if($count_role === 0)
     {
         $visible = ' style="display: none;" ';
     }
@@ -747,16 +749,19 @@ if($gPreferences['profile_show_extern_roles'] == 1
 
     // list all roles where the viewed user has an active membership
     $sql = 'SELECT *
-              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_ORGANIZATIONS. '
-             WHERE mem_rol_id = rol_id
-               AND mem_begin <= \''.DATE_NOW.'\'
-               AND mem_end   >= \''.DATE_NOW.'\'
-               AND mem_usr_id = '.$user->getValue('usr_id').'
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+        INNER JOIN '.TBL_ORGANIZATIONS.'
+                ON org_id = cat_org_id
+             WHERE mem_usr_id  = '.$user->getValue('usr_id').'
+               AND mem_begin  <= \''.DATE_NOW.'\'
+               AND mem_end    >= \''.DATE_NOW.'\'
                AND rol_valid   = 1
                AND rol_visible = 1
-               AND rol_cat_id  = cat_id
-               AND cat_org_id  = org_id
-               AND org_id    <> '. $gCurrentOrganization->getValue('org_id'). '
+               AND org_id     <> '.$gCurrentOrganization->getValue('org_id').'
              ORDER BY org_shortname, cat_sequence, rol_name';
     $roleStatement = $gDb->query($sql);
 
@@ -781,7 +786,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
                 $role->clear();
                 $role->setArray($row);
 
-                if($showRolesOtherOrganizations == false)
+                if(!$showRolesOtherOrganizations)
                 {
                     $page->addHtml('
                     <div class="panel panel-default" id="profile_other_orga_roles_box">
@@ -814,7 +819,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
 
         $gCurrentUser->setOrganization($gCurrentOrganization->getValue('org_id'));
 
-        if($showRolesOtherOrganizations == true)
+        if($showRolesOtherOrganizations)
         {
             $page->addHtml('</ul></div></div>');
         }

@@ -31,7 +31,7 @@ like member lists, event manager, guestbook, photo album or download area.
 
 ## Installation
 
-You can install Admidio on your webspace if the script language [PHP](http://php.net/) in version 5.3.7
+You can install Admidio on your webspace if the script language [PHP](https://secure.php.net/) in version 5.3.7
 or higher is available. Admidio also needs a [MySql](http://www.mysql.com/) (version 5.0 or higher) or
 [PostgreSQL](http://www.postgresql.org/) (version 9.0 or higher) database to run.
 

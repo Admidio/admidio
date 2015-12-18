@@ -13,8 +13,8 @@
  * Autoloading function of class files. This function will be later registered
  * for default autoload implementation. Therefore the class name must be the same
  * as the file name except for case sensitive.
- * @param $className Name of the class for which the file should be loaded.
- * @return Return @b false if the file for the class wasn't found.
+ * @param string $className Name of the class for which the file should be loaded.
+ * @return void|false Return @b false if the file for the class wasn't found.
  */
 function admFuncAutoload($className)
 {
@@ -55,15 +55,17 @@ function hasRole($roleName, $userId = 0)
     }
 
     $sql = 'SELECT mem_id
-              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
              WHERE mem_usr_id = '.$userId.'
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end    > \''.DATE_NOW.'\'
-               AND mem_rol_id = rol_id
                AND rol_name   = \''.$roleName.'\'
                AND rol_valid  = 1
-               AND rol_cat_id = cat_id
-               AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+               AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                    OR cat_org_id IS NULL )';
     $statement = $gDb->query($sql);
 
@@ -89,14 +91,16 @@ function isMember($userId)
     if(is_numeric($userId) && $userId > 0)
     {
         $sql = 'SELECT COUNT(*)
-                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                  FROM '.TBL_MEMBERS.'
+            INNER JOIN '.TBL_ROLES.'
+                    ON rol_id = mem_rol_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
                  WHERE mem_usr_id = '.$userId.'
                    AND mem_begin <= \''.DATE_NOW.'\'
                    AND mem_end    > \''.DATE_NOW.'\'
-                   AND mem_rol_id = rol_id
                    AND rol_valid  = 1
-                   AND rol_cat_id = cat_id
-                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                   AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL )';
         $statement = $gDb->query($sql);
 
@@ -126,15 +130,17 @@ function isGroupLeader($userId, $roleId = 0)
     if(is_numeric($userId) && $userId > 0 && is_numeric($roleId))
     {
         $sql = 'SELECT mem_id
-                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                  FROM '.TBL_MEMBERS.'
+            INNER JOIN '.TBL_ROLES.'
+                    ON rol_id = mem_rol_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
                  WHERE mem_usr_id = '.$userId.'
                    AND mem_begin <= \''.DATE_NOW.'\'
                    AND mem_end    > \''.DATE_NOW.'\'
                    AND mem_leader = 1
-                   AND mem_rol_id = rol_id
                    AND rol_valid  = 1
-                   AND rol_cat_id = cat_id
-                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
+                   AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL )';
         if ($roleId > 0)
         {
@@ -356,10 +362,10 @@ function admFuncProcessableImageSize()
  * value was set then the parameter will be initialized. The function can be used with every array and their elements.
  * You can set several flags (like required value, datatype …) that should be checked.
  *
- * @param array $array         The array with the element that should be checked
+ * @param array  $array        The array with the element that should be checked
  * @param string $variableName Name of the array element that should be checked
- * @param string $datatype     The datatype like @b string, @b numeric, @b boolean, @b html, @b date or @b file that
- *                             is expected and which will be checked.
+ * @param string $datatype     The datatype like @b string, @b numeric, @b int, @b float, @b bool, @b boolean, @b html,
+ *                             @b date or @b file that is expected and which will be checked.
  *                             Datatype @b date expects a date that has the Admidio default format from the
  *                             preferences or the english date format @b Y-m-d
  * @param array $options       (optional) An array with the following possible entries:
@@ -373,14 +379,16 @@ function admFuncProcessableImageSize()
  * @return mixed|null Returns the value of the element or the error message if a test failed
  *
  * @par Examples
- * @code   // numeric value that would get a default value 0 if not set
+ * @code
+ * // numeric value that would get a default value 0 if not set
  * $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', array('defaultValue' => 0));
  *
  * // string that will be initialized with text of id DAT_DATES
  * $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $g_l10n->get('DAT_DATES')));
  *
  * // string initialized with actual and the only allowed values are actual and old
- * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old'))); @endcode
+ * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old')));
+ * @endcode
  */
 function admFuncVariableIsValid($array, $variableName, $datatype, $options = array())
 {
@@ -392,9 +400,14 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
 
     $errorMessage = '';
     $datatype = admStrToLower($datatype);
+    $value = null;
 
     // set default value for each datatype if no value is given and no value was required
-    if(!isset($array[$variableName]) || $array[$variableName] === '')
+    if(array_key_exists($variableName, $array) && $array[$variableName] !== '')
+    {
+        $value = $array[$variableName];
+    }
+    else
     {
         if($optionsAll['requireValue'])
         {
@@ -404,40 +417,38 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
         elseif($optionsAll['defaultValue'] !== null)
         {
             // if a default value was set then take this value
-            $array[$variableName] = $optionsAll['defaultValue'];
+            $value = $optionsAll['defaultValue'];
         }
         else
         {
             // no value set then initialize the parameter
-            if($datatype === 'boolean' || $datatype === 'numeric')
+            if($datatype === 'bool' || $datatype === 'boolean')
             {
-                $array[$variableName] = 0;
+                $value = false;
+            }
+            elseif($datatype === 'numeric' || $datatype === 'int')
+            {
+                $value = 0;
+            }
+            elseif($datatype === 'float')
+            {
+                $value = 0.0;
             }
             else
             {
-                $array[$variableName] = '';
+                $value = '';
             }
 
-            return $array[$variableName];
+            return $value;
         }
     }
 
-    if($datatype === 'boolean')
-    {
-        // boolean type must be 0 or 1 otherwise throw error
-        // do not check with in_array because this function don't work properly
-        if($array[$variableName] != '0'     && $array[$variableName] != '1'
-        && $array[$variableName] != 'false' && $array[$variableName] != 'true')
-        {
-            $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-        }
-    }
-    elseif($optionsAll['validValues'] !== null)
+    if($optionsAll['validValues'] !== null)
     {
         // check if parameter has a valid value
         // do a strict check with in_array because the function don't work properly
-        if(!in_array(admStrToUpper($array[$variableName]), $optionsAll['validValues'], true)
-        && !in_array(admStrToLower($array[$variableName]), $optionsAll['validValues'], true))
+        if(!in_array(admStrToUpper($value), $optionsAll['validValues'], true)
+        && !in_array(admStrToLower($value), $optionsAll['validValues'], true))
         {
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
         }
@@ -448,9 +459,9 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
         case 'file':
             try
             {
-                if($array[$variableName] !== '')
+                if($value !== '')
                 {
-                    admStrIsValidFileName($array[$variableName]);
+                    admStrIsValidFileName($value);
                 }
             }
             catch(AdmException $e)
@@ -461,12 +472,12 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
 
         case 'date':
             // check if date is a valid Admidio date format
-            $objAdmidioDate = DateTime::createFromFormat($gPreferences['system_date'], $array[$variableName]);
+            $objAdmidioDate = DateTime::createFromFormat($gPreferences['system_date'], $value);
 
             if(!$objAdmidioDate)
             {
                 // check if date has english format
-                $objEnglishDate = DateTime::createFromFormat('Y-m-d', $array[$variableName]);
+                $objEnglishDate = DateTime::createFromFormat('Y-m-d', $value);
 
                 if(!$objEnglishDate)
                 {
@@ -475,32 +486,56 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
             }
             break;
 
+        case 'bool':
+        case 'boolean':
+            $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            if ($valid === null)
+            {
+                $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+            }
+            $value = $valid;
+            break;
+
+        case 'int':
+        case 'float':
         case 'numeric':
             // numeric datatype should only contain numbers
-            if (!is_numeric($array[$variableName]))
+            if (!is_numeric($value))
             {
                 $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
             }
             else
             {
-                $array[$variableName] = (int) $array[$variableName];
+                if ($datatype === 'int')
+                {
+                    $value = filter_var($value, FILTER_VALIDATE_INT);
+                }
+                elseif ($datatype === 'float')
+                {
+                    $value = filter_var($value, FILTER_VALIDATE_FLOAT);
+                }
+                else
+                {
+                    // https://secure.php.net/manual/en/function.is-numeric.php#107326
+                    $value = $value + 0;
+                }
             }
             break;
 
         case 'string':
-            $array[$variableName] = strStripTags(htmlspecialchars($array[$variableName], ENT_COMPAT, 'UTF-8'));
+            $value = strStripTags(htmlspecialchars($value, ENT_COMPAT, 'UTF-8'));
             break;
 
         case 'html':
             // check html string vor invalid tags and scripts
-            $array[$variableName] = htmLawed(stripslashes($array[$variableName]), array('safe' => 1));
+            $value = htmLawed(stripslashes($value), array('safe' => 1));
             break;
     }
 
     // wurde kein Fehler entdeckt, dann den Inhalt der Variablen zurueckgeben
     if($errorMessage === '')
     {
-        return $array[$variableName];
+        return $value;
     }
     else
     {
@@ -674,6 +709,8 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
  * Returns the extension of a given filename
  * @param string $filename given filename
  * @return string Returns the extension including "."
+ * @deprecated use pathinfo($filename, PATHINFO_EXTENSION) instead
+ *             important: return extension without "."
  */
 function admFuncGetFilenameExtension($filename)
 {
@@ -684,6 +721,7 @@ function admFuncGetFilenameExtension($filename)
  * Returns the name of a given filename without extension
  * @param string $filename given filename
  * @return string Returns name without extension
+ * @deprecated use pathinfo($filename, PATHINFO_FILENAME) instead
  */
 function admFuncGetFilenameWithoutExtension($filename)
 {
@@ -693,30 +731,41 @@ function admFuncGetFilenameWithoutExtension($filename)
 /**
  * Search all files or directories in the specified directory.
  * @param string $directory  The directory where the files or directories should be searched.
- * @param string $searchType This could be @b file or @b dir and represent the type of entries that should be searched.
- * @return string[] Returns an array with all found entries.
+ * @param string $searchType This could be @b file, @b dir, @b both or @b all and represent
+ *                           the type of entries that should be searched.
+ * @return string[]|false Returns an array with all found entries or false if an error occurs.
  */
 function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 {
-    $array_files = array();
-
-    $curdir = opendir($directory);
-    if($curdir)
+    $dirHandle = opendir($directory);
+    if ($dirHandle)
     {
-        while($filename = readdir($curdir))
+        $entries = array();
+
+        while (($entry = readdir($dirHandle)) !== false)
         {
-            if(strpos($filename, '.') !== 0)
+            if ($searchType === 'all')
             {
-                if(($searchType === 'file' && is_file($directory.'/'.$filename))
-                || ($searchType === 'dir'  && is_dir($directory.'/'.$filename)))
+                $entries[$entry] = $entry; // $entries[] = $entry;
+            }
+            elseif ($entry !== '.' && $entry !== '..')
+            {
+                $resource = $directory . '/' . $entry;
+
+                if ($searchType === 'both'
+                || ($searchType === 'file' && is_file($resource))
+                || ($searchType === 'dir'  && is_dir($resource)))
                 {
-                    $array_files[$filename] = $filename;
+                    $entries[$entry] = $entry; // $entries[] = $entry;
                 }
             }
         }
-    }
-    closedir($curdir);
-    asort($array_files);
+        closedir($dirHandle);
 
-    return $array_files;
+        asort($entries); // sort($entries);
+
+        return $entries;
+    }
+
+    return false;
 }

@@ -189,11 +189,11 @@ abstract class Modules
 
     /**
      * Set active role
-     * Set boolean for active role. Default 1 for active
+     * Set boolean for active role. Default true for active
      */
     protected function setActiveRole()
     {
-        $this->activeRole = admFuncVariableIsValid($this->properties, 'active_role', 'boolean', array('defaultValue' => 1));
+        $this->activeRole = admFuncVariableIsValid($this->properties, 'active_role', 'bool', array('defaultValue' => true));
     }
 
     /**

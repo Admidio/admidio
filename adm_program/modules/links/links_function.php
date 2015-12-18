@@ -19,8 +19,8 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getLinkId = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric');
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'numeric', array('requireValue' => true));
+$getLinkId = admFuncVariableIsValid($_GET, 'lnk_id', 'int');
+$getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
 
 // check if the module is enabled for use
 if ($gPreferences['enable_weblinks_module'] == 0)
@@ -63,7 +63,7 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
     {
         if(strpos($key, 'lnk_') === 0)
         {
-            if($link->setValue($key, $value) == false)
+            if(!$link->setValue($key, $value))
             {
                 // Daten wurden nicht uebernommen, Hinweis ausgeben
                 if($key === 'lnk_url')

@@ -74,7 +74,7 @@ if($plg_show_headline == 1)
     echo '<h3>'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE').'</h3>';
 }
 
-if($plg_announcements->getDataSetCount() == 0)
+if($plg_announcements->getDataSetCount() === 0)
 {
     echo $gL10n->get('SYS_NO_ENTRIES');
 }

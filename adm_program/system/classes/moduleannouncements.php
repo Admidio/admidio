@@ -85,15 +85,15 @@ class ModuleAnnouncements extends Modules
 
     /**
      * Get number of available announcements
-     * @Return Returns the total count and push it in the array
+     * @Return int Returns the total count and push it in the array
      */
     public function getDataSetCount()
     {
         global $gCurrentOrganization;
         global $gDb;
 
-        $sql = 'SELECT COUNT(1) as count
-                  FROM '. TBL_ANNOUNCEMENTS. '
+        $sql = 'SELECT COUNT(*) as count
+                  FROM '.TBL_ANNOUNCEMENTS.'
                  WHERE (  ann_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR (   ann_global = 1
                           AND ann_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
@@ -117,7 +117,7 @@ class ModuleAnnouncements extends Modules
         global $gDb;
 
         // Parameter
-        if($limit == null)
+        if($limit === null)
         {
             $announcementsPerPage = $gPreferences['announcements_per_page'];
         }
@@ -140,18 +140,18 @@ class ModuleAnnouncements extends Modules
                 cre_firstname.usd_value || \' \' || cre_surname.usd_value as create_name,
                 cha_firstname.usd_value || \' \' || cha_surname.usd_value as change_name ';
             $additionalTables = '
-              LEFT JOIN '. TBL_USER_DATA .' cre_surname
-                ON cre_surname.usd_usr_id = ann_usr_id_create
-               AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-              LEFT JOIN '. TBL_USER_DATA .' cre_firstname
-                ON cre_firstname.usd_usr_id = ann_usr_id_create
-               AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-              LEFT JOIN '. TBL_USER_DATA .' cha_surname
-                ON cha_surname.usd_usr_id = ann_usr_id_change
-               AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-              LEFT JOIN '. TBL_USER_DATA .' cha_firstname
-                ON cha_firstname.usd_usr_id = ann_usr_id_change
-               AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
+                                 LEFT JOIN '. TBL_USER_DATA .' cre_surname
+                                        ON cre_surname.usd_usr_id = ann_usr_id_create
+                                       AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+                                 LEFT JOIN '. TBL_USER_DATA .' cre_firstname
+                                        ON cre_firstname.usd_usr_id = ann_usr_id_create
+                                       AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+                                 LEFT JOIN '. TBL_USER_DATA .' cha_surname
+                                        ON cha_surname.usd_usr_id = ann_usr_id_change
+                                       AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+                                 LEFT JOIN '. TBL_USER_DATA .' cha_firstname
+                                        ON cha_firstname.usd_usr_id = ann_usr_id_change
+                                       AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
         }
         else
         {
@@ -159,15 +159,15 @@ class ModuleAnnouncements extends Modules
             $additionalFields = ' cre_username.usr_login_name as create_name,
                                   cha_username.usr_login_name as change_name ';
             $additionalTables = '
-              LEFT JOIN '. TBL_USERS .' cre_username
-                ON cre_username.usr_id = ann_usr_id_create
-              LEFT JOIN '. TBL_USERS .' cha_username
-                ON cha_username.usr_id = ann_usr_id_change ';
+                                 LEFT JOIN '. TBL_USERS .' cre_username
+                                        ON cre_username.usr_id = ann_usr_id_create
+                                 LEFT JOIN '. TBL_USERS .' cha_username
+                                        ON cha_username.usr_id = ann_usr_id_change ';
         }
 
         // read announcements from database
         $sql = 'SELECT ann.*, '.$additionalFields.'
-                  FROM '. TBL_ANNOUNCEMENTS. ' ann
+                  FROM '.TBL_ANNOUNCEMENTS.' ann
                        '.$additionalTables.'
                  WHERE (  ann_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR (   ann_global = 1
@@ -180,7 +180,7 @@ class ModuleAnnouncements extends Modules
         {
             $sql .= ' LIMIT '.$limit;
         }
-        if($startElement != 0)
+        if($startElement > 0)
         {
             $sql .= ' OFFSET '.$startElement;
         }

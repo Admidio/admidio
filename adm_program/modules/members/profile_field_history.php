@@ -24,7 +24,7 @@ $filterDateFrom = new DateTimeExtended(DATE_NOW, 'Y-m-d');
 $filterDateFrom->modify('-'.$gPreferences['members_days_field_history'].' day');
 
 // Initialize and check the parameters
-$getUserId   = admFuncVariableIsValid($_GET, 'usr_id',           'numeric');
+$getUserId   = admFuncVariableIsValid($_GET, 'usr_id',           'int');
 $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gPreferences['system_date'])));
 $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to',   'date', array('defaultValue' => DATE_NOW));
 
@@ -47,8 +47,8 @@ $sqlConditions  = '';
 // if profile log is activated and current user is allowed to edit users
 // then the profile field history will be shown otherwise show error
 if ($gPreferences['profile_log_edit_fields'] == 0
-    || ($getUserId == 0 && !$gCurrentUser->editUsers())
-    || ($getUserId > 0  && !$gCurrentUser->hasRightEditProfile($user)))
+    || ($getUserId === 0 && !$gCurrentUser->editUsers())
+    || ($getUserId > 0   && !$gCurrentUser->hasRightEditProfile($user)))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -98,7 +98,7 @@ if($getUserId > 0)
 }
 
 // get total count of relevant profile field changes
-$sql = 'SELECT COUNT(1) as count
+$sql = 'SELECT COUNT(*) as count
           FROM '.TBL_USER_LOG.'
          WHERE 1 = 1 '.
                $sqlConditions;
@@ -110,21 +110,21 @@ $countChanges = $row['count'];
 $sql = 'SELECT usl_usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, usl_usf_id, usl_value_old, usl_value_new,
                usl_usr_id_create, create_last_name.usd_value as create_last_name, create_first_name.usd_value as create_first_name, usl_timestamp_create
           FROM '.TBL_USER_LOG.'
-          JOIN '. TBL_USER_DATA. ' as last_name
+    INNER JOIN '.TBL_USER_DATA.' as last_name
             ON last_name.usd_usr_id = usl_usr_id
            AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-          JOIN '. TBL_USER_DATA. ' as first_name
+    INNER JOIN '.TBL_USER_DATA.' as first_name
             ON first_name.usd_usr_id = usl_usr_id
            AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-          JOIN '. TBL_USER_DATA. ' as create_last_name
+    INNER JOIN '.TBL_USER_DATA.' as create_last_name
             ON create_last_name.usd_usr_id = usl_usr_id_create
            AND create_last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-          JOIN '. TBL_USER_DATA. ' as create_first_name
+    INNER JOIN '.TBL_USER_DATA.' as create_first_name
             ON create_first_name.usd_usr_id = usl_usr_id_create
            AND create_first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
          WHERE usl_timestamp_create BETWEEN \''.$dateFromIntern.' 00:00:00\' AND \''.$dateToIntern.' 23:59:59\' '.
                $sqlConditions.'
-         ORDER BY usl_timestamp_create DESC ';
+         ORDER BY usl_timestamp_create DESC';
 $fieldHistoryStatement = $gDb->query($sql);
 
 if($fieldHistoryStatement->rowCount() === 0)
@@ -163,7 +163,7 @@ $table = new HtmlTable('profile_field_history_table', $page, true, true);
 
 $columnHeading = array();
 
-if($getUserId == 0)
+if($getUserId === 0)
 {
     $table->setDatatablesOrderColumns(array(array(6, 'desc')));
     $columnHeading[] = $gL10n->get('SYS_NAME');
@@ -186,24 +186,26 @@ while($row = $fieldHistoryStatement->fetch())
     $timestampCreate = new DateTimeExtended($row['usl_timestamp_create'], 'Y-m-d H:i:s');
     $columnValues    = array();
 
-    if($getUserId == 0)
+    if($getUserId === 0)
     {
         $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usl_usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a>';
     }
 
     $columnValues[] = $gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name');
-    if(strlen($gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new'], 'html')) > 0)
+    $uslValueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new']);
+    if($uslValueNew !== '')
     {
-        $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new'], 'html');
+        $columnValues[] = $uslValueNew;
     }
     else
     {
         $columnValues[] = '&nbsp;';
     }
 
-    if(strlen($gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old'], 'html')) > 0)
+    $uslValueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old']);
+    if($uslValueOld !== '')
     {
-        $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old'], 'html');
+        $columnValues[] = $uslValueOld;
     }
     else
     {

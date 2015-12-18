@@ -19,7 +19,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric');
+$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'int');
 $getMode    = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireValue' => true, 'validValues' => array('new', 'change', 'delete')));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -169,7 +169,7 @@ if($getMode === 'new' || $getMode === 'change')
         $b_return = $albumFolder->move($newFolder);
 
         // Verschieben war nicht erfolgreich, Schreibrechte vorhanden ?
-        if($b_return == false)
+        if(!$b_return)
         {
             $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
             $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));

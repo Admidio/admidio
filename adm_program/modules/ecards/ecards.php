@@ -19,16 +19,16 @@ require_once('ecard_function.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', array('requireValue' => true));
-$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
-$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', array('requireValue' => true));
-$showPage    = admFuncVariableIsValid($_GET, 'show_page', 'numeric', array('defaultValue' => 1));
+$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',    'int', array('requireValue' => true));
+$getUserId  = admFuncVariableIsValid($_GET, 'usr_id',    'int');
+$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr',  'int', array('requireValue' => true));
+$showPage   = admFuncVariableIsValid($_GET, 'show_page', 'int', array('defaultValue' => 1));
 
 // Initialisierung lokaler Variablen
-$funcClass     = new FunctionClass($gL10n);
-$templates   = $funcClass->getFileNames(THEME_SERVER_PATH. '/ecard_templates/');
-$template    = THEME_SERVER_PATH. '/ecard_templates/';
-$headline    = $gL10n->get('ECA_GREETING_CARD_EDIT');
+$funcClass = new FunctionClass($gL10n);
+$templates = $funcClass->getFileNames(THEME_SERVER_PATH. '/ecard_templates/');
+$template  = THEME_SERVER_PATH. '/ecard_templates/';
+$headline  = $gL10n->get('ECA_GREETING_CARD_EDIT');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_ecard_module'] != 1)
@@ -175,11 +175,12 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
     $arrayMailRoles = $gCurrentUser->getAllMailRoles();
 
     $sql = 'SELECT rol_id, rol_name
-              FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+              FROM '.TBL_ROLES.'
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
              WHERE rol_id IN ('.implode(',', $arrayMailRoles).')
-               AND rol_cat_id = cat_id
                AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-             ORDER BY rol_name ';
+             ORDER BY rol_name';
     $statement = $gDb->query($sql);
 
     while($row = $statement->fetch())
@@ -191,28 +192,29 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
     $arrayRoles = array_merge($arrayMailRoles, $gCurrentUser->getAllVisibleRoles());
     $arrayUniqueRoles = array_unique($arrayRoles);
 
-    $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
-                     email.usd_value as email
-                FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
-                JOIN '. TBL_USER_DATA. ' as email
-                  ON email.usd_usr_id = usr_id
-                 AND LENGTH(email.usd_value) > 0
-                JOIN '.TBL_USER_FIELDS.' as field
-                  ON field.usf_id = email.usd_usf_id
-                 AND field.usf_type = \'EMAIL\'
-                LEFT JOIN '. TBL_USER_DATA. ' as last_name
-                  ON last_name.usd_usr_id = usr_id
-                 AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-                LEFT JOIN '. TBL_USER_DATA. ' as first_name
-                  ON first_name.usd_usr_id = usr_id
-                 AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-               WHERE mem_usr_id  = usr_id
-                 AND mem_rol_id IN ('.implode(',', $arrayUniqueRoles).')
-                 AND mem_begin <= \''.DATE_NOW.'\'
-                 AND mem_end    > \''.DATE_NOW.'\'
-                 AND usr_valid   = 1
-            GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
-            ORDER BY first_name, last_name';
+    $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
+                   email.usd_value as email
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_USERS.'
+                ON usr_id = mem_usr_id
+        INNER JOIN '.TBL_USER_DATA.' as email
+                ON email.usd_usr_id = usr_id
+               AND LENGTH(email.usd_value) > 0
+        INNER JOIN '.TBL_USER_FIELDS.' as field
+                ON field.usf_id = email.usd_usf_id
+               AND field.usf_type = \'EMAIL\'
+         LEFT JOIN '.TBL_USER_DATA.' as last_name
+                ON last_name.usd_usr_id = usr_id
+               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' as first_name
+                ON first_name.usd_usr_id = usr_id
+               AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+             WHERE usr_valid  = 1
+               AND mem_begin <= \''.DATE_NOW.'\'
+               AND mem_end    > \''.DATE_NOW.'\'
+               AND mem_rol_id IN ('.implode(',', $arrayUniqueRoles).')
+          GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
+          ORDER BY first_name, last_name';
     $statement = $gDb->query($sql);
 
     while ($row = $statement->fetch())

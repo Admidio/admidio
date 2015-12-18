@@ -45,7 +45,7 @@ class HtmlPage
      */
     public function __construct($headline = '')
     {
-        global $g_root_path, $gDebug;
+        global $g_root_path;
 
         $this->pageContent   = '';
         $this->header        = '';

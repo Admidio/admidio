@@ -17,8 +17,8 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getItemId  = admFuncVariableIsValid($_GET, 'item_id',  'numeric');
-$getNewItem = admFuncVariableIsValid($_GET, 'new_item', 'numeric');
+$getItemId  = admFuncVariableIsValid($_GET, 'item_id',  'int');
+$getNewItem = admFuncVariableIsValid($_GET, 'new_item', 'int');
 
 // only users with the right to edit inventory could use this script
 if (!$gCurrentUser->editInventory())
@@ -83,7 +83,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
             $returnCode = $inventory->setValue($field->getValue('inf_name_intern'), $_POST[$post_id]);
 
             // Ausgabe der Fehlermeldung je nach Datentyp
-            if($returnCode == false)
+            if(!$returnCode)
             {
                 switch ($field->getValue('inf_type'))
                 {
@@ -135,7 +135,7 @@ try
         // der User wird gerade angelegt und die ID kann erst danach in das Create-Feld gesetzt werden
         $inventory->save();
 
-        if($getNewItem == 1)
+        if($getNewItem === 1)
         {
             $inventory->setValue('inv_usr_id_create', $gCurrentUser->getValue('inv_id'));
         }
@@ -164,7 +164,7 @@ $gNavigation->deleteLastUrl();
 // je nach Aufrufmodus auf die richtige Seite weiterleiten
 /*------------------------------------------------------------*/
 
-if($getNewItem == 1)
+if($getNewItem === 1)
 {
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));

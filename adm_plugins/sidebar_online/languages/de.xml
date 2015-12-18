@@ -2,5 +2,5 @@
 <resources>
     <string name="PLG_ONLINE_HEADLINE">Online</string>
     <string name="PLG_ONLINE_NO_VISITORS_ON_WEBSITE">Zur Zeit sind keine Besucher auf der Webseite.</string>
-    <string name="PLG_ONLINE_VAR_NUM_VISITORS">%VAR1% Besucher</string>
+    <string name="PLG_ONLINE_VAR_NUM_VISITORS">#VAR1# Besucher</string>
 </resources>

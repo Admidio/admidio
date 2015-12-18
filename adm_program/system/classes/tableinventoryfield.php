@@ -38,12 +38,12 @@ class TableInventoryField extends TableAccess
         $this->db->startTransaction();
 
         // close gap in sequence
-        $sql = 'UPDATE '. TBL_INVENT_FIELDS. ' SET inf_sequence = inf_sequence - 1
+        $sql = 'UPDATE '.TBL_INVENT_FIELDS.' SET inf_sequence = inf_sequence - 1
                  WHERE inf_cat_id   = '. $this->getValue('inf_cat_id'). '
                    AND inf_sequence > '. $this->getValue('inf_sequence');
         $this->db->query($sql);
 
-        $sql = 'DELETE FROM '. TBL_INVENT_DATA. '
+        $sql = 'DELETE FROM '.TBL_INVENT_DATA.'
                     WHERE ind_inf_id = '. $this->getValue('inf_id');
         $this->db->query($sql);
 
@@ -68,7 +68,9 @@ class TableInventoryField extends TableAccess
         {
             $newNameIntern = $newNameIntern.'_'.$index;
         }
-        $sql = 'SELECT inf_id FROM '.TBL_INVENT_FIELDS.' WHERE inf_name_intern = \''.$newNameIntern.'\'';
+        $sql = 'SELECT inf_id
+                  FROM '.TBL_INVENT_FIELDS.'
+                 WHERE inf_name_intern = \''.$newNameIntern.'\'';
         $pdoStatement = $this->db->query($sql);
 
         if($pdoStatement->rowCount() > 0)
@@ -220,7 +222,7 @@ class TableInventoryField extends TableAccess
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
         if(admStrToUpper($mode) === 'UP')
         {
-            $sql = 'UPDATE '. TBL_INVENT_FIELDS. ' SET inf_sequence = '.$this->getValue('inf_sequence').'
+            $sql = 'UPDATE '.TBL_INVENT_FIELDS.' SET inf_sequence = '.$this->getValue('inf_sequence').'
                      WHERE inf_cat_id   = '.$this->getValue('inf_cat_id').'
                        AND inf_sequence = '.$this->getValue('inf_sequence').' - 1 ';
             $this->db->query($sql);
@@ -230,7 +232,7 @@ class TableInventoryField extends TableAccess
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
         elseif(admStrToUpper($mode) === 'DOWN')
         {
-            $sql = 'UPDATE '. TBL_INVENT_FIELDS. ' SET inf_sequence = '.$this->getValue('inf_sequence').'
+            $sql = 'UPDATE '.TBL_INVENT_FIELDS.' SET inf_sequence = '.$this->getValue('inf_sequence').'
                      WHERE inf_cat_id   = '.$this->getValue('inf_cat_id').'
                        AND inf_sequence = '.$this->getValue('inf_sequence').' + 1 ';
             $this->db->query($sql);
@@ -252,7 +254,7 @@ class TableInventoryField extends TableAccess
         $fields_changed = $this->columnsValueChanged;
 
         // if new field than generate new name intern, otherwise no change will be made
-        if($this->new_record == true)
+        if($this->new_record)
         {
             $this->setValue('inf_name_intern', $this->getNewNameIntern($this->getValue('inf_name', 'database'), 1));
         }
@@ -264,9 +266,9 @@ class TableInventoryField extends TableAccess
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
-     * @param        $newValue   The new value that should be stored in the database field
+     * @param mixed  $newValue   The new value that should be stored in the database field
      * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     * @return Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
@@ -279,7 +281,8 @@ class TableInventoryField extends TableAccess
         elseif($columnName === 'inf_cat_id' && $this->getValue($columnName) != $newValue)
         {
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
-            $sql = 'SELECT COUNT(*) as count FROM '. TBL_INVENT_FIELDS. '
+            $sql = 'SELECT COUNT(*) as count
+                      FROM '.TBL_INVENT_FIELDS.'
                      WHERE inf_cat_id = '.$newValue;
             $pdoStatement = $this->db->query($sql);
 

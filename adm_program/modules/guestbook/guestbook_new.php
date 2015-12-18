@@ -17,7 +17,7 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getGboId    = admFuncVariableIsValid($_GET, 'id',       'numeric');
+$getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -69,7 +69,7 @@ if($getGboId > 0)
 
 // Wenn keine ID uebergeben wurde, der User aber eingeloggt ist koennen zumindest
 // Name, Emailadresse und Homepage vorbelegt werden...
-if ($getGboId == 0 && $gValidLogin)
+if ($getGboId === 0 && $gValidLogin)
 {
     $guestbook->setValue('gbo_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));
     $guestbook->setValue('gbo_email', $gCurrentUser->getValue('EMAIL'));
@@ -91,7 +91,8 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
     // einen GB-Eintrag erzeugt hat...
     $ipAddress = $_SERVER['REMOTE_ADDR'];
 
-    $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK. '
+    $sql = 'SELECT COUNT(*)
+              FROM '.TBL_GUESTBOOK.'
              WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
                AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                AND gbo_ip_address = \''. $guestbook->getValue('gbo_ip_address'). '\'';

@@ -20,7 +20,7 @@ unset($_SESSION['download_request']);
 $buffer = '';
 
 // Initialize and check the parameters
-$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric');
+$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
 
 // Check if module is activated
 if ($gPreferences['enable_download_module'] != 1)
@@ -37,7 +37,7 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
 
 try
 {
-    // get recordset of current folder from databse
+    // get recordset of current folder from database
     $currentFolder = new TableFolder($gDb);
     $currentFolder->getFolderForDownload($getFolderId);
 }

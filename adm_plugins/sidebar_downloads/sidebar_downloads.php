@@ -69,8 +69,9 @@ if ($gPreferences['enable_download_module'] == 1)
     // nun alle relevanten Downloads finden
 
     $sql = 'SELECT fil_timestamp, fil_name, fil_usr_id, fol_name, fol_path, fil_id, fil_fol_id
-              FROM '. TBL_FILES. ', '. TBL_FOLDERS. '
-             WHERE fil_fol_id = fol_id
+              FROM '.TBL_FILES.'
+        INNER JOIN '.TBL_FOLDERS.'
+                ON fol_id = fil_fol_id
              ORDER BY fil_timestamp DESC';
 
     $filesStatement = $gDb->query($sql);
@@ -89,7 +90,7 @@ if ($gPreferences['enable_download_module'] == 1)
 
             try
             {
-                // get recordset of current file from databse
+                // get recordset of current file from database
                 $file = new TableFile($gDb);
                 $file->getFileForDownload($plg_row->fil_id);
             }
@@ -133,7 +134,7 @@ if ($gPreferences['enable_download_module'] == 1)
 
                 ++$anzahl;
 
-                if ($anzahl == $plg_downloads_count)
+                if ($anzahl === $plg_downloads_count)
                 {
                     break;
                 }
@@ -142,7 +143,7 @@ if ($gPreferences['enable_download_module'] == 1)
 
         echo '</div>';
 
-        if ($anzahl == 0)
+        if ($anzahl === 0)
         {
             echo $gL10n->get('PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE');
         }

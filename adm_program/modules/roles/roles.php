@@ -9,18 +9,18 @@
  *
  * Parameters:
  *
- * inactive:  0 - (Default) show all active roles
- *            1 - show all inactive roles
- * invisible: 0 - (Default) show all visible roles
- *            1 - show all invisible roles
+ * inactive:  false - (Default) show all active roles
+ *            true  - show all inactive roles
+ * invisible: false - (Default) show all visible roles
+ *            true  - show all invisible roles
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getInactive  = admFuncVariableIsValid($_GET, 'inactive',  'boolean');
-$getInvisible = admFuncVariableIsValid($_GET, 'invisible', 'boolean');
+$getInactive  = admFuncVariableIsValid($_GET, 'inactive',  'bool');
+$getInvisible = admFuncVariableIsValid($_GET, 'invisible', 'bool');
 
 // only users with the special right are allowed to manage roles
 if(!$gCurrentUser->manageRoles())
@@ -113,13 +113,15 @@ $table->addRowHeadingByArray($columnHeading);
 $cat_id = '';
 
 // list all roles group by category
-$sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-         WHERE rol_cat_id = cat_id
-             AND cat_type = \'ROL\'
-                 '.$sqlRolesStatus.'
-             AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                  OR cat_org_id IS NULL )
-         ORDER BY cat_sequence ASC, rol_name ASC ';
+$sql = 'SELECT *
+          FROM '.TBL_ROLES.'
+    INNER JOIN '.TBL_CATEGORIES.'
+            ON cat_id = rol_cat_id
+         WHERE cat_type = \'ROL\'
+           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                OR cat_org_id IS NULL )
+               '.$sqlRolesStatus.'
+         ORDER BY cat_sequence ASC, rol_name ASC';
 $rolStatement = $gDb->query($sql);
 
 // Create role object

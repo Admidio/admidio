@@ -20,9 +20,9 @@ require_once('common.php');
 require_once('login_valid.php');
 
 // Initialize and check the parameters
-$getModule = admFuncVariableIsValid($_GET, 'module', 'string',  array('validValues' => array('photos', 'downloads')));
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'string',  array('defaultValue' => 'choose_files', 'validValues' => array('choose_files', 'upload_files')));
-$getId     = admFuncVariableIsValid($_GET, 'id',     'numeric', array('requireValue' => true));
+$getModule = admFuncVariableIsValid($_GET, 'module', 'string', array('validValues' => array('photos', 'downloads')));
+$getMode   = admFuncVariableIsValid($_GET, 'mode',   'string', array('defaultValue' => 'choose_files', 'validValues' => array('choose_files', 'upload_files')));
+$getId     = admFuncVariableIsValid($_GET, 'id',     'int',    array('requireValue' => true));
 
 // module specific checks
 if($getModule === 'photos')
@@ -95,7 +95,7 @@ elseif($getModule === 'downloads')
 
     try
     {
-        // get recordset of current folder from databse
+        // get recordset of current folder from database
         $folder = new TableFolder($gDb);
         $folder->getFolderForDownload($getId);
         $uploadDir = $folder->getCompletePathOfFolder().'/';
@@ -161,7 +161,7 @@ if($getMode === 'choose_files')
                         countErrorFiles++;
                     } else {
                         var message = "'.$textFileUploaded.'";
-                        var newMessage = message.replace("%VAR1_BOLD%", "<strong>" + file.name + "</strong>");
+                        var newMessage = message.replace("#VAR1_BOLD#", "<strong>" + file.name + "</strong>");
                         $("<p/>").html(newMessage).appendTo("#files");
                         countFiles++
                     }
@@ -175,7 +175,7 @@ if($getMode === 'choose_files')
                 );
             },
             stop: function (e, data) {
-                if(countErrorFiles == 0 && countFiles > 0) {
+                if(countErrorFiles === 0 && countFiles > 0) {
                     $("<p/>").html("<div class=\"alert alert-success\"><span class=\"glyphicon glyphicon-ok\"></span>'.$textUploadSuccessful.'</div>").appendTo("#files");
                 } else {
                     $("<p/>").html("<div class=\"alert alert-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>'.$textUploadNotSuccessful.'</div>").appendTo("#files");

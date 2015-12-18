@@ -393,7 +393,7 @@ class HtmlTable extends HtmlTableBasic
      */
     public function show($directOutput = true)
     {
-        global $g_root_path, $gDebug, $gPreferences;
+        global $g_root_path, $gPreferences;
 
         if($this->rowCount === 0)
         {

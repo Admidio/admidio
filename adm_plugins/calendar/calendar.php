@@ -105,7 +105,8 @@ if(!isset($plg_link_class_merge) || $plg_link_class_merge === '')
 // /////////////////////////////////////////////////////// //
 // Prüfen, ob die Rollenbedingung gesetzt wurde            //
 // /////////////////////////////////////////////////////// //
-if(isset($plg_rolle_sql) === 'all' || $plg_rolle_sql === '')
+if(isset($plg_rolle_sql)
+&& ($plg_rolle_sql === 'all' || $plg_rolle_sql === ''))
 {
     $rol_sql = 'is not null';
 }
@@ -210,7 +211,10 @@ if($plg_ter_aktiv == 1)
     // search for all events in database within the given month
     if($gCurrentUser->getValue('usr_id') > 0)
     {
-        $sqlLogin = 'AND ( dtr_rol_id IS NULL OR dtr_rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$gCurrentUser->getValue('usr_id').') )';
+        $sqlLogin = 'AND (  dtr_rol_id IS NULL
+                         OR dtr_rol_id IN (SELECT mem_rol_id
+                                             FROM '.TBL_MEMBERS.'
+                                            WHERE mem_usr_id = '.$gCurrentUser->getValue('usr_id').') )';
     }
     else
     {
@@ -218,13 +222,15 @@ if($plg_ter_aktiv == 1)
     }
 
     $sql = 'SELECT DISTINCT dat_id, dat_cat_id, cat_name, dat_begin, dat_end, dat_all_day, dat_location, dat_headline
-              FROM '. TBL_DATE_ROLE.', '. TBL_DATES. ', '.TBL_CATEGORIES.'
-             WHERE dat_id = dtr_dat_id
-                   '.$sqlLogin.'
-               AND dat_begin <= \''.$dateMonthEnd.'\'
+              FROM '.TBL_DATE_ROLE.'
+        INNER JOIN '.TBL_DATES.'
+                ON dat_id = dtr_dat_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = dat_cat_id
+             WHERE dat_begin <= \''.$dateMonthEnd.'\'
                AND dat_end   >= \''.$dateMonthStart.'\'
+                   '.$sqlLogin.'
                    '.$sqlSyntax.'
-               AND dat_cat_id = cat_id
              ORDER BY dat_begin ASC';
     $datesStatement = $gDb->query($sql);
 
@@ -324,21 +330,27 @@ if($plg_geb_aktiv == 1)
     $sql = 'SELECT DISTINCT
                    usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name,
                    birthday.usd_value AS birthday
-              FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
-              JOIN '. TBL_USER_DATA. ' AS birthday ON birthday.usd_usr_id = usr_id
-               AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+        INNER JOIN '.TBL_USERS.'
+                ON usr_id = mem_usr_id
+        INNER JOIN '.TBL_USER_DATA.' AS birthday
+                ON birthday.usd_usr_id = usr_id
+               AND birthday.usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').'
                AND '.$sqlMonthOfBirthday.' = '.$currentMonth.'
-              LEFT JOIN '. TBL_USER_DATA. ' AS last_name ON last_name.usd_usr_id = usr_id
-               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-              LEFT JOIN '. TBL_USER_DATA. ' AS first_name ON first_name.usd_usr_id = usr_id
-               AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-             WHERE rol_cat_id = cat_id
-               AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-               AND rol_id     = mem_rol_id
-               AND mem_usr_id = usr_id
+         LEFT JOIN '.TBL_USER_DATA.' AS last_name
+                ON last_name.usd_usr_id = usr_id
+               AND last_name.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+         LEFT JOIN '.TBL_USER_DATA.' AS first_name
+                ON first_name.usd_usr_id = usr_id
+               AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+             WHERE usr_valid  = 1
+               AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end    > \''.DATE_NOW.'\'
-               AND usr_valid  = 1
              ORDER BY '.$sqlMonthOfBirthday.' ASC, '.$sqlMonthOfBirthday.' ASC, last_name, first_name';
 
     $birthdayStatement = $gDb->query($sql);
@@ -456,7 +468,7 @@ while($currentDay <= $lastDayCurrentMonth)
 
             foreach($eventsMonthDayArray[$currentDay] as $eventArray)
             {
-                if($plg_ajaxbox == 1 || $countEvents == 0)
+                if($plg_ajaxbox == 1 || $countEvents === 0)
                 {
                     if($eventArray['location'] !== '')
                     {
@@ -590,17 +602,17 @@ while($currentDay <= $lastDayCurrentMonth)
         ';
         $boolNewStart = false;
     }
-    $rest = ($currentDay+$firstWeekdayOfMonth-1)%7;
+    $rest = ($currentDay + $firstWeekdayOfMonth - 1) % 7;
     if($currentDay == $today)
     {
         echo '<td align="center" class="plgCalendarToday">';
     }
-    elseif($rest == 6)
+    elseif($rest === 6)
     {
         // CSS aus der Linkklassenbestimmung verwenden
         echo '<td align="center" class="'.$plg_link_class_saturday.'">';
     }
-    elseif($rest == 0)
+    elseif($rest === 0)
     {
         // CSS aus der Linkklassenbestimmung verwenden
         echo '<td align="center" class="'.$plg_link_class_sunday.'">';
@@ -644,11 +656,11 @@ while($currentDay <= $lastDayCurrentMonth)
             echo '<span class="plgCalendarToday">'.$currentDay.'</span>';
         }
     }
-    elseif($rest == 6)
+    elseif($rest === 6)
     {
         echo '<span class="plgCalendarSaturday">'.$currentDay.'</span>';
     }
-    elseif($rest == 0)
+    elseif($rest === 0)
     {
         echo '<span class="plgCalendarSunday">'.$currentDay.'</span>';
     }
@@ -657,7 +669,7 @@ while($currentDay <= $lastDayCurrentMonth)
         echo $currentDay;
     }
     echo '</td>';
-    if($rest == 0 || $currentDay == $lastDayCurrentMonth)
+    if($rest === 0 || $currentDay == $lastDayCurrentMonth)
     {
         echo '</tr>
         ';

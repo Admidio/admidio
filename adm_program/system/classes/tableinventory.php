@@ -47,7 +47,7 @@ class TableInventory extends TableAccess
     {
         $this->db->startTransaction();
 
-        $sql = 'DELETE FROM '. TBL_INVENT_DATA. ' WHERE ind_itm_id = '. $this->getValue('inv_id');
+        $sql = 'DELETE FROM '.TBL_INVENT_DATA.' WHERE ind_itm_id = '. $this->getValue('inv_id');
         $this->db->query($sql);
 
         $return = parent::delete();

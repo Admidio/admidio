@@ -18,8 +18,8 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getGboId    = admFuncVariableIsValid($_GET, 'id',       'numeric');
-$getGbcId    = admFuncVariableIsValid($_GET, 'cid',      'numeric');
+$getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
+$getGbcId    = admFuncVariableIsValid($_GET, 'cid',      'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -50,8 +50,7 @@ else
 }
 
 // Erst einmal die Rechte abklopfen...
-if(($gPreferences['enable_guestbook_module'] == 2 || $gPreferences['enable_gbook_comments4all'] == 0)
-&& $getGboId > 0)
+if(($gPreferences['enable_guestbook_module'] == 2 || $gPreferences['enable_gbook_comments4all'] == 0) && $getGboId > 0)
 {
     // Falls anonymes kommentieren nicht erlaubt ist, muss der User eingeloggt sein zum kommentieren
     require_once('../../system/login_valid.php');
@@ -102,7 +101,7 @@ if(isset($_SESSION['guestbook_comment_request']))
 
 // Wenn der User eingeloggt ist und keine cid uebergeben wurde
 // koennen zumindest Name und Emailadresse vorbelegt werden...
-if($getGbcId == 0 && $gValidLogin)
+if($getGbcId === 0 && $gValidLogin)
 {
     $guestbook_comment->setValue('gbc_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));
     $guestbook_comment->setValue('gbc_email', $gCurrentUser->getValue('EMAIL'));
@@ -115,9 +114,10 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
     // einen GB-Eintrag erzeugt hat...
     $ipAddress = $_SERVER['REMOTE_ADDR'];
 
-    $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK_COMMENTS. '
-            where unix_timestamp(gbc_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
-              and gbc_ip_address = \''. $guestbook_comment->getValue('gbc_ip_address'). '\'';
+    $sql = 'SELECT COUNT(*)
+              FROM '.TBL_GUESTBOOK_COMMENTS.'
+             WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
+               AND gbc_ip_address = \''. $guestbook_comment->getValue('gbc_ip_address'). '\'';
     $statement = $gDb->query($sql);
     $row = $statement->fetch();
     if($row[0] > 0)

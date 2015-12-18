@@ -12,12 +12,12 @@
 /******************************************************************************
  * Parameters:
  *
- * mode    - html   : Default mode to show a html list with all users to add them to the role
- *           assign : Add membership of a specific user to the role.
- * rol_id           : Id of role to which members should be assigned or removed
- * usr_id           : Id of the user whose membership should be assigned or removed
- * mem_show_all - 1 : (Default) Show only active members of the current organization
- *                0 : Show active and inactive members of all organizations in database
+ * mode        - html   : Default mode to show a html list with all users to add them to the role
+ *               assign : Add membership of a specific user to the role.
+ * rol_id               : Id of role to which members should be assigned or removed
+ * usr_id               : Id of the user whose membership should be assigned or removed
+ * mem_show_all - true  : (Default) Show only active members of the current organization
+ *                false : Show active and inactive members of all organizations in database
  *
  *****************************************************************************/
 require_once('../../system/common.php');
@@ -30,11 +30,11 @@ if(isset($_GET['mode']) && $_GET['mode'] === 'assign')
 }
 
 // Initialize and check the parameters
-$getMode           = admFuncVariableIsValid($_GET, 'mode',          'string',  array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
-$getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'numeric', array('requireValue' => true, 'directOutput' => true));
-$getUserId         = admFuncVariableIsValid($_GET, 'usr_id',        'numeric', array('directOutput' => true));
-$getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'numeric');
-$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'boolean');
+$getMode           = admFuncVariableIsValid($_GET, 'mode',          'string', array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
+$getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'int',    array('requireValue' => true, 'directOutput' => true));
+$getUserId         = admFuncVariableIsValid($_GET, 'usr_id',        'int',    array('directOutput' => true));
+$getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
+$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'bool');
 
 $_SESSION['set_rol_id'] = $getRoleId;
 
@@ -53,7 +53,7 @@ if(!$role->allowedToAssignMembers($gCurrentUser))
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-if($getMembersShowAll == 1)
+if($getMembersShowAll)
 {
     $getFilterRoleId = 0;
 }
@@ -73,17 +73,17 @@ if($getMode === 'assign')
 
     try
     {
-        $membership = 0;
-        $leadership = 0;
+        $membership = false;
+        $leadership = false;
 
-        if(isset($_POST['member_'.$getUserId]) && $_POST['member_'.$getUserId] == 'true')
+        if(isset($_POST['member_'.$getUserId]) && $_POST['member_'.$getUserId] === 'true')
         {
-            $membership = 1;
+            $membership = true;
         }
-        if(isset($_POST['leader_'.$getUserId]) && $_POST['leader_'.$getUserId] == 'true')
+        if(isset($_POST['leader_'.$getUserId]) && $_POST['leader_'.$getUserId] === 'true')
         {
-            $membership = 1;
-            $leadership = 1;
+            $membership = true;
+            $leadership = true;
         }
 
         // Member
@@ -93,12 +93,12 @@ if($getMode === 'assign')
         $mem_count = $role->countMembers($getUserId);
 
         // Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
-        if($leadership == 1 || ($leadership == 0 && $membership == 1 && ($role->getValue('rol_max_members') > $mem_count || $role->getValue('rol_max_members') == 0 || $role->getValue('rol_max_members') == 0)))
+        if($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $mem_count || $role->getValue('rol_max_members') == 0 || $role->getValue('rol_max_members') == 0)))
         {
             $member->startMembership($role->getValue('rol_id'), $getUserId, $leadership);
             echo 'success';
         }
-        elseif($leadership == 0 && $membership == 0)
+        elseif(!$leadership && !$membership)
         {
             $member->stopMembership($role->getValue('rol_id'), $getUserId);
             echo 'success';
@@ -129,7 +129,7 @@ else
     // create sql for all relevant users
     $memberCondition = '';
 
-    if($getMembersShowAll == 1)
+    if($getMembersShowAll)
     {
         // Falls gefordert, aufrufen alle Benutzer aus der Datenbank
         $memberCondition = ' usr_valid = 1 ';
@@ -146,14 +146,16 @@ else
 
         $memberCondition = ' EXISTS
             (SELECT 1
-               FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+               FROM '.TBL_MEMBERS.'
+         INNER JOIN '.TBL_ROLES.'
+                 ON rol_id = mem_rol_id
+         INNER JOIN '.TBL_CATEGORIES.'
+                 ON cat_id = rol_cat_id
               WHERE mem_usr_id = usr_id
-                AND mem_rol_id = rol_id
                     '.$roleCondition.'
                 AND mem_begin <= \''.DATE_NOW.'\'
                 AND mem_end    > \''.DATE_NOW.'\'
                 AND rol_valid  = 1
-                AND rol_cat_id = cat_id
                 AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
                 AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                     OR cat_org_id IS NULL )) ';
@@ -163,8 +165,8 @@ else
     $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday,
                    city.usd_value as city, address.usd_value as address, zip_code.usd_value as zip_code, country.usd_value as country,
                    mem_usr_id as member_this_role, mem_leader as leader_this_role,
-                      (SELECT count(*)
-                         FROM '. TBL_ROLES. ' rol2, '. TBL_CATEGORIES. ' cat2, '. TBL_MEMBERS. ' mem2
+                      (SELECT COUNT(*)
+                         FROM '.TBL_ROLES.' rol2, '.TBL_CATEGORIES.' cat2, '.TBL_MEMBERS.' mem2
                         WHERE rol2.rol_valid   = 1
                           AND rol2.rol_cat_id  = cat2.cat_id
                           AND cat2.cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
@@ -174,38 +176,38 @@ else
                           AND mem2.mem_begin  <= \''.DATE_NOW.'\'
                           AND mem2.mem_end     > \''.DATE_NOW.'\'
                           AND mem2.mem_usr_id  = usr_id) as member_this_orga
-            FROM '. TBL_USERS. '
-            LEFT JOIN '. TBL_USER_DATA. ' as last_name
-              ON last_name.usd_usr_id = usr_id
-             AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-            LEFT JOIN '. TBL_USER_DATA. ' as first_name
-              ON first_name.usd_usr_id = usr_id
-             AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-            LEFT JOIN '. TBL_USER_DATA. ' as birthday
-              ON birthday.usd_usr_id = usr_id
-             AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
-            LEFT JOIN '. TBL_USER_DATA. ' as city
-              ON city.usd_usr_id = usr_id
-             AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
-            LEFT JOIN '. TBL_USER_DATA. ' as address
-              ON address.usd_usr_id = usr_id
-             AND address.usd_usf_id = '. $gProfileFields->getProperty('ADDRESS', 'usf_id'). '
-            LEFT JOIN '. TBL_USER_DATA. ' as zip_code
-              ON zip_code.usd_usr_id = usr_id
-             AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '
-            LEFT JOIN '. TBL_USER_DATA. ' as country
-              ON country.usd_usr_id = usr_id
-             AND country.usd_usf_id = '. $gProfileFields->getProperty('COUNTRY', 'usf_id'). '
-            LEFT JOIN '. TBL_ROLES. ' rol
-              ON rol.rol_valid   = 1
-             AND rol.rol_id      = '.$getRoleId.'
-            LEFT JOIN '. TBL_MEMBERS. ' mem
-              ON mem.mem_rol_id  = rol.rol_id
-             AND mem.mem_begin  <= \''.DATE_NOW.'\'
-             AND mem.mem_end     > \''.DATE_NOW.'\'
-             AND mem.mem_usr_id  = usr_id
-            WHERE '. $memberCondition. '
-            ORDER BY last_name, first_name ';
+              FROM '.TBL_USERS.'
+         LEFT JOIN '.TBL_USER_DATA.' as last_name
+                ON last_name.usd_usr_id = usr_id
+               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' as first_name
+                ON first_name.usd_usr_id = usr_id
+               AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' as birthday
+                ON birthday.usd_usr_id = usr_id
+               AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' as city
+                ON city.usd_usr_id = usr_id
+               AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' as address
+                ON address.usd_usr_id = usr_id
+               AND address.usd_usf_id = '. $gProfileFields->getProperty('ADDRESS', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' as zip_code
+                ON zip_code.usd_usr_id = usr_id
+               AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' as country
+                ON country.usd_usr_id = usr_id
+               AND country.usd_usf_id = '. $gProfileFields->getProperty('COUNTRY', 'usf_id'). '
+         LEFT JOIN '.TBL_ROLES.' rol
+                ON rol.rol_valid   = 1
+               AND rol.rol_id      = '.$getRoleId.'
+         LEFT JOIN '.TBL_MEMBERS.' mem
+                ON mem.mem_rol_id  = rol.rol_id
+               AND mem.mem_begin  <= \''.DATE_NOW.'\'
+               AND mem.mem_end     > \''.DATE_NOW.'\'
+               AND mem.mem_usr_id  = usr_id
+             WHERE '. $memberCondition. '
+             ORDER BY last_name, first_name ';
     $userStatement = $gDb->query($sql);
 
     // create html page object
@@ -214,7 +216,7 @@ else
 
     $javascriptCode = '';
 
-    if($getMembersShowAll == 1)
+    if($getMembersShowAll)
     {
         $javascriptCode .= '$("#mem_show_all").prop("checked", true);';
     }
@@ -267,7 +269,7 @@ else
                     // check if error occurs
                     if(data !== "success") {
                         // reset checkbox status
-                        if(checkbox.prop("checked") == true) {
+                        if(checkbox.prop("checked")) {
                             checkbox.prop("checked", false);
                             if(checkbox.hasClass("memlist_leader")) {
                                 $("input[type=checkbox]#member_"+userid).prop("checked", false);
@@ -294,10 +296,12 @@ else
         $membersAssignmentMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
     }
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
-    $sql = 'SELECT rol_id, rol_name, cat_name FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+    $sql = 'SELECT rol_id, rol_name, cat_name
+              FROM '.TBL_ROLES.'
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
              WHERE rol_valid   = 1
                AND rol_visible = 1
-               AND rol_cat_id  = cat_id
                AND (  cat_org_id  = '.$gCurrentOrganization->getValue('org_id').'
                    OR cat_org_id IS NULL )
              ORDER BY cat_sequence, rol_name';

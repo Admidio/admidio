@@ -36,12 +36,12 @@ elseif ($gPreferences['enable_photo_module'] == 2)
 }
 
 // Initialize and check the parameters
-$getPhotoId        = admFuncVariableIsValid($_GET, 'pho_id',          'numeric');
-$getHeadline       = admFuncVariableIsValid($_GET, 'headline',        'string',  array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
-$getStart          = admFuncVariableIsValid($_GET, 'start',           'numeric');
-$getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'numeric', array('defaultValue' => 1));
-$getLocked         = admFuncVariableIsValid($_GET, 'locked',          'numeric', array('defaultValue' => -1));
-$getPhotoNr        = admFuncVariableIsValid($_GET, 'photo_nr',        'numeric');
+$getPhotoId        = admFuncVariableIsValid($_GET, 'pho_id',          'int');
+$getHeadline       = admFuncVariableIsValid($_GET, 'headline',        'string', array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
+$getStart          = admFuncVariableIsValid($_GET, 'start',           'int');
+$getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'int', array('defaultValue' => 1));
+$getLocked         = admFuncVariableIsValid($_GET, 'locked',          'int', array('defaultValue' => -1));
+$getPhotoNr        = admFuncVariableIsValid($_GET, 'photo_nr',        'int');
 
 unset($_SESSION['photo_album_request']);
 unset($_SESSION['ecard_request']);
@@ -75,7 +75,7 @@ else
 }
 
 // Wurde keine Album uebergeben kann das Navigationsstack zurueckgesetzt werden
-if ($getPhotoId == 0)
+if ($getPhotoId === 0)
 {
     $gNavigation->clear();
 }
@@ -91,7 +91,7 @@ if($getPhotoId > 0 && $photoAlbum->getValue('pho_org_id') != $gCurrentOrganizati
 
 /*********************LOCKED************************************/
 // Falls gefordert und Foto-edit-rechte, aendern der Freigabe
-if($getLocked == '1' || $getLocked == '0')
+if($getLocked === 0 || $getLocked === 1)
 {
     // erst pruefen, ob der User Fotoberarbeitungsrechte hat
     if(!$gCurrentUser->editPhotoRight())
@@ -330,7 +330,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
         {
             if($hiddenPhotoNr >= $firstPhotoNr && $hiddenPhotoNr <= $actThumbnail)
             {
-                if($photoThumbnailTable_shown == false)
+                if(!$photoThumbnailTable_shown)
                 {
                     $page->addHtml($photoThumbnailTable);
                     $photoThumbnailTable_shown = true;
@@ -382,9 +382,9 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 
 // erfassen der Alben die in der Albentabelle ausgegeben werden sollen
 $sql = 'SELECT *
-          FROM '. TBL_PHOTOS. '
+          FROM '.TBL_PHOTOS.'
          WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
-if($getPhotoId == 0)
+if($getPhotoId === 0)
 {
     $sql = $sql.' AND (pho_pho_id_parent IS NULL) ';
 }
@@ -397,7 +397,7 @@ if(!$gCurrentUser->editPhotoRight())
     $sql = $sql.' AND pho_locked = 0 ';
 }
 
-$sql = $sql.' ORDER BY pho_begin DESC ';
+$sql = $sql.' ORDER BY pho_begin DESC';
 
 $albumStatement = $gDb->query($sql);
 $albumList      = $albumStatement->fetchAll();
@@ -426,7 +426,7 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
     $ordner = SERVER_PATH. '/adm_my_files/photos/'.$childPhotoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$childPhotoAlbum->getValue('pho_id');
 
     // show album if album is not locked or it has child albums or the user has the photo module edit right
-    if(file_exists($ordner) && ($childPhotoAlbum->getValue('pho_locked') == 0)
+    if(file_exists($ordner) && $childPhotoAlbum->getValue('pho_locked') == 0
     || $childPhotoAlbum->hasChildAlbums() || $gCurrentUser->editPhotoRight())
     {
         // Zufallsbild fuer die Vorschau ermitteln

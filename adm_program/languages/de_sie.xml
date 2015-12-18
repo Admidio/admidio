@@ -4,36 +4,36 @@
     <string name="DOW_SELECT_FILES">Dateien auswählen</string>
     <string name="DOW_FILES_UPLOAD_SUCCESSFUL">Alle Dateien wurden erfolgreich hochgeladen.\n\nDer Dialog kann jetzt geschlossen werden.</string>
     <string name="DOW_FILES_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Dateien erfolgreich hochgeladen.</string>
-    <string name="DOW_FILES_UPLOAD_DESC">Wählen Sie bitte alle Dateien aus, die Sie in den Ordner %VAR1_BOLD% hochladen möchten.</string>
-    <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite können Sie einstellen, wer den Ordner %VAR1_BOLD% sehen und die Dateien herunterladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen Ihnen nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben.</string>
+    <string name="DOW_FILES_UPLOAD_DESC">Wählen Sie bitte alle Dateien aus, die Sie in den Ordner #VAR1_BOLD# hochladen möchten.</string>
+    <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite können Sie einstellen, wer den Ordner #VAR1_BOLD# sehen und die Dateien herunterladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen Ihnen nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben.</string>
     <string name="DOW_UPLOAD_FILES">Dateien hochladen</string>
     <string name="LST_ADD_COLUMNS_DESC">Ordnen Sie in der folgenden Tabelle beliebig vielen Spalten entsprechende Profilfelder zu. Zusätzlich können Sie die Standardsortierung vorgeben und Bedingungen zu Feldern hinzufügen, nach denen die jeweiligen Mitglieder gefiltert werden sollen.</string>
     <string name="LST_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
     <string name="LST_DEFAULT_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden in mit dieser Konfiguration angezeigt.</string>
     <string name="LST_VARIOUS_ROLES">Verschiedene Rollen</string>
-    <string name="LST_ERROR_DELETE_DEFAULT_LIST">Die Liste %VAR1_BOLD% ist die Standardkonfiguration für Listen in dieser Organisation und kann nicht gelöscht werden. Wählen Sie in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuchen Sie danach diese Konfiguration zu löschen.</string>
+    <string name="LST_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist die Standardkonfiguration für Listen in dieser Organisation und kann nicht gelöscht werden. Wählen Sie in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuchen Sie danach diese Konfiguration zu löschen.</string>
     <string name="LST_SAVE_CHANGES">Änderungen speichern</string>
     <string name="LST_SELECT_CONFIGURATION">Konfiguration auswählen</string>
     <string name="LST_SELECT_MEMBERS">Mitglieder auswählen</string>
     <string name="ORG_BROWSER_UPDATE_CHECK">Update Meldung für veraltete Browser</string>
     <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Nach Aktivierung wird Benutzern mit veraltetem Browser geraten ein Browserupdate durchzuführen. Neuere Browser schützen besser vor Betrug, Viren, Trojanern, Datendiebstahl und anderen Bedrohungen Ihrer Privatsphäre und Sicherheit. Jede neue Browsergeneration verbessert die Geschwindigkeit und die Unterstützung neuer Webtechniken, mit der Webseiten besser dargestellt werden können. Hierzu wird das Service von https://browser-update.org/ verwendet.</string>
     <string name="ORG_FIELD_DISABLED_DESC">Ein gesperrtes Feld kann vom Benutzer im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten. Leiter einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</string>
-    <string name="SYS_CATEGORIES_VAR">%VAR1%-Kategorien</string>
-    <string name="SYS_CATEGORY_VAR">%VAR1%-Kategorie</string>
-    <string name="SYS_COPY_VAR">%VAR1% kopieren</string>
-    <string name="SYS_DATABASE_NO_LOGIN">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n%VAR1%.</string>
-    <string name="SYS_PHONE_INVALID_CHAR">Die Telefonnummer im Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</string>
+    <string name="SYS_CATEGORIES_VAR">#VAR1#-Kategorien</string>
+    <string name="SYS_CATEGORY_VAR">#VAR1#-Kategorie</string>
+    <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
+    <string name="SYS_DATABASE_NO_LOGIN">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
+    <string name="SYS_PHONE_INVALID_CHAR">Die Telefonnummer im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</string>
     <string name="SYS_VIEW">Ansicht</string>
     <string name="MSG_SHOW_FORMER">E-Mails an Ehemalige senden</string>
     <string name="MSG_SHOW_FORMER_DESC">Ist diese Einstellung gesetzt, dann können E-Mails an einzelne ehemalige Mitglieder, sowie an alle ehemaligen Mitglieder einer Rolle gesendet werden. (Standard: Aktiviert)</string>
-    <string name="PHO_FILE_UPLOADED">Das Bild %VAR1_BOLD% wurde hochgeladen.</string>
+    <string name="PHO_FILE_UPLOADED">Das Bild #VAR1_BOLD# wurde hochgeladen.</string>
     <string name="INS_DATABASE_LOGIN_DESC">Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere Admidio-Installationen auf derselben Datenbank einrichten möchten.</string>
     <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">Ein Termin wurde geändert</string>
-    <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1">Es wurde ein Termin bei %VAR1% geändert.\n\nTitel: %VAR2%\nDatum: %VAR3%\nKalender: %VAR4%\n</string>
-    <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2">Ort: %VAR1%\nRaum: %VAR2%\nTeilnehmer: %VAR3%\nGeändert von: %VAR4%\n</string>
-    <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3">Geändert am: %VAR1%</string>
+    <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1">Es wurde ein Termin bei #VAR1# geändert.\n\nTitel: #VAR2#\nDatum: #VAR3#\nKalender: #VAR4#\n</string>
+    <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2">Ort: #VAR1#\nRaum: #VAR2#\nTeilnehmer: #VAR3#\nGeändert von: #VAR4#\n</string>
+    <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3">Geändert am: #VAR1#</string>
     <string name="INS_DATA_FULLY_ENTERED">Sie haben alle notwendigen Daten für die Installation von Admidio eingegeben.\n\nJetzt muss die Datenbank erstellt und mit Ihren Daten befüllt werden.</string>
-    <string name="MAI_EMAIL_SEND_TO_RECEIVER">%VAR1% hat an die folgenden Empfänger: %VAR3% von %VAR2% folgende E-Mail geschickt:</string>
+    <string name="MAI_EMAIL_SEND_TO_RECEIVER">#VAR1# hat an die folgenden Empfänger: #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
     <string name="MAI_SEND_MAIL_TO_ROLE">Ihre E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn Sie eingeloggt sind stehen Ihnen weitere Rollen und Empfänger zur Verfügung, an die Sie E-Mails schreiben können.</string>
     <string name="MSG_ACTIVE_FORMER_SHORT">Aktive und ehemalige</string>
     <string name="MSG_FORMER_MEMBERS">Ehemalige Mitglieder</string>
@@ -45,18 +45,18 @@
     <string name="DAT_MAINTAIN_CATEGORIES_DESC">Hier können Kategorien angelegt und bearbeitet werden.</string>
     <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Wechsel zur Kalenderverwaltung</string>
     <string name="DAT_EDIT_ROOMS_DESC">Hier können Räume für Veranstaltungen angelegt und bearbeitet werden.</string>
-    <string name="DOW_CREATE_FOLDER_DESC">Der neue Ordner wird im bestehenden Ordner %VAR1_BOLD% angelegt.</string>
-    <string name="DOW_FILES_UPLOADED">%VAR1% Dateien wurden erfolgreich hochgeladen.</string>
-    <string name="DOW_UPLOAD_POST_EMPTY">Die Datei konnte nicht hochgeladen werden oder die Seite wurde ungültig aufgerufen.\n\nVermutlich wurde die maximale Dateigröße für Uploads überschritten. Diese ist auf deinem Server auf %VAR1%B eingestellt.</string>
+    <string name="DOW_CREATE_FOLDER_DESC">Der neue Ordner wird im bestehenden Ordner #VAR1_BOLD# angelegt.</string>
+    <string name="DOW_FILES_UPLOADED">#VAR1# Dateien wurden erfolgreich hochgeladen.</string>
+    <string name="DOW_UPLOAD_POST_EMPTY">Die Datei konnte nicht hochgeladen werden oder die Seite wurde ungültig aufgerufen.\n\nVermutlich wurde die maximale Dateigröße für Uploads überschritten. Diese ist auf deinem Server auf #VAR1#B eingestellt.</string>
     <string name="ECA_LAYOUT">Layout</string>
     <string name="ECA_SCALE_THUMBNAILS_DESC">Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige skaliert werden soll. (Standard: 250 Pixel)</string>
     <string name="ECA_MAX_PHOTO_SIZE_DESC">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild in der Grußkarte haben darf. (Standard: 400 x 250 Pixel)</string>
     <string name="INS_CONTINUE_INSTALLATION">Installation fortsetzen</string>
-    <string name="INS_DELETE_CONFIG_FILE">Im Hauptverzeichnis von Admidio %VAR1_BOLD% existiert noch eine Datei config.php. Diese wurde bereits in den Ordner adm_my_files verschoben. Löschen Sie bitte diese Datei im Hauptverzeichnis.</string>
+    <string name="INS_DELETE_CONFIG_FILE">Im Hauptverzeichnis von Admidio #VAR1_BOLD# existiert noch eine Datei config.php. Diese wurde bereits in den Ordner adm_my_files verschoben. Löschen Sie bitte diese Datei im Hauptverzeichnis.</string>
     <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Konfigurationsdatei herunterladen</string>
-    <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Die Konfigurationsdatei %VAR1_BOLD% konnte nicht im Ordner %VAR2_BOLD% abgelegt werden. Geben Sie dem Ordner bitte Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) oder laden Sie die Konfigurationsdatei herunter und kopieren diese mit einem FTP-Programm in das Admidio Verzeichnis %VAR3_BOLD%.\n\nNachdem Sie die Datei dort abgelegt haben, können Sie die Installation fortsetzen.</string>
+    <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Die Konfigurationsdatei #VAR1_BOLD# konnte nicht im Ordner #VAR2_BOLD# abgelegt werden. Geben Sie dem Ordner bitte Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) oder laden Sie die Konfigurationsdatei herunter und kopieren diese mit einem FTP-Programm in das Admidio Verzeichnis #VAR3_BOLD#.\n\nNachdem Sie die Datei dort abgelegt haben, können Sie die Installation fortsetzen.</string>
     <string name="INS_INSTALLATION_EXISTS">In der Datenbank existiert bereits eine Admidio Installation. Eine erneute Installation ist nicht möglich.</string>
-    <string name="INS_NO_INSTALLED_VERSION_FOUND">Die bereits installierte Version konnte nicht ermittelt werden. Falls Sie bisher noch Version 1.x von Admidio genutzt haben, aktualisieren Sie zuerst auf Version 2.x und starte danach das Update auf Version %VAR1%. Falls Sie bereits Version 2.x oder neuer installiert haben, prüfen Sie bitte die Konsistenz Ihrer Datenbank.</string>
+    <string name="INS_NO_INSTALLED_VERSION_FOUND">Die bereits installierte Version konnte nicht ermittelt werden. Falls Sie bisher noch Version 1.x von Admidio genutzt haben, aktualisieren Sie zuerst auf Version 2.x und starte danach das Update auf Version #VAR1#. Falls Sie bereits Version 2.x oder neuer installiert haben, prüfen Sie bitte die Konsistenz Ihrer Datenbank.</string>
     <string name="INS_UPDATE_NOT_POSSIBLE">Eine Aktualisierung der Datenbank ist nicht möglich!</string>
     <string name="INS_WEBMASTER_LOGIN">Webmaster-Anmeldung</string>
     <string name="INS_WEBMASTER_LOGIN_DESC">Ein Update der Datenbank darf nur von einem Webmaster durchgeführt werden. Geben Sie an dieser Stelle bitte die Zugangsdaten eines Webmasters ein.</string>
@@ -85,10 +85,10 @@
     <string name="MSG_ACTIVATE_CHAT_MODULE">Chat aktivieren</string>
     <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Chat Modul aktivieren, welches die Daten dynamisch alle 3 Sekunden aus der Datenbank holt. In der Datenbank werden maximal 99 Einträge gespeichert, ab der 100 meldung werden die ersten 50 wieder gelöscht.</string>
     <string name="MSG_OPPOSITE">Gesprächspartner</string>
-    <string name="MSG_PM_SEND">Die Private Nachricht wurde an %VAR1_BOLD% versendet.</string>
-    <string name="MSG_PM_NOT_SEND">Die Private Nachricht konnte nicht an %VAR1_BOLD% gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n%VAR2%</string>
+    <string name="MSG_PM_SEND">Die Private Nachricht wurde an #VAR1_BOLD# versendet.</string>
+    <string name="MSG_PM_NOT_SEND">Die Private Nachricht konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
     <string name="MSG_REMOVE">Nachricht entfernen</string>
-    <string name="MSG_DELETE_DESC">Soll Nachricht %VAR1_BOLD% nun entfernt werden.</string>
+    <string name="MSG_DELETE_DESC">Soll Nachricht #VAR1_BOLD# nun entfernt werden.</string>
     <string name="MSG_DELETE_PM">Da es sich um eine Private Nachricht handeln, wird die Nachricht nur zum löschen markiert und wartet auf eine Aktion des Gesprächspartners</string>
     <string name="ORG_ADD_ORGANIZATION_DESC">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der aktuelle Benutzer wird dort automatisch zum Webmaster ernannt und kann die weitere Einrichtung durchführen. Benutzer, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</string>
     <string name="ORG_CAPTCHA_WIDTH">Captcha-Breite</string>
@@ -103,7 +103,7 @@
     <string name="ORG_NEW_ORGANIZATION">Neue Organisation</string>
     <string name="ORG_NEW_ORGANIZATION_DESC">Geben Sie in diesem Formular die Abkürzung, den offiziellen Namen sowie die E-Mail-Adresse der Organisation ein, die Sie hinzufügen möchten. Die E-Mail-Adresse sollte eine allgemeine Adresse der Organisation sein. Diese wird unter anderem als Absenderadresse bei automatischen Systembenachrichtigungen genutzt.</string>
     <string name="ORG_NOT_SAVED_SETTINGS_LOST">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</string>
-    <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">Die Organisation %VAR1_BOLD% wurde hinzugefügt. Sie können diese nun bei der Anmeldung auswählen.\n\nFalls Sie für diese Organisation eine separate Homepage erstellt haben, müssen Sie auf der entsprechenden Seite noch die neue Organisation in die config.php eintragen.</string>
+    <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">Die Organisation #VAR1_BOLD# wurde hinzugefügt. Sie können diese nun bei der Anmeldung auswählen.\n\nFalls Sie für diese Organisation eine separate Homepage erstellt haben, müssen Sie auf der entsprechenden Seite noch die neue Organisation in die config.php eintragen.</string>
     <string name="ORG_REGIONAL_SETTINGS">Regionaleinstellungen</string>
     <string name="PMS_MESSAGE">Private Nachrichten</string>
     <string name="PMS_SEND_PM">Private Nachricht senden</string>
@@ -117,8 +117,8 @@
     <string name="PHO_MAX_PHOTO_SIZE_WIDTH">Max. Bildanzeigegröße (Breite)</string>
     <string name="PHO_MAX_PHOTO_SIZE_HEIGHT">Max. Bildanzeigegröße (Höhe)</string>
     <string name="PHO_NUMBER_OF_ALBUMS_PER_PAGE">Anzahl Alben pro Seite</string>
-    <string name="PHO_PARENT_ALBUM_DESC">Ein Album kann einem anderen Album untergeordnet sein. Wählen Sie dazu in der Auswahlliste das Elternalbum zum aktuellen Album aus. Wollen Sie das Album auf der obersten Ebene anzeigen, dann wählen Sie %VAR1_BOLD% aus.</string>
-    <string name="PHO_PHOTO_UPLOAD_DESC">Wählen Sie bitte alle Fotos aus, die Sie in das Album %VAR1_BOLD% hochladen möchten.</string>
+    <string name="PHO_PARENT_ALBUM_DESC">Ein Album kann einem anderen Album untergeordnet sein. Wählen Sie dazu in der Auswahlliste das Elternalbum zum aktuellen Album aus. Wollen Sie das Album auf der obersten Ebene anzeigen, dann wählen Sie #VAR1_BOLD# aus.</string>
+    <string name="PHO_PHOTO_UPLOAD_DESC">Wählen Sie bitte alle Fotos aus, die Sie in das Album #VAR1_BOLD# hochladen möchten.</string>
     <string name="PHO_SAVE_ORIGINALS">Originale speichern</string>
     <string name="PHO_SAVE_ORIGINALS_DESC">Steht genug Speicherplatz zur Verfügung, können hochgeladene Bilder auf dem Server archiviert und z.B. zum Download zur Verfügung gestellt werden.</string>
     <string name="PHO_SELECT_FOTOS">Fotos auswählen</string>
@@ -132,7 +132,7 @@
     <string name="PRO_MAINTAIN_ITEM_FIELDS">Artikelfelder verwalten</string>
     <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.</string>
     <string name="ROL_RIGHT_INVENTORY">Artikel und Lagerverwaltung</string>
-    <string name="ROL_ROLE_ASSIGNMENT">Rollenzuordnung für %VAR1% %VAR2%</string>
+    <string name="ROL_ROLE_ASSIGNMENT">Rollenzuordnung für #VAR1# #VAR2#</string>
     <string name="SYS_APPLY">Übernehmen</string>
     <string name="SYS_CATEGORIES">Kategorien</string>
     <string name="SYS_CHARACTERS">Zeichen</string>
@@ -146,7 +146,7 @@
     <string name="SYS_REQUIRED_FIELDS">Pflichtfelder</string>
     <string name="SYS_MENU">Menü</string>
     <string name="SYS_MESSAGES">Nachrichten</string>
-    <string name="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" translation="edited">Dieses Modul kann nur von der Organisation genutzt werden, die in der config.php hinterlegt ist. Dies ist die Organisation %VAR1%.</string>
+    <string name="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" translation="edited">Dieses Modul kann nur von der Organisation genutzt werden, die in der config.php hinterlegt ist. Dies ist die Organisation #VAR1#.</string>
     <string name="SYS_NO_DATA_FOUND">Es wurden keine Daten gefunden.</string>
     <string name="SYS_NORMAL_PICTURE">Normalbild</string>
     <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Die Online-Mitgliederverwaltung</string>
@@ -155,44 +155,44 @@
     <string name="SYS_QUANTITY">Menge</string>
     <string name="SYS_ROLES">Rollen</string>
     <string name="SYS_SELECT_FROM_LIST">Aus Liste auswählen</string>
-    <string name="SYS_STILL_X_CHARACTERS">noch %VAR1% Zeichen</string>
+    <string name="SYS_STILL_X_CHARACTERS">noch #VAR1# Zeichen</string>
     <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorienverwaltung</string>
     <string name="MAI_SENDER_INTO_TO_DESC">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit "Undisclosed Recipients" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse gefüllt werden. Alle anderen Empfänger werden weiterhin in das BCC-Feld geschrieben. (Standard: Deaktiviert)</string>
     <string name="SYS_CSV">CSV</string>
     <string name="SYS_LANDSCAPE" description="Format for printing">Querformat</string>
     <string name="SYS_PDF">PDF</string>
     <string name="SYS_PORTRAIT" description="Format for printing">Hochformat</string>
-    <string name="DAT_VIEW_MODE_DESC">Anzeigeart der Termine. Im Modus %VAR1_BOLD% werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus %VAR2_BOLD% werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</string>
+    <string name="DAT_VIEW_MODE_DESC">Anzeigeart der Termine. Im Modus #VAR1_BOLD# werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus #VAR2_BOLD# werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</string>
     <string name="PHO_DOWNLOAD_PHOTOS">Fotos herunterladen</string>
     <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Foto speichern</string>
     <string name="PHO_DOWNLOAD_ENABLED">Download aktivieren</string>
-    <string name="PHO_DOWNLOAD_ENABLED_DESC">Erlaubt es einzelne Fotos sowie komplette Alben als Zip-datei herunterzuladen. Dabei wird bei jedem Album als auch bei jedem Foto ein entsprechender Link angezeigt. Ist die Option %VAR1_BOLD% aktiviert, dann werden nur die Originalfotos heruntergeladen.</string>
+    <string name="PHO_DOWNLOAD_ENABLED_DESC">Erlaubt es einzelne Fotos sowie komplette Alben als Zip-datei herunterzuladen. Dabei wird bei jedem Album als auch bei jedem Foto ein entsprechender Link angezeigt. Ist die Option #VAR1_BOLD# aktiviert, dann werden nur die Originalfotos heruntergeladen.</string>
     <string name="PHO_KEEP_ORIGINAL">Originale zusätzlich speichern</string>
-    <string name="PHO_KEEP_ORIGINAL_DESC">Speichert alle hochgeladenen Fotos zusätzlich zur eingestellten Auflösung auch in der Originalgröße des Fotos ab. Ist zusätzlich die Option %VAR1_BOLD% aktiviert, werden die Originalfotos herunterladen. Diese Option verbraucht deutlich mehr Speicherplatz auf dem Webserver und sollte nur gewählt werden, wenn genügend Speicherplatz zur Verfügung steht.</string>
+    <string name="PHO_KEEP_ORIGINAL_DESC">Speichert alle hochgeladenen Fotos zusätzlich zur eingestellten Auflösung auch in der Originalgröße des Fotos ab. Ist zusätzlich die Option #VAR1_BOLD# aktiviert, werden die Originalfotos herunterladen. Diese Option verbraucht deutlich mehr Speicherplatz auf dem Webserver und sollte nur gewählt werden, wenn genügend Speicherplatz zur Verfügung steht.</string>
     <string name="SYS_DATABASE_VERSION">Datenbank-Version</string>
     <string name="DAT_PARTICIPATE_AT_DATE">An Termin als Organisator teilnehmen</string>
     <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Sie werden Organisator des Termins und erhalten das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem können Sie weitere Personen zu Organisatoren machen.</string>
     <string name="DAT_VIEW_MODE">Standard-Darstellung</string>
     <string name="DAT_VIEW_MODE_DETAIL">Detailiert</string>
     <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
-    <string name="ROL_DELETE_NO_DEFAULT_ROLE">Sie können die Rolle %VAR1_BOLD% nicht löschen. Es muss mindestens eine Rolle die Einstellung %VAR2_BOLD% besitzen.</string>
-    <string name="ROL_DELETE_SYSTEM_ROLE">Sie können die Systemrolle %VAR1_BOLD% nicht löschen.</string>
-    <string name="ROL_DELETE_ROLE">Sie können die Rolle %VAR1_BOLD% nicht löschen.</string>
-    <string name="CAT_DELETE_CATEGORY">Möchten Sie die Kategorie %VAR1_BOLD% wirklich löschen?</string>
-    <string name="CAT_DONT_DELETE_CATEGORY">Die Kategorie %VAR1_BOLD% kann nicht gelöscht werden, da sie noch %VAR2% abhängige Einträge besitzt.</string>
+    <string name="ROL_DELETE_NO_DEFAULT_ROLE">Sie können die Rolle #VAR1_BOLD# nicht löschen. Es muss mindestens eine Rolle die Einstellung #VAR2_BOLD# besitzen.</string>
+    <string name="ROL_DELETE_SYSTEM_ROLE">Sie können die Systemrolle #VAR1_BOLD# nicht löschen.</string>
+    <string name="ROL_DELETE_ROLE">Sie können die Rolle #VAR1_BOLD# nicht löschen.</string>
+    <string name="CAT_DELETE_CATEGORY">Möchten Sie die Kategorie #VAR1_BOLD# wirklich löschen?</string>
+    <string name="CAT_DONT_DELETE_CATEGORY">Die Kategorie #VAR1_BOLD# kann nicht gelöscht werden, da sie noch #VAR2# abhängige Einträge besitzt.</string>
     <string name="DAT_HIGHLIGHT_DATE">Termin optisch hervorheben</string>
     <string name="DOW_FOLDER_NOT_FOUND">Der gesuchte Ordner konnte nicht gefunden werden.</string>
-    <string name="LST_NOT_VALID_DATE_FORMAT">Bitte in der Bedingung des Feldes %VAR1_BOLD% ein gültiges Datum verwenden.</string>
-    <string name="LST_NOT_NUMERIC">Bitte in der Bedingung des Feldes %VAR1_BOLD% nur gültige Zahlen verwenden.</string>
+    <string name="LST_NOT_VALID_DATE_FORMAT">Bitte in der Bedingung des Feldes #VAR1_BOLD# ein gültiges Datum verwenden.</string>
+    <string name="LST_NOT_NUMERIC">Bitte in der Bedingung des Feldes #VAR1_BOLD# nur gültige Zahlen verwenden.</string>
     <string name="LST_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Adresse nicht gefüllt haben</string>
     <string name="LST_EXCLUDE_EXAMPLE">Stefan</string>
     <string name="LST_EXCLUDE_EXAMPLE_DESC">Sucht alle Benutzer, die nicht Stefan heißen</string>
     <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Adresse gefüllt haben</string>
     <string name="MAI_DELIVERY_CONFIRMATION">Lesebestätigung anfordern</string>
     <string name="MAI_DELIVERY_CONFIRMATION_DESC">Ist diese Option aktiviert, hat der Verfasser einer E-Mail die Möglichkeit eine Lesebestätigung anzufordern. Es hängt allerdings von den Einstellungen des E-Mailprogramms des Empfängers ab, ob eine Lesebestätigung versendet wird. Der Empfänger kann dies auf seinen Wunsch unterdrücken.</string>
-    <string name="MAI_EMAIL_SEND_TO_ROLE_ACTIVE">%VAR1% hat an die aktiven Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</string>
-    <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">%VAR1% hat an die ehemaligen Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</string>
-    <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">%VAR1% hat an die aktiven und ehemaligen Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</string>
+    <string name="MAI_EMAIL_SEND_TO_ROLE_ACTIVE">#VAR1# hat an die aktiven Mitglieder der Rolle #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
+    <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# hat an die ehemaligen Mitglieder der Rolle #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
+    <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# hat an die aktiven und ehemaligen Mitglieder der Rolle #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
     <string name="MAI_PHP_MAIL">PHP mail()</string>
     <string name="MAI_SEND_METHOD">Versandmethode</string>
     <string name="MAI_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Empfohlen wird daher in der Regel der Versand von einer existierenden Mailadresse über einen SMTP-Server. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</string>
@@ -220,8 +220,8 @@
     <string name="MAI_SMTP_USER">SMTP Benutzername</string>
     <string name="MAI_SMTP_USER_DESC">Der Benutzername, der bei der SMTP-Authentifizierung verwendet wird.</string>
     <string name="MEM_CHANGE_HISTORY">Änderungshistorie</string>
-    <string name="MEM_CHANGE_HISTORY_OF">Änderungshistorie von %VAR1%</string>
-    <string name="MEM_SEND_NEW_LOGIN">Möchten Sie %VAR1_BOLD% eine E-Mail mit dem aktuellen Benutzernamen und einem neuen Passwort zumailen?</string>
+    <string name="MEM_CHANGE_HISTORY_OF">Änderungshistorie von #VAR1#</string>
+    <string name="MEM_SEND_NEW_LOGIN">Möchten Sie #VAR1_BOLD# eine E-Mail mit dem aktuellen Benutzernamen und einem neuen Passwort zumailen?</string>
     <string name="ORG_SHOW_CREATE_EDIT">Ersteller und Zeitstempel anzeigen</string>
     <string name="ORG_SHOW_CREATE_EDIT_DESC">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen und bearbeiten.</string>
     <string name="ORG_ACTIVATE_SYSTEM_MAILS">Systembenachrichtigungen aktivieren</string>
@@ -232,7 +232,7 @@
     <string name="ORG_SYSTEM_MAIL_ADDRESS">E-Mailadresse</string>
     <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier sollte die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Absenderadresse für Systembenachrichtigungen benutzt, z.B. bei der Registrierungsbestätigung.</string>
     <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
-    <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mailadresse %VAR1% versendet. (Standard: nein)</string>
+    <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mailadresse #VAR1# versendet. (Standard: nein)</string>
     <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</string>
     <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</string>
     <string name="PRO_FUTURE_ROLE_MEMBERSHIP">Zukünftige Rollenmitgliedschaften</string>
@@ -251,7 +251,7 @@
     <string name="ROL_LEADER_ASSIGN_MEMBERS">Leiter dieser Rolle können neue Rollenmitglieder hinzufügen oder vorhandene Mitglieder entfernen.</string>
     <string name="ROL_LEADER_RIGHTS_DESC">Rollenmitglieder können zu Leitern einer Rolle ernannt werden und optional erweiterte Rechte bekommen.\nSie können das Recht bekommen Profildaten aller Rollenmitglieder zu bearbeiten und/oder das Recht Mitglieder der Rolle hinzuzufügen oder zu entfernen. Bekommen sie beide Rechte zugewiesen wären sie dadurch allerdings indirekt in der Lage Profildaten aller Mitglieder zu bearbeiten.</string>
     <string name="ROL_NO_ADDITIONAL_RIGHTS">Keine zusätzlichen Rechte</string>
-    <string name="ROL_NO_DEFAULT_ROLE">Sie können die Einstellung %VAR1_BOLD% nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</string>
+    <string name="ROL_NO_DEFAULT_ROLE">Sie können die Einstellung #VAR1_BOLD# nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</string>
     <string name="ROL_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
     <string name="SYS_CHANGED_AT">Geändert am</string>
     <string name="SYS_DELETE_LAST_CATEGORY">Es existiert keine weitere Kategorie für diesen Bereich. Aus diesem Grund kann die Kategorie nicht gelöscht werden.</string>
@@ -260,10 +260,10 @@
     <string name="SYS_DONT_SHOW">Nicht anzeigen</string>
     <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
     <string name="SYS_EDITED_BY">Geändert von</string>
-    <string name="SYS_EMAIL_NOT_SEND">Die E-Mail konnte nicht an %VAR1_BOLD% gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n%VAR2%</string>
+    <string name="SYS_EMAIL_NOT_SEND">Die E-Mail konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
     <string name="SYS_EMPTY">Leer</string>
     <string name="SYS_FIRSTNAME_LASTNAME">Vorname und Nachname</string>
-    <string name="SYS_FROM">ab %VAR1%</string>
+    <string name="SYS_FROM">ab #VAR1#</string>
     <string name="SYS_INFORMATIONS">Informationen</string>
     <string name="SYS_MAIL_DISPATCH">E-Mailversand</string>
     <string name="SYS_MODULE_PREFERENCES">Moduleinstellungen</string>
@@ -271,15 +271,15 @@
     <string name="SYS_NEW_VALUE">Neuer Wert</string>
     <string name="SYS_NOT_EMPTY">Nicht leer</string>
     <string name="SYS_PREVIOUS_VALUE">Vorheriger Wert</string>
-    <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei %organization_long_name% abgelehnt\n#content# Hallo %user_first_name% %user_first_name%,\n\nIhre Anmeldung auf %organization_homepage% wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls Sie Mitglied sind und Ihre Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass Sie als Mitglied nicht identifiziert wurden.\nZur Klärung der Gründe für die Ablehnung wenden Sie sich bitte an den Webmaster %webmaster_email% von %organization_homepage%.\n\nMit freundlichen Grüßen\nDie Webmaster</string>
+    <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name# #user_first_name#,\n\nIhre Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls Sie Mitglied sind und Ihre Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass Sie als Mitglied nicht identifiziert wurden.\nZur Klärung der Gründe für die Ablehnung wenden Sie sich bitte an den Webmaster #webmaster_email# von #organization_homepage#.\n\nMit freundlichen Grüßen\nDie Webmaster</string>
     <string name="SYS_SYSTEM">System</string>
     <string name="SYS_SYSTEM_MAILS">Systembenachrichtigungen</string>
     <string name="MAI_COUNT_BCC_DESC">E-Mails an Rollen mit mehreren Mitgliedern werden als Blindkopie (BCC) versendet. So kann vom Empfänger nicht eingesehen werden, wer diese E-Mail noch bekommen hat. Die Anzahl in diesem Feld gibt die maximale Anzahl an Empfängern pro E-Mail an. Diese Anzahl kann von Providern beschränkt werden. Besitzt eine Rolle mehr Mitglieder als die eingestellte Zahl, so werden mehrere E-Mails erzeugt. Wird der Wert auf 1 gesetzt, so werden die E-Mails nicht als Blindkopie versendet, sondern direkt an den Empfänger. Die Anzahl der möglichen zu versendenden E-Mails innerhalb eines Zeitraums kann auch von Providern beschränkt werden. (Standard: 50)</string>
     <string name="MAI_SENDER_INTO_TO">Absender als Adressat</string>
-    <string name="INS_ORGA_SHORTNAME_EXISTS">Eine Organisation mit dem Namen %VAR1_BOLD% existiert bereits. Wählen Sie bitte einen anderen Namen aus.</string>
-    <string name="SYS_LOSTPW_EMAIL_ERROR">Zu der E-Mail-Adresse %VAR1_BOLD% konnte im System keine gültige Anmeldung gefunden werden!</string>
-    <string name="SYS_LOSTPW_SEVERAL_EMAIL">Die E-Mail-Adresse %VAR1_BOLD% wurde mehrfach zugeordnet. Es konnte kein eindeutiger Benutzer gefunden werden.</string>
-    <string name="CAT_DEFAULT_VAR">Standard-%VAR1%</string>
+    <string name="INS_ORGA_SHORTNAME_EXISTS">Eine Organisation mit dem Namen #VAR1_BOLD# existiert bereits. Wählen Sie bitte einen anderen Namen aus.</string>
+    <string name="SYS_LOSTPW_EMAIL_ERROR">Zu der E-Mail-Adresse #VAR1_BOLD# konnte im System keine gültige Anmeldung gefunden werden!</string>
+    <string name="SYS_LOSTPW_SEVERAL_EMAIL">Die E-Mail-Adresse #VAR1_BOLD# wurde mehrfach zugeordnet. Es konnte kein eindeutiger Benutzer gefunden werden.</string>
+    <string name="CAT_DEFAULT_VAR">Standard-#VAR1#</string>
     <string name="DAT_ENABLE_ICAL">iCal-Funktion aktivieren</string>
     <string name="DAT_ENABLE_ICAL_DESC">Ist diese Funktion aktiviert, lassen sich einzelne Termine oder alle Termine in einem festgelegten Zeitraum herunterladen. Auch das Abonnieren der Termine mit einer Kalendersoftware wird möglich. (Standard: ja)</string>
     <string name="DAT_ICAL_DAYS_FUTURE">Anzahl iCal Tage Zukunft</string>
@@ -288,7 +288,7 @@
     <string name="DAT_ICAL_DAYS_PAST_DESC">Gibt an, wie viele Tage aus der Vergangenheit in einem iCal-Download oder -Abo einbezogen werden.  (Standard: 30)</string>
     <string name="DAT_REGISTRATION_POSSIBLE">Anmeldung zu diesem Termin ermöglichen</string>
     <string name="DAT_VISIBILITY">Sichtbarkeit</string>
-    <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Ihre Datenbank liegt in Version %VAR1% vor.\n\nEine Aktualisierung der Datenbank auf Version %VAR2% ist erforderlich.</string>
+    <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Ihre Datenbank liegt in Version #VAR1# vor.\n\nEine Aktualisierung der Datenbank auf Version #VAR2# ist erforderlich.</string>
     <string name="INS_DATABASE_SYSTEM">Datenbanksystem</string>
     <string name="INS_FACEBOOK">Facebook</string>
     <string name="INS_FACEBOOK_DESC">Wollen Sie Ihr Facebook-Profil hier verlinken? Dazu benötigen Sie Ihren Nutzernamen bei Facebook. Melden Sie sich bei Facebook an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher aus Ihrem Profil direkt Ihr Facebook-Profil aufrufen.</string>
@@ -304,14 +304,14 @@
     <string name="MAI_SUBJECT_ATTACHMENT">Betreff &amp; Anhang</string>
     <string name="MAI_CHARACTER_ENCODING">Zeichenkodierung</string>
     <string name="MAI_CHARACTER_ENCODING_DESC">Angabe der Zeichenkodierung in der Ihre E-Mail von Admidio verschickt wird. Da ggf. nicht alle E-Mail-Clients UTF-8 richtig verarbeiten können, kann hier alternativ auch ISO-8859-1 eingestellt werden.</string>
-    <string name="MAI_EMAIL_SEND_TO_USER">%VAR1% hat Ihnen von %VAR2% folgende E-Mail geschickt:</string>
+    <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# hat Ihnen von #VAR2# folgende E-Mail geschickt:</string>
     <string name="MAI_HTML_MAILS_REGISTERED_USERS">HTML-Mails</string>
     <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">Die Erstellung und der Versand von HTML-Mails kann für registrierte Benutzer aktiviert werden. Anstelle des normalen Textfeldes wird dann ein Javascript-Editor angezeigt über den der Text komfortabel editiert werden kann. Aus Sicherheitsgründen ist diese Funktion nicht für Gäste möglich.</string>
     <string name="MAI_YOUR_EMAIL">Ihre E-Mail</string>
     <string name="MAI_YOUR_NAME">Ihr Name</string>
-    <string name="MEM_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n%VAR1% neue Benutzer wurden angelegt.\n%VAR2% Benutzer wurden bearbeitet.\n%VAR3% Rollenmitgliedschaften wurden zugeordnet.</string>
-    <string name="ORG_FIELD_DISABLED">Feld nur für Benutzer mit dem Recht %VAR1_BOLD% editierbar</string>
-    <string name="ORG_FIELD_URL_DESC">Die eingegebene URL verlinkt später im Profil den Inhalt, den der Benutzer in dieses Feld eingegeben hat. Optional kann noch der Platzhalter %user_content% in die URL eingebaut werden. Dies ist dann der Inhalt, den der Benutzer im Feld eingegeben hat.\n\nBeispiel:\nUrl: http://www.google.de/search?q=%user_content%\nFeldinhalt: Admidio\nLink im Profil: http://www.google.de/search?q=Admidio</string>
+    <string name="MEM_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Benutzer wurden angelegt.\n#VAR2# Benutzer wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.</string>
+    <string name="ORG_FIELD_DISABLED">Feld nur für Benutzer mit dem Recht #VAR1_BOLD# editierbar</string>
+    <string name="ORG_FIELD_URL_DESC">Die eingegebene URL verlinkt später im Profil den Inhalt, den der Benutzer in dieses Feld eingegeben hat. Optional kann noch der Platzhalter %user_content% in die URL eingebaut werden. Dies ist dann der Inhalt, den der Benutzer im Feld eingegeben hat.\n\nBeispiel:\nUrl: https://www.google.de/search?q=%user_content%\nFeldinhalt: Admidio\nLink im Profil: https://www.google.de/search?q=Admidio</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Farbe Javascript-Editor</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Hier wird die Hintergrundfarbe des Javascripteditors angegeben. Dies kann ein hexadezimaler Farbwert sein z.B. #ffa500 oder ein RGB-Wert z.B. rgb(255, 185,0).</string>
     <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Javascript-Editor benutzen</string>
@@ -323,7 +323,7 @@
     <string name="SYS_CHECKBOX">Checkbox</string>
     <string name="SYS_CONFIRMATION_OF_INPUT">Bestätigung der Eingaben</string>
     <string name="SYS_CONTACT_DETAILS">Kontaktdaten</string>
-    <string name="SYS_DATABASE_VERSION_REQUIRED">Admidio benötigt %VAR1% oder höher</string>
+    <string name="SYS_DATABASE_VERSION_REQUIRED">Admidio benötigt #VAR1# oder höher</string>
     <string name="SYS_DESIGNATION">Bezeichnung</string>
     <string name="SYS_DROPDOWN_LISTBOX">Dropdown-Listenfeld</string>
     <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Webmaster deaktiviert.</string>
@@ -332,61 +332,61 @@
     <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf ein Feld benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Feldes automatisch gefüllt.</string>
     <string name="SYS_ORGANIZATION">Organisation</string>
     <string name="SYS_PERIOD">Zeitraum</string>
-    <string name="SYS_PHP_VERSION_REQUIRED">Admidio benötigt %VAR1% oder höher</string>
+    <string name="SYS_PHP_VERSION_REQUIRED">Admidio benötigt #VAR1# oder höher</string>
     <string name="SYS_PRESENTATION">Darstellung</string>
     <string name="SYS_RADIO_BUTTON">Optionsfeld</string>
     <string name="SYS_SOCIAL_NETWORKS">Soziale Netzwerke</string>
-    <string name="SYS_URL_INVALID_CHAR">Die URL im Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-_:/#?=% .</string>
+    <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-_:/#?=% .</string>
     <string name="SYS_VERSION">Version</string>
-    <string name="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update">Die Datenbankversion %VAR1% ist niedriger als die Version der Admidio-Scripte %VAR2%.\n\nFühren Sie bitte %VAR3%das Datenbankupdate%VAR4% auf die Version durch.</string>
-    <string name="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion %VAR1% ist höher als die Version der Admidio-Scripte %VAR2%.\n\nAktualisieren Sie bitte Ihre Admidio-Dateien auf dem FTP-Server %VAR3%mit der aktuelleren Admidio-Version%VAR4%.</string>
+    <string name="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update">Die Datenbankversion #VAR1# ist niedriger als die Version der Admidio-Scripte #VAR2#.\n\nFühren Sie bitte #VAR3#das Datenbankupdate#VAR4# auf die Version durch.</string>
+    <string name="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisieren Sie bitte Ihre Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
     <string name="UPD_BETA_VERSION">Verfügbare Beta</string>
     <string name="UPD_CURRENT_VERSION">Installiert</string>
     <string name="UPD_STABLE_VERSION">Verfügbar</string>
-    <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Neueste Ankündigungen der Organisation %VAR1%</string>
-    <string name="DAT_CURRENT_DATES_OF_ORGA">Aktuelle Termine der Organisation %VAR1%</string>
-    <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">Neueste Gästebucheinträge der Organisation %VAR1%</string>
+    <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Neueste Ankündigungen der Organisation #VAR1#</string>
+    <string name="DAT_CURRENT_DATES_OF_ORGA">Aktuelle Termine der Organisation #VAR1#</string>
+    <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">Neueste Gästebucheinträge der Organisation #VAR1#</string>
     <string name="MAI_CARBON_COPY">Kopie</string>
     <string name="MAI_COPY_OF_YOUR_EMAIL">Hier ist Ihre angeforderte Kopie der Nachricht</string>
     <string name="MAI_MESSAGE_WENT_TO">Diese Nachricht ging an</string>
-    <string name="PHO_RECENT_ALBUMS_OF_ORGA">Neuesten Fotoalben der Organisation %VAR1%</string>
-    <string name="SYS_FIELD_INVALID_CHAR">Das Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</string>
+    <string name="PHO_RECENT_ALBUMS_OF_ORGA">Neuesten Fotoalben der Organisation #VAR1#</string>
+    <string name="SYS_FIELD_INVALID_CHAR">Das Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</string>
     <string name="SYS_LOADING_CONTENT">Inhalt wird geladen ...</string>
     <string name="SYS_REGISTRATION_SAVED">Ihre Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Ihre Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung werden Sie per E-Mail benachrichtigt.</string>
-    <string name="SYS_RSS_FEED_FOR_VAR">RSS-Feed für %VAR1%</string>
+    <string name="SYS_RSS_FEED_FOR_VAR">RSS-Feed für #VAR1#</string>
     <!-- Phrases only in Announcementmodule -->
     <string name="ANN_ANNOUNCEMENT">Ankündigung</string>
     <string name="ANN_ANNOUNCEMENTS">Ankündigungen</string>
     <string name="ANN_ANNOUNCEMENTS_DESC">Ankündigungen, Neuigkeiten oder Informationen können hier veröffentlicht und angeschaut werden.</string>
     <string name="ANN_EMAIL_NOTIFICATION_TITLE">Eine neue Ankündigung wurde angelegt</string>
-    <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">Es wurde eine neue Ankündigung bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</string>
+    <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">Es wurde eine neue Ankündigung bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
 
     <!-- Phrases only in Backupmodule -->
     <string name="BAC_BACK_TO_BACKUP_PAGE">Zurück zur Backupseite</string>
-    <string name="BAC_BACKUP_COMPLETED">Backup fertiggestellt in %VAR1%</string>
+    <string name="BAC_BACKUP_COMPLETED">Backup fertiggestellt in #VAR1#</string>
     <string name="BAC_BACKUP_FILE">Backupdatei</string>
-    <string name="BAC_BACKUP_FROM">Backup vom %VAR1% um %VAR2%</string>
-    <string name="BAC_COMPLETED_VAR">%VAR1% fertig</string>
+    <string name="BAC_BACKUP_FROM">Backup vom #VAR1# um #VAR2#</string>
+    <string name="BAC_COMPLETED_VAR">#VAR1# fertig</string>
     <string name="BAC_CREATION_DATE">Erstellungsdatum</string>
     <string name="BAC_DATABASE_BACKUP">Datenbank-Backup</string>
     <string name="BAC_DATABASE_BACKUP_DESC">Datenbanksicherungen der Admidio-Tabellen können hier erstellt und heruntergeladen werden.</string>
-    <string name="BAC_DAYS_VAR">%VAR1% Tagen</string>
-    <string name="BAC_HOURS_VAR">%VAR1% Stunden</string>
-    <string name="BAC_MINUTES_VAR">%VAR1% Minuten</string>
+    <string name="BAC_DAYS_VAR">#VAR1# Tagen</string>
+    <string name="BAC_HOURS_VAR">#VAR1# Stunden</string>
+    <string name="BAC_MINUTES_VAR">#VAR1# Minuten</string>
     <string name="BAC_NO_BACKUP_FILE_EXISTS">Keine Backupdatei vorhanden!</string>
     <string name="BAC_OVERALL_PROGRESS">Gesamtfortschritt</string>
-    <string name="BAC_RECORDS_VAR">%VAR1% Datensätze</string>
-    <string name="BAC_PASSED_VAR">%VAR1% verstrichen</string>
+    <string name="BAC_RECORDS_VAR">#VAR1# Datensätze</string>
+    <string name="BAC_PASSED_VAR">#VAR1# verstrichen</string>
     <string name="BAC_START_BACKUP">Backup starten</string>
     <string name="BAC_SUM">Summe</string>
-    <string name="BAC_SECONDS_VAR">%VAR1% Sekunden</string>
+    <string name="BAC_SECONDS_VAR">#VAR1# Sekunden</string>
 
     <!-- Phrases only in Category-Administration -->
     <string name="CAT_CATEGORY_EXIST">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
-    <string name="CAT_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden:\n\n%VAR1_BOLD%\n\n Möchten Sie die Daten nur in Ihrer Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
+    <string name="CAT_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden:\n\n#VAR1_BOLD#\n\n Möchten Sie die Daten nur in Ihrer Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
     <string name="CAT_CATEGORY_NOT_DELETE">Sie können nicht alle Kategorien eines Moduls löschen.\nErstellen Sie vorher eine neue Kategorie für dieses Modul.</string>
-    <string name="CAT_MOVE_DOWN">%VAR1% nach unten verschieben</string>
-    <string name="CAT_MOVE_UP">%VAR1% nach oben verschieben</string>
+    <string name="CAT_MOVE_DOWN">#VAR1# nach unten verschieben</string>
+    <string name="CAT_MOVE_UP">#VAR1# nach oben verschieben</string>
 
     <!-- Phrases only in Datesmodule -->
     <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
@@ -394,18 +394,18 @@
     <string name="DAT_ALL_DAY">Ganztägig</string>
     <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmer zuordnen</string>
     <string name="DAT_ATTEND">Teilnehmen</string>
-    <string name="DAT_ATTEND_DATE">Sie haben Ihre Teilnahme für den Termin %VAR1_BOLD% am %VAR2% zugesagt.</string>
+    <string name="DAT_ATTEND_DATE">Sie haben Ihre Teilnahme für den Termin #VAR1_BOLD# am #VAR2# zugesagt.</string>
     <string name="DAT_CALENDAR">Kalender</string>
     <string name="DAT_CANCEL">Absagen</string>
-    <string name="DAT_CANCEL_DATE">Sie haben Ihre Teilnahme für den Termin %VAR1_BOLD% am %VAR2% wieder abgesagt.</string>
+    <string name="DAT_CANCEL_DATE">Sie haben Ihre Teilnahme für den Termin #VAR1_BOLD# am #VAR2# wieder abgesagt.</string>
     <string name="DAT_DATE">Termin</string>
     <string name="DAT_DATES">Termine</string>
     <string name="DAT_DATES_DESC">Termine können hier angelegt und angeschaut werden. Benutzer können sich auf Wunsch zu diesen Terminen anmelden.</string>
     <string name="DAT_EDIT_ROOMS">Räume bearbeiten</string>
     <string name="DAT_EMAIL_NOTIFICATION_TITLE">Ein neuer Termin wurde angelegt</string>
-    <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">Es wurde ein neuer Termin bei %VAR1% angelegt.\n\nTitel: %VAR2%\nDatum: %VAR3%\nKalender: %VAR4%\n</string>
-    <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Ort: %VAR1%\nRaum: %VAR2%\nTeilnehmer: %VAR3%\nAngelegt von: %VAR4%\n</string>
-    <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Angelegt am: %VAR1%</string>
+    <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">Es wurde ein neuer Termin bei #VAR1# angelegt.\n\nTitel: #VAR2#\nDatum: #VAR3#\nKalender: #VAR4#\n</string>
+    <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Ort: #VAR1#\nRaum: #VAR2#\nTeilnehmer: #VAR3#\nAngelegt von: #VAR4#\n</string>
+    <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Angelegt am: #VAR1#</string>
     <string name="DAT_EXPORT_ICAL">Exportieren (iCal)</string>
     <string name="DAT_LOCATION">Ort</string>
     <string name="DAT_LOCATION_LINK">Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort des Termins eingegeben, so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.</string>
@@ -415,7 +415,7 @@
     <string name="DAT_ORGANIZER" description="The Person">Organisator</string>
     <string name="DAT_ORGANIZERS" description="The Personen">Organisatoren</string>
     <string name="DAT_PARTICIPANTS_LIMIT">Teilnehmerbegrenzung</string>
-    <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Vergangene %VAR1%</string>
+    <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Vergangene #VAR1#</string>
     <string name="DAT_REGISTRATION_NOT_POSSIBLE">Keine Anmeldung mehr möglich.</string>
     <string name="DAT_REMOVE_APPLICATION">Wollen Sie die Anmeldung für den Termin wirklich entfernen? Hierbei werden alle bisherigen Teilnehmer gelöscht werden.</string>
     <string name="DAT_ROOM_INFORMATIONS">Rauminformationen</string>
@@ -442,26 +442,26 @@
     <string name="DOW_DOWNLOADS">Downloads</string>
     <string name="DOW_DOWNLOADS_DESC">Unterschiedliche Daten und Dateien können hier zum Download angeboten werden. Diese können in Ordnern mit individuellen Zugriffsrechten zusammengefasst werden.</string>
     <string name="DOW_EMAIL_NOTIFICATION_TITLE">Eine neue Datei wurde hochgeladen</string>
-    <string name="DOW_EMAIL_NOTIFICATION_MESSAGE">Es wurde eine neue Datei bei %VAR1% hochgeladen.\n\nDatei: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</string>
+    <string name="DOW_EMAIL_NOTIFICATION_MESSAGE">Es wurde eine neue Datei bei #VAR1# hochgeladen.\n\nDatei: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
     <string name="DOW_ENABLE_DOWNLOAD_MODULE">Downloadmodul aktivieren</string>
     <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">Das Downloadmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: ja)</string>
-    <string name="DOW_FILE_EXIST">Die Datei %VAR1% existiert bereits!\n\nBitte wählen Sie einen anderen Dateinamen aus.</string>
+    <string name="DOW_FILE_EXIST">Die Datei #VAR1# existiert bereits!\n\nBitte wählen Sie einen anderen Dateinamen aus.</string>
     <string name="DOW_FILE_EXTENSION_INVALID">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</string>
     <string name="DOW_FILE_NAME_RULES">Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann. Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).</string>
     <string name="DOW_FILE_NOT_EXISTS">Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.</string>
-    <string name="DOW_FILE_RENAME">Die Datei %VAR1% wurde umbenannt.</string>
-    <string name="DOW_FILE_RENAME_ERROR">Beim Umbenennen der Datei %VAR1% ist ein Fehler aufgetreten.</string>
-    <string name="DOW_FILE_TO_LARGE">Die hochgeladene Datei übersteigt die zulässige Dateigröße von %VAR1% MB.</string>
+    <string name="DOW_FILE_RENAME">Die Datei #VAR1# wurde umbenannt.</string>
+    <string name="DOW_FILE_RENAME_ERROR">Beim Umbenennen der Datei #VAR1# ist ein Fehler aufgetreten.</string>
+    <string name="DOW_FILE_TO_LARGE">Die hochgeladene Datei übersteigt die zulässige Dateigröße von #VAR1# MB.</string>
     <string name="DOW_FILE_TYPE">Dateityp</string>
-    <string name="DOW_FILE_UPLOADED">Die Datei %VAR1_BOLD% wurde hochgeladen</string>
-    <string name="DOW_FOLDER_CREATED">Der Ordner %VAR1_BOLD% wurde angelegt.</string>
-    <string name="DOW_FOLDER_EXISTS">Der Ordner %VAR1% existiert bereits!\n\nBitte wählen Sie einen anderen Namen für den Ordner aus.</string>
+    <string name="DOW_FILE_UPLOADED">Die Datei #VAR1_BOLD# wurde hochgeladen</string>
+    <string name="DOW_FOLDER_CREATED">Der Ordner #VAR1_BOLD# wurde angelegt.</string>
+    <string name="DOW_FOLDER_EXISTS">Der Ordner #VAR1# existiert bereits!\n\nBitte wählen Sie einen anderen Namen für den Ordner aus.</string>
     <string name="DOW_FOLDER_NAME_INVALID">Der ausgewählte Ordnername enthält ungültige Zeichen!\n\nBitte wählen Sie einen anderen Namen für den Ordner aus.</string>
     <string name="DOW_FOLDER_NO_FILES">Der Ordner enthält keine Dateien.</string>
     <string name="DOW_FOLDER_NO_RIGHTS">Sie besitzen keine Rechte den gewählten Downloadordner zu sehen.</string>
     <string name="DOW_FOLDER_NOT_EXISTS">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</string>
-    <string name="DOW_FOLDER_RENAME">Der Ordner %VAR1% wurde umbenannt.</string>
-    <string name="DOW_FOLDER_RENAME_ERROR">Beim Umbenennen des Ordners %VAR1% ist ein Fehler aufgetreten.</string>
+    <string name="DOW_FOLDER_RENAME">Der Ordner #VAR1# wurde umbenannt.</string>
+    <string name="DOW_FOLDER_RENAME_ERROR">Beim Umbenennen des Ordners #VAR1# ist ein Fehler aufgetreten.</string>
     <string name="DOW_MAXIMUM_FILE_SIZE">Maximale Dateigröße</string>
     <string name="DOW_MAXIMUM_FILE_SIZE_DESC">Benutzer können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 3MB)</string>
     <string name="DOW_NEW_FILE_NAME">Neuer Dateiname</string>
@@ -471,7 +471,7 @@
     <string name="DOW_EDIT_FILE">Datei bearbeiten</string>
     <string name="DOW_EDIT_FOLDER">Ordner bearbeiten</string>
     <string name="DOW_PREVIOUS_NAME">Bisheriger Name</string>
-    <string name="DOW_UPLOAD_FILE_TO_FOLDER">Datei in den Ordner %VAR1_BOLD% hochladen</string>
+    <string name="DOW_UPLOAD_FILE_TO_FOLDER">Datei in den Ordner #VAR1_BOLD# hochladen</string>
 
 
     <!-- Phrases only in Ecardsmodule -->
@@ -493,20 +493,20 @@
     <!-- Phrases only in Guestbookmodule -->
     <string name="GBO_BACK_TO_GUESTBOOK">Zurück zum Gästebuch</string>
     <string name="GBO_CAPTCHA_DESC">Für nicht eingeloggte Benutzer wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
-    <string name="GBO_COMMENT_BY">Kommentar von %VAR1%</string>
+    <string name="GBO_COMMENT_BY">Kommentar von #VAR1#</string>
     <string name="GBO_COMMENTS4ALL">Anonyme Kommentare erlauben</string>
     <string name="GBO_COMMENTS4ALL_DESC">Nicht eingeloggte Benutzer können nach Aktivierung dieser Option Einträge im Gästebuch kommentieren. Die Rechtevergabe für diese Funktion über die Rollenverwaltung wird dann ignoriert. (Standard: nein)</string>
     <string name="GBO_CREATE_COMMENT">Kommentar anlegen</string>
     <string name="GBO_CREATE_ENTRY">Eintrag anlegen</string>
-    <string name="GBO_CREATE_VAR_ENTRY">%VAR1%-Eintrag anlegen</string>
+    <string name="GBO_CREATE_VAR_ENTRY">#VAR1#-Eintrag anlegen</string>
     <string name="GBO_EDIT_COMMENT">Kommentar bearbeiten</string>
-    <string name="GBO_EDIT_ENTRY">%VAR1%-Eintrag bearbeiten</string>
+    <string name="GBO_EDIT_ENTRY">#VAR1#-Eintrag bearbeiten</string>
     <string name="GBO_EMAIL_NOTIFICATION_GBC_TITLE">Ein neuer Gästebuchkommentar wurde angelegt</string>
-    <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">Es wurde ein neuer Gästebuchkommentar bei %VAR1% angelegt.\n\nText: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</string>
+    <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">Es wurde ein neuer Gästebuchkommentar bei #VAR1# angelegt.\n\nText: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
     <string name="GBO_EMAIL_NOTIFICATION_TITLE">Ein neuer Gästebucheintrag wurde angelegt</string>
-    <string name="GBO_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Gästebucheintrag bei %VAR1% angelegt.\n\nText: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</string>
+    <string name="GBO_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Gästebucheintrag bei #VAR1# angelegt.\n\nText: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
     <string name="GBO_ENTRY_QUEUED">Der Eintrag wurde gespeichert. Er wird erst sichtbar nachdem er von einem Moderator freigeschaltet wurde.</string>
-    <string name="GBO_FLOODING_PROTECTION">Ihr letzter Eintrag im Gästebuch liegt weniger als %VAR1% Sekunden zurück.</string>
+    <string name="GBO_FLOODING_PROTECTION">Ihr letzter Eintrag im Gästebuch liegt weniger als #VAR1# Sekunden zurück.</string>
     <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Intervall</string>
     <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Für nicht eingeloggte Benutzer wird bei Einträgen im Gästebuch überprüft, ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben. Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabständen hintereinander ungewünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese Überprüfung nicht durchgeführt. (Standard: 60 Sekunden)</string>
     <string name="GBO_GUESTBOOK">Gästebuch</string>
@@ -517,10 +517,10 @@
     <string name="GBO_INITIAL_COMMENTS_LOADING">Kommentare direkt anzeigen</string>
     <string name="GBO_INITIAL_COMMENTS_LOADING_DESC">Wenn diese Option aktiviert ist, werden beim Aufruf der Gästebuchseite die Kommentare direkt geladen und angezeigt. Im anderen Fall muss der Benutzer auf einen Link klicken um die Kommentare zu sehen. (Standard: nein)</string>
     <string name="GBO_MODERATE_ENTRIES">Einträge moderieren</string>
-    <string name="GBO_MODERATE_VAR">%VAR1% moderieren</string>
+    <string name="GBO_MODERATE_VAR">#VAR1# moderieren</string>
     <string name="GBO_ONLY_VISITORS">Nur Besucher</string>
     <string name="GBO_SHOW_COMMENTS">Kommentare anzeigen</string>
-    <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Zeige %VAR1% Kommentar(e) zu diesem Eintrag</string>
+    <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Zeige #VAR1# Kommentar(e) zu diesem Eintrag</string>
     <string name="GBO_WRITE_COMMENT">Kommentar schreiben</string>
 
     <!-- Phrases only in Installation -->
@@ -533,15 +533,15 @@
     <string name="INS_BOARD">Vorstand</string>
     <string name="INS_CHOOSE_LANGUAGE">Bitte wählen Sie eine Sprache aus</string>
     <string name="INS_CONFERENCE_ROOM">Besprechnungsraum</string>
-    <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Die Datei %VAR1_BOLD% befindet sich nicht im Admidio Hauptverzeichnis!\n\nLaden Sie die Datei gegebenenfalls erneut herunter und kopieren Sie diese in das entsprechende Verzeichnis.</string>
+    <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Die Datei #VAR1_BOLD# befindet sich nicht im Admidio Hauptverzeichnis!\n\nLaden Sie die Datei gegebenenfalls erneut herunter und kopieren Sie diese in das entsprechende Verzeichnis.</string>
     <string name="INS_COURSES">Kurse</string>
     <string name="INS_CREATE_ADMINISTRATOR">Administrator anlegen</string>
     <string name="INS_CREATE_CONFIGURATION_FILE">Konfigurationsdatei erzeugen</string>
-    <string name="INS_DATA_DO_NOT_MATCH">Die Daten aus der %VAR1_BOLD% stimmen nicht mit den Angaben des Installationsassistenten überein.\n\nPrüfen Sie bitte Ihre config.php und ändern Sie die Daten entsprechend den gerade getätigten Angaben.</string>
+    <string name="INS_DATA_DO_NOT_MATCH">Die Daten aus der #VAR1_BOLD# stimmen nicht mit den Angaben des Installationsassistenten überein.\n\nPrüfen Sie bitte Ihre config.php und ändern Sie die Daten entsprechend den gerade getätigten Angaben.</string>
     <string name="INS_DATA_OF_ADMINISTRATOR">Daten des Administrators</string>
     <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Geben Sie in diesem Formular Name, E-Mail und die Zugangsdaten des Administrators an. Mit diesem Benutzer können Sie sich nach der Installation bei Admidio anmelden.</string>
     <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Eine Aktualisierung der Datenbank ist nicht erforderlich</string>
-    <string name="INS_DATABASE_FILE_NOT_FOUND">Die Datei %VAR1_BOLD% konnte nicht im Verzeichnis %VAR2_BOLD% gefunden werden.</string>
+    <string name="INS_DATABASE_FILE_NOT_FOUND">Die Datei #VAR1_BOLD# konnte nicht im Verzeichnis #VAR2_BOLD# gefunden werden.</string>
     <string name="INS_DATABASE_IS_UPDATED">Datenbank wird aktualisiert</string>
     <string name="INS_DATABASE_IS_UP_TO_DATE">Die Admidio-Datenbank ist aktuell</string>
     <string name="INS_DATABASE_LOGIN">Datenbank Zugangsdaten</string>
@@ -551,14 +551,14 @@
     <string name="INS_DESCRIPTION_MEMBER">Alle Mitglieder der Organisation</string>
     <string name="INS_DESCRIPTION_WEBMASTER">Gruppe der Administratoren des Systems</string>
     <string name="INS_ENTER_LOGIN_TO_DATABASE">Zugangsdaten zur Datenbank eingeben</string>
-    <string name="INS_ERROR_OPEN_FILE">Die Datei %VAR1_BOLD% konnte nicht geöffnet werden.</string>
-    <string name="INS_FOLDER_NOT_WRITABLE">Der Ordner %VAR1_BOLD% besitzt noch keine Schreibrechte. Diese sollten Sie noch vergeben, da ohne Schreibrechte keine Fotos oder Dateien für das Downloadmodul hochgeladen werden können.</string>
+    <string name="INS_ERROR_OPEN_FILE">Die Datei #VAR1_BOLD# konnte nicht geöffnet werden.</string>
+    <string name="INS_FOLDER_NOT_WRITABLE">Der Ordner #VAR1_BOLD# besitzt noch keine Schreibrechte. Diese sollten Sie noch vergeben, da ohne Schreibrechte keine Fotos oder Dateien für das Downloadmodul hochgeladen werden können.</string>
     <string name="INS_GROUPS">Gruppen</string>
     <string name="INS_ICQ">ICQ</string>
     <string name="INS_INSTALL_ADMIDIO">Admidio installieren</string>
     <string name="INS_INSTALLATION">Installation</string>
     <string name="INS_INSTALLATION_SUCCESSFUL">Die Admidio-Datenbank ist nun installiert und die Konfigurationsdatei eingerichtet. Sie können jetzt mit Admidio arbeiten und sich mit den Daten des Administrators anmelden.</string>
-    <string name="INS_INSTALLATION_VERSION">Installation der Version %VAR1%</string>
+    <string name="INS_INSTALLATION_VERSION">Installation der Version #VAR1#</string>
     <string name="INS_INSTALLATION_WAS_SUCCESSFUL">Die Installation war erfolgreich</string>
     <string name="INS_INTERN">Intern</string>
     <string name="INS_LANGUAGE_NOT_CHOOSEN">Es wurde keine Sprache ausgewählt.</string>
@@ -569,8 +569,8 @@
     <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben!</string>
     <string name="INS_PASSWORDS_NOT_EQUAL">Das Passwort stimmt nicht mit der Wiederholung überein.</string>
     <string name="INS_PHONE_LIST">Telefonliste</string>
-    <string name="INS_WRONG_MYSQL_VERSION">Admidio %VAR1% setzt mindestens die MySQL-Version %VAR2% voraus. Sie sollten versuchen die MySQL-Datenbank zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu Ihrer Datenbank ist.</string>
-    <string name="INS_WRONG_PHP_VERSION">Admidio %VAR1% setzt mindestens die PHP-Version %VAR2% voraus. Sie sollten versuchen PHP zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu dieser PHP-Version ist.</string>
+    <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# setzt mindestens die MySQL-Version #VAR2# voraus. Sie sollten versuchen die MySQL-Datenbank zu aktualisieren oder eine #VAR3#ältere Admidio-Version#VAR4# nutzen, welche kompatibel zu Ihrer Datenbank ist.</string>
+    <string name="INS_WRONG_PHP_VERSION">Admidio #VAR1# setzt mindestens die PHP-Version #VAR2# voraus. Sie sollten versuchen PHP zu aktualisieren oder eine #VAR3#ältere Admidio-Version#VAR4# nutzen, welche kompatibel zu dieser PHP-Version ist.</string>
     <string name="INS_SET_ORGANIZATION">Organisation festlegen</string>
     <string name="INS_SET_UP_ORGANIZATION">Organisation einrichten</string>
     <string name="INS_SETUP_WAS_SUCCESSFUL">Die Einrichtung war erfolgreich</string>
@@ -582,8 +582,8 @@
     <string name="INS_TRAINING">Training</string>
     <string name="INS_UPDATE">Update</string>
     <string name="INS_UPDATE_DATABASE">Datenbank aktualisieren</string>
-    <string name="INS_UPDATE_TO_VERSION_SUCCESSFUL">Die Admidio-Datenbank ist jetzt auf die Version %VAR1% aktualisiert worden.\nSie können nun wieder mit Admidio arbeiten.</string>
-    <string name="INS_UPDATE_VERSION">Update auf Version %VAR1%</string>
+    <string name="INS_UPDATE_TO_VERSION_SUCCESSFUL">Die Admidio-Datenbank ist jetzt auf die Version #VAR1# aktualisiert worden.\nSie können nun wieder mit Admidio arbeiten.</string>
+    <string name="INS_UPDATE_VERSION">Update auf Version #VAR1#</string>
     <string name="INS_UPDATING_WAS_SUCCESSFUL">Die Aktualisierung war erfolgreich</string>
     <string name="INS_WARNING_BETA_VERSION">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</string>
     <string name="INS_WARNING_SAFE_MODE">Auf Ihrem Server ist der Safe Mode aktiviert. Bei eingeschaltetem Safe Mode kann es später zu Problemen bei der Nutzung einiger Funktionen kommen.</string>
@@ -597,16 +597,16 @@
     <string name="LNK_DISPLAY_REDIRECT">Anzeige Weiterleitung</string>
     <string name="LNK_DISPLAY_REDIRECT_DESC">Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne Anzeige der Hinweisseite direkt aufgerufen. (Standard: 10 Sekunden)</string>
     <string name="LNK_EMAIL_NOTIFICATION_TITLE">Ein neuer Weblink wurde angelegt</string>
-    <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Weblink bei %VAR1% angelegt.\n\nLink: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</string>
-    <string name="LNK_GO_TO">Gehe zu %VAR1%</string>
+    <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Weblink bei #VAR1# angelegt.\n\nLink: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
+    <string name="LNK_GO_TO">Gehe zu #VAR1#</string>
     <string name="LNK_LINK_ADDRESS">Linkadresse</string>
     <string name="LNK_LINK_NAME">Linkname</string>
     <string name="LNK_LINK_TARGET">Linkziel</string>
     <string name="LNK_LINK_TARGET_DESC">Hier wird angegeben, ob die ausgewählte Webseite im selben Browserfenster wie Admidio oder in einem neuen Browserfenster angezeigt werden soll.</string>
-    <string name="LNK_LINKS_FROM">Linksammlung von %VAR1%</string>
+    <string name="LNK_LINKS_FROM">Linksammlung von #VAR1#</string>
     <string name="LNK_NEW_WINDOW">Neues Fenster</string>
     <string name="LNK_REDIRECT">Weiterleitung</string>
-    <string name="LNK_REDIRECT_DESC">Sie verlassen jetzt das Webangebot von %VAR1_BOLD% und werden in %VAR2% Sekunden automatisch zu %VAR3% weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicken Sie bitte %VAR4%!</string>
+    <string name="LNK_REDIRECT_DESC">Sie verlassen jetzt das Webangebot von #VAR1_BOLD# und werden in #VAR2# Sekunden automatisch zu #VAR3# weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicken Sie bitte #VAR4#!</string>
     <string name="LNK_SAME_WINDOW">Gleiches Fenster</string>
     <string name="LNK_WEBLINKS">Weblinks</string>
     <string name="LNK_WEBLINKS_DESC">Links zu interessanten Webseiten können hier abgelegt und nach unterschiedlichen Kategorien gruppiert werden.</string>
@@ -632,7 +632,7 @@
     <string name="LST_EMAIL_TO_MEMBERS">E-Mail an Mitglieder</string>
     <string name="LST_EXPORT_TO">Exportieren nach</string>
     <string name="LST_FORMER_MEMBERS">Ehemalige Mitglieder</string>
-    <string name="LST_FROM_TO">von %VAR1% bis %VAR2%</string>
+    <string name="LST_FROM_TO">von #VAR1# bis #VAR2#</string>
     <string name="LST_GENERAL_LISTS">Allgemeine Listen</string>
     <string name="LST_HIDE_DETAILS">Details in Übersicht einklappen</string>
     <string name="LST_HIDE_DETAILS_DESC">Bei Aktivierung dieser Option werden die Details in der Listenübersicht standardmäßig eingeklappt. Auf Wunsch lassen sich die Details weiterhin anzeigen. (Standard: nein)</string>
@@ -642,7 +642,7 @@
     <string name="LST_LISTS">Listen</string>
     <string name="LST_LISTS_DESC">Unterschiedliche Listen zu einzelnen Rollen können hier angezeigt werden. Außerdem können von den Benutzern individuelle Listen erstellt und gespeichert werden.</string>
     <string name="LST_LIST_VIEW">Listenübersicht</string>
-    <string name="LST_MAX">von max. %VAR1%</string>
+    <string name="LST_MAX">von max. #VAR1#</string>
     <string name="LST_MEMBERS_PER_PAGE">Anzahl Teilnehmer pro Seite</string>
     <string name="LST_MEMBER_ASSIGNMENT">Mitgliederzuordnung</string>
     <string name="LST_MEMBERSHIP_END">Mitgliedschaftsende</string>
@@ -697,13 +697,13 @@
     <string name="MAI_CHOOSE_ROLE">Bitte wählen Sie eine Rolle als Adressat der E-Mail aus!</string>
     <string name="MAI_COUNT_BCC">Anzahl der BCC Empfänger</string>
     <string name="MAI_EMAIL_DESC">E-Mails können an unterschiedliche Rollen, dies können Gruppen, Kurse oder Abteilungen sein, geschrieben werden.</string>
-    <string name="MAI_MAX_ATTACHMENT_SIZE">Sie können beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MB nicht überschreiten.</string>
+    <string name="MAI_MAX_ATTACHMENT_SIZE">Sie können beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen #VAR1# MB nicht überschreiten.</string>
     <string name="MAI_MESSAGE">Nachricht</string>
     <string name="MAI_ROLE_NO_EMAILS">Die von Ihnen ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mail-Adressen, an die eine E-Mail versendet werden kann!</string>
     <string name="MAI_SEND_COPY">Kopie der E-Mail an mich senden</string>
     <string name="MAI_SEND_EMAIL">E-Mail senden</string>
     <string name="MAI_SENDER_EMAIL">Absender Mailadresse</string>
-    <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter Mailadressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle Mails aus dem Mailmodul verschickt werden, (z.B. mailversand@%VAR1%).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</string>
+    <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter Mailadressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle Mails aus dem Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</string>
     <string name="MAI_SENDER_NOT_LOGGED_IN">(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)</string>
     <string name="MAI_SHOW_CAPTCHA_DESC">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
     <string name="MAI_SUBJECT">Betreff</string>
@@ -729,19 +729,19 @@
     <string name="MEM_IMPORT_USERS">Benutzer importieren</string>
     <string name="MEM_INPUT_FIRSTNAME_LASTNAME">Gib bitte den Vor- und Nachnamen des neuen Benutzers ein. Bevor der Benutzer angelegt wird, wird geprüft, ob ein Benutzer mit ähnlichem Namen bereits in der Datenbank existiert.</string>
     <string name="MEM_MAKE_FORMER">Sie können den Benutzer zu einem Ehemaligen machen. Dies hat den Vorteil, dass die Daten erhalten bleiben und Sie sie später immer wieder sehen kannst, welchen Rollen diese Person zugeordnet war.</string>
-    <string name="MEM_NO_MEMBERSHIP">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1%.</string>
+    <string name="MEM_NO_MEMBERSHIP">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1#.</string>
     <string name="MEM_NOT_EDIT">Nicht bearbeiten</string>
     <string name="MEM_PROFILE_FIELD">Profilfeld</string>
-    <string name="MEM_REMOVE_MEMBERSHIP">Wollen Sie die Mitgliedschaft des Benutzers %VAR1% bei %VAR2% beenden?</string>
-    <string name="MEM_REMOVE_MEMBERSHIP_OK">Die Mitgliedschaft des Benutzers bei %VAR1% wurde erfolgreich beendet!</string>
+    <string name="MEM_REMOVE_MEMBERSHIP">Wollen Sie die Mitgliedschaft des Benutzers #VAR1# bei #VAR2# beenden?</string>
+    <string name="MEM_REMOVE_MEMBERSHIP_OK">Die Mitgliedschaft des Benutzers bei #VAR1# wurde erfolgreich beendet!</string>
     <string name="MEM_REMOVE_USER">Benutzer entfernen</string>
-    <string name="MEM_REMOVE_USER_DESC">Wenn Sie %VAR1_BOLD% auswählen, wird der Datensatz unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.</string>
+    <string name="MEM_REMOVE_USER_DESC">Wenn Sie #VAR1_BOLD# auswählen, wird der Datensatz unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.</string>
     <string name="MEM_REPLACE">Ersetzen</string>
-    <string name="MEM_ROLE_SELECT_RIGHT">Sie Haben keine Berechtigung, die Rolle %VAR1% auszuwählen.\nBitte wählen Sie eine andere Rolle aus.</string>
+    <string name="MEM_ROLE_SELECT_RIGHT">Sie Haben keine Berechtigung, die Rolle #VAR1# auszuwählen.\nBitte wählen Sie eine andere Rolle aus.</string>
     <string name="MEM_SEND_USERNAME_PASSWORD">E-Mail mit Benutzernamen und neuem Passwort zuschicken</string>
     <string name="MEM_SHOW_ALL_USERS">Alle Benutzer anzeigen</string>
     <string name="MEM_UPDATED_ON">Aktualisiert am</string>
-    <string name="MEM_USER_DELETE">Wollen Sie %VAR1_BOLD% wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</string>
+    <string name="MEM_USER_DELETE">Wollen Sie #VAR1_BOLD# wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</string>
     <string name="MEM_USER_MANAGEMENT">Benutzerverwaltung</string>
     <string name="MEM_USER_MANAGEMENT_DESC">Alle aktiven und ehemaligen Benutzer können hier eingesehen und verwaltet werden. Neue Benutzer können angelegt oder importiert werden.</string>
 
@@ -755,10 +755,10 @@
     <string name="NWU_DELETE_REGISTRATION">Registrierung löschen</string>
     <string name="NWU_MANAGE_NEW_REGISTRATIONS_DESC">Besucher, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</string>
     <string name="NWU_NEW_REGISTRATIONS">Neue Registrierungen</string>
-    <string name="NWU_NO_MEMBERSHIP">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1%, besitzt aber bereits Logindaten.</string>
-    <string name="NWU_NO_MEMBERSHIP_NO_LOGIN">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1% und besitzt auch keine Logindaten.</string>
+    <string name="NWU_NO_MEMBERSHIP">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1#, besitzt aber bereits Logindaten.</string>
+    <string name="NWU_NO_MEMBERSHIP_NO_LOGIN">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1# und besitzt auch keine Logindaten.</string>
     <string name="NWU_NO_REGISTRATIONS">Es sind keine Registrierungen vorhanden.</string>
-    <string name="NWU_REGISTERED_ON">Registriert am %VAR1%</string>
+    <string name="NWU_REGISTERED_ON">Registriert am #VAR1#</string>
     <string name="NWU_REMINDER_SEND_LOGIN">Möchten Sie ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken?</string>
     <string name="NWU_SEND_LOGIN">Zugangsdaten zuschicken</string>
     <string name="NWU_USER_NO_VALID_LOGIN">Dieser Benutzer besitzt noch kein Login.\nMöchten Sie ihm die Daten dieser Registrierung zuordnen?</string>
@@ -772,7 +772,7 @@
     <string name="ORG_ADMIDIO_THEME_DESC">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner adm_themes angezeigt. (Standard: modern)</string>
     <string name="ORG_ADVANCED_REGISTRATION">Erweiterte Registrierung</string>
     <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Automatischer Logout nach</string>
-    <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird. Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls der Benutzer %VAR1_BOLD% ausgewählt hat. (Standard: 20 Minuten)</string>
+    <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird. Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls der Benutzer #VAR1_BOLD# ausgewählt hat. (Standard: 20 Minuten)</string>
     <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Hintergrundfarbe</string>
     <string name="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT">Hier kann die Hintergrundfarbe (Hex-Angabe) für den Captcha-Code ausgewählt werden. (Standard: #FFEFC4)</string>
     <string name="ORG_CAPTCHA_FONT">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (Standard: Theme-Schriftart)</string>
@@ -795,10 +795,10 @@
     <string name="ORG_CURRENCY_DESC">Kennzeichen der Währung, die benutzt wird. Dieses Zeichen wird hinter allen Beträgen angezeigt.</string>
     <string name="ORG_DATATYPE">Datentyp</string>
     <string name="ORG_DATE_FORMAT">Datumsformat</string>
-    <string name="ORG_DATE_FORMAT_DESC">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: d.m.Y)</string>
+    <string name="ORG_DATE_FORMAT_DESC">Das Format entspricht der PHP-Funktion #VAR1#. (Standard: d.m.Y)</string>
     <string name="ORG_EDIT_PROFILE_FIELD">Profilfeld bearbeiten</string>
     <string name="ORG_EMAIL_ALERTS">E-Mail-Benachrichtigung</string>
-    <string name="ORG_EMAIL_ALERTS_DESC">Mitglieder aller Rollen mit der Berechtigung %VAR1_BOLD% erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat. (Standard: ja)</string>
+    <string name="ORG_EMAIL_ALERTS_DESC">Mitglieder aller Rollen mit der Berechtigung #VAR1_BOLD# erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat. (Standard: ja)</string>
     <string name="ORG_ENABLE_CAPTCHA">Captcha aktivieren</string>
     <string name="ORG_ENABLE_RSS_FEEDS">RSS-Feeds aktivieren</string>
     <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Standard: ja)</string>
@@ -838,7 +838,7 @@
     <string name="ORG_SEND_NEW_PASSWORD">Neues Passwort zuschicken</string>
     <string name="ORG_SYSTEM_INFORMATIONS">Systeminformationen</string>
     <string name="ORG_TIME_FORMAT">Zeitformat</string>
-    <string name="ORG_TIME_FORMAT_DESC">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: H:i)</string>
+    <string name="ORG_TIME_FORMAT_DESC">Das Format entspricht der PHP-Funktion #VAR1#. (Standard: H:i)</string>
     <string name="ORG_URL">URL</string>
     <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivierungslink für das neue Passwort</string>
     <string name="ORG_VARIABLE_EMAIL">E-Mail des Benutzers aus dem jeweiligen Mailkontext</string>
@@ -853,11 +853,11 @@
 
     <!-- Phrases only in Updatecheck -->
     <string name="UPD_ADMIDIO">Zur Admidio-Updateseite wechseln</string>
-    <string name="UPD_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfen Sie Ihre Internetverbindung oder versuchn Sie es zu einem späteren Zeitpunkt nocheinmal. Alternativ können Sie auch manuell auf der Webseite von %VAR1% prüfen ob ein Update vorliegt.</string>
+    <string name="UPD_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfen Sie Ihre Internetverbindung oder versuchn Sie es zu einem späteren Zeitpunkt nocheinmal. Alternativ können Sie auch manuell auf der Webseite von #VAR1# prüfen ob ein Update vorliegt.</string>
     <string name="UPD_NEW">Eine neue stabile Version ist verfügbar!</string>
     <string name="UPD_NEW_BETA">Eine neue Beta Version ist verfügbar!</string>
     <string name="UPD_NEW_BOTH">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</string>
-    <string name="UPD_NO_NEW">Sie benutzen eine aktuelle %VAR1%Version von Admidio!</string>
+    <string name="UPD_NO_NEW">Sie benutzen eine aktuelle #VAR1#Version von Admidio!</string>
     <string name="UPD_TITLE">Update Prüfung</string>
 
 
@@ -871,19 +871,19 @@
     <string name="PHO_DISPLAY_PHOTOS">Fotodarstellung</string>
     <string name="PHO_EDIT_ALBUM">Album Bearbeiten</string>
     <string name="PHO_EMAIL_NOTIFICATION_TITLE">Ein neues Fotoalbum wurde angelegt</string>
-    <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neues Fotoalbum bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</string>
+    <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neues Fotoalbum bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
     <string name="PHO_FOLDER_NOT_FOUND">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesuchern der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</string>
     <string name="PHO_MAX_PHOTO_SIZE_DESC">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild im Anzeigefenster haben darf. Das Fenster im Popup- bzw. Colorboxmodus wird automatisch in der Größe angepasst. Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder für die Anzeige nicht neu skaliert werden müssen. (Standard: 640 x 400 Pixel)</string>
     <string name="PHO_NEXT_PHOTO">Nächstes Bild</string>
     <string name="PHO_NO_ALBUM_CONTENT">Dieses Album enthält leider noch keine Fotos.</string>
-    <string name="PHO_NO_FILES_OR_TO_LARGE">Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene, maximale Uploadgröße von %VAR1%B. übersteigen!</string>
+    <string name="PHO_NO_FILES_OR_TO_LARGE">Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene, maximale Uploadgröße von #VAR1#B. übersteigen!</string>
     <string name="PHO_NO_FILES_SELECTED">Sie haben keine Fotodateien ausgewählt, die hinzugefügt werden sollen.</string>
     <string name="PHO_NO_RIGHTS">Sie haben keine Rechte, diese Aktion auszuführen.\n\nNur eingeloggte Benutzer mit Fotoverwaltungsrecht können Fotos verwalten.</string>
     <string name="PHO_PARENT_ALBUM">Elternalbum</string>
     <string name="PHO_PHOTO_ALBUMS">Fotoalben</string>
     <string name="PHO_PHOTO_DELETE">dieses Foto löschen</string>
-    <string name="PHO_PHOTO_DESTINATION">Die Fotos werden zu dem Album %VAR1_BOLD% hinzugefügt.</string>
-    <string name="PHO_PHOTO_FILES_TO_LARGE">Die Dateigröße eines oder aller Fotos übersteigt die vom Server zugelassene Uploadgröße von %VAR1% MB.</string>
+    <string name="PHO_PHOTO_DESTINATION">Die Fotos werden zu dem Album #VAR1_BOLD# hinzugefügt.</string>
+    <string name="PHO_PHOTO_FILES_TO_LARGE">Die Dateigröße eines oder aller Fotos übersteigt die vom Server zugelassene Uploadgröße von #VAR1# MB.</string>
     <string name="PHO_PHOTO_FORMAT_INVALID">Es können nur Fotos im JPG und PNG-Format hochgeladen und angezeigt werden.</string>
     <string name="PHO_PHOTO_PROCESSING_ERROR">Fehler bei der Bildverarbeitung</string>
     <string name="PHO_PHOTO_ROTATE_LEFT">Foto gegen den Uhrzeigersinn drehen</string>
@@ -902,7 +902,7 @@
     <string name="PHO_SCALE_THUMBNAILS">Skalierung Thumbnails</string>
     <string name="PHO_SCALE_THUMBNAILS_DESC">Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander. Ggf. weniger Thumbnailspalten einstellen. (Standard: 160Pixel)</string>
     <string name="PHO_SHOW_CAPTION">Bildtext einblenden</string>
-    <string name="PHO_SHOW_CAPTION_DESC">Der eingegebene Text wird in allen angezeigten Fotos, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet. (Standard: &#169; %VAR1%)</string>
+    <string name="PHO_SHOW_CAPTION_DESC">Der eingegebene Text wird in allen angezeigten Fotos, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet. (Standard: &#169; #VAR1#)</string>
     <string name="PHO_SHOWN_ON_READY" >Die Fotos wurden dem Album erfolgreich hinzugefügt, wenn sie hier angezeigt werden.</string>
     <string name="PHO_UPLOAD_MORE">Weitere Fotos hochladen</string>
     <string name="PHO_UPLOAD_PHOTOS">Fotos hochladen</string>
@@ -921,9 +921,9 @@
     <string name="PRO_EDIT_MY_PROFILE_PICTURE">Mein Profilfoto bearbeiten</string>
     <string name="PRO_EDIT_PASSWORD">Passwort bearbeiten</string>
     <string name="PRO_EDIT_PROFILE">Profil bearbeiten</string>
-    <string name="PRO_EDIT_PROFILE_PIC_FROM">Profilfoto von %VAR1% %VAR2% bearbeiten</string>
-    <string name="PRO_EXPORT_VCARD_FROM_VAR">vCard von %VAR1% exportieren</string>
-    <string name="PRO_FIELD_NUMERIC" description="nur auf Fett gesetzt">Das Feld %VAR1_BOLD% darf nur Zahlen enthalten.\nKorrigieren Sie bitte Ihre Eingabe.</string>
+    <string name="PRO_EDIT_PROFILE_PIC_FROM">Profilfoto von #VAR1# #VAR2# bearbeiten</string>
+    <string name="PRO_EXPORT_VCARD_FROM_VAR">vCard von #VAR1# exportieren</string>
+    <string name="PRO_FIELD_NUMERIC" description="nur auf Fett gesetzt">Das Feld #VAR1_BOLD# darf nur Zahlen enthalten.\nKorrigieren Sie bitte Ihre Eingabe.</string>
     <string name="PRO_FORMER_ROLE_MEMBERSHIP">Ehemalige Rollenmitgliedschaften</string>
     <string name="PRO_LOCATION_PROFILE_PICTURES">Speicherort der Profilbilder</string>
     <string name="PRO_LOCATION_PROFILE_PICTURES_DESC">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Standard: Datenbank)</string>
@@ -938,17 +938,17 @@
     <string name="PRO_PASSWORD_OLD_WRONG">Das alte Passwort ist falsch.</string>
     <string name="PRO_PASSWORDS_NOT_EQUAL">Das Passwort stimmt nicht mit der Wiederholung überein.</string>
     <string name="PRO_PHOTO_DELETED">Das Profilfoto wurde gelöscht.</string>
-    <string name="PRO_PHOTO_FILE_TO_LARGE">Das hochgeladene Foto übersteigt die vom Server zugelassene Dateigröße von %VAR1% B.</string>
+    <string name="PRO_PHOTO_FILE_TO_LARGE">Das hochgeladene Foto übersteigt die vom Server zugelassene Dateigröße von #VAR1# B.</string>
     <string name="PRO_PHOTO_FORMAT_INVALID">Es können nur Fotos im JPG und PNG-Format hochgeladen und angezeigt werden.</string>
     <string name="PRO_PHOTO_NOT_CHOOSEN">Es wurde keine Bilddatei ausgewählt.</string>
-    <string name="PRO_PHOTO_RESOLUTION_TO_LARGE">Die Auflösung des hochgeladenen Bildes übersteigt die vom Server zugelassene Auflösung von %VAR1% Megapixeln.</string>
+    <string name="PRO_PHOTO_RESOLUTION_TO_LARGE">Die Auflösung des hochgeladenen Bildes übersteigt die vom Server zugelassene Auflösung von #VAR1# Megapixeln.</string>
     <string name="PRO_PHOTO_SAVED">Das neue Profilfoto wurde erfolgreich gespeichert.</string>
     <string name="PRO_PROFILE">Profil</string>
-    <string name="PRO_PROFILE_FROM">Profil von %VAR1% %VAR2%</string>
+    <string name="PRO_PROFILE_FROM">Profil von #VAR1# #VAR2#</string>
     <string name="PRO_RESTRICTIONS_HELP_1">Sie sollten selbst auf dem Foto zu sehen sein.</string>
     <string name="PRO_RESTRICTIONS_HELP_2">Das Foto muss im Format JPG oder PNG gespeichert sein.</string>
-    <string name="PRO_RESTRICTIONS_HELP_3">Der Server kann Fotos mit einer maximalen Auflösung von %VAR1% MegaPixeln verarbeiten.</string>
-    <string name="PRO_RESTRICTIONS_HELP_4">Die hochgeladene Datei darf nicht größer als %VAR1% MB sein.</string>
+    <string name="PRO_RESTRICTIONS_HELP_3">Der Server kann Fotos mit einer maximalen Auflösung von #VAR1# MegaPixeln verarbeiten.</string>
+    <string name="PRO_RESTRICTIONS_HELP_4">Die hochgeladene Datei darf nicht größer als #VAR1# MB sein.</string>
     <string name="PRO_ROLE_MEMBERSHIP_OTHER_ORG">Rollenmitgliedschaften anderer Organisationen</string>
     <string name="PRO_ROLE_NOT_ASSIGNED">Die Daten können nicht gespeichert werden.\nDem Benutzer wurden keine Rollen zugeordnet.</string>
     <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP">Ehemalige Rollenmitgliedschaften anzeigen</string>
@@ -960,9 +960,9 @@
     <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Rollen anderer Organisationen anzeigen</string>
     <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Ist der Benutzer Mitglied in Rollen einer anderen Organisation, so wird ein Kasten mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt. (Standard: ja)</string>
     <string name="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS">zur Profilfeldpflege wechseln</string>
-    <string name="PRO_TO_ADD">%VAR1% zu %VAR2% hinzufügen</string>
-    <string name="PRO_UPLOAD_HELP_1">Auf den Button %VAR1_BOLD% klicken und die gewünschte Fotodatei von der Festplatte auswählen.</string>
-    <string name="PRO_UPLOAD_HELP_2">Danach auf %VAR1_BOLD% klicken und ein wenig Geduld haben.</string>
+    <string name="PRO_TO_ADD">#VAR1# zu #VAR2# hinzufügen</string>
+    <string name="PRO_UPLOAD_HELP_1">Auf den Button #VAR1_BOLD# klicken und die gewünschte Fotodatei von der Festplatte auswählen.</string>
+    <string name="PRO_UPLOAD_HELP_2">Danach auf #VAR1_BOLD# klicken und ein wenig Geduld haben.</string>
     <string name="PRO_UPLOAD_PHOTO">Foto hochladen</string>
     <string name="PRO_USERNAME_DESCRIPTION">Mit diesem Namen können Sie sich später auf der Homepage anmelden.\n\nDer Name muss im System eindeutig sein. Ist Ihr Wunschname bereits vergeben, dann versuchen Sie es mit Kombinationen, wie zum Beispiel Andi78 oder StefanT.</string>
     <string name="PRO_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
@@ -973,7 +973,7 @@
     <string name="ROL_ALL_GUESTS">Alle Besucher der Seite</string>
     <string name="ROL_ALL_MEMBERS">Alle angemeldeten Benutzer</string>
     <string name="ROL_ANNUALLY">Jährlich</string>
-    <string name="ROL_HINT_DELETE_ROLE">Wenn Sie %VAR1_BOLD% auswählen, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.</string>
+    <string name="ROL_HINT_DELETE_ROLE">Wenn Sie #VAR1_BOLD# auswählen, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.</string>
     <string name="ROL_DEPENDENCIES">Abhängigkeiten</string>
     <string name="ROL_DEPENDENT">Abhängig</string>
     <string name="ROL_EDIT_ROLE">Rolle bearbeiten</string>
@@ -982,9 +982,9 @@
     <string name="ROL_INACTIV_ROLE_DESC">Sie können die Rolle zu einer inaktiven Rolle machen. Dies hat den Vorteil, dass die Daten (Mitgliederzuordnung) erhalten bleiben und Sie sei später immer wieder sehen können, welche Personen dieser Rolle zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den üblichen Übersichten.</string>
     <string name="ROL_INACTIV_ROLES">Inaktive Rollen</string>
     <string name="ROL_INVISIBLE_ROLES">Unsichtbare Rollen</string>
-    <string name="ROL_LINK_MEMBERSHIP_DEL">Wollen Sie den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich entfernen?</string>
+    <string name="ROL_LINK_MEMBERSHIP_DEL">Wollen Sie den Verweis auf die ehemalige Mitgliedschaft bei der Rolle #VAR1_BOLD# wirklich entfernen?</string>
     <string name="ROL_MEETINGS">Treffen</string>
-    <string name="ROL_MEMBERSHIP_DEL">Wollen Sie die Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich beenden?</string>
+    <string name="ROL_MEMBERSHIP_DEL">Wollen Sie die Mitgliedschaft bei der Rolle #VAR1_BOLD# wirklich beenden?</string>
     <string name="ROL_MONTHLY">Monatlich</string>
     <string name="ROL_NEW_ROLE">Neue Rolle</string>
     <string name="ROL_ONLY_ROLE_MEMBERS">Nur Rollenmitglieder</string>
@@ -1001,22 +1001,22 @@
     <string name="ROL_RIGHT_EDIT_USER_DESC">Rollen, die diese Option aktiviert haben, haben die Berechtigung alle Benutzerdaten (außer Passwörter) anderer Mitglieder zu bearbeiten.\nAußerdem haben sie Zugriff auf die Benutzerverwaltung und können dort neue Benutzer anlegen oder alte Benutzer löschen.</string>
     <string name="ROL_RIGHT_GUESTBOOK">Gästebucheinträge bearbeiten und löschen</string>
     <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Kommentare zu Gästebucheinträgen anlegen</string>
-    <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Diese Einstellung steuert, wer das Recht hat über das Mailmodul E-Mails an diese Rolle zu schicken. Das Rollenrecht %VAR1_BOLD% steht allerdings noch über dieser Einstellung.</string>
+    <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Diese Einstellung steuert, wer das Recht hat über das Mailmodul E-Mails an diese Rolle zu schicken. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
     <string name="ROL_RIGHT_MAIL_TO_ALL">E-Mails an alle Rollen schreiben</string>
     <string name="ROL_RIGHT_PHOTO">Fotos hochladen und bearbeiten</string>
     <string name="ROL_RIGHT_PROFILE">Eigenes Profil bearbeiten</string>
-    <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht %VAR1_BOLD% steht allerdings noch über dieser Einstellung.</string>
+    <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
     <string name="ROL_RIGHT_WEBLINKS">Weblinks anlegen und bearbeiten</string>
     <string name="ROL_ROLE">Rolle</string>
     <string name="ROL_ROLE_ADMINISTRATION">Rollenverwaltung</string>
     <string name="ROL_ROLE_ADMINISTRATION_DESC">Rollen, dies können Gruppen, Kurse oder Abteilungen sein, können hier erstellt und bearbeitet werden. Auch die Rechte der einzelnen Rollen werden hier festgelegt.</string>
     <string name="ROL_ROLE_DELETE">Rolle löschen</string>
-    <string name="ROL_ROLE_DELETE_DESC">Wollen Sie die Rolle %VAR1% wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</string>
-    <string name="ROL_ROLE_DEPENDENCIES">Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der %VAR1% sein!\n\nBeim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen Rolle Mitglied der %VAR1%. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften nicht aufgehoben!</string>
+    <string name="ROL_ROLE_DELETE_DESC">Wollen Sie die Rolle #VAR1# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</string>
+    <string name="ROL_ROLE_DEPENDENCIES">Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der #VAR1# sein!\n\nBeim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen Rolle Mitglied der #VAR1#. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften nicht aufgehoben!</string>
     <string name="ROL_ROLE_MEMBERSHIPS">Rollenmitgliedschaften</string>
     <string name="ROL_ROLE_MEMBERSHIPS_CHANGE">Rollenmitgliedschaften ändern</string>
     <string name="ROL_ROLE_NAME_EXISTS">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</string>
-    <string name="ROL_ROLE_SET_MODE">Die Rolle %VAR1_BOLD% wurde auf %VAR2_BOLD% gesetzt.</string>
+    <string name="ROL_ROLE_SET_MODE">Die Rolle #VAR1_BOLD# wurde auf #VAR2_BOLD# gesetzt.</string>
     <string name="ROL_SAVE_ROLES">Beim Speichern dieser Einstellungen gehen eventuell konfigurierte Rollenabhängigkeiten verloren.</string>
     <string name="ROL_SEE_ROLE_MEMBERSHIP">Rollenmitgliedschaft sehen</string>
     <string name="ROL_SEMIYEARLY">Halbjährlich</string>
@@ -1054,7 +1054,7 @@
     <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
     <string name="SYS_ADMIDIO_VERSION">Admidio-Version</string>
     <string name="SYS_ADMINISTRATION">Administration</string>
-    <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: %VAR1%</string>
+    <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: #VAR1#</string>
     <string name="SYS_ALL">Alle</string>
     <string name="SYS_ALSO_VISITORS">auch Besucher</string>
     <string name="SYS_ASSIGN_MEMBERS">Mitglieder zuordnen</string>
@@ -1091,40 +1091,40 @@
     <string name="SYS_CONTENT">Inhalt</string>
     <string name="SYS_CONTRIBUTION">Beitrag</string>
     <string name="SYS_CONTRIBUTION_PERIOD">Beitragszeitraum</string>
-    <string name="SYS_COOKIE_NOT_SET">Der Login kann nicht durchgeführt werden, da Ihr Browser das Setzen von Cookies verbietet!\n\nDamit Sie sich erfolgreich anmelden können, müssen Sie Ihren Browser so einstellen, dass dieser Cookies von %VAR1_BOLD% akzeptiert.</string>
+    <string name="SYS_COOKIE_NOT_SET">Der Login kann nicht durchgeführt werden, da Ihr Browser das Setzen von Cookies verbietet!\n\nDamit Sie sich erfolgreich anmelden können, müssen Sie Ihren Browser so einstellen, dass dieser Cookies von #VAR1_BOLD# akzeptiert.</string>
     <string name="SYS_COPY">Kopieren</string>
     <string name="SYS_COUNTRY">Land</string>
     <string name="SYS_CREATE">Anlegen</string>
-    <string name="SYS_CREATE_VAR">%VAR1% anlegen</string>
+    <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
     <string name="SYS_CREATE_NEW_USER">Neuen Benutzer anlegen</string>
     <string name="SYS_CREATE_NOT_FOUND_USER">Falls der neue Benutzer nicht unter den gefundenen Benutzern aufgelistet ist, können Sie diesen neu anlegen.</string>
     <string name="SYS_CREATE_ROLE">Rolle anlegen</string>
-    <string name="SYS_CREATED_BY">Angelegt von %VAR1% am %VAR2%</string>
-    <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Sie haben keine gültige E-Mail-Adresse hinterlegt!\n\nTragen Sie bitte in Ihrem %VAR1%Profil%VAR1% eine E-Mail-Adresse ein.</string>
+    <string name="SYS_CREATED_BY">Angelegt von #VAR1# am #VAR2#</string>
+    <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Sie haben keine gültige E-Mail-Adresse hinterlegt!\n\nTragen Sie bitte in Ihrem #VAR1#Profil#VAR1# eine E-Mail-Adresse ein.</string>
     <string name="SYS_DATABASE">Datenbank</string>
     <string name="SYS_DATABASE_ERROR">Datenbankfehler</string>
     <string name="SYS_DATE">Datum</string>
     <string name="SYS_DATE_END_BEFORE_BEGIN">Das eingegebene Enddatum liegt vor dem Anfangsdatum.</string>
-    <string name="SYS_DATE_FROM_TO" description="Used in date-context: 2010/01/10 to 2010/01/12">%VAR1% bis %VAR2%</string>
-    <string name="SYS_DATA_GLOBAL">Ist diese Option aktiviert, erscheinen diese Daten auch auf den Webseiten folgender Organisationen und können dort von Benutzern mit entsprechenden Rechten bearbeitet werden:\n\n%VAR1_BOLD%</string>
-    <string name="SYS_DATE_INVALID">Es wurde kein gültiges Datum in das Feld %VAR1_BOLD% eingegeben.\n\nDas Datum muss dem folgenden Format %VAR2_BOLD% entsprechen.</string>
+    <string name="SYS_DATE_FROM_TO" description="Used in date-context: 2010/01/10 to 2010/01/12">#VAR1# bis #VAR2#</string>
+    <string name="SYS_DATA_GLOBAL">Ist diese Option aktiviert, erscheinen diese Daten auch auf den Webseiten folgender Organisationen und können dort von Benutzern mit entsprechenden Rechten bearbeitet werden:\n\n#VAR1_BOLD#</string>
+    <string name="SYS_DATE_INVALID">Es wurde kein gültiges Datum in das Feld #VAR1_BOLD# eingegeben.\n\nDas Datum muss dem folgenden Format #VAR2_BOLD# entsprechen.</string>
     <string name="SYS_DATE_MODIFIED">Änderungsdatum</string>
     <string name="SYS_DATE_TO">bis</string>
     <string name="SYS_DEACTIVATED" >Deaktiviert</string>
     <string name="SYS_DEBUG_MODUS">Debugmodus</string>
     <string name="SYS_DELETE">Löschen</string>
     <string name="SYS_DELETE_DATA">Die Daten wurden gelöscht.</string>
-    <string name="SYS_DELETE_ENTRY">Wollen Sie den Eintrag %VAR1_BOLD% löschen?</string>
+    <string name="SYS_DELETE_ENTRY">Wollen Sie den Eintrag #VAR1_BOLD# löschen?</string>
     <string name="SYS_DESCRIPTION">Beschreibung</string>
     <string name="SYS_DONATE">Spenden</string>
     <string name="SYS_EDIT">Bearbeiten</string>
-    <string name="SYS_EDIT_VAR">%VAR1% bearbeiten</string>
+    <string name="SYS_EDIT_VAR">#VAR1# bearbeiten</string>
     <string name="SYS_EMAIL">E-Mail</string>
-    <string name="SYS_EMAIL_INVALID">Die E-Mail-Adresse im Feld %VAR1_BOLD% enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</string>
+    <string name="SYS_EMAIL_INVALID">Die E-Mail-Adresse im Feld #VAR1_BOLD# enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</string>
     <string name="SYS_ENTRY_MULTI_ORGA">Eintrag für mehrere Organisationen sichtbar</string>
     <string name="SYS_END" description="End of a date">Ende</string>
     <string name="SYS_ERROR">Fehler</string>
-    <string name="SYS_ERROR_DATABASE_ACCESS">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n%VAR1%</string>
+    <string name="SYS_ERROR_DATABASE_ACCESS">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n#VAR1#</string>
     <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - Seite nicht gefunden!</string>
     <string name="SYS_EXAMPLE">Beispiel</string>
     <string name="SYS_EXAMPLES">Beispiele</string>
@@ -1133,19 +1133,19 @@
     <string name="SYS_FEATURES">Funktionen</string>
     <string name="SYS_FEMALE">Weiblich</string>
     <string name="SYS_FIELD">Feld</string>
-    <string name="SYS_FIELD_EMPTY">Das Feld %VAR1_BOLD% ist nicht gefüllt.</string>
+    <string name="SYS_FIELD_EMPTY">Das Feld #VAR1_BOLD# ist nicht gefüllt.</string>
     <string name="SYS_FIELDS_EMPTY">Es sind nicht alle Felder gefüllt worden.</string>
     <string name="SYS_FILE">Datei</string>
     <string name="SYS_FILE_NOT_EXIST">Die ausgewählte Datei existiert nicht auf dem Server.</string>
     <string name="SYS_FILE_PROGRESS">%0 von %1 übertragen</string>
     <string name="SYS_FILE_TO_LARGE">Datei ist zu groß.</string>
-    <string name="SYS_FILE_TO_LARGE_SERVER">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von %VAR1% MB.</string>
+    <string name="SYS_FILE_TO_LARGE_SERVER">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von #VAR1# MB.</string>
     <string name="SYS_FILE_UPLOADS">Dateiuploads</string>
     <string name="SYS_FIRSTNAME">Vorname</string>
-    <string name="SYS_FROM_TO">vom %VAR1% bis %VAR2%</string>
+    <string name="SYS_FROM_TO">vom #VAR1# bis #VAR2#</string>
     <string name="SYS_FOLDER">Ordner</string>
-    <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner %VAR1_BOLD% kann nicht angelegt werden.\n\nWenden Sie Sich bitte an den %VAR2%Webmaster%VAR3%, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
-    <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\n\nWenden Sie sich bitte an den %VAR2%Webmaster%VAR3%, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
+    <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWenden Sie Sich bitte an den #VAR2#Webmaster#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
+    <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWenden Sie sich bitte an den #VAR2#Webmaster#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
     <string name="SYS_FORMER">Ehemaliger</string>
     <string name="SYS_FORMER_PL">Ehemalige</string>
     <string name="SYS_FONT">Schriftart</string>
@@ -1165,11 +1165,11 @@
     <string name="SYS_IO_ERROR">E/A Fehler</string>
     <string name="SYS_ISO_8859_1">ISO-8859-1</string>
     <string name="SYS_LANGUAGE">Sprache</string>
-    <string name="SYS_LAST_EDITED_BY">Zuletzt bearbeitet von %VAR1% am %VAR2%</string>
+    <string name="SYS_LAST_EDITED_BY">Zuletzt bearbeitet von #VAR1# am #VAR2#</string>
     <string name="SYS_LASTNAME">Nachname</string>
     <string name="SYS_LATER">Später</string>
     <string name="SYS_LEADER">Leiter</string>
-    <string name="SYS_LINK_TO">Link auf %VAR1%</string>
+    <string name="SYS_LINK_TO">Link auf #VAR1#</string>
     <string name="SYS_LOCATION" description="Location of a date">Ort</string>
     <string name="SYS_LOCK">Sperren</string>
     <string name="SYS_LOCKED">Gesperrt</string>
@@ -1182,8 +1182,8 @@
     <string name="SYS_LOGOUT">Abmelden</string>
     <string name="SYS_LOGOUT_SUCCESSFUL">Sie wurden erfolgreich abgemeldet.</string>
     <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Sie sind am System angemeldet, folglich kennen Sie Ihr Passwort!</string>
-    <string name="SYS_LOSTPW_SEND">Das neue Passwort wurde an die E-Mail-Adresse %VAR1% geschickt!</string>
-    <string name="SYS_LOSTPW_SEND_ERROR">Es ist ein Fehler beim Senden an die E-Mail-Adresse %VAR1% aufgetreten!\nBitte versuch es später wieder!</string>
+    <string name="SYS_LOSTPW_SEND">Das neue Passwort wurde an die E-Mail-Adresse #VAR1# geschickt!</string>
+    <string name="SYS_LOSTPW_SEND_ERROR">Es ist ein Fehler beim Senden an die E-Mail-Adresse #VAR1# aufgetreten!\nBitte versuch es später wieder!</string>
     <string name="SYS_MAP">Karte</string>
     <string name="SYS_MAINTAIN_CATEGORIES">Kategorien pflegen</string>
     <string name="SYS_MALE">Männlich</string>
@@ -1193,7 +1193,7 @@
     <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>
     <string name="SYS_MEGA_PIXEL">Mega Pixel</string>
     <string name="SYS_MEMBER">Mitglied</string>
-    <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Mitglied der Organisation %VAR1%</string>
+    <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Mitglied der Organisation #VAR1#</string>
     <string name="SYS_MEMBERS">Mitglieder</string>
     <string name="SYS_MEMORY_LIMIT">Arbeitsspeicher</string>
     <string name="SYS_MESSAGE">Nachricht</string>
@@ -1205,7 +1205,7 @@
     <string name="SYS_NAME">Name</string>
     <string name="SYS_NAME_ABBREVIATION">Name (Abkürzung)</string>
     <string name="SYS_NEXT">Weiter</string>
-    <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Kein Mitglied der Organisation %VAR1%</string>
+    <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Kein Mitglied der Organisation #VAR1#</string>
     <string name="SYS_NO">Nein</string>
     <string name="SYS_NO_ENTRY">Der angeforderte Eintrag existiert nicht in der Datenbank.</string>
     <string name="SYS_NO_ENTRIES">Es sind keine Einträge vorhanden.</string>
@@ -1254,7 +1254,7 @@
     <string name="SYS_REPEAT">Wiederholen</string>
     <string name="SYS_RESTRICTIONS">Einschränkungen</string>
     <string name="SYS_ROLE">Rolle</string>
-    <string name="SYS_ROLE_MAX_MEMBERS">Speichern ist nicht möglich, bei der Rolle %VAR1_BOLD% würde die maximale Mitgliederzahl überschritten.</string>
+    <string name="SYS_ROLE_MAX_MEMBERS">Speichern ist nicht möglich, bei der Rolle #VAR1_BOLD# würde die maximale Mitgliederzahl überschritten.</string>
     <string name="SYS_ROOM">Raum</string>
     <string name="SYS_RSS_DISABLED">Die RSS-Funktion wurde vom Webmaster deaktiviert.</string>
     <string name="SYS_SAFE_MODE">Safe Mode</string>
@@ -1265,7 +1265,7 @@
     <string name="SYS_SECONDS">Sekunden</string>
     <string name="SYS_SECURITY_ERROR">Sicherheits Fehler</string>
     <string name="SYS_SEND">Abschicken</string>
-    <string name="SYS_SEND_EMAIL_TO">Sende eine E-Mail an %VAR1%</string>
+    <string name="SYS_SEND_EMAIL_TO">Sende eine E-Mail an #VAR1#</string>
     <string name="SYS_SEARCH">Suche</string>
     <string name="SYS_SEND_NEW_PW">Neues Passwort zusenden</string>
     <string name="SYS_SENDER">Absender</string>
@@ -1276,23 +1276,23 @@
     <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
     <string name="SYS_SHOW_PROFILE">Profil anzeigen</string>
     <string name="SYS_SHOW_ROUTE">Route anzeigen</string>
-    <string name="SYS_SIMILAR_USERS_FOUND">Es wurden bereits Benutzer mit ähnlichem Namen wie %VAR1_BOLD% in der Datenbank gefunden.</string>
-    <string name="SYS_SINCE">seit %VAR1%</string>
-    <string name="SYS_SINCE_TO">seit %VAR1% bis %VAR2%</string>
+    <string name="SYS_SIMILAR_USERS_FOUND">Es wurden bereits Benutzer mit ähnlichem Namen wie #VAR1_BOLD# in der Datenbank gefunden.</string>
+    <string name="SYS_SINCE">seit #VAR1#</string>
+    <string name="SYS_SINCE_TO">seit #VAR1# bis #VAR2#</string>
     <string name="SYS_SIZE">Größe</string>
     <string name="SYS_START" description="Start of a date">Beginn</string>
     <string name="SYS_STATUS">Status</string>
     <string name="SYS_STOP">Stop</string>
     <string name="SYS_SUNDAY">Sonntag</string>
-    <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Ihr angefordertes Passwort\n#content# Hallo %user_first_name% %user_last_name%,\n\nSie haben ein neues Passwort angefordert!\n\nHier sind Ihre Daten:\nBenutzername: %user_login_name%\nPasswort: %variable1%\n\nDamit Sie Ihr neues Passwort benutzen können, müssen Sie es über den folgenden Link freischalten:\n\n%variable2%\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf %organization_homepage% in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Webmaster</string>
-    <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Logindaten für %organization_homepage%\n#content# Hallo %user_first_name% %user_last_name%,\n\nSie erhalten Ihre Logindaten für %organization_homepage% .\nBenutzername: %user_login_name%\nPasswort: %variable1%\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf %organization_homepage% in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Webmaster</string>
-    <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei %organization_long_name%\n#content# Hallo %user_first_name% %user_last_name%,\n\nIhre Anmeldung auf %organization_homepage% wurde bestätigt.\n\nNun können Sie sich mit Ihrem Benutzernamen : %user_login_name%\nund dem Passwort auf der Homepage einloggen.\n\nSollten Sie noch Fragen haben, schreiben Sie bitte eine E-Mail an %webmaster_email% .\n\nMit freundlichen Grüßen\nDie Webmaster</string>
-    <string name="SYS_SYSMAIL_REGISTRATION_WEBMASTER">#subject# Neue Registrierung bei %organization_long_name%\n#content# Es hat sich ein neuer Benutzer auf %organization_homepage% registriert.\n\nNachname: %user_last_name%\nVorname:  %user_first_name%\nE-Mail:   %user_email%\n\n\nDiese Nachricht wurde automatisch erzeugt.</string>
+    <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Ihr angefordertes Passwort\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie haben ein neues Passwort angefordert!\n\nHier sind Ihre Daten:\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDamit Sie Ihr neues Passwort benutzen können, müssen Sie es über den folgenden Link freischalten:\n\n#variable2#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Webmaster</string>
+    <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Logindaten für #organization_homepage#\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie erhalten Ihre Logindaten für #organization_homepage# .\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Webmaster</string>
+    <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name#\n#content# Hallo #user_first_name# #user_last_name#,\n\nIhre Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun können Sie sich mit Ihrem Benutzernamen : #user_login_name#\nund dem Passwort auf der Homepage einloggen.\n\nSollten Sie noch Fragen haben, schreiben Sie bitte eine E-Mail an #webmaster_email# .\n\nMit freundlichen Grüßen\nDie Webmaster</string>
+    <string name="SYS_SYSMAIL_REGISTRATION_WEBMASTER">#subject# Neue Registrierung bei #organization_long_name#\n#content# Es hat sich ein neuer Benutzer auf #organization_homepage# registriert.\n\nNachname: #user_last_name#\nVorname:  #user_first_name#\nE-Mail:   #user_email#\n\n\nDiese Nachricht wurde automatisch erzeugt.</string>
     <string name="SYS_TEXT">Text</string>
     <string name="SYS_THURSDAY">Donnerstag</string>
     <string name="SYS_TIME">Uhrzeit</string>
     <string name="SYS_TIME_FROM">Uhrzeit von</string>
-    <string name="SYS_TIME_INVALID">Es wurde keine gültige Uhrzeit in das Feld %VAR1_BOLD% eingegeben.\n\nDie Uhrzeit muss dem folgenden Format %VAR2_BOLD% entsprechen.</string>
+    <string name="SYS_TIME_INVALID">Es wurde keine gültige Uhrzeit in das Feld #VAR1_BOLD# eingegeben.\n\nDie Uhrzeit muss dem folgenden Format #VAR2_BOLD# entsprechen.</string>
     <string name="SYS_TIME_TO">Uhrzeit bis</string>
     <string name="SYS_TITLE">Titel</string>
     <string name="SYS_TO" description="E-Mail">An</string>
@@ -1308,12 +1308,12 @@
     <string name="SYS_UPLOAD_NAME_ERROR">Der Dateiname darf nicht "submit" heißen.</string>
     <string name="SYS_USER">Benutzer</string>
     <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</string>
-    <string name="SYS_USER_NO_EMAIL">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
+    <string name="SYS_USER_NO_EMAIL">Der Benutzer #VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
     <string name="SYS_USERNAME">Benutzername</string>
     <string name="SYS_USERS_FOUND">Gefundene Benutzer</string>
     <string name="SYS_UTF8">UTF-8</string>
     <string name="SYS_VISIBLE">Sichtbar</string>
-    <string name="SYS_VISIBLE_TO_USERS">%VAR1% nur für eingeloggte Benutzer sichtbar</string>
+    <string name="SYS_VISIBLE_TO_USERS">#VAR1# nur für eingeloggte Benutzer sichtbar</string>
     <string name="SYS_VISITORS">Besucher</string>
     <string name="SYS_WANT_REGISTER">Ich möchte mich registrieren!</string>
     <string name="SYS_WARNING">Warnung</string>

@@ -24,9 +24,9 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUsfId    = admFuncVariableIsValid($_GET, 'usf_id',   'numeric');
-$getMode     = admFuncVariableIsValid($_GET, 'mode',     'numeric', array('requireValue' => true));
-$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string',  array('validValues' => array('UP', 'DOWN')));
+$getUsfId    = admFuncVariableIsValid($_GET, 'usf_id',   'int');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
+$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$gCurrentUser->isWebmaster())
@@ -95,7 +95,7 @@ if($getMode === 1)
     {
         // Schauen, ob das Feld bereits existiert
         $sql = 'SELECT COUNT(*) AS count
-                  FROM '. TBL_USER_FIELDS. '
+                  FROM '.TBL_USER_FIELDS.'
                  WHERE usf_name LIKE \''.$_POST['usf_name'].'\'
                    AND usf_cat_id  = '.$_POST['usf_cat_id'].'
                    AND usf_id     <> '.$getUsfId;

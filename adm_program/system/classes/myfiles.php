@@ -60,7 +60,7 @@ class MyFiles extends Folder
                     if(!file_exists(SERVER_PATH. '/adm_my_files'))
                     {
                         // create folder adm_my_files
-                        if(@mkdir(SERVER_PATH. '/adm_my_files', 0777) == false)
+                        if(!@mkdir(SERVER_PATH. '/adm_my_files', 0777))
                         {
                             $this->errorText = 'SYS_FOLDER_NOT_CREATED';
                             $this->errorPath = $this->webPath;
@@ -71,7 +71,7 @@ class MyFiles extends Folder
                     if(!is_writable(SERVER_PATH. '/adm_my_files'))
                     {
                         // set adm_my_files writable
-                        if(@chmod(SERVER_PATH. '/adm_my_files', 0777) == false)
+                        if(!@chmod(SERVER_PATH. '/adm_my_files', 0777))
                         {
                             $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
                             $this->errorPath = $this->webPath;
@@ -101,7 +101,7 @@ class MyFiles extends Folder
             if(!is_writable($this->modulePath))
             {
                 // set module folder writable
-                if(@chmod($this->folderWithPath, 0777) == false)
+                if(!@chmod($this->folderWithPath, 0777))
                 {
                     $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
                     $this->errorPath = $this->webPath;
@@ -138,7 +138,7 @@ class MyFiles extends Folder
                 if(!file_exists($tempPath))
                 {
                     // create folder
-                    if(@mkdir($tempPath, 0777) == false)
+                    if(!@mkdir($tempPath, 0777))
                     {
                         $this->errorText = 'SYS_FOLDER_NOT_CREATED';
                         $this->errorPath = $this->webPath.'/'.$folder;
@@ -150,7 +150,7 @@ class MyFiles extends Folder
             if(!is_writable($tempPath))
             {
                 // set folder writable
-                if(@chmod($tempPath, 0777) == false)
+                if(!@chmod($tempPath, 0777))
                 {
                     $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
                     $this->errorPath = $this->webPath.'/'.$folder;

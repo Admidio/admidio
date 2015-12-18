@@ -24,15 +24,22 @@ if (!$gValidLogin)
 }
 
 // Initialize and check the parameters
-$getMsgId = admFuncVariableIsValid($_GET, 'msg_id', 'numeric', array('defaultValue' => 0));
+$getMsgId = admFuncVariableIsValid($_GET, 'msg_id', 'int', array('defaultValue' => 0));
 
-if ($getMsgId != 0)
+if ($getMsgId > 0)
 {
     $delMessage = new TableMessage($gDb, $getMsgId);
 
     // Function to delete message
     $delete = $delMessage->delete();
-    echo $delete;
+    if ($delete)
+    {
+        echo 'done';
+    }
+    else
+    {
+        echo 'delete not OK';
+    }
     exit();
 }
 
@@ -91,7 +98,7 @@ $modulemessages = new ModuleMessages();
 
 // find all own Email messages
 $statement = $modulemessages->msgGetUserEmails($gCurrentUser->getValue('usr_id'));
-if(isset($result))
+if(isset($statement))
 {
     while ($row = $statement->fetch())
     {
@@ -140,7 +147,7 @@ if(isset($result))
 
 // find all unread PM messages
 $statement = $modulemessages->msgGetUserUnread($gCurrentUser->getValue('usr_id'));
-if(isset($result))
+if(isset($statement))
 {
     while ($row = $statement->fetch())
     {
@@ -167,7 +174,7 @@ if(isset($result))
 
 // find all read or own PM messages
 $statement = $modulemessages->msgGetUser($gCurrentUser->getValue('usr_id'));
-if(isset($result))
+if(isset($statement))
 {
     while ($row = $statement->fetch())
     {

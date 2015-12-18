@@ -30,11 +30,11 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'numeric');
-$getType     = admFuncVariableIsValid($_GET, 'type',     'string',  array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
-$getMode     = admFuncVariableIsValid($_GET, 'mode',     'numeric', array('requireValue' => true));
-$getTitle    = admFuncVariableIsValid($_GET, 'title',    'string',  array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
-$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string',  array('validValues' => array('UP', 'DOWN')));
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
+$getType     = admFuncVariableIsValid($_GET, 'type',     'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
+$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
+$getTitle    = admFuncVariableIsValid($_GET, 'title',    'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
+$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
 
 // Modus und Rechte pruefen
 if($getType === 'ROL' && !$gCurrentUser->manageRoles())
@@ -119,7 +119,7 @@ if($getMode === 1)
     {
         // Schauen, ob die Kategorie bereits existiert
         $sql = 'SELECT COUNT(*) as count
-                  FROM '. TBL_CATEGORIES. '
+                  FROM '.TBL_CATEGORIES.'
                  WHERE cat_type    = \''. $getType. '\'
                    AND cat_name LIKE \''. $_POST['cat_name']. '\'
                    AND cat_id     <> '.$getCatId.
@@ -172,7 +172,7 @@ if($getMode === 1)
         $sequence = 0;
 
         $sql = 'SELECT *
-                  FROM '. TBL_CATEGORIES. '
+                  FROM '.TBL_CATEGORIES.'
                  WHERE cat_type = "'. $getType. '"
                    AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )

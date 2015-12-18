@@ -1,6 +1,11 @@
 <?php
-
-/*****************************************************************************/
+/**
+ ***********************************************************************************************
+ * @copyright 2004-2015 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
 /**
  * @class HtmlFormInstallation
  * @brief Create the html script for an installation / update form
@@ -17,13 +22,6 @@
  * $form->show();
  * @endcode
  */
-/**
- ***********************************************************************************************
- * @copyright 2004-2015 The Admidio Team
- * @see http://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
 class HtmlFormInstallation extends HtmlForm
 {
     private $descriptionTitle;  ///< A title for the description of the form. This will be displayed as h2
@@ -31,9 +29,10 @@ class HtmlFormInstallation extends HtmlForm
     private $headline;          ///< Headline of the form
     private $title;             ///< Title of the html page
 
-    /** Constructor creates the form element
-     *  @param string $id     Id of the form
-     *  @param string $action Optional action attribute of the form
+    /**
+     * Constructor creates the form element
+     * @param string $id     Id of the form
+     * @param string $action Optional action attribute of the form
      */
     public function __construct($id, $action)
     {
@@ -41,11 +40,12 @@ class HtmlFormInstallation extends HtmlForm
         parent::__construct($id, $action);
     }
 
-    /** If the method is called then a text with an optional title will be displayed after
-     *  the headline before the form will be displayed.
-     *  @param string $description The (html) text that should be shown.
-     *  @param string $title       The headline of the description. If set than this will be displayed
-     *                             before the description as h2
+    /**
+     * If the method is called then a text with an optional title will be displayed after
+     * the headline before the form will be displayed.
+     * @param string $description The (html) text that should be shown.
+     * @param string $title       The headline of the description. If set than this will be displayed
+     *                            before the description as h2
      */
     public function setFormDescription($description, $title = '')
     {
@@ -53,8 +53,9 @@ class HtmlFormInstallation extends HtmlForm
         $this->descriptionTitle = $title;
     }
 
-    /** Set the form in the installation modus. Therefore headline and title will be changed.
-     *  This is the default modus and will be set automatically if not modus is set in the calling code.
+    /**
+     * Set the form in the installation modus. Therefore headline and title will be changed.
+     * This is the default modus and will be set automatically if not modus is set in the calling code.
      */
     public function setInstallationModus()
     {
@@ -63,7 +64,8 @@ class HtmlFormInstallation extends HtmlForm
         $this->headline = $gL10n->get('INS_INSTALLATION_VERSION', ADMIDIO_VERSION_TEXT);
     }
 
-    /** Set the form in the update modus. Therefore headline and title will be changed.
+    /**
+     * Set the form in the update modus. Therefore headline and title will be changed.
      */
     public function setUpdateModus()
     {
@@ -72,11 +74,12 @@ class HtmlFormInstallation extends HtmlForm
         $this->headline = $gL10n->get('INS_UPDATE_VERSION', ADMIDIO_VERSION_TEXT);
     }
 
-    /** This method will create the whole html installation/update code. It will show the headline,
-     *  text and the configured form. If no modus is set the installation modus will be set here.
-     *  @param $directOutput If set to @b true (default) the form html will be directly send
-     *                       to the browser. If set to @b false the html will be returned.
-     *  @return If $directOutput is set to @b false this method will return the html code of the form.
+    /**
+     * This method will create the whole html installation/update code. It will show the headline,
+     * text and the configured form. If no modus is set the installation modus will be set here.
+     * @param bool $directOutput If set to @b true (default) the form html will be directly send
+     *                      to the browser. If set to @b false the html will be returned.
+     * @return string|void If $directOutput is set to @b false this method will return the html code of the form.
      */
     public function show($directOutput = true)
     {

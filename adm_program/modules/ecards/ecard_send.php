@@ -13,8 +13,8 @@ require_once('ecard_function.php');
 
 // Initialize and check the parameters
 $postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', array('requireValue' => true));
-$postPhotoId      = admFuncVariableIsValid($_POST, 'photo_id', 'numeric', array('requireValue' => true));
-$postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr', 'numeric', array('requireValue' => true));
+$postPhotoId      = admFuncVariableIsValid($_POST, 'photo_id',       'int',  array('requireValue' => true));
+$postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr',       'int',  array('requireValue' => true));
 
 $funcClass       = new FunctionClass($gL10n);
 $photoAlbum      = new TablePhotos($gDb, $postPhotoId);
@@ -28,12 +28,12 @@ $_SESSION['ecard_request'] = $_POST;
 if ($gPreferences['enable_ecard_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $gMessage($gL10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 // pruefen ob User eingeloggt ist
 if(!$gValidLogin)
 {
-    $gMessage($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 $senderName  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
@@ -56,7 +56,7 @@ $ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName, $template);
 // if template was not found then show error
 if($ecardDataToParse === '')
 {
-    $gMessage($gL10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 // check if user has right to send mail to selected roles and users
@@ -85,28 +85,31 @@ foreach($_POST['ecard_recipients'] as $key => $value)
 $ecardSendResult = true;
 
 if(count($arrayRoles) > 0)
-// Wenn schon dann alle Namen und die dazugeh�rigen Emails auslesen und in die versand Liste hinzuf�gen
+// Wenn schon dann alle Namen und die dazugehörigen Emails auslesen und in die versand Liste hinzufügen
 {
     $sql = 'SELECT DISTINCT first_name.usd_value as first_name, last_name.usd_value as last_name,
                    email.usd_value as email, rol_name
-              FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
-             RIGHT JOIN '. TBL_USER_DATA. ' as email
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+        INNER JOIN '.TBL_USERS.'
+                ON usr_id = mem_usr_id
+        RIGHT JOIN '.TBL_USER_DATA.' as email
                 ON email.usd_usr_id = usr_id
                AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
                AND LENGTH(email.usd_value) > 0
-              LEFT JOIN '. TBL_USER_DATA. ' as last_name
+         LEFT JOIN '.TBL_USER_DATA.' as last_name
                 ON last_name.usd_usr_id = usr_id
                AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-              LEFT JOIN '. TBL_USER_DATA. ' as first_name
+         LEFT JOIN '.TBL_USER_DATA.' as first_name
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
              WHERE rol_id           IN ('.implode(',', $arrayRoles).')
-               AND rol_cat_id       = cat_id
                AND cat_org_id       = '.$gCurrentOrganization->getValue('org_id').'
-               AND mem_rol_id       = rol_id
                AND mem_begin       <= \''.DATE_NOW.'\'
                AND mem_end          > \''.DATE_NOW.'\'
-               AND mem_usr_id       = usr_id
                AND usr_valid        = 1
                AND email.usd_usr_id = email.usd_usr_id
              ORDER BY last_name, first_name';
@@ -114,7 +117,7 @@ if(count($arrayRoles) > 0)
 
     while($row = $usersStatement->fetch())
     {
-        if($ecardSendResult == true)
+        if($ecardSendResult)
         {
             // create and send ecard
             $ecardHtmlData   = $funcClass->parseEcardTemplate($imageUrl, $_POST['ecard_message'], $ecardDataToParse, $row['first_name'].' '.$row['last_name'], $row['email']);
@@ -127,7 +130,7 @@ if(count($arrayUsers) > 0)
 {
     foreach($arrayUsers as $userId)
     {
-        if($ecardSendResult == true)
+        if($ecardSendResult)
         {
             $user = new User($gDb, $gProfileFields, $userId);
 
@@ -139,7 +142,7 @@ if(count($arrayUsers) > 0)
 }
 
 // show result
-if($ecardSendResult == true)
+if($ecardSendResult)
 {
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
     $gMessage->show($gL10n->get('ECA_SUCCESSFULLY_SEND'));

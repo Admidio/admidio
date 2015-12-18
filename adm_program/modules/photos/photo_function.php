@@ -21,10 +21,10 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId   = admFuncVariableIsValid($_GET, 'pho_id',    'numeric', array('requireValue' => true));
-$getJob       = admFuncVariableIsValid($_GET, 'job',       'string',  array('requireValue' => true, 'validValues' => array('delete', 'rotate')));
-$getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',  'numeric', array('requireValue' => true));
-$getDirection = admFuncVariableIsValid($_GET, 'direction', 'string',  array('validValues' => array('left', 'right')));
+$getPhotoId   = admFuncVariableIsValid($_GET, 'pho_id',    'int',    array('requireValue' => true));
+$getJob       = admFuncVariableIsValid($_GET, 'job',       'string', array('requireValue' => true, 'validValues' => array('delete', 'rotate')));
+$getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',  'int',    array('requireValue' => true));
+$getDirection = admFuncVariableIsValid($_GET, 'direction', 'string', array('validValues' => array('left', 'right')));
 
 if ($gPreferences['enable_photo_module'] == 0)
 {
@@ -40,8 +40,8 @@ if (!$gCurrentUser->editPhotoRight())
 
 /**
  * Loeschen eines Thumbnails
- * @param $photo_album Referenz auf Objekt des relevanten Albums
- * @param $pic_nr      Nr des Bildes dessen Thumbnail geloescht werden soll
+ * @param object $photo_album Referenz auf Objekt des relevanten Albums
+ * @param int    $pic_nr      Nr des Bildes dessen Thumbnail geloescht werden soll
  */
 function deleteThumbnail(&$photo_album, $pic_nr)
 {
@@ -86,8 +86,8 @@ function tryRename($path, $newPath)
 
 /**
  * Loeschen eines Bildes
- * @param $pho_id
- * @param $pic_nr
+ * @param int $pho_id
+ * @param int $pic_nr
  */
 function deletePhoto($pho_id, $pic_nr)
 {

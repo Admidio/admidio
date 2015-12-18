@@ -29,8 +29,8 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'numeric', array('requireValue' => true));
+$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'int');
+$getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
 
 // only members who are allowed to create and edit roles should have access to
 // most of these functions
@@ -105,13 +105,14 @@ elseif($getMode === 2)
     {
         // Schauen, ob die Rolle bereits existiert
         $sql = 'SELECT COUNT(*) AS count
-                  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                  FROM '.TBL_ROLES.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
                  WHERE rol_name   LIKE \''. $_POST['rol_name']. '\'
                    AND rol_cat_id = '. $_POST['rol_cat_id']. '
                    AND rol_id    <> '. $getRoleId. '
-                   AND rol_cat_id = cat_id
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
-                       OR cat_org_id IS NULL ) ';
+                       OR cat_org_id IS NULL )';
         $statement = $gDb->query($sql);
         $row = $statement->fetch();
 
@@ -252,7 +253,7 @@ elseif($getMode === 2)
             $returnCode = $role->setValue($key, $value);
 
             // at least one role must have this flag otherwise show error
-            if($returnCode == false && $key === 'rol_default_registration')
+            if(!$returnCode && $key === 'rol_default_registration')
             {
                 $gMessage->show($gL10n->get('ROL_NO_DEFAULT_ROLE', $gL10n->get('ROL_DEFAULT_REGISTRATION')));
             }
@@ -268,7 +269,7 @@ elseif($getMode === 2)
     }
 
     // holt die Role ID des letzten Insert Statements
-    if($getRoleId == 0)
+    if($getRoleId === 0)
     {
         $getRoleId = $role->getValue('rol_id');
     }

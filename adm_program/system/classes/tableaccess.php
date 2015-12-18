@@ -143,11 +143,11 @@ class TableAccess
 
     /**
      * Reads the number of all records of this table
-     * @return Number of records of this table
+     * @return int Number of records of this table
      */
     public function countAllRecords()
     {
-        $sql = 'SELECT COUNT(1) as count FROM '.$this->tableName;
+        $sql = 'SELECT COUNT(*) as count FROM '.$this->tableName;
         $countStatement = $this->db->query($sql);
         $row = $countStatement->fetch();
         return $row['count'];
@@ -312,7 +312,8 @@ class TableAccess
 
         if($sqlWhereCondition !== '')
         {
-            $sql = 'SELECT * FROM '.$this->tableName.$sqlAdditionalTables.'
+            $sql = 'SELECT *
+                      FROM '.$this->tableName.$sqlAdditionalTables.'
                      WHERE '.$sqlWhereCondition;
             $readDataStatement = $this->db->query($sql);
 
@@ -573,8 +574,8 @@ class TableAccess
     }
 
     /**
-     *  Set the database object for communication with the database of this class.
-     *  @param object $database An object of the class Database. This should be the global $gDb object.
+     * Set the database object for communication with the database of this class.
+     * @param object $database An object of the class Database. This should be the global $gDb object.
      */
     public function setDatabase(&$database)
     {
@@ -588,9 +589,9 @@ class TableAccess
      * Set a new value for a column of the database table. The value is only saved in the object.
      * You must call the method @b save to store the new value to the database. If the unique key
      * column is set to 0 than this record will be a new record and all other columns are marked as changed.
-     * @param  string $columnName The name of the database column whose value should get a new value
-     * @param  mixed  $newValue   The new value that should be stored in the database field
-     * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @param string $columnName The name of the database column whose value should get a new value
+     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
      * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      * @see TableAccess#getValue
      */

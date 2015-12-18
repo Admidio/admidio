@@ -16,45 +16,65 @@
  *
  *****************************************************************************/
 
-if (!function_exists('getmicrotime')) {
-    function getmicrotime() {
+/////////////////////////////////////////////////////////////////////
+///////////////////       SUPPORT FUNCTIONS       ///////////////////
+/////////////////////////////////////////////////////////////////////
+
+if (!function_exists('getmicrotime'))
+{
+    /**
+     * @return float
+     */
+    function getmicrotime()
+    {
         list($usec, $sec) = explode(' ', microtime());
-        return ((float) $usec + (float) $sec);
+        return (float) $usec + (float) $sec;
     }
 }
 
 // begin: (from phpthumb.functions.php)
-function FunctionIsDisabled($function) {
+function FunctionIsDisabled($function)
+{
     static $DisabledFunctions = null;
-    if ($DisabledFunctions === null) {
+    if ($DisabledFunctions === null)
+    {
         $disable_functions_local  = explode(',',     @ini_get('disable_functions'));
         $disable_functions_global = explode(',', @get_cfg_var('disable_functions'));
-        foreach ($disable_functions_local as $key => $value) {
+        foreach ($disable_functions_local as $key => $value)
+        {
             $DisabledFunctions[$value] = 'local';
         }
-        foreach ($disable_functions_global as $key => $value) {
+        foreach ($disable_functions_global as $key => $value)
+        {
             $DisabledFunctions[$value] = 'global';
         }
-        if (@ini_get('safe_mode')) {
+        if (@ini_get('safe_mode'))
+        {
             $DisabledFunctions['shell_exec'] = 'local';
         }
     }
     return isset($DisabledFunctions[$function]);
 }
 
-function SafeExec($command) {
+function SafeExec($command)
+{
     static $AllowedExecFunctions = array();
-    if (empty($AllowedExecFunctions)) {
+    if (empty($AllowedExecFunctions))
+    {
         $AllowedExecFunctions = array('shell_exec' => true, 'passthru' => true, 'system' => true, 'exec' => true);
-        foreach ($AllowedExecFunctions as $key => $value) {
+        foreach ($AllowedExecFunctions as $key => $value)
+        {
             $AllowedExecFunctions[$key] = !FunctionIsDisabled($key);
         }
     }
-    foreach ($AllowedExecFunctions as $execfunction => $is_allowed) {
-        if (!$is_allowed) {
+    foreach ($AllowedExecFunctions as $execfunction => $is_allowed)
+    {
+        if (!$is_allowed)
+        {
             continue;
         }
-        switch ($execfunction) {
+        switch ($execfunction)
+        {
             case 'passthru':
                 ob_start();
                 $execfunction($command);
@@ -76,14 +96,16 @@ function SafeExec($command) {
     return false;
 }
 
-function version_compare_replacement_sub($version1, $version2, $operator='') {
+function version_compare_replacement_sub($version1, $version2, $operator = '')
+{
     // If you specify the third optional operator argument, you can test for a particular relationship.
     // The possible operators are: <, lt, <=, le, >, gt, >=, ge, ==, =, eq, !=, <>, ne respectively.
     // Using this argument, the function will return 1 if the relationship is the one specified by the operator, 0 otherwise.
 
     // If a part contains special version strings these are handled in the following order: dev < (alpha = a) < (beta = b) < RC < pl
     static $versiontype_lookup = array();
-    if (empty($versiontype_lookup)) {
+    if (empty($versiontype_lookup))
+    {
         $versiontype_lookup['dev']   = 10001;
         $versiontype_lookup['a']     = 10002;
         $versiontype_lookup['alpha'] = 10002;
@@ -92,14 +114,17 @@ function version_compare_replacement_sub($version1, $version2, $operator='') {
         $versiontype_lookup['RC']    = 10004;
         $versiontype_lookup['pl']    = 10005;
     }
-    if (isset($versiontype_lookup[$version1])) {
+    if (isset($versiontype_lookup[$version1]))
+    {
         $version1 = $versiontype_lookup[$version1];
     }
-    if (isset($versiontype_lookup[$version2])) {
+    if (isset($versiontype_lookup[$version2]))
+    {
         $version2 = $versiontype_lookup[$version2];
     }
 
-    switch ($operator) {
+    switch ($operator)
+    {
         case '<':
         case 'lt':
             return intval($version1 < $version2);
@@ -127,16 +152,21 @@ function version_compare_replacement_sub($version1, $version2, $operator='') {
             return intval($version1 != $version2);
             break;
     }
-    if ($version1 == $version2) {
+    if ($version1 == $version2)
+    {
         return 0;
-    } elseif ($version1 < $version2) {
+    }
+    elseif ($version1 < $version2)
+    {
         return -1;
     }
     return 1;
 }
 
-function version_compare_replacement($version1, $version2, $operator='') {
-    if (function_exists('version_compare')) {
+function version_compare_replacement($version1, $version2, $operator = '')
+{
+    if (function_exists('version_compare'))
+    {
         // built into PHP v4.1.0+
         return version_compare($version1, $version2, $operator);
     }
@@ -153,9 +183,11 @@ function version_compare_replacement($version1, $version2, $operator='') {
     $parts1 = explode('.', $version1);
     $parts2 = explode('.', $version1);
     $parts_count = max(count($parts1), count($parts2));
-    for ($i = 0; $i < $parts_count; ++$i) {
+    for ($i = 0; $i < $parts_count; ++$i)
+    {
         $comparison = phpthumb_functions::version_compare_replacement_sub($version1, $version2, $operator);
-        if ($comparison != 0) {
+        if ($comparison != 0)
+        {
             return $comparison;
         }
     }
@@ -163,38 +195,49 @@ function version_compare_replacement($version1, $version2, $operator='') {
 }
 // end: (from phpthumb.functions.php)
 
-function MySQLdumpVersion() {
+function MySQLdumpVersion()
+{
     static $version = null;
-    if ($version === null) {
+    if ($version === null)
+    {
         $version = false;
         $execdversion = SafeExec('mysqldump --version');
-        if (preg_match('#^mysqldump +Ver ([0-9\\.]+)#i', $execdversion, $matches)) {
+        if (preg_match('#^mysqldump +Ver ([0-9\\.]+)#i', $execdversion, $matches))
+        {
             $version = $matches[1];
         }
     }
     return $version;
 }
 
-function gzipVersion() {
+function gzipVersion()
+{
     static $version = null;
-    if ($version === null) {
+    if ($version === null)
+    {
         $version = false;
         $execdversion = SafeExec('gzip --version');
-        if (preg_match('#^gzip ([0-9\\.]+)#i', $execdversion, $matches)) {
+        if (preg_match('#^gzip ([0-9\\.]+)#i', $execdversion, $matches))
+        {
             $version = $matches[1];
         }
     }
     return $version;
 }
 
-function bzip2Version() {
+function bzip2Version()
+{
     static $version = null;
-    if ($version === null) {
+    if ($version === null)
+    {
         $version = false;
         $execdversion = SafeExec('bzip2 --version 2>&1');
-        if (preg_match('#^bzip2(.*) Version ([0-9\\.]+)#i', $execdversion, $matches)) {
+        if (preg_match('#^bzip2(.*) Version ([0-9\\.]+)#i', $execdversion, $matches))
+        {
             $version = $matches[2];
-        } elseif (preg_match('#^bzip2:#i', $execdversion, $matches)) {
+        }
+        elseif (preg_match('#^bzip2:#i', $execdversion, $matches))
+        {
             $version = 'installed_unknown_version';
         }
     }
@@ -202,53 +245,89 @@ function bzip2Version() {
 }
 
 // MFA Anpassungen
-function FormattedTimeRemaining($seconds, $precision=1)
+/**
+ * @param int $seconds
+ * @param int $precision
+ * @return string
+ */
+function FormattedTimeRemaining($seconds, $precision = 1)
 {
     global $gL10n;
 
-    if ($seconds > 86400) {
+    if ($seconds > 86400)
+    {
         return $gL10n->get('BAC_DAYS_VAR', number_format($seconds / 86400, $precision));
-    } elseif ($seconds > 3600) {
+    }
+    elseif ($seconds > 3600)
+    {
         return $gL10n->get('BAC_HOURS_VAR', number_format($seconds / 3600, $precision));
-    } elseif ($seconds > 60) {
+    }
+    elseif ($seconds > 60)
+    {
         return $gL10n->get('BAC_MINUTES_VAR', number_format($seconds / 60, $precision));
     }
     return $gL10n->get('BAC_SECONDS_VAR', number_format($seconds, $precision));
 }
 // Ende : MFA
 
-function FileSizeNiceDisplay($filesize, $precision=2) {
-    if ($filesize < 1000) {
+/**
+ * @param int $filesize
+ * @param int $precision
+ * @return string
+ */
+function FileSizeNiceDisplay($filesize, $precision = 2)
+{
+    if ($filesize < 1000)
+    {
         $sizeunit  = 'bytes';
         $precision = 0;
-    } else {
+    }
+    else
+    {
         $filesize /= 1024;
         $sizeunit = 'kB';
     }
-    if ($filesize >= 1000) {
+    if ($filesize >= 1000)
+    {
         $filesize /= 1024;
         $sizeunit = 'MB';
     }
-    if ($filesize >= 1000) {
+    if ($filesize >= 1000)
+    {
         $filesize /= 1024;
         $sizeunit = 'GB';
     }
     return number_format($filesize, $precision).' '.$sizeunit;
 }
 
-function OutputInformation($id, $dhtml, $text='') {
+/**
+ * @param string $id
+ * @param string $dhtml
+ * @param string $text
+ * @return bool
+ */
+function OutputInformation($id, $dhtml, $text = '')
+{
     global $DHTMLenabled;
-    if ($DHTMLenabled) {
-        if (!$dhtml === null) {
-            if ($id) {
+    if ($DHTMLenabled)
+    {
+        if (!is_null($dhtml))
+        {
+            if ($id)
+            {
                 echo '<script type="text/javascript">if (document.getElementById("'.$id.'")) document.getElementById("'.$id.'").innerHTML="'.str_replace('</', '<\\/', $dhtml).'"</script>';
-            } else {
+            }
+            else
+            {
                 echo $dhtml;
             }
             //flush();
         }
-    } else {
-        if ($text) {
+    }
+    else
+    {
+        if ($text)
+        {
             echo $text;
             //flush();
         }
@@ -256,7 +335,8 @@ function OutputInformation($id, $dhtml, $text='') {
     return true;
 }
 
-function EmailAttachment($from, $to, $subject, $textbody, &$attachmentdata, $attachmentfilename) {
+function EmailAttachment($from, $to, $subject, $textbody, &$attachmentdata, $attachmentfilename)
+{
     $boundary = '_NextPart_'.time().'_'.md5($attachmentdata).'_';
 
     $textheaders  = '--'.$boundary."\r\n";

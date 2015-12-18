@@ -128,7 +128,7 @@ class ModuleWeblinks extends Modules
         global $gCurrentOrganization, $gPreferences, $gProfileFields, $gDb, $gValidLogin;
 
         // Parameter
-        if($limit == null)
+        if($limit === null)
         {
             $limit = $gPreferences['weblinks_per_page'];
         }
@@ -149,18 +149,19 @@ class ModuleWeblinks extends Modules
         }
 
         // Weblinks aus der DB fischen...
-        $sql = 'SELECT cat.*, lnk.*
-                  FROM '. TBL_CATEGORIES .' cat, '. TBL_LINKS. ' lnk
-                 WHERE lnk_cat_id = cat_id
-                   AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                   AND cat_type = \'LNK\'
-                   '.$this->getConditions.'
+        $sql = 'SELECT *
+                  FROM '.TBL_LINKS.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = lnk_cat_id
+                 WHERE cat_type   = \'LNK\'
+                   AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                       '.$this->getConditions.'
                  ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
         if($limit > 0)
         {
             $sql .= ' LIMIT '.$limit;
         }
-        if($startElement != 0)
+        if($startElement > 0)
         {
             $sql .= ' OFFSET '.$startElement;
         }
@@ -188,11 +189,13 @@ class ModuleWeblinks extends Modules
         global $gCurrentOrganization;
         global $gDb;
 
-        $sql = 'SELECT COUNT(*) AS count FROM '. TBL_LINKS. ', '. TBL_CATEGORIES .'
-                WHERE lnk_cat_id = cat_id
-                AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                AND cat_type = \'LNK\'
-        '.$this->getConditions;
+        $sql = 'SELECT COUNT(*) AS count
+                  FROM '.TBL_LINKS.'
+            INNER JOIN '. TBL_CATEGORIES .'
+                    ON cat_id = lnk_cat_id
+                 WHERE cat_type   = \'LNK\'
+                   AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                       '.$this->getConditions;
         $statement = $gDb->query($sql);
         $row = $statement->fetch();
         return $row['count'];

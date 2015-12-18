@@ -134,11 +134,12 @@ class TableRoles extends TableAccess
     {
         if($this->countLeaders === -1)
         {
-            $sql = 'SELECT COUNT(mem_id) FROM '. TBL_MEMBERS. '
+            $sql = 'SELECT COUNT(mem_id)
+                      FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id = '.$this->getValue('rol_id').'
                        AND mem_leader = 1
                        AND mem_begin <= \''.DATE_NOW.'\'
-                       AND mem_end    > \''.DATE_NOW.'\' ';
+                       AND mem_end    > \''.DATE_NOW.'\'';
             $countMembersStatement = $this->db->query($sql);
 
             $row = $countMembersStatement->fetch();
@@ -149,19 +150,20 @@ class TableRoles extends TableAccess
 
     /**
      * Method determines the number of active members (without leaders) of this role
-     * @param $exceptUserId UserId witch shouldn't be counted
+     * @param int $exceptUserId UserId witch shouldn't be counted
      * @return int Returns the number of members of this role
      */
     public function countMembers($exceptUserId = null)
     {
         if($this->countMembers === -1)
         {
-            $sql = 'SELECT COUNT(mem_id) FROM '. TBL_MEMBERS. '
-                     WHERE mem_rol_id = '.$this->getValue('rol_id').'
+            $sql = 'SELECT COUNT(mem_id)
+                      FROM '.TBL_MEMBERS.'
+                     WHERE mem_rol_id  = '.$this->getValue('rol_id').'
                        AND mem_usr_id != '.$exceptUserId.'
-                       AND mem_leader = 0
-                       AND mem_begin <= \''.DATE_NOW.'\'
-                       AND mem_end    > \''.DATE_NOW.'\' ';
+                       AND mem_leader  = 0
+                       AND mem_begin  <= \''.DATE_NOW.'\'
+                       AND mem_end     > \''.DATE_NOW.'\'';
             $countMembersStatement = $this->db->query($sql);
 
             $row = $countMembersStatement->fetch();
@@ -180,7 +182,8 @@ class TableRoles extends TableAccess
     {
         if($this->getValue('rol_max_members') !== '')
         {
-            $sql = 'SELECT mem_usr_id FROM '. TBL_MEMBERS. '
+            $sql = 'SELECT mem_usr_id
+                      FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id = '. $this->getValue('rol_id'). '
                        AND mem_begin <= \''.DATE_NOW.'\'
                        AND mem_end    > \''.DATE_NOW.'\'';
@@ -208,15 +211,17 @@ class TableRoles extends TableAccess
         if($this->getValue('rol_default_registration') == 1)
         {
             // checks if at least one other role has this flag, if not than this role couldn't be deleted
-            $sql = 'SELECT COUNT(1) AS count FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+            $sql = 'SELECT COUNT(*) AS count
+                      FROM '.TBL_ROLES.'
+                INNER JOIN '.TBL_CATEGORIES.'
+                        ON cat_id = rol_cat_id
                      WHERE rol_default_registration = 1
                        AND rol_id    <> '.$this->getValue('rol_id').'
-                       AND rol_cat_id = cat_id
                        AND cat_org_id = '.$gCurrentOrganization->getValue('org_id');
             $countRolesStatement = $this->db->query($sql);
             $row = $countRolesStatement->fetch();
 
-            if($row['count'] == 0)
+            if($row['count'] === 0)
             {
                 throw new AdmException('ROL_DELETE_NO_DEFAULT_ROLE', $this->getValue('rol_name'), $gL10n->get('ROL_DEFAULT_REGISTRATION'));
             }
@@ -235,12 +240,12 @@ class TableRoles extends TableAccess
         {
             $this->db->startTransaction();
 
-            $sql = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES. '
+            $sql = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.'
                      WHERE rld_rol_id_parent = '. $this->getValue('rol_id'). '
                         OR rld_rol_id_child  = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
-            $sql = 'DELETE FROM '. TBL_MEMBERS. '
+            $sql = 'DELETE FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
@@ -349,7 +354,7 @@ class TableRoles extends TableAccess
      */
     public function hasFormerMembers()
     {
-        $sql = 'SELECT COUNT(1) AS count
+        $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = '.$this->getValue('rol_id').'
                    AND (  mem_begin > \''.DATE_NOW.'\'
@@ -398,7 +403,7 @@ class TableRoles extends TableAccess
         // die Systemrollem sind immer aktiv
         if($this->getValue('rol_system') == false)
         {
-            $sql = 'UPDATE '. TBL_ROLES. ' SET rol_valid = 1
+            $sql = 'UPDATE '.TBL_ROLES.' SET rol_valid = 1
                      WHERE rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
@@ -422,7 +427,7 @@ class TableRoles extends TableAccess
         // die Systemrollem sind immer aktiv
         if($this->getValue('rol_system') == false)
         {
-            $sql = 'UPDATE '. TBL_ROLES. ' SET rol_valid = 0
+            $sql = 'UPDATE '.TBL_ROLES.' SET rol_valid = 0
                      WHERE rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
@@ -450,16 +455,17 @@ class TableRoles extends TableAccess
         if($columnName === 'rol_default_registration' && $newValue == '0' && $this->dbColumns[$columnName] == '1')
         {
             // checks if at least one other role has this flag
-            $sql = 'SELECT COUNT(1) AS count
-                      FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+            $sql = 'SELECT COUNT(*) AS count
+                      FROM '.TBL_ROLES.'
+                INNER JOIN '.TBL_CATEGORIES.'
+                        ON cat_id = rol_cat_id
                      WHERE rol_default_registration = 1
                        AND rol_id    <> '.$this->getValue('rol_id').'
-                       AND rol_cat_id = cat_id
                        AND cat_org_id = '.$gCurrentOrganization->getValue('org_id');
             $countRolesStatement = $this->db->query($sql);
             $row = $countRolesStatement->fetch();
 
-            if($row['count'] == 0)
+            if($row['count'] === 0)
             {
                 return false;
             }
@@ -489,9 +495,10 @@ class TableRoles extends TableAccess
                 {
                     // pruefen, ob der Benutzer Mitglied einer Rolle ist, die den Termin sehen darf
                     $sql = 'SELECT dtr_rol_id
-                              FROM '.TBL_DATE_ROLE.', '.TBL_DATES.'
+                              FROM '.TBL_DATE_ROLE.'
+                        INNER JOIN '.TBL_DATES.'
+                                ON dat_id = dtr_dat_id
                              WHERE dat_rol_id = '.$this->getValue('rol_id').'
-                               AND dtr_dat_id = dat_id
                                AND (  dtr_rol_id IS NULL
                                    OR EXISTS (SELECT 1
                                                 FROM '.TBL_MEMBERS.'

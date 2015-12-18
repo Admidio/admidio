@@ -26,10 +26,10 @@ require_once('../../system/login_valid.php');
 require_once('roles_functions.php');
 
 // Initialize and check the parameters
-$getUserId   = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
-$getRoleId   = admFuncVariableIsValid($_GET, 'rol_id',  'numeric');
-$getMemberId = admFuncVariableIsValid($_GET, 'mem_id',  'numeric');
-$getMode     = admFuncVariableIsValid($_GET, 'mode',    'numeric');
+$getUserId   = admFuncVariableIsValid($_GET, 'user_id', 'int');
+$getRoleId   = admFuncVariableIsValid($_GET, 'rol_id',  'int');
+$getMemberId = admFuncVariableIsValid($_GET, 'mem_id',  'int');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',    'int');
 
 // in ajax mode only return simple text on error
 if($getMode === 7)
@@ -105,7 +105,7 @@ elseif($getMode === 5)
     $count_role       = $roleStatement->rowCount();
     getRoleMemberships('former_role_list', $user, $roleStatement, $count_role, true);
 
-    if($count_role == 0)
+    if($count_role === 0)
     {
         echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'none\' })</script>';
     }
@@ -122,7 +122,7 @@ elseif($getMode === 6)
     $count_role       = $roleStatement->rowCount();
     getRoleMemberships('future_role_list', $user, $roleStatement, $count_role, true);
 
-    if($count_role == 0)
+    if($count_role === 0)
     {
         echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'none\' })</script>';
     }
@@ -217,7 +217,7 @@ elseif ($getMode === 8)
         $sql = 'SELECT
                     bm.mem_usr_id
                 FROM
-                    '. TBL_MEMBERS. ' bm
+                    '.TBL_MEMBERS.' bm
                 WHERE
                     bm.mem_rol_id = '.$getRoleId.'
                     AND bm.mem_begin <= \''.DATE_NOW.'\'

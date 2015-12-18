@@ -163,11 +163,12 @@ $columnHeading = array(
 $categoriesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
 $categoriesOverview->addRowHeadingByArray($columnHeading);
 
-$sql = 'SELECT * FROM '. TBL_CATEGORIES. '
-            WHERE (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                OR cat_org_id IS NULL )
-            AND cat_type   = \''.$getType.'\'
-            ORDER BY cat_sequence ASC ';
+$sql = 'SELECT *
+          FROM '.TBL_CATEGORIES.'
+         WHERE (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+               OR cat_org_id IS NULL )
+           AND cat_type   = \''.$getType.'\'
+         ORDER BY cat_sequence ASC';
 
 $categoryStatement = $gDb->query($sql);
 $flagTbodyWritten = false;

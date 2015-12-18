@@ -17,7 +17,8 @@ while($row_orga = $orgaStatement->fetch())
 {
     $last_cat_type = '';
     $counter       = 0;
-    $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
+    $sql = 'SELECT *
+              FROM '.TBL_CATEGORIES.'
              WHERE (  cat_org_id = '. $row_orga['org_id']. '
                    OR cat_org_id IS NULL )
              ORDER BY cat_type, cat_org_id, cat_sequence ';
@@ -31,7 +32,7 @@ while($row_orga = $orgaStatement->fetch())
             $last_cat_type = $row_cat['cat_type'];
         }
 
-        $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '. $counter. '
+        $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_sequence = '. $counter. '
                  WHERE cat_id = '. $row_cat['cat_id'];
         $gDb->query($sql);
 

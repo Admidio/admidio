@@ -17,8 +17,8 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric');
-$getFileId   = admFuncVariableIsValid($_GET, 'file_id',   'numeric');
+$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
+$getFileId   = admFuncVariableIsValid($_GET, 'file_id',   'int');
 
 // set headline of the script
 if($getFileId > 0)
@@ -74,18 +74,18 @@ try
 {
     if ($getFileId)
     {
-        // get recordset of current file from databse
+        // get recordset of current file from database
         $file = new TableFile($gDb);
         $file->getFileForDownload($getFileId);
 
         $originalName = $file->getValue('fil_name');
 
-        if ($form_values['new_name'] == null)
+        if ($form_values['new_name'] === null)
         {
-            $form_values['new_name'] = admFuncGetFilenameWithoutExtension($originalName);
+            $form_values['new_name'] = pathinfo($originalName, PATHINFO_FILENAME);
         }
 
-        if ($form_values['new_description'] == null)
+        if ($form_values['new_description'] === null)
         {
             $form_values['new_description'] = $file->getValue('fil_description');
         }
@@ -93,7 +93,7 @@ try
     }
     else
     {
-        // get recordset of current folder from databses
+        // get recordset of current folder from databases
         $folder = new TableFolder($gDb);
         $folder->getFolderForDownload($getFolderId);
 

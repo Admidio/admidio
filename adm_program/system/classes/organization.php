@@ -6,19 +6,20 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-/** @class Organization
- *  @brief Handle organization data of Admidio and is connected to database table adm_organizations
+/**
+ * @class Organization
+ * @brief Handle organization data of Admidio and is connected to database table adm_organizations
  *
- *  This class creates the organization object and manages the access to the
- *  organization specific preferences of the table adm_preferences. There
- *  are also some method to read the relationship of organizations if the
- *  database contains more then one organization.
- *  @par Examples
- *  @code // create object and read the value of the language preference
- *  $organization = new Organization($gDb, $organizationId);
- *  $preferences  = $organization->getPreferences();
- *  $language     = $preferences['system_language'];
- *  // language = 'de' @endcode
+ * This class creates the organization object and manages the access to the
+ * organization specific preferences of the table adm_preferences. There
+ * are also some method to read the relationship of organizations if the
+ * database contains more then one organization.
+ * @par Examples
+ * @code // create object and read the value of the language preference
+ * $organization = new Organization($gDb, $organizationId);
+ * $preferences  = $organization->getPreferences();
+ * $language     = $preferences['system_language'];
+ * // language = 'de' @endcode
  */
 class Organization extends TableAccess
 {
@@ -64,15 +65,16 @@ class Organization extends TableAccess
     /**
      * Creates all necessary data for a new organization. This method can only be called once for an organization.
      * It will create the basic categories, lists, roles, systemmails etc.
-     * @param $userId The id of the webmaster who creates the new organization.
-     *                This will be the first valid user of the new organization.
+     * @param int $userId The id of the webmaster who creates the new organization.
+     *                    This will be the first valid user of the new organization.
      */
     public function createBasicData($userId)
     {
         global $gL10n, $gProfileFields;
 
         // read id of system user from database
-        $sql = 'SELECT usr_id FROM '.TBL_USERS.'
+        $sql = 'SELECT usr_id
+                  FROM '.TBL_USERS.'
                  WHERE usr_login_name LIKE \''.$gL10n->get('SYS_SYSTEM').'\' ';
         $systemUserStatement = $this->db->query($sql);
         $row = $systemUserStatement->fetch();
@@ -99,12 +101,12 @@ class Organization extends TableAccess
         }
 
         // create default category for roles, events and weblinks
-        $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+        $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                                                VALUES ('. $this->getValue('org_id'). ', \'ROL\', \'COMMON\', \'SYS_COMMON\', 0, 1, 1, '.$systemUserId.',\''. DATETIME_NOW.'\')';
         $this->db->query($sql);
         $categoryCommon = $this->db->lastInsertId();
 
-        $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+        $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                                          VALUES ('. $this->getValue('org_id').', \'ROL\', \'GROUPS\',  \'INS_GROUPS\', 0, 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\')
                                               , ('. $this->getValue('org_id').', \'ROL\', \'COURSES\', \'INS_COURSES\', 0, 0, 0, 3, '.$systemUserId.',\''. DATETIME_NOW.'\')
                                               , ('. $this->getValue('org_id').', \'ROL\', \'TEAMS\',   \'INS_TEAMS\', 0, 0, 0, 4, '.$systemUserId.',\''. DATETIME_NOW.'\')
@@ -116,7 +118,7 @@ class Organization extends TableAccess
         $this->db->query($sql);
 
         // create default folder for download module in database
-        $sql = 'INSERT INTO '. TBL_FOLDERS. ' (fol_org_id, fol_type, fol_name, fol_path,
+        $sql = 'INSERT INTO '.TBL_FOLDERS.' (fol_org_id, fol_type, fol_name, fol_path,
                                                fol_locked, fol_public, fol_timestamp)
                                         VALUES ('. $this->getValue('org_id'). ', \'DOWNLOAD\', \'download\', \'/adm_my_files\',
                                                 0,1,\''.DATETIME_NOW.'\')';
@@ -197,7 +199,7 @@ class Organization extends TableAccess
         $addressList->save();
 
         // set addresslist to default configuration
-        $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''.$addressList->getValue('lst_id').'\'
+        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$addressList->getValue('lst_id').'\'
                  WHERE prf_org_id = '.$this->getValue('org_id').'
                    AND prf_name   = \'lists_default_configuation\' ';
         $this->db->query($sql);
@@ -285,7 +287,8 @@ class Organization extends TableAccess
     {
         $arr_child_orgas = array();
 
-        $sql = 'SELECT * FROM '.TBL_ORGANIZATIONS.'
+        $sql = 'SELECT *
+                  FROM '.TBL_ORGANIZATIONS.'
                  WHERE ';
         if($child)
         {
@@ -325,8 +328,9 @@ class Organization extends TableAccess
     {
         if(count($this->preferences) === 0)
         {
-            $sql    = 'SELECT * FROM '. TBL_PREFERENCES. '
-                        WHERE prf_org_id = '. $this->getValue('org_id');
+            $sql = 'SELECT *
+                      FROM '.TBL_PREFERENCES.'
+                     WHERE prf_org_id = '. $this->getValue('org_id');
             $preferencesStatement = $this->db->query($sql);
 
             while($prf_row = $preferencesStatement->fetch())
@@ -411,7 +415,7 @@ class Organization extends TableAccess
                 if($update && $value != $db_preferences[$key])
                 {
                     // Pref existiert in DB, aber Wert hat sich geaendert
-                    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''.$value.'\'
+                    $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$value.'\'
                              WHERE prf_org_id = '. $this->getValue('org_id'). '
                                AND prf_name   = \''.$key.'\' ';
                     $this->db->query($sql);
@@ -420,7 +424,7 @@ class Organization extends TableAccess
             else
             {
                 // Parameter existiert noch nicht in DB
-                $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
+                $sql = 'INSERT INTO '.TBL_PREFERENCES.' (prf_org_id, prf_name, prf_value)
                         VALUES   ('. $this->getValue('org_id'). ', \''.$key.'\', \''.$value.'\') ';
                 $this->db->query($sql);
             }
@@ -431,15 +435,15 @@ class Organization extends TableAccess
     /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
-     * @param  string $columnName The name of the database column whose value should get a new value
-     * @param  mixed  $newValue   The new value that should be stored in the database field
-     * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     * @return bool   Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @param string $columnName The name of the database column whose value should get a new value
+     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         // org_shortname shouldn't be edited
-        if($columnName === 'org_shortname' && $this->new_record == false)
+        if($columnName === 'org_shortname' && !$this->new_record)
         {
             return false;
         }

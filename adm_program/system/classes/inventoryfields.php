@@ -29,7 +29,7 @@ class InventoryFields
     /**
      * constructor that will initialize variables and read the inventory field structure
      * @param object $database       Object of the class Database. This should be the default global object @b $gDb.
-     * @param        $organizationId The id of the organization for which the
+     * @param int    $organizationId The id of the organization for which the
      *                               profile field structure should be read
      */
     public function __construct(&$database, $organizationId)
@@ -75,7 +75,7 @@ class InventoryFields
 
     /**
      * returns for field id (usf_id) the value of the column from table adm_user_fields
-     * @param $fieldId Expects the @b usf_id of table @b adm_user_fields
+     * @param int    $fieldId Expects the @b usf_id of table @b adm_user_fields
      * @param string $column The column name of @b adm_user_field for which you want the value
      * @param string $format Optional the format (is necessary for timestamps)
      * @return
@@ -94,12 +94,12 @@ class InventoryFields
 
     /**
      * Returns the value of the field in html format with consideration of all layout parameters
-     * @param string      $fieldNameIntern Internal profile field name of the field that should be html formated
-     * @param string|bool $value           The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
-     * @param string      $value2          An optional parameter that is necessary for some special fields like email to commit the user id
+     * @param string $fieldNameIntern Internal profile field name of the field that should be html formated
+     * @param        $value           The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
+     * @param int    $value2          An optional parameter that is necessary for some special fields like email to commit the user id
      * @return string Returns an html formated string that considered the profile field settings
      */
-    public function getHtmlValue($fieldNameIntern, $value, $value2 = '')
+    public function getHtmlValue($fieldNameIntern, $value, $value2 = null)
     {
         global $gPreferences, $g_root_path, $gL10n;
 
@@ -134,7 +134,7 @@ class InventoryFields
                         else
                         {
                             // set value2 to user id because we need a second parameter in the link to mail module
-                            if($value2 === '')
+                            if($value2 === null)
                             {
                                 $value2 = $this->mItemId;
                             }
@@ -153,7 +153,7 @@ class InventoryFields
                     break;
 
                 case 'DROPDOWN':
-                    case 'RADIO_BUTTON':
+                case 'RADIO_BUTTON':
                     $arrListValues = explode("\r\n", $this->mInventoryFields[$fieldNameIntern]->getValue('inf_value_list', 'database'));
                     $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
 
@@ -248,9 +248,9 @@ class InventoryFields
                 }
 
                 // replace a variable in url with user value
-                if(strpos($infUrl, '%user_content%') !== false)
+                if(strpos($infUrl, '#user_content#') !== false)
                 {
-                    $htmlValue = preg_replace('/%user_content%/', $value, $htmlValue);
+                    $htmlValue = preg_replace('/#user_content#/', $value, $htmlValue);
 
                 }
             }
@@ -352,8 +352,8 @@ class InventoryFields
     /**
      * Reads the profile fields structure out of database table @b adm_user_fields
      * and adds an object for each field structure to the @b mInventoryFields array.
-     * @param $organizationId The id of the organization for which the profile fields
-     *                        structure should be read.
+     * @param int $organizationId The id of the organization for which the profile fields
+     *                            structure should be read.
      */
     public function readInventoryFields($organizationId)
     {
@@ -362,11 +362,13 @@ class InventoryFields
         $this->clearInventoryData();
 
         // read all user fields and belonging category data of organization
-        $sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_INVENT_FIELDS. '
-                 WHERE inf_cat_id = cat_id
-                   AND (  cat_org_id IS NULL
+        $sql = 'SELECT *
+                  FROM '.TBL_INVENT_FIELDS.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = inf_cat_id
+                 WHERE (  cat_org_id IS NULL
                        OR cat_org_id  = '.$organizationId.' )
-                 ORDER BY cat_sequence ASC, inf_sequence ASC ';
+                 ORDER BY cat_sequence ASC, inf_sequence ASC';
         $usfStatement = $this->mDb->query($sql);
 
         while($row = $usfStatement->fetch())
@@ -383,9 +385,9 @@ class InventoryFields
      * Reads the user data of all profile fields out of database table @b adm_user_data
      * and adds an object for each field data to the @b mInventoryData array.
      * If profile fields structure wasn't read, this will be done before.
-     * @param $itemId         The id of the user for which the user data should be read.
-     * @param $organizationId The id of the organization for which the profile fields
-     *                        structure should be read if necessary.
+     * @param int $itemId         The id of the user for which the user data should be read.
+     * @param int $organizationId The id of the organization for which the profile fields
+     *                            structure should be read if necessary.
      */
     public function readInventoryData($itemId, $organizationId)
     {
@@ -400,9 +402,11 @@ class InventoryFields
             $this->mItemId = $itemId;
 
             // read all user data of user
-            $sql = 'SELECT * FROM '.TBL_INVENT_DATA.', '. TBL_INVENT_FIELDS. '
-                     WHERE ind_inf_id = inf_id
-                       AND ind_itm_id = '.$itemId;
+            $sql = 'SELECT *
+                      FROM '.TBL_INVENT_DATA.'
+                INNER JOIN '.TBL_INVENT_FIELDS.'
+                        ON inf_id = ind_inf_id
+                     WHERE ind_itm_id = '.$itemId;
             $usdStatement = $this->mDb->query($sql);
 
             while($row = $usdStatement->fetch())
@@ -418,7 +422,7 @@ class InventoryFields
 
     /**
      * save data of every user field
-     * @param $itemId id is necessary if new user, that id was not known before
+     * @param int $itemId id is necessary if new user, that id was not known before
      */
     public function saveInventoryData($itemId)
     {
@@ -450,8 +454,8 @@ class InventoryFields
 
     /**
      * set value for column usd_value of field
-     * @param $fieldNameIntern
-     * @param $fieldValue
+     * @param string $fieldNameIntern
+     * @param        $fieldValue
      * @return bool
      */
     public function setValue($fieldNameIntern, $fieldValue)

@@ -352,7 +352,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // if checked = true then set checkbox checked
-        if($checked === true || $checked == 1) // "$checked == 1" for backwards compatibility | TODO: change everywhere to bool
+        if($checked)
         {
             $attributes['checked'] = 'checked';
         }
@@ -557,7 +557,7 @@ class HtmlForm extends HtmlFormBasic
      *                          + @b FIELD_DEFAULT  : The field can accept an input.
      *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
      *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
-     *                        - @b allowedMimeTypes : An array with the allowed MIME types (http://wiki.selfhtml.org/wiki/Referenz:MIME-Typen).
+     *                        - @b allowedMimeTypes : An array with the allowed MIME types (https://wiki.selfhtml.org/wiki/Referenz:MIME-Typen).
      *                          If this is set then the user can only choose the specified files with the browser file dialog.
      *                          You should check the uploaded file against the MIME type because the file could be manipulated.
      *                        - @b maxUploadSize : The size in byte that could be maximum uploaded.
@@ -711,7 +711,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addInput($id, $label, $value, $options = array())
     {
-        global $gL10n, $gPreferences, $g_root_path, $gDebug;
+        global $gL10n, $gPreferences, $g_root_path;
 
         $attributes = array('class' => 'form-control');
         ++$this->countElements;
@@ -1111,7 +1111,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addSelectBox($id, $label, $values, $options = array())
     {
-        global $gL10n, $g_root_path, $gDebug, $gPreferences;
+        global $gL10n, $g_root_path, $gPreferences;
 
         $attributes = array('class' => 'form-control');
         $name       = $id;
@@ -1291,7 +1291,7 @@ class HtmlForm extends HtmlFormBasic
             if(is_object($this->htmlPage))
             {
                 $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/dist/css/select2.css');
-                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2-bootstrap-theme/dist/css/select2-bootstrap.min.css');
+                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2-bootstrap-theme/dist/select2-bootstrap.css');
                 $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/dist/js/select2.js');
                 $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/dist/js/i18n/'.$gL10n->getLanguageIsoCode().'.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
@@ -1493,7 +1493,7 @@ class HtmlForm extends HtmlFormBasic
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        $sqlTables       = TBL_CATEGORIES;
+        $sqlTables       = '';
         $sqlCondidtions  = '';
         $categoriesArray = array();
 
@@ -1505,22 +1505,18 @@ class HtmlForm extends HtmlFormBasic
             switch ($categoryType)
             {
                 case 'DAT':
-                    $sqlTables = TBL_CATEGORIES.', '.TBL_DATES;
-                    $sqlCondidtions = ' AND cat_id = dat_cat_id ';
+                    $sqlTables = ' INNER JOIN '.TBL_DATES.' ON cat_id = dat_cat_id ';
                     break;
                 case 'LNK':
-                    $sqlTables = TBL_CATEGORIES.', '.TBL_LINKS;
-                    $sqlCondidtions = ' AND cat_id = lnk_cat_id ';
+                    $sqlTables = ' INNER JOIN '.TBL_LINKS.' ON cat_id = lnk_cat_id ';
                     break;
                 case 'ROL':
                     // don't show system categories
-                    $sqlTables = TBL_CATEGORIES.', '.TBL_ROLES;
-                    $sqlCondidtions = ' AND cat_id = rol_cat_id
-                                    AND rol_visible = 1 ';
+                    $sqlTables = ' INNER JOIN '.TBL_ROLES.' ON cat_id = rol_cat_id';
+                    $sqlCondidtions = ' AND rol_visible = 1 ';
                     break;
                 case 'INF':
-                    $sqlTables = TBL_CATEGORIES.', '.TBL_INVENT_FIELDS;
-                    $sqlCondidtions = ' AND cat_id = inf_cat_id ';
+                    $sqlTables = ' INNER JOIN '.TBL_INVENT_FIELDS.' ON cat_id = inf_cat_id ';
                     break;
             }
         }
@@ -1537,12 +1533,13 @@ class HtmlForm extends HtmlFormBasic
 
         // the sql statement which returns all found categories
         $sql = 'SELECT DISTINCT cat_id, cat_name, cat_default, cat_sequence
-                  FROM '.$sqlTables.'
+                  FROM '.TBL_CATEGORIES.'
+                       '.$sqlTables.'
                  WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
-                   AND cat_type   = \''.$categoryType.'\'
+                   AND cat_type = \''.$categoryType.'\'
                        '.$sqlCondidtions.'
-                 ORDER BY cat_sequence ASC ';
+                 ORDER BY cat_sequence ASC';
         $statement = $database->query($sql);
         $countCategories = $statement->rowCount();
 

@@ -216,7 +216,7 @@ else
 }
 
 // check if organization or user object must be renewed if data was changed by other users
-$sesRenew = $gCurrentSession->getValue('ses_renew');
+$sesRenew = (int) $gCurrentSession->getValue('ses_renew');
 if($sesRenew === 1 || $sesRenew === 3)
 {
     // read new field structure in object and than create new user object with new field structure

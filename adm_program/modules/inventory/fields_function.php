@@ -20,9 +20,9 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getInfId    = admFuncVariableIsValid($_GET, 'inf_id',   'numeric');
-$getMode     = admFuncVariableIsValid($_GET, 'mode',     'numeric', array('requireValue' => true));
-$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string',  array('validValues' => array('UP', 'DOWN')));
+$getInfId    = admFuncVariableIsValid($_GET, 'inf_id',   'int');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
+$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
 
 // only users with the right to edit inventory could use this script
 if (!$gCurrentUser->editInventory())
@@ -77,11 +77,11 @@ if($getMode === 1)
     if(isset($_POST['inf_name']) && $itemField->getValue('inf_name') != $_POST['inf_name'])
     {
         // Schauen, ob das Feld bereits existiert
-        $sql    = 'SELECT COUNT(*) as count
-                     FROM '. TBL_INVENT_FIELDS. '
-                    WHERE inf_name LIKE \''.$_POST['inf_name'].'\'
-                      AND inf_cat_id  = '.$_POST['inf_cat_id'].'
-                      AND inf_id     <> '.$getInfId;
+        $sql = 'SELECT COUNT(*) as count
+                  FROM '.TBL_INVENT_FIELDS.'
+                 WHERE inf_name LIKE \''.$_POST['inf_name'].'\'
+                   AND inf_cat_id  = '.$_POST['inf_cat_id'].'
+                   AND inf_id     <> '.$getInfId;
         $statement = $gDb->query($sql);
         $row = $statement->fetch();
 

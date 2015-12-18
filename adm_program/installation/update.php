@@ -65,7 +65,7 @@ require_once(SERVER_PATH.'/adm_program/system/function.php');
 // Initialize and check the parameters
 
 define('THEME_PATH', 'layout');
-$getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('defaultValue' => 1));
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
 $message = '';
 
 // Default-DB-Type ist immer MySql
@@ -265,21 +265,23 @@ elseif($getMode === 2)
             }
 
             $sql = 'SELECT DISTINCT usr_id
-                      FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                     WHERE UPPER(usr_login_name) LIKE UPPER(\''.$loginName.'\')
-                       AND usr_valid      = 1
-                       AND mem_usr_id     = usr_id
-                       AND mem_rol_id     = rol_id
-                       AND mem_begin     <= \''.DATE_NOW.'\'
-                       AND mem_end        > \''.DATE_NOW.'\'
-                       AND rol_valid      = 1
-                           '.$sqlWebmaster.'
-                       AND rol_cat_id     = cat_id
-                       AND cat_org_id     = '.$gCurrentOrganization->getValue('org_id');
-            $statement = $gDb->query($sql);
+                      FROM '.TBL_MEMBERS.'
+                INNER JOIN '.TBL_USERS.'
+                        ON usr_id = mem_usr_id
+                INNER JOIN '.TBL_ROLES.'
+                        ON rol_id = mem_rol_id
+                INNER JOIN '.TBL_CATEGORIES.'
+                        ON cat_id = rol_cat_id
+                     WHERE UPPER(usr_login_name) = UPPER(\''.$loginname.'\')
+                       AND usr_valid  = 1
+                       AND rol_valid  = 1
+                       AND mem_begin <= \''.DATE_NOW.'\'
+                       AND mem_end    > \''.DATE_NOW.'\'
+                       AND cat_org_id = '.$organizationId;
+            $userStatement = $gDb->query($sql);
 
-            $userFound = $statement->rowCount();
-            $userRow   = $statement->fetch();
+            $userFound = $userStatement->rowCount();
+            $userRow   = $userStatement->fetch();
 
             if ($userFound === 1)
             {
@@ -315,11 +317,11 @@ elseif($getMode === 2)
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(300);
 
-    $mainVersion      = substr($installedDbVersion, 0, 1);
-    $subVersion       = substr($installedDbVersion, 2, 1);
-    $microVersion     = substr($installedDbVersion, 4, 1);
-    $microVersion     = (int) $microVersion + 1;
-    $flagNextVersion  = true;
+    $mainVersion     = substr($installedDbVersion, 0, 1);
+    $subVersion      = substr($installedDbVersion, 2, 1);
+    $microVersion    = substr($installedDbVersion, 4, 1);
+    $microVersion    = (int) $microVersion + 1;
+    $flagNextVersion = true;
 
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
     require_once('db_scripts/preferences.php');

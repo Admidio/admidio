@@ -25,9 +25,9 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getGboId    = admFuncVariableIsValid($_GET, 'id',       'numeric');
-$getMode     = admFuncVariableIsValid($_GET, 'mode',     'numeric', array('requireValue' => true));
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string',  array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
+$getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_guestbook_module'] == 0)
@@ -97,7 +97,7 @@ else
     // Gaestebuchobjekt anlegen
     $guestbook_comment = new TableGuestbookComment($gDb);
 
-    if($getGboId > 0 && $getMode != 4)
+    if($getGboId > 0 && $getMode !== 4)
     {
         $guestbook_comment->readDataById($getGboId);
 
@@ -179,7 +179,8 @@ if ($getMode === 1 || $getMode === 3)
                 // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
                 // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
                 // einen GB-Eintrag erzeugt hat...
-                $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK. '
+                $sql = 'SELECT COUNT(*)
+                          FROM '.TBL_GUESTBOOK.'
                          WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
                            AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                            AND gbo_ip_address = \''. $guestbook->getValue('gbo_ip_adress'). '\'';
@@ -371,7 +372,8 @@ elseif($getMode === 4 || $getMode === 8)
                 // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
                 // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
                 // einen GB-Eintrag/Kommentar erzeugt hat...
-                $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK_COMMENTS. '
+                $sql = 'SELECT COUNT(*)
+                          FROM '.TBL_GUESTBOOK_COMMENTS.'
                          WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
                            AND gbc_ip_address = \''. $guestbook_comment->getValue('gbc_ip_adress'). '\'';
                 $statement = $gDb->query($sql);

@@ -37,17 +37,17 @@ class User extends TableUsers
 {
     protected $webmaster;
 
-    public $mProfileFieldsData;                 ///< object with current user field structure
-    public $roles_rights = array();             ///< Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
-    protected $list_view_rights = array();      ///< Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
-    protected $role_mail_rights = array();      ///< Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
-    protected $rolesMembership  = array();      ///< Array with all roles who the user is assigned
-    protected $rolesMembershipLeader = array(); ///< Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
+    public $mProfileFieldsData;                   ///< object with current user field structure
+    public $roles_rights = array();               ///< Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
+    protected $list_view_rights = array();        ///< Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
+    protected $role_mail_rights = array();        ///< Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
+    protected $rolesMembership  = array();        ///< Array with all roles who the user is assigned
+    protected $rolesMembershipLeader = array();   ///< Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
     protected $rolesMembershipNoLeader = array(); ///< Array with all roles who the user is assigned and is not a leader of the role
-    protected $organizationId;                  ///< the organization for which the rights are read, could be changed with method @b setOrganization
-    protected $assignRoles;                     ///< Flag if the user has the right to assign at least one role
-    protected $saveChangesWithoutRights;        ///< If this flag is set then a user can save changes to the user if he hasn't the necessary rights
-    protected $usersEditAllowed = array();      ///< Array with all user ids where the current user is allowed to edit the profile.
+    protected $organizationId;                    ///< the organization for which the rights are read, could be changed with method @b setOrganization
+    protected $assignRoles;                       ///< Flag if the user has the right to assign at least one role
+    protected $saveChangesWithoutRights;          ///< If this flag is set then a user can save changes to the user if he hasn't the necessary rights
+    protected $usersEditAllowed = array();        ///< Array with all user ids where the current user is allowed to edit the profile.
 
     /**
      * Constructor that will create an object of a recordset of the users table.
@@ -81,10 +81,12 @@ class User extends TableUsers
 
         // every user will get the default roles for registration, if the current user has the right to assign roles
         // than the roles assignment dialog will be shown
-        $sql = 'SELECT rol_id FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
-                 WHERE rol_cat_id = cat_id
-                   AND cat_org_id = '.$this->organizationId.'
-                   AND rol_default_registration = 1 ';
+        $sql = 'SELECT rol_id
+                  FROM '.TBL_ROLES.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE rol_default_registration = 1
+                   AND cat_org_id = '.$this->organizationId;
         $defaultRolesStatement = $this->db->query($sql);
 
         if($defaultRolesStatement->rowCount() === 0)
@@ -119,25 +121,34 @@ class User extends TableUsers
             if(count($this->roles_rights) === 0)
             {
                 $this->assignRoles = false;
-                $tmp_roles_rights  = array('rol_assign_roles'  => '0', 'rol_approve_users' => '0',
-                                           'rol_announcements' => '0', 'rol_dates' => '0',
-                                           'rol_download'      => '0', 'rol_edit_user' => '0',
-                                           'rol_guestbook'     => '0', 'rol_guestbook_comments' => '0',
-                                           'rol_mail_to_all'   => '0',
-                                           'rol_photo'         => '0', 'rol_profile' => '0',
-                                           'rol_weblinks'      => '0', 'rol_all_lists_view' => '0',
-                                           'rol_inventory'     => '0');
+                $tmp_roles_rights  = array(
+                    'rol_assign_roles'       => '0',
+                    'rol_approve_users'      => '0',
+                    'rol_announcements'      => '0',
+                    'rol_dates'              => '0',
+                    'rol_download'           => '0',
+                    'rol_edit_user'          => '0',
+                    'rol_guestbook'          => '0',
+                    'rol_guestbook_comments' => '0',
+                    'rol_mail_to_all'        => '0',
+                    'rol_photo'              => '0',
+                    'rol_profile'            => '0',
+                    'rol_weblinks'           => '0',
+                    'rol_all_lists_view'     => '0',
+                    'rol_inventory'          => '0'
+                );
 
                 // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
                 $sql = 'SELECT *
-                          FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
-                          LEFT JOIN '. TBL_MEMBERS. '
-                            ON mem_usr_id  = '. $this->getValue('usr_id'). '
-                           AND mem_rol_id  = rol_id
-                           AND mem_begin  <= \''.DATE_NOW.'\'
-                           AND mem_end     > \''.DATE_NOW.'\'
-                         WHERE rol_valid   = 1
-                           AND rol_cat_id  = cat_id
+                          FROM '.TBL_ROLES.'
+                    INNER JOIN '.TBL_CATEGORIES.'
+                            ON cat_id = rol_cat_id
+                     LEFT JOIN '.TBL_MEMBERS.'
+                            ON mem_rol_id = rol_id
+                           AND mem_usr_id = '.$this->getValue('usr_id').'
+                           AND mem_begin <= \''.DATE_NOW.'\'
+                           AND mem_end    > \''.DATE_NOW.'\'
+                         WHERE rol_valid  = 1
                            AND (  cat_org_id = '.$this->organizationId.'
                                OR cat_org_id IS NULL ) ';
                 $rolesStatement = $this->db->query($sql);
@@ -447,13 +458,14 @@ class User extends TableUsers
         $this->db->startTransaction();
 
         // search for membership with same role and user and overlapping dates
-        $sql = 'SELECT * FROM '.TBL_MEMBERS.'
+        $sql = 'SELECT *
+                  FROM '.TBL_MEMBERS.'
                  WHERE mem_id    <> '.$memberId.'
                    AND mem_rol_id = '.$member->getValue('mem_rol_id').'
                    AND mem_usr_id = '.$this->getValue('usr_id').'
                    AND mem_begin <= \''.$endDate.'\'
                    AND mem_end   >= \''.$startDate.'\'
-                 ORDER BY mem_begin ASC ';
+                 ORDER BY mem_begin ASC';
         $membershipStatement = $this->db->query($sql);
 
         if($membershipStatement->rowCount() === 1)
@@ -528,7 +540,7 @@ class User extends TableUsers
 
     /**
      * Creates an array with all roles where the user has the right to mail them
-     * @return Array with role ids where user has the right to mail them
+     * @return array Array with role ids where user has the right to mail them
      */
     public function getAllMailRoles()
     {
@@ -856,13 +868,15 @@ class User extends TableUsers
                 else
                 {
                     $sql = 'SELECT rol_id, rol_this_list_view
-                              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                             WHERE mem_usr_id = '.$user->getValue('usr_id'). '
+                              FROM '.TBL_MEMBERS.'
+                        INNER JOIN '.TBL_ROLES.'
+                                ON rol_id = mem_rol_id
+                        INNER JOIN '.TBL_CATEGORIES.'
+                                ON cat_id = rol_cat_id
+                             WHERE rol_valid  = 1
                                AND mem_begin <= \''.DATE_NOW.'\'
                                AND mem_end    > \''.DATE_NOW.'\'
-                               AND mem_rol_id = rol_id
-                               AND rol_valid  = 1
-                               AND rol_cat_id = cat_id
+                               AND mem_usr_id = '.$user->getValue('usr_id').'
                                AND (  cat_org_id = '.$this->organizationId.'
                                    OR cat_org_id IS NULL ) ';
                     $listViewStatement = $this->db->query($sql);
@@ -1129,12 +1143,13 @@ class User extends TableUsers
         }
 
         // search for membership with same role and user and overlapping dates
-        $sql = 'SELECT * FROM '.TBL_MEMBERS.'
+        $sql = 'SELECT *
+                  FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = '.$roleId.'
                    AND mem_usr_id = '.$this->getValue('usr_id').'
                    AND mem_begin <= \''.$endDate.'\'
                    AND mem_end   >= \''.$startDate.'\'
-                 ORDER BY mem_begin ASC ';
+                 ORDER BY mem_begin ASC';
         $membershipStatement = $this->db->query($sql);
 
         if($membershipStatement->rowCount() === 1)
@@ -1217,12 +1232,12 @@ class User extends TableUsers
      * otherwise the value of the profile field of the table adm_user_data will set.
      * If the user log is activated than the change of the value will be logged in @b adm_user_log.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
-     * @param  string $columnName The name of the database column whose value should get a new value or the
+     * @param string $columnName The name of the database column whose value should get a new value or the
      *                            internal unique profile field name
-     * @param  mixed  $newValue   The new value that should be stored in the database field
-     * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will
+     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will
      *                            not be checked.
-     * @return bool   Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      * @par Examples
      * @code  // set data of adm_users column
      *                           $gCurrentUser->getValue('usr_login_name', 'Admidio');
@@ -1263,11 +1278,10 @@ class User extends TableUsers
 
         $newFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
 
-        /*  Nicht alle Aenderungen werden geloggt. Ausnahmen:
-         *  usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
-         *  Felder, die mit usr_ beginnen, werden nicht geloggt
-         *  Falls die Feldwerte sich nicht geaendert haben, wird natuerlich ebenfalls nicht geloggt
-         */
+        // Nicht alle Aenderungen werden geloggt. Ausnahmen:
+        // usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
+        // Felder, die mit usr_ beginnen, werden nicht geloggt
+        // Falls die Feldwerte sich nicht geaendert haben, wird natuerlich ebenfalls nicht geloggt
         if($gPreferences['profile_log_edit_fields'] == 1 && $this->getValue('usr_id') != 0
         && strpos($columnName, 'usr_') === false && $newFieldValue !== $oldFieldValue)
         {

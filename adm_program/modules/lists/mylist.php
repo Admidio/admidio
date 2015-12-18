@@ -11,8 +11,8 @@
  *
  * lst_id : Id of the list configuration that should be shown
  * rol_id : (Optional) If a role id is set then the form field will be preassigned.
- * active_role  : 1 - (Default) List only active roles
- *                0 - List only deactivated roles
+ * active_role  : true  - (Default) List only active roles
+ *                false - List only deactivated roles
  * show_members : 0 - (Default) show active members of role
  *                1 - show former members of role
  *                2 - show active and former members of role
@@ -22,13 +22,13 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'numeric');
-$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'numeric');
-$getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'boolean', array('defaultValue' => 1));
-$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
+$getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'int');
+$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
+$getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'bool', array('defaultValue' => true));
+$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
 // falls ehemalige Rolle, dann auch nur ehemalige Mitglieder anzeigen
-if($getActiveRole == 0)
+if(!$getActiveRole)
 {
     $getShowMembers = 1;
 }
@@ -36,7 +36,7 @@ if($getActiveRole == 0)
 // set headline of the script
 $headline = $gL10n->get('LST_MY_LIST').' - '.$gL10n->get('LST_CONFIGURATION');
 
-if($getRoleId == 0)
+if($getRoleId === 0)
 {
     // Navigation faengt hier im Modul an
     $gNavigation->clear();
@@ -155,8 +155,8 @@ $javascriptCode = '
 
             var selected = "";
             // bei einer neuen Liste sind Vorname und Nachname in den ersten Spalten vorbelegt
-            if((  (fieldNumberIntern == 0 && arr_user_fields[counter]["usf_name_intern"] == "LAST_NAME")
-               || (fieldNumberIntern == 1 && arr_user_fields[counter]["usf_name_intern"] == "FIRST_NAME"))
+            if((  (fieldNumberIntern === 0 && arr_user_fields[counter]["usf_name_intern"] === "LAST_NAME")
+               || (fieldNumberIntern === 1 && arr_user_fields[counter]["usf_name_intern"] === "FIRST_NAME"))
             && listId == 0)
             {
                 selected = " selected=\"selected\" ";
@@ -183,16 +183,16 @@ $javascriptCode = '
 
         if(arr_default_fields[fieldNumberShow])
         {
-            if(arr_default_fields[fieldNumberShow]["sort"] == "ASC")
+            if(arr_default_fields[fieldNumberShow]["sort"] === "ASC")
             {
                 selectAsc = " selected=\"selected\" ";
             }
-            if(arr_default_fields[fieldNumberShow]["sort"] == "DESC")
+            if(arr_default_fields[fieldNumberShow]["sort"] === "DESC")
             {
                 selectDesc = " selected=\"selected\" ";
             }
         }
-        else if(fieldNumberIntern == 0)
+        else if(fieldNumberIntern === 0)
         {
             selectAsc = " selected=\"selected\" ";
         }
@@ -374,8 +374,8 @@ $javascriptCode .= '
         {
             if(arr_user_fields[key]["usf_name"] == columnName)
             {
-                if(arr_user_fields[key]["usf_type"] == "DROPDOWN"
-                  || arr_user_fields[key]["usf_type"] == "RADIO_BUTTON")
+                if(arr_user_fields[key]["usf_type"] === "DROPDOWN"
+                  || arr_user_fields[key]["usf_type"] === "RADIO_BUTTON")
                 {
                     html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" class=\"ListConditionField\" name=\"condition" + fieldNumberShow + "\">" +
                     "<option value=\"\">&nbsp;</option>";
@@ -397,7 +397,7 @@ $javascriptCode .= '
                     }
                 }
 
-                if(arr_user_fields[key]["usf_type"] == "CHECKBOX")
+                if(arr_user_fields[key]["usf_type"] === "CHECKBOX")
                 {
                     html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\">" +
                     "<option value=\"\">&nbsp;</option>";
@@ -538,11 +538,12 @@ $actualGroup                 = '';
 $configurationsArray[]       = array(0, $gL10n->get('LST_CREATE_NEW_CONFIGURATION'), null);
 $numberLastConfigurations    = 0;
 
-$sql = 'SELECT lst_id, lst_name, lst_global, lst_timestamp FROM '. TBL_LISTS. '
+$sql = 'SELECT lst_id, lst_name, lst_global, lst_timestamp
+          FROM '.TBL_LISTS.'
          WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
            AND (  lst_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                OR lst_global = 1)
-         ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC ';
+         ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC';
 $configurationsStatement = $gDb->query($sql);
 
 $configurations = $configurationsStatement->fetchAll();
@@ -652,10 +653,11 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_select_members', $gL10n->get('LST_SELECT_MEMBERS'));
 // show all roles where the user has the right to see them
 $sql = 'SELECT rol_id, rol_name, cat_name
-          FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+          FROM '.TBL_ROLES.'
+    INNER JOIN '.TBL_CATEGORIES.'
+            ON cat_id = rol_cat_id
          WHERE rol_valid   = '.$getActiveRole.'
            AND rol_visible = 1
-           AND rol_cat_id  = cat_id
            AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )
          ORDER BY cat_sequence, rol_name';

@@ -16,7 +16,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric', array('requireValue' => true));
+$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int', array('requireValue' => true));
 
 $headline = $gL10n->get('DOW_SET_FOLDER_PERMISSIONS');
 
@@ -44,7 +44,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 try
 {
-    // get recordset of current folder from databse
+    // get recordset of current folder from database
     $folder = new TableFolder($gDb);
     $folder->getFolderForDownload($getFolderId);
 }
@@ -60,7 +60,7 @@ if ($folder->getValue('fol_fol_id_parent'))
 {
     try
     {
-        // get recordset of parent folder from databse
+        // get recordset of parent folder from database
         $parentFolder = new TableFolder($gDb);
         $parentFolder->getFolderForDownload($folder->getValue('fol_fol_id_parent'));
     }
@@ -78,12 +78,13 @@ if (count($parentRoleSet) === 0)
     // wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
     // alle aus der DB aus lesen
     $sql_roles = 'SELECT *
-                     FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                    WHERE rol_valid  = 1
-                      AND rol_system = 0
-                      AND rol_cat_id = cat_id
-                      AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                    ORDER BY rol_name';
+                    FROM '.TBL_ROLES.'
+              INNER JOIN '.TBL_CATEGORIES.'
+                      ON cat_id = rol_cat_id
+                   WHERE rol_valid  = 1
+                     AND rol_system = 0
+                     AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                   ORDER BY rol_name';
     $rolesStatement = $gDb->query($sql_roles);
 
     $parentRoleSet[] = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);

@@ -16,7 +16,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUsfId = admFuncVariableIsValid($_GET, 'usf_id', 'numeric');
+$getUsfId = admFuncVariableIsValid($_GET, 'usf_id', 'int');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$gCurrentUser->isWebmaster())

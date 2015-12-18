@@ -15,7 +15,7 @@
 require('../../system/common.php');
 
 // Initialize and check the parameters
-$getFileId = admFuncVariableIsValid($_GET, 'file_id', 'numeric', array('requireValue' => true));
+$getFileId = admFuncVariableIsValid($_GET, 'file_id', 'int', array('requireValue' => true));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_download_module'] != 1)
@@ -32,7 +32,7 @@ if($gCurrentOrganization->getValue('org_shortname')!= $g_organization)
 
 try
 {
-    // get recordset of current file from databse
+    // get recordset of current file from database
     $file = new TableFile($gDb);
     $file->getFileForDownload($getFileId);
 }

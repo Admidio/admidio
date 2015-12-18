@@ -26,8 +26,8 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('requireValue' => true));
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'numeric', array('requireValue' => true));
+$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('requireValue' => true));
+$getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
 
 // nur berechtigte User duerfen Funktionen aufrufen
 if(!$gCurrentUser->editUsers())
@@ -45,20 +45,22 @@ else
     $this_orga = false;
 }
 
-if($getMode != 1)
+if($getMode !== 1)
 {
     // pruefen, ob der User noch in anderen Organisationen aktiv ist
-    $sql    = 'SELECT rol_id
-                 FROM '. TBL_ROLES. ', '. TBL_MEMBERS. ', '. TBL_CATEGORIES. '
-                WHERE rol_valid   = 1
-                  AND rol_cat_id  = cat_id
-                  AND cat_org_id <> '. $gCurrentOrganization->getValue('org_id'). '
-                  AND mem_rol_id  = rol_id
-                  AND mem_begin  <= \''.DATE_NOW.'\'
-                  AND mem_end     > \''.DATE_NOW.'\'
-                  AND mem_usr_id  = '. $getUserId;
+    $sql = 'SELECT rol_id
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+             WHERE rol_valid   = 1
+               AND cat_org_id <> '. $gCurrentOrganization->getValue('org_id'). '
+               AND mem_begin  <= \''.DATE_NOW.'\'
+               AND mem_end     > \''.DATE_NOW.'\'
+               AND mem_usr_id  = '. $getUserId;
     $statement = $gDb->query($sql);
-    $other_orga = $statement->rowCount();
+    $otherOrgaCount = $statement->rowCount();
 
     // User-Objekt anlegen
     $user = new User($gDb, $gProfileFields, $getUserId);
@@ -106,8 +108,7 @@ elseif($getMode === 2)
 
     // User muss zur aktuellen Orga dazugehoeren
     // kein Suizid ermoeglichen
-    if($this_orga == false
-    || $gCurrentUser->getValue('usr_id') == $getUserId)
+    if(!$this_orga || $gCurrentUser->getValue('usr_id') == $getUserId)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -115,12 +116,14 @@ elseif($getMode === 2)
     $member = new TableMembers($gDb);
 
     $sql = 'SELECT mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
-              FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
              WHERE rol_valid  = 1
-               AND rol_cat_id = cat_id
                AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
-               AND mem_rol_id = rol_id
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end    > \''.DATE_NOW.'\'
                AND mem_usr_id = '. $getUserId;
@@ -134,7 +137,7 @@ elseif($getMode === 2)
     }
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-    $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP_OK', $gCurrentOrganization->getValue('org_longname')));
+    $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP_OK', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')));
 }
 elseif($getMode === 3)
 {
@@ -148,7 +151,7 @@ elseif($getMode === 3)
 
     // User darf in keiner anderen Orga aktiv sein
     // kein Suizid ermoeglichen
-    if($other_orga > 0 || $gCurrentUser->getValue('usr_id') == $getUserId)
+    if($otherOrgaCount > 0 || $gCurrentUser->getValue('usr_id') == $getUserId)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -163,7 +166,7 @@ elseif($getMode === 4)
     // nur Webmaster duerfen User neue Zugangsdaten zuschicken
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
     // nur an Mitglieder der eigenen Organisation schicken
-    if(!$gCurrentUser->isWebmaster() || $gPreferences['enable_system_mails'] != 1 || $this_orga == false)
+    if(!$gCurrentUser->isWebmaster() || $gPreferences['enable_system_mails'] != 1 || !$this_orga)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -200,19 +203,19 @@ elseif($getMode === 5)
 }
 elseif($getMode === 6)
 {
-    if($this_orga == true && $other_orga == 0 && $gCurrentUser->isWebmaster())
+    if($this_orga && $otherOrgaCount === 0 && $gCurrentUser->isWebmaster())
     {
         // nur Webmaster duerfen dies
         // User ist NUR Mitglied der aktuellen Orga -> dann fragen, ob Ehemaliger oder ganz loeschen
         header('Location: '.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=1');
         exit();
     }
-    elseif($this_orga == false && $other_orga == 0 && $gCurrentUser->isWebmaster())
+    elseif(!$this_orga && $otherOrgaCount === 0 && $gCurrentUser->isWebmaster())
     {
         // nur Webmaster duerfen dies
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
         $gMessage->setForwardYesNo($g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=3');
-        $gMessage->show($gL10n->get('MEM_USER_DELETE', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')), $gL10n->get('SYS_DELETE'));
+        $gMessage->show($gL10n->get('MEM_USER_DELETE', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')), $gL10n->get('SYS_DELETE'));
     }
     else
     {

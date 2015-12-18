@@ -1,16 +1,12 @@
 <?php
 /**
  ***********************************************************************************************
+ * Show a list of all events
+ *
  * @copyright 2004-2015 The Admidio Team
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- * Show a list of all events
- *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
- *
  * Parameters:
  *
  * mode      - actual : (Default) shows actual dates and all events in future
@@ -38,12 +34,11 @@ unset($_SESSION['dates_request']);
 
 // Initialize and check the parameters
 $getMode     = admFuncVariableIsValid($_GET, 'mode',      'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
-$getStart    = admFuncVariableIsValid($_GET, 'start',     'numeric');
+$getStart    = admFuncVariableIsValid($_GET, 'start',     'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline',  'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'numeric');
-$getId       = admFuncVariableIsValid($_GET, 'id',        'numeric');
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
+$getId       = admFuncVariableIsValid($_GET, 'id',        'int');
 $getShow     = admFuncVariableIsValid($_GET, 'show',      'string', array('defaultValue' => 'all', 'validValues' => array('all', 'maybe_participate', 'only_participate')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'numeric');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
 $getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'print')));
@@ -148,7 +143,7 @@ if($getViewMode === 'html')
                             $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
     }
 
-    if($getId == 0)
+    if($getId === 0)
     {
         $form = new HtmlForm('navbar_change_view_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
         $selectBoxEntries = array('detail' => $gL10n->get('DAT_VIEW_MODE_DETAIL'), 'compact' => $gL10n->get('DAT_VIEW_MODE_COMPACT'), 'room' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_ROOM'), 'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'), 'description' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION'));

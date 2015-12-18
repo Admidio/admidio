@@ -71,7 +71,7 @@ We also need people you translate [our documentation](http://admidio.org/dokuwik
 If you have knowledge in PHP programming and know something about HTML, CSS and
 JavaScript then you can start to help us to improve the software Admidio.
 You will find our software at GitHub. The handling with GitHub and branches
-is described in [our wiki](http://admidio.org/dokuwiki/doku.php?id=de:entwickler:fehlerkorrekturen_in_mehreren_versionen).
+is described in [our wiki](http://admidio.org/dokuwiki/doku.php?id=en:entwickler:fehlerkorrekturen_in_mehreren_versionen).
 
 So if you find yourself in one of the above points then we invite you
 to join our team and help to improve Admidio to one of the best free
