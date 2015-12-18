@@ -235,10 +235,10 @@ class ComponentUpdate extends Component
      */
     public function updateStepDeleteDateRoles()
     {
-        $sql = 'select rol_id from '.TBL_CATEGORIES.', '.TBL_ROLES.'
-                 where cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'
-                   and rol_cat_id = cat_id
-                   and not exists (select 1 from '.TBL_DATES.' where dat_rol_id = rol_id)';
+        $sql = 'SELECT rol_id FROM '.TBL_CATEGORIES.', '.TBL_ROLES.'
+                 WHERE cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'
+                   AND rol_cat_id = cat_id
+                   AND NOT exists (SELECT 1 FROM '.TBL_DATES.' WHERE dat_rol_id = rol_id)';
         $rolesStatement = $this->db->query($sql);
 
         while($row = $rolesStatement->fetch())

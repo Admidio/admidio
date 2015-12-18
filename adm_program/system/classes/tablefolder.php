@@ -89,7 +89,7 @@ class TableFolder extends TableAccess
 
         // Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
         $sql_subfolders = 'SELECT *
-                              FROM '. TBL_FOLDERS. '
+                             FROM '. TBL_FOLDERS. '
                             WHERE fol_fol_id_parent = '.$folderId;
         $subfoldersStatement = $this->db->query($sql_subfolders);
 
@@ -100,18 +100,18 @@ class TableFolder extends TableAccess
         }
 
         // In der DB die Files der aktuellen folder_id loeschen
-        $sql_delete_files = 'DELETE from '. TBL_FILES. '
-                        WHERE fil_fol_id = '.$folderId;
+        $sql_delete_files = 'DELETE FROM '. TBL_FILES. '
+                              WHERE fil_fol_id = '.$folderId;
         $this->db->query($sql_delete_files);
 
         // In der DB die verknuepften Berechtigungen zu dieser Folder_ID loeschen...
-        $sql_delete_fol_rol = 'DELETE from '. TBL_FOLDER_ROLES. '
-                        WHERE flr_fol_id = '.$folderId;
+        $sql_delete_fol_rol = 'DELETE FROM '. TBL_FOLDER_ROLES. '
+                                WHERE flr_fol_id = '.$folderId;
         $this->db->query($sql_delete_fol_rol);
 
         // In der DB den Eintrag des Ordners selber loeschen
-        $sql_delete_folder = 'DELETE from '. TBL_FOLDERS. '
-                        WHERE fol_id = '.$folderId;
+        $sql_delete_folder = 'DELETE FROM '. TBL_FOLDERS. '
+                               WHERE fol_id = '.$folderId;
         $this->db->query($sql_delete_folder);
 
         // Jetzt noch das Verzeichnis physikalisch von der Platte loeschen
