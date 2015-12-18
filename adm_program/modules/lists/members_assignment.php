@@ -146,7 +146,7 @@ else
 
         $memberCondition = ' EXISTS
             (SELECT 1
-               FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+               FROM '.TBL_MEMBERS.', '.TBL_ROLES.', '.TBL_CATEGORIES.'
               WHERE mem_usr_id = usr_id
                 AND mem_rol_id = rol_id
                     '.$roleCondition.'
@@ -164,7 +164,7 @@ else
                    city.usd_value as city, address.usd_value as address, zip_code.usd_value as zip_code, country.usd_value as country,
                    mem_usr_id as member_this_role, mem_leader as leader_this_role,
                       (SELECT COUNT(*)
-                         FROM '. TBL_ROLES. ' rol2, '. TBL_CATEGORIES. ' cat2, '. TBL_MEMBERS. ' mem2
+                         FROM '.TBL_ROLES.' rol2, '.TBL_CATEGORIES.' cat2, '.TBL_MEMBERS.' mem2
                         WHERE rol2.rol_valid   = 1
                           AND rol2.rol_cat_id  = cat2.cat_id
                           AND cat2.cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
@@ -174,32 +174,32 @@ else
                           AND mem2.mem_begin  <= \''.DATE_NOW.'\'
                           AND mem2.mem_end     > \''.DATE_NOW.'\'
                           AND mem2.mem_usr_id  = usr_id) as member_this_orga
-            FROM '. TBL_USERS. '
-            LEFT JOIN '. TBL_USER_DATA. ' as last_name
+            FROM '.TBL_USERS.'
+            LEFT JOIN '.TBL_USER_DATA.' as last_name
               ON last_name.usd_usr_id = usr_id
              AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-            LEFT JOIN '. TBL_USER_DATA. ' as first_name
+            LEFT JOIN '.TBL_USER_DATA.' as first_name
               ON first_name.usd_usr_id = usr_id
              AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-            LEFT JOIN '. TBL_USER_DATA. ' as birthday
+            LEFT JOIN '.TBL_USER_DATA.' as birthday
               ON birthday.usd_usr_id = usr_id
              AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
-            LEFT JOIN '. TBL_USER_DATA. ' as city
+            LEFT JOIN '.TBL_USER_DATA.' as city
               ON city.usd_usr_id = usr_id
              AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
-            LEFT JOIN '. TBL_USER_DATA. ' as address
+            LEFT JOIN '.TBL_USER_DATA.' as address
               ON address.usd_usr_id = usr_id
              AND address.usd_usf_id = '. $gProfileFields->getProperty('ADDRESS', 'usf_id'). '
-            LEFT JOIN '. TBL_USER_DATA. ' as zip_code
+            LEFT JOIN '.TBL_USER_DATA.' as zip_code
               ON zip_code.usd_usr_id = usr_id
              AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '
-            LEFT JOIN '. TBL_USER_DATA. ' as country
+            LEFT JOIN '.TBL_USER_DATA.' as country
               ON country.usd_usr_id = usr_id
              AND country.usd_usf_id = '. $gProfileFields->getProperty('COUNTRY', 'usf_id'). '
-            LEFT JOIN '. TBL_ROLES. ' rol
+            LEFT JOIN '.TBL_ROLES.' rol
               ON rol.rol_valid   = 1
              AND rol.rol_id      = '.$getRoleId.'
-            LEFT JOIN '. TBL_MEMBERS. ' mem
+            LEFT JOIN '.TBL_MEMBERS.' mem
               ON mem.mem_rol_id  = rol.rol_id
              AND mem.mem_begin  <= \''.DATE_NOW.'\'
              AND mem.mem_end     > \''.DATE_NOW.'\'
@@ -294,7 +294,7 @@ else
         $membersAssignmentMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
     }
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
-    $sql = 'SELECT rol_id, rol_name, cat_name FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+    $sql = 'SELECT rol_id, rol_name, cat_name FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
              WHERE rol_valid   = 1
                AND rol_visible = 1
                AND rol_cat_id  = cat_id

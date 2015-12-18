@@ -315,17 +315,17 @@ elseif (!isset($messageStatement))
 
         $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
                        rol_mail_this_role, rol_id, mem_begin, mem_end
-                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_USERS. '
-                  JOIN '. TBL_USER_DATA. ' as email
+                  FROM '.TBL_MEMBERS.', '.TBL_ROLES.', '.TBL_USERS.'
+                  JOIN '.TBL_USER_DATA.' as email
                     ON email.usd_usr_id = usr_id
                    AND LENGTH(email.usd_value) > 0
                   JOIN '.TBL_USER_FIELDS.' as field
                     ON field.usf_id = email.usd_usf_id
                    AND field.usf_type = \'EMAIL\'
-                  LEFT JOIN '. TBL_USER_DATA. ' as last_name
+                  LEFT JOIN '.TBL_USER_DATA.' as last_name
                     ON last_name.usd_usr_id = usr_id
                    AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-                  LEFT JOIN '. TBL_USER_DATA. ' as first_name
+                  LEFT JOIN '.TBL_USER_DATA.' as first_name
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
                  WHERE mem_usr_id  = usr_id
@@ -370,7 +370,7 @@ elseif (!isset($messageStatement))
         $maxNumberRecipients = 1;
         // list all roles where guests could send mails to
         $sql = 'SELECT rol_id, rol_name, cat_name
-                  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                  FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
                  WHERE rol_mail_this_role = 3
                    AND rol_valid  = 1
                    AND rol_cat_id = cat_id
@@ -396,7 +396,7 @@ elseif (!isset($messageStatement))
     if ($gCurrentUser->getValue('usr_id') > 0)
     {
         $sql = 'SELECT COUNT(*)
-                  FROM '. TBL_USER_FIELDS. '
+                  FROM '.TBL_USER_FIELDS.'
                   JOIN '. TBL_USER_DATA .' ON usd_usf_id = usf_id
                  WHERE usf_type = \'EMAIL\'
                    AND usd_usr_id = '.$gCurrentUser->getValue('usr_id').'
@@ -410,11 +410,11 @@ elseif (!isset($messageStatement))
         if($possible_emails > 1)
         {
             $sql   = 'SELECT email.usd_value as ID, email.usd_value as email
-                FROM '. TBL_USERS. '
-                JOIN '. TBL_USER_DATA. ' as email
+                FROM '.TBL_USERS.'
+                JOIN '.TBL_USER_DATA.' as email
                   ON email.usd_usr_id = usr_id
                  AND LENGTH(email.usd_value) > 0
-                JOIN '. TBL_USER_FIELDS. ' as field
+                JOIN '.TBL_USER_FIELDS.' as field
                   ON field.usf_id = email.usd_usf_id
                  AND field.usf_type = \'EMAIL\'
                WHERE usr_id = '. $gCurrentUser->getValue('usr_id'). '

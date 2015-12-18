@@ -90,7 +90,7 @@ $fieldsMenu->addItem('menu_item_new_field', $g_root_path.'/adm_program/modules/i
 $fieldsMenu->addItem('menu_item_maintain_category', $g_root_path.'/adm_program/modules/categories/categories.php?type=INF',
                             $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
 
-$sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_INVENT_FIELDS. '
+$sql = 'SELECT * FROM '.TBL_CATEGORIES.', '.TBL_INVENT_FIELDS.'
          WHERE cat_type   = \'INF\'
            AND inf_cat_id = cat_id
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '

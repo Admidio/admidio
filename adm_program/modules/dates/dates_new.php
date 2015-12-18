@@ -255,7 +255,7 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
     // add a multiselectbox to the form where the user can choose all roles that should see this event
     // first read all relevant roles from database and create an array with them
-    $sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+    $sql = 'SELECT * FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
              WHERE rol_valid   = 1
                AND rol_visible = 1
                AND rol_cat_id  = cat_id

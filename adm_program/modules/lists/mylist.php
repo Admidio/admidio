@@ -538,7 +538,7 @@ $actualGroup                 = '';
 $configurationsArray[]       = array(0, $gL10n->get('LST_CREATE_NEW_CONFIGURATION'), null);
 $numberLastConfigurations    = 0;
 
-$sql = 'SELECT lst_id, lst_name, lst_global, lst_timestamp FROM '. TBL_LISTS. '
+$sql = 'SELECT lst_id, lst_name, lst_global, lst_timestamp FROM '.TBL_LISTS.'
          WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
            AND (  lst_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                OR lst_global = 1)
@@ -652,7 +652,7 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_select_members', $gL10n->get('LST_SELECT_MEMBERS'));
 // show all roles where the user has the right to see them
 $sql = 'SELECT rol_id, rol_name, cat_name
-          FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+          FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
          WHERE rol_valid   = '.$getActiveRole.'
            AND rol_visible = 1
            AND rol_cat_id  = cat_id

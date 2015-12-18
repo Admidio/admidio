@@ -187,7 +187,7 @@ $page->addHtml('
                         // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
                         if(!$gCurrentOrganization->hasChildOrganizations())
                         {
-                            $sql = 'SELECT org_id, org_longname FROM '. TBL_ORGANIZATIONS.'
+                            $sql = 'SELECT org_id, org_longname FROM '.TBL_ORGANIZATIONS.'
                                      WHERE org_id <> '. $gCurrentOrganization->getValue('org_id'). '
                                        AND org_org_id_parent is NULL
                                      ORDER BY org_longname ASC, org_shortname ASC';
@@ -659,7 +659,7 @@ $page->addHtml('
                         $form->addCheckbox('lists_hide_overview_details', $gL10n->get('LST_HIDE_DETAILS'), $form_values['lists_hide_overview_details'], array('helpTextIdInline' => 'LST_HIDE_DETAILS_DESC'));
                         // read all global lists
                         $sql = 'SELECT lst_id, lst_name
-                                  FROM '. TBL_LISTS. '
+                                  FROM '.TBL_LISTS.'
                                  WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
                                    AND lst_global = 1
                                  ORDER BY lst_name ASC, lst_timestamp DESC ';

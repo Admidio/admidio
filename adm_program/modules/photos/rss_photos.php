@@ -69,7 +69,7 @@ else
 
 // read albums from database
 $sql = 'SELECT pho.*, '.$additionalFields.'
-          FROM '. TBL_PHOTOS. ' pho
+          FROM '.TBL_PHOTOS.' pho
                '.$additionalTables.'
          WHERE (   pho_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                AND pho_locked = 0)
@@ -104,7 +104,7 @@ while ($row = $statement->fetch())
     {
         // Erfassen des Eltern Albums
         $sql = ' SELECT *
-                  FROM '. TBL_PHOTOS. '
+                  FROM '.TBL_PHOTOS.'
                  WHERE pho_id = '.$pho_parent_id;
         $parentsStatement = $gDb->query($sql);
         $adm_photo_parent = $parentsStatement->fetch();

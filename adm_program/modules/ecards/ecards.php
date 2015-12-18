@@ -175,7 +175,7 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
     $arrayMailRoles = $gCurrentUser->getAllMailRoles();
 
     $sql = 'SELECT rol_id, rol_name
-              FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+              FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
              WHERE rol_id IN ('.implode(',', $arrayMailRoles).')
                AND rol_cat_id = cat_id
                AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
@@ -193,17 +193,17 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
     $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
                      email.usd_value as email
-                FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
-                JOIN '. TBL_USER_DATA. ' as email
+                FROM '.TBL_MEMBERS.', '.TBL_USERS.'
+                JOIN '.TBL_USER_DATA.' as email
                   ON email.usd_usr_id = usr_id
                  AND LENGTH(email.usd_value) > 0
                 JOIN '.TBL_USER_FIELDS.' as field
                   ON field.usf_id = email.usd_usf_id
                  AND field.usf_type = \'EMAIL\'
-                LEFT JOIN '. TBL_USER_DATA. ' as last_name
+                LEFT JOIN '.TBL_USER_DATA.' as last_name
                   ON last_name.usd_usr_id = usr_id
                  AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-                LEFT JOIN '. TBL_USER_DATA. ' as first_name
+                LEFT JOIN '.TBL_USER_DATA.' as first_name
                   ON first_name.usd_usr_id = usr_id
                  AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
                WHERE mem_usr_id  = usr_id

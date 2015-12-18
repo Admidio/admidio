@@ -78,7 +78,7 @@ if (count($parentRoleSet) === 0)
     // wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
     // alle aus der DB aus lesen
     $sql_roles = 'SELECT *
-                     FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                     FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
                     WHERE rol_valid  = 1
                       AND rol_system = 0
                       AND rol_cat_id = cat_id

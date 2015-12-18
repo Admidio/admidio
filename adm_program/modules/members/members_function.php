@@ -49,7 +49,7 @@ if($getMode !== 1)
 {
     // pruefen, ob der User noch in anderen Organisationen aktiv ist
     $sql    = 'SELECT rol_id
-                 FROM '. TBL_ROLES. ', '. TBL_MEMBERS. ', '. TBL_CATEGORIES. '
+                 FROM '.TBL_ROLES.', '.TBL_MEMBERS.', '.TBL_CATEGORIES.'
                 WHERE rol_valid   = 1
                   AND rol_cat_id  = cat_id
                   AND cat_org_id <> '. $gCurrentOrganization->getValue('org_id'). '
@@ -114,7 +114,7 @@ elseif($getMode === 2)
     $member = new TableMembers($gDb);
 
     $sql = 'SELECT mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
-              FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
+              FROM '.TBL_ROLES.', '.TBL_CATEGORIES.', '.TBL_MEMBERS.'
              WHERE rol_valid  = 1
                AND rol_cat_id = cat_id
                AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '

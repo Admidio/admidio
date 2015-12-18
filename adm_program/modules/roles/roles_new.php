@@ -168,7 +168,7 @@ $form->addSelectBox('rol_leader_rights', $gL10n->get('SYS_LEADER'), $selectBoxEn
 
 $selectBoxEntries = array(0 => $gL10n->get('ROL_SYSTEM_DEFAULT_LIST'));
 // SQL-Statement fuer alle Listenkonfigurationen vorbereiten, die angezeigt werdne sollen
-$sql = 'SELECT lst_id, lst_name FROM '. TBL_LISTS. '
+$sql = 'SELECT lst_id, lst_name FROM '.TBL_LISTS.'
          WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id'). '
            AND lst_global = 1
            AND lst_name IS NOT NULL
@@ -267,7 +267,7 @@ $form->addHtml('<p>'.$gL10n->get('ROL_ROLE_DEPENDENCIES', $rolename_var).'</p>')
 //  list all roles that the user is allowed to see
 $sqlAllRoles = '
     SELECT rol_id, rol_name, cat_name
-      FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+      FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
      WHERE rol_valid   = 1
        AND rol_visible = 1
        AND rol_cat_id  = cat_id

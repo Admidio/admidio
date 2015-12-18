@@ -105,7 +105,7 @@ elseif($getMode === 2)
     {
         // Schauen, ob die Rolle bereits existiert
         $sql = 'SELECT COUNT(*) AS count
-                  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                  FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
                  WHERE rol_name   LIKE \''. $_POST['rol_name']. '\'
                    AND rol_cat_id = '. $_POST['rol_cat_id']. '
                    AND rol_id    <> '. $getRoleId. '

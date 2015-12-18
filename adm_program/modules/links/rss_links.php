@@ -64,7 +64,7 @@ else
 
 // read weblinks from database
 $sql = 'SELECT cat.*, lnk.*, '.$additionalFields.'
-          FROM '. TBL_CATEGORIES .' cat, '. TBL_LINKS. ' lnk
+          FROM '. TBL_CATEGORIES .' cat, '.TBL_LINKS.' lnk
                '.$additionalTables.'
          WHERE lnk_cat_id = cat_id
            AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '

@@ -125,7 +125,7 @@ if($getPhotoNr == null)
 
     // get sub albums
     $sql = 'SELECT *
-              FROM '. TBL_PHOTOS. '
+              FROM '.TBL_PHOTOS.'
              WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
     if($getPhotoId === 0)
     {

@@ -113,7 +113,7 @@ $table->addRowHeadingByArray($columnHeading);
 $cat_id = '';
 
 // list all roles group by category
-$sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+$sql = 'SELECT * FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
          WHERE rol_cat_id = cat_id
              AND cat_type = \'ROL\'
                  '.$sqlRolesStatus.'

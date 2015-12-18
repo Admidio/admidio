@@ -95,7 +95,7 @@ function subfolder($parentId, $vorschub, $photoAlbum, $phoId)
     }
 
     $sql = 'SELECT *
-              FROM '. TBL_PHOTOS. '
+              FROM '.TBL_PHOTOS.'
              WHERE pho_id <> '. $photoAlbum->getValue('pho_id').
                    $sqlConditionParentId.'
                AND pho_org_id = '.$gCurrentOrganization->getValue('org_id');

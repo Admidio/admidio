@@ -69,8 +69,8 @@ if($gCurrentUser->manageRoles())
 {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
     $sql = 'SELECT rol_id, rol_name, rol_max_members, rol_webmaster, mem_id, mem_begin, mem_end
-              FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
-              LEFT JOIN '. TBL_MEMBERS. '
+              FROM '.TBL_CATEGORIES.', '.TBL_ROLES.'
+              LEFT JOIN '.TBL_MEMBERS.'
                 ON rol_id      = mem_rol_id
                AND mem_usr_id  = '.$getUserId.'
                AND mem_begin <= \''.DATE_NOW.'\'
@@ -86,8 +86,8 @@ else
 {
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
     $sql = 'SELECT rol_id, rol_name, rol_max_members, rol_webmaster, mgl.mem_id, mgl.mem_begin, mgl.mem_end
-              FROM '. TBL_MEMBERS. ' bm, '. TBL_CATEGORIES. ', '. TBL_ROLES. '
-              LEFT JOIN '. TBL_MEMBERS. ' mgl
+              FROM '.TBL_MEMBERS.' bm, '.TBL_CATEGORIES.', '.TBL_ROLES.'
+              LEFT JOIN '.TBL_MEMBERS.' mgl
                 ON rol_id         = mgl.mem_rol_id
                AND mgl.mem_usr_id = '.$getUserId.'
                AND mgl.mem_begin <= \''.DATE_NOW.'\'
@@ -118,7 +118,7 @@ foreach($rolesList as $row)
     {
         // erst einmal schauen, ob der Benutzer dieser Rolle bereits zugeordnet ist
         $sql = 'SELECT COUNT(*) as count
-                  FROM '. TBL_MEMBERS.'
+                  FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = '.$row['rol_id'].'
                    AND mem_usr_id = '.$getUserId.'
                    AND mem_leader = 0
@@ -132,7 +132,7 @@ foreach($rolesList as $row)
         {
             // Benutzer ist der Rolle noch nicht zugeordnet, dann schauen, ob die Anzahl ueberschritten wird
             $sql = 'SELECT COUNT(*) as count
-                      FROM '. TBL_MEMBERS.'
+                      FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id = '.$row['rol_id'].'
                        AND mem_leader = 0
                        AND mem_begin <= \''.DATE_NOW.'\'

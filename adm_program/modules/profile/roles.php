@@ -136,8 +136,8 @@ if($gCurrentUser->manageRoles())
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
     $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights,
                      mem_rol_id, mem_usr_id, mem_leader
-                 FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
-                 LEFT JOIN '. TBL_MEMBERS. '
+                 FROM '.TBL_CATEGORIES.', '.TBL_ROLES.'
+                 LEFT JOIN '.TBL_MEMBERS.'
                  ON rol_id      = mem_rol_id
                  AND mem_usr_id  = '.$getUserId.'
                  AND mem_begin  <= \''.DATE_NOW.'\'
@@ -154,8 +154,8 @@ else
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
     $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights,
                      mgl.mem_rol_id as mem_rol_id, mgl.mem_usr_id as mem_usr_id, mgl.mem_leader as mem_leader
-                 FROM '. TBL_MEMBERS. ' bm, '. TBL_CATEGORIES. ', '. TBL_ROLES. '
-                 LEFT JOIN '. TBL_MEMBERS. ' mgl
+                 FROM '.TBL_MEMBERS.' bm, '.TBL_CATEGORIES.', '.TBL_ROLES.'
+                 LEFT JOIN '.TBL_MEMBERS.' mgl
                  ON rol_id         = mgl.mem_rol_id
                  AND mgl.mem_usr_id = '.$getUserId.'
                  AND mgl.mem_begin <= \''.DATE_NOW.'\'

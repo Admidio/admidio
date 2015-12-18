@@ -561,7 +561,7 @@ if($gPreferences['profile_show_roles'] == 1)
     foreach($authorizations as $authorization_db_name)
     {
         $sql = 'SELECT rol_name
-                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES.'
+                  FROM '.TBL_MEMBERS.', '.TBL_ROLES.', '.TBL_CATEGORIES.'
                  WHERE mem_rol_id = rol_id
                    AND mem_begin <= \''.DATE_NOW.'\'
                    AND mem_end    > \''.DATE_NOW.'\'
@@ -747,7 +747,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
 
     // list all roles where the viewed user has an active membership
     $sql = 'SELECT *
-              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_ORGANIZATIONS. '
+              FROM '.TBL_MEMBERS.', '.TBL_ROLES.', '.TBL_CATEGORIES.', '.TBL_ORGANIZATIONS.'
              WHERE mem_rol_id = rol_id
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end   >= \''.DATE_NOW.'\'
