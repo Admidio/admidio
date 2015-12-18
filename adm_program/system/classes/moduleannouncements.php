@@ -93,7 +93,7 @@ class ModuleAnnouncements extends Modules
         global $gDb;
 
         $sql = 'SELECT COUNT(*) as count
-                  FROM '. TBL_ANNOUNCEMENTS. '
+                  FROM '.TBL_ANNOUNCEMENTS.'
                  WHERE (  ann_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR (   ann_global = 1
                           AND ann_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
@@ -167,7 +167,7 @@ class ModuleAnnouncements extends Modules
 
         // read announcements from database
         $sql = 'SELECT ann.*, '.$additionalFields.'
-                  FROM '. TBL_ANNOUNCEMENTS. ' ann
+                  FROM '.TBL_ANNOUNCEMENTS.' ann
                        '.$additionalTables.'
                  WHERE (  ann_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR (   ann_global = 1

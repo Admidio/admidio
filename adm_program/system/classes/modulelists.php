@@ -272,13 +272,13 @@ class ModuleLists extends Modules
         }
 
         $sql = 'SELECT rol.*, cat.*,
-               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem
+               (SELECT COUNT(*) FROM '.TBL_MEMBERS.' mem
                  WHERE mem.mem_rol_id = rol.rol_id '.$this->getMemberStatusSql().' AND mem_leader = 0) as num_members,
-               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem
+               (SELECT COUNT(*) FROM '.TBL_MEMBERS.' mem
                  WHERE mem.mem_rol_id = rol.rol_id '.$this->getMemberStatusSql().' AND mem_leader = 1) as num_leader,
-               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem
+               (SELECT COUNT(*) FROM '.TBL_MEMBERS.' mem
                  WHERE mem.mem_rol_id = rol.rol_id AND mem_end < \''. DATE_NOW.'\') as num_former
-          FROM '. TBL_ROLES. ' rol, '. TBL_CATEGORIES. ' cat
+          FROM '.TBL_ROLES.' rol, '.TBL_CATEGORIES.' cat
          WHERE rol_valid   = '.$this->activeRole.'
            AND rol_visible = 1
            AND rol_cat_id = cat_id
@@ -328,7 +328,7 @@ class ModuleLists extends Modules
         }
 
         $sql = 'SELECT COUNT(*) AS numrows
-          FROM '. TBL_ROLES. ' rol, '. TBL_CATEGORIES. ' cat
+          FROM '.TBL_ROLES.' rol, '.TBL_CATEGORIES.' cat
          WHERE rol_valid   = '.$this->activeRole.'
            AND rol_visible = 1
            AND rol_cat_id = cat_id
@@ -352,7 +352,7 @@ class ModuleLists extends Modules
         global $gCurrentUser;
         global $gDb;
 
-        $sql = 'SELECT lst_id, lst_name, lst_global FROM '. TBL_LISTS. '
+        $sql = 'SELECT lst_id, lst_name, lst_global FROM '.TBL_LISTS.'
                  WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                    AND (  lst_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                        OR lst_global = 1)

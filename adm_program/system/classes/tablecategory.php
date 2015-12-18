@@ -56,7 +56,7 @@ class TableCategory extends TableAccess
         }
 
         // checks if there exists another category of this type. Don't delete the last category of a type!
-        $sql = 'SELECT COUNT(*) AS count_categories FROM '. TBL_CATEGORIES. '
+        $sql = 'SELECT COUNT(*) AS count_categories FROM '.TBL_CATEGORIES.'
                  WHERE (  cat_org_id = '. $gCurrentSession->getValue('ses_org_id'). '
                        OR cat_org_id IS NULL )
                    AND cat_type     = \''. $this->getValue('cat_type'). '\'';
@@ -69,7 +69,7 @@ class TableCategory extends TableAccess
             $this->db->startTransaction();
 
             // Luecke in der Reihenfolge schliessen
-            $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = cat_sequence - 1
+            $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_sequence = cat_sequence - 1
                      WHERE (  cat_org_id = '. $gCurrentSession->getValue('ses_org_id'). '
                            OR cat_org_id IS NULL )
                        AND cat_sequence > '. $this->getValue('cat_sequence'). '
@@ -184,7 +184,7 @@ class TableCategory extends TableAccess
 
         // count all categories that are organization independent because these categories should not
         // be mixed with the organization categories. Hidden categories are sidelined.
-        $sql = 'SELECT COUNT(*) as count FROM '. TBL_CATEGORIES. '
+        $sql = 'SELECT COUNT(*) as count FROM '.TBL_CATEGORIES.'
                  WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                    AND cat_name_intern NOT LIKE \'CONFIRMATION_OF_PARTICIPATION\'
                    AND cat_org_id IS NULL ';
@@ -196,7 +196,7 @@ class TableCategory extends TableAccess
         {
             if($this->getValue('cat_org_id') == 0 || $this->getValue('cat_sequence') > $row['count']+1)
             {
-                $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '.$this->getValue('cat_sequence').'
+                $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_sequence = '.$this->getValue('cat_sequence').'
                          WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                                           OR cat_org_id IS NULL )
@@ -211,7 +211,7 @@ class TableCategory extends TableAccess
         {
             if($this->getValue('cat_org_id') > 0 || $this->getValue('cat_sequence') < $row['count'])
             {
-                $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '.$this->getValue('cat_sequence').'
+                $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_sequence = '.$this->getValue('cat_sequence').'
                          WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                                           OR cat_org_id IS NULL )
@@ -330,7 +330,7 @@ class TableCategory extends TableAccess
                 $org_condition = ' AND cat_org_id IS NULL ';
             }
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
-            $sql = 'SELECT COUNT(*) as count FROM '. TBL_CATEGORIES. '
+            $sql = 'SELECT COUNT(*) as count FROM '.TBL_CATEGORIES.'
                      WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                            '.$org_condition;
             $countCategoriesStatement = $this->db->query($sql);
@@ -342,7 +342,7 @@ class TableCategory extends TableAccess
             if($this->getValue('cat_org_id') == 0)
             {
                 // eine Orga-uebergreifende Kategorie ist immer am Anfang, also Kategorien anderer Orgas nach hinten schieben
-                $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = cat_sequence + 1
+                $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_sequence = cat_sequence + 1
                          WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                            AND cat_org_id IS NOT NULL ';
                 $this->db->query($sql);
@@ -387,7 +387,7 @@ class TableCategory extends TableAccess
         elseif($columnName === 'cat_default' && $newValue == '1')
         {
             // es darf immer nur eine Default-Kategorie je Bereich geben
-            $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_default = 0
+            $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_default = 0
                      WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                        AND (  cat_org_id IS NOT NULL
                            OR cat_org_id = '.$gCurrentOrganization->getValue('org_id').')';

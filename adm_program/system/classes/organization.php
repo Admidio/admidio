@@ -100,12 +100,12 @@ class Organization extends TableAccess
         }
 
         // create default category for roles, events and weblinks
-        $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+        $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                                                VALUES ('. $this->getValue('org_id'). ', \'ROL\', \'COMMON\', \'SYS_COMMON\', 0, 1, 1, '.$systemUserId.',\''. DATETIME_NOW.'\')';
         $this->db->query($sql);
         $categoryCommon = $this->db->lastInsertId();
 
-        $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+        $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                                          VALUES ('. $this->getValue('org_id').', \'ROL\', \'GROUPS\',  \'INS_GROUPS\', 0, 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\')
                                               , ('. $this->getValue('org_id').', \'ROL\', \'COURSES\', \'INS_COURSES\', 0, 0, 0, 3, '.$systemUserId.',\''. DATETIME_NOW.'\')
                                               , ('. $this->getValue('org_id').', \'ROL\', \'TEAMS\',   \'INS_TEAMS\', 0, 0, 0, 4, '.$systemUserId.',\''. DATETIME_NOW.'\')
@@ -117,7 +117,7 @@ class Organization extends TableAccess
         $this->db->query($sql);
 
         // create default folder for download module in database
-        $sql = 'INSERT INTO '. TBL_FOLDERS. ' (fol_org_id, fol_type, fol_name, fol_path,
+        $sql = 'INSERT INTO '.TBL_FOLDERS.' (fol_org_id, fol_type, fol_name, fol_path,
                                                fol_locked, fol_public, fol_timestamp)
                                         VALUES ('. $this->getValue('org_id'). ', \'DOWNLOAD\', \'download\', \'/adm_my_files\',
                                                 0,1,\''.DATETIME_NOW.'\')';
@@ -198,7 +198,7 @@ class Organization extends TableAccess
         $addressList->save();
 
         // set addresslist to default configuration
-        $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''.$addressList->getValue('lst_id').'\'
+        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$addressList->getValue('lst_id').'\'
                  WHERE prf_org_id = '.$this->getValue('org_id').'
                    AND prf_name   = \'lists_default_configuation\' ';
         $this->db->query($sql);
@@ -326,8 +326,9 @@ class Organization extends TableAccess
     {
         if(count($this->preferences) === 0)
         {
-            $sql    = 'SELECT * FROM '. TBL_PREFERENCES. '
-                        WHERE prf_org_id = '. $this->getValue('org_id');
+            $sql = 'SELECT *
+                      FROM '.TBL_PREFERENCES.'
+                     WHERE prf_org_id = '. $this->getValue('org_id');
             $preferencesStatement = $this->db->query($sql);
 
             while($prf_row = $preferencesStatement->fetch())
@@ -412,7 +413,7 @@ class Organization extends TableAccess
                 if($update && $value != $db_preferences[$key])
                 {
                     // Pref existiert in DB, aber Wert hat sich geaendert
-                    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''.$value.'\'
+                    $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$value.'\'
                              WHERE prf_org_id = '. $this->getValue('org_id'). '
                                AND prf_name   = \''.$key.'\' ';
                     $this->db->query($sql);
@@ -421,7 +422,7 @@ class Organization extends TableAccess
             else
             {
                 // Parameter existiert noch nicht in DB
-                $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
+                $sql = 'INSERT INTO '.TBL_PREFERENCES.' (prf_org_id, prf_name, prf_value)
                         VALUES   ('. $this->getValue('org_id'). ', \''.$key.'\', \''.$value.'\') ';
                 $this->db->query($sql);
             }

@@ -102,12 +102,13 @@ class TableFile extends TableAccess
             {
                 // Wenn der Ordner nicht public ist und der Benutzer keine Downloadadminrechte hat, muessen die Rechte untersucht werden
                 $sql_rights = 'SELECT COUNT(*) as count
-                         FROM '. TBL_FOLDER_ROLES. ', '. TBL_MEMBERS. '
-                        WHERE flr_fol_id = '. $this->getValue('fol_id'). '
-                          AND flr_rol_id = mem_rol_id
-                          AND mem_usr_id = '. $gCurrentUser->getValue('usr_id'). '
-                          AND mem_begin <= \''.DATE_NOW.'\'
-                          AND mem_end    > \''.DATE_NOW.'\'';
+                                 FROM '.TBL_FOLDER_ROLES.'
+                           INNER JOIN '.TBL_MEMBERS.'
+                                   ON mem_rol_id = flr_rol_id
+                                WHERE flr_fol_id = '.$this->getValue('fol_id').'
+                                  AND mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
+                                  AND mem_begin <= \''.DATE_NOW.'\'
+                                  AND mem_end    > \''.DATE_NOW.'\'';
                 $rightsStatement = $this->db->query($sql_rights);
                 $row_rights = $rightsStatement->fetch();
                 $row_count  = $row_rights['count'];

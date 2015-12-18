@@ -38,12 +38,12 @@ class TableInventoryField extends TableAccess
         $this->db->startTransaction();
 
         // close gap in sequence
-        $sql = 'UPDATE '. TBL_INVENT_FIELDS. ' SET inf_sequence = inf_sequence - 1
+        $sql = 'UPDATE '.TBL_INVENT_FIELDS.' SET inf_sequence = inf_sequence - 1
                  WHERE inf_cat_id   = '. $this->getValue('inf_cat_id'). '
                    AND inf_sequence > '. $this->getValue('inf_sequence');
         $this->db->query($sql);
 
-        $sql = 'DELETE FROM '. TBL_INVENT_DATA. '
+        $sql = 'DELETE FROM '.TBL_INVENT_DATA.'
                     WHERE ind_inf_id = '. $this->getValue('inf_id');
         $this->db->query($sql);
 
@@ -220,7 +220,7 @@ class TableInventoryField extends TableAccess
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
         if(admStrToUpper($mode) === 'UP')
         {
-            $sql = 'UPDATE '. TBL_INVENT_FIELDS. ' SET inf_sequence = '.$this->getValue('inf_sequence').'
+            $sql = 'UPDATE '.TBL_INVENT_FIELDS.' SET inf_sequence = '.$this->getValue('inf_sequence').'
                      WHERE inf_cat_id   = '.$this->getValue('inf_cat_id').'
                        AND inf_sequence = '.$this->getValue('inf_sequence').' - 1 ';
             $this->db->query($sql);
@@ -230,7 +230,7 @@ class TableInventoryField extends TableAccess
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
         elseif(admStrToUpper($mode) === 'DOWN')
         {
-            $sql = 'UPDATE '. TBL_INVENT_FIELDS. ' SET inf_sequence = '.$this->getValue('inf_sequence').'
+            $sql = 'UPDATE '.TBL_INVENT_FIELDS.' SET inf_sequence = '.$this->getValue('inf_sequence').'
                      WHERE inf_cat_id   = '.$this->getValue('inf_cat_id').'
                        AND inf_sequence = '.$this->getValue('inf_sequence').' + 1 ';
             $this->db->query($sql);
@@ -279,7 +279,7 @@ class TableInventoryField extends TableAccess
         elseif($columnName === 'inf_cat_id' && $this->getValue($columnName) != $newValue)
         {
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
-            $sql = 'SELECT COUNT(*) as count FROM '. TBL_INVENT_FIELDS. '
+            $sql = 'SELECT COUNT(*) as count FROM '.TBL_INVENT_FIELDS.'
                      WHERE inf_cat_id = '.$newValue;
             $pdoStatement = $this->db->query($sql);
 

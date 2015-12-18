@@ -121,7 +121,7 @@ class AutoLogin extends TableAccess
         $oneYearBeforeDateTime = $currDateTime->sub($oneYearDateInterval);
         $date_session_delete = $oneYearBeforeDateTime->format('Y.m.d H:i:s');
 
-        $sql = 'DELETE FROM '. TBL_AUTO_LOGIN. '
+        $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
                  WHERE atl_last_login < \''. $date_session_delete. '\'';
         $this->db->query($sql);
     }

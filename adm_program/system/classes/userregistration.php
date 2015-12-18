@@ -185,25 +185,28 @@ class UserRegistration extends User
             if($gPreferences['enable_system_mails'] == 1 && $gPreferences['enable_registration_admin_mail'] == 1 && $this->sendEmail)
             {
                 $sql = 'SELECT DISTINCT first_name.usd_value as first_name, last_name.usd_value as last_name, email.usd_value as email
-                          FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
-                         RIGHT JOIN '. TBL_USER_DATA. ' email
+                          FROM '.TBL_MEMBERS.'
+                    INNER JOIN '.TBL_ROLES.'
+                            ON rol_id = mem_rol_id
+                    INNER JOIN '.TBL_CATEGORIES.'
+                            ON cat_id = rol_cat_id
+                    INNER JOIN '.TBL_USERS.'
+                            ON usr_id = mem_usr_id
+                    RIGHT JOIN '.TBL_USER_DATA.' email
                             ON email.usd_usr_id = usr_id
                            AND email.usd_usf_id = '. $this->mProfileFieldsData->getProperty('EMAIL', 'usf_id'). '
                            AND LENGTH(email.usd_value) > 0
-                          LEFT JOIN '. TBL_USER_DATA. ' first_name
+                     LEFT JOIN '.TBL_USER_DATA.' first_name
                             ON first_name.usd_usr_id = usr_id
                            AND first_name.usd_usf_id = '. $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_id'). '
-                          LEFT JOIN '. TBL_USER_DATA. ' last_name
+                     LEFT JOIN '.TBL_USER_DATA.' last_name
                             ON last_name.usd_usr_id = usr_id
                            AND last_name.usd_usf_id = '. $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_id'). '
                          WHERE rol_approve_users = 1
-                           AND rol_cat_id        = cat_id
+                           AND usr_valid         = 1
                            AND cat_org_id        = '.$this->organizationId.'
-                           AND mem_rol_id        = rol_id
                            AND mem_begin        <= \''.DATE_NOW.'\'
-                           AND mem_end           > \''.DATE_NOW.'\'
-                           AND mem_usr_id        = usr_id
-                           AND usr_valid         = 1 ';
+                           AND mem_end           > \''.DATE_NOW.'\'';
                 $emailStatement = $this->db->query($sql);
 
                 while($row = $emailStatement->fetch())

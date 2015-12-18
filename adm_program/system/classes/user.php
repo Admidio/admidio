@@ -81,10 +81,12 @@ class User extends TableUsers
 
         // every user will get the default roles for registration, if the current user has the right to assign roles
         // than the roles assignment dialog will be shown
-        $sql = 'SELECT rol_id FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
-                 WHERE rol_cat_id = cat_id
-                   AND cat_org_id = '.$this->organizationId.'
-                   AND rol_default_registration = 1 ';
+        $sql = 'SELECT rol_id
+                  FROM '.TBL_ROLES.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE rol_default_registration = 1
+                   AND cat_org_id = '.$this->organizationId;
         $defaultRolesStatement = $this->db->query($sql);
 
         if($defaultRolesStatement->rowCount() === 0)
@@ -138,14 +140,15 @@ class User extends TableUsers
 
                 // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
                 $sql = 'SELECT *
-                          FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
-                          LEFT JOIN '. TBL_MEMBERS. '
-                            ON mem_usr_id  = '. $this->getValue('usr_id'). '
-                           AND mem_rol_id  = rol_id
-                           AND mem_begin  <= \''.DATE_NOW.'\'
-                           AND mem_end     > \''.DATE_NOW.'\'
-                         WHERE rol_valid   = 1
-                           AND rol_cat_id  = cat_id
+                          FROM '.TBL_ROLES.'
+                    INNER JOIN '.TBL_CATEGORIES.'
+                            ON cat_id = rol_cat_id
+                     LEFT JOIN '.TBL_MEMBERS.'
+                            ON mem_rol_id = rol_id
+                           AND mem_usr_id = '.$this->getValue('usr_id').'
+                           AND mem_begin <= \''.DATE_NOW.'\'
+                           AND mem_end    > \''.DATE_NOW.'\'
+                         WHERE rol_valid  = 1
                            AND (  cat_org_id = '.$this->organizationId.'
                                OR cat_org_id IS NULL ) ';
                 $rolesStatement = $this->db->query($sql);
@@ -861,13 +864,15 @@ class User extends TableUsers
                 else
                 {
                     $sql = 'SELECT rol_id, rol_this_list_view
-                              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                             WHERE mem_usr_id = '.$user->getValue('usr_id'). '
+                              FROM '.TBL_MEMBERS.'
+                        INNER JOIN '.TBL_ROLES.'
+                                ON rol_id = mem_rol_id
+                        INNER JOIN '.TBL_CATEGORIES.'
+                                ON cat_id = rol_cat_id
+                             WHERE rol_valid  = 1
                                AND mem_begin <= \''.DATE_NOW.'\'
                                AND mem_end    > \''.DATE_NOW.'\'
-                               AND mem_rol_id = rol_id
-                               AND rol_valid  = 1
-                               AND rol_cat_id = cat_id
+                               AND mem_usr_id = '.$user->getValue('usr_id').'
                                AND (  cat_org_id = '.$this->organizationId.'
                                    OR cat_org_id IS NULL ) ';
                     $listViewStatement = $this->db->query($sql);

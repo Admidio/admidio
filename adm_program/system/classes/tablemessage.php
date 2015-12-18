@@ -72,7 +72,7 @@ class TableMessage extends TableAccess
      */
     public function setReadValue($usrId)
     {
-        $sql = 'UPDATE '. TBL_MESSAGES. ' SET  msg_read = \'0\'
+        $sql = 'UPDATE '.TBL_MESSAGES.' SET  msg_read = \'0\'
                  WHERE msg_id = '.$this->msg_id.'
                    AND msg_usr_id_receiver LIKE \''.$usrId.'\'';
         return $this->db->query($sql);
@@ -104,7 +104,7 @@ class TableMessage extends TableAccess
                  CASE WHEN msg_usr_id_sender = '. $usrId .' THEN msg_usr_id_receiver
                  ELSE msg_usr_id_sender
                   END AS user
-                 FROM '. TBL_MESSAGES. '
+                 FROM '.TBL_MESSAGES.'
                 WHERE msg_type = \'PM\'
                   AND msg_id = '. $this->msg_id;
         $partnerStatement = $this->db->query($sql);
