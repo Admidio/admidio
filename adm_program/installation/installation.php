@@ -617,29 +617,29 @@ elseif($getMode === 8) // Start installation
     $db->query($sql);
 
     // create organization independent categories
-    $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+    $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
             VALUES (NULL, \'USF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
     $cat_id_master_data = $db->lastInsertId();
 
-    $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+    $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
             VALUES (NULL, \'USF\', \'SOCIAL_NETWORKS\', \'SYS_SOCIAL_NETWORKS\', 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
     $cat_id_messenger = $db->lastInsertId();
 
-    $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+    $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
             VALUES (NULL, \'ROL\', \'CONFIRMATION_OF_PARTICIPATION\', \'SYS_CONFIRMATION_OF_PARTICIPATION\', 1, 0, 1, 5, '.$systemUserId.',\''. DATETIME_NOW.'\')
                  , (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 0, 3, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
 
     // create inventory categories
-    $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+    $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
             VALUES (NULL, \'INF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
     $cat_id_master_inf = $db->lastInsertId();
 
     // Stammdatenfelder anlegen
-    $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_system, usf_disabled, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create)
+    $sql = 'INSERT INTO '.TBL_USER_FIELDS.' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_system, usf_disabled, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create)
             VALUES ('.$cat_id_master_data.', \'TEXT\', \'LAST_NAME\', \'SYS_LASTNAME\', NULL, NULL, 1, 1, 1, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                  , ('.$cat_id_master_data.', \'TEXT\', \'FIRST_NAME\',\'SYS_FIRSTNAME\', NULL, NULL, 1, 1, 1, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                  , ('.$cat_id_master_data.', \'TEXT\', \'ADDRESS\',   \'SYS_ADDRESS\', NULL, NULL, 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
@@ -658,7 +658,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     $usf_id_homepage = $db->lastInsertId();
 
     // Messenger anlegen
-    $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_url, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
+    $sql = 'INSERT INTO '.TBL_USER_FIELDS.' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_url, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
             VALUES ('.$cat_id_messenger.', \'TEXT\', \'AOL_INSTANT_MESSENGER\', \'INS_AOL_INSTANT_MESSENGER\', NULL, \'aim.png\', NULL, 0, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                  , ('.$cat_id_messenger.', \'TEXT\', \'FACEBOOK\',       \'INS_FACEBOOK\', \''.$gL10n->get('INS_FACEBOOK_DESC').'\', \'facebook.png\', \'https://www.facebook.com/#user_content#\', 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                  , ('.$cat_id_messenger.', \'TEXT\', \'GOOGLE_PLUS\',    \'INS_GOOGLE_PLUS\', \''.$gL10n->get('INS_GOOGLE_PLUS_DESC').'\', \'google_plus.png\', \'https://plus.google.com/#user_content#/posts\', 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
@@ -670,7 +670,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     $db->query($sql);
 
     // Inventoryfelder anlegen
-    $sql = 'INSERT INTO '. TBL_INVENT_FIELDS. ' (inf_cat_id, inf_type, inf_name_intern, inf_name, inf_description, inf_system, inf_disabled, inf_mandatory, inf_sequence, inf_usr_id_create, inf_timestamp_create)
+    $sql = 'INSERT INTO '.TBL_INVENT_FIELDS.' (inf_cat_id, inf_type, inf_name_intern, inf_name, inf_description, inf_system, inf_disabled, inf_mandatory, inf_sequence, inf_usr_id_create, inf_timestamp_create)
             VALUES ('.$cat_id_master_inf.', \'TEXT\', \'ITEM_NAME\', \'SYS_ITEMNAME\', NULL, 1, 1, 1, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                  , ('.$cat_id_master_inf.', \'NUMBER\', \'ROOM_ID\', \'SYS_ROOM\', NULL, 1, 1, 1, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                  , ('.$cat_id_master_inf.', \'NUMBER\', \'PRICE\',   \'SYS_QUANTITY\', NULL, 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
@@ -715,9 +715,9 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     $gCurrentOrganization->createBasicData($webmaster->getValue('usr_id'));
 
     // create default room for room module in database
-    $sql = 'INSERT INTO '. TBL_ROOMS. ' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
-                                    VALUES (\''.$gL10n->get('INS_CONFERENCE_ROOM').'\', \''.$gL10n->get('INS_DESCRIPTION_CONFERENCE_ROOM').'\',
-                                            15, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')';
+    $sql = 'INSERT INTO '.TBL_ROOMS.' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
+                   VALUES (\''.$gL10n->get('INS_CONFERENCE_ROOM').'\', \''.$gL10n->get('INS_DESCRIPTION_CONFERENCE_ROOM').'\',
+                           15, '.$gCurrentUser->getValue('usr_id').',\''.DATETIME_NOW.'\')';
     $db->query($sql);
 
     // first create a user object "current user" with webmaster rights because webmaster

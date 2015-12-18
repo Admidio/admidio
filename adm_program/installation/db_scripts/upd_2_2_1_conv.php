@@ -10,7 +10,7 @@
  */
 
 // englische Bezeichnung der Bereiche in Systememails einbauen
-$sql = 'SELECT * FROM '. TBL_TEXTS. ' ORDER BY txt_id DESC';
+$sql = 'SELECT * FROM '.TBL_TEXTS.' ORDER BY txt_id DESC';
 $textsStatement = $gDb->query($sql);
 
 while($row_texts = $textsStatement->fetch())
@@ -18,7 +18,7 @@ while($row_texts = $textsStatement->fetch())
     $row_texts['txt_text'] = preg_replace('/#Betreff#/', '#subject#', $row_texts['txt_text']);
     $row_texts['txt_text'] = preg_replace('/#Inhalt#/', '#content#', $row_texts['txt_text']);
 
-    $sql = 'UPDATE '. TBL_TEXTS. ' SET txt_text = \''.addslashes($row_texts['txt_text']). '\'
+    $sql = 'UPDATE '.TBL_TEXTS.' SET txt_text = \''.addslashes($row_texts['txt_text']). '\'
              WHERE txt_id = '.$row_texts['txt_id'];
     $gDb->query($sql);
 }
