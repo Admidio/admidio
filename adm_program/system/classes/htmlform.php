@@ -1539,7 +1539,7 @@ class HtmlForm extends HtmlFormBasic
                        OR cat_org_id IS NULL )
                    AND cat_type = \''.$categoryType.'\'
                        '.$sqlCondidtions.'
-                 ORDER BY cat_sequence ASC ';
+                 ORDER BY cat_sequence ASC';
         $statement = $database->query($sql);
         $countCategories = $statement->rowCount();
 

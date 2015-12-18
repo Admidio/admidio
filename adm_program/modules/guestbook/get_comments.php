@@ -35,9 +35,10 @@ if ($getGbcId > 0)
     }
 
     $sql = 'SELECT *
-              FROM '.TBL_GUESTBOOK_COMMENTS.', '.TBL_GUESTBOOK.'
+              FROM '.TBL_GUESTBOOK_COMMENTS.'
+        INNER JOIN '.TBL_GUESTBOOK.'
+                ON gbo_id = gbc_gbo_id
              WHERE gbo_id     = '.$getGbcId.'
-               AND gbc_gbo_id = gbo_id
                AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id').
                    $conditions.'
              ORDER BY gbc_timestamp_create ASC';

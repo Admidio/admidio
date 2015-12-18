@@ -172,9 +172,10 @@ if(!$getModeration && $gCurrentUser->editGuestbookRight() && $gPreferences['enab
                      WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        AND gbo_locked = 1) AS count_locked_guestbook,
                    (SELECT COUNT(*)
-                      FROM '.TBL_GUESTBOOK.', '.TBL_GUESTBOOK_COMMENTS.'
+                      FROM '.TBL_GUESTBOOK_COMMENTS.'
+                INNER JOIN '.TBL_GUESTBOOK.'
+                        ON gbo_id = gbc_gbo_id
                      WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                       AND gbo_id = gbc_gbo_id
                        AND gbc_locked = 1) AS count_locked_comments
               FROM '.TBL_ORGANIZATIONS.'
              WHERE org_id = '.$gCurrentOrganization->getValue('org_id');

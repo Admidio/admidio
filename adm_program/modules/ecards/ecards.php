@@ -175,11 +175,12 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
     $arrayMailRoles = $gCurrentUser->getAllMailRoles();
 
     $sql = 'SELECT rol_id, rol_name
-              FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+              FROM '.TBL_ROLES.'
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
              WHERE rol_id IN ('.implode(',', $arrayMailRoles).')
-               AND rol_cat_id = cat_id
                AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-             ORDER BY rol_name ';
+             ORDER BY rol_name';
     $statement = $gDb->query($sql);
 
     while($row = $statement->fetch())
@@ -193,7 +194,9 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
     $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
                    email.usd_value as email
-              FROM '.TBL_MEMBERS.', '.TBL_USERS.'
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_USERS.'
+                ON usr_id = mem_usr_id
         INNER JOIN '.TBL_USER_DATA.' as email
                 ON email.usd_usr_id = usr_id
                AND LENGTH(email.usd_value) > 0
@@ -206,11 +209,10 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
          LEFT JOIN '.TBL_USER_DATA.' as first_name
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-             WHERE mem_usr_id  = usr_id
-               AND mem_rol_id IN ('.implode(',', $arrayUniqueRoles).')
+             WHERE usr_valid  = 1
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end    > \''.DATE_NOW.'\'
-               AND usr_valid   = 1
+               AND mem_rol_id IN ('.implode(',', $arrayUniqueRoles).')
           GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
           ORDER BY first_name, last_name';
     $statement = $gDb->query($sql);

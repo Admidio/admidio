@@ -155,11 +155,12 @@ if ($getMsgType === 'EMAIL')
 
                 // check if role rights are granted to the User
                 $sql = 'SELECT rol_mail_this_role, rol_name, rol_id
-                          FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
-                         WHERE rol_cat_id    = cat_id
-                           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
-                               OR cat_org_id IS NULL)
-                           AND rol_id = '.$group[0];
+                          FROM '.TBL_ROLES.'
+                    INNER JOIN '.TBL_CATEGORIES.'
+                            ON cat_id = rol_cat_id
+                         WHERE rol_id = '.$group[0].'
+                           AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                               OR cat_org_id IS NULL)';
                 $statement = $gDb->query($sql);
                 $row = $statement->fetch();
 
@@ -192,7 +193,13 @@ if ($getMsgType === 'EMAIL')
 
                 $sql = 'SELECT first_name.usd_value as first_name, last_name.usd_value as last_name,
                                email.usd_value as email, rol_name
-                          FROM '.TBL_ROLES.', '.TBL_CATEGORIES.', '.TBL_MEMBERS.', '.TBL_USERS.'
+                          FROM '.TBL_MEMBERS.'
+                    INNER JOIN '.TBL_ROLES.'
+                            ON rol_id = mem_rol_id
+                    INNER JOIN '.TBL_CATEGORIES.'
+                            ON cat_id = rol_cat_id
+                    INNER JOIN '.TBL_USERS.'
+                            ON usr_id = mem_usr_id
                     INNER JOIN '.TBL_USER_DATA.' as email
                             ON email.usd_usr_id = usr_id
                            AND LENGTH(email.usd_value) > 0
@@ -206,11 +213,8 @@ if ($getMsgType === 'EMAIL')
                             ON first_name.usd_usr_id = usr_id
                            AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
                          WHERE rol_id      = '.$group[0].'
-                           AND rol_cat_id  = cat_id
                            AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                                OR cat_org_id IS NULL )
-                           AND mem_rol_id  = rol_id
-                           AND mem_usr_id  = usr_id
                            AND usr_valid   = 1 '.
                                $sqlConditions;
 

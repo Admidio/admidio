@@ -146,14 +146,16 @@ else
 
         $memberCondition = ' EXISTS
             (SELECT 1
-               FROM '.TBL_MEMBERS.', '.TBL_ROLES.', '.TBL_CATEGORIES.'
+               FROM '.TBL_MEMBERS.'
+         INNER JOIN '.TBL_ROLES.'
+                 ON rol_id = mem_rol_id
+         INNER JOIN '.TBL_CATEGORIES.'
+                 ON cat_id = rol_cat_id
               WHERE mem_usr_id = usr_id
-                AND mem_rol_id = rol_id
                     '.$roleCondition.'
                 AND mem_begin <= \''.DATE_NOW.'\'
                 AND mem_end    > \''.DATE_NOW.'\'
                 AND rol_valid  = 1
-                AND rol_cat_id = cat_id
                 AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
                 AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                     OR cat_org_id IS NULL )) ';
@@ -295,10 +297,11 @@ else
     }
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
     $sql = 'SELECT rol_id, rol_name, cat_name
-              FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+              FROM '.TBL_ROLES.'
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
              WHERE rol_valid   = 1
                AND rol_visible = 1
-               AND rol_cat_id  = cat_id
                AND (  cat_org_id  = '.$gCurrentOrganization->getValue('org_id').'
                    OR cat_org_id IS NULL )
              ORDER BY cat_sequence, rol_name';

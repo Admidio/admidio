@@ -97,12 +97,13 @@ $fieldsMenu->addItem('menu_item_maintain_category', $g_root_path.'/adm_program/m
                      $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
 
 $sql = 'SELECT *
-          FROM '.TBL_CATEGORIES.', '.TBL_USER_FIELDS.'
-         WHERE cat_type   = \'USF\'
-           AND usf_cat_id = cat_id
+          FROM '.TBL_USER_FIELDS.'
+    INNER JOIN '.TBL_CATEGORIES.'
+            ON cat_id = usf_cat_id
+         WHERE cat_type = \'USF\'
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )
-         ORDER BY cat_sequence ASC, usf_sequence ASC ';
+         ORDER BY cat_sequence ASC, usf_sequence ASC';
 $statement = $gDb->query($sql);
 
 // Create table

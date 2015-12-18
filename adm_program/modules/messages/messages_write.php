@@ -85,22 +85,25 @@ $list = array();
 if ($gValidLogin && $getMsgType === 'PM')
 {
     $sql = 'SELECT usr_id, FIRST_NAME.usd_value as first_name, LAST_NAME.usd_value as last_name, usr_login_name
-                  FROM '.TBL_ROLES.', '.TBL_CATEGORIES.', '.TBL_MEMBERS.', '.TBL_USERS.'
+                  FROM '.TBL_MEMBERS.'
+            INNER JOIN '.TBL_ROLES.'
+                    ON rol_id = mem_rol_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+            INNER JOIN '.TBL_USERS.'
+                    ON usr_id = mem_usr_id
              LEFT JOIN '.TBL_USER_DATA.' LAST_NAME
                     ON LAST_NAME.usd_usr_id = usr_id
                    AND LAST_NAME.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
              LEFT JOIN '.TBL_USER_DATA.' FIRST_NAME
                     ON FIRST_NAME.usd_usr_id = usr_id
                    AND FIRST_NAME.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). "
-                 WHERE rol_cat_id = cat_id
-                   AND rol_id IN (".implode(',', $gCurrentUser->getAllVisibleRoles()).")
+                 WHERE rol_id IN (".implode(',', $gCurrentUser->getAllVisibleRoles()).")
                    AND cat_name_intern <> 'CONFIRMATION_OF_PARTICIPATION'
                    AND (  cat_org_id = ". $gCurrentOrganization->getValue('org_id')."
                        OR cat_org_id IS NULL )
                    AND mem_begin <= '".DATE_NOW."'
                    AND mem_end   >= '".DATE_NOW."'
-                   AND mem_rol_id = rol_id
-                   AND mem_usr_id = usr_id
                    AND usr_id <> ".$gCurrentUser->getValue('usr_id')."
                    AND usr_valid  = 1
                    AND usr_login_name IS NOT NULL
@@ -285,10 +288,11 @@ elseif (!isset($messageStatement))
         // list array with all roles where user is allowed to send mail to
         $sql = 'SELECT rol_id, rol_name
                   FROM '.TBL_ROLES.'
-            INNER JOIN '.TBL_CATEGORIES.' ON cat_id = rol_cat_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
                  WHERE rol_id IN ('.implode(',', $gCurrentUser->getAllMailRoles()).')
                    AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-                 ORDER BY rol_name ASC ';
+                 ORDER BY rol_name ASC';
         $rolesStatement = $gDb->query($sql);
         $rolesArray = $rolesStatement->fetchAll();
 
@@ -315,7 +319,11 @@ elseif (!isset($messageStatement))
 
         $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
                        rol_mail_this_role, rol_id, mem_begin, mem_end
-                  FROM '.TBL_MEMBERS.', '.TBL_ROLES.', '.TBL_USERS.'
+                  FROM '.TBL_MEMBERS.'
+            INNER JOIN '.TBL_ROLES.'
+                    ON rol_id = mem_rol_id
+            INNER JOIN '.TBL_USERS.'
+                    ON usr_id = mem_usr_id
             INNER JOIN '.TBL_USER_DATA.' as email
                     ON email.usd_usr_id = usr_id
                    AND LENGTH(email.usd_value) > 0
@@ -328,13 +336,11 @@ elseif (!isset($messageStatement))
              LEFT JOIN '.TBL_USER_DATA.' as first_name
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-                 WHERE mem_usr_id  = usr_id
+                 WHERE rol_id in ('.implode(',', $listVisibleRoleArray).')
                    AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
-                   AND usr_valid   = 1
-                   AND mem_rol_id  = rol_id
-                   AND rol_id in ('.implode(',', $listVisibleRoleArray).')
+                   AND usr_valid = 1
                  GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value, rol_mail_this_role, rol_id
-                 ORDER BY last_name, first_name, rol_mail_this_role desc';
+                 ORDER BY last_name, first_name, rol_mail_this_role DESC';
         $statement = $gDb->query($sql);
 
         $passive_list = array();
@@ -370,10 +376,11 @@ elseif (!isset($messageStatement))
         $maxNumberRecipients = 1;
         // list all roles where guests could send mails to
         $sql = 'SELECT rol_id, rol_name, cat_name
-                  FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+                  FROM '.TBL_ROLES.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
                  WHERE rol_mail_this_role = 3
                    AND rol_valid  = 1
-                   AND rol_cat_id = cat_id
                    AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                  ORDER BY cat_sequence, rol_name ';
 
@@ -397,7 +404,8 @@ elseif (!isset($messageStatement))
     {
         $sql = 'SELECT COUNT(*)
                   FROM '.TBL_USER_FIELDS.'
-            INNER JOIN '. TBL_USER_DATA .' ON usd_usf_id = usf_id
+            INNER JOIN '. TBL_USER_DATA .'
+                    ON usd_usf_id = usf_id
                  WHERE usf_type = \'EMAIL\'
                    AND usd_usr_id = '.$gCurrentUser->getValue('usr_id').'
                    AND usd_value IS NOT NULL';

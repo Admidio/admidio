@@ -105,13 +105,14 @@ elseif($getMode === 2)
     {
         // Schauen, ob die Rolle bereits existiert
         $sql = 'SELECT COUNT(*) AS count
-                  FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+                  FROM '.TBL_ROLES.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
                  WHERE rol_name   LIKE \''. $_POST['rol_name']. '\'
                    AND rol_cat_id = '. $_POST['rol_cat_id']. '
                    AND rol_id    <> '. $getRoleId. '
-                   AND rol_cat_id = cat_id
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
-                       OR cat_org_id IS NULL ) ';
+                       OR cat_org_id IS NULL )';
         $statement = $gDb->query($sql);
         $row = $statement->fetch();
 

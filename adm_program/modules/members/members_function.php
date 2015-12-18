@@ -49,11 +49,13 @@ if($getMode !== 1)
 {
     // pruefen, ob der User noch in anderen Organisationen aktiv ist
     $sql = 'SELECT rol_id
-              FROM '.TBL_ROLES.', '.TBL_MEMBERS.', '.TBL_CATEGORIES.'
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
              WHERE rol_valid   = 1
-               AND rol_cat_id  = cat_id
                AND cat_org_id <> '. $gCurrentOrganization->getValue('org_id'). '
-               AND mem_rol_id  = rol_id
                AND mem_begin  <= \''.DATE_NOW.'\'
                AND mem_end     > \''.DATE_NOW.'\'
                AND mem_usr_id  = '. $getUserId;
@@ -114,12 +116,14 @@ elseif($getMode === 2)
     $member = new TableMembers($gDb);
 
     $sql = 'SELECT mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
-              FROM '.TBL_ROLES.', '.TBL_CATEGORIES.', '.TBL_MEMBERS.'
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
              WHERE rol_valid  = 1
-               AND rol_cat_id = cat_id
                AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
-               AND mem_rol_id = rol_id
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end    > \''.DATE_NOW.'\'
                AND mem_usr_id = '. $getUserId;

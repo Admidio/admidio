@@ -543,7 +543,7 @@ $sql = 'SELECT lst_id, lst_name, lst_global, lst_timestamp
          WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
            AND (  lst_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                OR lst_global = 1)
-         ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC ';
+         ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC';
 $configurationsStatement = $gDb->query($sql);
 
 $configurations = $configurationsStatement->fetchAll();
@@ -653,10 +653,11 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_select_members', $gL10n->get('LST_SELECT_MEMBERS'));
 // show all roles where the user has the right to see them
 $sql = 'SELECT rol_id, rol_name, cat_name
-          FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+          FROM '.TBL_ROLES.'
+    INNER JOIN '.TBL_CATEGORIES.'
+            ON cat_id = rol_cat_id
          WHERE rol_valid   = '.$getActiveRole.'
            AND rol_visible = 1
-           AND rol_cat_id  = cat_id
            AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )
          ORDER BY cat_sequence, rol_name';

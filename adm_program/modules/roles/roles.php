@@ -114,13 +114,14 @@ $cat_id = '';
 
 // list all roles group by category
 $sql = 'SELECT *
-          FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
-         WHERE rol_cat_id = cat_id
-           AND cat_type = \'ROL\'
+          FROM '.TBL_ROLES.'
+    INNER JOIN '.TBL_CATEGORIES.'
+            ON cat_id = rol_cat_id
+         WHERE cat_type = \'ROL\'
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                 OR cat_org_id IS NULL )
                '.$sqlRolesStatus.'
-         ORDER BY cat_sequence ASC, rol_name ASC ';
+         ORDER BY cat_sequence ASC, rol_name ASC';
 $rolStatement = $gDb->query($sql);
 
 // Create role object

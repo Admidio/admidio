@@ -168,7 +168,7 @@ $sql = 'SELECT *
          WHERE (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )
            AND cat_type   = \''.$getType.'\'
-         ORDER BY cat_sequence ASC ';
+         ORDER BY cat_sequence ASC';
 
 $categoryStatement = $gDb->query($sql);
 $flagTbodyWritten = false;

@@ -69,15 +69,16 @@ if($gCurrentUser->manageRoles())
 {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
     $sql = 'SELECT rol_id, rol_name, rol_max_members, rol_webmaster, mem_id, mem_begin, mem_end
-              FROM '.TBL_CATEGORIES.', '.TBL_ROLES.'
+              FROM '.TBL_ROLES.'
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
          LEFT JOIN '.TBL_MEMBERS.'
-                ON rol_id      = mem_rol_id
-               AND mem_usr_id  = '.$getUserId.'
+                ON mem_rol_id = rol_id
+               AND mem_usr_id = '.$getUserId.'
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end    > \''.DATE_NOW.'\'
              WHERE rol_valid   = 1
                AND rol_visible = 1
-               AND rol_cat_id  = cat_id
                AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
              ORDER BY cat_sequence, rol_name';
@@ -86,7 +87,11 @@ else
 {
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
     $sql = 'SELECT rol_id, rol_name, rol_max_members, rol_webmaster, mgl.mem_id, mgl.mem_begin, mgl.mem_end
-              FROM '.TBL_MEMBERS.' bm, '.TBL_CATEGORIES.', '.TBL_ROLES.'
+              FROM '.TBL_MEMBERS.' bm
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = bm.mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
          LEFT JOIN '.TBL_MEMBERS.' mgl
                 ON rol_id         = mgl.mem_rol_id
                AND mgl.mem_usr_id = '.$getUserId.'
@@ -96,11 +101,9 @@ else
                AND bm.mem_begin  <= \''.DATE_NOW.'\'
                AND bm.mem_end     > \''.DATE_NOW.'\'
                AND bm.mem_leader  = 1
-               AND rol_id         = bm.mem_rol_id
                AND rol_leader_rights IN (1,3)
                AND rol_valid      = 1
                AND rol_visible    = 1
-               AND rol_cat_id     = cat_id
                AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
              ORDER BY cat_sequence, rol_name';

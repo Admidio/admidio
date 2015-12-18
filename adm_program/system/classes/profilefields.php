@@ -397,7 +397,7 @@ class ProfileFields
                     ON cat_id = usf_cat_id
                  WHERE cat_org_id IS NULL
                     OR cat_org_id = '.$organizationId.'
-                 ORDER BY cat_sequence ASC, usf_sequence ASC ';
+                 ORDER BY cat_sequence ASC, usf_sequence ASC';
         $userFieldsStatement = $this->mDb->query($sql);
 
         while($row = $userFieldsStatement->fetch())

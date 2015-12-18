@@ -78,12 +78,13 @@ if (count($parentRoleSet) === 0)
     // wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
     // alle aus der DB aus lesen
     $sql_roles = 'SELECT *
-                     FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
-                    WHERE rol_valid  = 1
-                      AND rol_system = 0
-                      AND rol_cat_id = cat_id
-                      AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                    ORDER BY rol_name';
+                    FROM '.TBL_ROLES.'
+              INNER JOIN '.TBL_CATEGORIES.'
+                      ON cat_id = rol_cat_id
+                   WHERE rol_valid  = 1
+                     AND rol_system = 0
+                     AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                   ORDER BY rol_name';
     $rolesStatement = $gDb->query($sql_roles);
 
     $parentRoleSet[] = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);

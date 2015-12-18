@@ -266,15 +266,15 @@ if($role->getValue('rol_name') !== '')
 $form->addHtml('<p>'.$gL10n->get('ROL_ROLE_DEPENDENCIES', $rolename_var).'</p>');
 
 //  list all roles that the user is allowed to see
-$sqlAllRoles = '
-    SELECT rol_id, rol_name, cat_name
-      FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
-     WHERE rol_valid   = 1
-       AND rol_visible = 1
-       AND rol_cat_id  = cat_id
-       AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-           OR cat_org_id IS NULL )
-     ORDER BY cat_sequence, rol_name ';
+$sqlAllRoles = 'SELECT rol_id, rol_name, cat_name
+                  FROM '.TBL_ROLES.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE rol_valid   = 1
+                   AND rol_visible = 1
+                   AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+                       OR cat_org_id IS NULL )
+                 ORDER BY cat_sequence, rol_name';
 
 $form->addSelectBoxFromSql('dependent_roles', $gL10n->get('ROL_DEPENDENT'), $gDb, $sqlAllRoles,
                            array('defaultValue' => $childRoles, 'multiselect' => true));
