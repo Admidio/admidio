@@ -326,10 +326,13 @@ class User extends TableUsers
                 // Cookies fuer die Anmeldung setzen und evtl. Ports entfernen
                 $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
 
-                setcookie($gCookiePraefix. '_ID', $gSessionId, $timestamp_expired, '/', $domain, 0);
+                setcookie($gCookiePraefix. '_ID', $gSessionId, 0, '/', $domain, 0);
                 // User-Id und Autologin auch noch als Cookie speichern
                 // vorher allerdings noch serialisieren, damit der Inhalt nicht so einfach ausgelesen werden kann
                 setcookie($gCookiePraefix. '_DATA', $setAutoLogin. ';'. $this->getValue('usr_id'), $timestamp_expired, '/', $domain, 0);
+
+                // save cookie for autologin
+                setcookie($gCookiePraefix. '_AUTO_ID', $gSessionId, $timestamp_expired, '/', $domain, 0);
 
                 // count logins and update login dates
                 $this->saveChangesWithoutRights();
