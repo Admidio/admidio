@@ -186,16 +186,16 @@ class Participants
             $this->order = $order;
 
             $sql = 'SELECT DISTINCT
-                        surname.usd_value as surname, firstname.usd_value as firstname, mem_leader
-                    FROM '.TBL_MEMBERS.'
-                        LEFT JOIN '. TBL_USER_DATA .' surname
-                            ON surname.usd_usr_id = mem_usr_id
-                            AND surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-                        LEFT JOIN '. TBL_USER_DATA .' firstname
-                            ON firstname.usd_usr_id = mem_usr_id
-                            AND firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-                    WHERE mem_rol_id = '.$this->rolId.'
-                    ORDER BY surname '.$this->order.' ';
+                           surname.usd_value as surname, firstname.usd_value as firstname, mem_leader
+                      FROM '.TBL_MEMBERS.'
+                 LEFT JOIN '. TBL_USER_DATA .' surname
+                        ON surname.usd_usr_id = mem_usr_id
+                       AND surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+                 LEFT JOIN '. TBL_USER_DATA .' firstname
+                        ON firstname.usd_usr_id = mem_usr_id
+                       AND firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+                     WHERE mem_rol_id = '.$this->rolId.'
+                     ORDER BY surname '.$this->order.' ';
             $membersStatement = $this->mDb->query($sql);
 
             while ($row = $membersStatement->fetch())

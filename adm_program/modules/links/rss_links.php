@@ -46,20 +46,20 @@ if($gPreferences['system_show_create_edit'] == 1)
     $additionalFields = '
         cre_firstname.usd_value || \' \' || cre_surname.usd_value as create_name ';
     $additionalTables = '
-      LEFT JOIN '. TBL_USER_DATA .' cre_surname
-        ON cre_surname.usd_usr_id = lnk_usr_id_create
-       AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-      LEFT JOIN '. TBL_USER_DATA .' cre_firstname
-        ON cre_firstname.usd_usr_id = lnk_usr_id_create
-       AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
+                         LEFT JOIN '. TBL_USER_DATA .' cre_surname
+                                ON cre_surname.usd_usr_id = lnk_usr_id_create
+                               AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+                         LEFT JOIN '. TBL_USER_DATA .' cre_firstname
+                                ON cre_firstname.usd_usr_id = lnk_usr_id_create
+                               AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
 }
 else
 {
     // show username of create and last change user
     $additionalFields = ' cre_username.usr_login_name as create_name ';
     $additionalTables = '
-      LEFT JOIN '. TBL_USERS .' cre_username
-        ON cre_username.usr_id = lnk_usr_id_create ';
+                         LEFT JOIN '. TBL_USERS .' cre_username
+                                ON cre_username.usr_id = lnk_usr_id_create ';
 }
 
 // read weblinks from database

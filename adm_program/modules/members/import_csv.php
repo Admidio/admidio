@@ -170,11 +170,11 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); ++$i)
         // search for existing user with same name and read user data
         $sql = 'SELECT MAX(usr_id) AS usr_id
                   FROM '.TBL_USERS.'
-                  JOIN '.TBL_USER_DATA.' last_name
+            INNER JOIN '.TBL_USER_DATA.' last_name
                     ON last_name.usd_usr_id = usr_id
                    AND last_name.usd_usf_id = '.  $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
                    AND last_name.usd_value  = \''. $gDb->escapeString($user->getValue('LAST_NAME', 'database')). '\'
-                  JOIN '.TBL_USER_DATA.' first_name
+            INNER JOIN '.TBL_USER_DATA.' first_name
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = '.  $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
                    AND first_name.usd_value  = \''. $gDb->escapeString($user->getValue('FIRST_NAME', 'database')). '\'

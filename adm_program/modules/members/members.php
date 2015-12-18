@@ -90,19 +90,19 @@ $sql = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as
                    AND mem_end     > \''.DATE_NOW.'\'
                    AND mem_usr_id  = usr_id) as member_other_orga
           FROM '.TBL_USERS.'
-          JOIN '.TBL_USER_DATA.' as last_name
+    INNER JOIN '.TBL_USER_DATA.' as last_name
             ON last_name.usd_usr_id = usr_id
            AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-          JOIN '.TBL_USER_DATA.' as first_name
+    INNER JOIN '.TBL_USER_DATA.' as first_name
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-          LEFT JOIN '.TBL_USER_DATA.' as email
+     LEFT JOIN '.TBL_USER_DATA.' as email
             ON email.usd_usr_id = usr_id
            AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
-          LEFT JOIN '.TBL_USER_DATA.' as gender
+     LEFT JOIN '.TBL_USER_DATA.' as gender
             ON gender.usd_usr_id = usr_id
            AND gender.usd_usf_id = '. $gProfileFields->getProperty('GENDER', 'usf_id'). '
-          LEFT JOIN '.TBL_USER_DATA.' as birthday
+     LEFT JOIN '.TBL_USER_DATA.' as birthday
             ON birthday.usd_usr_id = usr_id
            AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
          WHERE usr_valid = 1

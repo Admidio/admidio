@@ -39,13 +39,13 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 $sql = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value as last_name,
                first_name.usd_value as first_name, email.usd_value as email
           FROM '.TBL_REGISTRATIONS.', '.TBL_USERS.'
-          LEFT JOIN '.TBL_USER_DATA.' as last_name
+     LEFT JOIN '.TBL_USER_DATA.' as last_name
             ON last_name.usd_usr_id = usr_id
            AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-          LEFT JOIN '.TBL_USER_DATA.' as first_name
+     LEFT JOIN '.TBL_USER_DATA.' as first_name
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-          LEFT JOIN '.TBL_USER_DATA.' as email
+     LEFT JOIN '.TBL_USER_DATA.' as email
             ON email.usd_usr_id = usr_id
            AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
          WHERE usr_valid = 0

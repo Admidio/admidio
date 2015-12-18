@@ -86,10 +86,10 @@ if ($gValidLogin && $getMsgType === 'PM')
 {
     $sql = 'SELECT usr_id, FIRST_NAME.usd_value as first_name, LAST_NAME.usd_value as last_name, usr_login_name
                   FROM '.TBL_ROLES.', '.TBL_CATEGORIES.', '.TBL_MEMBERS.', '.TBL_USERS.'
-                  LEFT JOIN '.TBL_USER_DATA.' LAST_NAME
+             LEFT JOIN '.TBL_USER_DATA.' LAST_NAME
                     ON LAST_NAME.usd_usr_id = usr_id
                    AND LAST_NAME.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-                  LEFT JOIN '.TBL_USER_DATA.' FIRST_NAME
+             LEFT JOIN '.TBL_USER_DATA.' FIRST_NAME
                     ON FIRST_NAME.usd_usr_id = usr_id
                    AND FIRST_NAME.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). "
                  WHERE rol_cat_id = cat_id
@@ -285,7 +285,7 @@ elseif (!isset($messageStatement))
         // list array with all roles where user is allowed to send mail to
         $sql = 'SELECT rol_id, rol_name
                   FROM '.TBL_ROLES.'
-                  JOIN '.TBL_CATEGORIES.' ON cat_id = rol_cat_id
+            INNER JOIN '.TBL_CATEGORIES.' ON cat_id = rol_cat_id
                  WHERE rol_id IN ('.implode(',', $gCurrentUser->getAllMailRoles()).')
                    AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
                  ORDER BY rol_name ASC ';
@@ -316,16 +316,16 @@ elseif (!isset($messageStatement))
         $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
                        rol_mail_this_role, rol_id, mem_begin, mem_end
                   FROM '.TBL_MEMBERS.', '.TBL_ROLES.', '.TBL_USERS.'
-                  JOIN '.TBL_USER_DATA.' as email
+            INNER JOIN '.TBL_USER_DATA.' as email
                     ON email.usd_usr_id = usr_id
                    AND LENGTH(email.usd_value) > 0
-                  JOIN '.TBL_USER_FIELDS.' as field
+            INNER JOIN '.TBL_USER_FIELDS.' as field
                     ON field.usf_id = email.usd_usf_id
                    AND field.usf_type = \'EMAIL\'
-                  LEFT JOIN '.TBL_USER_DATA.' as last_name
+             LEFT JOIN '.TBL_USER_DATA.' as last_name
                     ON last_name.usd_usr_id = usr_id
                    AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-                  LEFT JOIN '.TBL_USER_DATA.' as first_name
+             LEFT JOIN '.TBL_USER_DATA.' as first_name
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
                  WHERE mem_usr_id  = usr_id
@@ -397,7 +397,7 @@ elseif (!isset($messageStatement))
     {
         $sql = 'SELECT COUNT(*)
                   FROM '.TBL_USER_FIELDS.'
-                  JOIN '. TBL_USER_DATA .' ON usd_usf_id = usf_id
+            INNER JOIN '. TBL_USER_DATA .' ON usd_usf_id = usf_id
                  WHERE usf_type = \'EMAIL\'
                    AND usd_usr_id = '.$gCurrentUser->getValue('usr_id').'
                    AND usd_value IS NOT NULL';
@@ -411,10 +411,10 @@ elseif (!isset($messageStatement))
         {
             $sql = 'SELECT email.usd_value as ID, email.usd_value as email
                       FROM '.TBL_USERS.'
-                      JOIN '.TBL_USER_DATA.' as email
+                INNER JOIN '.TBL_USER_DATA.' as email
                         ON email.usd_usr_id = usr_id
                        AND LENGTH(email.usd_value) > 0
-                      JOIN '.TBL_USER_FIELDS.' as field
+                INNER JOIN '.TBL_USER_FIELDS.' as field
                         ON field.usf_id = email.usd_usf_id
                        AND field.usf_type = \'EMAIL\'
                      WHERE usr_id = '. $gCurrentUser->getValue('usr_id'). '

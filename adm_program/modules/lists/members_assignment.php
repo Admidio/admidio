@@ -174,38 +174,38 @@ else
                           AND mem2.mem_begin  <= \''.DATE_NOW.'\'
                           AND mem2.mem_end     > \''.DATE_NOW.'\'
                           AND mem2.mem_usr_id  = usr_id) as member_this_orga
-            FROM '.TBL_USERS.'
-            LEFT JOIN '.TBL_USER_DATA.' as last_name
-              ON last_name.usd_usr_id = usr_id
-             AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-            LEFT JOIN '.TBL_USER_DATA.' as first_name
-              ON first_name.usd_usr_id = usr_id
-             AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-            LEFT JOIN '.TBL_USER_DATA.' as birthday
-              ON birthday.usd_usr_id = usr_id
-             AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
-            LEFT JOIN '.TBL_USER_DATA.' as city
-              ON city.usd_usr_id = usr_id
-             AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
-            LEFT JOIN '.TBL_USER_DATA.' as address
-              ON address.usd_usr_id = usr_id
-             AND address.usd_usf_id = '. $gProfileFields->getProperty('ADDRESS', 'usf_id'). '
-            LEFT JOIN '.TBL_USER_DATA.' as zip_code
-              ON zip_code.usd_usr_id = usr_id
-             AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '
-            LEFT JOIN '.TBL_USER_DATA.' as country
-              ON country.usd_usr_id = usr_id
-             AND country.usd_usf_id = '. $gProfileFields->getProperty('COUNTRY', 'usf_id'). '
-            LEFT JOIN '.TBL_ROLES.' rol
-              ON rol.rol_valid   = 1
-             AND rol.rol_id      = '.$getRoleId.'
-            LEFT JOIN '.TBL_MEMBERS.' mem
-              ON mem.mem_rol_id  = rol.rol_id
-             AND mem.mem_begin  <= \''.DATE_NOW.'\'
-             AND mem.mem_end     > \''.DATE_NOW.'\'
-             AND mem.mem_usr_id  = usr_id
-            WHERE '. $memberCondition. '
-            ORDER BY last_name, first_name ';
+              FROM '.TBL_USERS.'
+         LEFT JOIN '.TBL_USER_DATA.' as last_name
+                ON last_name.usd_usr_id = usr_id
+               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' as first_name
+                ON first_name.usd_usr_id = usr_id
+               AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' as birthday
+                ON birthday.usd_usr_id = usr_id
+               AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' as city
+                ON city.usd_usr_id = usr_id
+               AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' as address
+                ON address.usd_usr_id = usr_id
+               AND address.usd_usf_id = '. $gProfileFields->getProperty('ADDRESS', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' as zip_code
+                ON zip_code.usd_usr_id = usr_id
+               AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' as country
+                ON country.usd_usr_id = usr_id
+               AND country.usd_usf_id = '. $gProfileFields->getProperty('COUNTRY', 'usf_id'). '
+         LEFT JOIN '.TBL_ROLES.' rol
+                ON rol.rol_valid   = 1
+               AND rol.rol_id      = '.$getRoleId.'
+         LEFT JOIN '.TBL_MEMBERS.' mem
+                ON mem.mem_rol_id  = rol.rol_id
+               AND mem.mem_begin  <= \''.DATE_NOW.'\'
+               AND mem.mem_end     > \''.DATE_NOW.'\'
+               AND mem.mem_usr_id  = usr_id
+             WHERE '. $memberCondition. '
+             ORDER BY last_name, first_name ';
     $userStatement = $gDb->query($sql);
 
     // create html page object
