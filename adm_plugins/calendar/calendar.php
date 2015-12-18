@@ -211,7 +211,10 @@ if($plg_ter_aktiv == 1)
     // search for all events in database within the given month
     if($gCurrentUser->getValue('usr_id') > 0)
     {
-        $sqlLogin = 'AND ( dtr_rol_id IS NULL OR dtr_rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$gCurrentUser->getValue('usr_id').') )';
+        $sqlLogin = 'AND (  dtr_rol_id IS NULL
+                         OR dtr_rol_id IN (SELECT mem_rol_id
+                                             FROM '.TBL_MEMBERS.'
+                                            WHERE mem_usr_id = '.$gCurrentUser->getValue('usr_id').') )';
     }
     else
     {

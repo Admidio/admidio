@@ -121,7 +121,9 @@ class UserRegistration extends User
         // than delete user because he has no use for the system
         if($this->getValue('usr_valid') == 0)
         {
-            $sql = 'SELECT reg_id FROM '.TBL_REGISTRATIONS.' WHERE reg_usr_id = '.$this->getValue('usr_id');
+            $sql = 'SELECT reg_id
+                      FROM '.TBL_REGISTRATIONS.'
+                     WHERE reg_usr_id = '.$this->getValue('usr_id');
             $registrationsStatement = $this->db->query($sql);
 
             if($registrationsStatement->rowCount() === 0)

@@ -455,7 +455,8 @@ class User extends TableUsers
         $this->db->startTransaction();
 
         // search for membership with same role and user and overlapping dates
-        $sql = 'SELECT * FROM '.TBL_MEMBERS.'
+        $sql = 'SELECT *
+                  FROM '.TBL_MEMBERS.'
                  WHERE mem_id    <> '.$memberId.'
                    AND mem_rol_id = '.$member->getValue('mem_rol_id').'
                    AND mem_usr_id = '.$this->getValue('usr_id').'
@@ -1139,7 +1140,8 @@ class User extends TableUsers
         }
 
         // search for membership with same role and user and overlapping dates
-        $sql = 'SELECT * FROM '.TBL_MEMBERS.'
+        $sql = 'SELECT *
+                  FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = '.$roleId.'
                    AND mem_usr_id = '.$this->getValue('usr_id').'
                    AND mem_begin <= \''.$endDate.'\'

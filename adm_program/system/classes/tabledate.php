@@ -279,7 +279,9 @@ class TableDate extends TableAccess
         {
             // alle Rollen-IDs einlesen, die diesen Termin sehen duerfen
             $this->visibleRoles = array();
-            $sql = 'SELECT dtr_rol_id FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
+            $sql = 'SELECT dtr_rol_id
+                      FROM '.TBL_DATE_ROLE.'
+                     WHERE dtr_dat_id = '.$this->getValue('dat_id');
             $dateRolesStatement = $this->db->query($sql);
 
             while($row = $dateRolesStatement->fetch())

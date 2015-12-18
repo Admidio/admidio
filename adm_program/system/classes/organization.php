@@ -73,7 +73,8 @@ class Organization extends TableAccess
         global $gL10n, $gProfileFields;
 
         // read id of system user from database
-        $sql = 'SELECT usr_id FROM '.TBL_USERS.'
+        $sql = 'SELECT usr_id
+                  FROM '.TBL_USERS.'
                  WHERE usr_login_name LIKE \''.$gL10n->get('SYS_SYSTEM').'\' ';
         $systemUserStatement = $this->db->query($sql);
         $row = $systemUserStatement->fetch();
@@ -286,7 +287,8 @@ class Organization extends TableAccess
     {
         $arr_child_orgas = array();
 
-        $sql = 'SELECT * FROM '.TBL_ORGANIZATIONS.'
+        $sql = 'SELECT *
+                  FROM '.TBL_ORGANIZATIONS.'
                  WHERE ';
         if($child)
         {

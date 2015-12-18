@@ -186,7 +186,8 @@ class TableMembers extends TableAccess
                 // if role webmaster then check if this membership is the last one -> don't delete it
                 if($this->getValue('rol_webmaster') == true)
                 {
-                    $sql = 'SELECT mem_id FROM '.TBL_MEMBERS.'
+                    $sql = 'SELECT mem_id
+                              FROM '.TBL_MEMBERS.'
                              WHERE mem_rol_id  = '.$roleId.'
                                AND mem_usr_id <> '.$userId.'
                                AND \''.DATE_NOW.'\' BETWEEN mem_begin AND mem_end ';

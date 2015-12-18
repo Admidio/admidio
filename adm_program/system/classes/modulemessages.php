@@ -162,7 +162,9 @@ class ModuleMessages
     {
         global $gDb;
 
-        $sql = "SELECT msg_id FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT'";
+        $sql = 'SELECT msg_id
+                  FROM '. TBL_MESSAGES. '
+                 WHERE msg_type = \'CHAT\'';
         $statement = $gDb->query($sql);
         $row = $statement->fetch();
 

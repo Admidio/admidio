@@ -314,7 +314,8 @@ class ListConfiguration extends TableLists
                 // if profile field then add not exists condition
                 if($listColumn->getValue('lsc_usf_id') > 0)
                 {
-                    $parser->setNotExistsStatement('SELECT 1 FROM '.TBL_USER_DATA.' '.$tableAlias.'s
+                    $parser->setNotExistsStatement('SELECT 1
+                                                      FROM '.TBL_USER_DATA.' '.$tableAlias.'s
                                                      WHERE '.$tableAlias.'s.usd_usr_id = usr_id
                                                        AND '.$tableAlias.'s.usd_usf_id = '.$listColumn->getValue('lsc_usf_id'));
                 }

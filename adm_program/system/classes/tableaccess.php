@@ -312,7 +312,8 @@ class TableAccess
 
         if($sqlWhereCondition !== '')
         {
-            $sql = 'SELECT * FROM '.$this->tableName.$sqlAdditionalTables.'
+            $sql = 'SELECT *
+                      FROM '.$this->tableName.$sqlAdditionalTables.'
                      WHERE '.$sqlWhereCondition;
             $readDataStatement = $this->db->query($sql);
 
