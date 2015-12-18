@@ -71,7 +71,7 @@ if ($gPreferences['enable_download_module'] == 1)
     $sql = 'SELECT fil_timestamp, fil_name, fil_usr_id, fol_name, fol_path, fil_id, fil_fol_id
               FROM '.TBL_FILES.'
         INNER JOIN '.TBL_FOLDERS.'
-             WHERE fol_id = fil_fol_id
+                ON fol_id = fil_fol_id
              ORDER BY fil_timestamp DESC';
 
     $filesStatement = $gDb->query($sql);

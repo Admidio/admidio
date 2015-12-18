@@ -16,7 +16,8 @@ $headline = $gL10n->get('SYS_LOGIN');
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // read id of webmaster role
-$sql = 'SELECT rol_id FROM '.TBL_ROLES.'
+$sql = 'SELECT rol_id
+          FROM '.TBL_ROLES.'
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
          WHERE rol_name LIKE \''.$gL10n->get('SYS_WEBMASTER').'\'
