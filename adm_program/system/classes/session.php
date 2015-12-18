@@ -177,6 +177,12 @@ class Session extends TableAccess
     {
         $this->readDataById($this->getValue('ses_id'));
 
+        // check if current connection has same ip address as of session initialization
+        if($this->getValue('ses_ip_address') !== $_SERVER['REMOTE_ADDR'])
+        {
+            die('Session has wrong ip address!');
+        }
+
         $sesRenew = $this->getValue('ses_renew');
         if($sesRenew == 2 || $sesRenew == 3)
         {
