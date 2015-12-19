@@ -77,6 +77,18 @@ class Session extends TableAccess
     }
 
     /**
+     * Initializes all class parameters and deletes all read data.
+     * Also the database structure of the assiciated table will be
+     * read and stored in the arrays @b dbColumns and @b columnsInfos
+     */
+    public function clear()
+    {
+        parent::clear();
+
+        $mObjectArray = array();
+    }
+
+    /**
      * Returns a reference of an object that is stored in the session. If the stored object
      * has a database object than this could be renewed if the object name of the database
      * object is @b db or @b mDb. This is necessary because the old database connection is
@@ -88,8 +100,6 @@ class Session extends TableAccess
     {
         if(array_key_exists($objectName, $this->mObjectArray))
         {
-            $objectVariables = get_object_vars($this->mObjectArray[$objectName]);
-
             // if object has database connection add database object
             if(method_exists($this->mObjectArray[$objectName], 'setDatabase'))
             {
@@ -171,12 +181,19 @@ class Session extends TableAccess
      */
     public function refreshSession()
     {
+        global $gCheckIpAddress;
+
         $this->readDataById($this->getValue('ses_id'));
 
         // check if current connection has same ip address as of session initialization
-        if($this->getValue('ses_ip_address') !== $_SERVER['REMOTE_ADDR'])
+        // if config parameter $gCheckIpAddress = 0 then don't check ip address
+        if($this->getValue('ses_ip_address') !== $_SERVER['REMOTE_ADDR']
+        && (!isset($gCheckIpAddress) || $gCheckIpAddress === 1))
         {
-            die('The IP address doesnot match with the IP address the current session was started! For safety reasons the current session was closed.');
+            unset($_SESSION['gCurrentSession']);
+            $this->clear();
+
+            exit('The IP address doesnot match with the IP address the current session was started! For safety reasons the current session was closed.');
         }
 
         $sesRenew = $this->getValue('ses_renew');
