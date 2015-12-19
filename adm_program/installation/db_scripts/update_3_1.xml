@@ -40,5 +40,7 @@
     <step id="380">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%variable1%', '#variable1#')</step>
     <step id="390">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%variable2%', '#variable2#')</step>
     <step id="400">UPDATE %PREFIX%_user_fields SET usf_url = REPLACE(usf_url, '%user_content%', '#user_content#') WHERE usf_url LIKE '%user_content%'</step>
+    <step id="410">TRUNCATE TABLE %PREFIX%_auto_login</step>
+    <step id="420">ALTER TABLE %PREFIX%_auto_login ADD COLUMN atl_auto_login_id varchar(35) not null</step>
     <step>stop</step>
 </update>

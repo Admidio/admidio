@@ -43,7 +43,7 @@ class AutoLogin extends TableAccess
         }
         else
         {
-            $this->readDataByColumns(array('atl_session_id' => $session));
+            $this->readDataByColumns(array('atl_auto_login_id' => $session));
         }
 
     }
@@ -76,37 +76,6 @@ class AutoLogin extends TableAccess
             $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
         }
         parent::save($updateFingerPrint);
-    }
-
-    /**
-     * Method checks the data of the cookie against the data stored in the database
-     * table @b adm_auto_login. If cookie data is ok then the user id will be set
-     * in the current session. Now there is a valid login for this user.
-     * @param object $session    The Session object of the current Admidio session.
-     * @param        $cookieData The data of the cookie @b ADMIDIO_DATA.
-     */
-    public function setValidLogin($session, $cookieData)
-    {
-        $dataArray = explode(';', $cookieData);
-
-        if($dataArray[0] == true      // autologin
-        && is_numeric($dataArray[1])) // user_id
-        {
-            // restore user if saved database user id == cookie user id
-            // if session is inactive than set it to an active session
-            if($this->getValue('atl_usr_id') == $dataArray[1])
-            {
-                $session->setValue('ses_timestamp', DATETIME_NOW);
-            }
-            else
-            {
-                // something is wrong -> for security reasons delete that auto login
-                $this->delete();
-            }
-
-            // auto login successful then create a valid session
-            $session->setValue('ses_usr_id', $this->getValue('atl_usr_id'));
-        }
     }
 
     /**

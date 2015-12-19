@@ -100,9 +100,6 @@ else
     $gSessionId = session_id();
 }
 
-// if auto login is set and session is new or a user assigned then check then create valid login
-$userIdAutoLogin = 0;
-
 // create language object to handle translation texts
 $gL10n = new Language();
 
@@ -121,24 +118,11 @@ if(array_key_exists('gCurrentSession', $_SESSION))
     // read organization data from session object
     $gCurrentOrganization =& $gCurrentSession->getObject('gCurrentOrganization');
     $gPreferences = $gCurrentOrganization->getPreferences();
-
-    // compute time in ms from last activity in session until now
-    $time_gap = time() - strtotime($gCurrentSession->getValue('ses_timestamp', 'Y-m-d H:i:s'));
-
-    // if cookie ADMIDIO_DATA is set and last user activity is longer ago, then create auto login if possible
-    if(array_key_exists($gCookiePraefix . '_DATA', $_COOKIE) && $time_gap > $gPreferences['logout_minutes'] * 60
-    && $gCurrentSession->hasObject('gCurrentUser'))
-    {
-        // restore user from auto login session
-        $autoLogin = new AutoLogin($gDb, $gSessionId);
-        $autoLogin->setValidLogin($gCurrentSession, $_COOKIE[$gCookiePraefix . '_DATA']);
-        $userIdAutoLogin = $autoLogin->getValue('atl_usr_id');
-    }
 }
 else
 {
     // create new session object and store it in PHP session
-    $gCurrentSession = new Session($gDb, $gSessionId);
+    $gCurrentSession = new Session($gDb, $gSessionId, $gCookiePraefix);
     $_SESSION['gCurrentSession'] = $gCurrentSession;
 
     // create system component
@@ -146,28 +130,13 @@ else
     $gSystemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
     $gCurrentSession->addObject('gSystemComponent', $gSystemComponent);
 
-    // if cookie ADMIDIO_DATA is set then there could be an auto login
-    // the auto login must be done here because after that the corresponding organization must be set
-    if(array_key_exists($gCookiePraefix . '_DATA', $_COOKIE))
+    // create object of the organization of config file with their preferences
+    if($gCurrentSession->getOrganizationId() > 0)
     {
-        // restore user from auto login session
-        $autoLogin = new AutoLogin($gDb, $gSessionId);
-        $autoLogin->setValidLogin($gCurrentSession, $_COOKIE[$gCookiePraefix . '_DATA']);
-        $userIdAutoLogin = $autoLogin->getValue('atl_usr_id');
-
-        // create object of the organization of config file with their preferences
-        if($autoLogin->getValue('atl_org_id') > 0)
-        {
-            $gCurrentOrganization = new Organization($gDb, $autoLogin->getValue('atl_org_id'));
-        }
-        else
-        {
-            $gCurrentOrganization = new Organization($gDb, $g_organization);
-        }
+        $gCurrentOrganization = new Organization($gDb, $gCurrentSession->getOrganizationId());
     }
     else
     {
-        // create object of the organization of config file with their preferences
         $gCurrentOrganization = new Organization($gDb, $g_organization);
     }
 
@@ -208,7 +177,15 @@ else
 {
     // create object with current user field structure und user object
     $gProfileFields = new ProfileFields($gDb, $gCurrentOrganization->getValue('org_id'));
-    $gCurrentUser   = new User($gDb, $gProfileFields, $userIdAutoLogin);
+    $gCurrentUser   = new User($gDb, $gProfileFields, $gCurrentSession->getValue('ses_usr_id'));
+
+    // if session is created with auto login then update user login data
+    // if user object is created and session has usr_id then this is an auto login
+    // and we should update the login data and count logins
+    if($gCurrentSession->getValue('ses_usr_id') > 0)
+    {
+        $gCurrentUser->updateLoginData();
+    }
 
     // save all data in session
     $gCurrentSession->addObject('gProfileFields', $gProfileFields);
@@ -240,13 +217,6 @@ if($gCurrentSession->getValue('ses_usr_id') > 0)
 
 // update session recordset (i.a. refresh timestamp)
 $gCurrentSession->save();
-
-// if session is created with auto login then update user login data
-if($userIdAutoLogin > 0 && $gCurrentUser->getValue('usr_id'))
-{
-    // count logins and save login date
-    $gCurrentUser->updateLoginData();
-}
 
 /*********************************************************************************
  create necessary objects and parameters

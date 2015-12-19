@@ -32,7 +32,10 @@
  */
 class Session extends TableAccess
 {
-    protected $mObjectArray = array(); ///< Array with all objects of this session object.
+    protected $mObjectArray = array();  ///< Array with all objects of this session object.
+    protected $mAutoLogin;              ///< Object of table auto login that will handle an auto login
+    protected $mCookiePrefix;           ///< The prefix that is used for the cookies and identify a cookie for this organization
+    protected $mDomain;                 ///< The current domain of this session without any ports
 
     /**
      * Constructor that will create an object of a recordset of the table adm_sessions.
@@ -41,10 +44,15 @@ class Session extends TableAccess
      * @param int|string $session  The recordset of the session with this id will be loaded.
      *                             The session can be the table id or the alphanumeric session id.
      *                             If id isn't set than an empty object of the table is created.
+     * @param string     $cookiePrefix The prefix that is used for cookies
      */
-    public function __construct(&$database, $session = 0)
+    public function __construct(&$database, $session = 0, $cookiePrefix = '')
     {
+        global $gDb;
         parent::__construct($database, TBL_SESSIONS, 'ses');
+
+        $this->mCookiePrefix = $cookiePrefix;
+        $this->mDomain       = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
 
         if(is_numeric($session))
         {
@@ -58,6 +66,24 @@ class Session extends TableAccess
             {
                 // if PHP session id was commited then store them in that field
                 $this->setValue('ses_session_id', $session);
+                $this->setValue('ses_timestamp', DATETIME_NOW);
+            }
+        }
+
+        // if cookie ADMIDIO_DATA is set then there could be an auto login
+        // the auto login must be done here because after that the corresponding organization must be set
+        if(array_key_exists($cookiePrefix . '_AUTO_LOGIN_ID', $_COOKIE))
+        {
+            // restore user from auto login session
+            $this->mAutoLogin = new AutoLogin($gDb, $_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID']);
+
+            // valid AutoLogin found
+            if($this->mAutoLogin->getValue('atl_id') > 0)
+            {
+                $this->mAutoLogin->setValue('atl_session_id', $session);
+                $this->mAutoLogin->save();
+
+                $this->setValue('ses_usr_id', $this->mAutoLogin->getValue('atl_usr_id'));
             }
         }
     }
@@ -113,6 +139,23 @@ class Session extends TableAccess
     }
 
     /**
+     * Return the organization id of this session. If AutoLogin is enabled then the
+     * organization may not be the organization of the config.php because the
+     * user had set the AutoLogin to a different organization.
+     */
+    public function getOrganizationId()
+    {
+        if(is_object($this->mAutoLogin))
+        {
+            return $this->mAutoLogin->getValue('atl_org_id');
+        }
+        else
+        {
+            return $this->getValue('ses_org_id');
+        }
+    }
+
+    /**
      * Checks if the object with this name exists in the object array of this class.
      * @param  string $objectName Internal unique name of the object. The name was set with the method @b addObject
      * @return bool   Returns @b true if the object exits otherwise @b false
@@ -134,7 +177,7 @@ class Session extends TableAccess
      */
     public function isValidLogin($userId)
     {
-        global $gPreferences;
+        global $gPreferences, $gCurrentUser;
 
         if($userId > 0)
         {
@@ -144,7 +187,8 @@ class Session extends TableAccess
                 $time_gap = time() - strtotime($this->getValue('ses_timestamp', 'Y-m-d H:i:s'));
 
                 // Check how long the user was inactive. If time range is to long -> logout
-                if($time_gap < $gPreferences['logout_minutes'] * 60)
+                // if user has auto login than session is also valid
+                if($time_gap < $gPreferences['logout_minutes'] * 60 || is_object($this->mAutoLogin))
                 {
                     // user login is valid !
                     $gValidLogin = true;
@@ -173,6 +217,30 @@ class Session extends TableAccess
         }
 
         return false;
+    }
+
+    /**
+     * The current user should be removed from the session and auto login.
+     * Also the auto login cookie should be removed.
+     */
+    public function logout()
+    {
+        $this->db->startTransaction();
+
+        // remove user from current session
+        $this->setValue('ses_usr_id', '');
+        $this->save();
+
+        if(is_object($this->mAutoLogin))
+        {
+            // remove auto login cookie from users browser by setting expired timestamp to 0
+            setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'), 0, '/', $this->mDomain, 0);
+
+            // delete auto login
+            $this->mAutoLogin->delete();
+        }
+
+        $this->db->endTransaction();
     }
 
     /**
@@ -260,6 +328,40 @@ class Session extends TableAccess
             $this->setValue('ses_timestamp', DATETIME_NOW);
         }
         parent::save($updateFingerPrint);
+    }
+
+    /**
+     * Save all data that is necessary for an auto login. Therefore an AutoLogin object
+     * will be created with an auto_login_id and this id will be stored in a cookie
+     * in the browser of the current user.
+     */
+    public function setAutoLogin()
+    {
+        $this->mAutoLogin = new AutoLogin($this->db);
+
+        $this->mAutoLogin->setValue('atl_auto_login_id', md5(time()));
+        $this->mAutoLogin->setValue('atl_session_id', $this->getValue('ses_session_id'));
+        $this->mAutoLogin->setValue('atl_org_id', $this->getValue('ses_org_id'));
+        $this->mAutoLogin->setValue('atl_usr_id', $this->getValue('ses_usr_id'));
+        $this->mAutoLogin->save();
+
+        // save cookie for autologin
+        $timestampExpired = time() + 60*60*24*365;
+        setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired, '/', $this->mDomain, 0);
+    }
+
+    /**
+     * Set the database object for communication with the database of this class.
+     * @param object $database An object of the class Database. This should be the global $gDb object.
+     */
+    public function setDatabase(&$database)
+    {
+        parent::setDatabase($database);
+
+        if(is_object($this->mAutoLogin))
+        {
+            $this->mAutoLogin->setDatabase($database);
+        }
     }
 
     /**
