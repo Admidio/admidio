@@ -85,6 +85,11 @@ class Session extends TableAccess
 
                 $this->setValue('ses_usr_id', $this->mAutoLogin->getValue('atl_usr_id'));
             }
+            else
+            {
+                $this->mAutoLogin = null;
+                setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID'], 0, '/', $this->mDomain, 0);
+            }
         }
     }
 
@@ -116,9 +121,8 @@ class Session extends TableAccess
 
     /**
      * Returns a reference of an object that is stored in the session. If the stored object
-     * has a database object than this could be renewed if the object name of the database
-     * object is @b db or @b mDb. This is necessary because the old database connection is
-     * not longer valid.
+     * has a database object than this could be renewed if the object has a method @b setDatabase.
+     * This is necessary because the old database connection is not longer valid.
      * @param  string $objectName Internal unique name of the object. The name was set with the method @b addObject
      * @return object Returns the reference to the object
      */
@@ -236,16 +240,18 @@ class Session extends TableAccess
             // remove auto login cookie from users browser by setting expired timestamp to 0
             setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'), 0, '/', $this->mDomain, 0);
 
-            // delete auto login
+            // delete auto login and remove all data
             $this->mAutoLogin->delete();
+            $this->mAutoLogin = null;
+            setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID'], 0, '/', $this->mDomain, 0);
         }
 
         $this->db->endTransaction();
     }
 
     /**
-     * Reload session data from database table adm_sessions. Check renew flag and
-     * reload organization object if necessary.
+     * Reload session data from database table adm_sessions. Refresh AutoLogin with
+     * new auto_login_id. Check renew flag and reload organization object if necessary.
      */
     public function refreshSession()
     {
@@ -264,10 +270,21 @@ class Session extends TableAccess
             exit('The IP address doesnot match with the IP address the current session was started! For safety reasons the current session was closed.');
         }
 
-        $sesRenew = $this->getValue('ses_renew');
-        if($sesRenew == 2 || $sesRenew == 3)
+        // if AutoLogin is set then refresh the auto_login_id for security reasons
+        if(is_object($this->mAutoLogin))
         {
-            // if flag for reload of organization is set than reload the organization data
+            $this->mAutoLogin->setValue('atl_auto_login_id', md5(time()));
+            $this->mAutoLogin->save();
+
+            // save cookie for autologin
+            $timestampExpired = time() + 60*60*24*365;
+            setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired, '/', $this->mDomain, 0);
+        }
+
+        // if flag for reload of organization is set than reload the organization data
+        $sesRenew = (int) $this->getValue('ses_renew');
+        if($sesRenew === 2 || $sesRenew === 3)
+        {
             $organization =& $this->getObject('gCurrentOrganization');
             $organizationId = $organization->getValue('org_id');
             $organization->readDataById($organizationId);
@@ -337,12 +354,14 @@ class Session extends TableAccess
      */
     public function setAutoLogin()
     {
+        // create object and set current session data to AutoLogin
         $this->mAutoLogin = new AutoLogin($this->db);
-
-        $this->mAutoLogin->setValue('atl_auto_login_id', md5(time()));
         $this->mAutoLogin->setValue('atl_session_id', $this->getValue('ses_session_id'));
         $this->mAutoLogin->setValue('atl_org_id', $this->getValue('ses_org_id'));
         $this->mAutoLogin->setValue('atl_usr_id', $this->getValue('ses_usr_id'));
+
+        // set new auto_login_id and save data
+        $this->mAutoLogin->setValue('atl_auto_login_id', md5(time()));
         $this->mAutoLogin->save();
 
         // save cookie for autologin

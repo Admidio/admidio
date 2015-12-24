@@ -58,7 +58,6 @@ if(!get_magic_quotes_gpc())
 
 // global parameters
 $gValidLogin = false;
-$gLayout     = array();
 
  // create database object and establish connection to database
 if(!isset($gDbType))
