@@ -243,7 +243,6 @@ class Session extends TableAccess
             // delete auto login and remove all data
             $this->mAutoLogin->delete();
             $this->mAutoLogin = null;
-            setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID'], 0, '/', $this->mDomain, 0);
         }
 
         $this->db->endTransaction();
