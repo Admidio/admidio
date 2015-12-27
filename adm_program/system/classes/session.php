@@ -87,8 +87,16 @@ class Session extends TableAccess
             }
             else
             {
+                // an invalid AutoLogin should be executed made the current AutoLogin unusable
                 $this->mAutoLogin = null;
                 setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID'], 0, '/', $this->mDomain, 0);
+
+                // for security reasons remove all auto logins of this user
+                $userId = substr($_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID'], 0, strpos($_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID'], ':'));
+
+                $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
+                         WHERE atl_usr_id = '.$userId;
+                $this->db->query($sql);
             }
         }
     }
@@ -272,7 +280,7 @@ class Session extends TableAccess
         // if AutoLogin is set then refresh the auto_login_id for security reasons
         if(is_object($this->mAutoLogin))
         {
-            $this->mAutoLogin->setValue('atl_auto_login_id', md5(time()));
+            $this->mAutoLogin->setValue('atl_auto_login_id', $this->mAutoLogin->generateAutoLoginId($this->getValue('ses_usr_id')));
             $this->mAutoLogin->save();
 
             // save cookie for autologin
@@ -360,7 +368,7 @@ class Session extends TableAccess
         $this->mAutoLogin->setValue('atl_usr_id', $this->getValue('ses_usr_id'));
 
         // set new auto_login_id and save data
-        $this->mAutoLogin->setValue('atl_auto_login_id', md5(time()));
+        $this->mAutoLogin->setValue('atl_auto_login_id', $this->mAutoLogin->generateAutoLoginId($this->getValue('ses_usr_id')));
         $this->mAutoLogin->save();
 
         // save cookie for autologin

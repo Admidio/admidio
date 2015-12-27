@@ -45,7 +45,16 @@ class AutoLogin extends TableAccess
         {
             $this->readDataByColumns(array('atl_auto_login_id' => $session));
         }
+    }
 
+    /**
+     * Creates a new unique auto login id for this user.
+     * @param  int    The id of the current user.
+     * @return string Returns the auto login id.
+     */
+    public function generateAutoLoginId($userId)
+    {
+        return substr($userId.':'.md5(time()), 0, 35);
     }
 
     /**
@@ -62,6 +71,7 @@ class AutoLogin extends TableAccess
         {
             // Insert
             global $gCurrentOrganization;
+
             $this->setValue('atl_org_id', $gCurrentOrganization->getValue('org_id'));
             $this->setValue('atl_last_login', DATETIME_NOW);
             $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
