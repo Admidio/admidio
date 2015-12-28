@@ -37,8 +37,6 @@ $plg_show_hinweis_keiner = 0;
 $plg_show_zeitraum = 5;
 // zeige zukünftige geburtstage
 $plg_show_future = 10;
-// verstecke hinweis "(nachtraeglich)", schliesslich wurde ja schon gratuliert
-$plg_show_nachtraeglich = 0;
 
 // Soll die E-Mail-Adresse fuer Besucher verlinkt sein ?
 // Bei registrierten Benutzern wird immer ein Link auf das Mailmodul gesetzt

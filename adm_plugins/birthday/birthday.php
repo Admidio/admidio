@@ -112,60 +112,60 @@ if(isset($page) && is_object($page))
 // set database to admidio, sometimes the user has other database connections at the same time
 $gDb->setCurrentDB();
 
-$sql    = 'SELECT DISTINCT usr_id, usr_login_name,
-                           last_name.usd_value as last_name, first_name.usd_value as first_name,
-                           birthday.bday as birthday, birthday.bdate,
-                           DATEDIFF(birthday.bdate, \''.DATETIME_NOW.'\') AS days_to_bdate,
-                           YEAR(bdate) - YEAR(bday) AS age,
-                           email.usd_value as email, gender.usd_value as gender
-             FROM '. TBL_USERS. ' users
-             JOIN ( (SELECT usd_usr_id, usd_value AS bday,
-                            year(\''.DATETIME_NOW.'\') || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd1.usd_value) AS bdate
-                       FROM '. TBL_USER_DATA. ' bd1
-                      WHERE DATEDIFF(year(\''.DATETIME_NOW.'\') || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd1.usd_value), \''.DATETIME_NOW.'\')
-                            BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
-                        AND usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). ')
-                  UNION
-                    (SELECT usd_usr_id, usd_value AS bday,
-                            year(\''.DATETIME_NOW.'\')-1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd2.usd_value) AS bdate
-                       FROM '. TBL_USER_DATA. ' bd2
-                      WHERE DATEDIFF(year(\''.DATETIME_NOW.'\')-1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd2.usd_value), \''.DATETIME_NOW.'\')
-                            BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
-                        AND usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). ')
-                  UNION
-                    (SELECT usd_usr_id, usd_value AS bday,
-                            year(\''.DATETIME_NOW.'\')+1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd3.usd_value) AS bdate
-                       FROM '. TBL_USER_DATA. ' bd3
-                      WHERE DATEDIFF(year(\''.DATETIME_NOW.'\')+1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd3.usd_value), \''.DATETIME_NOW.'\')
-                            BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
-                        AND usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). ')
-                  ) birthday
-               ON birthday.usd_usr_id = usr_id
-             LEFT JOIN '. TBL_USER_DATA. ' as last_name
-               ON last_name.usd_usr_id = usr_id
-              AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-             LEFT JOIN '. TBL_USER_DATA. ' as first_name
-               ON first_name.usd_usr_id = usr_id
-              AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-             LEFT JOIN '. TBL_USER_DATA. ' as email
-               ON email.usd_usr_id = usr_id
-              AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
-             LEFT JOIN '. TBL_USER_DATA. ' as gender
-               ON gender.usd_usr_id = usr_id
-              AND gender.usd_usf_id = '. $gProfileFields->getProperty('GENDER', 'usf_id'). '
-             LEFT JOIN '. TBL_MEMBERS. '
-               ON mem_usr_id = usr_id
-              AND mem_begin <= \''.DATE_NOW.'\'
-              AND mem_end    > \''.DATE_NOW.'\'
-             JOIN '. TBL_ROLES. '
-               ON mem_rol_id = rol_id
-              AND rol_valid  = 1
-             JOIN '. TBL_CATEGORIES. '
-               ON rol_cat_id = cat_id
-              AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-            WHERE usr_valid = 1
-              AND mem_rol_id '.$rol_sql.'
-            ORDER BY days_to_bdate '.$sort_sql.', last_name, first_name ';
+$sql = 'SELECT DISTINCT usr_id, usr_login_name,
+                        last_name.usd_value as last_name, first_name.usd_value as first_name,
+                        birthday.bday as birthday, birthday.bdate,
+                        DATEDIFF(birthday.bdate, \''.DATETIME_NOW.'\') AS days_to_bdate,
+                        YEAR(bdate) - YEAR(bday) AS age,
+                        email.usd_value as email, gender.usd_value as gender
+          FROM '.TBL_USERS.' users
+    INNER JOIN ( (SELECT usd_usr_id, usd_value AS bday,
+                         CONCAT(YEAR(\''.DATETIME_NOW.'\'), DATE_FORMAT(bd1.usd_value, \'-%m-%d\')) AS bdate
+                    FROM '.TBL_USER_DATA.' bd1
+                   WHERE DATEDIFF(CONCAT(YEAR(\''.DATETIME_NOW.'\'), DATE_FORMAT(bd1.usd_value, \'-%m-%d\')), \''.DATETIME_NOW.'\')
+                         BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
+                     AND usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').')
+               UNION
+                 (SELECT usd_usr_id, usd_value AS bday,
+                         CONCAT(YEAR(\''.DATETIME_NOW.'\')-1, DATE_FORMAT(bd2.usd_value, \'-%m-%d\')) AS bdate
+                    FROM '.TBL_USER_DATA.' bd2
+                   WHERE DATEDIFF(CONCAT(YEAR(\''.DATETIME_NOW.'\')-1, DATE_FORMAT(bd2.usd_value, \'-%m-%d\')), \''.DATETIME_NOW.'\')
+                         BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
+                     AND usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').')
+               UNION
+                 (SELECT usd_usr_id, usd_value AS bday,
+                         CONCAT(YEAR(\''.DATETIME_NOW.'\')+1, DATE_FORMAT(bd3.usd_value, \'-%m-%d\')) AS bdate
+                    FROM '.TBL_USER_DATA.' bd3
+                   WHERE DATEDIFF(CONCAT(YEAR(\''.DATETIME_NOW.'\')+1, DATE_FORMAT(bd3.usd_value, \'-%m-%d\')), \''.DATETIME_NOW.'\')
+                         BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
+                     AND usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').')
+               ) birthday
+            ON birthday.usd_usr_id = usr_id
+     LEFT JOIN '.TBL_USER_DATA.' as last_name
+            ON last_name.usd_usr_id = usr_id
+           AND last_name.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+     LEFT JOIN '.TBL_USER_DATA.' as first_name
+            ON first_name.usd_usr_id = usr_id
+           AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+     LEFT JOIN '.TBL_USER_DATA.' as email
+            ON email.usd_usr_id = usr_id
+           AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
+     LEFT JOIN '.TBL_USER_DATA.' as gender
+            ON gender.usd_usr_id = usr_id
+           AND gender.usd_usf_id = '.$gProfileFields->getProperty('GENDER', 'usf_id').'
+     LEFT JOIN '.TBL_MEMBERS.'
+            ON mem_usr_id = usr_id
+           AND mem_begin <= \''.DATE_NOW.'\'
+           AND mem_end    > \''.DATE_NOW.'\'
+    INNER JOIN '.TBL_ROLES.'
+            ON mem_rol_id = rol_id
+           AND rol_valid  = 1
+    INNER JOIN '.TBL_CATEGORIES.'
+            ON rol_cat_id = cat_id
+           AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+         WHERE usr_valid = 1
+           AND mem_rol_id '.$rol_sql.'
+         ORDER BY days_to_bdate '.$sort_sql.', last_name, first_name ';
 //echo $sql; exit();
 $result = $gDb->query($sql);
 
