@@ -73,7 +73,7 @@ collate = utf8_unicode_ci;
 create table %PREFIX%_auto_login
 (
     atl_id                         integer       unsigned not null AUTO_INCREMENT,
-    atl_session_id                 varchar(35)   not null,
+    atl_session_id                 varchar(40)   not null,
     atl_org_id                     integer       unsigned not null,
     atl_usr_id                     integer       unsigned not null,
     atl_last_login                 timestamp     null default null,
