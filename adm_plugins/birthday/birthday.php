@@ -118,23 +118,23 @@ $sql = 'SELECT DISTINCT usr_id, usr_login_name,
                         email.usd_value as email, gender.usd_value as gender
           FROM '.TBL_USERS.' users
     INNER JOIN ( (SELECT usd_usr_id, usd_value AS bday,
-                         year(\''.DATETIME_NOW.'\') || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd1.usd_value) AS bdate
+                         CONCAT(YEAR(\''.DATETIME_NOW.'\'), DATE_FORMAT(bd1.usd_value, \'-%m-%d\')) AS bdate
                     FROM '.TBL_USER_DATA.' bd1
-                   WHERE DATEDIFF(year(\''.DATETIME_NOW.'\') || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd1.usd_value), \''.DATETIME_NOW.'\')
+                   WHERE DATEDIFF(CONCAT(YEAR(\''.DATETIME_NOW.'\'), DATE_FORMAT(bd1.usd_value, \'-%m-%d\')), \''.DATETIME_NOW.'\')
                          BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
                      AND usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').')
                UNION
                  (SELECT usd_usr_id, usd_value AS bday,
-                         year(\''.DATETIME_NOW.'\')-1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd2.usd_value) AS bdate
+                         CONCAT(YEAR(\''.DATETIME_NOW.'\')-1, DATE_FORMAT(bd2.usd_value, \'-%m-%d\')) AS bdate
                     FROM '.TBL_USER_DATA.' bd2
-                   WHERE DATEDIFF(year(\''.DATETIME_NOW.'\')-1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd2.usd_value), \''.DATETIME_NOW.'\')
+                   WHERE DATEDIFF(CONCAT(YEAR(\''.DATETIME_NOW.'\')-1, DATE_FORMAT(bd2.usd_value, \'-%m-%d\')), \''.DATETIME_NOW.'\')
                          BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
                      AND usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').')
                UNION
                  (SELECT usd_usr_id, usd_value AS bday,
-                         year(\''.DATETIME_NOW.'\')+1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd3.usd_value) AS bdate
+                         CONCAT(YEAR(\''.DATETIME_NOW.'\')+1, DATE_FORMAT(bd3.usd_value, \'-%m-%d\')) AS bdate
                     FROM '.TBL_USER_DATA.' bd3
-                   WHERE DATEDIFF(year(\''.DATETIME_NOW.'\')+1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd3.usd_value), \''.DATETIME_NOW.'\')
+                   WHERE DATEDIFF(CONCAT(YEAR(\''.DATETIME_NOW.'\')+1, DATE_FORMAT(bd3.usd_value, \'-%m-%d\')), \''.DATETIME_NOW.'\')
                          BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
                      AND usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').')
                ) birthday
