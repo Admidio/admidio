@@ -1128,9 +1128,8 @@
     <string name="SYS_LOGOUT">Abmelden</string>
     <string name="SYS_LOGOUT_SUCCESSFUL">Du wurdest erfolgreich abgemeldet.</string>
     <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Du bist am System angemeldet, folglich kennst du ja dein Passwort!</string>
-    <string name="SYS_LOSTPW_EMAIL_ERROR">Zu der E-Mail-Adresse #VAR1_BOLD# konnte im System keine gültige Anmeldung gefunden werden!</string>
-    <string name="SYS_LOSTPW_SEND">Das neue Passwort wurde an die E-Mail-Adresse #VAR1# geschickt!</string>
-    <string name="SYS_LOSTPW_SEND_ERROR">Es ist ein Fehler beim Senden an die E-Mail-Adresse #VAR1# aufgetreten!\nBitte versuche es später erneut!</string>
+    <string name="SYS_LOSTPW_SEND_EMAIL">Das neue Passwort wurde an die E-Mail-Adresse #VAR1_BOLD# geschickt!</string>
+    <string name="SYS_LOSTPW_SEND_USERNAME">Das neue Passwort wurde an den Benutzer #VAR1_BOLD# geschickt!</string>
     <string name="SYS_LOSTPW_SEVERAL_EMAIL">Die E-Mail-Adresse #VAR1_BOLD# wurde mehrfach zugeordnet. Es konnte kein eindeutiger Benutzer gefunden werden.</string>
     <string name="SYS_MAIL_DISPATCH">E-Mailversand</string>
     <string name="SYS_MAINTAIN_CATEGORIES">Kategorien pflegen</string>
@@ -1189,7 +1188,7 @@
     <string name="SYS_PARTICIPANTS">Teilnehmer</string>
     <string name="SYS_PASSWORD">Passwort</string>
     <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen</string>
-    <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Solltest du dein Passwort vergessen haben, kann das System ein neues Passwort erstellen und an deine E-Mail-Adresse senden. Gib dazu bitte die E-Mail-Adresse an, unter der du dich in diesem System registriert hast. Das neue Passwort wird dann unverzüglich an diese E-Mail-Adresse gesendet.</string>
+    <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Solltest du dein Passwort vergessen haben, kann das System ein neues Passwort erstellen und an deine E-Mail-Adresse senden. Gib dazu bitte deinen Benutzernamen oder die E-Mail-Adresse an, unter der du dich in diesem System registriert hast. Das neue Passwort wird dann unverzüglich an diese E-Mail-Adresse gesendet.</string>
     <string name="SYS_PASSWORD_UNKNOWN">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfe bitte dein Passwort und gib dieses erneut ein.</string>
     <string name="SYS_PERIOD">Zeitraum</string>
     <string name="SYS_PDF">PDF</string>
@@ -1290,6 +1289,7 @@
     <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</string>
     <string name="SYS_USER_NO_EMAIL">Der Benutzer #VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
     <string name="SYS_USERNAME">Benutzername</string>
+    <string name="SYS_USERNAME_OR_EMAIL">Benutzername oder E-Mail</string>
     <string name="SYS_USERS_FOUND">Gefundene Benutzer</string>
     <string name="SYS_UTF8">UTF-8</string>
     <string name="SYS_VERSION">Version</string>
