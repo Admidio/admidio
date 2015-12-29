@@ -443,6 +443,12 @@ class HtmlPage
         // add admidio css file at last because there the user can redefine all css
         $this->addCssFile(THEME_PATH.'/css/admidio.css');
 
+        // add custom css file if it exists to add own css styles without edit the original admidio css
+        if(file_exists(THEME_PATH.'/css/custom.css'))
+        {
+            $this->addCssFile(THEME_PATH.'/css/custom.css');
+        }
+
         // if print mode is set then add a print specific css file
         if($this->printMode)
         {
