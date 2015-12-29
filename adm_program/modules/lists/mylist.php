@@ -43,7 +43,8 @@ if($getRoleId === 0)
 }
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-$defaultColumnRows = 6;    // number of columns that should be shown
+$defaultColumnRows   = 6;    // number of columns that should be shown
+$mySqlMaxColumnAlert = '';
 
 // Listenobjekt anlegen
 $list = new ListConfiguration($gDb, $getListId);
@@ -112,6 +113,18 @@ else
 $page = new HtmlPage($headline);
 $page->enableModal();
 
+// within MySql it's only possible to join 61 tables therefore show a message if user
+// want's to join more than 57 columns
+if($gDbType === 'mysql')
+{
+    $mySqlMaxColumnAlert = '
+    if(fieldNumberIntern >= 57)
+    {
+        alert("'.$gL10n->get('LST_NO_MORE_COLUMN').'");
+        return;
+    }';
+}
+
 $javascriptCode = '
     var listId             = '.$getListId.';
     var fieldNumberIntern  = 0;
@@ -121,12 +134,7 @@ $javascriptCode = '
     // Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
     function addColumn()
     {
-        // MySQL erlaubt nur 61 gejointe Tabellen
-        if(fieldNumberIntern >= 57)
-        {
-            alert("'.$gL10n->get('LST_NO_MORE_COLUMN').'");
-            return;
-        }
+        '.$mySqlMaxColumnAlert.'
 
         var category = "";
         var fieldNumberShow  = fieldNumberIntern + 1;

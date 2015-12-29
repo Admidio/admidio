@@ -48,7 +48,7 @@ if(!isset($_POST['sel_show_members']))
 $list = new ListConfiguration($gDb, $getListId);
 
 // pruefen, ob Benutzer die Rechte hat, diese Liste zu bearbeiten
-if($getMode != 2)
+if($getMode !== 2)
 {
     // globale Listen duerfen nur von Webmastern editiert werden
     if($list->getValue('lst_global') == 1 && !$gCurrentUser->isWebmaster())

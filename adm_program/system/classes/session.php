@@ -48,7 +48,6 @@ class Session extends TableAccess
      */
     public function __construct(&$database, $session = 0, $cookiePrefix = '')
     {
-        global $gDb;
         parent::__construct($database, TBL_SESSIONS, 'ses');
 
         $this->mCookiePrefix = $cookiePrefix;
@@ -75,7 +74,7 @@ class Session extends TableAccess
         if(array_key_exists($cookiePrefix . '_AUTO_LOGIN_ID', $_COOKIE))
         {
             // restore user from auto login session
-            $this->mAutoLogin = new AutoLogin($gDb, $_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID']);
+            $this->mAutoLogin = new AutoLogin($database, $_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID']);
 
             // valid AutoLogin found
             if($this->mAutoLogin->getValue('atl_id') > 0)
@@ -147,16 +146,17 @@ class Session extends TableAccess
      * Return the organization id of this session. If AutoLogin is enabled then the
      * organization may not be the organization of the config.php because the
      * user had set the AutoLogin to a different organization.
+     * @return int Returns the organization id of this session
      */
     public function getOrganizationId()
     {
         if(is_object($this->mAutoLogin))
         {
-            return $this->mAutoLogin->getValue('atl_org_id');
+            return (int) $this->mAutoLogin->getValue('atl_org_id');
         }
         else
         {
-            return $this->getValue('ses_org_id');
+            return (int) $this->getValue('ses_org_id');
         }
     }
 

@@ -272,12 +272,13 @@ elseif($getMode === 2)
                         ON rol_id = mem_rol_id
                 INNER JOIN '.TBL_CATEGORIES.'
                         ON cat_id = rol_cat_id
-                     WHERE UPPER(usr_login_name) = UPPER(\''.$loginname.'\')
+                     WHERE UPPER(usr_login_name) = UPPER(\''.$loginName.'\')
+                           '.$sqlWebmaster.'
                        AND usr_valid  = 1
                        AND rol_valid  = 1
                        AND mem_begin <= \''.DATE_NOW.'\'
                        AND mem_end    > \''.DATE_NOW.'\'
-                       AND cat_org_id = '.$organizationId;
+                       AND cat_org_id = '.$gCurrentOrganization->getValue('org_id');
             $userStatement = $gDb->query($sql);
 
             $userFound = $userStatement->rowCount();
