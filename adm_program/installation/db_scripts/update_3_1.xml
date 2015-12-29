@@ -41,6 +41,9 @@
     <step id="390">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '%variable2%', '#variable2#')</step>
     <step id="400">UPDATE %PREFIX%_user_fields SET usf_url = REPLACE(usf_url, '%user_content%', '#user_content#') WHERE usf_url LIKE '%user_content%'</step>
     <step id="410">TRUNCATE TABLE %PREFIX%_auto_login</step>
-    <step id="420">ALTER TABLE %PREFIX%_auto_login ADD COLUMN atl_auto_login_id varchar(35) not null</step>
+    <step id="420">ALTER TABLE %PREFIX%_auto_login ADD COLUMN atl_auto_login_id varchar(255) not null</step>
+    <step id="430">ALTER TABLE %PREFIX%_auto_login ADD COLUMN atl_number_invalid smallint not null DEFAULT 0</step>
+    <step id="440" database="mysql">ALTER TABLE %PREFIX%_auto_login MODIFY COLUMN atl_session_id varchar(255) NOT NULL</step>
+    <step id="450" database="postgresql">ALTER TABLE %PREFIX%_auto_login ALTER COLUMN atl_session_id TYPE varchar(255)</step>
     <step>stop</step>
 </update>

@@ -54,7 +54,7 @@ class AutoLogin extends TableAccess
      */
     public function generateAutoLoginId($userId)
     {
-        return substr($userId.':'.md5(time()), 0, 35);
+        return $userId.':'.PasswordHashing::genRandomPassword(40);
     }
 
     /**
