@@ -124,7 +124,7 @@ class Session extends TableAccess
      * has a database object than this could be renewed if the object has a method @b setDatabase.
      * This is necessary because the old database connection is not longer valid.
      * @param  string $objectName Internal unique name of the object. The name was set with the method @b addObject
-     * @return object Returns the reference to the object
+     * @return object|bool Returns the reference to the object or false if the object was not found.
      */
     public function &getObject($objectName)
     {
@@ -139,7 +139,7 @@ class Session extends TableAccess
             // return reference of object
             return $this->mObjectArray[$objectName];
         }
-        return $this;
+        return false;
     }
 
     /**
