@@ -91,6 +91,7 @@ class AutoLogin extends TableAccess
     /**
      * Method will clean the database table @b adm_auto_login.
      * All login that had their last login one year ago will be deleted.
+     * All counted wrong auto login ids from this user will be reset.
      */
     public function tableCleanup()
     {
@@ -102,6 +103,13 @@ class AutoLogin extends TableAccess
 
         $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
                  WHERE atl_last_login < \''. $date_session_delete. '\'';
+        $this->db->query($sql);
+
+        // reset all counted wrong auto login ids from this user to prevent
+        // a deadlock if user has auto login an several devices and they were
+        // set invalid fpr security reasons
+        $sql = 'UPDATE '.TBL_AUTO_LOGIN.' SET atl_number_invalid = 0
+                 WHERE atl_usr_id = '.$this->getValue('atl_usr_id');
         $this->db->query($sql);
     }
 }

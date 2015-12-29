@@ -91,11 +91,16 @@ class Session extends TableAccess
                 $this->mAutoLogin = null;
                 setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID'], 0, '/', $this->mDomain, 0);
 
-                // for security reasons remove all auto logins of this user
+                // now count invalid auto login for this user and delete all auto login of this users if number of wrong logins > 3
                 $userId = substr($_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID'], 0, strpos($_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID'], ':'));
 
-                $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
+                $sql = 'UPDATE '.TBL_AUTO_LOGIN.' SET atl_number_invalid = atl_number_invalid + 1
                          WHERE atl_usr_id = '.$userId;
+                $this->db->query($sql);
+
+                $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
+                         WHERE atl_usr_id = '.$userId.'
+                           AND atl_number_invalid > 3 ';
                 $this->db->query($sql);
             }
         }
@@ -113,18 +118,6 @@ class Session extends TableAccess
         {
             $this->mObjectArray[$objectName] = &$object;
         }
-    }
-
-    /**
-     * Initializes all class parameters and deletes all read data.
-     * Also the database structure of the assiciated table will be
-     * read and stored in the arrays @b dbColumns and @b columnsInfos
-     */
-    public function clear()
-    {
-        parent::clear();
-
-        $this->mObjectArray = array();
     }
 
     /**
@@ -272,6 +265,7 @@ class Session extends TableAccess
         && (!isset($gCheckIpAddress) || $gCheckIpAddress === 1))
         {
             unset($_SESSION['gCurrentSession']);
+            $this->mObjectArray = array();
             $this->clear();
 
             exit('The IP address doesnot match with the IP address the current session was started! For safety reasons the current session was closed.');
