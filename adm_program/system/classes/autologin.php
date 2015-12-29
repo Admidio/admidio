@@ -43,9 +43,18 @@ class AutoLogin extends TableAccess
         }
         else
         {
-            $this->readDataByColumns(array('atl_session_id' => $session));
+            $this->readDataByColumns(array('atl_auto_login_id' => $session));
         }
+    }
 
+    /**
+     * Creates a new unique auto login id for this user.
+     * @param int $userId The id of the current user.
+     * @return string Returns the auto login id.
+     */
+    public function generateAutoLoginId($userId)
+    {
+        return $userId.':'.PasswordHashing::genRandomPassword(40);
     }
 
     /**
@@ -62,6 +71,7 @@ class AutoLogin extends TableAccess
         {
             // Insert
             global $gCurrentOrganization;
+
             $this->setValue('atl_org_id', $gCurrentOrganization->getValue('org_id'));
             $this->setValue('atl_last_login', DATETIME_NOW);
             $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
@@ -79,39 +89,9 @@ class AutoLogin extends TableAccess
     }
 
     /**
-     * Method checks the data of the cookie against the data stored in the database
-     * table @b adm_auto_login. If cookie data is ok then the user id will be set
-     * in the current session. Now there is a valid login for this user.
-     * @param object $session    The Session object of the current Admidio session.
-     * @param        $cookieData The data of the cookie @b ADMIDIO_DATA.
-     */
-    public function setValidLogin($session, $cookieData)
-    {
-        $dataArray = explode(';', $cookieData);
-
-        if($dataArray[0] == true      // autologin
-        && is_numeric($dataArray[1])) // user_id
-        {
-            // restore user if saved database user id == cookie user id
-            // if session is inactive than set it to an active session
-            if($this->getValue('atl_usr_id') == $dataArray[1])
-            {
-                $session->setValue('ses_timestamp', DATETIME_NOW);
-            }
-            else
-            {
-                // something is wrong -> for security reasons delete that auto login
-                $this->delete();
-            }
-
-            // auto login successful then create a valid session
-            $session->setValue('ses_usr_id', $this->getValue('atl_usr_id'));
-        }
-    }
-
-    /**
      * Method will clean the database table @b adm_auto_login.
      * All login that had their last login one year ago will be deleted.
+     * All counted wrong auto login ids from this user will be reset.
      */
     public function tableCleanup()
     {
@@ -123,6 +103,13 @@ class AutoLogin extends TableAccess
 
         $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
                  WHERE atl_last_login < \''. $date_session_delete. '\'';
+        $this->db->query($sql);
+
+        // reset all counted wrong auto login ids from this user to prevent
+        // a deadlock if user has auto login an several devices and they were
+        // set invalid fpr security reasons
+        $sql = 'UPDATE '.TBL_AUTO_LOGIN.' SET atl_number_invalid = 0
+                 WHERE atl_usr_id = '.$this->getValue('atl_usr_id');
         $this->db->query($sql);
     }
 }

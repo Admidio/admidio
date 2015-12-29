@@ -73,11 +73,13 @@ collate = utf8_unicode_ci;
 create table %PREFIX%_auto_login
 (
     atl_id                         integer       unsigned not null AUTO_INCREMENT,
-    atl_session_id                 varchar(40)   not null,
+    atl_auto_login_id              varchar(255)  not null,
+    atl_session_id                 varchar(255)  not null,
     atl_org_id                     integer       unsigned not null,
     atl_usr_id                     integer       unsigned not null,
     atl_last_login                 timestamp     null default null,
     atl_ip_address                 varchar(39)   not null,
+    atl_number_invalid             smallint      not null default 0,
     primary key (atl_id)
 )
 engine = InnoDB
