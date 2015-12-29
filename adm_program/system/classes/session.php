@@ -110,13 +110,16 @@ class Session extends TableAccess
      * will be stored in the session and could be read with the method @b getObject.
      * @param string $objectName Internal unique name of the object.
      * @param object $object     The object that should be stored in this class.
+     * @return bool Return false if object isn't type object or objectName already exists
      */
     public function addObject($objectName, &$object)
     {
         if(is_object($object) && !array_key_exists($objectName, $this->mObjectArray))
         {
             $this->mObjectArray[$objectName] = &$object;
+            return true;
         }
+        return false;
     }
 
     /**
@@ -124,7 +127,7 @@ class Session extends TableAccess
      * has a database object than this could be renewed if the object has a method @b setDatabase.
      * This is necessary because the old database connection is not longer valid.
      * @param  string $objectName Internal unique name of the object. The name was set with the method @b addObject
-     * @return object|bool Returns the reference to the object or false if the object was not found.
+     * @return object|false Returns the reference to the object or false if the object was not found.
      */
     public function &getObject($objectName)
     {
@@ -167,11 +170,7 @@ class Session extends TableAccess
      */
     public function hasObject($objectName)
     {
-        if(array_key_exists($objectName, $this->mObjectArray))
-        {
-            return true;
-        }
-        return false;
+        return array_key_exists($objectName, $this->mObjectArray);
     }
 
     /**
@@ -402,7 +401,7 @@ class Session extends TableAccess
 
         $sql = 'DELETE FROM '.TBL_SESSIONS.'
                  WHERE ses_timestamp < \''.$timestamp.'\'
-                   AND ses_session_id NOT LIKE \''.$this->getValue('ses_session_id').'\' ';
+                   AND ses_session_id NOT LIKE \''.$this->getValue('ses_session_id').'\'';
         $this->db->query($sql);
     }
 }

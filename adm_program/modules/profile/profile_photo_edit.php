@@ -181,7 +181,7 @@ elseif($getMode === 'upload')
 {
     /*****************************Foto zwischenspeichern bestaetigen***********************************/
 
-    // Dateigroesse
+    // File size
     if ($_FILES['userfile']['error'][0] == 1)
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', round(admFuncMaxUploadSize()/pow(1024, 2))));
@@ -193,45 +193,45 @@ elseif($getMode === 'upload')
         $gMessage->show($gL10n->get('PRO_PHOTO_NOT_CHOOSEN'));
     }
 
-    // Dateiendung
-    $image_properties = getimagesize($_FILES['userfile']['tmp_name'][0]);
-    if ($image_properties['mime'] !== 'image/jpeg' && $image_properties['mime'] !== 'image/png')
+    // File ending
+    $imageProperties = getimagesize($_FILES['userfile']['tmp_name'][0]);
+    if ($imageProperties['mime'] !== 'image/jpeg' && $imageProperties['mime'] !== 'image/png')
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_FORMAT_INVALID'));
     }
 
     // Auflösungskontrolle
-    $image_dimensions = $image_properties[0]*$image_properties[1];
-    if($image_dimensions > admFuncProcessableImageSize())
+    $imageDimensions = $imageProperties[0] * $imageProperties[1];
+    if($imageDimensions > admFuncProcessableImageSize())
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', round(admFuncProcessableImageSize()/1000000, 2)));
     }
 
     // Foto auf entsprechende Groesse anpassen
-    $user_image = new Image($_FILES['userfile']['tmp_name'][0]);
-    $user_image->setImageType('jpeg');
-    $user_image->scale(130, 170);
+    $userImage = new Image($_FILES['userfile']['tmp_name'][0]);
+    $userImage->setImageType('jpeg');
+    $userImage->scale(130, 170);
 
     // Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        $user_image->copyToFile(null, SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg');
+        $userImage->copyToFile(null, SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg');
     }
     // Datenbankspeicherung
     else
     {
         // Foto in PHP-Temp-Ordner übertragen
-        $user_image->copyToFile(null, ($_FILES['userfile']['tmp_name'][0]));
+        $userImage->copyToFile(null, ($_FILES['userfile']['tmp_name'][0]));
         // Foto aus PHP-Temp-Ordner einlesen
-        $user_image_data = fread(fopen($_FILES['userfile']['tmp_name'][0], 'r'), $_FILES['userfile']['size'][0]);
+        $userImageData = fread(fopen($_FILES['userfile']['tmp_name'][0], 'r'), $_FILES['userfile']['size'][0]);
 
         // Zwischenspeichern des neuen Fotos in der Session
-        $gCurrentSession->setValue('ses_binary', $user_image_data);
+        $gCurrentSession->setValue('ses_binary', $userImageData);
         $gCurrentSession->save();
     }
 
     // Image-Objekt löschen
-    $user_image->delete();
+    $userImage->delete();
 
     if($getUserId == $gCurrentUser->getValue('usr_id'))
     {

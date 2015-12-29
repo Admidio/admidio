@@ -39,7 +39,7 @@ class TableFile extends TableAccess
     }
 
     /**
-     * Deletes the selected record of the table and the assiciated file in the file system.
+     * Deletes the selected record of the table and the associated file in the file system.
      * After that the class will be initialize.
      * @return bool @b true if no error occurred
      */

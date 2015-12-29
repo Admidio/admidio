@@ -619,10 +619,10 @@ class User extends TableUsers
 
         if(strpos($columnName, 'usr_') === 0)
         {
-            if($columnName === 'usr_photo' && $gPreferences['profile_photo_storage'] == 0
-                && file_exists(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))
+            $usrProfilePhotoPath = SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg';
+            if($columnName === 'usr_photo' && $gPreferences['profile_photo_storage'] == 0 && file_exists($usrProfilePhotoPath))
             {
-                return file_get_contents(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg');
+                return file_get_contents($usrProfilePhotoPath);
             }
             else
             {
