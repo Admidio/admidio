@@ -45,7 +45,7 @@ if ($getGbcId > 0)
     $commentStatement = $gDb->query($sql);
 }
 
-if (isset($comment_result))
+if($commentStatement->rowCount() > 0)
 {
     $gbComment = new TableGuestbookComment($gDb);
 

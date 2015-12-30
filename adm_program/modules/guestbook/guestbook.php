@@ -65,7 +65,7 @@ if($gPreferences['enable_rss'] == 1)
 $page->addJavascript('
     function getComments(commentId) {
         // RequestObjekt abschicken und Kommentar laden
-        $.get("'.$g_root_path.'/adm_program/modules/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.$getModeration.',
+        $.get("'.$g_root_path.'/adm_program/modules/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.(int) $getModeration.',
         function(data) {
             $("#comments_" + commentId).html(data);
         });
