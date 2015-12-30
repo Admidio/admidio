@@ -489,7 +489,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
         case 'bool':
         case 'boolean':
             $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-            if ($valid === null)
+            if ($valid === false)
             {
                 $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
             }
