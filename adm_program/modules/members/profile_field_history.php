@@ -81,7 +81,7 @@ if($objDateTo === false)
 }
 
 // DateTo should be greater than DateFrom (Timestamp must be less)
-if($objDateFrom < $objDateTo)
+if($objDateFrom > $objDateTo)
 {
     $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
 }
