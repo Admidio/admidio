@@ -89,7 +89,7 @@ class TableFolder extends TableAccess
 
         // Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
         $sql_subfolders = 'SELECT *
-                              FROM '. TBL_FOLDERS. '
+                             FROM '.TBL_FOLDERS.'
                             WHERE fol_fol_id_parent = '.$folderId;
         $subfoldersStatement = $this->db->query($sql_subfolders);
 
@@ -100,18 +100,18 @@ class TableFolder extends TableAccess
         }
 
         // In der DB die Files der aktuellen folder_id loeschen
-        $sql_delete_files = 'DELETE from '. TBL_FILES. '
-                        WHERE fil_fol_id = '.$folderId;
+        $sql_delete_files = 'DELETE FROM '.TBL_FILES.'
+                              WHERE fil_fol_id = '.$folderId;
         $this->db->query($sql_delete_files);
 
         // In der DB die verknuepften Berechtigungen zu dieser Folder_ID loeschen...
-        $sql_delete_fol_rol = 'DELETE from '. TBL_FOLDER_ROLES. '
-                        WHERE flr_fol_id = '.$folderId;
+        $sql_delete_fol_rol = 'DELETE FROM '.TBL_FOLDER_ROLES.'
+                                WHERE flr_fol_id = '.$folderId;
         $this->db->query($sql_delete_fol_rol);
 
         // In der DB den Eintrag des Ordners selber loeschen
-        $sql_delete_folder = 'DELETE from '. TBL_FOLDERS. '
-                        WHERE fol_id = '.$folderId;
+        $sql_delete_folder = 'DELETE FROM '.TBL_FOLDERS.'
+                               WHERE fol_id = '.$folderId;
         $this->db->query($sql_delete_folder);
 
         // Jetzt noch das Verzeichnis physikalisch von der Platte loeschen
@@ -150,7 +150,7 @@ class TableFolder extends TableAccess
 
         // Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
         $sql_subfolders = 'SELECT *
-                              FROM '. TBL_FOLDERS. '
+                             FROM '.TBL_FOLDERS.'
                             WHERE fol_fol_id_parent = '.$folderId;
         $subfoldersStatement = $this->db->query($sql_subfolders);
 
@@ -161,13 +161,13 @@ class TableFolder extends TableAccess
         }
 
         // Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
-        $sql_update = 'UPDATE '. TBL_FOLDERS. '
+        $sql_update = 'UPDATE '.TBL_FOLDERS.'
                           SET fol_locked = \''.$lockedFlag.'\'
                         WHERE fol_id = '.$folderId;
         $this->db->query($sql_update);
 
         //...und natuerlich auch fuer alle Files die in diesem Ordner sind
-        $sql_update = 'UPDATE '. TBL_FILES. '
+        $sql_update = 'UPDATE '.TBL_FILES.'
                           SET fil_locked = \''.$lockedFlag.'\'
                         WHERE fil_fol_id = '.$folderId;
         $this->db->query($sql_update);
@@ -190,7 +190,7 @@ class TableFolder extends TableAccess
 
         // Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
         $sql_subfolders = 'SELECT *
-                              FROM '. TBL_FOLDERS. '
+                             FROM '.TBL_FOLDERS.'
                             WHERE fol_fol_id_parent = '.$folderId;
         $subfoldersStatement = $this->db->query($sql_subfolders);
 
@@ -201,7 +201,7 @@ class TableFolder extends TableAccess
         }
 
         // Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
-        $sql_update = 'UPDATE '. TBL_FOLDERS. '
+        $sql_update = 'UPDATE '.TBL_FOLDERS.'
                           SET fol_public = \''.$public_flag.'\'
                         WHERE fol_id = '.$folderId;
         $this->db->query($sql_update);
@@ -254,12 +254,13 @@ class TableFolder extends TableAccess
             {
                 // Wenn der Ordner nicht public ist und der Benutzer keine DownloadAdminrechte hat, muessen die Rechte untersucht werden
                 $sql_rights = 'SELECT COUNT(*) as count
-                         FROM '. TBL_FOLDER_ROLES. ', '. TBL_MEMBERS. '
-                        WHERE flr_fol_id = '. $this->getValue('fol_id'). '
-                          AND flr_rol_id = mem_rol_id
-                          AND mem_usr_id = '. $gCurrentUser->getValue('usr_id'). '
-                          AND mem_begin <= \''.DATE_NOW.'\'
-                          AND mem_end    > \''.DATE_NOW.'\'';
+                                 FROM '.TBL_FOLDER_ROLES.'
+                           INNER JOIN '.TBL_MEMBERS.'
+                                   ON mem_rol_id = flr_rol_id
+                                WHERE flr_fol_id = '.$this->getValue('fol_id').'
+                                  AND mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
+                                  AND mem_begin <= \''.DATE_NOW.'\'
+                                  AND mem_end    > \''.DATE_NOW.'\'';
                 $rightsStatement = $this->db->query($sql_rights);
                 $row_rights = $rightsStatement->fetch();
                 $row_count  = $row_rights['count'];
@@ -294,7 +295,7 @@ class TableFolder extends TableAccess
 
         // Erst einmal alle Unterordner auslesen, die in diesem Verzeichnis enthalten sind
         $sql_folders = 'SELECT *
-                         FROM '. TBL_FOLDERS. '
+                         FROM '.TBL_FOLDERS.'
                         WHERE fol_type          = \'DOWNLOAD\'
                           AND fol_fol_id_parent = '. $this->getValue('fol_id'). '
                           AND fol_org_id        = '. $gCurrentOrganization->getValue('org_id'). '
@@ -322,10 +323,11 @@ class TableFolder extends TableAccess
 
                 // Gucken ob der angemeldete Benutzer Rechte an dem Unterordner hat...
                 $sql_rights = 'SELECT COUNT(*)
-                                 FROM '. TBL_FOLDER_ROLES. ', '. TBL_MEMBERS. '
-                                WHERE flr_fol_id = '. $row_folders->fol_id. '
-                                  AND flr_rol_id = mem_rol_id
-                                  AND mem_usr_id = '. $gCurrentUser->getValue('usr_id'). '
+                                 FROM '.TBL_FOLDER_ROLES.'
+                           INNER JOIN '.TBL_MEMBERS.'
+                                   ON mem_rol_id = flr_rol_id
+                                WHERE flr_fol_id = '.$row_folders->fol_id.'
+                                  AND mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
                                   AND mem_begin <= \''.DATE_NOW.'\'
                                   AND mem_end    > \''.DATE_NOW.'\'';
                 $rightsStatement = $this->db->query($sql_rights);
@@ -378,7 +380,7 @@ class TableFolder extends TableAccess
 
         // Nun alle Dateien auslesen, die in diesem Verzeichnis enthalten sind
         $sql_files   = 'SELECT *
-                         FROM '. TBL_FILES. '
+                         FROM '.TBL_FILES.'
                         WHERE fil_fol_id = '. $this->getValue('fol_id'). '
                         ORDER BY fil_name';
         $filesStatement = $this->db->query($sql_files);
@@ -564,11 +566,12 @@ class TableFolder extends TableAccess
             {
 
                 // wenn der Ordner einen Mutterordner hat muss der Rootordner ermittelt werden
-                $sql_rootFolder = 'SELECT * FROM '. TBL_FOLDERS. '
-                                        WHERE fol_name = \'download\'
-                                       AND fol_type    = \'DOWNLOAD\'
-                                       AND fol_path    = \'/adm_my_files\'
-                                       AND fol_org_id  = '. $gCurrentOrganization->getValue('org_id');
+                $sql_rootFolder = 'SELECT *
+                                     FROM '.TBL_FOLDERS.'
+                                    WHERE fol_name   = \'download\'
+                                      AND fol_type   = \'DOWNLOAD\'
+                                      AND fol_path   = \'/adm_my_files\'
+                                      AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
                 $rootFolderStatement = $this->db->query($sql_rootFolder);
                 $rootFolderRow = $rootFolderStatement->fetchObject();
 
@@ -589,8 +592,9 @@ class TableFolder extends TableAccess
         else
         {
             // Informationen zur uebergebenen OrdnerId aus der DB holen
-            $sql_currentFolder = 'SELECT * FROM '. TBL_FOLDERS. '
-                                   WHERE fol_id   = '.$folderId;
+            $sql_currentFolder = 'SELECT *
+                                    FROM '.TBL_FOLDERS.'
+                                   WHERE fol_id = '.$folderId;
             $currentFolderStatement = $this->db->query($sql_currentFolder);
             $currentFolderRow = $currentFolderStatement->fetchObject();
 
@@ -633,9 +637,11 @@ class TableFolder extends TableAccess
         $roleArray = array();
 
         // Erst einmal die aktuellen Rollenberechtigungen fuer den Ordner auslesen
-        $sql_rolset = 'SELECT * FROM '. TBL_FOLDER_ROLES. ', '. TBL_ROLES. '
-                            WHERE flr_fol_id = '. $this->getValue('fol_id'). '
-                              AND flr_rol_id = rol_id';
+        $sql_rolset = 'SELECT *
+                         FROM '.TBL_FOLDER_ROLES.'
+                   INNER JOIN '.TBL_ROLES.'
+                           ON rol_id = flr_rol_id
+                        WHERE flr_fol_id = '.$this->getValue('fol_id');
         $rolesetStatement = $this->db->query($sql_rolset);
 
         while($rowRoleset = $rolesetStatement->fetchObject())
@@ -644,8 +650,8 @@ class TableFolder extends TableAccess
             {
                 // Jede Rolle wird nun dem Array hinzugefuegt
                 $roleArray[] = array(
-                                    'rol_id'        => $rowRoleset->rol_id,
-                                    'rol_name'      => $rowRoleset->rol_name);
+                                    'rol_id'   => $rowRoleset->rol_id,
+                                    'rol_name' => $rowRoleset->rol_name);
             }
             else
             {
@@ -696,14 +702,14 @@ class TableFolder extends TableAccess
         $this->db->startTransaction();
 
         // Den neuen Pfad in der DB setzen fuer die aktuelle folder_id...
-        $sql_update = 'UPDATE '. TBL_FOLDERS. '
+        $sql_update = 'UPDATE '.TBL_FOLDERS.'
                           SET fol_path = \''.$newPath.'\'
                         WHERE fol_id = '.$folderId;
         $this->db->query($sql_update);
 
         // Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
         $sql_subfolders = 'SELECT *
-                              FROM '. TBL_FOLDERS. '
+                             FROM '.TBL_FOLDERS.'
                             WHERE fol_fol_id_parent = '.$folderId;
         $subfoldersStatement = $this->db->query($sql_subfolders);
 
@@ -754,7 +760,7 @@ class TableFolder extends TableAccess
 
         // Alle Unterordner auslesen, die im uebergebenen Ordner enthalten sind
         $sql_subfolders = 'SELECT *
-                              FROM '. TBL_FOLDERS. '
+                             FROM '.TBL_FOLDERS.'
                             WHERE fol_fol_id_parent = '.$folderId;
         $subfoldersStatement = $this->db->query($sql_subfolders);
 
@@ -765,8 +771,8 @@ class TableFolder extends TableAccess
         }
 
         // Erst die alten Berechtigungen loeschen fuer die aktuelle OrdnerId
-        $sql_delete  = 'DELETE FROM '. TBL_FOLDER_ROLES. '
-                            WHERE flr_fol_id = '.$folderId;
+        $sql_delete  = 'DELETE FROM '.TBL_FOLDER_ROLES.'
+                              WHERE flr_fol_id = '.$folderId;
         $this->db->query($sql_delete);
 
         // Jetzt die neuen Berechtigungen schreiben
@@ -774,7 +780,7 @@ class TableFolder extends TableAccess
         {
             foreach($rolesArray as $rolesId)
             {
-                $sql_insert = 'INSERT INTO '. TBL_FOLDER_ROLES. ' (flr_fol_id, flr_rol_id)
+                $sql_insert = 'INSERT INTO '.TBL_FOLDER_ROLES.' (flr_fol_id, flr_rol_id)
                                     VALUES ('. $folderId. ', '. $rolesId. ')';
                 $this->db->query($sql_insert);
             }

@@ -69,7 +69,9 @@ if ($getMode === 1)
 // Löschen des Raums
 elseif ($getMode === 2)
 {
-    $sql = 'SELECT * FROM '.TBL_DATES.' WHERE dat_room_id = '.$getRoomId;
+    $sql = 'SELECT *
+              FROM '.TBL_DATES.'
+             WHERE dat_room_id = '.$getRoomId;
     $statement = $gDb->query($sql);
     $row = $statement->rowCount();
     if($row === 0)

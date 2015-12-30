@@ -34,12 +34,14 @@ if ($getGbcId > 0)
         $conditions .= ' AND gbc_locked = 0 ';
     }
 
-    $sql    = 'SELECT * FROM '. TBL_GUESTBOOK_COMMENTS. ', '. TBL_GUESTBOOK. '
-                WHERE gbo_id     = '.$getGbcId.'
-                  AND gbc_gbo_id = gbo_id
-                  AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id').
-                      $conditions.'
-                ORDER by gbc_timestamp_create asc';
+    $sql = 'SELECT *
+              FROM '.TBL_GUESTBOOK_COMMENTS.'
+        INNER JOIN '.TBL_GUESTBOOK.'
+                ON gbo_id = gbc_gbo_id
+             WHERE gbo_id     = '.$getGbcId.'
+               AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id').
+                   $conditions.'
+             ORDER BY gbc_timestamp_create ASC';
     $commentStatement = $gDb->query($sql);
 }
 

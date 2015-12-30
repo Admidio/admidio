@@ -125,7 +125,7 @@ if($getPhotoNr == null)
 
     // get sub albums
     $sql = 'SELECT *
-              FROM '. TBL_PHOTOS. '
+              FROM '.TBL_PHOTOS.'
              WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
     if($getPhotoId == 0)
     {
@@ -140,7 +140,7 @@ if($getPhotoNr == null)
         $sql = $sql.' AND pho_locked = 0 ';
     }
 
-    $sql = $sql.' ORDER BY pho_begin DESC ';
+    $sql = $sql.' ORDER BY pho_begin DESC';
     $statement = $gDb->query($sql);
 
     // number of sub albums

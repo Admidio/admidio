@@ -27,17 +27,17 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 $gInventoryFields = new InventoryFields($gDb, $gCurrentOrganization->getValue('org_id'));
 
 // alle Items zur Auswahl selektieren
-$sql    = 'SELECT inv_id, item_name.ind_value as item_name, room_id.ind_value as room_id,
-                  COALESCE(inv_timestamp_change, inv_timestamp_create) as timestamp
-             FROM '. TBL_INVENT. '
-             JOIN '. TBL_INVENT_DATA. ' as item_name
-               ON item_name.ind_itm_id = inv_id
-              AND item_name.ind_inf_id = '. $gInventoryFields->getProperty('ITEM_NAME', 'inf_id'). '
-             JOIN '. TBL_INVENT_DATA. ' as room_id
-               ON room_id.ind_itm_id = inv_id
-              AND room_id.ind_inf_id = '. $gInventoryFields->getProperty('ROOM_ID', 'inf_id'). '
-            WHERE inv_valid = 1
-            ORDER BY item_name.ind_value, room_id.ind_value ';
+$sql = 'SELECT inv_id, item_name.ind_value as item_name, room_id.ind_value as room_id,
+               COALESCE(inv_timestamp_change, inv_timestamp_create) as timestamp
+          FROM '.TBL_INVENT.'
+    INNER JOIN '.TBL_INVENT_DATA.' as item_name
+            ON item_name.ind_itm_id = inv_id
+           AND item_name.ind_inf_id = '. $gInventoryFields->getProperty('ITEM_NAME', 'inf_id'). '
+    INNER JOIN '.TBL_INVENT_DATA.' as room_id
+            ON room_id.ind_itm_id = inv_id
+           AND room_id.ind_inf_id = '. $gInventoryFields->getProperty('ROOM_ID', 'inf_id'). '
+         WHERE inv_valid = 1
+         ORDER BY item_name.ind_value, room_id.ind_value ';
 $mglStatement = $gDb->query($sql);
 
 // create html page object

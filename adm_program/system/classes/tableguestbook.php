@@ -38,7 +38,7 @@ class TableGuestbook extends TableAccess
         $this->db->startTransaction();
 
         // erst einmal alle vorhanden Kommentare zu diesem Gaestebucheintrag loeschen...
-        $sql = 'DELETE FROM '. TBL_GUESTBOOK_COMMENTS. ' WHERE gbc_gbo_id = '. $this->getValue('gbo_id');
+        $sql = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.' WHERE gbc_gbo_id = '. $this->getValue('gbo_id');
         $result = $this->db->query($sql);
 
         $return = parent::delete();

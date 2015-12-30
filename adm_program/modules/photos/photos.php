@@ -382,7 +382,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 
 // erfassen der Alben die in der Albentabelle ausgegeben werden sollen
 $sql = 'SELECT *
-          FROM '. TBL_PHOTOS. '
+          FROM '.TBL_PHOTOS.'
          WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
 if($getPhotoId == 0)
 {
@@ -397,7 +397,7 @@ if(!$gCurrentUser->editPhotoRight())
     $sql = $sql.' AND pho_locked = 0 ';
 }
 
-$sql = $sql.' ORDER BY pho_begin DESC ';
+$sql = $sql.' ORDER BY pho_begin DESC';
 
 $albumStatement = $gDb->query($sql);
 $albumList      = $albumStatement->fetchAll();

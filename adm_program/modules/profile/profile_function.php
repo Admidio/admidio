@@ -217,7 +217,7 @@ elseif ($getMode === 8)
         $sql = 'SELECT
                     bm.mem_usr_id
                 FROM
-                    '. TBL_MEMBERS. ' bm
+                    '.TBL_MEMBERS.' bm
                 WHERE
                     bm.mem_rol_id = '.$getRoleId.'
                     AND bm.mem_begin <= \''.DATE_NOW.'\'

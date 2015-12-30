@@ -248,9 +248,9 @@ class InventoryFields
                 }
 
                 // replace a variable in url with user value
-                if(strpos($infUrl, '%user_content%') !== false)
+                if(strpos($infUrl, '#user_content#') !== false)
                 {
-                    $htmlValue = preg_replace('/%user_content%/', $value, $htmlValue);
+                    $htmlValue = preg_replace('/#user_content#/', $value, $htmlValue);
 
                 }
             }
@@ -362,11 +362,13 @@ class InventoryFields
         $this->clearInventoryData();
 
         // read all user fields and belonging category data of organization
-        $sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_INVENT_FIELDS. '
-                 WHERE inf_cat_id = cat_id
-                   AND (  cat_org_id IS NULL
+        $sql = 'SELECT *
+                  FROM '.TBL_INVENT_FIELDS.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = inf_cat_id
+                 WHERE (  cat_org_id IS NULL
                        OR cat_org_id  = '.$organizationId.' )
-                 ORDER BY cat_sequence ASC, inf_sequence ASC ';
+                 ORDER BY cat_sequence ASC, inf_sequence ASC';
         $usfStatement = $this->mDb->query($sql);
 
         while($row = $usfStatement->fetch())
@@ -400,9 +402,11 @@ class InventoryFields
             $this->mItemId = $itemId;
 
             // read all user data of user
-            $sql = 'SELECT * FROM '.TBL_INVENT_DATA.', '. TBL_INVENT_FIELDS. '
-                     WHERE ind_inf_id = inf_id
-                       AND ind_itm_id = '.$itemId;
+            $sql = 'SELECT *
+                      FROM '.TBL_INVENT_DATA.'
+                INNER JOIN '.TBL_INVENT_FIELDS.'
+                        ON inf_id = ind_inf_id
+                     WHERE ind_itm_id = '.$itemId;
             $usdStatement = $this->mDb->query($sql);
 
             while($row = $usdStatement->fetch())

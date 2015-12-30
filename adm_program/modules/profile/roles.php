@@ -136,17 +136,18 @@ if($gCurrentUser->manageRoles())
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
     $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights,
                      mem_rol_id, mem_usr_id, mem_leader
-                 FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
-                 LEFT JOIN '. TBL_MEMBERS. '
-                 ON rol_id      = mem_rol_id
-                 AND mem_usr_id  = '.$getUserId.'
-                 AND mem_begin  <= \''.DATE_NOW.'\'
-                 AND mem_end     > \''.DATE_NOW.'\'
+              FROM '.TBL_CATEGORIES.'
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+         LEFT JOIN '.TBL_MEMBERS.'
+                ON rol_id      = mem_rol_id
+               AND mem_usr_id  = '.$getUserId.'
+               AND mem_begin  <= \''.DATE_NOW.'\'
+               AND mem_end     > \''.DATE_NOW.'\'
              WHERE rol_valid   = 1
-                 AND rol_visible = 1
-                 AND rol_cat_id  = cat_id
-                 AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                     OR cat_org_id IS NULL )
+               AND rol_visible = 1
+               AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                   OR cat_org_id IS NULL )
              ORDER BY cat_sequence, cat_id, rol_name';
 }
 else
@@ -154,23 +155,25 @@ else
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
     $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights,
                      mgl.mem_rol_id as mem_rol_id, mgl.mem_usr_id as mem_usr_id, mgl.mem_leader as mem_leader
-                 FROM '. TBL_MEMBERS. ' bm, '. TBL_CATEGORIES. ', '. TBL_ROLES. '
-                 LEFT JOIN '. TBL_MEMBERS. ' mgl
-                 ON rol_id         = mgl.mem_rol_id
-                 AND mgl.mem_usr_id = '.$getUserId.'
-                 AND mgl.mem_begin <= \''.DATE_NOW.'\'
-                 AND mgl.mem_end    > \''.DATE_NOW.'\'
+              FROM '.TBL_MEMBERS.' bm
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = bm.mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+         LEFT JOIN '.TBL_MEMBERS.' mgl
+                ON rol_id         = mgl.mem_rol_id
+               AND mgl.mem_usr_id = '.$getUserId.'
+               AND mgl.mem_begin <= \''.DATE_NOW.'\'
+               AND mgl.mem_end    > \''.DATE_NOW.'\'
              WHERE bm.mem_usr_id  = '. $gCurrentUser->getValue('usr_id'). '
-                 AND bm.mem_begin  <= \''.DATE_NOW.'\'
-                 AND bm.mem_end     > \''.DATE_NOW.'\'
-                 AND bm.mem_leader  = 1
-                 AND rol_id         = bm.mem_rol_id
-                 AND rol_leader_rights IN ('.ROLE_LEADER_MEMBERS_ASSIGN.','.ROLE_LEADER_MEMBERS_ASSIGN_EDIT.')
-                 AND rol_valid      = 1
-                 AND rol_visible    = 1
-                 AND rol_cat_id     = cat_id
-                 AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                     OR cat_org_id IS NULL )
+               AND bm.mem_begin  <= \''.DATE_NOW.'\'
+               AND bm.mem_end     > \''.DATE_NOW.'\'
+               AND bm.mem_leader  = 1
+               AND rol_leader_rights IN ('.ROLE_LEADER_MEMBERS_ASSIGN.','.ROLE_LEADER_MEMBERS_ASSIGN_EDIT.')
+               AND rol_valid      = 1
+               AND rol_visible    = 1
+               AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+                   OR cat_org_id IS NULL )
              ORDER BY cat_sequence, cat_id, rol_name';
 }
 $statement = $gDb->query($sql);

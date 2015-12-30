@@ -1057,7 +1057,7 @@ class HtmlForm extends HtmlFormBasic
         {
             unset($attributes['checked']);
 
-            if($optionsAll['defaultValue'] === $key)
+            if($optionsAll['defaultValue'] == $key)
             {
                 $attributes['checked'] = 'checked';
             }
@@ -1493,7 +1493,7 @@ class HtmlForm extends HtmlFormBasic
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        $sqlTables       = TBL_CATEGORIES;
+        $sqlTables       = '';
         $sqlCondidtions  = '';
         $categoriesArray = array();
 
@@ -1505,22 +1505,18 @@ class HtmlForm extends HtmlFormBasic
             switch ($categoryType)
             {
                 case 'DAT':
-                    $sqlTables = TBL_CATEGORIES.', '.TBL_DATES;
-                    $sqlCondidtions = ' AND cat_id = dat_cat_id ';
+                    $sqlTables = ' INNER JOIN '.TBL_DATES.' ON cat_id = dat_cat_id ';
                     break;
                 case 'LNK':
-                    $sqlTables = TBL_CATEGORIES.', '.TBL_LINKS;
-                    $sqlCondidtions = ' AND cat_id = lnk_cat_id ';
+                    $sqlTables = ' INNER JOIN '.TBL_LINKS.' ON cat_id = lnk_cat_id ';
                     break;
                 case 'ROL':
                     // don't show system categories
-                    $sqlTables = TBL_CATEGORIES.', '.TBL_ROLES;
-                    $sqlCondidtions = ' AND cat_id = rol_cat_id
-                                    AND rol_visible = 1 ';
+                    $sqlTables = ' INNER JOIN '.TBL_ROLES.' ON cat_id = rol_cat_id';
+                    $sqlCondidtions = ' AND rol_visible = 1 ';
                     break;
                 case 'INF':
-                    $sqlTables = TBL_CATEGORIES.', '.TBL_INVENT_FIELDS;
-                    $sqlCondidtions = ' AND cat_id = inf_cat_id ';
+                    $sqlTables = ' INNER JOIN '.TBL_INVENT_FIELDS.' ON cat_id = inf_cat_id ';
                     break;
             }
         }
@@ -1537,12 +1533,13 @@ class HtmlForm extends HtmlFormBasic
 
         // the sql statement which returns all found categories
         $sql = 'SELECT DISTINCT cat_id, cat_name, cat_default, cat_sequence
-                  FROM '.$sqlTables.'
+                  FROM '.TBL_CATEGORIES.'
+                       '.$sqlTables.'
                  WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
-                   AND cat_type   = \''.$categoryType.'\'
+                   AND cat_type = \''.$categoryType.'\'
                        '.$sqlCondidtions.'
-                 ORDER BY cat_sequence ASC ';
+                 ORDER BY cat_sequence ASC';
         $statement = $database->query($sql);
         $countCategories = $statement->rowCount();
 

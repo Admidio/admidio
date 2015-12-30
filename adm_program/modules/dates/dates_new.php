@@ -236,11 +236,15 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
     {
         if($gDbType === 'mysql')
         {
-            $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') FROM '.TBL_ROOMS.' ORDER BY room_name';
+            $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\')
+                      FROM '.TBL_ROOMS.'
+                     ORDER BY room_name';
         }
         else
         {
-            $sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' FROM '.TBL_ROOMS.' ORDER BY room_name';
+            $sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\'
+                      FROM '.TBL_ROOMS.'
+                     ORDER BY room_name';
         }
         $form->addSelectBoxFromSql('dat_room_id', $gL10n->get('SYS_ROOM'), $gDb, $sql, array('defaultValue' => $date->getValue('dat_room_id')));
     }
@@ -255,10 +259,12 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
     // add a multiselectbox to the form where the user can choose all roles that should see this event
     // first read all relevant roles from database and create an array with them
-    $sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+    $sql = 'SELECT *
+              FROM '.TBL_ROLES.'
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
              WHERE rol_valid   = 1
                AND rol_visible = 1
-               AND rol_cat_id  = cat_id
                AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
              ORDER BY cat_sequence, rol_name';

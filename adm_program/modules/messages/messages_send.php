@@ -101,10 +101,10 @@ if($gPreferences['enable_pm_module'] != 1 && $getMsgType === 'PM')
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
     $postName = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
-	if(!strValidCharacters($postFrom, 'email'))
-	{
+    if(!strValidCharacters($postFrom, 'email'))
+    {
         $postFrom = $gCurrentUser->getValue('EMAIL');
-	}
+    }
 }
 else
 {
@@ -155,11 +155,12 @@ if ($getMsgType === 'EMAIL')
 
                 // check if role rights are granted to the User
                 $sql = 'SELECT rol_mail_this_role, rol_name, rol_id
-                          FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                         WHERE rol_cat_id    = cat_id
-                           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
-                               OR cat_org_id IS NULL)
-                           AND rol_id = '.$group[0];
+                          FROM '.TBL_ROLES.'
+                    INNER JOIN '.TBL_CATEGORIES.'
+                            ON cat_id = rol_cat_id
+                         WHERE rol_id = '.$group[0].'
+                           AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                               OR cat_org_id IS NULL)';
                 $statement = $gDb->query($sql);
                 $row = $statement->fetch();
 
@@ -192,25 +193,28 @@ if ($getMsgType === 'EMAIL')
 
                 $sql = 'SELECT first_name.usd_value as first_name, last_name.usd_value as last_name,
                                email.usd_value as email, rol_name
-                          FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
-                          JOIN '. TBL_USER_DATA. ' as email
+                          FROM '.TBL_MEMBERS.'
+                    INNER JOIN '.TBL_ROLES.'
+                            ON rol_id = mem_rol_id
+                    INNER JOIN '.TBL_CATEGORIES.'
+                            ON cat_id = rol_cat_id
+                    INNER JOIN '.TBL_USERS.'
+                            ON usr_id = mem_usr_id
+                    INNER JOIN '.TBL_USER_DATA.' as email
                             ON email.usd_usr_id = usr_id
                            AND LENGTH(email.usd_value) > 0
-                          JOIN '.TBL_USER_FIELDS.' as field
+                    INNER JOIN '.TBL_USER_FIELDS.' as field
                             ON field.usf_id = email.usd_usf_id
                            AND field.usf_type = \'EMAIL\'
-                          LEFT JOIN '. TBL_USER_DATA. ' as last_name
+                     LEFT JOIN '.TBL_USER_DATA.' as last_name
                             ON last_name.usd_usr_id = usr_id
                            AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-                          LEFT JOIN '. TBL_USER_DATA. ' as first_name
+                     LEFT JOIN '.TBL_USER_DATA.' as first_name
                             ON first_name.usd_usr_id = usr_id
                            AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
                          WHERE rol_id      = '.$group[0].'
-                           AND rol_cat_id  = cat_id
                            AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                                OR cat_org_id IS NULL )
-                           AND mem_rol_id  = rol_id
-                           AND mem_usr_id  = usr_id
                            AND usr_valid   = 1 '.
                                $sqlConditions;
 
@@ -235,6 +239,10 @@ if ($getMsgType === 'EMAIL')
                     // all role members will be attached as BCC
                     while ($row = $statement->fetchObject())
                     {
+                        if (!strValidCharacters($row->email, 'email'))
+                        {
+                            $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $row->first_name.' '.$row->last_name));
+                        }
                         $receiver[] = array($row->email, $row->first_name.' '.$row->last_name);
                     }
 
@@ -284,7 +292,7 @@ if ($getMsgType === 'EMAIL')
     }
 
     // check sending attributes for user, to be sure that they are correct
-    if ($postName !== $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
+    if ($postName !== $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }

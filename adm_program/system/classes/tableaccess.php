@@ -69,7 +69,7 @@ class TableAccess
     /**
      * Called on serialization of this object. The database object could not
      * be serialized and should be ignored.
-     * @return Returns all class variables that should be serialized.
+     * @return array Returns all class variables that should be serialized.
      */
     public function __sleep()
     {
@@ -78,7 +78,7 @@ class TableAccess
 
     /**
      * Initializes all class parameters and deletes all read data.
-     * Also the database structure of the assiciated table will be
+     * Also the database structure of the associated table will be
      * read and stored in the arrays @b dbColumns and @b columnsInfos
      */
     public function clear()
@@ -188,7 +188,7 @@ class TableAccess
         if(array_key_exists($columnName, $this->dbColumns))
         {
             // wenn Schluesselfeld leer ist, dann 0 zurueckgeben
-            if($columnName == $this->keyColumnName && empty($this->dbColumns[$columnName]))
+            if($columnName === $this->keyColumnName && empty($this->dbColumns[$columnName]))
             {
                 $columnValue = 0;
             }
@@ -312,7 +312,8 @@ class TableAccess
 
         if($sqlWhereCondition !== '')
         {
-            $sql = 'SELECT * FROM '.$this->tableName.$sqlAdditionalTables.'
+            $sql = 'SELECT *
+                      FROM '.$this->tableName.$sqlAdditionalTables.'
                      WHERE '.$sqlWhereCondition;
             $readDataStatement = $this->db->query($sql);
 
@@ -655,7 +656,6 @@ class TableAccess
 
             if(array_key_exists($columnName, $this->dbColumns))
             {
-
                 // only mark as "changed" if the value is different (use binary safe function!)
                 if(strcmp($newValue, $this->dbColumns[$columnName]) !== 0)
                 {

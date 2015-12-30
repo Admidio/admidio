@@ -52,7 +52,8 @@ class TableUserField extends TableAccess
         $this->db->query($sql);
 
         // close gap in sequence of saved lists
-        $sql = 'SELECT lsc_lst_id, lsc_number FROM '.TBL_LIST_COLUMNS.'
+        $sql = 'SELECT lsc_lst_id, lsc_number
+                  FROM '.TBL_LIST_COLUMNS.'
                  WHERE lsc_usf_id = '.$this->getValue('usf_id');
         $listsStatement = $this->db->query($sql);
 
@@ -102,7 +103,9 @@ class TableUserField extends TableAccess
         {
             $newNameIntern = $newNameIntern.'_'.$index;
         }
-        $sql = 'SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_name_intern = \''.$newNameIntern.'\'';
+        $sql = 'SELECT usf_id
+                  FROM '.TBL_USER_FIELDS.'
+                 WHERE usf_name_intern = \''.$newNameIntern.'\'';
         $userFieldsStatement = $this->db->query($sql);
 
         if($userFieldsStatement->rowCount() > 0)
@@ -348,7 +351,8 @@ class TableUserField extends TableAccess
         elseif($columnName === 'usf_cat_id' && $this->getValue($columnName) !== $newValue)
         {
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
-            $sql = 'SELECT COUNT(*) as count FROM '.TBL_USER_FIELDS.'
+            $sql = 'SELECT COUNT(*) as count
+                      FROM '.TBL_USER_FIELDS.'
                      WHERE usf_cat_id = '.$newValue;
             $countUserFieldsStatement = $this->db->query($sql);
 

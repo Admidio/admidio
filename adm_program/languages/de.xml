@@ -520,7 +520,7 @@
     <string name="MEM_NOT_EDIT">Nicht bearbeiten</string>
     <string name="MEM_PROFILE_FIELD">Profilfeld</string>
     <string name="MEM_REMOVE_MEMBERSHIP">Willst du die Mitgliedschaft des Benutzers #VAR1# bei #VAR2# beenden?</string>
-    <string name="MEM_REMOVE_MEMBERSHIP_OK">Die Mitgliedschaft des Benutzers bei #VAR1# wurde erfolgreich beendet!</string>
+    <string name="MEM_REMOVE_MEMBERSHIP_OK">Die Mitgliedschaft des Benutzers #VAR1_BOLD# bei #VAR2_BOLD# wurde erfolgreich beendet!</string>
     <string name="MEM_REMOVE_USER">Benutzer entfernen</string>
     <string name="MEM_REMOVE_USER_DESC">Wenn du #VAR1_BOLD# auswählst, wird der Datensatz unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.</string>
     <string name="MEM_REPLACE">Ersetzen</string>
@@ -638,7 +638,7 @@
     <string name="ORG_FIELD_NOT_HIDDEN">Feld für alle Benutzer sichtbar</string>
     <string name="ORG_FIELD_NOT_MANDATORY">Feld muss nicht zwingend ausgefüllt werden</string>
     <string name="ORG_FIELD_UP">Profilfeld nach oben verschieben</string>
-    <string name="ORG_FIELD_URL_DESC">Die eingegebene URL verlinkt später im Profil den Inhalt, den der Benutzer in dieses Feld eingegeben hat. Optional kann noch der Platzhalter %user_content% in die URL eingebaut werden. Dies ist dann der Inhalt, den der Benutzer im Feld eingegeben hat.\n\nBeispiel:\nUrl: https://www.google.de/search?q=%user_content%\nFeldinhalt: Admidio\nLink im Profil: https://www.google.de/search?q=Admidio</string>
+    <string name="ORG_FIELD_URL_DESC">Die eingegebene URL verlinkt später im Profil den Inhalt, den der Benutzer in dieses Feld eingegeben hat. Optional kann noch der Platzhalter #user_content# in die URL eingebaut werden. Dies ist dann der Inhalt, den der Benutzer im Feld eingegeben hat.\n\nBeispiel:\nUrl: https://www.google.de/search?q=#user_content#\nFeldinhalt: Admidio\nLink im Profil: https://www.google.de/search?q=Admidio</string>
     <string name="ORG_HOMEPAGE_REGISTERED_USERS">Auf diese Seite wird der Benutzer geleitet, sobald er sich angemeldet hat. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</string>
     <string name="ORG_HOMEPAGE_VISITORS">Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</string>
     <string name="ORG_INVALID_THEME">Es wurde kein gültiges Theme ausgewählt.</string>
@@ -1072,8 +1072,6 @@
     <string name="SYS_FIELDS_EMPTY">Es sind nicht alle Felder gefüllt worden.</string>
     <string name="SYS_FILE">Datei</string>
     <string name="SYS_FILE_NOT_EXIST">Die ausgewählte Datei existiert nicht auf dem Server.</string>
-    <string name="SYS_FILE_PROGRESS">%0 von %1 übertragen</string>
-    <string name="SYS_FILE_TO_LARGE">Datei ist zu groß.</string>
     <string name="SYS_FILE_TO_LARGE_SERVER">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von #VAR1# MB.</string>
     <string name="SYS_FILE_UPLOADS">Dateiuploads</string>
     <string name="SYS_FILENAME_EMPTY">Es wurde kein Dateiname angegeben!</string>
@@ -1097,7 +1095,6 @@
     <string name="SYS_HELP">Hilfe</string>
     <string name="SYS_HIDE">Ausblenden</string>
     <string name="SYS_HOMEPAGE">Startseite</string>
-    <string name="SYS_HTTP_ERROR">HTTP Fehler (%1)</string>
     <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Webmaster deaktiviert.</string>
     <string name="SYS_ICON">Icon</string>
     <string name="SYS_INACTIVE">Inaktiv</string>
@@ -1280,8 +1277,6 @@
     <string name="SYS_TIME_TO">Uhrzeit bis</string>
     <string name="SYS_TITLE">Titel</string>
     <string name="SYS_TO" description="E-Mail">An</string>
-    <string name="SYS_TO_MANY_FILES">Du kannst maximal %0 Dateien hinzufügen.</string>
-    <string name="SYS_TOTAL_PROGRESS">übertrage Datei %0 von %1</string>
     <string name="SYS_TUESDAY">Dienstag</string>
     <string name="SYS_TYPE">Typ</string>
     <string name="SYS_UNKNOWN">Unbekannt</string>
@@ -1290,7 +1285,7 @@
     <string name="SYS_UPDATE">Aktualisieren</string>
     <string name="SYS_UPLOAD_MAX_FILESIZE">max. Uploadgröße</string>
     <string name="SYS_UPLOAD_NAME_ERROR">Der Dateiname darf nicht "submit" heißen.</string>
-    <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-_:/#?=% .</string>
+    <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-+_:/#?= .</string>
     <string name="SYS_USER">Benutzer</string>
     <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</string>
     <string name="SYS_USER_NO_EMAIL">Der Benutzer #VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>

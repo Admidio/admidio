@@ -119,7 +119,7 @@ if($getMode === 1)
     {
         // Schauen, ob die Kategorie bereits existiert
         $sql = 'SELECT COUNT(*) as count
-                  FROM '. TBL_CATEGORIES. '
+                  FROM '.TBL_CATEGORIES.'
                  WHERE cat_type    = \''. $getType. '\'
                    AND cat_name LIKE \''. $_POST['cat_name']. '\'
                    AND cat_id     <> '.$getCatId.
@@ -172,7 +172,7 @@ if($getMode === 1)
         $sequence = 0;
 
         $sql = 'SELECT *
-                  FROM '. TBL_CATEGORIES. '
+                  FROM '.TBL_CATEGORIES.'
                  WHERE cat_type = "'. $getType. '"
                    AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )

@@ -80,8 +80,8 @@ if($objDateTo === false)
     }
 }
 
-// DateTo should be greater than DateFrom (Timestamp must be less)
-if($objDateFrom < $objDateTo)
+// DateTo should be greater than DateFrom
+if($objDateFrom > $objDateTo)
 {
     $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
 }
@@ -110,21 +110,21 @@ $countChanges = $row['count'];
 $sql = 'SELECT usl_usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, usl_usf_id, usl_value_old, usl_value_new,
                usl_usr_id_create, create_last_name.usd_value as create_last_name, create_first_name.usd_value as create_first_name, usl_timestamp_create
           FROM '.TBL_USER_LOG.'
-          JOIN '. TBL_USER_DATA. ' as last_name
+    INNER JOIN '.TBL_USER_DATA.' as last_name
             ON last_name.usd_usr_id = usl_usr_id
            AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-          JOIN '. TBL_USER_DATA. ' as first_name
+    INNER JOIN '.TBL_USER_DATA.' as first_name
             ON first_name.usd_usr_id = usl_usr_id
            AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-          JOIN '. TBL_USER_DATA. ' as create_last_name
+    INNER JOIN '.TBL_USER_DATA.' as create_last_name
             ON create_last_name.usd_usr_id = usl_usr_id_create
            AND create_last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-          JOIN '. TBL_USER_DATA. ' as create_first_name
+    INNER JOIN '.TBL_USER_DATA.' as create_first_name
             ON create_first_name.usd_usr_id = usl_usr_id_create
            AND create_first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
          WHERE usl_timestamp_create BETWEEN \''.$dateFromIntern.' 00:00:00\' AND \''.$dateToIntern.' 23:59:59\' '.
                $sqlConditions.'
-         ORDER BY usl_timestamp_create DESC ';
+         ORDER BY usl_timestamp_create DESC';
 $fieldHistoryStatement = $gDb->query($sql);
 
 if($fieldHistoryStatement->rowCount() === 0)

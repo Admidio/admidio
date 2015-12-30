@@ -266,9 +266,9 @@ class ProfileFields
                 }
 
                 // replace a variable in url with user value
-                if(strpos($this->mProfileFields[$fieldNameIntern]->getValue('usf_url'), '%user_content%') !== false)
+                if(strpos($this->mProfileFields[$fieldNameIntern]->getValue('usf_url'), '#user_content#') !== false)
                 {
-                    $htmlValue = preg_replace('/%user_content%/', $value, $htmlValue);
+                    $htmlValue = preg_replace('/#user_content#/', $value, $htmlValue);
                 }
             }
             $value = $htmlValue;
@@ -391,11 +391,13 @@ class ProfileFields
         $this->clearUserData();
 
         // read all user fields and belonging category data of organization
-        $sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_USER_FIELDS. '
-                 WHERE usf_cat_id = cat_id
-                   AND (  cat_org_id IS NULL
-                       OR cat_org_id  = '.$organizationId.' )
-                 ORDER BY cat_sequence ASC, usf_sequence ASC ';
+        $sql = 'SELECT *
+                  FROM '.TBL_USER_FIELDS.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = usf_cat_id
+                 WHERE cat_org_id IS NULL
+                    OR cat_org_id = '.$organizationId.'
+                 ORDER BY cat_sequence ASC, usf_sequence ASC';
         $userFieldsStatement = $this->mDb->query($sql);
 
         while($row = $userFieldsStatement->fetch())
@@ -429,9 +431,11 @@ class ProfileFields
             $this->mUserId = $userId;
 
             // read all user data of user
-            $sql = 'SELECT * FROM '.TBL_USER_DATA.', '. TBL_USER_FIELDS. '
-                     WHERE usd_usf_id = usf_id
-                       AND usd_usr_id = '.$userId;
+            $sql = 'SELECT *
+                      FROM '.TBL_USER_DATA.'
+                INNER JOIN '.TBL_USER_FIELDS.'
+                        ON usf_id = usd_usf_id
+                     WHERE usd_usr_id = '.$userId;
             $userDataStatement = $this->mDb->query($sql);
 
             while($row = $userDataStatement->fetch())

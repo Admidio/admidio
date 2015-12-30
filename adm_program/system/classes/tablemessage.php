@@ -34,7 +34,10 @@ class TableMessage extends TableAccess
      */
     public function countUnreadMessageRecords($usrId)
     {
-        $sql = 'SELECT COUNT(*) as count FROM '.$this->tableName.' WHERE msg_usr_id_receiver LIKE \''. $usrId .'\' and msg_read = 1';
+        $sql = 'SELECT COUNT(*) as count
+                  FROM '.$this->tableName.'
+                 WHERE msg_usr_id_receiver LIKE \''. $usrId .'\'
+                   AND msg_read = 1';
         $countStatement = $this->db->query($sql);
         $row = $countStatement->fetch();
         return $row['count'];
@@ -58,7 +61,8 @@ class TableMessage extends TableAccess
      */
     public function countMessageParts()
     {
-        $sql = 'SELECT COUNT(*) as count FROM '.TBL_MESSAGES_CONTENT.'
+        $sql = 'SELECT COUNT(*) as count
+                  FROM '.TBL_MESSAGES_CONTENT.'
                  WHERE msc_msg_id = '.$this->getValue('msg_id');
         $countStatement = $this->db->query($sql);
         $row = $countStatement->fetch();
@@ -68,11 +72,11 @@ class TableMessage extends TableAccess
     /**
      * Set a new value for a column of the database table.
      * @param int $usrId of the receiver - just for security reasons.
-     * @return Returns @b answer of the SQL execution
+     * @return object Returns @b answer of the SQL execution
      */
     public function setReadValue($usrId)
     {
-        $sql = 'UPDATE '. TBL_MESSAGES. ' SET  msg_read = \'0\'
+        $sql = 'UPDATE '.TBL_MESSAGES.' SET  msg_read = \'0\'
                  WHERE msg_id = '.$this->msg_id.'
                    AND msg_usr_id_receiver LIKE \''.$usrId.'\'';
         return $this->db->query($sql);
@@ -81,7 +85,7 @@ class TableMessage extends TableAccess
     /**
      * get a list with all messages of an conversation.
      * @param int $msgId of the conversation - just for security reasons.
-     * @return Returns @b answer of the SQL execution
+     * @return object Returns @b answer of the SQL execution
      */
     public function getConversation($msgId)
     {
@@ -104,7 +108,7 @@ class TableMessage extends TableAccess
                  CASE WHEN msg_usr_id_sender = '. $usrId .' THEN msg_usr_id_receiver
                  ELSE msg_usr_id_sender
                   END AS user
-                 FROM '. TBL_MESSAGES. '
+                 FROM '.TBL_MESSAGES.'
                 WHERE msg_type = \'PM\'
                   AND msg_id = '. $this->msg_id;
         $partnerStatement = $this->db->query($sql);

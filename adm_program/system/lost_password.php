@@ -49,24 +49,27 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
     {
         // search for user with the email address that have a valid login and membership to a role
         $sql = 'SELECT usr_id
-                  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
-                  JOIN '. TBL_USER_DATA. ' as email
+                  FROM '.TBL_MEMBERS.'
+            INNER JOIN '.TBL_ROLES.'
+                    ON rol_id = mem_rol_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+            INNER JOIN '.TBL_USERS.'
+                    ON usr_id = mem_usr_id
+            INNER JOIN '.TBL_USER_DATA.' as email
                     ON email.usd_usr_id = usr_id
                    AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
                    AND email.usd_value  = \''.$_POST['recipient_email'].'\'
-                 WHERE rol_cat_id = cat_id
-                   AND rol_valid   = 1
-                   AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-                       OR cat_org_id IS NULL )
-                   AND rol_id     = mem_rol_id
+                 WHERE LENGTH(usr_login_name) > 0
+                   AND rol_valid  = 1
+                   AND usr_valid  = 1
                    AND mem_begin <= \''.DATE_NOW.'\'
                    AND mem_end    > \''.DATE_NOW.'\'
-                   AND mem_usr_id = usr_id
-                   AND usr_valid  = 1
-                   AND LENGTH(usr_login_name) > 0
+                   AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                       OR cat_org_id IS NULL )
                  GROUP BY usr_id';
-        $pdoStatement = $gDb->query($sql);
-        $count = $pdoStatement->rowCount();
+        $userStatement = $gDb->query($sql);
+        $count = $userStatement->rowCount();
 
         // show error if no user found or more than one user found
         if($count === 0)
@@ -78,7 +81,7 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
             $gMessage->show($gL10n->get('SYS_LOSTPW_SEVERAL_EMAIL', $_POST['recipient_email']));
         }
 
-        $row  = $pdoStatement->fetch();
+        $row  = $userStatement->fetch();
         $user = new User($gDb, $gProfileFields, $row['usr_id']);
 
         // create and save new password and activation id

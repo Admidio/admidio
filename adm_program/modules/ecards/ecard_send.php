@@ -85,28 +85,31 @@ foreach($_POST['ecard_recipients'] as $key => $value)
 $ecardSendResult = true;
 
 if(count($arrayRoles) > 0)
-// Wenn schon dann alle Namen und die dazugeh�rigen Emails auslesen und in die versand Liste hinzuf�gen
+// Wenn schon dann alle Namen und die dazugehörigen Emails auslesen und in die versand Liste hinzufügen
 {
     $sql = 'SELECT DISTINCT first_name.usd_value as first_name, last_name.usd_value as last_name,
                    email.usd_value as email, rol_name
-              FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
-             RIGHT JOIN '. TBL_USER_DATA. ' as email
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+        INNER JOIN '.TBL_USERS.'
+                ON usr_id = mem_usr_id
+        RIGHT JOIN '.TBL_USER_DATA.' as email
                 ON email.usd_usr_id = usr_id
                AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
                AND LENGTH(email.usd_value) > 0
-              LEFT JOIN '. TBL_USER_DATA. ' as last_name
+         LEFT JOIN '.TBL_USER_DATA.' as last_name
                 ON last_name.usd_usr_id = usr_id
                AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-              LEFT JOIN '. TBL_USER_DATA. ' as first_name
+         LEFT JOIN '.TBL_USER_DATA.' as first_name
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
              WHERE rol_id           IN ('.implode(',', $arrayRoles).')
-               AND rol_cat_id       = cat_id
                AND cat_org_id       = '.$gCurrentOrganization->getValue('org_id').'
-               AND mem_rol_id       = rol_id
                AND mem_begin       <= \''.DATE_NOW.'\'
                AND mem_end          > \''.DATE_NOW.'\'
-               AND mem_usr_id       = usr_id
                AND usr_valid        = 1
                AND email.usd_usr_id = email.usd_usr_id
              ORDER BY last_name, first_name';

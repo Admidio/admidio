@@ -302,13 +302,15 @@ class Inventory extends TableInventory
                 else
                 {
                     $sql = 'SELECT rol_id, rol_this_list_view
-                              FROM '. TBL_INVENTORY. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                              FROM '.TBL_INVENTORY.'
+                        INNER JOIN '.TBL_ROLES.'
+                                ON rol_id = mem_rol_id
+                        INNER JOIN '.TBL_CATEGORIES.'
+                                ON cat_id = rol_cat_id
                              WHERE mem_usr_id = '.$item->getValue('inv_id'). '
                                AND mem_begin <= \''.DATE_NOW.'\'
                                AND mem_end    > \''.DATE_NOW.'\'
-                               AND mem_rol_id = rol_id
                                AND rol_valid  = 1
-                               AND rol_cat_id = cat_id
                                AND (  cat_org_id = '.$this->organizationId.'
                                    OR cat_org_id IS NULL ) ';
                     $pdoStatement = $this->db->query($sql);

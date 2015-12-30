@@ -75,7 +75,7 @@ class ComponentUpdate extends Component
         {
             // if the sql statement is only for a special database and you do
             // not have this database then don't execute this statement
-            if(isset($xmlNode['database']) && (string)$xmlNode['database'] !== $gDbType)
+            if(isset($xmlNode['database']) && (string) $xmlNode['database'] !== $gDbType)
             {
                 $executeSql = false;
             }
@@ -235,10 +235,14 @@ class ComponentUpdate extends Component
      */
     public function updateStepDeleteDateRoles()
     {
-        $sql = 'select rol_id from '.TBL_CATEGORIES.', '.TBL_ROLES.'
-                 where cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'
-                   and rol_cat_id = cat_id
-                   and not exists (select 1 from '.TBL_DATES.' where dat_rol_id = rol_id)';
+        $sql = 'SELECT rol_id
+                  FROM '.TBL_ROLES.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'
+                   AND NOT exists (SELECT 1
+                                     FROM '.TBL_DATES.'
+                                    WHERE dat_rol_id = rol_id)';
         $rolesStatement = $this->db->query($sql);
 
         while($row = $rolesStatement->fetch())
@@ -259,14 +263,15 @@ class ComponentUpdate extends Component
 
         foreach($organizationsArray as $organization)
         {
-            $sql = 'SELECT lst_id FROM '. TBL_LISTS. '
+            $sql = 'SELECT lst_id
+                      FROM '.TBL_LISTS.'
                      WHERE lst_org_id  = '. $organization['org_id'].'
                        AND lst_default = 1 ';
             $defaultListStatement = $this->db->query($sql);
             $defaultListId = $defaultListStatement->fetch();
 
             // save default list to preferences
-            $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''.$defaultListId['lst_id'].'\'
+            $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$defaultListId['lst_id'].'\'
                      WHERE prf_org_id = '.$organization['org_id'].'
                        AND prf_name   = \'lists_default_configuation\' ';
             $this->db->query($sql);

@@ -561,13 +561,15 @@ if($gPreferences['profile_show_roles'] == 1)
     foreach($authorizations as $authorization_db_name)
     {
         $sql = 'SELECT rol_name
-                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES.'
-                 WHERE mem_rol_id = rol_id
+                  FROM '.TBL_MEMBERS.'
+            INNER JOIN '.TBL_ROLES.'
+                    ON rol_id = mem_rol_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE rol_valid  = 1
                    AND mem_begin <= \''.DATE_NOW.'\'
                    AND mem_end    > \''.DATE_NOW.'\'
                    AND mem_usr_id = '.$user->getValue('usr_id').'
-                   AND rol_valid  = 1
-                   AND rol_cat_id = cat_id
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
                    AND '.$authorization_db_name.' = 1
@@ -747,16 +749,19 @@ if($gPreferences['profile_show_extern_roles'] == 1
 
     // list all roles where the viewed user has an active membership
     $sql = 'SELECT *
-              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_ORGANIZATIONS. '
-             WHERE mem_rol_id = rol_id
-               AND mem_begin <= \''.DATE_NOW.'\'
-               AND mem_end   >= \''.DATE_NOW.'\'
-               AND mem_usr_id = '.$user->getValue('usr_id').'
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+        INNER JOIN '.TBL_ORGANIZATIONS.'
+                ON org_id = cat_org_id
+             WHERE mem_usr_id  = '.$user->getValue('usr_id').'
+               AND mem_begin  <= \''.DATE_NOW.'\'
+               AND mem_end    >= \''.DATE_NOW.'\'
                AND rol_valid   = 1
                AND rol_visible = 1
-               AND rol_cat_id  = cat_id
-               AND cat_org_id  = org_id
-               AND org_id    <> '. $gCurrentOrganization->getValue('org_id'). '
+               AND org_id     <> '.$gCurrentOrganization->getValue('org_id').'
              ORDER BY org_shortname, cat_sequence, rol_name';
     $roleStatement = $gDb->query($sql);
 

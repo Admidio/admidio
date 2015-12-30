@@ -187,7 +187,8 @@ $page->addHtml('
                         // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
                         if(!$gCurrentOrganization->hasChildOrganizations())
                         {
-                            $sql = 'SELECT org_id, org_longname FROM '. TBL_ORGANIZATIONS.'
+                            $sql = 'SELECT org_id, org_longname
+                                      FROM '.TBL_ORGANIZATIONS.'
                                      WHERE org_id <> '. $gCurrentOrganization->getValue('org_id'). '
                                        AND org_org_id_parent is NULL
                                      ORDER BY org_longname ASC, org_shortname ASC';
@@ -659,10 +660,10 @@ $page->addHtml('
                         $form->addCheckbox('lists_hide_overview_details', $gL10n->get('LST_HIDE_DETAILS'), $form_values['lists_hide_overview_details'], array('helpTextIdInline' => 'LST_HIDE_DETAILS_DESC'));
                         // read all global lists
                         $sql = 'SELECT lst_id, lst_name
-                                  FROM '. TBL_LISTS. '
+                                  FROM '.TBL_LISTS.'
                                  WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
                                    AND lst_global = 1
-                                 ORDER BY lst_name ASC, lst_timestamp DESC ';
+                                 ORDER BY lst_name ASC, lst_timestamp DESC';
                         $form->addSelectBoxFromSql('lists_default_configuation', $gL10n->get('LST_DEFAULT_CONFIGURATION'), $gDb, $sql, array('defaultValue' => $form_values['lists_default_configuation'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_DEFAULT_CONFIGURATION_DESC'));
                         $html = '<a class="btn" href="'. $g_root_path. '/adm_program/modules/categories/categories.php?type=ROL"><img
                                     src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';

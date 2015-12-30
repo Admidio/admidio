@@ -78,7 +78,8 @@ class RoleDependency
 
         if(is_numeric($childRoleId) && is_numeric($parentRoleId) && $childRoleId > 0 && $parentRoleId > 0)
         {
-            $sql = 'SELECT * FROM '. TBL_ROLE_DEPENDENCIES.
+            $sql = 'SELECT *
+                      FROM '. TBL_ROLE_DEPENDENCIES.
                    ' WHERE rld_rol_id_child  = '.$childRoleId.'
                        AND rld_rol_id_parent = '.$parentRoleId;
             $roleDependenciesStatement = $this->db->query($sql);
@@ -116,7 +117,8 @@ class RoleDependency
 
         if(is_numeric($parentId) && $parentId > 0)
         {
-            $sql = 'SELECT rld_rol_id_child FROM '. TBL_ROLE_DEPENDENCIES.
+            $sql = 'SELECT rld_rol_id_child
+                      FROM '. TBL_ROLE_DEPENDENCIES.
                    ' WHERE rld_rol_id_parent = '.$parentId;
             $pdoStatement = $db->query($sql);
 
@@ -144,7 +146,8 @@ class RoleDependency
 
         if(is_numeric($childId) && $childId > 0)
         {
-            $sql = 'SELECT rld_rol_id_parent FROM '.TBL_ROLE_DEPENDENCIES.
+            $sql = 'SELECT rld_rol_id_parent
+                      FROM '.TBL_ROLE_DEPENDENCIES.
                    ' WHERE rld_rol_id_child = '.$childId;
             $pdoStatement = $db->query($sql);
 
@@ -284,7 +287,8 @@ class RoleDependency
     {
         if($this->roleIdParent > 0 && $this->roleIdChild > 0)
         {
-            $sql = 'SELECT mem_usr_id FROM '.TBL_MEMBERS.
+            $sql = 'SELECT mem_usr_id
+                      FROM '.TBL_MEMBERS.
                    ' WHERE mem_rol_id = '.$this->roleIdChild.'
                        AND mem_begin <= \''.DATE_NOW.'\'
                        AND mem_end    > \''.DATE_NOW.'\'';
