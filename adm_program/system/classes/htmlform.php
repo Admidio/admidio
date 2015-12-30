@@ -1057,7 +1057,7 @@ class HtmlForm extends HtmlFormBasic
         {
             unset($attributes['checked']);
 
-            if($optionsAll['defaultValue'] === $key)
+            if($optionsAll['defaultValue'] == $key)
             {
                 $attributes['checked'] = 'checked';
             }
