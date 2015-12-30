@@ -20,8 +20,8 @@ require_once('../../system/login_valid.php');
 header('Content-type: text/html; charset=utf-8');
 
 // Initialize and check the parameters
-$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'int',    array('requireValue' => true));
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'string', array('defaultValue' => 'html', 'validValues' => array('html', 'change')));
+$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('requireValue' => true));
+$getMode   = admFuncVariableIsValid($_GET, 'mode',   'string',  array('defaultValue' => 'html', 'validValues' => array('html', 'change')));
 
 // in ajax mode only return simple text on error
 if($getMode === 'change')

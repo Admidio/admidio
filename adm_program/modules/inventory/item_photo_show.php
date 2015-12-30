@@ -10,20 +10,20 @@
  * Parameters:
  *
  * inv_id    : id of inventory whose photo should be changed
- * new_photo : false (Default) show current stored inventory photo
- *             true  show uploaded photo of current session
+ * new_photo : 0 (Default) show current stored inventory photo
+ *             1 show uploaded photo of current session
  ***********************************************************************************************
  */
 require('../../system/common.php');
 require('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getItemId   = admFuncVariableIsValid($_GET, 'inv_id',    'int', array('requireValue' => true));
-$getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'bool');
+$getItemId   = admFuncVariableIsValid($_GET, 'inv_id',    'numeric', array('requireValue' => true));
+$getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'boolean');
 
 // lokale Variablen der Uebergabevariablen initialisieren
-$image   = null;
-$picpath = THEME_SERVER_PATH. '/images/no_profile_pic.png';
+$image         = null;
+$picpath       = THEME_SERVER_PATH. '/images/no_profile_pic.png';
 
 // only users with the right to edit inventory could use this script
 if (!$gCurrentUser->editInventory())
@@ -41,7 +41,7 @@ if($inventory->getValue('inv_id') == 0)
 }
 
 // Foto aus adm_my_files
-if($gPreferences['profile_photo_storage'] == 1 && !$getNewPhoto)
+if($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 0)
 {
     if(file_exists(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg'))
     {
@@ -50,7 +50,7 @@ if($gPreferences['profile_photo_storage'] == 1 && !$getNewPhoto)
     $image = new Image($picpath);
 }
 // Foto aus der Datenbank
-elseif($gPreferences['profile_photo_storage'] == 0 && !$getNewPhoto)
+elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 0)
 {
     if(strlen($inventory->getValue('inv_photo')) != null)
     {
@@ -63,13 +63,13 @@ elseif($gPreferences['profile_photo_storage'] == 0 && !$getNewPhoto)
     }
 }
 // neues Foto, Ordnerspeicherung
-elseif($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto)
+elseif($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 1)
 {
     $picpath = SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg';
     $image = new Image($picpath);
 }
 // neues Foto, Datenbankspeicherung
-elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto)
+elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 1)
 {
     $image = new Image();
     $image->setImageFromData($gCurrentSession->getValue('ses_binary'));

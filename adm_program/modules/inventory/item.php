@@ -17,7 +17,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getItemId = admFuncVariableIsValid($_GET, 'item_id', 'int');
+$getItemId = admFuncVariableIsValid($_GET, 'item_id', 'numeric');
 
 // only users with the right to edit inventory could use this script
 if (!$gCurrentUser->editInventory())

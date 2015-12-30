@@ -19,27 +19,27 @@
  *              3 - assign/accept a registration
  * lastname   : (Optional) Lastname could be set and will than be preassigned for new users
  * firstname  : (Optional) First name could be set and will than be preassigned for new users
- * remove_url : true - Removes the last url from navigation cache
+ * remove_url : 1 - Removes the last url from navigation cache
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getUserId    = admFuncVariableIsValid($_GET, 'user_id',  'int');
-$getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'int');
+$getUserId    = admFuncVariableIsValid($_GET, 'user_id',  'numeric');
+$getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'numeric');
 $getLastname  = stripslashes(admFuncVariableIsValid($_GET, 'lastname',  'string'));
 $getFirstname = stripslashes(admFuncVariableIsValid($_GET, 'firstname', 'string'));
-$getRemoveUrl = admFuncVariableIsValid($_GET, 'remove_url', 'bool');
+$getRemoveUrl = admFuncVariableIsValid($_GET, 'remove_url', 'boolean');
 
 $registrationOrgId = $gCurrentOrganization->getValue('org_id');
 
 // set headline of the script
-if($getNewUser === 1)
+if($getNewUser == 1)
 {
     $headline = $gL10n->get('PRO_ADD_USER');
 }
-elseif($getNewUser === 2)
+elseif($getNewUser == 2)
 {
     $headline = $gL10n->get('SYS_REGISTRATION');
 }
@@ -59,7 +59,7 @@ if(!$gValidLogin)
 }
 
 // if new_user isn't set and no user id is set then show dialog to create a user
-if($getUserId === 0 && $getNewUser === 0)
+if($getUserId == 0 && $getNewUser == 0)
 {
     $getNewUser = 1;
 }
@@ -70,7 +70,7 @@ if($getRemoveUrl == 1)
 }
 
 // User-ID nur uebernehmen, wenn ein vorhandener Benutzer auch bearbeitet wird
-if($getUserId > 0 && $getNewUser !== 0 && $getNewUser !== 3)
+if($getUserId > 0 && $getNewUser != 0 && $getNewUser != 3)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -162,17 +162,17 @@ foreach($gProfileFields->mProfileFields as $field)
 
     // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
     // E-Mail ist Ausnahme und muss immer angezeigt werden
-    if($getNewUser === 2 && $gPreferences['registration_mode'] == 1
+    if($getNewUser == 2 && $gPreferences['registration_mode'] == 1
     && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') === 'EMAIL'))
     {
         $showField = true;
     }
-    elseif($getNewUser === 2 && $gPreferences['registration_mode'] == 2)
+    elseif($getNewUser == 2 && $gPreferences['registration_mode'] == 2)
     {
         // bei der vollstaendigen Registrierung alle Felder anzeigen
         $showField = true;
     }
-    elseif($getNewUser !== 2
+    elseif($getNewUser != 2
     && ($getUserId == $gCurrentUser->getValue('usr_id') || $gCurrentUser->hasRightEditProfile($user)))
     {
         // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
@@ -196,13 +196,13 @@ foreach($gProfileFields->mProfileFields as $field)
 
         if($field->getValue('cat_name_intern') === 'MASTER_DATA')
         {
-            if($getUserId > 0 || $getNewUser === 2)
+            if($getUserId > 0 || $getNewUser == 2)
             {
                 // add username to form
                 $fieldProperty = FIELD_DEFAULT;
                 $fieldHelpId   = 'PRO_USERNAME_DESCRIPTION';
 
-                if(!$gCurrentUser->isWebmaster() && $getNewUser === 0)
+                if(!$gCurrentUser->isWebmaster() && $getNewUser == 0)
                 {
                     $fieldProperty = FIELD_DISABLED;
                     $fieldHelpId   = '';
@@ -214,7 +214,7 @@ foreach($gProfileFields->mProfileFields as $field)
 
                 $form->addInput('usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'), array('maxLength' => 35, 'property' => $fieldProperty, 'helpTextIdLabel' => $fieldHelpId, 'class' => 'form-control-small'));
 
-                if($getNewUser === 2)
+                if($getNewUser == 2)
                 {
                     // at registration add password and password confirm to form
                     $form->addInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 8, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION', 'class' => 'form-control-small'));
@@ -258,7 +258,7 @@ foreach($gProfileFields->mProfileFields as $field)
         $helpId        = '';
 
         if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_disabled') == 1
-        && !$gCurrentUser->hasRightEditProfile($user, false) && $getNewUser === 0)
+        && !$gCurrentUser->hasRightEditProfile($user, false) && $getNewUser == 0)
         {
             // disable field if this is configured in profile field configuration
             $fieldProperty = FIELD_DISABLED;
@@ -391,7 +391,7 @@ foreach($gProfileFields->mProfileFields as $field)
 $form->closeGroupBox();
 
 // if captchas are enabled then visitors of the website must resolve this
-if($getNewUser === 2 && $gPreferences['enable_registration_captcha'] == 1)
+if($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1)
 {
     $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
     $form->addCaptcha('captcha', $gPreferences['captcha_type']);
@@ -399,7 +399,7 @@ if($getNewUser === 2 && $gPreferences['enable_registration_captcha'] == 1)
 }
 
 // Bild und Text fuer den Speichern-Button
-if($getNewUser === 2)
+if($getNewUser == 2)
 {
     // Registrierung
     $btn_image = 'email.png';
@@ -413,7 +413,7 @@ else
 
 $form->addSubmitButton('btn_save', $btn_text, array('icon' => THEME_PATH.'/icons/'.$btn_image));
 
-if($getNewUser === 0)
+if($getNewUser == 0)
 {
     // show information about user who creates the recordset and changed it
     $form->addHtml(admFuncShowCreateChangeInfoById($user->getValue('usr_usr_id_create'), $user->getValue('usr_timestamp_create'), $user->getValue('usr_usr_id_change'), $user->getValue('usr_timestamp_change')));

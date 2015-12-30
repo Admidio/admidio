@@ -30,7 +30,7 @@ if(!$gCurrentUser->editAnnouncements())
 }
 
 // Initialize and check the parameters
-$getAnnId    = admFuncVariableIsValid($_GET, 'ann_id',   'int');
+$getAnnId    = admFuncVariableIsValid($_GET, 'ann_id',   'numeric');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('ANN_ANNOUNCEMENTS')));
 
 // set headline of the script

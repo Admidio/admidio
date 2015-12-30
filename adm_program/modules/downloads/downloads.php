@@ -20,7 +20,7 @@ unset($_SESSION['download_request']);
 $buffer = '';
 
 // Initialize and check the parameters
-$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
+$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric');
 
 // Check if module is activated
 if ($gPreferences['enable_download_module'] != 1)

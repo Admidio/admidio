@@ -11,8 +11,8 @@
  *
  * lst_id : Id of the list configuration that should be shown
  * rol_id : (Optional) If a role id is set then the form field will be preassigned.
- * active_role  : true  - (Default) List only active roles
- *                false - List only deactivated roles
+ * active_role  : 1 - (Default) List only active roles
+ *                0 - List only deactivated roles
  * show_members : 0 - (Default) show active members of role
  *                1 - show former members of role
  *                2 - show active and former members of role
@@ -22,13 +22,13 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'int');
-$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
-$getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'bool', array('defaultValue' => true));
-$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
+$getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'numeric');
+$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'numeric');
+$getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'boolean', array('defaultValue' => 1));
+$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
 
 // falls ehemalige Rolle, dann auch nur ehemalige Mitglieder anzeigen
-if(!$getActiveRole)
+if($getActiveRole == 0)
 {
     $getShowMembers = 1;
 }
@@ -36,7 +36,7 @@ if(!$getActiveRole)
 // set headline of the script
 $headline = $gL10n->get('LST_MY_LIST').' - '.$gL10n->get('LST_CONFIGURATION');
 
-if($getRoleId === 0)
+if($getRoleId == 0)
 {
     // Navigation faengt hier im Modul an
     $gNavigation->clear();

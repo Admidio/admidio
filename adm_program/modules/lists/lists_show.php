@@ -27,13 +27,13 @@ require_once('../../system/common.php');
 unset($list);
 
 // Initialize and check the parameters
-$getDateFrom    = admFuncVariableIsValid($_GET, 'date_from',    'date',   array('defaultValue' => DATE_NOW));
-$getDateTo      = admFuncVariableIsValid($_GET, 'date_to',      'date',   array('defaultValue' => DATE_NOW));
-$getMode        = admFuncVariableIsValid($_GET, 'mode',         'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
-$getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'int',    array('defaultValue' => 1));
-$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
-$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
-$getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen',  'bool');
+$getDateFrom    = admFuncVariableIsValid($_GET, 'date_from',    'date',    array('defaultValue' => DATE_NOW));
+$getDateTo      = admFuncVariableIsValid($_GET, 'date_to',      'date',    array('defaultValue' => DATE_NOW));
+$getMode        = admFuncVariableIsValid($_GET, 'mode',         'string',  array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
+$getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'numeric', array('defaultValue' => 1));
+$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'numeric');
+$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
+$getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen',  'boolean');
 
 // Create date objects and format dates in system format
 $objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
@@ -115,7 +115,7 @@ if($getRoleId === 0 && $numberRoles === 1)
     // set role default list configuration
     $getRoleId = $role->getDefaultList();
 
-    if($getRoleId === 0)
+    if($getRoleId == 0)
     {
         $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
     }
@@ -220,15 +220,15 @@ if($getMode !== 'csv')
     $datatable = false;
     $hoverRows = false;
 
-    if($getShowMembers === 0)
+    if($getShowMembers == 0)
     {
         $htmlSubHeadline .= ' - '. $gL10n->get('LST_ACTIVE_MEMBERS');
     }
-    elseif($getShowMembers === 1)
+    elseif($getShowMembers == 1)
     {
         $htmlSubHeadline .= ' - '. $gL10n->get('LST_FORMER_MEMBERS');
     }
-    elseif($getShowMembers === 2)
+    elseif($getShowMembers == 2)
     {
         $htmlSubHeadline .= ' - '. $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }

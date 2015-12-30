@@ -20,9 +20,9 @@ require_once('common.php');
 require_once('login_valid.php');
 
 // Initialize and check the parameters
-$getModule = admFuncVariableIsValid($_GET, 'module', 'string', array('validValues' => array('photos', 'downloads')));
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'string', array('defaultValue' => 'choose_files', 'validValues' => array('choose_files', 'upload_files')));
-$getId     = admFuncVariableIsValid($_GET, 'id',     'int',    array('requireValue' => true));
+$getModule = admFuncVariableIsValid($_GET, 'module', 'string',  array('validValues' => array('photos', 'downloads')));
+$getMode   = admFuncVariableIsValid($_GET, 'mode',   'string',  array('defaultValue' => 'choose_files', 'validValues' => array('choose_files', 'upload_files')));
+$getId     = admFuncVariableIsValid($_GET, 'id',     'numeric', array('requireValue' => true));
 
 // module specific checks
 if($getModule === 'photos')

@@ -9,8 +9,8 @@
  *
  * Parameters:
  *
- * members - false : (Default) Show only active members of the current organization
- *           true  : Show active and inactive members of all organizations in database
+ * members - 1 : (Default) Show only active members of the current organization
+ *           0 : Show active and inactive members of all organizations in database
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
@@ -24,12 +24,12 @@ if (isset($_POST['admSearchMembers']) && strlen($_POST['admSearchMembers']) > 0)
 }
 
 // Initialize and check the parameters
-$getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));
+$getMembers = admFuncVariableIsValid($_GET, 'members', 'boolean', array('defaultValue' => 1));
 
 // if only active members should be shown then set parameter
 if($gPreferences['members_show_all_users'] == 0)
 {
-    $getMembers = true;
+    $getMembers = 1;
 }
 
 // only legitimate users are allowed to call the user management
@@ -47,7 +47,7 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 $memberCondition = '';
 
 // Create condition if only active members should be shown
-if($getMembers)
+if($getMembers == 1)
 {
     $memberCondition = ' AND EXISTS
         (SELECT 1
@@ -117,7 +117,7 @@ $sql = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as
 $mglStatement = $gDb->query($sql);
 
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
-if($getMembers)
+if($getMembers == 1)
 {
     $flagShowMembers = 0;
     $htmlShowMembers = '';

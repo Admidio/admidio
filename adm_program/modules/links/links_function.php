@@ -19,8 +19,8 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getLinkId = admFuncVariableIsValid($_GET, 'lnk_id', 'int');
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
+$getLinkId = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric');
+$getMode   = admFuncVariableIsValid($_GET, 'mode',   'numeric', array('requireValue' => true));
 
 // check if the module is enabled for use
 if ($gPreferences['enable_weblinks_module'] == 0)

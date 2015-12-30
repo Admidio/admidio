@@ -19,16 +19,16 @@ require_once('ecard_function.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',    'int', array('requireValue' => true));
-$getUserId  = admFuncVariableIsValid($_GET, 'usr_id',    'int');
-$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr',  'int', array('requireValue' => true));
-$showPage   = admFuncVariableIsValid($_GET, 'show_page', 'int', array('defaultValue' => 1));
+$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', array('requireValue' => true));
+$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
+$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', array('requireValue' => true));
+$showPage    = admFuncVariableIsValid($_GET, 'show_page', 'numeric', array('defaultValue' => 1));
 
 // Initialisierung lokaler Variablen
-$funcClass = new FunctionClass($gL10n);
-$templates = $funcClass->getFileNames(THEME_SERVER_PATH. '/ecard_templates/');
-$template  = THEME_SERVER_PATH. '/ecard_templates/';
-$headline  = $gL10n->get('ECA_GREETING_CARD_EDIT');
+$funcClass     = new FunctionClass($gL10n);
+$templates   = $funcClass->getFileNames(THEME_SERVER_PATH. '/ecard_templates/');
+$template    = THEME_SERVER_PATH. '/ecard_templates/';
+$headline    = $gL10n->get('ECA_GREETING_CARD_EDIT');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_ecard_module'] != 1)

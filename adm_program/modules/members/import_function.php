@@ -13,8 +13,8 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $postImportCoding   = admFuncVariableIsValid($_POST, 'import_coding',    'string',  array('requireValue' => true, 'validValues' => array('iso-8859-1', 'utf-8')));
-$postRoleId         = admFuncVariableIsValid($_POST, 'import_role_id',   'int');
-$postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'int', array('requireValue' => true));
+$postRoleId         = admFuncVariableIsValid($_POST, 'import_role_id',   'numeric');
+$postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'numeric', array('requireValue' => true));
 
 $_SESSION['import_request'] = $_POST;
 unset($_SESSION['import_csv_request']);
@@ -34,7 +34,7 @@ elseif($_FILES['userfile']['error'][0] == 1)
     // Dateigroesse ueberpruefen Servereinstellungen
     $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', $gPreferences['max_file_upload_size']));
 }
-elseif($postRoleId === 0)
+elseif($postRoleId == 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROLE')));
 }

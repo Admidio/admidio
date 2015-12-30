@@ -16,8 +16,8 @@
  * subject   - subject of the message
  * msg_id    - ID of the message -> just for answers
  * rol_id    - Statt einem Rollennamen/Kategorienamen kann auch eine RollenId uebergeben werden
- * carbon_copy - false - (Default) Checkbox "Kopie an mich senden" ist NICHT gesetzt
- *             - true  - Checkbox "Kopie an mich senden" ist gesetzt
+ * carbon_copy - 1 (Default) Checkbox "Kopie an mich senden" ist gesetzt
+ *             - 0 Checkbox "Kopie an mich senden" ist NICHT gesetzt
  * show_members : 0 - (Default) show active members of role
  *                1 - show former members of role
  *                2 - show active and former members of role
@@ -28,7 +28,7 @@ require_once('../../system/common.php');
 
 // Initialize and check the parameters
 $getMsgType     = admFuncVariableIsValid($_GET, 'msg_type',     'string');
-$getUserId      = admFuncVariableIsValid($_GET, 'usr_id',       'int');
+$getUserId      = admFuncVariableIsValid($_GET, 'usr_id',       'numeric');
 $getSubject     = admFuncVariableIsValid($_GET, 'subject',      'html');
 $getMsgId       = admFuncVariableIsValid($_GET, 'msg_id',       'int');
 $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
@@ -43,15 +43,15 @@ if ($getMsgId > 0)
 }
 
 // check if the call of the page was allowed by settings
-if ($gPreferences['enable_mail_module'] != 1 && $getMsgType !== 'PM'
-   || $gPreferences['enable_pm_module'] != 1 && $getMsgType === 'PM')
+if ($gPreferences['enable_mail_module'] != 1 && $getMsgType != 'PM'
+   || $gPreferences['enable_pm_module'] != 1 && $getMsgType == 'PM')
 {
     // message if the sending of PM is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 // check for valid login
-if (!$gValidLogin && $getUserId === 0 && $getMsgType === 'PM')
+if (!$gValidLogin && $getUserId == 0 && $getMsgType === 'PM')
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -171,7 +171,7 @@ if ($getMsgType === 'PM')
     // show form
     $form = new HtmlForm('pm_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
 
-    if ($getUserId === 0)
+    if ($getUserId == 0)
     {
         $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
         $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'               => FIELD_REQUIRED,
