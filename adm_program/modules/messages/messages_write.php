@@ -32,7 +32,7 @@ $getUserId      = admFuncVariableIsValid($_GET, 'usr_id',       'int');
 $getSubject     = admFuncVariableIsValid($_GET, 'subject',      'html');
 $getMsgId       = admFuncVariableIsValid($_GET, 'msg_id',       'int');
 $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
-$getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy',  'bool', array('defaultValue' => 0));
+$getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy',  'bool', array('defaultValue' => false));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
