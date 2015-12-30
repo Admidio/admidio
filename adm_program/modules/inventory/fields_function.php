@@ -78,7 +78,7 @@ if($getMode === 1)
     {
         // Schauen, ob das Feld bereits existiert
         $sql = 'SELECT COUNT(*) as count
-                  FROM '. TBL_INVENT_FIELDS. '
+                  FROM '.TBL_INVENT_FIELDS.'
                  WHERE inf_name LIKE \''.$_POST['inf_name'].'\'
                    AND inf_cat_id  = '.$_POST['inf_cat_id'].'
                    AND inf_id     <> '.$getInfId;

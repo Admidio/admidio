@@ -69,7 +69,7 @@ class TableAccess
     /**
      * Called on serialization of this object. The database object could not
      * be serialized and should be ignored.
-     * @return Returns all class variables that should be serialized.
+     * @return array Returns all class variables that should be serialized.
      */
     public function __sleep()
     {
@@ -78,7 +78,7 @@ class TableAccess
 
     /**
      * Initializes all class parameters and deletes all read data.
-     * Also the database structure of the assiciated table will be
+     * Also the database structure of the associated table will be
      * read and stored in the arrays @b dbColumns and @b columnsInfos
      */
     public function clear()
@@ -188,7 +188,7 @@ class TableAccess
         if(array_key_exists($columnName, $this->dbColumns))
         {
             // wenn Schluesselfeld leer ist, dann 0 zurueckgeben
-            if($columnName == $this->keyColumnName && empty($this->dbColumns[$columnName]))
+            if($columnName === $this->keyColumnName && empty($this->dbColumns[$columnName]))
             {
                 $columnValue = 0;
             }
@@ -312,7 +312,8 @@ class TableAccess
 
         if($sqlWhereCondition !== '')
         {
-            $sql = 'SELECT * FROM '.$this->tableName.$sqlAdditionalTables.'
+            $sql = 'SELECT *
+                      FROM '.$this->tableName.$sqlAdditionalTables.'
                      WHERE '.$sqlWhereCondition;
             $readDataStatement = $this->db->query($sql);
 
@@ -573,8 +574,8 @@ class TableAccess
     }
 
     /**
-     *  Set the database object for communication with the database of this class.
-     *  @param object $database An object of the class Database. This should be the global $gDb object.
+     * Set the database object for communication with the database of this class.
+     * @param object $database An object of the class Database. This should be the global $gDb object.
      */
     public function setDatabase(&$database)
     {
@@ -588,9 +589,9 @@ class TableAccess
      * Set a new value for a column of the database table. The value is only saved in the object.
      * You must call the method @b save to store the new value to the database. If the unique key
      * column is set to 0 than this record will be a new record and all other columns are marked as changed.
-     * @param  string $columnName The name of the database column whose value should get a new value
-     * @param  mixed  $newValue   The new value that should be stored in the database field
-     * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @param string $columnName The name of the database column whose value should get a new value
+     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
      * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      * @see TableAccess#getValue
      */
@@ -655,7 +656,6 @@ class TableAccess
 
             if(array_key_exists($columnName, $this->dbColumns))
             {
-
                 // only mark as "changed" if the value is different (use binary safe function!)
                 if(strcmp($newValue, $this->dbColumns[$columnName]) !== 0)
                 {

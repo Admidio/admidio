@@ -75,7 +75,7 @@ class ModuleMenu
 
     /**
      * This method adds an additional css class to the main nav tag of the menu.
-     * @param $className The name of a css class that should be add to the main nav tag of the manu
+     * @param string $className The name of a css class that should be add to the main nav tag of the manu
      */
     public function addCssClass($className)
     {

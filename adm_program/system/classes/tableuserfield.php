@@ -52,7 +52,8 @@ class TableUserField extends TableAccess
         $this->db->query($sql);
 
         // close gap in sequence of saved lists
-        $sql = 'SELECT lsc_lst_id, lsc_number FROM '.TBL_LIST_COLUMNS.'
+        $sql = 'SELECT lsc_lst_id, lsc_number
+                  FROM '.TBL_LIST_COLUMNS.'
                  WHERE lsc_usf_id = '.$this->getValue('usf_id');
         $listsStatement = $this->db->query($sql);
 
@@ -102,7 +103,9 @@ class TableUserField extends TableAccess
         {
             $newNameIntern = $newNameIntern.'_'.$index;
         }
-        $sql = 'SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_name_intern = \''.$newNameIntern.'\'';
+        $sql = 'SELECT usf_id
+                  FROM '.TBL_USER_FIELDS.'
+                 WHERE usf_name_intern = \''.$newNameIntern.'\'';
         $userFieldsStatement = $this->db->query($sql);
 
         if($userFieldsStatement->rowCount() > 0)
@@ -332,9 +335,9 @@ class TableUserField extends TableAccess
     /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
-     * @param  string $columnName The name of the database column whose value should get a new value
-     * @param  mixed  $newValue The new value that should be stored in the database field
-     * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @param string $columnName The name of the database column whose value should get a new value
+     * @param mixed  $newValue The new value that should be stored in the database field
+     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
      * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
@@ -348,7 +351,8 @@ class TableUserField extends TableAccess
         elseif($columnName === 'usf_cat_id' && $this->getValue($columnName) !== $newValue)
         {
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
-            $sql = 'SELECT COUNT(*) as count FROM '.TBL_USER_FIELDS.'
+            $sql = 'SELECT COUNT(*) as count
+                      FROM '.TBL_USER_FIELDS.'
                      WHERE usf_cat_id = '.$newValue;
             $countUserFieldsStatement = $this->db->query($sql);
 

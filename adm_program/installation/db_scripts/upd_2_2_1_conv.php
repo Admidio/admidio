@@ -10,7 +10,7 @@
  */
 
 // englische Bezeichnung der Bereiche in Systememails einbauen
-$sql = 'SELECT * FROM '. TBL_TEXTS. ' ORDER BY txt_id DESC';
+$sql = 'SELECT * FROM '.TBL_TEXTS.' ORDER BY txt_id DESC';
 $textsStatement = $gDb->query($sql);
 
 while($row_texts = $textsStatement->fetch())
@@ -18,7 +18,7 @@ while($row_texts = $textsStatement->fetch())
     $row_texts['txt_text'] = preg_replace('/#Betreff#/', '#subject#', $row_texts['txt_text']);
     $row_texts['txt_text'] = preg_replace('/#Inhalt#/', '#content#', $row_texts['txt_text']);
 
-    $sql = 'UPDATE '. TBL_TEXTS. ' SET txt_text = \''.addslashes($row_texts['txt_text']). '\'
+    $sql = 'UPDATE '.TBL_TEXTS.' SET txt_text = \''.addslashes($row_texts['txt_text']). '\'
              WHERE txt_id = '.$row_texts['txt_id'];
     $gDb->query($sql);
 }
@@ -36,10 +36,12 @@ foreach($gL10n->getCountries() as $key => $value)
 }
 
 // Laenderbezeichnung durch ISOCODES ersetzen, damit die Laender sprachabhaengig angezeigt werden
-$sql = 'SELECT distinct usd_value, usd_usf_id FROM '.TBL_USER_DATA.', '.TBL_USER_FIELDS.'
+$sql = 'SELECT DISTINCT usd_value, usd_usf_id
+          FROM '.TBL_USER_DATA.'
+    INNER JOIN '.TBL_USER_FIELDS.'
+            ON usf_id = usd_usf_id
          WHERE usf_name_intern LIKE \'COUNTRY\'
-           AND usd_usf_id = usf_id
-           AND length(usd_value) > 0 ';
+           AND LENGTH(usd_value) > 0 ';
 $countriesStatement = $gDb->query($sql);
 
 while($row_countries = $countriesStatement->fetch())

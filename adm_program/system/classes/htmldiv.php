@@ -18,7 +18,7 @@
  *
  * @par Example: Creating a div element
  * @code
- *  $testArray = array('Test_1', 'Test_2','Test_3');
+ * $testArray = array('Test_1', 'Test_2','Test_3');
  * // Get the Instance for a new division element
  * $div = new HtmlDiv('ID_Wrapper', 'Class_Wrapper');
  * // add a headline

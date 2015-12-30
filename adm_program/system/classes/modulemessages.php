@@ -38,21 +38,22 @@ class ModuleMessages
 
     /**
      * check for Group and give back a string with groupname and if it is active, inactive or both.
-     * @param $groupstring
+     * @param string $groupString
      * @return string
      */
-    public function msgGroupNameSplit($groupstring)
+    public function msgGroupNameSplit($groupString)
     {
         global $gCurrentOrganization, $gL10n, $gDb;
 
-        $group = $this->msgGroupSplit($groupstring);
+        $group = $this->msgGroupSplit($groupString);
 
         $sql = 'SELECT rol_name, rol_id
-                      FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                     WHERE rol_cat_id    = cat_id
-                       AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
-                           OR cat_org_id IS NULL)
-                       AND rol_id = '.$group[0];
+                  FROM '.TBL_ROLES.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE rol_id = '.$group[0].'
+                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
+                       OR cat_org_id IS NULL)';
         $statement = $gDb->query($sql);
         $row = $statement->fetch();
 
@@ -77,20 +78,20 @@ class ModuleMessages
 
     /**
      * check for Group and give back a array with group ID[0] and if it is active, inactive or both [1].
-     * @param $groupstring
+     * @param string $groupString
      * @return array
      */
-    public function msgGroupSplit($groupstring)
+    public function msgGroupSplit($groupString)
     {
-        $groupsplit = explode(':', $groupstring);
+        $groupSplit = explode(':', $groupString);
 
-        if (strpos($groupsplit[1], '-') > 0)
+        if (strpos($groupSplit[1], '-') > 0)
         {
-            $group = explode('-', $groupsplit[1]);
+            $group = explode('-', $groupSplit[1]);
         }
         else
         {
-            $group[0] = $groupsplit[1];
+            $group[0] = $groupSplit[1];
             $group[1] = 0;
         }
 
@@ -99,16 +100,16 @@ class ModuleMessages
 
     /**
      * return an array with all Email-Messages of the given user.
-     * @param $user
+     * @param int $userId
      * @return array
      */
-    public function msgGetUserEmails($user)
+    public function msgGetUserEmails($userId)
     {
         global $gDb;
 
         $sql = "SELECT msg_id, msg_usr_id_receiver AS user
         FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'EMAIL' and msg_usr_id_sender = ". $user ."
+         WHERE msg_type = 'EMAIL' and msg_usr_id_sender = ". $userId ."
          ORDER BY msg_id DESC";
 
         return $gDb->query($sql);
@@ -116,7 +117,7 @@ class ModuleMessages
 
     /**
      * return an array with all unread Messages of the given user.
-     * @param $userId
+     * @param int $userId
      * @return array
      */
     public function msgGetUserUnread($userId)
@@ -135,7 +136,7 @@ class ModuleMessages
 
     /**
      * return an array with all unread Messages of the given user.
-     * @param $userId
+     * @param int $userId
      * @return array
      */
     public function msgGetUser($userId)
@@ -161,7 +162,9 @@ class ModuleMessages
     {
         global $gDb;
 
-        $sql = "SELECT msg_id FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT'";
+        $sql = 'SELECT msg_id
+                  FROM '. TBL_MESSAGES. '
+                 WHERE msg_type = \'CHAT\'';
         $statement = $gDb->query($sql);
         $row = $statement->fetch();
 

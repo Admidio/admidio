@@ -143,12 +143,14 @@ if($gValidLogin)
         }
     }
 
+    $lastLogin = ($gCurrentUser->getValue('usr_last_login') === '') ? '---' : $gCurrentUser->getValue('usr_last_login');
+
     // create a static form
     $form = new HtmlForm('plugin-login-static-form', null, null, array('type' => 'vertical', 'setFocus' => false));
     $form->addStaticControl('plg_user', $gL10n->get('SYS_MEMBER'), '<a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $gCurrentUser->getValue('usr_id'). '"
                 '. $plg_link_target. ' title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'. $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'). '</a>');
     $form->addStaticControl('plg_active_since', $gL10n->get('PLG_LOGIN_ACTIVE_SINCE'), $gCurrentSession->getValue('ses_begin', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK'));
-    $form->addStaticControl('plg_last_login', $gL10n->get('PLG_LOGIN_LAST_LOGIN'), $gCurrentUser->getValue('usr_last_login'));
+    $form->addStaticControl('plg_last_login', $gL10n->get('PLG_LOGIN_LAST_LOGIN'), $lastLogin);
     $form->addStaticControl('plg_number_of_logins', $gL10n->get('PLG_LOGIN_NUMBER_OF_LOGINS'), $gCurrentUser->getValue('usr_number_login').$htmlUserRank);
     $form->show();
 
@@ -183,7 +185,9 @@ else
     // show selectbox with all organizations of database
     if($gPreferences['system_organization_select'] == 1)
     {
-        $sql = 'SELECT org_id, org_longname FROM '.TBL_ORGANIZATIONS.' ORDER BY org_longname ASC, org_shortname ASC';
+        $sql = 'SELECT org_id, org_longname
+                  FROM '.TBL_ORGANIZATIONS.'
+                 ORDER BY org_longname ASC, org_shortname ASC';
         $form->addSelectBoxFromSql('plg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
             array('defaultValue' => $gCurrentOrganization->getValue('org_id'), 'showContextDependentFirstEntry' => false));
     }
@@ -216,10 +220,12 @@ else
     if($plg_show_email_link)
     {
         // read id of webmaster role
-        $sql = 'SELECT rol_id FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
-                 WHERE rol_name LIKE \''.$gL10n->get('SYS_WEBMASTER').'\'
-                   AND rol_webmaster = 1
-                   AND rol_cat_id = cat_id
+        $sql = 'SELECT rol_id
+                  FROM '.TBL_ROLES.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE rol_webmaster = 1
+                   AND rol_name LIKE \''.$gL10n->get('SYS_WEBMASTER').'\'
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL ) ';
         $webmasterStatement = $gDb->query($sql);

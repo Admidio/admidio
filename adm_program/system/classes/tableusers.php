@@ -135,7 +135,10 @@ class TableUsers extends TableAccess
         $this->db->query($sql);
 
         $sql = 'DELETE FROM '.TBL_LIST_COLUMNS.'
-                 WHERE lsc_lst_id IN (SELECT lst_id FROM '.TBL_LISTS.' WHERE lst_usr_id = '.$this->getValue('usr_id').' AND lst_global = 0)';
+                 WHERE lsc_lst_id IN (SELECT lst_id
+                                        FROM '.TBL_LISTS.'
+                                       WHERE lst_usr_id = '.$this->getValue('usr_id').'
+                                         AND lst_global = 0)';
         $this->db->query($sql);
 
         $sql = 'DELETE FROM '.TBL_LISTS.' WHERE lst_global = 0 AND lst_usr_id = '.$this->getValue('usr_id');
@@ -154,15 +157,20 @@ class TableUsers extends TableAccess
 
         $sql = 'INSERT INTO '.TBL_IDS.' (ids_usr_id, ids_reference_id)
                    SELECT '.$gCurrentUser->getValue('usr_id').', msc_msg_id
-                     FROM '.TBL_MESSAGES_CONTENT.' WHERE msc_usr_id = '.$this->getValue('usr_id');
+                     FROM '.TBL_MESSAGES_CONTENT.'
+                    WHERE msc_usr_id = '.$this->getValue('usr_id');
         $this->db->query($sql);
 
         $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
-                 WHERE msc_msg_id IN (SELECT ids_reference_id FROM '.TBL_IDS.' WHERE ids_usr_id = '.$gCurrentUser->getValue('usr_id').')';
+                 WHERE msc_msg_id IN (SELECT ids_reference_id
+                                        FROM '.TBL_IDS.'
+                                       WHERE ids_usr_id = '.$gCurrentUser->getValue('usr_id').')';
         $this->db->query($sql);
 
         $sql = 'DELETE FROM '.TBL_MESSAGES.'
-                 WHERE msg_id IN (SELECT ids_reference_id FROM '.TBL_IDS.' WHERE ids_usr_id = '.$gCurrentUser->getValue('usr_id').')';
+                 WHERE msg_id IN (SELECT ids_reference_id
+                                    FROM '.TBL_IDS.'
+                                   WHERE ids_usr_id = '.$gCurrentUser->getValue('usr_id').')';
         $this->db->query($sql);
 
         $sql = 'DELETE FROM '.TBL_IDS.' WHERE ids_usr_id = '. $gCurrentUser->getValue('usr_id');
@@ -193,10 +201,10 @@ class TableUsers extends TableAccess
     /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
-     * @param  string $columnName The name of the database column whose value should get a new value
-     * @param  mixed  $newValue   The new value that should be stored in the database field
-     * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     * @return bool   Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @param string $columnName The name of the database column whose value should get a new value
+     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {

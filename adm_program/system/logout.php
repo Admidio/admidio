@@ -11,20 +11,7 @@
 require_once('common.php');
 
 // remove user from session
-$gCurrentSession->setValue('ses_usr_id', '');
-$gCurrentSession->save();
-
-// delete content of cookie
-$domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
-
-// remove auto login
-if(isset($_COOKIE[$gCookiePraefix.'_DATA']))
-{
-    setcookie($gCookiePraefix.'_DATA', '', time() - 1000, '/', $domain, 0);
-
-    $autoLogin = new AutoLogin($gDb, $gSessionId);
-    $autoLogin->delete();
-}
+$gCurrentSession->logout();
 
 // if login organization is different to organization of config file then create new session variables
 if($g_organization !== $gCurrentOrganization->getValue('org_shortname'))

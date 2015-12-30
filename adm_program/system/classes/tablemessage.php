@@ -29,12 +29,15 @@ class TableMessage extends TableAccess
 
     /**
      * Reads the number of all unread messages of this table
-     * @param $usr_id
+     * @param int $usrId
      * @return Number of unread messages of this table
      */
-    public function countUnreadMessageRecords($usr_id)
+    public function countUnreadMessageRecords($usrId)
     {
-        $sql = 'SELECT COUNT(*) as count FROM '.$this->tableName.' WHERE msg_usr_id_receiver LIKE \''. $usr_id .'\' and msg_read = 1';
+        $sql = 'SELECT COUNT(*) as count
+                  FROM '.$this->tableName.'
+                 WHERE msg_usr_id_receiver LIKE \''. $usrId .'\'
+                   AND msg_read = 1';
         $countStatement = $this->db->query($sql);
         $row = $countStatement->fetch();
         return $row['count'];
@@ -58,7 +61,8 @@ class TableMessage extends TableAccess
      */
     public function countMessageParts()
     {
-        $sql = 'SELECT COUNT(*) as count FROM '.TBL_MESSAGES_CONTENT.'
+        $sql = 'SELECT COUNT(*) as count
+                  FROM '.TBL_MESSAGES_CONTENT.'
                  WHERE msc_msg_id = '.$this->getValue('msg_id');
         $countStatement = $this->db->query($sql);
         $row = $countStatement->fetch();
@@ -67,26 +71,27 @@ class TableMessage extends TableAccess
 
     /**
      * Set a new value for a column of the database table.
-     * @param $usr_id of the receiver - just for security reasons.
-     * @return Returns @b answer of the SQL execution
+     * @param int $usrId of the receiver - just for security reasons.
+     * @return object Returns @b answer of the SQL execution
      */
-    public function setReadValue($usr_id)
+    public function setReadValue($usrId)
     {
-        $sql = 'UPDATE '. TBL_MESSAGES. ' SET  msg_read = \'0\'
+        $sql = 'UPDATE '.TBL_MESSAGES.' SET  msg_read = \'0\'
                  WHERE msg_id = '.$this->msg_id.'
-                   AND msg_usr_id_receiver LIKE \''.$usr_id.'\'';
+                   AND msg_usr_id_receiver LIKE \''.$usrId.'\'';
         return $this->db->query($sql);
     }
 
-    /** get a list with all messages of an conversation.
-     *  @param $MsgId of the conversation - just for security reasons.
-     *  @return Returns @b answer of the SQL execution
+    /**
+     * get a list with all messages of an conversation.
+     * @param int $msgId of the conversation - just for security reasons.
+     * @return object Returns @b answer of the SQL execution
      */
-    public function getConversation($MsgId)
+    public function getConversation($msgId)
     {
         $sql = "SELECT msc_usr_id, msc_message, msc_timestamp
                   FROM ". TBL_MESSAGES_CONTENT. "
-                 WHERE msc_msg_id = ". $MsgId ."
+                 WHERE msc_msg_id = ". $msgId ."
                  ORDER BY msc_part_id DESC";
         return $this->db->query($sql);
     }
@@ -94,16 +99,16 @@ class TableMessage extends TableAccess
     /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
-     * @param $usr_id
+     * @param int $usrId
      * @return Returns @b ID of the user that is partner in the actual conversation
      */
-    public function getConversationPartner($usr_id)
+    public function getConversationPartner($usrId)
     {
         $sql = 'SELECT msg_id,
-                 CASE WHEN msg_usr_id_sender = '. $usr_id .' THEN msg_usr_id_receiver
+                 CASE WHEN msg_usr_id_sender = '. $usrId .' THEN msg_usr_id_receiver
                  ELSE msg_usr_id_sender
                   END AS user
-                 FROM '. TBL_MESSAGES. '
+                 FROM '.TBL_MESSAGES.'
                 WHERE msg_type = \'PM\'
                   AND msg_id = '. $this->msg_id;
         $partnerStatement = $this->db->query($sql);
@@ -115,14 +120,14 @@ class TableMessage extends TableAccess
     /**
      * Deletes the selected message with all associated fields.
      * After that the class will be initialize.
-     * @return @b 'done' if message is deleted or message with additional information if it is marked
-     *         for other user to delete. On error it is "delete not OK"
+     * @return bool @b true if message is deleted or message with additional information if it is marked
+     *         for other user to delete. On error it is false
      */
     public function delete()
     {
         global $gCurrentUser;
 
-        $return = 'delete not OK';
+        $return = false;
 
         if($this->getValue('msg_read') == 2 || $this->getValue('msg_type') === 'EMAIL')
         {
@@ -134,7 +139,7 @@ class TableMessage extends TableAccess
              WHERE msg_id = ". $this->getValue('msg_id');
             $this->db->query($sql);
 
-            $return = 'done';
+            $return = true;
         }
         else
         {
@@ -149,7 +154,7 @@ class TableMessage extends TableAccess
              WHERE msg_id = ".$this->getValue('msg_id');
             $this->db->query($sql);
 
-            $return = 'done';
+            $return = true;
         }
 
         return $return;

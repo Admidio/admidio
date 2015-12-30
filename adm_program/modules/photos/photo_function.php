@@ -40,8 +40,8 @@ if (!$gCurrentUser->editPhotoRight())
 
 /**
  * Loeschen eines Thumbnails
- * @param $photo_album Referenz auf Objekt des relevanten Albums
- * @param $pic_nr      Nr des Bildes dessen Thumbnail geloescht werden soll
+ * @param object $photo_album Referenz auf Objekt des relevanten Albums
+ * @param int    $pic_nr      Nr des Bildes dessen Thumbnail geloescht werden soll
  */
 function deleteThumbnail(&$photo_album, $pic_nr)
 {
@@ -86,8 +86,8 @@ function tryRename($path, $newPath)
 
 /**
  * Loeschen eines Bildes
- * @param $pho_id
- * @param $pic_nr
+ * @param int $pho_id
+ * @param int $pic_nr
  */
 function deletePhoto($pho_id, $pic_nr)
 {

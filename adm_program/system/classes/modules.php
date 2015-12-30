@@ -189,7 +189,7 @@ abstract class Modules
 
     /**
      * Set active role
-     * Set boolean for active role. Default 1 for active
+     * Set boolean for active role. Default true for active
      */
     protected function setActiveRole()
     {

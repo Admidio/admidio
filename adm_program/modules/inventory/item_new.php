@@ -197,11 +197,15 @@ foreach($gInventoryFields->mInventoryFields as $field)
             {
                 if($gDbType === 'mysql')
                 {
-                    $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') FROM '.TBL_ROOMS.' ORDER BY room_name';
+                    $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\')
+                              FROM '.TBL_ROOMS.'
+                             ORDER BY room_name';
                 }
                 else
                 {
-                    $sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' FROM '.TBL_ROOMS.' ORDER BY room_name';
+                    $sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\'
+                              FROM '.TBL_ROOMS.'
+                             ORDER BY room_name';
                 }
                 $defaultValue = '';
                 if($getNewItem == 0)

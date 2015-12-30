@@ -71,12 +71,12 @@ if(isset($_SESSION['photo_album_request']))
 
 /**
  * die Albenstruktur fuer eine Auswahlbox darstellen und das aktuelle Album vorauswählen
- * @param $parent_id
- * @param $vorschub
- * @param $photoAlbum
- * @param $pho_id
+ * @param int    $parentId
+ * @param string $vorschub
+ * @param        $photoAlbum
+ * @param        $phoId
  */
-function subfolder($parent_id, $vorschub, $photoAlbum, $pho_id)
+function subfolder($parentId, $vorschub, $photoAlbum, $phoId)
 {
     global $gDb, $gCurrentOrganization, $photoAlbumsArray;
 
@@ -85,9 +85,9 @@ function subfolder($parent_id, $vorschub, $photoAlbum, $pho_id)
     $parentPhotoAlbum = new TablePhotos($gDb);
 
     // Erfassen des auszugebenden Albums
-    if($parent_id > 0)
+    if($parentId > 0)
     {
-        $sqlConditionParentId .= ' AND pho_pho_id_parent = \''.$parent_id.'\' ';
+        $sqlConditionParentId .= ' AND pho_pho_id_parent = \''.$parentId.'\' ';
     }
     else
     {
@@ -95,7 +95,7 @@ function subfolder($parent_id, $vorschub, $photoAlbum, $pho_id)
     }
 
     $sql = 'SELECT *
-              FROM '. TBL_PHOTOS. '
+              FROM '.TBL_PHOTOS.'
              WHERE pho_id <> '. $photoAlbum->getValue('pho_id').
                    $sqlConditionParentId.'
                AND pho_org_id = '.$gCurrentOrganization->getValue('org_id');
@@ -110,7 +110,7 @@ function subfolder($parent_id, $vorschub, $photoAlbum, $pho_id)
         $photoAlbumsArray[$parentPhotoAlbum->getValue('pho_id')] =
             $vorschub.'&#151; '.$parentPhotoAlbum->getValue('pho_name').'&nbsp('.$parentPhotoAlbum->getValue('pho_begin', 'Y').')';
 
-        subfolder($parentPhotoAlbum->getValue('pho_id'), $vorschub, $photoAlbum, $pho_id);
+        subfolder($parentPhotoAlbum->getValue('pho_id'), $vorschub, $photoAlbum, $phoId);
     }//while
 }//function
 

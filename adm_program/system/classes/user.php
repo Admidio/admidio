@@ -81,10 +81,12 @@ class User extends TableUsers
 
         // every user will get the default roles for registration, if the current user has the right to assign roles
         // than the roles assignment dialog will be shown
-        $sql = 'SELECT rol_id FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
-                 WHERE rol_cat_id = cat_id
-                   AND cat_org_id = '.$this->organizationId.'
-                   AND rol_default_registration = 1 ';
+        $sql = 'SELECT rol_id
+                  FROM '.TBL_ROLES.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE rol_default_registration = 1
+                   AND cat_org_id = '.$this->organizationId;
         $defaultRolesStatement = $this->db->query($sql);
 
         if($defaultRolesStatement->rowCount() === 0)
@@ -138,14 +140,15 @@ class User extends TableUsers
 
                 // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
                 $sql = 'SELECT *
-                          FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
-                          LEFT JOIN '. TBL_MEMBERS. '
-                            ON mem_usr_id  = '. $this->getValue('usr_id'). '
-                           AND mem_rol_id  = rol_id
-                           AND mem_begin  <= \''.DATE_NOW.'\'
-                           AND mem_end     > \''.DATE_NOW.'\'
-                         WHERE rol_valid   = 1
-                           AND rol_cat_id  = cat_id
+                          FROM '.TBL_ROLES.'
+                    INNER JOIN '.TBL_CATEGORIES.'
+                            ON cat_id = rol_cat_id
+                     LEFT JOIN '.TBL_MEMBERS.'
+                            ON mem_rol_id = rol_id
+                           AND mem_usr_id = '.$this->getValue('usr_id').'
+                           AND mem_begin <= \''.DATE_NOW.'\'
+                           AND mem_end    > \''.DATE_NOW.'\'
+                         WHERE rol_valid  = 1
                            AND (  cat_org_id = '.$this->organizationId.'
                                OR cat_org_id IS NULL ) ';
                 $rolesStatement = $this->db->query($sql);
@@ -311,17 +314,7 @@ class User extends TableUsers
             // soll der Besucher automatisch eingeloggt bleiben, dann verfaellt das Cookie erst nach einem Jahr
             if($setAutoLogin && $gPreferences['enable_auto_login'] == 1)
             {
-                $timestamp_expired = time() + 60*60*24*365;
-                $autoLogin = new AutoLogin($this->db, $gSessionId);
-
-                // falls bereits ein Autologin existiert (Doppelanmeldung an 1 Browser),
-                // dann kein Neues anlegen, da dies zu 'Duplicate Key' fuehrt
-                if($autoLogin->getValue('atl_usr_id') === '')
-                {
-                    $autoLogin->setValue('atl_session_id', $gSessionId);
-                    $autoLogin->setValue('atl_usr_id', $this->getValue('usr_id'));
-                    $autoLogin->save();
-                }
+                $gCurrentSession->setAutoLogin();
             }
             else
             {
@@ -331,13 +324,9 @@ class User extends TableUsers
 
             if($updateSessionCookies)
             {
-                // Cookies fuer die Anmeldung setzen und evtl. Ports entfernen
+                // set cookie for session id and remove ports from domain
                 $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
-
-                setcookie($gCookiePraefix. '_ID', $gSessionId, $timestamp_expired, '/', $domain, 0);
-                // User-Id und Autologin auch noch als Cookie speichern
-                // vorher allerdings noch serialisieren, damit der Inhalt nicht so einfach ausgelesen werden kann
-                setcookie($gCookiePraefix. '_DATA', $setAutoLogin. ';'. $this->getValue('usr_id'), $timestamp_expired, '/', $domain, 0);
+                setcookie($gCookiePraefix. '_ID', $gSessionId, 0, '/', $domain, 0);
 
                 // count logins and update login dates
                 $this->saveChangesWithoutRights();
@@ -452,13 +441,14 @@ class User extends TableUsers
         $this->db->startTransaction();
 
         // search for membership with same role and user and overlapping dates
-        $sql = 'SELECT * FROM '.TBL_MEMBERS.'
+        $sql = 'SELECT *
+                  FROM '.TBL_MEMBERS.'
                  WHERE mem_id    <> '.$memberId.'
                    AND mem_rol_id = '.$member->getValue('mem_rol_id').'
                    AND mem_usr_id = '.$this->getValue('usr_id').'
                    AND mem_begin <= \''.$endDate.'\'
                    AND mem_end   >= \''.$startDate.'\'
-                 ORDER BY mem_begin ASC ';
+                 ORDER BY mem_begin ASC';
         $membershipStatement = $this->db->query($sql);
 
         if($membershipStatement->rowCount() === 1)
@@ -630,7 +620,7 @@ class User extends TableUsers
         if(strpos($columnName, 'usr_') === 0)
         {
             if($columnName === 'usr_photo' && $gPreferences['profile_photo_storage'] == 0
-                && file_exists(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))
+            && file_exists(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))
             {
                 return file_get_contents(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg');
             }
@@ -861,13 +851,15 @@ class User extends TableUsers
                 else
                 {
                     $sql = 'SELECT rol_id, rol_this_list_view
-                              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                             WHERE mem_usr_id = '.$user->getValue('usr_id'). '
+                              FROM '.TBL_MEMBERS.'
+                        INNER JOIN '.TBL_ROLES.'
+                                ON rol_id = mem_rol_id
+                        INNER JOIN '.TBL_CATEGORIES.'
+                                ON cat_id = rol_cat_id
+                             WHERE rol_valid  = 1
                                AND mem_begin <= \''.DATE_NOW.'\'
                                AND mem_end    > \''.DATE_NOW.'\'
-                               AND mem_rol_id = rol_id
-                               AND rol_valid  = 1
-                               AND rol_cat_id = cat_id
+                               AND mem_usr_id = '.$user->getValue('usr_id').'
                                AND (  cat_org_id = '.$this->organizationId.'
                                    OR cat_org_id IS NULL ) ';
                     $listViewStatement = $this->db->query($sql);
@@ -1134,12 +1126,13 @@ class User extends TableUsers
         }
 
         // search for membership with same role and user and overlapping dates
-        $sql = 'SELECT * FROM '.TBL_MEMBERS.'
+        $sql = 'SELECT *
+                  FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = '.$roleId.'
                    AND mem_usr_id = '.$this->getValue('usr_id').'
                    AND mem_begin <= \''.$endDate.'\'
                    AND mem_end   >= \''.$startDate.'\'
-                 ORDER BY mem_begin ASC ';
+                 ORDER BY mem_begin ASC';
         $membershipStatement = $this->db->query($sql);
 
         if($membershipStatement->rowCount() === 1)
@@ -1222,12 +1215,12 @@ class User extends TableUsers
      * otherwise the value of the profile field of the table adm_user_data will set.
      * If the user log is activated than the change of the value will be logged in @b adm_user_log.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
-     * @param  string $columnName The name of the database column whose value should get a new value or the
+     * @param string $columnName The name of the database column whose value should get a new value or the
      *                            internal unique profile field name
-     * @param  mixed  $newValue   The new value that should be stored in the database field
-     * @param  bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will
+     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will
      *                            not be checked.
-     * @return bool   Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      * @par Examples
      * @code  // set data of adm_users column
      *                           $gCurrentUser->getValue('usr_login_name', 'Admidio');
@@ -1268,11 +1261,10 @@ class User extends TableUsers
 
         $newFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
 
-        /*  Nicht alle Aenderungen werden geloggt. Ausnahmen:
-         *  usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
-         *  Felder, die mit usr_ beginnen, werden nicht geloggt
-         *  Falls die Feldwerte sich nicht geaendert haben, wird natuerlich ebenfalls nicht geloggt
-         */
+        // Nicht alle Aenderungen werden geloggt. Ausnahmen:
+        // usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
+        // Felder, die mit usr_ beginnen, werden nicht geloggt
+        // Falls die Feldwerte sich nicht geaendert haben, wird natuerlich ebenfalls nicht geloggt
         if($gPreferences['profile_log_edit_fields'] == 1 && $this->getValue('usr_id') != 0
         && strpos($columnName, 'usr_') === false && $newFieldValue !== $oldFieldValue)
         {

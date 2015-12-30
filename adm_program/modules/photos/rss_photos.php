@@ -51,25 +51,25 @@ if($gPreferences['system_show_create_edit'] == 1)
     $additionalFields = '
         cre_firstname.usd_value || \' \' || cre_surname.usd_value as create_name ';
     $additionalTables = '
-      LEFT JOIN '. TBL_USER_DATA .' cre_surname
-        ON cre_surname.usd_usr_id = pho_usr_id_create
-       AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-      LEFT JOIN '. TBL_USER_DATA .' cre_firstname
-        ON cre_firstname.usd_usr_id = pho_usr_id_create
-       AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
+                         LEFT JOIN '. TBL_USER_DATA .' cre_surname
+                                ON cre_surname.usd_usr_id = pho_usr_id_create
+                               AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+                         LEFT JOIN '. TBL_USER_DATA .' cre_firstname
+                                ON cre_firstname.usd_usr_id = pho_usr_id_create
+                               AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
 }
 else
 {
     // show username of create and last change user
     $additionalFields = ' cre_username.usr_login_name as create_name ';
     $additionalTables = '
-      LEFT JOIN '. TBL_USERS .' cre_username
-        ON cre_username.usr_id = pho_usr_id_create ';
+                         LEFT JOIN '. TBL_USERS .' cre_username
+                                ON cre_username.usr_id = pho_usr_id_create ';
 }
 
 // read albums from database
 $sql = 'SELECT pho.*, '.$additionalFields.'
-          FROM '. TBL_PHOTOS. ' pho
+          FROM '.TBL_PHOTOS.' pho
                '.$additionalTables.'
          WHERE (   pho_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                AND pho_locked = 0)
@@ -104,7 +104,7 @@ while ($row = $statement->fetch())
     {
         // Erfassen des Eltern Albums
         $sql = ' SELECT *
-                  FROM '. TBL_PHOTOS. '
+                  FROM '.TBL_PHOTOS.'
                  WHERE pho_id = '.$pho_parent_id;
         $parentsStatement = $gDb->query($sql);
         $adm_photo_parent = $parentsStatement->fetch();

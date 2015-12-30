@@ -15,22 +15,24 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php')
 
 /**
  * get all memberships where the user is assigned
- * @param $user_id
+ * @param int $userId
  * @return object
  */
-function getRolesFromDatabase($user_id)
+function getRolesFromDatabase($userId)
 {
     global $gDb, $gCurrentOrganization;
 
     $sql = 'SELECT *
-              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-             WHERE mem_rol_id  = rol_id
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+             WHERE mem_usr_id  = '.$userId.'
                AND mem_begin  <= \''.DATE_NOW.'\'
                AND mem_end    >= \''.DATE_NOW.'\'
-               AND mem_usr_id  = '.$user_id.'
                AND rol_valid   = 1
                AND rol_visible = 1
-               AND rol_cat_id  = cat_id
                AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
              ORDER BY cat_org_id, cat_sequence, rol_name';
@@ -39,21 +41,23 @@ function getRolesFromDatabase($user_id)
 
 /**
  * get all memberships where the user will be assigned
- * @param $user_id
+ * @param int $userId
  * @return object
  */
-function getFutureRolesFromDatabase($user_id)
+function getFutureRolesFromDatabase($userId)
 {
     global $gDb, $gCurrentOrganization;
 
     $sql = 'SELECT *
-              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-             WHERE mem_rol_id  = rol_id
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+             WHERE mem_usr_id  = '.$userId.'
                AND mem_begin   > \''.DATE_NOW.'\'
-               AND mem_usr_id  = '.$user_id.'
                AND rol_valid   = 1
                AND rol_visible = 1
-               AND rol_cat_id  = cat_id
                AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
              ORDER BY cat_org_id, cat_sequence, rol_name';
@@ -62,21 +66,23 @@ function getFutureRolesFromDatabase($user_id)
 
 /**
  * get all memberships where the user was assigned
- * @param $user_id
+ * @param int $userId
  * @return object
  */
-function getFormerRolesFromDatabase($user_id)
+function getFormerRolesFromDatabase($userId)
 {
     global $gDb, $gCurrentOrganization;
 
     $sql = 'SELECT *
-              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-             WHERE mem_rol_id  = rol_id
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+             WHERE mem_usr_id  = '.$userId.'
                AND mem_end     < \''.DATE_NOW.'\'
-               AND mem_usr_id  = '.$user_id.'
                AND rol_valid   = 1
                AND rol_visible = 1
-               AND rol_cat_id  = cat_id
                AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
              ORDER BY cat_org_id, cat_sequence, rol_name';
@@ -84,11 +90,11 @@ function getFormerRolesFromDatabase($user_id)
 }
 
 /**
- * @param $htmlListId
- * @param $user
- * @param $roleStatement
- * @param $count_role
- * @param $directOutput
+ * @param string $htmlListId
+ * @param object $user
+ * @param object $roleStatement
+ * @param        $count_role
+ * @param bool   $directOutput
  * @return string
  */
 function getRoleMemberships($htmlListId, $user, $roleStatement, $count_role, $directOutput)

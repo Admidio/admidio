@@ -293,7 +293,8 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             $zeit = $_POST['date_from_time']. ' - '. $_POST['date_to_time'];
         }
 
-        $sql_cal = 'SELECT cat_name FROM '.TBL_CATEGORIES.'
+        $sql_cal = 'SELECT cat_name
+                      FROM '.TBL_CATEGORIES.'
                      WHERE cat_id = '.$_POST['dat_cat_id'];
         $pdoStatement = $gDb->query($sql_cal);
         $row_cal  = $pdoStatement->fetch();
@@ -349,7 +350,8 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     if($_POST['date_registration_possible'] == 1 && strlen($date->getValue('dat_rol_id')) === 0)
     {
         // Kategorie fuer Terminbestaetigungen einlesen
-        $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.'
+        $sql = 'SELECT cat_id
+                  FROM '.TBL_CATEGORIES.'
                  WHERE cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'';
         $pdoStatement = $gDb->query($sql);
         $row = $pdoStatement->fetch();
@@ -358,7 +360,8 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         if($getCopy)
         {
             // copy original role with their settings
-            $sql = 'SELECT dat_rol_id FROM '.TBL_DATES.'
+            $sql = 'SELECT dat_rol_id
+                      FROM '.TBL_DATES.'
                      WHERE dat_id = '.$originalDateId;
             $pdoStatement = $gDb->query($sql);
             $row = $pdoStatement->fetch();
@@ -438,7 +441,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     {
         // user wants to participate -> add him to date
         $member = new TableMembers($gDb);
-        $member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'), 1);
+        $member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'), true);
     }
     elseif(!isset($_POST['date_current_user_assigned'])
     && $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')))
