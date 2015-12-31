@@ -210,10 +210,10 @@ class ModuleDates extends Modules
         // read dates from database
         $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.mem_leader,'.$additionalFields.'
                   FROM '.TBL_DATE_ROLE.' dtr
-            INNER JOIN '.TBL_CATEGORIES.' cat
-                    ON cat_id = dat_cat_id
             INNER JOIN '.TBL_DATES.' dat
                     ON dat_id = dtr_dat_id
+            INNER JOIN '.TBL_CATEGORIES.' cat
+                    ON cat_id = dat_cat_id
                        '.$this->sqlAdditionalTablesGet('data').'
              LEFT JOIN '.TBL_MEMBERS.' mem
                     ON mem.mem_rol_id = dat_rol_id
