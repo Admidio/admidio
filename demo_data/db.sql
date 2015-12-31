@@ -5,7 +5,6 @@
  * @copyright 2004-2015 The Admidio Team
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- *
  ***********************************************************************************************
  */
 
@@ -52,7 +51,7 @@ drop table if exists %PREFIX%_ids cascade;
 create table %PREFIX%_announcements
 (
     ann_id                         integer       unsigned not null AUTO_INCREMENT,
-    ann_org_shortname              varchar(10)   not null,
+    ann_org_id                     integer       unsigned,
     ann_global                     boolean       not null default '0',
     ann_headline                   varchar(100)  not null,
     ann_description                text,
@@ -74,11 +73,13 @@ collate = utf8_unicode_ci;
 create table %PREFIX%_auto_login
 (
     atl_id                         integer       unsigned not null AUTO_INCREMENT,
-    atl_session_id                 varchar(35)   not null,
+    atl_auto_login_id              varchar(255)  not null,
+    atl_session_id                 varchar(255)  not null,
     atl_org_id                     integer       unsigned not null,
     atl_usr_id                     integer       unsigned not null,
-    atl_last_login                 timestamp        null default null,
+    atl_last_login                 timestamp     null default null,
     atl_ip_address                 varchar(39)   not null,
+    atl_number_invalid             smallint      not null default 0,
     primary key (atl_id)
 )
 engine = InnoDB
@@ -248,7 +249,7 @@ create table %PREFIX%_guestbook
     gbo_org_id                     integer       unsigned not null,
     gbo_name                       varchar(60)   not null,
     gbo_text                       text          not null,
-    gbo_email                      varchar(50),
+    gbo_email                      varchar(254),
     gbo_homepage                   varchar(50),
     gbo_ip_address                 varchar(39)   not null,
     gbo_locked                     boolean       not null default '0',
@@ -273,7 +274,7 @@ create table %PREFIX%_guestbook_comments
     gbc_gbo_id                     integer       unsigned not null,
     gbc_name                       varchar(60)   not null,
     gbc_text                       text          not null,
-    gbc_email                      varchar(50),
+    gbc_email                      varchar(254),
     gbc_ip_address                 varchar(39)   not null,
     gbc_locked                     boolean       not null default '0',
     gbc_usr_id_create              integer       unsigned,
@@ -361,7 +362,7 @@ create table %PREFIX%_invent
     inv_text                       text,
     inv_for_loan                   boolean       not null default '0',
     inv_last_lent                  timestamp     null default null,
-    inv_usr_id_lent                integer         unsigned,
+    inv_usr_id_lent                integer       unsigned,
     inv_lent_until                 timestamp     null default null,
     inv_number_lent                integer       not null default 0,
     inv_usr_id_create              integer       unsigned,
@@ -386,7 +387,7 @@ create table %PREFIX%_links
     lnk_cat_id                     integer       unsigned not null,
     lnk_name                       varchar(255)  not null,
     lnk_description                text,
-    lnk_url                        varchar(2000)  not null,
+    lnk_url                        varchar(2000) not null,
     lnk_counter                    integer       not null default 0,
     lnk_usr_id_create              integer       unsigned,
     lnk_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
@@ -411,7 +412,6 @@ create table %PREFIX%_lists
     lst_name                       varchar(255),
     lst_timestamp                  timestamp     not null default CURRENT_TIMESTAMP,
     lst_global                     boolean       not null default '0',
-    lst_default                    boolean       not null default '0',
     primary key (lst_id)
 )
 engine = InnoDB
@@ -471,15 +471,15 @@ create index IDX_%PREFIX%_MEM_ROL_USR_ID on %PREFIX%_members (mem_rol_id, mem_us
 /*==============================================================*/
 /* Table: adm_messages                                          */
 /*==============================================================*/
-CREATE TABLE %PREFIX%_messages
+create table %PREFIX%_messages
 (
-    msg_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
-    msg_type                      varchar(10)     NOT NULL,
-    msg_subject                   varchar(256)    NOT NULL,
-    msg_usr_id_sender             integer         unsigned NOT NULL,
-    msg_usr_id_receiver           varchar(256)    NOT NULL,
-    msg_timestamp                 timestamp       NOT NULL default CURRENT_TIMESTAMP,
-    msg_read                      smallint        NOT NULL DEFAULT 0,
+    msg_id                        integer         unsigned not null AUTO_INCREMENT,
+    msg_type                      varchar(10)     not null,
+    msg_subject                   varchar(256)    not null,
+    msg_usr_id_sender             integer         unsigned not null,
+    msg_usr_id_receiver           varchar(256)    not null,
+    msg_timestamp                 timestamp       not null default CURRENT_TIMESTAMP,
+    msg_read                      smallint        not null default 0,
     primary key (msg_id)
 )
 engine = InnoDB
@@ -489,14 +489,14 @@ collate = utf8_unicode_ci;
 /*==============================================================*/
 /* Table: adm_messages_content                                  */
 /*==============================================================*/
-CREATE TABLE %PREFIX%_messages_content
+create table %PREFIX%_messages_content
 (
-    msc_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
-    msc_msg_id                    integer         unsigned NOT NULL,
-    msc_part_id                   integer         unsigned NOT NULL,
+    msc_id                        integer         unsigned not null AUTO_INCREMENT,
+    msc_msg_id                    integer         unsigned not null,
+    msc_part_id                   integer         unsigned not null,
     msc_usr_id                    integer         unsigned,
-    msc_message                   text            NOT NULL,
-    msc_timestamp                 timestamp       NOT NULL default CURRENT_TIMESTAMP,
+    msc_message                   text            not null,
+    msc_timestamp                 timestamp       not null default CURRENT_TIMESTAMP,
     primary key (msc_id)
 )
 engine = InnoDB
@@ -531,8 +531,8 @@ create unique index ak_%PREFIX%_shortname on %PREFIX%_organizations (org_shortna
 create table %PREFIX%_photos
 (
     pho_id                         integer       unsigned not null AUTO_INCREMENT,
-    pho_org_shortname              varchar(10)   not null,
-    pho_quantity                   integer        unsigned not null default 0,
+    pho_org_id                     integer       unsigned not null,
+    pho_quantity                   integer       unsigned not null default 0,
     pho_name                       varchar(50)   not null,
     pho_begin                      date          not null,
     pho_end                        date          not null,
@@ -690,8 +690,7 @@ create table %PREFIX%_sessions
     ses_usr_id                     integer       unsigned default NULL,
     ses_org_id                     integer       unsigned not null,
     ses_session_id                 varchar(255)  not null,
-    ses_device_id                  varchar(255),
-    ses_begin                      timestamp        null default null,
+    ses_begin                      timestamp     null default null,
     ses_timestamp                  timestamp     not null default CURRENT_TIMESTAMP,
     ses_ip_address                 varchar(39)   not null,
     ses_binary                     blob,
@@ -777,21 +776,22 @@ create unique index IDX_%PREFIX%_USD_USR_USF_ID on %PREFIX%_user_data (usd_usr_i
 /*==============================================================*/
 /* Table: adm_user_log                                             */
 /*==============================================================*/
-CREATE TABLE %PREFIX%_user_log (
-  usl_id                INTEGER                  NOT NULL AUTO_INCREMENT ,
-  usl_usr_id            INTEGER         unsigned NOT NULL ,
-  usl_usf_id            INTEGER         unsigned NOT NULL ,
-  usl_value_old         VARCHAR(4000)             NULL ,
-  usl_value_new         VARCHAR(4000)             NULL ,
-  usl_usr_id_create     INTEGER         unsigned NULL ,
-  usl_timestamp_create  TIMESTAMP                NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-  usl_comment           VARCHAR(255) NULL ,
-  PRIMARY KEY (usl_id)
+create table %PREFIX%_user_log
+(
+    usl_id                         integer       not null AUTO_INCREMENT,
+    usl_usr_id                     integer       unsigned not null,
+    usl_usf_id                     integer       unsigned not null,
+    usl_value_old                  varchar(4000) null,
+    usl_value_new                  varchar(4000) null,
+    usl_usr_id_create              integer       unsigned null,
+    usl_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
+    usl_comment                    varchar(255)  null,
+    primary key (usl_id)
 )
-ENGINE = InnoDB
+engine = InnoDB
 auto_increment = 1
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
+default character set = utf8
+collate = utf8_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_users                                             */
@@ -827,8 +827,8 @@ create unique index IDX_%PREFIX%_USR_LOGIN_NAME on %PREFIX%_users (usr_login_nam
 /*==============================================================*/
 /* Constraints                                                  */
 /*==============================================================*/
-alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_ORG foreign key (ann_org_shortname)
-      references %PREFIX%_organizations (org_shortname) on delete restrict on update restrict;
+alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_ORG foreign key (ann_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
 alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_USR_CREATE foreign key (ann_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_USR_CHANGE foreign key (ann_usr_id_change)
@@ -935,8 +935,8 @@ alter table %PREFIX%_organizations add constraint %PREFIX%_FK_ORG_ORG_PARENT for
 
 alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_PHO_PARENT foreign key (pho_pho_id_parent)
       references %PREFIX%_photos (pho_id) on delete set null on update restrict;
-alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_ORG foreign key (pho_org_shortname)
-      references %PREFIX%_organizations (org_shortname) on delete restrict on update restrict;
+alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_ORG foreign key (pho_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
 alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_USR_CREATE foreign key (pho_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_USR_CHANGE foreign key (pho_usr_id_change)
