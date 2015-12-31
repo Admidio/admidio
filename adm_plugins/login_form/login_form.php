@@ -143,7 +143,14 @@ if($gValidLogin)
         }
     }
 
-    $lastLogin = ($gCurrentUser->getValue('usr_last_login') === '') ? '---' : $gCurrentUser->getValue('usr_last_login');
+    if (($gCurrentUser->getValue('usr_last_login') === ''))
+    {
+        $lastLogin = '---';
+    }
+    else
+    {
+        $lastLogin = $gCurrentUser->getValue('usr_last_login');
+    }
 
     // create a static form
     $form = new HtmlForm('plugin-login-static-form', null, null, array('type' => 'vertical', 'setFocus' => false));
