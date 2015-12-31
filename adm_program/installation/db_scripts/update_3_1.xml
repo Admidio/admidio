@@ -49,5 +49,6 @@
     <step id="470" database="postgresql">ALTER TABLE %PREFIX%_guestbook ALTER COLUMN gbo_email TYPE varchar(254)</step>
     <step id="480" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments MODIFY COLUMN gbc_email varchar(254)</step>
     <step id="490" database="postgresql">ALTER TABLE %PREFIX%_guestbook_comments ALTER COLUMN gbc_email TYPE varchar(254)</step>
+    <step id="500">ALTER TABLE %PREFIX%_sessions DROP COLUMN ses_device_id</step>
     <step>stop</step>
 </update>
