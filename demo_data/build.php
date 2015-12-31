@@ -22,16 +22,16 @@ if(file_exists('../adm_my_files/config.php'))
 elseif(file_exists('../config.php'))
 {
     // search in path of version 1.x and 2.x
-    include('../config.php');
+    require_once('../config.php');
 }
 else
 {
     exit('<p style="color: #cc0000;">Error: Config file not found!</p>');
 }
 
-include('../adm_program/system/constants.php');
-include('../adm_program/system/function.php');
-include('../adm_program/system/string.php');
+include_once('../adm_program/system/constants.php');
+include_once('../adm_program/system/function.php');
+include_once('../adm_program/system/string.php');
 
 // import of demo data must be enabled in config.php
 if(!isset($gImportDemoData) || $gImportDemoData != 1)
@@ -47,9 +47,10 @@ if(!isset($gDbType))
     $gDbType = 'mysql';
 }
 
-// parts of this function are from get_backtrace out of phpBB3
-// Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
-
+/**
+ * parts of this function are from get_backtrace out of phpBB3
+ * @return string Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
+ */
 function getBacktrace()
 {
     $output = '<div style="font-family: monospace;">';
@@ -218,7 +219,7 @@ foreach($sql_arr as $sql)
 
 // manipulate some dates so that it's suitable to the current date
 echo 'Edit data of database ...<br />';
-include('data_edit.php');
+include_once('data_edit.php');
 
 // in postgresql all sequences must get a new start value because our inserts have given ids
 if($gDbType === 'postgresql')
