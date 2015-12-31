@@ -32,9 +32,9 @@ unset($_SESSION['dates_request']);
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
-// Daterange defined in preferences  
-$startDate = date('Y-m-d', time()-$gPreferences['dates_ical_days_past']*86400);  
-$endDate = date('Y-m-d', time()+$gPreferences['dates_ical_days_future']*86400);  
+// Daterange defined in preferences
+$startDate = date('Y-m-d', time() - $gPreferences['dates_ical_days_past']   * 60*60*24);
+$endDate   = date('Y-m-d', time() + $gPreferences['dates_ical_days_future'] * 60*60*24);
 
 // Message if module is disabled
 if($gPreferences['enable_dates_module'] == 0)
@@ -57,15 +57,15 @@ if ($gPreferences['enable_dates_ical'] != 1)
 
 // create Object
 $dates = new ModuleDates();
-// set mode, viewmode, calendar, startdate and enddate manually  
-$dates->setParameter('mode', 2);   
-$dates->setParameter('view_mode', 'period');  
-$dates->setParameter('cat_id', $getCatId);  
-$dates->setDaterange($startDate, $endDate);  
+// set mode, viewmode, calendar, startdate and enddate manually
+$dates->setParameter('mode', 2);
+$dates->setParameter('view_mode', 'period');
+$dates->setParameter('cat_id', $getCatId);
+$dates->setDaterange($startDate, $endDate);
 // read events for output
 $datesResult = $dates->getDataset(0, 0);
-// get parameters fom $_GET Array stored in class  
-$parameter = $dates->getParameters();  
+// get parameters fom $_GET Array stored in class
+$parameter = $dates->getParameters();
 
 // Headline for file name
 if($getCatId > 0)
