@@ -32,20 +32,23 @@ unset($_SESSION['dates_request']);
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
+// Daterange defined in preferences  
+$startDate = date('Y-m-d', time()-$gPreferences['dates_ical_days_past']*86400);  
+$endDate = date('Y-m-d', time()+$gPreferences['dates_ical_days_future']*86400);  
 
-// prüfen ob das Modul überhaupt aktiviert ist
+// Message if module is disabled
 if($gPreferences['enable_dates_module'] == 0)
 {
-    // das Modul ist deaktiviert
+    // Module disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 elseif($gPreferences['enable_dates_module'] == 2)
 {
-    // nur eingelochte Benutzer dürfen auf das Modul zugreifen
+    // only with valid login
     require_once('../../system/login_valid.php');
 }
 
-// Nachschauen ob ical ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
+// If Ical enabled and module is public
 if ($gPreferences['enable_dates_ical'] != 1)
 {
     $gMessage->setForwardUrl($gHomepage);
@@ -54,21 +57,18 @@ if ($gPreferences['enable_dates_ical'] != 1)
 
 // create Object
 $dates = new ModuleDates();
-// get parameters fom $_GET Array stored in class
-$parameter = $dates->getParameters();
-// set mode, viewmode, startdate and enddate manually
-$parameter['mode'] = 2;
-$parameter['view_mode'] = 'period';
-$parameter['date_from'] = date('Y-m-d', time()-$gPreferences['dates_ical_days_past']*86400);
-$parameter['date_to']   = date('Y-m-d', time()+$gPreferences['dates_ical_days_future']*86400);
-
-// set date range
-$dates->setDaterange($parameter['date_from'], $parameter['date_to']);
+// set mode, viewmode, calendar, startdate and enddate manually  
+$dates->setParameter('mode', 2);   
+$dates->setParameter('view_mode', 'period');  
+$dates->setParameter('cat_id', $getCatId);  
+$dates->setDaterange($startDate, $endDate);  
 // read events for output
 $datesResult = $dates->getDataset(0, 0);
+// get parameters fom $_GET Array stored in class  
+$parameter = $dates->getParameters();  
 
-// Headline für Dateinamen
-if($dates->getCatId() > 0)
+// Headline for file name
+if($getCatId > 0)
 {
     $calendar = new TableCategory($gDb, $dates->getCatId());
     $getHeadline.= '_'. $calendar->getValue('cat_name');

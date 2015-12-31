@@ -145,7 +145,7 @@ else
 {
     $form->addInput('gbc_name', $gL10n->get('SYS_NAME'), $guestbook_comment->getValue('gbc_name'), array('maxLength' => 60, 'property' => FIELD_REQUIRED));
 }
-$form->addInput('gbc_email', $gL10n->get('SYS_EMAIL'), $guestbook_comment->getValue('gbc_email'), array('type' => 'email', 'maxLength' => 50));
+$form->addInput('gbc_email', $gL10n->get('SYS_EMAIL'), $guestbook_comment->getValue('gbc_email'), array('type' => 'email', 'maxLength' => 254));
 $form->addEditor('gbc_text', $gL10n->get('SYS_COMMENT'), $guestbook_comment->getValue('gbc_text'), array('property' => FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook'));
 
 // if captchas are enabled then visitors of the website must resolve this

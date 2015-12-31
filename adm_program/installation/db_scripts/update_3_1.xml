@@ -45,5 +45,9 @@
     <step id="430">ALTER TABLE %PREFIX%_auto_login ADD COLUMN atl_number_invalid smallint not null DEFAULT 0</step>
     <step id="440" database="mysql">ALTER TABLE %PREFIX%_auto_login MODIFY COLUMN atl_session_id varchar(255) NOT NULL</step>
     <step id="450" database="postgresql">ALTER TABLE %PREFIX%_auto_login ALTER COLUMN atl_session_id TYPE varchar(255)</step>
+    <step id="460" database="mysql">ALTER TABLE %PREFIX%_guestbook MODIFY COLUMN gbo_email varchar(254)</step>
+    <step id="470" database="postgresql">ALTER TABLE %PREFIX%_guestbook ALTER COLUMN gbo_email TYPE varchar(254)</step>
+    <step id="480" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments MODIFY COLUMN gbc_email varchar(254)</step>
+    <step id="490" database="postgresql">ALTER TABLE %PREFIX%_guestbook_comments ALTER COLUMN gbc_email TYPE varchar(254)</step>
     <step>stop</step>
 </update>
