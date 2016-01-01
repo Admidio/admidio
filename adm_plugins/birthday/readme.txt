@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------
                           Sidebar Birthday
-             Copyright (c) 2004 - 2015 The Admidio Team
+             Copyright (c) 2004 - 2016 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
 
@@ -68,6 +68,6 @@ Es ist nicht gestattet den Copyrighthinweis im Quellcode zu entfernen.
 Für weitere Informationen sollten Sie die gpl-de.html durchlesen.
 
 -------------------------------------------------------------------------
-              Copyright (c) 2004 - 2015 The Admidio Team
+              Copyright (c) 2004 - 2016 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------

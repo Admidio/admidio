@@ -947,7 +947,7 @@ class HtmlForm extends HtmlFormBasic
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if(is_object($this->htmlPage))
             {
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.noblecount.min.js');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.noblecount.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
             }
             else

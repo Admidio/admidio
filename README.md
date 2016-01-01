@@ -119,4 +119,4 @@ and sharing great software.
 - [Html5Shiv](https://github.com/aFarkas/html5shiv): Enable Html5 for older browsers
 - [Respond](https://github.com/scottjehl/Respond): Polyfill for min/max-width CSS3 Media Queries
 
-Copyright (c) 2004 - 2015 The Admidio Team
+Copyright (c) 2004 - 2016 The Admidio Team

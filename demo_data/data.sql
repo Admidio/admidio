@@ -4,23 +4,23 @@
 --
 
 INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES ('SYSTEM', 'Admidio Core', 'CORE', '3.1.0', 1, 500)
-                              , ('MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUCEMENTS', '3.1.0', 1, 0)
-                              , ('MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.1.0', 1, 0)
-                              , ('MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.1.0', 1, 0)
-                              , ('MODULE', 'DAT_DATES', 'DATES', '3.1.0', 1, 0)
-                              , ('MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.1.0', 1, 0)
-                              , ('MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.1.0', 1, 0)
-                              , ('MODULE', 'LNK_WEBLINKS', 'LINKS', '3.1.0', 1, 0)
-                              , ('MODULE', 'LST_LISTS', 'LISTS', '3.1.0', 1, 0)
-                              , ('MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.1.0', 1, 0)
-                              , ('MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.1.0', 1, 0)
-                              , ('MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.1.0', 1, 0)
-                              , ('MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.1.0', 1, 0)
-                              , ('MODULE', 'PRO_PROFILE', 'PROFILE', '3.1.0', 1, 0)
-                              , ('MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.1.0', 1, 0)
-                              , ('MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.1.0', 1, 0)
-                              , ('MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.1.0', 1, 0);
+                         VALUES ('SYSTEM', 'Admidio Core', 'CORE', '3.0.6', 0, 610)
+                              , ('MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUCEMENTS', '3.0.6', 0, 0)
+                              , ('MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.0.6', 0, 0)
+                              , ('MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.0.6', 0, 0)
+                              , ('MODULE', 'DAT_DATES', 'DATES', '3.0.6', 0, 0)
+                              , ('MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.0.6', 0, 0)
+                              , ('MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.0.6', 0, 0)
+                              , ('MODULE', 'LNK_WEBLINKS', 'LINKS', '3.0.6', 0, 0)
+                              , ('MODULE', 'LST_LISTS', 'LISTS', '3.0.6', 0, 0)
+                              , ('MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.0.6', 0, 0)
+                              , ('MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.0.6', 0, 0)
+                              , ('MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.0.6', 0, 0)
+                              , ('MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.0.6', 0, 0)
+                              , ('MODULE', 'PRO_PROFILE', 'PROFILE', '3.0.6', 0, 0)
+                              , ('MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.0.6', 0, 0)
+                              , ('MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.0.6', 0, 0)
+                              , ('MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.0.6', 0, 0);
 
 --
 -- Data for table adm_organizations
@@ -507,10 +507,10 @@ female.png|SYS_FEMALE', NULL, NULL, 0, 0, 0, 0, 12, 1, '2012-01-08 11:12:05', NU
 -- Data for table adm_announcements
 --
 
-INSERT INTO %PREFIX%_announcements (ann_id, ann_org_id, ann_global, ann_headline, ann_description, ann_usr_id_create, ann_timestamp_create, ann_usr_id_change, ann_timestamp_change) VALUES
-(1, 1, '0', 'DEMO_ANN_NEW_JERSEYS', 'DEMO_ANN_NEW_JERSEYS_CONTENT', 1, '2012-01-01 00:00:00', NULL, NULL),
-(2, 1, '0', 'DEMO_ANN_AEROBICS_COURSE', 'DEMO_ANN_AEROBICS_COURSE_CONTENT', 1, '2012-01-08 11:12:05', 1, '2012-01-06 17:33:53'),
-(3, 1, '1', 'DEMO_ANN_WELCOME', 'DEMO_ANN_WELCOME_CONTENT', 1, '2012-01-08 11:12:05', NULL, NULL);
+INSERT INTO %PREFIX%_announcements (ann_id, ann_org_shortname, ann_global, ann_headline, ann_description, ann_usr_id_create, ann_timestamp_create, ann_usr_id_change, ann_timestamp_change) VALUES
+(1, 'DEMO', '0', 'DEMO_ANN_NEW_JERSEYS', 'DEMO_ANN_NEW_JERSEYS_CONTENT', 1, '2012-01-01 00:00:00', NULL, NULL),
+(2, 'DEMO', '0', 'DEMO_ANN_AEROBICS_COURSE', 'DEMO_ANN_AEROBICS_COURSE_CONTENT', 1, '2012-01-08 11:12:05', 1, '2012-01-06 17:33:53'),
+(3, 'DEMO', '1', 'DEMO_ANN_WELCOME', 'DEMO_ANN_WELCOME_CONTENT', 1, '2012-01-08 11:12:05', NULL, NULL);
 
 
 --
@@ -596,19 +596,19 @@ INSERT INTO %PREFIX%_links (lnk_id, lnk_cat_id, lnk_name, lnk_description, lnk_u
 -- Data for table adm_lists
 --
 
-INSERT INTO %PREFIX%_lists (lst_id, lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global) VALUES
-(1, 1, 1, 'INS_ADDRESS_LIST', '2009-02-27 21:50:57', 1),
-(2, 1, 1, 'INS_PHONE_LIST', '2009-02-27 21:50:57', 1),
-(3, 1, 1, 'SYS_CONTACT_DETAILS', '2009-02-27 21:50:57', 1),
-(4, 1, 1, 'INS_MEMBERSHIP', '2009-02-27 21:50:57', 1),
-(5, 1, 1, 'SYS_SOCIAL_NETWORKS', '2009-02-27 21:56:52', 0),
-(6, 1, 1, 'SYS_BIRTHDAY', '2009-02-27 21:57:38', 0),
-(7, 1, 351, 'SYS_WEBSITE', '2009-02-27 22:34:28', 0),
-(8, 1, 351, NULL, '2009-02-27 22:34:47', 0),
-(9, 2, 1, 'INS_ADDRESS_LIST', '2012-02-27 21:50:57', 1),
-(10, 2, 1, 'INS_PHONE_LIST', '2012-02-27 21:50:57', 1),
-(11, 2, 1, 'SYS_CONTACT_DETAILS', '2012-02-27 21:50:57', 1),
-(12, 2, 1, 'INS_MEMBERSHIP', '2012-02-27 21:50:57', 1);
+INSERT INTO %PREFIX%_lists (lst_id, lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default) VALUES
+(1, 1, 1, 'INS_ADDRESS_LIST', '2009-02-27 21:50:57', 1, 1),
+(2, 1, 1, 'INS_PHONE_LIST', '2009-02-27 21:50:57', 1, 0),
+(3, 1, 1, 'SYS_CONTACT_DETAILS', '2009-02-27 21:50:57', 1, 0),
+(4, 1, 1, 'INS_MEMBERSHIP', '2009-02-27 21:50:57', 1, 0),
+(5, 1, 1, 'SYS_SOCIAL_NETWORKS', '2009-02-27 21:56:52', 0, 0),
+(6, 1, 1, 'SYS_BIRTHDAY', '2009-02-27 21:57:38', 0, 0),
+(7, 1, 351, 'SYS_WEBSITE', '2009-02-27 22:34:28', 0, 0),
+(8, 1, 351, NULL, '2009-02-27 22:34:47', 0, 0),
+(9, 2, 1, 'INS_ADDRESS_LIST', '2012-02-27 21:50:57', 1, 1),
+(10, 2, 1, 'INS_PHONE_LIST', '2012-02-27 21:50:57', 1, 0),
+(11, 2, 1, 'SYS_CONTACT_DETAILS', '2012-02-27 21:50:57', 1, 0),
+(12, 2, 1, 'INS_MEMBERSHIP', '2012-02-27 21:50:57', 1, 0);
 
 --
 -- Data for table adm_list_columns
@@ -909,11 +909,11 @@ INSERT INTO %PREFIX%_registrations (reg_id, reg_org_id, reg_usr_id, reg_timestam
 -- Data for table adm_photos
 --
 
-INSERT INTO %PREFIX%_photos (pho_id, pho_org_id, pho_quantity, pho_name, pho_begin, pho_end, pho_photographers, pho_locked, pho_pho_id_parent, pho_usr_id_create, pho_timestamp_create, pho_usr_id_change, pho_timestamp_change) VALUES
-(1, 1, 0, 'DEMO_PHO_CROATIA', '2009-10-05', '2009-10-11', 'DEMO_PHO_STEVEN_SMITH', 0, NULL, 1, '2009-10-23 18:15:37', NULL, NULL),
-(2, 1, 3, 'DEMO_PHO_PLITVICE_LAKES', '2009-10-05', '2009-10-07', 'DEMO_PHO_STEVEN_SMITH', 0, 1, 1, '2009-10-23 18:17:44', NULL, NULL),
-(3, 1, 3, 'Krka', '2009-10-08', '2009-10-11', 'DEMO_PHO_STEVEN_SMITH', 0, 1, 1, '2009-10-23 18:18:44', NULL, NULL),
-(4, 1, 5, 'Machu Picchu', '2009-09-14', '2009-09-17', 'Admin', 0, NULL, 1, '2009-10-23 18:20:50', NULL, NULL);
+INSERT INTO %PREFIX%_photos (pho_id, pho_org_shortname, pho_quantity, pho_name, pho_begin, pho_end, pho_photographers, pho_locked, pho_pho_id_parent, pho_usr_id_create, pho_timestamp_create, pho_usr_id_change, pho_timestamp_change) VALUES
+(1, 'DEMO', 0, 'DEMO_PHO_CROATIA', '2009-10-05', '2009-10-11', 'DEMO_PHO_STEVEN_SMITH', 0, NULL, 1, '2009-10-23 18:15:37', NULL, NULL),
+(2, 'DEMO', 3, 'DEMO_PHO_PLITVICE_LAKES', '2009-10-05', '2009-10-07', 'DEMO_PHO_STEVEN_SMITH', 0, 1, 1, '2009-10-23 18:17:44', NULL, NULL),
+(3, 'DEMO', 3, 'Krka', '2009-10-08', '2009-10-11', 'DEMO_PHO_STEVEN_SMITH', 0, 1, 1, '2009-10-23 18:18:44', NULL, NULL),
+(4, 'DEMO', 5, 'Machu Picchu', '2009-09-14', '2009-09-17', 'Admin', 0, NULL, 1, '2009-10-23 18:20:50', NULL, NULL);
 
 
 --

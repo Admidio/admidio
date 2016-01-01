@@ -1098,7 +1098,6 @@
     <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Webmaster deaktiviert.</string>
     <string name="SYS_ICON">Icon</string>
     <string name="SYS_INACTIVE">Inaktiv</string>
-    <string name="SYS_INFO">Info</string>
     <string name="SYS_INFORMATIONS">Informationen</string>
     <string name="SYS_INTERNAL_NAME">Interner Name</string>
     <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf ein Feld benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Feldes automatisch gefüllt.</string>
