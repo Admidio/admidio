@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Validate login data, create cookie and sign in the user to Admidio
  *
- * @copyright 2004-2015 The Admidio Team
+ * @copyright 2004-2016 The Admidio Team
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
