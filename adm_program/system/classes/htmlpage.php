@@ -543,7 +543,7 @@ class HtmlPage
             <!DOCTYPE html>
             <html>
             <head>
-                <!-- (c) 2004 - 2015 The Admidio Team - http://www.admidio.org/ -->
+                <!-- (c) 2004 - 2016 The Admidio Team - http://www.admidio.org/ -->
 
                 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
