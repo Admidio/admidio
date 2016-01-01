@@ -135,9 +135,10 @@ if (isset($folderContent['folders']))
     {
         $nextFolder = $folderContent['folders'][$i];
         $folderDescription = '';
-        if($nextFolder['fol_description'] !== '')
+        if(strlen($nextFolder['fol_description']) > 0)
         {
-            $folderDescription = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/info.png" alt="'.$nextFolder['fol_description'].'" title="'.$nextFolder['fol_description'].'" />';
+            $folderDescription = '<img class="admidio-icon-help" src="'. THEME_PATH. '/icons/info.png" data-toggle="popover" data-trigger="hover"
+                data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$nextFolder['fol_description'].'" alt="Info" />';
         }
         // create array with all column values
         $columnValues = array(
