@@ -269,7 +269,7 @@ class ModuleDates extends Modules
             && $this->getParameter('dateEndFormatEnglish') < DATE_NOW
             || $this->getParameter('mode') === 'old')
         {
-            $headline = $gL10n->get('DAT_PREVIOUS_DATES', ' ').$headline;
+            $headline = $gL10n->get('DAT_PREVIOUS_DATES', '').$headline;
         }
 
         if($this->getParameter('view_mode') === 'print')
@@ -366,13 +366,17 @@ class ModuleDates extends Modules
                 case 'old':
                     $dateRangeStart = '1970-01-01';
                     $dateRangeEnd   = DATE_NOW;
-                    $this->order    = 'DESC';
                     break;
                 case 'all':
                     $dateRangeStart = '1970-01-01';
                     $dateRangeEnd   = $yearEnd.'-12-31';
                     break;
             }
+        }
+        // If mode=old then we want to have the events in reverse order ('DESC')
+        If($this->mode === 'old')
+        {
+            $this->order    = 'DESC';
         }
 
         // Create date object and format date_from in English format and system format and push to daterange array
