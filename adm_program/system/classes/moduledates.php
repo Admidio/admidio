@@ -346,6 +346,7 @@ class ModuleDates extends Modules
      * getParameter and could be used in the script.
      * @param  string     $dateRangeStart A date in english or Admidio format that will be the start date of the range.
      * @param  string     $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
+     * @throws AdmException SYS_DATE_END_BEFORE_BEGIN
      * @return void|false Returns false if invalid date format is submitted
      */
     public function setDateRange($dateRangeStart = '', $dateRangeEnd = '')
@@ -374,9 +375,9 @@ class ModuleDates extends Modules
             }
         }
         // If mode=old then we want to have the events in reverse order ('DESC')
-        If($this->mode === 'old')
+        if($this->mode === 'old')
         {
-            $this->order    = 'DESC';
+            $this->order = 'DESC';
         }
 
         // Create date object and format date_from in English format and system format and push to daterange array
