@@ -53,7 +53,7 @@ if($getMode !== 'new' && $getPhotoId > 0)
 }
 
 // Speicherort mit dem Pfad aus der Datenbank
-$ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
+$albumPath = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
 if($getMode === 'new' || $getMode === 'change')
@@ -130,10 +130,9 @@ if($getMode === 'new' || $getMode === 'change')
         }
     }
 
-    /********************neuen Datensatz anlegen***********************************/
     if ($getMode === 'new')
     {
-        // Album in Datenbank schreiben
+        // write recordset with new album into database
         $photo_album->save();
 
         $error = $photo_album->createFolder();
@@ -156,38 +155,41 @@ if($getMode === 'new' || $getMode === 'change')
         }
 
         $getPhotoId = $photo_album->getValue('pho_id');
-    }//if
-
-    /********************Aenderung des Ordners***********************************/
-    // Wurde das Anfangsdatum bearbeitet, muss sich der Ordner aendern
-    elseif ($getMode === 'change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
+    }
+    else
     {
-        $newFolder = SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
-
-        // das komplette Album in den neuen Ordner kopieren
-        $albumFolder = new Folder($ordner);
-        $b_return = $albumFolder->move($newFolder);
-
-        // Verschieben war nicht erfolgreich, Schreibrechte vorhanden ?
-        if(!$b_return)
+        // if begin date changed than the folder must also be changed
+        if($albumPath != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
         {
-            $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
-            $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+            $newFolder = SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
+
+            // das komplette Album in den neuen Ordner kopieren
+            $albumFolder = new Folder($albumPath);
+            $b_return = $albumFolder->move($newFolder);
+
+            // Verschieben war nicht erfolgreich, Schreibrechte vorhanden ?
+            if(!$b_return)
+            {
+                $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
+                $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+            }
         }
-    }//if
 
-    /********************Aenderung der Datenbankeinträge***********************************/
-
-    if($getMode === 'change')
-    {
-        // geaenderte Daten in der Datenbank akutalisieren
+        // now save changes to database
         $photo_album->save();
     }
 
     unset($_SESSION['photo_album_request']);
     $gNavigation->deleteLastUrl();
 
-    header('Location: '. $gNavigation->getUrl());
+    if ($getMode === 'new')
+    {
+        header('Location: '. $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId);
+    }
+    else
+    {
+        header('Location: '. $gNavigation->getUrl());
+    }
     exit();
 }
 
