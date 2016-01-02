@@ -766,11 +766,13 @@ else
             {
                 $columnValue = '';
 
-                foreach($participantsArray as $participant)
+                if(is_array($participantsArray))
                 {
-                    $columnValue .= $participant['firstname']. ' '. $participant['surname']. ', ';
+                    foreach($participantsArray as $participant)
+                    {
+                        $columnValue .= $participant['firstname']. ' '. $participant['surname']. ', ';
+                    }
                 }
-
                 $columnValues[] = substr($columnValue, 0, strlen($columnValue) - 2);
             }
             elseif($getView === 'description')
