@@ -131,6 +131,8 @@ class Session extends TableAccess
      */
     public function &getObject($objectName)
     {
+        $returnParam = false;
+
         if(array_key_exists($objectName, $this->mObjectArray))
         {
             // if object has database connection add database object
@@ -142,7 +144,9 @@ class Session extends TableAccess
             // return reference of object
             return $this->mObjectArray[$objectName];
         }
-        return false;
+
+        // use parameter because we return a reference so only value will return an error
+        return $returnParam;
     }
 
     /**
