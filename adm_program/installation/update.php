@@ -364,7 +364,7 @@ elseif($getMode === 2)
                 // Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
                 for($microVersion = $microVersion; $microVersion < 15; ++$microVersion)
                 {
-                    $version = $mainVersion.'.'.$subVersion.'.'.$microVersion;
+                    $version = $mainVersion.'_'.$subVersion.'_'.$microVersion;
 
                     // Update-Datei der naechsten hoeheren Version ermitteln
                     $sqlUpdateFile = 'db_scripts/upd_'. $version. '_db.sql';
