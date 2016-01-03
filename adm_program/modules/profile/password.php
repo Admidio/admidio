@@ -127,7 +127,9 @@ elseif($getMode === 'html')
                     $("#password_form .form-alert").attr("class", "alert alert-success form-alert");
                     $("#password_form .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
                     $("#password_form .form-alert").fadeIn("slow");
-                    setTimeout("$(\"#admidio_modal\").modal(\"hide\");",2000);
+                    setTimeout(function () {
+                        $("#admidio_modal").modal("hide");
+                    }, 2000);
                 } else {
                     $("#password_form .form-alert").attr("class", "alert alert-danger form-alert");
                     $("#password_form .form-alert").fadeIn();
