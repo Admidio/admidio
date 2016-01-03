@@ -113,7 +113,9 @@ and sharing great software.
 - [Bootstrap-Datepicker](https://github.com/eternicode/bootstrap-datepicker): Datepicker for bootstrap 3
 - [Lightbox](https://ashleydw.github.io/lightbox/): Lightbox for bootstrap 3
 - [Moment](http://momentjs.com/): Parse, validate, manipulate, and display dates in JavaScript
+- [NobleCount](http://tpgblog.com/NobleCount/): NobleCount… for a more ‘proper’ count of the characters remaining.
 - [James Heinrich](http://www.silisoftware.com/): backupDB
+- [password_compat](https://github.com/ircmaxell/password_compat/): Compatibility with the password_* functions that ship with PHP 5.5
 - [htmLawed](http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/): PHP code to purify & filter HTML
 - [phpass](http://www.openwall.com/phpass/): Portable PHP password hashing framework
 - [Html5Shiv](https://github.com/aFarkas/html5shiv): Enable Html5 for older browsers

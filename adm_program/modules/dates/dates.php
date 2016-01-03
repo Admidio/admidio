@@ -92,14 +92,14 @@ else
 $datesResult     = $dates->getDataset($getStart, $datesPerPage);
 $datesTotalCount = $dates->getDataSetCount();
 
-if($getViewMode !== 'print')
+if($getViewMode !== 'print' && $getId === 0)
 {
     // Navigation of the module starts here
     $gNavigation->addStartUrl(CURRENT_URL, $dates->getHeadline($getHeadline));
 }
 
 // create html page object
-$page = new HtmlPage($getHeadline);
+$page = new HtmlPage($dates->getHeadline($getHeadline));
 $page->enableModal();
 
 if($getViewMode === 'html')
@@ -766,11 +766,13 @@ else
             {
                 $columnValue = '';
 
-                foreach($participantsArray as $participant)
+                if(is_array($participantsArray))
                 {
-                    $columnValue .= $participant['firstname']. ' '. $participant['surname']. ', ';
+                    foreach($participantsArray as $participant)
+                    {
+                        $columnValue .= $participant['firstname']. ' '. $participant['surname']. ', ';
+                    }
                 }
-
                 $columnValues[] = substr($columnValue, 0, strlen($columnValue) - 2);
             }
             elseif($getView === 'description')
@@ -795,6 +797,6 @@ else
 }
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode='.$getViewMode;
+$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?view='.$getView.'&mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode='.$getViewMode;
 $page->addHtml(admFuncGeneratePagination($base_url, $datesTotalCount, $datesResult['limit'], $getStart, true));
 $page->show();

@@ -947,7 +947,7 @@ class HtmlForm extends HtmlFormBasic
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if(is_object($this->htmlPage))
             {
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.noblecount.js');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/noblecount/jquery.noblecount.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
             }
             else
@@ -1275,7 +1275,7 @@ class HtmlForm extends HtmlFormBasic
             });';
 
             // add default values to multi select
-            if(is_array($optionsAll['defaultValue']) && array_count_values($optionsAll['defaultValue']) > 0)
+            if(is_array($optionsAll['defaultValue']) && count($optionsAll['defaultValue']) > 0)
             {
                 $htmlDefaultValues = '';
                 foreach($optionsAll['defaultValue'] as $key => $htmlDefaultValue)
