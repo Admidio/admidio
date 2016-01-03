@@ -52,9 +52,9 @@ if($getMode === 'change')
     }
     else
     {
-        $oldPassword        = $_POST['old_password'];
+        $oldPassword = $_POST['old_password'];
     }
-    
+
     $newPassword        = $_POST['new_password'];
     $newPasswordConfirm = $_POST['new_password_confirm'];
 
