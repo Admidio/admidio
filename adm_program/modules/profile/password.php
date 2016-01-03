@@ -46,18 +46,21 @@ if(!isMember($getUserId)
 
 if($getMode === 'change')
 {
-    $oldPassword        = $_POST['old_password'];
+    if($gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
+    {
+        $oldPassword = '';
+    }
+    else
+    {
+        $oldPassword        = $_POST['old_password'];
+    }
+    
     $newPassword        = $_POST['new_password'];
     $newPasswordConfirm = $_POST['new_password_confirm'];
 
     /***********************************************************************/
     /* Handle form input */
     /***********************************************************************/
-    if($gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
-    {
-        $oldPassword = '';
-    }
-
     if(($oldPassword !== '' || $gCurrentUser->isWebmaster())
     &&  $newPassword !== '' && $newPasswordConfirm !== '')
     {
