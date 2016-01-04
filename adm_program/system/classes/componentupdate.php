@@ -60,7 +60,9 @@ class ComponentUpdate extends Component
      * If the step was successfully done the id will be stored in the component recordset
      * so if the whole update crashs later we know that this step was successfully executed.
      * When the node has an attribute @b database than this sql statement will only executed
-     * if the value of the attribute is equal to your current @b $gDbType .
+     * if the value of the attribute is equal to your current @b $gDbType . If the node has
+     * an attribute @b error and this is set to @b ignore than an sql error will not stop
+     * the update script.
      * @param object $xmlNode A SimpleXML node of the current update step.
      */
     private function executeStep($xmlNode)
@@ -68,6 +70,7 @@ class ComponentUpdate extends Component
         global $g_tbl_praefix, $gDbType;
 
         $executeSql = true;
+        $showError  = true;
 
         $updateStepContent = trim((string) $xmlNode);
 
@@ -78,6 +81,12 @@ class ComponentUpdate extends Component
             if(isset($xmlNode['database']) && (string) $xmlNode['database'] !== $gDbType)
             {
                 $executeSql = false;
+            }
+
+            // if the attribute error was set to "ignore" then don't show errors that occures on sql execution
+            if(isset($xmlNode['error']) && (string) $xmlNode['error'] === 'ignore')
+            {
+                $showError = false;
             }
 
             // if a method of this class was set in the update step
@@ -97,7 +106,7 @@ class ComponentUpdate extends Component
                 // replace prefix with installation specific table prefix
                 $sql = str_replace('%PREFIX%', $g_tbl_praefix, $updateStepContent);
 
-                $this->db->query($sql);
+                $this->db->query($sql, $showError);
             }
 
             // set the type if the id to integer because otherwise the system thinks it's not numeric !!!
