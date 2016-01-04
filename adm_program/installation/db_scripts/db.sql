@@ -800,8 +800,8 @@ create table %PREFIX%_users
 (
     usr_id                         integer       unsigned not null AUTO_INCREMENT,
     usr_login_name                 varchar(35),
-    usr_password                   varchar(60),
-    usr_new_password               varchar(60),
+    usr_password                   varchar(255),
+    usr_new_password               varchar(255),
     usr_photo                      blob,
     usr_text                       text,
     usr_activation_code            varchar(10),
