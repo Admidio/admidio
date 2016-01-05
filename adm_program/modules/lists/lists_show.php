@@ -22,7 +22,7 @@
  *                  true  - Only show the list without any other html unnecessary elements
  ***********************************************************************************************
  */
-require_once ('../../system/common.php');
+require_once('../../system/common.php');
 
 unset($list);
 
@@ -163,10 +163,10 @@ switch ($getMode)
 
 // Array to assign names to tables
 $arr_col_name = array('usr_login_name' => $gL10n->get('SYS_USERNAME'),
-                      'usr_photo' => $gL10n->get('PHO_PHOTO'),
-                      'mem_begin' => $gL10n->get('SYS_START'),
-                      'mem_end' => $gL10n->get('SYS_END'),
-                      'mem_leader' => $gL10n->get('SYS_LEADERS'),
+                      'usr_photo'      => $gL10n->get('PHO_PHOTO'),
+                      'mem_begin'      => $gL10n->get('SYS_START'),
+                      'mem_end'        => $gL10n->get('SYS_END'),
+                      'mem_leader'     => $gL10n->get('SYS_LEADERS'),
 );
 
 // Array for valid colums visible for current user.
@@ -363,10 +363,10 @@ if ($getMode !== 'csv')
 
         $form = new HtmlForm('navbar_export_to_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
         $selectBoxEntries = array(
-            '' => $gL10n->get('LST_EXPORT_TO').' ...',
+            ''       => $gL10n->get('LST_EXPORT_TO').' ...',
             'csv-ms' => $gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')',
-            'pdf' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
-            'pdfl' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
+            'pdf'    => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
+            'pdfl'   => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
             'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
         );
         $form->addSelectBox('export_list_to', null, $selectBoxEntries, array('showContextDependentFirstEntry' => false));
@@ -570,7 +570,7 @@ foreach ($membersList as $member)
 
                 // in html mode we add an additional column with leader/member information to
                 // enable the grouping function of jquery datatables
-                if ($getMode === 'html') 
+                if ($getMode === 'html')
                 {
                     if ($member['mem_leader'] == 1)
                     {
@@ -615,7 +615,7 @@ foreach ($membersList as $member)
                 {
                     $content = '<img src="'.$g_root_path.'/adm_program/modules/profile/profile_photo_show.php?usr_id='.$member['usr_id'].'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
                 }
-                if ($getMode === 'csv' && $member[$sqlColumnNumber] != null) 
+                if ($getMode === 'csv' && $member[$sqlColumnNumber] != null)
                 {
                     $content = $gL10n->get('LST_USER_PHOTO');
                 }
