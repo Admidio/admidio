@@ -239,38 +239,24 @@ if ($getMsgType === 'EMAIL')
                     // all role members will be attached as BCC
                     while ($row = $statement->fetchObject())
                     {
-                        if (!strValidCharacters($row->email, 'email'))
+                        if (strValidCharacters($row->email, 'email'))
                         {
-                            $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $row->first_name.' '.$row->last_name));
+                            $receiver[] = array($row->email, $row->first_name.' '.$row->last_name);
                         }
-                        $receiver[] = array($row->email, $row->first_name.' '.$row->last_name);
                     }
 
                 }
-                else
-                {
-                    // error if role has no email addresses or role ID is not existing
-                    $gMessage->show($gL10n->get('MAI_ROLE_NO_EMAILS'));
-                }
-
             }
             else
             {
                 // create user object
                 $user = new User($gDb, $gProfileFields, $value);
 
-                if(!$gCurrentUser->hasRightViewProfile($user))
+                // only send email to user if current user is allowed to view this user and he has a valid email address
+                if($gCurrentUser->hasRightViewProfile($user) && strValidCharacters($user->getValue('EMAIL'), 'email'))
                 {
-                    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+                    $receiver[] = array($user->getValue('EMAIL'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
                 }
-
-                // error if no valid Email for given user ID
-                if (!strValidCharacters($user->getValue('EMAIL'), 'email'))
-                {
-                    $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
-                }
-
-                $receiver[] = array($user->getValue('EMAIL'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
             }
             $ReceiverString .= ' | '.$value;
         }
@@ -284,6 +270,12 @@ if ($getMsgType === 'EMAIL')
 
     // save page in navigation - to have a check for a navigation back.
     $gNavigation->addUrl(CURRENT_URL);
+
+    // if no valid recipients exists show message
+    if(count($receiver) === 0)
+    {
+        $gMessage->show($gL10n->get('MSG_NO_VALID_RECIPIENTS'));
+    }
 
     // check if name is given
     if($postName === '')

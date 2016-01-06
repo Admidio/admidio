@@ -166,7 +166,7 @@ $arr_col_name = array('usr_login_name' => $gL10n->get('SYS_USERNAME'),
                       'usr_photo'      => $gL10n->get('PHO_PHOTO'),
                       'mem_begin'      => $gL10n->get('SYS_START'),
                       'mem_end'        => $gL10n->get('SYS_END'),
-                      'mem_leader'     => $gL10n->get('SYS_LEADERS'),
+                      'mem_leader'     => $gL10n->get('SYS_LEADERS')
 );
 
 // Array for valid colums visible for current user.
@@ -367,7 +367,7 @@ if ($getMode !== 'csv')
             'csv-ms' => $gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')',
             'pdf'    => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
             'pdfl'   => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
-            'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
+            'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')'
         );
         $form->addSelectBox('export_list_to', null, $selectBoxEntries, array('showContextDependentFirstEntry' => false));
         $listsMenu->addForm($form->show(false));
