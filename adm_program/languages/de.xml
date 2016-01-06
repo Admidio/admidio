@@ -449,7 +449,6 @@
     <string name="MAI_MAX_RECEIVER_DESC">Dieser Wert gibt an, wieviele Empfänger man für ein E-Mail auswählen kann. Eine Rolle wird als ein einzelner Empfänger verstanden</string>
     <string name="MAI_MESSAGE_WENT_TO">Diese Nachricht ging an</string>
     <string name="MAI_PHP_MAIL">PHP mail()</string>
-    <string name="MAI_ROLE_NO_EMAILS">Die von dir ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mail-Adressen, an die eine E-Mail versendet werden kann!</string>
     <string name="MAI_SEND_COPY">Kopie der E-Mail an mich senden</string>
     <string name="MAI_SEND_EMAIL">E-Mail senden</string>
     <string name="MAI_SEND_MAIL_TO_ROLE">Deine E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn du eingeloggt bist stehen dir weitere Rollen und Empfänger zur Verfügung, an die du E-Mails schreiben kannst.</string>
@@ -546,6 +545,7 @@
     <string name="MSG_DELETE_DESC">Soll Nachricht #VAR1_BOLD# nun entfernt werden.</string>
     <string name="MSG_DELETE_PM">Da es sich um eine Private Nachricht handeln, wird die Nachricht nur zum löschen markiert und wartet auf eine Aktion des Gesprächspartners</string>
     <string name="MSG_FORMER_MEMBERS">Ehemalige Mitglieder</string>
+    <string name="MSG_NO_VALID_RECIPIENTS">Die ausgewählten Rollen und Benutzer besitzen keine gültigen E-Mail-Adressen. Aus diesem Grund kann die E-Mail nicht versendet werden.</string>
     <string name="MSG_OPPOSITE">Gesprächspartner</string>
     <string name="MSG_PM_SEND">Die Private Nachricht wurde an #VAR1_BOLD# versendet.</string>
     <string name="MSG_PM_NOT_SEND">Die Private Nachricht konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
