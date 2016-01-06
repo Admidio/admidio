@@ -488,7 +488,18 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
 
         case 'bool':
         case 'boolean':
-            $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+            $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            // Bug workaround PHP <5.4.8
+            // https://bugs.php.net/bug.php?id=49510
+            if ($valid === null && ($value === null || $value === false || $value === ''))
+            {
+                $valid = false;
+            }
+            if ($valid === null)
+            {
+                $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+            }
+            $value = $valid;
             break;
 
         case 'int':
