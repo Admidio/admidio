@@ -397,14 +397,16 @@ else
         // if active, then show room information
         if($date->getValue('dat_room_id') > 0)
         {
+            $room = new TableRooms($gDb, $date->getValue('dat_room_id'));
+
             if($getViewMode === 'html')
             {
                 $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
-                $outputLinkRoom = '<strong><a data-toggle="modal" data-target="#admidio_modal" href="'.$roomLink.'">'.$row['room_name'].'</a></strong>';
+                $outputLinkRoom = '<strong><a data-toggle="modal" data-target="#admidio_modal" href="'.$roomLink.'">'.$room->getValue('room_name').'</a></strong>';
             }
             else
             {
-                $outputLinkRoom = $row['room_name'];
+                $outputLinkRoom = $room->getValue('room_name');
             }
         }
 
