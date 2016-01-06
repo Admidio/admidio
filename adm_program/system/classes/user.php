@@ -276,12 +276,15 @@ class User extends TableUsers
      *                                            To use this functionality @b $updateSessionCookies must be set to true.
      * @param  bool         $updateSessionCookies The current session will be updated to a valid login.
      *                                            If set to false then the login is only valid for the current script.
+     * @param  bool         $updateHash           If set to true the code will check if the current password hash uses
+     *                                            the best hashing algorithm. If not the password will be rehashed with
+     *                                            the new algorithm. If set to false the password will not be rehashed.
      * @throws AdmException SYS_LOGIN_FAILED
      *                                           SYS_LOGIN_FAILED
      *                                           SYS_PASSWORD_UNKNOWN
      * @return true         Return true if the correct password for this user was given to this method.
      */
-    public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true)
+    public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true)
     {
         global $gPreferences, $gCookiePraefix, $gCurrentSession, $gSessionId;
 
@@ -299,7 +302,7 @@ class User extends TableUsers
 
         if(PasswordHashing::verify($password, $currHash))
         {
-            if(PasswordHashing::needsRehash($currHash))
+            if($updateHash && PasswordHashing::needsRehash($currHash))
             {
                 $this->setPassword($password);
                 $this->save();

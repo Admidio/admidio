@@ -151,7 +151,7 @@ class Message
             // forward to next page after x seconds
             if ($this->timer > 0)
             {
-                $page->addJavascript('window.setTimeout("window.location.href=\''. $this->forwardUrl. '\'", '. $this->timer. ');');
+                $page->addJavascript('setTimeout(function () { window.location.href = "'. $this->forwardUrl. '"; }, '. $this->timer. ');');
             }
         }
         elseif(!$this->modalWindowMode)

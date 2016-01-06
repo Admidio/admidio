@@ -27,17 +27,17 @@ require_once('../../system/common.php');
 unset($list);
 
 // Initialize and check the parameters
-$getDateFrom    = admFuncVariableIsValid($_GET, 'date_from',    'date',   array('defaultValue' => DATE_NOW));
-$getDateTo      = admFuncVariableIsValid($_GET, 'date_to',      'date',   array('defaultValue' => DATE_NOW));
-$getMode        = admFuncVariableIsValid($_GET, 'mode',         'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
-$getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'int',    array('defaultValue' => 1));
-$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
+$getDateFrom    = admFuncVariableIsValid($_GET, 'date_from', 'date', array('defaultValue' => DATE_NOW));
+$getDateTo      = admFuncVariableIsValid($_GET, 'date_to', 'date', array('defaultValue' => DATE_NOW));
+$getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
+$getListId      = admFuncVariableIsValid($_GET, 'lst_id', 'int', array('defaultValue' => 1));
+$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'int');
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
-$getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen',  'bool');
+$getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen', 'bool');
 
 // Create date objects and format dates in system format
 $objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
-if($objDateFrom === false)
+if ($objDateFrom === false)
 {
     // check if date_from  has system format
     $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], $getDateFrom);
@@ -46,7 +46,7 @@ $dateFrom = $objDateFrom->format($gPreferences['system_date']);
 $startDateEnglishFormat = $objDateFrom->format('Y-m-d');
 
 $objDateTo = DateTime::createFromFormat('Y-m-d', $getDateTo);
-if($objDateTo === false)
+if ($objDateTo === false)
 {
     // check if date_from  has system format
     $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], $getDateTo);
@@ -57,7 +57,7 @@ $endDateEnglishFormat = $objDateTo->format('Y-m-d');
 // Initialize the content of this parameter (otherwise some servers will keep the content)
 unset($rolesIds);
 
-if($getRoleId > 0)
+if ($getRoleId > 0)
 {
     $rolesIds[] = $getRoleId;
 }
@@ -68,28 +68,27 @@ else
 }
 
 // determine all roles relevant data
-$numberRoles      = count($rolesIds);
-$roleName         = $gL10n->get('LST_VARIOUS_ROLES');
-$htmlSubHeadline  = '';
-$roleIdLink       = '';
+$numberRoles     = count($rolesIds);
+$roleName        = $gL10n->get('LST_VARIOUS_ROLES');
+$htmlSubHeadline = '';
+$roleIdLink      = '';
 
-if($numberRoles > 1)
-{
+if ($numberRoles > 1) {
     $sql = 'SELECT rol_id, rol_name
               FROM '.TBL_ROLES.'
              WHERE rol_id IN ('.implode(',', $rolesIds).')';
     $rolesStatement = $gDb->query($sql);
-    $rolesData      = $rolesStatement->fetchAll();
+    $rolesData = $rolesStatement->fetchAll();
 
     // check if user has right to view all roles
-    foreach($rolesData as $role)
+    foreach ($rolesData as $role)
     {
-        if(!$gCurrentUser->hasRightViewRole($role['rol_id']))
+        if (!$gCurrentUser->hasRightViewRole($role['rol_id']))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
 
-        $htmlSubHeadline .= ', '. $role['rol_name'];
+        $htmlSubHeadline .= ', '.$role['rol_name'];
     }
 
     $htmlSubHeadline = substr($htmlSubHeadline, 2);
@@ -99,23 +98,23 @@ else
     $role = new TableRoles($gDb, $getRoleId);
 
     // check if user has right to view role
-    if(!$gCurrentUser->hasRightViewRole($getRoleId))
+    if (!$gCurrentUser->hasRightViewRole($getRoleId))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
-    $roleName         = $role->getValue('rol_name');
+    $roleName = $role->getValue('rol_name');
     $htmlSubHeadline .= $role->getValue('cat_name');
-    $roleIdLink       = '&rol_id='. $getRoleId;
+    $roleIdLink = '&rol_id='.$getRoleId;
 }
 
 // if no list parameter is set then load role default list configuration or system default list configuration
-if($getRoleId === 0 && $numberRoles === 1)
+if ($getRoleId === 0 && $numberRoles === 1)
 {
     // set role default list configuration
     $getRoleId = $role->getDefaultList();
 
-    if($getRoleId === 0)
+    if ($getRoleId === 0)
     {
         $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
     }
@@ -167,8 +166,13 @@ $arr_col_name = array('usr_login_name' => $gL10n->get('SYS_USERNAME'),
                       'usr_photo'      => $gL10n->get('PHO_PHOTO'),
                       'mem_begin'      => $gL10n->get('SYS_START'),
                       'mem_end'        => $gL10n->get('SYS_END'),
-                      'mem_leader'     => $gL10n->get('SYS_LEADERS')
+                      'mem_leader'     => $gL10n->get('SYS_LEADERS'),
 );
+
+// Array for valid colums visible for current user.
+// Needed for PDF export to set the correct colspan for the layout
+// Maybe there are hidden fields.
+$arrValidColums = array();
 
 $mainSql = ''; // Main SQL statement for lists
 $str_csv = ''; // CSV file as string
@@ -181,7 +185,7 @@ try
     $mainSql = $list->getSQL($rolesIds, $getShowMembers, $startDateEnglishFormat, $endDateEnglishFormat);
     // echo $mainSql; exit();
 }
-catch(AdmException $e)
+catch (AdmException $e)
 {
     $e->showHtml();
 }
@@ -192,15 +196,15 @@ $numMembers = $listStatement->rowCount();
 // get all members and their data of this list in an array
 $membersList = $listStatement->fetchAll();
 
-if($numMembers == 0)
+if ($numMembers == 0)
 {
     // Es sind keine Daten vorhanden !
     $gMessage->show($gL10n->get('LST_NO_USER_FOUND'));
 }
 
 // define title (html) and headline
-$title = $gL10n->get('LST_LIST').' - '. $roleName;
-if(strlen($list->getValue('lst_name')) > 0)
+$title = $gL10n->get('LST_LIST').' - '.$roleName;
+if (strlen($list->getValue('lst_name')) > 0)
 {
     $headline = $roleName.' - '.$list->getValue('lst_name');
 }
@@ -210,46 +214,44 @@ else
 }
 
 // if html mode and last url was not a list view then save this url to navigation stack
-if($getMode === 'html' && strpos($gNavigation->getUrl(), 'lists_show.php') === false)
+if ($getMode === 'html' && strpos($gNavigation->getUrl(), 'lists_show.php') === false)
 {
     $gNavigation->addUrl(CURRENT_URL);
 }
 
-if($getMode !== 'csv')
+if ($getMode !== 'csv')
 {
     $datatable = false;
     $hoverRows = false;
 
-    if($getShowMembers === 0)
+    if ($getShowMembers === 0)
     {
-        $htmlSubHeadline .= ' - '. $gL10n->get('LST_ACTIVE_MEMBERS');
+        $htmlSubHeadline .= ' - '.$gL10n->get('LST_ACTIVE_MEMBERS');
     }
-    elseif($getShowMembers === 1)
+    elseif ($getShowMembers === 1)
     {
-        $htmlSubHeadline .= ' - '. $gL10n->get('LST_FORMER_MEMBERS');
+        $htmlSubHeadline .= ' - '.$gL10n->get('LST_FORMER_MEMBERS');
     }
-    elseif($getShowMembers === 2)
+    elseif ($getShowMembers === 2)
     {
-        $htmlSubHeadline .= ' - '. $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
+        $htmlSubHeadline .= ' - '.$gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }
 
-    if($getMode === 'print')
+    if ($getMode === 'print')
     {
         // create html page object without the custom theme files
         $page = new HtmlPage();
         $page->hideThemeHtml();
         $page->hideMenu();
         $page->setPrintMode();
-
         $page->setTitle($title);
         $page->setHeadline($headline);
         $page->addHtml('<h5>'.$htmlSubHeadline.'</h5>');
-
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
     }
-    elseif($getMode === 'pdf')
+    elseif ($getMode === 'pdf')
     {
-        require_once(SERVER_PATH. '/adm_program/libs/tcpdf/tcpdf.php');
+        require_once SERVER_PATH.'/adm_program/libs/tcpdf/tcpdf.php';
         $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
@@ -282,14 +284,8 @@ if($getMode !== 'csv')
         // Create table object for display
         $table = new HtmlTable('adm_lists_table', $pdf, $hoverRows, $datatable, $classTable);
         $table->addAttribute('border', '1');
-        $table->addTableHeader();
-        $table->addRow();
-        $table->addAttribute('align', 'center');
-        $table->addColumn($headline, array('colspan' => $list->countColumns() + 1));
-        $table->addRow();
-
     }
-    elseif($getMode === 'html')
+    elseif ($getMode === 'html')
     {
         $datatable = true;
         $hoverRows = true;
@@ -297,7 +293,7 @@ if($getMode !== 'csv')
         // create html page object
         $page = new HtmlPage();
 
-        if($getFullScreen)
+        if ($getFullScreen)
         {
             $page->hideThemeHtml();
         }
@@ -306,7 +302,7 @@ if($getMode !== 'csv')
         $page->setHeadline($headline);
 
         // Only for active members of a role
-        if($getShowMembers === 0)
+        if ($getShowMembers === 0)
         {
             // create filter menu with elements for start-/enddate
             $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
@@ -327,13 +323,13 @@ if($getMode !== 'csv')
                 if($(this).val().length > 1) {
                     var result = $(this).val();
                     $(this).prop("selectedIndex",0);
-                    self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
-                        "lst_id='.$getListId. $roleIdLink. '&mode=" + result + "&show_members='.$getShowMembers.'";
+                    self.location.href = "'.$g_root_path.'/adm_program/modules/lists/lists_show.php?" +
+                        "lst_id='.$getListId.$roleIdLink.'&mode=" + result + "&show_members='.$getShowMembers.'";
                 }
             });
 
             $("#menu_item_print_view").click(function () {
-                window.open("'.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId. $roleIdLink. '&mode=print&show_members='.$getShowMembers.'", "_blank");
+                window.open("'.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.$roleIdLink.'&mode=print&show_members='.$getShowMembers.'", "_blank");
             });', true);
 
         // get module menu
@@ -341,23 +337,23 @@ if($getMode !== 'csv')
 
         $listsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
-        if($getFullScreen)
+        if ($getFullScreen)
         {
-            $listsMenu->addItem('menu_item_normal_picture', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId. htmlspecialchars($roleIdLink). '&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=false',
+            $listsMenu->addItem('menu_item_normal_picture', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.htmlspecialchars($roleIdLink).'&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=false',
                 $gL10n->get('SYS_NORMAL_PICTURE'), 'arrow_in.png');
         }
         else
         {
-            $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId. htmlspecialchars($roleIdLink). '&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=true',
+            $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.htmlspecialchars($roleIdLink).'&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=true',
                 $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png');
         }
 
-        if($numberRoles === 1)
+        if ($numberRoles === 1)
         {
             // link to assign or remove members if you are allowed to do it
-            if($role->allowedToAssignMembers($gCurrentUser))
+            if ($role->allowedToAssignMembers($gCurrentUser))
             {
-                $listsMenu->addItem('menu_item_assign_members', $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='. $role->getValue('rol_id'),
+                $listsMenu->addItem('menu_item_assign_members', $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$role->getValue('rol_id'),
                     $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png');
             }
         }
@@ -371,7 +367,7 @@ if($getMode !== 'csv')
             'csv-ms' => $gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')',
             'pdf'    => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
             'pdfl'   => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
-            'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')'
+            'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
         );
         $form->addSelectBox('export_list_to', null, $selectBoxEntries, array('showContextDependentFirstEntry' => false));
         $listsMenu->addForm($form->show(false));
@@ -386,37 +382,36 @@ if($getMode !== 'csv')
 }
 
 // initialize array parameters for table and set the first column for the counter
-if($getMode === 'html')
+if ($getMode === 'html')
 {
     // in html mode we group leaders. Therefore we need a special hidden column.
-    $columnAlign  = array('left', 'left');
+    $columnAlign = array('left', 'left');
     $columnValues = array($gL10n->get('SYS_ABR_NO'), $gL10n->get('INS_GROUPS'));
 }
 else
 {
-    $columnAlign  = array('left');
+    $columnAlign = array('left');
     $columnValues = array($gL10n->get('SYS_ABR_NO'));
 }
 
 // headlines for columns
-for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
-{
+for ($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber) {
     $column = $list->getColumnObject($columnNumber);
 
     // Find name of the field
-    if($column->getValue('lsc_usf_id') > 0)
+    if ($column->getValue('lsc_usf_id') > 0)
     {
         // customs field
         $usf_id = $column->getValue('lsc_usf_id');
         $columnHeader = $gProfileFields->getPropertyById($usf_id, 'usf_name');
 
-        if($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX'
-        || $gProfileFields->getPropertyById($usf_id, 'usf_name_intern') === 'GENDER')
+        if ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX'
+            || $gProfileFields->getPropertyById($usf_id, 'usf_name_intern') === 'GENDER')
         {
             $columnAlign[] = 'center';
         }
-        elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'NUMBER'
-        || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'DECIMAL')
+        elseif ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'NUMBER'
+                || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'DECIMAL')
         {
             $columnAlign[] = 'right';
         }
@@ -432,44 +427,70 @@ for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
         $columnAlign[] = 'left';
     }
 
-    // show hidden fields only for user with rights
-    if($usf_id == 0
-    || $gCurrentUser->editUsers()
-    || $gProfileFields->getPropertyById($usf_id, 'usf_hidden') == 0)
+    if ($getMode === 'csv')
     {
-        if($getMode === 'csv')
+        if ($columnNumber == 1)
         {
-            if($columnNumber == 1)
-            {
-                // add serial
-                $str_csv = $str_csv. $valueQuotes. $gL10n->get('SYS_ABR_NO'). $valueQuotes;
-            }
-            $str_csv = $str_csv. $separator. $valueQuotes. $columnHeader. $valueQuotes;
+            // add serial
+            $str_csv = $str_csv.$valueQuotes.$gL10n->get('SYS_ABR_NO').$valueQuotes;
         }
-        elseif($getMode === 'pdf')
-        {
-            if($columnNumber == 1)
-            {
-                $table->addColumn($gL10n->get('SYS_ABR_NO'), array('style' => 'text-align: '.$columnAlign[$columnNumber-1].';font-size:14;background-color:#C7C7C7;'), 'th');
-            }
+    }
 
-            $table->addColumn($columnHeader, array('style' => 'text-align: '.$columnAlign[$columnNumber-1].';font-size:14;background-color:#C7C7C7;'), 'th');
+    if ($getMode === 'pdf')
+    {
+        if ($columnNumber == 1)
+        {
+            // add serial
+            $arrValidColums[] = $gL10n->get('SYS_ABR_NO');
         }
-        elseif($getMode === 'html' || $getMode === 'print')
+    }
+
+    // show hidden fields only for user with rights
+    if ($usf_id == 0
+        || $gCurrentUser->editUsers()
+        || $gProfileFields->getPropertyById($usf_id, 'usf_hidden') == 0)
+    {
+        if ($getMode === 'csv')
+        {
+            $str_csv = $str_csv.$separator.$valueQuotes.$columnHeader.$valueQuotes;
+        }
+        elseif ($getMode === 'pdf')
+        {
+            $arrValidColums[] = $columnHeader;
+        }
+        elseif ($getMode === 'html' || $getMode === 'print')
         {
             $columnValues[] = $columnHeader;
         }
     }
 }  // End-For
 
-if($getMode === 'csv')
+if ($getMode === 'csv')
 {
-    $str_csv = $str_csv. "\n";
+    $str_csv = $str_csv."\n";
 }
-elseif($getMode === 'html' || $getMode === 'print')
+elseif ($getMode === 'html' || $getMode === 'print')
 {
     $table->setColumnAlignByArray($columnAlign);
     $table->addRowHeadingByArray($columnValues);
+}
+elseif ($getMode === 'pdf')
+{
+    $table->addTableHeader();
+    $table->addRow();
+    $table->addAttribute('align', 'center');
+    $table->addColumn($headline, array('colspan' => count($arrValidColums)));
+    $table->addRow();
+    // Write valid column headings
+    for ($column = 1; $column <= count($arrValidColums); ++$column)
+    {
+        if ($column == 1)
+        {
+            $table->addColumn($arrValidColums[0], array('style' => 'text-align: '.$columnAlign[$columnNumber - 1].';font-size:14;background-color:#C7C7C7;'), 'th');
+        }
+
+        $table->addColumn($arrValidColums[$column], array('style' => 'text-align: '.$columnAlign[$columnNumber - 1].';font-size:14;background-color:#C7C7C7;'), 'th');
+    }
 }
 else
 {
@@ -479,16 +500,16 @@ else
 $lastGroupHead = -1; // Mark for change between leader and member
 $listRowNumber = 1;
 
-foreach($membersList as $member)
+foreach ($membersList as $member)
 {
-    if($getMode === 'print' || $getMode === 'pdf')
+    if ($getMode === 'print' || $getMode === 'pdf')
     {
         // in print preview and pdf we group the role leaders and the members and
         // add a specific header for them
-        if($lastGroupHead != $member['mem_leader']
+        if ($lastGroupHead != $member['mem_leader']
         && ($member['mem_leader'] != 0 || $lastGroupHead != -1))
         {
-            if($member['mem_leader'] == 1)
+            if ($member['mem_leader'] == 1)
             {
                 $title = $gL10n->get('SYS_LEADERS');
             }
@@ -505,9 +526,9 @@ foreach($membersList as $member)
     }
 
     // if html mode and the role has leaders then group all data between leaders and members
-    if($getMode === 'html')
+    if ($getMode === 'html')
     {
-        if($member['mem_leader'] != 0)
+        if ($member['mem_leader'] != 0)
         {
             $table->setDatatablesGroupColumn(2);
         }
@@ -520,7 +541,7 @@ foreach($membersList as $member)
     $columnValues = array();
 
     // Fields of recordset
-    for($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
+    for ($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
     {
         $column = $list->getColumnObject($columnNumber);
 
@@ -528,7 +549,7 @@ foreach($membersList as $member)
         // the Index to the row must be set to 2 directly
         $sqlColumnNumber = $columnNumber + 1;
 
-        if($column->getValue('lsc_usf_id') > 0)
+        if ($column->getValue('lsc_usf_id') > 0)
         {
             // check if customs field and remember
             $b_user_field = true;
@@ -540,41 +561,42 @@ foreach($membersList as $member)
             $usf_id = 0;
         }
 
-        // hidden fields are only for users with rights
-        if($usf_id == 0
-        || $gCurrentUser->editUsers()
-        || $gProfileFields->getPropertyById($usf_id, 'usf_hidden') == 0)
+        if ($getMode === 'html' || $getMode === 'print' || $getMode === 'pdf')
         {
-            if($getMode === 'html' || $getMode === 'print' || $getMode === 'pdf')
+            if ($columnNumber == 1)
             {
-                if($columnNumber == 1)
-                {
-                    // add serial
-                    $columnValues[] = $listRowNumber;
+                // add serial
+                $columnValues[] = $listRowNumber;
 
-                    // in html mode we add an additional column with leader/member information to
-                    // enable the grouping function of jquery datatables
-                    if($getMode === 'html')
+                // in html mode we add an additional column with leader/member information to
+                // enable the grouping function of jquery datatables
+                if ($getMode === 'html')
+                {
+                    if ($member['mem_leader'] == 1)
                     {
-                        if($member['mem_leader'] == 1)
-                        {
-                            $columnValues[] = $gL10n->get('SYS_LEADERS');
-                        }
-                        else
-                        {
-                            $columnValues[] = $gL10n->get('SYS_PARTICIPANTS');
-                        }
+                        $columnValues[] = $gL10n->get('SYS_LEADERS');
+                    }
+                    else
+                    {
+                        $columnValues[] = $gL10n->get('SYS_PARTICIPANTS');
                     }
                 }
             }
-            else
+        }
+        else
+        {
+            if ($columnNumber == 1)
             {
-                if($columnNumber == 1)
-                {
-                    // 1st column may show the serial
-                    $str_csv = $str_csv. $valueQuotes. $listRowNumber. $valueQuotes;
-                }
+                // 1st column may show the serial
+                $str_csv = $str_csv.$valueQuotes.$listRowNumber.$valueQuotes;
             }
+        }
+
+        // hidden fields are only for users with rights
+        if ($usf_id == 0
+            || $gCurrentUser->editUsers()
+            || $gProfileFields->getPropertyById($usf_id, 'usf_hidden') == 0)
+        {
 
             // fill content with data of database
             $content = $member[$sqlColumnNumber];
@@ -582,14 +604,14 @@ foreach($membersList as $member)
             /*****************************************************************/
             // in some cases the content must have a special output format
             /*****************************************************************/
-            if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id'))
+            if ($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id'))
             {
                 $content = $gL10n->getCountryByCode($member[$sqlColumnNumber]);
             }
-            elseif($column->getValue('lsc_special_field') === 'usr_photo')
+            elseif ($column->getValue('lsc_special_field') === 'usr_photo')
             {
                 // show user photo
-                if($getMode === 'html' || $getMode === 'print')
+                if ($getMode === 'html' || $getMode === 'print')
                 {
                     $content = '<img src="'.$g_root_path.'/adm_program/modules/profile/profile_photo_show.php?usr_id='.$member['usr_id'].'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
                 }
@@ -598,65 +620,64 @@ foreach($membersList as $member)
                     $content = $gL10n->get('LST_USER_PHOTO');
                 }
             }
-            elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX')
+            elseif ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX')
             {
-                if($getMode !== 'html')
+                if ($getMode !== 'html')
                 {
-                    if($content == 1)
+                    if ($content == 1)
                     {
                         $content = $gL10n->get('SYS_YES');
-                    }
-                    else
+                    }else
                     {
                         $content = $gL10n->get('SYS_NO');
                     }
                 }
             }
-            elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'DATE'
-            ||     $column->getValue('lsc_special_field') === 'mem_begin'
-            ||     $column->getValue('lsc_special_field') === 'mem_end')
+            elseif ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'DATE'
+                    || $column->getValue('lsc_special_field') === 'mem_begin'
+                    || $column->getValue('lsc_special_field') === 'mem_end')
             {
-                if(strlen($member[$sqlColumnNumber]) > 0)
+                if (strlen($member[$sqlColumnNumber]) > 0)
                 {
                     // date must be formated
                     $date = new DateTimeExtended($member[$sqlColumnNumber], 'Y-m-d');
                     $content = $date->format($gPreferences['system_date']);
                 }
             }
-            elseif(($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'DROPDOWN'
-                  || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'RADIO_BUTTON')
-            && $getMode === 'csv')
+            elseif (($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'DROPDOWN'
+                    || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'RADIO_BUTTON')
+                    && $getMode === 'csv')
             {
-                if(strlen($member[$sqlColumnNumber]) > 0)
+                if (strlen($member[$sqlColumnNumber]) > 0)
                 {
                     // show selected text of optionfield or combobox
                     $arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
-                    $content       = $arrListValues[$member[$sqlColumnNumber]];
+                    $content = $arrListValues[$member[$sqlColumnNumber]];
                 }
             }
 
             // format value for csv export
-            if($getMode === 'csv')
+            if ($getMode === 'csv')
             {
-                $str_csv = $str_csv. $separator. $valueQuotes. $content. $valueQuotes;
+                $str_csv = $str_csv.$separator.$valueQuotes.$content.$valueQuotes;
             }
             // create output in html layout
             else
             {
                 // firstname and lastname get a link to the profile
-                if($getMode === 'html'
-                &&   ($usf_id == $gProfileFields->getProperty('LAST_NAME', 'usf_id')
-                   || $usf_id == $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
+                if ($getMode === 'html'
+                    &&   ($usf_id == $gProfileFields->getProperty('LAST_NAME', 'usf_id')
+                    || $usf_id == $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
                 {
                     $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member['usr_id']);
-                    $columnValues[] = '<a href="'.$g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $member['usr_id'].'">'.$htmlValue.'</a>';
+                    $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$member['usr_id'].'">'.$htmlValue.'</a>';
                 }
                 else
                 {
-                    if($getMode === 'print'
-                    &&   ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'EMAIL'
-                       || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'PHONE'
-                       || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'URL'))
+                    if ($getMode === 'print'
+                        &&($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'EMAIL'
+                        || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'PHONE'
+                        || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'URL'))
                     {
                         $columnValues[] = $content;
                     }
@@ -669,11 +690,10 @@ foreach($membersList as $member)
         }
     }
 
-    if($getMode === 'csv')
+    if ($getMode === 'csv')
     {
-        $str_csv = $str_csv. "\n";
-    }
-    else
+        $str_csv = $str_csv."\n";
+    }else
     {
         $table->addRowByArray($columnValues, null, array('nobr' => 'true'));
     }
@@ -682,16 +702,16 @@ foreach($membersList as $member)
 }  // End-While (end found User)
 
 // Settings for export file
-if($getMode === 'csv' || $getMode === 'pdf')
+if ($getMode === 'csv' || $getMode === 'pdf')
 {
     // file name in the current directory...
-    if(strlen($list->getValue('lst_name')) > 0)
+    if (strlen($list->getValue('lst_name')) > 0)
     {
-        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $roleName). '-'. str_replace('.', '', $list->getValue('lst_name')).'.'.$getMode;
+        $filename = $gCurrentOrganization->getValue('org_shortname').'-'.str_replace('.', '', $roleName).'-'.str_replace('.', '', $list->getValue('lst_name')).'.'.$getMode;
     }
     else
     {
-        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $roleName).'.'.$getMode;
+        $filename = $gCurrentOrganization->getValue('org_shortname').'-'.str_replace('.', '', $roleName).'.'.$getMode;
     }
 
      // for IE the filename must have special chars in hexadecimal
@@ -705,15 +725,14 @@ if($getMode === 'csv' || $getMode === 'pdf')
     // necessary for IE6 to 8, because without it the download with SSL has problems
     header('Cache-Control: private');
     header('Pragma: public');
-
 }
 
-if($getMode === 'csv')
+if ($getMode === 'csv')
 {
     // download CSV file
     header('Content-Type: text/comma-separated-values; charset='.$charset);
 
-    if($charset === 'iso-8859-1')
+    if ($charset === 'iso-8859-1')
     {
         echo utf8_decode($str_csv);
     }
@@ -723,66 +742,66 @@ if($getMode === 'csv')
     }
 }
 // send the new PDF to the User
-elseif($getMode === 'pdf')
+elseif ($getMode === 'pdf')
 {
     // output the HTML content
     $pdf->writeHTML($table->getHtmlTable(), true, false, true, false, '');
 
     // Save PDF to file
-    $pdf->Output(SERVER_PATH. '/adm_my_files/'.$filename, 'F');
+    $pdf->Output(SERVER_PATH.'/adm_my_files/'.$filename, 'F');
 
     // Redirect
     header('Content-Type: application/pdf');
 
-    readfile(SERVER_PATH. '/adm_my_files/'.$filename);
+    readfile(SERVER_PATH.'/adm_my_files/'.$filename);
     ignore_user_abort(true);
-    unlink(SERVER_PATH. '/adm_my_files/'.$filename);
+    unlink(SERVER_PATH.'/adm_my_files/'.$filename);
 }
-elseif($getMode === 'html' || $getMode === 'print')
+elseif ($getMode === 'html' || $getMode === 'print')
 {
     // add table list to the page
     $page->addHtml($table->show(false));
 
     // create a infobox for the role
-    if($getMode === 'html' && $numberRoles === 1)
+    if ($getMode === 'html' && $numberRoles === 1)
     {
         $htmlBox = '';
 
         // only show infobox if additional role information fields are filled
-        if(strlen($role->getValue('rol_start_date')) > 0
-        || $role->getValue('rol_weekday') > 0
-        || strlen($role->getValue('rol_start_time')) > 0
-        || strlen($role->getValue('rol_location')) > 0
-        || strlen($role->getValue('rol_cost')) > 0
-        || strlen($role->getValue('rol_max_members')) > 0)
+        if (strlen($role->getValue('rol_start_date')) > 0
+            || $role->getValue('rol_weekday') > 0
+            || strlen($role->getValue('rol_start_time')) > 0
+            || strlen($role->getValue('rol_location')) > 0
+            || strlen($role->getValue('rol_cost')) > 0
+            || strlen($role->getValue('rol_max_members')) > 0)
         {
             $htmlBox = '
             <div class="panel panel-default" id="adm_lists_infobox">
                 <div class="panel-heading">'.$gL10n->get('LST_INFOBOX').': '.$role->getValue('rol_name').'</div>
                 <div class="panel-body">';
-                    $form = new HtmlForm('list_infobox_items', null);
-                    $form->addStaticControl('infobox_category', $gL10n->get('SYS_CATEGORY'), $role->getValue('cat_name'));
+            $form = new HtmlForm('list_infobox_items', null);
+            $form->addStaticControl('infobox_category', $gL10n->get('SYS_CATEGORY'), $role->getValue('cat_name'));
 
                     // Description
-                    if(strlen($role->getValue('rol_description')) > 0)
+                    if (strlen($role->getValue('rol_description')) > 0)
                     {
                         $form->addStaticControl('infobox_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'));
                     }
 
                     // Period
-                    if(strlen($role->getValue('rol_start_date')) > 0)
+                    if (strlen($role->getValue('rol_start_date')) > 0)
                     {
                         $form->addStaticControl('infobox_period', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])));
                     }
 
                     // Event
-                    if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
+                    if ($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
                     {
-                        if($role->getValue('rol_weekday') > 0)
+                        if ($role->getValue('rol_weekday') > 0)
                         {
                             $value = DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
                         }
-                        if(strlen($role->getValue('rol_start_time')) > 0)
+                        if (strlen($role->getValue('rol_start_time')) > 0)
                         {
                             $value = $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
                         }
@@ -791,30 +810,30 @@ elseif($getMode === 'html' || $getMode === 'print')
                     }
 
                     // Meeting Point
-                    if(strlen($role->getValue('rol_location')) > 0)
+                    if (strlen($role->getValue('rol_location')) > 0)
                     {
                         $form->addStaticControl('infobox_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'));
                     }
 
                     // Member Fee
-                    if(strlen($role->getValue('rol_cost')) > 0)
+                    if (strlen($role->getValue('rol_cost')) > 0)
                     {
-                        $form->addStaticControl('infobox_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost'). ' '.$gPreferences['system_currency']);
+                        $form->addStaticControl('infobox_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost').' '.$gPreferences['system_currency']);
                     }
 
                     // Fee period
-                    if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
+                    if (strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
                     {
                         $form->addStaticControl('infobox_contribution_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), $role->getCostPeriods($role->getValue('rol_cost_period')));
                     }
 
                     // max participants
-                    if(strlen($role->getValue('rol_max_members')) > 0)
+                    if (strlen($role->getValue('rol_max_members')) > 0)
                     {
                         $form->addStaticControl('infobox_max_participants', $gL10n->get('SYS_MAX_PARTICIPANTS'), $role->getValue('rol_max_members'));
                     }
-                    $htmlBox .= $form->show(false);
-                $htmlBox .= '</div>
+            $htmlBox .= $form->show(false);
+            $htmlBox .= '</div>
             </div>';
         } // end of infobox
 

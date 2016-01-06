@@ -486,7 +486,7 @@ class HtmlPage
             <script src="'.$g_root_path.'/adm_program/libs/respond/respond.min.js"></script>
         <![endif]-->';
 
-        if ($gPreferences['system_browser_update_check'] == 1)
+        if (isset($gPreferences['system_browser_update_check']) && $gPreferences['system_browser_update_check'] == 1)
         {
             $this->addJavascriptFile($g_root_path.'/adm_program/libs/browser-update/browser-update.js');
         }

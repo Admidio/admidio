@@ -290,8 +290,11 @@ elseif($getMode === 2)
                 $gProfileFields = new ProfileFields($gDb, $gCurrentOrganization->getValue('org_id'));
                 $gCurrentUser   = new User($gDb, $gProfileFields, $userRow['usr_id']);
 
-                // check login. If login failed an exception will be thrown
-                $gCurrentUser->checkLogin($password, false, false);
+                // check login data. If login failed an exception will be thrown.
+                // Don't update the current session with user id and don't do a rehash of the password
+                // because in former versions the password field was to small for the current hashes
+                // and the update of this field will be done after this check.
+                $gCurrentUser->checkLogin($password, false, false, false);
             }
             else
             {
@@ -364,7 +367,7 @@ elseif($getMode === 2)
                 // Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
                 for($microVersion = $microVersion; $microVersion < 15; ++$microVersion)
                 {
-                    $version = $mainVersion.'.'.$subVersion.'.'.$microVersion;
+                    $version = $mainVersion.'_'.$subVersion.'_'.$microVersion;
 
                     // Update-Datei der naechsten hoeheren Version ermitteln
                     $sqlUpdateFile = 'db_scripts/upd_'. $version. '_db.sql';

@@ -103,7 +103,7 @@ else
 $gL10n = new Language();
 
 // Session handling
-if(array_key_exists('gCurrentSession', $_SESSION))
+if(array_key_exists('gCurrentSession', $_SESSION) && $_SESSION['gCurrentSession']->hasObject('gCurrentOrganization'))
 {
     // read session object from PHP session
     $gCurrentSession = $_SESSION['gCurrentSession'];
