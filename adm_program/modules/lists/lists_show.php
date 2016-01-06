@@ -31,7 +31,7 @@ $getDateFrom    = admFuncVariableIsValid($_GET, 'date_from',    'date',   array(
 $getDateTo      = admFuncVariableIsValid($_GET, 'date_to',      'date',   array('defaultValue' => DATE_NOW));
 $getMode        = admFuncVariableIsValid($_GET, 'mode',         'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
 $getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'int',    array('defaultValue' => 1));
-$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
+$getRoleIds     = admFuncVariableIsValid($_GET, 'rol_ids',      'string'); // could be int or int[], so string is necessary
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 $getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen',  'bool');
 
@@ -54,21 +54,15 @@ if ($objDateTo === false)
 $dateTo = $objDateTo->format($gPreferences['system_date']);
 $endDateEnglishFormat = $objDateTo->format('Y-m-d');
 
-// Initialize the content of this parameter (otherwise some servers will keep the content)
-unset($rolesIds);
-
-if ($getRoleId > 0)
+$roleIds = array_map('intval', array_filter(explode(',', $getRoleIds), 'is_numeric'));
+$numberRoles = count($roleIds);
+if ($numberRoles === 0)
 {
-    $rolesIds[] = $getRoleId;
+    // TODO error message
 }
-else
-{
-    $rolesIds  = $_SESSION['role_ids'];
-    $getRoleId = $rolesIds[0];
-}
+$roleId = $roleIds[0];
 
 // determine all roles relevant data
-$numberRoles     = count($rolesIds);
 $roleName        = $gL10n->get('LST_VARIOUS_ROLES');
 $htmlSubHeadline = '';
 $roleIdLink      = '';
@@ -77,7 +71,7 @@ if ($numberRoles > 1)
 {
     $sql = 'SELECT rol_id, rol_name
               FROM '.TBL_ROLES.'
-             WHERE rol_id IN ('.implode(',', $rolesIds).')';
+             WHERE rol_id IN ('.implode(',', $roleIds).')';
     $rolesStatement = $gDb->query($sql);
     $rolesData      = $rolesStatement->fetchAll();
 
@@ -96,26 +90,26 @@ if ($numberRoles > 1)
 }
 else
 {
-    $role = new TableRoles($gDb, $getRoleId);
+    $role = new TableRoles($gDb, $roleId);
 
     // check if user has right to view role
-    if (!$gCurrentUser->hasRightViewRole($getRoleId))
+    if (!$gCurrentUser->hasRightViewRole($roleId))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
     $roleName         = $role->getValue('rol_name');
     $htmlSubHeadline .= $role->getValue('cat_name');
-    $roleIdLink       = '&rol_id='.$getRoleId;
+    $roleIdLink       = '&rol_id='.$roleId;
 }
 
 // if no list parameter is set then load role default list configuration or system default list configuration
-if ($getRoleId === 0 && $numberRoles === 1)
+if ($numberRoles === 1 && $roleId === 0)
 {
     // set role default list configuration
-    $getRoleId = $role->getDefaultList();
+    $roleId = $role->getDefaultList();
 
-    if ($getRoleId === 0)
+    if ($roleId === 0)
     {
         $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
     }
@@ -184,7 +178,7 @@ try
 {
     // create list configuration object and create a sql statement out of it
     $list = new ListConfiguration($gDb, $getListId);
-    $mainSql = $list->getSQL($rolesIds, $getShowMembers, $startDateEnglishFormat, $endDateEnglishFormat);
+    $mainSql = $list->getSQL($roleIds, $getShowMembers, $startDateEnglishFormat, $endDateEnglishFormat);
     // echo $mainSql; exit();
 }
 catch (AdmException $e)
@@ -312,7 +306,7 @@ if ($getMode !== 'csv')
             $form->addInput('date_from', $gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('date_to', $gL10n->get('LST_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('lst_id', '', $getListId, array('property' => FIELD_HIDDEN));
-            $form->addInput('rol_id', '', $getRoleId, array('property' => FIELD_HIDDEN));
+            $form->addInput('rol_id', '', $roleId, array('property' => FIELD_HIDDEN));
             $form->addInput('show_members', '', $getShowMembers, array('property' => FIELD_HIDDEN));
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
             $filterNavbar->addForm($form->show(false));
