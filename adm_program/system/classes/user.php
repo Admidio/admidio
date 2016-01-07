@@ -8,7 +8,6 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once(SERVER_PATH.'/adm_program/system/classes/passwordhashing.php');
 
 /******************************************************************************
  * Diese Klasse dient dazu ein Userobjekt zu erstellen.
@@ -270,62 +269,104 @@ class User extends TableUsers
     /**
      * Check if a valid password is set for the user and return true if the correct password
      * was set. Optional the current session could be updated to a valid login session.
-     * @param  string       $password             The password for the current user. This should not be encoded.
-     * @param  bool         $setAutoLogin         If set to true then this login will be stored in AutoLogin table
-     *                                            and the user doesn't need to login another time with this browser.
-     *                                            To use this functionality @b $updateSessionCookies must be set to true.
-     * @param  bool         $updateSessionCookies The current session will be updated to a valid login.
-     *                                            If set to false then the login is only valid for the current script.
-     * @param  bool         $updateHash           If set to true the code will check if the current password hash uses
-     *                                            the best hashing algorithm. If not the password will be rehashed with
-     *                                            the new algorithm. If set to false the password will not be rehashed.
-     * @throws AdmException SYS_LOGIN_FAILED
-     *                                           SYS_LOGIN_FAILED
-     *                                           SYS_PASSWORD_UNKNOWN
-     * @return true         Return true if the correct password for this user was given to this method.
+     * @param string $password             The password for the current user. This should not be encoded.
+     * @param bool   $setAutoLogin         If set to true then this login will be stored in AutoLogin table
+     *                                     and the user doesn't need to login another time with this browser.
+     *                                     To use this functionality @b $updateSessionCookies must be set to true.
+     * @param bool   $updateSessionCookies The current session will be updated to a valid login.
+     *                                     If set to false then the login is only valid for the current script.
+     * @param bool   $updateHash           If set to true the code will check if the current password hash uses
+     *                                     the best hashing algorithm. If not the password will be rehashed with
+     *                                     the new algorithm. If set to false the password will not be rehashed.
+     * @param bool   $isWebmaster          If set to true the code will check if the current password hash uses
+     * @return true|string Return true if login was successful and a string with the reason why the login failed.
+     *                     Possible reasons: SYS_LOGIN_MAX_INVALID_LOGIN
+     *                                       SYS_LOGIN_NOT_ACTIVATED
+     *                                       SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION
+     *                                       SYS_LOGIN_USER_NO_WEBMASTER
+     *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
      */
-    public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true)
+    public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true, $isWebmaster = false)
     {
-        global $gPreferences, $gCookiePraefix, $gCurrentSession, $gSessionId;
+        global $gPreferences, $gCookiePraefix, $gCurrentSession, $gSessionId, $installedDbVersion;
 
-        if($this->getValue('usr_number_invalid') >= 3)
+        $invalidLoginCount = $this->getValue('usr_number_invalid');
+
+        // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
+        if ($invalidLoginCount >= 3 && time() - strtotime($this->getValue('usr_date_invalid', 'Y-m-d H:i:s')) < 60 * 15)
         {
-            // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
-            if(time() - strtotime($this->getValue('usr_date_invalid', 'Y-m-d H:i:s')) < 900)
-            {
-                $this->clear();
-                throw new AdmException('SYS_LOGIN_FAILED');
-            }
+            $this->clear();
+            return 'SYS_LOGIN_MAX_INVALID_LOGIN';
         }
 
         $currHash = $this->getValue('usr_password');
 
-        if(PasswordHashing::verify($password, $currHash))
+        if (PasswordHashing::verify($password, $currHash))
         {
-            if($updateHash && PasswordHashing::needsRehash($currHash))
+            // Password correct
+
+            // if user is not activated/valid return error message
+            if (!$this->getValue('usr_valid'))
+            {
+                return 'SYS_LOGIN_NOT_ACTIVATED';
+            }
+
+            $sqlWebmaster = '';
+            // only check for webmaster role if version > 2.3 because before we don't have that flag
+            if($isWebmaster && version_compare($installedDbVersion, '2.4.0') === 1)
+            {
+                $sqlWebmaster = ', rol_webmaster';
+            }
+
+            // Check if user is currently member of a role of an organisation
+            $sql = 'SELECT DISTINCT mem_usr_id'.$sqlWebmaster.'
+                      FROM '.TBL_MEMBERS.'
+                INNER JOIN '.TBL_ROLES.'
+                        ON rol_id = mem_rol_id
+                INNER JOIN '.TBL_CATEGORIES.'
+                        ON cat_id = rol_cat_id
+                     WHERE mem_usr_id = '.$this->getValue('usr_id').'
+                       AND rol_valid  = 1
+                       AND mem_begin <= \''.DATE_NOW.'\'
+                       AND mem_end    > \''.DATE_NOW.'\'
+                       AND cat_org_id = '.$this->organizationId;
+            $userStatement = $this->db->query($sql);
+
+            if ($userStatement->rowCount() === 0)
+            {
+                return 'SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION';
+            }
+
+            $userRow = $userStatement->fetch();
+            if ($isWebmaster && version_compare($installedDbVersion, '2.4.0') === 1 && $userRow['rol_webmaster'] == 0)
+            {
+                return 'SYS_LOGIN_USER_NO_WEBMASTER';
+            }
+
+            // Rehash password if the hash is outdated and rehashing is enabled
+            if ($updateHash && PasswordHashing::needsRehash($currHash))
             {
                 $this->setPassword($password);
                 $this->save();
             }
 
-            if($updateSessionCookies)
+            if ($updateSessionCookies)
             {
                 $gCurrentSession->setValue('ses_usr_id', $this->getValue('usr_id'));
                 $gCurrentSession->save();
             }
 
-            // soll der Besucher automatisch eingeloggt bleiben, dann verfaellt das Cookie erst nach einem Jahr
-            if($setAutoLogin && $gPreferences['enable_auto_login'] == 1)
+            // should the user stayed logged in automatically, than the cookie would expire in one year
+            if ($setAutoLogin && $gPreferences['enable_auto_login'] == 1)
             {
                 $gCurrentSession->setAutoLogin();
             }
             else
             {
-                $timestamp_expired = 0;
                 $this->setValue('usr_last_session_id', null);
             }
 
-            if($updateSessionCookies)
+            if ($updateSessionCookies)
             {
                 // set cookie for session id and remove ports from domain
                 $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
@@ -340,8 +381,10 @@ class User extends TableUsers
         }
         else
         {
+            // Password wrong
+
             // log invalid logins
-            if($this->getValue('usr_number_invalid') >= 3)
+            if ($invalidLoginCount >= 3)
             {
                 $this->setValue('usr_number_invalid', 1);
             }
@@ -351,16 +394,16 @@ class User extends TableUsers
             }
 
             $this->setValue('usr_date_invalid', DATETIME_NOW);
-            $this->save(false);   // don't update timestamp
+            $this->save(false); // don't update timestamp
             $this->clear();
 
-            if($this->getValue('usr_number_invalid') >= 3)
+            if ($this->getValue('usr_number_invalid') >= 3)
             {
-                throw new AdmException('SYS_LOGIN_FAILED');
+                return 'SYS_LOGIN_MAX_INVALID_LOGIN';
             }
             else
             {
-                throw new AdmException('SYS_PASSWORD_UNKNOWN');
+                return 'SYS_LOGIN_USERNAME_PASSWORD_INCORRECT';
             }
         }
     }

@@ -11,7 +11,6 @@
 require_once('common.php');
 
 // Initialize parameters
-$userFound  = 0;
 $bAutoLogin = false;
 $loginname  = '';
 $password   = '';
@@ -66,29 +65,17 @@ if($password === '')
 //    $gMessage->show($gL10n->get('PRO_PASSWORD_LENGTH', $gL10n->get('SYS_PASSWORD')));
 //}
 
-// check name and password
-// user must have membership of one role of the organization
-
-$sql = 'SELECT DISTINCT usr_id
-          FROM '.TBL_MEMBERS.'
-    INNER JOIN '.TBL_USERS.'
-            ON usr_id = mem_usr_id
-    INNER JOIN '.TBL_ROLES.'
-            ON rol_id = mem_rol_id
-    INNER JOIN '.TBL_CATEGORIES.'
-            ON cat_id = rol_cat_id
-         WHERE UPPER(usr_login_name) = UPPER(\''.$loginname.'\')
-           AND usr_valid  = 1
-           AND rol_valid  = 1
-           AND mem_begin <= \''.DATE_NOW.'\'
-           AND mem_end    > \''.DATE_NOW.'\'
-           AND cat_org_id = '.$organizationId;
+// Search for username
+$sql = 'SELECT usr_id
+          FROM '.TBL_USERS.'
+         WHERE UPPER(usr_login_name) = UPPER(\''.$loginname.'\')';
 $userStatement = $gDb->query($sql);
 
-$userFound = $userStatement->rowCount();
-$userRow   = $userStatement->fetch();
-
-if ($userFound === 1)
+if ($userStatement->rowCount() === 0)
+{
+    $gMessage->show($gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT'));
+}
+else
 {
     // if login organization is different to organization of config file then create new session variables
     if($organizationId != $gCurrentOrganization->getValue('org_id'))
@@ -105,58 +92,38 @@ if ($userFound === 1)
         $gCurrentSession->save();
     }
 
-    try
+    $userRow = $userStatement->fetch();
+
+    // create user object
+    $gCurrentUser = new User($gDb, $gProfileFields, $userRow['usr_id']);
+
+    $checkLoginReturn = $gCurrentUser->checkLogin($password, $bAutoLogin);
+
+    if (is_string($checkLoginReturn))
     {
-        // create user object
-        $gCurrentUser = new User($gDb, $gProfileFields, $userRow['usr_id']);
-
-        if($gCurrentUser->checkLogin($password, $bAutoLogin))
-        {
-            // show successful login message
-            $login_message = 'SYS_LOGIN_SUCCESSFUL';
-
-            // bei einer Beta-Version noch einen Hinweis ausgeben !
-            if(ADMIDIO_VERSION_BETA > 0 && !$gDebug)
-            {
-                $login_message = 'SYS_BETA_VERSION';
-            }
-
-            // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf die Startseite verweisen
-            if(!array_key_exists('login_forward_url', $_SESSION))
-            {
-                $_SESSION['login_forward_url'] = $g_root_path . '/' . $gPreferences['homepage_login'];
-            }
-
-            // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
-            // ob der Browser Cookies setzen darf -> sonst kein Login moeglich
-            $location = 'Location: ' . $g_root_path . '/adm_program/system/cookie_check.php?message_code=' . $login_message;
-            header($location);
-            exit();
-        }
-    }
-    catch(AdmException $e)
-    {
-        $e->showHtml();
-    }
-}
-else
-{
-    // now check if login is not released or doesn't exists
-    $sql = 'SELECT usr_id
-              FROM '.TBL_USERS.'
-        INNER JOIN '.TBL_REGISTRATIONS.'
-                ON usr_id = reg_usr_id
-             WHERE UPPER(usr_login_name) = UPPER(\''. $loginname. '\')
-               AND usr_valid  = 0
-               AND reg_org_id = '.$gCurrentOrganization->getValue('org_id');
-    $userStatement = $gDb->query($sql);
-
-    if($userStatement->rowCount() === 1)
-    {
-        $gMessage->show($gL10n->get('SYS_LOGIN_NOT_ACTIVATED'));
+        $gMessage->show($gL10n->get($checkLoginReturn));
     }
     else
     {
-        $gMessage->show($gL10n->get('SYS_LOGIN_UNKNOWN'));
+        // show successful login message
+        $loginMessage = 'SYS_LOGIN_SUCCESSFUL';
+
+        // bei einer Beta-Version noch einen Hinweis ausgeben !
+        if(ADMIDIO_VERSION_BETA > 0 && !$gDebug)
+        {
+            $loginMessage = 'SYS_BETA_VERSION';
+        }
+
+        // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf die Startseite verweisen
+        if(!array_key_exists('login_forward_url', $_SESSION))
+        {
+            $_SESSION['login_forward_url'] = $g_root_path . '/' . $gPreferences['homepage_login'];
+        }
+
+        // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
+        // ob der Browser Cookies setzen darf -> sonst kein Login moeglich
+        $location = 'Location: ' . $g_root_path . '/adm_program/system/cookie_check.php?message_code=' . $loginMessage;
+        header($location);
+        exit();
     }
 }

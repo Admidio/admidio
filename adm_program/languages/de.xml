@@ -1119,11 +1119,13 @@
     <string name="SYS_LOCK">Sperren</string>
     <string name="SYS_LOCKED">Gesperrt</string>
     <string name="SYS_LOGIN">Anmelden</string>
-    <string name="SYS_LOGIN_FAILED">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</string>
+    <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</string>
     <string name="SYS_LOGIN_NOT_ACTIVATED">Deine Anmeldung wurde noch nicht freigeschaltet.\n\nDu wirst benachrichtigt, sobald deine Anmeldung freigeschaltet wurde und ein Login möglich ist.</string>
+    <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Anmeldedaten korrekt, jedoch ist dieser User aktuell kein gültiges Mitglied einer Organisation.</string>
+    <string name="SYS_LOGIN_USER_NO_WEBMASTER">Anmeldedaten korrekt, jedoch ist der Update Prozess nur für Webmaster freigeschalten.</string>
+    <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Username und/oder Passwort falsch.</string>
     <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
     <string name="SYS_LOGIN_SUCCESSFUL">Du hast dich erfolgreich angemeldet.</string>
-    <string name="SYS_LOGIN_UNKNOWN">Der angegebene Benutzername existiert nicht.</string>
     <string name="SYS_LOGOUT">Abmelden</string>
     <string name="SYS_LOGOUT_SUCCESSFUL">Du wurdest erfolgreich abgemeldet.</string>
     <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Du bist am System angemeldet, folglich kennst du ja dein Passwort!</string>

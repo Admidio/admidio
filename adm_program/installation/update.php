@@ -250,70 +250,49 @@ elseif($getMode === 2)
 
     if(!isset($gLoginForUpdate) || $gLoginForUpdate == 1)
     {
-        try
-        {
-            // check name and password
-            // user must have membership of one role of the organization
-            $loginName    = admFuncVariableIsValid($_POST, 'login_name', 'string', array('requireValue' => true, 'directOutput' => true));
-            $password     = admFuncVariableIsValid($_POST, 'password',   'string', array('requireValue' => true, 'directOutput' => true));
-            $sqlWebmaster = '';
+        // get username and password
+        $loginName = admFuncVariableIsValid($_POST, 'login_name', 'string', array('requireValue' => true, 'directOutput' => true));
+        $password  = admFuncVariableIsValid($_POST, 'password',   'string', array('requireValue' => true, 'directOutput' => true));
 
-            // only check for webmaster role if version > 2.3 because before we don't have that flag
-            if(version_compare($installedDbVersion, '2.4.0') === 1)
-            {
-                $sqlWebmaster = ' AND rol_webmaster = 1 ';
-            }
+        // Search for username
+        $sql = 'SELECT usr_id
+                  FROM '.TBL_USERS.'
+                 WHERE UPPER(usr_login_name) = UPPER(\''.$loginname.'\')';
+        $userStatement = $gDb->query($sql);
 
-            $sql = 'SELECT DISTINCT usr_id
-                      FROM '.TBL_MEMBERS.'
-                INNER JOIN '.TBL_USERS.'
-                        ON usr_id = mem_usr_id
-                INNER JOIN '.TBL_ROLES.'
-                        ON rol_id = mem_rol_id
-                INNER JOIN '.TBL_CATEGORIES.'
-                        ON cat_id = rol_cat_id
-                     WHERE UPPER(usr_login_name) = UPPER(\''.$loginName.'\')
-                           '.$sqlWebmaster.'
-                       AND usr_valid  = 1
-                       AND rol_valid  = 1
-                       AND mem_begin <= \''.DATE_NOW.'\'
-                       AND mem_end    > \''.DATE_NOW.'\'
-                       AND cat_org_id = '.$gCurrentOrganization->getValue('org_id');
-            $userStatement = $gDb->query($sql);
-
-            $userFound = $userStatement->rowCount();
-            $userRow   = $userStatement->fetch();
-
-            if ($userFound === 1)
-            {
-                // create object with current user field structure und user object
-                $gProfileFields = new ProfileFields($gDb, $gCurrentOrganization->getValue('org_id'));
-                $gCurrentUser   = new User($gDb, $gProfileFields, $userRow['usr_id']);
-
-                // check login data. If login failed an exception will be thrown.
-                // Don't update the current session with user id and don't do a rehash of the password
-                // because in former versions the password field was to small for the current hashes
-                // and the update of this field will be done after this check.
-                $gCurrentUser->checkLogin($password, false, false, false);
-            }
-            else
-            {
-                $message = '
-                    <div class="alert alert-danger alert-small" role="alert">
-                        <span class="glyphicon glyphicon-exclamation-sign"></span>
-                        <strong>'.$gL10n->get('INS_WEBMASTER_LOGIN_FAILED').'</strong>
-                    </div>';
-                showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
-            }
-        }
-        catch(AdmException $e)
+        if ($userStatement->rowCount() === 0)
         {
             $message = '
                 <div class="alert alert-danger alert-small" role="alert">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    <strong>'.$e->getText().'</strong>
+                    <strong>'.$gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT').'</strong>
                 </div>';
             showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
+        }
+        else
+        {
+            $userRow = $userStatement->fetch();
+
+            // create object with current user field structure und user object
+            $gProfileFields = new ProfileFields($gDb, $gCurrentOrganization->getValue('org_id'));
+            $gCurrentUser   = new User($gDb, $gProfileFields, $userRow['usr_id']);
+
+            // check login data. If login failed an exception will be thrown.
+            // Don't update the current session with user id and don't do a rehash of the password
+            // because in former versions the password field was to small for the current hashes
+            // and the update of this field will be done after this check.
+            $checkLoginReturn = $gCurrentUser->checkLogin($password, false, false, false, true);
+
+            if (is_string($checkLoginReturn))
+            {
+                $message = '
+                    <div class="alert alert-danger alert-small" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        <strong>'.$gL10n->get($checkLoginReturn).'</strong>
+                    </div>';
+                showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
+            }
+            // else continue with code below
         }
     }
 
