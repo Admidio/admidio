@@ -257,7 +257,7 @@ elseif($getMode === 2)
         // Search for username
         $sql = 'SELECT usr_id
                   FROM '.TBL_USERS.'
-                 WHERE UPPER(usr_login_name) = UPPER(\''.$loginname.'\')';
+                 WHERE UPPER(usr_login_name) = UPPER(\''.$loginName.'\')';
         $userStatement = $gDb->query($sql);
 
         if ($userStatement->rowCount() === 0)
