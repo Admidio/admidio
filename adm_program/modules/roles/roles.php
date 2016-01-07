@@ -218,7 +218,7 @@ while($row = $rolStatement->fetch())
     // if no assigned roles
     if($assignRoles === '')
     {
-        $assignRoles= '&nbsp;';
+        $assignRoles = '&nbsp;';
     }
 
     if($role->getValue("rol_this_list_view") == 1)
