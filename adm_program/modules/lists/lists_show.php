@@ -100,7 +100,7 @@ else
 
     $roleName         = $role->getValue('rol_name');
     $htmlSubHeadline .= $role->getValue('cat_name');
-    $roleIdLink       = '&rol_id='.$roleId;
+    $roleIdLink       = '&rol_ids='.$roleId;
 }
 
 // if no list parameter is set then load role default list configuration or system default list configuration

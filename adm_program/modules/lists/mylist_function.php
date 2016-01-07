@@ -106,9 +106,6 @@ if ($getMode === 1 || $getMode === 2)
         exit();
     }
 
-    // save all roles in a session parameter for later use
-    $_SESSION['role_ids'] = $_POST['sel_roles_ids'];
-
     // weiterleiten zur allgemeinen Listeseite
     header('Location: '.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$list->getValue('lst_id').'&mode=html&show_members='.$_POST['sel_show_members'].'&rol_ids='.implode(',', $_POST['sel_roles_ids']));
     exit();
