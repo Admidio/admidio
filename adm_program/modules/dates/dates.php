@@ -484,7 +484,7 @@ else
             {
                 if($outputNumberMembers > 0 || $outputNumberLeaders > 0)
                 {
-                    $buttonURL = $g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id');
+                    $buttonURL = $g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_ids='.$date->getValue('dat_rol_id');
 
                     if ($getView === 'detail')
                     {

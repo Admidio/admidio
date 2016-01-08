@@ -376,6 +376,7 @@
     <string name="LST_NEW_DEFAULT_CONFIGURATION">Konfiguration wird zur neuen Standardkonfiguration</string>
     <string name="LST_NO_MORE_COLUMN">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</string>
     <string name="LST_NO_USER_FOUND">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</string>
+    <string name="LST_NO_ROLE_GIVEN">Es wurde keine Rolle angegeben.</string>
     <string name="LST_NO_ROLES_REMOVED">Es sind noch keine Rollen aus dem System entfernt worden.\n\nErst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei den "Entfernten Rollen".</string>
     <string name="LST_NO_RIGHTS_VIEW_LIST">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</string>
     <string name="LST_NOT_VALID_DATE_FORMAT">Bitte in der Bedingung des Feldes #VAR1_BOLD# ein gültiges Datum verwenden.</string>
@@ -1119,11 +1120,13 @@
     <string name="SYS_LOCK">Sperren</string>
     <string name="SYS_LOCKED">Gesperrt</string>
     <string name="SYS_LOGIN">Anmelden</string>
-    <string name="SYS_LOGIN_FAILED">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</string>
+    <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</string>
     <string name="SYS_LOGIN_NOT_ACTIVATED">Deine Anmeldung wurde noch nicht freigeschaltet.\n\nDu wirst benachrichtigt, sobald deine Anmeldung freigeschaltet wurde und ein Login möglich ist.</string>
+    <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Anmeldedaten korrekt, jedoch ist dieser User aktuell kein gültiges Mitglied einer Organisation.</string>
+    <string name="SYS_LOGIN_USER_NO_WEBMASTER">Anmeldedaten korrekt, jedoch ist der Update Prozess nur für Webmaster freigeschalten.</string>
+    <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Der eingegebene Benutzername und/oder das Passwort ist falsch.</string>
     <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
     <string name="SYS_LOGIN_SUCCESSFUL">Du hast dich erfolgreich angemeldet.</string>
-    <string name="SYS_LOGIN_UNKNOWN">Der angegebene Benutzername existiert nicht.</string>
     <string name="SYS_LOGOUT">Abmelden</string>
     <string name="SYS_LOGOUT_SUCCESSFUL">Du wurdest erfolgreich abgemeldet.</string>
     <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Du bist am System angemeldet, folglich kennst du ja dein Passwort!</string>

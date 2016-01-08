@@ -134,12 +134,14 @@ if (isset($folderContent['folders']))
     for($i=0; $i<count($folderContent['folders']); ++$i)
     {
         $nextFolder = $folderContent['folders'][$i];
+
         $folderDescription = '';
         if(strlen($nextFolder['fol_description']) > 0)
         {
             $folderDescription = '<img class="admidio-icon-help" src="'. THEME_PATH. '/icons/info.png" data-toggle="popover" data-trigger="hover"
                 data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$nextFolder['fol_description'].'" alt="Info" />';
         }
+
         // create array with all column values
         $columnValues = array(
             1, // Type folder
@@ -159,9 +161,8 @@ if (isset($folderContent['folders']))
             if($nextFolder['fol_exists'] == false)
             {
                 $noteFolderNotExists = '
-                <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                    href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FOLDER_NOT_EXISTS&amp;inline=true"><img
-                    src="'. THEME_PATH. '/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" /></a>';
+                <img class="admidio-icon-help" src="'. THEME_PATH. '/icons/warning.png" data-toggle="popover" data-trigger="hover" data-placement="left"
+                    title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('DOW_FOLDER_NOT_EXISTS').'" alt="'.$gL10n->get('SYS_WARNING').'" /></a>';
             }
 
             $columnValues[] = ' <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?folder_id='. $nextFolder['fol_id']. '">
@@ -199,7 +200,8 @@ if (isset($folderContent['files']))
         $fileDescription = '';
         if($nextFile['fil_description'] != '')
         {
-            $fileDescription = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/info.png" alt="'.$gL10n->get('SYS_FILE').'" title="'.$nextFile['fil_description'].'" />';
+            $fileDescription = '<img class="admidio-icon-help" src="'. THEME_PATH. '/icons/info.png" data-toggle="popover" data-trigger="hover"
+                data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$nextFile['fil_description'].'" alt="Info" />';
         }
 
         // create array with all column values
@@ -221,9 +223,8 @@ if (isset($folderContent['files']))
             if($nextFile['fil_exists'] == false)
             {
                 $noteFileNotExists = '
-                <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                    href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FILE_NOT_EXISTS&amp;inline=true"><img
-                    src="'. THEME_PATH. '/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" /></a>';
+                <img class="admidio-icon-help" src="'. THEME_PATH. '/icons/warning.png" data-toggle="popover" data-trigger="hover" data-placement="left"
+                    title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('DOW_FILE_NOT_EXISTS').'" alt="'.$gL10n->get('SYS_WARNING').'" /></a>';
             }
             $columnValues[] = '
             <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?file_id='. $nextFile['fil_id']. '">

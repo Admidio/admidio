@@ -125,7 +125,10 @@ $downloadRenameMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $
 
 // create html form
 $form = new HtmlForm('edit_download_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id='.$getFolderId.'&amp;file_id='.$getFileId, $page);
-$form->addInput('file_type', $gL10n->get('DOW_FILE_TYPE'), $fileType, array('property' => FIELD_DISABLED, 'class' => 'form-control-small'));
+if ($getFileId)
+{
+    $form->addInput('file_type', $gL10n->get('DOW_FILE_TYPE'), $fileType, array('property' => FIELD_DISABLED, 'class' => 'form-control-small'));
+}
 $form->addInput('previous_name', $gL10n->get('DOW_PREVIOUS_NAME'), $originalName, array('property' => FIELD_DISABLED));
 $form->addInput('new_name', $gL10n->get('DOW_NEW_NAME'), $form_values['new_name'], array('maxLength' => 255, 'property' => FIELD_REQUIRED, 'helpTextIdLabel' => 'DOW_FILE_NAME_RULES'));
 $form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $form_values['new_description'], 4, array('maxLength' => 255));

@@ -223,8 +223,7 @@ function strValidCharacters($string, $checkType)
             switch ($checkType)
             {
                 case 'email':
-                    return filter_var(trim($string), FILTER_VALIDATE_EMAIL) !== false
-                        && preg_match('/^[^@]+@[^@]+\.[^@]{2,}$/', trim($string));
+                    return filter_var(trim($string), FILTER_VALIDATE_EMAIL) !== false;
                 case 'url':
                     return filter_var(trim($string), FILTER_VALIDATE_URL) !== false;
                 default:
