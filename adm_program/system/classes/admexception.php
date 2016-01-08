@@ -36,6 +36,11 @@
  */
 class AdmException extends Exception
 {
+    protected $param1;
+    protected $param2;
+    protected $param3;
+    protected $param4;
+
     /**
      * Constructor that will @b rollback an open database translation
      * @param string $message Translation @b id that should be shown when exception is catched

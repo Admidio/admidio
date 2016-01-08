@@ -35,8 +35,8 @@ class ComponentUpdate extends Component
     /**
      * Will open a XML file of a specific version that contains all the update steps that
      * must be passed to successfully update Admidio to this version
-     * @param  string|int $mainVersion Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
-     * @param  string|int $subVersion  Contains a string with the main version number e.g. 1 or 2 from x.1 or x.2.
+     * @param string|int $mainVersion Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
+     * @param string|int $subVersion  Contains a string with the main version number e.g. 1 or 2 from x.1 or x.2.
      * @return bool
      */
     private function createXmlObject($mainVersion, $subVersion)

@@ -105,8 +105,8 @@ class ModuleAnnouncements extends Modules
 
     /**
      * Get all records and push it to the array
-     * @param int      $startElement
-     * @param int|null $limit
+     * @param int $startElement
+     * @param int $limit
      * @return array Returns the Array with results, recordsets and validated parameters from $_GET Array
      */
     public function getDataSet($startElement = 0, $limit = null)

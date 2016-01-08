@@ -30,7 +30,7 @@ class TableMessage extends TableAccess
     /**
      * Reads the number of all unread messages of this table
      * @param int $usrId
-     * @return Number of unread messages of this table
+     * @return int Number of unread messages of this table
      */
     public function countUnreadMessageRecords($usrId)
     {
@@ -45,7 +45,7 @@ class TableMessage extends TableAccess
 
     /**
      * Reads the number of all conversations in this table
-     * @return Number of conversations in this table
+     * @return int Number of conversations in this table
      */
     public function countMessageConversations()
     {
@@ -57,7 +57,7 @@ class TableMessage extends TableAccess
 
     /**
      * Reads the number of all messages in actual conversation
-     * @return Number of all messages in actual conversation
+     * @return int Number of all messages in actual conversation
      */
     public function countMessageParts()
     {
@@ -89,10 +89,10 @@ class TableMessage extends TableAccess
      */
     public function getConversation($msgId)
     {
-        $sql = "SELECT msc_usr_id, msc_message, msc_timestamp
-                  FROM ". TBL_MESSAGES_CONTENT. "
-                 WHERE msc_msg_id = ". $msgId ."
-                 ORDER BY msc_part_id DESC";
+        $sql = 'SELECT msc_usr_id, msc_message, msc_timestamp
+                  FROM '. TBL_MESSAGES_CONTENT. '
+                 WHERE msc_msg_id = '. $msgId .'
+                 ORDER BY msc_part_id DESC';
         return $this->db->query($sql);
     }
 
@@ -100,17 +100,17 @@ class TableMessage extends TableAccess
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
      * @param int $usrId
-     * @return Returns @b ID of the user that is partner in the actual conversation
+     * @return int Returns @b ID of the user that is partner in the actual conversation
      */
     public function getConversationPartner($usrId)
     {
         $sql = 'SELECT msg_id,
-                 CASE WHEN msg_usr_id_sender = '. $usrId .' THEN msg_usr_id_receiver
-                 ELSE msg_usr_id_sender
-                  END AS user
-                 FROM '.TBL_MESSAGES.'
-                WHERE msg_type = \'PM\'
-                  AND msg_id = '. $this->msg_id;
+                  CASE WHEN msg_usr_id_sender = '. $usrId .' THEN msg_usr_id_receiver
+                  ELSE msg_usr_id_sender
+                   END AS user
+                  FROM '.TBL_MESSAGES.'
+                 WHERE msg_type = \'PM\'
+                   AND msg_id = '. $this->msg_id;
         $partnerStatement = $this->db->query($sql);
         $row = $partnerStatement->fetch();
 
@@ -131,12 +131,12 @@ class TableMessage extends TableAccess
 
         if($this->getValue('msg_read') == 2 || $this->getValue('msg_type') === 'EMAIL')
         {
-            $sql = "DELETE FROM ".TBL_MESSAGES_CONTENT."
-             WHERE msc_msg_id = ". $this->getValue('msg_id');
+            $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
+             WHERE msc_msg_id = '. $this->getValue('msg_id');
             $this->db->query($sql);
 
-            $sql = "DELETE FROM ".TBL_MESSAGES."
-             WHERE msg_id = ". $this->getValue('msg_id');
+            $sql = 'DELETE FROM '.TBL_MESSAGES.'
+             WHERE msg_id = '. $this->getValue('msg_id');
             $this->db->query($sql);
 
             $return = true;

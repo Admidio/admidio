@@ -193,7 +193,7 @@ class Language
     /**
      * Returns the name of the country in the language of this object. The country will be
      * identified by the ISO code e.g. 'DEU' or 'GBR' ...
-     * @param  string $isoCode The three digits ISO code of the country where the name should be returned.
+     * @param string $isoCode The three digits ISO code of the country where the name should be returned.
      * @return string Return the name of the country in the language of this object.
      */
     public function getCountryByCode($isoCode)
@@ -215,7 +215,7 @@ class Language
     /**
      * Returns the three digits ISO code of the country. The country will be identified
      * by the name in the language of this object
-     * @param  string $country The name of the country in the language of this object.
+     * @param string $country The name of the country in the language of this object.
      * @return string Return the three digits ISO code of the country.
      */
     public function getCountryByName($country)
@@ -231,7 +231,7 @@ class Language
 
     /**
      * Returns the ISO code of the language of this object.
-     * @param  bool   $referenceLanguage If set to @b true than the ISO code of the reference language will returned.
+     * @param bool $referenceLanguage If set to @b true than the ISO code of the reference language will returned.
      * @return string Returns the ISO code of the language of this object or the reference language e.g. @b de or @b en.
      */
     public function getLanguageIsoCode($referenceLanguage = false)
@@ -251,7 +251,7 @@ class Language
     /**
      * Returns the language code of the language of this object. This is the code that is set within
      * Admidio with some specials like de_sie. If you only want the ISO code then call getLanguageIsoCode().
-     * @param  bool   $referenceLanguage If set to @b true than the language code of the reference language will returned.
+     * @param bool $referenceLanguage If set to @b true than the language code of the reference language will returned.
      * @return string Returns the language code of the language of this object or the reference language.
      */
     public function getLanguage($referenceLanguage = false)
@@ -282,10 +282,10 @@ class Language
 
     /**
      * Search for text id in a language xml file and return the text. If no text was found than nothing is returned.
-     * @param  array  $objectArray  The reference to an array where every SimpleXMLElement of each language path is stored
-     * @param  string $languagePath The path in which the different language xml files are.
-     * @param  string $language     The ISO code of the language in which the text will be searched
-     * @param  string $textId       The id of the text that will be searched in the file.
+     * @param array  $objectArray  The reference to an array where every SimpleXMLElement of each language path is stored
+     * @param string $languagePath The path in which the different language xml files are.
+     * @param string $language     The ISO code of the language in which the text will be searched
+     * @param string $textId       The id of the text that will be searched in the file.
      * @return string Return the text in the language or nothing if text id wasn't found.
      */
     public function searchLanguageText(&$objectArray, $languagePath, $language, $textId)

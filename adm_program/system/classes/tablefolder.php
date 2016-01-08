@@ -67,7 +67,7 @@ class TableFolder extends TableAccess
      * Also all files, subfolders and the selected folder will be deleted in the file system.
      * After that the class will be initialize.
      * @param int $folderId
-     * @return @b true if no error occurred
+     * @return bool @b true if no error occurred
      */
     public function delete($folderId = 0)
     {
@@ -729,6 +729,7 @@ class TableFolder extends TableAccess
      * with their timestamp will be updated.
      * For new records the user, organization and timestamp will be set per default.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
@@ -740,7 +741,7 @@ class TableFolder extends TableAccess
             $this->setValue('fol_usr_id', $gCurrentUser->getValue('usr_id'));
             $this->setValue('fol_org_id', $gCurrentOrganization->getValue('org_id'));
         }
-        parent::save($updateFingerPrint);
+        return parent::save($updateFingerPrint);
     }
 
     /**

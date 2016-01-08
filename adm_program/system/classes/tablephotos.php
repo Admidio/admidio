@@ -46,32 +46,33 @@ class TablePhotos extends TableAccess
     /**
      * Rekursive Funktion gibt die Anzahl aller Bilder inkl. der Unteralben zurueck
      * pho_id noetig fuer rekursiven Aufruf
-     * @param int $pho_id
+     * @param int $phoId
+     * @return int
      */
-    public function countImages($pho_id = 0)
+    public function countImages($phoId = 0)
     {
-        $total_images = 0;
+        $totalImages = 0;
 
         // wurde keine ID uebergeben, dann Anzahl Bilder des aktuellen Albums ermitteln
-        if($pho_id == 0)
+        if($phoId == 0)
         {
-            $pho_id = $this->getValue('pho_id');
-            $total_images = $this->getValue('pho_quantity');
+            $phoId = $this->getValue('pho_id');
+            $totalImages = $this->getValue('pho_quantity');
         }
 
         // alle Unteralben ermitteln
         $sql = 'SELECT pho_id, pho_quantity
                   FROM '.TBL_PHOTOS.'
-                 WHERE pho_pho_id_parent = '.$pho_id.'
+                 WHERE pho_pho_id_parent = '.$phoId.'
                    AND pho_locked = 0';
         $childAlbumsStatement = $this->db->query($sql);
 
         while($pho_row = $childAlbumsStatement->fetch())
         {
-            $total_images = $total_images + $pho_row['pho_quantity'] + $this->countImages($pho_row['pho_id']);
+            $totalImages = $totalImages + $pho_row['pho_quantity'] + $this->countImages($pho_row['pho_id']);
         }
 
-        return $total_images;
+        return $totalImages;
     }
 
     /**
@@ -117,33 +118,33 @@ class TablePhotos extends TableAccess
 
     /**
      * Rekursive Funktion die die uebergebene Veranstaltung und alle Unterveranstaltungen loescht
-     * @param int $photo_id
-     * @return
+     * @param int $photoId
+     * @return bool
      */
-    public function deleteInDatabase($photo_id)
+    public function deleteInDatabase($photoId)
     {
-        $return_code = true;
+        $returnValue = true;
         $this->db->startTransaction();
 
         // erst einmal rekursiv zur tiefsten Tochterveranstaltung gehen
         $sql = 'SELECT pho_id
                   FROM '.TBL_PHOTOS.'
-                 WHERE pho_pho_id_parent = '.$photo_id;
+                 WHERE pho_pho_id_parent = '.$photoId;
         $childAlbumStatement = $this->db->query($sql);
 
         while($row = $childAlbumStatement->fetch())
         {
-            if($return_code)
+            if($returnValue)
             {
-                $return_code = $this->deleteInDatabase($row['pho_id']);
+                $returnValue = $this->deleteInDatabase($row['pho_id']);
             }
         }
 
         // nun DB-Eintrag und Ordner loeschen
-        if($return_code)
+        if($returnValue)
         {
             // Ordnerpfad zusammensetzen
-            $folder = SERVER_PATH. '/adm_my_files/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$photo_id;
+            $folder = SERVER_PATH. '/adm_my_files/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$photoId;
 
             // aktuellen Ordner incl. Unterordner und Dateien loeschen, falls er existiert
             if(file_exists($folder))
@@ -151,25 +152,25 @@ class TablePhotos extends TableAccess
                 // nun erst rekursiv den Ordner im Dateisystem loeschen
                 $myFilesPhotos = new MyFiles('PHOTOS');
                 $myFilesPhotos->setFolder($folder);
-                $return_code = $myFilesPhotos->delete($folder);
+                $returnValue = $myFilesPhotos->delete($folder);
             }
 
-            if($return_code)
+            if($returnValue)
             {
                 // Veranstaltung jetzt in DB loeschen
                 $sql = 'DELETE FROM '.TBL_PHOTOS.'
-                         WHERE pho_id = '.$photo_id;
+                         WHERE pho_id = '.$photoId;
                 $this->db->query($sql);
             }
         }
 
         $this->db->endTransaction();
-        return $return_code;
+        return $returnValue;
     }
 
     /**
      * Check if this album has one or more child albums.
-     * @return Return @b true if child albums exists.
+     * @return bool Return @b true if child albums exists.
      */
     public function hasChildAlbums()
     {
@@ -202,6 +203,7 @@ class TablePhotos extends TableAccess
      * with their timestamp will be updated.
      * The current organization will be set per default.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
@@ -212,60 +214,60 @@ class TablePhotos extends TableAccess
             $this->setValue('pho_org_id', $gCurrentOrganization->getValue('org_id'));
         }
 
-        parent::save($updateFingerPrint);
+        return parent::save($updateFingerPrint);
     }
 
     /**
      * Rekursive Funktion zum Auswaehlen eines Beispielbildes aus einem moeglichst hohen Album
      * Rueckgabe eines Arrays mit allen noetigen Infos um den Link zu erstellen
-     * @param int $pho_id
+     * @param int $phoId
      * @return array
      */
-    public function shuffleImage($pho_id = 0)
+    public function shuffleImage($phoId = 0)
     {
-        $shuffle_image = array('shuffle_pho_id' => 0, 'shuffle_img_nr' => 0, 'shuffle_img_begin' => '');
+        $shuffleImage = array('shuffle_pho_id' => 0, 'shuffle_img_nr' => 0, 'shuffle_img_begin' => '');
 
         // wurde keine ID uebergeben, dann versuchen das Zufallsbild aus dem aktuellen Album zu nehmen
-        if($pho_id === 0)
+        if($phoId === 0)
         {
-            $pho_id = $this->getValue('pho_id');
-            $shuffle_image['shuffle_pho_id']    = $this->getValue('pho_id');
-            $shuffle_image['shuffle_img_begin'] = $this->getValue('pho_begin', 'Y-m-d');
+            $phoId = $this->getValue('pho_id');
+            $shuffleImage['shuffle_pho_id']    = $this->getValue('pho_id');
+            $shuffleImage['shuffle_img_begin'] = $this->getValue('pho_begin', 'Y-m-d');
 
             if($this->getValue('pho_quantity') > 0)
             {
-                $shuffle_image['shuffle_img_nr'] = mt_rand(1, $this->getValue('pho_quantity'));
+                $shuffleImage['shuffle_img_nr'] = mt_rand(1, $this->getValue('pho_quantity'));
             }
         }
 
-        if($shuffle_image['shuffle_img_nr'] == 0)
+        if($shuffleImage['shuffle_img_nr'] == 0)
         {
             // kein Bild vorhanden, dann in einem Unteralbum suchen
             $sql = 'SELECT *
                       FROM '.TBL_PHOTOS.'
-                     WHERE pho_pho_id_parent = '.$pho_id.'
+                     WHERE pho_pho_id_parent = '.$phoId.'
                        AND pho_locked = 0
                      ORDER BY pho_quantity DESC';
             $childAlbumsStatement = $this->db->query($sql);
 
-            while($pho_row = $childAlbumsStatement->fetch())
+            while($phoRow = $childAlbumsStatement->fetch())
             {
-                if($shuffle_image['shuffle_img_nr'] == 0)
+                if($shuffleImage['shuffle_img_nr'] == 0)
                 {
-                    $shuffle_image['shuffle_pho_id'] = $pho_row['pho_id'];
-                    $shuffle_image['shuffle_img_begin'] = $pho_row['pho_begin'];
+                    $shuffleImage['shuffle_pho_id'] = $phoRow['pho_id'];
+                    $shuffleImage['shuffle_img_begin'] = $phoRow['pho_begin'];
 
-                    if($pho_row['pho_quantity'] > 0)
+                    if($phoRow['pho_quantity'] > 0)
                     {
-                        $shuffle_image['shuffle_img_nr'] = mt_rand(1, $pho_row['pho_quantity']);
+                        $shuffleImage['shuffle_img_nr'] = mt_rand(1, $phoRow['pho_quantity']);
                     }
                     else
                     {
-                        $shuffle_image = $this->shuffleImage($pho_row['pho_id']);
+                        $shuffleImage = $this->shuffleImage($phoRow['pho_id']);
                     }
                 }
             }
         }
-        return $shuffle_image;
+        return $shuffleImage;
     }
 }

@@ -30,11 +30,10 @@ class TableInventoryField extends TableAccess
     /**
      * Deletes the selected field and all references in other tables.
      * Also the gap in sequence will be closed. After that the class will be initialize.
-     * @return @b true if no error occurred
+     * @return bool @b true if no error occurred
      */
     public function delete()
     {
-
         $this->db->startTransaction();
 
         // close gap in sequence
@@ -248,6 +247,7 @@ class TableInventoryField extends TableAccess
      * with their timestamp will be updated.
      * For new records the name intern will be set per default.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
@@ -259,7 +259,7 @@ class TableInventoryField extends TableAccess
             $this->setValue('inf_name_intern', $this->getNewNameIntern($this->getValue('inf_name', 'database'), 1));
         }
 
-        parent::save($updateFingerPrint);
+        return parent::save($updateFingerPrint);
     }
 
     /**

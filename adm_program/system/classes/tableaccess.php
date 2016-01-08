@@ -31,7 +31,7 @@ class TableAccess
 {
     protected $additionalTables;    ///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
     protected $tableName;           ///< Name of the database table of this object. This must be the table name with the installation specific praefix e.g. @b demo_users
-    protected $columnPraefix;       ///< The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
+    protected $columnPrefix;       ///< The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
     protected $keyColumnName;       ///< Name of the unique autoincrement index column of the database table
     protected $db;                  ///< An object of the class Database for communication with the database
 
@@ -43,15 +43,15 @@ class TableAccess
     /**
      * Constructor that will create an object of a recordset of the specified table.
      * If the id is set than this recordset will be loaded.
-     * @param object     $database      Object of the class Database. This should be the default global object @b $gDb.
-     * @param string     $tableName     The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
-     * @param string     $columnPraefix The praefix of each column of that table. E.g. for table @b adm_roles this is @b rol
-     * @param string|int $id            The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+     * @param object     $database     Object of the class Database. This should be the default global object @b $gDb.
+     * @param string     $tableName    The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
+     * @param string     $columnPrefix The prefix of each column of that table. E.g. for table @b adm_roles this is @b rol
+     * @param string|int $id           The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $tableName, $columnPraefix, $id = '')
+    public function __construct(&$database, $tableName, $columnPrefix, $id = '')
     {
-        $this->tableName     = $tableName;
-        $this->columnPraefix = $columnPraefix;
+        $this->tableName    = $tableName;
+        $this->columnPrefix = $columnPrefix;
 
         $this->setDatabase($database);
 
@@ -84,8 +84,7 @@ class TableAccess
     public function clear()
     {
         $this->columnsValueChanged = false;
-        $this->new_record   = true;
-        $this->record_count = -1;
+        $this->new_record = true;
 
         if(count($this->columnsInfos) > 0)
         {
@@ -136,9 +135,11 @@ class TableAccess
      */
     protected function connectAdditionalTable($table, $columnNameAdditionalTable, $columnNameClassTable)
     {
-        $this->additionalTables[] = array('table'                     => $table,
-                                          'columnNameAdditionalTable' => $columnNameAdditionalTable,
-                                          'columnNameClassTable'      => $columnNameClassTable);
+        $this->additionalTables[] = array(
+            'table'                     => $table,
+            'columnNameAdditionalTable' => $columnNameAdditionalTable,
+            'columnNameClassTable'      => $columnNameClassTable
+        );
     }
 
     /**
@@ -173,9 +174,9 @@ class TableAccess
     /**
      * Get the value of a column of the database table.
      * If the value was manipulated before with @b setValue than the manipulated value is returned.
-     * @param  string $columnName The name of the database column whose value should be read
-     * @param  string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                            For text columns the format can be @b database that would return the original database value without any transformations
+     * @param string $columnName The name of the database column whose value should be read
+     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                           For text columns the format can be @b database that would return the original database value without any transformations
      * @return mixed Returns the value of the database column.
      *               If the value was manipulated before with @b setValue than the manipulated value is returned.
      * @see TableAccess#setValue
@@ -285,7 +286,7 @@ class TableAccess
      * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param  string $sqlWhereCondition Conditions for the table to select one record
+     * @param string $sqlWhereCondition Conditions for the table to select one record
      * @return bool Returns @b true if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
@@ -347,7 +348,7 @@ class TableAccess
     /**
      * Reads a record out of the table in database selected by the unique id column in the table.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param  int|string $id Unique id of id column of the table.
+     * @param int|string $id Unique id of id column of the table.
      * @return bool Returns @b true if one record is found
      * @see TableAccess#readData
      * @see TableAccess#readDataByColumns
@@ -374,7 +375,7 @@ class TableAccess
      * The columns and values must be selected so that they identify only one record.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param  array $columnArray An array where every element index is the column name and the value is the column value
+     * @param array $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns @b true if one record is found
      * @par Examples
      * @code // reads data not be mem_id but with combination of role and user id
@@ -418,8 +419,8 @@ class TableAccess
      * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
-     * @param  bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
-     *                                 if table has columns like @b usr_id_create or @b usr_id_changed
+     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
+     *                                if table has columns like @b usr_id_create or @b usr_id_changed
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
@@ -435,21 +436,21 @@ class TableAccess
             {
                 // besitzt die Tabelle Felder zum Speichern des Erstellers und der letzten Aenderung,
                 // dann diese hier automatisiert fuellen
-                if($this->new_record && array_key_exists($this->columnPraefix . '_usr_id_create', $this->dbColumns))
+                if($this->new_record && array_key_exists($this->columnPrefix . '_usr_id_create', $this->dbColumns))
                 {
                     global $gCurrentUser;
-                    $this->setValue($this->columnPraefix.'_timestamp_create', DATETIME_NOW);
-                    $this->setValue($this->columnPraefix.'_usr_id_create', $gCurrentUser->getValue('usr_id'));
+                    $this->setValue($this->columnPrefix.'_timestamp_create', DATETIME_NOW);
+                    $this->setValue($this->columnPrefix.'_usr_id_create', $gCurrentUser->getValue('usr_id'));
                 }
-                elseif(array_key_exists($this->columnPraefix . '_usr_id_change', $this->dbColumns))
+                elseif(array_key_exists($this->columnPrefix . '_usr_id_change', $this->dbColumns))
                 {
                     global $gCurrentUser;
                     // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-                    if(time() > (strtotime($this->getValue($this->columnPraefix.'_timestamp_create')) + 900)
-                    || $gCurrentUser->getValue('usr_id') != $this->getValue($this->columnPraefix.'_usr_id_create'))
+                    if(time() > (strtotime($this->getValue($this->columnPrefix.'_timestamp_create')) + 900)
+                    || $gCurrentUser->getValue('usr_id') != $this->getValue($this->columnPrefix.'_usr_id_create'))
                     {
-                        $this->setValue($this->columnPraefix.'_timestamp_change', DATETIME_NOW);
-                        $this->setValue($this->columnPraefix.'_usr_id_change', $gCurrentUser->getValue('usr_id'));
+                        $this->setValue($this->columnPrefix.'_timestamp_change', DATETIME_NOW);
+                        $this->setValue($this->columnPrefix.'_usr_id_change', $gCurrentUser->getValue('usr_id'));
                     }
                 }
             }
@@ -459,7 +460,7 @@ class TableAccess
             {
                 // Auto-Increment-Felder duerfen nicht im Insert/Update erscheinen
                 // Felder anderer Tabellen auch nicht
-                if(strpos($key, $this->columnPraefix. '_') === 0
+                if(strpos($key, $this->columnPrefix. '_') === 0
                 && $this->columnsInfos[$key]['serial'] == 0
                 && $this->columnsInfos[$key]['changed'])
                 {

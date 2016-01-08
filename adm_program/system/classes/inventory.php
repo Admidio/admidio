@@ -176,7 +176,8 @@ class Inventory extends TableInventory
      * If the user doesn't have the right to save data of this user than an exception will be thrown.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if
      *                                table has columns like @b usr_id_create or @b usr_id_changed
-     * @throw AdmException
+     * @throws AdmException
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
@@ -194,12 +195,14 @@ class Inventory extends TableInventory
                 $this->columnsValueChanged = true;
             }
 
-            parent::save($updateFingerPrint);
+            $returnValue = parent::save($updateFingerPrint);
 
             // save data of all user fields
             $this->mInventoryFieldsData->saveInventoryData($this->getValue('inv_id'));
 
             $this->db->endTransaction();
+
+            return $returnValue;
         }
         else
         {
@@ -283,6 +286,8 @@ class Inventory extends TableInventory
      */
     public function hasRightViewItem($item)
     {
+        global $gCurrentUser;
+
         $viewProfile = false;
 
         if(is_object($item))

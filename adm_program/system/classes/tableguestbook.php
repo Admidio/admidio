@@ -31,7 +31,7 @@ class TableGuestbook extends TableAccess
     /**
      * Deletes the selected guestbook entry and all comments.
      * After that the class will be initialize.
-     * @return @b true if no error occurred
+     * @return bool @b true if no error occurred
      */
     public function delete()
     {
@@ -39,7 +39,7 @@ class TableGuestbook extends TableAccess
 
         // erst einmal alle vorhanden Kommentare zu diesem Gaestebucheintrag loeschen...
         $sql = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.' WHERE gbc_gbo_id = '. $this->getValue('gbo_id');
-        $result = $this->db->query($sql);
+        $this->db->query($sql);
 
         $return = parent::delete();
 
@@ -98,6 +98,7 @@ class TableGuestbook extends TableAccess
      * with their timestamp will be updated.
      * For new records the organization and ip address will be set per default.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
@@ -109,7 +110,7 @@ class TableGuestbook extends TableAccess
             $this->setValue('gbo_ip_address', $_SERVER['REMOTE_ADDR']);
         }
 
-        parent::save($updateFingerPrint);
+        return parent::save($updateFingerPrint);
     }
 
     /**

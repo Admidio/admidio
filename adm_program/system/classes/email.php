@@ -65,10 +65,18 @@ class Email extends PHPMailer
     private $emText;     // plain text of email
     private $emHtmlText; // html text of email
     private $emSender;   // mail sender adress and Name
+    private $emAddresses;
+    private $emCopyToSender;
+    private $emListRecipients;
+    private $emSendAsHTML;
+    private $emBccArray = array();
 
+    /**
+     * Email constructor.
+     */
     public function __construct()
     {
-        //Übername Einstellungen
+        // Übername Einstellungen
         global $gL10n, $gPreferences, $gDebug;
 
         // Wir zeigen richtige Fehlermeldungen an
@@ -190,8 +198,8 @@ class Email extends PHPMailer
 
     /**
      * Returns the maximum size of an attachment
-     * @param  string $sizeUnit 'b' = byte, 'kib' = kilobyte, 'mib' = megabyte, 'gib' = gigabyte, 'tib' = terabyte
-     * @return float  The maximum attachment size in the given size-unit
+     * @param string $sizeUnit 'b' = byte, 'kib' = kilobyte, 'mib' = megabyte, 'gib' = gigabyte, 'tib' = terabyte
+     * @return int The maximum attachment size in the given size-unit
      */
     public static function getMaxAttachementSize($sizeUnit = 'mib')
     {
@@ -238,8 +246,6 @@ class Email extends PHPMailer
         // save sender if a copy of the mail should be send to him
         $this->emSender = array('address' => $address, 'name' => $name);
 
-        $fromName    = '';
-        $fromAddress = '';
         // Falls so eingestellt soll die Mail von einer bestimmten Adresse aus versendet werden
         if(strlen($gPreferences['mail_sendmail_address']) > 0)
         {

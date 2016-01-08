@@ -124,21 +124,21 @@ class HtmlTableBasic extends HtmlElement {
 
     /**
      * Constructor initializing all class variables
-     * @param string $id Id of the table
-     * @param string $class Class name of the table
-     * @param $border Set table border
+     * @param string $id     Id of the table
+     * @param string $class  Class name of the table
+     * @param int    $border Set table border
      */
     public function __construct($id = '', $class = '', $border = 0)
     {
-        $this->border      = (is_numeric($border)) ? $border : 0;
-        $this->lineChange  = '';
-        $this->columsWidth = array();
-        $this->changeclass = '';
-        $this->thead       = -1;
-        $this->tfoot       = -1;
-        $this->tbody       = -1;
-        $this->columnCount = 0;
-        $this->rowCount    = 0;
+        $this->border       = (is_numeric($border)) ? $border : 0;
+        $this->lineChange   = '';
+        $this->changeClass  = '';
+        $this->columnsWidth = array();
+        $this->thead        = -1;
+        $this->tfoot        = -1;
+        $this->tbody        = -1;
+        $this->columnCount  = 0;
+        $this->rowCount     = 0;
 
         parent::__construct('table', '', '', true);
 
@@ -271,13 +271,13 @@ class HtmlTableBasic extends HtmlElement {
                 // Only allowed in body element of the table
                 if($this->rowCount % $this->lineChange == 0)
                 {
-                    $this->changeclass = $this->class_1;
+                    $this->changeClass = $this->class_1;
                 }
                 else
                 {
-                    $this->changeclass = $this->class_2;
+                    $this->changeClass = $this->class_2;
                 }
-                $modulo = $this->changeclass;
+                $modulo = $this->changeClass;
                 $this->addAttribute('class', $modulo, 'tr');
             }
 
@@ -312,13 +312,13 @@ class HtmlTableBasic extends HtmlElement {
                 // Only allowed in body element of the table
                 if($this->rowCount % $this->lineChange == 0)
                 {
-                    $this->changeclass = $this->class_1;
+                    $this->changeClass = $this->class_1;
                 }
                 else
                 {
-                    $this->changeclass = $this->class_2;
+                    $this->changeClass = $this->class_2;
                 }
-                $modulo = $this->changeclass;
+                $modulo = $this->changeClass;
                 $this->addAttribute('class', $modulo, 'tr');
             }
 

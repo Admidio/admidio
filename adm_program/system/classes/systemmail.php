@@ -39,7 +39,7 @@ class SystemMail extends Email
      */
     public function __construct(&$database)
     {
-        $this->db          =& $database;
+        $this->db =& $database;
         $this->smTextObject = new TableText($this->db);
         parent::__construct();
     }
@@ -48,7 +48,7 @@ class SystemMail extends Email
      * diese Methode liest den Mailtext aus der DB und ersetzt vorkommende Platzhalter durch den gewuenschten Inhalt
      * @param string $systemMailId eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
      * @param object $user         Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
-     * @return
+     * @return string
      */
     public function getMailText($systemMailId, &$user)
     {
@@ -120,8 +120,8 @@ class SystemMail extends Email
 
     /**
      * diese Methode sendet eine Systemmail nachdem der Mailtext ausgelesen und Platzhalter ersetzt wurden
-     * @param  string       $systemMailId eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
-     * @param  object       $user         Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
+     * @param string $systemMailId eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
+     * @param object $user         Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
      * @throws AdmException SYS_EMAIL_NOT_SEND
      * @return true
      */

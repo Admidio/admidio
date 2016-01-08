@@ -169,13 +169,12 @@ class ListConfiguration extends TableLists
 
     /**
      * prepare SQL to list configuration
-     * @param array $roleIds Array with all roles, which members are shown
-     * @param int   $memberStatus 0 - Only active mebers of a role
-     *                          1 - Only former members
-     *                          2 - Active and former members of a role
-     * @param string|null $startDate
-     * @param string|null $endDate
-     * @throws AdmException
+     * @param array  $roleIds Array with all roles, which members are shown
+     * @param int    $memberStatus 0 - Only active members of a role
+     *                             1 - Only former members
+     *                             2 - Active and former members of a role
+     * @param string $startDate
+     * @param string $endDate
      * @return string
      */
     public function getSQL($roleIds, $memberStatus = 0, $startDate = null, $endDate = null)
@@ -437,12 +436,13 @@ class ListConfiguration extends TableLists
 
     /**
      * @param bool $updateFingerPrint
+     * @return bool
      */
     public function save($updateFingerPrint = true)
     {
         $this->db->startTransaction();
 
-        parent::save($updateFingerPrint);
+        $returnValue = parent::save($updateFingerPrint);
 
         // save columns
         foreach($this->columns as $number => $listColumn)
@@ -455,5 +455,7 @@ class ListConfiguration extends TableLists
         }
 
         $this->db->endTransaction();
+
+        return $returnValue;
     }
 }

@@ -77,9 +77,8 @@ class HtmlDiv extends HtmlElement
 
     /**
      * Add a datalist (dl).
-     *
-     * @param string|null $id Id Attribute
-     * @param string|null $class Class Attribute
+     * @param string $id Id Attribute
+     * @param string $class Class Attribute
      */
     public function addDivElement($id = null, $class = null)
     {
@@ -106,12 +105,11 @@ class HtmlDiv extends HtmlElement
     }
 
     /**
-     * @par Add inline element into current division.
-     *
-     * @param string      $element The inline element
-     * @param string|null $id Id Attribute
-     * @param string|null $class Class Attribute
-     * @param string|null $data Data of the element (optional)
+     * Add inline element into current division.
+     * @param string $element The inline element
+     * @param string $id Id Attribute
+     * @param string $class Class Attribute
+     * @param string $data Data of the element (optional)
      */
     public function addInline($element, $id = null, $class = null, $data = null)
     {

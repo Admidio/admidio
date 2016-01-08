@@ -151,7 +151,7 @@ class ModuleMenu
 
     /**
      * creates an text link icon
-     * @param  array  $menuEntry menu entry element which was added with addItem
+     * @param array $menuEntry menu entry element which was added with addItem
      * @return string HTML of created item
      */
     private function createIconTextLink(&$menuEntry)
@@ -184,7 +184,7 @@ class ModuleMenu
 
     /**
      * gets the position of a given ID in the menu
-     * @param  string    $id
+     * @param string $id
      * @return int|false Position of the element; Returns false of no element is found
      */
     public function getPosition($id)
@@ -197,12 +197,12 @@ class ModuleMenu
 
     /**
      * inserts a new menu entry before the named position
-     * @param  int    $position
-     * @param  string $id
-     * @param  string $link
-     * @param  string $text
-     * @param  string $icon
-     * @param  string $desc
+     * @param int    $position
+     * @param string $id
+     * @param string $link
+     * @param string $text
+     * @param string $icon
+     * @param string $desc
      * @return bool
      */
     public function insertItem($position, $id, $link, $text, $icon, $desc = '')
@@ -224,12 +224,12 @@ class ModuleMenu
 
     /**
      * add new entry to array and do some checks before so that link and icon get a valid url
-     * @param  string $id   Html id of the element
-     * @param  string $type The different type of menu that should be shown: @b link normal link with icon; @b category category select box
-     * @param  string $link Link to the page that will be called if menu item is clicked
-     * @param  string $text Link text
-     * @param  string $icon Icon of the menu item, that will also be linked
-     * @param  string $js   Javascript to be executed
+     * @param string $id   Html id of the element
+     * @param string $type The different type of menu that should be shown: @b link normal link with icon; @b category category select box
+     * @param string $link Link to the page that will be called if menu item is clicked
+     * @param string $text Link text
+     * @param string $icon Icon of the menu item, that will also be linked
+     * @param string $js   Javascript to be executed
      * @return array
      */
     private function mkItem($id, $type, $link, $text, $icon, $js = '')

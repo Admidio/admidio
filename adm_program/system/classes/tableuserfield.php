@@ -92,8 +92,8 @@ class TableUserField extends TableAccess
      * diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
      * dieser bildet sich aus dem Namen in Grossbuchstaben und der naechsten freien Nummer (index)
      * Beispiel: 'Mitgliedsnummer' => 'MITGLIEDSNUMMER_2'
-     * @param  string $name
-     * @param  int    $index
+     * @param string $name
+     * @param int    $index
      * @return string
      */
     private function getNewNameIntern($name, $index)
@@ -119,14 +119,14 @@ class TableUserField extends TableAccess
     /**
      * Get the value of a column of the database table.
      * If the value was manipulated before with @b setValue than the manipulated value is returned.
-     * @param  string $columnName The name of the database column whose value should be read
-     * @param  string $format For column @c usf_value_list the following format is accepted: @n
-     *                @b database returns database value of usf_value_list; @n
-     *                @b text extract only text from usf_value_list, image infos will be ignored @n
-     *                For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011' @n
-     *                For text columns the format can be @b database that would be the database value without any transformations
+     * @param string $columnName The name of the database column whose value should be read
+     * @param string $format For column @c usf_value_list the following format is accepted: @n
+     *               @b database returns database value of usf_value_list; @n
+     *               @b text extract only text from usf_value_list, image infos will be ignored @n
+     *               For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011' @n
+     *               For text columns the format can be @b database that would be the database value without any transformations
      * @return mixed Returns the value of the database column.
-     *         If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *               If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
@@ -311,6 +311,7 @@ class TableUserField extends TableAccess
      * with their timestamp will be updated.
      * For new records the name intern will be set per default.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
@@ -323,13 +324,15 @@ class TableUserField extends TableAccess
             $this->setValue('usf_name_intern', $this->getNewNameIntern($this->getValue('usf_name', 'database'), 1));
         }
 
-        parent::save($updateFingerPrint);
+        $returnValue = parent::save($updateFingerPrint);
 
         if($fields_changed && is_object($gCurrentSession))
         {
             // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->renewUserObject();
         }
+
+        return $returnValue;
     }
 
     /**

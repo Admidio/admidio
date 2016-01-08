@@ -32,8 +32,8 @@ class ConditionParser
 
     /**
      * Creates a valid date format @b YYYY-MM-DD for the SQL statement
-     * @param  string $date     The unformated date from user input e.g. @b 12.04.2012
-     * @param  string $operator The actual operator for the @b date parameter
+     * @param string $date     The unformated date from user input e.g. @b 12.04.2012
+     * @param string $operator The actual operator for the @b date parameter
      * @return string String with a SQL valid date format @b YYYY-MM-DD
      */
     private function getFormatDate($date, $operator)
@@ -160,7 +160,7 @@ class ConditionParser
      * @param string $fieldName       The name of the profile field. This is used for error output to the end user
      * @throws AdmException LST_NOT_VALID_DATE_FORMAT
      *                      LST_NOT_NUMERIC
-     * @return string       Returns a valid SQL string with the condition for that column
+     * @return string Returns a valid SQL string with the condition for that column
      */
     public function makeSqlStatement($sourceCondition, $columnName, $columnType, $fieldName)
     {

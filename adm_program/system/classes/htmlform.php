@@ -8,11 +8,11 @@
  */
 
 // constants for field property
-define('FIELD_DEFAULT', 0);
+define('FIELD_DEFAULT',  0);
 define('FIELD_REQUIRED', 1);
 define('FIELD_DISABLED', 2);
 define('FIELD_READONLY', 3);
-define('FIELD_HIDDEN', 4);
+define('FIELD_HIDDEN',   4);
 
 /**
  * @class HtmlForm
@@ -49,25 +49,25 @@ class HtmlForm extends HtmlFormBasic
 
     /**
      * Constructor creates the form element
-     * @param string      $id       Id of the form
-     * @param string|null $action   Action attribute of the form
-     * @param object|null $htmlPage (optional) A HtmlPage object that will be used to add javascript code or files to the html output page.
-     * @param array       $options  (optional) An array with the following possible entries:
-     *                              - @b type : Set the form type. Every type has some special features:
-     *                                + @b default  : A form that can be used to edit and save data of a database table. The label
-     *                                  and the element have a horizontal orientation.
-     *                                + @b vertical : A form that can be used to edit and save data but has a vertical orientation.
-     *                                  The label is positioned above the form element.
-     *                                + @b navbar   : A form that should be used in a navbar. The form content will
-     *                                  be send with the 'GET' method and this form should not get a default focus.
-     *                              - @b enableFileUpload : Set specific parameters that are necessary for file upload with a form
-     *                              - @b showRequiredFields : If this is set to @b true (default) then every required field got a special
-     *                                css class and also the form got a @b div that explains the required layout.
-     *                                If this is set to @b false then only the html flag @b required will be set.
-     *                              - @b setFocus : Default is set to @b true. Set the focus on page load to the first field
-     *                                of this form.
-     *                              - @b class : An additional css classname. The class @b form-horizontal
-     *                                is set as default and need not set with this parameter.
+     * @param string $id       Id of the form
+     * @param string $action   Action attribute of the form
+     * @param object $htmlPage (optional) A HtmlPage object that will be used to add javascript code or files to the html output page.
+     * @param array  $options  (optional) An array with the following possible entries:
+     *                         - @b type : Set the form type. Every type has some special features:
+     *                           + @b default  : A form that can be used to edit and save data of a database table. The label
+     *                             and the element have a horizontal orientation.
+     *                           + @b vertical : A form that can be used to edit and save data but has a vertical orientation.
+     *                             The label is positioned above the form element.
+     *                           + @b navbar   : A form that should be used in a navbar. The form content will
+     *                             be send with the 'GET' method and this form should not get a default focus.
+     *                         - @b enableFileUpload : Set specific parameters that are necessary for file upload with a form
+     *                         - @b showRequiredFields : If this is set to @b true (default) then every required field got a special
+     *                           css class and also the form got a @b div that explains the required layout.
+     *                           If this is set to @b false then only the html flag @b required will be set.
+     *                         - @b setFocus : Default is set to @b true. Set the focus on page load to the first field
+     *                           of this form.
+     *                         - @b class : An additional css classname. The class @b form-horizontal
+     *                           is set as default and need not set with this parameter.
      */
     public function __construct($id, $action, $htmlPage = null, $options = array())
     {
@@ -1883,10 +1883,10 @@ class HtmlForm extends HtmlFormBasic
     /**
      * Add a small help icon to the form at the current element which shows the
      * translated text of the text-id on mouseover or when you click on the icon.
-     * @param  string|array $textId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                              If you need an additional parameter for the text you can add an array. The first entry must
-     *                              be the unique text id and the second entry will be a parameter of the text id.
-     * @return string|void  Return a html snippet that contains a help icon with a link to a popup box that shows the message.
+     * @param string|array $textId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                             If you need an additional parameter for the text you can add an array. The first entry must
+     *                             be the unique text id and the second entry will be a parameter of the text id.
+     * @return string Return a html snippet that contains a help icon with a link to a popup box that shows the message.
      */
     public static function getHelpTextIcon($textId)
     {
@@ -1921,15 +1921,19 @@ class HtmlForm extends HtmlFormBasic
             return '<img class="admidio-icon-help" src="'. THEME_PATH. '/icons/help.png" data-toggle="popover" data-html="true" data-trigger="hover"
                 data-placement="auto" title="'.$gL10n->get('SYS_NOTE').'" data-content="'.htmlspecialchars($text).'" alt="Help" />';
         }
+        else
+        {
+            return '';
+        }
     }
 
     /**
      * This method send the whole html code of the form to the browser. Call this method
      * if you have finished your form layout. If mandatory fields were set than a notice
      * which marker represents the mandatory will be shown before the form.
-     * @param  bool        $directOutput (optional) If set to @b true (default) the form html will be directly send
+     * @param bool $directOutput (optional) If set to @b true (default) the form html will be directly send
      *                                   to the browser. If set to @b false the html will be returned.
-     * @return string|void If $directOutput is set to @b false this method will return the html code of the form.
+     * @return string|null|void If $directOutput is set to @b false this method will return the html code of the form.
      */
     public function show($directOutput = true)
     {

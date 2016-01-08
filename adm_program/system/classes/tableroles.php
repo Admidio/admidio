@@ -306,7 +306,7 @@ class TableRoles extends TableAccess
     /**
      * Read the id of the default list of this role. The list is stored in the column @b rol_lst_id.
      * If there is no list stored then the system default list will be returned
-     * @return Returns the default list id of this role
+     * @return int Returns the default list id of this role
      */
     public function getDefaultList()
     {
@@ -328,8 +328,8 @@ class TableRoles extends TableAccess
      * @param string $columnName The name of the database column whose value should be read
      * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
      *                           For text columns the format can be @b database that would return the original database value without any transformations
-     * @return mixed Returns the value of the database column.
-     *         If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @return int|float|string|bool Returns the value of the database column.
+     *                               If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
@@ -375,13 +375,14 @@ class TableRoles extends TableAccess
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
      * For new records the organization and ip address will be set per default.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
         global $gCurrentSession;
         $fields_changed = $this->columnsValueChanged;
 
-        parent::save($updateFingerPrint);
+        $returnValue = parent::save($updateFingerPrint);
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
         if($fields_changed && is_object($gCurrentSession))
@@ -390,6 +391,8 @@ class TableRoles extends TableAccess
             // rights have been changed if they where members of this role
             $gCurrentSession->renewUserObject();
         }
+
+        return $returnValue;
     }
 
     /**

@@ -64,6 +64,7 @@ class AutoLogin extends TableAccess
      * The current organization, last login and ip adress will be set per default.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
      *                                if table has columns like @b usr_id_create or @b usr_id_changed
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
@@ -85,7 +86,7 @@ class AutoLogin extends TableAccess
             $this->setValue('atl_last_login', DATETIME_NOW);
             $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
         }
-        parent::save($updateFingerPrint);
+        return parent::save($updateFingerPrint);
     }
 
     /**
