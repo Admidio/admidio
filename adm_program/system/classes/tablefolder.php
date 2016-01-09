@@ -51,7 +51,7 @@ class TableFolder extends TableAccess
         $error = array('text' => '', 'path' => '');
 
         $this->folderPath->setFolder($this->getCompletePathOfFolder());
-        $b_return = $this->folderPath->createFolder($folderName, true);
+        $this->folderPath->createFolder($folderName, true);
 
         if(!$this->folderPath->createFolder($folderName, true))
         {
@@ -554,7 +554,6 @@ class TableFolder extends TableAccess
         if ($folderId === 0)
         {
             $originalCall = true;
-            $folderId = $this->getValue('fol_id');
             $parentId = $this->getValue('fol_fol_id_parent');
 
             if ($parentId)
@@ -569,8 +568,6 @@ class TableFolder extends TableAccess
                                       AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
                 $rootFolderStatement = $this->db->query($sql_rootFolder);
                 $rootFolderRow = $rootFolderStatement->fetchObject();
-
-                $rootFolderId = $rootFolderRow->fol_id;
 
                 $navigationPrefix = '
                 <li><a class="btn" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $rootFolderRow->fol_id. '"><img

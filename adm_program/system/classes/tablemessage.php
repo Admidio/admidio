@@ -135,9 +135,7 @@ class TableMessage extends TableAccess
              WHERE msc_msg_id = '. $this->getValue('msg_id');
             $this->db->query($sql);
 
-            $sql = 'DELETE FROM '.TBL_MESSAGES.'
-             WHERE msg_id = '. $this->getValue('msg_id');
-            $this->db->query($sql);
+            parent::delete();
         }
         else
         {

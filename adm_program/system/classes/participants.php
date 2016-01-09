@@ -80,7 +80,7 @@ class Participants
     /**
      * Count participants of the date.
      * @param int $rolId
-     * @return int|void Returns the result of counted participants as numeric value in current object. Leaders are not counted!
+     * @return int Returns the result of counted participants as numeric value in current object. Leaders are not counted!
      */
     public function getCount($rolId = 0)
     {
@@ -119,9 +119,9 @@ class Participants
             // Then Store the results in class variables.
             $this->count = count($numParticipants);
             $this->leader = $leader;
-
-            return $this->count - $this->leader;
         }
+
+        return $this->count - $this->leader;
     }
 
     /**
@@ -136,9 +136,6 @@ class Participants
         {
             // get data from database
             $this->getCount($rolId);
-            // Store the results in class variables.
-            $this->count = count($numParticipants);
-            $this->leader = $leader;
         }
 
         return $this->count - $this->leader;
@@ -156,9 +153,6 @@ class Participants
         {
             // get data from database
             $this->getCount($rolId);
-            // Store the results in class variables.
-            $this->count = count($numParticipants);
-            $this->leader = $leader;
         }
 
         return $this->leader;

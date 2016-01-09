@@ -94,7 +94,7 @@ class HtmlForm extends HtmlFormBasic
         $this->flagRequiredFields    = false;
         $this->flagFieldListOpen     = false;
         $this->showRequiredFields    = $optionsAll['showRequiredFields'];
-        $this->countFields           = 0;
+        $this->countElements         = 0;
         $this->datepickerInitialized = false;
         $this->type                  = $optionsAll['type'];
         $this->id                    = $id;
