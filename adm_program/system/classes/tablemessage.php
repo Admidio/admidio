@@ -127,7 +127,7 @@ class TableMessage extends TableAccess
     {
         global $gCurrentUser;
 
-        $return = false;
+        $this->db->startTransaction();
 
         if($this->getValue('msg_read') == 2 || $this->getValue('msg_type') === 'EMAIL')
         {
@@ -138,8 +138,6 @@ class TableMessage extends TableAccess
             $sql = 'DELETE FROM '.TBL_MESSAGES.'
              WHERE msg_id = '. $this->getValue('msg_id');
             $this->db->query($sql);
-
-            $return = true;
         }
         else
         {
@@ -153,10 +151,9 @@ class TableMessage extends TableAccess
                                                 , msg_usr_id_sender = ".$gCurrentUser->getValue('usr_id').", msg_usr_id_receiver = '".$other."'
              WHERE msg_id = ".$this->getValue('msg_id');
             $this->db->query($sql);
-
-            $return = true;
         }
 
-        return $return;
+        $this->db->endTransaction();
+        return true;
     }
 }
