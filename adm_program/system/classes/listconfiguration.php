@@ -180,7 +180,7 @@ class ListConfiguration extends TableLists
     public function getSQL($roleIds, $memberStatus = 0, $startDate = null, $endDate = null)
     {
         global $gL10n, $gProfileFields, $gCurrentOrganization, $gDbType;
-        $sql = '';
+
         $sqlSelect  = '';
         $sqlJoin    = '';
         $sqlWhere   = '';
@@ -252,6 +252,7 @@ class ListConfiguration extends TableLists
             if(strlen($listColumn->getValue('lsc_filter')) > 0)
             {
                 $value = $listColumn->getValue('lsc_filter');
+                $type = '';
 
                 // custom profile field
                 if($listColumn->getValue('lsc_usf_id') > 0)

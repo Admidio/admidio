@@ -428,14 +428,14 @@ class TableFolder extends TableAccess
             if ($addToArray)
             {
                 $completeFolder['files'][] = array(
-                                'fil_id'          => $row_files->fil_id,
-                                'fil_name'        => $row_files->fil_name,
-                                'fil_description' => $row_files->fil_description,
-                                'fil_timestamp'   => $row_files->fil_timestamp,
-                                'fil_locked'      => $row_files->fil_locked,
-                                'fil_exists'      => $fileExists,
-                                'fil_size'        => $fileSize,
-                                'fil_counter'     => $row_files->fil_counter
+                    'fil_id'          => $row_files->fil_id,
+                    'fil_name'        => $row_files->fil_name,
+                    'fil_description' => $row_files->fil_description,
+                    'fil_timestamp'   => $row_files->fil_timestamp,
+                    'fil_locked'      => $row_files->fil_locked,
+                    'fil_exists'      => $fileExists,
+                    'fil_size'        => $fileSize,
+                    'fil_counter'     => $row_files->fil_counter
                 );
             }
         }
@@ -448,7 +448,7 @@ class TableFolder extends TableAccess
             if (file_exists($this->getCompletePathOfFolder()))
             {
 
-                $fileHandle    = opendir($this->getCompletePathOfFolder());
+                $fileHandle = opendir($this->getCompletePathOfFolder());
                 if($fileHandle)
                 {
                     while($file = readdir($fileHandle))
@@ -477,7 +477,6 @@ class TableFolder extends TableAccess
                                         {
                                             $alreadyAdded = true;
                                         }
-
                                     }
                                 }
 
@@ -486,7 +485,6 @@ class TableFolder extends TableAccess
                                 {
                                     $completeFolder['additionalFolders'][] = array('fol_name' => $file);
                                 }
-
                             }
                             elseif (is_file($fileFolderPath))
                             {
@@ -515,15 +513,12 @@ class TableFolder extends TableAccess
                                     $completeFolder['additionalFiles'][] = array('fil_name' => $file, 'fil_size' => $fileSize);
                                 }
                             }
-                         }
+                        }
                     }
 
                    closedir($fileHandle);
-
                 }
-
             }
-
         }
 
         // Das Array mit dem Ordnerinhalt zurueckgeben

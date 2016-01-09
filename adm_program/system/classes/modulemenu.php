@@ -49,15 +49,15 @@ class ModuleMenu
     /**
      * Creates a selectbox with all categories of a category type. If an category of this selectbox is selected
      * than the link is called and where you can select entries of this category
-     * @param bool   $id              Html id of the element
+     * @param string $id              Html id of the element
      * @param string $categoryType    Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
-     * @param        $defaultCategory Id of selected category (if id = -1 then no default category will be selected)
+     * @param string $defaultCategory Id of selected category (if id = -1 then no default category will be selected)
      * @param string $link            Link to the page that will be called if menu item is clicked. At the end of
      *                                this link the ID if the category will be added automatically, so you can add a
      *                                category parameter at last
      * @param string $text            Text of the selectbox
      * @param bool   $admin           Set to @b true if user has admin rights in this category, than a link to
-     *                                administrate the catories is shown.
+     *                                administrate the categories is shown.
      */
     public function addCategoryItem($id, $categoryType, $defaultCategory, $link, $text, $admin = false)
     {

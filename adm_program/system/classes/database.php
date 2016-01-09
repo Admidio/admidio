@@ -633,7 +633,6 @@ class Database
     {
         global $g_root_path, $gMessage, $gPreferences, $gCurrentOrganization, $gDebug, $gL10n;
 
-        $htmlOutput = '';
         $backtrace  = $this->getBacktrace();
 
         // Rollback on open transaction
