@@ -75,9 +75,6 @@ if(!isset($plg_photos_show_link))
     $plg_photos_show_link = true;
 }
 
-// Sprachdatei des Plugins einbinden
-$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
-
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
 if($plg_show_headline == 1)
 {
