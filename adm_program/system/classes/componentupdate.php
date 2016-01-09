@@ -158,7 +158,6 @@ class ComponentUpdate extends Component
      * Do a loop through all versions start with the current version and end with the target version.
      * Within every subversion the method will search for an update xml file and execute all steps
      * in this file until the end of file is reached. If an error occurred then the update will be stopped.
-     * @return Return @b true if the update was successful.
      */
     public function update()
     {
@@ -219,7 +218,6 @@ class ComponentUpdate extends Component
                 if(file_exists($phpUpdateFile))
                 {
                     require_once($phpUpdateFile);
-                    $flagNextVersion = true;
                 }
 
                 // save current version to system component

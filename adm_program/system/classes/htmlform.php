@@ -780,9 +780,8 @@ class HtmlForm extends HtmlFormBasic
         // add a nice modern datepicker to date inputs
         if($optionsAll['type'] === 'date' || $optionsAll['type'] === 'datetime' || $optionsAll['type'] === 'birthday')
         {
-            $attributes['placeholder']  = DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']);
-            $javascriptCode             = '';
-            $datepickerOptions          = '';
+            $attributes['placeholder'] = DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']);
+            $javascriptCode = '';
 
             // if you have a birthday field than start with the years selection
             if($optionsAll['type'] === 'birthday')
@@ -1147,11 +1146,11 @@ class HtmlForm extends HtmlFormBasic
             $attributes['required'] = 'required';
         }
 
+        $placeholder = '';
         if($optionsAll['multiselect'] === true)
         {
             $attributes['multiple'] = 'multiple';
             $name = $id.'[]';
-            $placeholder = '';
 
             if($optionsAll['defaultValue'] !== '' && !is_array($optionsAll['defaultValue']))
             {

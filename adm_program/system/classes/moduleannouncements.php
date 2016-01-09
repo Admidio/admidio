@@ -116,12 +116,6 @@ class ModuleAnnouncements extends Modules
         global $gProfileFields;
         global $gDb;
 
-        // Parameter
-        if($limit === null)
-        {
-            $announcementsPerPage = $gPreferences['announcements_per_page'];
-        }
-
         // Bedingungen
         if($this->getParameter('id') > 0)
         {

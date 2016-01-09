@@ -79,8 +79,7 @@ class Email extends PHPMailer
         // Übername Einstellungen
         global $gL10n, $gPreferences, $gDebug;
 
-        // Wir zeigen richtige Fehlermeldungen an
-        $this->exceptions = true;
+        parent::__construct(true);
 
         $this->emCopyToSender   = false;
         $this->emListRecipients = false;
@@ -154,7 +153,6 @@ class Email extends PHPMailer
     {
         $address = admStrToLower($address);
         // Copy must be Ascii-US formated, so encode in MimeHeader
-        $asciiName = stripslashes($name);
 
         try
         {
@@ -180,7 +178,6 @@ class Email extends PHPMailer
     {
         $address = admStrToLower($address);
         // Recipient must be Ascii-US formated, so encode in MimeHeader
-        $asciiName = stripslashes($name);
 
         try
         {

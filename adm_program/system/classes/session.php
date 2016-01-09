@@ -198,8 +198,6 @@ class Session extends TableAccess
                 // if user has auto login than session is also valid
                 if($time_gap < $gPreferences['logout_minutes'] * 60 || is_object($this->mAutoLogin))
                 {
-                    // user login is valid !
-                    $gValidLogin = true;
                     $this->setValue('ses_timestamp', DATETIME_NOW);
                     return true;
                 }

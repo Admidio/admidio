@@ -56,9 +56,6 @@ class Inventory extends TableInventory
 
         // die Daten der Profilfelder werden geloescht, die Struktur bleibt
         $this->mInventoryFieldsData->clearInventoryData();
-
-        $this->webmaster = 0;
-
     }
 
     /**
@@ -181,7 +178,6 @@ class Inventory extends TableInventory
      */
     public function save($updateFingerPrint = true)
     {
-        $fields_changed = $this->columnsValueChanged;
         global $gCurrentUser;
 
         // if current user is new or is allowed to edit this user than save data
@@ -271,8 +267,6 @@ class Inventory extends TableInventory
             // users data from adm_users table
             $returnCode = parent::setValue($columnName, $newValue);
         }
-
-        $newFieldValue = $this->mInventoryFieldsData->getValue($columnName, 'database');
 
         return $returnCode;
     }

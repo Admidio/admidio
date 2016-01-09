@@ -73,7 +73,7 @@ class ProfileFields
     {
         if($column === 'usf_icon')
         {
-            $value =$this->mProfileFields[$fieldNameIntern]->getValue($column, $format);
+            $value = $this->mProfileFields[$fieldNameIntern]->getValue($column, $format);
         }
 
         if(array_key_exists($fieldNameIntern, $this->mProfileFields))

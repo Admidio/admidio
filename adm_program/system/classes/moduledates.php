@@ -439,10 +439,6 @@ class ModuleDates extends Modules
         {
             $date = '';
         }
-        else
-        {
-            $this->date = $date;
-        }
 
         return $date;
     }

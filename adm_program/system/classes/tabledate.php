@@ -105,8 +105,6 @@ class TableDate extends TableAccess
      */
     public function getIcal($domain)
     {
-        $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';
-
         $ical = $this->getIcalHeader().
                 $this->getIcalVEvent($domain).
                 $this->getIcalFooter();

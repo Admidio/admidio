@@ -41,6 +41,7 @@ class ModuleMenu
 
         $this->id        = $id;
         $this->items     = array();
+        $this->ddItemCnt = 0;
         $this->root_path = $g_root_path;
         $this->customCssClass  = '';
         $this->maxMenuLinkItem = $maxMenuLinkItem;

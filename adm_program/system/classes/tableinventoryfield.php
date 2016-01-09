@@ -250,8 +250,6 @@ class TableInventoryField extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        $fields_changed = $this->columnsValueChanged;
-
         // if new field than generate new name intern, otherwise no change will be made
         if($this->new_record)
         {

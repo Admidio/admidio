@@ -245,7 +245,6 @@ class HtmlTableBasic extends HtmlElement {
                 {
                     foreach($data as $column)
                     {
-                        $style = $this->columnsWidth[$this->columnCount];
                         $this->addColumn($column, null, $col);
                     }
                 }
@@ -287,7 +286,6 @@ class HtmlTableBasic extends HtmlElement {
                 {
                     foreach($data as $column)
                     {
-                        $style = $this->columnsWidth[$this->columnCount];
                         $this->addColumn($column, null, $col);
                     }
                 }
@@ -328,7 +326,6 @@ class HtmlTableBasic extends HtmlElement {
                 {
                     foreach($data as $column)
                     {
-                        $style = $this->columnsWidth[$this->columnCount];
                         $this->addColumn($column, null, $col);
                     }
                 }

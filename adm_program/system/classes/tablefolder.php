@@ -366,23 +366,23 @@ class TableFolder extends TableAccess
             if ($addToArray)
             {
                 $completeFolder['folders'][] = array(
-                                'fol_id'          => $row_folders->fol_id,
-                                'fol_name'        => $row_folders->fol_name,
-                                'fol_description' => $row_folders->fol_description,
-                                'fol_path'        => $row_folders->fol_path,
-                                'fol_timestamp'   => $row_folders->fol_timestamp,
-                                'fol_public'      => $row_folders->fol_public,
-                                'fol_exists'      => $folderExists,
-                                'fol_locked'      => $row_folders->fol_locked
+                    'fol_id'          => $row_folders->fol_id,
+                    'fol_name'        => $row_folders->fol_name,
+                    'fol_description' => $row_folders->fol_description,
+                    'fol_path'        => $row_folders->fol_path,
+                    'fol_timestamp'   => $row_folders->fol_timestamp,
+                    'fol_public'      => $row_folders->fol_public,
+                    'fol_exists'      => $folderExists,
+                    'fol_locked'      => $row_folders->fol_locked
                 );
             }
         }
 
         // Nun alle Dateien auslesen, die in diesem Verzeichnis enthalten sind
-        $sql_files   = 'SELECT *
-                         FROM '.TBL_FILES.'
-                        WHERE fil_fol_id = '. $this->getValue('fol_id'). '
-                        ORDER BY fil_name';
+        $sql_files = 'SELECT *
+                        FROM '.TBL_FILES.'
+                       WHERE fil_fol_id = '. $this->getValue('fol_id'). '
+                       ORDER BY fil_name';
         $filesStatement = $this->db->query($sql_files);
 
         // jetzt noch die Dateien ins Array packen:
@@ -767,8 +767,8 @@ class TableFolder extends TableAccess
         }
 
         // Erst die alten Berechtigungen loeschen fuer die aktuelle OrdnerId
-        $sql_delete  = 'DELETE FROM '.TBL_FOLDER_ROLES.'
-                              WHERE flr_fol_id = '.$folderId;
+        $sql_delete = 'DELETE FROM '.TBL_FOLDER_ROLES.'
+                             WHERE flr_fol_id = '.$folderId;
         $this->db->query($sql_delete);
 
         // Jetzt die neuen Berechtigungen schreiben
