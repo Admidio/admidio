@@ -353,6 +353,7 @@ if($plg_geb_aktiv == 1)
                AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
              WHERE usr_valid  = 1
                AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+               AND rol_id '.$rol_sql.'
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end    > \''.DATE_NOW.'\'
              ORDER BY '.$sqlMonthOfBirthday.' ASC, '.$sqlMonthOfBirthday.' ASC, last_name, first_name';
