@@ -135,7 +135,6 @@ class Email extends PHPMailer
 
         if (strValidCharacters($address, 'email'))
         {
-            //$this->emBccArray[] = '"'. $asciiName. '" <'. $address. '>';
             $this->emBccArray[] = array('name' => $asciiName, 'address' => $address);
             $this->emAddresses = $this->emAddresses.$name."\r\n";
             return true;
@@ -152,7 +151,6 @@ class Email extends PHPMailer
     public function addCopy($address, $name = '')
     {
         $address = admStrToLower($address);
-        // Copy must be Ascii-US formated, so encode in MimeHeader
 
         try
         {
@@ -177,7 +175,6 @@ class Email extends PHPMailer
     public function addRecipient($address, $name = '')
     {
         $address = admStrToLower($address);
-        // Recipient must be Ascii-US formated, so encode in MimeHeader
 
         try
         {

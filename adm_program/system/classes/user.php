@@ -394,6 +394,7 @@ class User extends TableUsers
             }
 
             $this->setValue('usr_date_invalid', DATETIME_NOW);
+            $this->saveChangesWithoutRights();
             $this->save(false); // don't update timestamp
             $this->clear();
 
