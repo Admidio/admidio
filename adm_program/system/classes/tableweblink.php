@@ -88,16 +88,17 @@ class TableWeblink extends TableAccess
     {
         if($columnName === 'lnk_url' && $newValue !== '')
         {
-            // Homepage darf nur gueltige Zeichen enthalten
-            if(!strValidCharacters($newValue, 'url'))
-            {
-                return false;
-            }
             // Homepage noch mit http vorbelegen
             if(strpos(admStrToLower($newValue), 'http://')  === false
             && strpos(admStrToLower($newValue), 'https://') === false)
             {
                 $newValue = 'http://'.$newValue;
+            }
+
+            // Homepage darf nur gueltige Zeichen enthalten
+            if(!strValidCharacters($newValue, 'url'))
+            {
+                return false;
             }
         }
         elseif($columnName === 'lnk_description')

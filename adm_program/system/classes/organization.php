@@ -449,16 +449,17 @@ class Organization extends TableAccess
         }
         elseif($columnName === 'org_homepage' && $newValue !== '')
         {
-            // Homepage darf nur gueltige Zeichen enthalten
-            if (!strValidCharacters($newValue, 'url'))
-            {
-                return false;
-            }
             // Homepage noch mit http vorbelegen
             if(strpos(admStrToLower($newValue), 'http://')  === false
             && strpos(admStrToLower($newValue), 'https://') === false)
             {
                 $newValue = 'http://'. $newValue;
+            }
+
+            // Homepage darf nur gueltige Zeichen enthalten
+            if (!strValidCharacters($newValue, 'url'))
+            {
+                return false;
             }
         }
         return parent::setValue($columnName, $newValue, $checkValue);
