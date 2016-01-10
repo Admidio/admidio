@@ -1307,7 +1307,6 @@ class User extends TableUsers
             // users data from adm_users table
             $returnCode = parent::setValue($columnName, $newValue);
         }
-
         $newFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
 
         // Nicht alle Aenderungen werden geloggt. Ausnahmen:
@@ -1315,7 +1314,8 @@ class User extends TableUsers
         // Felder, die mit usr_ beginnen, werden nicht geloggt
         // Falls die Feldwerte sich nicht geaendert haben, wird natuerlich ebenfalls nicht geloggt
         if($gPreferences['profile_log_edit_fields'] == 1 && $this->getValue('usr_id') != 0
-        && strpos($columnName, 'usr_') === false && $newFieldValue !== $oldFieldValue)
+        && strpos($columnName, 'usr_') === false && $newFieldValue !== $oldFieldValue
+        && $returnCode === true)
         {
             $logEntry = new TableAccess($this->db, TBL_USER_LOG, 'usl');
             $logEntry->setValue('usl_usr_id', $this->getValue('usr_id'));
