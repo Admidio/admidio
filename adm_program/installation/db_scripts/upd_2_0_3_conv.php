@@ -13,7 +13,7 @@
 $last_cat_id = 0;
 $counter     = 0;
 $sql = "SELECT * FROM ". TBL_USER_FIELDS. "
-         ORDER BY usf_cat_id, usf_sequence ";
+      ORDER BY usf_cat_id, usf_sequence ";
 $fieldsStatement = $gDb->query($sql);
 
 while($row_fields = $fieldsStatement->fetch())
@@ -42,7 +42,7 @@ while($row_orga = $orgaStatement->fetch())
     $sql = "SELECT * FROM ". TBL_CATEGORIES. "
              WHERE (  cat_org_id = ". $row_orga['org_id']. "
                    OR cat_org_id IS NULL )
-             ORDER BY cat_type, cat_org_id, cat_sequence ";
+          ORDER BY cat_type, cat_org_id, cat_sequence ";
     $catStatement = $gDb->query($sql);
 
     while($row_cat = $catStatement->fetch())

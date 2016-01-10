@@ -135,8 +135,8 @@ class TableFile extends TableAccess
      * @param string $columnName The name of the database column whose value should be read
      * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
      *                           For text columns the format can be @b database that would return the original database value without any transformations
-     * @return Returns the value of the database column.
-     *         If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @return int|string|bool Returns the value of the database column.
+     *                         If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
@@ -159,6 +159,7 @@ class TableFile extends TableAccess
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
      * For new records the user and timestamp will be set per default.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
@@ -169,6 +170,6 @@ class TableFile extends TableAccess
             $this->setValue('fil_timestamp', DATETIME_NOW);
             $this->setValue('fil_usr_id', $gCurrentUser->getValue('usr_id'));
         }
-        parent::save($updateFingerPrint);
+        return parent::save($updateFingerPrint);
     }
 }

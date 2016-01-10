@@ -194,7 +194,7 @@ else
     {
         $sql = 'SELECT org_id, org_longname
                   FROM '.TBL_ORGANIZATIONS.'
-                 ORDER BY org_longname ASC, org_shortname ASC';
+              ORDER BY org_longname ASC, org_shortname ASC';
         $form->addSelectBoxFromSql('plg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
             array('defaultValue' => $gCurrentOrganization->getValue('org_id'), 'showContextDependentFirstEntry' => false));
     }

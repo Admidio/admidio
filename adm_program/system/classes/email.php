@@ -65,14 +65,21 @@ class Email extends PHPMailer
     private $emText;     // plain text of email
     private $emHtmlText; // html text of email
     private $emSender;   // mail sender adress and Name
+    private $emAddresses;
+    private $emCopyToSender;
+    private $emListRecipients;
+    private $emSendAsHTML;
+    private $emBccArray = array();
 
+    /**
+     * Email constructor.
+     */
     public function __construct()
     {
-        //Übername Einstellungen
+        // Übername Einstellungen
         global $gL10n, $gPreferences, $gDebug;
 
-        // Wir zeigen richtige Fehlermeldungen an
-        $this->exceptions = true;
+        parent::__construct(true);
 
         $this->emCopyToSender   = false;
         $this->emListRecipients = false;
@@ -128,7 +135,6 @@ class Email extends PHPMailer
 
         if (strValidCharacters($address, 'email'))
         {
-            //$this->emBccArray[] = '"'. $asciiName. '" <'. $address. '>';
             $this->emBccArray[] = array('name' => $asciiName, 'address' => $address);
             $this->emAddresses = $this->emAddresses.$name."\r\n";
             return true;
@@ -145,8 +151,6 @@ class Email extends PHPMailer
     public function addCopy($address, $name = '')
     {
         $address = admStrToLower($address);
-        // Copy must be Ascii-US formated, so encode in MimeHeader
-        $asciiName = stripslashes($name);
 
         try
         {
@@ -171,8 +175,6 @@ class Email extends PHPMailer
     public function addRecipient($address, $name = '')
     {
         $address = admStrToLower($address);
-        // Recipient must be Ascii-US formated, so encode in MimeHeader
-        $asciiName = stripslashes($name);
 
         try
         {
@@ -190,8 +192,8 @@ class Email extends PHPMailer
 
     /**
      * Returns the maximum size of an attachment
-     * @param  string $sizeUnit 'b' = byte, 'kib' = kilobyte, 'mib' = megabyte, 'gib' = gigabyte, 'tib' = terabyte
-     * @return float  The maximum attachment size in the given size-unit
+     * @param string $sizeUnit 'b' = byte, 'kib' = kilobyte, 'mib' = megabyte, 'gib' = gigabyte, 'tib' = terabyte
+     * @return int The maximum attachment size in the given size-unit
      */
     public static function getMaxAttachementSize($sizeUnit = 'mib')
     {
@@ -238,8 +240,6 @@ class Email extends PHPMailer
         // save sender if a copy of the mail should be send to him
         $this->emSender = array('address' => $address, 'name' => $name);
 
-        $fromName    = '';
-        $fromAddress = '';
         // Falls so eingestellt soll die Mail von einer bestimmten Adresse aus versendet werden
         if(strlen($gPreferences['mail_sendmail_address']) > 0)
         {

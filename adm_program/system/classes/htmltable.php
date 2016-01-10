@@ -387,8 +387,8 @@ class HtmlTable extends HtmlTableBasic
      * This method send the whole html code of the table to the browser. If the jQuery plugin DataTables
      * is activated then the javascript for that plugin will be added. Call this method if you
      * have finished your form layout. If table has no rows then a message will be shown.
-     * @param  bool        $directOutput (optional) If set to @b true (default) the table html will be directly send
-     *                                   to the browser. If set to @b false the html will be returned.
+     * @param bool $directOutput If set to @b true (default) the table html will be directly send
+     *                           to the browser. If set to @b false the html will be returned.
      * @return string|void If $directOutput is set to @b false this method will return the html code of the table.
      */
     public function show($directOutput = true)

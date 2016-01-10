@@ -80,10 +80,9 @@ class HtmlList extends HtmlElement
 
     /**
      * Add datalist (dl).
-     *
-     * @param string      $id id Attribute
-     * @param string|null $term term as string for datalist
-     * @param string|null $description description as string for data description
+     * @param string $id id Attribute
+     * @param string $term term as string for datalist
+     * @param string $description description as string for data description
      */
     public function addDatalist($id = '', $term = null, $description = null)
     {
@@ -108,9 +107,8 @@ class HtmlList extends HtmlElement
 
     /**
      * Add term and description to datalist (dl).
-     *
-     * @param string|null $term Term as string for datalist
-     * @param string|null $description Description as string for data
+     * @param string $term Term as string for datalist
+     * @param string $description Description as string for data
      * @throws Exception
      * @return false
      */
@@ -135,10 +133,9 @@ class HtmlList extends HtmlElement
 
     /**
      * Add list item (li).
-     *
-     * @param string      $id id Attribute
-     * @param string|null $data element data
-     * @param string|null $term optional term as string for nested datalist
+     * @param string $id id Attribute
+     * @param string $data element data
+     * @param string $term optional term as string for nested datalist
      */
     public function addListItem($id = '', $data = null, $term = null)
     {

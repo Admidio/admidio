@@ -51,7 +51,7 @@ class TableFolder extends TableAccess
         $error = array('text' => '', 'path' => '');
 
         $this->folderPath->setFolder($this->getCompletePathOfFolder());
-        $b_return = $this->folderPath->createFolder($folderName, true);
+        $this->folderPath->createFolder($folderName, true);
 
         if(!$this->folderPath->createFolder($folderName, true))
         {
@@ -67,7 +67,7 @@ class TableFolder extends TableAccess
      * Also all files, subfolders and the selected folder will be deleted in the file system.
      * After that the class will be initialize.
      * @param int $folderId
-     * @return @b true if no error occurred
+     * @return bool @b true if no error occurred
      */
     public function delete($folderId = 0)
     {
@@ -299,7 +299,7 @@ class TableFolder extends TableAccess
                         WHERE fol_type          = \'DOWNLOAD\'
                           AND fol_fol_id_parent = '. $this->getValue('fol_id'). '
                           AND fol_org_id        = '. $gCurrentOrganization->getValue('org_id'). '
-                        ORDER BY fol_name';
+                     ORDER BY fol_name';
         $foldersStatement = $this->db->query($sql_folders);
 
         // Nun alle Folders und Files in ein mehrdimensionales Array stopfen
@@ -366,23 +366,23 @@ class TableFolder extends TableAccess
             if ($addToArray)
             {
                 $completeFolder['folders'][] = array(
-                                'fol_id'          => $row_folders->fol_id,
-                                'fol_name'        => $row_folders->fol_name,
-                                'fol_description' => $row_folders->fol_description,
-                                'fol_path'        => $row_folders->fol_path,
-                                'fol_timestamp'   => $row_folders->fol_timestamp,
-                                'fol_public'      => $row_folders->fol_public,
-                                'fol_exists'      => $folderExists,
-                                'fol_locked'      => $row_folders->fol_locked
+                    'fol_id'          => $row_folders->fol_id,
+                    'fol_name'        => $row_folders->fol_name,
+                    'fol_description' => $row_folders->fol_description,
+                    'fol_path'        => $row_folders->fol_path,
+                    'fol_timestamp'   => $row_folders->fol_timestamp,
+                    'fol_public'      => $row_folders->fol_public,
+                    'fol_exists'      => $folderExists,
+                    'fol_locked'      => $row_folders->fol_locked
                 );
             }
         }
 
         // Nun alle Dateien auslesen, die in diesem Verzeichnis enthalten sind
-        $sql_files   = 'SELECT *
-                         FROM '.TBL_FILES.'
-                        WHERE fil_fol_id = '. $this->getValue('fol_id'). '
-                        ORDER BY fil_name';
+        $sql_files = 'SELECT *
+                        FROM '.TBL_FILES.'
+                       WHERE fil_fol_id = '. $this->getValue('fol_id'). '
+                    ORDER BY fil_name';
         $filesStatement = $this->db->query($sql_files);
 
         // jetzt noch die Dateien ins Array packen:
@@ -428,14 +428,14 @@ class TableFolder extends TableAccess
             if ($addToArray)
             {
                 $completeFolder['files'][] = array(
-                                'fil_id'          => $row_files->fil_id,
-                                'fil_name'        => $row_files->fil_name,
-                                'fil_description' => $row_files->fil_description,
-                                'fil_timestamp'   => $row_files->fil_timestamp,
-                                'fil_locked'      => $row_files->fil_locked,
-                                'fil_exists'      => $fileExists,
-                                'fil_size'        => $fileSize,
-                                'fil_counter'     => $row_files->fil_counter
+                    'fil_id'          => $row_files->fil_id,
+                    'fil_name'        => $row_files->fil_name,
+                    'fil_description' => $row_files->fil_description,
+                    'fil_timestamp'   => $row_files->fil_timestamp,
+                    'fil_locked'      => $row_files->fil_locked,
+                    'fil_exists'      => $fileExists,
+                    'fil_size'        => $fileSize,
+                    'fil_counter'     => $row_files->fil_counter
                 );
             }
         }
@@ -448,7 +448,7 @@ class TableFolder extends TableAccess
             if (file_exists($this->getCompletePathOfFolder()))
             {
 
-                $fileHandle    = opendir($this->getCompletePathOfFolder());
+                $fileHandle = opendir($this->getCompletePathOfFolder());
                 if($fileHandle)
                 {
                     while($file = readdir($fileHandle))
@@ -477,7 +477,6 @@ class TableFolder extends TableAccess
                                         {
                                             $alreadyAdded = true;
                                         }
-
                                     }
                                 }
 
@@ -486,7 +485,6 @@ class TableFolder extends TableAccess
                                 {
                                     $completeFolder['additionalFolders'][] = array('fol_name' => $file);
                                 }
-
                             }
                             elseif (is_file($fileFolderPath))
                             {
@@ -515,15 +513,12 @@ class TableFolder extends TableAccess
                                     $completeFolder['additionalFiles'][] = array('fil_name' => $file, 'fil_size' => $fileSize);
                                 }
                             }
-                         }
+                        }
                     }
 
                    closedir($fileHandle);
-
                 }
-
             }
-
         }
 
         // Das Array mit dem Ordnerinhalt zurueckgeben
@@ -559,7 +554,6 @@ class TableFolder extends TableAccess
         if ($folderId === 0)
         {
             $originalCall = true;
-            $folderId = $this->getValue('fol_id');
             $parentId = $this->getValue('fol_fol_id_parent');
 
             if ($parentId)
@@ -574,8 +568,6 @@ class TableFolder extends TableAccess
                                       AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
                 $rootFolderStatement = $this->db->query($sql_rootFolder);
                 $rootFolderRow = $rootFolderStatement->fetchObject();
-
-                $rootFolderId = $rootFolderRow->fol_id;
 
                 $navigationPrefix = '
                 <li><a class="btn" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $rootFolderRow->fol_id. '"><img
@@ -729,6 +721,7 @@ class TableFolder extends TableAccess
      * with their timestamp will be updated.
      * For new records the user, organization and timestamp will be set per default.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
@@ -740,7 +733,7 @@ class TableFolder extends TableAccess
             $this->setValue('fol_usr_id', $gCurrentUser->getValue('usr_id'));
             $this->setValue('fol_org_id', $gCurrentOrganization->getValue('org_id'));
         }
-        parent::save($updateFingerPrint);
+        return parent::save($updateFingerPrint);
     }
 
     /**
@@ -771,8 +764,8 @@ class TableFolder extends TableAccess
         }
 
         // Erst die alten Berechtigungen loeschen fuer die aktuelle OrdnerId
-        $sql_delete  = 'DELETE FROM '.TBL_FOLDER_ROLES.'
-                              WHERE flr_fol_id = '.$folderId;
+        $sql_delete = 'DELETE FROM '.TBL_FOLDER_ROLES.'
+                             WHERE flr_fol_id = '.$folderId;
         $this->db->query($sql_delete);
 
         // Jetzt die neuen Berechtigungen schreiben

@@ -55,11 +55,15 @@ abstract class Modules
     public $arrParameter;           ///< Array with validated parameters
 
     /**
-     * @param  int   $startElement
-     * @param  int   $limit
+     * @param int $startElement
+     * @param int $limit
      * @return array
      */
     abstract public function getDataSet($startElement = 0, $limit = null);
+
+    /**
+     * @return mixed
+     */
     abstract public function getDataSetCount();
 
     /**
@@ -155,7 +159,7 @@ abstract class Modules
 
     /**
      * Returns a module parameter from the class
-     * @param  string     $parameterName The name of the parameter whose value should be returned.
+     * @param string $parameterName The name of the parameter whose value should be returned.
      * @return array|null Returns the parameter value
      */
     public function getParameter($parameterName)

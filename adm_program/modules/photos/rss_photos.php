@@ -73,7 +73,7 @@ $sql = 'SELECT pho.*, '.$additionalFields.'
                '.$additionalTables.'
          WHERE (   pho_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                AND pho_locked = 0)
-         ORDER BY pho_timestamp_create DESC
+      ORDER BY pho_timestamp_create DESC
          LIMIT 10';
 $statement = $gDb->query($sql);
 

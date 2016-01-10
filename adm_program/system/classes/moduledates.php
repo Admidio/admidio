@@ -146,7 +146,7 @@ class ModuleDates extends Modules
 
     /**
      * Method validates all date inputs and formats them to date format 'Y-m-d' needed for database queries
-     * @param  string       $date Date to be validated and formated if needed
+     * @param string $date Date to be validated and formated if needed
      * @return string|false
      */
     private function formatDate($date)
@@ -177,8 +177,8 @@ class ModuleDates extends Modules
 
     /**
      * SQL query returns an array with available dates.
-     * @param  int   $startElement Defines the offset of the query (default: 0)
-     * @param  int   $limit        Limit of query rows (default: 0)
+     * @param int $startElement Defines the offset of the query (default: 0)
+     * @param int $limit        Limit of query rows (default: 0)
      * @return array Array with all results, dates and parameters.
      */
     public function getDataSet($startElement = 0, $limit = null)
@@ -249,7 +249,7 @@ class ModuleDates extends Modules
 
     /**
      * Returns a module specific headline
-     * @param  string $headline The initial headline of the module.
+     * @param string $headline The initial headline of the module.
      * @return string Returns the full headline of the module
      */
     public function getHeadline($headline)
@@ -322,8 +322,8 @@ class ModuleDates extends Modules
      * Html output will be set regarding the parameters.
      * If value matches the reference or date('1970-01-01'), the output value is cleared to get an empty string.
      * This method can be used to fill a html form
-     * @param  string $date      Date is to be checked to reference and default date '1970-01-01'.
-     * @param  string $reference Reference date
+     * @param string $date      Date is to be checked to reference and default date '1970-01-01'.
+     * @param string $reference Reference date
      * @return string String with date value, or an empty string, if $date is '1970-01-01' or reference date
      */
     public function getFormValue($date, $reference)
@@ -344,8 +344,8 @@ class ModuleDates extends Modules
      * 4 parameters @b dateStartFormatEnglish, @b dateStartFormatEnglish,
      * @b dateEndFormatEnglish and @b dateEndFormatAdmidio that could be read with
      * getParameter and could be used in the script.
-     * @param  string     $dateRangeStart A date in english or Admidio format that will be the start date of the range.
-     * @param  string     $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
+     * @param string $dateRangeStart A date in english or Admidio format that will be the start date of the range.
+     * @param string $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
      * @throws AdmException SYS_DATE_END_BEFORE_BEGIN
      * @return void|false Returns false if invalid date format is submitted
      */
@@ -428,8 +428,8 @@ class ModuleDates extends Modules
     /**
      * Check date value to reference and set html output.
      * If value matches to reference, value is cleared to get an empty string.
-     * @param  string $date
-     * @param  string $reference
+     * @param string $date
+     * @param string $reference
      * @return string
      */
     private function setFormValue($date, $reference)
@@ -439,19 +439,15 @@ class ModuleDates extends Modules
         {
             $date = '';
         }
-        else
-        {
-            $this->date = $date;
-        }
 
         return $date;
     }
 
     /**
      * Get additional tables for sql statement
-     * @param  string $type of sql statement:
-     *                      data:  is joining tables to get more data from them
-     *                      count: is joining tables only to get the correct number of records (default: 'data')
+     * @param string $type of sql statement:
+     *                     data:  is joining tables to get more data from them
+     *                     count: is joining tables only to get the correct number of records (default: 'data')
      * @return string String with the necessary joins
      */
     public function sqlAdditionalTablesGet($type = 'data')

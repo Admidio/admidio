@@ -33,9 +33,9 @@ class PasswordHashing
     /**
      * Hash the given password with the given options
      * Minimum cost is 8
-     * @param  string       $password  The password string
-     * @param  int          $algorithm The hash-algorithm constant
-     * @param  array        $options   The hash-options array
+     * @param string $password  The password string
+     * @param int    $algorithm The hash-algorithm constant
+     * @param array  $options   The hash-options array
      * @return string|false Returns the hashed password or false if an error occurs
      */
     public static function hash($password, $algorithm = PASSWORD_DEFAULT, $options = array())
@@ -54,9 +54,9 @@ class PasswordHashing
 
     /**
      * Verify if the given password belongs to the given hash
-     * @param  string $password The password string to check
-     * @param  string $hash     The hash string to check
-     * @return bool   Returns true if the password belongs to the hash and false if not
+     * @param string $password The password string to check
+     * @param string $hash     The hash string to check
+     * @return bool Returns true if the password belongs to the hash and false if not
      */
     public static function verify($password, $hash)
     {
@@ -79,10 +79,10 @@ class PasswordHashing
 
     /**
      * Checks if the given hash is generated from the given options
-     * @param  string $hash      The hash string that should checked
-     * @param  int    $algorithm The hash-algorithm the hash should match to
-     * @param  array  $options   The hash-options the hash should match to
-     * @return bool   Returns false if the hash match the given options and false if not
+     * @param string $hash      The hash string that should checked
+     * @param int    $algorithm The hash-algorithm the hash should match to
+     * @param array  $options   The hash-options the hash should match to
+     * @return bool Returns false if the hash match the given options and false if not
      */
     public static function needsRehash($hash, $algorithm = PASSWORD_DEFAULT, $options = array())
     {
@@ -91,7 +91,7 @@ class PasswordHashing
 
     /**
      * Generate a cryptographically strong random password
-     * @param  int    $length The length of the generated password
+     * @param int $length The length of the generated password
      * @return string Returns a cryptographically strong random password string
      */
     public static function genRandomPassword($length)
@@ -101,7 +101,7 @@ class PasswordHashing
 
     /**
      * Provides infos about the given password (length, number, lowerCase, upperCase, symbol)
-     * @param  string $password The password you want the get infos about
+     * @param string $password The password you want the get infos about
      * @return array Returns an array with infos about the given password
      */
     public static function passwordInfo($password)
@@ -138,7 +138,7 @@ class PasswordHashing
 
     /**
      * Provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
-     * @param  string       $hash The hash you want the get infos about
+     * @param string $hash The hash you want the get infos about
      * @return array|string Returns an array or string with infos about the given hash
      */
     public static function hashInfo($hash)
@@ -161,11 +161,11 @@ class PasswordHashing
 
     /**
      * Run a benchmark to get the best fitting cost value. The cost value can vary from 4 to 31.
-     * @param  float  $maxTime   The maximum time the hashing process should take in seconds
-     * @param  string $password  The password to test
-     * @param  int    $algorithm The algorithm to test
-     * @param  array  $options   The options to test
-     * @return array  Returns an array with the maximum tested cost with the required time
+     * @param float  $maxTime   The maximum time the hashing process should take in seconds
+     * @param string $password  The password to test
+     * @param int    $algorithm The algorithm to test
+     * @param array  $options   The options to test
+     * @return array Returns an array with the maximum tested cost with the required time
      */
     public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = PASSWORD_DEFAULT, $options = array('cost' => 8))
     {

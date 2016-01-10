@@ -119,8 +119,8 @@ class ModuleWeblinks extends Modules
 
     /**
      * Function returns a set of links with corresponding information
-     * @param int      $startElement Start element of result. First (and default) is 0.
-     * @param int|null $limit        Number of elements returned max. Default NULL will take number from preferences.
+     * @param int $startElement Start element of result. First (and default) is 0.
+     * @param int $limit        Number of elements returned max. Default NULL will take number from preferences.
      * @return array with links and corresponding information
      */
     public function getDataSet($startElement = 0, $limit = null)
@@ -156,7 +156,7 @@ class ModuleWeblinks extends Modules
                  WHERE cat_type   = \'LNK\'
                    AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                        '.$this->getConditions.'
-                 ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
+              ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
         if($limit > 0)
         {
             $sql .= ' LIMIT '.$limit;

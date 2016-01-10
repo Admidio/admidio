@@ -36,7 +36,6 @@ class HtmlFormInstallation extends HtmlForm
      */
     public function __construct($id, $action)
     {
-
         parent::__construct($id, $action);
     }
 

@@ -75,9 +75,6 @@ if(!isset($plg_photos_show_link))
     $plg_photos_show_link = true;
 }
 
-// Sprachdatei des Plugins einbinden
-$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
-
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
 if($plg_show_headline == 1)
 {
@@ -91,7 +88,7 @@ $sql = 'SELECT *
          WHERE pho_org_id   = '.$gCurrentOrganization->getValue('org_id').'
            AND pho_locked   = 0
            AND pho_quantity > 0
-         ORDER BY pho_begin DESC';
+      ORDER BY pho_begin DESC';
 
 // Limit setzen falls gefordert
 if($plg_photos_albums != 0)

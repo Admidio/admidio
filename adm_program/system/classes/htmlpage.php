@@ -412,8 +412,8 @@ class HtmlPage
     /**
      * This method send the whole html code of the page to the browser. Call this method
      * if you have finished your page layout.
-     * @param  bool        $directOutput (optional) If set to @b true (default) the html page will be directly send
-     *                                   to the browser. If set to @b false the html will be returned.
+     * @param bool $directOutput If set to @b true (default) the html page will be directly send
+     *                           to the browser. If set to @b false the html will be returned.
      * @return string|void If $directOutput is set to @b false this method will return the html code of the page.
      */
     public function show($directOutput = true)

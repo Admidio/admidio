@@ -202,9 +202,9 @@ abstract class HtmlElement {
 
     /**
      * Set attributes from associative array.
-     * @param  array      $array An array that contains all attribute names as array key
-     *                           and all attribute content as array value
-     * @return void|false
+     * @param array $array An array that contains all attribute names as array key
+     *                     and all attribute content as array value
+     * @return false
      */
     protected function setAttributesFromArray($array)
     {
@@ -415,8 +415,7 @@ abstract class HtmlElement {
      * If nesting mode is not used, the methods looks for the entry in the array and determines
      * that all setted elements after the selected element must be closed as well.
      * All end tags to position are closed automatically starting with last setted element tag.
-     *
-     * @param  string     $parentElement Parent element to be closed
+     * @param string $parentElement Parent element to be closed
      * @return void|false
      */
     public function closeParentElement($parentElement)
@@ -526,8 +525,8 @@ abstract class HtmlElement {
 
     /**
      * Prepare html of data added from content arrays
-     * @param  array      $data        Array with content for child elements
-     * @param  bool       $selfClosing Element has self closing tag ( default: false)
+     * @param array $data        Array with content for child elements
+     * @param bool  $selfClosing Element has self closing tag ( default: false)
      * @return void|false Returns FALSE is no data is given
      */
     private function readData($data, $selfClosing = false)

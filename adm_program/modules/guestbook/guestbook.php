@@ -204,7 +204,7 @@ $sql = 'SELECT *
           FROM '.TBL_GUESTBOOK.' gbo
          WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                '.$conditions.'
-         ORDER BY gbo_timestamp_create DESC
+      ORDER BY gbo_timestamp_create DESC
          LIMIT '. $guestbook_entries_per_page.' OFFSET '.$getStart;
 $guestbookStatement = $gDb->query($sql);
 
@@ -301,7 +301,7 @@ else
                           FROM '.TBL_GUESTBOOK_COMMENTS.'
                          WHERE gbc_gbo_id = '.$guestbook->getValue('gbo_id').'
                                '.$conditions.'
-                         ORDER BY gbc_timestamp_create ASC';
+                      ORDER BY gbc_timestamp_create ASC';
                 $commentStatement = $gDb->query($sql);
 
                 // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...

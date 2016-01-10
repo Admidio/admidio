@@ -207,7 +207,7 @@ $gDb->query($sql);
 // Orga-Felder zur Sortierung durchnummerieren
 $sql = "SELECT * FROM ". TBL_USER_FIELDS. "
          WHERE usf_sequence = 0
-         ORDER BY usf_cat_id, usf_name ";
+      ORDER BY usf_cat_id, usf_name ";
 $usfStatement = $gDb->query($sql);
 $cat_id_merker = 0;
 $sequence      = 1;
@@ -230,7 +230,7 @@ while($row_usf = $usfStatement->fetch())
 $sql = "SELECT * FROM ". TBL_CATEGORIES. "
          WHERE cat_sequence = 0
            AND cat_type    <> 'USF'
-         ORDER BY cat_type, cat_org_id, cat_name ";
+      ORDER BY cat_type, cat_org_id, cat_name ";
 $catStatement = $gDb->query($sql);
 $type_merker   = "";
 $org_id_merker = 0;

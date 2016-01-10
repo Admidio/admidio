@@ -169,19 +169,18 @@ class ListConfiguration extends TableLists
 
     /**
      * prepare SQL to list configuration
-     * @param array $roleIds Array with all roles, which members are shown
-     * @param int   $memberStatus 0 - Only active mebers of a role
-     *                          1 - Only former members
-     *                          2 - Active and former members of a role
-     * @param string|null $startDate
-     * @param string|null $endDate
-     * @throws AdmException
+     * @param array  $roleIds Array with all roles, which members are shown
+     * @param int    $memberStatus 0 - Only active members of a role
+     *                             1 - Only former members
+     *                             2 - Active and former members of a role
+     * @param string $startDate
+     * @param string $endDate
      * @return string
      */
     public function getSQL($roleIds, $memberStatus = 0, $startDate = null, $endDate = null)
     {
         global $gL10n, $gProfileFields, $gCurrentOrganization, $gDbType;
-        $sql = '';
+
         $sqlSelect  = '';
         $sqlJoin    = '';
         $sqlWhere   = '';
@@ -253,6 +252,7 @@ class ListConfiguration extends TableLists
             if(strlen($listColumn->getValue('lsc_filter')) > 0)
             {
                 $value = $listColumn->getValue('lsc_filter');
+                $type = '';
 
                 // custom profile field
                 if($listColumn->getValue('lsc_usf_id') > 0)
@@ -380,7 +380,7 @@ class ListConfiguration extends TableLists
                        OR cat_org_id IS NULL )
                        '.$sqlMemberStatus.'
                        '.$sqlWhere.'
-                 ORDER BY mem_leader DESC';
+              ORDER BY mem_leader DESC';
         if($sqlOrderBy !== '')
         {
             $sql = $sql. ', '. $sqlOrderBy;
@@ -397,7 +397,7 @@ class ListConfiguration extends TableLists
         $sql = 'SELECT *
                   FROM '.TBL_LIST_COLUMNS.'
                  WHERE lsc_lst_id = '.$this->getValue('lst_id').'
-                 ORDER BY lsc_number ASC';
+              ORDER BY lsc_number ASC';
         $lscStatement = $this->db->query($sql);
 
         while($lsc_row = $lscStatement->fetch())
@@ -437,12 +437,13 @@ class ListConfiguration extends TableLists
 
     /**
      * @param bool $updateFingerPrint
+     * @return bool
      */
     public function save($updateFingerPrint = true)
     {
         $this->db->startTransaction();
 
-        parent::save($updateFingerPrint);
+        $returnValue = parent::save($updateFingerPrint);
 
         // save columns
         foreach($this->columns as $number => $listColumn)
@@ -455,5 +456,7 @@ class ListConfiguration extends TableLists
         }
 
         $this->db->endTransaction();
+
+        return $returnValue;
     }
 }

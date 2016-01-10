@@ -57,6 +57,9 @@ class Captcha
     private $backgroundWriting, $backgroundWritingSize;
     private $captchaCode, $charCount;
 
+    /**
+     * Captcha constructor.
+     */
     public function __construct()
     {
         global $gPreferences;
@@ -207,6 +210,7 @@ class Captcha
         $background = imagecolorallocate($image, $this->backgroundColourR, $this->backgroundColourG, $this->backgroundColourB);
         imagefilledrectangle($image, 0, 0, $this->width, $this->height, $background);
 
+        $color = null;
         // Gitter in den Hintergrund zeichnen...
         // erst vertikal...
         for($i = 0; $i < $this->width; $i += intval($this->backgroundWritingSize / 2))

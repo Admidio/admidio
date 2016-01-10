@@ -551,7 +551,7 @@ $sql = 'SELECT lst_id, lst_name, lst_global, lst_timestamp
          WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
            AND (  lst_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                OR lst_global = 1)
-         ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC';
+      ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC';
 $configurationsStatement = $gDb->query($sql);
 
 $configurations = $configurationsStatement->fetchAll();
@@ -668,7 +668,7 @@ $sql = 'SELECT rol_id, rol_name, cat_name
            AND rol_visible = 1
            AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )
-         ORDER BY cat_sequence, rol_name';
+      ORDER BY cat_sequence, rol_name';
 $form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sql,
     array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
 $showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));

@@ -76,7 +76,7 @@ class HtmlNavbar
 
     /**
      * Creates the html for the menu entry.
-     * @param  array  $data An array with all data if the item. This will be @id, @url, @text and @icon.
+     * @param array $data An array with all data if the item. This will be @id, @url, @text and @icon.
      * @return string Returns the html for the menu entry
      */
     protected function createHtmlLink($data)
@@ -181,8 +181,8 @@ class HtmlNavbar
     /**
      * Creates the html output of the module menu. Each added menu item will be displayed.
      * If one item has several subitems than a dropdown button will be created.
-     * @param  bool        $directOutput If set to @b true (default) the module menu will be directly send
-     *                                   to the browser. If set to @b false the html will be returned.
+     * @param bool $directOutput If set to @b true (default) the module menu will be directly send
+     *                           to the browser. If set to @b false the html will be returned.
      * @return string|void Returns the html output for the complete menu
      */
     public function show($directOutput = true)

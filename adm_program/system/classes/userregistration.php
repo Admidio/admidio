@@ -34,6 +34,7 @@
 class UserRegistration extends User
 {
     private $sendEmail; ///< Flag if the object will send a SystemMail if registration is accepted or deleted.
+    private $tableRegistration;
 
     /**
      * Constructor that will create an object of a recordset of the users table.
@@ -60,8 +61,8 @@ class UserRegistration extends User
         }
 
         // create recordset for registration table
-        $this->TableRegistration = new TableAccess($this->db, TBL_REGISTRATIONS, 'reg');
-        $this->TableRegistration->readDataByColumns(array('reg_org_id' => $this->organizationId, 'reg_usr_id' => $userId));
+        $this->tableRegistration = new TableAccess($this->db, TBL_REGISTRATIONS, 'reg');
+        $this->tableRegistration->readDataByColumns(array('reg_org_id' => $this->organizationId, 'reg_usr_id' => $userId));
     }
 
     /**
@@ -81,7 +82,7 @@ class UserRegistration extends User
         $this->save();
 
         // delete registration record in registration table
-        $this->TableRegistration->delete();
+        $this->tableRegistration->delete();
 
         // every user will get the default roles for registration
         $this->assignDefaultRoles();
@@ -115,7 +116,7 @@ class UserRegistration extends User
         $this->db->startTransaction();
 
         // delete registration record in registration table
-        $return = $this->TableRegistration->delete();
+        $return = $this->tableRegistration->delete();
 
         // if user is not valid and has no other registrations
         // than delete user because he has no use for the system
@@ -160,27 +161,28 @@ class UserRegistration extends User
      * notification mail will be send to all users of roles that have the right to confirm registrations
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
      *                                if table has columns like @b usr_id_create or @b usr_id_changed
+     * @return bool
      */
     public function save($updateFingerPrint = true)
     {
         global $gMessage, $gL10n, $gPreferences;
 
         // if new registration is saved then set user not valid
-        if($this->TableRegistration->isNewRecord())
+        if($this->tableRegistration->isNewRecord())
         {
             $this->setValue('usr_valid', 0);
         }
 
-        parent::save($updateFingerPrint);
+        $returnValue = parent::save($updateFingerPrint);
 
         // if new registration is saved then save also record in registration table and send notification mail
-        if($this->TableRegistration->isNewRecord())
+        if($this->tableRegistration->isNewRecord())
         {
             // save registration record
-            $this->TableRegistration->setValue('reg_org_id', $this->organizationId);
-            $this->TableRegistration->setValue('reg_usr_id', $this->getValue('usr_id'));
-            $this->TableRegistration->setValue('reg_timestamp', DATETIME_NOW);
-            $this->TableRegistration->save();
+            $this->tableRegistration->setValue('reg_org_id', $this->organizationId);
+            $this->tableRegistration->setValue('reg_usr_id', $this->getValue('usr_id'));
+            $this->tableRegistration->setValue('reg_timestamp', DATETIME_NOW);
+            $this->tableRegistration->save();
 
             // send a notification mail to all role members of roles that can approve registrations
             // therefore the flags system mails and notification mail for roles with approve registration must be activated
@@ -220,5 +222,7 @@ class UserRegistration extends User
                 }
             }
         }
+
+        return $returnValue;
     }
 }

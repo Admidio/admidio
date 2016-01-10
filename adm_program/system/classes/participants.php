@@ -80,7 +80,7 @@ class Participants
     /**
      * Count participants of the date.
      * @param int $rolId
-     * @return int|void Returns the result of counted participants as numeric value in current object. Leaders are not counted!
+     * @return int Returns the result of counted participants as numeric value in current object. Leaders are not counted!
      */
     public function getCount($rolId = 0)
     {
@@ -91,9 +91,9 @@ class Participants
         }
 
         $sql = 'SELECT DISTINCT mem_usr_id, mem_leader
-                FROM '.TBL_MEMBERS.'
-                WHERE mem_rol_id = '.$this->rolId.'
-                AND mem_end    >= \''.DATE_NOW.'\'';
+                  FROM '.TBL_MEMBERS.'
+                 WHERE mem_rol_id = '.$this->rolId.'
+                   AND mem_end   >= \''.DATE_NOW.'\'';
         $membersStatement = $this->mDb->query($sql);
 
         // Write all member Id´s and leader status in an array
@@ -119,9 +119,9 @@ class Participants
             // Then Store the results in class variables.
             $this->count = count($numParticipants);
             $this->leader = $leader;
-
-            return $this->count - $this->leader;
         }
+
+        return $this->count - $this->leader;
     }
 
     /**
@@ -136,9 +136,6 @@ class Participants
         {
             // get data from database
             $this->getCount($rolId);
-            // Store the results in class variables.
-            $this->count = count($numParticipants);
-            $this->leader = $leader;
         }
 
         return $this->count - $this->leader;
@@ -156,9 +153,6 @@ class Participants
         {
             // get data from database
             $this->getCount($rolId);
-            // Store the results in class variables.
-            $this->count = count($numParticipants);
-            $this->leader = $leader;
         }
 
         return $this->leader;
@@ -195,7 +189,7 @@ class Participants
                         ON firstname.usd_usr_id = mem_usr_id
                        AND firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
                      WHERE mem_rol_id = '.$this->rolId.'
-                     ORDER BY surname '.$this->order.' ';
+                  ORDER BY surname '.$this->order.' ';
             $membersStatement = $this->mDb->query($sql);
 
             while ($row = $membersStatement->fetch())

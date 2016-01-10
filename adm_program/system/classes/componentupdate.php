@@ -35,8 +35,8 @@ class ComponentUpdate extends Component
     /**
      * Will open a XML file of a specific version that contains all the update steps that
      * must be passed to successfully update Admidio to this version
-     * @param  string|int $mainVersion Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
-     * @param  string|int $subVersion  Contains a string with the main version number e.g. 1 or 2 from x.1 or x.2.
+     * @param string|int $mainVersion Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
+     * @param string|int $subVersion  Contains a string with the main version number e.g. 1 or 2 from x.1 or x.2.
      * @return bool
      */
     private function createXmlObject($mainVersion, $subVersion)
@@ -158,7 +158,6 @@ class ComponentUpdate extends Component
      * Do a loop through all versions start with the current version and end with the target version.
      * Within every subversion the method will search for an update xml file and execute all steps
      * in this file until the end of file is reached. If an error occurred then the update will be stopped.
-     * @return Return @b true if the update was successful.
      */
     public function update()
     {
@@ -219,7 +218,6 @@ class ComponentUpdate extends Component
                 if(file_exists($phpUpdateFile))
                 {
                     require_once($phpUpdateFile);
-                    $flagNextVersion = true;
                 }
 
                 // save current version to system component

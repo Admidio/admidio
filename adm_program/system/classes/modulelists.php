@@ -244,8 +244,8 @@ class ModuleLists extends Modules
 
     /**
      * Function returns a set of lists with corresponding information
-     * @param int      $startElement Start element of result. First (and default) is 0.
-     * @param int|null $limit Number of elements returned max. Default NULL will take number from preferences.
+     * @param int $startElement Start element of result. First (and default) is 0.
+     * @param int $limit        Number of elements returned max. Default NULL will take number from preferences.
      * @return array with list and corresponding information
      */
     public function getDataSet($startElement = 0, $limit = null)
@@ -292,7 +292,7 @@ class ModuleLists extends Modules
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
                        '.$sql_conditions.'
-                 ORDER BY cat_sequence, rol_name';
+              ORDER BY cat_sequence, rol_name';
 
         // If is there a limit then specify one
         if($limit > 0)
@@ -365,7 +365,7 @@ class ModuleLists extends Modules
                    AND (  lst_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                        OR lst_global = 1)
                    AND lst_name IS NOT NULL
-                 ORDER BY lst_global ASC, lst_name ASC';
+              ORDER BY lst_global ASC, lst_name ASC';
         $statement = $gDb->query($sql);
 
         $configurations = array();

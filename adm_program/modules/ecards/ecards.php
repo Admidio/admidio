@@ -180,7 +180,7 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
                 ON cat_id = rol_cat_id
              WHERE rol_id IN ('.implode(',', $arrayMailRoles).')
                AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-             ORDER BY rol_name';
+          ORDER BY rol_name';
     $statement = $gDb->query($sql);
 
     while($row = $statement->fetch())

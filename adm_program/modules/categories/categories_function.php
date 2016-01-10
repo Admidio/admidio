@@ -176,7 +176,7 @@ if($getMode === 1)
                  WHERE cat_type = "'. $getType. '"
                    AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
-                 ORDER BY cat_org_id ASC, cat_sequence ASC';
+              ORDER BY cat_org_id ASC, cat_sequence ASC';
         $categoriesStatement = $gDb->query($sql);
 
         while($row = $categoriesStatement->fetch())

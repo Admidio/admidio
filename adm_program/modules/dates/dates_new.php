@@ -238,13 +238,13 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
         {
             $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\')
                       FROM '.TBL_ROOMS.'
-                     ORDER BY room_name';
+                  ORDER BY room_name';
         }
         else
         {
             $sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\'
                       FROM '.TBL_ROOMS.'
-                     ORDER BY room_name';
+                  ORDER BY room_name';
         }
         $form->addSelectBoxFromSql('dat_room_id', $gL10n->get('SYS_ROOM'), $gDb, $sql, array('defaultValue' => $date->getValue('dat_room_id')));
     }
@@ -267,7 +267,7 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
                AND rol_visible = 1
                AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
-             ORDER BY cat_sequence, rol_name';
+          ORDER BY cat_sequence, rol_name';
     $statement = $gDb->query($sql);
     $roles = array(array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null));
 

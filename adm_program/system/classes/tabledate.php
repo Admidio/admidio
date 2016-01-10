@@ -59,7 +59,7 @@ class TableDate extends TableAccess
         $this->db->startTransaction();
 
         $sql = 'DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
-        $result = $this->db->query($sql);
+        $this->db->query($sql);
 
         // if date has participants then the role with their memberships must be deleted
         if($this->getValue('dat_rol_id') > 0)
@@ -72,9 +72,8 @@ class TableDate extends TableAccess
         }
 
         parent::delete();
-        $result = $this->db->endTransaction();
 
-        return $result;
+        return $this->db->endTransaction();
     }
 
     /**
@@ -101,13 +100,11 @@ class TableDate extends TableAccess
 
     /**
      * gibt einen Termin im iCal-Format zurueck
-     * @param  string $domain
+     * @param string $domain
      * @return string
      */
     public function getIcal($domain)
     {
-        $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';
-
         $ical = $this->getIcalHeader().
                 $this->getIcalVEvent($domain).
                 $this->getIcalFooter();
@@ -163,7 +160,7 @@ class TableDate extends TableAccess
 
     /**
      * gibt einen einzelnen Termin im iCal-Format zurück
-     * @param  string $domain
+     * @param string $domain
      * @return string
      */
     public function getIcalVEvent($domain)
@@ -190,7 +187,7 @@ class TableDate extends TableAccess
             // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
             // Outlook und Co. zeigen es erst dann korrekt an
             $icalVEevent .= "DTSTART;VALUE=DATE:".$this->getValue('dat_begin', 'Ymd')."\r\n".
-                            "DTEND;VALUE=DATE:".date('Ymd', $this->getValue('dat_end', 'U')+86400)."\r\n";
+                            "DTEND;VALUE=DATE:".date('Ymd', $this->getValue('dat_end', 'U')+60*60*24)."\r\n";
         }
         else
         {
@@ -206,13 +203,13 @@ class TableDate extends TableAccess
     /**
      * Get the value of a column of the database table.
      * If the value was manipulated before with @b setValue than the manipulated value is returned.
-     * @param  string $columnName The name of the database column whose value should be read
-     * @param  string $format     For date or timestamp columns the format should be
-     *                            the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                            For text columns the format can be @b database that would return
-     *                            the original database value without any transformations
-     * @return mixed  Returns the value of the database column.
-     *                           If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @param string $columnName The name of the database column whose value should be read
+     * @param string $format     For date or timestamp columns the format should be
+     *                           the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                           For text columns the format can be @b database that would return
+     *                           the original database value without any transformations
+     * @return int|string|bool Returns the value of the database column.
+     *                         If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
@@ -227,7 +224,7 @@ class TableDate extends TableAccess
 
             // bei ganztaegigen Terminen wird das Enddatum immer 1 Tag zurueckgesetzt
             list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $this->dbColumns['dat_end']);
-            $value = date($format, mktime($hour, $minute, $second, $month, $day, $year) - 86400);
+            $value = date($format, mktime($hour, $minute, $second, $month, $day, $year) - 60*60*24);
         }
         elseif($columnName === 'dat_description')
         {
@@ -305,15 +302,15 @@ class TableDate extends TableAccess
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
      * Saves also all roles that could see this date.
-     * @param  bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
-     *                                 if table has columns like @b usr_id_create or @b usr_id_changed
+     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
+     *                                if table has columns like @b usr_id_create or @b usr_id_changed
      * @return bool
      */
     public function save($updateFingerPrint = true)
     {
         $this->db->startTransaction();
 
-        parent::save($updateFingerPrint);
+        $returnValue = parent::save($updateFingerPrint);
 
         if($this->changeVisibleRoles)
         {
@@ -345,9 +342,9 @@ class TableDate extends TableAccess
         }
 
         $this->changeVisibleRoles = false;
-        $result = $this->db->endTransaction();
+        $this->db->endTransaction();
 
-        return $result;
+        return $returnValue;
     }
 
     /**
@@ -365,7 +362,7 @@ class TableDate extends TableAccess
             // hier muss bei ganztaegigen Terminen das bis-Datum um einen Tag hochgesetzt werden
             // damit der Termin bei SQL-Abfragen richtig beruecksichtigt wird
             list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $newValue);
-            $newValue = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year) + 86400);
+            $newValue = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year) + 60*60*24);
         }
         elseif($columnName === 'dat_description')
         {

@@ -97,7 +97,7 @@ $sql = 'SELECT *
          WHERE cat_type = \'INF\'
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )
-         ORDER BY cat_sequence ASC, inf_sequence ASC';
+      ORDER BY cat_sequence ASC, inf_sequence ASC';
 $statement = $gDb->query($sql);
 
 // Create table

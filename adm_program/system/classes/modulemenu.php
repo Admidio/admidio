@@ -41,6 +41,7 @@ class ModuleMenu
 
         $this->id        = $id;
         $this->items     = array();
+        $this->ddItemCnt = 0;
         $this->root_path = $g_root_path;
         $this->customCssClass  = '';
         $this->maxMenuLinkItem = $maxMenuLinkItem;
@@ -49,15 +50,15 @@ class ModuleMenu
     /**
      * Creates a selectbox with all categories of a category type. If an category of this selectbox is selected
      * than the link is called and where you can select entries of this category
-     * @param bool   $id              Html id of the element
+     * @param string $id              Html id of the element
      * @param string $categoryType    Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
-     * @param        $defaultCategory Id of selected category (if id = -1 then no default category will be selected)
+     * @param string $defaultCategory Id of selected category (if id = -1 then no default category will be selected)
      * @param string $link            Link to the page that will be called if menu item is clicked. At the end of
      *                                this link the ID if the category will be added automatically, so you can add a
      *                                category parameter at last
      * @param string $text            Text of the selectbox
      * @param bool   $admin           Set to @b true if user has admin rights in this category, than a link to
-     *                                administrate the catories is shown.
+     *                                administrate the categories is shown.
      */
     public function addCategoryItem($id, $categoryType, $defaultCategory, $link, $text, $admin = false)
     {
@@ -151,7 +152,7 @@ class ModuleMenu
 
     /**
      * creates an text link icon
-     * @param  array  $menuEntry menu entry element which was added with addItem
+     * @param array $menuEntry menu entry element which was added with addItem
      * @return string HTML of created item
      */
     private function createIconTextLink(&$menuEntry)
@@ -184,7 +185,7 @@ class ModuleMenu
 
     /**
      * gets the position of a given ID in the menu
-     * @param  string    $id
+     * @param string $id
      * @return int|false Position of the element; Returns false of no element is found
      */
     public function getPosition($id)
@@ -197,12 +198,12 @@ class ModuleMenu
 
     /**
      * inserts a new menu entry before the named position
-     * @param  int    $position
-     * @param  string $id
-     * @param  string $link
-     * @param  string $text
-     * @param  string $icon
-     * @param  string $desc
+     * @param int    $position
+     * @param string $id
+     * @param string $link
+     * @param string $text
+     * @param string $icon
+     * @param string $desc
      * @return bool
      */
     public function insertItem($position, $id, $link, $text, $icon, $desc = '')
@@ -224,12 +225,12 @@ class ModuleMenu
 
     /**
      * add new entry to array and do some checks before so that link and icon get a valid url
-     * @param  string $id   Html id of the element
-     * @param  string $type The different type of menu that should be shown: @b link normal link with icon; @b category category select box
-     * @param  string $link Link to the page that will be called if menu item is clicked
-     * @param  string $text Link text
-     * @param  string $icon Icon of the menu item, that will also be linked
-     * @param  string $js   Javascript to be executed
+     * @param string $id   Html id of the element
+     * @param string $type The different type of menu that should be shown: @b link normal link with icon; @b category category select box
+     * @param string $link Link to the page that will be called if menu item is clicked
+     * @param string $text Link text
+     * @param string $icon Icon of the menu item, that will also be linked
+     * @param string $js   Javascript to be executed
      * @return array
      */
     private function mkItem($id, $type, $link, $text, $icon, $js = '')

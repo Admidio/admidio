@@ -34,11 +34,11 @@ class TableWeblink extends TableAccess
     /**
      * Get the value of a column of the database table.
      * If the value was manipulated before with @b setValue than the manipulated value is returned.
-     * @param  string $columnName The name of the database column whose value should be read
-     * @param  string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                            For text columns the format can be @b database that would return the original database value without any transformations
-     * @return mixed  Returns the value of the database column.
-     *                If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @param string $columnName The name of the database column whose value should be read
+     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                           For text columns the format can be @b database that would return the original database value without any transformations
+     * @return int|string Returns the value of the database column.
+     *                    If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
@@ -88,16 +88,17 @@ class TableWeblink extends TableAccess
     {
         if($columnName === 'lnk_url' && $newValue !== '')
         {
-            // Homepage darf nur gueltige Zeichen enthalten
-            if(!strValidCharacters($newValue, 'url'))
-            {
-                return false;
-            }
             // Homepage noch mit http vorbelegen
             if(strpos(admStrToLower($newValue), 'http://')  === false
             && strpos(admStrToLower($newValue), 'https://') === false)
             {
                 $newValue = 'http://'.$newValue;
+            }
+
+            // Homepage darf nur gueltige Zeichen enthalten
+            if(!strValidCharacters($newValue, 'url'))
+            {
+                return false;
             }
         }
         elseif($columnName === 'lnk_description')

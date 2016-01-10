@@ -191,7 +191,7 @@ $page->addHtml('
                                       FROM '.TBL_ORGANIZATIONS.'
                                      WHERE org_id <> '. $gCurrentOrganization->getValue('org_id'). '
                                        AND org_org_id_parent is NULL
-                                     ORDER BY org_longname ASC, org_shortname ASC';
+                                  ORDER BY org_longname ASC, org_shortname ASC';
                             $form->addSelectBoxFromSql('org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sql, array('defaultValue'     => $form_values['org_org_id_parent'],
                                                                                                                                       'helpTextIdInline' => 'ORG_PARENT_ORGANIZATION_DESC'));
                         }
@@ -663,7 +663,7 @@ $page->addHtml('
                                   FROM '.TBL_LISTS.'
                                  WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
                                    AND lst_global = 1
-                                 ORDER BY lst_name ASC, lst_timestamp DESC';
+                              ORDER BY lst_name ASC, lst_timestamp DESC';
                         $form->addSelectBoxFromSql('lists_default_configuation', $gL10n->get('LST_DEFAULT_CONFIGURATION'), $gDb, $sql, array('defaultValue' => $form_values['lists_default_configuation'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_DEFAULT_CONFIGURATION_DESC'));
                         $html = '<a class="btn" href="'. $g_root_path. '/adm_program/modules/categories/categories.php?type=ROL"><img
                                     src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';

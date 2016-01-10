@@ -64,18 +64,13 @@ class ProfileFields
 
     /**
      * returns for a fieldname intern (usf_name_intern) the value of the column from table adm_user_fields
-     * @param  string $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
-     * @param  string $column          The column name of @b adm_user_field for which you want the value
-     * @param  string $format          Optional the format (is necessary for timestamps)
+     * @param string $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
+     * @param string $column          The column name of @b adm_user_field for which you want the value
+     * @param string $format          Optional the format (is necessary for timestamps)
      * @return mixed
      */
     public function getProperty($fieldNameIntern, $column, $format = '')
     {
-        if($column === 'usf_icon')
-        {
-            $value =$this->mProfileFields[$fieldNameIntern]->getValue($column, $format);
-        }
-
         if(array_key_exists($fieldNameIntern, $this->mProfileFields))
         {
             return $this->mProfileFields[$fieldNameIntern]->getValue($column, $format);
@@ -110,9 +105,9 @@ class ProfileFields
 
     /**
      * Returns the value of the field in html format with consideration of all layout parameters
-     * @param string $fieldNameIntern Internal profile field name of the field that should be html formated
-     * @param        $value           The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
-     * @param int    $value2          An optional parameter that is necessary for some special fields like email to commit the user id
+     * @param string     $fieldNameIntern Internal profile field name of the field that should be html formated
+     * @param string|int $value           The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
+     * @param string|int $value2          An optional parameter that is necessary for some special fields like email to commit the user id
      * @return string Returns an html formated string that considered the profile field settings
      */
     public function getHtmlValue($fieldNameIntern, $value, $value2 = null)
@@ -298,8 +293,9 @@ class ProfileFields
      * format = 'html'  : returns the value in html-format if this is necessary for that field type @n
      * format = 'database' : returns the value that is stored in database with no format applied
      * @param string $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
-     * @param string $format Returns the field value in a special format @b text, @b html, @b database or datetime (detailed description in method description)
-     * @return
+     * @param string $format          Returns the field value in a special format @b text, @b html, @b database
+     *                                or datetime (detailed description in method description)
+     * @return string|int|bool Returns the value for the column.
      */
     public function getValue($fieldNameIntern, $format = '')
     {
@@ -397,7 +393,7 @@ class ProfileFields
                     ON cat_id = usf_cat_id
                  WHERE cat_org_id IS NULL
                     OR cat_org_id = '.$organizationId.'
-                 ORDER BY cat_sequence ASC, usf_sequence ASC';
+              ORDER BY cat_sequence ASC, usf_sequence ASC';
         $userFieldsStatement = $this->mDb->query($sql);
 
         while($row = $userFieldsStatement->fetch())

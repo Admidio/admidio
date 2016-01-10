@@ -82,7 +82,7 @@ switch($postFunction)
              WHERE msg_type = 'CHAT'
                AND msg_converation_id  = 0
                AND msg_part_id  > ".$postLines. "
-             ORDER BY msg_part_id";
+          ORDER BY msg_part_id";
 
             $statement = $gDb->query($sql);
             while($row = $statement->fetch())

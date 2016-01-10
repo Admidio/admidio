@@ -42,8 +42,10 @@ class TableCategory extends TableAccess
      * Deletes the selected record of the table and all references in other tables.
      * After that the class will be initialize. The method throws exceptions if
      * the category couldn't be deleted.
-     * @throws AdmException
-     * @return @b true if no error occurred
+     * @throws AdmException SYS_DELETE_SYSTEM_CATEGORY
+     *                      CAT_DONT_DELETE_CATEGORY
+     *                      SYS_DELETE_LAST_CATEGORY
+     * @return bool @b true if no error occurred
      */
     public function delete()
     {
@@ -131,7 +133,7 @@ class TableCategory extends TableAccess
 
     /**
      * Read number of child recordsets of this category.
-     * @return Returns the number of child elements of this category
+     * @return int Returns the number of child elements of this category
      */
     public function getNumberElements()
     {
@@ -150,8 +152,8 @@ class TableCategory extends TableAccess
      * @param string $columnName The name of the database column whose value should be read
      * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
      *                           For text columns the format can be @b database that would return the original database value without any transformations
-     * @return Returns the value of the database column.
-     *         If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * @return int|string|bool Returns the value of the database column.
+     *                         If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
@@ -278,7 +280,7 @@ class TableCategory extends TableAccess
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of adm_categories will be read and stored in the object.
      * @param array $columnArray An array where every element index is the column name and the value is the column value
-     * @return Returns @b true if one record is found
+     * @return bool Returns @b true if one record is found
      */
     public function readDataByColumns($columnArray)
     {
@@ -317,6 +319,7 @@ class TableCategory extends TableAccess
      * with their timestamp will be updated.
      * If a new record is inserted than the next free sequence will be determined.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
@@ -362,7 +365,7 @@ class TableCategory extends TableAccess
             $this->setValue('cat_name_intern', $this->getNewNameIntern($this->getValue('cat_name'), 1));
         }
 
-        parent::save($updateFingerPrint);
+        $returnValue = parent::save($updateFingerPrint);
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
         if($fields_changed && $this->getValue('cat_type') === 'USF' && is_object($gCurrentSession))
@@ -372,6 +375,8 @@ class TableCategory extends TableAccess
         }
 
         $this->db->endTransaction();
+
+        return $returnValue;
     }
 
     /**

@@ -113,7 +113,7 @@ $sql = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as
            AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
          WHERE usr_valid = 1
                '.$memberCondition.'
-         ORDER BY last_name.usd_value, first_name.usd_value ';
+      ORDER BY last_name.usd_value, first_name.usd_value ';
 $mglStatement = $gDb->query($sql);
 
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen

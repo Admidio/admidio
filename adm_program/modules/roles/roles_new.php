@@ -173,7 +173,7 @@ $sql = 'SELECT lst_id, lst_name
          WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id'). '
            AND lst_global = 1
            AND lst_name IS NOT NULL
-         ORDER BY lst_global ASC, lst_name ASC';
+      ORDER BY lst_global ASC, lst_name ASC';
 $pdoStatement = $gDb->query($sql);
 
 while($row = $pdoStatement->fetch())
@@ -274,7 +274,7 @@ $sqlAllRoles = 'SELECT rol_id, rol_name, cat_name
                    AND rol_visible = 1
                    AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
-                 ORDER BY cat_sequence, rol_name';
+              ORDER BY cat_sequence, rol_name';
 
 $form->addSelectBoxFromSql('dependent_roles', $gL10n->get('ROL_DEPENDENT'), $gDb, $sqlAllRoles,
                            array('defaultValue' => $childRoles, 'multiselect' => true));

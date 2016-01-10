@@ -44,11 +44,11 @@ class Menu
     }
 
     /**
-     * @param  string $id
-     * @param  string $link
-     * @param  string $text
-     * @param  string $icon
-     * @param  string $desc
+     * @param string $id
+     * @param string $link
+     * @param string $text
+     * @param string $icon
+     * @param string $desc
      * @return array
      */
     private function mkItem($id, $link, $text, $icon, $desc = '')
@@ -98,7 +98,7 @@ class Menu
 
     /**
      * gets the position of a given ID in the menu
-     * @param  string    $id
+     * @param string $id
      * @return int|false
      */
     public function getPosition($id)
@@ -111,12 +111,12 @@ class Menu
 
     /**
      * inserts a new menu entry before the named position
-     * @param  int    $position
-     * @param  string $id
-     * @param  string $link
-     * @param  string $text
-     * @param  string $icon
-     * @param  string $desc
+     * @param int    $position
+     * @param string $id
+     * @param string $link
+     * @param string $text
+     * @param string $icon
+     * @param string $desc
      * @return bool
      */
     public function insertItem($position, $id, $link, $text, $icon, $desc = '')
@@ -139,8 +139,8 @@ class Menu
      * Create the html menu from the internal array that must be filled before.
      * You have the option to create a simple menu with icon and link or
      * a more complex menu with submenu and description text.
-     * @param  bool   $complex Create a @b simple menu as default. If you set the param to @b true
-     *                         then you will create a menu with submenus and description
+     * @param bool $complex Create a @b simple menu as default. If you set the param to @b true
+     *                      then you will create a menu with submenus and description
      * @return string Return the html code of the form.
      */
     public function show($complex = false)

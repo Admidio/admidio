@@ -31,7 +31,8 @@ class TableLists extends TableAccess
     /**
      * Deletes the selected list with all associated fields.
      * After that the class will be initialize.
-     * @return @b true if no error occurred
+     * @throws AdmException LST_ERROR_DELETE_DEFAULT_LIST
+     * @return bool @b true if no error occurred
      */
     public function delete()
     {
@@ -47,7 +48,7 @@ class TableLists extends TableAccess
 
         // alle Spalten der Liste loeschen
         $sql = 'DELETE FROM '.TBL_LIST_COLUMNS.' WHERE lsc_lst_id = '. $this->getValue('lst_id');
-        $result = $this->db->query($sql);
+        $this->db->query($sql);
 
         $return = parent::delete();
 
@@ -62,6 +63,7 @@ class TableLists extends TableAccess
      * with their timestamp will be updated.
      * Per default the organization, user and timestamp will be set.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
@@ -89,6 +91,6 @@ class TableLists extends TableAccess
             $this->setValue('lst_global', 0);
         }
 
-        parent::save($updateFingerPrint);
+        return parent::save($updateFingerPrint);
     }
 }

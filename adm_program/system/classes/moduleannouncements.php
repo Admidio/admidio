@@ -105,8 +105,8 @@ class ModuleAnnouncements extends Modules
 
     /**
      * Get all records and push it to the array
-     * @param int      $startElement
-     * @param int|null $limit
+     * @param int $startElement
+     * @param int $limit
      * @return array Returns the Array with results, recordsets and validated parameters from $_GET Array
      */
     public function getDataSet($startElement = 0, $limit = null)
@@ -115,12 +115,6 @@ class ModuleAnnouncements extends Modules
         global $gPreferences;
         global $gProfileFields;
         global $gDb;
-
-        // Parameter
-        if($limit === null)
-        {
-            $announcementsPerPage = $gPreferences['announcements_per_page'];
-        }
 
         // Bedingungen
         if($this->getParameter('id') > 0)
@@ -173,7 +167,7 @@ class ModuleAnnouncements extends Modules
                        OR (   ann_global = 1
                           AND ann_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                        '.$this->getConditions.'
-                 ORDER BY ann_timestamp_create DESC';
+              ORDER BY ann_timestamp_create DESC';
 
         // Check if limit was set
         if($limit > 0)

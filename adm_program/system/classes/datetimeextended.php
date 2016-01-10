@@ -61,7 +61,7 @@ class DateTimeExtended extends DateTime
 
     /**
      * Returns an array with all 7 weekdays with full name in the specific language.
-     * @param  int             $weekday The number of the weekday for which the name should be returned (1 = Monday ...)
+     * @param int $weekday The number of the weekday for which the name should be returned (1 = Monday ...)
      * @return string|string[] with all 7 weekday or if param weekday is set than the full name of that weekday
      */
     public static function getWeekdays($weekday = 0)
@@ -93,8 +93,8 @@ class DateTimeExtended extends DateTime
      * to a syntax that is known by the bootstrap datepicker plugin.
      * e.g.: input: 'd.m.Y' output: 'dd.mm.yyyy'
      * e.g.: input: 'j.n.y' output: 'd.m.yy'
-     * @param  string $format Optional a format could be given in the date() syntax that should be transformed.
-     *                        If no format is set then the format of the class constructor will be used.
+     * @param string $format Optional a format could be given in the date() syntax that should be transformed.
+     *                       If no format is set then the format of the class constructor will be used.
      * @return string Return the transformed format that is valid for the datepicker.
      */
     public static function getDateFormatForDatepicker($format = 'Y-m-d')

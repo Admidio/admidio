@@ -69,7 +69,7 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
                        AND mem_end    > \''.DATE_NOW.'\'
                        AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                            OR cat_org_id IS NULL )
-                     GROUP BY usr_id';
+                  GROUP BY usr_id';
             $userStatement = $gDb->query($sql);
             $count = $userStatement->rowCount();
         }
@@ -91,7 +91,7 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
                        AND mem_end    > \''.DATE_NOW.'\'
                        AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                            OR cat_org_id IS NULL )
-                     GROUP BY usr_id';
+                  GROUP BY usr_id';
             $userStatement = $gDb->query($sql);
             $count = $userStatement->rowCount();
         }

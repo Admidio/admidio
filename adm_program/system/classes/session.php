@@ -126,7 +126,7 @@ class Session extends TableAccess
      * Returns a reference of an object that is stored in the session. If the stored object
      * has a database object than this could be renewed if the object has a method @b setDatabase.
      * This is necessary because the old database connection is not longer valid.
-     * @param  string $objectName Internal unique name of the object. The name was set with the method @b addObject
+     * @param string $objectName Internal unique name of the object. The name was set with the method @b addObject
      * @return object|false Returns the reference to the object or false if the object was not found.
      */
     public function &getObject($objectName)
@@ -169,8 +169,8 @@ class Session extends TableAccess
 
     /**
      * Checks if the object with this name exists in the object array of this class.
-     * @param  string $objectName Internal unique name of the object. The name was set with the method @b addObject
-     * @return bool   Returns @b true if the object exits otherwise @b false
+     * @param string $objectName Internal unique name of the object. The name was set with the method @b addObject
+     * @return bool Returns @b true if the object exits otherwise @b false
      */
     public function hasObject($objectName)
     {
@@ -180,7 +180,7 @@ class Session extends TableAccess
     /**
      * Check if the current session has a valid user login. Therefore the user id must be stored
      * within the session and the timestamps must be valid
-     * @param  int  $userId The user id must be stored in this session and will be checked if valid.
+     * @param int $userId The user id must be stored in this session and will be checked if valid.
      * @return bool Returns @b true if the user has a valid session login otherwise @b false;
      */
     public function isValidLogin($userId)
@@ -198,8 +198,6 @@ class Session extends TableAccess
                 // if user has auto login than session is also valid
                 if($time_gap < $gPreferences['logout_minutes'] * 60 || is_object($this->mAutoLogin))
                 {
-                    // user login is valid !
-                    $gValidLogin = true;
                     $this->setValue('ses_timestamp', DATETIME_NOW);
                     return true;
                 }
@@ -331,6 +329,7 @@ class Session extends TableAccess
      * with their timestamp will be updated.
      * For new records the organization, timestamp, begin date and ip address will be set per default.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
@@ -348,7 +347,7 @@ class Session extends TableAccess
             // Update
             $this->setValue('ses_timestamp', DATETIME_NOW);
         }
-        parent::save($updateFingerPrint);
+        return parent::save($updateFingerPrint);
     }
 
     /**

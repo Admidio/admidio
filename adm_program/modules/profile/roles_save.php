@@ -81,7 +81,7 @@ if($gCurrentUser->manageRoles())
                AND rol_visible = 1
                AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
-             ORDER BY cat_sequence, rol_name';
+          ORDER BY cat_sequence, rol_name';
 }
 else
 {
@@ -106,7 +106,7 @@ else
                AND rol_visible    = 1
                AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
-             ORDER BY cat_sequence, rol_name';
+          ORDER BY cat_sequence, rol_name';
 }
 $rolesStatement = $gDb->query($sql);
 $rolesList      = $rolesStatement->fetchAll();

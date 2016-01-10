@@ -45,7 +45,7 @@ $sql = 'SELECT *
           FROM '.TBL_GUESTBOOK.'
          WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id').'
            AND gbo_locked = 0
-         ORDER BY gbo_timestamp_create DESC
+      ORDER BY gbo_timestamp_create DESC
          LIMIT 10';
 $statement = $gDb->query($sql);
 
