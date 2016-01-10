@@ -108,11 +108,11 @@ if(!isset($plg_link_class_merge) || $plg_link_class_merge === '')
 if(isset($plg_rolle_sql)
 && ($plg_rolle_sql === 'all' || $plg_rolle_sql === ''))
 {
-    $rol_sql = 'is not null';
+    $rol_sql = ' IS NOT NULL ';
 }
 else
 {
-    $rol_sql = 'in '.$plg_rolle_sql;
+    $rol_sql = ' IN '.$plg_rolle_sql;
 }
 
 // Sprachdatei des Plugins einbinden
