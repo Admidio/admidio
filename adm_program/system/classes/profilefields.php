@@ -110,7 +110,7 @@ class ProfileFields
      * @param string|int $value2          An optional parameter that is necessary for some special fields like email to commit the user id
      * @return string Returns an html formated string that considered the profile field settings
      */
-    public function getHtmlValue($fieldNameIntern, $value, $value2 = null)
+    public function getHtmlValue($fieldNameIntern, $value, $value2 = '')
     {
         global $gPreferences, $g_root_path, $gL10n;
 
@@ -132,6 +132,14 @@ class ProfileFields
                         $htmlValue = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
                     }
                     break;
+                case 'DATE':
+                    if($value !== '')
+                    {
+                        // date must be formated
+                        $date = DateTime::createFromFormat('Y-m-d', $value);
+                        $htmlValue = $date->format($gPreferences['system_date']);
+                    }
+                    break;
                 case 'EMAIL':
                     // the value in db is only the position, now search for the text
                     if($value !== '')
@@ -143,7 +151,7 @@ class ProfileFields
                         else
                         {
                             // set value2 to user id because we need a second parameter in the link to mail module
-                            if($value2 === null)
+                            if($value2 === '')
                             {
                                 $value2 = $this->mUserId;
                             }

@@ -623,14 +623,13 @@ foreach ($membersList as $member)
                     }
                 }
             }
-            elseif ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'DATE'
-            || $column->getValue('lsc_special_field') === 'mem_begin'
+            elseif ($column->getValue('lsc_special_field') === 'mem_begin'
             || $column->getValue('lsc_special_field') === 'mem_end')
             {
                 if (strlen($member[$sqlColumnNumber]) > 0)
                 {
                     // date must be formated
-                    $date = new DateTimeExtended($member[$sqlColumnNumber], 'Y-m-d');
+                    $date = DateTime::createFromFormat('Y-m-d', $member[$sqlColumnNumber]);
                     $content = $date->format($gPreferences['system_date']);
                 }
             }
