@@ -106,7 +106,7 @@ if(isset($plg_link_class_merge) == false || ($plg_link_class_merge) =='')
 // /////////////////////////////////////////////////////// //
 // Prüfen, ob die Rollenbedingung gesetzt wurde            //
 // /////////////////////////////////////////////////////// //
-if(isset($plg_rolle_sql) == 'all' || ($plg_rolle_sql) == '')
+if(!isset($plg_rolle_sql) || $plg_rolle_sql == 'all' || ($plg_rolle_sql) == '')
 {
     $rol_sql = 'is not null';
 }
@@ -343,6 +343,7 @@ if($plg_geb_aktiv == 1)
                AND mem_usr_id = usr_id
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end    > \''.DATE_NOW.'\'
+               AND rol_id '.$rol_sql.'
                AND usr_valid  = 1
              ORDER BY '.$sqlMonthOfBirthday.' ASC, '.$sqlMonthOfBirthday.' ASC, last_name, first_name';
 
