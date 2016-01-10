@@ -105,14 +105,13 @@ if(!isset($plg_link_class_merge) || $plg_link_class_merge === '')
 // /////////////////////////////////////////////////////// //
 // Prüfen, ob die Rollenbedingung gesetzt wurde            //
 // /////////////////////////////////////////////////////// //
-if(isset($plg_rolle_sql)
-&& ($plg_rolle_sql === 'all' || $plg_rolle_sql === ''))
+if(!isset($plg_rolle_sql) || $plg_rolle_sql === 'all' || $plg_rolle_sql === '')
 {
-    $rol_sql = ' IS NOT NULL ';
+    $sqlRoleIds = ' IS NOT NULL ';
 }
 else
 {
-    $rol_sql = ' IN '.$plg_rolle_sql;
+    $sqlRoleIds = ' IN '.$plg_rolle_sql;
 }
 
 // Sprachdatei des Plugins einbinden
@@ -353,7 +352,7 @@ if($plg_geb_aktiv == 1)
                AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
              WHERE usr_valid  = 1
                AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-               AND rol_id '.$rol_sql.'
+               AND rol_id '.$sqlRoleIds.'
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end    > \''.DATE_NOW.'\'
              ORDER BY '.$sqlMonthOfBirthday.' ASC, '.$sqlMonthOfBirthday.' ASC, last_name, first_name';
