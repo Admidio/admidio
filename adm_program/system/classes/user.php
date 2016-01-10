@@ -495,7 +495,7 @@ class User extends TableUsers
                    AND mem_usr_id = '.$this->getValue('usr_id').'
                    AND mem_begin <= \''.$endDate.'\'
                    AND mem_end   >= \''.$startDate.'\'
-                 ORDER BY mem_begin ASC';
+              ORDER BY mem_begin ASC';
         $membershipStatement = $this->db->query($sql);
 
         if($membershipStatement->rowCount() === 1)
@@ -1181,7 +1181,7 @@ class User extends TableUsers
                    AND mem_usr_id = '.$this->getValue('usr_id').'
                    AND mem_begin <= \''.$endDate.'\'
                    AND mem_end   >= \''.$startDate.'\'
-                 ORDER BY mem_begin ASC';
+              ORDER BY mem_begin ASC';
         $membershipStatement = $this->db->query($sql);
 
         if($membershipStatement->rowCount() === 1)

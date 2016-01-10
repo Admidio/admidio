@@ -207,7 +207,7 @@ else
                AND mem.mem_end     > \''.DATE_NOW.'\'
                AND mem.mem_usr_id  = usr_id
              WHERE '. $memberCondition. '
-             ORDER BY last_name, first_name ';
+          ORDER BY last_name, first_name ';
     $userStatement = $gDb->query($sql);
 
     // create html page object
@@ -304,7 +304,7 @@ else
                AND rol_visible = 1
                AND (  cat_org_id  = '.$gCurrentOrganization->getValue('org_id').'
                    OR cat_org_id IS NULL )
-             ORDER BY cat_sequence, rol_name';
+          ORDER BY cat_sequence, rol_name';
     $navbarForm->addSelectBoxFromSql('filter_rol_id', $gL10n->get('SYS_ROLE'), $gDb, $sql, array('defaultValue' => $getFilterRoleId, 'firstEntry' => $gL10n->get('SYS_ALL')));
     $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), 0, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
     $membersAssignmentMenu->addForm($navbarForm->show(false));

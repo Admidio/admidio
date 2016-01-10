@@ -112,7 +112,7 @@ if(count($arrayRoles) > 0)
                AND mem_end          > \''.DATE_NOW.'\'
                AND usr_valid        = 1
                AND email.usd_usr_id = email.usd_usr_id
-             ORDER BY last_name, first_name';
+          ORDER BY last_name, first_name';
     $usersStatement = $gDb->query($sql);
 
     while($row = $usersStatement->fetch())

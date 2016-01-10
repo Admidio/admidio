@@ -124,7 +124,7 @@ $sql = 'SELECT usl_usr_id, last_name.usd_value as last_name, first_name.usd_valu
            AND create_first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
          WHERE usl_timestamp_create BETWEEN \''.$dateFromIntern.' 00:00:00\' AND \''.$dateToIntern.' 23:59:59\' '.
                $sqlConditions.'
-         ORDER BY usl_timestamp_create DESC';
+      ORDER BY usl_timestamp_create DESC';
 $fieldHistoryStatement = $gDb->query($sql);
 
 if($fieldHistoryStatement->rowCount() === 0)

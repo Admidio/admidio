@@ -87,7 +87,7 @@ switch($postFunction)
               FROM ". TBL_MESSAGES_CONTENT. "
              WHERE msc_msg_id  = '".$msg_id."'
                AND msc_part_id > ".$postLines. "
-             ORDER BY msc_part_id";
+          ORDER BY msc_part_id";
 
             $statement = $gDb->query($sql);
             while($row = $statement->fetch())

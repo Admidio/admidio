@@ -121,7 +121,7 @@ $sql = 'SELECT *
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                 OR cat_org_id IS NULL )
                '.$sqlRolesStatus.'
-         ORDER BY cat_sequence ASC, rol_name ASC';
+      ORDER BY cat_sequence ASC, rol_name ASC';
 $rolStatement = $gDb->query($sql);
 
 // Create role object

@@ -88,7 +88,7 @@ $sql = 'SELECT *
          WHERE pho_org_id   = '.$gCurrentOrganization->getValue('org_id').'
            AND pho_locked   = 0
            AND pho_quantity > 0
-         ORDER BY pho_begin DESC';
+      ORDER BY pho_begin DESC';
 
 // Limit setzen falls gefordert
 if($plg_photos_albums != 0)

@@ -41,7 +41,7 @@ if ($getGbcId > 0)
              WHERE gbo_id     = '.$getGbcId.'
                AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id').
                    $conditions.'
-             ORDER BY gbc_timestamp_create ASC';
+          ORDER BY gbc_timestamp_create ASC';
     $commentStatement = $gDb->query($sql);
 }
 

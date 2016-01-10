@@ -150,7 +150,7 @@ if($gCurrentUser->manageRoles())
                AND rol_visible = 1
                AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
-             ORDER BY cat_sequence, cat_id, rol_name';
+          ORDER BY cat_sequence, cat_id, rol_name';
 }
 else
 {
@@ -176,7 +176,7 @@ else
                AND rol_visible    = 1
                AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
-             ORDER BY cat_sequence, cat_id, rol_name';
+          ORDER BY cat_sequence, cat_id, rol_name';
 }
 $statement = $gDb->query($sql);
 $category  = '';

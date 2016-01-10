@@ -37,7 +37,7 @@ $sql = 'SELECT inv_id, item_name.ind_value as item_name, room_id.ind_value as ro
             ON room_id.ind_itm_id = inv_id
            AND room_id.ind_inf_id = '. $gInventoryFields->getProperty('ROOM_ID', 'inf_id'). '
          WHERE inv_valid = 1
-         ORDER BY item_name.ind_value, room_id.ind_value ';
+      ORDER BY item_name.ind_value, room_id.ind_value ';
 $mglStatement = $gDb->query($sql);
 
 // create html page object

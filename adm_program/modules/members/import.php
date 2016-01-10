@@ -80,7 +80,7 @@ $sql = 'SELECT *
            AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )'.
                $condition.'
-         ORDER BY cat_sequence, rol_name';
+      ORDER BY cat_sequence, rol_name';
 $statement = $gDb->query($sql);
 $roles = array();
 

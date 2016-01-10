@@ -225,7 +225,7 @@ foreach($gProfileFields->mProfileFields as $field)
                     {
                         $sql = 'SELECT org_id, org_longname
                                   FROM '.TBL_ORGANIZATIONS.'
-                                 ORDER BY org_longname ASC, org_shortname ASC';
+                              ORDER BY org_longname ASC, org_shortname ASC';
                         $form->addSelectBoxFromSql('reg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, array('property' => FIELD_REQUIRED, 'defaultValue' => $registrationOrgId));
                     }
                 }

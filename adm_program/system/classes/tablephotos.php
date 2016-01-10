@@ -247,7 +247,7 @@ class TablePhotos extends TableAccess
                       FROM '.TBL_PHOTOS.'
                      WHERE pho_pho_id_parent = '.$phoId.'
                        AND pho_locked = 0
-                     ORDER BY pho_quantity DESC';
+                  ORDER BY pho_quantity DESC';
             $childAlbumsStatement = $this->db->query($sql);
 
             while($phoRow = $childAlbumsStatement->fetch())

@@ -156,7 +156,7 @@ class ModuleWeblinks extends Modules
                  WHERE cat_type   = \'LNK\'
                    AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                        '.$this->getConditions.'
-                 ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
+              ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
         if($limit > 0)
         {
             $sql .= ' LIMIT '.$limit;

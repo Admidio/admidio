@@ -573,7 +573,7 @@ if($gPreferences['profile_show_roles'] == 1)
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
                    AND '.$authorization_db_name.' = 1
-                 ORDER BY cat_org_id, cat_sequence, rol_name';
+              ORDER BY cat_org_id, cat_sequence, rol_name';
         $roleStatement = $gDb->query($sql);
         $berechtigungs_Herkunft[$authorization_db_name] = null;
 
@@ -762,7 +762,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
                AND rol_valid   = 1
                AND rol_visible = 1
                AND org_id     <> '.$gCurrentOrganization->getValue('org_id').'
-             ORDER BY org_shortname, cat_sequence, rol_name';
+          ORDER BY org_shortname, cat_sequence, rol_name';
     $roleStatement = $gDb->query($sql);
 
     if($roleStatement->rowCount() > 0)

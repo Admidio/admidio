@@ -52,7 +52,7 @@ $sql = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value as las
            AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
          WHERE usr_valid = 0
            AND reg_org_id = '.$gCurrentOrganization->getValue('org_id').'
-         ORDER BY last_name, first_name';
+      ORDER BY last_name, first_name';
 $usrStatement = $gDb->query($sql);
 $members_found = $usrStatement->rowCount();
 

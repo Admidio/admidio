@@ -368,7 +368,7 @@ class InventoryFields
                     ON cat_id = inf_cat_id
                  WHERE (  cat_org_id IS NULL
                        OR cat_org_id  = '.$organizationId.' )
-                 ORDER BY cat_sequence ASC, inf_sequence ASC';
+              ORDER BY cat_sequence ASC, inf_sequence ASC';
         $usfStatement = $this->mDb->query($sql);
 
         while($row = $usfStatement->fetch())

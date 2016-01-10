@@ -380,7 +380,7 @@ class ListConfiguration extends TableLists
                        OR cat_org_id IS NULL )
                        '.$sqlMemberStatus.'
                        '.$sqlWhere.'
-                 ORDER BY mem_leader DESC';
+              ORDER BY mem_leader DESC';
         if($sqlOrderBy !== '')
         {
             $sql = $sql. ', '. $sqlOrderBy;
@@ -397,7 +397,7 @@ class ListConfiguration extends TableLists
         $sql = 'SELECT *
                   FROM '.TBL_LIST_COLUMNS.'
                  WHERE lsc_lst_id = '.$this->getValue('lst_id').'
-                 ORDER BY lsc_number ASC';
+              ORDER BY lsc_number ASC';
         $lscStatement = $this->db->query($sql);
 
         while($lsc_row = $lscStatement->fetch())

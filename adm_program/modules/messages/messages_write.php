@@ -107,8 +107,8 @@ if ($gValidLogin && $getMsgType === 'PM')
                    AND usr_id <> ".$gCurrentUser->getValue('usr_id')."
                    AND usr_valid  = 1
                    AND usr_login_name IS NOT NULL
-                 GROUP BY usr_id, LAST_NAME.usd_value, FIRST_NAME.usd_value, usr_login_name
-                 ORDER BY LAST_NAME.usd_value, FIRST_NAME.usd_value";
+              GROUP BY usr_id, LAST_NAME.usd_value, FIRST_NAME.usd_value, usr_login_name
+              ORDER BY LAST_NAME.usd_value, FIRST_NAME.usd_value";
 
     $dropStatement = $gDb->query($sql);
 
@@ -312,10 +312,10 @@ elseif (!isset($messageStatement))
                         ON cat_id = rol_cat_id
                      WHERE rol_id IN ('.$sqlRoleIds.')
                            '.$sqlParticipationRoles.'
-                     ORDER BY rol_name ASC';
+                  ORDER BY rol_name ASC';
             $rolesStatement = $gDb->query($sql);
             $rolesArray = $rolesStatement->fetchAll();
-    
+
             foreach($rolesArray as $roleArray)
             {
                 // Rollenobjekt anlegen
@@ -331,7 +331,7 @@ elseif (!isset($messageStatement))
                     $listActiveAndFormer[] = array('groupID: '.$roleArray['rol_id'].'-2', $roleArray['rol_name'].' '.'('.$gL10n->get('MSG_ACTIVE_FORMER_SHORT').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_ACTIVE_FORMER_MEMBERS') . ')');
                 }
             }
-    
+
             $list = array_merge($list, $listFormer, $listActiveAndFormer);
             $listVisibleRoleArray = array_intersect($listRoleIdsArray, $gCurrentUser->getAllVisibleRoles());
         }
@@ -362,13 +362,13 @@ elseif (!isset($messageStatement))
                        AND usr_id <> '.$gCurrentUser->getValue('usr_id').
                            $sqlUserIds.'
                        AND usr_valid = 1
-                     GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value, rol_mail_this_role, rol_id
-                     ORDER BY last_name, first_name, rol_mail_this_role DESC';
+                  GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value, rol_mail_this_role, rol_id
+                  ORDER BY last_name, first_name, rol_mail_this_role DESC';
             $statement = $gDb->query($sql);
-    
+
             $passive_list = array();
             $active_list = array();
-    
+
             while ($row = $statement->fetch())
             {
                 if (!isset($act_usr_id) or $act_usr_id != $row['usr_id'])
@@ -390,7 +390,7 @@ elseif (!isset($messageStatement))
                     }
                 }
             }
-    
+
             $list =  array_merge($list, $active_list, $passive_list);
         }
     }
@@ -405,7 +405,7 @@ elseif (!isset($messageStatement))
                  WHERE rol_mail_this_role = 3
                    AND rol_valid  = 1
                    AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                 ORDER BY cat_sequence, rol_name ';
+              ORDER BY cat_sequence, rol_name ';
 
         $statement = $gDb->query($sql);
         while($row = $statement->fetch())
@@ -450,7 +450,7 @@ elseif (!isset($messageStatement))
                        AND field.usf_type = \'EMAIL\'
                      WHERE usr_id = '. $gCurrentUser->getValue('usr_id'). '
                        AND usr_valid   = 1
-                     GROUP BY email.usd_value, email.usd_value';
+                  GROUP BY email.usd_value, email.usd_value';
 
             $form->addSelectBoxFromSql('mailfromid', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sql, array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false));
         }

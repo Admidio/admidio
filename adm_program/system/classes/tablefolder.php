@@ -299,7 +299,7 @@ class TableFolder extends TableAccess
                         WHERE fol_type          = \'DOWNLOAD\'
                           AND fol_fol_id_parent = '. $this->getValue('fol_id'). '
                           AND fol_org_id        = '. $gCurrentOrganization->getValue('org_id'). '
-                        ORDER BY fol_name';
+                     ORDER BY fol_name';
         $foldersStatement = $this->db->query($sql_folders);
 
         // Nun alle Folders und Files in ein mehrdimensionales Array stopfen
@@ -382,7 +382,7 @@ class TableFolder extends TableAccess
         $sql_files = 'SELECT *
                         FROM '.TBL_FILES.'
                        WHERE fil_fol_id = '. $this->getValue('fol_id'). '
-                       ORDER BY fil_name';
+                    ORDER BY fil_name';
         $filesStatement = $this->db->query($sql_files);
 
         // jetzt noch die Dateien ins Array packen:

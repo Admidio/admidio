@@ -167,7 +167,7 @@ class ModuleAnnouncements extends Modules
                        OR (   ann_global = 1
                           AND ann_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                        '.$this->getConditions.'
-                 ORDER BY ann_timestamp_create DESC';
+              ORDER BY ann_timestamp_create DESC';
 
         // Check if limit was set
         if($limit > 0)

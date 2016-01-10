@@ -74,7 +74,7 @@ else
 $sql = 'SELECT room.*, '.$additionalFields.'
           FROM '.TBL_ROOMS.' room
                '.$additionalTables.'
-         ORDER BY room_name';
+      ORDER BY room_name';
 $roomsStatement = $gDb->query($sql);
 
 if($roomsStatement->rowCount() === 0)

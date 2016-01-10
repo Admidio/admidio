@@ -189,7 +189,7 @@ class Participants
                         ON firstname.usd_usr_id = mem_usr_id
                        AND firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
                      WHERE mem_rol_id = '.$this->rolId.'
-                     ORDER BY surname '.$this->order.' ';
+                  ORDER BY surname '.$this->order.' ';
             $membersStatement = $this->mDb->query($sql);
 
             while ($row = $membersStatement->fetch())

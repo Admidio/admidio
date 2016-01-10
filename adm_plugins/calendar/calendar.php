@@ -230,7 +230,7 @@ if($plg_ter_aktiv == 1)
                AND dat_end   >= \''.$dateMonthStart.'\'
                    '.$sqlLogin.'
                    '.$sqlSyntax.'
-             ORDER BY dat_begin ASC';
+          ORDER BY dat_begin ASC';
     $datesStatement = $gDb->query($sql);
 
     while($row = $datesStatement->fetch())
@@ -355,7 +355,7 @@ if($plg_geb_aktiv == 1)
                AND rol_id '.$sqlRoleIds.'
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end    > \''.DATE_NOW.'\'
-             ORDER BY '.$sqlMonthOfBirthday.' ASC, '.$sqlMonthOfBirthday.' ASC, last_name, first_name';
+          ORDER BY '.$sqlMonthOfBirthday.' ASC, '.$sqlMonthOfBirthday.' ASC, last_name, first_name';
 
     $birthdayStatement = $gDb->query($sql);
 

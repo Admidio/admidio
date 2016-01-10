@@ -84,7 +84,7 @@ if (count($parentRoleSet) === 0)
                    WHERE rol_valid  = 1
                      AND rol_system = 0
                      AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                   ORDER BY rol_name';
+                ORDER BY rol_name';
     $rolesStatement = $gDb->query($sql_roles);
 
     $parentRoleSet[] = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
