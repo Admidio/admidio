@@ -114,7 +114,8 @@ class ProfileFields
     {
         global $gPreferences, $g_root_path, $gL10n;
 
-        if($value !== '' && array_key_exists($fieldNameIntern, $this->mProfileFields))
+        // if value is empty or null, then do nothing
+        if($value != '' && array_key_exists($fieldNameIntern, $this->mProfileFields))
         {
             // create html for each field type
             $htmlValue = $value;
