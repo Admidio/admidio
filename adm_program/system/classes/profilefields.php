@@ -106,8 +106,8 @@ class ProfileFields
     /**
      * Returns the value of the field in html format with consideration of all layout parameters
      * @param string     $fieldNameIntern Internal profile field name of the field that should be html formated
-     * @param string/int $value           The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
-     * @param string/int $value2          An optional parameter that is necessary for some special fields like email to commit the user id
+     * @param string|int $value           The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
+     * @param string|int $value2          An optional parameter that is necessary for some special fields like email to commit the user id
      * @return string Returns an html formated string that considered the profile field settings
      */
     public function getHtmlValue($fieldNameIntern, $value, $value2 = null)
@@ -293,8 +293,9 @@ class ProfileFields
      * format = 'html'  : returns the value in html-format if this is necessary for that field type @n
      * format = 'database' : returns the value that is stored in database with no format applied
      * @param string $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
-     * @param string $format Returns the field value in a special format @b text, @b html, @b database or datetime (detailed description in method description)
-     * @return string/int/bool Returns the value for the column.
+     * @param string $format          Returns the field value in a special format @b text, @b html, @b database
+     *                                or datetime (detailed description in method description)
+     * @return string|int|bool Returns the value for the column.
      */
     public function getValue($fieldNameIntern, $format = '')
     {
