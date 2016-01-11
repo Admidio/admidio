@@ -137,7 +137,10 @@ class ProfileFields
                     {
                         // date must be formated
                         $date = DateTime::createFromFormat('Y-m-d', $value);
-                        $htmlValue = $date->format($gPreferences['system_date']);
+                        if(is_object($date))
+                        {
+                            $htmlValue = $date->format($gPreferences['system_date']);
+                        }
                     }
                     break;
                 case 'EMAIL':
