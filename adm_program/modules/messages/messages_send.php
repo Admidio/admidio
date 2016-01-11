@@ -40,6 +40,18 @@ else
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TO')));
 }
 
+if($postSubjectSQL === '')
+{
+    // message when no subject is given
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('MAI_SUBJECT')));    
+}
+
+if($postBodySQL === '')
+{
+    // message when no subject is given
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_MESSAGE')));    
+}
+
 $message = new TableMessage($gDb, $getMsgId);
 
 if ($getMsgId > 0)
