@@ -22,13 +22,19 @@ $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 
 // Check form values
 $postFrom       = admFuncVariableIsValid($_POST, 'mailfrom', 'string');
-$postName       = admFuncVariableIsValid($_POST, 'name',     'string');
+$postName       = admFuncVariableIsValid($_POST, 'namefrom', 'string');
 $postSubject    = admFuncVariableIsValid($_POST, 'subject',  'html');
 $postSubjectSQL = admFuncVariableIsValid($_POST, 'subject',  'string');
 $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postBodySQL    = admFuncVariableIsValid($_POST, 'msg_body', 'string');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
 $postCaptcha    = admFuncVariableIsValid($_POST, 'captcha', 'string');
+
+// save form data in session for back navigation
+$_SESSION['message_request'] = $_POST;
+
+// save page in navigation - to have a check for a navigation back.
+$gNavigation->addUrl(CURRENT_URL);
 
 if (isset($_POST['msg_to']))
 {
@@ -38,6 +44,18 @@ else
 {
     // message when no receiver is given
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TO')));
+}
+
+if($postSubjectSQL === '')
+{
+    // message when no subject is given
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('MAI_SUBJECT')));    
+}
+
+if($postBodySQL === '')
+{
+    // message when no subject is given
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_MESSAGE')));    
 }
 
 $message = new TableMessage($gDb, $getMsgId);
@@ -108,7 +126,7 @@ if ($gCurrentUser->getValue('usr_id') > 0)
 }
 else
 {
-    if($postName == '')
+    if($postName === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('MAI_YOUR_NAME')));
     }
@@ -127,16 +145,6 @@ if(!($gCurrentUser->getValue('usr_id') > 0 && $gPreferences['mail_delivery_confi
 // check if PM or Email and to steps:
 if ($getMsgType === 'EMAIL')
 {
-    // put values into SESSION
-    $_SESSION['message_request'] = array(
-        'name'                  => $postName,
-        'msgfrom'               => $postFrom,
-        'subject'               => $postSubject,
-        'msg_body'              => $postBody,
-        'carbon_copy'           => $postCarbonCopy,
-        'delivery_confirmation' => $postDeliveryConfirmation,
-    );
-
     if (isset($postTo))
     {
         $receiver = array();
@@ -267,9 +275,6 @@ if ($getMsgType === 'EMAIL')
         // message when no receiver is given
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
-
-    // save page in navigation - to have a check for a navigation back.
-    $gNavigation->addUrl(CURRENT_URL);
 
     // if no valid recipients exists show message
     if(count($receiver) === 0)

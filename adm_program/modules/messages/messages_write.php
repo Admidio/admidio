@@ -143,6 +143,35 @@ else
     }
 }
 
+// Wenn die letzte URL in der Zuruecknavigation die des Scriptes message_send.php ist,
+// dann soll das Formular gefuellt werden mit den Werten aus der Session
+if (strpos($gNavigation->getUrl(), 'messages_send.php') > 0 && isset($_SESSION['message_request']))
+{
+    // Das Formular wurde also schon einmal ausgefüllt,
+    // da der User hier wieder gelandet ist nach der Mailversand-Seite
+    $form_values = strStripSlashesDeep($_SESSION['message_request']);
+    unset($_SESSION['message_request']);
+
+    if(!isset($form_values['carbon_copy']))
+    {
+        $form_values['carbon_copy'] = 0;
+    }
+    if(!isset($form_values['delivery_confirmation']))
+    {
+        $form_values['delivery_confirmation'] = 0;
+    }
+}
+else
+{
+    $form_values['namefrom']    = '';
+    $form_values['mailfrom']    = '';
+    $form_values['subject']     = $getSubject;
+    $form_values['msg_body']    = '';
+    $form_values['msg_to']      = 0;
+    $form_values['carbon_copy'] = $getCarbonCopy;
+    $form_values['delivery_confirmation'] = $getDeliveryConfirmation;
+}
+
 // create html page object
 $page = new HtmlPage($headline);
 
@@ -157,11 +186,6 @@ if ($getMsgType === 'PM')
 {
 
     $formParam = 'msg_type=PM';
-
-    if ($getUserId > 0)
-    {
-        $form_values['subject'] = $getSubject;
-    }
 
     if ($getMsgId > 0)
     {
@@ -191,10 +215,10 @@ if ($getMsgType === 'PM')
 
     if($getSubject === '')
     {
-        $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), '', array('maxLength' => 77, 'property' => FIELD_REQUIRED));
+        $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $form_values['subject'], array('maxLength' => 77, 'property' => FIELD_REQUIRED));
     }
 
-    $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_PM'), null, 10, array('maxLength' => 254, 'property' => FIELD_REQUIRED));
+    $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_PM'), $form_values['msg_body'], 10, array('maxLength' => 254, 'property' => FIELD_REQUIRED));
 
     $form->closeGroupBox();
 
@@ -230,27 +254,6 @@ elseif (!isset($messageStatement))
         }
 
         $rollenName = $role->getValue('rol_name');
-    }
-
-    // Wenn die letzte URL in der Zuruecknavigation die des Scriptes message_send.php ist,
-    // dann soll das Formular gefuellt werden mit den Werten aus der Session
-    if (strpos($gNavigation->getUrl(), 'message_send.php') > 0 && isset($_SESSION['message_request']))
-    {
-        // Das Formular wurde also schon einmal ausgefüllt,
-        // da der User hier wieder gelandet ist nach der Mailversand-Seite
-        $form_values = strStripSlashesDeep($_SESSION['message_request']);
-        unset($_SESSION['message_request']);
-        $gNavigation->deleteLastUrl();
-    }
-    else
-    {
-        $form_values['name']        = '';
-        $form_values['mailfrom']    = '';
-        $form_values['subject']     = $getSubject;
-        $form_values['msg_body']    = '';
-        $form_values['msg_to']      = 0;
-        $form_values['carbon_copy'] = $getCarbonCopy;
-        $form_values['delivery_confirmation'] = $getDeliveryConfirmation;
     }
 
     $formParam = '';
@@ -461,7 +464,7 @@ elseif (!isset($messageStatement))
     }
     else
     {
-        $form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $form_values['name'], array('maxLength' => 50, 'property' => FIELD_REQUIRED));
+        $form->addInput('namefrom', $gL10n->get('MAI_YOUR_NAME'), $form_values['namefrom'], array('maxLength' => 50, 'property' => FIELD_REQUIRED));
         $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $form_values['mailfrom'], array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
     }
 
@@ -498,7 +501,7 @@ elseif (!isset($messageStatement))
     }
     else
     {
-        $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_TEXT'), null, 10, array('property' => FIELD_REQUIRED));
+        $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_TEXT'), $form_values['msg_body'], 10, array('property' => FIELD_REQUIRED));
     }
 
     $form->closeGroupBox();

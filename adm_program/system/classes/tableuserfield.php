@@ -271,6 +271,10 @@ class TableUserField extends TableAccess
 
         }
 
+        if($value === null)
+        {
+            return '';
+        }
         return $value;
     }
 

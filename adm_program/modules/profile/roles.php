@@ -138,7 +138,7 @@ if($gCurrentUser->manageRoles())
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
     $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights,
                      mem_rol_id, mem_usr_id, mem_leader
-              FROM '.TBL_CATEGORIES.'
+              FROM '.TBL_ROLES.'
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
          LEFT JOIN '.TBL_MEMBERS.'
