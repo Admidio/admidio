@@ -156,6 +156,10 @@ if (strpos($gNavigation->getUrl(), 'messages_send.php') > 0 && isset($_SESSION['
     {
         $form_values['carbon_copy'] = 0;
     }
+    if(!isset($form_values['delivery_confirmation']))
+    {
+        $form_values['delivery_confirmation'] = 0;
+    }
 }
 else
 {
