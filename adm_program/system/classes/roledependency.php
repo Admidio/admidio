@@ -300,7 +300,7 @@ class RoleDependency
 
                 while ($row = $membershipStatement->fetch())
                 {
-                    $member->startMembership($this->roleIdParent, $row->mem_usr_id);
+                    $member->startMembership($this->roleIdParent, $row['mem_usr_id']);
                 }
             }
 
