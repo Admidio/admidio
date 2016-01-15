@@ -609,7 +609,7 @@ foreach ($membersList as $member)
             }
             elseif ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX')
             {
-                if ($getMode !== 'html')
+                if ($getMode === 'csv')
                 {
                     if ($content == 1)
                     {
