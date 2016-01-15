@@ -87,6 +87,7 @@ if(!isset($plg_link_url) || $plg_link_url === '')
 $plgDates = new ModuleDates();
 
 // read events for output
+$plgDates->setDateRange();
 $plgDatesResult = $plgDates->getDataSet(0, $plg_dates_count);
 
 $plg_date = new TableDate($gDb);
