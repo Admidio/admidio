@@ -49,13 +49,13 @@ else
 if($postSubjectSQL === '')
 {
     // message when no subject is given
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('MAI_SUBJECT')));    
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('MAI_SUBJECT')));
 }
 
 if($postBodySQL === '')
 {
     // message when no subject is given
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_MESSAGE')));    
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_MESSAGE')));
 }
 
 $message = new TableMessage($gDb, $getMsgId);
@@ -289,7 +289,7 @@ if ($getMsgType === 'EMAIL')
     }
 
     // check sending attributes for user, to be sure that they are correct
-    if ($postName !== $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
+    if(gValidLogin && $postName !== $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
