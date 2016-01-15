@@ -96,6 +96,15 @@ if($getMode === 'assign')
         if($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $mem_count || $role->getValue('rol_max_members') == 0 || $role->getValue('rol_max_members') == 0)))
         {
             $member->startMembership($role->getValue('rol_id'), $getUserId, $leadership);
+
+            // find the parent roles and assign user to parent roles
+            $dependencies = RoleDependency::getParentRoles($gDb, $role->getValue('rol_id'));
+            $parentRoles  = array();
+
+            foreach($dependencies as $tmpRole)
+            {
+                $member->startMembership($tmpRole, $getUserId);
+            }
             echo 'success';
         }
         elseif(!$leadership && !$membership)
