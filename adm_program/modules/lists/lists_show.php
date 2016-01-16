@@ -492,7 +492,7 @@ $listRowNumber = 1;
 
 foreach ($membersList as $member)
 {
-    if ($getMode === 'print' || $getMode === 'pdf')
+    if ($getMode !== 'csv')
     {
         // in print preview and pdf we group the role leaders and the members and
         // add a specific header for them
@@ -509,7 +509,10 @@ foreach ($membersList as $member)
                 $title = $gL10n->get('SYS_PARTICIPANTS');
             }
 
-            $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), 1, ($list->countColumns() + 1));
+            if ($getMode === 'print' || $getMode === 'pdf')
+            {
+                $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), 1, ($list->countColumns() + 1));
+            }
             $lastGroupHead = $member['mem_leader'];
         }
     }
