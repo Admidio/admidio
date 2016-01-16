@@ -431,8 +431,8 @@ class Email extends PHPMailer
 
             foreach($bccArrays as $bccArray)
             {
-                // remove all current bcc recipients from mail
-                $this->ClearBCCs();
+                // remove all current recipients from mail
+                $this->clearAllRecipients();
 
                 try
                 {
