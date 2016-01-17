@@ -37,15 +37,16 @@ class ModuleMessages
     }
 
     /**
-     * check for Group and give back a string with groupname and if it is active, inactive or both.
-     * @param string $groupString
-     * @return string
+     * Check for roles and give back a string with rolename. If former members or activa and former
+     * members were selected than an additional string will be shown after the rolename.
+     * @param string $roleIdsString A string with several role ids.
+     * @return string Returns the rolename and the status if former members were selected.
      */
-    public function msgGroupNameSplit($groupString)
+    public function msgGroupNameSplit($roleIdsString)
     {
         global $gCurrentOrganization, $gL10n, $gDb;
 
-        $group = $this->msgGroupSplit($groupString);
+        $group = $this->msgGroupSplit($roleIdsString);
 
         $sql = 'SELECT rol_name, rol_id
                   FROM '.TBL_ROLES.'
@@ -69,8 +70,9 @@ class ModuleMessages
         }
         else
         {
-            // only active members
-            $ReceiverNameLong = $row['rol_name'] . ' (' .$gL10n->get('LST_ACTIVE_MEMBERS') . ')';
+            // only active members then only show rolename and not the status
+            $ReceiverNameLong = $row['rol_name'];
+            //$ReceiverNameLong = $row['rol_name'] . ' (' .$gL10n->get('LST_ACTIVE_MEMBERS') . ')';
         }
 
         return $ReceiverNameLong;
