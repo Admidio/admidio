@@ -70,26 +70,6 @@ class HtmlPage
         $this->rssFiles = array();
     }
 
-    /**
-     * @param string $filepath
-     * @return string
-     */
-    private function getDebugOrMinFilepath($filepath)
-    {
-        global $gDebug;
-
-        $fileInfo = pathinfo($filepath);
-        $filename = basename($fileInfo['filename'], '.min');
-
-        $filepathDebug = $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
-        $filepathMin   = $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
-
-        if (!$gDebug && file_exists($filepathMin))
-        {
-            return $filepathMin;
-        }
-        return $filepathDebug;
-    }
 
     /**
      * Adds a cascading style sheets file to the html page.
@@ -144,12 +124,13 @@ class HtmlPage
     /**
      * Adds a javascript file to the html page.
      * @param string $file The url with filename of the javascript file.
+     *
      */
     public function addJavascriptFile($file)
     {
         if(!in_array($file, $this->jsFiles, true))
         {
-            $this->jsFiles[] = self::getDebugOrMinFilepath($file);
+            $this->jsFiles[] = $this->getDebugOrMinFilepath($file);
         }
     }
 
@@ -303,6 +284,31 @@ class HtmlPage
     public function enableModal()
     {
         $this->showModal = true;
+    }
+
+    /**
+     * The method will return the filename. If you are in debug mode than it will return the 
+     * not minified version of the filename otherwise it will return the minified version.
+     * Therefore you must provide 2 versions of the file. One with a @b min before the file extension
+     * and one version without the @b min.
+     * @param string $filepath Filename of the NOT minified file.
+     * @return string Returns the filename in dependence of the debug mode.
+     */
+    private function getDebugOrMinFilepath($filepath)
+    {
+        global $gDebug;
+
+        $fileInfo = pathinfo($filepath);
+        $filename = basename($fileInfo['filename'], '.min');
+
+        $filepathDebug = $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
+        $filepathMin   = $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
+
+        if (!$gDebug && file_exists($filepathMin))
+        {
+            return $filepathMin;
+        }
+        return $filepathDebug;
     }
 
     /**
