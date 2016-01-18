@@ -175,8 +175,8 @@ elseif($getMode === 7)
             exit($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
         }
 
-        // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
-        if ($startDate < $endDate)
+        // Enddate must be later/bigger or on same day than Startdate
+        if ($formatedStartDate > $formatedEndDate)
         {
             exit($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
         }
