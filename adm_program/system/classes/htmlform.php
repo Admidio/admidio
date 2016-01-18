@@ -1593,6 +1593,11 @@ class HtmlForm extends HtmlFormBasic
                 }
             }
         }
+        // if no categories exist than select default category
+        else
+        {
+            $categoriesArray[0] = $gL10n->get('SYS_ALL');
+        }
 
         // now call method to create selectbox from array
         $this->addSelectBox($id, $label, $categoriesArray, $optionsAll);
