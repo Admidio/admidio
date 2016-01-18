@@ -135,8 +135,8 @@ if($gCurrentUser->editPhotoRight())
 // integrate bootstrap ekko lightbox addon
 if($gPreferences['photo_show_mode'] == 1)
 {
-    $page->addCssFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.css');
-    $page->addJavascriptFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.js');
+    $page->addCssFile('adm_program/libs/lightbox/ekko-lightbox.css');
+    $page->addJavascriptFile('adm_program/libs/lightbox/ekko-lightbox.js');
 
     $page->addJavascript('$(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) { event.preventDefault(); $(this).ekkoLightbox(); });', true);
 }

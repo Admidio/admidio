@@ -120,10 +120,10 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage($headline);
 $page->enableModal();
 
-$page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.css');
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/locales/bootstrap-datepicker.'.$gL10n->getLanguageIsoCode().'.min.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
+$page->addCssFile('adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.css');
+$page->addJavascriptFile('adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
+$page->addJavascriptFile('adm_program/libs/bootstrap-datepicker/locales/bootstrap-datepicker.'.$gL10n->getLanguageIsoCode().'.min.js');
+$page->addJavascriptFile('adm_program/modules/profile/profile.js');
 
 $page->addJavascript('
     var profileJS = new profileJSClass();

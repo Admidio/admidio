@@ -16,7 +16,7 @@
  * @par Examples
  * @code // create a simple html page with some text
  * $page = new HtmlPage();
- * $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.min.js');
+ * $page->addJavascriptFile('adm_program/libs/jquery/jquery.min.js');
  * $page->setHeadline('A simple Html page');
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
  * $page->show(); @endcode
@@ -60,26 +60,35 @@ class HtmlPage
         $this->printMode     = false;
         $this->javascriptContent        = '';
         $this->javascriptContentExecute = '';
+        $this->cssFiles      = array();
+        $this->jsFiles       = array();
 
         $this->setHeadline($headline);
 
-        $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.css');
-        $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.js',
-                                $g_root_path.'/adm_program/system/js/common_functions.js',
-                                $g_root_path.'/adm_program/libs/bootstrap/js/bootstrap.js');
+        $this->addCssFile('adm_program/libs/bootstrap/css/bootstrap.css');
+        $this->addJavascriptFile('adm_program/libs/jquery/jquery.js');
+        $this->addJavascriptFile('adm_program/system/js/common_functions.js');
+        $this->addJavascriptFile('adm_program/libs/bootstrap/js/bootstrap.js');
         $this->rssFiles = array();
     }
 
 
     /**
      * Adds a cascading style sheets file to the html page.
-     * @param string $file The url with filename of the css file.
+     * @param string $file The url with filename or the relative path starting with @i adm_program of the css file.
      */
     public function addCssFile($file)
     {
         if(!in_array($file, $this->cssFiles, true))
         {
-            $this->cssFiles[] = self::getDebugOrMinFilepath($file);
+            if(strpos($file, 'http') !== false)
+            {
+                $this->cssFiles[] = $file;
+            }
+            else
+            {
+                $this->cssFiles[] = $this->getDebugOrMinFilepath($file);
+            }
         }
     }
 
@@ -123,14 +132,21 @@ class HtmlPage
 
     /**
      * Adds a javascript file to the html page.
-     * @param string $file The url with filename of the javascript file.
+     * @param string $file The url with filename or the relative path starting with @i adm_program of the javascript file.
      *
      */
     public function addJavascriptFile($file)
     {
         if(!in_array($file, $this->jsFiles, true))
         {
-            $this->jsFiles[] = $this->getDebugOrMinFilepath($file);
+            if(strpos($file, 'http') !== false)
+            {
+                $this->jsFiles[] = $file;
+            }
+            else
+            {
+                $this->jsFiles[] = $this->getDebugOrMinFilepath($file);
+            }
         }
     }
 
@@ -296,19 +312,21 @@ class HtmlPage
      */
     private function getDebugOrMinFilepath($filepath)
     {
-        global $gDebug;
+        global $gDebug, $g_root_path;
 
         $fileInfo = pathinfo($filepath);
         $filename = basename($fileInfo['filename'], '.min');
 
-        $filepathDebug = $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
-        $filepathMin   = $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
+        $filepathDebug = '/'. $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
+        $filepathMin   = '/'. $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
 
-        if (!$gDebug && file_exists($filepathMin))
+        if ((!$gDebug && file_exists(SERVER_PATH.$filepathMin)) 
+        || file_exists(SERVER_PATH.$filepathDebug) == false)
         {
-            return $filepathMin;
+            return $g_root_path.$filepathMin;
         }
-        return $filepathDebug;
+        
+        return $g_root_path.$filepathDebug;
     }
 
     /**
@@ -494,7 +512,7 @@ class HtmlPage
 
         if (isset($gPreferences['system_browser_update_check']) && $gPreferences['system_browser_update_check'] == 1)
         {
-            $this->addJavascriptFile($g_root_path.'/adm_program/libs/browser-update/browser-update.js');
+            $this->addJavascriptFile('adm_program/libs/browser-update/browser-update.js');
         }
 
         // add javascript files to page

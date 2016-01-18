@@ -32,7 +32,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage($headline);
 
 $page->addCssFile(THEME_PATH.'/css/chat.css');
-$page->addJavascriptFile($g_root_path.'/adm_program/modules/messages/chat.js');
+$page->addJavascriptFile('adm_program/modules/messages/chat.js');
 
 $page->addJavascript('
     // kick off chat
