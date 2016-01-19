@@ -1593,10 +1593,10 @@ class HtmlForm extends HtmlFormBasic
                 }
             }
         }
-        // if no categories exist than select default category
-        else
+        // if no categories exist and in filter modus, than don't show category
+        elseif($selectboxModus === 'FILTER_CATEGORIES')
         {
-            $categoriesArray[0] = $gL10n->get('SYS_ALL');
+            return null;
         }
 
         // now call method to create selectbox from array
