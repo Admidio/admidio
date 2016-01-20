@@ -623,7 +623,8 @@ foreach ($membersList as $member)
                     }
                 }
             }
-            elseif ($column->getValue('lsc_special_field') === 'mem_begin'
+            elseif ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'DATE'
+            || $column->getValue('lsc_special_field') === 'mem_begin'
             || $column->getValue('lsc_special_field') === 'mem_end')
             {
                 if (strlen($member[$sqlColumnNumber]) > 0)
