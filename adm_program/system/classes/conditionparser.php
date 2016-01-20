@@ -89,10 +89,11 @@ class ConditionParser
         // validate date and return it in database format
         if($date !== '')
         {
-            $date = new DateTimeExtended($date, $gPreferences['system_date']);
-            if($date->isValid())
+            $dateObject = DateTime::createFromFormat($gPreferences['system_date'], $date);
+
+            if($dateObject !== false)
             {
-                $formatDate = $date->format('Y-m-d');
+                $formatDate = $dateObject->format('Y-m-d');
             }
         }
 
