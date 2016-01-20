@@ -695,7 +695,6 @@ input[type="time"] {
 }
 
 .table tbody > tr > td {
-    word-break: break-all;
     word-wrap: break-word;
 }
 

@@ -132,6 +132,7 @@ $columnHeading = array(
     $gL10n->get('SYS_LEADER'));
 $table->addRowHeadingByArray($columnHeading);
 $table->setColumnAlignByArray(array('center', 'left', 'left', 'left'));
+$table->setColumnsWidth(array('10%', '30%', '45%', '15%'));
 
 if($gCurrentUser->manageRoles())
 {
