@@ -396,28 +396,19 @@ elseif ($getMode === 7)
             $parentFolder->getFolderForDownload($targetFolder->getValue('fol_fol_id_parent'));
         }
 
-        if(in_array(0, $_POST['adm_allowed_roles'], true))
+        if(in_array(0, $_POST['adm_allowed_roles']))
         {
-            $public = 1;
-        }
-        else
-        {
-            $public = 0;
-        }
-
-        // set flag public for this folder and all child folders
-        $targetFolder->editPublicFlagOnFolder($public);
-
-        // now set all rol
-        if ($public === 0)
-        {
-            // save all set roles in the database
-            $targetFolder->setRolesOnFolder($_POST['adm_allowed_roles']);
-        }
-        else
-        {
+            // set flag public for this folder and all child folders
+            $targetFolder->editPublicFlagOnFolder(1);
             // if all users have access then delete all existing roles
             $targetFolder->setRolesOnFolder(array());
+        }
+        else
+        {
+            // set flag public for this folder and all child folders
+            $targetFolder->editPublicFlagOnFolder(0);
+            // save all set roles in the database
+            $targetFolder->setRolesOnFolder($_POST['adm_allowed_roles']);
         }
 
         $targetFolder->save();
