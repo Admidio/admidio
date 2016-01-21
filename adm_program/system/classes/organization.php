@@ -235,11 +235,11 @@ class Organization extends TableAccess
         $formerList->setValue('lst_name', $gL10n->get('INS_MEMBERSHIP'));
         $formerList->setValue('lst_org_id', $this->getValue('org_id'));
         $formerList->setValue('lst_global', 1);
-        $formerList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'));
-        $formerList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'));
+        $formerList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+        $formerList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
         $formerList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
         $formerList->addColumn(4, 'mem_begin');
-        $formerList->addColumn(5, 'mem_end', 'DESC');
+        $formerList->addColumn(5, 'mem_end');
         $formerList->save();
     }
 
