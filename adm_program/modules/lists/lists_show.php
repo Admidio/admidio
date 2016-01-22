@@ -477,7 +477,7 @@ elseif ($getMode === 'pdf')
     $table->addRow();
 
     // Write valid column headings
-    for ($column = 0; $column < count($arrValidColumns); $column++)
+    for ($column = 0; $column < count($arrValidColumns); ++$column)
     {
         $table->addColumn($arrValidColumns[$column], array('style' => 'text-align: '.$columnAlign[$column].';font-size:14;background-color:#C7C7C7;'), 'th');
     }

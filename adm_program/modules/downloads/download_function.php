@@ -396,7 +396,7 @@ elseif ($getMode === 7)
             $parentFolder->getFolderForDownload($targetFolder->getValue('fol_fol_id_parent'));
         }
 
-        if(in_array(0, $_POST['adm_allowed_roles']))
+        if(in_array(0, $_POST['adm_allowed_roles'], true))
         {
             // set flag public for this folder and all child folders
             $targetFolder->editPublicFlagOnFolder(1);

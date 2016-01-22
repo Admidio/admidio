@@ -72,7 +72,6 @@ class HtmlPage
         $this->rssFiles = array();
     }
 
-
     /**
      * Adds a cascading style sheets file to the html page.
      * @param string $file The url with filename or the relative path starting with @i adm_program of the css file.
@@ -133,7 +132,6 @@ class HtmlPage
     /**
      * Adds a javascript file to the html page.
      * @param string $file The url with filename or the relative path starting with @i adm_program of the javascript file.
-     *
      */
     public function addJavascriptFile($file)
     {
@@ -303,7 +301,7 @@ class HtmlPage
     }
 
     /**
-     * The method will return the filename. If you are in debug mode than it will return the 
+     * The method will return the filename. If you are in debug mode than it will return the
      * not minified version of the filename otherwise it will return the minified version.
      * Therefore you must provide 2 versions of the file. One with a @b min before the file extension
      * and one version without the @b min.
@@ -317,15 +315,14 @@ class HtmlPage
         $fileInfo = pathinfo($filepath);
         $filename = basename($fileInfo['filename'], '.min');
 
-        $filepathDebug = '/'. $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
-        $filepathMin   = '/'. $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
+        $filepathDebug = '/' . $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
+        $filepathMin   = '/' . $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
 
-        if ((!$gDebug && file_exists(SERVER_PATH.$filepathMin)) 
-        || file_exists(SERVER_PATH.$filepathDebug) == false)
+        if ((!$gDebug && file_exists(SERVER_PATH.$filepathMin)) || !file_exists(SERVER_PATH.$filepathDebug))
         {
             return $g_root_path.$filepathMin;
         }
-        
+
         return $g_root_path.$filepathDebug;
     }
 
