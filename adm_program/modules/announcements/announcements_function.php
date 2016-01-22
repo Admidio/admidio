@@ -81,7 +81,7 @@ if($getMode === 1)
     // Daten in Datenbank schreiben
     $return_code = $announcement->save();
 
-    if($return_code < 0)
+    if($return_code === false)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }

@@ -270,7 +270,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     // save event in database
     $return_code = $date->save();
 
-    if($return_code == 0 && $gPreferences['enable_email_notification'] == 1)
+    if($return_code === true && $gPreferences['enable_email_notification'] == 1)
     {
         // Benachrichtigungs-Email für neue Einträge
 
