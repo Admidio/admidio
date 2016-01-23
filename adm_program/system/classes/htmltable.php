@@ -415,11 +415,11 @@ class HtmlTable extends HtmlTableBasic
                 $javascriptGroup = '';
                 $javascriptGroupFunction = '';
 
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.dataTables.js');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/dataTables.bootstrap.js');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/moment/moment.js');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/moment/datetime-moment.js');
-                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/datatables/css/dataTables.bootstrap.css');
+                $this->htmlPage->addJavascriptFile('adm_program/libs/datatables/js/jquery.dataTables.js');
+                $this->htmlPage->addJavascriptFile('adm_program/libs/datatables/js/dataTables.bootstrap.js');
+                $this->htmlPage->addJavascriptFile('adm_program/libs/moment/moment.js');
+                $this->htmlPage->addJavascriptFile('adm_program/libs/moment/datetime-moment.js');
+                $this->htmlPage->addCssFile('adm_program/libs/datatables/css/dataTables.bootstrap.css');
 
                 if($this->rowCount > 10)
                 {

@@ -256,15 +256,22 @@ class Session extends TableAccess
      */
     public function refreshSession()
     {
-        global $gCheckIpAddress;
+        global $gCheckIpAddress, $gDebug;
 
+        // read session data from database to update the renew flag
         $this->readDataById($this->getValue('ses_id'));
 
         // check if current connection has same ip address as of session initialization
         // if config parameter $gCheckIpAddress = 0 then don't check ip address
         if($this->getValue('ses_ip_address') !== $_SERVER['REMOTE_ADDR']
+        && $this->getValue('ses_ip_address') !== ''
         && (!isset($gCheckIpAddress) || $gCheckIpAddress === 1))
         {
+            if($gDebug)
+            {
+                error_log('Admidio stored session ip address: '.$this->getValue('ses_ip_address'). ' :: Remode ip address: '.$_SERVER['REMOTE_ADDR']);
+            }
+
             unset($_SESSION['gCurrentSession']);
             $this->mObjectArray = array();
             $this->clear();

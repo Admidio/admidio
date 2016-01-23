@@ -81,14 +81,14 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
     }
 
     // Daten in Datenbank schreiben
-    $return_code = $link->save();
+    $returnCode = $link->save();
 
-    if($return_code < 0)
+    if($returnCode === false)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
-    if($return_code == 0 && $getMode === 1)
+    if($returnCode === true && $getMode === 1)
     {
         // Benachrichtigungs-Email für neue Einträge
         $message = $gL10n->get('LNK_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));

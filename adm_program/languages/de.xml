@@ -678,7 +678,7 @@
     <string name="ORG_SEND_NEW_PASSWORD">Neues Passwort zuschicken</string>
     <string name="ORG_SHOW_CREATE_EDIT">Ersteller und Zeitstempel anzeigen</string>
     <string name="ORG_SHOW_CREATE_EDIT_DESC">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen und bearbeiten.</string>
-    <string name="ORG_SHOW_ALL_USERS">Zeige alle Benutzer</string>
+    <string name="ORG_SHOW_ALL_USERS">Optional alle Benutzer anzeigen</string>
     <string name="ORG_SHOW_ALL_USERS_DESC">Ist diese Einstellung gesetzt, so werden in der Benutzerverwaltung neben den aktiven Mitgliedern der aktuellen Organisation optional auch ehemalige Mitglieder und Mitglieder anderer Organisationen angezeigt. Wird die Einstellung deaktiviert, werden nur aktive Mitglieder der aktuellen Organisation angezeigt. Beim Anlegen neuer Benutzer oder Zuordnen von Anmeldungen wird allerdings weiterhin im gesamten Benutzerbestand aller Organisationen nach bereits existierenden Benutzern geschaut.</string>
     <string name="ORG_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
     <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss der Benutzer auch an der dieser Organisation registriert sein.</string>

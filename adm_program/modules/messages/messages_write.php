@@ -217,6 +217,10 @@ if ($getMsgType === 'PM')
     {
         $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $form_values['subject'], array('maxLength' => 77, 'property' => FIELD_REQUIRED));
     }
+    else
+    {
+        $form->addInput('subject', null, $form_values['subject'], array('type' => 'hidden'));
+    }
 
     $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_PM'), $form_values['msg_body'], 10, array('maxLength' => 254, 'property' => FIELD_REQUIRED));
 

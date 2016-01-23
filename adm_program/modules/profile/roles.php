@@ -111,7 +111,7 @@ else
 {
     // create html page object
     $page = new HtmlPage($headline);
-    $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
+    $page->addJavascriptFile('adm_program/modules/profile/profile.js');
 
     $page->addJavascript('var profileJS = new profileJSClass();');
 
@@ -132,6 +132,7 @@ $columnHeading = array(
     $gL10n->get('SYS_LEADER'));
 $table->addRowHeadingByArray($columnHeading);
 $table->setColumnAlignByArray(array('center', 'left', 'left', 'left'));
+$table->setColumnsWidth(array('10%', '30%', '45%', '15%'));
 
 if($gCurrentUser->manageRoles())
 {

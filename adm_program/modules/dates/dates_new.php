@@ -137,7 +137,7 @@ else
 // create html page object
 $page = new HtmlPage($headline);
 
-$page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
+$page->addJavascriptFile('adm_program/system/js/date-functions.js');
 $page->addJavascript('
     // Funktion blendet Zeitfelder ein/aus
     function setAllDay() {

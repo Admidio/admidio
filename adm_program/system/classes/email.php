@@ -424,15 +424,15 @@ class Email extends PHPMailer
         }
 
         // Wenn es Bcc-Empfänger gibt
-        if (isset($this->emBccArray))
+        if (count($this->emBccArray) > 0)
         {
             // Bcc Array in Päckchen zerlegen
             $bccArrays = array_chunk($this->emBccArray, $gPreferences['mail_bcc_count']);
 
             foreach($bccArrays as $bccArray)
             {
-                // remove all current bcc recipients from mail
-                $this->ClearBCCs();
+                // remove all current recipients from mail
+                $this->clearAllRecipients();
 
                 try
                 {

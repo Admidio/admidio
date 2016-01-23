@@ -318,12 +318,12 @@ if ($getMode !== 'csv')
                     var result = $(this).val();
                     $(this).prop("selectedIndex",0);
                     self.location.href = "'.$g_root_path.'/adm_program/modules/lists/lists_show.php?" +
-                        "lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=" + result + "&show_members='.$getShowMembers.'";
+                        "lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=" + result + "&show_members='.$getShowMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'";
                 }
             });
 
             $("#menu_item_print_view").click(function () {
-                window.open("'.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=print&show_members='.$getShowMembers.'", "_blank");
+                window.open("'.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=print&show_members='.$getShowMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'", "_blank");
             });', true);
 
         // get module menu
@@ -333,12 +333,12 @@ if ($getMode !== 'csv')
 
         if ($getFullScreen)
         {
-            $listsMenu->addItem('menu_item_normal_picture', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;rol_ids='.$getRoleIds.'&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=false',
+            $listsMenu->addItem('menu_item_normal_picture', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;rol_ids='.$getRoleIds.'&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=false&amp;date_from='.$getDateFrom.'&date_to='.$getDateTo.'',
                 $gL10n->get('SYS_NORMAL_PICTURE'), 'arrow_in.png');
         }
         else
         {
-            $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;rol_ids='.$getRoleIds.'&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=true',
+            $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;rol_ids='.$getRoleIds.'&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=true&amp;date_from='.$getDateFrom.'&date_to='.$getDateTo.'',
                 $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png');
         }
 
@@ -469,20 +469,17 @@ elseif ($getMode === 'html' || $getMode === 'print')
 }
 elseif ($getMode === 'pdf')
 {
+    $table->setColumnAlignByArray($columnAlign);
     $table->addTableHeader();
     $table->addRow();
     $table->addAttribute('align', 'center');
     $table->addColumn($headline, array('colspan' => count($arrValidColumns)));
     $table->addRow();
-    // Write valid column headings
-    for ($column = 1; $column <= count($arrValidColumns); ++$column)
-    {
-        if ($column === 1)
-        {
-            $table->addColumn($arrValidColumns[0], array('style' => 'text-align: '.$columnAlign[$columnNumber - 1].';font-size:14;background-color:#C7C7C7;'), 'th');
-        }
 
-        $table->addColumn($arrValidColumns[$column], array('style' => 'text-align: '.$columnAlign[$columnNumber - 1].';font-size:14;background-color:#C7C7C7;'), 'th');
+    // Write valid column headings
+    for ($column = 0; $column < count($arrValidColumns); ++$column)
+    {
+        $table->addColumn($arrValidColumns[$column], array('style' => 'text-align: '.$columnAlign[$column].';font-size:14;background-color:#C7C7C7;'), 'th');
     }
 }
 else
@@ -495,7 +492,7 @@ $listRowNumber = 1;
 
 foreach ($membersList as $member)
 {
-    if ($getMode === 'print' || $getMode === 'pdf')
+    if ($getMode !== 'csv')
     {
         // in print preview and pdf we group the role leaders and the members and
         // add a specific header for them
@@ -512,7 +509,10 @@ foreach ($membersList as $member)
                 $title = $gL10n->get('SYS_PARTICIPANTS');
             }
 
-            $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), 1, ($list->countColumns() + 1));
+            if ($getMode === 'print' || $getMode === 'pdf')
+            {
+                $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), 1, ($list->countColumns() + 1));
+            }
             $lastGroupHead = $member['mem_leader'];
         }
     }
@@ -612,7 +612,7 @@ foreach ($membersList as $member)
             }
             elseif ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX')
             {
-                if ($getMode !== 'html')
+                if ($getMode === 'csv')
                 {
                     if ($content == 1)
                     {
@@ -623,7 +623,8 @@ foreach ($membersList as $member)
                     }
                 }
             }
-            elseif ($column->getValue('lsc_special_field') === 'mem_begin'
+            elseif ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'DATE'
+            || $column->getValue('lsc_special_field') === 'mem_begin'
             || $column->getValue('lsc_special_field') === 'mem_end')
             {
                 if (strlen($member[$sqlColumnNumber]) > 0)

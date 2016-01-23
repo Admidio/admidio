@@ -288,10 +288,10 @@ if ($getMsgType === 'EMAIL')
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
     }
 
-    // check sending attributes for user, to be sure that they are correct
-    if($gValidLogin && $postName !== $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
+    // if valid login then sender should always current user
+    if($gValidLogin)
     {
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        $postName = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
     }
 
     // set sending address

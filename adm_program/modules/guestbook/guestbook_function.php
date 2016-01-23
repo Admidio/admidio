@@ -204,12 +204,12 @@ if ($getMode === 1 || $getMode === 3)
         // Daten in Datenbank schreiben
         $return_code = $guestbook->save();
 
-        if($return_code < 0)
+        if($return_code === false)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
 
-        if($return_code == 0)
+        if($return_code === true)
         {
             // Benachrichtigungs-Email für neue Einträge
             if(!$gValidLogin)
@@ -396,12 +396,12 @@ elseif($getMode === 4 || $getMode === 8)
         // Daten in Datenbank schreiben
         $return_code = $guestbook_comment->save();
 
-        if($return_code < 0)
+        if($return_code === false)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
 
-        if($return_code == 0)
+        if($return_code === true)
         {
             // Benachrichtigungs-Email für neue Einträge
             if(!$gValidLogin)
