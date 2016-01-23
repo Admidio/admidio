@@ -185,6 +185,7 @@ class Language
             $countries[(string) $attributes->name] = (string) $stringNode;
         }
 
+        sort($countries, SORT_LOCALE_STRING);
         $this->languageData->setCountriesArray($countries);
 
         return $this->languageData->getCountriesArray();
