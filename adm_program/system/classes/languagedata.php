@@ -128,6 +128,7 @@ class LanguageData
         {
             // initialize all parameters
             $this->textCache = array();
+            $this->countries = array();
 
             $this->language = $language;
         }
