@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="PLG_DOWNLOADS_HEADLINE">Downloads</string>
-    <string name="PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE">There were not uploaded any files for download.</string>
+  <string name="PLG_DOWNLOADS_HEADLINE">Downloads</string>
+  <string name="PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE">There are no uploaded files for download.</string>
 </resources>

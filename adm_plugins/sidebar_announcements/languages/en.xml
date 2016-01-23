@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ANNOUNCEMENTS">All Announcements</string>
-    <string name="PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE">Announcements</string>
-    <string name="PLG_SIDEBAR_ANNOUNCEMENTS_MORE">more</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ANNOUNCEMENTS">All Announcements</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE">Announcements</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_MORE">more</string>
 </resources>

@@ -293,6 +293,7 @@
   <string name="INS_WEBMASTER_LOGIN_FAILED">Could not find a user with this login credentials and a web administration role.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Welcome to the installation of Admidio</string>
   <string name="INS_WELCOME_TEXT">On the following pages you will be prompted to provide some necessary information in order to create a new Admidio system. You will have to specify the database access information of your Admidio installation as well.</string>
+  <string name="INS_WINDOWS_LIVE">Windows Live</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# requires at least MySQL version #VAR2#. Please try to update your MySQL database or use an #VAR3#older Admidio version#VAR4# in order to ensure compatibility.</string>
   <string name="INS_WRONG_PHP_VERSION">Admidio #VAR1# requires at least PHP version #VAR2#. Please try to update your PHP version or oder use an #VAR3#older Admidio version#VAR4# in order to ensure compatibility.</string>
   <string name="INS_XING">Xing</string>
@@ -543,7 +544,7 @@
   <string name="MSG_ACTIVATE_PM_MODULE_DESC">This option allows to deactivate private messages. The module will neither be callable nor listed in the overview. (Default: Activated)</string>
   <string name="MSG_ACTIVE_FORMER_SHORT">Active and former</string>
   <string name="MSG_CHAT">Chat</string>
-  <string name="MSG_DELETE_DESC">Should message #VAR1_BOLD# now be removed?</string>
+  <string name="MSG_DELETE_DESC">Should message #VAR1_BOLD# be removed now?</string>
   <string name="MSG_DELETE_PM">Because it is a private message, the message is only marked for deletion and is waiting for an action of the conversation partner.</string>
   <string name="MSG_FORMER_MEMBERS">Former members</string>
   <string name="MSG_NO_VALID_RECIPIENTS">The selected roles and users have no valid e-mail addresses. For this reason, the e-mail can`t be sent.</string>
@@ -588,7 +589,7 @@
   <string name="ORG_ADVANCED_REGISTRATION">Advanced registration</string>
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Auto log off after</string>
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Set the time before the system automatically logs an inactive user off. A user is inactive when no page is loaded for a certain time. This configuration is being ignored when user selected #VAR1_BOLD#. (default: 20 minutes)</string>
-  <string name="ORG_BROWSER_UPDATE_CHECK">Update message for outdated Browsers</string>
+  <string name="ORG_BROWSER_UPDATE_CHECK">Update message for outdated browsers</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">After activation users with outdated browsers are advised to run a browserupdate. Newer browsers guarantee a better protection against fraud, viruses, Trojans, identity theft and other threats to your privacy and security. Every new browser generation improves speed and supports more and more new web technologies, which leads to a better web experience. For this purpose, the service of https://browser-update.org/ is used.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Background color</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT">Select background color (as hex) for captcha code. (default: #FFEFC4)</string>
@@ -677,7 +678,7 @@
   <string name="ORG_SEND_NEW_PASSWORD">Send new password</string>
   <string name="ORG_SHOW_CREATE_EDIT">Show creator and timestamp of creation</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">A field is normally visible to all users. If this function is not selected, the data can only be seen by users who have the right to edit all users. In own profile, the user can see and edit the data.</string>
-  <string name="ORG_SHOW_ALL_USERS">Show all users</string>
+  <string name="ORG_SHOW_ALL_USERS">Optional show all users</string>
   <string name="ORG_SHOW_ALL_USERS_DESC">If this option is enabled, former members and members of other organizations will be displayed in addition to the active members of the current organization. Otherwise only members of the current organization will be displayed. When creating new users or assigning registrations all organizations will still be checked for existing users.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
@@ -690,7 +691,7 @@
   <string name="ORG_TIME_FORMAT">Time format</string>
   <string name="ORG_TIME_FORMAT_DESC">Format complies with PHP function #VAR1#. (default: H:i)</string>
   <string name="ORG_TIMEZONE">Time zone</string>
-  <string name="ORG_TIMEZONE_DESC">This is the set time zone. If this is changed later in the config.php file of Admidio, so already recorded dates and times are not adjusted to the new time zone.</string>
+  <string name="ORG_TIMEZONE_DESC">This is the set time zone. If this is changed later in the config.php file of Admidio, already recorded dates and times are not adjusted to the new time zone.</string>
   <string name="ORG_URL">URL</string>
   <string name="ORG_VALUE_LIST">Value list</string>
   <string name="ORG_VALUE_LIST_DESC">Define the items of the drop-down menu or the option boxes here.  Provide one drop-down or radio button item per line.\n\nInstead of the text, the selected position in the list will be stored in the profile. If text in a line should change, all assigned users will be able to see the new text in their profiles right away. If a menu item is being moved to another line, another entry might be shown in the user\'s profile.\n\nIn case of a radio button, an icon can be displayed instead of a text element, too. In order to do this, the name of an icon in the theme folder can be provided (e.g. ok.png) or the external URL of a picture files (e.g. http://www.example.com/example.jpg). By using a pipe, additional tool tip can be used with the icon set (e.g. female.png|female)</string>
@@ -826,7 +827,7 @@
   <string name="PRO_NO_DEFAULT_ROLE">The role management contains no default role for new users. Please contact a webmaster who can edit this setting.</string>
   <string name="PRO_NO_ROLES_VISIBLE">No roles were found. Possibly you do not have the rights to see certain roles.</string>
   <string name="PRO_PASSWORD_CHANGED">Password has been successfully changed.</string>
-  <string name="PRO_PASSWORD_DESCRIPTION">Password must have at least 8 characters including numbers, letters and special characters.\n\nDue to security reasons, password is being saved encrypted. Later it can not be seen anymore.</string>
+  <string name="PRO_PASSWORD_DESCRIPTION">Password must have at least 8 characters including numbers, letters and special characters.\n\nDue to security reasons, password will be  encrypted. Later it can not be viewed anymore.</string>
   <string name="PRO_PASSWORD_LENGTH">Password must have at least 8 characters.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">Old password is incorrect.</string>
   <string name="PRO_PASSWORDS_NOT_EQUAL">Original and retyped passwords are different.</string>
@@ -1190,7 +1191,7 @@
   <string name="SYS_PARTICIPANTS">Members</string>
   <string name="SYS_PASSWORD">Password</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Password forgotten</string>
-  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">If you have forgotten your password, the system can create a new password and send it to your email address. Please name your user name or e-mail address used for registration in this system. The new password will be sent immediately to this e-mail address.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">If you have forgotten your password, the system can create a new password and send it to your email address. Please type in, your user name or e-mail address used for registration in the system. The new password will be sent immediately to the registred e-mail address.</string>
   <string name="SYS_PASSWORD_UNKNOWN">Login failed due to incorrect password.\n\nPlease check your password and try again.</string>
   <string name="SYS_PERIOD">Time period</string>
   <string name="SYS_PDF">PDF</string>
@@ -1215,7 +1216,7 @@
   <string name="SYS_PROGRESSBAR">Progress bar</string>
   <string name="SYS_PROPERTIES">Properties</string>
   <string name="SYS_PWACT_PW_SAVED">New password saved!</string>
-  <string name="SYS_PWACT_CODE_INVALID">Either new password has already been activated or activation code is incorrect!</string>
+  <string name="SYS_PWACT_CODE_INVALID">The new password has already been activated or the activation code is incorrect!</string>
   <string name="SYS_QUANTITY">Amount</string>
   <string name="SYS_RADIO_BUTTON">Radio button</string>
   <string name="SYS_RECIPIENT">Recipient</string>
@@ -1228,7 +1229,7 @@
   <string name="SYS_REQUIRED_FIELDS">Required fields</string>
   <string name="SYS_RESTRICTIONS">Resctrictions</string>
   <string name="SYS_ROLE">Role</string>
-  <string name="SYS_ROLE_MAX_MEMBERS">Saving not possible. Maximum number of role members in role #VAR1_BOLD# would exceed predefined limit.</string>
+  <string name="SYS_ROLE_MAX_MEMBERS">It was not possible to save the change. Maximum number of role members in role #VAR1_BOLD# will exceed predefined limit.</string>
   <string name="SYS_ROLES">Roles</string>
   <string name="SYS_ROOM">Room</string>
   <string name="SYS_RSS_DISABLED">RSS feature disabled by the system administrator.</string>
@@ -1286,7 +1287,7 @@
   <string name="SYS_UPDATE">Update</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. file upload size</string>
   <string name="SYS_UPLOAD_NAME_ERROR">The file name can not be named \"Submit\".</string>
-  <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nPermitted are only letters and umlauts, numbers 0-9 and special characters .-+_:/#?= .</string>
+  <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed. </string>
   <string name="SYS_USER">User</string>
   <string name="SYS_USER_ID_NOT_FOUND">No user could be found with this ID!</string>
   <string name="SYS_USER_NO_EMAIL">User #VAR1_BOLD# has no valid e-mail address in personal information!</string>

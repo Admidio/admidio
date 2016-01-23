@@ -1,13 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="PLG_BIRTHDAY_FUTURE">#VAR1# bliver om #VAR2# dage #VAR3# år, den #VAR4#</string>
-    <string name="PLG_BIRTHDAY_MAN_VAR">Hr #VAR1#</string>
-    <string name="PLG_BIRTHDAY_MORE_USERS">Idag har #VAR1# brugere fødselsdag!</string>
-    <string name="PLG_BIRTHDAY_NO_USER">Idag har ingen brugere fødselsdag.</string>
-    <string name="PLG_BIRTHDAY_ONE_USER">Idag har én bruger fødselsdag!</string>
-    <string name="PLG_BIRTHDAY_PAST">#VAR1# blev for #VAR2# dage siden #VAR3# år, den #VAR4#</string>
-    <string name="PLG_BIRTHDAY_TODAY">#VAR1# bliver idag #VAR2#</string>
-    <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# bliver imorgen #VAR3# år, den #VAR4#</string>
-    <string name="PLG_BIRTHDAY_WOMAN_VAR">Fru #VAR1#</string>
-    <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# blev igår #VAR3# år, den #VAR4#</string>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# bliver om #VAR2# dage #VAR3# år, den #VAR4#</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Fødselsdag</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Hr #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_USERS">Idag har #VAR1# brugere fødselsdag!</string>
+  <string name="PLG_BIRTHDAY_NO_USER">Idag har ingen brugere fødselsdag.</string>
+  <string name="PLG_BIRTHDAY_ONE_USER">Idag har én bruger fødselsdag!</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# blev for #VAR2# dage siden #VAR3# år, den #VAR4#</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# bliver idag #VAR2#</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# bliver imorgen #VAR3# år, den #VAR4#</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">Fru #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# blev igår #VAR3# år, den #VAR4#</string>
 </resources>
