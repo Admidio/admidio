@@ -29,14 +29,14 @@ $_SESSION['mylist_request'] = $_POST;
 // Mindestens ein Feld sollte zugeordnet sein
 if(!isset($_POST['column1']) || strlen($_POST['column1']) === 0)
 {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', 'Feld 1'));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', '1. '.$gL10n->get('LST_COLUMN')));
 }
 
 // Rolle muss beim Anzeigen gefuellt sein
 if($getMode === 2
 && (!isset($_POST['sel_roles_ids']) || $_POST['sel_roles_ids'] == 0 || !is_array($_POST['sel_roles_ids'])))
 {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', 'Rolle'));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROLE')));
 }
 
 if(!isset($_POST['sel_show_members']))

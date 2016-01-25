@@ -12,7 +12,6 @@
     <string name="BAC_BACKUP_COMPLETED">Backup fertiggestellt in #VAR1#</string>
     <string name="BAC_BACKUP_FILE">Backupdatei</string>
     <string name="BAC_BACKUP_FROM">Backup vom #VAR1# um #VAR2#</string>
-    <string name="BAC_COMPLETED_VAR">#VAR1# fertig</string>
     <string name="BAC_CREATION_DATE">Erstellungsdatum</string>
     <string name="BAC_DATABASE_BACKUP">Datenbank-Backup</string>
     <string name="BAC_DATABASE_BACKUP_DESC">Datenbanksicherungen der Admidio-Tabellen können hier erstellt und heruntergeladen werden.</string>
@@ -23,15 +22,12 @@
     <string name="BAC_NO_BACKUP_FILE_EXISTS">Keine Backupdatei vorhanden!</string>
     <string name="BAC_ONLY_MYSQL">Das Backupmodul kann nur bei einer MySQL-Datenbank genutzt werden.</string>
     <string name="BAC_OVERALL_PROGRESS">Gesamtfortschritt</string>
-    <string name="BAC_RECORDS_VAR">#VAR1# Datensätze</string>
-    <string name="BAC_PASSED_VAR">#VAR1# verstrichen</string>
     <string name="BAC_START_BACKUP">Backup starten</string>
     <string name="BAC_SUM">Summe</string>
     <string name="BAC_SECONDS_VAR">#VAR1# Sekunden</string>
     <!-- Phrases only in Category-Administration -->
     <string name="CAT_CATEGORY_EXIST">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
     <string name="CAT_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden:\n\n#VAR1_BOLD#\n\n Möchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
-    <string name="CAT_CATEGORY_NOT_DELETE">Du kannst nicht alle Kategorien eines Moduls löschen.\nErstelle vorher eine neue Kategorie für dieses Modul.</string>
     <string name="CAT_DEFAULT_VAR">Standard-#VAR1#</string>
     <string name="CAT_DELETE_CATEGORY">Möchtest du die Kategorie #VAR1_BOLD# wirklich löschen?</string>
     <string name="CAT_DONT_DELETE_CATEGORY">Die Kategorie #VAR1_BOLD# kann nicht gelöscht werden, da sie noch #VAR2# abhängige Einträge besitzt.</string>
@@ -318,7 +314,7 @@
     <string name="LNK_LINKS_FROM">Linksammlung von #VAR1#</string>
     <string name="LNK_NEW_WINDOW">Neues Fenster</string>
     <string name="LNK_REDIRECT">Weiterleitung</string>
-    <string name="LNK_REDIRECT_DESC">Du verlässt jetzt das Webangebot von #VAR1_BOLD# und wirst in #VAR2# Sekunden automatisch zu #VAR3# weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicke bitte #VAR4#!</string>
+    <string name="LNK_REDIRECT_DESC">Du verlässt jetzt das Webangebot von #VAR1_BOLD# und wirst in #VAR2# Sekunden automatisch zu #VAR3# weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicke bitte #VAR4#hier#VAR5#!</string>
     <string name="LNK_SAME_WINDOW">Gleiches Fenster</string>
     <string name="LNK_WEBLINKS">Weblinks</string>
     <string name="LNK_WEBLINKS_DESC">Links zu interessanten Webseiten können hier abgelegt und nach unterschiedlichen Kategorien gruppiert werden.</string>
@@ -917,7 +913,6 @@
     <string name="ROL_RIGHT_PROFILE">Eigenes Profil bearbeiten</string>
     <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
     <string name="ROL_RIGHT_WEBLINKS">Weblinks anlegen und bearbeiten</string>
-    <string name="ROL_ROLE">Rolle</string>
     <string name="ROL_ROLE_ADMINISTRATION">Rollenverwaltung</string>
     <string name="ROL_ROLE_ADMINISTRATION_DESC">Rollen, dies können Gruppen, Kurse oder Abteilungen sein, können hier erstellt und bearbeitet werden. Auch die Rechte der einzelnen Rollen werden hier festgelegt.</string>
     <string name="ROL_ROLE_DELETE">Rolle löschen</string>
