@@ -26,7 +26,16 @@ function admFuncAutoload($className)
     }
     else
     {
-        return false;
+        $fileName = SERVER_PATH. '/adm_program/libs/phpmailer/class.'.strtolower($className).'.php';
+
+        if(file_exists($fileName))
+        {
+            include($fileName);
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 

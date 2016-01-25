@@ -262,12 +262,11 @@ class TableFolder extends TableAccess
                                   AND mem_begin <= \''.DATE_NOW.'\'
                                   AND mem_end    > \''.DATE_NOW.'\'';
                 $rightsStatement = $this->db->query($sql_rights);
-                $row_rights = $rightsStatement->fetch();
-                $row_count  = $row_rights['count'];
+                $rowRights = $rightsStatement->fetch();
 
                 // Falls der User in keiner Rolle Mitglied ist, die Rechte an dem Ordner besitzt
                 // wird auch kein Ordner geliefert.
-                if ($row_count === 0)
+                if ($rowRights['count'] === '0')
                 {
                     $this->clear();
                     throw new AdmException('DOW_FOLDER_NO_RIGHTS');
@@ -322,7 +321,7 @@ class TableFolder extends TableAccess
             {
 
                 // Gucken ob der angemeldete Benutzer Rechte an dem Unterordner hat...
-                $sql_rights = 'SELECT COUNT(*)
+                $sql_rights = 'SELECT COUNT(*) as count
                                  FROM '.TBL_FOLDER_ROLES.'
                            INNER JOIN '.TBL_MEMBERS.'
                                    ON mem_rol_id = flr_rol_id
@@ -331,12 +330,11 @@ class TableFolder extends TableAccess
                                   AND mem_begin <= \''.DATE_NOW.'\'
                                   AND mem_end    > \''.DATE_NOW.'\'';
                 $rightsStatement = $this->db->query($sql_rights);
-                $row_rights = $rightsStatement->fetch();
-                $row_count  = $row_rights[0];
+                $rowRights = $rightsStatement->fetch();
 
                 // Falls der User in mindestens einer Rolle Mitglied ist, die Rechte an dem Ordner besitzt
                 // wird der Ordner natuerlich ins Array gepackt.
-                if ($row_count > 0)
+                if ($rowRights['count'] !== '0')
                 {
                     $addToArray = true;
                 }

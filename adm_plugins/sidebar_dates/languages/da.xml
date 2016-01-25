@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="PLG_DATES_ALL_EVENTS">Alle events</string>
+  <string name="PLG_DATES_ALL_EVENTS">Alle aktiviteter</string>
+  <string name="PLG_DATES_HEADLINE">Aktivitet</string>
+  <string name="PLG_SIDEBAR_DATES_MORE">mere</string>
 </resources>

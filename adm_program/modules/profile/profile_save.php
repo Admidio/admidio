@@ -244,21 +244,21 @@ if($gCurrentUser->isWebmaster() || $getNewUser > 0)
 if($getNewUser === 2)
 {
     $user->setPassword($_POST['usr_password']);
-}
 
-// Falls der User sich registrieren wollte, aber ein Captcha geschaltet ist,
-// muss natuerlich der Code ueberprueft werden
-if ($getNewUser === 2 && $gPreferences['enable_registration_captcha'] == 1)
-{
-    if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
+    // Falls der User sich registrieren wollte, aber ein Captcha geschaltet ist,
+    // muss natuerlich der Code ueberprueft werden
+    if ($gPreferences['enable_registration_captcha'] == 1)
     {
-        if($gPreferences['captcha_type'] === 'pic')
+        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
         {
-            $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
-        }
-        elseif($gPreferences['captcha_type'] === 'calc')
-        {
-            $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
+            if($gPreferences['captcha_type'] === 'pic')
+            {
+                $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
+            }
+            elseif($gPreferences['captcha_type'] === 'calc')
+            {
+                $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
+            }
         }
     }
 }

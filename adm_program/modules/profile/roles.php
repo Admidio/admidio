@@ -127,7 +127,7 @@ $html .= '<form id="roles_assignment_form" action="'.$g_root_path.'/adm_program/
 $table = new HtmlTable('role_assignment_table');
 $columnHeading = array(
     '&nbsp;',
-    $gL10n->get('ROL_ROLE'),
+    $gL10n->get('SYS_ROLE'),
     $gL10n->get('SYS_DESCRIPTION'),
     $gL10n->get('SYS_LEADER'));
 $table->addRowHeadingByArray($columnHeading);

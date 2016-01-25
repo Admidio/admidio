@@ -67,8 +67,9 @@ if ($gPreferences['weblinks_redirect_seconds'] > 0)
     // Html des Modules ausgeben
     $page->addHtml('
     <p class="lead">'.$gL10n->get('LNK_REDIRECT_DESC', $gCurrentOrganization->getValue('org_longname'),
-        '<span id="counter">'.$gPreferences['weblinks_redirect_seconds'].'</span>', '<strong>'.$weblink->getValue('lnk_name').'</strong> ('.$weblink->getValue('lnk_url').')',
-        '<a href="'.$weblink->getValue('lnk_url').'" target="_self">hier</a>').'
+        '<span id="counter">'.$gPreferences['weblinks_redirect_seconds'].'</span>',
+        '<strong>'.$weblink->getValue('lnk_name').'</strong> ('.$weblink->getValue('lnk_url').')',
+        '<a href="'.$weblink->getValue('lnk_url').'" target="_self">', '</a>').'
     </p>');
 
     // show html of complete page
