@@ -82,7 +82,7 @@ if ($gPreferences['mail_max_receiver'] > 0 && $getMsgType !== 'PM')
 
 $list = array();
 
-if ($gValidLogin && $getMsgType === 'PM')
+if ($gValidLogin && $getMsgType === 'PM' && count($gCurrentUser->getAllVisibleRoles()) > 0)
 {
     $sql = 'SELECT usr_id, FIRST_NAME.usd_value as first_name, LAST_NAME.usd_value as last_name, usr_login_name
                   FROM '.TBL_MEMBERS.'
@@ -273,7 +273,7 @@ elseif (!isset($messageStatement))
     $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
     $preloadData = array();
-    $sqlRoleIds  = 0;
+    $sqlRoleIds  = '';
     $sqlUserIds  = '';
     $sqlParticipationRoles = '';
 
@@ -305,7 +305,7 @@ elseif (!isset($messageStatement))
         $listActiveAndFormer = array();
         $listRoleIdsArray = array();
 
-        if($getUserId > 0)
+        if($sqlRoleIds === '')
         {
             // if only send mail to one user than this user must be in a role the current user is allowed to see
             $listVisibleRoleArray = $gCurrentUser->getAllVisibleRoles();
@@ -343,7 +343,7 @@ elseif (!isset($messageStatement))
             $listVisibleRoleArray = array_intersect($listRoleIdsArray, $gCurrentUser->getAllVisibleRoles());
         }
 
-        if($getRoleId === 0)
+        if($getRoleId === 0 && count($listVisibleRoleArray) > 0)
         {
             // if no special role was preselected then list users
             $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
