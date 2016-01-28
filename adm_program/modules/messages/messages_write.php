@@ -380,20 +380,20 @@ elseif (!isset($messageStatement))
             {
                 if (!isset($act_usr_id) or $act_usr_id != $row['usr_id'])
                 {
-                    if ($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW && $row['rol_mail_this_role'] >= 2)
+                    // if roles are visible for all login users or members then show members
+                    if ($row['rol_mail_this_role'] >= 2 || ($row['rol_mail_this_role'] == 1 && in_array($row['rol_id'], $gCurrentUser->getRoleMemberships(), true)))
                     {
-                        $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
-                        $act_usr_id = $row['usr_id'];
-                    }
-                    elseif ($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW && $row['rol_mail_this_role'] == 1 && in_array($row['rol_id'], $gCurrentUser->getRoleMemberships(), true))
-                    {
-                        $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
-                        $act_usr_id = $row['usr_id'];
-                    }
-                    elseif ($gPreferences['mail_show_former'] == 1)
-                    {
-                        $passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
-                        $act_usr_id = $row['usr_id'];
+                        // if membership is active then show them as active members
+                        if($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW)
+                        {
+                            $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
+                            $act_usr_id = $row['usr_id'];
+                        }
+                        elseif($gPreferences['mail_show_former'] == 1)
+                        {
+                            $passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
+                            $act_usr_id = $row['usr_id'];
+                        }
                     }
                 }
             }
@@ -420,6 +420,12 @@ elseif (!isset($messageStatement))
             $list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], '');
         }
 
+    }
+
+    // no roles or users found then show message
+    if(count($list) === 0)
+    {
+        $gMessage->show($gL10n->get('MSG_NO_ROLES_AND_USERS'));
     }
 
     $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'               => FIELD_REQUIRED,
