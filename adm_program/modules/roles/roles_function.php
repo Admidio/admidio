@@ -206,7 +206,7 @@ elseif($getMode === 2)
 
     if(strlen($_POST['rol_start_time']) > 0)
     {
-        $validFromTime = DateTime::createFromFormat('Y-m-d '.$gPreferences['system_time'], DATE_NOW.' '.$_POST['date_to_time']);
+        $validFromTime = DateTime::createFromFormat('Y-m-d '.$gPreferences['system_time'], DATE_NOW.' '.$_POST['rol_start_time']);
         if(!$validFromTime)
         {
             $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('ROL_TIME_FROM'), $gPreferences['system_time']));
