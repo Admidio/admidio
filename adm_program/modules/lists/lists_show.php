@@ -62,6 +62,11 @@ if ($numberRoles === 0)
     $gMessage->show($gL10n->get('LST_NO_ROLE_GIVEN'));
 }
 
+if($objDateFrom > $objDateTo)
+{
+    $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+}
+
 // determine all roles relevant data
 $roleName        = $gL10n->get('LST_VARIOUS_ROLES');
 $htmlSubHeadline = '';

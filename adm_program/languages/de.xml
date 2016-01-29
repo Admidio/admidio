@@ -543,6 +543,7 @@
     <string name="MSG_DELETE_DESC">Soll Nachricht #VAR1_BOLD# nun entfernt werden.</string>
     <string name="MSG_DELETE_PM">Da es sich um eine Private Nachricht handeln, wird die Nachricht nur zum löschen markiert und wartet auf eine Aktion des Gesprächspartners</string>
     <string name="MSG_FORMER_MEMBERS">Ehemalige Mitglieder</string>
+    <string name="MSG_NO_ROLES_AND_USERS">Es sind keine Rollen oder Benutzer freigegeben, an die du Nachrichten schicken kannst.</string>
     <string name="MSG_NO_VALID_RECIPIENTS">Die ausgewählten Rollen und Benutzer besitzen keine gültigen E-Mail-Adressen. Aus diesem Grund kann die E-Mail nicht versendet werden.</string>
     <string name="MSG_OPPOSITE">Gesprächspartner</string>
     <string name="MSG_PM_SEND">Die Private Nachricht wurde an #VAR1_BOLD# versendet.</string>
