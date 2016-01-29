@@ -1552,7 +1552,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             $row = $statement->fetch();
-            if($optionsAll['defaultValue'] === null)
+            if($optionsAll['defaultValue'] === '')
             {
                 $optionsAll['defaultValue'] = $row['cat_id'];
             }
@@ -1587,7 +1587,7 @@ class HtmlForm extends HtmlFormBasic
                     $categoriesArray[$row['cat_id']] = $row['cat_name'];
                 }
 
-                if($row['cat_default'] === 1 && $optionsAll['defaultValue'] === null)
+                if($row['cat_default'] === '1' && $optionsAll['defaultValue'] === '')
                 {
                     $optionsAll['defaultValue'] = $row['cat_id'];
                 }

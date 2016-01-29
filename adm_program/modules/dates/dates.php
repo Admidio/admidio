@@ -136,7 +136,7 @@ if($getViewMode === 'html')
     $DatesMenu = $page->getMenu();
 
     // Add new event
-    if($gCurrentUser->editDates())
+    if($gCurrentUser->editDates() && $getId === 0)
     {
         $DatesMenu->addItem('admMenuItemAdd',
                             $g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$getHeadline,
@@ -160,7 +160,10 @@ if($getViewMode === 'html')
         // show print button
         $DatesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
 
-        $DatesMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
+        if($gPreferences['enable_dates_ical'] == 1 || $gCurrentUser->isWebmaster() || $gCurrentUser->editDates())
+        {
+            $DatesMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
+        }
 
         // ical Download
         if($gPreferences['enable_dates_ical'] == 1)
