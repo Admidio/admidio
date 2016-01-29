@@ -35,7 +35,6 @@
     <string name="CAT_MOVE_UP">#VAR1# nach oben verschieben</string>
     <!-- Phrases only in Datesmodule -->
     <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
-    <string name="DAT_ADD_ROLE">Rolle hinzufügen</string>
     <string name="DAT_ALL_DAY">Ganztägig</string>
     <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmer zuordnen</string>
     <string name="DAT_ATTEND">Teilnehmen</string>
@@ -72,8 +71,6 @@
     <string name="DAT_MAINTAIN_CATEGORIES_DESC">Hier können Kategorien angelegt und bearbeitet werden.</string>
     <string name="DAT_MANAGE_CALENDARS">Kalender verwalten</string>
     <string name="DAT_MAX_MEMBERS">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</string>
-    <string name="DAT_ORGANIZER" description="The Person">Organisator</string>
-    <string name="DAT_ORGANIZERS" description="The Personen">Organisatoren</string>
     <string name="DAT_PARTICIPANTS_LIMIT">Teilnehmerbegrenzung</string>
     <string name="DAT_PARTICIPATE_AT_DATE">An Termin als Organisator teilnehmen</string>
     <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Du wirst Organisator des Termins und erhälst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren machen.</string>
@@ -87,10 +84,6 @@
     <string name="DAT_ROOM_RESERVED">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</string>
     <string name="DAT_ROOM_SELECTABLE">Raum auswählbar</string>
     <string name="DAT_ROOM_SELECTABLE_DESC">Eine Auswahlbox für die verfügbaren Räume wird angezeigt, um dem Ersteller eines Termins die Auswahl eines Raums zu ermöglichen. (Standard: nein)</string>
-    <string name="DAT_QUOTA_AND_MAX_MEMBERS_MUST_MATCH">Werden alle teilnehmenden Rollen kontingentiert, muss die Anzahl der Summe der Kontingentierungen mit der maximalen Teilnehmerzahl bzw. der Raumkapazität übereinstimmen.</string>
-    <string name="DAT_QUOTA_EXCEEDED">Es dürfen maximal so viele Teilnehmer insgesamt in allen Rollen (Kontigentierung) sein wie Teilnehmer insgesamt (Teilnehmerbegrenzung).</string>
-    <string name="DAT_QUOTA_FOR_ROLE">Es kann nur ein Kontingent für eine Rolle angegeben werden, für die der Termin auch sichtbar ist.</string>
-    <string name="DAT_QUOTA_WITH_MAXIMUM">Eine Kontingentierung kann nur bei einer Teilnehmerbegrenzung stattfinden</string>
     <string name="DAT_SHOW_MAP_LINK">Kartenlink anzeigen</string>
     <string name="DAT_SHOW_MAP_LINK_DESC">Wird ein Ort angegeben, so wird versucht ein Link zu Google-Maps zu erstellen, welcher den Ort anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)</string>
     <string name="DAT_SHOW_ON_MAP">Auf Karte zeigen</string>
@@ -851,7 +844,6 @@
     <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Rollen anderer Organisationen anzeigen</string>
     <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Ist der Benutzer Mitglied in Rollen einer anderen Organisation, so wird ein Kasten mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt. (Standard: ja)</string>
     <string name="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS">zur Profilfeldpflege wechseln</string>
-    <string name="PRO_TO_ADD">#VAR1# zu #VAR2# hinzufügen</string>
     <string name="PRO_UPLOAD_HELP_1">Auf den Button #VAR1_BOLD# klicken und die gewünschte Fotodatei von der Festplatte auswählen.</string>
     <string name="PRO_UPLOAD_HELP_2">Danach auf #VAR1_BOLD# klicken und ein wenig Geduld haben.</string>
     <string name="PRO_UPLOAD_PHOTO">Foto hochladen</string>
