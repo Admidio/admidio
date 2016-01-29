@@ -52,36 +52,6 @@ function getFieldCode($fieldNameIntern, $user)
         $birthday = new DateTimeExtended($user->getValue($fieldNameIntern, 'Y.m.d'), 'Y.m.d');
         $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' '.$gL10n->get('PRO_YEARS').')';
     }
-
-    // Icons der Messenger anzeigen
-    if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') === 'ICQ')
-    {
-        if(strlen($user->getValue($fieldNameIntern)) > 0)
-        {
-            // Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
-            preg_match_all('/\d+/', $user->getValue($fieldNameIntern), $matches);
-            $icq_number = implode("", reset($matches));
-
-            // ICQ Onlinestatus anzeigen
-            $value = '
-            <a class="admidio-icon-link" href="https://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
-                src="https://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
-                alt="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
-                title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
-        }
-    }
-    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') === 'SKYPE')
-    {
-        if(strlen($user->getValue($fieldNameIntern)) > 0)
-        {
-            // Skype Onlinestatus anzeigen
-            $value = '<script type="text/javascript" src="https://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
-            <a class="admidio-icon-link" href="skype:'.$user->getValue($fieldNameIntern).'?add"><img
-                src="http://mystatus.skype.com/smallicon/'.$user->getValue($fieldNameIntern).'"
-                title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
-                alt="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
-        }
-    }
     elseif(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_icon')) > 0)
     {
         $value = $gProfileFields->getProperty($fieldNameIntern, 'usf_icon').'&nbsp;&nbsp;'. $value;
