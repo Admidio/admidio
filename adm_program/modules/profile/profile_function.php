@@ -71,10 +71,21 @@ elseif($getMode === 2)
     // if user has the right then cancel membership
     if($role->allowedToAssignMembers($gCurrentUser))
     {
-        $member->stopMembership();
+        try
+        {
+            $member->stopMembership();
+        }
+        catch(AdmException $e)
+        {
+            $e->showText();
+        }
 
         // Beendigung erfolgreich -> Rueckgabe fuer XMLHttpRequest
         echo 'done';
+    }
+    else
+    {
+        echo $gL10n->get('SYS_NO_RIGHTS');
     }
 }
 elseif($getMode === 3)

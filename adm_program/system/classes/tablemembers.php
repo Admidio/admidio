@@ -188,10 +188,11 @@ class TableMembers extends TableAccess
                 {
                     $sql = 'SELECT mem_id
                               FROM '.TBL_MEMBERS.'
-                             WHERE mem_rol_id  = '.$roleId.'
-                               AND mem_usr_id <> '.$userId.'
+                             WHERE mem_rol_id  = '.$this->getValue('mem_rol_id').'
+                               AND mem_usr_id <> '.$this->getValue('mem_usr_id').'
                                AND \''.DATE_NOW.'\' BETWEEN mem_begin AND mem_end ';
                     $memberStatement = $this->db->query($sql);
+
                     if($memberStatement->rowCount() === 0)
                     {
                         throw new AdmException('LST_MUST_HAVE_WEBMASTER');
@@ -218,7 +219,7 @@ class TableMembers extends TableAccess
                 }
 
                 // if role membership of current user will be changed then renew his rights arrays
-                if($gCurrentUser->getValue('usr_id') == $userId)
+                if($gCurrentUser->getValue('usr_id') == $this->getValue('mem_usr_id'))
                 {
                     $gCurrentUser->renewRoleData();
                 }
