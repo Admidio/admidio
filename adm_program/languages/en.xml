@@ -12,7 +12,6 @@
   <string name="BAC_BACKUP_COMPLETED">Backup created in #VAR1#</string>
   <string name="BAC_BACKUP_FILE">Backup file</string>
   <string name="BAC_BACKUP_FROM">Backup created on #VAR1# at #VAR2#</string>
-  <string name="BAC_COMPLETED_VAR">#VAR1# created</string>
   <string name="BAC_CREATION_DATE">Created on</string>
   <string name="BAC_DATABASE_BACKUP">Database backup</string>
   <string name="BAC_DATABASE_BACKUP_DESC">Create and download database backups of Admidio tables.</string>
@@ -23,15 +22,12 @@
   <string name="BAC_NO_BACKUP_FILE_EXISTS">No Backup file found!</string>
   <string name="BAC_ONLY_MYSQL">The backup module can only be used in combination with a MySQL database.</string>
   <string name="BAC_OVERALL_PROGRESS">Progress</string>
-  <string name="BAC_RECORDS_VAR">#VAR1# records</string>
-  <string name="BAC_PASSED_VAR">#VAR1# processed</string>
   <string name="BAC_START_BACKUP">Start backup process</string>
   <string name="BAC_SUM">Total</string>
   <string name="BAC_SECONDS_VAR">#VAR1# seconds</string>
   <!--Phrases only in Category-Administration-->
   <string name="CAT_CATEGORY_EXIST">Category name already exists in selected organization.</string>
   <string name="CAT_CATEGORY_GLOBAL">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:\n\n#VAR1_BOLD#\n\n Please deactivate, if fields should only be shown in your organization.</string>
-  <string name="CAT_CATEGORY_NOT_DELETE">You can not delete all categories of a module.\nPlease create first new category for selected module.</string>
   <string name="CAT_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Could not delete category #VAR1_BOLD# because of #VAR2# depending entries.</string>
@@ -39,7 +35,6 @@
   <string name="CAT_MOVE_UP">Move up #VAR1#</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Add event to calendar</string>
-  <string name="DAT_ADD_ROLE">Add role</string>
   <string name="DAT_ALL_DAY">Full time</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Add participants</string>
   <string name="DAT_ATTEND">Participate</string>
@@ -76,8 +71,6 @@
   <string name="DAT_MAINTAIN_CATEGORIES_DESC">Here you can create and edit categories.</string>
   <string name="DAT_MANAGE_CALENDARS">Manage calendars</string>
   <string name="DAT_MAX_MEMBERS">Reduce number of participants for this event. Please leave field empty for unlimited participants.</string>
-  <string name="DAT_ORGANIZER" description="The Person">Organizer</string>
-  <string name="DAT_ORGANIZERS" description="The Personen">Organizers</string>
   <string name="DAT_PARTICIPANTS_LIMIT">Limited number of participants</string>
   <string name="DAT_PARTICIPATE_AT_DATE">Join the event as organizer</string>
   <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">You will be the event organizer and are allowed to add/remove further participants or name them as additional organizer.</string>
@@ -91,10 +84,6 @@
   <string name="DAT_ROOM_RESERVED">Selected room is already in use at this time.</string>
   <string name="DAT_ROOM_SELECTABLE">Room is available</string>
   <string name="DAT_ROOM_SELECTABLE_DESC">Selection box for available rooms is available. Select room and create event for selected room. (standard answer: no)</string>
-  <string name="DAT_QUOTA_AND_MAX_MEMBERS_MUST_MATCH">If participant quotas are set, total members of quotas must match maximum number of  participants and room capacity respectively.</string>
-  <string name="DAT_QUOTA_EXCEEDED">Maximum number of participants in all roles (if quotas are set) must not be higher then maximum number of participants set for the room.</string>
-  <string name="DAT_QUOTA_FOR_ROLE">Only one quota is allowed for one role that is able to display selected event.</string>
-  <string name="DAT_QUOTA_WITH_MAXIMUM">Setting of quota is allowed when number of participants is limited.</string>
   <string name="DAT_SHOW_MAP_LINK">Display link to map</string>
   <string name="DAT_SHOW_MAP_LINK_DESC">If location is set, Google Maps is used to display location and route from own location. (default: yes)</string>
   <string name="DAT_SHOW_ON_MAP">Show map</string>
@@ -181,13 +170,13 @@
   <string name="GBO_COMMENTS4ALL_DESC">By activating this option, unregistered users will be able to make comments in guestbook. All other access permissions set in the role administration panel will be ignored. (default: no)</string>
   <string name="GBO_CREATE_COMMENT">Leave comment</string>
   <string name="GBO_CREATE_ENTRY">Leave entry</string>
-  <string name="GBO_CREATE_VAR_ENTRY">leave #VAR1# entry</string>
+  <string name="GBO_CREATE_VAR_ENTRY">Leave #VAR1# entry</string>
   <string name="GBO_EDIT_COMMENT">Edit comment</string>
   <string name="GBO_EDIT_ENTRY">Edit #VAR1# entry</string>
   <string name="GBO_EMAIL_NOTIFICATION_GBC_TITLE">New guestbook comment was created</string>
   <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">New guestbook comment at #VAR1# was created.\n\nText: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
   <string name="GBO_EMAIL_NOTIFICATION_TITLE">New guestbook entry was created</string>
-  <string name="GBO_EMAIL_NOTIFICATION_MESSAGE">New guestbookentry at #VAR1# was created.\n\nText: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
+  <string name="GBO_EMAIL_NOTIFICATION_MESSAGE">New guestbook entry at #VAR1# was created.\n\nText: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
   <string name="GBO_ENTRY_QUEUED">Entry saved. It will be displayed after moderation.</string>
   <string name="GBO_FLOODING_PROTECTION">Your last entry was created less than #VAR1# seconds ago.</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Interval</string>
@@ -318,7 +307,7 @@
   <string name="LNK_LINKS_FROM">Links of #VAR1#</string>
   <string name="LNK_NEW_WINDOW">New window</string>
   <string name="LNK_REDIRECT">Redirect</string>
-  <string name="LNK_REDIRECT_DESC">You are leaving the website of #VAR1_BOLD# and will be redirected automatically to #VAR3# in #VAR2# seconds.\n\nIf the automatically redirection is not working please click #VAR4#!</string>
+  <string name="LNK_REDIRECT_DESC">You are leaving the website of #VAR1_BOLD# and will be redirected automatically to #VAR3# in #VAR2# seconds.\n\nIf the automatic redirection is not working please click #VAR4#here#VAR5#!</string>
   <string name="LNK_SAME_WINDOW">Same window</string>
   <string name="LNK_WEBLINKS">Web links</string>
   <string name="LNK_WEBLINKS_DESC">Create and organize by categories interesting hyperlinks.</string>
@@ -547,6 +536,7 @@
   <string name="MSG_DELETE_DESC">Should message #VAR1_BOLD# be removed now?</string>
   <string name="MSG_DELETE_PM">Because it is a private message, the message is only marked for deletion and is waiting for an action of the conversation partner.</string>
   <string name="MSG_FORMER_MEMBERS">Former members</string>
+  <string name="MSG_NO_ROLES_AND_USERS">There are no roles or users released to whom you can send messages.</string>
   <string name="MSG_NO_VALID_RECIPIENTS">The selected roles and users have no valid e-mail addresses. For this reason, the e-mail can`t be sent.</string>
   <string name="MSG_OPPOSITE">Business partner</string>
   <string name="MSG_PM_SEND">Private message has been send to #VAR1_BOLD#.</string>
@@ -827,7 +817,7 @@
   <string name="PRO_NO_DEFAULT_ROLE">The role management contains no default role for new users. Please contact a webmaster who can edit this setting.</string>
   <string name="PRO_NO_ROLES_VISIBLE">No roles were found. Possibly you do not have the rights to see certain roles.</string>
   <string name="PRO_PASSWORD_CHANGED">Password has been successfully changed.</string>
-  <string name="PRO_PASSWORD_DESCRIPTION">Password must have at least 8 characters including numbers, letters and special characters.\n\nDue to security reasons, password will be  encrypted. Later it can not be viewed anymore.</string>
+  <string name="PRO_PASSWORD_DESCRIPTION">Password must have at least 8 characters including numbers, letters and special characters.\n\nDue to security reasons, the password will be  encrypted. It can not be shown in clear text anymore.</string>
   <string name="PRO_PASSWORD_LENGTH">Password must have at least 8 characters.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">Old password is incorrect.</string>
   <string name="PRO_PASSWORDS_NOT_EQUAL">Original and retyped passwords are different.</string>
@@ -854,7 +844,6 @@
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Display role of other organizations</string>
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">When user is member in roles of another organization, a box will be displayed showing all roles and the registration date. (default: yes)</string>
   <string name="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS">go to profile preferences</string>
-  <string name="PRO_TO_ADD">Add #VAR1# to #VAR2#</string>
   <string name="PRO_UPLOAD_HELP_1">Press button #VAR1_BOLD# in order to select photo files on harddrive for upload.</string>
   <string name="PRO_UPLOAD_HELP_2">Press then #VAR1_BOLD# and be patient.</string>
   <string name="PRO_UPLOAD_PHOTO">Upload photo</string>
@@ -917,7 +906,6 @@
   <string name="ROL_RIGHT_PROFILE">Edit own profile</string>
   <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Define which user should be able to see several lists and certain user profiles of members of the current role. Role permission #VAR1_BOLD# is parent configuration is the current permission level.</string>
   <string name="ROL_RIGHT_WEBLINKS">Create and edit web links</string>
-  <string name="ROL_ROLE">Role</string>
   <string name="ROL_ROLE_ADMINISTRATION">Role administration</string>
   <string name="ROL_ROLE_ADMINISTRATION_DESC">Roles based on certain groups, courses and departments can be managed here. Role permissions can be defined here, too.</string>
   <string name="ROL_ROLE_DELETE">Deleting role</string>

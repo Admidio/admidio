@@ -12,7 +12,6 @@
   <string name="BAC_BACKUP_COMPLETED">Backup oprettet på #VAR1#</string>
   <string name="BAC_BACKUP_FILE">Backup fil</string>
   <string name="BAC_BACKUP_FROM">Backup oprettet på #VAR1# i #VAR2#</string>
-  <string name="BAC_COMPLETED_VAR">#VAR1# oprettet</string>
   <string name="BAC_CREATION_DATE">Oprettet den</string>
   <string name="BAC_DATABASE_BACKUP">Database-Backup</string>
   <string name="BAC_DATABASE_BACKUP_DESC">Opret og download database backups af Admidio tabeller.</string>
@@ -23,15 +22,12 @@
   <string name="BAC_NO_BACKUP_FILE_EXISTS">Ingen backup fil tilstede!</string>
   <string name="BAC_ONLY_MYSQL">Backup modulet kan kun anvendes sammen med en MySQL database.</string>
   <string name="BAC_OVERALL_PROGRESS">Status</string>
-  <string name="BAC_RECORDS_VAR">#VAR1# informationer</string>
-  <string name="BAC_PASSED_VAR">#VAR1# behandlet</string>
   <string name="BAC_START_BACKUP">Start backup processen</string>
   <string name="BAC_SUM">Total</string>
   <string name="BAC_SECONDS_VAR">#VAR1# sekunder</string>
   <!--Phrases only in Category-Administration-->
   <string name="CAT_CATEGORY_EXIST">Kategori navn eksisterer allerede i den valgte organisation.</string>
   <string name="CAT_CATEGORY_GLOBAL">Hvis aktiveret, profil felter af kategorier vil blive vist og kan redigeres i profil visningen af følgende organisationer:\n\n#VAR1_BOLD#\n\n Venligst deaktiver hvis felterne kun skal vises i din organisation.</string>
-  <string name="CAT_CATEGORY_NOT_DELETE">Du kan ikke slette alle kategorier for et modul.\nOpret første nye kategori for det valgte modul.</string>
   <string name="CAT_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Vil du virkelig slette kategorien #VAR1_BOLD# ?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Kunne ikke slette kategorien #VAR1_BOLD# fordi den indeholder #VAR2# afhængige data.</string>
@@ -39,7 +35,6 @@
   <string name="CAT_MOVE_UP">Flyt op #VAR1#</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Tilføj aktivitet til kalender</string>
-  <string name="DAT_ADD_ROLE">Tilføj rolle</string>
   <string name="DAT_ALL_DAY">Hele dagen</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Tilføj deltagere</string>
   <string name="DAT_ATTEND">Deltag</string>
@@ -76,8 +71,6 @@
   <string name="DAT_MAINTAIN_CATEGORIES_DESC">Her kan du oprette og redigere ketegorier.</string>
   <string name="DAT_MANAGE_CALENDARS">Kalender styring</string>
   <string name="DAT_MAX_MEMBERS">Reducer antallet af deltagere til denne event. Lad feltet være tomt hvis der er ubegrænset adgang.</string>
-  <string name="DAT_ORGANIZER" description="The Person">Organisator</string>
-  <string name="DAT_ORGANIZERS" description="The Personen">Organisatorer</string>
   <string name="DAT_PARTICIPANTS_LIMIT">Begrænset antal deltagere</string>
   <string name="DAT_PARTICIPATE_AT_DATE">Deltag i eventet som organisator.</string>
   <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Du vil blive organisator for eventet og dermed tilladt at tilføje/fjerne deltagere eller udnævne dem til med-organisatorer.</string>
@@ -91,10 +84,6 @@
   <string name="DAT_ROOM_RESERVED">Det valgte lokale er allerede i brug i denne periode.</string>
   <string name="DAT_ROOM_SELECTABLE">Lokalet er tilgængeligt</string>
   <string name="DAT_ROOM_SELECTABLE_DESC">En valg boks for ledige lokaler er tilgængelig. Vælg lokale og opret en event for det valgte lokale. (standard indstilling: no)</string>
-  <string name="DAT_QUOTA_AND_MAX_MEMBERS_MUST_MATCH">Hvis der er sat en deltager kvote så må det totale antal deltagere ikke overstige denne kvote og heller ikke lokalets kapacitet.</string>
-  <string name="DAT_QUOTA_EXCEEDED">Det samlede antal deltagere i alle roller (hvis kvoter er sat) må ikke være højere end maximum antal deltagere defineret for lokalet.</string>
-  <string name="DAT_QUOTA_FOR_ROLE">Kun en kvote er tilladt for en rolle som kan vise den valgte event.</string>
-  <string name="DAT_QUOTA_WITH_MAXIMUM">Indstilling af kvote er tilladt når antal af deltagere er begrænset.</string>
   <string name="DAT_SHOW_MAP_LINK">Vis link til kort</string>
   <string name="DAT_SHOW_MAP_LINK_DESC">Når lokation er sat, bruges Google Maps til at vise lokationen og en rute fra egen lokation til denne. (standard: ja)</string>
   <string name="DAT_SHOW_ON_MAP">Vis på kort</string>
@@ -318,7 +307,6 @@
   <string name="LNK_LINKS_FROM">Links fra #VAR1#</string>
   <string name="LNK_NEW_WINDOW">Nyt vindue</string>
   <string name="LNK_REDIRECT">Viderestil</string>
-  <string name="LNK_REDIRECT_DESC">Du forlader nu #VAR1_BOLD# og vil blive viderestillet automatisk til #VAR3# indenfor #VAR2# sekunder.\n\nHvis den automatiske viderestilling ikke virker, så kan du klikke #VAR4#!</string>
   <string name="LNK_SAME_WINDOW">Samme vindue</string>
   <string name="LNK_WEBLINKS">Links</string>
   <string name="LNK_WEBLINKS_DESC">Opret og organiser interessante links.</string>
@@ -678,6 +666,7 @@
   <string name="ORG_SEND_NEW_PASSWORD">Send nyt kodeord</string>
   <string name="ORG_SHOW_CREATE_EDIT">Vis opretter og tidspunktet for oprettelsen</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Et felt er normalt synligt for alle brugere. Hvis denne funktion ikke er valgt, så vil dataene KUN være synlige for brugere der har rettighed til at redigere alle brugere. I deres egen profil, kan brugeren se og redigere disse data.</string>
+  <string name="ORG_SHOW_ALL_USERS">Valgfrit: vis alle brugere</string>
   <string name="ORG_SHOW_ALL_USERS_DESC">Hvis denne mulighed er aktiveret, vil tidligere medlemmer og medlemmer af andre organisationer blive vist sammen med de aktive medlemmer af den nuværende organisation/forening. Ellers så vil kun medlemmer af den nuværende organisation/forening blive vist. Når der oprettes nye brugere eller der tildeles registreringer vil alle organisationer/foreninger blive checket for eksisterende brugere.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Vis organisations vælger</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Hvis der er flere organisationer gemt i den samme database, så kan Log ind skærmen vise en valg boks med alle tilgængelige organisationer. Brugeren kan så på login skærmen vælge en anden organisation (en anden organisation end den der er defineret i config.php). Brugeren skal selvfølgelig være registreret medlem af den valgte organisation.</string>
@@ -853,7 +842,6 @@
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Vis rolle for andre organisationer</string>
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Hvis en bruger har rolle medlemskab i en anden organisation, vil en boks blive vist med alle roller og registrerings datoen. (Standard: Ja)</string>
   <string name="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS">Gå til profil indstillinger</string>
-  <string name="PRO_TO_ADD">Tilføj #VAR1# til #VAR2#</string>
   <string name="PRO_UPLOAD_HELP_1">Klik på knappen #VAR1_BOLD# for at vælge billede filer der skal overføres.</string>
   <string name="PRO_UPLOAD_HELP_2">Klik så på #VAR1_BOLD# og vent tålmodigt.</string>
   <string name="PRO_UPLOAD_PHOTO">Overfør billede</string>
@@ -916,7 +904,6 @@
   <string name="ROL_RIGHT_PROFILE">Rediger egen profil</string>
   <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Definer hvilke brugere der skal kunne se adskildelige lister og bestemte bruger profiler for medlemmer af den nuværende rolle. Rolle rettigheden #VAR1_BOLD# er forældre konfiguration for det nuværende rettigheds niveau.</string>
   <string name="ROL_RIGHT_WEBLINKS">Opret og rediger web links</string>
-  <string name="ROL_ROLE">Rolle</string>
   <string name="ROL_ROLE_ADMINISTRATION">Rolle administration</string>
   <string name="ROL_ROLE_ADMINISTRATION_DESC">Roller baseret på bestemte grupper, kurser og afdelinger kan administreres her. Rolle rettigheder kan også defineres her.</string>
   <string name="ROL_ROLE_DELETE">Sletter rolle</string>

@@ -12,7 +12,6 @@
   <string name="BAC_BACKUP_COMPLETED">Backup fertiggestellt in #VAR1#</string>
   <string name="BAC_BACKUP_FILE">Backupdatei</string>
   <string name="BAC_BACKUP_FROM">Backup vom #VAR1# um #VAR2#</string>
-  <string name="BAC_COMPLETED_VAR">#VAR1# fertig</string>
   <string name="BAC_CREATION_DATE">Erstellungsdatum</string>
   <string name="BAC_DATABASE_BACKUP">Datenbank-Backup</string>
   <string name="BAC_DATABASE_BACKUP_DESC">Datenbanksicherungen der Admidio-Tabellen können hier erstellt und heruntergeladen werden.</string>
@@ -23,15 +22,12 @@
   <string name="BAC_NO_BACKUP_FILE_EXISTS">Keine Backupdatei vorhanden!</string>
   <string name="BAC_ONLY_MYSQL">Das Backupmodul kann nur bei einer MySQL-Datenbank genutzt werden.</string>
   <string name="BAC_OVERALL_PROGRESS">Gesamtfortschritt</string>
-  <string name="BAC_RECORDS_VAR">#VAR1# Datensätze</string>
-  <string name="BAC_PASSED_VAR">#VAR1# verstrichen</string>
   <string name="BAC_START_BACKUP">Backup starten</string>
   <string name="BAC_SUM">Summe</string>
   <string name="BAC_SECONDS_VAR">#VAR1# Sekunden</string>
   <!--Phrases only in Category-Administration-->
   <string name="CAT_CATEGORY_EXIST">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
   <string name="CAT_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden:\n\n#VAR1_BOLD#\n\n Möchten Sie die Daten nur in Ihrer Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
-  <string name="CAT_CATEGORY_NOT_DELETE">Sie können nicht alle Kategorien eines Moduls löschen.\nErstellen Sie vorher eine neue Kategorie für dieses Modul.</string>
   <string name="CAT_DEFAULT_VAR">Standard-#VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Möchten Sie die Kategorie #VAR1_BOLD# wirklich löschen?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Die Kategorie #VAR1_BOLD# kann nicht gelöscht werden, da sie noch #VAR2# abhängige Einträge besitzt.</string>
@@ -39,7 +35,6 @@
   <string name="CAT_MOVE_UP">#VAR1# nach oben verschieben</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
-  <string name="DAT_ADD_ROLE">Rolle hinzufügen</string>
   <string name="DAT_ALL_DAY">Ganztägig</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmer zuordnen</string>
   <string name="DAT_ATTEND">Teilnehmen</string>
@@ -76,8 +71,6 @@
   <string name="DAT_MAINTAIN_CATEGORIES_DESC">Hier können Kategorien angelegt und bearbeitet werden.</string>
   <string name="DAT_MANAGE_CALENDARS">Kalender verwalten</string>
   <string name="DAT_MAX_MEMBERS">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</string>
-  <string name="DAT_ORGANIZER" description="The Person">Organisator</string>
-  <string name="DAT_ORGANIZERS" description="The Personen">Organisatoren</string>
   <string name="DAT_PARTICIPANTS_LIMIT">Teilnehmerbegrenzung</string>
   <string name="DAT_PARTICIPATE_AT_DATE">Am Termin als Organisator teilnehmen</string>
   <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Sie werden Organisator des Termins und erhalten das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem können Sie weitere Personen zu Organisatoren machen.</string>
@@ -91,10 +84,6 @@
   <string name="DAT_ROOM_RESERVED">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</string>
   <string name="DAT_ROOM_SELECTABLE">Raum auswählbar</string>
   <string name="DAT_ROOM_SELECTABLE_DESC">Eine Auswahlbox für die verfügbaren Räume wird angezeigt, um dem Ersteller eines Termins die Auswahl eines Raums zu ermöglichen. (Standard: nein)</string>
-  <string name="DAT_QUOTA_AND_MAX_MEMBERS_MUST_MATCH">Werden alle teilnehmenden Rollen kontingentiert, muss die Anzahl der Summe der Kontingentierungen mit der maximalen Teilnehmerzahl bzw. der Raumkapazität übereinstimmen.</string>
-  <string name="DAT_QUOTA_EXCEEDED">Es dürfen maximal so viele Teilnehmer insgesamt in allen Rollen (Kontigentierung) sein wie Teilnehmer insgesamt (Teilnehmerbegrenzung).</string>
-  <string name="DAT_QUOTA_FOR_ROLE">Es kann nur ein Kontingent für eine Rolle angegeben werden, für die der Termin auch sichtbar ist.</string>
-  <string name="DAT_QUOTA_WITH_MAXIMUM">Eine Kontingentierung kann nur bei einer Teilnehmerbegrenzung stattfinden</string>
   <string name="DAT_SHOW_MAP_LINK">Kartenlink anzeigen</string>
   <string name="DAT_SHOW_MAP_LINK_DESC">Wird ein Ort angegeben, so wird versucht ein Link zu Google-Maps zu erstellen, welcher den Ort anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)</string>
   <string name="DAT_SHOW_ON_MAP">Auf Karte zeigen</string>
@@ -318,7 +307,7 @@
   <string name="LNK_LINKS_FROM">Linksammlung von #VAR1#</string>
   <string name="LNK_NEW_WINDOW">Neues Fenster</string>
   <string name="LNK_REDIRECT">Weiterleitung</string>
-  <string name="LNK_REDIRECT_DESC">Sie verlassen jetzt das Webangebot von #VAR1_BOLD# und werden in #VAR2# Sekunden automatisch zu #VAR3# weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicken Sie bitte #VAR4#!</string>
+  <string name="LNK_REDIRECT_DESC">Sie verlassen jetzt das Webangebot von #VAR1_BOLD# und werden in #VAR2# Sekunden automatisch zu #VAR3# weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicken Sie bitte #VAR4#hier#VAR5#!</string>
   <string name="LNK_SAME_WINDOW">Gleiches Fenster</string>
   <string name="LNK_WEBLINKS">Weblinks</string>
   <string name="LNK_WEBLINKS_DESC">Links zu interessanten Webseiten können hier abgelegt und nach unterschiedlichen Kategorien gruppiert werden.</string>
@@ -547,6 +536,7 @@
   <string name="MSG_DELETE_DESC">Soll Nachricht #VAR1_BOLD# nun entfernt werden.</string>
   <string name="MSG_DELETE_PM">Da es sich um eine Private Nachricht handeln, wird die Nachricht nur zum löschen markiert und wartet auf eine Aktion des Gesprächspartners</string>
   <string name="MSG_FORMER_MEMBERS">Ehemalige Mitglieder</string>
+  <string name="MSG_NO_ROLES_AND_USERS">Es sind keine Rollen oder Benutzer freigegeben, an die Sie Nachrichten schicken können.</string>
   <string name="MSG_NO_VALID_RECIPIENTS">Die ausgewählten Rollen und Benutzer besitzen keine gültigen E-Mail-Adressen. Aus diesem Grund kann die E-Mail nicht versendet werden.</string>
   <string name="MSG_OPPOSITE">Gesprächspartner</string>
   <string name="MSG_PM_SEND">Die Private Nachricht wurde an #VAR1_BOLD# versendet.</string>
@@ -854,7 +844,6 @@
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Rollen anderer Organisationen anzeigen</string>
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Ist der Benutzer Mitglied in Rollen einer anderen Organisation, so wird ein Kasten mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt. (Standard: ja)</string>
   <string name="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS">zur Profilfeldpflege wechseln</string>
-  <string name="PRO_TO_ADD">#VAR1# zu #VAR2# hinzufügen</string>
   <string name="PRO_UPLOAD_HELP_1">Auf den Button #VAR1_BOLD# klicken und die gewünschte Fotodatei von der Festplatte auswählen.</string>
   <string name="PRO_UPLOAD_HELP_2">Danach auf #VAR1_BOLD# klicken und ein wenig Geduld haben.</string>
   <string name="PRO_UPLOAD_PHOTO">Foto hochladen</string>
@@ -917,7 +906,6 @@
   <string name="ROL_RIGHT_PROFILE">Eigenes Profil bearbeiten</string>
   <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
   <string name="ROL_RIGHT_WEBLINKS">Weblinks anlegen und bearbeiten</string>
-  <string name="ROL_ROLE">Rolle</string>
   <string name="ROL_ROLE_ADMINISTRATION">Rollenverwaltung</string>
   <string name="ROL_ROLE_ADMINISTRATION_DESC">Rollen, dies können Gruppen, Kurse oder Abteilungen sein, können hier erstellt und bearbeitet werden. Auch die Rechte der einzelnen Rollen werden hier festgelegt.</string>
   <string name="ROL_ROLE_DELETE">Rolle löschen</string>
