@@ -116,6 +116,12 @@ if ($gValidLogin && $getMsgType === 'PM' && count($gCurrentUser->getAllVisibleRo
     {
         $list[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'].' (' .$row['usr_login_name'].')', '');
     }
+
+    // no roles or users found then show message
+    if(count($list) === 0)
+    {
+        $gMessage->show($gL10n->get('MSG_NO_ROLES_AND_USERS'));
+    }
 }
 
 if ($getUserId > 0)
