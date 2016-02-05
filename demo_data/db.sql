@@ -778,13 +778,13 @@ create unique index IDX_%PREFIX%_USD_USR_USF_ID on %PREFIX%_user_data (usd_usr_i
 /* Table: adm_user_log                                             */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_user_log (
-  usl_id                INTEGER                  NOT NULL AUTO_INCREMENT ,
-  usl_usr_id            INTEGER         unsigned NOT NULL ,
-  usl_usf_id            INTEGER         unsigned NOT NULL ,
-  usl_value_old         VARCHAR(4000)             NULL ,
-  usl_value_new         VARCHAR(4000)             NULL ,
-  usl_usr_id_create     INTEGER         unsigned NULL ,
-  usl_timestamp_create  TIMESTAMP                NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  usl_id                integer                  NOT NULL AUTO_INCREMENT ,
+  usl_usr_id            integer         unsigned NOT NULL ,
+  usl_usf_id            integer         unsigned NOT NULL ,
+  usl_value_old         varchar(4000)            NULL ,
+  usl_value_new         varchar(4000)            NULL ,
+  usl_usr_id_create     integer         unsigned NULL ,
+  usl_timestamp_create  timestamp                NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   usl_comment           VARCHAR(255) NULL ,
   PRIMARY KEY (usl_id)
 )

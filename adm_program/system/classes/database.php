@@ -386,12 +386,12 @@ class Database
 
         if ($this->engine === 'pgsql')
         {
-            $sql = strtolower($sql);
+            $sqlCompare = strtolower($sql);
 
             // prepare the sql statement to be compatible with PostgreSQL
-            if (strpos($sql, 'create table') !== false || strpos($sql, 'alter table') !== false)
+            if (strpos($sqlCompare, 'create table') !== false || strpos($sqlCompare, 'alter table') !== false)
             {
-                if (strpos($sql, 'create table') !== false)
+                if (strpos($sqlCompare, 'create table') !== false)
                 {
                     // on a create-table-statement if necessary cut existing MySQL table options
                     $sql = substr($sql, 0, strrpos($sql, ')') + 1);
@@ -407,7 +407,7 @@ class Database
                 $sql = str_replace('blob', 'bytea', $sql);
 
                 // Auto_Increment must be replaced with Serial
-                $posAutoIncrement = strpos($sql, 'auto_increment');
+                $posAutoIncrement = strpos($sql, 'AUTO_INCREMENT');
                 if ($posAutoIncrement > 0)
                 {
                     $posInteger = strrpos(substr($sql, 0, $posAutoIncrement), 'integer');
