@@ -186,7 +186,7 @@ class TableAccess
         global $gPreferences;
         $columnValue = '';
 
-        if(array_key_exists($columnName, $this->dbColumns))
+        if(array_key_exists((string) $columnName, $this->dbColumns))
         {
             // wenn Schluesselfeld leer ist, dann 0 zurueckgeben
             if($columnName === $this->keyColumnName && empty($this->dbColumns[$columnName]))
@@ -200,7 +200,7 @@ class TableAccess
         }
 
         // if text field and format not 'database' then convert all quotes to html syntax
-        if(array_key_exists($columnName, $this->columnsInfos) && array_key_exists('type', $this->columnsInfos[$columnName]))
+        if(array_key_exists((string) $columnName, $this->columnsInfos) && array_key_exists('type', $this->columnsInfos[$columnName]))
         {
             if($format !== 'database'
             && (strpos($this->columnsInfos[$columnName]['type'], 'char') !== false
