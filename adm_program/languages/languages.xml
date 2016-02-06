@@ -28,4 +28,8 @@
         <isocode>nl</isocode>
         <name>Nederlands</name>
     </language>
+    <language>
+        <isocode>pt</isocode>
+        <name>Português</name>
+    </language>
 </languagelist>

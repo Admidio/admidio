@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# fará #VAR3# anos daqui a #VAR2# dias, na #VAR4#</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Aniversários</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Sr. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_USERS">Número de aniversariantes hoje: #VAR1#</string>
+  <string name="PLG_BIRTHDAY_NO_USER">Ninguém está a fazer anos hoje.</string>
+  <string name="PLG_BIRTHDAY_ONE_USER">Alguém está a fazer anos hoje!</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# fez #VAR3# anos há #VAR2# dias atrás, na #VAR4#</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# fará #VAR2# anos hoje</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# fará #VAR3# anos amanhã, na #VAR4#</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">Srª. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# fez #VAR3# anos ontem, na #VAR4#</string>
+</resources>
