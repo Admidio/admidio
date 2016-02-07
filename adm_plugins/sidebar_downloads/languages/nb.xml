@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_DOWNLOADS_HEADLINE">Nedlastninger</string>
+  <string name="PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE">Ingen filer ble valgt for nedlastning.</string>
+</resources>

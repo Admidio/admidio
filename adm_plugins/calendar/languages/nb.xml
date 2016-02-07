@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">Aktuell måned</string>
+  <string name="PLG_CALENDAR_MONTH">Januar,Februar,Mars,April,Mai,Juni,Juli,August,September,Oktober,November,Desember</string>
+  <string name="PLG_CALENDAR_MORE"> (... videre)</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">M</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">Ti</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">O</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">To</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">F</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">L</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">S</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Flerdaglig</string>
+</resources>

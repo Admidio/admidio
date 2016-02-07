@@ -599,7 +599,7 @@ foreach ($membersList as $member)
             /*****************************************************************/
             // in some cases the content must have a special output format
             /*****************************************************************/
-            if ($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id'))
+            if ($usf_id > 0 && $usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id'))
             {
                 $content = $gL10n->getCountryByCode($member[$sqlColumnNumber]);
             }

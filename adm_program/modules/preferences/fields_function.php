@@ -84,6 +84,23 @@ if($getMode === 1)
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_VALUE_LIST')));
     }
 
+    if($_POST['usf_icon'] !== '')
+    {
+        try
+        {
+            admStrIsValidFileName($_POST['usf_icon']);
+        }
+        catch(AdmException $e)
+        {
+            $e->showHtml();
+        }
+    }
+
+    if($_POST['usf_url'] !== '' && !strValidCharacters($_POST['usf_url'], 'url'))
+    {
+        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('ORG_URL')));
+    }
+
     // Nachname und Vorname sollen immer Pflichtfeld bleiben
     if($userField->getValue('usf_name_intern') === 'LAST_NAME'
     || $userField->getValue('usf_name_intern') === 'FIRST_NAME')

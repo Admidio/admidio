@@ -116,6 +116,12 @@ if ($gValidLogin && $getMsgType === 'PM' && count($gCurrentUser->getAllVisibleRo
     {
         $list[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'].' (' .$row['usr_login_name'].')', '');
     }
+
+    // no roles or users found then show message
+    if(count($list) === 0)
+    {
+        $gMessage->show($gL10n->get('MSG_NO_ROLES_AND_USERS'));
+    }
 }
 
 if ($getUserId > 0)
@@ -346,8 +352,7 @@ elseif (!isset($messageStatement))
         if($getRoleId === 0 && count($listVisibleRoleArray) > 0)
         {
             // if no special role was preselected then list users
-            $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
-                           rol_mail_this_role, rol_id, mem_begin, mem_end
+            $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name, rol_id, mem_begin, mem_end
                       FROM '.TBL_MEMBERS.'
                 INNER JOIN '.TBL_ROLES.'
                         ON rol_id = mem_rol_id
@@ -366,11 +371,11 @@ elseif (!isset($messageStatement))
                         ON first_name.usd_usr_id = usr_id
                        AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
                      WHERE rol_id in ('.implode(',', $listVisibleRoleArray).')
+                       AND mem_begin <=  \''.DATE_NOW.'\'
                        AND usr_id <> '.$gCurrentUser->getValue('usr_id').
                            $sqlUserIds.'
                        AND usr_valid = 1
-                  GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value, rol_mail_this_role, rol_id
-                  ORDER BY last_name, first_name, rol_mail_this_role DESC';
+                  ORDER BY last_name, first_name, mem_end DESC';
             $statement = $gDb->query($sql);
 
             $passive_list = array();
@@ -378,22 +383,19 @@ elseif (!isset($messageStatement))
 
             while ($row = $statement->fetch())
             {
-                if (!isset($act_usr_id) or $act_usr_id != $row['usr_id'])
+                // every user should only be once in the list
+                if (!isset($currentUserId) or $currentUserId != $row['usr_id'])
                 {
-                    // if roles are visible for all login users or members then show members
-                    if ($row['rol_mail_this_role'] >= 2 || ($row['rol_mail_this_role'] == 1 && in_array($row['rol_id'], $gCurrentUser->getRoleMemberships(), true)))
+                    // if membership is active then show them as active members
+                    if($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW)
                     {
-                        // if membership is active then show them as active members
-                        if($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW)
-                        {
-                            $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
-                            $act_usr_id = $row['usr_id'];
-                        }
-                        elseif($gPreferences['mail_show_former'] == 1)
-                        {
-                            $passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
-                            $act_usr_id = $row['usr_id'];
-                        }
+                        $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
+                        $currentUserId = $row['usr_id'];
+                    }
+                    elseif($gPreferences['mail_show_former'] == 1)
+                    {
+                        $passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
+                        $currentUserId = $row['usr_id'];
                     }
                 }
             }

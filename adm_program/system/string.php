@@ -190,11 +190,9 @@ function strNextLetter($letter, $reverse = false)
  * @param string $string              The string that should be checked.
  * @param string $checkType           The type @b email, @b file, @b noSpecialChar, @b phone or @b url that will be checked.
  *                                    Each type has a different valid character list.
- * @param bool   $onlyCheckValidChars If set to true than syntax of email or url will not be checked. Only if the
- *                                    characters are valid for email or url
  * @return bool Returns @b true if all characters of @b string match the internal character list.
  */
-function strValidCharacters($string, $checkType, $onlyCheckValidChars = false)
+function strValidCharacters($string, $checkType)
 {
     if(trim($string) !== '')
     {

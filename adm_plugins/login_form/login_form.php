@@ -3,14 +3,14 @@
  ***********************************************************************************************
  * Login Form
  *
- * Version 1.7.0
+ * Version 1.8.0
  *
  * Login Form stellt das Loginformular mit den entsprechenden Feldern dar,
  * damit sich ein Benutzer anmelden kann. Ist der Benutzer angemeldet, so
  * werden an der Stelle der Felder nun nützliche Informationen des Benutzers
  * angezeigt.
  *
- * Compatible with Admidio version 3.0
+ * Compatible with Admidio version 3.1
  *
  * @copyright 2004-2016 The Admidio Team
  * @see http://www.admidio.org/
@@ -156,7 +156,7 @@ if($gValidLogin)
     $form = new HtmlForm('plugin-login-static-form', null, null, array('type' => 'vertical', 'setFocus' => false));
     $form->addStaticControl('plg_user', $gL10n->get('SYS_MEMBER'), '<a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $gCurrentUser->getValue('usr_id'). '"
                 '. $plg_link_target. ' title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'. $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'). '</a>');
-    $form->addStaticControl('plg_active_since', $gL10n->get('PLG_LOGIN_ACTIVE_SINCE'), $gCurrentSession->getValue('ses_begin', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK'));
+    $form->addStaticControl('plg_active_since', $gL10n->get('PLG_LOGIN_ACTIVE_SINCE'), $gCurrentSession->getValue('ses_begin', $gPreferences['system_time']));
     $form->addStaticControl('plg_last_login', $gL10n->get('PLG_LOGIN_LAST_LOGIN'), $lastLogin);
     $form->addStaticControl('plg_number_of_logins', $gL10n->get('PLG_LOGIN_NUMBER_OF_LOGINS'), $gCurrentUser->getValue('usr_number_login').$htmlUserRank);
     $form->show();

@@ -143,7 +143,6 @@
     <string name="DOW_UNMANAGED_FILES">Nicht verwaltete Dateien</string>
     <string name="DOW_UPLOAD_FILE_TO_FOLDER">Datei in den Ordner #VAR1_BOLD# hochladen</string>
     <string name="DOW_UPLOAD_FILES">Dateien hochladen</string>
-    <string name="DOW_UPLOAD_POST_EMPTY">Die Datei konnte nicht hochgeladen werden oder die Seite wurde ungültig aufgerufen.\n\nVermutlich wurde die maximale Dateigröße für Uploads überschritten. Diese ist auf deinem Server auf #VAR1#B eingestellt.</string>
     <!-- Phrases only in Ecardsmodule -->
     <string name="ECA_A_ECARD_FROM">Eine Grußkarte von</string>
     <string name="ECA_ACTIVATE_GREETING_CARDS">Grußkarten aktivieren</string>

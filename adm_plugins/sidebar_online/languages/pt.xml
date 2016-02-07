@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_ONLINE_HEADLINE">Ativo</string>
+  <string name="PLG_ONLINE_NO_VISITORS_ON_WEBSITE">Não há nenhum visitante no website</string>
+  <string name="PLG_ONLINE_VAR_NUM_VISITORS">#VAR1# Visitantes</string>
+</resources>

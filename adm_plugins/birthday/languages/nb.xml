@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# er i #VAR2# dager #VAR3# år, på #VAR4#</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Fødselsdager</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Herr #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_USERS">I dag har #VAR1# medlemmer fødselsdag!</string>
+  <string name="PLG_BIRTHDAY_NO_USER">I dag har ingen medlemmer fødselsdag,</string>
+  <string name="PLG_BIRTHDAY_ONE_USER">I dag har et medlem fødselsdag!</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# ble #VAR3# år gammel #VAR2# dager før, på #VAR4#</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# blir #VAR2# i dag</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# blir #VAR3# i morgen, den #VAR4#</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">Fru #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# ble #VAR3# år gammel i går den #VAR4#</string>
+</resources>
