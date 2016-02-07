@@ -3,10 +3,10 @@
  ***********************************************************************************************
  * Sidebar Online
  *
- * Version 1.5.0
+ * Version 1.6.0
  * Plugin shows visitors and registered members of the homepage
  *
- * Compatible with Admidio version 3.0
+ * Compatible with Admidio version 3.1
  *
  * @copyright 2004-2016 The Admidio Team
  * @see http://www.admidio.org/

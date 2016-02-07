@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LOGIN_ACTIVE_SINCE">Aktiv siden</string>
+  <string name="PLG_LOGIN_HONORARY_MEMBER">Æresmedlem</string>
+  <string name="PLG_LOGIN_LAST_LOGIN">Siste innlogging</string>
+  <string name="PLG_LOGIN_NEW_ONLINE_MEMBER">Nytt onlinemedlem</string>
+  <string name="PLG_LOGIN_NUMBER_OF_LOGINS">Antall pålogginger</string>
+  <string name="PLG_LOGIN_ONLINE_MEMBER">Onlinemedlem</string>
+  <string name="PLG_LOGIN_SENIOR_ONLINE_MEMBER">Senior onlinemedlem</string>
+</resources>

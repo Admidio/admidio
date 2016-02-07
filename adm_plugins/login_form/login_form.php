@@ -3,14 +3,14 @@
  ***********************************************************************************************
  * Login Form
  *
- * Version 1.7.0
+ * Version 1.8.0
  *
  * Login Form stellt das Loginformular mit den entsprechenden Feldern dar,
  * damit sich ein Benutzer anmelden kann. Ist der Benutzer angemeldet, so
  * werden an der Stelle der Felder nun nützliche Informationen des Benutzers
  * angezeigt.
  *
- * Compatible with Admidio version 3.0
+ * Compatible with Admidio version 3.1
  *
  * @copyright 2004-2016 The Admidio Team
  * @see http://www.admidio.org/
