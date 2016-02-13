@@ -68,7 +68,7 @@ $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDat
          WHERE ann_id = 2 ';
 $db->query($sql);
 
-$sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDate(0).' 21:45:33\'
+$sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDate(0).' 00:15:33\'
          WHERE ann_id = 3 ';
 $db->query($sql);
 
