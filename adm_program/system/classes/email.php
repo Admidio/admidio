@@ -54,7 +54,6 @@
  *
  * Am Ende muss die Mail natuerlich noch gesendet werden:
  * function sendEmail();
- *
  *****************************************************************************/
 class Email extends PHPMailer
 {
