@@ -182,7 +182,7 @@ class TableUsers extends TableAccess
                                        WHERE msg_usr_id_sender = '.$this->getValue('usr_id').')';
         $this->db->query($sql);
 
-        $sql = 'DELETE FROM '.TBL_MESSAGES.' WHERE msg_usr_id_sender = '. $gCurrentUser->getValue('usr_id');
+        $sql = 'DELETE FROM '.TBL_MESSAGES.' WHERE msg_usr_id_sender = '. $this->getValue('usr_id');
         $this->db->query($sql);
 
         $sql = 'DELETE FROM '.TBL_REGISTRATIONS.' WHERE reg_usr_id = '.$this->getValue('usr_id');
