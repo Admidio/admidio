@@ -6,7 +6,7 @@
   <string name="ANN_ANNOUNCEMENTS_DESC">Display or edit announcements, news and other information.</string>
   <string name="ANN_EMAIL_NOTIFICATION_TITLE">A new announcement was created</string>
   <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">A new announcement at #VAR1# was created\n\nTitle: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
-  <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Latest announcements of organization #VAR1#</string>
+  <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Latest announcements from organization #VAR1#</string>
   <!--Phrases only in Backupmodule-->
   <string name="BAC_BACK_TO_BACKUP_PAGE">Back to backup page</string>
   <string name="BAC_BACKUP_COMPLETED">Backup created in #VAR1#</string>
@@ -143,7 +143,6 @@
   <string name="DOW_UNMANAGED_FILES">Unmanaged files</string>
   <string name="DOW_UPLOAD_FILE_TO_FOLDER">Upload file to folder #VAR1_BOLD#</string>
   <string name="DOW_UPLOAD_FILES">Upload files</string>
-  <string name="DOW_UPLOAD_POST_EMPTY">File could not be uploaded or invalid page call.\n\nProbably the maximum file upload size has been exeeded (#VAR1#B for this server).</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Greeting card sent by</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Activating greeting card module</string>
@@ -180,7 +179,7 @@
   <string name="GBO_ENTRY_QUEUED">Entry saved. It will be displayed after moderation.</string>
   <string name="GBO_FLOODING_PROTECTION">Your last entry was created less than #VAR1# seconds ago.</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Interval</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Entries of unregistered users will be checked. To many entries within the give time intervall are not allowed. This option allows to take control over unwanted entries. If interval is set to 0, no check will be done. (default: 60 seconds)</string>
+  <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Entries of unregistered users will be checked. Too many entries within the given time intervall are not allowed. This option allows to take control over unwanted entries. If interval is set to 0, no check will be done. (default: 60 seconds)</string>
   <string name="GBO_GUESTBOOK">Guestbook</string>
   <string name="GBO_GUESTBOOK_DESC">Guests and users are able to leave greetings and comments, and can annotate other\'s entries.</string>
   <string name="GBO_GUESTBOOK_MODERATION">Moderation activated for</string>
@@ -208,7 +207,7 @@
   <string name="INS_CONFIGURATION_FILE_NOT_FOUND">File #VAR1_BOLD# can not be found in main directory of Admidio!\n\nPlease download file again and copy it to the mentioned directory.</string>
   <string name="INS_CONTINUE_INSTALLATION">Continue installation</string>
   <string name="INS_COURSES">Courses</string>
-  <string name="INS_CREATE_ADMINISTRATOR">Creating administrator</string>
+  <string name="INS_CREATE_ADMINISTRATOR">Create an administrator</string>
   <string name="INS_CREATE_CONFIGURATION_FILE">Creating configuration file</string>
   <string name="INS_DATA_FULLY_ENTERED">You have entered all the necessary data for installing Admidio.\n\nNow the database has to be created and filled with your data.</string>
   <string name="INS_DATABASE_LOGIN_DESC">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</string>
@@ -219,13 +218,13 @@
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">The configuration file #VAR1_BOLD# could not be saved in folder #VAR2_BOLD#. Please assign write access to the folder (change the file attribute via FTP to 0777 or drwxrwxrwx respectively) or download the configurationen file and copy it into the Admidio directory #VAR3_BOLD# by using a FTP program.\n\nAfter the file has been dropped at this location you can continue with the installation.</string>
   <string name="INS_DATA_DO_NOT_MATCH">Data from #VAR1_BOLD# does not comply with information provided in installation wizard.\n\nCheck config.php and all other information.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Administrator\'s details</string>
-  <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Provide here administrator\'s name, e-mail and access information. Log in with same user after installation.</string>
+  <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Enter the administrator\'s name, e-mail and access information. Log in with the administrator’s credentials after installation.</string>
   <string name="INS_DATA_OF_ORGANIZATION">Data of the organization</string>
   <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Database update is not required</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">File #VAR1_BOLD# could not be found in folder #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_IS_UPDATED">Updating database</string>
   <string name="INS_DATABASE_IS_UP_TO_DATE">Admidio\'s database is up to date</string>
-  <string name="INS_DATABASE_LOGIN">Entering database information</string>
+  <string name="INS_DATABASE_LOGIN">Database access</string>
   <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Creating database</string>
   <string name="INS_DESCRIPTION_BOARD">Administrative board of association</string>
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Meetings can take place here. Room has to be reserved before. Beamer is free for use.</string>
@@ -328,7 +327,7 @@
   <string name="LST_CONFIGURATION_LIST">List configuration</string>
   <string name="LST_CONFIGURATION_SAVE">Please select name for configuration set?</string>
   <string name="LST_COUNTRY_ISO" translation="edited">The country needs to be specified as Code ISO 3166 ALPHA-3 (3 characters)</string>
-  <string name="LST_CREATE_NEW_CONFIGURATION">Creating new configuration</string>
+  <string name="LST_CREATE_NEW_CONFIGURATION">Create a new configuration</string>
   <string name="LST_CREATE_OWN_LIST">Create own list</string>
   <string name="LST_DEFAULT_CONFIGURATION">Default configuration</string>
   <string name="LST_DEFAULT_CONFIGURATION_DESC">One of the predefined configurations here can be set to the default configuration for lists of this organization. Membership lists of roles not having a predefined  list configuration, are also displayed in this configuration.</string>
@@ -817,7 +816,7 @@
   <string name="PRO_NO_DEFAULT_ROLE">The role management contains no default role for new users. Please contact a webmaster who can edit this setting.</string>
   <string name="PRO_NO_ROLES_VISIBLE">No roles were found. Possibly you do not have the rights to see certain roles.</string>
   <string name="PRO_PASSWORD_CHANGED">Password has been successfully changed.</string>
-  <string name="PRO_PASSWORD_DESCRIPTION">Password must have at least 8 characters including numbers, letters and special characters.\n\nDue to security reasons, the password will be  encrypted. It can not be shown in clear text anymore.</string>
+  <string name="PRO_PASSWORD_DESCRIPTION">Password must have at least 8 characters including numbers, letters and special characters.\n\nDue to security reasons, the password will be encrypted. It can not be shown in clear text anymore.</string>
   <string name="PRO_PASSWORD_LENGTH">Password must have at least 8 characters.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">Old password is incorrect.</string>
   <string name="PRO_PASSWORDS_NOT_EQUAL">Original and retyped passwords are different.</string>

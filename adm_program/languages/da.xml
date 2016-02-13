@@ -143,7 +143,6 @@
   <string name="DOW_UNMANAGED_FILES">Filer uden ejer</string>
   <string name="DOW_UPLOAD_FILE_TO_FOLDER">Overfør fil til folder #VAR1_BOLD#</string>
   <string name="DOW_UPLOAD_FILES">Overfør filer</string>
-  <string name="DOW_UPLOAD_POST_EMPTY">Filen kunne ikke uploades eller der er sket et forkert side kald.\n\nDen maksimale fil upload størrelse er nok overskredet (#VAR1#B for denne server).</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Postkort sendt af</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Aktiverer postkort modul</string>
@@ -307,6 +306,7 @@
   <string name="LNK_LINKS_FROM">Links fra #VAR1#</string>
   <string name="LNK_NEW_WINDOW">Nyt vindue</string>
   <string name="LNK_REDIRECT">Viderestil</string>
+  <string name="LNK_REDIRECT_DESC">Du forlader nu siden #VAR1_BOLD# og vil blive omdirigeret automatisk til #VAR3# i løbet af #VAR2# sekunder.\n\n hvis den automatiske omdirigering ikke virker, klik da venligst #VAR4# her #VAR5#!</string>
   <string name="LNK_SAME_WINDOW">Samme vindue</string>
   <string name="LNK_WEBLINKS">Links</string>
   <string name="LNK_WEBLINKS_DESC">Opret og organiser interessante links.</string>
@@ -535,6 +535,7 @@
   <string name="MSG_DELETE_DESC">Skal besked #VAR1_BOLD# fjernes nu?</string>
   <string name="MSG_DELETE_PM">Fordi det er en privat besked, er beskeden kun markeret til sletning, og afventer en handling fra den anden part i samtalen.</string>
   <string name="MSG_FORMER_MEMBERS">Tidligere medlemmer</string>
+  <string name="MSG_NO_ROLES_AND_USERS">Der er ikke nogen roller eller brugere, til hvem du kan sende beskeder.</string>
   <string name="MSG_NO_VALID_RECIPIENTS">De valgte roller og brugere har ingen gyldige e-mail adresser. Derfor kan der ikke sendes e-mail til disse.</string>
   <string name="MSG_OPPOSITE">Forretnings partner</string>
   <string name="MSG_PM_SEND">En privat besked er sendt til #VAR1_BOLD#.</string>
