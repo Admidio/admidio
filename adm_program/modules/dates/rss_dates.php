@@ -42,6 +42,7 @@ if ($gPreferences['enable_dates_module'] != 1)
 
 // create Object
 $dates = new ModuleDates();
+$dates->setDateRange();
 
 // read events for output
 $datesResult = $dates->getDataset(0, 10);
