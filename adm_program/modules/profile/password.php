@@ -72,6 +72,7 @@ if($getMode === 'change')
                 // Webmaster could change password of other users without this verification.
                 if(PasswordHashing::verify($oldPassword, $user->getValue('usr_password')) || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
                 {
+                    $user->saveChangesWithoutRights();
                     $user->setPassword($newPassword);
                     $user->save();
 
