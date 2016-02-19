@@ -106,7 +106,7 @@ class RSSfeed
         {
             if (isset($this->channel[$field]))
             {
-                echo '<${field}>'.htmlspecialchars($this->channel[$field], ENT_QUOTES)."</${field}>\n";
+                echo '<'.$field.'>'.htmlspecialchars($this->channel[$field], ENT_QUOTES).'</'.$field.">\n";
             }
         }
         echo '<language>'.$gL10n->getLanguageIsoCode()."</language>\n";
@@ -126,7 +126,7 @@ class RSSfeed
             {
                 if (isset($item[$field]))
                 {
-                    echo '<${field}>'.htmlspecialchars($item[$field], ENT_QUOTES)."</${field}>\n";
+                    echo '<'.$field.'>'.htmlspecialchars($item[$field], ENT_QUOTES).'</'.$field.">\n";
                 }
             }
             echo '<guid>'.str_replace('&', '&amp;', $item['link'])."</guid>\n";
