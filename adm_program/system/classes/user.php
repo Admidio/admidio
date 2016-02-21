@@ -1330,6 +1330,22 @@ class User extends TableUsers
     }
 
     /**
+     * Update login data for this user. These are timestamps of last login and reset count
+     * and timestamp of invalid logins.
+     * @return void
+     */
+    public function updateLoginData()
+    {
+        $this->saveChangesWithoutRights();
+        $this->setValue('usr_last_login',   $this->getValue('usr_actual_login', 'Y-m-d H:i:s'));
+        $this->setValue('usr_number_login', $this->getValue('usr_number_login') + 1);
+        $this->setValue('usr_actual_login', DATETIME_NOW);
+        $this->setValue('usr_date_invalid', null);
+        $this->setValue('usr_number_invalid', 0);
+        $this->save(false); // Zeitstempel nicht aktualisieren
+    }
+
+    /**
      * Funktion prueft, ob der angemeldete User Ankuendigungen anlegen und bearbeiten darf
      * @return bool
      */
