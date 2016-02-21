@@ -51,14 +51,14 @@ if($getUserId > 0)
 
 if($getMode === 1 || $getMode === 2)
 {
-    // User-Account einem existierenden Mitglied zuordnen
+    // add new registration to an existing user account
 
     // Daten kopieren, aber nur, wenn noch keine Logindaten existieren
     if($user->getValue('usr_login_name') === '' && $user->getValue('usr_password') === '')
     {
         $user->setValue('EMAIL', $registrationUser->getValue('EMAIL'));
         $user->setValue('usr_login_name', $registrationUser->getValue('usr_login_name'));
-        $user->setPassword($registrationUser->getValue('usr_password'));
+        $user->setPassword($registrationUser->getValue('usr_password'), false, false);
     }
 
     try
