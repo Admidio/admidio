@@ -86,30 +86,10 @@ abstract class Modules
         $this->arrParameters = array();
 
         // Set parameters
-        $this->setActiveRole();
-        $this->setCatId();
         $this->setId();
         $this->setMode();
         $this->setOrder();
         $this->setStartElement();
-    }
-
-    /**
-     * Return boolean for active role
-     * @return bool Returns boolean for active role
-     */
-    public function getActiveRole()
-    {
-        return $this->activeRole;
-    }
-
-    /**
-     * Return category ID
-     * @return int Returns the category ID
-     */
-    public function getCatId()
-    {
-        return $this->catId;
     }
 
     /**
@@ -192,26 +172,6 @@ abstract class Modules
     }
 
     /**
-     * Set active role
-     * Set boolean for active role. Default true for active
-     */
-    protected function setActiveRole()
-    {
-        $this->activeRole = admFuncVariableIsValid($this->properties, 'active_role', 'bool', array('defaultValue' => true));
-    }
-
-    /**
-     * Set category ID
-     * @par If user string is set in $_GET Array the string is validated by Admidio function
-     * and set as category ID in the modules. Otherwise the category is set default to "0"
-     */
-    protected function setCatId()
-    {
-        // check optional user parameter and make secure. Otherwise set default value
-        //$this->catId = admFuncVariableIsValid($this->properties, 'cat_id', 'numeric', 0);
-    }
-
-    /**
      * Set ID
      */
     protected function setId()
@@ -268,6 +228,10 @@ abstract class Modules
             if($parameterName === 'cat_id')
             {
                 $this->catId = $parameterValue;
+            }
+            elseif($parameterName === 'active_role')
+            {
+                $this->activeRole = $parameterValue;
             }
             elseif($parameterName === 'mode')
             {

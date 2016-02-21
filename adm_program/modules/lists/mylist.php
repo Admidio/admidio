@@ -27,10 +27,14 @@ $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
 $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'bool', array('defaultValue' => true));
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
-// falls ehemalige Rolle, dann auch nur ehemalige Mitglieder anzeigen
-if(!$getActiveRole)
+// within PHP 5.3 false will not be set and therefore we must add 0 as value
+if($getActiveRole)
 {
-    $getShowMembers = 1;
+    $getActiveRole  = 1;
+}
+else
+{
+    $getActiveRole  = 0;
 }
 
 // set headline of the script

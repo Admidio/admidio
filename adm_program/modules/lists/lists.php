@@ -22,19 +22,22 @@ $getStart      = admFuncVariableIsValid($_GET, 'start',       'int');
 $getCatId      = admFuncVariableIsValid($_GET, 'cat_id',      'int');
 $getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 
-// New Modulelist object
-$lists = new ModuleLists();
-$lists->setParameter('cat_id', $getCatId);
-
 // set headline
 if($getActiveRole)
 {
     $headline = $gL10n->get('LST_ACTIVE_ROLES');
+    $getActiveRole = 1;
 }
 else
 {
     $headline = $gL10n->get('LST_INACTIVE_ROLES');
+    $getActiveRole = 0;
 }
+
+// New Modulelist object
+$lists = new ModuleLists();
+$lists->setParameter('cat_id', $getCatId);
+$lists->setParameter('active_role', $getActiveRole);
 
 if($getCatId > 0)
 {
@@ -256,7 +259,7 @@ foreach($listsResult['recordset'] as $row)
                 {
                     $html .= '&nbsp;'.$gL10n->get('LST_MAX', $role->getValue('rol_max_members'));
                 }
-                if($lists->getActiveRole() && $row['num_former'] > 0)
+                if($getActiveRole && $row['num_former'] > 0)
                 {
                     // show former members
                     if($row['num_former'] == 1)
