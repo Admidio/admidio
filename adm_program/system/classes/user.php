@@ -346,6 +346,7 @@ class User extends TableUsers
             // Rehash password if the hash is outdated and rehashing is enabled
             if ($updateHash && PasswordHashing::needsRehash($currHash))
             {
+                $this->saveChangesWithoutRights();
                 $this->setPassword($password);
                 $this->save();
             }

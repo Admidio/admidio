@@ -42,6 +42,7 @@ if ($gPreferences['enable_dates_module'] != 1)
 
 // create Object
 $dates = new ModuleDates();
+$dates->setDateRange();
 
 // read events for output
 $datesResult = $dates->getDataset(0, 10);
@@ -73,7 +74,7 @@ if($datesResult['numResults'] > 0)
             $title = $title. ' - '. $date->getValue('dat_end', $gPreferences['system_date']);
         }
         $title   = $title. ' '. $date->getValue('dat_headline');
-        $link    = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id');
+        $link    = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id').'&view=detail';
         $author  = $row['create_name'];
         $pubDate = date('r', strtotime($date->getValue('dat_timestamp_create')));
 

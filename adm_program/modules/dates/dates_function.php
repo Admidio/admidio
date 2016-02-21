@@ -23,6 +23,11 @@
  */
 require_once('../../system/common.php');
 
+if($_GET['mode'] == 2)
+{
+    $gMessage->showHtmlTextOnly(true);
+}
+
 // Initialize and check the parameters
 $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'int');
 $getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));

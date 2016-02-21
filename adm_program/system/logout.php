@@ -14,7 +14,7 @@ require_once('common.php');
 $gCurrentSession->logout();
 
 // if login organization is different to organization of config file then create new session variables
-if($g_organization !== $gCurrentOrganization->getValue('org_shortname'))
+if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0)
 {
     // read organization of config file with their preferences
     $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
