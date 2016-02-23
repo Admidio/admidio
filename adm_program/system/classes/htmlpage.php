@@ -553,7 +553,6 @@ class HtmlPage
         {
             $headerContent .= '<script type="text/javascript"><!--
                 $(document).ready(function() {
-                    $(".admidio-icon-info, .admidio-icon-link img, [data-toggle=tooltip]").tooltip();
                     $("[data-toggle=\'popover\']").popover();
                     '.$this->javascriptContentExecute.'
                 });
