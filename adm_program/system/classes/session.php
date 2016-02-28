@@ -267,10 +267,7 @@ class Session extends TableAccess
         && $this->getValue('ses_ip_address') !== ''
         && (!isset($gCheckIpAddress) || $gCheckIpAddress === 1))
         {
-            if($gDebug)
-            {
-                error_log('Admidio stored session ip address: '.$this->getValue('ses_ip_address'). ' :: Remode ip address: '.$_SERVER['REMOTE_ADDR']);
-            }
+            error_log('Admidio stored session ip address: '.$this->getValue('ses_ip_address'). ' :: Remode ip address: '.$_SERVER['REMOTE_ADDR']);
 
             unset($_SESSION['gCurrentSession']);
             $this->mObjectArray = array();
