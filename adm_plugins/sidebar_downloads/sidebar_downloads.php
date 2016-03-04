@@ -139,9 +139,9 @@ if ($gPreferences['enable_download_module'] == 1)
                     break;
                 }
             }
-        }
 
-        echo '</div>';
+            echo '</div>';
+        }
 
         if ($anzahl === 0)
         {
