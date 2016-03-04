@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Sidebar Announcements
  *
- * Version 1.8.0
+ * Version 1.8.1
  *
  * Plugin das die letzten X Ankuendigungen in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -121,8 +121,11 @@ else
         // Vorschau-Text anzeigen
         if($plg_show_preview > 0)
         {
-            // Anfang des Ankündigungs-Textes auslesen. Plus 15 Zeichen, um am Ende eines Wortes abzubrechen
-            $textPrev = substr($plg_announcement->getValue('ann_description'), 0, $plg_show_preview + 15);
+            // HTML-Tags rausnehmen
+            $textPrev = strip_tags($plg_announcement->getValue('ann_description'), '<p></p><br><br/><br /><i></i><b></b>');
+
+            // Anfang des Textes auslesen auf die angegebene Länge plus 15 Zeichen, um am Ende eines Wortes abzubrechen
+            $textPrev = substr($textPrev, 0, $plg_show_preview + 15);
             $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...';
 
             echo '<div>'.$textPrev.'

@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Sidebar Dates
  *
- * Version 1.7.0
+ * Version 1.7.1
  *
  * Plugin das die letzten X Termine in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -163,9 +163,12 @@ if($plgDatesResult['numResults'] > 0)
         // Vorschau-Text anzeigen
         if($plg_dates_show_preview > 0)
         {
-            // Anfang des Ankündigungs-Textes auslesen. Plus 15 Zeichen, um am Ende eines Wortes abzubrechen
-            $textPrev = substr($plg_date->getValue('dat_description'), 0, $plg_dates_show_preview + 15);
-            $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...';
+            // HTML-Tags rausnehmen
+            $textPrev = strip_tags ($plg_date->getValue('dat_description'), '<p></p><br><br/><br /><i></i><b></b>');
+
+            // Anfang des Textes auslesen auf die angegebene Länge plus 15 Zeichen, um am Ende eines Wortes abzubrechen
+            $textPrev=substr($textPrev, 0, $plg_dates_show_preview + 15);
+            $textPrev=substr($textPrev, 0, strrpos($textPrev, ' ')).' ...';
 
             echo '<div>'.$textPrev.'
             <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
