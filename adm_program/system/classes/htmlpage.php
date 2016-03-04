@@ -554,6 +554,7 @@ class HtmlPage
             $headerContent .= '<script type="text/javascript"><!--
                 $(document).ready(function() {
                     $("[data-toggle=\'popover\']").popover();
+                    $(".admidio-icon-info, .admidio-icon-link img, [data-toggle=tooltip]").tooltip();
                     '.$this->javascriptContentExecute.'
                 });
             --></script>';
