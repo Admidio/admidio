@@ -571,23 +571,24 @@ class ProfileFields
                     }
                     break;
                 case 'PHONE':
-                    // Homepage darf nur gueltige Zeichen enthalten
+                    // check phone number for valid characters
                     if (!strValidCharacters($fieldValue, 'phone') && !$this->noValueCheck)
                     {
                         return false;
                     }
                     break;
                 case 'URL':
-                    // Homepage darf nur gueltige Zeichen enthalten
-                    if (!strValidCharacters($fieldValue, 'url') && !$this->noValueCheck)
-                    {
-                        return false;
-                    }
-                    // Homepage noch mit http vorbelegen
+                    // Set http hat the beginning if no protokoll was definded
                     if(strpos(admStrToLower($fieldValue), 'http://')  === false
                         && strpos(admStrToLower($fieldValue), 'https://') === false)
                     {
                         $fieldValue = 'http://'. $fieldValue;
+                    }
+
+                    // now check url for valid characters
+                    if (!strValidCharacters($fieldValue, 'url') && !$this->noValueCheck)
+                    {
+                        return false;
                     }
                     break;
             }
