@@ -463,7 +463,7 @@ elseif (!isset($messageStatement))
                        AND usr_valid   = 1
                   GROUP BY email.usd_value, email.usd_value';
 
-            $form->addSelectBoxFromSql('mailfromid', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sql, array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false));
+            $form->addSelectBoxFromSql('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sql, array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false));
         }
         else
         {
