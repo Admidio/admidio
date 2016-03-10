@@ -183,7 +183,6 @@ else
     // and we should update the login data and count logins
     if($gCurrentSession->getValue('ses_usr_id') > 0)
     {
-        $gCurrentUser->saveChangesWithoutRights();
         $gCurrentUser->updateLoginData();
     }
 

@@ -884,8 +884,13 @@ class User extends TableUsers
     {
         if(is_object($user))
         {
-            // Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
+            // if user is allowed to edit the profile then he can also view it
             if($this->hasRightEditProfile($user))
+            {
+                return true;
+            }
+            // every user is allowed to view his own profile
+            elseif($user->getValue('usr_id') == $this->getValue('usr_id'))
             {
                 return true;
             }
@@ -1327,6 +1332,22 @@ class User extends TableUsers
             $logEntry->save();
         }
         return $returnCode;
+    }
+
+    /**
+     * Update login data for this user. These are timestamps of last login and reset count
+     * and timestamp of invalid logins.
+     * @return void
+     */
+    public function updateLoginData()
+    {
+        $this->saveChangesWithoutRights();
+        $this->setValue('usr_last_login',   $this->getValue('usr_actual_login', 'Y-m-d H:i:s'));
+        $this->setValue('usr_number_login', $this->getValue('usr_number_login') + 1);
+        $this->setValue('usr_actual_login', DATETIME_NOW);
+        $this->setValue('usr_date_invalid', null);
+        $this->setValue('usr_number_invalid', 0);
+        $this->save(false); // Zeitstempel nicht aktualisieren
     }
 
     /**

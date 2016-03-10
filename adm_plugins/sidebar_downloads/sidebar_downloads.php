@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * sidebar_downloads
  *
- * Version 1.5.0
+ * Version 1.5.1
  *
  * Plugin das die aktuellsten X Downloads auflistet
  *
@@ -139,9 +139,9 @@ if ($gPreferences['enable_download_module'] == 1)
                     break;
                 }
             }
-        }
 
-        echo '</div>';
+            echo '</div>';
+        }
 
         if ($anzahl === 0)
         {

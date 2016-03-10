@@ -75,14 +75,18 @@ foreach($_POST['ecard_recipients'] as $key => $value)
     }
     else
     {
-        if($gCurrentUser->hasRightViewProfile($value))
-        {
-            $arrayUsers[] = $value;
-        }
+        $arrayUsers[] = $value;
     }
 }
 
-$ecardSendResult = true;
+if(count($arrayRoles) === 0 && count($arrayUsers) === 0)
+{
+    $ecardSendResult = false;
+}
+else
+{
+    $ecardSendResult = true;
+}
 
 if(count($arrayRoles) > 0)
 // Wenn schon dann alle Namen und die dazugehörigen Emails auslesen und in die versand Liste hinzufügen
@@ -134,9 +138,12 @@ if(count($arrayUsers) > 0)
         {
             $user = new User($gDb, $gProfileFields, $userId);
 
-            // create and send ecard
-            $ecardHtmlData   = $funcClass->parseEcardTemplate($imageUrl, $_POST['ecard_message'], $ecardDataToParse, $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $user->getValue('EMAIL'));
-            $ecardSendResult = $funcClass->sendEcard($senderName, $senderEmail, $ecardHtmlData, $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $user->getValue('EMAIL'), $imageServerPath);
+            if($gCurrentUser->hasRightViewProfile($user))
+            {
+                // create and send ecard
+                $ecardHtmlData   = $funcClass->parseEcardTemplate($imageUrl, $_POST['ecard_message'], $ecardDataToParse, $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $user->getValue('EMAIL'));
+                $ecardSendResult = $funcClass->sendEcard($senderName, $senderEmail, $ecardHtmlData, $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $user->getValue('EMAIL'), $imageServerPath);
+            }
         }
     }
 }

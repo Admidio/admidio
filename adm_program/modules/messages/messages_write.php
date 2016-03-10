@@ -18,9 +18,6 @@
  * rol_id    - Statt einem Rollennamen/Kategorienamen kann auch eine RollenId uebergeben werden
  * carbon_copy - false - (Default) Checkbox "Kopie an mich senden" ist NICHT gesetzt
  *             - true  - Checkbox "Kopie an mich senden" ist gesetzt
- * show_members : 0 - (Default) show active members of role
- *                1 - show former members of role
- *                2 - show active and former members of role
  *
  *****************************************************************************/
 
@@ -34,7 +31,6 @@ $getMsgId       = admFuncVariableIsValid($_GET, 'msg_id',       'int');
 $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
 $getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy',  'bool', array('defaultValue' => false));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
-$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
 if ($getMsgId > 0)
 {
@@ -467,7 +463,7 @@ elseif (!isset($messageStatement))
                        AND usr_valid   = 1
                   GROUP BY email.usd_value, email.usd_value';
 
-            $form->addSelectBoxFromSql('mailfromid', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sql, array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false));
+            $form->addSelectBoxFromSql('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sql, array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false));
         }
         else
         {

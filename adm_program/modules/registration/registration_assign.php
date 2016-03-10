@@ -151,8 +151,8 @@ while($row = $usrStatement->fetchObject())
 
     if(isMember($row->usr_id))
     {
-        // gefundene User ist bereits Mitglied dieser Organisation
-        if($row->usr_login_name !== '')
+        // found user is member of this organization
+        if(strlen($row->usr_login_name) > 0)
         {
             // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken
             $page->addHtml('<p>'.$gL10n->get('NWU_USER_VALID_LOGIN'));

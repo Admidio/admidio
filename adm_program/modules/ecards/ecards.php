@@ -214,12 +214,12 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
                AND mem_end    > \''.DATE_NOW.'\'
                AND mem_rol_id IN ('.implode(',', $arrayUniqueRoles).')
           GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
-          ORDER BY first_name, last_name';
+          ORDER BY last_name, first_name';
     $statement = $gDb->query($sql);
 
     while ($row = $statement->fetch())
     {
-        $list[] = array($row['usr_id'], $row['first_name'].' '.$row['last_name']. ' ('.$row['email'].')', $gL10n->get('SYS_MEMBERS'));
+        $list[] = array($row['usr_id'], $row['last_name']. ', '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('SYS_MEMBERS'));
     }
 
     $form->addSelectBox('ecard_recipients', $gL10n->get('SYS_TO'), $list, array('property'     => FIELD_REQUIRED,

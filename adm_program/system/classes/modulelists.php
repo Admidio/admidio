@@ -230,15 +230,24 @@ class ModuleLists extends Modules
     private function getVisibleRolesSql()
     {
         global $gCurrentUser;
-        // create a list with all rol_ids that the user is allowed to view
-        $visibleRoles = implode(',', $gCurrentUser->getAllVisibleRoles());
-        if($visibleRoles !== '')
+
+        if($this->activeRole === 0 && $gCurrentUser->isWebmaster())
         {
-            return ' AND rol_id IN ('.$visibleRoles.')';
+            // if inactive roles should be shown, then show all of them to webmaster
+            return '';
         }
         else
         {
-            return ' AND rol_id = 0 ';
+            // create a list with all rol_ids that the user is allowed to view
+            $visibleRoles = implode(',', $gCurrentUser->getAllVisibleRoles());
+            if($visibleRoles !== '')
+            {
+                return ' AND rol_id IN ('.$visibleRoles.')';
+            }
+            else
+            {
+                return ' AND rol_id = 0 ';
+            }
         }
     }
 

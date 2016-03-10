@@ -323,47 +323,51 @@ class ProfileFields
 
             if($format !== 'database')
             {
-                switch ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type'))
+                if($fieldNameIntern == 'COUNTRY')
                 {
-                    case 'DATE':
-                        if ($value !== '')
-                        {
-                            // if no format or html is set then show date format from Admidio settings
-                            if($format === '' || $format === 'html')
+                    if ($value !== '')
+                    {
+                        // read the language name of the country
+                        $value = $gL10n->getCountryByCode($value);
+                    }
+                }
+                else
+                {
+                    switch ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type'))
+                    {
+                        case 'DATE':
+                            if ($value !== '')
                             {
-                                $dateFormat = $gPreferences['system_date'];
-                            }
-                            else
-                            {
-                                $dateFormat = $format;
-                            }
+                                // if no format or html is set then show date format from Admidio settings
+                                if($format === '' || $format === 'html')
+                                {
+                                    $dateFormat = $gPreferences['system_date'];
+                                }
+                                else
+                                {
+                                    $dateFormat = $format;
+                                }
 
-                            // if date field then the current date format must be used
-                            $date = new DateTimeExtended($value, 'Y-m-d');
-                            if(!$date->isValid())
-                            {
-                                return $value;
+                                // if date field then the current date format must be used
+                                $date = new DateTimeExtended($value, 'Y-m-d');
+                                if(!$date->isValid())
+                                {
+                                    return $value;
+                                }
+                                $value = $date->format($dateFormat);
                             }
-                            $value = $date->format($dateFormat);
-                        }
-                        break;
-                    case 'DROPDOWN':
-                    case 'RADIO_BUTTON':
-                        // the value in db is only the position, now search for the text
-                        if($value > 0 && $format !== 'html')
-                        {
-                            $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list');
-                            $value = $arrListValues[$value];
+                            break;
+                        case 'DROPDOWN':
+                        case 'RADIO_BUTTON':
+                            // the value in db is only the position, now search for the text
+                            if($value > 0 && $format !== 'html')
+                            {
+                                $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list');
+                                $value = $arrListValues[$value];
 
-                        }
-                        break;
-                    case 'COUNTRY':
-                        if ($value !== '')
-                        {
-                            // read the language name of the country
-                            $value = $gL10n->getCountryByCode($value);
-                        }
-                        break;
+                            }
+                            break;
+                    }
                 }
             }
         }
@@ -571,23 +575,24 @@ class ProfileFields
                     }
                     break;
                 case 'PHONE':
-                    // Homepage darf nur gueltige Zeichen enthalten
+                    // check phone number for valid characters
                     if (!strValidCharacters($fieldValue, 'phone') && !$this->noValueCheck)
                     {
                         return false;
                     }
                     break;
                 case 'URL':
-                    // Homepage darf nur gueltige Zeichen enthalten
-                    if (!strValidCharacters($fieldValue, 'url') && !$this->noValueCheck)
-                    {
-                        return false;
-                    }
-                    // Homepage noch mit http vorbelegen
+                    // Set http hat the beginning if no protokoll was definded
                     if(strpos(admStrToLower($fieldValue), 'http://')  === false
                         && strpos(admStrToLower($fieldValue), 'https://') === false)
                     {
                         $fieldValue = 'http://'. $fieldValue;
+                    }
+
+                    // now check url for valid characters
+                    if (!strValidCharacters($fieldValue, 'url') && !$this->noValueCheck)
+                    {
+                        return false;
                     }
                     break;
             }
