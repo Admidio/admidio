@@ -43,7 +43,7 @@ if($gValidLogin)
     $gMessage->show($gL10n->get('SYS_LOSTPW_AREADY_LOGGED_ID'));
 }
 
-if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
+if(!empty($_POST['recipient_email']))
 {
     try
     {
