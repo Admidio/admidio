@@ -179,7 +179,7 @@ elseif($getMode === 2)  // Welcome to installation
     }
 
     // if safe mode is used then show a notice to the user
-    // depracated: Remove if PHP 5.3 dropped
+    // deprecated: Remove if PHP 5.3 dropped
     if(ini_get('safe_mode') === '1')
     {
         $message .= '

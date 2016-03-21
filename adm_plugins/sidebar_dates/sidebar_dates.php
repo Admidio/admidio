@@ -164,7 +164,7 @@ if($plgDatesResult['numResults'] > 0)
         if($plg_dates_show_preview > 0)
         {
             // HTML-Tags rausnehmen
-            $textPrev = strip_tags ($plg_date->getValue('dat_description'), '<p></p><br><br/><br /><i></i><b></b>');
+            $textPrev = strip_tags($plg_date->getValue('dat_description'), '<p></p><br><br/><br /><i></i><b></b>');
 
             // Anfang des Textes auslesen auf die angegebene Länge plus 15 Zeichen, um am Ende eines Wortes abzubrechen
             $textPrev=substr($textPrev, 0, $plg_dates_show_preview + 15);

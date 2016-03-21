@@ -13,7 +13,6 @@
  * Based on backupDB Version 1.2.7-201104261502
  * by James Heinrich <info@silisoftware.com>
  * available at http://www.silisoftware.com
- *
  *****************************************************************************/
 
 /////////////////////////////////////////////////////////////////////
@@ -48,6 +47,7 @@ function FunctionIsDisabled($function)
         {
             $DisabledFunctions[$value] = 'global';
         }
+        // deprecated: Remove if PHP 5.3 dropped
         if (@ini_get('safe_mode'))
         {
             $DisabledFunctions['shell_exec'] = 'local';
@@ -96,6 +96,12 @@ function SafeExec($command)
     return false;
 }
 
+/**
+ * @param string $version1
+ * @param string $version2
+ * @param string $operator
+ * @return int
+ */
 function version_compare_replacement_sub($version1, $version2, $operator = '')
 {
     // If you specify the third optional operator argument, you can test for a particular relationship.
@@ -163,6 +169,12 @@ function version_compare_replacement_sub($version1, $version2, $operator = '')
     return 1;
 }
 
+/**
+ * @param string $version1
+ * @param string $version2
+ * @param string $operator
+ * @return int|mixed
+ */
 function version_compare_replacement($version1, $version2, $operator = '')
 {
     if (function_exists('version_compare'))
@@ -177,8 +189,8 @@ function version_compare_replacement($version1, $version2, $operator = '')
 
     // and also inserts dots . before and after any non number so that for example '4.3.2RC1' becomes '4.3.2.RC.1'.
     // Then it splits the results like if you were using explode('.',$ver). Then it compares the parts starting from left to right.
-    $version1 = preg_replace('#([0-9]+)([A-Z]+)([0-9]+)#i', '\\1.\\2.\\3', $version1);
-    $version2 = preg_replace('#([0-9]+)([A-Z]+)([0-9]+)#i', '\\1.\\2.\\3', $version2);
+    $version1 = preg_replace('#(\d+)([A-Z]+)(\d+)#i', '\\1.\\2.\\3', $version1);
+    $version2 = preg_replace('#(\d+)([A-Z]+)(\d+)#i', '\\1.\\2.\\3', $version2);
 
     $parts1 = explode('.', $version1);
     $parts2 = explode('.', $version1);
@@ -285,17 +297,17 @@ function FileSizeNiceDisplay($filesize, $precision = 2)
     else
     {
         $filesize /= 1024;
-        $sizeunit = 'kB';
+        $sizeunit  = 'kB';
     }
     if ($filesize >= 1000)
     {
         $filesize /= 1024;
-        $sizeunit = 'MB';
+        $sizeunit  = 'MB';
     }
     if ($filesize >= 1000)
     {
         $filesize /= 1024;
-        $sizeunit = 'GB';
+        $sizeunit  = 'GB';
     }
     return number_format($filesize, $precision).' '.$sizeunit;
 }
@@ -304,7 +316,7 @@ function FileSizeNiceDisplay($filesize, $precision = 2)
  * @param string $id
  * @param string $dhtml
  * @param string $text
- * @return bool
+ * @return true
  */
 function OutputInformation($id, $dhtml, $text = '')
 {
@@ -335,6 +347,15 @@ function OutputInformation($id, $dhtml, $text = '')
     return true;
 }
 
+/**
+ * @param string $from
+ * @param string $to
+ * @param string $subject
+ * @param string $textbody
+ * @param string $attachmentdata
+ * @param string $attachmentfilename
+ * @return bool
+ */
 function EmailAttachment($from, $to, $subject, $textbody, &$attachmentdata, $attachmentfilename)
 {
     $boundary = '_NextPart_'.time().'_'.md5($attachmentdata).'_';
@@ -357,4 +378,3 @@ function EmailAttachment($from, $to, $subject, $textbody, &$attachmentdata, $att
 /////////////////////////////////////////////////////////////////////
 ///////////////////     END SUPPORT FUNCTIONS     ///////////////////
 /////////////////////////////////////////////////////////////////////
-
