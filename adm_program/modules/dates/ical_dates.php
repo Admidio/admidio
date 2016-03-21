@@ -61,9 +61,9 @@ $dates = new ModuleDates();
 $dates->setParameter('mode', 2);
 $dates->setParameter('view_mode', 'period');
 $dates->setParameter('cat_id', $getCatId);
-$dates->setDaterange($startDate, $endDate);
+$dates->setDateRange($startDate, $endDate);
 // read events for output
-$datesResult = $dates->getDataset(0, 0);
+$datesResult = $dates->getDataSet(0, 0);
 // get parameters fom $_GET Array stored in class
 $parameter = $dates->getParameters();
 

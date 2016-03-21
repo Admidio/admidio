@@ -217,7 +217,7 @@ class FunctionClass
                     $uid = md5(uniqid($img_name.time(), true));
                     try
                     {
-                        $email->AddEmbeddedImage($img_server_path, $uid, $img_name, $encoding = 'base64', 'image/'.$img_type);
+                        $email->addEmbeddedImage($img_server_path, $uid, $img_name, $encoding = 'base64', 'image/'.$img_type);
                     }
                     catch (phpmailerException $e)
                     {

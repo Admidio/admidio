@@ -89,7 +89,7 @@ else
 }
 
 // read relevant events from database
-$datesResult     = $dates->getDataset($getStart, $datesPerPage);
+$datesResult     = $dates->getDataSet($getStart, $datesPerPage);
 $datesTotalCount = $dates->getDataSetCount();
 
 if($getViewMode !== 'print' && $getId === 0)

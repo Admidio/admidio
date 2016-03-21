@@ -84,7 +84,7 @@ class HtmlList extends HtmlElement
      * @param string $term term as string for datalist
      * @param string $description description as string for data description
      */
-    public function addDatalist($id = '', $term = null, $description = null)
+    public function addDataList($id = '', $term = null, $description = null)
     {
         // First check whether open list item tag  must be closed before setting new item
         if(in_array('dl', $this->arrParentElements, true))

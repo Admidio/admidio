@@ -45,7 +45,7 @@ $dates = new ModuleDates();
 $dates->setDateRange();
 
 // read events for output
-$datesResult = $dates->getDataset(0, 10);
+$datesResult = $dates->getDataSet(0, 10);
 
 // ab hier wird der RSS-Feed zusammengestellt
 

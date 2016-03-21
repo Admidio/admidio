@@ -55,7 +55,7 @@ $rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHea
 if($announcements->getDataSetCount() > 0)
 {
     $announcement = new TableAnnouncement($gDb);
-    $rows = $announcements->getDataset(0, 10);
+    $rows = $announcements->getDataSet(0, 10);
     // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
     foreach ($rows['recordset'] as $row)
     {

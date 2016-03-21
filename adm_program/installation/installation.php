@@ -342,7 +342,7 @@ elseif($getMode === 4)  // Creating organization
     $form->addInput('orga_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, array('maxLength' => 10, 'property' => $shortnameProperty, 'class' => 'form-control-small'));
     $form->addInput('orga_longname', $gL10n->get('SYS_NAME'), $orgaLongName, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('orga_email', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $orgaEmail, array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
-    $form->addSelectbox('orga_timezone', $gL10n->get('ORG_TIMEZONE'), $timezones, array('property' => FIELD_REQUIRED, 'defaultValue' => date_default_timezone_get()));
+    $form->addSelectBox('orga_timezone', $gL10n->get('ORG_TIMEZONE'), $timezones, array('property' => FIELD_REQUIRED, 'defaultValue' => date_default_timezone_get()));
     $form->closeGroupBox();
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=3'));
     $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), array('icon' => 'layout/forward.png'));

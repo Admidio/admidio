@@ -268,11 +268,11 @@ if ($getMode !== 'csv')
         // set auto page breaks
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
         $pdf->SetMargins(10, 20, 10);
-        $pdf->SetHeaderMargin(10);
-        $pdf->SetFooterMargin(0);
+        $pdf->setHeaderMargin(10);
+        $pdf->setFooterMargin(0);
 
         // headline for PDF
-        $pdf->SetHeaderData('', '', $headline, '');
+        $pdf->setHeaderData('', '', $headline, '');
 
         // set font
         $pdf->SetFont('times', '', 10);
