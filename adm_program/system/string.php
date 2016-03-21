@@ -251,7 +251,7 @@ function admStrIsValidFileName($filename, $checkExtension = false)
     if(trim($filename) !== '')
     {
         // filename should only contains valid characters and don't start with a dot
-        if(strValidCharacters($filename, 'file') && substr($filename, 0, 1) !== '.')
+        if(strValidCharacters($filename, 'file') && strpos($filename, '.') !== 0)
         {
             if($checkExtension)
             {

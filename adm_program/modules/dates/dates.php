@@ -785,7 +785,7 @@ else
                         $columnValue .= $participant['firstname']. ' '. $participant['surname']. ', ';
                     }
                 }
-                $columnValues[] = substr($columnValue, 0, strlen($columnValue) - 2);
+                $columnValues[] = substr($columnValue, 0, -2);
             }
             elseif($getView === 'description')
             {

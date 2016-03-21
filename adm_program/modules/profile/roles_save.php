@@ -46,7 +46,7 @@ if(!$gCurrentUser->assignRoles())
 $roleCount = 0;
 foreach($_POST as $key=>$value)
 {
-    if(preg_match('/^(role-)[0-9]+$/i', $key))
+    if(preg_match('/^(role-)\d+$/i', $key))
     {
         ++$roleCount;
     }

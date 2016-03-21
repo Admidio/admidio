@@ -99,9 +99,9 @@ switch($postFunction)
         break;
 
     case 'send':
-        $reg_exUrl = '/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/';
         if($postMessage !== "\n")
         {
+            $reg_exUrl = '/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/';
             if(preg_match($reg_exUrl, $postMessage, $url))
             {
                 $postMessage = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
@@ -116,7 +116,7 @@ switch($postFunction)
         $row = $statement->fetch();
         $MsgId = $row['max_id'] + 1;
 
-        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read)
+        $sql = "INSERT INTO ".TBL_MESSAGES." (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read)
             VALUES ('CHAT', '0', '".$MsgId."', '".$postNickname."', '', '', '".$postMessage."', CURRENT_TIMESTAMP, '0')";
 
         $gDb->query($sql);

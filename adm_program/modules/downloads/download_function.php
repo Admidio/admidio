@@ -186,7 +186,7 @@ elseif ($getMode === 4)
             // check filename and throw exception if something is wrong
             if(admStrIsValidFileName($_POST['new_name'], true))
             {
-                $newFile        = $_POST['new_name'].admFuncGetFilenameExtension($oldFile);
+                $newFile        = $_POST['new_name'].'.'.pathinfo($oldFile, PATHINFO_EXTENSION);
                 $newDescription = $_POST['new_description'];
 
                 // Test ob die Datei schon existiert im Filesystem

@@ -269,7 +269,7 @@ foreach($gProfileFields->mProfileFields as $field)
         $javascriptCode .= '
                 user_fields['. $i. '] = new Object();
                 user_fields['. $i. ']["cat_id"]   = "'. $field->getValue('cat_id'). '";
-                user_fields['. $i. ']["cat_name"] = "'. strtr($field->getValue('cat_name'), '"', '\''). '";
+                user_fields['. $i. ']["cat_name"] = "'. str_replace('"', '\'', $field->getValue('cat_name')). '";
                 user_fields['. $i. ']["usf_id"]   = "'. $field->getValue('usf_id'). '";
                 user_fields['. $i. ']["usf_name"] = "'. addslashes($field->getValue('usf_name')). '";
                 user_fields['. $i. ']["usf_name_intern"] = "'. addslashes($field->getValue('usf_name_intern')). '";

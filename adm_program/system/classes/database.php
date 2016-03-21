@@ -292,7 +292,7 @@ class Database
             $output .= '<strong>LINE:</strong> '.((!empty($trace['line'])) ? $trace['line'] : '').'<br />';
 
             $output .= '<strong>CALL:</strong> '.htmlentities($trace['class'].$trace['type'].$trace['function']).
-                       '('.((count($args)) ? implode(', ', $args) : '').')<br />';
+                       '('.(count($args) ? implode(', ', $args) : '').')<br />';
         }
         $output .= '</div>';
         return $output;

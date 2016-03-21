@@ -111,7 +111,7 @@ class ConditionParser
         global $gL10n;
 
         $this->mSrcCond = admStrToUpper(trim($sourceCondition));
-        $this->mSrcCond = strtr($this->mSrcCond, '*', '%');
+        $this->mSrcCond = str_replace('*', '%', $this->mSrcCond);
 
         // valid 'not null' is '#'
         $this->mSrcCond = str_replace(admStrToUpper($gL10n->get('SYS_NOT_EMPTY')), ' # ', $this->mSrcCond);

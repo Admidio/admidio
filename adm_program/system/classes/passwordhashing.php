@@ -60,11 +60,11 @@ class PasswordHashing
      */
     public static function verify($password, $hash)
     {
-        if (strlen($hash) === 60 && substr($hash, 0, 4) === '$2y$')
+        if (strlen($hash) === 60 && strpos($hash, '$2y$') === 0)
         {
             return password_verify($password, $hash);
         }
-        elseif (strlen($hash) === 34 && substr($hash, 0, 3) === '$P$')
+        elseif (strlen($hash) === 34 && strpos($hash, '$P$') === 0)
         {
             $passwordHasher = new PasswordHash(9, true);
             return $passwordHasher->CheckPassword($password, $hash);
@@ -143,11 +143,11 @@ class PasswordHashing
      */
     public static function hashInfo($hash)
     {
-        if (strlen($hash) === 60 && substr($hash, 0, 4) === '$2y$')
+        if (strlen($hash) === 60 && strpos($hash, '$2y$') === 0)
         {
             return password_get_info($hash);
         }
-        elseif (strlen($hash) === 34 && substr($hash, 0, 3) === '$P$')
+        elseif (strlen($hash) === 34 && strpos($hash, '$P$') === 0)
         {
             return 'PRIVATE/PORTABLE_HASH';
         }

@@ -482,7 +482,7 @@ class User extends TableUsers
 
         $member = new TableMembers($this->db, $memberId);
 
-        if($startDate === '' || $startDate === '')
+        if($startDate === '' || $endDate === '')
         {
             return false;
         }
