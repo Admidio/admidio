@@ -962,7 +962,7 @@
     <string name="SYS_BIRTHDAY">Geburtstag</string>
     <string name="SYS_CAPTCHA">Captcha</string>
     <string name="SYS_CAPTCHA_CALC">Ergebnis der Rechnung</string>
-    <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Das Ergbenis der Rechnung wurde falsch eingegeben.</string>
+    <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Das Ergebnis der Rechnung wurde falsch eingegeben.</string>
     <string name="SYS_CAPTCHA_CALC_DESCRIPTION">Bei der Rechenaufgabe handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Rechenaufgabe wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage die Lösung der Rechenaufgabe in das Formularfeld ein.</string>
     <string name="SYS_CAPTCHA_CALC_PART1">Bitte berechne</string>
     <string name="SYS_CAPTCHA_CALC_PART2">und zähle</string>

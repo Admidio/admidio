@@ -498,7 +498,7 @@ elseif($getMode === 6)  // Termin im iCal-Format exportieren
     $filename = $date->getValue('dat_headline');
 
     // for IE the filename must have special chars in hexadecimal
-    if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
+    if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
     {
         $filename = urlencode($filename);
     }

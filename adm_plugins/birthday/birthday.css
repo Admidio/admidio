@@ -10,9 +10,9 @@
  */
 
 #plgBirthdayNameList {
-    margin:             0px;
-    padding:            0px;
-    list-style-type:    none;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
 }
 
 /* ********************************************************** */
@@ -20,11 +20,11 @@
 /* ********************************************************** */
 
 #plgBirthdayNameHighlight {
-    color:              #53a351;
+    color: #53a351;
 }
 
 #plgBirthdayDateHighlight {
-    color:              #53a351;
+    color: #53a351;
 }
 
 /* ********************************************************** */
@@ -32,11 +32,11 @@
 /* ********************************************************** */
 
 #plgBirthdayNameHighlightAgo {
-    color:              #d84d1e;
+    color: #d84d1e;
 }
 
 #plgBirthdayDateHighlightAgo {
-    color:              #d84d1e;
+    color: #d84d1e;
 }
 
 /* ********************************************************** */
@@ -44,26 +44,26 @@
 /* ********************************************************** */
 
 #plgBirthdayNameHighlightFuture {
-    color:              #5475ff;
+    color: #5475ff;
 }
 
 #plgBirthdayDateHighlightFuture {
-    color:              #5475ff;
+    color: #5475ff;
 }
 
 #plgBirthdayNameList li {
-    display:            inline;
-    text-align:         left;
-    float:              none;       /* left : Alles in einer Zeile anzeigen */
-    overflow:           hidden;
-    padding-bottom:     8px;
-    margin-bottom:      3px;
-    border-bottom:      1px dashed #d7d7d7;
+    display: inline;
+    text-align: left;
+    float: none;       /* left : Alles in einer Zeile anzeigen */
+    overflow: hidden;
+    padding-bottom: 8px;
+    margin-bottom: 3px;
+    border-bottom: 1px dashed #d7d7d7;
 }
 
 
 
 /* Hack, da der IE mit diesem CSS nicht klar kommt */
 ul[id]#plgBirthdayNameList li {
-    display:              block;
+    display: block;
 }

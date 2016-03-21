@@ -35,9 +35,9 @@ var entryDeleted;
  * This function can be used to call a specific url and hide an html element
  * in dependence from the returned data. If the data received is "done" then
  * the element will be hidden otherwise the data will be shown in an error block.
- * @param {string} elementId        This is the id of a html element that should be hidden.
- * @param {string} url              This is the url that will be called.
- * @param {object} callbackFunction A name of a function that should be called if the return was positive.
+ * @param {string} elementId          This is the id of a html element that should be hidden.
+ * @param {string} url                This is the url that will be called.
+ * @param {object} [callbackFunction] A name of a function that should be called if the return was positive.
  */
 function callUrlHideElement(elementId, url, callbackFunction) {
     callbackFunction = typeof callbackFunction !== 'undefined' ? callbackFunction : "";
