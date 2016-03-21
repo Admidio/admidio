@@ -344,7 +344,7 @@ elseif($getMode === 2)
 
                 // in der Schleife wird geschaut ob es Scripte fuer eine Microversion (3.Versionsstelle) gibt
                 // Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
-                for($microVersion = $microVersion; $microVersion < 15; ++$microVersion)
+                for($microVersion; $microVersion < 15; ++$microVersion)
                 {
                     $version = $mainVersion.'_'.$subVersion.'_'.$microVersion;
 

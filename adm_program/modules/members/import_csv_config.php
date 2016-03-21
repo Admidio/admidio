@@ -33,7 +33,7 @@ $count_semicolon = 0;
 $count_tabulator = 0;
 
 $line = reset($_SESSION['file_lines']);
-for($i = 0; $i < count($_SESSION['file_lines']); ++$i)
+for($i = 0, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
 {
     $count = substr_count($line, ",");
     $count_comma += $count;

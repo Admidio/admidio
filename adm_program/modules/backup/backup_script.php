@@ -138,7 +138,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
     {
         echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables[$dbname]) / TABLES_PER_COL).'"><b>'.htmlentities($dbname).'</b></th></tr><tr><td nowrap valign="top">';
         $tablecounter = 0;
-        for ($t = 0; $t < count($SelectedTables[$dbname]); ++$t)
+        for ($t = 0, $tMax = count($SelectedTables[$dbname]); $t < $tMax; ++$t)
         {
             if ($tablecounter++ >= TABLES_PER_COL)
             {
@@ -159,7 +159,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
     $alltablesstructure = '';
     foreach ($SelectedTables as $dbname => $value)
     {
-        for ($t = 0; $t < count($SelectedTables[$dbname]); ++$t)
+        for ($t = 0, $tMax = count($SelectedTables[$dbname]); $t < $tMax; ++$t)
         {
             @set_time_limit(60);
             OutputInformation('statusinfo', 'Creating structure for <b>'.htmlentities($dbname.'.'.$SelectedTables[$dbname][$t]).'</b>');
@@ -348,7 +348,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
         foreach ($SelectedTables as $dbname => $value)
         {
             @set_time_limit(60);
-            for ($t = 0; $t < count($SelectedTables[$dbname]); ++$t)
+            for ($t = 0, $tMax = count($SelectedTables[$dbname]); $t < $tMax; ++$t)
             {
                 $SQLquery  = 'SELECT *';
                 $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;

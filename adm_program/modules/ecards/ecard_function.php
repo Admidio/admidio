@@ -183,7 +183,7 @@ class FunctionClass
             $matchArray[0] = array_unique($matchArray[0]);
             $matchArray[2] = array_unique($matchArray[2]);
 
-            for ($i=0; $i < count($matchArray[0]); ++$i)
+            for ($i = 0, $iMax = count($matchArray[0]); $i < $iMax; ++$i)
             {
                 // anstelle der URL muss nun noch der Server-Pfad gesetzt werden
                 $img_server_path = str_replace(THEME_PATH, THEME_SERVER_PATH, $matchArray[2][$i]);

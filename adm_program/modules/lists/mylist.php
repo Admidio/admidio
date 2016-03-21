@@ -94,7 +94,7 @@ else
     {
         $defaultColumnRows = $list->countColumns();
 
-        for($number = 1; $number <= $list->countColumns(); ++$number)
+        for($number = 1, $max = $list->countColumns(); $number <= $max; ++$number)
         {
             $column = $list->getColumnObject($number);
             if($column->getValue('lsc_usf_id') > 0)

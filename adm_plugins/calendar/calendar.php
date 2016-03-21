@@ -200,7 +200,7 @@ if($plg_ter_aktiv == 1)
     {
         // nur bestimmte Kalender anzeigen
         $sqlSyntax = ' AND cat_type = \'DAT\' AND ( ';
-        for($i = 0; $i < count($plg_kal_cat); ++$i)
+        for($i = 0, $iMax = count($plg_kal_cat); $i < $iMax; ++$i)
         {
             $sqlSyntax = $sqlSyntax. 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
         }

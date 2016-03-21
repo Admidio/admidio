@@ -144,7 +144,7 @@ if($plg_photos_show_link && $plg_max_char_per_word > 0)
     // Linktext umbrechen wenn noetig
     $words = explode(' ', $album->getValue('pho_name'));
 
-    for($i = 0; $i < count($words); ++$i)
+    for($i = 0, $iMax = count($words); $i < $iMax; ++$i)
     {
         if(strlen($words[$i]) > $plg_max_char_per_word)
         {

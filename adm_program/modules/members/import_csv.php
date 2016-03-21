@@ -68,7 +68,7 @@ if($firstRowTitle)
     $startRow = 1;
 }
 
-for($i = $startRow; $i < count($_SESSION['file_lines']); ++$i)
+for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
 {
     $user->clear();
     $columnArray = explode($_SESSION['value_separator'], $line);

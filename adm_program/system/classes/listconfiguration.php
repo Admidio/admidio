@@ -122,7 +122,7 @@ class ListConfiguration extends TableLists
             else
             {
                 // only 1 columns is deleted and following are going 1 step up
-                for($newColumnNumber = $number; $newColumnNumber < $this->countColumns(); ++$newColumnNumber)
+                for($newColumnNumber = $number, $max = $this->countColumns(); $newColumnNumber < $max; ++$newColumnNumber)
                 {
                     $newColumn = $this->columns[$newColumnNumber];
                     $oldColumn = $this->columns[$newColumnNumber+1];

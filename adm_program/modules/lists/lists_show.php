@@ -394,7 +394,7 @@ else
 }
 
 // headlines for columns
-for ($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
+for ($columnNumber = 1, $iMax = $list->countColumns(); $columnNumber <= $iMax; ++$columnNumber)
 {
     $column = $list->getColumnObject($columnNumber);
 
@@ -482,7 +482,7 @@ elseif ($getMode === 'pdf')
     $table->addRow();
 
     // Write valid column headings
-    for ($column = 0; $column < count($arrValidColumns); ++$column)
+    for ($column = 0, $max = count($arrValidColumns); $column < $max; ++$column)
     {
         $table->addColumn($arrValidColumns[$column], array('style' => 'text-align: '.$columnAlign[$column].';font-size:14;background-color:#C7C7C7;'), 'th');
     }
@@ -538,7 +538,7 @@ foreach ($membersList as $member)
     $columnValues = array();
 
     // Fields of recordset
-    for ($columnNumber = 1; $columnNumber <= $list->countColumns(); ++$columnNumber)
+    for ($columnNumber = 1, $max = $list->countColumns(); $columnNumber <= $max; ++$columnNumber)
     {
         $column = $list->getColumnObject($columnNumber);
 
