@@ -200,7 +200,7 @@ class FunctionClass
                 if(strpos($matchArray[2][$i], 'photo_show.php') !== false)
                 {
                     $img_name = 'picture.'. $img_type;
-                    $img_name_intern = substr(md5(uniqid($img_name.time())), 0, 8). '.'. $img_type;
+                    $img_name_intern = substr(md5(uniqid($img_name.time(), true)), 0, 8). '.'. $img_type;
                     $img_server_path = SERVER_PATH. '/adm_my_files/photos/'. $img_name_intern;
                     $img_photo_path  = $img_server_path;
 
@@ -212,7 +212,7 @@ class FunctionClass
                 // Bild als Anhang an die Mail haengen
                 if($img_name !== 'none.jpg' && $img_name !== '')
                 {
-                    $uid = md5(uniqid($img_name.time()));
+                    $uid = md5(uniqid($img_name.time(), true));
                     try
                     {
                         $email->AddEmbeddedImage($img_server_path, $uid, $img_name, $encoding = 'base64', 'image/'.$img_type);

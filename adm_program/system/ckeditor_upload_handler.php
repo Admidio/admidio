@@ -73,7 +73,7 @@ try
                 // if file exists than create a random number and append it to the filename
                 $serverUrl = $myFilesProfilePhotos->getServerPath() . '/' .
                     substr($localFile, 0, strrpos($localFile, '.')) . '_' .
-                    rand().substr($localFile, strrpos($localFile, '.'));
+                    mt_rand().substr($localFile, strrpos($localFile, '.'));
             }
             $htmlUrl = $g_root_path.'/adm_program/system/show_image.php?module='.$folderName.'&file='.$localFile;
             move_uploaded_file($_FILES['upload']['tmp_name'], $serverUrl);

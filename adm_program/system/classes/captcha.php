@@ -131,14 +131,14 @@ class Captcha
     public function getCaptchaCalc($textPart1, $textPart2, $textPart3_third, $textPart3_half, $textPart4)
     {
         // Zuweisung der Einstiegsvariablen
-        $number = array(rand(40, 60), rand(20, 40), rand(1, 20));
+        $number = array(mt_rand(40, 60), mt_rand(20, 40), mt_rand(1, 20));
         $operator_value = array();
         $result = $number[0];
 
         // Rechenaufgabe erstellen
         for($count = 1; $count <= 2; ++$count)
         {
-            $operator = rand(1, 2);
+            $operator = mt_rand(1, 2);
             if($operator === 1)
             {
                 $result = $result + $number[$count];
@@ -160,8 +160,8 @@ class Captcha
         $ready = 0;
         while($ready < 1)
         {
-            $number[3] = rand(20, 100);
-            if(is_int($number[3]/3))
+            $number[3] = mt_rand(20, 100);
+            if(is_int($number[3] / 3))
             {
                 $operator_value[2] = $textPart3_third;
                 $result = $result + ($number[3]/3);
@@ -189,12 +189,12 @@ class Captcha
 
         // Hier wird die Anzahl der Captcha-Zeichen festgelegt
         // (das Captcha soll zwischen 4 und 6 Zeichen beinhalten)
-        $this->charCount = rand(4, 6);
+        $this->charCount = mt_rand(4, 6);
 
         $this->captchaCode = '';
         for ($i = 0; $i < $this->charCount; ++$i)
         {
-            $this->captchaCode = $this->captchaCode . $this->allowedChars{rand(0, strlen($this->allowedChars)-1)};
+            $this->captchaCode .= $this->allowedChars{mt_rand(0, strlen($this->allowedChars)-1)};
         }
 
         // hier wird der Code jetzt in der Session gespeichert...
