@@ -93,18 +93,18 @@ if ($gValidLogin && $getMsgType === 'PM' && count($gCurrentUser->getAllVisibleRo
                    AND LAST_NAME.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
              LEFT JOIN '.TBL_USER_DATA.' FIRST_NAME
                     ON FIRST_NAME.usd_usr_id = usr_id
-                   AND FIRST_NAME.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). "
-                 WHERE rol_id IN (".implode(',', $gCurrentUser->getAllVisibleRoles()).")
-                   AND cat_name_intern <> 'CONFIRMATION_OF_PARTICIPATION'
-                   AND (  cat_org_id = ". $gCurrentOrganization->getValue('org_id')."
+                   AND FIRST_NAME.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+                 WHERE rol_id IN ('.implode(',', $gCurrentUser->getAllVisibleRoles()).')
+                   AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL )
-                   AND mem_begin <= '".DATE_NOW."'
-                   AND mem_end   >= '".DATE_NOW."'
-                   AND usr_id <> ".$gCurrentUser->getValue('usr_id')."
+                   AND mem_begin <= \''.DATE_NOW.'\'
+                   AND mem_end   >= \''.DATE_NOW.'\'
+                   AND usr_id <> '.$gCurrentUser->getValue('usr_id').'
                    AND usr_valid  = 1
                    AND usr_login_name IS NOT NULL
               GROUP BY usr_id, LAST_NAME.usd_value, FIRST_NAME.usd_value, usr_login_name
-              ORDER BY LAST_NAME.usd_value, FIRST_NAME.usd_value";
+              ORDER BY LAST_NAME.usd_value, FIRST_NAME.usd_value';
 
     $dropStatement = $gDb->query($sql);
 

@@ -35,9 +35,9 @@ $count_tabulator = 0;
 $line = reset($_SESSION['file_lines']);
 for($i = 0, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
 {
-    $count = substr_count($line, ",");
+    $count = substr_count($line, ',');
     $count_comma += $count;
-    $count = substr_count($line, ";");
+    $count = substr_count($line, ';');
     $count_semicolon += $count;
     $count = substr_count($line, "\t");
     $count_tabulator += $count;
@@ -47,7 +47,7 @@ for($i = 0, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
 
 if($count_semicolon > $count_comma && $count_semicolon > $count_tabulator)
 {
-    $_SESSION['value_separator'] = ";";
+    $_SESSION['value_separator'] = ';';
 }
 elseif($count_tabulator > $count_semicolon && $count_tabulator > $count_comma)
 {
@@ -55,7 +55,7 @@ elseif($count_tabulator > $count_semicolon && $count_tabulator > $count_comma)
 }
 else
 {
-    $_SESSION['value_separator'] = ",";
+    $_SESSION['value_separator'] = ',';
 }
 
 if(isset($_SESSION['import_csv_request']))

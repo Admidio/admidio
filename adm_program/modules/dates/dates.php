@@ -362,7 +362,7 @@ else
 
                 $outputLinkLocation = '
                     <a href="'.$location_url.'" target="_blank" title="'.$gL10n->get('DAT_SHOW_ON_MAP').'"/>
-                        <strong>'.$date->getValue("dat_location").'</strong>
+                        <strong>'.$date->getValue('dat_location').'</strong>
                     </a>';
 
                 // if valid login and enough information about address exist - calculate the route

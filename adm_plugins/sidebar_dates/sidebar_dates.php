@@ -131,7 +131,7 @@ if($plgDatesResult['numResults'] > 0)
         }
 
         // ?ber $plg_link_url wird die Verbindung zum Date-Modul hergestellt.
-        echo $plg_html_end_date. '<br /><a class="'. $plg_link_class. '" href="'. $plg_link_url. '?view_mode=html&amp;view=detail&amp;id='. $plg_date->getValue("dat_id"). '" target="'. $plg_link_target. '">';
+        echo $plg_html_end_date. '<br /><a class="'. $plg_link_class. '" href="'. $plg_link_url. '?view_mode=html&amp;view=detail&amp;id='. $plg_date->getValue('dat_id'). '" target="'. $plg_link_target. '">';
 
         if($plg_max_char_per_word > 0)
         {
@@ -172,7 +172,7 @@ if($plgDatesResult['numResults'] > 0)
 
             echo '<div>'.$textPrev.'
             <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
-                href="'.$plg_link_url.'?view_mode=html&amp;view=detail&amp;id='. $plg_date->getValue("dat_id"). '"><span
+                href="'.$plg_link_url.'?view_mode=html&amp;view=detail&amp;id='. $plg_date->getValue('dat_id'). '"><span
                 class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_DATES_MORE').'</a></div>';
         }
 

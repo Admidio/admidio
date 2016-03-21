@@ -41,9 +41,9 @@ $(function() {
 switch($postFunction)
 {
     case 'update':
-        $sql = "SELECT MAX(msg_part_id) as max_id
-          FROM ". TBL_MESSAGES."
-          where msg_converation_id = 0";
+        $sql = 'SELECT MAX(msg_part_id) as max_id
+                  FROM '.TBL_MESSAGES.'
+                 WHERE msg_converation_id = 0';
 
         $statement = $gDb->query($sql);
         $row = $statement->fetch();
@@ -58,10 +58,13 @@ switch($postFunction)
         {
             $log['test'] = '100';
 
-            $sql = "DELETE FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT' and msg_converation_id = 0 and msg_part_id <= 50";
+            $sql = 'DELETE FROM '.TBL_MESSAGES.'
+                     WHERE msg_type = \'CHAT\' AND msg_converation_id = 0 AND msg_part_id <= 50';
             $gDb->query($sql);
 
-            $sql = "UPDATE ". TBL_MESSAGES. " SET msg_part_id = msg_part_id - 50 WHERE msg_type = 'CHAT' and msg_converation_id = 0";
+            $sql = 'UPDATE '.TBL_MESSAGES.'
+                       SET msg_part_id = msg_part_id - 50
+                     WHERE msg_type = \'CHAT\' AND msg_converation_id = 0';
             $gDb->query($sql);
 
             $postLines = $postLines - 50;
@@ -77,17 +80,17 @@ switch($postFunction)
         {
             $text = array();
 
-            $sql = "SELECT msg_part_id, msg_subject, msg_message, msg_timestamp
-              FROM ". TBL_MESSAGES. "
-             WHERE msg_type = 'CHAT'
-               AND msg_converation_id  = 0
-               AND msg_part_id  > ".$postLines. "
-          ORDER BY msg_part_id";
+            $sql = 'SELECT msg_part_id, msg_subject, msg_message, msg_timestamp
+                      FROM '.TBL_MESSAGES.'
+                     WHERE msg_type = \'CHAT\'
+                       AND msg_converation_id  = 0
+                       AND msg_part_id > '.$postLines.'
+                  ORDER BY msg_part_id';
 
             $statement = $gDb->query($sql);
             while($row = $statement->fetch())
             {
-                $text[] = '<time>'.date("d.m - H:i", strtotime($row['msg_timestamp'])).'</time><span>'.$row['msg_subject'].'</span>'.$row['msg_message'];
+                $text[] = '<time>'.date('d.m - H:i', strtotime($row['msg_timestamp'])).'</time><span>'.$row['msg_subject'].'</span>'.$row['msg_message'];
             }
 
             $log['state'] = $MsgId;
@@ -103,11 +106,11 @@ switch($postFunction)
             {
                 $postMessage = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
             }
-            fwrite(fopen('chat.txt', 'a'), "<span>". $postNickname . "</span>" . $postMessage = str_replace("\n", " ", $postMessage) . "\n");
+            fwrite(fopen('chat.txt', 'a'), '<span>'. $postNickname . '</span>' . $postMessage = str_replace("\n", ' ', $postMessage) . "\n");
         }
-        $sql = "SELECT MAX(msg_part_id) as max_id
-          FROM ". TBL_MESSAGES."
-          where msg_converation_id = 0";
+        $sql = 'SELECT MAX(msg_part_id) as max_id
+                  FROM '. TBL_MESSAGES.'
+                 WHERE msg_converation_id = 0';
 
         $statement = $gDb->query($sql);
         $row = $statement->fetch();
@@ -120,7 +123,8 @@ switch($postFunction)
         break;
 
     case 'delete':
-        $sql = "DELETE FROM ". TBL_MESSAGES. " WHERE msg_type = 'CHAT' and msg_converation_id = 0";
+        $sql = 'DELETE FROM '.TBL_MESSAGES.'
+                 WHERE msg_type = \'CHAT\' AND msg_converation_id = 0';
         $gDb->query($sql);
         break;
 }

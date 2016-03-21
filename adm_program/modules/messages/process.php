@@ -40,9 +40,9 @@ $modulemessages = new ModuleMessages();
 // find ID of the admidio Chat
 $msg_id = $modulemessages->msgGetChatId();
 
-$sql = "SELECT MAX(msc_part_id) as max_id
-          FROM ". TBL_MESSAGES_CONTENT."
-          where msc_msg_id = '".$msg_id."'";
+$sql = 'SELECT MAX(msc_part_id) as max_id
+          FROM '.TBL_MESSAGES_CONTENT.'
+         WHERE msc_msg_id = \''.$msg_id.'\'';
 
 $statement = $gDb->query($sql);
 $row = $statement->fetch();
@@ -64,10 +64,13 @@ switch($postFunction)
         {
             $log['test'] = '100';
 
-            $sql = "DELETE FROM ". TBL_MESSAGES_CONTENT. " WHERE msc_msg_id = '".$msg_id."' and msc_part_id <= 50";
+            $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
+                     WHERE msc_msg_id = \''.$msg_id.'\' AND msc_part_id <= 50';
             $gDb->query($sql);
 
-            $sql = "UPDATE ". TBL_MESSAGES_CONTENT. " SET msc_part_id = msc_part_id - 50 WHERE msc_msg_id = '".$msg_id."'";
+            $sql = 'UPDATE '.TBL_MESSAGES_CONTENT.'
+                       SET msc_part_id = msc_part_id - 50
+                     WHERE msc_msg_id = \''.$msg_id.'\'';
             $gDb->query($sql);
 
             $postLines = $postLines - 50;
@@ -83,11 +86,11 @@ switch($postFunction)
         {
             $text = array();
 
-            $sql = "SELECT msc_part_id, msc_usr_id, msc_message, msc_timestamp
-              FROM ". TBL_MESSAGES_CONTENT. "
-             WHERE msc_msg_id  = '".$msg_id."'
-               AND msc_part_id > ".$postLines. "
-          ORDER BY msc_part_id";
+            $sql = 'SELECT msc_part_id, msc_usr_id, msc_message, msc_timestamp
+                      FROM '.TBL_MESSAGES_CONTENT.'
+                     WHERE msc_msg_id  = \''.$msg_id.'\'
+                       AND msc_part_id > '.$postLines. '
+                  ORDER BY msc_part_id';
 
             $statement = $gDb->query($sql);
             while($row = $statement->fetch())
@@ -130,7 +133,7 @@ switch($postFunction)
         break;
 
     case 'delete':
-        $sql = "DELETE FROM ". TBL_MESSAGES_CONTENT. " WHERE msc_msg_id = '".$msg_id."'";
+        $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.' WHERE msc_msg_id = \''.$msg_id.'\'';
         $gDb->query($sql);
         break;
 }

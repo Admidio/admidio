@@ -182,7 +182,7 @@ if($getPhotoNr == null)
                 $path = $albumFolder.'/'.$i.'.jpg';
                 if(file_exists($path))
                 {
-                    $zip->addFromString($photo_album_name."/".basename($path),  file_get_contents($path));
+                    $zip->addFromString($photo_album_name.'/'.basename($path),  file_get_contents($path));
                 }
             }
         }

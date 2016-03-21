@@ -93,11 +93,11 @@ else
 
         if($plg_max_char_per_word > 0)
         {
-            $plg_new_headline = "";
+            $plg_new_headline = '';
             unset($plg_words);
 
             // Woerter unterbrechen, wenn sie zu lang sind
-            $plg_words = explode(" ", $plg_announcement->getValue('ann_headline'));
+            $plg_words = explode(' ', $plg_announcement->getValue('ann_headline'));
 
             foreach($plg_words as $plg_key => $plg_value)
             {

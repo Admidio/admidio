@@ -125,29 +125,29 @@ class FunctionClass
         $pregRepArray = array();
 
         // Hier wird der Pfad zum Admidio Verzeichnis ersetzt
-        $pregRepArray["/<%g_root_path%>/"]                = $g_root_path;
+        $pregRepArray['/<%g_root_path%>/']                = $g_root_path;
         // Hier wird der Pfad zum aktuellen Template Verzeichnis ersetzt
-        $pregRepArray["/<%theme_root_path%>/"]            = THEME_PATH;
+        $pregRepArray['/<%theme_root_path%>/']            = THEME_PATH;
         // Hier wird der Sender Name, Email und Id ersetzt
-        $pregRepArray["/<%ecard_sender_id%>/"]            = $gCurrentUser->getValue('usr_id');
-        $pregRepArray["/<%ecard_sender_email%>/"]         = $gCurrentUser->getValue('EMAIL');
-        $pregRepArray["/<%ecard_sender_name%>/"]          = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+        $pregRepArray['/<%ecard_sender_id%>/']            = $gCurrentUser->getValue('usr_id');
+        $pregRepArray['/<%ecard_sender_email%>/']         = $gCurrentUser->getValue('EMAIL');
+        $pregRepArray['/<%ecard_sender_name%>/']          = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
         // Hier wird der Empfaenger Name und Email ersetzt
-        $pregRepArray["/<%ecard_reciepient_email%>/"]     = htmlentities($recipientEmail, ENT_COMPAT, 'UTF-8');
-        $pregRepArray["/<%ecard_reciepient_name%>/"]      = htmlentities($recipientName, ENT_COMPAT, 'UTF-8');
+        $pregRepArray['/<%ecard_reciepient_email%>/']     = htmlentities($recipientEmail, ENT_COMPAT, 'UTF-8');
+        $pregRepArray['/<%ecard_reciepient_name%>/']      = htmlentities($recipientName, ENT_COMPAT, 'UTF-8');
         // Hier wird der Bildname ersetzt
-        $pregRepArray["/<%ecard_image_name%>/"]           = $imageName;
+        $pregRepArray['/<%ecard_image_name%>/']           = $imageName;
 
-        $pregRepArray["/<%ecard_greeting_card_from%>/"]   = htmlentities($this->greetingCardFrom, ENT_COMPAT, 'UTF-8');
-        $pregRepArray["/<%ecard_greeting_card_string%>/"] = htmlentities($this->greetingCardString, ENT_COMPAT, 'UTF-8');
-        $pregRepArray["/<%ecard_to_string%>/"]            = htmlentities($this->sendToString, ENT_COMPAT, 'UTF-8');
-        $pregRepArray["/<%ecard_email_string%>/"]         = htmlentities($this->emailString, ENT_COMPAT, 'UTF-8');
+        $pregRepArray['/<%ecard_greeting_card_from%>/']   = htmlentities($this->greetingCardFrom, ENT_COMPAT, 'UTF-8');
+        $pregRepArray['/<%ecard_greeting_card_string%>/'] = htmlentities($this->greetingCardString, ENT_COMPAT, 'UTF-8');
+        $pregRepArray['/<%ecard_to_string%>/']            = htmlentities($this->sendToString, ENT_COMPAT, 'UTF-8');
+        $pregRepArray['/<%ecard_email_string%>/']         = htmlentities($this->emailString, ENT_COMPAT, 'UTF-8');
 
         // make html in description secure
         $ecardMessage = htmLawed(stripslashes($ecardMessage), array('safe' => 1));
 
         // Hier wird die Nachricht ersetzt
-        $pregRepArray["/<%ecard_message%>/"]              = $ecardMessage;
+        $pregRepArray['/<%ecard_message%>/']              = $ecardMessage;
 
         $ecard_data = preg_replace(array_keys($pregRepArray), array_values($pregRepArray), $ecard_data);
 
@@ -176,7 +176,7 @@ class FunctionClass
         $email->addRecipient($recipientEmail, $recipientName);
 
         // alle Bilder werden aus dem Template herausgeholt, damit diese als Anhang verschickt werden koennen
-        if (preg_match_all("/(<img.*src=\")(.*)(\".*>)/Uim", $ecardHtmlData, $matchArray))
+        if (preg_match_all('/(<img.*src=")(.*)(".*>)/Uim', $ecardHtmlData, $matchArray))
         {
             //$matchArray[0] = $this->deleteDoubleEntries($matchArray[0]);
             //$matchArray[2] = $this->deleteDoubleEntries($matchArray[2]);
