@@ -59,7 +59,7 @@ $fileSize   = filesize($completePath);
 $filename   = $file->getValue('fil_name');
 
 // for IE the filename must have special chars in hexadecimal
-if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
+if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
 {
     $filename = urlencode($filename);
 }
