@@ -457,8 +457,7 @@ class HtmlTableBasic extends HtmlElement {
     {
         $this->closeParentElement('tr');
         $this->closeParentElement('tbody');
-        $table = '<div class="table-responsive">'.$this->getHtmlElement().'</div>';
-        return $table;
+        return '<div class="table-responsive">'.$this->getHtmlElement().'</div>';
     }
 
     /**

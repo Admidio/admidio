@@ -516,7 +516,7 @@ foreach ($membersList as $member)
 
             if ($getMode === 'print' || $getMode === 'pdf')
             {
-                $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), 1, ($list->countColumns() + 1));
+                $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), 1, $list->countColumns() + 1);
             }
             $lastGroupHead = $member['mem_leader'];
         }
@@ -622,7 +622,8 @@ foreach ($membersList as $member)
                     if ($content == 1)
                     {
                         $content = $gL10n->get('SYS_YES');
-                    }else
+                    }
+                    else
                     {
                         $content = $gL10n->get('SYS_NO');
                     }

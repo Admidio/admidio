@@ -277,8 +277,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 user_fields['. $i. ']["usf_value_list"] = new Object();';
 
         // get avaiable values for current field type and push to array
-        if($field->getValue('usf_type') === 'DROPDOWN'
-            || $field->getValue('usf_type') === 'RADIO_BUTTON')
+        if($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'RADIO_BUTTON')
         {
             foreach($field->getValue('usf_value_list', 'text') as $key => $value)
             {

@@ -212,7 +212,7 @@ class Image
     public function rotate($direction = 'right')
     {
         // nur bei gueltigen Uebergaben weiterarbeiten
-        if(($direction === 'left' || $direction === 'right'))
+        if($direction === 'left' || $direction === 'right')
         {
             // Erzeugung neues Bild
             $photo_rotate = imagecreatetruecolor($this->imageHeight, $this->imageWidth);

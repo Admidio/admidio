@@ -191,9 +191,7 @@ class ModuleMenu
     public function getPosition($id)
     {
         $keys = array_keys($this->items);
-        $key = array_search($id, $keys, true);
-
-        return $key;
+        return array_search($id, $keys, true);
     }
 
     /**

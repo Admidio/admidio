@@ -143,7 +143,7 @@ if($gValidLogin)
         }
     }
 
-    if (($gCurrentUser->getValue('usr_last_login') === ''))
+    if ($gCurrentUser->getValue('usr_last_login') === '')
     {
         $lastLogin = '---';
     }
@@ -244,15 +244,13 @@ else
         $linkText = $gL10n->get('SYS_LOGIN_PROBLEMS');
 
         // Link bei Loginproblemen
-        if($gPreferences['enable_password_recovery'] == 1
-        && $gPreferences['enable_system_mails'] == 1)
+        if($gPreferences['enable_password_recovery'] == 1 && $gPreferences['enable_system_mails'] == 1)
         {
             // neues Passwort zusenden
             $linkUrl  = $g_root_path.'/adm_program/system/lost_password.php';
             $linkText = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
         }
-        elseif($gPreferences['enable_mail_module'] == 1
-        && $roleWebmaster->getValue('rol_mail_this_role') == 3)
+        elseif($gPreferences['enable_mail_module'] == 1 && $roleWebmaster->getValue('rol_mail_this_role') == 3)
         {
             // Mailmodul aufrufen mit Webmaster als Ansprechpartner
             $linkUrl = $g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='. $roleWebmaster->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');

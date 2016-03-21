@@ -111,7 +111,7 @@ if($getMode === 'show_list')
             '<a href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '"><img
                 src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" />'. $old_backup_file. '</a>',
             date($gPreferences['system_date'].' '.$gPreferences['system_time'], filemtime($backupabsolutepath.$old_backup_file)),
-            round(filesize($backupabsolutepath.$old_backup_file)/1024). ' kB',
+            round(filesize($backupabsolutepath.$old_backup_file) / 1024). ' kB',
             '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                 href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
                 $key.'&amp;name='.urlencode($old_backup_file).'&amp;database_id='.$old_backup_file.'"><img

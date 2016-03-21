@@ -113,7 +113,7 @@ while ($row = $statement->fetch())
         $parents = $adm_photo_parent['pho_name'].' > '.$parents;
 
         // Elternveranst
-        $pho_parent_id=$adm_photo_parent['pho_pho_id_parent'];
+        $pho_parent_id = $adm_photo_parent['pho_pho_id_parent'];
     }
 
     $title   = $parents.$photo_album->getValue('pho_name');

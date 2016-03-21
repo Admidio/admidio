@@ -100,7 +100,7 @@ if($gCurrentUser->isWebmaster())
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
-$previousCategoryId   = 0;
+$previousCategoryId = 0;
 
 // Get Lists
 $getStart      = $lists->getStartElement();

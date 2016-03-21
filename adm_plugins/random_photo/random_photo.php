@@ -113,7 +113,7 @@ while(!file_exists($picpath) && $i < 20 && $albumStatement->rowCount() > 0)
     $album->setArray($albumList[mt_rand(0, $albumStatement->rowCount()-1)]);
 
     // Falls gewuensch Bild per Zufall auswaehlen
-    if($plg_photos_picnr ==0)
+    if($plg_photos_picnr == 0)
     {
         $picnr = mt_rand(1, $album->getValue('pho_quantity'));
     }
@@ -136,8 +136,8 @@ if(!file_exists($picpath))
 $bildgroesse = getimagesize($picpath);
 
 // Popupfenstergröße
-$popup_height = $gPreferences['photo_show_height']+210;
-$popup_width  = $gPreferences['photo_show_width']+70;
+$popup_height = $gPreferences['photo_show_height'] + 210;
+$popup_width  = $gPreferences['photo_show_width'] + 70;
 
 if($plg_photos_show_link && $plg_max_char_per_word > 0)
 {

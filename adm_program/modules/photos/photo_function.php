@@ -69,7 +69,7 @@ function tryDelete($path)
         chmod($path, 0777);
         unlink($path);
     }
-};
+}
 
 /**
  * @param string $path
@@ -82,7 +82,7 @@ function tryRename($path, $newPath)
         chmod($path, 0777);
         rename($path, $newPath);
     }
-};
+}
 
 /**
  * Loeschen eines Bildes
@@ -139,7 +139,7 @@ function deletePhoto($pho_id, $pic_nr)
         $photo_album->setValue('pho_quantity', $photo_album->getValue('pho_quantity')-1);
         $photo_album->save();
     }
-};
+}
 
 // Foto um 90° drehen
 if($getJob === 'rotate')

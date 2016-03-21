@@ -58,12 +58,9 @@ if($getMembersShowAll)
     $getFilterRoleId = 0;
 }
 
-if($getFilterRoleId > 0)
+if($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId))
 {
-    if(!$gCurrentUser->hasRightViewRole($getFilterRoleId))
-    {
-        $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
-    }
+    $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
 }
 
 if($getMode === 'assign')

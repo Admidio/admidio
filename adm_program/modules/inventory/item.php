@@ -186,8 +186,7 @@ $page->addHtml('
             foreach($gInventoryFields->mInventoryFields as $field)
             {
                 // nur Felder der Stammdaten anzeigen
-                if($field->getValue('cat_name_intern') === 'MASTER_DATA'
-                && $field->getValue('inv_hidden') == 0)
+                if($field->getValue('cat_name_intern') === 'MASTER_DATA' && $field->getValue('inv_hidden') == 0)
                 {
                     switch($field->getValue('inf_name_intern'))
                     {

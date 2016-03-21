@@ -286,7 +286,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         }
         else
         {
-            $datum = $_POST['date_from']. ' - '.$_POST['date_to'];
+            $datum = $_POST['date_from'] . ' - ' . $_POST['date_to'];
         }
 
         if($_POST['dat_all_day'] != 0)

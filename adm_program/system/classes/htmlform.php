@@ -1047,7 +1047,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             $this->addHtml('<label for="'.($id.'_0').'" class="radio-inline">');
-            $this->addSimpleInput('radio', $id, ($id.'_0'), null, $attributes);
+            $this->addSimpleInput('radio', $id, $id.'_0', null, $attributes);
             $this->addHtml('---</label>');
         }
 
@@ -1062,7 +1062,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             $this->addHtml('<label for="'.($id.'_'.$key).'" class="radio-inline">');
-            $this->addSimpleInput('radio', $id, ($id.'_'.$key), $key, $attributes);
+            $this->addSimpleInput('radio', $id, $id.'_'.$key, $key, $attributes);
             $this->addHtml($value.'</label>');
         }
 

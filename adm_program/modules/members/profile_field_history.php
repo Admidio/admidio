@@ -42,7 +42,7 @@ else
 }
 
 // Initialize local parameteres
-$sqlConditions  = '';
+$sqlConditions = '';
 
 // if profile log is activated and current user is allowed to edit users
 // then the profile field history will be shown otherwise show error

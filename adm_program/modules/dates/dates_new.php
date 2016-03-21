@@ -95,8 +95,8 @@ else
     if($getDateId === 0)
     {
         // bei neuem Termin Datum mit aktuellen Daten vorbelegen
-        $date->setValue('dat_begin', date('Y-m-d H:00:00', time()+3600));
-        $date->setValue('dat_end', date('Y-m-d H:00:00', time()+7200));
+        $date->setValue('dat_begin', date('Y-m-d H:00:00', time() + 60 * 60 * 1));
+        $date->setValue('dat_end', date('Y-m-d H:00:00', time() + 60 * 60 * 2));
 
         // a new event will be visible for all users per default
         $date->setVisibleRoles(array('0'));

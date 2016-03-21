@@ -72,8 +72,8 @@ if(isset($_SESSION['import_csv_request']))
 else
 {
     $form_values['first_row'] = 1;
-    $form_values['import_coding']    = 'iso-8859-1';
-    $form_values['import_role_id']   = 0;
+    $form_values['import_coding']  = 'iso-8859-1';
+    $form_values['import_role_id'] = 0;
 }
 
 // create html page object
