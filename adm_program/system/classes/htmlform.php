@@ -378,7 +378,7 @@ class HtmlForm extends HtmlFormBasic
 
         if($optionsAll['helpTextIdLabel'] !== '')
         {
-            $htmlHelpIcon = $this->getHelpTextIcon($optionsAll['helpTextIdLabel']);
+            $htmlHelpIcon = self::getHelpTextIcon($optionsAll['helpTextIdLabel']);
         }
 
         // now create html for the field
@@ -1840,7 +1840,7 @@ class HtmlForm extends HtmlFormBasic
 
         if($helpTextId !== '')
         {
-            $htmlHelpIcon = $this->getHelpTextIcon($helpTextId);
+            $htmlHelpIcon = self::getHelpTextIcon($helpTextId);
         }
 
         // add label element
