@@ -86,9 +86,10 @@ class FunctionClass
      * Diese Funktion ersetzt alle im Template enthaltenen Platzhalter durch die dementsprechenden Informationen
      * @param string $imageName
      * @param string $ecardMessage
-     * @param        $ecard_data     geparste Information von dem Grußkarten Template
+     * @param string $ecard_data     geparste Information von dem Grußkarten Template
      * @param string $recipientName  der Name des Empfaengers
      * @param string $recipientEmail die Email des Empfaengers
+     * @return string
      *
      * Ersetzt werden folgende Platzhalter
      *     Admidio Pfad:           <%g_root_path%>
@@ -157,10 +158,11 @@ class FunctionClass
      * Diese Funktion ruft die Mail Klasse auf und uebergibt ihr die zu sendenden Daten
      * @param string $senderName
      * @param string $senderEmail
-     * @param        $ecardHtmlData   geparste Daten vom Template
+     * @param string $ecardHtmlData   geparste Daten vom Template
      * @param string $recipientName   der Name des Empfaengers
      * @param string $recipientEmail  die Email des Empfaengers
      * @param string $photoServerPath der Pfad wo die Bilder in der Grußkarte am Server liegen
+     * @return bool|string
      */
     public function sendEcard($senderName, $senderEmail, $ecardHtmlData, $recipientName, $recipientEmail, $photoServerPath)
     {

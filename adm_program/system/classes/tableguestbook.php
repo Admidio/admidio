@@ -53,7 +53,7 @@ class TableGuestbook extends TableAccess
      * @param string $columnName The name of the database column whose value should be read
      * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
      *                           For text columns the format can be @b database that would return the original database value without any transformations
-     * @return Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *         If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
