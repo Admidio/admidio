@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * This class is deprecated and should not be used anymore. The class Users should be used instead.
- +
+ *
  ***********************************************************************************************
  */
 
