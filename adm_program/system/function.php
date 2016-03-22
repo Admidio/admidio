@@ -721,29 +721,6 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
 }
 
 /**
- * Returns the extension of a given filename
- * @param string $filename given filename
- * @return string Returns the extension including "."
- * @deprecated use pathinfo($filename, PATHINFO_EXTENSION) instead
- *             important: return extension without "."
- */
-function admFuncGetFilenameExtension($filename)
-{
-    return strtolower(strrchr($filename, '.'));
-}
-
-/**
- * Returns the name of a given filename without extension
- * @param string $filename given filename
- * @return string Returns name without extension
- * @deprecated use pathinfo($filename, PATHINFO_FILENAME) instead
- */
-function admFuncGetFilenameWithoutExtension($filename)
-{
-    return str_replace(strrchr($filename, '.'), '', $filename);
-}
-
-/**
  * Search all files or directories in the specified directory.
  * @param string $directory  The directory where the files or directories should be searched.
  * @param string $searchType This could be @b file, @b dir, @b both or @b all and represent
