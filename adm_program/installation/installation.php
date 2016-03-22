@@ -590,7 +590,7 @@ elseif($getMode === 8) // Start installation
 
     // create a hidden system user for internal use
     // all recordsets created by installation will get the create id of the system user
-    $gCurrentUser = new TableUsers($db);
+    $gCurrentUser = new TableAccess($db, TBL_USERS, 'usr');
     $gCurrentUser->setValue('usr_login_name', $gL10n->get('SYS_SYSTEM'));
     $gCurrentUser->setValue('usr_valid', '0');
     $gCurrentUser->setValue('usr_timestamp_create', DATETIME_NOW);
@@ -693,7 +693,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     $gCurrentOrganization->save();
 
     // create user webmaster and assign roles
-    $webmaster = new TableUsers($db);
+    $webmaster = new User($db);
     $webmaster->setValue('usr_login_name', $_SESSION['user_login']);
     $webmaster->setPassword($_SESSION['user_password']);
     $webmaster->setValue('usr_usr_id_create', $gCurrentUser->getValue('usr_id'));

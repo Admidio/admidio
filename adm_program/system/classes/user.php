@@ -32,7 +32,7 @@
  *                        Rolle "Webmaster" ist
  *
  *****************************************************************************/
-class User extends TableUsers
+class User extends TableAccess
 {
     protected $webmaster;
 
@@ -57,15 +57,19 @@ class User extends TableUsers
      * @param int    $userId     The id of the user who should be loaded. If id isn't set than an empty object with
      *                           no specific user is created.
      */
-    public function __construct(&$database, $userFields, $userId = 0)
+    public function __construct(&$database, $userFields = '', $userId = 0)
     {
         global $gCurrentOrganization;
 
-        $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
-        $this->mProfileFieldsData->setDatabase($database);
+        if($userFields !== '')
+        {
+            $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
+            $this->mProfileFieldsData->setDatabase($database);
+        }
 
         $this->organizationId = $gCurrentOrganization->getValue('org_id');
-        parent::__construct($database, $userId);
+
+        parent::__construct($database, TBL_USERS, 'usr', $userId);
     }
 
     /**
@@ -419,8 +423,15 @@ class User extends TableUsers
     {
         parent::clear();
 
-        // die Daten der Profilfelder werden geloescht, die Struktur bleibt
-        $this->mProfileFieldsData->clearUserData();
+        // new user should be valid (except registration)
+        $this->setValue('usr_valid', 1);
+        $this->columnsValueChanged = false;
+
+        if(is_object($this->mProfileFieldsData))
+        {
+            // data of all profile fields will be deleted, the internal structure will not be destroyed
+            $this->mProfileFieldsData->clearUserData();
+        }
 
         $this->webmaster = 0;
 
@@ -444,6 +455,167 @@ class User extends TableUsers
         {
             return false;
         }
+    }
+
+    /**
+     * Deletes the selected user of the table and all the many references in other tables.
+     * After that the class will be initialize.
+     * @return true|void @b true if no error occurred
+     */
+    public function delete()
+    {
+        global $gCurrentUser;
+
+        $this->db->startTransaction();
+
+        $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_usr_id_create = NULL
+                 WHERE ann_usr_id_create = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_usr_id_change = NULL
+                 WHERE ann_usr_id_change = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_DATES.' SET dat_usr_id_create = NULL
+                 WHERE dat_usr_id_create = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_DATES.' SET dat_usr_id_change = NULL
+                 WHERE dat_usr_id_change = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_FOLDERS.' SET fol_usr_id = NULL
+                 WHERE fol_usr_id = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_FILES.' SET fil_usr_id = NULL
+                 WHERE fil_usr_id = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_usr_id_create = NULL
+                 WHERE gbo_usr_id_create = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_usr_id_change = NULL
+                 WHERE gbo_usr_id_change = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_LINKS.' SET lnk_usr_id_create = NULL
+                 WHERE lnk_usr_id_create = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_LINKS.' SET lnk_usr_id_change = NULL
+                 WHERE lnk_usr_id_change = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_LISTS.' SET lst_usr_id = NULL
+                 WHERE lst_global = 1
+                   AND lst_usr_id = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_PHOTOS.' SET pho_usr_id_create = NULL
+                 WHERE pho_usr_id_create = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_PHOTOS.' SET pho_usr_id_change = NULL
+                 WHERE pho_usr_id_change = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_ROLES.' SET rol_usr_id_create = NULL
+                 WHERE rol_usr_id_create = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_ROLES.' SET rol_usr_id_change = NULL
+                 WHERE rol_usr_id_change = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_ROLE_DEPENDENCIES.' SET rld_usr_id = NULL
+                 WHERE rld_usr_id = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_USER_LOG.' SET usl_usr_id_create = NULL
+                 WHERE usl_usr_id_create = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_USERS.' SET usr_usr_id_create = NULL
+                 WHERE usr_usr_id_create = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_USERS.' SET usr_usr_id_change = NULL
+                 WHERE usr_usr_id_change = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_LIST_COLUMNS.'
+                 WHERE lsc_lst_id IN (SELECT lst_id
+                                        FROM '.TBL_LISTS.'
+                                       WHERE lst_usr_id = '.$this->getValue('usr_id').'
+                                         AND lst_global = 0)';
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_LISTS.' WHERE lst_global = 0 AND lst_usr_id = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.' WHERE gbc_usr_id_create = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        // MySQL couldn't create delete statement with same table in subquery.
+        // Therefore we fill a temporary table with all ids that should be deleted and reference on this table
+        $sql = 'DELETE FROM '.TBL_IDS.' WHERE ids_usr_id = '. $gCurrentUser->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'INSERT INTO '.TBL_IDS.' (ids_usr_id, ids_reference_id)
+                   SELECT '.$gCurrentUser->getValue('usr_id').', msc_msg_id
+                     FROM '.TBL_MESSAGES_CONTENT.'
+                    WHERE msc_usr_id = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
+                 WHERE msc_msg_id IN (SELECT ids_reference_id
+                                        FROM '.TBL_IDS.'
+                                       WHERE ids_usr_id = '.$gCurrentUser->getValue('usr_id').')';
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_MESSAGES.'
+                 WHERE msg_id IN (SELECT ids_reference_id
+                                    FROM '.TBL_IDS.'
+                                   WHERE ids_usr_id = '.$gCurrentUser->getValue('usr_id').')';
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_IDS.' WHERE ids_usr_id = '. $gCurrentUser->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
+                 WHERE msc_msg_id IN (SELECT msg_id
+                                        FROM '.TBL_MESSAGES.'
+                                       WHERE msg_usr_id_sender = '.$this->getValue('usr_id').')';
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_MESSAGES.' WHERE msg_usr_id_sender = '. $this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_REGISTRATIONS.' WHERE reg_usr_id = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.' WHERE atl_usr_id = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_SESSIONS.' WHERE ses_usr_id = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_USER_LOG.' WHERE usl_usr_id = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_USER_DATA.' WHERE usd_usr_id = '.$this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $return = parent::delete();
+
+        $this->db->endTransaction();
+
+        return $return;
     }
 
     /**
@@ -1085,7 +1257,7 @@ class User extends TableUsers
             }
 
             // if value of a field changed then update timestamp of user object
-            if($this->mProfileFieldsData->columnsValueChanged)
+            if(is_object($this->mProfileFieldsData) && $this->mProfileFieldsData->columnsValueChanged)
             {
                 $this->columnsValueChanged = true;
             }
@@ -1100,8 +1272,11 @@ class User extends TableUsers
                 $returnValue = parent::save($updateFingerPrint);
             }
 
-            // save data of all user fields
-            $this->mProfileFieldsData->saveUserData($this->getValue('usr_id'));
+            if(is_object($this->mProfileFieldsData))
+            {
+                // save data of all user fields
+                $this->mProfileFieldsData->saveUserData($this->getValue('usr_id'));
+            }
 
             if($fields_changed && is_object($gCurrentSession))
             {
@@ -1143,6 +1318,40 @@ class User extends TableUsers
             $this->organizationId = $organizationId;
             $this->roles_rights   = array();
         }
+    }
+
+    /**
+     * Set a new value for a password column of the database table.
+     * The value is only saved in the object. You must call the method @b save to store the new value to the database
+     * @param string $newPassword   The new value that should be stored in the database field
+     * @param bool   $isNewPassword Should the column password or new_password be set
+     * @param bool   $doHashing     Should the password get hashed before inserted. Default is true
+     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
+     */
+    public function setPassword($newPassword, $isNewPassword = false, $doHashing = true)
+    {
+        global $gPreferences;
+
+        $columnName = 'usr_password';
+
+        if($isNewPassword)
+        {
+            $columnName = 'usr_new_password';
+        }
+
+        if($doHashing)
+        {
+            // get the saved cost value that fits your server performance best and rehash your password
+            $cost = 10;
+            if(isset($gPreferences['system_hashing_cost']))
+            {
+                $cost = intval($gPreferences['system_hashing_cost']);
+            }
+
+            $newPassword = PasswordHashing::hash($newPassword, PASSWORD_DEFAULT, array('cost' => $cost));
+        }
+
+        return parent::setValue($columnName, $newPassword, false);
     }
 
     /**
@@ -1286,12 +1495,13 @@ class User extends TableUsers
     {
         global $gCurrentUser, $gPreferences;
 
-        $returnCode    = true;
-        $oldFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
+        $returnCode = true;
 
         if(strpos($columnName, 'usr_') !== 0)
         {
             // user data from adm_user_fields table
+
+            $oldFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
 
             // only to a update if value has changed
             if(strcmp($newValue, $oldFieldValue) !== 0)
@@ -1307,30 +1517,46 @@ class User extends TableUsers
                     $returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
                 }
             }
+
+            $newFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
+
+
+            // Nicht alle Aenderungen werden geloggt. Ausnahmen:
+            // usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
+            // Felder, die mit usr_ beginnen, werden nicht geloggt
+            // Falls die Feldwerte sich nicht geaendert haben, wird natuerlich ebenfalls nicht geloggt
+            if($gPreferences['profile_log_edit_fields'] == 1 && $this->getValue('usr_id') != 0
+            && $newFieldValue !== $oldFieldValue && $returnCode === true)
+            {
+                $logEntry = new TableAccess($this->db, TBL_USER_LOG, 'usl');
+                $logEntry->setValue('usl_usr_id', $this->getValue('usr_id'));
+                $logEntry->setValue('usl_usf_id', $this->mProfileFieldsData->getProperty($columnName, 'usf_id'));
+                $logEntry->setValue('usl_value_old', $oldFieldValue);
+                $logEntry->setValue('usl_value_new', $newFieldValue);
+                $logEntry->setValue('usl_comm', '');
+                $logEntry->save();
+            }
         }
         else
         {
             // users data from adm_users table
+
+            if($columnName === 'usr_password' || $columnName === 'usr_new_password')
+            {
+                return false;
+            }
+            // username should not contain special characters
+            elseif($columnName === 'usr_login_name')
+            {
+                if($newValue !== '' && !strValidCharacters($newValue, 'noSpecialChar'))
+                {
+                    return false;
+                }
+            }
+
             $returnCode = parent::setValue($columnName, $newValue);
         }
-        $newFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
 
-        // Nicht alle Aenderungen werden geloggt. Ausnahmen:
-        // usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
-        // Felder, die mit usr_ beginnen, werden nicht geloggt
-        // Falls die Feldwerte sich nicht geaendert haben, wird natuerlich ebenfalls nicht geloggt
-        if($gPreferences['profile_log_edit_fields'] == 1 && $this->getValue('usr_id') != 0
-        && strpos($columnName, 'usr_') === false && $newFieldValue !== $oldFieldValue
-        && $returnCode === true)
-        {
-            $logEntry = new TableAccess($this->db, TBL_USER_LOG, 'usl');
-            $logEntry->setValue('usl_usr_id', $this->getValue('usr_id'));
-            $logEntry->setValue('usl_usf_id', $this->mProfileFieldsData->getProperty($columnName, 'usf_id'));
-            $logEntry->setValue('usl_value_old', $oldFieldValue);
-            $logEntry->setValue('usl_value_new', $newFieldValue);
-            $logEntry->setValue('usl_comm', '');
-            $logEntry->save();
-        }
         return $returnCode;
     }
 

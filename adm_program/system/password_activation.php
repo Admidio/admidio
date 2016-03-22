@@ -25,7 +25,7 @@ if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_r
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-$user = new TableUsers($gDb, $getUserId);
+$user = new User($gDb, $gProfileFields, $getUserId);
 
 if($user->getValue('usr_activation_code') === $getActivationId)
 {
