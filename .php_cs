@@ -100,7 +100,7 @@ $fixers = array(
     //'short_array_syntax',                         // [contrib] {long_array_syntax} will be used in future
     //'short_echo_tag',                             // [contrib] not specified now
     //'strict',                                     // [contrib] maybe used in future
-    'strict_param',                                 // [contrib]
+    //'strict_param',                               // [contrib] should not be used automatically because of problems in code
 );
 
 $finder = Symfony\CS\Finder\DefaultFinder::create()
