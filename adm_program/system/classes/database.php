@@ -397,14 +397,15 @@ class Database
                     $sql = substr($sql, 0, strrpos($sql, ')') + 1);
                 }
 
-                // PostgreSQL doesn't know unsigned
-                $sql = str_replace('unsigned', '', $sql);
-
-                // PostgreSQL interprets a boolean as string so transform it to a smallint
-                $sql = str_replace('boolean', 'smallint', $sql);
-
-                // A blob is in PostgreSQL a bytea datatype
-                $sql = str_replace('blob', 'bytea', $sql);
+                $replaceArray = array(
+                    // PostgreSQL doesn't know unsigned
+                    'unsigned' => '',
+                    // PostgreSQL interprets a boolean as string so transform it to a smallint
+                    'boolean'  => 'smallint',
+                    // A blob is in PostgreSQL a bytea datatype
+                    'blob'     => 'bytea'
+                );
+                $sql = str_replace(array_keys($replaceArray), array_values($replaceArray), $sql);
 
                 // Auto_Increment must be replaced with Serial
                 $posAutoIncrement = strpos($sql, 'AUTO_INCREMENT');

@@ -478,15 +478,19 @@ elseif($getMode === 6)  // Creating configuration file
     }
 
     // replace placeholders in configuration file structure with data of installation wizard
-    $configFileContent = str_replace('%PREFIX%',   $_SESSION['prefix'],      $configFileContent);
-    $configFileContent = str_replace('%DB_TYPE%',  $_SESSION['db_type'],     $configFileContent);
-    $configFileContent = str_replace('%SERVER%',   $_SESSION['db_server'],   $configFileContent);
-    $configFileContent = str_replace('%USER%',     $_SESSION['db_user'],     $configFileContent);
-    $configFileContent = str_replace('%PASSWORD%', $_SESSION['db_password'], $configFileContent);
-    $configFileContent = str_replace('%DATABASE%', $_SESSION['db_database'], $configFileContent);
-    $configFileContent = str_replace('%ROOT_PATH%', $rootPath, $configFileContent);
-    $configFileContent = str_replace('%ORGANIZATION%', $_SESSION['orga_shortname'], $configFileContent);
-    $configFileContent = str_replace('%TIMEZONE%', $_SESSION['orga_timezone'], $configFileContent);
+    $replaceArray = array(
+        '%PREFIX%'       => $_SESSION['prefix'],
+        '%DB_TYPE%'      => $_SESSION['db_type'],
+        '%SERVER%'       => $_SESSION['db_server'],
+        '%USER%'         => $_SESSION['db_user'],
+        '%PASSWORD%'     => $_SESSION['db_password'],
+        '%DATABASE%'     => $_SESSION['db_database'],
+        '%ROOT_PATH%'    => $rootPath,
+        '%ORGANIZATION%' => $_SESSION['orga_shortname'],
+        '%TIMEZONE%'     => $_SESSION['orga_timezone']
+    );
+    $configFileContent = str_replace(array_keys($replaceArray), array_values($replaceArray), $configFileContent);
+
     $_SESSION['config_file_content'] = $configFileContent;
 
     // now save new configuration file in Admidio folder if user has write access to this folder

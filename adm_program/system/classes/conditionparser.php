@@ -111,44 +111,40 @@ class ConditionParser
         global $gL10n;
 
         $this->mSrcCond = admStrToUpper(trim($sourceCondition));
-        $this->mSrcCond = str_replace('*', '%', $this->mSrcCond);
 
-        // valid 'not null' is '#'
-        $this->mSrcCond = str_replace(admStrToUpper($gL10n->get('SYS_NOT_EMPTY')), ' # ', $this->mSrcCond);
-        $this->mSrcCond = str_replace(' NOT NULL ', ' # ', $this->mSrcCond);
-
-        // valid 'null' is '_'
-        $this->mSrcCond = str_replace(admStrToUpper($gL10n->get('SYS_EMPTY')), ' _ ', $this->mSrcCond);
-        $this->mSrcCond = str_replace(' NULL ', ' _ ', $this->mSrcCond);
-
-        // valid 'is not' is '!'
-        $this->mSrcCond = str_replace('{}',     ' ! ', $this->mSrcCond);
-        $this->mSrcCond = str_replace('!=',     ' ! ', $this->mSrcCond);
-
-        // valid 'is' is '='
-        $this->mSrcCond = str_replace('==',     ' = ', $this->mSrcCond);
-        $this->mSrcCond = str_replace(' LIKE ', ' = ', $this->mSrcCond);
-        $this->mSrcCond = str_replace(' IS ',   ' = ', $this->mSrcCond);
-        $this->mSrcCond = str_replace(' IST ',  ' = ', $this->mSrcCond);
-
-        // valid 'less than' is '['
-        $this->mSrcCond = str_replace('{=',     ' [ ', $this->mSrcCond);
-        $this->mSrcCond = str_replace('={',     ' [ ', $this->mSrcCond);
-
-        // valid 'greater than' is ']'
-        $this->mSrcCond = str_replace('}=',     ' ] ', $this->mSrcCond);
-        $this->mSrcCond = str_replace('=}',     ' ] ', $this->mSrcCond);
-
-        // valid 'and' is '&'
-        $this->mSrcCond = str_replace(' AND ',  ' & ', $this->mSrcCond);
-        $this->mSrcCond = str_replace(' UND ',  ' & ', $this->mSrcCond);
-        $this->mSrcCond = str_replace('&&',     ' & ', $this->mSrcCond);
-        $this->mSrcCond = str_replace('+',      ' & ', $this->mSrcCond);
-
-        // valid 'or' is '|'
-        $this->mSrcCond = str_replace(' OR ',   ' | ', $this->mSrcCond);
-        $this->mSrcCond = str_replace(' ODER ', ' | ', $this->mSrcCond);
-        $this->mSrcCond = str_replace('||',     ' | ', $this->mSrcCond);
+        $replaceArray = array(
+            '*' => '%',
+            // valid 'not null' is '#'
+            admStrToUpper($gL10n->get('SYS_NOT_EMPTY')) => ' # ',
+            ' NOT NULL ' => ' # ',
+            // valid 'null' is '_'
+            admStrToUpper($gL10n->get('SYS_EMPTY')) => ' _ ',
+            ' NULL ' => ' _ ',
+            // valid 'is not' is '!'
+            '{}'     => ' ! ',
+            '!='     => ' ! ',
+            // valid 'is' is '='
+            '=='     => ' = ',
+            ' LIKE ' => ' = ',
+            ' IS '   => ' = ',
+            ' IST '  => ' = ',
+            // valid 'less than' is '['
+            '{='     => ' [ ',
+            '={'     => ' [ ',
+            // valid 'greater than' is ']'
+            '}='     => ' ] ',
+            '=}'     => ' ] ',
+            // valid 'and' is '&'
+            ' AND '  => ' & ',
+            ' UND '  => ' & ',
+            '&&'     => ' & ',
+            '+'      => ' & ',
+            // valid 'or' is '|'
+            ' OR '   => ' | ',
+            ' ODER ' => ' | ',
+            '||'     => ' | '
+        );
+        $this->mSrcCond = str_replace(array_keys($replaceArray), array_values($replaceArray), $this->mSrcCond);
 
         return $this->mSrcCond;
     }
