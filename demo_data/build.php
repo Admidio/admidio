@@ -101,7 +101,7 @@ function getBacktrace()
         $output .= '<b>FILE:</b> ' . htmlentities($trace['file']) . '<br />';
         $output .= '<b>LINE:</b> ' . ((!empty($trace['line'])) ? $trace['line'] : '') . '<br />';
 
-        $output .= '<b>CALL:</b> ' . htmlentities($trace['class'] . $trace['type'] . $trace['function']) . '(' . ((sizeof($args)) ? implode(', ', $args) : '') . ')<br />';
+        $output .= '<b>CALL:</b> ' . htmlentities($trace['class'] . $trace['type'] . $trace['function']) . '(' . (count($args) ? implode(', ', $args) : '') . ')<br />';
     }
     $output .= '</div>';
 
