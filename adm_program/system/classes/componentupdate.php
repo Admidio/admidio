@@ -255,7 +255,7 @@ class ComponentUpdate extends Component
         while($row = $rolesStatement->fetch())
         {
             $role = new TableRoles($this->db, $row['rol_id']);
-            $role->delete();
+            $role->delete(); // TODO Exception handling
         }
     }
 

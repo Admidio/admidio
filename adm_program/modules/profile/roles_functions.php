@@ -90,11 +90,11 @@ function getFormerRolesFromDatabase($userId)
 }
 
 /**
- * @param string $htmlListId
- * @param object $user
- * @param object $roleStatement
- * @param        $count_role
- * @param bool   $directOutput
+ * @param string        $htmlListId
+ * @param \User         $user
+ * @param \PDOStatement $roleStatement
+ * @param int           $count_role
+ * @param bool          $directOutput
  * @return string
  */
 function getRoleMemberships($htmlListId, $user, $roleStatement, $count_role, $directOutput)

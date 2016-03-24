@@ -42,7 +42,7 @@ class Language
     /**
      * Adds a language data object to this class. The object contains all necessary
      * language data that is stored in the PHP session.
-     * @param object $languageDataObject An object of the class @b LanguageData.
+     * @param \LanguageData $languageDataObject An object of the class @b LanguageData.
      */
     public function addLanguageData(&$languageDataObject)
     {

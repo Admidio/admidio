@@ -18,7 +18,7 @@ class FunctionClass
     public $greetingCardString       = '';
 
     /**
-     * @param object $gL10n
+     * @param \Language $gL10n
      */
     public function __construct($gL10n)
     {

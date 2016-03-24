@@ -39,13 +39,13 @@ class HtmlNavbar
 
     /**
      * creates the object of the module menu and initialize all class parameters
-     * @param string $id       Html id of the navbar
-     * @param string $name     Name of the navbar that will be shown when navbar changed to vertical mode on small devices
-     * @param object $htmlPage Optional a HtmlPage object that will be used to add javascript code
-     *                         or files to the html output page.
-     * @param string $type     Different types of the navbar can be defined.
-     *                         default: will be the standard navbar of all modules.
-     *                         filter:  should be used if this navbar is used to filter data of within the script.
+     * @param string    $id       Html id of the navbar
+     * @param string    $name     Name of the navbar that will be shown when navbar changed to vertical mode on small devices
+     * @param \HtmlPage $htmlPage Optional a HtmlPage object that will be used to add javascript code
+     *                            or files to the html output page.
+     * @param string    $type     Different types of the navbar can be defined.
+     *                            default: will be the standard navbar of all modules.
+     *                            filter:  should be used if this navbar is used to filter data of within the script.
      */
     public function __construct($id, $name = null, $htmlPage = null, $type = 'default')
     {

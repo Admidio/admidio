@@ -46,14 +46,14 @@ class HtmlTable extends HtmlTableBasic
 
     /**
      * Constructor creates the table element
-     * @param string $id         Id of the table
-     * @param object $htmlPage   (optional) A HtmlPage object that will be used to add javascript code
-     *                           or files to the html output page.
-     * @param bool   $hoverRows  (optional) If set to @b true then the active selected row will be marked with special css code
-     * @param bool   $datatables (optional) If set to @b true then the jQuery plugin Datatables will be used to create the table.
-     *                           Then column sort, search within the table and other features are possible.
-     * @param string $class      (optional) An additional css classname. The class @b table
-     *                           is set as default and need not set with this parameter.
+     * @param string    $id         Id of the table
+     * @param \HtmlPage $htmlPage   (optional) A HtmlPage object that will be used to add javascript code
+     *                              or files to the html output page.
+     * @param bool      $hoverRows  (optional) If set to @b true then the active selected row will be marked with special css code
+     * @param bool      $datatables (optional) If set to @b true then the jQuery plugin Datatables will be used to create the table.
+     *                              Then column sort, search within the table and other features are possible.
+     * @param string    $class      (optional) An additional css classname. The class @b table
+     *                              is set as default and need not set with this parameter.
      */
     public function __construct($id, $htmlPage = null, $hoverRows = true, $datatables = false, $class = '')
     {

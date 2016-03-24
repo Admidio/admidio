@@ -53,7 +53,7 @@ class TableRoles extends TableAccess
 
     /**
      * checks if user is allowed to assign members to this role
-     * @param object $user UserObject of user who should be checked
+     * @param \User $user UserObject of user who should be checked
      * @return bool
      */
     public function allowedToAssignMembers($user)
@@ -88,7 +88,7 @@ class TableRoles extends TableAccess
 
     /**
      * checks if user is allowed to edit members of this role
-     * @param object $user UserObject of user who should be checked
+     * @param \User $user UserObject of user who should be checked
      * @return bool
      */
     public function allowedToEditMembers($user)

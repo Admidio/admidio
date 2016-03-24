@@ -49,25 +49,25 @@ class HtmlForm extends HtmlFormBasic
 
     /**
      * Constructor creates the form element
-     * @param string $id       Id of the form
-     * @param string $action   Action attribute of the form
-     * @param object $htmlPage (optional) A HtmlPage object that will be used to add javascript code or files to the html output page.
-     * @param array  $options  (optional) An array with the following possible entries:
-     *                         - @b type : Set the form type. Every type has some special features:
-     *                           + @b default  : A form that can be used to edit and save data of a database table. The label
-     *                             and the element have a horizontal orientation.
-     *                           + @b vertical : A form that can be used to edit and save data but has a vertical orientation.
-     *                             The label is positioned above the form element.
-     *                           + @b navbar   : A form that should be used in a navbar. The form content will
-     *                             be send with the 'GET' method and this form should not get a default focus.
-     *                         - @b enableFileUpload : Set specific parameters that are necessary for file upload with a form
-     *                         - @b showRequiredFields : If this is set to @b true (default) then every required field got a special
-     *                           css class and also the form got a @b div that explains the required layout.
-     *                           If this is set to @b false then only the html flag @b required will be set.
-     *                         - @b setFocus : Default is set to @b true. Set the focus on page load to the first field
-     *                           of this form.
-     *                         - @b class : An additional css classname. The class @b form-horizontal
-     *                           is set as default and need not set with this parameter.
+     * @param string    $id       Id of the form
+     * @param string    $action   Action attribute of the form
+     * @param \HtmlPage $htmlPage (optional) A HtmlPage object that will be used to add javascript code or files to the html output page.
+     * @param array     $options  (optional) An array with the following possible entries:
+     *                            - @b type : Set the form type. Every type has some special features:
+     *                              + @b default  : A form that can be used to edit and save data of a database table. The label
+     *                                and the element have a horizontal orientation.
+     *                              + @b vertical : A form that can be used to edit and save data but has a vertical orientation.
+     *                                The label is positioned above the form element.
+     *                              + @b navbar   : A form that should be used in a navbar. The form content will
+     *                                be send with the 'GET' method and this form should not get a default focus.
+     *                            - @b enableFileUpload : Set specific parameters that are necessary for file upload with a form
+     *                            - @b showRequiredFields : If this is set to @b true (default) then every required field got a special
+     *                              css class and also the form got a @b div that explains the required layout.
+     *                              If this is set to @b false then only the html flag @b required will be set.
+     *                            - @b setFocus : Default is set to @b true. Set the focus on page load to the first field
+     *                              of this form.
+     *                            - @b class : An additional css classname. The class @b form-horizontal
+     *                              is set as default and need not set with this parameter.
      */
     public function __construct($id, $action, $htmlPage = null, $options = array())
     {

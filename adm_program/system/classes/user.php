@@ -952,8 +952,8 @@ class User extends TableAccess
       * Checks if the current user is allowed to edit the profile of the user of the parameter.
       * If will check if user can generally edit all users or if he is a group leader and can edit users
       * of a special role where @b $user is a member or if it's the own profile and he could edit this.
-      * @param object $user            User object of the user that should be checked if the current user can edit his profile.
-      * @param bool   $checkOwnProfile If set to @b false than this method don't check the role right to edit the own profile.
+      * @param \User $user            User object of the user that should be checked if the current user can edit his profile.
+      * @param bool  $checkOwnProfile If set to @b false than this method don't check the role right to edit the own profile.
       * @return bool Return @b true if the current user is allowed to edit the profile of the user from @b $user.
       */
      public function hasRightEditProfile(&$user, $checkOwnProfile = true)
@@ -1049,7 +1049,7 @@ class User extends TableAccess
      * Checks if the current user is allowed to view the profile of the user of the parameter.
      * If will check if user has edit rights with method editProfile or if the user is a member
      * of a role where the current user has the right to view profiles.
-     * @param object $user User object of the user that should be checked if the current user can view his profile.
+     * @param \User $user User object of the user that should be checked if the current user can view his profile.
      * @return bool Return @b true if the current user is allowed to view the profile of the user from @b $user.
      */
     public function hasRightViewProfile($user)
