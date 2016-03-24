@@ -221,17 +221,17 @@ class TableFolder extends TableAccess
 
         if ($folderId > 0)
         {
-            $condition = '     fol_id     = '.$folderId.'
-                           AND fol_type   = \'DOWNLOAD\'
-                           AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
+            $condition = 'fol_id     = '.$folderId.'
+                      AND fol_type   = \'DOWNLOAD\'
+                      AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
             parent::readData($condition);
         }
         else
         {
-            $condition = '     fol_name   = \'download\'
-                           AND fol_type   = \'DOWNLOAD\'
-                           AND fol_path   = \'/adm_my_files\'
-                           AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
+            $condition = 'fol_name   = \'download\'
+                      AND fol_type   = \'DOWNLOAD\'
+                      AND fol_path   = \'/adm_my_files\'
+                      AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
             parent::readData($condition);
         }
 
@@ -319,7 +319,6 @@ class TableFolder extends TableAccess
             }
             elseif ($gValidLogin)
             {
-
                 // Gucken ob der angemeldete Benutzer Rechte an dem Unterordner hat...
                 $sql_rights = 'SELECT COUNT(*) as count
                                  FROM '.TBL_FOLDER_ROLES.'
@@ -338,7 +337,6 @@ class TableFolder extends TableAccess
                 {
                     $addToArray = true;
                 }
-
             }
 
             // Jetzt noch pruefen ob der Ordner physikalisch vorhanden ist
@@ -532,9 +530,8 @@ class TableFolder extends TableAccess
         // Pfad zusammen setzen
         $folderPath   = $this->getValue('fol_path');
         $folderName   = $this->getValue('fol_name');
-        $completePath = SERVER_PATH. $folderPath. '/'. $folderName;
 
-        return $completePath;
+        return SERVER_PATH. $folderPath. '/'. $folderName;
     }
 
     /**
@@ -613,6 +610,7 @@ class TableFolder extends TableAccess
 
             return $link;
         }
+        return '';
     }
 
     /**

@@ -198,7 +198,7 @@ class ModuleAnnouncements extends Modules
      * getParameter and could be used in the script.
      * @param string $dateRangeStart A date in english or Admidio format that will be the start date of the range.
      * @param string $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
-     * @return false|void Returns false if invalid date format is submitted
+     * @return bool Returns false if invalid date format is submitted
      */
     public function setDateRange($dateRangeStart, $dateRangeEnd)
     {
@@ -255,6 +255,6 @@ class ModuleAnnouncements extends Modules
                 return false;
             }
         }
-
+        return true;
     }
 }

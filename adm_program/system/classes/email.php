@@ -89,7 +89,7 @@ class Email extends PHPMailer
         // Versandmethode festlegen
         if($gPreferences['mail_send_method'] === 'SMTP')
         {
-            $this->IsSMTP();
+            $this->isSMTP();
 
             $this->Host        = $gPreferences['mail_smtp_host'];
             $this->SMTPAuth    = $gPreferences['mail_smtp_auth'];
@@ -107,11 +107,11 @@ class Email extends PHPMailer
         }
         else
         {
-            $this->IsMail();
+            $this->isMail();
         }
 
         // set language for error reporting
-        $this->SetLanguage($gL10n->getLanguageIsoCode());
+        $this->setLanguage($gL10n->getLanguageIsoCode());
         $this->CharSet = $gPreferences['mail_character_encoding'];
     }
 
@@ -149,7 +149,7 @@ class Email extends PHPMailer
 
         try
         {
-            $this->AddCC($address, $name);
+            $this->addCC($address, $name);
         }
         catch (phpmailerException $e)
         {
@@ -173,7 +173,7 @@ class Email extends PHPMailer
 
         try
         {
-            $this->AddAddress($address, $name);
+            $this->addAddress($address, $name);
         }
         catch (phpmailerException $e)
         {
@@ -255,8 +255,8 @@ class Email extends PHPMailer
         {
             // if someone wants to reply to this mail then this should go to the users email
             // and not to a domain email, so add a separate reply-to address
-            $this->AddReplyTo($address, $name);
-            $this->SetFrom($fromAddress, $fromName);
+            $this->addReplyTo($address, $name);
+            $this->setFrom($fromAddress, $fromName);
         }
         catch (phpmailerException $e)
         {
@@ -289,8 +289,11 @@ class Email extends PHPMailer
     {
         // Erst mal die Zeilenumbrueche innerhalb des Mailtextes umwandeln in einfache Umbrueche
         // statt \r und \r\n nur noch \n
-        $text = str_replace("\r\n", "\n", $text);
-        $text = str_replace("\r", "\n", $text);
+        $replaceArray = array(
+            "\r"   => "\n",
+            "\r\n" => "\n"
+        );
+        $text = str_replace(array_keys($replaceArray), array_values($replaceArray), $text);
 
         $this->emText = $this->emText.strip_tags($text);
         $this->emHtmlText = $this->emHtmlText.$text;
@@ -411,7 +414,7 @@ class Email extends PHPMailer
         // Text in Nachricht einfügen
         if($this->emSendAsHTML)
         {
-            $this->MsgHTML($this->emHtmlText);
+            $this->msgHTML($this->emHtmlText);
         }
         else
         {
@@ -441,12 +444,12 @@ class Email extends PHPMailer
                         // add all recipients as bcc to the mail
                         foreach($bccArray as $bcc)
                         {
-                            $this->AddBCC($bcc['address'], $bcc['name']);
+                            $this->addBCC($bcc['address'], $bcc['name']);
                         }
                     }
 
                     // now send mail
-                    $this->Send();
+                    $this->send();
                 }
                 catch (phpmailerException $e)
                 {
@@ -459,7 +462,7 @@ class Email extends PHPMailer
         {
             try
             {
-                $this->Send();
+                $this->send();
             }
             catch (phpmailerException $e)
             {
@@ -471,7 +474,7 @@ class Email extends PHPMailer
         if ($this->emCopyToSender)
         {
             // Alle Empfänger entfernen
-            $this->ClearAllRecipients();
+            $this->clearAllRecipients();
 
             $this->Subject = $gL10n->get('MAI_CARBON_COPY').': '.$this->Subject;
 
@@ -494,7 +497,7 @@ class Email extends PHPMailer
             // Text in Nachricht einfügen
             if($this->emSendAsHTML)
             {
-                $this->MsgHTML($this->emHtmlText);
+                $this->msgHTML($this->emHtmlText);
             }
             else
             {
@@ -502,10 +505,10 @@ class Email extends PHPMailer
             }
 
             // neuer Empänger
-            $this->AddAddress($this->emSender['address'], $this->emSender['name']);
+            $this->addAddress($this->emSender['address'], $this->emSender['name']);
             try
             {
-                $this->Send();
+                $this->send();
             }
             catch (phpmailerException $e)
             {
@@ -515,7 +518,7 @@ class Email extends PHPMailer
 
         // initialize recepient adresses so same email could be send to other recepients
         $this->emAddresses = '';
-        $this->ClearAddresses();
+        $this->clearAddresses();
 
         return true;
     }

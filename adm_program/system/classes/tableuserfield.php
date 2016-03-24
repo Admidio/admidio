@@ -243,6 +243,7 @@ class TableUserField extends TableAccess
                     // save values in new array that starts with key = 1
                     $arrListValuesWithKeys[++$key] = $listValue;
                 }
+                unset($listValue);
                 $value = $arrListValuesWithKeys;
             }
         }

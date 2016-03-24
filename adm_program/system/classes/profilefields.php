@@ -232,6 +232,8 @@ class ProfileFields
                         // save values in new array that starts with key = 1
                         $arrListValuesWithKeys[++$key] = $listValue;
                     }
+                    unset($listValue);
+
                     $htmlValue = $arrListValuesWithKeys[$value];
                     break;
                 case 'PHONE':

@@ -169,13 +169,10 @@ class TableCategory extends TableAccess
             $value = parent::getValue($columnName, $format);
         }
 
-        if($columnName === 'cat_name' && $format !== 'database')
+        // if text is a translation-id then translate it
+        if($columnName === 'cat_name' && $format !== 'database' && strpos($value, '_') === 3)
         {
-            // if text is a translation-id then translate it
-            if(strpos($value, '_') === 3)
-            {
-                $value = $gL10n->get(admStrToUpper($value));
-            }
+            $value = $gL10n->get(admStrToUpper($value));
         }
 
         return $value;

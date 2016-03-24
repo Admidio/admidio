@@ -63,12 +63,7 @@ class Inventory extends TableInventory
      */
     public function columnsValueChanged()
     {
-        if($this->columnsValueChanged || $this->mProfileFieldsData->columnsValueChanged)
-        {
-            return true;
-        }
-
-        return false;
+        return $this->columnsValueChanged || $this->mProfileFieldsData->columnsValueChanged;
     }
 
     /**
@@ -301,7 +296,7 @@ class Inventory extends TableInventory
                 else
                 {
                     $sql = 'SELECT rol_id, rol_this_list_view
-                              FROM '.TBL_INVENTORY.'
+                              FROM '.TBL_INVENT.'
                         INNER JOIN '.TBL_ROLES.'
                                 ON rol_id = mem_rol_id
                         INNER JOIN '.TBL_CATEGORIES.'

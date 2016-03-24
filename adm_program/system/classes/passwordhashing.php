@@ -38,7 +38,7 @@ class PasswordHashing
      * @param array  $options   The hash-options array
      * @return string|false Returns the hashed password or false if an error occurs
      */
-    public static function hash($password, $algorithm = PASSWORD_DEFAULT, $options = array())
+    public static function hash($password, $algorithm = PASSWORD_DEFAULT, array $options = array())
     {
         if (!in_array('cost', $options, true))
         {
@@ -84,7 +84,7 @@ class PasswordHashing
      * @param array  $options   The hash-options the hash should match to
      * @return bool Returns false if the hash match the given options and false if not
      */
-    public static function needsRehash($hash, $algorithm = PASSWORD_DEFAULT, $options = array())
+    public static function needsRehash($hash, $algorithm = PASSWORD_DEFAULT, array $options = array())
     {
         return password_needs_rehash($hash, $algorithm, $options);
     }
@@ -167,7 +167,7 @@ class PasswordHashing
      * @param array  $options   The options to test
      * @return array Returns an array with the maximum tested cost with the required time
      */
-    public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = PASSWORD_DEFAULT, $options = array('cost' => 8))
+    public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = PASSWORD_DEFAULT, array $options = array('cost' => 8))
     {
         $cost = $options['cost'];
         $time = 0;

@@ -100,14 +100,14 @@ $albumStatement = $gDb->query($sql);
 $albumList      = $albumStatement->fetchAll();
 
 // Variablen initialisieren
-$i         = 0;
-$picnr     = 0;
-$picpath   = '';
-$link_text = '';
+$i        = 0;
+$picNr    = 0;
+$picPath  = '';
+$linkText = '';
 $album = new TablePhotos($gDb);
 
 // Schleife, falls nicht direkt ein Bild gefunden wird, aber auf 20 Durchlaeufe begrenzen
-while(!file_exists($picpath) && $i < 20 && $albumStatement->rowCount() > 0)
+while(!file_exists($picPath) && $i < 20 && $albumStatement->rowCount() > 0)
 {
     // Ausgewähltendatendatz holen
     $album->setArray($albumList[mt_rand(0, $albumStatement->rowCount()-1)]);
@@ -115,25 +115,25 @@ while(!file_exists($picpath) && $i < 20 && $albumStatement->rowCount() > 0)
     // Falls gewuensch Bild per Zufall auswaehlen
     if($plg_photos_picnr == 0)
     {
-        $picnr = mt_rand(1, $album->getValue('pho_quantity'));
+        $picNr = mt_rand(1, $album->getValue('pho_quantity'));
     }
     else
     {
-        $picnr = $plg_photos_picnr;
+        $picNr = $plg_photos_picnr;
     }
 
     // Bilpfad zusammensetzen
-    $picpath = PLUGIN_PATH. '/../adm_my_files/photos/'.$album->getValue('pho_begin', 'Y-m-d').'_'.$album->getValue('pho_id').'/'.$picnr.'.jpg';
+    $picPath = PLUGIN_PATH. '/../adm_my_files/photos/'.$album->getValue('pho_begin', 'Y-m-d').'_'.$album->getValue('pho_id').'/'.$picNr.'.jpg';
     ++$i;
 }
 
-if(!file_exists($picpath))
+if(!file_exists($picPath))
 {
-    $picpath = THEME_SERVER_PATH. '/images/nopix.jpg';
+    $picPath = THEME_SERVER_PATH. '/images/nopix.jpg';
 }
 
 // Ermittlung der Original Bildgroesse
-$bildgroesse = getimagesize($picpath);
+$bildgroesse = getimagesize($picPath);
 
 // Popupfenstergröße
 $popup_height = $gPreferences['photo_show_height'] + 210;
@@ -144,34 +144,34 @@ if($plg_photos_show_link && $plg_max_char_per_word > 0)
     // Linktext umbrechen wenn noetig
     $words = explode(' ', $album->getValue('pho_name'));
 
-    for($i = 0, $iMax = count($words); $i < $iMax; ++$i)
+    foreach ($words as $word)
     {
-        if(strlen($words[$i]) > $plg_max_char_per_word)
+        if(strlen($word) > $plg_max_char_per_word)
         {
-            $link_text = $link_text.substr($words[$i], 0, $plg_max_char_per_word). '-<br />'.
-                            substr($words[$i], $plg_max_char_per_word).' ';
+            $linkText .= substr($word, 0, $plg_max_char_per_word).'-<br />'.
+                substr($word, $plg_max_char_per_word).' ';
         }
         else
         {
-            $link_text = $link_text. $words[$i].' ';
+            $linkText .= $word.' ';
         }
     }
 }
 else
 {
-    $link_text = $album->getValue('pho_name');
+    $linkText = $album->getValue('pho_name');
 }
 
 // Ausgabe
 $pho_id = $album->getValue('pho_id');
-echo '<a class="'.$plg_link_class.'" href="'. $g_root_path. '/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'&amp;photo_nr='.$picnr.'" target="'. $plg_link_target. '"><img
-    class="thumbnail" alt="'.$link_text.'" title="'.$link_text.'"
-    src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;photo_nr='.$picnr.'&amp;pho_begin='.$album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$plg_photos_max_width.'&amp;max_height='.$plg_photos_max_height.'" /></a>';
+echo '<a class="'.$plg_link_class.'" href="'. $g_root_path. '/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'&amp;photo_nr='.$picNr.'" target="'. $plg_link_target. '"><img
+    class="thumbnail" alt="'.$linkText.'" title="'.$linkText.'"
+    src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;photo_nr='.$picNr.'&amp;pho_begin='.$album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$plg_photos_max_width.'&amp;max_height='.$plg_photos_max_height.'" /></a>';
 
 // Link zum Album
 if($plg_photos_show_link)
 {
-    echo'<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'" target="'.$plg_link_target.'">'.$link_text.'</a>';
+    echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'" target="'.$plg_link_target.'">'.$linkText.'</a>';
 }
 
 echo '</div>';

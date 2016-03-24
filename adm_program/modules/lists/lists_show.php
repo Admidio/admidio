@@ -427,22 +427,16 @@ for ($columnNumber = 1, $iMax = $list->countColumns(); $columnNumber <= $iMax; +
         $columnAlign[] = 'left';
     }
 
-    if ($getMode === 'csv')
+    if ($getMode === 'csv' && $columnNumber === 1)
     {
-        if ($columnNumber === 1)
-        {
-            // add serial
-            $str_csv = $str_csv.$valueQuotes.$gL10n->get('SYS_ABR_NO').$valueQuotes;
-        }
+        // add serial
+        $str_csv .= $valueQuotes.$gL10n->get('SYS_ABR_NO').$valueQuotes;
     }
 
-    if ($getMode === 'pdf')
+    if ($getMode === 'pdf' && $columnNumber === 1)
     {
-        if ($columnNumber === 1)
-        {
-            // add serial
-            $arrValidColumns[] = $gL10n->get('SYS_ABR_NO');
-        }
+        // add serial
+        $arrValidColumns[] = $gL10n->get('SYS_ABR_NO');
     }
 
     // show hidden fields only for user with rights
@@ -689,7 +683,8 @@ foreach ($membersList as $member)
     if ($getMode === 'csv')
     {
         $str_csv = $str_csv."\n";
-    }else
+    }
+    else
     {
         $table->addRowByArray($columnValues, null, array('nobr' => 'true'));
     }

@@ -269,7 +269,7 @@ class HtmlTable extends HtmlTableBasic
                 $arrayOrderColumns[$key] = $column - 1;
             }
 
-            $this->datatablesColumnDefs[] = '{ "targets": ['.($selectedColumn-1).'], "orderData": ['.(implode(',', $arrayOrderColumns)).'] }';
+            $this->datatablesColumnDefs[] = '{ "targets": ['.($selectedColumn-1).'], "orderData": ['.implode(',', $arrayOrderColumns).'] }';
         }
         else
         {

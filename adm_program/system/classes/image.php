@@ -35,10 +35,10 @@
 class Image
 {
     private $imagePath;
-    private $imageType    = null;
-    public $imageResource = null;
-    public $imageWidth    = 0;
-    public $imageHeight   = 0;
+    private $imageType;
+    public $imageResource;
+    public $imageWidth  = 0;
+    public $imageHeight = 0;
 
     /**
      * @param string $pathAndFilename
@@ -113,11 +113,7 @@ class Image
                 break;
         }
 
-        if($this->imageResource !== false)
-        {
-            return true;
-        }
-        return false;
+        return $this->imageResource !== false;
     }
 
     /**

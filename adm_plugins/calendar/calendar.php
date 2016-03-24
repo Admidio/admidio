@@ -468,12 +468,9 @@ while($currentDay <= $lastDayCurrentMonth)
         {
             $ter_valid = 1;
         }
-        if($plg_ter_login == 1)
+        if($plg_ter_login == 1 && $gValidLogin)
         {
-            if($gValidLogin)
-            {
-                $ter_valid = 1;
-            }
+            $ter_valid = 1;
         }
 
         if($ter_valid == 1 && array_key_exists($currentDay, $eventsMonthDayArray))
@@ -538,12 +535,9 @@ while($currentDay <= $lastDayCurrentMonth)
         {
             $geb_valid = 1;
         }
-        if($plg_geb_login == 1)
+        if($plg_geb_login == 1 && $gValidLogin)
         {
-            if($gValidLogin)
-            {
-                $geb_valid = 1;
-            }
+            $geb_valid = 1;
         }
 
         if($geb_valid == 1 && array_key_exists($currentDay, $birthdaysMonthDayArray))
@@ -660,7 +654,7 @@ while($currentDay <= $lastDayCurrentMonth)
             }
             else
             {
-                echo '<a class="'.$plg_link_class.'" href="'.$plg_link.'" title="'.str_replace('"', "", $textContent).'"
+                echo '<a class="'.$plg_link_class.'" href="'.$plg_link.'" title="'.str_replace('"', '', $textContent).'"
                     href="'.$plg_link.'" target="'.$plg_link_target.'">'.$currentDay.'</a>';
             }
         }

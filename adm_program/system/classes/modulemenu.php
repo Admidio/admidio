@@ -28,7 +28,13 @@
  */
 class ModuleMenu
 {
+    protected $id;
+    protected $items;
+    protected $ddItemCnt;
+    protected $root_path;
     protected $customCssClass;
+    protected $maxMenuLinkItem;
+    protected $ddJS;
 
     /**
      * creates the object of the module menu and initialize all class parameters
@@ -90,7 +96,7 @@ class ModuleMenu
      */
     private function addDropDownItem(&$menuEntry, $selected = false)
     {
-        if (!empty($this->ddJS))
+        if ($this->ddJS !== '')
         {
             $this->ddJS .= ',';
         }

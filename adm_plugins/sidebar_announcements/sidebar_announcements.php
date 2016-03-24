@@ -89,7 +89,7 @@ else
         $plg_announcement->clear();
         $plg_announcement->setArray($plg_row);
 
-        echo '<div><a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue("ann_id"). '&amp;headline='. $gL10n->get('PLG_ANNOUNCEMENTS_HEADLINE'). '" target="'. $plg_link_target. '">';
+        echo '<div><a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue('ann_id'). '&amp;headline='. $gL10n->get('PLG_ANNOUNCEMENTS_HEADLINE'). '" target="'. $plg_link_target. '">';
 
         if($plg_max_char_per_word > 0)
         {
@@ -130,7 +130,7 @@ else
 
             echo '<div>'.$textPrev.'
             <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
-                href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue("ann_id"). '&amp;headline='. $gL10n->get('PLG_ANNOUNCEMENTS_HEADLINE'). '"><span
+                href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue('ann_id'). '&amp;headline='. $gL10n->get('PLG_ANNOUNCEMENTS_HEADLINE'). '"><span
                 class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_MORE').'</a></div>';
         }
 

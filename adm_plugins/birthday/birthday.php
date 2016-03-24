@@ -204,7 +204,7 @@ if($numberBirthdays > 0)
                 // ab einem festgelegten Alter wird fuer ausgeloggte Besucher nur der Nachname mit Anrede angezeigt
                 if(!$gValidLogin && $plg_show_alter_anrede <= $row['age'])
                 {
-                    if (($row['gender']) > 1)
+                    if ($row['gender'] > 1)
                     {
                         $plg_show_name = $gL10n->get('PLG_BIRTHDAY_WOMAN_VAR', $row['last_name']);
                     }
@@ -246,9 +246,10 @@ if($numberBirthdays > 0)
                     }
                     else
                     {
-                        $birthayDate = new DateTimeExtended($row['birthday'], 'Y-m-d');
-                        $plgDays = ' ';
-                        $plgCssClass = '';
+                        $birthayDate  = new DateTimeExtended($row['birthday'], 'Y-m-d');
+                        $plgDays      = ' ';
+                        $plgCssClass  = '';
+                        $birthdayText = '';
 
                         if ($row['days_to_bdate'] < 0)
                         {

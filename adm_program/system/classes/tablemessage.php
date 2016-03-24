@@ -72,7 +72,7 @@ class TableMessage extends TableAccess
     /**
      * Set a new value for a column of the database table.
      * @param int $usrId of the receiver - just for security reasons.
-     * @return object Returns @b answer of the SQL execution
+     * @return \PDOStatement Returns @b answer of the SQL execution
      */
     public function setReadValue($usrId)
     {
@@ -85,7 +85,7 @@ class TableMessage extends TableAccess
     /**
      * get a list with all messages of an conversation.
      * @param int $msgId of the conversation - just for security reasons.
-     * @return object Returns @b answer of the SQL execution
+     * @return \PDOStatement Returns @b answer of the SQL execution
      */
     public function getConversation($msgId)
     {
@@ -145,9 +145,10 @@ class TableMessage extends TableAccess
                 $other = $this->getValue('msg_usr_id_receiver');
             }
 
-            $sql = "UPDATE ". TBL_MESSAGES. " SET msg_read = 2, msg_timestamp = CURRENT_TIMESTAMP
-                                                , msg_usr_id_sender = ".$gCurrentUser->getValue('usr_id').", msg_usr_id_receiver = '".$other."'
-             WHERE msg_id = ".$this->getValue('msg_id');
+            $sql = 'UPDATE '.TBL_MESSAGES.
+                     ' SET msg_read = 2, msg_timestamp = CURRENT_TIMESTAMP,
+                           msg_usr_id_sender = '.$gCurrentUser->getValue('usr_id').', msg_usr_id_receiver = \''.$other.'\'
+                     WHERE msg_id = '.$this->getValue('msg_id');
             $this->db->query($sql);
         }
 

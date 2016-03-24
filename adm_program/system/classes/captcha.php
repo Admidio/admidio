@@ -213,14 +213,14 @@ class Captcha
         $color = null;
         // Gitter in den Hintergrund zeichnen...
         // erst vertikal...
-        for($i = 0; $i < $this->width; $i += intval($this->backgroundWritingSize / 2))
+        for($i = 0; $i < $this->width; $i += floor($this->backgroundWritingSize / 2))
         {
             $color = imagecolorallocate($image, $this->backgroundColourR - 40, $this->backgroundColourG - 40, $this->backgroundColourB - 40);
             imageline($image, $i, 0, $i, $this->height, $color);
         }
 
         // ...dann horizontal
-        for($i = 0; $i < $this->height; $i += intval($this->backgroundWritingSize / 2))
+        for($i = 0; $i < $this->height; $i += floor($this->backgroundWritingSize / 2))
         {
             imageline($image, 0, $i, $this->width, $i, $color);
         }
@@ -233,7 +233,7 @@ class Captcha
 
         for ($i = 0; $i < $this->charCount; ++$i)
         {
-            $xPosition = intval($xStartPosition + $i * ($this->width / ($this->charCount + 1)));
+            $xPosition = floor($xStartPosition + $i * ($this->width / ($this->charCount + 1)));
 
             $text  = substr($this->captchaCode, $i, 1);
             $color = imagecolorallocate($image, $this->backgroundColourR - 125, $this->backgroundColourG - 55, $this->backgroundColourB - 90);

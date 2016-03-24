@@ -48,7 +48,7 @@ class UploadHandlerDownload extends UploadHandler
             try
             {
                 // check filesize against module settings
-                if ($file->size > ($gPreferences['max_file_upload_size']) * 1024 * 1024)
+                if ($file->size > $gPreferences['max_file_upload_size'] * 1024 * 1024)
                 {
                     throw new AdmException('DOW_FILE_TO_LARGE', $gPreferences['max_file_upload_size']);
                 }

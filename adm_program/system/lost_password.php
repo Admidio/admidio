@@ -23,18 +23,16 @@ if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_r
 
 // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
 // muss natuerlich der Code ueberprueft werden
-if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1 && !empty($_POST['captcha']))
+if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1 && !empty($_POST['captcha'])
+&& (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($_POST['captcha'])))
 {
-    if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($_POST['captcha']))
+    if($gPreferences['captcha_type'] === 'pic')
     {
-        if($gPreferences['captcha_type'] === 'pic')
-        {
-            $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
-        }
-        elseif($gPreferences['captcha_type'] === 'calc')
-        {
-            $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
-        }
+        $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
+    }
+    elseif($gPreferences['captcha_type'] === 'calc')
+    {
+        $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
     }
 }
 if($gValidLogin)

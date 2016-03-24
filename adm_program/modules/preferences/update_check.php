@@ -166,7 +166,7 @@ if($getMode === 2)
         $versionstext = $gL10n->get('UPD_NO_NEW', $versionstextBeta);
     }
 
-    echo'
+    echo '
         <p>'.$gL10n->get('UPD_CURRENT_VERSION').':&nbsp;'.ADMIDIO_VERSION_TEXT.'</p>
         <p>'.$gL10n->get('UPD_STABLE_VERSION').':&nbsp;
             <a class="btn" href="http://www.admidio.org/index.php?page=download" target="_blank">

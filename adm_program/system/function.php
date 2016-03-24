@@ -14,7 +14,7 @@
  * for default autoload implementation. Therefore the class name must be the same
  * as the file name except for case sensitive.
  * @param string $className Name of the class for which the file should be loaded.
- * @return void|false Return @b false if the file for the class wasn't found.
+ * @return null|false Return @b false if the file for the class wasn't found.
  */
 function admFuncAutoload($className)
 {
@@ -37,6 +37,8 @@ function admFuncAutoload($className)
             return false;
         }
     }
+
+    return null;
 }
 
 // now register this function in this script so only function.php must be included for autoload
@@ -399,7 +401,7 @@ function admFuncProcessableImageSize()
  * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old')));
  * @endcode
  */
-function admFuncVariableIsValid($array, $variableName, $datatype, $options = array())
+function admFuncVariableIsValid($array, $variableName, $datatype, array $options = array())
 {
     global $gL10n, $gMessage, $gPreferences;
 
@@ -452,15 +454,13 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
         }
     }
 
-    if($optionsAll['validValues'] !== null)
+    // check if parameter has a valid value
+    // do a strict check with in_array because the function don't work properly
+    if($optionsAll['validValues'] !== null
+    && !in_array(admStrToUpper($value), $optionsAll['validValues'], true)
+    && !in_array(admStrToLower($value), $optionsAll['validValues'], true))
     {
-        // check if parameter has a valid value
-        // do a strict check with in_array because the function don't work properly
-        if(!in_array(admStrToUpper($value), $optionsAll['validValues'], true)
-        && !in_array(admStrToLower($value), $optionsAll['validValues'], true))
-        {
-            $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-        }
+        $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
     }
 
     switch ($datatype)

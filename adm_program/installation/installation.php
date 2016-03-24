@@ -546,20 +546,18 @@ elseif($getMode === 8) // Start installation
     @set_time_limit(300);
 
     // first check if session is filled (if installation was aborted then this is not filled)
-    if(isset($_SESSION['prefix']))
-    {
-        // if previous dialogs were filled then check if the settings are equal to config file
-        if($g_tbl_praefix  !== $_SESSION['prefix']
+    // if previous dialogs were filled then check if the settings are equal to config file
+    if(isset($_SESSION['prefix'])
+    &&    ($g_tbl_praefix  !== $_SESSION['prefix']
         || $gDbType        !== $_SESSION['db_type']
         || $g_adm_srv      !== $_SESSION['db_server']
         || $g_adm_usr      !== $_SESSION['db_user']
         || $g_adm_pw       !== $_SESSION['db_password']
         || $g_adm_db       !== $_SESSION['db_database']
-        || $g_organization !== $_SESSION['orga_shortname'])
-        {
-            showNotice($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6',
-                       $gL10n->get('SYS_BACK'), 'layout/back.png');
-        }
+        || $g_organization !== $_SESSION['orga_shortname']))
+    {
+        showNotice($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6',
+                   $gL10n->get('SYS_BACK'), 'layout/back.png');
     }
 
     // read data from sql script db.sql and execute all statements to the current database

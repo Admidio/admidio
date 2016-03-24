@@ -94,9 +94,9 @@ class InventoryFields
 
     /**
      * Returns the value of the field in html format with consideration of all layout parameters
-     * @param string $fieldNameIntern Internal profile field name of the field that should be html formated
-     * @param        $value           The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
-     * @param int    $value2          An optional parameter that is necessary for some special fields like email to commit the user id
+     * @param string     $fieldNameIntern Internal profile field name of the field that should be html formated
+     * @param string|int $value           The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
+     * @param int        $value2          An optional parameter that is necessary for some special fields like email to commit the user id
      * @return string Returns an html formated string that considered the profile field settings
      */
     public function getHtmlValue($fieldNameIntern, $value, $value2 = null)
@@ -147,7 +147,7 @@ class InventoryFields
                         }
                         else
                         {
-                            $htmlValue = '<a href="'.$emailLink.'" style="overflow: visible; display: inline;" title="'.$value.'">'.$value.'</a>';
+                            $htmlValue = '<a href="'.$emailLink.'" title="'.$value.'" style="overflow: visible; display: inline;">'.$value.'</a>';
                         }
                     }
                     break;
@@ -251,7 +251,6 @@ class InventoryFields
                 if(strpos($infUrl, '#user_content#') !== false)
                 {
                     $htmlValue = preg_replace('/#user_content#/', $value, $htmlValue);
-
                 }
             }
             $value = $htmlValue;

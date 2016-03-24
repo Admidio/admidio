@@ -63,9 +63,8 @@ class TableFile extends TableAccess
         $fileName     = $this->getValue('fil_name');
         $folderPath   = $this->getValue('fol_path');
         $folderName   = $this->getValue('fol_name');
-        $completePath = SERVER_PATH. $folderPath. '/'. $folderName. '/'. $fileName;
 
-        return $completePath;
+        return SERVER_PATH. $folderPath. '/'. $folderName. '/'. $fileName;
     }
 
     /**

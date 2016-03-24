@@ -130,8 +130,11 @@ class Language
 
             for($paramNumber = 1; $paramNumber < $paramCount; ++$paramNumber)
             {
-                $text = str_replace('#VAR'.$paramNumber.'#', $paramArray[$paramNumber], $text);
-                $text = str_replace('#VAR'.$paramNumber.'_BOLD#', '<strong>'.$paramArray[$paramNumber].'</strong>', $text);
+                $replaceArray = array(
+                    '#VAR'.$paramNumber.'#'      => $paramArray[$paramNumber],
+                    '#VAR'.$paramNumber.'_BOLD#' => '<strong>'.$paramArray[$paramNumber].'</strong>'
+                );
+                $text = str_replace(array_keys($replaceArray), array_values($replaceArray), $text);
             }
 
             // replace square brackets with html tags

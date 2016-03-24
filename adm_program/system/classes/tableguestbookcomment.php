@@ -107,16 +107,13 @@ class TableGuestbookComment extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($newValue !== '')
+        if($newValue !== '' && $columnName === 'gbc_email')
         {
-            if($columnName === 'gbc_email')
+            $newValue = admStrToLower($newValue);
+            if (!strValidCharacters($newValue, 'email'))
             {
-                $newValue = admStrToLower($newValue);
-                if (!strValidCharacters($newValue, 'email'))
-                {
-                    // falls die Email ein ungueltiges Format aufweist wird sie nicht gesetzt
-                    return false;
-                }
+                // falls die Email ein ungueltiges Format aufweist wird sie nicht gesetzt
+                return false;
             }
         }
 

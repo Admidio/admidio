@@ -196,6 +196,7 @@ class ListConfiguration extends TableLists
                 $sqlSelect = $sqlSelect . ', ';
             }
 
+            $tableAlias = '';
             if($listColumn->getValue('lsc_usf_id') > 0)
             {
                 // dynamic profile field

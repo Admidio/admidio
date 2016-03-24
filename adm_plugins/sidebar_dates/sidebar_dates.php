@@ -167,8 +167,8 @@ if($plgDatesResult['numResults'] > 0)
             $textPrev = strip_tags($plg_date->getValue('dat_description'), '<p></p><br><br/><br /><i></i><b></b>');
 
             // Anfang des Textes auslesen auf die angegebene Länge plus 15 Zeichen, um am Ende eines Wortes abzubrechen
-            $textPrev=substr($textPrev, 0, $plg_dates_show_preview + 15);
-            $textPrev=substr($textPrev, 0, strrpos($textPrev, ' ')).' ...';
+            $textPrev = substr($textPrev, 0, $plg_dates_show_preview + 15);
+            $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...';
 
             echo '<div>'.$textPrev.'
             <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"

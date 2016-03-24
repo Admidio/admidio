@@ -312,6 +312,7 @@ class TableRoles extends TableAccess
     public function getDefaultList()
     {
         global $gCurrentOrganization, $gPreferences;
+
         $defaultListId = $this->getValue('rol_lst_id');
 
         // if default list is not set
@@ -337,13 +338,10 @@ class TableRoles extends TableAccess
         global $gL10n;
         $value = parent::getValue($columnName, $format);
 
-        if($columnName === 'cat_name' && $format !== 'database')
+        // if text is a translation-id then translate it
+        if($columnName === 'cat_name' && $format !== 'database' && strpos($value, '_') === 3)
         {
-            // if text is a translation-id then translate it
-            if(strpos($value, '_') === 3)
-            {
-                $value = $gL10n->get(admStrToUpper($value));
-            }
+            $value = $gL10n->get(admStrToUpper($value));
         }
 
         return $value;
@@ -363,11 +361,7 @@ class TableRoles extends TableAccess
         $countMembersStatement = $this->db->query($sql);
         $row = $countMembersStatement->fetch();
 
-        if($row['count'] > 0)
-        {
-            return true;
-        }
-        return false;
+        return $row['count'] > 0;
     }
 
     /**
@@ -381,6 +375,7 @@ class TableRoles extends TableAccess
     public function save($updateFingerPrint = true)
     {
         global $gCurrentSession;
+
         $fields_changed = $this->columnsValueChanged;
 
         $returnValue = parent::save($updateFingerPrint);

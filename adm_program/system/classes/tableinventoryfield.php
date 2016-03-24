@@ -88,7 +88,7 @@ class TableInventoryField extends TableAccess
      *                           @b text extract only text from usf_value_list, image infos will be ignored @n
      *                           For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011' @n
      *                           For text columns the format can be @b database that would be the database value without any transformations
-     * @return Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *         If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
@@ -203,6 +203,7 @@ class TableInventoryField extends TableAccess
                     // save values in new array that starts with key = 1
                     $arrListValuesWithKeys[++$key] = $listValue;
                 }
+                unset($listValue);
                 $value = $arrListValuesWithKeys;
             }
         }
