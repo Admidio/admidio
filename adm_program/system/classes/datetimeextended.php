@@ -18,9 +18,9 @@ class DateTimeExtended extends DateTime
 
     /**
      * es muss das Datum und das dazugehoerige Format uebergeben werden
-     * @param string $date     String mit dem Datum
-     * @param string $format   das zum Datum passende Format (Schreibweise aus date())
-     * @param object $timezone DateTimeZone
+     * @param string        $date     String mit dem Datum
+     * @param string        $format   das zum Datum passende Format (Schreibweise aus date())
+     * @param \DateTimeZone $timezone DateTimeZone
      */
     public function __construct($date, $format, $timezone = null)
     {

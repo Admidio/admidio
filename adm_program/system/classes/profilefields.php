@@ -28,8 +28,8 @@ class ProfileFields
 
     /**
      * constructor that will initialize variables and read the profile field structure
-     * @param object $database       Database object (should be @b $gDb)
-     * @param int    $organizationId The id of the organization for which the profile field structure should be read
+     * @param \Database $database       Database object (should be @b $gDb)
+     * @param int       $organizationId The id of the organization for which the profile field structure should be read
      */
     public function __construct(&$database, $organizationId)
     {
@@ -495,7 +495,7 @@ class ProfileFields
 
     /**
      * Set the database object for communication with the database of this class.
-     * @param object $database An object of the class Database. This should be the global $gDb object.
+     * @param \Database $database An object of the class Database. This should be the global $gDb object.
      */
     public function setDatabase(&$database)
     {

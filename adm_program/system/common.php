@@ -49,6 +49,7 @@ $_POST   = admStrStripTagsSpecial($_POST);
 $_COOKIE = admStrStripTagsSpecial($_COOKIE);
 
 // escape all quotes so db queries are save
+// deprecated
 if(!get_magic_quotes_gpc())
 {
     $_GET    = strAddSlashesDeep($_GET);

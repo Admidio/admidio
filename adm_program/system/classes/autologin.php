@@ -28,7 +28,7 @@ class AutoLogin extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_auto_login.
      * If the id is set than the specific auto login will be loaded.
-     * @param object     $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param \Database  $database Object of the class Database. This should be the default global object @b $gDb.
      * @param string|int $session  The recordset of the auto login with this session will be loaded.
      *                             If session isn't set than an empty object of the table is created.
      */

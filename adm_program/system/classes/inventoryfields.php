@@ -28,9 +28,9 @@ class InventoryFields
 
     /**
      * constructor that will initialize variables and read the inventory field structure
-     * @param object $database       Object of the class Database. This should be the default global object @b $gDb.
-     * @param int    $organizationId The id of the organization for which the
-     *                               profile field structure should be read
+     * @param \Database $database       Object of the class Database. This should be the default global object @b $gDb.
+     * @param int       $organizationId The id of the organization for which the
+     *                                  profile field structure should be read
      */
     public function __construct(&$database, $organizationId)
     {

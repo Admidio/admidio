@@ -32,10 +32,10 @@ class Inventory extends TableInventory
     /**
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
-     * @param object $database        Object of the class database. This could be the default object @b $gDb.
-     * @param object $inventoryFields An object of the ProfileFields class with the profile field structure
-     *                                of the current organization. This could be the default object @b $gProfileFields.
-     * @param int    $itemId          The id of the user who should be loaded. If id isn't set than an empty object with no specific user is created.
+     * @param \Database        $database        Object of the class database. This could be the default object @b $gDb.
+     * @param \InventoryFields $inventoryFields An object of the ProfileFields class with the profile field structure
+     *                                          of the current organization. This could be the default object @b $gProfileFields.
+     * @param int              $itemId          The id of the user who should be loaded. If id isn't set than an empty object with no specific user is created.
      */
     public function __construct(&$database, $inventoryFields, $itemId = 0)
     {

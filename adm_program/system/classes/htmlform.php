@@ -1312,42 +1312,42 @@ class HtmlForm extends HtmlFormBasic
      * column represents the label of each option of the selectbox. Optional you can add a third column
      * to the sql statement. This column will be used as label for an optiongroup. Each time the value
      * of the third column changed a new optiongroup will be created.
-     * @param string $id             Id of the selectbox. This will also be the name of the selectbox.
-     * @param string $label          The label of the selectbox.
-     * @param object $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param string $sql            Any SQL statement that return 2 columns. The first column will be the internal value of the
-     *                               selectbox item and will be submitted with the form. The second column represents the
-     *                               displayed value of the item. Each row of the result will be a new selectbox entry.
-     * @param array  $options (optional) An array with the following possible entries:
-     *                        - @b property : With this param you can set the following properties:
-     *                          + @b FIELD_DEFAULT  : The field can accept an input.
-     *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
-     *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
-     *                        - @b defaultValue : This is the value the selectbox shows when loaded. If @b multiselect is activated than
-     *                          an array with all default values could be set.
-     *                        - @b showContextDependentFirstEntry : If set to @b true the select box will get an additional first entry.
-     *                          If FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
-     *                          an empty entry will be added so you must not select something.
-     *                        - @b firstEntry : Here you can define a string that should be shown as firstEntry and will be the
-     *                          default value if no other value is set. This entry will only be added if @b showContextDependentFirstEntry
-     *                          is set to false!
-     *                        - @b multiselect : If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
-     *                          where the user could select multiple values from the selectbox. Then an array will be
-     *                          created within the $_POST array.
-     *                        - @b maximumSelectionNumber : If @b multiselect is enabled then you can configure the maximum number
-     *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
-     *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
-     *                          the user can see the text if he hover over the icon. If you need an additional parameter
-     *                          for the text you can add an array. The first entry must be the unique text id and the second
-     *                          entry will be a parameter of the text id.
-     *                        - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
-     *                          If you need an additional parameter for the text you can add an array. The first entry must
-     *                          be the unique text id and the second entry will be a parameter of the text id.
-     *                        - @b icon : An icon can be set. This will be placed in front of the label.
-     *                        - @b class : An additional css classname. The class @b admSelectbox
-     *                          is set as default and need not set with this parameter.
+     * @param string    $id             Id of the selectbox. This will also be the name of the selectbox.
+     * @param string    $label          The label of the selectbox.
+     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param string    $sql            Any SQL statement that return 2 columns. The first column will be the internal value of the
+     *                                  selectbox item and will be submitted with the form. The second column represents the
+     *                                  displayed value of the item. Each row of the result will be a new selectbox entry.
+     * @param array     $options (optional) An array with the following possible entries:
+     *                           - @b property : With this param you can set the following properties:
+     *                             + @b FIELD_DEFAULT  : The field can accept an input.
+     *                             + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
+     *                             + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
+     *                           - @b defaultValue : This is the value the selectbox shows when loaded. If @b multiselect is activated than
+     *                             an array with all default values could be set.
+     *                           - @b showContextDependentFirstEntry : If set to @b true the select box will get an additional first entry.
+     *                             If FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
+     *                             an empty entry will be added so you must not select something.
+     *                           - @b firstEntry : Here you can define a string that should be shown as firstEntry and will be the
+     *                             default value if no other value is set. This entry will only be added if @b showContextDependentFirstEntry
+     *                             is set to false!
+     *                           - @b multiselect : If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
+     *                             where the user could select multiple values from the selectbox. Then an array will be
+     *                             created within the $_POST array.
+     *                           - @b maximumSelectionNumber : If @b multiselect is enabled then you can configure the maximum number
+     *                             of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
+     *                           - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
+     *                             e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
+     *                             the user can see the text if he hover over the icon. If you need an additional parameter
+     *                             for the text you can add an array. The first entry must be the unique text id and the second
+     *                             entry will be a parameter of the text id.
+     *                           - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
+     *                             e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
+     *                             If you need an additional parameter for the text you can add an array. The first entry must
+     *                             be the unique text id and the second entry will be a parameter of the text id.
+     *                           - @b icon : An icon can be set. This will be placed in front of the label.
+     *                           - @b class : An additional css classname. The class @b admSelectbox
+     *                             is set as default and need not set with this parameter.
      *
      * @par Examples
      * @code // create a selectbox with all profile fields of a specific category
@@ -1447,32 +1447,32 @@ class HtmlForm extends HtmlFormBasic
     /**
      * Add a new selectbox with a label to the form. The selectbox get their data from table adm_categories.
      * You must define the category type (roles, dates, links ...). All categories of this type will be shown.
-     * @param string $id             Id of the selectbox. This will also be the name of the selectbox.
-     * @param string $label          The label of the selectbox.
-     * @param object $database A Admidio database object that contains a valid connection to a database
-     * @param string $categoryType   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
-     * @param string $selectboxModus The selectbox could be shown in 2 different modus.
-     *                               - @b EDIT_CATEGORIES : First entry will be "Please choose" and default category will be preselected.
-     *                               - @b FILTER_CATEGORIES : First entry will be "All" and only categories with childs will be shown.
-     * @param array  $options (optional) An array with the following possible entries:
-     *                        - @b property : With this param you can set the following properties:
-     *                          + @b FIELD_DEFAULT  : The field can accept an input.
-     *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
-     *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
-     *                        - @b defaultValue : Id of category that should be selected per default.
-     *                        - @b showSystemCategory : Show user defined and system categories
-     *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
-     *                          the user can see the text if he hover over the icon. If you need an additional parameter
-     *                          for the text you can add an array. The first entry must be the unique text id and the second
-     *                          entry will be a parameter of the text id.
-     *                        - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
-     *                          If you need an additional parameter for the text you can add an array. The first entry must
-     *                          be the unique text id and the second entry will be a parameter of the text id.
-     *                        - @b icon : An icon can be set. This will be placed in front of the label.
-     *                        - @b class : An additional css classname. The class @b admSelectbox
-     *                          is set as default and need not set with this parameter.
+     * @param string    $id             Id of the selectbox. This will also be the name of the selectbox.
+     * @param string    $label          The label of the selectbox.
+     * @param \Database $database       A Admidio database object that contains a valid connection to a database
+     * @param string    $categoryType   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
+     * @param string    $selectboxModus The selectbox could be shown in 2 different modus.
+     *                                  - @b EDIT_CATEGORIES : First entry will be "Please choose" and default category will be preselected.
+     *                                  - @b FILTER_CATEGORIES : First entry will be "All" and only categories with childs will be shown.
+     * @param array     $options (optional) An array with the following possible entries:
+     *                            - @b property : With this param you can set the following properties:
+     *                              + @b FIELD_DEFAULT  : The field can accept an input.
+     *                              + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
+     *                              + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
+     *                            - @b defaultValue : Id of category that should be selected per default.
+     *                            - @b showSystemCategory : Show user defined and system categories
+     *                            - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
+     *                              e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
+     *                              the user can see the text if he hover over the icon. If you need an additional parameter
+     *                              for the text you can add an array. The first entry must be the unique text id and the second
+     *                              entry will be a parameter of the text id.
+     *                            - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
+     *                              e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
+     *                              If you need an additional parameter for the text you can add an array. The first entry must
+     *                              be the unique text id and the second entry will be a parameter of the text id.
+     *                            - @b icon : An icon can be set. This will be placed in front of the label.
+     *                            - @b class : An additional css classname. The class @b admSelectbox
+     *                              is set as default and need not set with this parameter.
      */
     public function addSelectBoxForCategories($id, $label, $database, $categoryType, $selectboxModus, $options = array())
     {

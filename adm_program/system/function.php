@@ -377,7 +377,7 @@ function admFuncProcessableImageSize()
  *                             @b date or @b file that is expected and which will be checked.
  *                             Datatype @b date expects a date that has the Admidio default format from the
  *                             preferences or the english date format @b Y-m-d
- * @param array $options       (optional) An array with the following possible entries:
+ * @param array  $options      (optional) An array with the following possible entries:
  *                             - @b defaultValue : A value that will be set if the variable has no value
  *                             - @b requireValue : If set to @b true than a value is required otherwise the function
  *                                                 returns an error
@@ -576,7 +576,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $options = arr
 /**
  * Creates a html fragment with information about user and time when the recordset was created
  * and when it was at last edited. Therefore all necessary data must be set in the function
- * parameters. If userid is not set then the function will show @b deleted @b user.
+ * parameters. If userId is not set then the function will show @b deleted @b user.
  * @param int     $userIdCreated   Id of the user who create the recordset.
  * @param string  $timestampCreate Date and time of the moment when the user create the recordset.
  * @param int     $userIdEdited    Id of the user last changed the recordset.

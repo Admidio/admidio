@@ -63,7 +63,7 @@ class ComponentUpdate extends Component
      * if the value of the attribute is equal to your current @b $gDbType . If the node has
      * an attribute @b error and this is set to @b ignore than an sql error will not stop
      * the update script.
-     * @param object $xmlNode A SimpleXML node of the current update step.
+     * @param \SimpleXMLElement $xmlNode A SimpleXML node of the current update step.
      */
     private function executeStep($xmlNode)
     {

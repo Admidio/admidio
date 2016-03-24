@@ -27,8 +27,8 @@ class TableDate extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_dates.
      * If the id is set than the specific date will be loaded.
-     * @param object $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int    $dat_id   The recordset of the date with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int       $dat_id   The recordset of the date with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$database, $dat_id = 0)
     {

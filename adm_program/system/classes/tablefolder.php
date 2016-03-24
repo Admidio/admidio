@@ -31,8 +31,8 @@ class TableFolder extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_folders.
      * If the id is set than the specific folder will be loaded.
-     * @param object $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int    $folderId The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int       $folderId The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(&$database, $folderId = 0)
     {
@@ -658,7 +658,7 @@ class TableFolder extends TableAccess
      * @param string $columnName The name of the database column whose value should be read
      * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
      *                           For text columns the format can be @b database that would return the original database value without any transformations
-     * @return Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *         If the value was manipulated before with @b setValue than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')

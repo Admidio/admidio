@@ -45,7 +45,7 @@ function showNotice($message, $url, $buttonText, $buttonIcon, $update = false)
 
 /**
  * prueft, ob die Mindestvoraussetzungen bei PHP und MySQL eingehalten werden
- * @param  object $db
+ * @param  \Database $db
  * @return string
  */
 function checkDatabaseVersion(&$db)

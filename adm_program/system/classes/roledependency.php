@@ -29,7 +29,7 @@ class RoleDependency
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
-     * @param object $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
      */
     public function __construct(&$database)
     {
@@ -107,11 +107,11 @@ class RoleDependency
     }
 
     /**
-     * @param object $db
-     * @param int    $parentId
+     * @param \Database $database
+     * @param int       $parentId
      * @return array
      */
-    public static function getChildRoles(&$db, $parentId)
+    public static function getChildRoles(&$database, $parentId)
     {
         $allChildIds = array();
 
@@ -120,7 +120,7 @@ class RoleDependency
             $sql = 'SELECT rld_rol_id_child
                       FROM '. TBL_ROLE_DEPENDENCIES.
                    ' WHERE rld_rol_id_parent = '.$parentId;
-            $pdoStatement = $db->query($sql);
+            $pdoStatement = $database->query($sql);
 
             $numRows = $pdoStatement->rowCount();
             if ($numRows)
@@ -136,11 +136,11 @@ class RoleDependency
     }
 
     /**
-     * @param object $db
-     * @param int    $childId
+     * @param \Database $database
+     * @param int       $childId
      * @return array
      */
-    public static function getParentRoles(&$db, $childId)
+    public static function getParentRoles(&$database, $childId)
     {
         $allParentIds = array();
 
@@ -149,7 +149,7 @@ class RoleDependency
             $sql = 'SELECT rld_rol_id_parent
                       FROM '.TBL_ROLE_DEPENDENCIES.
                    ' WHERE rld_rol_id_child = '.$childId;
-            $pdoStatement = $db->query($sql);
+            $pdoStatement = $database->query($sql);
 
             $numRows = $pdoStatement->rowCount();
             if ($numRows)
@@ -200,17 +200,17 @@ class RoleDependency
     }
 
     /**
-     * @param object $db
-     * @param int    $parentId
+     * @param \Database $database
+     * @param int       $parentId
      * @return
      */
-    public static function removeChildRoles(&$db, $parentId)
+    public static function removeChildRoles(&$database, $parentId)
     {
         if(is_numeric($parentId) && $parentId > 0)
         {
             $sql = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.
                    ' WHERE rld_rol_id_parent = '.$parentId;
-            $db->query($sql);
+            $database->query($sql);
 
             return 0;
         }

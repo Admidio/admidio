@@ -40,7 +40,7 @@ class Session extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_sessions.
      * If the id is set than the specific session will be loaded.
-     * @param object     $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param \Database  $database Object of the class Database. This should be the default global object @b $gDb.
      * @param int|string $session  The recordset of the session with this id will be loaded.
      *                             The session can be the table id or the alphanumeric session id.
      *                             If id isn't set than an empty object of the table is created.
@@ -378,7 +378,7 @@ class Session extends TableAccess
 
     /**
      * Set the database object for communication with the database of this class.
-     * @param object $database An object of the class Database. This should be the global $gDb object.
+     * @param \Database $database An object of the class Database. This should be the global $gDb object.
      */
     public function setDatabase(&$database)
     {
