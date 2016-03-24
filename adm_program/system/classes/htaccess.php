@@ -29,49 +29,47 @@
 class Htaccess
 {
     protected $folderPath;
-    protected $htaccessFileExistsAlready = false;
-    protected $folderExists              = false;
 
     /**
-     * @param string $folderPathParam
+     * @param string $folderPath
      */
-    public function __construct($folderPathParam)
+    public function __construct($folderPath)
     {
-        $this->folderPath = $folderPathParam;
-
-        if (file_exists($this->folderPath))
-        {
-            $this->folderExists = true;
-
-            if (file_exists($folderPathParam . '/.htaccess'))
-            {
-                $this->htaccessFileExistsAlready = true;
-            }
-        }
+        $this->folderPath = $folderPath;
     }
 
     /**
      * Schuetzt den uebergebenen Ordner
+     * @return bool Returns true if protection is enabled
      */
     public function protectFolder()
     {
-        if ($this->folderExists && !$this->htaccessFileExistsAlready)
+        if (is_dir($this->folderPath) && !is_file($this->folderPath.'/.htaccess') && is_writable($this->folderPath.'/.htaccess'))
         {
-            $file = fopen($this->folderPath . '/.htaccess', 'w+');
+            $file = fopen($this->folderPath.'/.htaccess', 'w+');
+
+            if (!$file)
+            {
+                return false;
+            }
+
             fwrite($file, "Order deny,allow\n");
             fwrite($file, "Deny from all\n");
-            fclose($file);
+            return fclose($file);
         }
+        return true;
     }
 
     /**
      * Entfernt den Ordnerschutz (loeschen der htaccessDatei)
+     * @return bool Returns true if protection is disabled
      */
     public function unprotectFolder()
     {
-        if ($this->folderExists && $this->htaccessFileExistsAlready)
+        if (is_dir($this->folderPath) && is_file($this->folderPath.'/.htaccess'))
         {
-            @unlink($this->folderPath . '/.htaccess', 'w+');
+            return @unlink($this->folderPath.'/.htaccess', 'w+');
         }
+        return true;
     }
 }
