@@ -34,15 +34,14 @@
  */
 class Navigation
 {
-    private $urlStack = array();
-    private $count;
+    private $urlStack;
 
     /**
      * Constructor will initialize the local parameters
      */
     public function __construct()
     {
-        $this->count = 0;
+        $this->urlStack = array();
     }
 
     /**
@@ -70,25 +69,27 @@ class Navigation
      *                     would be linked with the $url.
      * @param string $icon A url to the icon that should be shown in the html navigation stack
      *                     together with the text and would be linked with the $url.
-     * @return void
+     * @return bool Returns true if the url got added and false if not.
      */
     public function addUrl($url, $text = null, $icon = null)
     {
-        if($this->count == 0 || $url != $this->urlStack[$this->count-1]['url'])
+        $count = count($this->urlStack);
+
+        if($count === 0 || $url !== end($this->urlStack)['url'])
         {
-            if($this->count > 1 && $url == $this->urlStack[$this->count-2]['url'])
+            if($count > 1 && $url === $this->urlStack[$count-2]['url'])
             {
                 // if the last but one url is equal to the current url then only remove the last url
                 array_pop($this->urlStack);
-                --$this->count;
             }
             else
             {
                 // if the current url will not be the last or the last but one then add the current url to stack
-                $this->urlStack[$this->count] = array('url' => $url, 'text' => $text, 'icon' => $icon);
-                ++$this->count;
+                $this->urlStack[] = array('url' => $url, 'text' => $text, 'icon' => $icon);
+                return true;
             }
         }
+        return false;
     }
 
     /**
@@ -98,7 +99,6 @@ class Navigation
     public function clear()
     {
         $this->urlStack = array();
-        $this->count = 0;
     }
 
     /**
@@ -107,20 +107,16 @@ class Navigation
      */
     public function count()
     {
-        return $this->count;
+        return count($this->urlStack);
     }
 
     /**
      * Removes the last url from the stack.
-     * @return void
+     * @return string[] Returns the removed element
      */
     public function deleteLastUrl()
     {
-        if($this->count > 0)
-        {
-            --$this->count;
-            unset($this->urlStack[$this->count]);
-        }
+        return array_pop($this->urlStack);
     }
 
     /**
@@ -142,7 +138,6 @@ class Navigation
             $html = '
             <a class="btn" href="'.$url.'"><img src="'. THEME_PATH. '/icons/back.png"
                 alt="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').'</a>';
-
         }
 
         // if entries where found then add div element
@@ -164,11 +159,11 @@ class Navigation
     {
         $html = '';
 
-        for($i = 0; $i < $this->count; ++$i)
+        foreach ($this->urlStack as $url)
         {
-            if(strlen($this->urlStack[$i]['text']) > 0)
+            if(strlen($url['text']) > 0)
             {
-                $html .= '<a href="'.$this->urlStack[$i]['url'].'">'.$this->urlStack[$i]['text'].'</a>';
+                $html .= '<a href="'.$url['url'].'">'.$url['text'].'</a>';
             }
         }
 
@@ -182,36 +177,40 @@ class Navigation
 
     /**
      * Get the previous url from the stack. This is not the last url that was added to the stack!
-     * @return string
+     * @return string|null Returns the previous added url. If only one url is added it returns this one. If no url is added returns null
      */
     public function getPreviousUrl()
     {
-        if($this->count > 1)
+        $count = count($this->urlStack);
+
+        if($count === 0)
         {
-            $url_count = $this->count - 2;
+            return null;
+        }
+        elseif($count === 1)
+        {
+            // Only one url, take this one
+            return reset($this->urlStack)['url'];
         }
         else
         {
-            // es gibt nur eine Url, dann diese nehmen
-            $url_count = 0;
+            return $this->urlStack[$count - 2]['url'];
         }
-        return $this->urlStack[$url_count]['url'];
     }
 
     /**
      * Get the last added url from the stack.
-     * @return string|null
+     * @return string|null Returns the last added url. If the stack is empty returns null
      */
     public function getUrl()
     {
-        if($this->count > 0)
+        if(count($this->urlStack) > 0)
         {
-            return $this->urlStack[$this->count-1]['url'];
+            return end($this->urlStack)['url'];
         }
         else
         {
             return null;
         }
-
     }
 }
