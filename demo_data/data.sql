@@ -4,23 +4,23 @@
 --
 
 INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES ('SYSTEM', 'Admidio Core', 'CORE', '3.1.0', 0, 500)
-                              , ('MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUCEMENTS', '3.1.0', 0, 0)
-                              , ('MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.1.0', 0, 0)
-                              , ('MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.1.0', 0, 0)
-                              , ('MODULE', 'DAT_DATES', 'DATES', '3.1.0', 0, 0)
-                              , ('MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.1.0', 0, 0)
-                              , ('MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.1.0', 0, 0)
-                              , ('MODULE', 'LNK_WEBLINKS', 'LINKS', '3.1.0', 0, 0)
-                              , ('MODULE', 'LST_LISTS', 'LISTS', '3.1.0', 0, 0)
-                              , ('MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.1.0', 0, 0)
-                              , ('MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.1.0', 0, 0)
-                              , ('MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.1.0', 0, 0)
-                              , ('MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.1.0', 0, 0)
-                              , ('MODULE', 'PRO_PROFILE', 'PROFILE', '3.1.0', 0, 0)
-                              , ('MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.1.0', 0, 0)
-                              , ('MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.1.0', 0, 0)
-                              , ('MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.1.0', 0, 0);
+                         VALUES ('SYSTEM', 'Admidio Core', 'CORE', '3.1.2', 0, 500)
+                              , ('MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUCEMENTS', '3.1.2', 0, 0)
+                              , ('MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.1.2', 0, 0)
+                              , ('MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.1.2', 0, 0)
+                              , ('MODULE', 'DAT_DATES', 'DATES', '3.1.2', 0, 0)
+                              , ('MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.1.2', 0, 0)
+                              , ('MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.1.2', 0, 0)
+                              , ('MODULE', 'LNK_WEBLINKS', 'LINKS', '3.1.2', 0, 0)
+                              , ('MODULE', 'LST_LISTS', 'LISTS', '3.1.2', 0, 0)
+                              , ('MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.1.2', 0, 0)
+                              , ('MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.1.2', 0, 0)
+                              , ('MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.1.2', 0, 0)
+                              , ('MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.1.2', 0, 0)
+                              , ('MODULE', 'PRO_PROFILE', 'PROFILE', '3.1.2', 0, 0)
+                              , ('MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.1.2', 0, 0)
+                              , ('MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.1.2', 0, 0)
+                              , ('MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.1.2', 0, 0);
 
 --
 -- Data for table adm_organizations
@@ -78,6 +78,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (6500, 1, 'lists_hide_overview_details', '0'),
 (6600, 1, 'lists_members_per_page', '25'),
 (6700, 1, 'lists_roles_per_page', '10'),
+(6705, 1, 'lists_default_configuation', '1'),
 (6800, 1, 'logout_minutes', '20'),
 (6900, 1, 'mail_bcc_count', '50'),
 (6910, 1, 'mail_character_encoding', 'utf-8'),
@@ -184,6 +185,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (65001, 2, 'lists_hide_overview_details', '0'),
 (66001, 2, 'lists_members_per_page', '25'),
 (67001, 2, 'lists_roles_per_page', '10'),
+(67005, 2, 'lists_default_configuation', '9'),
 (68001, 2, 'logout_minutes', '20'),
 (69001, 2, 'mail_bcc_count', '50'),
 (69100, 2, 'mail_character_encoding', 'utf-8'),
