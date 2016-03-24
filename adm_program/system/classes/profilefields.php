@@ -323,7 +323,7 @@ class ProfileFields
 
             if($format !== 'database')
             {
-                if($fieldNameIntern == 'COUNTRY')
+                if($fieldNameIntern === 'COUNTRY')
                 {
                     if ($value !== '')
                     {

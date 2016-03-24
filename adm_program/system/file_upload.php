@@ -24,6 +24,15 @@ $getModule = admFuncVariableIsValid($_GET, 'module', 'string', array('validValue
 $getMode   = admFuncVariableIsValid($_GET, 'mode',   'string', array('defaultValue' => 'choose_files', 'validValues' => array('choose_files', 'upload_files')));
 $getId     = admFuncVariableIsValid($_GET, 'id',     'int',    array('requireValue' => true));
 
+// Initialize variables
+$headline                = '';
+$textFileUploaded        = '';
+$textUploadSuccessful    = '';
+$textUploadNotSuccessful = '';
+$textUploadDescription   = '';
+$textSelectFiles         = '';
+$iconUploadPath          = '';
+
 // module specific checks
 if($getModule === 'photos')
 {

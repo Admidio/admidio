@@ -55,7 +55,7 @@ class ConditionParser
             {
                 case '=':
                     // first remove = from destination condition
-                    $this->mDestCond = substr($this->mDestCond, 0, strlen($this->mDestCond) - 4);
+                    $this->mDestCond = substr($this->mDestCond, 0, -4);
 
                     // now compute the dates for a valid birthday with that age
                     $date->modify('-'.$age.' years');
@@ -116,10 +116,10 @@ class ConditionParser
             '*' => '%',
             // valid 'not null' is '#'
             admStrToUpper($gL10n->get('SYS_NOT_EMPTY')) => ' # ',
-            ' NOT NULL ' => ' # ',
+            ' NOT NULL '                                => ' # ',
             // valid 'null' is '_'
             admStrToUpper($gL10n->get('SYS_EMPTY')) => ' _ ',
-            ' NULL ' => ' _ ',
+            ' NULL '                                => ' _ ',
             // valid 'is not' is '!'
             '{}'     => ' ! ',
             '!='     => ' ! ',

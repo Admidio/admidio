@@ -237,7 +237,7 @@ $gMessage = new Message();
 // Every URL will be stored in a stack and can be called if user want's to navigate back
 if($gCurrentSession->hasObject('gNavigation'))
 {
-    $gNavigation = $gCurrentSession->getObject('gNavigation');
+    $gNavigation =& $gCurrentSession->getObject('gNavigation');
 }
 else
 {

@@ -113,7 +113,7 @@ class Database
         {
             $availableDrivers = PDO::getAvailableDrivers();
 
-            if (empty($availableDrivers))
+            if (count($availableDrivers) === 0)
             {
                 throw new PDOException('PDO does not support any drivers');
             }

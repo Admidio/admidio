@@ -244,7 +244,7 @@ elseif($getMode === 4)  // Creating organization
             // wenn letztes Zeichen ein _ dann abschneiden
             if(strrpos($_POST['db_prefix'], '_')+1 === strlen($_POST['db_prefix']))
             {
-                $_POST['db_prefix'] = substr($_POST['db_prefix'], 0, strlen($_POST['db_prefix'])-1);
+                $_POST['db_prefix'] = substr($_POST['db_prefix'], 0, -1);
             }
 
             // nur gueltige Zeichen zulassen
@@ -332,6 +332,7 @@ elseif($getMode === 4)  // Creating organization
 
     // create array with possible PHP timezones
     $allTimezones = DateTimeZone::listIdentifiers();
+    $timezones = array();
     foreach($allTimezones as $timezone)
     {
         $timezones[$timezone] = $timezone;

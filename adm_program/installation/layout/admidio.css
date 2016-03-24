@@ -75,9 +75,8 @@ h3 {
     h1, h3 {
         padding: 15px 5px;
         border: 1px solid #7d7d7d;
-        border-left: 0;
-        border-right: 0;
-        border-color: #7d7d7d;
+        border-right-width: 0;
+        border-left-width: 0;
         background-color: #96c4cb;
         background-repeat: repeat-x;
         background-image: -moz-linear-gradient(top, #ffffff 0%, #96c4cb 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96c4cb 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96c4cb 95%);

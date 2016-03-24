@@ -194,7 +194,7 @@ class Captcha
         $this->captchaCode = '';
         for ($i = 0; $i < $this->charCount; ++$i)
         {
-            $this->captchaCode .= $this->allowedChars{mt_rand(0, strlen($this->allowedChars)-1)};
+            $this->captchaCode .= $this->allowedChars[mt_rand(0, strlen($this->allowedChars)-1)];
         }
 
         // hier wird der Code jetzt in der Session gespeichert...

@@ -1520,7 +1520,6 @@ class User extends TableAccess
 
             $newFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
 
-
             // Nicht alle Aenderungen werden geloggt. Ausnahmen:
             // usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
             // Felder, die mit usr_ beginnen, werden nicht geloggt

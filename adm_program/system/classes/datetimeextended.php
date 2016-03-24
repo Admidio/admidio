@@ -53,8 +53,7 @@ class DateTimeExtended extends DateTime
      */
     public function getAge()
     {
-        $interval = $this->diff(new DateTime('now'));
-        return $interval->y;
+        return $this->diff(new DateTime('now'))->y;
     }
 
     /**
