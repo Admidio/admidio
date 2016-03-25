@@ -116,7 +116,7 @@ if($plgDatesResult['numResults'] > 0)
         // Bis-Datum und Uhrzeit anzeigen
         if($plg_show_date_end)
         {
-            if($plg_date->getValue('dat_begin', $gPreferences['system_date']) != $plg_date->getValue('dat_end', $gPreferences['system_date']))
+            if($plg_date->getValue('dat_begin', $gPreferences['system_date']) !== $plg_date->getValue('dat_end', $gPreferences['system_date']))
             {
                 $plg_html_end_date .= $plg_date->getValue('dat_end', $gPreferences['system_date']);
             }

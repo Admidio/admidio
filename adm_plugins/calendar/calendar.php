@@ -270,7 +270,7 @@ if($plg_ter_aktiv == 1)
 
             $oneDayDate = false;
 
-            if($startDate->format('m') != $currentMonth)
+            if($startDate->format('m') !== $currentMonth)
             {
                 $firstDay = 1;
             }
@@ -279,7 +279,7 @@ if($plg_ter_aktiv == 1)
                 $firstDay = $startDate->format('j');
             }
 
-            if($endDate->format('m') != $currentMonth)
+            if($endDate->format('m') !== $currentMonth)
             {
                 $lastDay = $lastDayCurrentMonth;
             }
@@ -294,7 +294,7 @@ if($plg_ter_aktiv == 1)
                 $lastDay = $endDate->format('j');
             }
 
-            if($startDate->format('Y-m-d') == $endDate->format('Y-m-d'))
+            if($startDate->format('Y-m-d') === $endDate->format('Y-m-d'))
             {
                 $oneDayDate = true;
             }
@@ -686,7 +686,7 @@ while($currentDay <= $lastDayCurrentMonth)
 }
 echo '</table>';
 
-if($currentMonth.$currentYear != date('mY'))
+if($currentMonth.$currentYear !== date('mY'))
 {
     echo '<div id="plgCalendarReset"><a href="#" onclick="$.ajax({
             type: \'GET\',
