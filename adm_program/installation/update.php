@@ -159,8 +159,8 @@ else
     if($componentUpdateHandle->getValue('com_id') > 0)
     {
         $installedDbVersion     = $componentUpdateHandle->getValue('com_version');
-        $installedDbBetaVersion = $componentUpdateHandle->getValue('com_beta');
-        $currentUpdateStep      = $componentUpdateHandle->getValue('com_update_step');
+        $installedDbBetaVersion = (int) $componentUpdateHandle->getValue('com_beta');
+        $currentUpdateStep      = (int) $componentUpdateHandle->getValue('com_update_step');
         $maxUpdateStep          = $componentUpdateHandle->getMaxUpdateStep();
     }
 }
@@ -300,11 +300,11 @@ elseif($getMode === 2)
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(300);
 
-    $mainVersion     = substr($installedDbVersion, 0, 1);
-    $subVersion      = substr($installedDbVersion, 2, 1);
-    $microVersion    = substr($installedDbVersion, 4, 1);
-    $microVersion    = (int) $microVersion + 1;
+    $mainVersion     = (int) substr($installedDbVersion, 0, 1);
+    $subVersion      = (int) substr($installedDbVersion, 2, 1);
+    $microVersion    = (int) substr($installedDbVersion, 4, 1);
     $flagNextVersion = true;
+    ++$microVersion;
 
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
     require_once('db_scripts/preferences.php');
@@ -396,12 +396,12 @@ elseif($getMode === 2)
                 {
                     if($subVersion == 4) // we do not have more then 4 subversions with old updater
                     {
-                        $mainVersion = (int) $mainVersion + 1;
+                        ++$mainVersion;
                         $subVersion  = 0;
                     }
                     else
                     {
-                        $subVersion  = (int) $subVersion + 1;
+                        ++$subVersion;
                     }
 
                     $microVersion    = 0;

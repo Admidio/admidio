@@ -1345,7 +1345,7 @@ class User extends TableAccess
             $cost = 10;
             if(isset($gPreferences['system_hashing_cost']))
             {
-                $cost = intval($gPreferences['system_hashing_cost']);
+                $cost = (int) $gPreferences['system_hashing_cost'];
             }
 
             $newPassword = PasswordHashing::hash($newPassword, PASSWORD_DEFAULT, array('cost' => $cost));

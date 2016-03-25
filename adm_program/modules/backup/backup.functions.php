@@ -133,29 +133,29 @@ function version_compare_replacement_sub($version1, $version2, $operator = '')
     {
         case '<':
         case 'lt':
-            return intval($version1 < $version2);
+            return (int) ($version1 < $version2);
             break;
         case '<=':
         case 'le':
-            return intval($version1 <= $version2);
+            return (int) ($version1 <= $version2);
             break;
         case '>':
         case 'gt':
-            return intval($version1 > $version2);
+            return (int) ($version1 > $version2);
             break;
         case '>=':
         case 'ge':
-            return intval($version1 >= $version2);
+            return (int) ($version1 >= $version2);
             break;
         case '==':
         case '=':
         case 'eq':
-            return intval($version1 == $version2);
+            return (int) ($version1 == $version2);
             break;
         case '!=':
         case '<>':
         case 'ne':
-            return intval($version1 != $version2);
+            return (int) ($version1 != $version2);
             break;
     }
     if ($version1 == $version2)

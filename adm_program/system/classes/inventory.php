@@ -211,7 +211,7 @@ class Inventory extends TableInventory
     {
         if(is_numeric($organizationId))
         {
-            $this->organizationId = intval($organizationId);
+            $this->organizationId = (int) $organizationId;
         }
     }
 
