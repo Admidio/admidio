@@ -169,13 +169,13 @@ if($getPhotoNr == null)
                     if(file_exists($path.'.jpg'))
                     {
                         $path .= '.jpg';
-                        $zip->addFromString($photo_album_name."/".basename($path),  file_get_contents($path));
+                        $zip->addFromString($photo_album_name.'/'.basename($path),  file_get_contents($path));
                         continue;
                     }
                     elseif(file_exists($path.'.png'))
                     {
                         $path .= '.png';
-                        $zip->addFromString($photo_album_name."/".basename($path),  file_get_contents($path));
+                        $zip->addFromString($photo_album_name.'/'.basename($path),  file_get_contents($path));
                         continue;
                     }
                 }

@@ -53,9 +53,10 @@ $statement = $gDb->query($sql);
 
 // create RSS feed object with channel information
 $rss = new RSSfeed($gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline,
-            $gCurrentOrganization->getValue('org_homepage'),
-            $gL10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA', $gCurrentOrganization->getValue('org_longname')),
-            $gCurrentOrganization->getValue('org_longname'));
+                   $gCurrentOrganization->getValue('org_homepage'),
+                   $gL10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA',
+                   $gCurrentOrganization->getValue('org_longname')),
+                   $gCurrentOrganization->getValue('org_longname'));
 $guestbook = new TableGuestbook($gDb);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen

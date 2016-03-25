@@ -369,6 +369,7 @@ function EmailAttachment($from, $to, $subject, $textbody, &$attachmentdata, $att
     $attachmentheaders .= 'Content-Transfer-Encoding: base64'."\r\n";
     $attachmentheaders .= 'Content-Disposition: attachment; filename="'.$attachmentfilename.'"'."\r\n\r\n";
 
+    $headers = array();
     $headers[] = 'From: '.$from;
     $headers[] = 'Content-Type: multipart/mixed; boundary="'.$boundary.'"';
 

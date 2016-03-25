@@ -95,7 +95,7 @@ if ($gCurrentUser->editDownloadRight())
 
     $DownloadsMenu->addItem('menu_item_config_folder', $g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$getFolderId,
                         $gL10n->get('SYS_AUTHORIZATION'), 'lock.png');
-};
+}
 
 if($gCurrentUser->isWebmaster())
 {

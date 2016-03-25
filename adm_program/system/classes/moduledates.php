@@ -168,11 +168,9 @@ class ModuleDates extends Modules
             {
                 return $objDate->format('Y-m-d');
             }
-            else
-            {
-                return false;
-            }
         }
+
+        return false;
     }
 
     /**
@@ -183,10 +181,7 @@ class ModuleDates extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization;
-        global $gCurrentUser;
-        global $gDb;
-        global $gPreferences;
+        global $gDb, $gPreferences, $gCurrentUser, $gCurrentOrganization;
 
         if($limit === null)
         {
@@ -239,6 +234,7 @@ class ModuleDates extends Modules
         $datesStatement = $gDb->query($sql);
 
         // array for results
+        $dates = array();
         $dates['recordset']  = $datesStatement->fetchAll();
         $dates['numResults'] = $datesStatement->rowCount();
         $dates['limit']      = $limit;
@@ -254,7 +250,7 @@ class ModuleDates extends Modules
      */
     public function getHeadline($headline)
     {
-        global $gL10n, $gCurrentOrganization, $gDb;
+        global $gDb, $gL10n, $gCurrentOrganization;
 
         // set headline with category name
         if($this->getParameter('cat_id') > 0)
@@ -288,8 +284,7 @@ class ModuleDates extends Modules
     {
         if($this->id == 0)
         {
-            global $gCurrentOrganization;
-            global $gDb;
+            global $gDb, $gCurrentOrganization;
 
             $sql = 'SELECT COUNT(DISTINCT dat_id) as count
                       FROM '.TBL_DATE_ROLE.'
@@ -310,10 +305,8 @@ class ModuleDates extends Modules
 
             return $row['count'];
         }
-        else
-        {
-            return 1;
-        }
+
+        return 1;
     }
 
     /**
@@ -328,14 +321,12 @@ class ModuleDates extends Modules
      */
     public function getFormValue($date, $reference)
     {
-        if(!isset($date) || !isset($reference))
-        {
-            return false;
-        }
-        else
+        if(isset($date) && isset($reference))
         {
             return $this->setFormValue($date, $reference);
         }
+
+        return false;
     }
 
     /**
@@ -346,7 +337,7 @@ class ModuleDates extends Modules
      * @param string $dateRangeStart A date in english or Admidio format that will be the start date of the range.
      * @param string $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
      * @throws AdmException SYS_DATE_END_BEFORE_BEGIN
-     * @return void|false Returns false if invalid date format is submitted
+     * @return bool Returns false if invalid date format is submitted
      */
     public function setDateRange($dateRangeStart = '', $dateRangeEnd = '')
     {
@@ -388,15 +379,13 @@ class ModuleDates extends Modules
             $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], $dateRangeStart);
         }
 
-        if(is_object($objDateFrom))
-        {
-            $this->setParameter('dateStartFormatEnglish', $objDateFrom->format('Y-m-d'));
-            $this->setParameter('dateStartFormatAdmidio', $objDateFrom->format($gPreferences['system_date']));
-        }
-        else
+        if(!is_object($objDateFrom))
         {
             return false;
         }
+
+        $this->setParameter('dateStartFormatEnglish', $objDateFrom->format('Y-m-d'));
+        $this->setParameter('dateStartFormatAdmidio', $objDateFrom->format($gPreferences['system_date']));
 
         // Create date object and format date_to in English format and sytem format and push to daterange array
         $objDateTo = DateTime::createFromFormat('Y-m-d', $dateRangeEnd);
@@ -407,21 +396,21 @@ class ModuleDates extends Modules
             $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], $dateRangeEnd);
         }
 
-        if(is_object($objDateTo))
-        {
-            $this->setParameter('dateEndFormatEnglish', $objDateTo->format('Y-m-d'));
-            $this->setParameter('dateEndFormatAdmidio', $objDateTo->format($gPreferences['system_date']));
-        }
-        else
+        if(!is_object($objDateTo))
         {
             return false;
         }
+
+        $this->setParameter('dateEndFormatEnglish', $objDateTo->format('Y-m-d'));
+        $this->setParameter('dateEndFormatAdmidio', $objDateTo->format($gPreferences['system_date']));
 
         // DateTo should be greater than DateFrom (Timestamp must be less)
         if($objDateFrom->format('U') > $objDateTo->format('U'))
         {
             throw new AdmException('SYS_DATE_END_BEFORE_BEGIN');
         }
+
+        return true;
     }
 
     /**
@@ -451,8 +440,7 @@ class ModuleDates extends Modules
      */
     public function sqlAdditionalTablesGet($type = 'data')
     {
-        global $gPreferences;
-        global $gProfileFields;
+        global $gPreferences, $gProfileFields;
 
         $additionalTables = '';
 

@@ -162,6 +162,9 @@ elseif($getMode === 2)
     // Check valid format of date input
     // ------------------------------------------------
 
+    $validFromDate = '';
+    $validToDate   = '';
+
     if(strlen($_POST['rol_start_date']) > 0)
     {
         $validFromDate = DateTime::createFromFormat($gPreferences['system_date'], $_POST['rol_start_date']);

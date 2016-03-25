@@ -316,6 +316,7 @@ class ModuleLists extends Modules
         $listsStatement = $gDb->query($sql);
 
         // array for results
+        $lists = array();
         $lists['recordset']  = $listsStatement->fetchAll();
         $lists['numResults'] = $listsStatement->rowCount();
         $lists['limit']      = $limit;

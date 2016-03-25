@@ -16,6 +16,8 @@ class FunctionClass
     public $newMessageReceivedString = '';
     public $greetingCardFrom         = '';
     public $greetingCardString       = '';
+    public $sendToString             = '';
+    public $emailString              = '';
 
     /**
      * @param \Language $gL10n
@@ -33,8 +35,8 @@ class FunctionClass
     }
 
     /**
-     * @param string $directory
-     * @return array
+     * @param string $directory Path of the directory with the template files
+     * @return string[] Returns an array of the template filenames
      */
     public function getFileNames($directory)
     {
@@ -86,28 +88,28 @@ class FunctionClass
      * Diese Funktion ersetzt alle im Template enthaltenen Platzhalter durch die dementsprechenden Informationen
      * @param string $imageName
      * @param string $ecardMessage
-     * @param string $ecard_data     geparste Information von dem Grußkarten Template
+     * @param string $ecardData      geparste Information von dem Grußkarten Template
      * @param string $recipientName  der Name des Empfaengers
      * @param string $recipientEmail die Email des Empfaengers
      * @return string
      *
      * Ersetzt werden folgende Platzhalter
-     *     Admidio Pfad:           <%g_root_path%>
-     *     Template Verzeichnis    <%template_root_path%>
-     *     Style Eigenschaften:    <%ecard_font%>              <%ecard_font_size%>         <%ecard_font_color%> <%ecard_font_bold%> <%ecard_font_italic%>
-     *     Empfaenger Daten:       <%ecard_reciepient_email%>  <%ecard_reciepient_name%>
-     *     Sender Daten:           <%ecard_sender_id%>         <%ecard_sender_email%>      <%ecard_sender_name%>
-     *     Bild Daten:             <%ecard_image_width%>       <%ecard_image_height%>      <%ecard_image_name%>
-     *     Nachricht:              <%ecard_message%>
+     * Admidio Pfad:           <%g_root_path%>
+     * Template Verzeichnis:   <%template_root_path%>
+     * Style Eigenschaften:    <%ecard_font%>              <%ecard_font_size%>         <%ecard_font_color%> <%ecard_font_bold%> <%ecard_font_italic%>
+     * Empfaenger Daten:       <%ecard_reciepient_email%>  <%ecard_reciepient_name%>
+     * Sender Daten:           <%ecard_sender_id%>         <%ecard_sender_email%>      <%ecard_sender_name%>
+     * Bild Daten:             <%ecard_image_width%>       <%ecard_image_height%>      <%ecard_image_name%>
+     * Nachricht:              <%ecard_message%>
      */
-    public function parseEcardTemplate($imageName, $ecardMessage, $ecard_data, $recipientName, $recipientEmail)
+    public function parseEcardTemplate($imageName, $ecardMessage, $ecardData, $recipientName, $recipientEmail)
     {
         global $gCurrentUser, $g_root_path;
 
         // Falls der Name des Empfaenger nicht vorhanden ist wird er fuer die Vorschau ersetzt
         if(strip_tags(trim($recipientName)) === '')
         {
-            $recipientName  = '< '.$this->nameRecipientString.' >';
+            $recipientName = '< '.$this->nameRecipientString.' >';
         }
 
         // Falls die Email des Empfaenger nicht vorhanden ist wird sie fuer die Vorschau ersetzt
@@ -149,9 +151,9 @@ class FunctionClass
         // Hier wird die Nachricht ersetzt
         $pregRepArray['/<%ecard_message%>/']              = $ecardMessage;
 
-        $ecard_data = preg_replace(array_keys($pregRepArray), array_values($pregRepArray), $ecard_data);
+        $ecardData = preg_replace(array_keys($pregRepArray), array_values($pregRepArray), $ecardData);
 
-        return $ecard_data;
+        return $ecardData;
     }
 
     /**

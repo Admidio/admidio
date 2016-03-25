@@ -169,6 +169,7 @@ class ModuleWeblinks extends Modules
         $weblinksStatement = $gDb->query($sql);
 
         // array for results
+        $weblinks = array();
         $weblinks['recordset']  = $weblinksStatement->fetchAll();
         $weblinks['numResults'] = $weblinksStatement->rowCount();
         $weblinks['limit']      = $limit;

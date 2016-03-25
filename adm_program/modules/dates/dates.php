@@ -113,7 +113,7 @@ if($getViewMode === 'html')
         $page->addRssFile($g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$getHeadline,
                           $gL10n->get('SYS_RSS_FEED_FOR_VAR',
                           $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
-    };
+    }
 
     $page->addJavascript('
         $("#sel_change_view").change(function () {
@@ -231,6 +231,9 @@ else
     if ($getView === 'compact' || $getView === 'room' || $getView === 'participants' || $getView === 'description')
     {
         $compactTable = new HtmlTable('events_compact_table', $page, $hoverRows, $datatable, $classTable);
+
+        $columnHeading = array();
+        $columnAlign   = array();
 
         switch ($getView)
         {

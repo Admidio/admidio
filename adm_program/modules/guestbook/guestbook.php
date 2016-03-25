@@ -60,7 +60,7 @@ $page->enableModal();
 if($gPreferences['enable_rss'] == 1)
 {
     $page->addRssFile($g_root_path.'/adm_program/modules/guestbook/rss_guestbook.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
-};
+}
 
 $page->addJavascript('
     function getComments(commentId) {

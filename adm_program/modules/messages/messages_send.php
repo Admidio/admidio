@@ -459,7 +459,7 @@ else
     // check if it is allowed to send to this user
     if((!$gCurrentUser->editUsers() && !isMember($user->getValue('usr_id'))) || $user->getValue('usr_id') === '')
     {
-            $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
+        $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
     }
 
     // check if receiver of message has valid login
@@ -476,7 +476,7 @@ else
         $PMId2 = 1;
 
         $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-            VALUES ('".$getMsgType."', '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', CURRENT_TIMESTAMP, '1')";
+                VALUES ('".$getMsgType."', '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', CURRENT_TIMESTAMP, '1')";
 
         $gDb->query($sql);
         $getMsgId = $gDb->lastInsertId();
@@ -507,13 +507,13 @@ if ($sendResult)
     if ($getMsgType !== 'PM' && $gValidLogin)
     {
         $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-            VALUES ('".$getMsgType."', '".$postSubjectSQL."', ".$gCurrentUser->getValue('usr_id').", '".$ReceiverString."', CURRENT_TIMESTAMP, 0)";
+                VALUES ('".$getMsgType."', '".$postSubjectSQL."', ".$gCurrentUser->getValue('usr_id').", '".$ReceiverString."', CURRENT_TIMESTAMP, 0)";
 
         $gDb->query($sql);
         $getMsgId = $gDb->lastInsertId();
 
         $sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-            VALUES (".$getMsgId.", 1, ".$gCurrentUser->getValue('usr_id').", '".$postBodySQL."', CURRENT_TIMESTAMP)";
+                VALUES (".$getMsgId.", 1, ".$gCurrentUser->getValue('usr_id').", '".$postBodySQL."', CURRENT_TIMESTAMP)";
 
         $gDb->query($sql);
     }

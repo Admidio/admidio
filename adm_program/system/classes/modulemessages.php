@@ -93,8 +93,9 @@ class ModuleMessages
         }
         else
         {
-            $group[0] = $groupSplit[1];
-            $group[1] = 0;
+            $group = array();
+            $group[] = $groupSplit[1];
+            $group[] = 0;
         }
 
         return $group;

@@ -70,6 +70,9 @@ else
     $form_values['new_description'] = null;
 }
 
+$originalName = '';
+$fileType     = '';
+
 try
 {
     if ($getFileId)

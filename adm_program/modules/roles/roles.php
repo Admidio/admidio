@@ -221,27 +221,27 @@ while($row = $rolStatement->fetch())
         $assignRoles = '&nbsp;';
     }
 
-    if($role->getValue("rol_this_list_view") == 1)
+    if($role->getValue('rol_this_list_view') == 1)
     {
         $listView .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/list_role.png"
                         alt="'.$gL10n->get('ROL_VIEW_LIST_ROLE').'" title="'.$gL10n->get('ROL_VIEW_LIST_ROLE').'" />';
     }
-    if($role->getValue("rol_this_list_view") == 2)
+    if($role->getValue('rol_this_list_view') == 2)
     {
         $listView .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/list_key.png"
                         alt="'.$gL10n->get('ROL_VIEW_LIST_MEMBERS').'" title="'.$gL10n->get('ROL_VIEW_LIST_MEMBERS').'" />';
     }
-    if($role->getValue("rol_mail_this_role") == 1 && $gPreferences['enable_mail_module'] > 0)
+    if($role->getValue('rol_mail_this_role') == 1 && $gPreferences['enable_mail_module'] > 0)
     {
         $listView .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/email_role.png"
                         alt="'.$gL10n->get('ROL_SEND_MAIL_ROLE').'" title="'.$gL10n->get('ROL_SEND_MAIL_ROLE').'" />';
     }
-    if($role->getValue("rol_mail_this_role") == 2 && $gPreferences['enable_mail_module'] > 0)
+    if($role->getValue('rol_mail_this_role') == 2 && $gPreferences['enable_mail_module'] > 0)
     {
         $listView .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/email_key.png"
                         alt="'.$gL10n->get('ROL_SEND_MAIL_MEMBERS').'" title="'.$gL10n->get('ROL_SEND_MAIL_MEMBERS').'" />';
     }
-    if($role->getValue("rol_mail_this_role") == 3 && $gPreferences['enable_mail_module'] > 0)
+    if($role->getValue('rol_mail_this_role') == 3 && $gPreferences['enable_mail_module'] > 0)
     {
         $listView .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/email.png"
                         alt="'.$gL10n->get('ROL_SEND_MAIL_GUESTS').'" title="'.$gL10n->get('ROL_SEND_MAIL_GUESTS').'" />';
@@ -252,7 +252,7 @@ while($row = $rolStatement->fetch())
         $listView = '&nbsp;';
     }
 
-    $linkAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_ids='.$role->getValue("rol_id").'"><img
+    $linkAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_ids='.$role->getValue('rol_id').'"><img
                                 src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('ROL_SHOW_MEMBERS').'" title="'.$gL10n->get('ROL_SHOW_MEMBERS').'" /></a>';
 
     if($getInactive)

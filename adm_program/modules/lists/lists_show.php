@@ -692,6 +692,8 @@ foreach ($membersList as $member)
     ++$listRowNumber;
 }  // End-While (end found User)
 
+$filename = '';
+
 // Settings for export file
 if ($getMode === 'csv' || $getMode === 'pdf')
 {
@@ -788,6 +790,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
             // Event
             if ($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
             {
+                $value = '';
                 if ($role->getValue('rol_weekday') > 0)
                 {
                     $value = DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';

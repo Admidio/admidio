@@ -76,9 +76,10 @@ $statement = $gDb->query($sql);
 
 // create RSS feed object with channel information
 $rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline,
-            $gCurrentOrganization->getValue('org_homepage'),
-            $gL10n->get('LNK_LINKS_FROM', $gCurrentOrganization->getValue('org_longname')),
-            $gCurrentOrganization->getValue('org_longname'));
+                   $gCurrentOrganization->getValue('org_homepage'),
+                   $gL10n->get('LNK_LINKS_FROM',
+                   $gCurrentOrganization->getValue('org_longname')),
+                   $gCurrentOrganization->getValue('org_longname'));
 $weblink = new TableWeblink($gDb);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
