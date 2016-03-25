@@ -64,7 +64,7 @@ $page->enableModal();
 if($gPreferences['enable_rss'] == 1)
 {
     $page->addRssFile($g_root_path. '/adm_program/modules/links/rss_links.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline));
-};
+}
 
 $page->addHtml('<div id="links_overview">');
 

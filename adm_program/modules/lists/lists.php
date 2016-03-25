@@ -290,7 +290,7 @@ foreach($listsResult['recordset'] as $row)
                 // Contributory period
                 if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
                 {
-                    $form->addStaticControl('list_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), $role->getCostPeriods($role->getValue('rol_cost_period')));
+                    $form->addStaticControl('list_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), $role::getCostPeriods($role->getValue('rol_cost_period')));
                 }
 
                 $page->addHtml($form->show(false));

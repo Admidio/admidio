@@ -290,8 +290,8 @@ class ConditionParser
                             case '{':
                                 // bastwe: invert condition on age search
                                 if($columnType === 'date'
-                                    && (strstr(admStrToUpper($sourceCondition), 'J') !== false
-                                        || strstr(admStrToUpper($sourceCondition), 'Y') !== false))
+                                    && (strpos(admStrToUpper($sourceCondition), 'J') !== false
+                                        || strpos(admStrToUpper($sourceCondition), 'Y') !== false))
                                 {
                                     $this->mDestCond .= ' > ';
                                 }
@@ -303,8 +303,8 @@ class ConditionParser
                             case '}':
                                 // bastwe: invert condition on age search
                                 if($columnType === 'date'
-                                    && (strstr(admStrToUpper($sourceCondition), 'J') !== false
-                                        || strstr(admStrToUpper($sourceCondition), 'Y') !== false))
+                                    && (strpos(admStrToUpper($sourceCondition), 'J') !== false
+                                        || strpos(admStrToUpper($sourceCondition), 'Y') !== false))
                                 {
                                     $this->mDestCond .= ' < ';
                                 }
@@ -316,8 +316,8 @@ class ConditionParser
                             case '[':
                                 // bastwe: invert condition on age search
                                 if($columnType === 'date'
-                                    && (strstr(admStrToUpper($sourceCondition), 'J') !== false
-                                        || strstr(admStrToUpper($sourceCondition), 'Y') !== false))
+                                    && (strpos(admStrToUpper($sourceCondition), 'J') !== false
+                                        || strpos(admStrToUpper($sourceCondition), 'Y') !== false))
                                 {
                                     $this->mDestCond .= ' >= ';
                                 }
@@ -329,8 +329,8 @@ class ConditionParser
                             case ']':
                                 // bastwe: invert condition on age search
                                 if($columnType === 'date'
-                                    && (strstr(admStrToUpper($sourceCondition), 'J') !== false
-                                        || strstr(admStrToUpper($sourceCondition), 'Y') !== false))
+                                    && (strpos(admStrToUpper($sourceCondition), 'J') !== false
+                                        || strpos(admStrToUpper($sourceCondition), 'Y') !== false))
                                 {
                                     $this->mDestCond .= ' <= ';
                                 }
