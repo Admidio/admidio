@@ -260,7 +260,7 @@ foreach($gProfileFields->mProfileFields as $field)
         && $field->getValue('cat_name_intern') !== 'MASTER_DATA')
     {
         $posEndOfMasterData = $i;
-        $i = $i + 2;
+        $i += 2;
     }
 
     // add profile field to user field array
@@ -301,7 +301,7 @@ foreach($gProfileFields->mProfileFields as $field)
 if($posEndOfMasterData == 0)
 {
     $posEndOfMasterData = $i;
-    $i = $i + 2;
+    $i += 2;
 }
 $javascriptCode .= '
         user_fields['. $posEndOfMasterData. '] = new Object();

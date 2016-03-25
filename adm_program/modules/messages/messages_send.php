@@ -230,7 +230,7 @@ if ($getMsgType === 'EMAIL')
                 // damit er die Mail nicht an sich selber schickt.
                 if ($gValidLogin)
                 {
-                    $sql = $sql. ' AND usr_id <> '. $gCurrentUser->getValue('usr_id');
+                    $sql .= ' AND usr_id <> '. $gCurrentUser->getValue('usr_id');
                 }
                 $statement = $gDb->query($sql);
 
@@ -321,7 +321,7 @@ if ($getMsgType === 'EMAIL')
                     if ($_FILES['userfile']['error'][$currentAttachmentNo] == 0)
                     {
                         // check the size of the attachment
-                        $attachmentSize = $attachmentSize + $_FILES['userfile']['size'][$currentAttachmentNo];
+                        $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
                         if($attachmentSize > $email->getMaxAttachementSize('b'))
                         {
                             $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));

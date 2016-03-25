@@ -141,12 +141,12 @@ class Captcha
             $operator = mt_rand(1, 2);
             if($operator === 1)
             {
-                $result = $result + $number[$count];
+                $result += $number[$count];
                 $operator_value[$count-1] = '+';
             }
             if($operator === 2)
             {
-                $result = $result - $number[$count];
+                $result -= $number[$count];
                 $operator_value[$count-1] = '-';
             }
             if($count === 2 && $result < 1)
@@ -164,13 +164,13 @@ class Captcha
             if(is_int($number[3] / 3))
             {
                 $operator_value[2] = $textPart3_third;
-                $result = $result + ($number[3]/3);
+                $result += $number[3] / 3;
                 $ready = 1;
             }
-            elseif(is_int($number[3]/2))
+            elseif(is_int($number[3] / 2))
             {
                 $operator_value[2] = $textPart3_half;
-                $result = $result + ($number[3]/2);
+                $result += $number[3] / 2;
                 $ready = 1;
             }
         }

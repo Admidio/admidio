@@ -51,7 +51,7 @@ switch($postFunction)
 
         if($MsgId + 25 < $postLines)
         {
-            $postLines = $postLines - 50;
+            $postLines -= 50;
         }
 
         if($postLines >= 100)
@@ -67,8 +67,8 @@ switch($postFunction)
                      WHERE msg_type = \'CHAT\' AND msg_converation_id = 0';
             $gDb->query($sql);
 
-            $postLines = $postLines - 50;
-            $MsgId = $MsgId - 50;
+            $postLines -= 50;
+            $MsgId -= 50;
         }
 
         if($postLines == $MsgId)

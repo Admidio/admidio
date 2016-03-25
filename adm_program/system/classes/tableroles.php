@@ -190,7 +190,7 @@ class TableRoles extends TableAccess
                        AND mem_end    > \''.DATE_NOW.'\'';
             if(!$countLeaders)
             {
-                $sql = $sql. ' AND mem_leader = 0 ';
+                $sql .= ' AND mem_leader = 0 ';
             }
             $membersStatement = $this->db->query($sql);
 

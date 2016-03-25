@@ -118,7 +118,7 @@ if($getMode === 'show_list')
                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
         $table->addRowByArray($columnValues, 'row_file_'.$key);
 
-        $backup_size_sum = $backup_size_sum + round(filesize($backupAbsolutePath.$old_backup_file)/1024);
+        $backup_size_sum += round(filesize($backupAbsolutePath.$old_backup_file) / 1024);
     }
 
     if(count($existingBackupFiles) > 0)

@@ -57,7 +57,7 @@ switch($postFunction)
     case 'update':
         if($msgId + 25 < $postLines)
         {
-            $postLines = $postLines - 50;
+            $postLines -= 50;
         }
 
         if($postLines >= 100)
@@ -73,8 +73,8 @@ switch($postFunction)
                      WHERE msc_msg_id = \''.$msg_id.'\'';
             $gDb->query($sql);
 
-            $postLines = $postLines - 50;
-            $msgId = $msgId - 50;
+            $postLines -= 50;
+            $msgId -= 50;
         }
 
         if($postLines === $msgId)
@@ -123,7 +123,7 @@ switch($postFunction)
             $msg_id = $modulemessages->msgGetChatId();
         }
 
-        $msgId += 1;
+        ++$msgId;
 
         $sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
             VALUES ('".$msg_id."', '".$msgId."', '".$gCurrentUser->getValue('usr_id')."', '".$postMessage."', CURRENT_TIMESTAMP)";

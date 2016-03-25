@@ -186,9 +186,9 @@ if($plg_ter_aktiv == 1)
 
     foreach($plg_arr_orgas as $key => $value)
     {
-        $plg_organizations = $plg_organizations. $key. ', ';
+        $plg_organizations .= $key. ', ';
     }
-    $plg_organizations = $plg_organizations. $gCurrentOrganization->getValue('org_id');
+    $plg_organizations .= $gCurrentOrganization->getValue('org_id');
 
     // Ermitteln, welche Kalender angezeigt werden sollen
     if(in_array('all', $plg_kal_cat, true))

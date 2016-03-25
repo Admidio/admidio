@@ -79,15 +79,16 @@ $sql = 'SELECT ses_usr_id, usr_login_name
             ON usr_id = ses_usr_id
          WHERE ses_timestamp BETWEEN \''.$ref_date.'\' AND \''.DATETIME_NOW.'\'
            AND ses_org_id = '.$gCurrentOrganization->getValue('org_id');
+
 if($plg_show_visitors == 0)
 {
-    $sql = $sql. ' AND ses_usr_id IS NOT NULL ';
+    $sql .= ' AND ses_usr_id IS NOT NULL ';
 }
 if($plg_show_self == 0 && $gValidLogin)
 {
-    $sql = $sql. ' AND ses_usr_id <> '. $gCurrentUser->getValue('usr_id');
+    $sql .= ' AND ses_usr_id <> '. $gCurrentUser->getValue('usr_id');
 }
-$sql = $sql. " ORDER BY ses_usr_id ";
+$sql .= ' ORDER BY ses_usr_id ';
 $onlineUsersStatement = $gDb->query($sql);
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';

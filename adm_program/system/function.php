@@ -532,7 +532,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, array $options
                 else
                 {
                     // https://secure.php.net/manual/en/function.is-numeric.php#107326
-                    $value = $value + 0;
+                    $value += 0;
                 }
             }
             break;

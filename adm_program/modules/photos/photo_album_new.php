@@ -80,7 +80,7 @@ function subfolder($parentId, $vorschub, $photoAlbum, $phoId)
 {
     global $gDb, $gCurrentOrganization, $photoAlbumsArray;
 
-    $vorschub = $vorschub.'&nbsp;&nbsp;&nbsp;';
+    $vorschub .= '&nbsp;&nbsp;&nbsp;';
     $sqlConditionParentId = '';
     $parentPhotoAlbum = new TablePhotos($gDb);
 

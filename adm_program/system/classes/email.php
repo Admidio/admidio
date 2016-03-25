@@ -295,8 +295,8 @@ class Email extends PHPMailer
         );
         $text = str_replace(array_keys($replaceArray), array_values($replaceArray), $text);
 
-        $this->emText = $this->emText.strip_tags($text);
-        $this->emHtmlText = $this->emHtmlText.$text;
+        $this->emText .= strip_tags($text);
+        $this->emHtmlText .= $text;
     }
 
     /**
@@ -335,8 +335,8 @@ class Email extends PHPMailer
         '*****************************************************************************************************************************'.
         "\r\n"."\r\n";
 
-        $this->emText = $this->emText.$senderText;
-        $this->emHtmlText = $this->emHtmlText.nl2br($senderText);
+        $this->emText .= $senderText;
+        $this->emHtmlText .= nl2br($senderText);
     }
 
     /**

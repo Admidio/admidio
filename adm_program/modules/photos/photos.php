@@ -386,18 +386,18 @@ $sql = 'SELECT *
          WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
 if($getPhotoId === 0)
 {
-    $sql = $sql.' AND (pho_pho_id_parent IS NULL) ';
+    $sql .= ' AND (pho_pho_id_parent IS NULL) ';
 }
 if($getPhotoId > 0)
 {
-    $sql = $sql.' AND pho_pho_id_parent = '.$getPhotoId.'';
+    $sql .= ' AND pho_pho_id_parent = '.$getPhotoId.'';
 }
 if(!$gCurrentUser->editPhotoRight())
 {
-    $sql = $sql.' AND pho_locked = 0 ';
+    $sql .= ' AND pho_locked = 0 ';
 }
 
-$sql = $sql.' ORDER BY pho_begin DESC';
+$sql .= ' ORDER BY pho_begin DESC';
 
 $albumStatement = $gDb->query($sql);
 $albumList      = $albumStatement->fetchAll();

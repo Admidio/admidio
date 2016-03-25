@@ -102,13 +102,13 @@ if($getPhotoNr == null)
             $path = $albumFolder.'/originals/'.$i;
             if(file_exists($path.'.jpg'))
             {
-                $path = $path.'.jpg';
+                $path .= '.jpg';
                 $zip->addFromString(basename($path),  file_get_contents($path));
                 continue;
             }
             elseif(file_exists($path.'.png'))
             {
-                $path = $path.'.png';
+                $path .= '.png';
                 $zip->addFromString(basename($path),  file_get_contents($path));
                 continue;
             }
@@ -129,18 +129,18 @@ if($getPhotoNr == null)
              WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
     if($getPhotoId === 0)
     {
-        $sql = $sql.' AND (pho_pho_id_parent IS NULL) ';
+        $sql .= ' AND (pho_pho_id_parent IS NULL) ';
     }
     if($getPhotoId > 0)
     {
-        $sql = $sql.' AND pho_pho_id_parent = '.$getPhotoId.'';
+        $sql .= ' AND pho_pho_id_parent = '.$getPhotoId.'';
     }
     if (!$gCurrentUser->editPhotoRight())
     {
-        $sql = $sql.' AND pho_locked = 0 ';
+        $sql .= ' AND pho_locked = 0 ';
     }
 
-    $sql = $sql.' ORDER BY pho_begin DESC';
+    $sql .= ' ORDER BY pho_begin DESC';
     $statement = $gDb->query($sql);
 
     // number of sub albums
@@ -168,13 +168,13 @@ if($getPhotoNr == null)
                     $path = $albumFolder.'/originals/'.$i;
                     if(file_exists($path.'.jpg'))
                     {
-                        $path = $path.'.jpg';
+                        $path .= '.jpg';
                         $zip->addFromString($photo_album_name."/".basename($path),  file_get_contents($path));
                         continue;
                     }
                     elseif(file_exists($path.'.png'))
                     {
-                        $path = $path.'.png';
+                        $path .= '.png';
                         $zip->addFromString($photo_album_name."/".basename($path),  file_get_contents($path));
                         continue;
                     }

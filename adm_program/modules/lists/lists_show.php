@@ -444,7 +444,7 @@ for ($columnNumber = 1, $iMax = $list->countColumns(); $columnNumber <= $iMax; +
     {
         if ($getMode === 'csv')
         {
-            $str_csv = $str_csv.$separator.$valueQuotes.$columnHeader.$valueQuotes;
+            $str_csv .= $separator.$valueQuotes.$columnHeader.$valueQuotes;
         }
         elseif ($getMode === 'pdf')
         {
@@ -459,7 +459,7 @@ for ($columnNumber = 1, $iMax = $list->countColumns(); $columnNumber <= $iMax; +
 
 if ($getMode === 'csv')
 {
-    $str_csv = $str_csv."\n";
+    $str_csv .= "\n";
 }
 elseif ($getMode === 'html' || $getMode === 'print')
 {
@@ -579,7 +579,7 @@ foreach ($membersList as $member)
             if ($columnNumber === 1)
             {
                 // 1st column may show the serial
-                $str_csv = $str_csv.$valueQuotes.$listRowNumber.$valueQuotes;
+                $str_csv .= $valueQuotes.$listRowNumber.$valueQuotes;
             }
         }
 
@@ -649,7 +649,7 @@ foreach ($membersList as $member)
             // format value for csv export
             if ($getMode === 'csv')
             {
-                $str_csv = $str_csv.$separator.$valueQuotes.$content.$valueQuotes;
+                $str_csv .= $separator.$valueQuotes.$content.$valueQuotes;
             }
             // create output in html layout
             else
@@ -682,7 +682,7 @@ foreach ($membersList as $member)
 
     if ($getMode === 'csv')
     {
-        $str_csv = $str_csv."\n";
+        $str_csv .= "\n";
     }
     else
     {

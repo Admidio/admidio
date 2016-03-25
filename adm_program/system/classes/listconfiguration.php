@@ -193,7 +193,7 @@ class ListConfiguration extends TableLists
             // add column
             if($sqlSelect !== '')
             {
-                $sqlSelect = $sqlSelect . ', ';
+                $sqlSelect .= ', ';
             }
 
             $tableAlias = '';
@@ -216,7 +216,7 @@ class ListConfiguration extends TableLists
                 $dbColumnName = $listColumn->getValue('lsc_special_field');
             }
 
-            $sqlSelect = $sqlSelect. $dbColumnName;
+            $sqlSelect .= $dbColumnName;
 
             $userFieldType = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type');
 
@@ -225,7 +225,7 @@ class ListConfiguration extends TableLists
             {
                 if($sqlOrderBy !== '')
                 {
-                    $sqlOrderBy = $sqlOrderBy. ', ';
+                    $sqlOrderBy .= ', ';
                 }
 
                 if($userFieldType === 'NUMBER' || $userFieldType === 'DECIMAL')
@@ -323,7 +323,7 @@ class ListConfiguration extends TableLists
 
                 // now transform condition into SQL
                 $condition = $parser->makeSqlStatement($value, $dbColumnName, $type, $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name'));
-                $sqlWhere = $sqlWhere. $condition;
+                $sqlWhere .= $condition;
             }
         }
 
@@ -334,9 +334,9 @@ class ListConfiguration extends TableLists
             {
                 if($sqlRoleIds !== '')
                 {
-                    $sqlRoleIds = $sqlRoleIds. ', ';
+                    $sqlRoleIds .= ', ';
                 }
-                $sqlRoleIds = $sqlRoleIds. $value;
+                $sqlRoleIds .= $value;
             }
         }
 

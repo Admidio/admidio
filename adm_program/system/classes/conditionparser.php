@@ -210,21 +210,21 @@ class ConditionParser
                         // neue Bedingung, also Verknuepfen
                         if($character === '&')
                         {
-                            $this->mDestCond = $this->mDestCond.' AND ';
+                            $this->mDestCond .= ' AND ';
                         }
                         elseif($character === '|')
                         {
-                            $this->mDestCond = $this->mDestCond.' OR ';
+                            $this->mDestCond .= ' OR ';
                         }
 
                         // Feldname noch dahinter
                         if($columnType === 'string')
                         {
-                            $this->mDestCond = $this->mDestCond.' UPPER('.$columnName.') ';
+                            $this->mDestCond .= ' UPPER('.$columnName.') ';
                         }
                         else
                         {
-                            $this->mDestCond = $this->mDestCond.' '.$columnName.' ';
+                            $this->mDestCond .= ' '.$columnName.' ';
                         }
 
                         $bStartCondition = true;
@@ -247,7 +247,7 @@ class ConditionParser
 
                         if(!$bStartCondition)
                         {
-                            $this->mDestCond = $this->mDestCond.' AND '.$columnName.' ';
+                            $this->mDestCond .= ' AND '.$columnName.' ';
                             $bStartCondition = true;
                         }
 
@@ -256,35 +256,35 @@ class ConditionParser
                             case '=':
                                 if ($columnType === 'string')
                                 {
-                                    $this->mDestCond = $this->mDestCond.' LIKE ';
+                                    $this->mDestCond .= ' LIKE ';
                                 }
                                 else
                                 {
-                                    $this->mDestCond = $this->mDestCond.' = ';
+                                    $this->mDestCond .= ' = ';
                                 }
                                 break;
                             case '!':
                                 if ($columnType === 'string')
                                 {
-                                    $this->mDestCond = $this->mDestCond.' NOT LIKE ';
+                                    $this->mDestCond .= ' NOT LIKE ';
                                 }
                                 else
                                 {
-                                    $this->mDestCond = $this->mDestCond.' <> ';
+                                    $this->mDestCond .= ' <> ';
                                 }
                                 break;
                             case '_':
-                                $this->mDestCond = $this->mDestCond.' IS NULL ';
+                                $this->mDestCond .= ' IS NULL ';
                                 if($this->mNotExistsSql !== '')
                                 {
-                                    $this->mDestCond = $this->mDestCond.' OR NOT EXISTS ('.$this->mNotExistsSql.') ';
+                                    $this->mDestCond .= ' OR NOT EXISTS ('.$this->mNotExistsSql.') ';
                                 }
                                 break;
                             case '#':
-                                $this->mDestCond = $this->mDestCond.' IS NOT NULL ';
+                                $this->mDestCond .= ' IS NOT NULL ';
                                 if($this->mNotExistsSql !== '')
                                 {
-                                    $this->mDestCond = $this->mDestCond.' OR EXISTS ('.$this->mNotExistsSql.') ';
+                                    $this->mDestCond .= ' OR EXISTS ('.$this->mNotExistsSql.') ';
                                 }
                                 break;
                             case '{':
@@ -293,11 +293,11 @@ class ConditionParser
                                     && (strstr(admStrToUpper($sourceCondition), 'J') !== false
                                         || strstr(admStrToUpper($sourceCondition), 'Y') !== false))
                                 {
-                                    $this->mDestCond = $this->mDestCond.' > ';
+                                    $this->mDestCond .= ' > ';
                                 }
                                 else
                                 {
-                                    $this->mDestCond = $this->mDestCond.' < ';
+                                    $this->mDestCond .= ' < ';
                                 }
                                 break;
                             case '}':
@@ -306,11 +306,11 @@ class ConditionParser
                                     && (strstr(admStrToUpper($sourceCondition), 'J') !== false
                                         || strstr(admStrToUpper($sourceCondition), 'Y') !== false))
                                 {
-                                    $this->mDestCond = $this->mDestCond.' < ';
+                                    $this->mDestCond .= ' < ';
                                 }
                                 else
                                 {
-                                    $this->mDestCond = $this->mDestCond.' > ';
+                                    $this->mDestCond .= ' > ';
                                 }
                                 break;
                             case '[':
@@ -319,11 +319,11 @@ class ConditionParser
                                     && (strstr(admStrToUpper($sourceCondition), 'J') !== false
                                         || strstr(admStrToUpper($sourceCondition), 'Y') !== false))
                                 {
-                                    $this->mDestCond = $this->mDestCond.' >= ';
+                                    $this->mDestCond .= ' >= ';
                                 }
                                 else
                                 {
-                                    $this->mDestCond = $this->mDestCond.' <= ';
+                                    $this->mDestCond .= ' <= ';
                                 }
                                 break;
                             case ']':
@@ -332,22 +332,22 @@ class ConditionParser
                                     && (strstr(admStrToUpper($sourceCondition), 'J') !== false
                                         || strstr(admStrToUpper($sourceCondition), 'Y') !== false))
                                 {
-                                    $this->mDestCond = $this->mDestCond.' <= ';
+                                    $this->mDestCond .= ' <= ';
                                 }
                                 else
                                 {
-                                    $this->mDestCond = $this->mDestCond.' >= ';
+                                    $this->mDestCond .= ' >= ';
                                 }
                                 break;
                             default:
-                                $this->mDestCond = $this->mDestCond.$character;
+                                $this->mDestCond .= $character;
                         }
 
                         if($character !== '_' && $character !== '#')
                         {
                             // allways set quote marks for a value because some fields are a varchar in db
                             // but should only filled with integer
-                            $this->mDestCond   = $this->mDestCond.' \'';
+                            $this->mDestCond  .= ' \'';
                             $this->mOpenQuotes = true;
                             $bStartOperand     = true;
                         }
@@ -363,7 +363,7 @@ class ConditionParser
                             {
                                 if($this->getFormatDate($date, $operator) !== '')
                                 {
-                                    $this->mDestCond = $this->mDestCond.$this->getFormatDate($date, $operator);
+                                    $this->mDestCond .= $this->getFormatDate($date, $operator);
                                 }
                                 else
                                 {
@@ -376,7 +376,7 @@ class ConditionParser
                             {
                                 // allways set quote marks for a value because some fields are a varchar in db
                                 // but should only filled with integer
-                                $this->mDestCond   = $this->mDestCond.'\' ';
+                                $this->mDestCond  .= '\' ';
                                 $this->mOpenQuotes = false;
                             }
 
@@ -390,11 +390,11 @@ class ConditionParser
                             {
                                 if($columnType === 'string')
                                 {
-                                    $this->mDestCond = $this->mDestCond.' AND UPPER('.$columnName.') ';
+                                    $this->mDestCond .= ' AND UPPER('.$columnName.') ';
                                 }
                                 else
                                 {
-                                    $this->mDestCond = $this->mDestCond.' AND '.$columnName.' = ';
+                                    $this->mDestCond .= ' AND '.$columnName.' = ';
                                 }
                                 $this->mOpenQuotes = false;
                             }
@@ -403,11 +403,11 @@ class ConditionParser
                                 // first condition of these column
                                 if($columnType === 'string')
                                 {
-                                    $this->mDestCond = $this->mDestCond.' LIKE \'';
+                                    $this->mDestCond .= ' LIKE \'';
                                 }
                                 else
                                 {
-                                    $this->mDestCond = $this->mDestCond.' = \'';
+                                    $this->mDestCond .= ' = \'';
                                 }
                                 $this->mOpenQuotes = true;
                             }
@@ -415,7 +415,7 @@ class ConditionParser
                             // Zeichen an Zielstring dranhaengen
                             if($columnType === 'date')
                             {
-                                $date = $date.$character;
+                                $date .= $character;
                             }
                             elseif($columnType === 'int' && !is_numeric($character))
                             {
@@ -424,7 +424,7 @@ class ConditionParser
                             }
                             else
                             {
-                                $this->mDestCond = $this->mDestCond.$character;
+                                $this->mDestCond .= $character;
                             }
 
                             $bNewCondition   = false;
@@ -440,7 +440,7 @@ class ConditionParser
             {
                 if($this->getFormatDate($date, $operator) !== '')
                 {
-                    $this->mDestCond = $this->mDestCond.$this->getFormatDate($date, $operator);
+                    $this->mDestCond .= $this->getFormatDate($date, $operator);
                 }
                 else
                 {
@@ -452,10 +452,10 @@ class ConditionParser
             {
                 // allways set quote marks for a value because some fields are a varchar in db
                 // but should only filled with integer
-                $this->mDestCond = $this->mDestCond.'\' ';
+                $this->mDestCond .= '\' ';
             }
 
-            $this->mDestCond = $this->mDestCond.' ) ';
+            $this->mDestCond .= ' ) ';
         }
 
         return $this->mDestCond;
