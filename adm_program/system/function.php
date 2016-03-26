@@ -313,41 +313,46 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
 }
 
 /**
+ * @param string $data
+ * @param bool   $decimalMulti
+ * @return int
+ */
+function admFuncGetBytesFromSize($data, $decimalMulti = false)
+{
+    $value = (float) substr(trim($data), 0, -1);
+    $unit  = admStrToUpper(substr(trim($data), -1));
+
+    $multi = 1024;
+    if ($decimalMulti)
+    {
+        $multi = 1000;
+    }
+
+    switch ($unit)
+    {
+        case 'T':
+            $value *= $multi;
+        case 'G':
+            $value *= $multi;
+        case 'M':
+            $value *= $multi;
+        case 'K':
+            $value *= $multi;
+    }
+
+    return (int) $value;
+}
+
+/**
  * Berechnung der Maximalerlaubten Dateiuploadgröße in Byte
  * @return int
  */
 function admFuncMaxUploadSize()
 {
-    $postMaxSize = trim(ini_get('post_max_size'));
-    switch (admStrToLower(substr($postMaxSize, -1)))
-    {
-        case 'g':
-            $postMaxSize *= 1024;
-        case 'm':
-            $postMaxSize *= 1024;
-        case 'k':
-            $postMaxSize *= 1024;
-    }
+    $postMaxSize       = admFuncGetBytesFromSize(ini_get('post_max_size'));
+    $uploadMaxFilesize = admFuncGetBytesFromSize(ini_get('upload_max_filesize'));
 
-    $uploadMaxFilesize = trim(ini_get('upload_max_filesize'));
-    switch (admStrToLower(substr($uploadMaxFilesize, -1)))
-    {
-        case 'g':
-            $uploadMaxFilesize *= 1024;
-        case 'm':
-            $uploadMaxFilesize *= 1024;
-        case 'k':
-            $uploadMaxFilesize *= 1024;
-    }
-
-    if ($uploadMaxFilesize < $postMaxSize)
-    {
-        return $uploadMaxFilesize;
-    }
-    else
-    {
-        return $postMaxSize;
-    }
+    return min($postMaxSize, $uploadMaxFilesize);
 }
 
 /**
@@ -368,15 +373,8 @@ function admFuncProcessableImageSize()
         $memoryLimit = '128M';
     }
 
-    switch (admStrToLower(substr($memoryLimit, -1)))
-    {
-        case 'g':
-            $memoryLimit *= 1024;
-        case 'm':
-            $memoryLimit *= 1024;
-        case 'k':
-            $memoryLimit *= 1024;
-    }
+    $memoryLimit = admFuncGetBytesFromSize($memoryLimit);
+
     // Für jeden Pixel werden 3Byte benötigt (RGB)
     // der Speicher muss doppelt zur Verfügung stehen
     // nach ein paar tests hat sich 2,5Fach als sichrer herausgestellt
