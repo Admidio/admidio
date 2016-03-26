@@ -68,7 +68,7 @@ class TableDate extends TableAccess
             $this->db->query($sql);
 
             $dateRole = new TableRoles($this->db, $this->getValue('dat_rol_id'));
-            $dateRole->delete();
+            $dateRole->delete(); // TODO Exception handling
         }
 
         parent::delete();

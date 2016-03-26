@@ -352,7 +352,7 @@ class User extends TableAccess
             {
                 $this->saveChangesWithoutRights();
                 $this->setPassword($password);
-                $this->save();
+                $this->save(); // TODO Exception handling
             }
 
             if ($updateSessionCookies)
@@ -400,7 +400,7 @@ class User extends TableAccess
 
             $this->setValue('usr_date_invalid', DATETIME_NOW);
             $this->saveChangesWithoutRights();
-            $this->save(false); // don't update timestamp
+            $this->save(false); // don't update timestamp // TODO Exception handling
             $this->clear();
 
             if ($this->getValue('usr_number_invalid') >= 3)
@@ -1572,7 +1572,7 @@ class User extends TableAccess
         $this->setValue('usr_actual_login', DATETIME_NOW);
         $this->setValue('usr_date_invalid', null);
         $this->setValue('usr_number_invalid', 0);
-        $this->save(false); // Zeitstempel nicht aktualisieren
+        $this->save(false); // Zeitstempel nicht aktualisieren // TODO Exception handling
     }
 
     /**

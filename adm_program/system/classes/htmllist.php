@@ -100,7 +100,7 @@ class HtmlList extends HtmlElement
 
         if($term !== null && $description !== null)
         {
-            $this->addDataListItems($term, $description);
+            $this->addDataListItems($term, $description); // TODO Exception handling
 
         }
     }

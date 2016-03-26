@@ -322,7 +322,7 @@ class ListConfiguration extends TableLists
                 }
 
                 // now transform condition into SQL
-                $condition = $parser->makeSqlStatement($value, $dbColumnName, $type, $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name'));
+                $condition = $parser->makeSqlStatement($value, $dbColumnName, $type, $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name')); // TODO Excpetion handling
                 $sqlWhere .= $condition;
             }
         }

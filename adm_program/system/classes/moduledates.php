@@ -503,7 +503,7 @@ class ModuleDates extends Modules
         {
             if(strlen($this->getParameter('dateStartFormatEnglish') === 0))
             {
-                $this->setDateRange();
+                $this->setDateRange(); // TODO Exception handling
             }
 
             // add 1 second to end date because full time events to until next day

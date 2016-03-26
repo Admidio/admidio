@@ -95,7 +95,7 @@ class UserRegistration extends User
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
             $sysmail->addRecipient($this->getValue('EMAIL'), $this->getValue('FIRST_NAME', 'database').' '.$this->getValue('LAST_NAME', 'database'));
-            $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $this);
+            $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $this); // TODO Exception handling
         }
 
         return true;
@@ -141,7 +141,7 @@ class UserRegistration extends User
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
             $sysmail->addRecipient($this->getValue('EMAIL'), $this->getValue('FIRST_NAME'). ' '. $this->getValue('LAST_NAME'));
-            $sysmail->sendSystemMail('SYSMAIL_REFUSE_REGISTRATION', $this);
+            $sysmail->sendSystemMail('SYSMAIL_REFUSE_REGISTRATION', $this); // TODO Exception handling
         }
 
         return $return;
@@ -173,7 +173,7 @@ class UserRegistration extends User
             $this->setValue('usr_valid', 0);
         }
 
-        $returnValue = parent::save($updateFingerPrint);
+        $returnValue = parent::save($updateFingerPrint); // TODO Exception handling
 
         // if new registration is saved then save also record in registration table and send notification mail
         if($this->tableRegistration->isNewRecord())
@@ -218,7 +218,7 @@ class UserRegistration extends User
                     // send mail that a new registration is available
                     $sysmail = new SystemMail($this->db);
                     $sysmail->addRecipient($row['email'], $row['first_name']. ' '. $row['last_name']);
-                    $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_WEBMASTER', $this);
+                    $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_WEBMASTER', $this); // TODO Exception handling
                 }
             }
         }
