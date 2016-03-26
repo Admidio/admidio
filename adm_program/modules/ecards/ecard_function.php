@@ -40,48 +40,57 @@ class FunctionClass
      */
     public function getFileNames($directory)
     {
-        $array_files = array();
-        $i = 0;
-        if($curdir = opendir($directory))
+        $files = array();
+
+        $dirHandle = @opendir($directory);
+        if($dirHandle)
         {
-            while($file = readdir($curdir))
+            while(($entry = readdir($dirHandle)) !== false)
             {
-                if($file !== '.' && $file !== '..')
+                if($entry !== '.' && $entry !== '..' && is_file($directory.'/'.$entry))
                 {
-                    $array_files[$i] = $file;
-                    ++$i;
+                    $files[] = $entry;
                 }
             }
+            closedir($dirHandle);
         }
-        closedir($curdir);
 
-        return $array_files;
+        return $files;
     }
 
     /**
      * Diese Funktion holt das Template aus dem uebergebenen Verzeichnis und liefert die Daten und einen error state zurueck
-     * @param string $template_name der Name des Template
-     * @param string $tmpl_folder   der Name des Ordner wo das Template vorhanden ist
-     * @return string
+     * @param string $tplFilename Filename of the template
+     * @param string $tplFolder   Folder path of the templates
+     * @return string|null Returns the content of the template file and null if file not found or couldn't open
      */
-    public function getEcardTemplate($template_name, $tmpl_folder)
+    public function getEcardTemplate($tplFilename, $tplFolder = '')
     {
-        $file_data = '';
-        $fpread = @fopen($tmpl_folder.$template_name, 'r');
-        if (!$fpread)
+        if ($tplFolder === '')
         {
-            return '';
-        }
-        else
-        {
-            while(! feof($fpread))
-            {
-                $file_data .= fgets($fpread, 4096);
-            }
-            fclose($fpread);
+            $tplFolder = THEME_SERVER_PATH.'/ecard_templates/';
         }
 
-        return $file_data;
+        if (!is_file($tplFolder.$tplFilename))
+        {
+            return null;
+        }
+
+        $fileHandle = @fopen($tplFolder.$tplFilename, 'r');
+        if ($fileHandle)
+        {
+            $fileData = '';
+
+            while (!feof($fileHandle))
+            {
+                $fileData .= fgets($fileHandle, 4096);
+            }
+            fclose($fileHandle);
+
+            return $fileData;
+        }
+
+        return null;
     }
 
     /**

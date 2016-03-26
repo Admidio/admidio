@@ -20,7 +20,6 @@ $funcClass       = new FunctionClass($gL10n);
 $photoAlbum      = new TablePhotos($gDb, $postPhotoId);
 $imageUrl        = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$postPhotoId.'&photo_nr='.$postPhotoNr.'&max_width='.$gPreferences['ecard_card_picture_width'].'&max_height='.$gPreferences['ecard_card_picture_height'];
 $imageServerPath = SERVER_PATH. '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$postPhotoId.'/'.$postPhotoNr.'.jpg';
-$template        = THEME_SERVER_PATH. '/ecard_templates/';
 
 $_SESSION['ecard_request'] = $_POST;
 
@@ -51,10 +50,10 @@ if(strlen($_POST['ecard_message']) === 0)
 }
 
 // Template wird geholt
-$ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName, $template);
+$ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName);
 
 // if template was not found then show error
-if($ecardDataToParse === '')
+if($ecardDataToParse === null)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }

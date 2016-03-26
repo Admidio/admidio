@@ -62,21 +62,27 @@ if($getMode === 'show_list')
     $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
     // create a list with all valid files in the backup folder
-    if ($handle = opendir($backupAbsolutePath))
+    $dirHandle = @opendir($backupAbsolutePath);
+    if ($dirHandle)
     {
-        while (false !== ($file = readdir($handle)))
+        while (($entry = readdir($dirHandle)) !== false)
         {
+            if($entry === '.' || $entry === '..')
+            {
+                continue;
+            }
+
             try
             {
-                admStrIsValidFileName($file, true);
-                $existingBackupFiles[] = $file;
+                admStrIsValidFileName($entry, true);
+                $existingBackupFiles[] = $entry;
             }
             catch(AdmException $e)
             {
                 $temp = 1;
             }
         }
-        closedir($handle);
+        closedir($dirHandle);
     }
 
     // sort files (filename/date)

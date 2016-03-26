@@ -729,7 +729,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
  */
 function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 {
-    $dirHandle = opendir($directory);
+    $dirHandle = @opendir($directory);
     if ($dirHandle)
     {
         $entries = array();

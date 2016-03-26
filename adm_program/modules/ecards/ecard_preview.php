@@ -41,9 +41,9 @@ $imageUrl = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$p
 $funcClass = new FunctionClass($gL10n);
 
 // read content of template file
-$ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName, THEME_SERVER_PATH. '/ecard_templates/');
+$ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName);
 
-if($ecardDataToParse === '')
+if($ecardDataToParse === null)
 {
     $gMessage->show($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
 }

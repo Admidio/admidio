@@ -136,10 +136,10 @@ class Folder
             return false;
         }
 
-        $dh = @opendir($sourceFolder);
-        if($dh)
+        $dirHandle = @opendir($sourceFolder);
+        if($dirHandle)
         {
-            while (false !== ($entry = readdir($dh)))
+            while (($entry = readdir($dirHandle)) !== false)
             {
                 if($entry === '.' || $entry === '..')
                 {
@@ -164,7 +164,7 @@ class Folder
                     }
                 }
             }
-            closedir($dh);
+            closedir($dirHandle);
         }
         return true;
     }
@@ -188,10 +188,10 @@ class Folder
             return false;
         }
 
-        $dh = @opendir($folder);
-        if($dh)
+        $dirHandle = @opendir($folder);
+        if($dirHandle)
         {
-            while (false !== ($entry = readdir($dh)))
+            while (($entry = readdir($dirHandle)) !== false)
             {
                 if($entry === '.' || $entry === '..')
                 {
@@ -215,7 +215,7 @@ class Folder
                     }
                 }
             }
-            closedir($dh);
+            closedir($dirHandle);
         }
 
         if(!$onlyDeleteContent)
