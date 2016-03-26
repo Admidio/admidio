@@ -130,7 +130,7 @@ class HtmlTableBasic extends HtmlElement {
      */
     public function __construct($id = '', $class = '', $border = 0)
     {
-        $this->border       = (is_numeric($border)) ? $border : 0;
+        $this->border       = is_numeric($border) ? $border : 0;
         $this->lineChange   = '';
         $this->changeClass  = '';
         $this->columnsWidth = array();
@@ -175,7 +175,7 @@ class HtmlTableBasic extends HtmlElement {
             $this->addElement($col);
         }
 
-        if(!empty($this->columnsWidth) && isset($this->columnsWidth[$this->columnCount]))
+        if(count($this->columnsWidth) > 0 && isset($this->columnsWidth[$this->columnCount]))
         {
             $this->addAttribute('style', 'width:' . $this->columnsWidth[$this->columnCount].';');
         }
@@ -212,7 +212,7 @@ class HtmlTableBasic extends HtmlElement {
             $this->closeParentElement('tr');
         }
 
-        if($this->lineChange === '' && empty($this->columnsWidth))
+        if($this->lineChange === '' && count($this->columnsWidth) === 0)
         {
             $this->addParentElement('tr');
 
@@ -229,7 +229,7 @@ class HtmlTableBasic extends HtmlElement {
             }
 
         }
-        elseif($this->lineChange === '' && !empty($this->columnsWidth))
+        elseif($this->lineChange === '' && count($this->columnsWidth) > 0)
         {
             $this->addParentElement('tr');
 
@@ -255,7 +255,7 @@ class HtmlTableBasic extends HtmlElement {
                 }
             }
         }
-        elseif($this->lineChange !== '' && empty($this->columnsWidth))
+        elseif($this->lineChange !== '' && count($this->columnsWidth) === 0)
         {
             $this->addParentElement('tr');
 
@@ -354,7 +354,7 @@ class HtmlTableBasic extends HtmlElement {
      */
     public function addTableBody($attribute = '', $value = '', $data = '', $col = 'td')
     {
-        if($this->tfoot != -1 && in_array('tfoot', $this->arrParentElements, true));
+        if($this->tfoot != -1 && in_array('tfoot', $this->arrParentElements, true))
         {
             $this->closeParentElement('tr');
         }
@@ -393,7 +393,7 @@ class HtmlTableBasic extends HtmlElement {
      */
     public function addTableFooter($attribute = '', $value = '', $data = '', $col = 'td')
     {
-        if($this->thead != -1 && in_array('thead', $this->arrParentElements, true));
+        if($this->thead != -1 && in_array('thead', $this->arrParentElements, true))
         {
             $this->closeParentElement('thead');
         }
@@ -469,21 +469,21 @@ class HtmlTableBasic extends HtmlElement {
      * @param string $class_1 Name of the standard class used for lineChange mode
      * @param string $class_2 Name of the change class used for lineChange mode
      * @param int    $line    Number of the line that is changed to Class_2 (Default: 2)
-     * @return void|false
+     * @return bool
      */
     public function setClassChange($class_1 = '', $class_2 = '', $line = 2)
     {
-        if(is_numeric($line))
-        {
-            $this->lineChange = $line;
-        }
-        else
+        if(!is_numeric($line))
         {
             return false;
         }
 
+        $this->lineChange = $line;
+
         $this->class_1 = $class_1;
         $this->class_2 = $class_2;
+
+        return true;
     }
 
     /**

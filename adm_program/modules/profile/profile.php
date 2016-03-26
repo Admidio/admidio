@@ -527,6 +527,8 @@ if($gPreferences['profile_show_roles'] == 1)
         'rol_all_lists_view'
     );
 
+    $berechtigungsHerkunft = array();
+
     // Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
     foreach($authorizations as $authorization_db_name)
     {
@@ -545,11 +547,11 @@ if($gPreferences['profile_show_roles'] == 1)
                    AND '.$authorization_db_name.' = 1
               ORDER BY cat_org_id, cat_sequence, rol_name';
         $roleStatement = $gDb->query($sql);
-        $berechtigungs_Herkunft[$authorization_db_name] = null;
+        $berechtigungsHerkunft[$authorization_db_name] = null;
 
         while($row = $roleStatement->fetch())
         {
-            $berechtigungs_Herkunft[$authorization_db_name] = $berechtigungs_Herkunft[$authorization_db_name].', '.$row['rol_name'];
+            $berechtigungsHerkunft[$authorization_db_name] = $berechtigungsHerkunft[$authorization_db_name].', '.$row['rol_name'];
         }
     }
 
@@ -562,68 +564,68 @@ if($gPreferences['profile_show_roles'] == 1)
             //checkRolesRight($right)
             if($user->checkRolesRight('rol_assign_roles') == 1)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_assign_roles'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/roles.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_assign_roles'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/roles.png"
                 alt="'.$gL10n->get('ROL_RIGHT_ASSIGN_ROLES').'" title="'.$gL10n->get('ROL_RIGHT_ASSIGN_ROLES').'" />');
             }
             if($user->checkRolesRight('rol_approve_users') == 1)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_approve_users'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/new_registrations.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_approve_users'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/new_registrations.png"
                 alt="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'" title="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'" />');
             }
             if($user->checkRolesRight('rol_edit_user') == 1)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_edit_user'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/group.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_edit_user'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/group.png"
                 alt="'.$gL10n->get('ROL_RIGHT_EDIT_USER').'" title="'.$gL10n->get('ROL_RIGHT_EDIT_USER').'" />');
             }
 
             if($user->checkRolesRight('rol_mail_to_all') == 1)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_mail_to_all'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/email.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_mail_to_all'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/email.png"
                 alt="'.$gL10n->get('ROL_RIGHT_MAIL_TO_ALL').'" title="'.$gL10n->get('ROL_RIGHT_MAIL_TO_ALL').'" />');
             }
             if($user->checkRolesRight('rol_profile') == 1)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_profile'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/profile.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_profile'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/profile.png"
                 alt="'.$gL10n->get('ROL_RIGHT_PROFILE').'" title="'.$gL10n->get('ROL_RIGHT_PROFILE').'" />');
             }
             if($user->checkRolesRight('rol_announcements') == 1 && $gPreferences['enable_announcements_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_announcements'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/announcements.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_announcements'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/announcements.png"
                 alt="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" title="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" />');
             }
             if($user->checkRolesRight('rol_dates') == 1 && $gPreferences['enable_dates_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_dates'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/dates.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_dates'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/dates.png"
                 alt="'.$gL10n->get('ROL_RIGHT_DATES').'" title="'.$gL10n->get('ROL_RIGHT_DATES').'" />');
             }
             if($user->checkRolesRight('rol_photo') == 1 && $gPreferences['enable_photo_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_photo'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/photo.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_photo'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/photo.png"
                 alt="'.$gL10n->get('ROL_RIGHT_PHOTO').'" title="'.$gL10n->get('ROL_RIGHT_PHOTO').'" />');
             }
             if($user->checkRolesRight('rol_download') == 1 && $gPreferences['enable_download_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_download'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/download.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_download'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/download.png"
                 alt="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" title="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" />');
             }
             if($user->checkRolesRight('rol_guestbook') == 1 && $gPreferences['enable_guestbook_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/guestbook.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_guestbook'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/guestbook.png"
                 alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" />');
             }
             if($user->checkRolesRight('rol_guestbook_comments') == 1 && $gPreferences['enable_guestbook_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook_comments'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/comment.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_guestbook_comments'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/comment.png"
                 alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" />');
             }
             if($user->checkRolesRight('rol_weblinks') == 1 && $gPreferences['enable_weblinks_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_weblinks'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/weblinks.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_weblinks'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/weblinks.png"
                 alt="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'" title="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'" />');
             }
             if($user->checkRolesRight('rol_all_lists_view') == 1)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_all_lists_view'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/lists.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_all_lists_view'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/lists.png"
                 alt="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" title="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" />');
             }
             $page->addHtml('</p>

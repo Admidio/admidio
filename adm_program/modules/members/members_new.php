@@ -19,24 +19,27 @@ if (!$gCurrentUser->editUsers())
 
 echo '
 <script type="text/javascript"><!--
-    $("body").on("shown.bs.modal", ".modal", function () { $("#form_members_create_user:first *:input[type!=hidden]:first").focus(); });
+    $("body").on("shown.bs.modal", ".modal", function () {
+        $("#form_members_create_user:first *:input[type!=hidden]:first").focus();
+    });
 
     $("#form_members_create_user").submit(function(event) {
         var action = $(this).attr("action");
-        $("#form_members_create_user .form-alert").hide();
+        var formMembersAlert = $("#form_members_create_user .form-alert");
+        formMembersAlert.hide();
 
         // disable default form submit
         event.preventDefault();
 
         $.ajax({
-            type:    "POST",
-            url:     action,
-            data:    $(this).serialize(),
+            type: "POST",
+            url:  action,
+            data: $(this).serialize(),
             success: function(data) {
                 if(data === "success") {
-                    $("#form_members_create_user .form-alert").attr("class", "alert alert-success form-alert");
-                    $("#form_members_create_user .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('MEM_USER_COULD_BE_CREATED').'</strong>");
-                    $("#form_members_create_user .form-alert").fadeIn("slow");
+                    formMembersAlert.attr("class", "alert alert-success form-alert");
+                    formMembersAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('MEM_USER_COULD_BE_CREATED').'</strong>");
+                    formMembersAlert.fadeIn("slow");
                     setTimeout(function () {
                         self.location.href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
                     },2500);
@@ -44,9 +47,9 @@ echo '
                     if(data.length > 1000) {
                         $(".modal-body").html(data);
                     } else {
-                        $("#form_members_create_user .form-alert").attr("class", "alert alert-danger form-alert");
-                        $("#form_members_create_user .form-alert").fadeIn();
-                        $("#form_members_create_user .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
+                        formMembersAlert.attr("class", "alert alert-danger form-alert");
+                        formMembersAlert.fadeIn();
+                        formMembersAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                     }
                 }
             }

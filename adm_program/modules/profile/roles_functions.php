@@ -16,7 +16,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php')
 /**
  * get all memberships where the user is assigned
  * @param int $userId
- * @return object
+ * @return \PDOStatement
  */
 function getRolesFromDatabase($userId)
 {
@@ -42,7 +42,7 @@ function getRolesFromDatabase($userId)
 /**
  * get all memberships where the user will be assigned
  * @param int $userId
- * @return object
+ * @return \PDOStatement
  */
 function getFutureRolesFromDatabase($userId)
 {
@@ -67,7 +67,7 @@ function getFutureRolesFromDatabase($userId)
 /**
  * get all memberships where the user was assigned
  * @param int $userId
- * @return object
+ * @return \PDOStatement
  */
 function getFormerRolesFromDatabase($userId)
 {
@@ -110,7 +110,6 @@ function getRoleMemberships($htmlListId, $user, $roleStatement, $count_role, $di
     {
         if($gCurrentUser->hasRightViewRole($row['mem_rol_id']) && $row['rol_visible'] == 1)
         {
-            $formerMembership = false;
             $futureMembership = false;
             $showRoleEndDate  = false;
             $deleteMode = 'pro_role';
@@ -129,7 +128,6 @@ function getRoleMemberships($htmlListId, $user, $roleStatement, $count_role, $di
             // check if membership ends in the past
             if(strcmp(DATE_NOW, $member->getValue('mem_end', 'Y-m-d')) > 0)
             {
-                $formerMembership = true;
                 $deleteMode = 'pro_former';
             }
 

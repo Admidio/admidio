@@ -117,7 +117,7 @@ $page->enableModal();
 if($gPreferences['enable_rss'] == 1)
 {
     $page->addRssFile($g_root_path.'/adm_program/modules/photos/rss_photos.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline));
-};
+}
 
 if($gCurrentUser->editPhotoRight())
 {
@@ -532,13 +532,13 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
             </div>
           </div>');
     }//Ende wenn Ordner existiert
-};//for
+}//for
 
 $page->addHtml('</div>');
 
 /****************************Leeres Album****************/
 // Falls das Album weder Fotos noch Unterordner enthaelt
-if(($photoAlbum->getValue('pho_quantity') == '0' || strlen($photoAlbum->getValue('pho_quantity')) === 0) && $albumsCount < 1)  // alle vorhandenen Albumen werden ignoriert
+if(($photoAlbum->getValue('pho_quantity') == 0 || strlen($photoAlbum->getValue('pho_quantity')) === 0) && $albumsCount < 1)  // alle vorhandenen Albumen werden ignoriert
 {
     $page->addHtml($gL10n->get('PHO_NO_ALBUM_CONTENT'));
 }

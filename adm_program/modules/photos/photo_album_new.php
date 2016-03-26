@@ -35,6 +35,7 @@ if(!$gCurrentUser->editPhotoRight())
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
 }
 
+$headline = '';
 if($getMode === 'new')
 {
     $headline = $gL10n->get('PHO_CREATE_ALBUM');

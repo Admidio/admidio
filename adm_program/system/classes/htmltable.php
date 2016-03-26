@@ -34,7 +34,6 @@ class HtmlTable extends HtmlTableBasic
 {
     protected $id;                       ///< Html id attribute of the table.
     protected $columnAlign;              ///< Array with entry for each column with the align of that column. Values are @b right, @b left or @b center.
-    protected $columnCount;              ///< Number of columns in this table. This will be set after columns were added to the table.
     protected $messageNoRowsFound;       ///< The text that should be shown if no row was added to the table
     protected $htmlPage;                 ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
     protected $datatables;               ///< A flag if the jQuery plugin DataTables should be used to show the table.
@@ -77,7 +76,6 @@ class HtmlTable extends HtmlTableBasic
         $this->datatables    = $datatables;
         $this->datatablesInitParameters = array();
         $this->groupedColumn = -1;
-        $this->columnCount   = 0;
         $this->rowsPerPage   = 25;
         $this->orderColumns  = array();
         $this->datatablesColumnDefs    = array();

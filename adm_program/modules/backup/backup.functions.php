@@ -59,7 +59,7 @@ function FunctionIsDisabled($function)
 function SafeExec($command)
 {
     static $AllowedExecFunctions = array();
-    if (empty($AllowedExecFunctions))
+    if (count($AllowedExecFunctions) === 0)
     {
         $AllowedExecFunctions = array('shell_exec' => true, 'passthru' => true, 'system' => true, 'exec' => true);
         foreach ($AllowedExecFunctions as $key => $value)
@@ -110,7 +110,7 @@ function version_compare_replacement_sub($version1, $version2, $operator = '')
 
     // If a part contains special version strings these are handled in the following order: dev < (alpha = a) < (beta = b) < RC < pl
     static $versiontype_lookup = array();
-    if (empty($versiontype_lookup))
+    if (count($versiontype_lookup) === 0)
     {
         $versiontype_lookup['dev']   = 10001;
         $versiontype_lookup['a']     = 10002;

@@ -478,7 +478,7 @@ $page->addHtml('
                             $form->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), $gL10n->get('SYS_NOT_SET'));
                         }
 
-                        $form->addStaticControl('max_processable_image_size', $gL10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE'), round((admFuncProcessableImageSize()/1000000), 2).' '.$gL10n->get('SYS_MEGA_PIXEL'));
+                        $form->addStaticControl('max_processable_image_size', $gL10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE'), round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('SYS_MEGA_PIXEL'));
                         $html = '<a href="preferences_function.php?mode=4" target="_blank">phpinfo()</a>';
                         $form->addStaticControl('php_info', $gL10n->get('SYS_PHP_INFO'), $html);
 

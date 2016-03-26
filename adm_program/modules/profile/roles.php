@@ -58,30 +58,35 @@ else
     $setRoleId = null;
 }
 
+$page = null;
+
 if($getInline)
 {
     header('Content-type: text/html; charset=utf-8');
 
     $html .= '<script type="text/javascript"><!--
     $(document).ready(function() {
-        $(".admidio-group-heading").click(function() { showHideBlock($(this).attr("id")); });
+        $(".admidio-group-heading").click(function() {
+            showHideBlock($(this).attr("id"));
+        });
 
         $("#roles_assignment_form").submit(function(event) {
             var action = $(this).attr("action");
-            $("#roles_assignment_form .form-alert").hide();
+            var rolesFormAlert = $("#roles_assignment_form .form-alert");
+            rolesFormAlert.hide();
 
             // disable default form submit
             event.preventDefault();
 
             $.ajax({
-                type:    "POST",
-                url:     action,
-                data:    $(this).serialize(),
+                type: "POST",
+                url:  action,
+                data: $(this).serialize(),
                 success: function(data) {
                     if(data === "success") {
-                        $("#roles_assignment_form .form-alert").attr("class", "alert alert-success form-alert");
-                        $("#roles_assignment_form .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
-                        $("#roles_assignment_form .form-alert").fadeIn("slow");
+                        rolesFormAlert.attr("class", "alert alert-success form-alert");
+                        rolesFormAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                        rolesFormAlert.fadeIn("slow");
                         setTimeout(function () {
                             $("#admidio_modal").modal("hide");
                         }, 2000);
@@ -90,9 +95,9 @@ if($getInline)
                         profileJS.reloadFormerRoleMemberships();
                         profileJS.reloadFutureRoleMemberships();
                     } else {
-                        $("#roles_assignment_form .form-alert").attr("class", "alert alert-danger form-alert");
-                        $("#roles_assignment_form .form-alert").fadeIn();
-                        $("#roles_assignment_form .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
+                        rolesFormAlert.attr("class", "alert alert-danger form-alert");
+                        rolesFormAlert.fadeIn();
+                        rolesFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
                     }
                 }
             });
