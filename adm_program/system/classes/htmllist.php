@@ -100,8 +100,7 @@ class HtmlList extends HtmlElement
 
         if($term !== null && $description !== null)
         {
-            $this->addDataListItems($term, $description); // TODO Exception handling
-
+            $this->addDataListItems($term, $description);
         }
     }
 
@@ -109,26 +108,19 @@ class HtmlList extends HtmlElement
      * Add term and description to datalist (dl).
      * @param string $term Term as string for datalist
      * @param string $description Description as string for data
-     * @throws Exception
-     * @return false
+     * @return bool
      */
     public function addDataListItems($term = null, $description = null)
     {
-        if($term !== null && $description !== null)
+        if($term === null || $description === null)
         {
-            // Arrays are not supported in datalists
-            if(!is_array($term) && !is_array($description))
-            {
-                $this->addElement('dt', '', '', $term);
-                $this->addElement('dd', '', '', $description);
-            }
-            else
-            {
-                // Arrays are not supported
-                throw new Exception('Arrays are not supported in datalist items! Items are determined as string!');
-            }
+            return false;
         }
-        return false;
+
+        $this->addElement('dt', '', '', $term);
+        $this->addElement('dd', '', '', $description);
+
+        return true;
     }
 
     /**
