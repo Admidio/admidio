@@ -138,7 +138,7 @@ else
             {
                 $i = 0;
                 $new_category = true;
-                if ($j>0)
+                if ($j > 0)
                 {
                     $page->addHtml('</div></div>');
                 }

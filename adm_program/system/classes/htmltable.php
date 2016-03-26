@@ -75,10 +75,10 @@ class HtmlTable extends HtmlTableBasic
         $this->id            = $id;
         $this->datatables    = $datatables;
         $this->datatablesInitParameters = array();
+        $this->datatablesColumnDefs     = array();
         $this->groupedColumn = -1;
         $this->rowsPerPage   = 25;
         $this->orderColumns  = array();
-        $this->datatablesColumnDefs    = array();
 
         // when using DataTables we must set the width attribute so that all columns will change
         // dynamic their width if the browser window size change.

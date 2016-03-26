@@ -57,7 +57,7 @@
  * HtmlElement::addElement('dd', 'description2');
  * HtmlElement::closeParentElement('dl');
  * HtmlElement::closeParentElement('li');
- * $htmlList= HtmlElement::getHtmlElement();
+ * $htmlList = HtmlElement::getHtmlElement();
  * echo $htmlList;
  * @endcode
  * @par Example_2 Nested Div Elements using nesting mode

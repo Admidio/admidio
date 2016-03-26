@@ -341,7 +341,7 @@ class ModuleLists extends Modules
         // provoke empty result for not logged in users
         if(!$gValidLogin)
         {
-            $sql_conditions= ' AND cat_hidden = 0 ';
+            $sql_conditions = ' AND cat_hidden = 0 ';
         }
 
         $sql = 'SELECT COUNT(*) AS numrows

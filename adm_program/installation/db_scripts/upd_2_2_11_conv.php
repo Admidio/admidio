@@ -39,7 +39,7 @@ function validate_bbc($table, $idCol, $col)
         {
             // comepare number of opening and closeing tags
             $dif = substr_count($row->$col, $bbcode['o'])-substr_count($row->$col, $bbcode['c']);
-            for($x=0; $x<$dif; ++$x)
+            for($x = 0; $x < $dif; ++$x)
             {
                 $sql_append .= $bbcode['c'];
             }

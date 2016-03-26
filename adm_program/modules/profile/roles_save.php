@@ -44,7 +44,7 @@ if(!$gCurrentUser->assignRoles())
 
 // detect number of selected roles
 $roleCount = 0;
-foreach($_POST as $key=>$value)
+foreach($_POST as $key => $value)
 {
     if(preg_match('/^(role-)\d+$/i', $key))
     {
