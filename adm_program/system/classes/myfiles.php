@@ -38,29 +38,39 @@ class MyFiles extends Folder
     public function __construct($module)
     {
         global $g_root_path;
-        $this->module = $module;
-        $this->modulePath  = SERVER_PATH. '/adm_my_files/'. strtolower($module);
-        $this->currentPath = SERVER_PATH. '/adm_my_files/'. strtolower($module);
-        $this->webPath     = $g_root_path. '/adm_my_files';
+
+        $this->module      = $module;
+        $this->modulePath  = SERVER_PATH.'/adm_my_files/'.strtolower($module);
+        $this->currentPath = SERVER_PATH.'/adm_my_files/'.strtolower($module);
+        $this->webPath     = $g_root_path.'/adm_my_files';
+
+        parent::__construct($this->modulePath);
     }
 
     /**
      * method checks if adm_my_files folder has all necessary rights
      * the method is designed to make as little as possible checks
+     *
+     * [1] (!@mkdir($dirPath, 0777) && !is_dir($dirPath))
+     * This issue is difficult to reproduce, as any of concurrency-related issues. Appears when several
+     * processes attempting to create a directory which is not yet existing, but between is_dir() and mkdir()
+     * calls another process already managed to create a directory.
      * @return bool if false than check the parameters $errorText, $errorPath
      */
     public function checkSettings()
     {
         if(!is_writable($this->modulePath))
         {
-            if(!file_exists($this->modulePath))
+            if(!is_dir($this->modulePath))
             {
-                if(!is_writable(SERVER_PATH. '/adm_my_files'))
+                $serverPathAdmMyFiles = SERVER_PATH.'/adm_my_files';
+
+                if(!is_writable($serverPathAdmMyFiles))
                 {
-                    if(!file_exists(SERVER_PATH. '/adm_my_files'))
+                    if(!is_dir($serverPathAdmMyFiles))
                     {
-                        // create folder adm_my_files
-                        if(!@mkdir(SERVER_PATH. '/adm_my_files', 0777))
+                        // create folder "adm_my_files"
+                        if(!@mkdir($serverPathAdmMyFiles, 0777) && !is_dir($serverPathAdmMyFiles)) // [1]
                         {
                             $this->errorText = 'SYS_FOLDER_NOT_CREATED';
                             $this->errorPath = $this->webPath;
@@ -68,10 +78,10 @@ class MyFiles extends Folder
                         }
                     }
 
-                    if(!is_writable(SERVER_PATH. '/adm_my_files'))
+                    if(!is_writable($serverPathAdmMyFiles))
                     {
-                        // set adm_my_files writable
-                        if(!@chmod(SERVER_PATH. '/adm_my_files', 0777))
+                        // set "adm_my_files" writable
+                        if(!@chmod($serverPathAdmMyFiles, 0777))
                         {
                             $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
                             $this->errorPath = $this->webPath;
@@ -81,20 +91,22 @@ class MyFiles extends Folder
                 }
 
                 // create module folder
-                if(@mkdir($this->modulePath, 0777))
-                {
-                    // create htaccess file for folder adm_my_files if necessary
-                    if (!file_exists(SERVER_PATH. '/adm_my_files/.htaccess'))
-                    {
-                        $protection = new Htaccess(SERVER_PATH. '/adm_my_files');
-                        $protection->protectFolder();
-                    }
-                }
-                else
+                if(!@mkdir($this->modulePath, 0777) && !is_dir($this->modulePath)) // [1]
                 {
                     $this->errorText = 'SYS_FOLDER_NOT_CREATED';
                     $this->errorPath = $this->webPath;
                     return false;
+                }
+
+                // create ".htaccess" file for folder "adm_my_files"
+                if (!is_file($serverPathAdmMyFiles.'/.htaccess'))
+                {
+                    $protection = new Htaccess($serverPathAdmMyFiles);
+
+                    if (!$protection->protectFolder())
+                    {
+                        return false;
+                    }
                 }
             }
 
@@ -125,41 +137,48 @@ class MyFiles extends Folder
     /**
      * open a folder in the current module folder
      * if that folder doesn't exists than it will be created
-     * @param string $folder
-     * @return int
+     *
+     * [1] (!@mkdir($dirPath, 0777) && !is_dir($dirPath))
+     * This issue is difficult to reproduce, as any of concurrency-related issues. Appears when several
+     * processes attempting to create a directory which is not yet existing, but between is_dir() and mkdir()
+     * calls another process already managed to create a directory.
+     * @param string $folder subfolder name
+     * @return bool Returns true if folder is successfully created and writable.
      */
     public function setSubFolder($folder)
     {
-        if(admStrIsValidFileName($folder))
+        if(!admStrIsValidFileName($folder))
         {
-            $tempPath = $this->modulePath. '/'. $folder;
-            if(!is_writable($tempPath))
-            {
-                if(!file_exists($tempPath))
-                {
-                    // create folder
-                    if(!@mkdir($tempPath, 0777))
-                    {
-                        $this->errorText = 'SYS_FOLDER_NOT_CREATED';
-                        $this->errorPath = $this->webPath.'/'.$folder;
-                        return 0;
-                    }
-                }
-            }
-
-            if(!is_writable($tempPath))
-            {
-                // set folder writable
-                if(!@chmod($tempPath, 0777))
-                {
-                    $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
-                    $this->errorPath = $this->webPath.'/'.$folder;
-                    return 0;
-                }
-            }
-            $this->currentPath = $tempPath;
-            $this->webPath     = $this->webPath.'/'.$folder;
-            return 1;
+            return false;
         }
+
+        $tempServerPath = $this->modulePath.'/'.$folder;
+        $tempWebPath    = $this->webPath.'/'.$folder;
+
+        // create folder
+        if (!is_dir($tempServerPath))
+        {
+            if (!@mkdir($tempServerPath, 0777) && !is_dir($tempServerPath)) // [1]
+            {
+                $this->errorText = 'SYS_FOLDER_NOT_CREATED';
+                $this->errorPath = $tempWebPath;
+                return false;
+            }
+        }
+
+        // set folder writable
+        if (!is_writable($tempServerPath))
+        {
+            if (!@chmod($tempServerPath, 0777))
+            {
+                $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
+                $this->errorPath = $tempWebPath;
+                return false;
+            }
+        }
+
+        $this->currentPath = $tempServerPath;
+        $this->webPath     = $tempWebPath;
+        return true;
     }
 }
