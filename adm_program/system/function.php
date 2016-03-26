@@ -243,15 +243,15 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
         }
 
         $urlString = '#';
-        if ($url !== '')
+        if ($url !== '' && $className === '')
         {
-            $urlString = $url.'&amp;'.$paramName.'='.$paramValue;
+            $urlString = $url.'&'.$paramName.'='.$paramValue;
         }
 
         return '<li'.$classString.'><a href="'.$urlString.'">'.$linkText.'</a></li>';
     }
 
-    $onPage = floor($pageStartItem / $itemsPerPage) + 1;
+    $onPage = (int) floor($pageStartItem / $itemsPerPage) + 1;
 
     $pageNavigationString = '';
 
