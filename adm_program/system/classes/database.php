@@ -104,7 +104,6 @@ class Database
         $this->options  = $options;
 
         $this->transactions = 0;
-        $this->sqlStatement = null;
         $this->fetchArray   = array();
         $this->minRequiredVersion = '';
         $this->databaseName       = '';
@@ -145,7 +144,7 @@ class Database
         switch ($this->engine)
         {
             case 'mysql':
-                if (!$this->port)
+                if ($this->port === null)
                 {
                     $this->dsn = 'mysql:host='.$this->host.';dbname='.$this->dbName;
                 }
@@ -156,7 +155,7 @@ class Database
                 break;
 
             case 'pgsql':
-                if (!$this->port)
+                if ($this->port === null)
                 {
                     $this->dsn = 'pgsql:host='.$this->host.';dbname='.$this->dbName;
                 }
