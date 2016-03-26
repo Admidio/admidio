@@ -1937,7 +1937,7 @@ class HtmlForm extends HtmlFormBasic
      * which marker represents the mandatory will be shown before the form.
      * @param bool $directOutput (optional) If set to @b true (default) the form html will be directly send
      *                                   to the browser. If set to @b false the html will be returned.
-     * @return string|null|void If $directOutput is set to @b false this method will return the html code of the form.
+     * @return string|null If $directOutput is set to @b false this method will return the html code of the form.
      */
     public function show($directOutput = true)
     {
@@ -1963,6 +1963,7 @@ class HtmlForm extends HtmlFormBasic
         if($directOutput)
         {
             echo $html;
+            return null;
         }
         else
         {

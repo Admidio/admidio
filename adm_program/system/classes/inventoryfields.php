@@ -113,7 +113,7 @@ class InventoryFields
             switch ($infType)
             {
                 case 'CHECKBOX':
-                    if($value == 1)
+                    if($value == '1')
                     {
                         $htmlValue = '<img src="'.THEME_PATH.'/icons/checkbox_checked.gif" alt="on" />';
                     }

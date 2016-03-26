@@ -160,7 +160,7 @@ if ($getMode === 1 || $getMode === 3)
         }
     }
 
-    if (strlen($guestbook->getValue('gbo_name')) > 0 && strlen($guestbook->getValue('gbo_text'))  > 0)
+    if (strlen($guestbook->getValue('gbo_name')) > 0 && strlen($guestbook->getValue('gbo_text')) > 0)
     {
         // Gaestebucheintrag speichern
 

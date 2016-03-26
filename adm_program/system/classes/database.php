@@ -576,7 +576,7 @@ class Database
                     }
                     if ($properties['is_nullable'] === 'YES')
                     {
-                        $columnProperties[$properties['column_name']]['null']   = 1;
+                        $columnProperties[$properties['column_name']]['null'] = 1;
                     }
                     /*if ($properties['Key'] === 'PRI' || $properties['Key'] === 'MUL')
                     {

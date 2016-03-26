@@ -96,21 +96,19 @@ class TableRoles extends TableAccess
         // you aren't allowed to edit users of not active roles
         if($this->getValue('rol_valid'))
         {
-            if(!$user->editUsers())
-            {
-                // leader are allowed to assign members if it's configured in the role
-                if($user->isMemberOfRole($this->getValue('rol_id'))
-                && ($this->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
-                   || $this->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT))
-                {
-                    return true;
-                }
-                return true;
-            }
-            else
+            if($user->editUsers())
             {
                 return true;
             }
+
+            // leader are allowed to assign members if it's configured in the role
+            if ($user->isMemberOfRole($this->getValue('rol_id'))
+            &&    ($this->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
+                || $this->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT))
+            {
+                return true;
+            }
+            return true;
         }
         return false;
     }
@@ -287,20 +285,21 @@ class TableRoles extends TableAccess
     {
         global $gL10n;
 
-        $costPeriods = array(-1 => $gL10n->get('ROL_UNIQUELY'),
-                             1  => $gL10n->get('ROL_ANNUALLY'),
-                             2  => $gL10n->get('ROL_SEMIYEARLY'),
-                             4  => $gL10n->get('ROL_QUARTERLY'),
-                             12 => $gL10n->get('ROL_MONTHLY')
+        $costPeriods = array(
+            -1 => $gL10n->get('ROL_UNIQUELY'),
+            1  => $gL10n->get('ROL_ANNUALLY'),
+            2  => $gL10n->get('ROL_SEMIYEARLY'),
+            4  => $gL10n->get('ROL_QUARTERLY'),
+            12 => $gL10n->get('ROL_MONTHLY')
         );
 
-        if($costPeriod !== 0)
+        if($costPeriod === 0)
         {
-            return $costPeriods[$costPeriod];
+            return $costPeriods;
         }
         else
         {
-            return $costPeriods;
+            return $costPeriods[$costPeriod];
         }
     }
 

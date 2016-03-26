@@ -416,7 +416,7 @@ abstract class HtmlElement {
      * that all setted elements after the selected element must be closed as well.
      * All end tags to position are closed automatically starting with last setted element tag.
      * @param string $parentElement Parent element to be closed
-     * @return void|false
+     * @return bool
      */
     public function closeParentElement($parentElement)
     {
@@ -432,11 +432,11 @@ abstract class HtmlElement {
         if(in_array($parentElement, $this->arrParentElements, true) && !$this->nesting)
         {
             // find position in log array
-            for($i = 0; $i < $totalCount-1; ++$i)
+            foreach ($this->arrParentElements as $key => $value)
             {
-                if($this->arrParentElements[$i] === $parentElement)
+                if($value === $parentElement)
                 {
-                    $position = $i;
+                    $position = $key;
                 }
             }
 
@@ -464,6 +464,8 @@ abstract class HtmlElement {
         }
 
         $this->arrParentElements = array_values($this->arrParentElements);
+
+        return true;
     }
 
     /**
@@ -525,51 +527,48 @@ abstract class HtmlElement {
 
     /**
      * Prepare html of data added from content arrays
-     * @param array $data        Array with content for child elements
-     * @param bool  $selfClosing Element has self closing tag ( default: false)
-     * @return void|false Returns FALSE is no data is given
+     * @param string[]|array[] $data        Array with content for child elements
+     * @param bool             $selfClosing Element has self closing tag ( default: false)
+     * @return bool Returns false is no data is given
      */
     private function readData($data, $selfClosing = false)
     {
-        if(isset($data) && is_array($data))
+        if(!isset($data) || !is_array($data))
         {
-            // no selfclosing element
-            if(!$selfClosing)
-            {
-                $startTag = '<' . $this->currentElement . $this->getElementAttributesString() . '>';
-                $endTag   = '</' . $this->currentElement . '>';
-            }
-            else
-            {
-                $startTag = '<' . $this->currentElement . $this->getElementAttributesString();
-                $endTag   = '/>';
-            }
+            return false;
+        }
 
-            // count entries
-            $numberEntries = count($data);
-            // count 1 level deeper.
-            $nextLevel = count($data[0]);
-            if($nextLevel > 1)
+        // no selfclosing element
+        if(!$selfClosing)
+        {
+            $startTag = '<' . $this->currentElement . $this->getElementAttributesString() . '>';
+            $endTag   = '</' . $this->currentElement . '>';
+        }
+        else
+        {
+            $startTag = '<' . $this->currentElement . $this->getElementAttributesString();
+            $endTag   = '/>';
+        }
+
+        if(is_array($data[0]))
+        {
+            foreach ($data as $array)
             {
-                // bidimensional or assoc. array
-                for ($i = 0; $i < $numberEntries; ++$i)
+                foreach ($array as $value)
                 {
-                    foreach ($data[$i] as $col => $value)
-                    {
-                        $this->htmlString .= $startTag . $value . $endTag;
-                    }
-                }
-            }
-            else
-            {
-                // single array
-                foreach ($data as $col)
-                {
-                    $this->htmlString .= $startTag . $col . $endTag;
+                    $this->htmlString .= $startTag . $value . $endTag;
                 }
             }
         }
+        else
+        {
+            // single array
+            foreach ($data as $value)
+            {
+                $this->htmlString .= $startTag . $value . $endTag;
+            }
+        }
 
-        return false;
+        return true;
     }
 }

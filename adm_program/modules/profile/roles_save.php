@@ -173,10 +173,10 @@ foreach($rolesList as $row)
     || ($row['rol_webmaster'] == 1 && $gCurrentUser->isWebmaster()
         && $getUserId != $gCurrentUser->getValue('usr_id')))
     {
-        $roleAssign = 0;
+        $roleAssign = false;
         if(isset($_POST['role-'.$row['rol_id']]) && $_POST['role-'.$row['rol_id']] == 1)
         {
-            $roleAssign = 1;
+            $roleAssign = true;
         }
 
         $roleLeader = 0;
@@ -186,7 +186,7 @@ foreach($rolesList as $row)
         }
 
         // update role membership
-        if($roleAssign == 1)
+        if($roleAssign)
         {
             $user->setRoleMembership($row['rol_id'], DATE_NOW, '9999-12-31', $roleLeader);
             ++$assignedCount;
