@@ -20,7 +20,7 @@
 // create path to plugin
 $plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
 $plugin_file_pos   = strpos(__FILE__, 'calendar.php');
-$plugin_folder     = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);
+$plugin_folder     = substr(__FILE__, $plugin_folder_pos + 1, $plugin_file_pos - $plugin_folder_pos - 2);
 
 if(!defined('PLUGIN_PATH'))
 {
@@ -405,20 +405,20 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
         {
             echo "<th style=\"text-align: center;\" class=\"plgCalendarHeader\"><a href=\"#\" onclick=\"$.ajax({
                 type: 'GET',
-                url: '".$g_root_path."/adm_plugins/$plugin_folder/calendar.php',
+                url: '".$g_root_path."/adm_plugins/".$plugin_folder."/calendar.php',
                 cache: false,
-                data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $currentMonth-1, 1, $currentYear))."',
+                data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $currentMonth - 1, 1, $currentYear))."',
                 success: function(html){
                     $('#plgCalendarContent').replaceWith(html);
                     $('.admidio-calendar-link').popover();
                 }
             }); return false;\">&laquo;</a></th>";
-            echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$months[$currentMonth-1].' '.$currentYear.'</th>';
+            echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>';
             echo "<th style=\"text-align: center;\" class=\"plgCalendarHeader\"><a href=\"#\" onclick=\"$.ajax({
                 type: 'GET',
-                url: '".$g_root_path."/adm_plugins/$plugin_folder/calendar.php',
+                url: '".$g_root_path."/adm_plugins/".$plugin_folder."/calendar.php',
                 cache: false,
-                data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $currentMonth+1, 1, $currentYear))."',
+                data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $currentMonth + 1, 1, $currentYear))."',
                 success: function(html){
                     $('#plgCalendarContent').replaceWith(html);
                     $('.admidio-calendar-link').popover();
@@ -427,7 +427,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
         }
         else
         {
-            echo '<th colspan="7" align="center" class="plgCalendarHeader">'.$months[$currentMonth-1].' '.$currentYear.'</th>';
+            echo '<th colspan="7" align="center" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>';
         }
     echo '</tr>
     <tr>

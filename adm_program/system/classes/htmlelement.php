@@ -449,7 +449,7 @@ abstract class HtmlElement {
             else
             {
                 // all elements setted later must also be closed and removed from array
-                for($i = $totalCount-1; $i >= $position; --$i)
+                for($i = $totalCount - 1; $i >= $position; --$i)
                 {
                     $this->htmlString .= '</' . $this->arrParentElements[$i] . '>';
                     unset($this->arrParentElements[$i]);
@@ -459,8 +459,8 @@ abstract class HtmlElement {
         else
         {
             // close last tag and delete whitespaces in log array
-            $this->htmlString .= '</' . $this->arrParentElements[$totalCount-1] . '>';
-            unset($this->arrParentElements[$totalCount-1]);
+            $this->htmlString .= '</' . $this->arrParentElements[$totalCount - 1] . '>';
+            unset($this->arrParentElements[$totalCount - 1]);
         }
 
         $this->arrParentElements = array_values($this->arrParentElements);

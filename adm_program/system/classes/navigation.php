@@ -77,7 +77,7 @@ class Navigation
 
         if($count === 0 || $url !== end($this->urlStack)['url'])
         {
-            if($count > 1 && $url === $this->urlStack[$count-2]['url'])
+            if($count > 1 && $url === $this->urlStack[$count - 2]['url'])
             {
                 // if the last but one url is equal to the current url then only remove the last url
                 array_pop($this->urlStack);

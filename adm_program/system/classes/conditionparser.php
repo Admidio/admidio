@@ -70,7 +70,7 @@ class ConditionParser
                 case '}':
                     // search for dates that are older than the age
                     // because the age itself takes 1 year we must add 1 year and 1 day to age
-                    $date->modify('-'.($age+1).' years');
+                    $date->modify('-'.($age + 1).' years');
                     $date->modify('+1 day');
                     $ageCondition = $date->format('Y-m-d');
                     break;

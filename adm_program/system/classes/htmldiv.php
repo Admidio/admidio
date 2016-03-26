@@ -153,7 +153,7 @@ class HtmlDiv extends HtmlElement
         if(in_array($parentElement, $this->arrParentElements, true))
         {
             // find position in log array
-            for($i = 0; $i < $totalCount-1; ++$i)
+            for($i = 0; $i < $totalCount - 1; ++$i)
             {
                 if($this->arrParentElements[$i] === $parentElement)
                 {
@@ -170,7 +170,7 @@ class HtmlDiv extends HtmlElement
             else
             {
                 // all elements setted later must also be closed and removed from array
-                for($i = $totalCount-1; $i >= $position; --$i)
+                for($i = $totalCount - 1; $i >= $position; --$i)
                 {
                     $this->htmlString .= '</' . $this->arrParentElements[$i] . '>';
                     unset($this->arrParentElements[$i]);

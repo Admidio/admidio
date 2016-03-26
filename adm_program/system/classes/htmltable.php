@@ -220,12 +220,12 @@ class HtmlTable extends HtmlTableBasic
             // internal datatable columns starts with 0
             foreach($arrayColumnsSort as $column)
             {
-                $this->datatablesColumnDefs[] = '{ "orderable":false, "targets":'.($column-1).' }';
+                $this->datatablesColumnDefs[] = '{ "orderable":false, "targets":'.($column - 1).' }';
             }
         }
         elseif(is_numeric($arrayColumnsSort))
         {
-            $this->datatablesColumnDefs[] = '{ "orderable":false, "targets":'.($arrayColumnsSort-1).' }';
+            $this->datatablesColumnDefs[] = '{ "orderable":false, "targets":'.($arrayColumnsSort - 1).' }';
         }
     }
 
@@ -267,11 +267,11 @@ class HtmlTable extends HtmlTableBasic
                 $arrayOrderColumns[$key] = $column - 1;
             }
 
-            $this->datatablesColumnDefs[] = '{ "targets": ['.($selectedColumn-1).'], "orderData": ['.implode(',', $arrayOrderColumns).'] }';
+            $this->datatablesColumnDefs[] = '{ "targets": ['.($selectedColumn - 1).'], "orderData": ['.implode(',', $arrayOrderColumns).'] }';
         }
         else
         {
-            $this->datatablesColumnDefs[] = '{ "targets": ['.($selectedColumn-1).'], "orderData": ['.($arrayOrderColumns-1).'] }';
+            $this->datatablesColumnDefs[] = '{ "targets": ['.($selectedColumn - 1).'], "orderData": ['.($arrayOrderColumns - 1).'] }';
         }
     }
 
@@ -288,12 +288,12 @@ class HtmlTable extends HtmlTableBasic
             // internal datatable columns starts with 0
             foreach($arrayColumnsHide as $column)
             {
-                $this->datatablesColumnDefs[] = '{ "visible":false, "targets":'.($column-1).' }';
+                $this->datatablesColumnDefs[] = '{ "visible":false, "targets":'.($column - 1).' }';
             }
         }
         elseif(is_numeric($arrayColumnsHide))
         {
-            $this->datatablesColumnDefs[] = '{ "visible":false, "targets":'.($arrayColumnsHide-1).' }';
+            $this->datatablesColumnDefs[] = '{ "visible":false, "targets":'.($arrayColumnsHide - 1).' }';
         }
     }
 
@@ -338,11 +338,11 @@ class HtmlTable extends HtmlTableBasic
             {
                 if(is_array($column))
                 {
-                    $this->orderColumns[] = '['.($column[0]-1).', "'.$column[1].'"]';
+                    $this->orderColumns[] = '['.($column[0] - 1).', "'.$column[1].'"]';
                 }
                 else
                 {
-                    $this->orderColumns[] = '['.($column-1).', "asc"]';
+                    $this->orderColumns[] = '['.($column - 1).', "asc"]';
                 }
             }
         }

@@ -520,7 +520,7 @@ class HtmlTableBasic extends HtmlElement {
         if($column > 0 && $width !== '')
         {
             // internal datatable columns starts with 0
-            $this->columnsWidth[$column-1] = $width;
+            $this->columnsWidth[$column - 1] = $width;
         }
     }
 }

@@ -18,7 +18,7 @@
 // create path to plugin
 $plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
 $plugin_file_pos = strpos(__FILE__, 'sidebar_downloads.php');
-$plugin_folder = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);
+$plugin_folder = substr(__FILE__, $plugin_folder_pos + 1, $plugin_file_pos - $plugin_folder_pos - 2);
 
 if(!defined('PLUGIN_PATH'))
 {

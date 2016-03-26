@@ -142,12 +142,12 @@ class Captcha
             if($operator === 1)
             {
                 $result += $number[$count];
-                $operator_value[$count-1] = '+';
+                $operator_value[$count - 1] = '+';
             }
             if($operator === 2)
             {
                 $result -= $number[$count];
-                $operator_value[$count-1] = '-';
+                $operator_value[$count - 1] = '-';
             }
             if($count === 2 && $result < 1)
             {

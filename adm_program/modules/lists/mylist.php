@@ -311,12 +311,12 @@ $javascriptCode .= '
         user_fields['. $posEndOfMasterData. ']["usf_name"] = "'.$gL10n->get('SYS_USERNAME').'";
         user_fields['. $posEndOfMasterData. ']["usf_name_intern"] = "'.$gL10n->get('SYS_USERNAME').'";
 
-        user_fields['. ($posEndOfMasterData+1). '] = new Object();
-        user_fields['. ($posEndOfMasterData+1). ']["cat_id"]   = user_fields[1]["cat_id"];;
-        user_fields['. ($posEndOfMasterData+1). ']["cat_name"] = user_fields[1]["cat_name"];
-        user_fields['. ($posEndOfMasterData+1). ']["usf_id"]   = "usr_photo";
-        user_fields['. ($posEndOfMasterData+1). ']["usf_name"] = "'.$gL10n->get('PHO_PHOTO').'";
-        user_fields['. ($posEndOfMasterData+1). ']["usf_name_intern"] = "'.$gL10n->get('PHO_PHOTO').'";
+        user_fields['. ($posEndOfMasterData + 1). '] = new Object();
+        user_fields['. ($posEndOfMasterData + 1). ']["cat_id"]   = user_fields[1]["cat_id"];;
+        user_fields['. ($posEndOfMasterData + 1). ']["cat_name"] = user_fields[1]["cat_name"];
+        user_fields['. ($posEndOfMasterData + 1). ']["usf_id"]   = "usr_photo";
+        user_fields['. ($posEndOfMasterData + 1). ']["usf_name"] = "'.$gL10n->get('PHO_PHOTO').'";
+        user_fields['. ($posEndOfMasterData + 1). ']["usf_name_intern"] = "'.$gL10n->get('PHO_PHOTO').'";
 
         user_fields['. $i. '] = new Object();
         user_fields['. $i. ']["cat_id"]   = -1;
