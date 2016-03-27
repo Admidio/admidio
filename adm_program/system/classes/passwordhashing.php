@@ -9,6 +9,8 @@
 
 // provide forward compatibility with the password_* functions that ship with PHP 5.5
 require_once(SERVER_PATH.'/adm_program/libs/password_compat/password.php');
+// provide forward compatibility with the random_* functions that ship with PHP 7.0
+require_once(SERVER_PATH.'/adm_program/libs/random_compat/lib/random.php');
 // old phpass password hashing lib for backward compatibility
 require_once(SERVER_PATH.'/adm_program/libs/phpass/passwordhash.php');
 
@@ -92,11 +94,54 @@ class PasswordHashing
     /**
      * Generate a cryptographically strong random password
      * @param int $length The length of the generated password
+     * @throws \AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_FAIL
      * @return string Returns a cryptographically strong random password string
      */
     public static function genRandomPassword($length)
     {
-        return substr(bin2hex(openssl_random_pseudo_bytes(ceil($length / 2))), 0, $length);
+        try
+        {
+            $string = random_bytes(ceil($length / 2));
+        }
+        catch (Error $e)
+        {
+            // An unexpected error has occurred
+            throw new AdmException('SYS_GEN_RANDOM_ERROR');
+        }
+        catch (Exception $e)
+        {
+            // If you get this message, the CSPRNG failed hard.
+            throw new AdmException('SYS_GEN_RANDOM_FAIL');
+        }
+
+        return substr(bin2hex($string), 0, $length);
+    }
+
+    /**
+     * Generate a cryptographically strong random integer
+     * @param int $min The min of the range (inclusive)
+     * @param int $max The max of the range (inclusive)
+     * @throws \AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_FAIL
+     * @return int Returns a cryptographically strong random integer
+     */
+    public static function genRandomInt($min, $max)
+    {
+        try
+        {
+            $int = random_int($min, $max);
+        }
+        catch (Error $e)
+        {
+            // An unexpected error has occurred
+            throw new AdmException('SYS_GEN_RANDOM_ERROR');
+        }
+        catch (Exception $e)
+        {
+            // If you get this message, the CSPRNG failed hard.
+            throw new AdmException('SYS_GEN_RANDOM_FAIL');
+        }
+
+        return $int;
     }
 
     /**
@@ -111,7 +156,7 @@ class PasswordHashing
             'number'    => false,
             'lowerCase' => false,
             'upperCase' => false,
-            'symbol'    => false,
+            'symbol'    => false
         );
 
         $passwordInfo['length'] = strlen($password);

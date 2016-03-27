@@ -1080,6 +1080,8 @@
   <string name="SYS_FRIDAY">Friday</string>
   <string name="SYS_FULL_SCREEN">Full screen</string>
   <string name="SYS_GENDER">Gender</string>
+  <string name="SYS_GEN_RANDOM_ERROR">An unexpected error at generating a random string has occurred.</string>
+  <string name="SYS_GEN_RANDOM_FAIL">Could not generate a random string. Is this OS secure?</string>
   <string name="SYS_HEADLINE">Headline</string>
   <string name="SYS_HELP">Help</string>
   <string name="SYS_HIDE">Hide</string>
