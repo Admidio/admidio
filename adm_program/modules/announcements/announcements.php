@@ -83,7 +83,7 @@ if($gCurrentUser->editAnnouncements())
                                 $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
 }
 
-if($gCurrentUser->isWebmaster())
+if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of announcements
     $announcementsMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=announcements',

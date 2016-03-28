@@ -91,7 +91,7 @@ elseif($getMode === 2)
 elseif($getMode === 3)
 {
     // Remove former membership of role
-    if($gCurrentUser->isWebmaster())
+    if($gCurrentUser->isAdministrator())
     {
         $member = new TableMembers($gDb, $getMemberId);
         $member->delete();

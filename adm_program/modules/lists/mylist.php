@@ -525,7 +525,7 @@ $page->addJavascript('$(document).ready(function() {
 $myListMenu = $page->getMenu();
 
 // show link to system preferences of roles
-if($gCurrentUser->isWebmaster())
+if($gCurrentUser->isAdministrator())
 {
     $myListMenu->addItem('admMenuItemPreferencesLists', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=lists',
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
@@ -608,7 +608,7 @@ $form->addSelectBox('sel_select_configuation', $gL10n->get('LST_SELECT_CONFIGURA
     array('defaultValue' => $formValues['sel_select_configuation'], 'showContextDependentFirstEntry' => false));
 
 // Webmasters could upgrade a configuration to a global configuration that is visible to all users
-if($gCurrentUser->isWebmaster())
+if($gCurrentUser->isAdministrator())
 {
     $form->addCheckbox('cbx_global_configuration', $gL10n->get('LST_CONFIGURATION_ALL_USERS'), $list->getValue('lst_global'),
         array('defaultValue' => $formValues['cbx_global_configuration'], 'helpTextIdLabel' => 'LST_PRESET_CONFIGURATION_DESC'));
@@ -647,7 +647,7 @@ else
     $form->addButton('btn_save', $gL10n->get('LST_SAVE_CONFIGURATION'), array('icon' => THEME_PATH.'/icons/disk.png'));
 }
 // your lists could be deleted, webmasters are allowed to delete system configurations
-if(($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
+if(($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
 || ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
 {
     $form->addButton('btn_delete', $gL10n->get('LST_DELETE_CONFIGURATION'), array('icon' => THEME_PATH.'/icons/delete.png'));

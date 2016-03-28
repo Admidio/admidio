@@ -147,7 +147,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
                 $fieldProperty = FIELD_DEFAULT;
                 $fieldHelpId   = null;
 
-                if(!$gCurrentUser->isWebmaster() && $getNewItem === 0)
+                if(!$gCurrentUser->isAdministrator() && $getNewItem === 0)
                 {
                     $fieldProperty = FIELD_DISABLED;
                 }

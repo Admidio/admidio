@@ -123,7 +123,7 @@ elseif($getMode === 2)
     }
 
     // bei der Rolle "Webmaster" muessen bestimmte Flags gesetzt sein
-    if($role->getValue('rol_webmaster') == 1)
+    if($role->getValue('rol_administrator') == 1)
     {
         $_POST['rol_assign_roles']   = 1;
         $_POST['rol_all_lists_view'] = 1;

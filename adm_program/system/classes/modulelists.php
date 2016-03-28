@@ -100,7 +100,7 @@
  *                          [37] => 1
  *                          [rol_visible] => 1
  *                          [38] => 0
- *                          [rol_webmaster] => 0
+ *                          [rol_administrator] => 0
  *                          [39] => 3
  *                          [cat_id] => 3
  *                          [40] => 1
@@ -231,7 +231,7 @@ class ModuleLists extends Modules
     {
         global $gCurrentUser;
 
-        if($this->activeRole === 0 && $gCurrentUser->isWebmaster())
+        if($this->activeRole === 0 && $gCurrentUser->isAdministrator())
         {
             // if inactive roles should be shown, then show all of them to webmaster
             return '';

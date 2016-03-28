@@ -231,8 +231,8 @@ else
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE rol_webmaster = 1
-                   AND rol_name LIKE \''.$gL10n->get('SYS_WEBMASTER').'\'
+                 WHERE rol_administrator = 1
+                   AND rol_name LIKE \''.$gL10n->get('SYS_ADMINISTRATOR').'\'
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL ) ';
         $webmasterStatement = $gDb->query($sql);

@@ -21,7 +21,7 @@ $getRoomId = admFuncVariableIsValid($_GET, 'room_id', 'int');
 $getMode   = admFuncVariableIsValid($_GET, 'mode',    'int', array('requireValue' => true));
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
-if (!$gCurrentUser->isWebmaster())
+if (!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

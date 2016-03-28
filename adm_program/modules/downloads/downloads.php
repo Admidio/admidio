@@ -97,7 +97,7 @@ if ($gCurrentUser->editDownloadRight())
                         $gL10n->get('SYS_AUTHORIZATION'), 'lock.png');
 }
 
-if($gCurrentUser->isWebmaster())
+if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of weblinks
     $DownloadsMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=downloads',

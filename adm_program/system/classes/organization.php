@@ -129,7 +129,7 @@ class Organization extends TableAccess
         // Create role webmaster
         $roleWebmaster = new TableRoles($this->db);
         $roleWebmaster->setValue('rol_cat_id', $categoryCommon);
-        $roleWebmaster->setValue('rol_name', $gL10n->get('SYS_WEBMASTER'));
+        $roleWebmaster->setValue('rol_name', $gL10n->get('SYS_ADMINISTRATOR'));
         $roleWebmaster->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_WEBMASTER'));
         $roleWebmaster->setValue('rol_assign_roles', 1);
         $roleWebmaster->setValue('rol_approve_users', 1);
@@ -146,7 +146,7 @@ class Organization extends TableAccess
         $roleWebmaster->setValue('rol_profile', 1);
         $roleWebmaster->setValue('rol_this_list_view', 1);
         $roleWebmaster->setValue('rol_all_lists_view', 1);
-        $roleWebmaster->setValue('rol_webmaster', 1);
+        $roleWebmaster->setValue('rol_administrator', 1);
         $roleWebmaster->setValue('rol_inventory', 1);
         $roleWebmaster->save();
 

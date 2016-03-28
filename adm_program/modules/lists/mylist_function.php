@@ -51,7 +51,7 @@ $list = new ListConfiguration($gDb, $getListId);
 if($getMode !== 2)
 {
     // globale Listen duerfen nur von Webmastern editiert werden
-    if($list->getValue('lst_global') == 1 && !$gCurrentUser->isWebmaster())
+    if($list->getValue('lst_global') == 1 && !$gCurrentUser->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -85,7 +85,7 @@ if ($getMode === 1 || $getMode === 2)
     }
 
     // set list global only in save mode
-    if($getMode === 1 && $gCurrentUser->isWebmaster() && isset($_POST['cbx_global_configuration']))
+    if($getMode === 1 && $gCurrentUser->isAdministrator() && isset($_POST['cbx_global_configuration']))
     {
         $list->setValue('lst_global', $_POST['cbx_global_configuration']);
     }

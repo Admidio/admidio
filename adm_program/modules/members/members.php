@@ -168,7 +168,7 @@ $membersAdministrationMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_M
 $membersAdministrationMenu->addItem('menu_item_import_users', $g_root_path.'/adm_program/modules/members/import.php',
                             $gL10n->get('MEM_IMPORT_USERS'), 'database_in.png', 'right', 'menu_item_extras');
 
-if($gCurrentUser->isWebmaster())
+if($gCurrentUser->isAdministrator())
 {
     // show link to maintain profile fields
     $membersAdministrationMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php',
@@ -275,7 +275,7 @@ while($row = $mglStatement->fetch())
 
     // Webmasters can change or send password if login is configured and user is member of current organization
     if($row['member_this_orga'] > 0
-    && $gCurrentUser->isWebmaster()
+    && $gCurrentUser->isAdministrator()
     && strlen($row['usr_login_name']) > 0
     && $row['usr_id'] != $gCurrentUser->getValue('usr_id'))
     {
@@ -319,7 +319,7 @@ while($row = $mglStatement->fetch())
     }
 
     // Mitglieder entfernen
-    if((($row['member_other_orga'] == 0 && $gCurrentUser->isWebmaster()) // kein Mitglied einer anderen Orga, dann duerfen Webmaster loeschen
+    if((($row['member_other_orga'] == 0 && $gCurrentUser->isAdministrator()) // kein Mitglied einer anderen Orga, dann duerfen Webmaster loeschen
         || $row['member_this_orga'] > 0)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
         && $row['usr_id'] != $gCurrentUser->getValue('usr_id'))       // das eigene Profil darf keiner entfernen
     {

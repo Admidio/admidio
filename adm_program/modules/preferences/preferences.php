@@ -22,7 +22,7 @@ $showOption = admFuncVariableIsValid($_GET, 'show_option', 'string');
 $headline = $gL10n->get('SYS_SETTINGS');
 
 // only webmasters are allowed to edit organization preferences
-if(!$gCurrentUser->isWebmaster())
+if(!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

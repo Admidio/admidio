@@ -69,7 +69,7 @@ if($roleCount === 0)
 if($gCurrentUser->manageRoles())
 {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
-    $sql = 'SELECT rol_id, rol_name, rol_max_members, rol_webmaster, mem_id, mem_begin, mem_end
+    $sql = 'SELECT rol_id, rol_name, rol_max_members, rol_administrator, mem_id, mem_begin, mem_end
               FROM '.TBL_ROLES.'
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
@@ -87,7 +87,7 @@ if($gCurrentUser->manageRoles())
 else
 {
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-    $sql = 'SELECT rol_id, rol_name, rol_max_members, rol_webmaster, mgl.mem_id, mgl.mem_begin, mgl.mem_end
+    $sql = 'SELECT rol_id, rol_name, rol_max_members, rol_administrator, mgl.mem_id, mgl.mem_begin, mgl.mem_end
               FROM '.TBL_MEMBERS.' bm
         INNER JOIN '.TBL_ROLES.'
                 ON rol_id = bm.mem_rol_id
@@ -170,8 +170,8 @@ foreach($rolesList as $row)
 {
     // if role is webmaster than only webmaster can add new user,
     // but don't change their own membership, because there must be at least one webmaster
-    if($row['rol_webmaster'] == 0
-    || ($row['rol_webmaster'] == 1 && $gCurrentUser->isWebmaster()
+    if($row['rol_administrator'] == 0
+    || ($row['rol_administrator'] == 1 && $gCurrentUser->isAdministrator()
         && $getUserId != $gCurrentUser->getValue('usr_id')))
     {
         $roleAssign = false;

@@ -271,7 +271,7 @@ while($row = $rolStatement->fetch())
                 alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"
                 title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"/></a>';
 
-    if($role->getValue('rol_webmaster') == 1)
+    if($role->getValue('rol_administrator') == 1)
     {
         $linkAdministration .= '<a class="admidio-icon-link"><img src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" /></a>';
     }

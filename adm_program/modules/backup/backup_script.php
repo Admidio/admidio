@@ -20,7 +20,7 @@ require_once('../../system/login_valid.php');
 require_once('backup.functions.php');
 
 // only webmaster are allowed to start backup
-if(!$gCurrentUser->isWebmaster())
+if(!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

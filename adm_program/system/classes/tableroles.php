@@ -76,8 +76,8 @@ class TableRoles extends TableAccess
             else
             {
                 // only webmasters are allowed to assign new members to webmaster role
-                if($this->getValue('rol_webmaster') == 0
-                || ($this->getValue('rol_webmaster') == 1 && $user->isWebmaster()))
+                if($this->getValue('rol_administrator') == 0
+                || ($this->getValue('rol_administrator') == 1 && $user->isAdministrator()))
                 {
                     return true;
                 }
@@ -231,9 +231,9 @@ class TableRoles extends TableAccess
         {
             throw new AdmException('ROL_DELETE_SYSTEM_ROLE', $this->getValue('rol_name'));
         }
-        elseif($this->getValue('rol_webmaster'))
+        elseif($this->getValue('rol_administrator'))
         {
-            throw new AdmException('ROL_DELETE_ROLE', $gL10n->get('SYS_WEBMASTER'));
+            throw new AdmException('ROL_DELETE_ROLE', $gL10n->get('SYS_ADMINISTRATOR'));
         }
         else
         {

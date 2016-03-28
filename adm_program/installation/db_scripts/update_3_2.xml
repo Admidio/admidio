@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<update>
+    <step id="10">UPDATE %PREFIX%_roles SET rol_name = 'Administrator_1' WHERE rol_name = 'Administrator'</step>
+    <step id="20">UPDATE %PREFIX%_roles SET rol_name = 'Administrator' WHERE rol_name = 'Webmaster'</step>
+    <step id="30">UPDATE %PREFIX%_roles SET rol_name = 'SYS_ADMINISTRATOR' WHERE rol_name = 'SYS_WEBMASTER'</step>
+    <step id="40">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_administrator boolean not null default '0'</step>
+    <step id="50">UPDATE %PREFIX%_roles SET rol_administrator = rol_webmaster</step>
+    <step id="60">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_webmaster</step>
+    <step>stop</step>
+</update>

@@ -93,7 +93,7 @@
 
                     // Administration Menu
                     if($gCurrentUser->approveUsers() || $gCurrentUser->editUsers()
-                    || $gCurrentUser->manageRoles()  || $gCurrentUser->isWebmaster())
+                    || $gCurrentUser->manageRoles()  || $gCurrentUser->isAdministrator())
                     {
                         $adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
 
@@ -112,7 +112,7 @@
                             $adminMenu->addItem('roladm', '/adm_program/modules/roles/roles.php',
                                                 $gL10n->get('ROL_ROLE_ADMINISTRATION'), '/icons/roles.png');
                         }
-                        if($gCurrentUser->isWebmaster())
+                        if($gCurrentUser->isAdministrator())
                         {
                             $adminMenu->addItem('dbback', '/adm_program/modules/backup/backup.php',
                                                 $gL10n->get('BAC_DATABASE_BACKUP'), '/icons/backup.png');

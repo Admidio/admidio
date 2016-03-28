@@ -184,7 +184,7 @@ class TableMembers extends TableAccess
             && strcmp($this->getValue('mem_end', 'Y-m-d'), $newEndDate) >= 0)
             {
                 // if role webmaster then check if this membership is the last one -> don't delete it
-                if($this->getValue('rol_webmaster') == true)
+                if($this->getValue('rol_administrator') == true)
                 {
                     $sql = 'SELECT mem_id
                               FROM '.TBL_MEMBERS.'

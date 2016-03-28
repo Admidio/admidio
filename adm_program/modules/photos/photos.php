@@ -191,7 +191,7 @@ if($gPreferences['photo_download_enabled'] == 1 && $photoAlbum->getValue('pho_qu
                                                 $gL10n->get('PHO_DOWNLOAD_PHOTOS'), 'page_white_compressed.png');
 }
 
-if($gCurrentUser->isWebmaster())
+if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of photos
     $photosMenu->addItem('menu_item_preferences_photos', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=photos',
