@@ -97,7 +97,7 @@ class PasswordHashing
      * Generate a cryptographically strong random password
      * @param int    $length  The length of the generated password (default = 12)
      * @param string $charset A string of all possible characters to choose from (default = [0-9a-zA-z])
-     * @throws \AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_FAIL
+     * @throws \AdmException SYS_GEN_RANDOM_TWO_DISTINCT_CHARS, SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_FAIL
      * @return string Returns a cryptographically strong random password string
      * @link https://paragonie.com/b/JvICXzh_jhLyt4y3
      */
@@ -124,7 +124,7 @@ class PasswordHashing
         $randomString = '';
         for ($i = 0; $i < $length; ++$i)
         {
-            $r = random_int(0, $charsetMax);
+            $r = self::genRandomInt(0, $charsetMax);
             $randomString .= $charset[$r];
         }
 
