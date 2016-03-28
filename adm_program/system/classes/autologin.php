@@ -54,7 +54,18 @@ class AutoLogin extends TableAccess
      */
     public function generateAutoLoginId($userId)
     {
-        return $userId.':'.PasswordHashing::genRandomPassword(40);
+        $loginId = '';
+
+        try
+        {
+            $loginId = $userId.':'.PasswordHashing::genRandomPassword(40);
+        }
+        catch(AdmException $e)
+        {
+            $e->showText();
+        }
+
+        return $loginId;
     }
 
     /**
