@@ -1003,7 +1003,7 @@ class User extends TableAccess
                     foreach($this->rolesMembershipLeader as $roleId => $leaderRights)
                     {
                         // is group leader of role and has the right to edit users ?
-                        if(in_array($roleId, $rolesMembership, true) && $leaderRights > 1)
+                        if(in_array($roleId, $rolesMembership) && $leaderRights > 1)
                         {
                             $returnValue = true;
                         }
