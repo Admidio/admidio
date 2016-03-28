@@ -62,7 +62,6 @@ if($datesResult['numResults'] > 0)
     $date = new TableDate($gDb);
     foreach($datesResult['recordset'] as $row)
     {
-
         // ausgelesene Termindaten in Date-Objekt schieben
         $date->clear();
         $date->setArray($row);
@@ -117,4 +116,4 @@ if($datesResult['numResults'] > 0)
     }
 }
 // jetzt nur noch den Feed generieren lassen
-$rss->buildFeed();
+$rss->getRssFeed();

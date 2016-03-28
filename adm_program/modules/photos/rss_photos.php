@@ -155,4 +155,4 @@ while ($row = $statement->fetch())
 }
 
 // jetzt nur noch den Feed generieren lassen
-$rss->buildFeed();
+$rss->getRssFeed();
