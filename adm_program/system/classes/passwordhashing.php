@@ -45,11 +45,12 @@ class PasswordHashing
     {
         if (!in_array('cost', $options, true))
         {
-            $options['cost'] = 10;
+            $options['cost'] = 12;
         }
-        if ($options['cost'] < 4)
+        // https://paragonie.com/blog/2016/02/how-safely-store-password-in-2016
+        if ($options['cost'] < 10)
         {
-            $options['cost'] = 4;
+            $options['cost'] = 10;
         }
 
         return password_hash($password, $algorithm, $options);
