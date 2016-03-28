@@ -408,7 +408,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
                 url: '".$g_root_path."/adm_plugins/".$plugin_folder."/calendar.php',
                 cache: false,
                 data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $currentMonth - 1, 1, $currentYear))."',
-                success: function(html){
+                success: function(html) {
                     $('#plgCalendarContent').replaceWith(html);
                     $('.admidio-calendar-link').popover();
                 }
@@ -419,7 +419,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
                 url: '".$g_root_path."/adm_plugins/".$plugin_folder."/calendar.php',
                 cache: false,
                 data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $currentMonth + 1, 1, $currentYear))."',
-                success: function(html){
+                success: function(html) {
                     $('#plgCalendarContent').replaceWith(html);
                     $('.admidio-calendar-link').popover();
                 }
@@ -693,7 +693,7 @@ if($currentMonth.$currentYear !== date('mY'))
             url: \''.$g_root_path.'/adm_plugins/'.$plugin_folder.'/calendar.php\',
             cache: false,
             data: \'ajax_change&amp;date_id='.date('mY').'\',
-            success: function(html){
+            success: function(html) {
                 $(\'#plgCalendarContent\').replaceWith(html);
                 $(\'.admidio-calendar-link\').popover();
             }
