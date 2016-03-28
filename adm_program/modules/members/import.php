@@ -67,7 +67,7 @@ if(!$gCurrentUser->manageRoles())
 }
 if(!$gCurrentUser->isAdministrator())
 {
-    // Webmasterrolle nicht anzeigen
+    // Don't show administrator role
     $condition .= ' AND rol_administrator = 0 ';
 }
 

@@ -695,13 +695,13 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     $gCurrentOrganization->setValue('org_homepage', $_SERVER['HTTP_HOST']);
     $gCurrentOrganization->save();
 
-    // create user webmaster and assign roles
-    $webmaster = new User($db);
-    $webmaster->setValue('usr_login_name', $_SESSION['user_login']);
-    $webmaster->setPassword($_SESSION['user_password']);
-    $webmaster->setValue('usr_usr_id_create', $gCurrentUser->getValue('usr_id'));
-    $webmaster->setValue('usr_timestamp_create', DATETIME_NOW);
-    $webmaster->save(false); // no registered user -> UserIdCreate couldn't be filled
+    // create administrator and assign roles
+    $administrator = new User($db);
+    $administrator->setValue('usr_login_name', $_SESSION['user_login']);
+    $administrator->setPassword($_SESSION['user_password']);
+    $administrator->setValue('usr_usr_id_create', $gCurrentUser->getValue('usr_id'));
+    $administrator->setValue('usr_timestamp_create', DATETIME_NOW);
+    $administrator->save(false); // no registered user -> UserIdCreate couldn't be filled
 
     // write all preferences from preferences.php in table adm_preferences
     require_once('db_scripts/preferences.php');
@@ -716,7 +716,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
 
     // create all necessary data for this organization
     $gCurrentOrganization->setPreferences($orga_preferences, false);
-    $gCurrentOrganization->createBasicData($webmaster->getValue('usr_id'));
+    $gCurrentOrganization->createBasicData($administrator->getValue('usr_id'));
 
     // create default room for room module in database
     $sql = 'INSERT INTO '.TBL_ROOMS.' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
@@ -724,9 +724,9 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
                            15, '.$gCurrentUser->getValue('usr_id').',\''.DATETIME_NOW.'\')';
     $db->query($sql);
 
-    // first create a user object "current user" with webmaster rights because webmaster
-    // is allowed to edit firstname and lastname
-    $gCurrentUser = new User($db, $gProfileFields, $webmaster->getValue('usr_id'));
+    // first create a user object "current user" with administrator rights 
+    // because administrator is allowed to edit firstname and lastname
+    $gCurrentUser = new User($db, $gProfileFields, $administrator->getValue('usr_id'));
     $gCurrentUser->setValue('LAST_NAME',  $_SESSION['user_last_name']);
     $gCurrentUser->setValue('FIRST_NAME', $_SESSION['user_first_name']);
     $gCurrentUser->setValue('EMAIL',      $_SESSION['user_email']);

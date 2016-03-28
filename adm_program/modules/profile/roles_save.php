@@ -168,8 +168,8 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 // Ergebnisse durchlaufen und Datenbankupdate durchfuehren
 foreach($rolesList as $row)
 {
-    // if role is webmaster than only webmaster can add new user,
-    // but don't change their own membership, because there must be at least one webmaster
+    // if role is administrator than only administrator can add new user,
+    // but don't change their own membership, because there must be at least one administrator
     if($row['rol_administrator'] == 0
     || ($row['rol_administrator'] == 1 && $gCurrentUser->isAdministrator()
         && $getUserId != $gCurrentUser->getValue('usr_id')))

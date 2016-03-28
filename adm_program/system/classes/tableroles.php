@@ -75,7 +75,7 @@ class TableRoles extends TableAccess
             }
             else
             {
-                // only webmasters are allowed to assign new members to webmaster role
+                // only administrators are allowed to assign new members to administrator role
                 if($this->getValue('rol_administrator') == 0
                 || ($this->getValue('rol_administrator') == 1 && $user->isAdministrator()))
                 {

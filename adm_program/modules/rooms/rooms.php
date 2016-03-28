@@ -12,7 +12,7 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
-// only webmasters are allowed to manage rooms
+// only administrators are allowed to manage rooms
 if (!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

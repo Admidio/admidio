@@ -21,7 +21,7 @@ require('../../system/login_valid.php');
 $getJob      = admFuncVariableIsValid($_GET, 'job',      'string', array('requireValue' => true, 'validValues' => array('delete', 'get_file')));
 $getFilename = admFuncVariableIsValid($_GET, 'filename', 'file',   array('requireValue' => true));
 
-// nur Webmaster duerfen ein Backup starten
+// only administrators are allowed to create backups
 if(!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

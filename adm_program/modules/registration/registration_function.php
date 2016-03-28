@@ -29,7 +29,7 @@ $getMode      = admFuncVariableIsValid($_GET, 'mode',        'int', array('requi
 $getNewUserId = admFuncVariableIsValid($_GET, 'new_user_id', 'int', array('requireValue' => true));
 $getUserId    = admFuncVariableIsValid($_GET, 'user_id',     'int');
 
-// nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
+// only administrators could approve new users
 if(!$gCurrentUser->approveUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

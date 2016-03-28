@@ -100,7 +100,7 @@ elseif($getMode === 2)
 {
     // User NUR aus der aktuellen Organisation entfernen
 
-    // Es duerfen keine Webmaster entfernt werden
+    // Administrators could not be deleted
     if(!$gCurrentUser->isAdministrator() && $user->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -143,7 +143,7 @@ elseif($getMode === 3)
 {
     // User aus der Datenbank loeschen
 
-    // nur Webmaster duerfen dies
+        // only administrators are allowed to do this
     if(!$gCurrentUser->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -163,7 +163,7 @@ elseif($getMode === 3)
 }
 elseif($getMode === 4)
 {
-    // nur Webmaster duerfen User neue Zugangsdaten zuschicken
+    // only administrators are allowed to send new login data
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
     // nur an Mitglieder der eigenen Organisation schicken
     if(!$gCurrentUser->isAdministrator() || $gPreferences['enable_system_mails'] != 1 || !$this_orga)
@@ -205,14 +205,14 @@ elseif($getMode === 6)
 {
     if($this_orga && $otherOrgaCount === 0 && $gCurrentUser->isAdministrator())
     {
-        // nur Webmaster duerfen dies
+        // only administrators are allowed to do this
         // User ist NUR Mitglied der aktuellen Orga -> dann fragen, ob Ehemaliger oder ganz loeschen
         header('Location: '.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=1');
         exit();
     }
     elseif(!$this_orga && $otherOrgaCount === 0 && $gCurrentUser->isAdministrator())
     {
-        // nur Webmaster duerfen dies
+        // only administrators are allowed to do this
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
         $gMessage->setForwardYesNo($g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=3');
         $gMessage->show($gL10n->get('MEM_USER_DELETE', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')), $gL10n->get('SYS_DELETE'));

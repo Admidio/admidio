@@ -122,7 +122,7 @@ elseif($getMode === 2)
         }
     }
 
-    // bei der Rolle "Webmaster" muessen bestimmte Flags gesetzt sein
+    // Administrator role need some more flags
     if($role->getValue('rol_administrator') == 1)
     {
         $_POST['rol_assign_roles']   = 1;

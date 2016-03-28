@@ -366,7 +366,7 @@ class HtmlPage
     /**
      * Every html page of Admidio contains three files of the custom theme.
      * my_header.php, my_body_top.php and my_body_bottom.php
-     * With these files the webmaster can contain custom layout to Admidio.
+     * With these files the administrator can contain custom layout to Admidio.
      * If these files should not be included in the current page, than this method must be called.
      * @return void
      */

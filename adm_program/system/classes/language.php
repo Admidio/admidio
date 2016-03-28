@@ -30,7 +30,7 @@
  * $language->addLanguageData($session->getObject('languageData'));
  *
  * // read and display a language specific text with placeholders for individual content
- * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Webmaster');@endcode
+ * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Administrator');@endcode
  */
 class Language
 {
@@ -78,7 +78,7 @@ class Language
      *                echo $gL10n->get('SYS_NUMBER');
      *
      * // display a text with placeholders for individual content
-     * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Webmaster');
+     * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Administrator');
      * @endcode
      */
     public function get($textId)

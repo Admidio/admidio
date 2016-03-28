@@ -51,7 +51,7 @@ if($getRoleId > 0)
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
-    // Rolle Webmaster darf nur vom Webmaster selber erstellt oder gepflegt werden
+    // Administrator role could only be created or edited by administrators
     if($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

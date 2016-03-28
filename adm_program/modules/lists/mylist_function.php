@@ -50,7 +50,7 @@ $list = new ListConfiguration($gDb, $getListId);
 // pruefen, ob Benutzer die Rechte hat, diese Liste zu bearbeiten
 if($getMode !== 2)
 {
-    // globale Listen duerfen nur von Webmastern editiert werden
+    // global lists can only be edited by administrator
     if($list->getValue('lst_global') == 1 && !$gCurrentUser->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

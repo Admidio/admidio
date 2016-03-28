@@ -226,7 +226,7 @@ else
 
     if($plg_show_email_link)
     {
-        // read id of webmaster role
+        // read id of administrator role
         $sql = 'SELECT rol_id
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
@@ -235,11 +235,11 @@ else
                    AND rol_name LIKE \''.$gL10n->get('SYS_ADMINISTRATOR').'\'
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL ) ';
-        $webmasterStatement = $gDb->query($sql);
-        $row = $webmasterStatement->fetch();
+        $administratorStatement = $gDb->query($sql);
+        $row = $administratorStatement->fetch();
 
-        // create role object for webmaster
-        $roleWebmaster = new TableRoles($gDb, $row['rol_id']);
+        // create role object for administrator
+        $roleAdministrator = new TableRoles($gDb, $row['rol_id']);
 
         $linkText = $gL10n->get('SYS_LOGIN_PROBLEMS');
 
@@ -250,14 +250,14 @@ else
             $linkUrl  = $g_root_path.'/adm_program/system/lost_password.php';
             $linkText = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
         }
-        elseif($gPreferences['enable_mail_module'] == 1 && $roleWebmaster->getValue('rol_mail_this_role') == 3)
+        elseif($gPreferences['enable_mail_module'] == 1 && $roleAdministrator->getValue('rol_mail_this_role') == 3)
         {
-            // Mailmodul aufrufen mit Webmaster als Ansprechpartner
-            $linkUrl = $g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='. $roleWebmaster->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+            // show link of message module to send mail to administrator role
+            $linkUrl = $g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='. $roleAdministrator->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
         }
         else
         {
-            // direkte Mail an den Webmaster ueber einen externen Mailclient
+            // show link to send mail with local mail-client to administrator
             $linkUrl = 'mailto:'. $gPreferences['email_administrator']. '?subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
         }
 

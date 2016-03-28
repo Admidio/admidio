@@ -607,7 +607,7 @@ foreach($configurations as $configuration)
 $form->addSelectBox('sel_select_configuation', $gL10n->get('LST_SELECT_CONFIGURATION'), $configurationsArray,
     array('defaultValue' => $formValues['sel_select_configuation'], 'showContextDependentFirstEntry' => false));
 
-// Webmasters could upgrade a configuration to a global configuration that is visible to all users
+// Administrators could upgrade a configuration to a global configuration that is visible to all users
 if($gCurrentUser->isAdministrator())
 {
     $form->addCheckbox('cbx_global_configuration', $gL10n->get('LST_CONFIGURATION_ALL_USERS'), $list->getValue('lst_global'),
@@ -646,7 +646,7 @@ else
 {
     $form->addButton('btn_save', $gL10n->get('LST_SAVE_CONFIGURATION'), array('icon' => THEME_PATH.'/icons/disk.png'));
 }
-// your lists could be deleted, webmasters are allowed to delete system configurations
+// your lists could be deleted, administrators are allowed to delete system configurations
 if(($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
 || ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
 {

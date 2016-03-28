@@ -156,7 +156,7 @@ class TableMembers extends TableAccess
     /**
      * Stops a membership for the assigned role and user from now until 31.12.9999.
      * If the user is the current user then initiate a refresh of his role cache. If
-     * the last membership of a webmaster role should be stopped then throw an exception.
+     * the last membership of a administrator role should be stopped then throw an exception.
      * @param int $roleId Stops the membership of this role
      * @param int $userId The user who should loose the member of the role.
      * @throws AdmException
@@ -183,7 +183,7 @@ class TableMembers extends TableAccess
             if(strcmp(date('Y-m-d', time()), $this->getValue('mem_begin', 'Y-m-d')) >= 0
             && strcmp($this->getValue('mem_end', 'Y-m-d'), $newEndDate) >= 0)
             {
-                // if role webmaster then check if this membership is the last one -> don't delete it
+                // if role administrator then check if this membership is the last one -> don't delete it
                 if($this->getValue('rol_administrator') == true)
                 {
                     $sql = 'SELECT mem_id
@@ -195,7 +195,7 @@ class TableMembers extends TableAccess
 
                     if($memberStatement->rowCount() === 0)
                     {
-                        throw new AdmException('LST_MUST_HAVE_WEBMASTER');
+                        throw new AdmException('LST_MUST_HAVE_ADMINISTRATOR');
                     }
                 }
 

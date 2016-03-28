@@ -211,7 +211,7 @@ foreach($gProfileFields->mProfileFields as $field)
 
 if($gCurrentUser->isAdministrator() || $getNewUser > 0)
 {
-    // Loginname darf nur vom Webmaster bzw. bei Neuanlage geaendert werden
+    // Only administrators could change loginname or within a new registration
     if($_POST['usr_login_name'] !== $user->getValue('usr_login_name'))
     {
         if(strlen($_POST['usr_login_name']) > 0)

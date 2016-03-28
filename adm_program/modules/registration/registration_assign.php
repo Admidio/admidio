@@ -18,7 +18,7 @@ require_once('../../system/login_valid.php');
 // Initialize and check the parameters
 $getNewUserId = admFuncVariableIsValid($_GET, 'new_user_id', 'int', array('requireValue' => true));
 
-// nur Webmaster duerfen User zuordnen, ansonsten Seite verlassen
+// only administrators could approve new users
 if(!$gCurrentUser->approveUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

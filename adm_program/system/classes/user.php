@@ -198,7 +198,7 @@ class User extends TableAccess
                             $this->assignRoles = true;
                         }
 
-                        // Webmasterflag setzen
+                        // set administrator flag
                         if($row['rol_administrator'] == 1)
                         {
                             $this->administrator = true;
@@ -287,7 +287,7 @@ class User extends TableAccess
      *                     Possible reasons: SYS_LOGIN_MAX_INVALID_LOGIN
      *                                       SYS_LOGIN_NOT_ACTIVATED
      *                                       SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION
-     *                                       SYS_LOGIN_USER_NO_WEBMASTER
+     *                                       SYS_LOGIN_USER_NO_ADMINISTRATOR
      *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
      */
     public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true, $isAdministrator = false)
@@ -315,20 +315,20 @@ class User extends TableAccess
                 return 'SYS_LOGIN_NOT_ACTIVATED';
             }
 
-            $sqlWebmaster = '';
+            $sqlAdministrator = '';
             // only check for administrator role if version > 3.1 because before it was webmaster role
             if($isAdministrator && version_compare($installedDbVersion, '3.2.0') === 1)
             {
-                $sqlWebmaster = ', rol_administrator AS administrator';
+                $sqlAdministrator = ', rol_administrator AS administrator';
             }
             // only check for webmaster role if version > 2.3 because before we don't have that flag
             elseif($isAdministrator && version_compare($installedDbVersion, '2.4.0') === 1)
             {
-                $sqlWebmaster = ', rol_webmaster AS administrator';
+                $sqlAdministrator = ', rol_webmaster AS administrator';
             }
 
             // Check if user is currently member of a role of an organisation
-            $sql = 'SELECT DISTINCT mem_usr_id'.$sqlWebmaster.'
+            $sql = 'SELECT DISTINCT mem_usr_id'.$sqlAdministrator.'
                       FROM '.TBL_MEMBERS.'
                 INNER JOIN '.TBL_ROLES.'
                         ON rol_id = mem_rol_id
@@ -349,7 +349,7 @@ class User extends TableAccess
             $userRow = $userStatement->fetch();
             if ($isAdministrator && version_compare($installedDbVersion, '2.4.0') === 1 && $userRow['administrator'] == 0)
             {
-                return 'SYS_LOGIN_USER_NO_WEBMASTER';
+                return 'SYS_LOGIN_USER_NO_ADMINISTRATOR';
             }
 
             // Rehash password if the hash is outdated and rehashing is enabled

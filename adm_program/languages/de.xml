@@ -200,6 +200,7 @@
     <string name="INS_ADDIDIONAL_DATA">Zusätzliche Daten</string>
     <string name="INS_ADDRESS_LIST">Adressliste</string>
     <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Es sind nicht alle Daten für den Administrator eingegeben worden!</string>
+    <string name="INS_ADMINISTRATOR_LOGIN_DESC">Ein Update der Datenbank darf nur von einem Administrator durchgeführt werden. Gib an dieser Stelle bitte die Zugangsdaten eines Administrators ein.</string>
     <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
     <string name="INS_BOARD">Vorstand</string>
     <string name="INS_CHOOSE_LANGUAGE">Wähle bitte eine Sprache aus</string>
@@ -229,7 +230,7 @@
     <string name="INS_DESCRIPTION_BOARD">Vorstand des Vereins</string>
     <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Hier können Besprechungen stattfinden. Der Raum muss vorher reserviert werden. Beamer steht zur Verfügung.</string>
     <string name="INS_DESCRIPTION_MEMBER">Alle Mitglieder der Organisation</string>
-    <string name="INS_DESCRIPTION_WEBMASTER">Gruppe der Administratoren des Systems</string>
+    <string name="INS_DESCRIPTION_ADMINISTRATOR">Gruppe der Administratoren des Systems</string>
     <string name="INS_ENTER_LOGIN_TO_DATABASE">Zugangsdaten zur Datenbank eingeben</string>
     <string name="INS_ERROR_OPEN_FILE">Die Datei #VAR1_BOLD# konnte nicht geöffnet werden.</string>
     <string name="INS_FACEBOOK">Facebook</string>
@@ -276,9 +277,6 @@
     <string name="INS_UPDATING_WAS_SUCCESSFUL">Die Aktualisierung war erfolgreich</string>
     <string name="INS_WARNING_BETA_VERSION">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</string>
     <string name="INS_WARNING_SAFE_MODE">Auf deinem Server ist der Safe Mode aktiviert. Bei eingeschaltetem Safe Mode kann es später zu Problemen bei der Nutzung einiger Funktionen kommen.</string>
-    <string name="INS_WEBMASTER_LOGIN">Webmaster-Anmeldung</string>
-    <string name="INS_WEBMASTER_LOGIN_DESC">Ein Update der Datenbank darf nur von einem Webmaster durchgeführt werden. Gib an dieser Stelle bitte die Zugangsdaten eines Webmasters ein.</string>
-    <string name="INS_WEBMASTER_LOGIN_FAILED">Zu den eingegebenen Logindaten wurde kein Benutzer gefunden, der Mitglied einer Webmasterrolle ist.</string>
     <string name="INS_WELCOME_TO_INSTALLATION">Willkommen zur Installation von Admidio</string>
     <string name="INS_WELCOME_TEXT">Auf den nächsten Seiten müssen einige notwendige Informationen für die Einrichtung von Admidio eingeben werden. Du benötigst dazu unter anderem die Zugangsdaten zu der Datenbank, auf der Admidio zukünftig laufen soll.</string>
     <string name="INS_WINDOWS_LIVE">Windows Live</string>
@@ -359,7 +357,7 @@
     <string name="LST_MEMBERSHIP_END">Mitgliedschaftsende</string>
     <string name="LST_MEMBERSHIP_START">Mitgliedschaftsbeginn</string>
     <string name="LST_MICROSOFT_EXCEL">Microsoft Excel</string>
-    <string name="LST_MUST_HAVE_WEBMASTER">Die Rolle Webmaster muss mindestens ein Mitglied haben!</string>
+    <string name="LST_MUST_HAVE_ADMINISTRATOR">Die Rolle Administrator muss mindestens ein Mitglied haben!</string>
     <string name="LST_MY_LIST">Eigene Liste</string>
     <string name="LST_MYLIST_CONDITION_DESC">Hier kannst du Bedingungen zu jedem Feld in deiner neuen Liste eingeben. Damit wird die ausgewählte Rolle noch einmal nach deinen Bedingungen eingeschränkt.</string>
     <string name="LST_NEW_DEFAULT_CONFIGURATION">Konfiguration wird zur neuen Standardkonfiguration</string>
@@ -373,7 +371,7 @@
     <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Adresse gefüllt haben</string>
     <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Anzahl Rollen pro Seite</string>
     <string name="LST_PRESET_CONFIGURATION">Vorgegebene Konfigurationen</string>
-    <string name="LST_PRESET_CONFIGURATION_DESC">Als Webmaster kannst du Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen. Konfiguriere die entsprechende Spalten und Bedingungen und speichere diese unter dem gewünschten Namen.</string>
+    <string name="LST_PRESET_CONFIGURATION_DESC">Als Administrator kannst du Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen. Konfiguriere die entsprechende Spalten und Bedingungen und speichere diese unter dem gewünschten Namen.</string>
     <string name="LST_PRINT_PREVIEW">Druckvorschau</string>
     <string name="LST_ROLE_INFORMATION">Rolleninformationen</string>
     <string name="LST_ROLE_MEMBERSHIP_IN_PERIOD">Mitglieder im Zeitraum:</string>
@@ -571,7 +569,7 @@
     <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer freigegeben werden. Haben nur angemeldete Benutzer Zugriff, so wird das Modul für Besucher ausgeblendet. Der RSS-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Standard: Aktiviert)</string>
     <string name="ORG_ACTIVATE_SYSTEM_MAILS">Systembenachrichtigungen aktivieren</string>
     <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Hier können die Systembenachrichtigungen von Admidio deaktiviert werden. Systembenachrichtigungen werden versendet, wenn sich zum Beispiel ein neuer Benutzer angemeldet hat. Aber auch Registrierungsbestätigungen werden als Systembenachrichtigungen verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden. Es sei denn der Server unterstützt keinen E-Mailversand. Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Standard: ja)</string>
-    <string name="ORG_ADD_ORGANIZATION_DESC">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der aktuelle Benutzer wird dort automatisch zum Webmaster ernannt und kann die weitere Einrichtung durchführen. Benutzer, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</string>
+    <string name="ORG_ADD_ORGANIZATION_DESC">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der aktuelle Benutzer wird dort automatisch zum Administrator ernannt und kann die weitere Einrichtung durchführen. Benutzer, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</string>
     <string name="ORG_ADDITIONAL_VARIABLES">Zusätzliche Variablen</string>
     <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
     <string name="ORG_ADMIDIO_THEME_DESC">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner adm_themes angezeigt. (Standard: modern)</string>
@@ -645,7 +643,7 @@
     <string name="ORG_NEW_PASSWORD_ACTIVATION_LINK">Neues Passwort mit Aktivierungslink</string>
     <string name="ORG_NO_FIELD_CREATED">Es wurden noch keine organisationsspezifischen Profilfelder angelegt!</string>
     <string name="ORG_NOT_SAVED_SETTINGS_LOST">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</string>
-    <string name="ORG_NOTIFY_WEBMASTER">Benachrichtung des Webmasters nach einer Registrierung</string>
+    <string name="ORG_NOTIFY_ADMINISTRATOR">Benachrichtigung des Administrators nach einer Registrierung</string>
     <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
     <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)</string>
     <string name="ORG_ONLY_FOR_REGISTERED_USER">Nur für angemeldete Benutzer</string>
@@ -813,7 +811,7 @@
     <string name="PRO_MY_PROFILE">Mein Profil</string>
     <string name="PRO_NEW_PASSWORD">Neues Passwort</string>
     <string name="PRO_NEW_PICTURE">Neues Profilfoto</string>
-    <string name="PRO_NO_DEFAULT_ROLE">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Webmaster, der diese Einstellung vornehmen kann.</string>
+    <string name="PRO_NO_DEFAULT_ROLE">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Administrator, der diese Einstellung vornehmen kann.</string>
     <string name="PRO_NO_ROLES_VISIBLE">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</string>
     <string name="PRO_PASSWORD_CHANGED">Das Passwort wurde erfolgreich geändert.</string>
     <string name="PRO_PASSWORD_DESCRIPTION">Das Passwort muss aus mindestens 8 Zeichen bestehen. Es sollte sowohl Zahlen, Buchstaben als auch Sonderzeichen beinhalten.\n\nAus Sicherheitsgründen wird das Passwort verschlüsselt gespeichert. Es ist später nicht mehr möglich dieses einzusehen.</string>
@@ -1014,6 +1012,7 @@
     <string name="SYS_DATABASE_ERROR">Datenbankfehler</string>
     <string name="SYS_DATABASE_NO_LOGIN">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
     <string name="SYS_DATABASE_VERSION">Datenbank-Version</string>
+    <string name="SYS_DATABASE_VERSION_INVALID" description="Var3 and Var4 create link to update">Die Datenbankversion #VAR1# ist niedriger als die Version der Admidio-Scripte #VAR2#.\n\nFühre bitte #VAR3#das Datenbankupdate#VAR4# auf die Version durch.</string>
     <string name="SYS_DATABASE_VERSION_REQUIRED">Admidio benötigt #VAR1# oder höher</string>
     <string name="SYS_DATE">Datum</string>
     <string name="SYS_DATE_END_BEFORE_BEGIN">Das eingegebene Enddatum liegt vor dem Anfangsdatum.</string>
@@ -1065,14 +1064,15 @@
     <string name="SYS_FILE_TO_LARGE_SERVER">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von #VAR1# MB.</string>
     <string name="SYS_FILE_UPLOADS">Dateiuploads</string>
     <string name="SYS_FILENAME_EMPTY">Es wurde kein Dateiname angegeben!</string>
+    <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisiere bitte deine Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
     <string name="SYS_FILTER">Filter</string>
     <string name="SYS_FIRSTNAME">Vorname</string>
     <string name="SYS_FIRSTNAME_LASTNAME">Vorname und Nachname</string>
     <string name="SYS_FROM">ab #VAR1#</string>
     <string name="SYS_FROM_TO">vom #VAR1# bis #VAR2#</string>
     <string name="SYS_FOLDER">Ordner</string>
-    <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWende dich bitte an den #VAR2#Webmaster#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
-    <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWende dich bitte an den #VAR2#Webmaster#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
+    <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWende dich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
+    <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWende dich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
     <string name="SYS_FORMER">Ehemaliger</string>
     <string name="SYS_FORMER_PL">Ehemalige</string>
     <string name="SYS_FONT">Schriftart</string>
@@ -1085,7 +1085,7 @@
     <string name="SYS_HELP">Hilfe</string>
     <string name="SYS_HIDE">Ausblenden</string>
     <string name="SYS_HOMEPAGE">Startseite</string>
-    <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Webmaster deaktiviert.</string>
+    <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Administrator deaktiviert.</string>
     <string name="SYS_ICON">Icon</string>
     <string name="SYS_INACTIVE">Inaktiv</string>
     <string name="SYS_INFORMATIONS">Informationen</string>
@@ -1111,8 +1111,8 @@
     <string name="SYS_LOGIN">Anmelden</string>
     <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</string>
     <string name="SYS_LOGIN_NOT_ACTIVATED">Deine Anmeldung wurde noch nicht freigeschaltet.\n\nDu wirst benachrichtigt, sobald deine Anmeldung freigeschaltet wurde und ein Login möglich ist.</string>
+    <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Die Anmeldedaten wurden richtig eingegeben, jedoch ist der Update-Prozess nur für Administratoren freigeschaltet.</string>
     <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Die Anmeldedaten wurden richtig eingegeben, allerdings bist du kein aktives Mitglied dieser Organisation.</string>
-    <string name="SYS_LOGIN_USER_NO_WEBMASTER">Die Anmeldedaten wurden richtig eingegeben, jedoch ist der Update-Prozess nur für Webmaster freigeschaltet.</string>
     <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Der eingegebene Benutzername und/oder das Passwort ist falsch.</string>
     <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
     <string name="SYS_LOGIN_SUCCESSFUL">Du hast dich erfolgreich angemeldet.</string>
@@ -1220,7 +1220,7 @@
     <string name="SYS_ROLE_MAX_MEMBERS">Speichern ist nicht möglich, bei der Rolle #VAR1_BOLD# würde die maximale Mitgliederzahl überschritten.</string>
     <string name="SYS_ROLES">Rollen</string>
     <string name="SYS_ROOM">Raum</string>
-    <string name="SYS_RSS_DISABLED">Die RSS-Funktion wurde vom Webmaster deaktiviert.</string>
+    <string name="SYS_RSS_DISABLED">Die RSS-Funktion wurde vom Administrator deaktiviert.</string>
     <string name="SYS_RSS_FEED_FOR_VAR">RSS-Feed für #VAR1#</string>
     <string name="SYS_SAFE_MODE">Safe Mode</string>
     <string name="SYS_SAFE_MODE_PROBLEM">problematisch bei Dateiuploads</string>
@@ -1252,11 +1252,11 @@
     <string name="SYS_STOP">Stop</string>
     <string name="SYS_SUNDAY">Sonntag</string>
     <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorienverwaltung</string>
-    <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Dein angefordertes Passwort\n#content# Hallo #user_first_name#,\n\ndu hast ein neues Passwort angefordert!\n\nHier sind deine Daten:\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDamit du dein neues Passwort benutzen kannst, musst du es über den folgenden Link freischalten:\n\n#variable2#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDie Webmaster</string>
-    <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Logindaten für #organization_homepage#\n#content# Hallo #user_first_name#,\n\ndu erhälst deine Logindaten für #organization_homepage# .\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDie Webmaster</string>
-    <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls du Mitglied bist und deine Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass du als Mitglied nicht identifiziert wurdest.\nZur Klärung der Gründe für die Ablehnung wende dich bitte an den Webmaster #webmaster_email# von #organization_homepage#.\n\nViele Grüße\nDie Webmaster</string>
-    <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name#\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : #user_login_name#\nund dem Passwort auf der Homepage einloggen.\n\nSollten noch Fragen bestehen, schreib eine E-Mail an #webmaster_email# .\n\nViele Grüße\nDie Webmaster</string>
-    <string name="SYS_SYSMAIL_REGISTRATION_WEBMASTER">#subject# Neue Registrierung bei #organization_long_name#\n#content# Es hat sich ein neuer Benutzer auf #organization_homepage# registriert.\n\nNachname: #user_last_name#\nVorname:  #user_first_name#\nE-Mail:   #user_email#\n\n\nDiese Nachricht wurde automatisch erzeugt.</string>
+    <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Dein angefordertes Passwort\n#content# Hallo #user_first_name#,\n\ndu hast ein neues Passwort angefordert!\n\nHier sind deine Daten:\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDamit du dein neues Passwort benutzen kannst, musst du es über den folgenden Link freischalten:\n\n#variable2#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDie Administratoren</string>
+    <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Logindaten für #organization_homepage#\n#content# Hallo #user_first_name#,\n\ndu erhälst deine Logindaten für #organization_homepage# .\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDie Administratoren</string>
+    <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls du Mitglied bist und deine Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass du als Mitglied nicht identifiziert wurdest.\nZur Klärung der Gründe für die Ablehnung wende dich bitte an den Administrator #administrator_email# von #organization_homepage#.\n\nViele Grüße\nDie Administratoren</string>
+    <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name#\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : #user_login_name#\nund dem Passwort auf der Homepage einloggen.\n\nSollten noch Fragen bestehen, schreib eine E-Mail an #administrator_email# .\n\nViele Grüße\nDie Administratoren</string>
+    <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Neue Registrierung bei #organization_long_name#\n#content# Es hat sich ein neuer Benutzer auf #organization_homepage# registriert.\n\nNachname: #user_last_name#\nVorname:  #user_first_name#\nE-Mail:   #user_email#\n\n\nDiese Nachricht wurde automatisch erzeugt.</string>
     <string name="SYS_SYSTEM">System</string>
     <string name="SYS_SYSTEM_MAILS">Systembenachrichtigungen</string>
     <string name="SYS_TEXT">Text</string>
@@ -1291,8 +1291,6 @@
     <string name="SYS_WANT_REGISTER">Ich möchte mich registrieren!</string>
     <string name="SYS_WARNING">Warnung</string>
     <string name="SYS_WEBMASTER">Webmaster</string>
-    <string name="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update">Die Datenbankversion #VAR1# ist niedriger als die Version der Admidio-Scripte #VAR2#.\n\nFühre bitte #VAR3#das Datenbankupdate#VAR4# auf die Version durch.</string>
-    <string name="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisiere bitte deine Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
     <string name="SYS_WEBSITE">Webseite</string>
     <string name="SYS_WEDNESDAY">Mittwoch</string>
     <string name="SYS_WHAT_TO_DO">Was ist zu tun?</string>

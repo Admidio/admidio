@@ -233,7 +233,7 @@ class ModuleLists extends Modules
 
         if($this->activeRole === 0 && $gCurrentUser->isAdministrator())
         {
-            // if inactive roles should be shown, then show all of them to webmaster
+            // if inactive roles should be shown, then show all of them to administrator
             return '';
         }
         else

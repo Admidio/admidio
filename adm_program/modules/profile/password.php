@@ -36,7 +36,7 @@ else
 $user = new User($gDb, $gProfileFields, $getUserId);
 
 // only the own password could be individual set.
-// Webmaster could only send a generated password or set a password if no password was set before
+// Administrator could only send a generated password or set a password if no password was set before
 if(!isMember($getUserId)
 || (!$gCurrentUser->isAdministrator() && $gCurrentUser->getValue('usr_id') != $getUserId)
 || ($gCurrentUser->isAdministrator() && $user->getValue('usr_password') !== '' && $user->getValue('EMAIL') === '' && $gPreferences['enable_system_mails'] == 1))
@@ -69,7 +69,7 @@ if($getMode === 'change')
             if ($newPassword === $newPasswordConfirm)
             {
                 // check if old password is correct.
-                // Webmaster could change password of other users without this verification.
+                // Administrator could change password of other users without this verification.
                 if(PasswordHashing::verify($oldPassword, $user->getValue('usr_password')) || $gCurrentUser->isAdministrator() && $gCurrentUser->getValue('usr_id') != $getUserId)
                 {
                     $user->saveChangesWithoutRights();

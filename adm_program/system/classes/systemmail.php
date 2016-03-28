@@ -74,7 +74,7 @@ class SystemMail extends Email
         $mailSrcText = preg_replace('/#user_last_name#/',  $user->getValue('LAST_NAME', 'database'), $mailSrcText);
         $mailSrcText = preg_replace('/#user_login_name#/', $user->getValue('usr_login_name'), $mailSrcText);
         $mailSrcText = preg_replace('/#user_email#/', $user->getValue('EMAIL'),   $mailSrcText);
-        $mailSrcText = preg_replace('/#webmaster_email#/', $gPreferences['email_administrator'],  $mailSrcText);
+        $mailSrcText = preg_replace('/#administrator_email#/', $gPreferences['email_administrator'],  $mailSrcText);
         $mailSrcText = preg_replace('/#organization_short_name#/', $this->smOrganization->getValue('org_shortname'), $mailSrcText);
         $mailSrcText = preg_replace('/#organization_long_name#/',  $this->smOrganization->getValue('org_longname'), $mailSrcText);
         $mailSrcText = preg_replace('/#organization_homepage#/',   $this->smOrganization->getValue('org_homepage'), $mailSrcText);

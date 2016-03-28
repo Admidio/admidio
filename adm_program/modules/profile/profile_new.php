@@ -233,7 +233,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 {
                     // only show link if user is member of this organization.
                     // Password of own user could be changed.
-                    // Webmasters are allowed to change password if no login was configured or no email is set to send a generated password.
+                    // Administrators are allowed to change password if no login was configured or no email is set to send a generated password.
                     if(isMember($user->getValue('usr_id'))
                     && ($gCurrentUser->getValue('usr_id') == $user->getValue('usr_id')
                        || ($gCurrentUser->isAdministrator()

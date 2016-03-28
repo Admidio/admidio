@@ -273,7 +273,7 @@ while($row = $mglStatement->fetch())
 
     $userAdministration = '';
 
-    // Webmasters can change or send password if login is configured and user is member of current organization
+    // Administrators can change or send password if login is configured and user is member of current organization
     if($row['member_this_orga'] > 0
     && $gCurrentUser->isAdministrator()
     && strlen($row['usr_login_name']) > 0
@@ -281,14 +281,14 @@ while($row = $mglStatement->fetch())
     {
         if(strlen($row['email']) > 0 && $gPreferences['enable_system_mails'] == 1)
         {
-            // if email is set and systemmails are activated then webmaster can send a new password to user
+            // if email is set and systemmails are activated then administrators can send a new password to user
             $userAdministration = '
             <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
                 src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
         }
         else
         {
-            // if user has no email or send email is disabled then webmaster could set a new password
+            // if user has no email or send email is disabled then administrators could set a new password
             $userAdministration = '
             <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.$g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $row['usr_id']. '"><img
                 src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>';
@@ -319,7 +319,7 @@ while($row = $mglStatement->fetch())
     }
 
     // Mitglieder entfernen
-    if((($row['member_other_orga'] == 0 && $gCurrentUser->isAdministrator()) // kein Mitglied einer anderen Orga, dann duerfen Webmaster loeschen
+    if((($row['member_other_orga'] == 0 && $gCurrentUser->isAdministrator()) // kein Mitglied einer anderen Orga, dann duerfen Administratoren loeschen
         || $row['member_this_orga'] > 0)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
         && $row['usr_id'] != $gCurrentUser->getValue('usr_id'))       // das eigene Profil darf keiner entfernen
     {
