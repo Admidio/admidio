@@ -26,6 +26,7 @@ require_once(SERVER_PATH.'/adm_program/libs/phpass/passwordhash.php');
  * verify()             verify if the given password belongs to the given hash
  * needsRehash()        checks if the given hash is generated from the given options
  * genRandomPassword()  generate a cryptographically strong random password
+ * genRandomInt()       generate a cryptographically strong random int
  * passwordInfo()       provides infos about the given password (length, number, lowerCase, upperCase, symbol)
  * hashInfo()           provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
  * costBenchmark()      run a benchmark to get the best fitting cost value
@@ -44,11 +45,12 @@ class PasswordHashing
     {
         if (!in_array('cost', $options, true))
         {
-            $options['cost'] = 10;
+            $options['cost'] = 12;
         }
-        if ($options['cost'] < 4)
+        // https://paragonie.com/blog/2016/02/how-safely-store-password-in-2016
+        if ($options['cost'] < 10)
         {
-            $options['cost'] = 4;
+            $options['cost'] = 10;
         }
 
         return password_hash($password, $algorithm, $options);
@@ -93,28 +95,40 @@ class PasswordHashing
 
     /**
      * Generate a cryptographically strong random password
-     * @param int $length The length of the generated password
+     * @param int    $length  The length of the generated password (default = 12)
+     * @param string $charset A string of all possible characters to choose from (default = [0-9a-zA-z])
      * @throws \AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_FAIL
      * @return string Returns a cryptographically strong random password string
+     * @link https://paragonie.com/b/JvICXzh_jhLyt4y3
      */
-    public static function genRandomPassword($length)
+    public static function genRandomPassword($length = 12, $charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
     {
-        try
+        if ($length < 1)
         {
-            $string = random_bytes(ceil($length / 2));
-        }
-        catch (Error $e)
-        {
-            // An unexpected error has occurred
-            throw new AdmException('SYS_GEN_RANDOM_ERROR');
-        }
-        catch (Exception $e)
-        {
-            // If you get this message, the CSPRNG failed hard.
-            throw new AdmException('SYS_GEN_RANDOM_FAIL');
+            // Just return an empty string. Any value < 1 is meaningless.
+            return '';
         }
 
-        return substr(bin2hex($string), 0, $length);
+        // Remove duplicate characters from $charset
+        $split = str_split($charset);
+        $charset = implode('', array_unique($split));
+
+        // This is the maximum index for all of the characters in the string $charset
+        $charsetMax = strlen($charset) - 1;
+        if ($charsetMax < 1)
+        {
+            // Avoid letting users do: randomString($int, 'a'); -> 'aaaaa...'
+            throw new AdmException('SYS_GEN_RANDOM_TWO_DISTINCT_CHARS');
+        }
+
+        $randomString = '';
+        for ($i = 0; $i < $length; ++$i)
+        {
+            $r = random_int(0, $charsetMax);
+            $randomString .= $charset[$r];
+        }
+
+        return $randomString;
     }
 
     /**

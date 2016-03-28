@@ -1082,6 +1082,7 @@
   <string name="SYS_GENDER">Gender</string>
   <string name="SYS_GEN_RANDOM_ERROR">An unexpected error at generating a random string has occurred.</string>
   <string name="SYS_GEN_RANDOM_FAIL">Could not generate a random string. Is this OS secure?</string>
+  <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Expected a string that contains at least 2 distinct characters</string>
   <string name="SYS_HEADLINE">Headline</string>
   <string name="SYS_HELP">Help</string>
   <string name="SYS_HIDE">Hide</string>

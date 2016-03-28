@@ -176,7 +176,7 @@ elseif($getMode === 4)
         try
         {
             // neues Passwort generieren und abspeichern
-            $password = PasswordHashing::genRandomPassword(8);
+            $password = PasswordHashing::genRandomPassword(12);
             $user->setPassword($password);
             $user->save();
 

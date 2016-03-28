@@ -107,7 +107,7 @@ if(!empty($_POST['recipient_email']))
             $user = new User($gDb, $gProfileFields, $row['usr_id']);
 
             // create and save new password and activation id
-            $newPassword  = PasswordHashing::genRandomPassword(8);
+            $newPassword  = PasswordHashing::genRandomPassword(12);
             $activationId = PasswordHashing::genRandomPassword(10);
 
             $user->setPassword($newPassword, true);
