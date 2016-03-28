@@ -33,6 +33,10 @@
  *****************************************************************************/
 class RSSfeed
 {
+    protected $channel;
+    protected $items;
+    protected $feed;
+
     /**
      * Constructor of the RSS class which needs all the information of the channel
      * @param string $title       Headline of this channel
@@ -61,93 +65,102 @@ class RSSfeed
      */
     public function addItem($title, $description, $link, $author, $date)
     {
-        $item = array('title' => $title, 'description' => $description, 'author' => $author, 'pubDate' => $date, 'link' => $link);
+        $item = array('title' => $title, 'description' => $description, 'link' => $link, 'author' => $author, 'pubDate' => $date);
         $this->items[] = $item;
     }
 
     /**
      * @return void
      */
-    public function buildFeed()
+    public function getRssFeed()
     {
-        $this->rssHeader();
-        $this->openChannel();
-        $this->addChannelInfos();
-        $this->buildItems();
-        $this->closeChannel();
-        $this->rssFooter();
-    }
+        $rssFeed = '';
+        $rssFeed .= $this->getRssHeader();
+        $rssFeed .= $this->getChannelOpener();
+        $rssFeed .= $this->getChannelInfo();
+        $rssFeed .= $this->getItems();
+        $rssFeed .= $this->getChannelCloser();
+        $rssFeed .= $this->getRssFooter();
 
-    /**
-     * @return void
-     */
-    public function rssHeader()
-    {
         header('Content-type: application/xml');
-        echo '<?xml version="1.0" encoding="utf-8"?>'.chr(10).'<rss version="2.0">'.chr(10);
+        echo $rssFeed;
     }
 
     /**
-     * @return void
+     * @return string Returns the RSS header
      */
-    public function openChannel()
+    private function getRssHeader()
     {
-        echo '<channel>'.chr(10);
+        return '<?xml version="1.0" encoding="utf-8"?>'.chr(10).'<rss version="2.0">'.chr(10);
     }
 
     /**
-     * @return void
+     * @return string Returns the open channel
      */
-    public function addChannelInfos()
+    private function getChannelOpener()
+    {
+        return '<channel>'.chr(10);
+    }
+
+    /**
+     * @return string Returns channel infos
+     */
+    private function getChannelInfo()
     {
         global $gL10n;
 
+        $channelInfo = '';
         foreach (array('title', 'link', 'description', 'copyright') as $field)
         {
             if (isset($this->channel[$field]))
             {
-                echo '<'.$field.'>'.htmlspecialchars($this->channel[$field], ENT_QUOTES).'</'.$field.">\n";
+                $channelInfo .= '<'.$field.'>'.htmlspecialchars($this->channel[$field], ENT_QUOTES).'</'.$field.'>'.chr(10);
             }
         }
-        echo '<language>'.$gL10n->getLanguageIsoCode()."</language>\n";
-        echo "<generator>Admidio RSS-Class</generator>\n\n";
-        echo '<pubDate>'.date('r')."</pubDate>\n\n";
+        $channelInfo .= '<language>'.$gL10n->getLanguageIsoCode().'</language>'.chr(10);
+        $channelInfo .= '<generator>Admidio RSS-Class</generator>'.chr(10).chr(10);
+        $channelInfo .= '<pubDate>'.date('r').'</pubDate>'.chr(10).chr(10);
+
+        return $channelInfo;
     }
 
     /**
-     * @return void
+     * @return string Returns the items
      */
-    public function buildItems()
+    private function getItems()
     {
+        $itemString = '';
         foreach ($this->items as $item)
         {
-            echo "<item>\n";
+            $itemString .= '<item>'.chr(10);
             foreach (array('title', 'description', 'link', 'author', 'pubDate') as $field)
             {
                 if (isset($item[$field]))
                 {
-                    echo '<'.$field.'>'.htmlspecialchars($item[$field], ENT_QUOTES).'</'.$field.">\n";
+                    $itemString .= '<'.$field.'>'.htmlspecialchars($item[$field], ENT_QUOTES).'</'.$field.'>'.chr(10);
                 }
             }
-            echo '<guid>'.str_replace('&', '&amp;', $item['link'])."</guid>\n";
-            echo '<source url="'.$this->feed.'">'.htmlspecialchars($this->channel['title'], ENT_QUOTES)."</source>\n";
-            echo "</item>\n\n";
+            $itemString .= '<guid>'.str_replace('&', '&amp;', $item['link']).'</guid>'.chr(10);
+            $itemString .= '<source url="'.$this->feed.'">'.htmlspecialchars($this->channel['title'], ENT_QUOTES).'</source>'.chr(10);
+            $itemString .= '</item>'.chr(10).chr(10);
         }
+
+        return $itemString;
     }
 
     /**
-     * @return void
+     * @return string Returns the channel close
      */
-    public function closeChannel()
+    private function getChannelCloser()
     {
-        echo '</channel>'.chr(10);
+        return '</channel>'.chr(10);
     }
 
     /**
-     * @return void
+     * @return string Returns the RSS footer
      */
-    public function rssFooter()
+    private function getRssFooter()
     {
-        echo '</rss>'.chr(10);
+        return '</rss>'.chr(10);
     }
 }
