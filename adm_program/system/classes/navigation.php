@@ -75,7 +75,7 @@ class Navigation
     {
         $count = count($this->urlStack);
 
-        if($count === 0 || $url !== end($this->urlStack)['url'])
+        if($count === 0 || $url !== $this->urlStack[$count - 1]['url'])
         {
             if($count > 1 && $url === $this->urlStack[$count - 2]['url'])
             {
@@ -190,7 +190,7 @@ class Navigation
         elseif($count === 1)
         {
             // Only one url, take this one
-            return reset($this->urlStack)['url'];
+            return $this->urlStack[1]['url'];
         }
         else
         {
@@ -204,9 +204,11 @@ class Navigation
      */
     public function getUrl()
     {
-        if(count($this->urlStack) > 0)
+        $count = count($this->urlStack);
+
+        if($count > 0)
         {
-            return end($this->urlStack)['url'];
+            return $this->urlStack[$count - 1]['url'];
         }
         else
         {
