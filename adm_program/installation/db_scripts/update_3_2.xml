@@ -4,5 +4,6 @@
     <step id="20">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_administrator boolean not null default '0'</step>
     <step id="30">UPDATE %PREFIX%_roles SET rol_administrator = rol_webmaster</step>
     <step id="40">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_webmaster</step>
+    <step id="50">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '#webmaster_email#', '#administrator_email#')</step>
     <step>stop</step>
 </update>
