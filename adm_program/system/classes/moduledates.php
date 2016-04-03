@@ -215,11 +215,13 @@ class ModuleDates extends Modules
                    AND mem.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
                    AND mem.mem_begin <= \''.DATE_NOW.'\'
                    AND mem.mem_end    > \''.DATE_NOW.'\'
-                 WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                       OR (   dat_global   = 1
-                          AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
-                       '.$this->sqlConditionsGet()
-                        . ' ORDER BY dat_begin '.$this->order;
+                 WHERE (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                       OR  (   dat_global = 1
+                           AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().')
+                           )
+                       )
+                       '.$this->sqlConditionsGet().'
+                       ORDER BY dat_begin '.$this->order;
 
         // Parameter
         if($limit > 0)
@@ -293,10 +295,10 @@ class ModuleDates extends Modules
                 INNER JOIN '.TBL_CATEGORIES.'
                         ON cat_id = dat_cat_id
                            '.$this->sqlAdditionalTablesGet('count').'
-                     WHERE (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-                           OR (   dat_global = 1
-                              AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().')
-                              )
+                     WHERE ( cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                           OR  (   dat_global = 1
+                               AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().')
+                               )
                            )'
                            .$this->sqlConditionsGet();
 
