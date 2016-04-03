@@ -9,7 +9,8 @@
  ***********************************************************************************************
  */
 
-/******************************************************************************
+/**
+ * @class Folder
  * Mit dieser Klasse koennen Ordner leichter verwaltet werden. Das rekursive Verschieben,
  * Kopieren, Loeschen uvw. wird unterstuetzt.
  *
@@ -25,8 +26,7 @@
  * move($destinationFolder, $sourceFolder = '')
  *                       - verschiebt den kompletten Ordner mit allen Unterordnern
  *                         und Dateien in einen neuen Pfad
- *
- *****************************************************************************/
+ */
 class Folder
 {
     protected $folderWithPath;

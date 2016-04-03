@@ -6,16 +6,16 @@
  * @copyright 2004-2016 The Admidio Team
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+/**
+ * @class TableText
  *
  * Diese Klasse dient dazu ein Textobjekt zu erstellen.
  * Texte koennen ueber diese Klasse in der Datenbank verwaltet werden.
  *
  * Es stehen die Methoden der Elternklasse TableAccess zur Verfuegung.
- ***********************************************************************************************
- */
-
-/**
- * Class TableText
  */
 class TableText extends TableAccess
 {

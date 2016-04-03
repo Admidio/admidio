@@ -10,7 +10,7 @@
  */
 
 /**
- * Class DateTimeExtended
+ * @class DateTimeExtended
  */
 class DateTimeExtended extends DateTime
 {

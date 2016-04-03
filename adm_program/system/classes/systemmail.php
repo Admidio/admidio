@@ -9,7 +9,8 @@
  ***********************************************************************************************
  */
 
-/******************************************************************************
+/**
+ * @class SystemMail
  * Beside the methods of the parent class there are the following additional methods:
  *
  * getMailText($systemMailId, &$user)
@@ -22,8 +23,7 @@
  * sendSystemMail($systemMailId, &$user)
  *                  - diese Methode sendet eine Systemmail nachdem der Mailtext
  *                    ausgelesen und Platzhalter ersetzt wurden
- *
- *****************************************************************************/
+ */
 class SystemMail extends Email
 {
     private $smTextObject;

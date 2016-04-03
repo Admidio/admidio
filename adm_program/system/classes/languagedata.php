@@ -5,6 +5,9 @@
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
+ */
+
+/**
  * @class LanguageData
  * @brief Stores language data in a class object
  *

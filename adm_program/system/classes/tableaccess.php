@@ -6,6 +6,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+
 /**
  * @class TableAccess
  * @brief Controls read and write access to datbase tables

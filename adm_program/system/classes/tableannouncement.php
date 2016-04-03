@@ -6,6 +6,11 @@
  * @copyright 2004-2016 The Admidio Team
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+/**
+ * @class TableAnnouncement
  *
  * Diese Klasse dient dazu ein Ankuendigungsobjekt zu erstellen.
  * Eine Ankuendigung kann ueber diese Klasse in der Datenbank verwaltet werden
@@ -13,11 +18,6 @@
  * Beside the methods of the parent class there are the following additional methods:
  *
  * editRight()       - prueft, ob die Ankuendigung von der aktuellen Orga bearbeitet werden darf
- ***********************************************************************************************
- */
-
-/**
- * Class TableAnnouncement
  */
 class TableAnnouncement extends TableAccess
 {

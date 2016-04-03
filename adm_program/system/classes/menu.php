@@ -9,7 +9,8 @@
  ***********************************************************************************************
  */
 
-/******************************************************************************
+/**
+ * @class Menu
  * Create, modify and display menus. Each menu item is defined by
  *
  *      - $id   : identifier of the menu item
@@ -19,8 +20,7 @@
  *      - $icon : URL, relative to the theme plugin, starting with a /
  *              : or full URL with http or https protocol
  *      - $desc : (optional) long description of the menu item
- *
- *****************************************************************************/
+ */
 class Menu
 {
     protected $id;

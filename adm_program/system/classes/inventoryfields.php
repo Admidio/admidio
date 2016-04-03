@@ -6,6 +6,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+
 /**
  * @class InventoryFields
  * @brief Reads the Inventory fields structure out of database and give access to it

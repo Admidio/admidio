@@ -9,7 +9,8 @@
  ***********************************************************************************************
  */
 
-/******************************************************************************
+/**
+ * @class TableFolder
  * Diese Klasse dient dazu ein Folderobjekt zu erstellen.
  * Ein Ordner kann ueber diese Klasse in der Datenbank verwaltet werden
  *
@@ -22,8 +23,7 @@
  *                         - Inhalt des aktuellen Ordners, abhaengig von den
  *                           Benutzerrechten, als Array zurueckliefern
  * ...
- *
- *****************************************************************************/
+ */
 class TableFolder extends TableAccess
 {
     protected $folderPath;

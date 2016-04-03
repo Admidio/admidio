@@ -9,7 +9,8 @@
  ***********************************************************************************************
  */
 
-/******************************************************************************
+/**
+ * @class TableRoles
  * Diese Klasse dient dazu einen Rollenobjekt zu erstellen.
  * Eine Rolle kann ueber diese Klasse in der Datenbank verwaltet werden.
  * Dazu werden die Informationen der Rolle sowie der zugehoerigen Kategorie
@@ -29,8 +30,7 @@
  * viewRole()       - diese Methode basiert auf viewRole des Usersobjekts, geht aber noch weiter
  *                    und prueft auch Rollen zu Terminen (hier muss man nicht Mitglied der Rolle
  *                    sein, sondern nur in einer Rolle sein, die den Termin sehen darf)
- *
- *****************************************************************************/
+ */
 class TableRoles extends TableAccess
 {
     protected $countLeaders;    ///< number of leaders of this role

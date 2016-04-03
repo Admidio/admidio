@@ -5,6 +5,9 @@
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
+ */
+
+/**
  * @class Language
  * @brief Reads language specific texts that are identified with text ids out of language xml files
  *

@@ -9,7 +9,8 @@
  ***********************************************************************************************
  */
 
-/******************************************************************************
+/**
+ * @class TableCategory
  * Diese Klasse dient dazu einen Kategorieobjekt zu erstellen.
  * Eine Kategorieobjekt kann ueber diese Klasse in der Datenbank verwaltet werden
  *
@@ -20,8 +21,7 @@
  *                       aus dem Namen in Grossbuchstaben und der naechsten freien Nummer
  * getNumberElements() - number of child recordsets
  * moveSequence($mode) - Kategorie wird um eine Position in der Reihenfolge verschoben
- *
- *****************************************************************************/
+ */
 class TableCategory extends TableAccess
 {
     protected $elementTable;

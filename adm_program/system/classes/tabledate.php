@@ -9,7 +9,8 @@
  ***********************************************************************************************
  */
 
-/******************************************************************************
+/**
+ * @class TableDate
  * Diese Klasse dient dazu ein Terminobjekt zu erstellen.
  * Ein Termin kann ueber diese Klasse in der Datenbank verwaltet werden
  *
@@ -17,8 +18,7 @@
  *
  * getIcal($domain)  - gibt String mit dem Termin im iCal-Format zurueck
  * editRight()       - prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
- *
- *****************************************************************************/
+ */
 class TableDate extends TableAccess
 {
     protected $visibleRoles = array();

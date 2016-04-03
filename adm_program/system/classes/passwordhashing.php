@@ -15,7 +15,7 @@ require_once(SERVER_PATH.'/adm_program/libs/random_compat/lib/random.php');
 require_once(SERVER_PATH.'/adm_program/libs/phpass/passwordhash.php');
 
 /**
- * Class PasswordHashing
+ * @class PasswordHashing
  *
  * This class provides static functions for different tasks for passwords and hashing
  * It used the "password_compat" lib to provide forward compatibility with the password_* functions that ship with PHP 5.5

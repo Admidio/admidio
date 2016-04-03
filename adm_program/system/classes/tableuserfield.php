@@ -6,17 +6,17 @@
  * @copyright 2004-2016 The Admidio Team
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+/**
+ * @class TableUserField
  *
  * Diese Klasse dient dazu einen Benutzerdefiniertes Feldobjekt zu erstellen.
  * Eine Benutzerdefiniertes Feldobjekt kann ueber diese Klasse in der Datenbank
  * verwaltet werden
  *
  * Es stehen die Methoden der Elternklasse TableAccess zur Verfuegung
- ***********************************************************************************************
- */
-
-/**
- * Class TableUserField
  */
 class TableUserField extends TableAccess
 {

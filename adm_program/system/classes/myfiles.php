@@ -9,7 +9,8 @@
  ***********************************************************************************************
  */
 
-/******************************************************************************
+/**
+ * @class MyFiles
  * This class supports the assignment of rights to every folder of adm_my_files
  * It's easy to create new folders and get detailed error messages if there are
  * problems with folder rights
@@ -20,8 +21,7 @@
  * getServerPath()       - returns the current path
  * setSubFolder($folder) - open a folder in the current module folder
  *                         if that folder doesn't exists than it will be created
- *
- *****************************************************************************/
+ */
 class MyFiles extends Folder
 {
     protected $module;      // name of the module and name of the folder in adm_my_files

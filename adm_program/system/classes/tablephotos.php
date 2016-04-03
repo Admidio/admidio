@@ -9,7 +9,8 @@
  ***********************************************************************************************
  */
 
-/******************************************************************************
+/**
+ * @class TablePhotos
  * Diese Klasse dient dazu ein Fotoveranstaltungsobjekt zu erstellen.
  * Eine Fotoveranstaltung kann ueber diese Klasse in der Datenbank verwaltet werden.
  *
@@ -24,8 +25,7 @@
  *                               und alle Unterveranstaltungen loescht
  * deleteInFilesystem($folder) - Rekursive Funktion die alles innerhalb des uebergebenen
  *                               Ordners mit Unterordnern und allen Dateien loescht
- *
- *****************************************************************************/
+ */
 class TablePhotos extends TableAccess
 {
     protected $hasChildAlbums; ///< Flag if this album has child albums

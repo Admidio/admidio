@@ -10,7 +10,7 @@
  */
 
 /**
- * Class RoleDependency
+ * @class RoleDependency
  */
 class RoleDependency
 {

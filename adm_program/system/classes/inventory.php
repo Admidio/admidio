@@ -8,7 +8,9 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-/******************************************************************************
+
+/**
+ * @class Inventory
  * Diese Klasse dient dazu ein Userobjekt zu erstellen.
  * Ein User kann ueber diese Klasse in der Datenbank verwaltet werden
  *
@@ -21,8 +23,7 @@
  *                      - aehnlich getProperty, allerdings suche ueber usf_id
  * viewProfile          - Ueberprueft ob der User das Profil eines uebrgebenen
  *                        Users einsehen darf
- *
- *****************************************************************************/
+ */
 class Inventory extends TableInventory
 {
     public $mInventoryFieldsData;           ///< object with current user field structure
