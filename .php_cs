@@ -58,7 +58,7 @@ $fixers = array(
     //'phpdoc_type_to_var',                         // [symfony] {phpdoc_var_to_type} not specified now
     'phpdoc_types',                                 // [symfony]
     //'phpdoc_var_without_name',                    // [symfony] not specified now
-    //'pre_increment',                              // [symfony] not neccessary
+    //'pre_increment',                              // [symfony] not necessary now
     //'print_to_echo',                              // [symfony] {echo_to_print}
     //'remove_leading_slash_use',                   // [symfony] not necessary now
     //'remove_lines_between_uses',                  // [symfony] not necessary now
