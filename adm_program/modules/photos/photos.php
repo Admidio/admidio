@@ -354,7 +354,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
     // show additional album information
     $datePeriod = $photoAlbum->getValue('pho_begin', $gPreferences['system_date']);
 
-    if($photoAlbum->getValue('pho_end') != $photoAlbum->getValue('pho_begin')
+    if($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin')
     && strlen($photoAlbum->getValue('pho_end')) > 0)
     {
         $datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gPreferences['system_date']);
@@ -443,7 +443,7 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
         }
 
         $albumDate = $childPhotoAlbum->getValue('pho_begin', $gPreferences['system_date']);
-        if($childPhotoAlbum->getValue('pho_end') != $childPhotoAlbum->getValue('pho_begin'))
+        if($childPhotoAlbum->getValue('pho_end') !== $childPhotoAlbum->getValue('pho_begin'))
         {
             $albumDate .= ' '.$gL10n->get('SYS_DATE_TO').' '.$childPhotoAlbum->getValue('pho_end', $gPreferences['system_date']);
         }

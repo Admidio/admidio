@@ -124,7 +124,7 @@ if ($getMode === 1 || $getMode === 3)
     // muss natuerlich der Code ueberprueft werden
     if ($getMode === 1 && !$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
     {
-        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
+        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($_POST['captcha']))
         {
             if($gPreferences['captcha_type'] === 'pic')
             {
@@ -316,7 +316,7 @@ elseif($getMode === 4 || $getMode === 8)
     // muss natuerlich der Code ueberprueft werden
     if ($getMode === 4 && !$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
     {
-        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
+        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($_POST['captcha']))
         {
             if($gPreferences['captcha_type'] === 'pic')
             {

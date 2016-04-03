@@ -249,7 +249,7 @@ if($getNewUser === 2)
     // muss natuerlich der Code ueberprueft werden
     if ($gPreferences['enable_registration_captcha'] == 1)
     {
-        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']))
+        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($_POST['captcha']))
         {
             if($gPreferences['captcha_type'] === 'pic')
             {

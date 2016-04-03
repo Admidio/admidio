@@ -465,7 +465,7 @@ foreach($gProfileFields->mProfileFields as $field)
         || (!$gCurrentUser->hasRightEditProfile($user) && $field->getValue('usf_hidden') == 0)))
     {
         // show new category header if new category and field has value or is a checkbox field
-        if($category != $field->getValue('cat_name')
+        if($category !== $field->getValue('cat_name')
         && (strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 || $field->getValue('usf_type') === 'CHECKBOX'))
         {
             if($category !== '')

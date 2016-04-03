@@ -101,7 +101,7 @@ elseif($getMode === 2)
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
     }
 
-    if($role->getValue('rol_name') != $_POST['rol_name'])
+    if($role->getValue('rol_name') !== $_POST['rol_name'])
     {
         // Schauen, ob die Rolle bereits existiert
         $sql = 'SELECT COUNT(*) AS count

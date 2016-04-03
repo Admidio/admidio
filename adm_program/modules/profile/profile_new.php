@@ -182,7 +182,7 @@ foreach($gProfileFields->mProfileFields as $field)
 
     // Kategorienwechsel den Kategorienheader anzeigen
     // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-    if($category != $field->getValue('cat_name') && $showField)
+    if($category !== $field->getValue('cat_name') && $showField)
     {
         if($category !== '')
         {

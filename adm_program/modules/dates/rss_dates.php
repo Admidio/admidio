@@ -68,7 +68,7 @@ if($datesResult['numResults'] > 0)
 
         // set data for attributes of this entry
         $title = $date->getValue('dat_begin', $gPreferences['system_date']);
-        if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
+        if($date->getValue('dat_begin', $gPreferences['system_date']) !== $date->getValue('dat_end', $gPreferences['system_date']))
         {
             $title = $title. ' - '. $date->getValue('dat_end', $gPreferences['system_date']);
         }
@@ -86,7 +86,7 @@ if($datesResult['numResults'] > 0)
         {
             $descDateFrom = $descDateFrom. ' '. $date->getValue('dat_begin', $gPreferences['system_time']).' '.$gL10n->get('SYS_CLOCK');
 
-            if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
+            if($date->getValue('dat_begin', $gPreferences['system_date']) !== $date->getValue('dat_end', $gPreferences['system_date']))
             {
                 $descDateTo = $date->getValue('dat_end', $gPreferences['system_date']). ' ';
             }
@@ -95,7 +95,7 @@ if($datesResult['numResults'] > 0)
         }
         else
         {
-            if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
+            if($date->getValue('dat_begin', $gPreferences['system_date']) !== $date->getValue('dat_end', $gPreferences['system_date']))
             {
                 $description = $gL10n->get('SYS_DATE_FROM_TO', $descDateFrom, $date->getValue('dat_end', $gPreferences['system_date']));
             }

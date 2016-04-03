@@ -280,7 +280,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         // Benachrichtigungs-Email für neue Einträge
 
         // Daten für Benachrichtigung zusammenstellen
-        if($_POST['date_from'] == $_POST['date_to'])
+        if($_POST['date_from'] === $_POST['date_to'])
         {
             $datum = $_POST['date_from'];
         }
@@ -432,7 +432,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         }
 
         if($role->getValue('rol_max_members') != $date->getValue('dat_max_members')
-        || $role->getValue('rol_name') != $roleName)
+        || $role->getValue('rol_name') !== $roleName)
         {
             $role->setValue('rol_name', $roleName);
             $role->setValue('rol_max_members', $date->getValue('dat_max_members'));

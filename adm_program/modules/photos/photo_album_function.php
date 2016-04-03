@@ -159,7 +159,7 @@ if($getMode === 'new' || $getMode === 'change')
     else
     {
         // if begin date changed than the folder must also be changed
-        if($albumPath != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
+        if($albumPath !== SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
         {
             $newFolder = SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
 

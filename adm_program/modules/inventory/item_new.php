@@ -127,7 +127,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
 
     // Kategorienwechsel den Kategorienheader anzeigen
     // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-    if($category != $field->getValue('cat_name'))
+    if($category !== $field->getValue('cat_name'))
     {
         if($category !== '')
         {

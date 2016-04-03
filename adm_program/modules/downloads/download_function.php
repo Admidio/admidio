@@ -190,7 +190,7 @@ elseif ($getMode === 4)
                 $newDescription = $_POST['new_description'];
 
                 // Test ob die Datei schon existiert im Filesystem
-                if ($newFile != $file->getValue('fil_name')
+                if ($newFile !== $file->getValue('fil_name')
                  && file_exists(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
                 {
                     $gMessage->show($gL10n->get('DOW_FILE_EXIST', $newFile));
@@ -233,7 +233,7 @@ elseif ($getMode === 4)
                 $newDescription = $_POST['new_description'];
 
                 // Test ob der Ordner schon existiert im Filesystem
-                if ($newFolder != $folder->getValue('fol_name')
+                if ($newFolder !== $folder->getValue('fol_name')
                 && file_exists(SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
                 {
                     $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolder));

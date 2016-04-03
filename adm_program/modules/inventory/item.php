@@ -273,7 +273,7 @@ foreach($gProfileFields->mProfileFields as $field)
         || (!$gCurrentUser->editInventory($inventory) && $field->getValue('inf_hidden') == 0)))
     {
         // show new category header if new category and field has value or is a checkbox field
-        if($category != $field->getValue('cat_name')
+        if($category !== $field->getValue('cat_name')
         && (strlen($inventory->getValue($field->getValue('inf_name_intern'))) > 0 || $field->getValue('inf_type') === 'CHECKBOX'))
         {
             if($category !== '')
