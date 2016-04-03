@@ -70,7 +70,7 @@ $page->addHtml('<div id="links_overview">');
 
 // show icon links and navigation
 
-if($weblinks->getId() == 0)
+if($weblinks->getId() === 0)
 {
     // get module menu
     $LinksMenu = $page->getMenu();

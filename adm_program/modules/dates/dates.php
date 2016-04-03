@@ -213,7 +213,7 @@ elseif($getViewMode === 'print')
     $page->addHtml('<h3>'.$gL10n->get('DAT_PERIOD_FROM_TO', $dates->getParameter('dateStartFormatAdmidio'), $dates->getParameter('dateEndFormatAdmidio')).'</h3>');
 }
 
-if($datesTotalCount == 0)
+if($datesTotalCount === 0)
 {
     // No events found
     if($getId > 0)

@@ -47,9 +47,9 @@ switch($postFunction)
 
         $statement = $gDb->query($sql);
         $row = $statement->fetch();
-        $MsgId = $row['max_id'];
+        $msgId = $row['max_id'];
 
-        if($MsgId + 25 < $postLines)
+        if($msgId + 25 < $postLines)
         {
             $postLines -= 50;
         }
@@ -68,10 +68,10 @@ switch($postFunction)
             $gDb->query($sql);
 
             $postLines -= 50;
-            $MsgId -= 50;
+            $msgId -= 50;
         }
 
-        if($postLines == $MsgId)
+        if($postLines === $msgId)
         {
             $log['state'] = $postLines;
             $log['text'] = false;
@@ -93,7 +93,7 @@ switch($postFunction)
                 $text[] = '<time>'.date('d.m - H:i', strtotime($row['msg_timestamp'])).'</time><span>'.$row['msg_subject'].'</span>'.$row['msg_message'];
             }
 
-            $log['state'] = $MsgId;
+            $log['state'] = $msgId;
             $log['text'] = $text;
         }
         break;
@@ -114,10 +114,10 @@ switch($postFunction)
 
         $statement = $gDb->query($sql);
         $row = $statement->fetch();
-        $MsgId = $row['max_id'] + 1;
+        $msgId = $row['max_id'] + 1;
 
         $sql = "INSERT INTO ".TBL_MESSAGES." (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read)
-            VALUES ('CHAT', '0', '".$MsgId."', '".$postNickname."', '', '', '".$postMessage."', CURRENT_TIMESTAMP, '0')";
+            VALUES ('CHAT', '0', '".$msgId."', '".$postNickname."', '', '', '".$postMessage."', CURRENT_TIMESTAMP, '0')";
 
         $gDb->query($sql);
         break;

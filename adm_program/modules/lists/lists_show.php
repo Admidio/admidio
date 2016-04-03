@@ -195,7 +195,7 @@ $numMembers = $listStatement->rowCount();
 // get all members and their data of this list in an array
 $membersList = $listStatement->fetchAll();
 
-if ($numMembers == 0)
+if ($numMembers === 0)
 {
     // Es sind keine Daten vorhanden !
     $gMessage->show($gL10n->get('LST_NO_USER_FOUND'));

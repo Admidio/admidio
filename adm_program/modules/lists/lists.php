@@ -107,7 +107,7 @@ $getStart      = $lists->getStartElement();
 $listsResult   = $lists->getDataSet($getStart);
 $numberOfRoles = $lists->getDataSetCount();
 
-if($numberOfRoles == 0)
+if($numberOfRoles === 0)
 {
     if($gValidLogin)
     {

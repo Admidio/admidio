@@ -298,7 +298,7 @@ foreach($gProfileFields->mProfileFields as $field)
 
 // Add loginname and photo at the end of category master data
 // add new category with start and end date of role membership
-if($posEndOfMasterData == 0)
+if($posEndOfMasterData === 0)
 {
     $posEndOfMasterData = $i;
     $i += 2;
