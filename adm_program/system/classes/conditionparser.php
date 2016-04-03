@@ -183,7 +183,7 @@ class ConditionParser
             {
                 // Sonderfall !!!
                 // bei einer Checkbox kann es nur 1 oder 0 geben und keine komplizierten Verknuepfungen
-                if($sourceCondition == '1')
+                if($sourceCondition === '1')
                 {
                     $this->mDestCond = ' AND '.$columnName.' = 1 ';
                 }

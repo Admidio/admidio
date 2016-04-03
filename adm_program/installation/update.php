@@ -216,7 +216,7 @@ if($getMode === 1)
         $form->show();
     }
     // if versions are equal > no update
-    elseif(version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT) === 0 && $maxUpdateStep == $currentUpdateStep)
+    elseif(version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT) === 0 && $maxUpdateStep === $currentUpdateStep)
     {
         $message = '
             <div class="alert alert-success form-alert">
@@ -394,10 +394,10 @@ elseif($getMode === 2)
                 // solange bis die aktuelle Versionsnummer erreicht wurde
                 if(!$flagNextVersion && version_compare($mainVersion.'.'.$subVersion.'.'.$microVersion, ADMIDIO_VERSION) === -1)
                 {
-                    if($subVersion == 4) // we do not have more then 4 subversions with old updater
+                    if($subVersion === 4) // we do not have more then 4 subversions with old updater
                     {
                         ++$mainVersion;
-                        $subVersion  = 0;
+                        $subVersion = 0;
                     }
                     else
                     {

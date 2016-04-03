@@ -423,7 +423,7 @@ class ModuleDates extends Modules
     private function setFormValue($date, $reference)
     {
         $checkedDate = $this->formatDate($date);
-        if($checkedDate == $reference || $checkedDate === '1970-01-01')
+        if($checkedDate === $reference || $checkedDate === '1970-01-01')
         {
             $date = '';
         }

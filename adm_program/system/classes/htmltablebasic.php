@@ -268,7 +268,7 @@ class HtmlTableBasic extends HtmlElement {
             if($this->tbody == 1)
             {
                 // Only allowed in body element of the table
-                if($this->rowCount % $this->lineChange == 0)
+                if($this->rowCount % $this->lineChange === 0)
                 {
                     $this->changeClass = $this->class_1;
                 }
@@ -308,7 +308,7 @@ class HtmlTableBasic extends HtmlElement {
             if($this->tbody == 1)
             {
                 // Only allowed in body element of the table
-                if($this->rowCount % $this->lineChange == 0)
+                if($this->rowCount % $this->lineChange === 0)
                 {
                     $this->changeClass = $this->class_1;
                 }
