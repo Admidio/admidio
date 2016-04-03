@@ -432,7 +432,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         }
 
         if($role->getValue('rol_max_members') != $date->getValue('dat_max_members')
-        || $role->getValue('role_name' != $roleName))
+        || $role->getValue('rol_name') != $roleName)
         {
             $role->setValue('rol_name', $roleName);
             $role->setValue('rol_max_members', $date->getValue('dat_max_members'));
