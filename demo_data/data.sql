@@ -448,12 +448,12 @@ INSERT INTO %PREFIX%_categories (cat_id, cat_org_id, cat_type, cat_name_intern, 
 --
 
 INSERT INTO %PREFIX%_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_download, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_this_list_view, rol_all_lists_view, rol_leader_rights, rol_default_registration, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_visible, rol_webmaster) VALUES
-(1, 3, 'SYS_WEBMASTER', 'INS_DESCRIPTION_WEBMASTER', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', 1, 0, 1, 1),
+(1, 3, 'SYS_WEBMASTER', 'INS_DESCRIPTION_ADMINISTRATOR', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', 1, 0, 1, 1),
 (2, 3, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:36', 1, '2008-05-03 16:26:36', 1, 0, 1, 0),
 (3, 3, 'INS_BOARD', 'INS_DESCRIPTION_BOARD', 0, 0, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 2, 1, 1, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', 1, 0, 1, 0),
 (4, 6, 'DEMO_ROL_1_YOUTH_TEAM', 'DEMO_ROL_1_YOUTH_TEAM_CONTENT', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 1, 0, 3, 0, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:24:41', 1, '2008-05-03 16:24:41', 1, 0, 1, 0),
 (5, 6, 'DEMO_ROL_2_YOUTH_TEAM', 'DEMO_ROL_2_YOUTH_TEAM_CONTENT', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 1, 0, 3, 0, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:25:58', 1, '2008-05-03 16:25:58', 1, 0, 1, 0),
-(6, 13, 'SYS_WEBMASTER', 'INS_DESCRIPTION_WEBMASTER', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 22:35:08', 1, '2010-01-21 20:35:08', 1, 0, 1, 1),
+(6, 13, 'SYS_WEBMASTER', 'INS_DESCRIPTION_ADMINISTRATOR', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 22:35:08', 1, '2010-01-21 20:35:08', 1, 0, 1, 1),
 (7, 13, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 16:26:36', 1, '2010-12-22 06:34:06', 1, 0, 1, 0),
 (8, 23, 'DAT_DATE 2012-05-13 19:00 - 4', 'DEMO_DAT_BARBECUE', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0, 0);
 
@@ -939,12 +939,12 @@ INSERT INTO %PREFIX%_sessions (ses_id, ses_usr_id, ses_org_id, ses_session_id, s
 
 INSERT INTO %PREFIX%_texts (txt_id, txt_org_id, txt_name, txt_text) VALUES
 (1, 1, 'SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REGISTRATION_USER'),
-(2, 1, 'SYSMAIL_REGISTRATION_WEBMASTER', 'SYS_SYSMAIL_REGISTRATION_WEBMASTER'),
+(2, 1, 'SYSMAIL_REGISTRATION_WEBMASTER', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
 (3, 1, 'SYSMAIL_NEW_PASSWORD', 'SYS_SYSMAIL_NEW_PASSWORD'),
 (4, 1, 'SYSMAIL_ACTIVATION_LINK', 'SYS_SYSMAIL_ACTIVATION_LINK'),
 (5, 1, 'SYSMAIL_REFUSE_REGISTRATION', 'SYS_SYSMAIL_REFUSE_REGISTRATION'),
 (101, 2, 'SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REGISTRATION_USER'),
-(102, 2, 'SYSMAIL_REGISTRATION_WEBMASTER', 'SYS_SYSMAIL_REGISTRATION_WEBMASTER'),
+(102, 2, 'SYSMAIL_REGISTRATION_WEBMASTER', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
 (103, 2, 'SYSMAIL_NEW_PASSWORD', 'SYS_SYSMAIL_NEW_PASSWORD'),
 (104, 2, 'SYSMAIL_ACTIVATION_LINK', 'SYS_SYSMAIL_ACTIVATION_LINK'),
 (105, 2, 'SYSMAIL_REFUSE_REGISTRATION', 'SYS_SYSMAIL_REFUSE_REGISTRATION');

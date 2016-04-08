@@ -160,7 +160,7 @@ if($getViewMode === 'html')
         // show print button
         $DatesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
 
-        if($gPreferences['enable_dates_ical'] == 1 || $gCurrentUser->isWebmaster() || $gCurrentUser->editDates())
+        if($gPreferences['enable_dates_ical'] == 1 || $gCurrentUser->isAdministrator() || $gCurrentUser->editDates())
         {
             $DatesMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
         }
@@ -173,7 +173,7 @@ if($getViewMode === 'html')
                                 $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png', 'right', 'menu_item_extras');
         }
 
-        if($gCurrentUser->isWebmaster())
+        if($gCurrentUser->isAdministrator())
         {
             // show link to system preferences of weblinks
             $DatesMenu->addItem('admMenuItemPreferencesLinks',

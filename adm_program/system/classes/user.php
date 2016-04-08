@@ -29,12 +29,12 @@
  *                        Users einsehen darf
  * viewRole             - Ueberprueft ob der User eine uebergebene Rolle(Liste)
  *                        einsehen darf
- * isWebmaster()        - gibt true/false zurueck, falls der User Mitglied der
+ * isAdministrator()        - gibt true/false zurueck, falls der User Mitglied der
  *                        Rolle "Webmaster" ist
  */
 class User extends TableAccess
 {
-    protected $webmaster;
+    protected $administrator;
 
     public $mProfileFieldsData;                   ///< object with current user field structure
     public $roles_rights = array();               ///< Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
@@ -198,10 +198,10 @@ class User extends TableAccess
                             $this->assignRoles = true;
                         }
 
-                        // Webmasterflag setzen
-                        if($row['rol_webmaster'] == 1)
+                        // set administrator flag
+                        if($row['rol_administrator'] == 1)
                         {
-                            $this->webmaster = 1;
+                            $this->administrator = true;
                         }
                     }
 
@@ -282,15 +282,15 @@ class User extends TableAccess
      * @param bool   $updateHash           If set to true the code will check if the current password hash uses
      *                                     the best hashing algorithm. If not the password will be rehashed with
      *                                     the new algorithm. If set to false the password will not be rehashed.
-     * @param bool   $isWebmaster          If set to true the code will check if the current password hash uses
+     * @param bool   $isAdministrator      If set to true the code will check if the current password hash uses
      * @return true|string Return true if login was successful and a string with the reason why the login failed.
      *                     Possible reasons: SYS_LOGIN_MAX_INVALID_LOGIN
      *                                       SYS_LOGIN_NOT_ACTIVATED
      *                                       SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION
-     *                                       SYS_LOGIN_USER_NO_WEBMASTER
+     *                                       SYS_LOGIN_USER_NO_ADMINISTRATOR
      *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
      */
-    public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true, $isWebmaster = false)
+    public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true, $isAdministrator = false)
     {
         global $gPreferences, $gCookiePraefix, $gCurrentSession, $gSessionId, $installedDbVersion;
 
@@ -315,15 +315,20 @@ class User extends TableAccess
                 return 'SYS_LOGIN_NOT_ACTIVATED';
             }
 
-            $sqlWebmaster = '';
-            // only check for webmaster role if version > 2.3 because before we don't have that flag
-            if($isWebmaster && version_compare($installedDbVersion, '2.4.0') === 1)
+            $sqlAdministrator = '';
+            // only check for administrator role if version > 3.1 because before it was webmaster role
+            if($isAdministrator && version_compare($installedDbVersion, '3.2.0') === 1)
             {
-                $sqlWebmaster = ', rol_webmaster';
+                $sqlAdministrator = ', rol_administrator AS administrator';
+            }
+            // only check for webmaster role if version > 2.3 because before we don't have that flag
+            elseif($isAdministrator && version_compare($installedDbVersion, '2.4.0') === 1)
+            {
+                $sqlAdministrator = ', rol_webmaster AS administrator';
             }
 
             // Check if user is currently member of a role of an organisation
-            $sql = 'SELECT DISTINCT mem_usr_id'.$sqlWebmaster.'
+            $sql = 'SELECT DISTINCT mem_usr_id'.$sqlAdministrator.'
                       FROM '.TBL_MEMBERS.'
                 INNER JOIN '.TBL_ROLES.'
                         ON rol_id = mem_rol_id
@@ -342,9 +347,9 @@ class User extends TableAccess
             }
 
             $userRow = $userStatement->fetch();
-            if ($isWebmaster && version_compare($installedDbVersion, '2.4.0') === 1 && $userRow['rol_webmaster'] == 0)
+            if ($isAdministrator && version_compare($installedDbVersion, '2.4.0') === 1 && $userRow['administrator'] == 0)
             {
-                return 'SYS_LOGIN_USER_NO_WEBMASTER';
+                return 'SYS_LOGIN_USER_NO_ADMINISTRATOR';
             }
 
             // Rehash password if the hash is outdated and rehashing is enabled
@@ -433,7 +438,7 @@ class User extends TableAccess
             $this->mProfileFieldsData->clearUserData();
         }
 
-        $this->webmaster = 0;
+        $this->administrator = false;
 
         // initialize rights arrays
         $this->usersEditAllowed = array();
@@ -1137,6 +1142,16 @@ class User extends TableAccess
     }
 
     /**
+     * Checks if the user is assigned to the role @b Administrator
+     * @return bool Returns @b true if the user is a member of the role @b Administrator
+     */
+    public function isAdministrator()
+    {
+        $this->checkRolesRight();
+        return $this->administrator;
+    }
+
+    /**
      * check if user is leader of a role
      * @param int|string $roleId
      * @return bool
@@ -1171,13 +1186,14 @@ class User extends TableAccess
     }
 
     /**
-     * Checks if the user is assigned to the role @b Webmaster
-     * @return bool Returns @b true if the user is a member of the role @b Webmaster
+     * Checks if the user is assigned to the role @b Administrator
+     * @deprecated 3.2.0:4.0.0 Use Method isAdministrator() instead
+     * @return bool Returns @b true if the user is a member of the role @b Administrator
+     * @see User#isAdministrator
      */
     public function isWebmaster()
     {
-        $this->checkRolesRight();
-        return $this->webmaster;
+        return $this->isAdministrator();
     }
 
     /**

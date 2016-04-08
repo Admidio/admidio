@@ -36,17 +36,17 @@ else
 $user = new User($gDb, $gProfileFields, $getUserId);
 
 // only the own password could be individual set.
-// Webmaster could only send a generated password or set a password if no password was set before
+// Administrator could only send a generated password or set a password if no password was set before
 if(!isMember($getUserId)
-|| (!$gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
-|| ($gCurrentUser->isWebmaster() && $user->getValue('usr_password') !== '' && $user->getValue('EMAIL') === '' && $gPreferences['enable_system_mails'] == 1))
+|| (!$gCurrentUser->isAdministrator() && $gCurrentUser->getValue('usr_id') != $getUserId)
+|| ($gCurrentUser->isAdministrator() && $user->getValue('usr_password') !== '' && $user->getValue('EMAIL') === '' && $gPreferences['enable_system_mails'] == 1))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 if($getMode === 'change')
 {
-    if($gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
+    if($gCurrentUser->isAdministrator() && $gCurrentUser->getValue('usr_id') != $getUserId)
     {
         $oldPassword = '';
     }
@@ -61,7 +61,7 @@ if($getMode === 'change')
     /***********************************************************************/
     /* Handle form input */
     /***********************************************************************/
-    if(($oldPassword !== '' || $gCurrentUser->isWebmaster())
+    if(($oldPassword !== '' || $gCurrentUser->isAdministrator())
     &&  $newPassword !== '' && $newPasswordConfirm !== '')
     {
         if(strlen($newPassword) >= 8)
@@ -69,8 +69,8 @@ if($getMode === 'change')
             if ($newPassword === $newPasswordConfirm)
             {
                 // check if old password is correct.
-                // Webmaster could change password of other users without this verification.
-                if(PasswordHashing::verify($oldPassword, $user->getValue('usr_password')) || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId)
+                // Administrator could change password of other users without this verification.
+                if(PasswordHashing::verify($oldPassword, $user->getValue('usr_password')) || $gCurrentUser->isAdministrator() && $gCurrentUser->getValue('usr_id') != $getUserId)
                 {
                     $user->saveChangesWithoutRights();
                     $user->setPassword($newPassword);

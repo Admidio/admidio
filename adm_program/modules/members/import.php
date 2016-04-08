@@ -65,10 +65,10 @@ if(!$gCurrentUser->manageRoles())
     // keine Rollen mit Rollenzuordnungsrecht anzeigen
     $condition .= ' AND rol_assign_roles = 0 ';
 }
-if(!$gCurrentUser->isWebmaster())
+if(!$gCurrentUser->isAdministrator())
 {
-    // Webmasterrolle nicht anzeigen
-    $condition .= ' AND rol_webmaster = 0 ';
+    // Don't show administrator role
+    $condition .= ' AND rol_administrator = 0 ';
 }
 
 $sql = 'SELECT *

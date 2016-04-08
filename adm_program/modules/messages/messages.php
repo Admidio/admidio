@@ -72,7 +72,7 @@ if ($gPreferences['enable_chat_module'] == 1)
     $EmailMenu->addItem('admMenuItemNewChat', $g_root_path.'/adm_program/modules/messages/messages_chat.php', $gL10n->get('MSG_CHAT'), '/chat.png');
 }
 
-if($gCurrentUser->isWebmaster())
+if($gCurrentUser->isAdministrator())
 {
     $EmailMenu->addItem('admMenuItemPreferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=messages',
                     $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');

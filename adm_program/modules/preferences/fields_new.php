@@ -19,7 +19,7 @@ require_once('../../system/login_valid.php');
 $getUsfId = admFuncVariableIsValid($_GET, 'usf_id', 'int');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
-if (!$gCurrentUser->isWebmaster())
+if (!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

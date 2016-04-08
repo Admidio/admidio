@@ -66,7 +66,7 @@ class Organization extends TableAccess
     /**
      * Creates all necessary data for a new organization. This method can only be called once for an organization.
      * It will create the basic categories, lists, roles, systemmails etc.
-     * @param int $userId The id of the webmaster who creates the new organization.
+     * @param int $userId The id of the administrator who creates the new organization.
      *                    This will be the first valid user of the new organization.
      */
     public function createBasicData($userId)
@@ -83,7 +83,7 @@ class Organization extends TableAccess
 
         // create all systemmail texts and write them into table adm_texts
         $systemmailsTexts = array('SYSMAIL_REGISTRATION_USER'      => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
-                                  'SYSMAIL_REGISTRATION_WEBMASTER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_WEBMASTER'),
+                                  'SYSMAIL_REGISTRATION_WEBMASTER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
                                   'SYSMAIL_REFUSE_REGISTRATION'    => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
                                   'SYSMAIL_NEW_PASSWORD'           => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
                                   'SYSMAIL_ACTIVATION_LINK'        => $gL10n->get('SYS_SYSMAIL_ACTIVATION_LINK'));
@@ -127,29 +127,29 @@ class Organization extends TableAccess
 
         // now create default roles
 
-        // Create role webmaster
-        $roleWebmaster = new TableRoles($this->db);
-        $roleWebmaster->setValue('rol_cat_id', $categoryCommon);
-        $roleWebmaster->setValue('rol_name', $gL10n->get('SYS_WEBMASTER'));
-        $roleWebmaster->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_WEBMASTER'));
-        $roleWebmaster->setValue('rol_assign_roles', 1);
-        $roleWebmaster->setValue('rol_approve_users', 1);
-        $roleWebmaster->setValue('rol_announcements', 1);
-        $roleWebmaster->setValue('rol_dates', 1);
-        $roleWebmaster->setValue('rol_download', 1);
-        $roleWebmaster->setValue('rol_guestbook', 1);
-        $roleWebmaster->setValue('rol_guestbook_comments', 1);
-        $roleWebmaster->setValue('rol_photo', 1);
-        $roleWebmaster->setValue('rol_weblinks', 1);
-        $roleWebmaster->setValue('rol_edit_user', 1);
-        $roleWebmaster->setValue('rol_mail_to_all', 1);
-        $roleWebmaster->setValue('rol_mail_this_role', 3);
-        $roleWebmaster->setValue('rol_profile', 1);
-        $roleWebmaster->setValue('rol_this_list_view', 1);
-        $roleWebmaster->setValue('rol_all_lists_view', 1);
-        $roleWebmaster->setValue('rol_webmaster', 1);
-        $roleWebmaster->setValue('rol_inventory', 1);
-        $roleWebmaster->save();
+        // Create role administrator
+        $roleAdministrator = new TableRoles($this->db);
+        $roleAdministrator->setValue('rol_cat_id', $categoryCommon);
+        $roleAdministrator->setValue('rol_name', $gL10n->get('SYS_ADMINISTRATOR'));
+        $roleAdministrator->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_ADMINISTRATOR'));
+        $roleAdministrator->setValue('rol_assign_roles', 1);
+        $roleAdministrator->setValue('rol_approve_users', 1);
+        $roleAdministrator->setValue('rol_announcements', 1);
+        $roleAdministrator->setValue('rol_dates', 1);
+        $roleAdministrator->setValue('rol_download', 1);
+        $roleAdministrator->setValue('rol_guestbook', 1);
+        $roleAdministrator->setValue('rol_guestbook_comments', 1);
+        $roleAdministrator->setValue('rol_photo', 1);
+        $roleAdministrator->setValue('rol_weblinks', 1);
+        $roleAdministrator->setValue('rol_edit_user', 1);
+        $roleAdministrator->setValue('rol_mail_to_all', 1);
+        $roleAdministrator->setValue('rol_mail_this_role', 3);
+        $roleAdministrator->setValue('rol_profile', 1);
+        $roleAdministrator->setValue('rol_this_list_view', 1);
+        $roleAdministrator->setValue('rol_all_lists_view', 1);
+        $roleAdministrator->setValue('rol_administrator', 1);
+        $roleAdministrator->setValue('rol_inventory', 1);
+        $roleAdministrator->save();
 
         // Create role member
         $roleMember = new TableRoles($this->db);
@@ -178,9 +178,9 @@ class Organization extends TableAccess
         $roleManagement->setValue('rol_all_lists_view', 1);
         $roleManagement->save();
 
-        // Create membership for user in role 'Webmaster' and 'Members'
+        // Create membership for user in role 'Administrator' and 'Members'
         $member = new TableMembers($this->db);
-        $member->startMembership($roleWebmaster->getValue('rol_id'), $userId);
+        $member->startMembership($roleAdministrator->getValue('rol_id'), $userId);
         $member->startMembership($roleMember->getValue('rol_id'),    $userId);
 
         // create object with current user field structure

@@ -136,7 +136,7 @@ if($gPreferences['enable_weblinks_module'] == 1
 $page->addHtml($moduleMenu->show(true));
 
 // menu with links to all administration pages of Admidio if the user has the right to administrate
-if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles()
+if($gCurrentUser->isAdministrator() || $gCurrentUser->manageRoles()
 || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
 {
     $adminMenu = new Menu('index_administration', $gL10n->get('SYS_ADMINISTRATION'));
@@ -162,7 +162,7 @@ if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles()
                             $gL10n->get('ROL_ROLE_ADMINISTRATION_DESC'));
     }
 
-    if($gCurrentUser->isWebmaster())
+    if($gCurrentUser->isAdministrator())
     {
         $adminMenu->addItem('dbback', '/adm_program/modules/backup/backup.php',
                             $gL10n->get('BAC_DATABASE_BACKUP'), '/icons/backup_big.png',

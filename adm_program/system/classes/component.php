@@ -46,9 +46,8 @@ class Component extends TableAccess
      * There will be different messages shown if versions aren't equal. If database has minor
      * version than a link to update the database will be shown. If filesystem has minor version
      * than a link to download current version will be shown.
-     * @throws AdmException SYS_WEBMASTER_DATABASE_INVALID
-     *                      SYS_WEBMASTER_FILESYSTEM_INVALID
-     *                      SYS_DATABASE_INVALID
+     * @throws AdmException SYS_DATABASE_VERSION_INVALID
+     *                      SYS_FILESYSTEM_VERSION_INVALID
      * @return void Nothing will be returned. If the versions aren't equal a message will be shown.
      */
     public function checkDatabaseVersion()
@@ -71,12 +70,12 @@ class Component extends TableAccess
 
         if ($returnCode === -1) // database has minor version
         {
-            throw new AdmException('SYS_WEBMASTER_DATABASE_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT,
+            throw new AdmException('SYS_DATABASE_VERSION_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT,
                                    '<a href="'.$g_root_path.'/adm_program/installation/update.php">', '</a>');
         }
         elseif ($returnCode === 1) // filesystem has minor version
         {
-            throw new AdmException('SYS_WEBMASTER_FILESYSTEM_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT,
+            throw new AdmException('SYS_FILESYSTEM_VERSION_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT,
                                    '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
         }
     }

@@ -91,7 +91,7 @@ $sql = 'CREATE index IDX_'.$g_tbl_praefix.'_MEM_ROL_USR_ID ON '.TBL_MEMBERS.' (m
 $gDb->query($sql);
 
 $sql = 'UPDATE '.TBL_ROLES.' SET rol_webmaster = 1
-         WHERE rol_name = \''.$gL10n->get('SYS_WEBMASTER').'\' ';
+         WHERE rol_name = \''.$gL10n->get('SYS_ADMINISTRATOR').'\' ';
 $gDb->query($sql);
 
  // convert <br /> to a normal line feed

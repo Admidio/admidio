@@ -51,8 +51,8 @@ if($getRoleId > 0)
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
-    // Rolle Webmaster darf nur vom Webmaster selber erstellt oder gepflegt werden
-    if($role->getValue('rol_webmaster') == 1 && !$gCurrentUser->isWebmaster())
+    // Administrator role could only be created or edited by administrators
+    if($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -137,7 +137,7 @@ $rolesEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n
 // show form
 $form = new HtmlForm('roles_edit_form', $g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$getRoleId.'&amp;mode=2', $page);
 $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->get('SYS_CATEGORY'));
-if($role->getValue('rol_webmaster') == 1)
+if($role->getValue('rol_administrator') == 1)
 {
     $form->addInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'),
                     array('maxLength' => 100, 'property' => FIELD_READONLY));

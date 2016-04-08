@@ -218,20 +218,20 @@ if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
     $profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $user->getValue('usr_id'),
                         $gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
 }
-elseif($gCurrentUser->isWebmaster() && isMember($user->getValue('usr_id'))
+elseif($gCurrentUser->isAdministrator() && isMember($user->getValue('usr_id'))
 && strlen($user->getValue('usr_login_name')) > 0)
 {
-    // Webmasters can change or send password if login is configured and user is member of current organization
+    // Administrators can change or send password if login is configured and user is member of current organization
 
     if(strlen($user->getValue('EMAIL')) > 0 && $gPreferences['enable_system_mails'] == 1)
     {
-        // if email is set and systemmails are activated then webmaster can send a new password to user
+        // if email is set and systemmails are activated then administrator can send a new password to user
         $profileMenu->addItem('menu_item_send_password', $g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$user->getValue('usr_id').'&amp;mode=5',
                             $gL10n->get('ORG_SEND_NEW_PASSWORD'), 'key.png');
     }
     else
     {
-        // if user has no email or send email is disabled then webmaster could set a new password
+        // if user has no email or send email is disabled then administrator could set a new password
         $profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $user->getValue('usr_id'),
                             $gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
     }
@@ -257,7 +257,7 @@ if($gCurrentUser->assignRoles())
                             $gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE'), 'roles.png', 'right', 'menu_item_extras');
 }
 
-if($gCurrentUser->isWebmaster())
+if($gCurrentUser->isAdministrator())
 {
     // show link to maintain profile fields
     $profileMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php',

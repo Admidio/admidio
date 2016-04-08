@@ -29,8 +29,8 @@ if($getMode === 1)
     $gMessage->showHtmlTextOnly(true);
 }
 
-// only webmasters are allowed to edit organization preferences or create new organizations
-if(!$gCurrentUser->isWebmaster())
+// only administrators are allowed to edit organization preferences or create new organizations
+if(!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

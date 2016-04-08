@@ -66,7 +66,7 @@ if ($members_found === 0)
 $page = new HtmlPage($headline);
 $page->enableModal();
 
-if($gCurrentUser->isWebmaster())
+if($gCurrentUser->isAdministrator())
 {
     // get module menu
     $registrationMenu = $page->getMenu();

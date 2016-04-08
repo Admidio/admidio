@@ -156,7 +156,7 @@ $profileMenu->addItem('menu_item_new_entry', $g_root_path. '/adm_program/modules
 
 $profileMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
 
-if($gCurrentUser->isWebmaster())
+if($gCurrentUser->isAdministrator())
 {
     // show link to maintain profile fields
     $profileMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php',

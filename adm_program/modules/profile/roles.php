@@ -206,11 +206,11 @@ while($row = $statement->fetch())
             $memberChecked = ' checked="checked" ';
         }
 
-        // if role is webmaster than only webmaster can add new user,
-        // but don't change their own membership, because there must be at least one webmaster
-        if($role->getValue('rol_webmaster') == 1
-        && (!$gCurrentUser->isWebmaster()
-        || ($gCurrentUser->isWebmaster() && $getUserId == $gCurrentUser->getValue('usr_id'))))
+        // if role is administrator than only administrator can add new user,
+        // but don't change their own membership, because there must be at least one administrator
+        if($role->getValue('rol_administrator') == 1
+        && (!$gCurrentUser->isAdministrator()
+        || ($gCurrentUser->isAdministrator() && $getUserId == $gCurrentUser->getValue('usr_id'))))
         {
             $memberDisabled = ' disabled="disabled" ';
         }
@@ -221,8 +221,8 @@ while($row = $statement->fetch())
             $leaderChecked = ' checked="checked" ';
         }
 
-        // the leader of webmaster role can only be set by a webmaster
-        if($role->getValue('rol_webmaster') == 1 && !$gCurrentUser->isWebmaster())
+        // the leader of administrator role can only be set by a administrator
+        if($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator())
         {
             $leaderDisabled = ' disabled="disabled" ';
         }

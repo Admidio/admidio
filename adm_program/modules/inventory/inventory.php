@@ -55,7 +55,7 @@ $itemsAdministrationMenu->addItem('menu_item_create_user', $g_root_path.'/adm_pr
 // show link to room management
 $itemsAdministrationMenu->addItem('menu_item_manage_rooms', $g_root_path.'/adm_program/modules/rooms/rooms.php', $gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION'), 'home.png');
 
-if($gCurrentUser->isWebmaster())
+if($gCurrentUser->isAdministrator())
 {
     // show link to maintain profile fields
     $itemsAdministrationMenu->addItem('menu_item_maintain_inventory_fields', $g_root_path. '/adm_program/modules/inventory/fields.php', $gL10n->get('PRO_MAINTAIN_ITEM_FIELDS'), 'application_form_edit.png');
@@ -104,7 +104,7 @@ while($row = $mglStatement->fetch())
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
 
     // remove Item
-    if($gCurrentUser->isWebmaster()) // just Webmaster can remove items
+    if($gCurrentUser->isAdministrator()) // just Webmaster can remove items
     {
         $itemAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/inventory/items_function.php?item_id='.$row['inv_id'].'&amp;mode=6"><img
                                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';

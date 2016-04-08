@@ -177,9 +177,9 @@ function getRoleMemberships($htmlListId, $user, $roleStatement, $count_role, $di
 
                             if($role->allowedToAssignMembers($gCurrentUser))
                             {
-                                // You are not allowed to delete your own webmaster membership, other roles could be deleted
-                                if (($role->getValue('rol_webmaster') == 1 && $gCurrentUser->getValue('usr_id') != $user->getValue('usr_id'))
-                                || ($role->getValue('rol_webmaster') == 0))
+                                // You are not allowed to delete your own administrator membership, other roles could be deleted
+                                if (($role->getValue('rol_administrator') == 1 && $gCurrentUser->getValue('usr_id') != $user->getValue('usr_id'))
+                                || ($role->getValue('rol_administrator') == 0))
                                 {
                                     $roleMemHTML .= '
                                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
@@ -193,8 +193,8 @@ function getRoleMemberships($htmlListId, $user, $roleStatement, $count_role, $di
                                     <a class="admidio-icon-link"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
                                 }
 
-                                // do not edit webmaster role
-                                if ($row['rol_webmaster'] == 0)
+                                // do not edit administrator role
+                                if ($row['rol_administrator'] == 0)
                                 {
                                     $roleMemHTML .= '<a class="admidio-icon-link" style="cursor:pointer;" onclick="profileJS.toggleDetailsOn('.$member->getValue('mem_id').')"><img
                                         src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('PRO_CHANGE_DATE').'" title="'.$gL10n->get('PRO_CHANGE_DATE').'" /></a>';

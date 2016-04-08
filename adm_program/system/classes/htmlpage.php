@@ -233,7 +233,7 @@ class HtmlPage
                                 $gL10n->get('LNK_WEBLINKS'), 'weblinks.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
         }
 
-        if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
+        if($gCurrentUser->isAdministrator() || $gCurrentUser->manageRoles() || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
         {
             $this->menu->addItem('menu_item_administration', null, $gL10n->get('SYS_ADMINISTRATION'), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
 
@@ -252,7 +252,7 @@ class HtmlPage
                 $this->menu->addItem('menu_item_roles', '/adm_program/modules/roles/roles.php',
                                     $gL10n->get('ROL_ROLE_ADMINISTRATION'), 'roles.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
             }
-            if($gCurrentUser->isWebmaster())
+            if($gCurrentUser->isAdministrator())
             {
                 $this->menu->addItem('menu_item_backup', '/adm_program/modules/backup/backup.php',
                                     $gL10n->get('BAC_DATABASE_BACKUP'), 'backup.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
@@ -369,7 +369,7 @@ class HtmlPage
     /**
      * Every html page of Admidio contains three files of the custom theme.
      * my_header.php, my_body_top.php and my_body_bottom.php
-     * With these files the webmaster can contain custom layout to Admidio.
+     * With these files the administrator can contain custom layout to Admidio.
      * If these files should not be included in the current page, than this method must be called.
      * @return void
      */

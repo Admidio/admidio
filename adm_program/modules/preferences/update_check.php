@@ -19,7 +19,7 @@ require_once('../../system/login_valid.php');
 // Initialize and check the parameters
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1, 'directOutput' => true));
 
-if($getMode === 3 && !$gCurrentUser->isWebmaster())
+if($getMode === 3 && !$gCurrentUser->isAdministrator())
 {
     echo $gL10n->get('SYS_NO_RIGHTS');
     exit();

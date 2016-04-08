@@ -82,7 +82,7 @@ if($weblinks->getId() === 0)
                             $gL10n->get('LNK_CREATE_LINK'), 'add.png');
     }
 
-    if($gCurrentUser->isWebmaster())
+    if($gCurrentUser->isAdministrator())
     {
         // show link to system preferences of weblinks
         $LinksMenu->addItem('menu_items_links_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=links',

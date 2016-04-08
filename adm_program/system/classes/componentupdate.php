@@ -260,6 +260,22 @@ class ComponentUpdate extends Component
     }
 
     /**
+     * This method renames the webmaster role to administrator.
+     */
+    public function updateStepRenameWebmasterToAdministrator()
+    {
+        global $gL10n;
+
+        $sql = 'UPDATE '.TBL_ROLES.' SET rol_name = \''.$gL10n->get('SYS_ADMINISTRATOR').'_1\'
+                 WHERE rol_name = \''.$gL10n->get('SYS_ADMINISTRATOR').'\'';
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_ROLES.' SET rol_name = \''.$gL10n->get('SYS_ADMINISTRATOR').'\'
+                 WHERE rol_name = \''.$gL10n->get('SYS_WEBMASTER').'\'';
+        $this->db->query($sql);
+    }
+
+    /**
      * This method set the default configuration for all organizations
      */
     public function updateStepSetDefaultConfiguration()

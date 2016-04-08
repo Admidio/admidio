@@ -190,7 +190,7 @@ if(!$getModeration && $gCurrentUser->editGuestbookRight() && $gPreferences['enab
     }
 }
 
-if($gCurrentUser->isWebmaster())
+if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of announcements
     $guestbookMenu->addItem('admMenuItemPreferencesGuestbook', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=guestbook',

@@ -15,20 +15,20 @@ $headline = $gL10n->get('SYS_LOGIN');
 // remember url (will be removed in cookie_check)
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// read id of webmaster role
+// read id of administrator role
 $sql = 'SELECT rol_id
           FROM '.TBL_ROLES.'
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
-         WHERE rol_name LIKE \''.$gL10n->get('SYS_WEBMASTER').'\'
-           AND rol_webmaster = 1
+         WHERE rol_name LIKE \''.$gL10n->get('SYS_ADMINISTRATOR').'\'
+           AND rol_administrator = 1
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                OR cat_org_id IS NULL )';
 $pdoStatement = $gDb->query($sql);
 $row = $pdoStatement->fetch();
 
-// create role object for webmaster
-$roleWebmaster = new TableRoles($gDb, $row['rol_id']);
+// create role object for administrator
+$roleAdministrator = new TableRoles($gDb, $row['rol_id']);
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -77,14 +77,14 @@ if($gPreferences['enable_password_recovery'] == 1 && $gPreferences['enable_syste
     // neues Passwort zusenden
     $mail_link = $g_root_path.'/adm_program/system/lost_password.php';
 }
-elseif($gPreferences['enable_mail_module'] == 1 && $roleWebmaster->getValue('rol_mail_this_role') == 3)
+elseif($gPreferences['enable_mail_module'] == 1 && $roleAdministrator->getValue('rol_mail_this_role') == 3)
 {
-    // Mailmodul aufrufen mit Webmaster als Ansprechpartner
-    $mail_link = $g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='.$roleWebmaster->getValue('rol_id').'&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+    // show link of message module to send mail to administrator role
+    $mail_link = $g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='.$roleAdministrator->getValue('rol_id').'&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
 }
 else
 {
-    // direkte Mail an den Webmaster ueber einen externen Mailclient
+    // show link to send mail with local mail-client to administrator
     $mail_link = 'mailto:'.$gPreferences['email_administrator'].'?subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
 }
 
