@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">Huidige maand</string>
+  <string name="PLG_CALENDAR_MONTH">januari, februari, maart, april, mei, juni, juli, augustus, september, oktober, november, december</string>
+  <string name="PLG_CALENDAR_MORE">(... verdere)</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">Ma</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">Di</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">Wo</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">Do</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">Vr</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">Za</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">Zo</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Meerdaags</string>
+</resources>
