@@ -2,19 +2,19 @@
 <resources>
   <string name="AFG">Afghanistan</string>
   <string name="EGY">Egypte</string>
-  <string name="ALB">Albanie</string>
+  <string name="ALB">Albanië</string>
   <string name="DZA">Algerije</string>
   <string name="AND">Andorra</string>
   <string name="AGO">Angola</string>
   <string name="AIA">Anguilla</string>
   <string name="ATG">Antigua en Barbuda</string>
-  <string name="GNQ">Equatoriaal Guinea</string>
-  <string name="ARG">Argentinie</string>
-  <string name="ARM">Armenie</string>
+  <string name="GNQ">Equatoriaal-Guinea</string>
+  <string name="ARG">Argentinië</string>
+  <string name="ARM">Armenië</string>
   <string name="ABW">Aruba</string>
   <string name="AZE">Azerbeidzjan</string>
-  <string name="ETH">Ethiopie</string>
-  <string name="AUS">Australie</string>
+  <string name="ETH">Ethiopië</string>
+  <string name="AUS">Australië</string>
   <string name="BHS">Bahama\'s</string>
   <string name="BHR">Bahrein</string>
   <string name="BGD">Bangladesh</string>
@@ -69,6 +69,7 @@
   <string name="HKG">Hongkong</string>
   <string name="IND">India</string>
   <string name="IDN">Indonesie</string>
+  <string name="IMN">Man</string>
   <string name="IRQ">Irak</string>
   <string name="IRN">Iran</string>
   <string name="IRL">Ierland</string>
@@ -138,6 +139,7 @@
   <string name="NGA">Nigeria</string>
   <string name="NIU">Niue</string>
   <string name="PRK">Noord Korea</string>
+  <string name="NFK">Norfolkeiland</string>
   <string name="NOR">Noorwegen</string>
   <string name="OMN">Oman</string>
   <string name="AUT">Oostenrijk</string>
@@ -155,6 +157,7 @@
   <string name="ROU">Roemenie</string>
   <string name="RUS">Rusland</string>
   <string name="SLB">Salomons Eilanden</string>
+  <string name="BLM">Saint-Barthélemy</string>
   <string name="ZMB">Zambia</string>
   <string name="WSM">Samoa</string>
   <string name="SMR">San Marino</string>

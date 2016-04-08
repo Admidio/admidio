@@ -820,3 +820,9 @@ tr.admidio-event-highlight,
 .panel-primary.admidio-event-highlight > .panel-heading {
     border-bottom: 2px solid #ff9c00;
 }
+
+/* Plugin area */
+
+.admidio-plugin-content > div > a {
+    white-space: normal;
+}

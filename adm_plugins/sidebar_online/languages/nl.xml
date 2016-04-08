@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_ONLINE_HEADLINE">Online</string>
+  <string name="PLG_ONLINE_NO_VISITORS_ON_WEBSITE">Op dit moment zijn geen bezoekers op de website.</string>
+  <string name="PLG_ONLINE_VAR_NUM_VISITORS">#VAR1# bezoekers</string>
+</resources>
