@@ -688,20 +688,23 @@ else
 
             if($dateBegin === $dateEnd)
             {
-                if ($date->getValue('dat_all_day') == 1)
-                {
-                    $dateTimeValue = $dateBegin;
-                }
-                else
-                {
-                    $dateTimeValue = $dateBegin. ' '. $timeBegin. ' - '. $timeEnd;
-                }
+                $dateTimeValue = $dateBegin. ' '. $timeBegin. ' - '. $timeEnd;
             }
             else
             {
                 if ($date->getValue('dat_all_day') == 1)
                 {
-                    $dateTimeValue = $dateBegin. ' - '. $dateEnd;
+                    // full-time event that only exists one day should only show the begin date
+                    $dateDiff = $objDateBegin->diff($objDateEnd);
+
+                    if($dateDiff->d === 1)
+                    {
+                        $dateTimeValue = $dateBegin;
+                    }
+                    else
+                    {
+                        $dateTimeValue = $dateBegin. ' - '. $dateEnd;
+                    }
                 }
                 else
                 {
