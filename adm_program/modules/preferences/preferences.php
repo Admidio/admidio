@@ -146,7 +146,7 @@ $page->addHtml('
 
                         // search all available themes in theme folder
                         $themes = admFuncGetDirectoryEntries(SERVER_PATH.'/adm_themes', 'dir');
-                        if ($themes === false)
+                        if (!is_array($themes))
                         {
                             $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
                         }
@@ -637,7 +637,7 @@ $page->addHtml('
                         $form->addInput('ecard_card_picture_width', $gL10n->get('PHO_MAX_PHOTO_SIZE_WIDTH'), $form_values['ecard_card_picture_width'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999));
                         $form->addInput('ecard_card_picture_height', $gL10n->get('PHO_MAX_PHOTO_SIZE_HEIGHT'), $form_values['ecard_card_picture_height'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'ECA_MAX_PHOTO_SIZE_DESC'));
                         $templates = admFuncGetDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates');
-                        if ($templates === false)
+                        if (!is_array($templates))
                         {
                             $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
                         }

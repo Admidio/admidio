@@ -161,7 +161,7 @@ $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
         class="imageFrame" alt="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'" />
     </a>');
 $templates = admFuncGetDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates');
-if ($templates === false)
+if (!is_array($templates))
 {
     $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
 }
