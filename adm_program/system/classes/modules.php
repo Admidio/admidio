@@ -140,7 +140,7 @@ abstract class Modules
     /**
      * Returns a module parameter from the class
      * @param string $parameterName The name of the parameter whose value should be returned.
-     * @return array|null Returns the parameter value
+     * @return mixed|null Returns the parameter value
      */
     public function getParameter($parameterName)
     {
@@ -217,7 +217,7 @@ abstract class Modules
     /**
      * add a module parameter to the class
      * @param string $parameterName  The name of the parameter that should be added.
-     * @param string $parameterValue The value of the parameter that should be added.
+     * @param mixed $parameterValue The value of the parameter that should be added.
      */
     public function setParameter($parameterName, $parameterValue)
     {

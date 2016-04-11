@@ -58,7 +58,7 @@ if($gPreferences['system_organization_select'] == 1)
 
 if($gPreferences['enable_auto_login'] == 1)
 {
-    $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'), '0');
+    $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'), false);
 }
 $form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => THEME_PATH.'/icons/key.png'));
 $page->addHtml($form->show(false));

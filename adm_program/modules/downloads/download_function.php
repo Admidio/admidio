@@ -399,14 +399,14 @@ elseif ($getMode === 7)
         if(in_array('0', $_POST['adm_allowed_roles'], true))
         {
             // set flag public for this folder and all child folders
-            $targetFolder->editPublicFlagOnFolder(1);
+            $targetFolder->editPublicFlagOnFolder(true);
             // if all users have access then delete all existing roles
             $targetFolder->setRolesOnFolder(array());
         }
         else
         {
             // set flag public for this folder and all child folders
-            $targetFolder->editPublicFlagOnFolder(0);
+            $targetFolder->editPublicFlagOnFolder(false);
             // save all set roles in the database
             $targetFolder->setRolesOnFolder($_POST['adm_allowed_roles']);
         }

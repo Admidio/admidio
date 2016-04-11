@@ -159,8 +159,9 @@
     <string name="ECA_SCALE_THUMBNAILS_DESC">Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige skaliert werden soll. (Standard: 250 Pixel)</string>
     <string name="ECA_SUCCESSFULLY_SEND">Deine Grußkarte wurde erfolgreich versendet.</string>
     <string name="ECA_TEMPLATE">Template</string>
-    <string name="ECA_TEMPLATE_DESC">Hier wird das Standard Template festgelegt. (Standard: Postcard) </string>
+    <string name="ECA_TEMPLATE_DESC">Hier wird das Standard Template festgelegt. (Standard: Postcard)</string>
     <string name="ECA_VIEW_PICTURE_FULL_SIZED">Bild in voller Größe anzeigen</string>
+    <string name="ECA_TEMPLATE_FOLDER_OPEN">Template Ordner konnte nicht geöffnet/gelesen werden.</string>
     <!-- Phrases only in Guestbookmodule -->
     <string name="GBO_BACK_TO_GUESTBOOK">Zurück zum Gästebuch</string>
     <string name="GBO_CAPTCHA_DESC">Für nicht eingeloggte Benutzer wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
@@ -675,6 +676,7 @@
     <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
     <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mailadresse #VAR1# versendet. (Standard: nein)</string>
     <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</string>
+    <string name="ORG_THEME_FOLDER_OPEN">Themes Ordner konnte nicht geöffnet/gelesen werden.</string>
     <string name="ORG_TIME_FORMAT">Zeitformat</string>
     <string name="ORG_TIME_FORMAT_DESC">Das Format entspricht der PHP-Funktion #VAR1#. (Standard: H:i)</string>
     <string name="ORG_TIMEZONE">Zeitzone</string>

@@ -201,7 +201,7 @@ else
 
     if($gPreferences['enable_auto_login'] == 1)
     {
-        $form->addCheckbox('plg_auto_login', $gL10n->get('SYS_REMEMBER_ME'), '0');
+        $form->addCheckbox('plg_auto_login', $gL10n->get('SYS_REMEMBER_ME'), false);
     }
 
     $form->addSubmitButton('next_page', $gL10n->get('SYS_LOGIN'), array('icon' => $iconCode));

@@ -177,34 +177,34 @@ class TableFolder extends TableAccess
 
     /**
      * Set the public flag to a folder and all subfolders.
-     * @param bool $public_flag If set to @b 1 then all users could see this folder.
-     * @param int  $folderId    The id of the folder where the public flag should be set.
+     * @param bool $publicFlag If set to @b 1 then all users could see this folder.
+     * @param int  $folderId   The id of the folder where the public flag should be set.
      */
-    public function editPublicFlagOnFolder($public_flag, $folderId = 0)
+    public function editPublicFlagOnFolder($publicFlag, $folderId = 0)
     {
         if ($folderId === 0)
         {
             $folderId = $this->getValue('fol_id');
-            $this->setValue('fol_public', $public_flag);
+            $this->setValue('fol_public', (int) $publicFlag);
         }
 
         // Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
-        $sql_subfolders = 'SELECT *
+        $sqlSubfolders = 'SELECT *
                              FROM '.TBL_FOLDERS.'
                             WHERE fol_fol_id_parent = '.$folderId;
-        $subfoldersStatement = $this->db->query($sql_subfolders);
+        $subfoldersStatement = $this->db->query($sqlSubfolders);
 
-        while($row_subfolders = $subfoldersStatement->fetchObject())
+        while($rowSubfolders = $subfoldersStatement->fetchObject())
         {
             // rekursiver Aufruf mit jedem einzelnen Unterordner
-            $this->editPublicFlagOnFolder($public_flag, $row_subfolders->fol_id);
+            $this->editPublicFlagOnFolder($publicFlag, $rowSubfolders->fol_id);
         }
 
         // Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
-        $sql_update = 'UPDATE '.TBL_FOLDERS.'
-                          SET fol_public = \''.$public_flag.'\'
+        $sqlUpdate = 'UPDATE '.TBL_FOLDERS.'
+                          SET fol_public = \''.(int) $publicFlag.'\'
                         WHERE fol_id = '.$folderId;
-        $this->db->query($sql_update);
+        $this->db->query($sqlUpdate);
 
     }
 

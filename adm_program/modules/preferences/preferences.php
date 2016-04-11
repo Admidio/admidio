@@ -146,6 +146,10 @@ $page->addHtml('
 
                         // search all available themes in theme folder
                         $themes = admFuncGetDirectoryEntries(SERVER_PATH.'/adm_themes', 'dir');
+                        if ($themes === false)
+                        {
+                            $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
+                        }
                         $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, array('property' => FIELD_REQUIRED, 'defaultValue' => $form_values['theme'], 'helpTextIdInline' => 'ORG_ADMIDIO_THEME_DESC'));
                         $form->addInput('homepage_logout', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('SYS_VISITORS').')', $form_values['homepage_logout'],
                             array('maxLength' => 250, 'property' => FIELD_REQUIRED, 'helpTextIdInline' => 'ORG_HOMEPAGE_VISITORS'));
@@ -633,6 +637,10 @@ $page->addHtml('
                         $form->addInput('ecard_card_picture_width', $gL10n->get('PHO_MAX_PHOTO_SIZE_WIDTH'), $form_values['ecard_card_picture_width'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999));
                         $form->addInput('ecard_card_picture_height', $gL10n->get('PHO_MAX_PHOTO_SIZE_HEIGHT'), $form_values['ecard_card_picture_height'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'ECA_MAX_PHOTO_SIZE_DESC'));
                         $templates = admFuncGetDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates');
+                        if ($templates === false)
+                        {
+                            $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
+                        }
                         foreach($templates as $key => $templateName)
                         {
                             $templates[$key] = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));

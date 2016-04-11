@@ -161,11 +161,18 @@ $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
         class="imageFrame" alt="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'" />
     </a>');
 $templates = admFuncGetDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates');
+if ($templates === false)
+{
+    $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
+}
 foreach($templates as $key => $templateName)
 {
     $templates[$key] = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
 }
-$form->addSelectBox('ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates, array('defaultValue' => $template, 'property' => FIELD_REQUIRED, 'showContextDependentFirstEntry' => false));
+$form->addSelectBox(
+    'ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates,
+    array('defaultValue' => $template, 'property' => FIELD_REQUIRED, 'showContextDependentFirstEntry' => false)
+);
 $form->closeGroupBox();
 $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 

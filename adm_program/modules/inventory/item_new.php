@@ -186,8 +186,12 @@ foreach($gInventoryFields->mInventoryFields as $field)
 
         if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'CHECKBOX')
         {
-            $form->addCheckbox('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
-                $inventory->getValue($field->getValue('inf_name_intern')), $fieldProperty, $helpId, null, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
+            $form->addCheckbox(
+                'inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
+                $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
+                $inventory->getValue($field->getValue('inf_name_intern')), $fieldProperty, $helpId, null,
+                $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database')
+            );
         }
         elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'DROPDOWN'
             || $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name_intern') === 'ROOM_ID')
@@ -213,14 +217,21 @@ foreach($gInventoryFields->mInventoryFields as $field)
                     $defaultValue = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id');
                 }
 
-                $form->addSelectBoxFromSql('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),  $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'), $gDb, $sql, array('property' => $fieldProperty, 'showContextDependentFirstEntry' => true, 'defaultValue' => $defaultValue));
+                $form->addSelectBoxFromSql(
+                    'inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
+                    $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'), $gDb, $sql,
+                    array('property' => $fieldProperty, 'showContextDependentFirstEntry' => true, 'defaultValue' => $defaultValue));
             }
             else
             {
                 $arrListValues = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_value_list');
                 $defaultValue  = $inventory->getValue($field->getValue('inf_name_intern'), 'database');
-                $form->addSelectBox('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
-                                    $arrListValues, $fieldProperty, $defaultValue, true, $helpId, null, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
+                $form->addSelectBox(
+                    'inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
+                    $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
+                    $arrListValues, $fieldProperty, $defaultValue, true, $helpId, null,
+                    $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database')
+                );
             }
 
         }

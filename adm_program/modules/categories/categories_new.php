@@ -146,13 +146,13 @@ if($getType === 'USF')
         $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
         $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
 
-        $value = 0;
+        $checked = false;
         if($category->getValue('cat_org_id') == 0)
         {
-            $value = 1;
+            $checked = true;
         }
 
-        $form->addCheckbox('show_in_several_organizations', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $value,
+        $form->addCheckbox('show_in_several_organizations', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $checked,
                            array('helpTextIdLabel' => array('SYS_DATA_GLOBAL', $organizations)));
     }
 }

@@ -117,17 +117,7 @@ $sql = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as
 $mglStatement = $gDb->query($sql);
 
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
-if($getMembers)
-{
-    $flagShowMembers = 0;
-    $htmlShowMembers = '';
-
-}
-else
-{
-    $flagShowMembers = 1;
-    $htmlShowMembers = 'checked';
-}
+$flagShowMembers = !$getMembers;
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -139,7 +129,7 @@ $page->addJavascript('
 
     // change mode of users that should be shown
     $("#mem_show_all").click(function() {
-        window.location.replace("'.$g_root_path.'/adm_program/modules/members/members.php?members='.$flagShowMembers.'");
+        window.location.replace("'.$g_root_path.'/adm_program/modules/members/members.php?members='.(int) $flagShowMembers.'");
     });', true);
 
 // get module menu
