@@ -19,6 +19,7 @@ require_once(SERVER_PATH.'/adm_program/libs/phpass/passwordhash.php');
  *
  * This class provides static functions for different tasks for passwords and hashing
  * It used the "password_compat" lib to provide forward compatibility with the password_* functions that ship with PHP 5.5
+ * It used the "random_compat" lib to provide forward compatibility with the random_* functions that ship with PHP 7.0
  * It used the "phpass" lib to provide backward compatibility to the old password hashing way
  *
  * Functions:
@@ -35,7 +36,7 @@ class PasswordHashing
 {
     /**
      * Hash the given password with the given options
-     * Minimum cost is 8
+     * Minimum cost is 10
      * @param string $password  The password string
      * @param int    $algorithm The hash-algorithm constant
      * @param array  $options   The hash-options array
@@ -226,7 +227,7 @@ class PasswordHashing
      * @param array  $options   The options to test
      * @return array Returns an array with the maximum tested cost with the required time
      */
-    public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = PASSWORD_DEFAULT, array $options = array('cost' => 8))
+    public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = PASSWORD_DEFAULT, array $options = array('cost' => 12))
     {
         $cost = $options['cost'];
         $time = 0;
@@ -240,8 +241,9 @@ class PasswordHashing
         // loop through the cost value until the needed hashing time reaches the maximum set time
         while ($time <= $maxTime && $cost <= 31)
         {
-            $start = microtime(true);
             $options['cost'] = $cost;
+
+            $start = microtime(true);
             self::hash($password, $algorithm, $options);
             $end = microtime(true);
 
@@ -250,8 +252,6 @@ class PasswordHashing
             $results = array('cost' => $cost, 'time' => $time);
             ++$cost;
         }
-
-        array_pop($results);
 
         return $results;
     }
