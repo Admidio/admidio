@@ -100,7 +100,7 @@ class Email extends PHPMailer
             $this->AuthType    = $gPreferences['mail_smtp_authentication_type'];
             $this->Username    = $gPreferences['mail_smtp_user'];
             $this->Password    = $gPreferences['mail_smtp_password'];
-            $this->Debugoutput = 'error_log';
+            $this->Debugoutput = 'html';
 
             if($gDebug)
             {
