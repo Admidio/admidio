@@ -156,7 +156,6 @@ class Message
         }
         elseif(!$this->modalWindowMode)
         {
-            header('Content-type: text/html; charset=utf-8');
             $html .= '<h1>'.$headline.'</h1>';
         }
 
