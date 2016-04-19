@@ -40,7 +40,7 @@ class TableMessage extends TableAccess
                    AND msg_read = 1';
         $countStatement = $this->db->query($sql);
         $row = $countStatement->fetch();
-        return $row['count'];
+        return (int) $row['count'];
     }
 
     /**
@@ -52,7 +52,7 @@ class TableMessage extends TableAccess
         $sql = 'SELECT COUNT(*) as count FROM '. TBL_MESSAGES;
         $countStatement = $this->db->query($sql);
         $row = $countStatement->fetch();
-        return $row['count'];
+        return (int) $row['count'];
     }
 
     /**
@@ -66,7 +66,7 @@ class TableMessage extends TableAccess
                  WHERE msc_msg_id = '.$this->getValue('msg_id');
         $countStatement = $this->db->query($sql);
         $row = $countStatement->fetch();
-        return $row['count'];
+        return (int) $row['count'];
     }
 
     /**

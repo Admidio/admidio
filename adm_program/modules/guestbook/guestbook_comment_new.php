@@ -114,13 +114,13 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
     // einen GB-Eintrag erzeugt hat...
     $ipAddress = $_SERVER['REMOTE_ADDR'];
 
-    $sql = 'SELECT COUNT(*)
+    $sql = 'SELECT COUNT(*) as count
               FROM '.TBL_GUESTBOOK_COMMENTS.'
              WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
                AND gbc_ip_address = \''. $guestbook_comment->getValue('gbc_ip_address'). '\'';
     $statement = $gDb->query($sql);
     $row = $statement->fetch();
-    if($row[0] > 0)
+    if($row['count'] > 0)
     {
         // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
         $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));

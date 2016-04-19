@@ -58,16 +58,15 @@ class TableCategory extends TableAccess
         }
 
         // checks if there exists another category of this type. Don't delete the last category of a type!
-        $sql = 'SELECT COUNT(*) AS count_categories
+        $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_CATEGORIES.'
                  WHERE (  cat_org_id = '. $gCurrentSession->getValue('ses_org_id'). '
                        OR cat_org_id IS NULL )
                    AND cat_type     = \''. $this->getValue('cat_type'). '\'';
-        $countCategoriesStatement = $this->db->query($sql);
+        $categoriesStatement = $this->db->query($sql);
+        $row = $categoriesStatement->fetch();
 
-        $row = $countCategoriesStatement->fetch();
-
-        if($row['count_categories'] > 1)
+        if($row['count'] > 1)
         {
             $this->db->startTransaction();
 
@@ -137,13 +136,13 @@ class TableCategory extends TableAccess
      */
     public function getNumberElements()
     {
-        $sql = 'SELECT COUNT(*)
+        $sql = 'SELECT COUNT(*) as count
                   FROM '.$this->elementTable.'
                  WHERE '.$this->elementColumn.' = '. $this->getValue('cat_id');
         $elementsStatement = $this->db->query($sql);
         $row = $elementsStatement->fetch();
 
-        return $row[0];
+        return (int) $row['count'];
     }
 
     /**

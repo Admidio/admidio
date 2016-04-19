@@ -135,7 +135,7 @@ $sql = 'SELECT COUNT(*) AS count
                $conditions;
 $pdoStatement = $gDb->query($sql);
 $row = $pdoStatement->fetch();
-$num_guestbook = $row['count'];
+$num_guestbook = (int) $row['count'];
 
 // Anzahl Gaestebucheintraege pro Seite
 if($gPreferences['guestbook_entries_per_page'] > 0)

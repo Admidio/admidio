@@ -131,7 +131,7 @@ foreach($rolesList as $row)
 
         $row_usr = $pdoStatement->fetch();
 
-        if($row_usr['count'] === 0)
+        if((int) $row_usr['count'] === 0)
         {
             // Benutzer ist der Rolle noch nicht zugeordnet, dann schauen, ob die Anzahl ueberschritten wird
             $sql = 'SELECT COUNT(*) as count

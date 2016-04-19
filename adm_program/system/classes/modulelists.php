@@ -343,7 +343,7 @@ class ModuleLists extends Modules
             $sql_conditions= ' AND cat_hidden = 0 ';
         }
 
-        $sql = 'SELECT COUNT(*) AS numrows
+        $sql = 'SELECT COUNT(*) AS count
           FROM '.TBL_ROLES.' rol, '.TBL_CATEGORIES.' cat
          WHERE rol_valid   = '.$this->activeRole.'
            AND rol_visible = 1
@@ -355,7 +355,7 @@ class ModuleLists extends Modules
         $statement = $gDb->query($sql);
         $row = $statement->fetch();
 
-        return $row['numrows'];
+        return (int) $row['count'];
     }
 
     /**

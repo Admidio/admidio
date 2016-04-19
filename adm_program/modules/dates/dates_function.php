@@ -233,7 +233,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     {
         if($_POST['dat_room_id'] > 0)
         {
-            $sql = 'SELECT COUNT(dat_id) AS is_reserved
+            $sql = 'SELECT COUNT(*) AS is_reserved
                       FROM '.TBL_DATES.'
                      WHERE dat_begin  <= \''.$endDateTime->format('Y-m-d H:i:s').'\'
                        AND dat_end    >= \''.$startDateTime->format('Y-m-d H:i:s').'\'

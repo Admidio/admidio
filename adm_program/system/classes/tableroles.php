@@ -134,7 +134,7 @@ class TableRoles extends TableAccess
     {
         if($this->countLeaders === -1)
         {
-            $sql = 'SELECT COUNT(mem_id)
+            $sql = 'SELECT COUNT(*) as count
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id = '.$this->getValue('rol_id').'
                        AND mem_leader = 1
@@ -143,7 +143,7 @@ class TableRoles extends TableAccess
             $countMembersStatement = $this->db->query($sql);
 
             $row = $countMembersStatement->fetch();
-            $this->countLeaders = $row[0];
+            $this->countLeaders = (int) $row['count'];
         }
         return $this->countLeaders;
     }
@@ -157,7 +157,7 @@ class TableRoles extends TableAccess
     {
         if($this->countMembers === -1)
         {
-            $sql = 'SELECT COUNT(mem_id)
+            $sql = 'SELECT COUNT(*) as count
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id  = '.$this->getValue('rol_id').'
                        AND mem_usr_id != '.$exceptUserId.'
@@ -167,7 +167,7 @@ class TableRoles extends TableAccess
             $countMembersStatement = $this->db->query($sql);
 
             $row = $countMembersStatement->fetch();
-            $this->countMembers = $row[0];
+            $this->countMembers = (int) $row['count'];
         }
         return $this->countMembers;
     }
@@ -221,7 +221,7 @@ class TableRoles extends TableAccess
             $countRolesStatement = $this->db->query($sql);
             $row = $countRolesStatement->fetch();
 
-            if($row['count'] === 0)
+            if((int) $row['count'] === 0)
             {
                 throw new AdmException('ROL_DELETE_NO_DEFAULT_ROLE', $this->getValue('rol_name'), $gL10n->get('ROL_DEFAULT_REGISTRATION'));
             }
@@ -468,7 +468,7 @@ class TableRoles extends TableAccess
             $countRolesStatement = $this->db->query($sql);
             $row = $countRolesStatement->fetch();
 
-            if($row['count'] === 0)
+            if((int) $row['count'] === 0)
             {
                 return false;
             }
