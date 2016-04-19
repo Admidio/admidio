@@ -110,11 +110,10 @@ class TableFile extends TableAccess
                                   AND mem_end    > \''.DATE_NOW.'\'';
                 $rightsStatement = $this->db->query($sql_rights);
                 $row_rights = $rightsStatement->fetch();
-                $row_count  = $row_rights['count'];
 
                 // Falls der User in keiner Rolle Mitglied ist, die Rechte an dem Ordner besitzt
                 // wird auch kein Ordner geliefert.
-                if ($row_count === 0)
+                if ((int) $row_rights['count'] === 0)
                 {
                     $this->clear();
                     throw new AdmException('DOW_FOLDER_NO_RIGHTS');

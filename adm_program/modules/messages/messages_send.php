@@ -442,7 +442,6 @@ if ($getMsgType === 'EMAIL')
 
     // finally send the mail
     $sendResult = $email->sendEmail();
-
 }
 // ***** PM *****
 else
@@ -501,7 +500,7 @@ else
 }
 
 // message if send/save is OK
-if ($sendResult)
+if ($sendResult === true) // don't remove check === true. ($sendResult) won't work
 {
     // save mail also to database
     if ($getMsgType !== 'PM' && $gValidLogin)

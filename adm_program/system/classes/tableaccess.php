@@ -152,7 +152,7 @@ class TableAccess
         $sql = 'SELECT COUNT(*) as count FROM '.$this->tableName;
         $countStatement = $this->db->query($sql);
         $row = $countStatement->fetch();
-        return $row['count'];
+        return (int) $row['count'];
     }
 
     /**

@@ -305,7 +305,7 @@ class ModuleDates extends Modules
             $statement = $gDb->query($sql);
             $row = $statement->fetch();
 
-            return $row['count'];
+            return (int) $row['count'];
         }
 
         return 1;

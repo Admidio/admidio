@@ -266,7 +266,7 @@ class TableFolder extends TableAccess
 
                 // Falls der User in keiner Rolle Mitglied ist, die Rechte an dem Ordner besitzt
                 // wird auch kein Ordner geliefert.
-                if ($rowRights['count'] === '0')
+                if ((int) $rowRights['count'] === 0)
                 {
                     $this->clear();
                     throw new AdmException('DOW_FOLDER_NO_RIGHTS');
@@ -333,7 +333,7 @@ class TableFolder extends TableAccess
 
                 // Falls der User in mindestens einer Rolle Mitglied ist, die Rechte an dem Ordner besitzt
                 // wird der Ordner natuerlich ins Array gepackt.
-                if ($rowRights['count'] !== '0')
+                if ($rowRights['count'] > 0)
                 {
                     $addToArray = true;
                 }

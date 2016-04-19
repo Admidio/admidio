@@ -102,7 +102,7 @@ function isMember($userId)
 
     if (is_numeric($userId) && $userId > 0)
     {
-        $sql = 'SELECT COUNT(*)
+        $sql = 'SELECT COUNT(*) as count
                   FROM '.TBL_MEMBERS.'
             INNER JOIN '.TBL_ROLES.'
                     ON rol_id = mem_rol_id
@@ -115,11 +115,9 @@ function isMember($userId)
                    AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL )';
         $statement = $gDb->query($sql);
-
         $row = $statement->fetch();
-        $rowCount = $row[0];
 
-        if ($rowCount > 0)
+        if($row['count'] > 0)
         {
             return true;
         }

@@ -199,7 +199,7 @@ class ModuleWeblinks extends Modules
                        '.$this->getConditions;
         $statement = $gDb->query($sql);
         $row = $statement->fetch();
-        return $row['count'];
+        return (int) $row['count'];
     }
 
     /**
