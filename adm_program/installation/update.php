@@ -288,7 +288,7 @@ elseif($getMode === 2)
                 $message = '
                     <div class="alert alert-danger alert-small" role="alert">
                         <span class="glyphicon glyphicon-exclamation-sign"></span>
-                        <strong>'.$gL10n->get($checkLoginReturn).'</strong>
+                        <strong>'.$checkLoginReturn.'</strong>
                     </div>';
                 showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
             }
