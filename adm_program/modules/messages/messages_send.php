@@ -442,6 +442,12 @@ if ($getMsgType === 'EMAIL')
 
     // finally send the mail
     $sendResult = $email->sendEmail();
+
+    // within this mode an smtp protokoll will be shown and the header was still send to browser
+    if($email->isSMTP() && $gDebug === 1)
+    {
+        $gMessage->showHtmlTextOnly(true);
+    }
 }
 // ***** PM *****
 else

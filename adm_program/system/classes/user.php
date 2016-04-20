@@ -292,7 +292,7 @@ class User extends TableAccess
      */
     public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true, $isAdministrator = false)
     {
-        global $gPreferences, $gCookiePraefix, $gCurrentSession, $gSessionId, $installedDbVersion;
+        global $gPreferences, $gCookiePraefix, $gCurrentSession, $gSessionId, $installedDbVersion, $gL10n;
 
         $invalidLoginCount = $this->getValue('usr_number_invalid');
 
@@ -300,7 +300,7 @@ class User extends TableAccess
         if ($invalidLoginCount >= 3 && time() - strtotime($this->getValue('usr_date_invalid', 'Y-m-d H:i:s')) < 60 * 15)
         {
             $this->clear();
-            return 'SYS_LOGIN_MAX_INVALID_LOGIN';
+            return $gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN');
         }
 
         $currHash = $this->getValue('usr_password');
@@ -312,7 +312,7 @@ class User extends TableAccess
             // if user is not activated/valid return error message
             if (!$this->getValue('usr_valid'))
             {
-                return 'SYS_LOGIN_NOT_ACTIVATED';
+                return $gL10n->get('SYS_LOGIN_NOT_ACTIVATED');
             }
 
             $sqlAdministrator = '';
@@ -328,12 +328,14 @@ class User extends TableAccess
             }
 
             // Check if user is currently member of a role of an organisation
-            $sql = 'SELECT DISTINCT mem_usr_id'.$sqlAdministrator.'
+            $sql = 'SELECT DISTINCT mem_usr_id, org_longname'.$sqlAdministrator.'
                       FROM '.TBL_MEMBERS.'
                 INNER JOIN '.TBL_ROLES.'
                         ON rol_id = mem_rol_id
                 INNER JOIN '.TBL_CATEGORIES.'
                         ON cat_id = rol_cat_id
+                INNER JOIN '.TBL_ORGANIZATIONS.'
+                        ON org_id = cat_org_id
                      WHERE mem_usr_id = '.$this->getValue('usr_id').'
                        AND rol_valid  = 1
                        AND mem_begin <= \''.DATE_NOW.'\'
@@ -343,13 +345,13 @@ class User extends TableAccess
 
             if ($userStatement->rowCount() === 0)
             {
-                return 'SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION';
+                return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', $userRow['org_longname']);
             }
 
             $userRow = $userStatement->fetch();
             if ($isAdministrator && version_compare($installedDbVersion, '2.4.0') === 1 && $userRow['administrator'] == 0)
             {
-                return 'SYS_LOGIN_USER_NO_ADMINISTRATOR';
+                return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', $userRow['org_longname']);
             }
 
             // Rehash password if the hash is outdated and rehashing is enabled
@@ -410,11 +412,11 @@ class User extends TableAccess
 
             if ($this->getValue('usr_number_invalid') >= 3)
             {
-                return 'SYS_LOGIN_MAX_INVALID_LOGIN';
+                return $gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN');
             }
             else
             {
-                return 'SYS_LOGIN_USERNAME_PASSWORD_INCORRECT';
+                return $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
             }
         }
     }

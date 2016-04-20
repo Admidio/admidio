@@ -101,7 +101,7 @@ else
 
     if (is_string($checkLoginReturn))
     {
-        $gMessage->show($gL10n->get($checkLoginReturn));
+        $gMessage->show($checkLoginReturn);
     }
     else
     {
