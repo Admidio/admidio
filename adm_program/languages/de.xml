@@ -567,7 +567,7 @@
     <string name="NWU_USER_VALID_LOGIN">Dieser Benutzer besitzt schon ein gültiges Login.</string>
     <!-- Phrases only in Organizationadministration -->
     <string name="ORG_ACCESS_TO_MODULE">Zugriff auf Modul</string>
-    <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer freigegeben werden. Haben nur angemeldete Benutzer Zugriff, so wird das Modul für Besucher ausgeblendet. Der RSS-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Standard: Aktiviert)</string>
+    <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer freigegeben werden. Haben nur angemeldete Benutzer Zugriff, so wird das Modul für Besucher ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Standard: Aktiviert)</string>
     <string name="ORG_ACTIVATE_SYSTEM_MAILS">Systembenachrichtigungen aktivieren</string>
     <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Hier können die Systembenachrichtigungen von Admidio deaktiviert werden. Systembenachrichtigungen werden versendet, wenn sich zum Beispiel ein neuer Benutzer angemeldet hat. Aber auch Registrierungsbestätigungen werden als Systembenachrichtigungen verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden. Es sei denn der Server unterstützt keinen E-Mailversand. Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Standard: ja)</string>
     <string name="ORG_ADD_ORGANIZATION_DESC">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der aktuelle Benutzer wird dort automatisch zum Administrator ernannt und kann die weitere Einrichtung durchführen. Benutzer, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</string>
@@ -612,8 +612,8 @@
     <string name="ORG_EMAIL_ALERTS">E-Mail-Benachrichtigung</string>
     <string name="ORG_EMAIL_ALERTS_DESC">Mitglieder aller Rollen mit der Berechtigung #VAR1_BOLD# erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat. (Standard: ja)</string>
     <string name="ORG_ENABLE_CAPTCHA">Captcha aktivieren</string>
-    <string name="ORG_ENABLE_RSS_FEEDS">RSS-Feeds aktivieren</string>
-    <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Standard: ja)</string>
+    <string name="ORG_ENABLE_RSS_FEEDS">Web-Feeds aktivieren</string>
+    <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kann Web-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Standard: ja)</string>
     <string name="ORG_FAST_REGISTRATION">Schnelle Registrierung</string>
     <string name="ORG_FIELD_DESCRIPTION">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</string>
     <string name="ORG_FIELD_DISABLED">Feld nur für Benutzer mit dem Recht #VAR1_BOLD# editierbar</string>
@@ -1225,8 +1225,8 @@
     <string name="SYS_ROLE_MAX_MEMBERS">Speichern ist nicht möglich, bei der Rolle #VAR1_BOLD# würde die maximale Mitgliederzahl überschritten.</string>
     <string name="SYS_ROLES">Rollen</string>
     <string name="SYS_ROOM">Raum</string>
-    <string name="SYS_RSS_DISABLED">Die RSS-Funktion wurde vom Administrator deaktiviert.</string>
-    <string name="SYS_RSS_FEED_FOR_VAR">RSS-Feed für #VAR1#</string>
+    <string name="SYS_RSS_DISABLED">Der Web-Feed wurde vom Administrator deaktiviert.</string>
+    <string name="SYS_RSS_FEED_FOR_VAR">Web-Feed für #VAR1#</string>
     <string name="SYS_SAFE_MODE">Safe Mode</string>
     <string name="SYS_SAFE_MODE_PROBLEM">problematisch bei Dateiuploads</string>
     <string name="SYS_SATURDAY">Samstag</string>
