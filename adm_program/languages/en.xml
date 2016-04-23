@@ -1110,8 +1110,8 @@
   <string name="SYS_LOGIN">Sign in</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">You have tried to login too many times recently using a wrong password.\nFor security reasons your account has been locked for 15 minutes.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Your account has not been activated yet.\n\nYou will be informed as soon as access is possible.</string>
-  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Your login credentials were correct but you are not an active member of this organization.</string>
-  <string name="SYS_LOGIN_USER_NO_WEBMASTER">Your login credentials were correct but the update process is only activated for webmasters.</string>
+  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Your login credentials were correct but you are not an active member of the organization #VAR1_BOLD#.</string>
+  <string name="SYS_LOGIN_USER_NO_WEBMASTER">Your login credentials were correct but the update process is only activated for webmasters of the organization #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">The given username and/or password is incorrect.</string>
   <string name="SYS_LOGIN_PROBLEMS">Login problems</string>
   <string name="SYS_LOGIN_SUCCESSFUL">Signing in was successful.</string>

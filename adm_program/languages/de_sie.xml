@@ -1110,8 +1110,8 @@
   <string name="SYS_LOGIN">Anmelden</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Sie haben mehrmals innerhalb kurzer Zeit versucht, sich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist Ihr Zugang für 15 Minuten gesperrt.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Ihre Anmeldung wurde noch nicht freigeschaltet.\n\nSie werden benachrichtigt, sobald Ihre Anmeldung freigeschaltet wurde und ein Login möglich ist.</string>
-  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Die Anmeldedaten wurden richtig eingegeben, allerdings sind Sie kein aktives Mitglied dieser Organisation.</string>
-  <string name="SYS_LOGIN_USER_NO_WEBMASTER">Die Anmeldedaten wurden richtig eingegeben, jedoch ist der Update-Prozess nur für Webmaster freigeschaltet.</string>
+  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Die Anmeldedaten wurden richtig eingegeben, allerdings sind Sie kein aktives Mitglied der Organisation #VAR1_BOLD#.</string>
+  <string name="SYS_LOGIN_USER_NO_WEBMASTER">Die Anmeldedaten wurden richtig eingegeben, jedoch ist der Update-Prozess nur für Webmaster der Organisation #VAR1_BOLD# freigeschaltet.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Der eingegebene Benutzername und/oder das Passwort ist falsch.</string>
   <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
   <string name="SYS_LOGIN_SUCCESSFUL">Sie haben sich erfolgreich angemeldet.</string>
