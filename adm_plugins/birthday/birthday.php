@@ -111,11 +111,11 @@ if(isset($page) && is_object($page))
 }
 
 $sql = 'SELECT DISTINCT usr_id, usr_login_name,
-                        last_name.usd_value as last_name, first_name.usd_value as first_name,
-                        birthday.bday as birthday, birthday.bdate,
+                        last_name.usd_value AS last_name, first_name.usd_value AS first_name,
+                        birthday.bday AS birthday, birthday.bdate,
                         DATEDIFF(birthday.bdate, \''.DATETIME_NOW.'\') AS days_to_bdate,
                         YEAR(bdate) - YEAR(bday) AS age,
-                        email.usd_value as email, gender.usd_value as gender
+                        email.usd_value AS email, gender.usd_value AS gender
           FROM '.TBL_USERS.' users
     INNER JOIN ( (SELECT usd_usr_id, usd_value AS bday,
                          CONCAT(YEAR(\''.DATETIME_NOW.'\'), DATE_FORMAT(bd1.usd_value, \'-%m-%d\')) AS bdate
@@ -139,16 +139,16 @@ $sql = 'SELECT DISTINCT usr_id, usr_login_name,
                      AND usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').')
                ) birthday
             ON birthday.usd_usr_id = usr_id
-     LEFT JOIN '.TBL_USER_DATA.' as last_name
+     LEFT JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
            AND last_name.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-     LEFT JOIN '.TBL_USER_DATA.' as first_name
+     LEFT JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-     LEFT JOIN '.TBL_USER_DATA.' as email
+     LEFT JOIN '.TBL_USER_DATA.' AS email
             ON email.usd_usr_id = usr_id
            AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
-     LEFT JOIN '.TBL_USER_DATA.' as gender
+     LEFT JOIN '.TBL_USER_DATA.' AS gender
             ON gender.usd_usr_id = usr_id
            AND gender.usd_usf_id = '.$gProfileFields->getProperty('GENDER', 'usf_id').'
      LEFT JOIN '.TBL_MEMBERS.'

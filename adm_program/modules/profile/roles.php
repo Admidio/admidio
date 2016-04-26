@@ -162,7 +162,7 @@ else
 {
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
     $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights,
-                     mgl.mem_rol_id as mem_rol_id, mgl.mem_usr_id as mem_usr_id, mgl.mem_leader as mem_leader
+                     mgl.mem_rol_id AS mem_rol_id, mgl.mem_usr_id AS mem_usr_id, mgl.mem_leader AS mem_leader
               FROM '.TBL_MEMBERS.' bm
         INNER JOIN '.TBL_ROLES.'
                 ON rol_id = bm.mem_rol_id

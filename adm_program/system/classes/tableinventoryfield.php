@@ -282,7 +282,7 @@ class TableInventoryField extends TableAccess
         elseif($columnName === 'inf_cat_id' && $this->getValue($columnName) != $newValue)
         {
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
-            $sql = 'SELECT COUNT(*) as count
+            $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_INVENT_FIELDS.'
                      WHERE inf_cat_id = '.$newValue;
             $pdoStatement = $this->db->query($sql);

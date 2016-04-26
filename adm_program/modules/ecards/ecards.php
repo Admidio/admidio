@@ -199,21 +199,21 @@ while($row = $statement->fetch())
 $arrayRoles = array_merge($arrayMailRoles, $gCurrentUser->getAllVisibleRoles());
 $arrayUniqueRoles = array_unique($arrayRoles);
 
-$sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name,
-               email.usd_value as email
+$sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name,
+               email.usd_value AS email
           FROM '.TBL_MEMBERS.'
     INNER JOIN '.TBL_USERS.'
             ON usr_id = mem_usr_id
-    INNER JOIN '.TBL_USER_DATA.' as email
+    INNER JOIN '.TBL_USER_DATA.' AS email
             ON email.usd_usr_id = usr_id
            AND LENGTH(email.usd_value) > 0
-    INNER JOIN '.TBL_USER_FIELDS.' as field
+    INNER JOIN '.TBL_USER_FIELDS.' AS field
             ON field.usf_id = email.usd_usf_id
            AND field.usf_type = \'EMAIL\'
-     LEFT JOIN '.TBL_USER_DATA.' as last_name
+     LEFT JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
            AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' as first_name
+     LEFT JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
          WHERE usr_valid  = 1

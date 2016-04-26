@@ -37,7 +37,7 @@ class TableMessage extends TableAccess
      */
     public function countUnreadMessageRecords($usrId)
     {
-        $sql = 'SELECT COUNT(*) as count
+        $sql = 'SELECT COUNT(*) AS count
                   FROM '.$this->tableName.'
                  WHERE msg_usr_id_receiver LIKE \''. $usrId .'\'
                    AND msg_read = 1';
@@ -52,7 +52,7 @@ class TableMessage extends TableAccess
      */
     public function countMessageConversations()
     {
-        $sql = 'SELECT COUNT(*) as count FROM '. TBL_MESSAGES;
+        $sql = 'SELECT COUNT(*) AS count FROM '. TBL_MESSAGES;
         $countStatement = $this->db->query($sql);
         $row = $countStatement->fetch();
         return (int) $row['count'];
@@ -64,7 +64,7 @@ class TableMessage extends TableAccess
      */
     public function countMessageParts()
     {
-        $sql = 'SELECT COUNT(*) as count
+        $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MESSAGES_CONTENT.'
                  WHERE msc_msg_id = '.$this->getValue('msg_id');
         $countStatement = $this->db->query($sql);

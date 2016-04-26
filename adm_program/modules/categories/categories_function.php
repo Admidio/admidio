@@ -118,7 +118,7 @@ if($getMode === 1)
     if($category->getValue('cat_name') !== $_POST['cat_name'])
     {
         // Schauen, ob die Kategorie bereits existiert
-        $sql = 'SELECT COUNT(*) as count
+        $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_CATEGORIES.'
                  WHERE cat_type    = \''. $getType. '\'
                    AND cat_name LIKE \''. $_POST['cat_name']. '\'

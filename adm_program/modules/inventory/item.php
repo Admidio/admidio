@@ -194,13 +194,13 @@ $page->addHtml('
                             $field = getFieldCode($field->getValue('inf_name_intern'), $getItemId);
                             if($gDbType === 'mysql')
                             {
-                                $sql = 'SELECT CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') as name
+                                $sql = 'SELECT CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') AS name
                                           FROM '.TBL_ROOMS.'
                                          WHERE room_id = ' . $field['value'];
                             }
                             else
                             {
-                                $sql = 'SELECT room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' as name
+                                $sql = 'SELECT room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' AS name
                                           FROM '.TBL_ROOMS.'
                                          WHERE room_id = ' . $field['value'];
                             }

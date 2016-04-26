@@ -102,7 +102,7 @@ function isMember($userId)
 
     if (is_numeric($userId) && $userId > 0)
     {
-        $sql = 'SELECT COUNT(*) as count
+        $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MEMBERS.'
             INNER JOIN '.TBL_ROLES.'
                     ON rol_id = mem_rol_id

@@ -253,7 +253,7 @@ class TableFolder extends TableAccess
             elseif (!$gCurrentUser->editDownloadRight() && !$this->getValue('fol_public'))
             {
                 // Wenn der Ordner nicht public ist und der Benutzer keine DownloadAdminrechte hat, muessen die Rechte untersucht werden
-                $sql_rights = 'SELECT COUNT(*) as count
+                $sql_rights = 'SELECT COUNT(*) AS count
                                  FROM '.TBL_FOLDER_ROLES.'
                            INNER JOIN '.TBL_MEMBERS.'
                                    ON mem_rol_id = flr_rol_id
@@ -320,7 +320,7 @@ class TableFolder extends TableAccess
             elseif ($gValidLogin)
             {
                 // Gucken ob der angemeldete Benutzer Rechte an dem Unterordner hat...
-                $sql_rights = 'SELECT COUNT(*) as count
+                $sql_rights = 'SELECT COUNT(*) AS count
                                  FROM '.TBL_FOLDER_ROLES.'
                            INNER JOIN '.TBL_MEMBERS.'
                                    ON mem_rol_id = flr_rol_id

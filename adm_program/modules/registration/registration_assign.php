@@ -55,27 +55,27 @@ else
 }
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
-$sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
-               first_name.usd_value as first_name, address.usd_value as address,
-               zip_code.usd_value as zip_code, city.usd_value as city,
-               email.usd_value as email
+$sql = 'SELECT usr_id, usr_login_name, last_name.usd_value AS last_name,
+               first_name.usd_value AS first_name, address.usd_value AS address,
+               zip_code.usd_value AS zip_code, city.usd_value AS city,
+               email.usd_value AS email
           FROM '.TBL_USERS.'
-    RIGHT JOIN '.TBL_USER_DATA.' as last_name
+    RIGHT JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
            AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-    RIGHT JOIN '.TBL_USER_DATA.' as first_name
+    RIGHT JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' as address
+     LEFT JOIN '.TBL_USER_DATA.' AS address
             ON address.usd_usr_id = usr_id
            AND address.usd_usf_id = '. $gProfileFields->getProperty('ADDRESS', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' as zip_code
+     LEFT JOIN '.TBL_USER_DATA.' AS zip_code
             ON zip_code.usd_usr_id = usr_id
            AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' as city
+     LEFT JOIN '.TBL_USER_DATA.' AS city
             ON city.usd_usr_id = usr_id
            AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' as email
+     LEFT JOIN '.TBL_USER_DATA.' AS email
             ON email.usd_usr_id = usr_id
            AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
          WHERE usr_valid = 1

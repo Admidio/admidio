@@ -176,7 +176,7 @@ class TablePhotos extends TableAccess
     {
         if($this->hasChildAlbums === null)
         {
-            $sql = 'SELECT COUNT(*) as count
+            $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_PHOTOS.'
                      WHERE pho_pho_id_parent = '.$this->getValue('pho_id');
             $countChildAlbums = $this->db->query($sql);

@@ -10,12 +10,12 @@
  */
 
 // eine Orga-ID einlesen
-$sql = 'SELECT MIN(org_id) as org_id FROM '.TBL_ORGANIZATIONS.' ORDER BY org_id DESC';
+$sql = 'SELECT MIN(org_id) AS org_id FROM '.TBL_ORGANIZATIONS.' ORDER BY org_id DESC';
 $orgaStatement = $gDb->query($sql);
 $row_orga = $orgaStatement->fetch();
 
 // die Erstellungs-ID mit Webmaster befuellen, damit das Feld auf NOT NULL gesetzt werden kann
-$sql = 'SELECT min(mem_usr_id) as webmaster_id
+$sql = 'SELECT MIN(mem_usr_id) AS webmaster_id
           FROM '.TBL_MEMBERS.'
     INNER JOIN '.TBL_ROLES.'
             ON rol_id = mem_rol_id
@@ -110,7 +110,7 @@ $sql = 'INSERT INTO '.TBL_DATE_ROLE.' (dtr_dat_id, dtr_rol_id)
 $gDb->query($sql);
 
 // Max. Rol-Kategorien-Sequenz einlesen
-$sql = 'SELECT MAX(cat_sequence) as sequence FROM '.TBL_CATEGORIES.' WHERE cat_type = \'ROL\' ';
+$sql = 'SELECT MAX(cat_sequence) AS sequence FROM '.TBL_CATEGORIES.' WHERE cat_type = \'ROL\' ';
 $orgaStatement = $gDb->query($sql);
 $row_cat = $orgaStatement->fetch();
 
@@ -126,7 +126,7 @@ $orgaStatement = $gDb->query($sql);
 while($row_orga = $orgaStatement->fetch())
 {
     // ID eines Webmasters ermitteln
-    $sql = 'SELECT min(mem_usr_id) as webmaster_id
+    $sql = 'SELECT MIN(mem_usr_id) AS webmaster_id
               FROM '.TBL_MEMBERS.'
         INNER JOIN '.TBL_ROLES.'
                 ON rol_id = mem_rol_id

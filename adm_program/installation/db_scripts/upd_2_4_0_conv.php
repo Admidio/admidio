@@ -36,7 +36,7 @@ if($gDbType === 'mysql')
     $sql = 'ALTER TABLE '.TBL_SESSIONS.' MODIFY COLUMN ses_session_id varchar(255) NOT NULL';
     $gDb->query($sql, false);
     $sql = 'UPDATE '.TBL_ROLES.' SET rol_default_registration = 1
-             WHERE rol_id IN (SELECT cast(prf_value as unsigned integer)
+             WHERE rol_id IN (SELECT CAST(prf_value AS unsigned integer)
                                 FROM '.TBL_PREFERENCES.' WHERE prf_name = \'profile_default_role\' )';
     $gDb->query($sql, false);
     $sql = 'DELETE FROM '.TBL_PREFERENCES.' WHERE prf_name = \'profile_default_role\'';
@@ -68,7 +68,7 @@ else
     $sql = 'ALTER TABLE '.TBL_SESSIONS.' ALTER COLUMN ses_session_id SET NOT NULL';
     $gDb->query($sql, false);
     $sql = 'UPDATE '.TBL_ROLES.' SET rol_default_registration = 1
-             WHERE rol_id IN (SELECT cast(prf_value as integer)
+             WHERE rol_id IN (SELECT CAST(prf_value AS integer)
                                 FROM '.TBL_PREFERENCES.'
                                WHERE prf_name = \'profile_default_role\' )';
     $gDb->query($sql, false);
@@ -87,7 +87,7 @@ $sql = 'ALTER TABLE '.$g_tbl_praefix.'_members ADD CONSTRAINT '.$g_tbl_praefix.'
       REFERENCES '.$g_tbl_praefix.'_users (usr_id) ON DELETE RESTRICT ON UPDATE RESTRICT';
 $gDb->query($sql, false);
 
-$sql = 'CREATE index IDX_'.$g_tbl_praefix.'_MEM_ROL_USR_ID ON '.TBL_MEMBERS.' (mem_rol_id, mem_usr_id)';
+$sql = 'CREATE INDEX IDX_'.$g_tbl_praefix.'_MEM_ROL_USR_ID ON '.TBL_MEMBERS.' (mem_rol_id, mem_usr_id)';
 $gDb->query($sql);
 
 $sql = 'UPDATE '.TBL_ROLES.' SET rol_webmaster = 1

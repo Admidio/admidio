@@ -36,18 +36,18 @@ $headline = $gL10n->get('NWU_NEW_REGISTRATIONS');
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // Select new Members of the group
-$sql = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value as last_name,
-               first_name.usd_value as first_name, email.usd_value as email
+$sql = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value AS last_name,
+               first_name.usd_value AS first_name, email.usd_value AS email
           FROM '.TBL_REGISTRATIONS.'
     INNER JOIN '.TBL_USERS.'
             ON usr_id = reg_usr_id
-     LEFT JOIN '.TBL_USER_DATA.' as last_name
+     LEFT JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
            AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' as first_name
+     LEFT JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' as email
+     LEFT JOIN '.TBL_USER_DATA.' AS email
             ON email.usd_usr_id = usr_id
            AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
          WHERE usr_valid = 0

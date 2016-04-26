@@ -136,7 +136,7 @@ class TableCategory extends TableAccess
      */
     public function getNumberElements()
     {
-        $sql = 'SELECT COUNT(*) as count
+        $sql = 'SELECT COUNT(*) AS count
                   FROM '.$this->elementTable.'
                  WHERE '.$this->elementColumn.' = '. $this->getValue('cat_id');
         $elementsStatement = $this->db->query($sql);
@@ -187,7 +187,7 @@ class TableCategory extends TableAccess
 
         // count all categories that are organization independent because these categories should not
         // be mixed with the organization categories. Hidden categories are sidelined.
-        $sql = 'SELECT COUNT(*) as count
+        $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_CATEGORIES.'
                  WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                    AND cat_name_intern NOT LIKE \'CONFIRMATION_OF_PARTICIPATION\'
@@ -335,7 +335,7 @@ class TableCategory extends TableAccess
                 $org_condition = ' AND cat_org_id IS NULL ';
             }
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
-            $sql = 'SELECT COUNT(*) as count
+            $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_CATEGORIES.'
                      WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                            '.$org_condition;

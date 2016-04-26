@@ -61,56 +61,56 @@ if($getMembers)
             AND mem_end    > \''.DATE_NOW.'\'
             AND rol_valid  = 1
             AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+            AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                 OR cat_org_id IS NULL )) ';
 }
 
 // alle Mitglieder zur Auswahl selektieren
 // unbestaetigte User werden dabei nicht angezeigt
-$sql = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name,
-               email.usd_value as email, gender.usd_value as gender, birthday.usd_value as birthday,
-               usr_login_name, COALESCE(usr_timestamp_change, usr_timestamp_create) as timestamp,
+$sql = 'SELECT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name,
+               email.usd_value AS email, gender.usd_value AS gender, birthday.usd_value AS birthday,
+               usr_login_name, COALESCE(usr_timestamp_change, usr_timestamp_create) AS timestamp,
                (SELECT COUNT(*)
                   FROM '.TBL_MEMBERS.'
             INNER JOIN '.TBL_ROLES.'
                     ON rol_id = mem_rol_id
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE rol_valid   = 1
+                 WHERE rol_valid = 1
                    AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                   AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL )
-                   AND mem_begin  <= \''.DATE_NOW.'\'
-                   AND mem_end     > \''.DATE_NOW.'\'
-                   AND mem_usr_id  = usr_id) as member_this_orga,
+                   AND mem_begin <= \''.DATE_NOW.'\'
+                   AND mem_end    > \''.DATE_NOW.'\'
+                   AND mem_usr_id = usr_id) AS member_this_orga,
                (SELECT COUNT(*)
                   FROM '.TBL_MEMBERS.'
             INNER JOIN '.TBL_ROLES.'
                     ON rol_id = mem_rol_id
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE rol_valid   = 1
+                 WHERE rol_valid = 1
                    AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-                   AND cat_org_id <> '. $gCurrentOrganization->getValue('org_id'). '
+                   AND cat_org_id <> '.$gCurrentOrganization->getValue('org_id').'
                    AND mem_begin  <= \''.DATE_NOW.'\'
                    AND mem_end     > \''.DATE_NOW.'\'
-                   AND mem_usr_id  = usr_id) as member_other_orga
+                   AND mem_usr_id  = usr_id) AS member_other_orga
           FROM '.TBL_USERS.'
-    INNER JOIN '.TBL_USER_DATA.' as last_name
+    INNER JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-    INNER JOIN '.TBL_USER_DATA.' as first_name
+           AND last_name.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+    INNER JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' as email
+           AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+     LEFT JOIN '.TBL_USER_DATA.' AS email
             ON email.usd_usr_id = usr_id
-           AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' as gender
+           AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
+     LEFT JOIN '.TBL_USER_DATA.' AS gender
             ON gender.usd_usr_id = usr_id
-           AND gender.usd_usf_id = '. $gProfileFields->getProperty('GENDER', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' as birthday
+           AND gender.usd_usf_id = '.$gProfileFields->getProperty('GENDER', 'usf_id').'
+     LEFT JOIN '.TBL_USER_DATA.' AS birthday
             ON birthday.usd_usr_id = usr_id
-           AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
+           AND birthday.usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').'
          WHERE usr_valid = 1
                '.$memberCondition.'
       ORDER BY last_name.usd_value, first_name.usd_value ';

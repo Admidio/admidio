@@ -41,7 +41,7 @@ $(function() {
 switch($postFunction)
 {
     case 'update':
-        $sql = 'SELECT MAX(msg_part_id) as max_id
+        $sql = 'SELECT MAX(msg_part_id) AS max_id
                   FROM '.TBL_MESSAGES.'
                  WHERE msg_converation_id = 0';
 
@@ -108,7 +108,7 @@ switch($postFunction)
             }
             fwrite(fopen('chat.txt', 'a'), '<span>'. $postNickname . '</span>' . $postMessage = str_replace("\n", ' ', $postMessage) . "\n");
         }
-        $sql = 'SELECT MAX(msg_part_id) as max_id
+        $sql = 'SELECT MAX(msg_part_id) AS max_id
                   FROM '. TBL_MESSAGES.'
                  WHERE msg_converation_id = 0';
 

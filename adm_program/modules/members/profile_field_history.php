@@ -98,7 +98,7 @@ if($getUserId > 0)
 }
 
 // get total count of relevant profile field changes
-$sql = 'SELECT COUNT(*) as count
+$sql = 'SELECT COUNT(*) AS count
           FROM '.TBL_USER_LOG.'
          WHERE 1 = 1 '.
                $sqlConditions;
@@ -107,19 +107,19 @@ $row = $pdoStatement->fetch();
 $countChanges = (int) $row['count'];
 
 // create select statement with all necessary data
-$sql = 'SELECT usl_usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, usl_usf_id, usl_value_old, usl_value_new,
-               usl_usr_id_create, create_last_name.usd_value as create_last_name, create_first_name.usd_value as create_first_name, usl_timestamp_create
+$sql = 'SELECT usl_usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, usl_usf_id, usl_value_old, usl_value_new,
+               usl_usr_id_create, create_last_name.usd_value AS create_last_name, create_first_name.usd_value AS create_first_name, usl_timestamp_create
           FROM '.TBL_USER_LOG.'
-    INNER JOIN '.TBL_USER_DATA.' as last_name
+    INNER JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usl_usr_id
            AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-    INNER JOIN '.TBL_USER_DATA.' as first_name
+    INNER JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usl_usr_id
            AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-    INNER JOIN '.TBL_USER_DATA.' as create_last_name
+    INNER JOIN '.TBL_USER_DATA.' AS create_last_name
             ON create_last_name.usd_usr_id = usl_usr_id_create
            AND create_last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-    INNER JOIN '.TBL_USER_DATA.' as create_first_name
+    INNER JOIN '.TBL_USER_DATA.' AS create_first_name
             ON create_first_name.usd_usr_id = usl_usr_id_create
            AND create_first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
          WHERE usl_timestamp_create BETWEEN \''.$dateFromIntern.' 00:00:00\' AND \''.$dateToIntern.' 23:59:59\' '.

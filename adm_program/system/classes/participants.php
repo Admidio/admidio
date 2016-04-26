@@ -181,7 +181,7 @@ class Participants
             $this->order = $order;
 
             $sql = 'SELECT DISTINCT
-                           surname.usd_value as surname, firstname.usd_value as firstname, mem_leader
+                           surname.usd_value AS surname, firstname.usd_value AS firstname, mem_leader
                       FROM '.TBL_MEMBERS.'
                  LEFT JOIN '. TBL_USER_DATA .' surname
                         ON surname.usd_usr_id = mem_usr_id

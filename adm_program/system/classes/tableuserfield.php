@@ -359,7 +359,7 @@ class TableUserField extends TableAccess
         elseif($columnName === 'usf_cat_id' && $this->getValue($columnName) !== $newValue)
         {
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
-            $sql = 'SELECT COUNT(*) as count
+            $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_USER_FIELDS.'
                      WHERE usf_cat_id = '.$newValue;
             $countUserFieldsStatement = $this->db->query($sql);

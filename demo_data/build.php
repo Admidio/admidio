@@ -262,7 +262,8 @@ echo 'Installation successful !<br />';
 if(!$db->query('SELECT 1 FROM '.TBL_COMPONENTS, false))
 {
     // in Admidio version 2 the database version was stored in preferences table
-    $sql = 'SELECT prf_value FROM '.$g_tbl_praefix.'_preferences
+    $sql = 'SELECT prf_value
+              FROM '.$g_tbl_praefix.'_preferences
              WHERE prf_name   = \'db_version\'
                AND prf_org_id = 1';
     $pdoStatement = $db->query($sql);

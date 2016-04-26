@@ -44,7 +44,7 @@ if($gPreferences['system_show_create_edit'] == 1)
 {
     // show firstname and lastname of create and last change user
     $additionalFields = '
-        cre_firstname.usd_value || \' \' || cre_surname.usd_value as create_name ';
+        cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name ';
     $additionalTables = '
                          LEFT JOIN '. TBL_USER_DATA .' cre_surname
                                 ON cre_surname.usd_usr_id = lnk_usr_id_create
@@ -56,7 +56,7 @@ if($gPreferences['system_show_create_edit'] == 1)
 else
 {
     // show username of create and last change user
-    $additionalFields = ' cre_username.usr_login_name as create_name ';
+    $additionalFields = ' cre_username.usr_login_name AS create_name ';
     $additionalTables = '
                          LEFT JOIN '. TBL_USERS .' cre_username
                                 ON cre_username.usr_id = lnk_usr_id_create ';

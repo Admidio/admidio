@@ -100,7 +100,7 @@ while($row_orga = $orgaStatement->fetch())
 
     // bei allen Alben ohne Ersteller, die Erstellungs-ID mit Webmaster befuellen,
     // damit das Feld auf NOT NULL gesetzt werden kann
-    $sql = 'SELECT min(mem_usr_id) as webmaster_id
+    $sql = 'SELECT MIN(mem_usr_id) AS webmaster_id
               FROM '.TBL_MEMBERS.'
         INNER JOIN '.TBL_ROLES.'
                 ON rol_id = mem_rol_id

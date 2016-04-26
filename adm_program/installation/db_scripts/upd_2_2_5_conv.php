@@ -10,12 +10,12 @@
  */
 
 // eine Orga-ID einlesen
-$sql = 'SELECT MIN(org_id) as org_id FROM '.TBL_ORGANIZATIONS.' ORDER BY org_id DESC';
+$sql = 'SELECT MIN(org_id) AS org_id FROM '.TBL_ORGANIZATIONS.' ORDER BY org_id DESC';
 $orgaStatement = $gDb->query($sql);
 $row_orga = $orgaStatement->fetch();
 
 // Webmaster-ID ermitteln
-$sql = 'SELECT usr_id as webmaster_id, usr_timestamp_create as timestamp
+$sql = 'SELECT usr_id AS webmaster_id, usr_timestamp_create AS timestamp
           FROM '.TBL_USERS.'
          WHERE usr_id IN (SELECT MIN(mem_usr_id)
                             FROM '.TBL_MEMBERS.'

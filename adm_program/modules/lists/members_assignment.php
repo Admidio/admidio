@@ -168,9 +168,9 @@ else
     }
 
      // SQL-Statement zusammensetzen
-    $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday,
-                   city.usd_value as city, address.usd_value as address, zip_code.usd_value as zip_code, country.usd_value as country,
-                   mem_usr_id as member_this_role, mem_leader as leader_this_role,
+    $sql = 'SELECT DISTINCT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, birthday.usd_value AS birthday,
+                   city.usd_value AS city, address.usd_value AS address, zip_code.usd_value AS zip_code, country.usd_value AS country,
+                   mem_usr_id AS member_this_role, mem_leader AS leader_this_role,
                       (SELECT COUNT(*)
                          FROM '.TBL_ROLES.' rol2, '.TBL_CATEGORIES.' cat2, '.TBL_MEMBERS.' mem2
                         WHERE rol2.rol_valid   = 1
@@ -181,27 +181,27 @@ else
                           AND mem2.mem_rol_id  = rol2.rol_id
                           AND mem2.mem_begin  <= \''.DATE_NOW.'\'
                           AND mem2.mem_end     > \''.DATE_NOW.'\'
-                          AND mem2.mem_usr_id  = usr_id) as member_this_orga
+                          AND mem2.mem_usr_id  = usr_id) AS member_this_orga
               FROM '.TBL_USERS.'
-         LEFT JOIN '.TBL_USER_DATA.' as last_name
+         LEFT JOIN '.TBL_USER_DATA.' AS last_name
                 ON last_name.usd_usr_id = usr_id
                AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' as first_name
+         LEFT JOIN '.TBL_USER_DATA.' AS first_name
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' as birthday
+         LEFT JOIN '.TBL_USER_DATA.' AS birthday
                 ON birthday.usd_usr_id = usr_id
                AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' as city
+         LEFT JOIN '.TBL_USER_DATA.' AS city
                 ON city.usd_usr_id = usr_id
                AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' as address
+         LEFT JOIN '.TBL_USER_DATA.' AS address
                 ON address.usd_usr_id = usr_id
                AND address.usd_usf_id = '. $gProfileFields->getProperty('ADDRESS', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' as zip_code
+         LEFT JOIN '.TBL_USER_DATA.' AS zip_code
                 ON zip_code.usd_usr_id = usr_id
                AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' as country
+         LEFT JOIN '.TBL_USER_DATA.' AS country
                 ON country.usd_usr_id = usr_id
                AND country.usd_usf_id = '. $gProfileFields->getProperty('COUNTRY', 'usf_id'). '
          LEFT JOIN '.TBL_ROLES.' rol

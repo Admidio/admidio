@@ -188,7 +188,7 @@ class UserRegistration extends User
             // therefore the flags system mails and notification mail for roles with approve registration must be activated
             if($gPreferences['enable_system_mails'] == 1 && $gPreferences['enable_registration_admin_mail'] == 1 && $this->sendEmail)
             {
-                $sql = 'SELECT DISTINCT first_name.usd_value as first_name, last_name.usd_value as last_name, email.usd_value as email
+                $sql = 'SELECT DISTINCT first_name.usd_value AS first_name, last_name.usd_value AS last_name, email.usd_value AS email
                           FROM '.TBL_MEMBERS.'
                     INNER JOIN '.TBL_ROLES.'
                             ON rol_id = mem_rol_id

@@ -284,15 +284,15 @@ class ModuleLists extends Modules
                        (SELECT COUNT(*)
                           FROM '.TBL_MEMBERS.' mem
                          WHERE mem.mem_rol_id = rol.rol_id '.$this->getMemberStatusSql().'
-                           AND mem_leader = 0) as num_members,
+                           AND mem_leader = 0) AS num_members,
                        (SELECT COUNT(*)
                           FROM '.TBL_MEMBERS.' mem
                          WHERE mem.mem_rol_id = rol.rol_id '.$this->getMemberStatusSql().'
-                           AND mem_leader = 1) as num_leader,
+                           AND mem_leader = 1) AS num_leader,
                        (SELECT COUNT(*)
                           FROM '.TBL_MEMBERS.' mem
                          WHERE mem.mem_rol_id = rol.rol_id
-                           AND mem_end < \''. DATE_NOW.'\') as num_former
+                           AND mem_end < \''. DATE_NOW.'\') AS num_former
                   FROM '.TBL_ROLES.' rol
             INNER JOIN '.TBL_CATEGORIES.' cat
                     ON cat_id = rol_cat_id

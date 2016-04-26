@@ -80,7 +80,7 @@ $list = array();
 
 if ($gValidLogin && $getMsgType === 'PM' && count($gCurrentUser->getAllVisibleRoles()) > 0)
 {
-    $sql = 'SELECT usr_id, FIRST_NAME.usd_value as first_name, LAST_NAME.usd_value as last_name, usr_login_name
+    $sql = 'SELECT usr_id, FIRST_NAME.usd_value AS first_name, LAST_NAME.usd_value AS last_name, usr_login_name
                   FROM '.TBL_MEMBERS.'
             INNER JOIN '.TBL_ROLES.'
                     ON rol_id = mem_rol_id
@@ -348,25 +348,25 @@ elseif (!isset($messageStatement))
         if($getRoleId === 0 && count($listVisibleRoleArray) > 0)
         {
             // if no special role was preselected then list users
-            $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name, rol_id, mem_begin, mem_end
+            $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, rol_id, mem_begin, mem_end
                       FROM '.TBL_MEMBERS.'
                 INNER JOIN '.TBL_ROLES.'
                         ON rol_id = mem_rol_id
                 INNER JOIN '.TBL_USERS.'
                         ON usr_id = mem_usr_id
-                INNER JOIN '.TBL_USER_DATA.' as email
+                INNER JOIN '.TBL_USER_DATA.' AS email
                         ON email.usd_usr_id = usr_id
                        AND LENGTH(email.usd_value) > 0
-                INNER JOIN '.TBL_USER_FIELDS.' as field
+                INNER JOIN '.TBL_USER_FIELDS.' AS field
                         ON field.usf_id = email.usd_usf_id
                        AND field.usf_type = \'EMAIL\'
-                 LEFT JOIN '.TBL_USER_DATA.' as last_name
+                 LEFT JOIN '.TBL_USER_DATA.' AS last_name
                         ON last_name.usd_usr_id = usr_id
                        AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-                 LEFT JOIN '.TBL_USER_DATA.' as first_name
+                 LEFT JOIN '.TBL_USER_DATA.' AS first_name
                         ON first_name.usd_usr_id = usr_id
                        AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-                     WHERE rol_id in ('.implode(',', $listVisibleRoleArray).')
+                     WHERE rol_id IN ('.implode(',', $listVisibleRoleArray).')
                        AND mem_begin <=  \''.DATE_NOW.'\'
                        AND usr_id <> '.$gCurrentUser->getValue('usr_id').
                            $sqlUserIds.'
@@ -451,16 +451,16 @@ elseif (!isset($messageStatement))
 
         if($possible_emails > 1)
         {
-            $sql = 'SELECT email.usd_value as ID, email.usd_value as email
+            $sql = 'SELECT email.usd_value AS ID, email.usd_value AS email
                       FROM '.TBL_USERS.'
-                INNER JOIN '.TBL_USER_DATA.' as email
+                INNER JOIN '.TBL_USER_DATA.' AS email
                         ON email.usd_usr_id = usr_id
                        AND LENGTH(email.usd_value) > 0
-                INNER JOIN '.TBL_USER_FIELDS.' as field
+                INNER JOIN '.TBL_USER_FIELDS.' AS field
                         ON field.usf_id = email.usd_usf_id
                        AND field.usf_type = \'EMAIL\'
                      WHERE usr_id = '. $gCurrentUser->getValue('usr_id'). '
-                       AND usr_valid   = 1
+                       AND usr_valid = 1
                   GROUP BY email.usd_value, email.usd_value';
 
             $form->addSelectBoxFromSql('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sql, array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false));

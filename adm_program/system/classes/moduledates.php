@@ -192,18 +192,18 @@ class ModuleDates extends Modules
         {
             // show firstname and lastname of create and last change user
             $additionalFields = '
-                cre_firstname.usd_value || \' \' || cre_surname.usd_value as create_name,
-                cha_firstname.usd_value || \' \' || cha_surname.usd_value as change_name ';
+                cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
+                cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name ';
         }
         else
         {
             // show username of create and last change user
-            $additionalFields = ' cre_username.usr_login_name as create_name,
-                                  cha_username.usr_login_name as change_name ';
+            $additionalFields = ' cre_username.usr_login_name AS create_name,
+                                  cha_username.usr_login_name AS change_name ';
         }
 
         // read dates from database
-        $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.mem_leader,'.$additionalFields.'
+        $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id AS member_date_role, mem.mem_leader,'.$additionalFields.'
                   FROM '.TBL_DATE_ROLE.' dtr
             INNER JOIN '.TBL_DATES.' dat
                     ON dat_id = dtr_dat_id
@@ -288,7 +288,7 @@ class ModuleDates extends Modules
         {
             global $gDb, $gCurrentOrganization;
 
-            $sql = 'SELECT COUNT(DISTINCT dat_id) as count
+            $sql = 'SELECT COUNT(DISTINCT dat_id) AS count
                       FROM '.TBL_DATE_ROLE.'
                 INNER JOIN '.TBL_DATES.'
                         ON dat_id = dtr_dat_id

@@ -133,7 +133,7 @@ class TableRoles extends TableAccess
     {
         if($this->countLeaders === -1)
         {
-            $sql = 'SELECT COUNT(*) as count
+            $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id = '.$this->getValue('rol_id').'
                        AND mem_leader = 1
@@ -156,7 +156,7 @@ class TableRoles extends TableAccess
     {
         if($this->countMembers === -1)
         {
-            $sql = 'SELECT COUNT(*) as count
+            $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id  = '.$this->getValue('rol_id').'
                        AND mem_usr_id != '.$exceptUserId.'

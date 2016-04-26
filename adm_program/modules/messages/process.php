@@ -40,7 +40,7 @@ $modulemessages = new ModuleMessages();
 // find ID of the admidio Chat
 $msg_id = $modulemessages->msgGetChatId();
 
-$sql = 'SELECT MAX(msc_part_id) as max_id
+$sql = 'SELECT MAX(msc_part_id) AS max_id
           FROM '.TBL_MESSAGES_CONTENT.'
          WHERE msc_msg_id = \''.$msg_id.'\'';
 

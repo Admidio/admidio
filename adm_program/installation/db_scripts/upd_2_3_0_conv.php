@@ -21,19 +21,19 @@ $gDb->query($sql, false);
 $sql = 'ALTER TABLE '.TBL_USER_FIELDS.' DROP INDEX ak_name_intern';
 $gDb->query($sql, false);
 
-$sql = 'CREATE UNIQUE index IDX_PRF_ORG_ID_NAME ON '.TBL_PREFERENCES.' (prf_org_id, prf_name)';
+$sql = 'CREATE UNIQUE INDEX IDX_PRF_ORG_ID_NAME ON '.TBL_PREFERENCES.' (prf_org_id, prf_name)';
 $gDb->query($sql);
-$sql = 'CREATE UNIQUE index IDX_USR_LOGIN_NAME ON '.TBL_USERS.' (usr_login_name)';
+$sql = 'CREATE UNIQUE INDEX IDX_USR_LOGIN_NAME ON '.TBL_USERS.' (usr_login_name)';
 $gDb->query($sql);
-$sql = 'CREATE UNIQUE index IDX_USD_USR_USF_ID ON '.TBL_USER_DATA.' (usd_usr_id, usd_usf_id)';
+$sql = 'CREATE UNIQUE INDEX IDX_USD_USR_USF_ID ON '.TBL_USER_DATA.' (usd_usr_id, usd_usf_id)';
 $gDb->query($sql);
-$sql = 'CREATE UNIQUE index IDX_MEM_ROL_USR_ID ON '.TBL_MEMBERS.' (mem_rol_id, mem_usr_id)';
+$sql = 'CREATE UNIQUE INDEX IDX_MEM_ROL_USR_ID ON '.TBL_MEMBERS.' (mem_rol_id, mem_usr_id)';
 $gDb->query($sql);
-$sql = 'CREATE UNIQUE index IDX_USF_NAME_INTERN ON '.TBL_USER_FIELDS.' (usf_name_intern)';
+$sql = 'CREATE UNIQUE INDEX IDX_USF_NAME_INTERN ON '.TBL_USER_FIELDS.' (usf_name_intern)';
 $gDb->query($sql);
 
 // get id of webmaster
-$sql = 'SELECT MIN(mem_usr_id) as webmaster_id
+$sql = 'SELECT MIN(mem_usr_id) AS webmaster_id
           FROM '.TBL_MEMBERS.'
     INNER JOIN '.TBL_ROLES.'
             ON rol_id = mem_rol_id

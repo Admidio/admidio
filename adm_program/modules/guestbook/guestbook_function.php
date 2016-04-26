@@ -179,7 +179,7 @@ if ($getMode === 1 || $getMode === 3)
                 // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
                 // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
                 // einen GB-Eintrag erzeugt hat...
-                $sql = 'SELECT COUNT(*) as count
+                $sql = 'SELECT COUNT(*) AS count
                           FROM '.TBL_GUESTBOOK.'
                          WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
                            AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
@@ -372,7 +372,7 @@ elseif($getMode === 4 || $getMode === 8)
                 // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
                 // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
                 // einen GB-Eintrag/Kommentar erzeugt hat...
-                $sql = 'SELECT COUNT(*) as count
+                $sql = 'SELECT COUNT(*) AS count
                           FROM '.TBL_GUESTBOOK_COMMENTS.'
                          WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
                            AND gbc_ip_address = \''. $guestbook_comment->getValue('gbc_ip_adress'). '\'';

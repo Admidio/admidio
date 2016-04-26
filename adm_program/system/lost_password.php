@@ -56,7 +56,7 @@ if(!empty($_POST['recipient_email']))
                         ON cat_id = rol_cat_id
                 INNER JOIN '.TBL_USERS.'
                         ON usr_id = mem_usr_id
-                INNER JOIN '.TBL_USER_DATA.' as email
+                INNER JOIN '.TBL_USER_DATA.' AS email
                         ON email.usd_usr_id = usr_id
                        AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
                        AND email.usd_value  = \''.$_POST['recipient_email'].'\'

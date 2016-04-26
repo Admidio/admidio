@@ -121,7 +121,7 @@ foreach($rolesList as $row)
     if($row['rol_max_members'] > 0)
     {
         // erst einmal schauen, ob der Benutzer dieser Rolle bereits zugeordnet ist
-        $sql = 'SELECT COUNT(*) as count
+        $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = '.$row['rol_id'].'
                    AND mem_usr_id = '.$getUserId.'
@@ -135,7 +135,7 @@ foreach($rolesList as $row)
         if((int) $row_usr['count'] === 0)
         {
             // Benutzer ist der Rolle noch nicht zugeordnet, dann schauen, ob die Anzahl ueberschritten wird
-            $sql = 'SELECT COUNT(*) as count
+            $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id = '.$row['rol_id'].'
                        AND mem_leader = 0
