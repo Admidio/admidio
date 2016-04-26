@@ -11,7 +11,7 @@
  */
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'common.php')
 {
-    exit('This page may not be called directly !');
+    exit('This page may not be called directly!');
 }
 
 // embed config and constants file

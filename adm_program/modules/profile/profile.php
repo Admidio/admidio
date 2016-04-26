@@ -34,9 +34,7 @@ if(!$gCurrentUser->hasRightViewProfile($user))
 function getFieldCode($fieldNameIntern, $user)
 {
     global $gPreferences, $g_root_path, $gCurrentUser, $gProfileFields, $gL10n;
-    $html      = array('label' => '', 'value' => '');
-    $value     = '';
-    $msg_image = '';
+    $html = array('label' => '', 'value' => '');
 
     if(!$gCurrentUser->hasRightEditProfile($user) && $gProfileFields->getProperty($fieldNameIntern, 'usf_hidden') == 1)
     {

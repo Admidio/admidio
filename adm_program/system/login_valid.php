@@ -13,7 +13,7 @@
  */
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'login_valid.php')
 {
-    exit('This page may not be called directly !');
+    exit('This page may not be called directly!');
 }
 
 if(!$gValidLogin)

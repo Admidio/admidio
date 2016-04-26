@@ -380,18 +380,18 @@ elseif (!isset($messageStatement))
             while ($row = $statement->fetch())
             {
                 // every user should only be once in the list
-                if (!isset($currentUserId) or $currentUserId != $row['usr_id'])
+                if (!isset($currentUserId) || $currentUserId != $row['usr_id'])
                 {
                     // if membership is active then show them as active members
                     if($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW)
                     {
-                        $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
+                        $active_list[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
                         $currentUserId = $row['usr_id'];
                     }
                     elseif($gPreferences['mail_show_former'] == 1)
                     {
-                        $passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
-                        $currentUserId = $row['usr_id'];
+                        $passive_list[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
+                        $currentUserId  = $row['usr_id'];
                     }
                 }
             }

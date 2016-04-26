@@ -10,7 +10,7 @@
  */
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php')
 {
-    exit('This page may not be called directly !');
+    exit('This page may not be called directly!');
 }
 
 /**
