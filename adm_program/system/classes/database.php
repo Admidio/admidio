@@ -58,7 +58,6 @@
  */
 class Database
 {
-    protected $engine;
     protected $host;
     protected $port;
     protected $dbName;
@@ -78,7 +77,7 @@ class Database
     /**
      * The constructor will check if a valid engine was set and try to connect to the database.
      * If the engine is invalid or the connection not possible an exception will be thrown.
-     * @param string $engine   The database type that is supported from Admidio. @b mysql and @b postgresql are valid values.
+     * @param string $engine   The database type that is supported from Admidio. @b mysql and @b pgsql are valid values.
      * @param string $host     The hostname or server where the database is running. e.g. localhost or 127.0.0.1
      * @param int    $port     If you don't use the default port of the database then set your port here.
      * @param string $dbName   Name of the database you want to connect.
@@ -95,7 +94,6 @@ class Database
             $engine = 'pgsql';
         }
 
-        $this->engine   = $engine;
         $this->host     = $host;
         $this->port     = $port;
         $this->dbName   = $dbName;
@@ -116,12 +114,12 @@ class Database
             {
                 throw new PDOException('PDO does not support any drivers');
             }
-            if (!in_array($this->engine, $availableDrivers, true))
+            if (!in_array($engine, $availableDrivers, true))
             {
-                throw new PDOException('The requested PDO driver '.$this->engine.' is not supported');
+                throw new PDOException('The requested PDO driver '.$engine.' is not supported');
             }
 
-            $this->buildDSNString();
+            $this->setDSNString($engine);
 
             // needed to avoid leaking username, password, ... if a PDOException is thrown
             $this->pdo = new PDO($this->dsn, $this->username, $this->password, $this->options);
@@ -137,11 +135,12 @@ class Database
     /**
      * Create a valid DSN string for the engine that was set through the constructor.
      * If no valid engine is set than an exception is thrown.
+     * @param string $engine The database type that is supported from Admidio. @b mysql and @b pgsql are valid values.
      * @throws \PDOException
      */
-    private function buildDSNString()
+    private function setDSNString($engine)
     {
-        switch ($this->engine)
+        switch ($engine)
         {
             case 'mysql':
                 if ($this->port === null)
@@ -168,6 +167,117 @@ class Database
             default:
                 throw new PDOException('Engine is not supported by Admidio');
         }
+    }
+
+    /**
+     * Set connection specific options like UTF8 connection.
+     * These options should always be set if Admidio connect to a database.
+     */
+    private function setConnectionOptions()
+    {
+        // Connect to database with UTF8
+        $this->query('SET NAMES \'UTF8\'');
+
+        if ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql')
+        {
+            // set ANSI mode, that SQL could be more compatible with other DBs
+            $this->query('SET SQL_MODE = \'ANSI\'');
+            // if the server has limited the joins, it can be canceled with this statement
+            $this->query('SET SQL_BIG_SELECTS = 1');
+        }
+    }
+
+    /**
+     * @param string $property Property name of the in use database config
+     * @return string Returns the value of the chosen property
+     */
+    protected function getPropertyFromDatabaseConfig($property)
+    {
+        $xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', null, true);
+        $node = $xmlDatabases->xpath('/databases/database[@id="'.$this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME).'"]/'.$property);
+        return (string) $node[0];
+    }
+
+    /**
+     * Get the name of the database that is running Admidio.
+     * @return string Returns a string with the name of the database e.g. 'MySQL' or 'PostgreSQL'
+     */
+    public function getName()
+    {
+        if ($this->databaseName === '')
+        {
+            $this->databaseName = $this->getPropertyFromDatabaseConfig('name');
+        }
+        return $this->databaseName;
+    }
+
+    /**
+     * Get the minimum required version of the database that is necessary to run Admidio.
+     * @return string Returns a string with the minimum required database version e.g. '5.0.1'
+     */
+    public function getMinimumRequiredVersion()
+    {
+        if ($this->minRequiredVersion === '')
+        {
+            $this->minRequiredVersion = $this->getPropertyFromDatabaseConfig('minversion');
+        }
+        return $this->minRequiredVersion;
+    }
+
+    /**
+     * Get the version of the connected database.
+     * @return string Returns a string with the database version e.g. '5.5.8'
+     */
+    public function getVersion()
+    {
+        $versionStatement = $this->query('SELECT version()');
+        $version = $versionStatement->fetchColumn();
+
+        if ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql')
+        {
+            // the string (PostgreSQL 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
+            $versionArray  = explode(',', $version);
+            $versionArray2 = explode(' ', $versionArray[0]);
+            return $versionArray2[1];
+        }
+
+        return $version;
+    }
+
+    /**
+     * Start a transaction if no open transaction exists. If you call this multiple times
+     * only 1 transaction will be open and it will be closed after the last endTransaction was send.
+     * @return bool
+     * @see Database#endTransaction
+     * @see Database#rollback
+     */
+    public function startTransaction()
+    {
+        global $gDebug;
+
+        // If we are within a transaction we will not open another one,
+        // but enclose the current one to not loose data (prevening auto commit)
+        if ($this->transactions > 0)
+        {
+            ++$this->transactions;
+            return true;
+        }
+
+        // if debug mode then log all sql statements
+        if ($gDebug === 1)
+        {
+            error_log('START TRANSACTION');
+        }
+
+        $result = $this->pdo->beginTransaction();
+
+        if (!$result)
+        {
+            $this->showError();
+        }
+
+        $this->transactions = 1;
+        return $result;
     }
 
     /**
@@ -224,15 +334,6 @@ class Database
     public function escapeString($string)
     {
         return trim($this->pdo->quote($string), "'");
-    }
-
-    /**
-     * Returns an array with all available PDO database drivers of the server.
-     * @return string[] Returns an array with all available PDO database drivers of the server.
-     */
-    public static function getAvailableDBs()
-    {
-        return PDO::getAvailableDrivers();
     }
 
     /**
@@ -298,56 +399,6 @@ class Database
     }
 
     /**
-     * Get the minimum required version of the database that is necessary to run Admidio.
-     * @return string Returns a string with the minimum required database version e.g. '5.0.1'
-     */
-    public function getMinimumRequiredVersion()
-    {
-        if ($this->minRequiredVersion === '')
-        {
-            $xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', null, true);
-            $node = $xmlDatabases->xpath('/databases/database[@id="'.$this->engine.'"]/minversion');
-            $this->minRequiredVersion = (string) $node[0]; // explicit typcasting because of problem with simplexml and sessions
-        }
-        return $this->minRequiredVersion;
-    }
-
-    /**
-     * Get the name of the database that is running Admidio.
-     * @return string Returns a string with the name of the database e.g. 'MySQL' or 'PostgreSQL'
-     */
-    public function getName()
-    {
-        if ($this->databaseName === '')
-        {
-            $xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', null, true);
-            $node = $xmlDatabases->xpath('/databases/database[@id="'.$this->engine.'"]/name');
-            $this->databaseName = (string) $node[0]; // explicit typcasting because of problem with simplexml and sessions
-        }
-        return $this->databaseName;
-    }
-
-    /**
-     * Get the version of the connected database.
-     * @return string Returns a string with the database version e.g. '5.5.8'
-     */
-    public function getVersion()
-    {
-        $versionStatement = $this->query('SELECT version()');
-        $row = $versionStatement->fetch(PDO::FETCH_NUM);
-
-        if ($this->engine === 'pgsql')
-        {
-            // the string (PostgreSQL 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
-            $versionArray  = explode(',', $row[0]);
-            $versionArray2 = explode(' ', $versionArray[0]);
-            return $versionArray2[1];
-        }
-
-        return $row[0];
-    }
-
-    /**
      * Returns the ID of the unique id column of the last INSERT operation.
      * This method replace the old method Database#insert_id.
      * @return string Return ID value of the last INSERT operation.
@@ -355,11 +406,10 @@ class Database
      */
     public function lastInsertId()
     {
-        if ($this->engine === 'pgsql')
+        if ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql')
         {
             $lastValStatement = $this->query('SELECT lastval()');
-            $insertRow = $lastValStatement->fetch(PDO::FETCH_NUM);
-            return $insertRow[0];
+            return $lastValStatement->fetchColumn();
         }
         else
         {
@@ -383,7 +433,7 @@ class Database
     {
         global $gDebug;
 
-        if ($this->engine === 'pgsql')
+        if ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql')
         {
             $sqlCompare = strtolower($sql);
 
@@ -475,37 +525,21 @@ class Database
     }
 
     /**
-     * Set connection specific options like UTF8 connection.
-     * These options should always be set if Admidio connect to a database.
-     */
-    private function setConnectionOptions()
-    {
-        // Connect to database with UTF8
-        $this->query('SET NAMES \'UTF8\'');
-
-        if ($this->engine === 'mysql')
-        {
-            // set ANSI mode, that SQL could be more compatible with other DBs
-            $this->query('SET SQL_MODE = \'ANSI\'');
-            // if the server has limited the joins, it can be canceled with this statement
-            $this->query('SET SQL_BIG_SELECTS = 1');
-        }
-    }
-
-    /**
      * Methods reads all columns and their properties from the database table.
      * @param string $table                Name of the database table for which the columns should be shown.
      * @param bool   $showColumnProperties If this is set to @b false only the column names were returned.
      * @return array Returns an array with each column and their properties if $showColumnProperties is set to @b true.
      *               The array has the following format:
      *               array (
-     *               'column1' => array (
-     *                            'serial' => '1',
-     *                            'null'   => '0',
-     *                            'key'    => '0',
-     *                            'type'   => 'integer')
-     *               'column2' => array (...)
+     *                   'column1' => array (
+     *                       'serial' => '1',
+     *                       'null'   => '0',
+     *                       'key'    => '0',
+     *                       'type'   => 'integer'
+     *                    ),
+     *                   'column2' => array (...)
      *               ...
+     *               )
      */
     public function showColumns($table, $showColumnProperties = true)
     {
@@ -513,7 +547,7 @@ class Database
         {
             $columnProperties = array();
 
-            if ($this->engine === 'mysql')
+            if ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql')
             {
                 $sql = 'SHOW COLUMNS FROM '.$table;
                 $columnsStatement = $this->query($sql);
@@ -556,7 +590,7 @@ class Database
                     }
                 }
             }
-            elseif ($this->engine === 'pgsql')
+            elseif ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql')
             {
                 $sql = 'SELECT column_name, column_default, is_nullable, data_type
                           FROM information_schema.columns
@@ -633,7 +667,7 @@ class Database
     {
         global $g_root_path, $gMessage, $gPreferences, $gCurrentOrganization, $gDebug, $gL10n;
 
-        $backtrace  = $this->getBacktrace();
+        $backtrace = $this->getBacktrace();
 
         // Rollback on open transaction
         if ($this->transactions > 0)
@@ -681,39 +715,14 @@ class Database
     }
 
     /**
-     * Start a transaction if no open transaction exists. If you call this multiple times
-     * only 1 transaction will be open and it will be closed after the last endTransaction was send.
-     * @return bool
-     * @see Database#endTransaction
-     * @see Database#rollback
+     * Returns an array with all available PDO database drivers of the server.
+     * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
+     * @return string[] Returns an array with all available PDO database drivers of the server.
+     * @see <a href="https://secure.php.net/manual/en/pdo.getavailabledrivers.php">PDO::getAvailableDrivers</a>
      */
-    public function startTransaction()
+    public static function getAvailableDBs()
     {
-        global $gDebug;
-
-        // If we are within a transaction we will not open another one,
-        // but enclose the current one to not loose data (prevening auto commit)
-        if ($this->transactions > 0)
-        {
-            ++$this->transactions;
-            return true;
-        }
-
-        // if debug mode then log all sql statements
-        if ($gDebug === 1)
-        {
-            error_log('START TRANSACTION');
-        }
-
-        $result = $this->pdo->beginTransaction();
-
-        if (!$result)
-        {
-            $this->showError();
-        }
-
-        $this->transactions = 1;
-        return $result;
+        return PDO::getAvailableDrivers();
     }
 
     /**
