@@ -306,8 +306,8 @@ class InventoryFields
                     }
 
                     // if date field then the current date format must be used
-                    $date = new DateTimeExtended($value, 'Y-m-d');
-                    if(!$date->isValid())
+                    $date = DateTime::createFromFormat('Y-m-d', $value);
+                    if($date === false)
                     {
                         return $value;
                     }
@@ -477,8 +477,8 @@ class InventoryFields
 
                 case 'DATE':
                     // Datum muss gueltig sein und formatiert werden
-                    $date = new DateTimeExtended($fieldValue, $gPreferences['system_date']);
-                    if(!$date->isValid())
+                    $date = DateTime::createFromFormat($gPreferences['system_date'], $fieldValue);
+                    if($date === false)
                     {
                         if(!$this->noValueCheck)
                         {

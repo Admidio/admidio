@@ -153,21 +153,17 @@ class ModuleDates extends Modules
     {
         global $gPreferences;
 
-        $objDate = new DateTimeExtended($date, 'Y-m-d');
-
-        if($objDate->isValid())
+        $objDate = DateTime::createFromFormat('Y-m-d', $date);
+        if($objDate !== false)
         {
             return $date;
         }
-        else
-        {
-            // check if date has system format
-            $objDate = new DateTimeExtended($date, $gPreferences['system_date']);
 
-            if($objDate->isValid())
-            {
-                return $objDate->format('Y-m-d');
-            }
+        // check if date has system format
+        $objDate = DateTime::createFromFormat($gPreferences['system_date'], $date);
+        if($objDate !== false)
+        {
+            return $objDate->format('Y-m-d');
         }
 
         return false;

@@ -161,29 +161,29 @@ elseif($getMode === 7)
     $formatedEndDate   = '';
 
     // Check das Beginn Datum
-    $startDate = new DateTimeExtended($getMembershipStart, $gPreferences['system_date']);
-    if($startDate->isValid())
+    $startDate = DateTime::createFromFormat($gPreferences['system_date'], $getMembershipStart);
+    if($startDate === false)
     {
-        // Datum formatiert zurueckschreiben
-        $formatedStartDate = $startDate->format('Y-m-d');
+        exit($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
     }
     else
     {
-        exit($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
+        // Datum formatiert zurueckschreiben
+        $formatedStartDate = $startDate->format('Y-m-d');
     }
 
     // Falls gesetzt wird das Enddatum gecheckt
     if($getMembershipEnd !== '')
     {
-        $endDate = new DateTimeExtended($getMembershipEnd, $gPreferences['system_date']);
-        if($endDate->isValid())
+        $endDate = DateTime::createFromFormat($gPreferences['system_date'], $getMembershipEnd);
+        if($endDate === false)
         {
-            // Datum formatiert zurueckschreiben
-            $formatedEndDate = $endDate->format('Y-m-d');
+            exit($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
         }
         else
         {
-            exit($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
+            // Datum formatiert zurueckschreiben
+            $formatedEndDate = $endDate->format('Y-m-d');
         }
 
         // If start-date is later/bigger or on same day than end-date we show an error

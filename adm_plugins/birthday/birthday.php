@@ -246,7 +246,7 @@ if($numberBirthdays > 0)
                     }
                     else
                     {
-                        $birthayDate  = new DateTimeExtended($row['birthday'], 'Y-m-d');
+                        $birthayDate  = DateTime::createFromFormat('Y-m-d', $row['birthday']);
                         $plgDays      = ' ';
                         $plgCssClass  = '';
                         $birthdayText = '';

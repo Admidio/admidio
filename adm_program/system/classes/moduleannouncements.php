@@ -212,8 +212,8 @@ class ModuleAnnouncements extends Modules
         }
 
         // Create date object and format date_from in English format and system format and push to daterange array
-        $objDate = new DateTimeExtended($dateRangeStart, 'Y-m-d');
-        if($objDate->isValid())
+        $objDate = DateTime::createFromFormat('Y-m-d', $dateRangeStart);
+        if($objDate !== false)
         {
             $this->setParameter('dateStartFormatEnglish', $objDate->format('Y-m-d'));
             $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
@@ -221,9 +221,8 @@ class ModuleAnnouncements extends Modules
         else
         {
             // check if date_from  has system format
-            $objDate = new DateTimeExtended($dateRangeStart, $gPreferences['system_date']);
-
-            if($objDate->isValid())
+            $objDate = DateTime::createFromFormat($gPreferences['system_date'], $dateRangeStart);
+            if($objDate !== false)
             {
                 $this->setParameter('dateStartFormatEnglish', $objDate->format('Y-m-d'));
                 $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
@@ -235,8 +234,8 @@ class ModuleAnnouncements extends Modules
         }
 
         // Create date object and format date_to in English format and sytem format and push to daterange array
-        $objDate = new DateTimeExtended($dateRangeEnd, 'Y-m-d');
-        if($objDate->isValid())
+        $objDate = DateTime::createFromFormat('Y-m-d', $dateRangeEnd);
+        if($objDate !== false)
         {
             $this->setParameter('dateEndFormatEnglish', $objDate->format('Y-m-d'));
             $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));
@@ -244,9 +243,8 @@ class ModuleAnnouncements extends Modules
         else
         {
             // check if date_from  has system format
-            $objDate = new DateTimeExtended($dateRangeEnd, $gPreferences['system_date']);
-
-            if($objDate->isValid())
+            $objDate = DateTime::createFromFormat($gPreferences['system_date'], $dateRangeEnd);
+            if($objDate !== false)
             {
                 $this->setParameter('dateEndFormatEnglish', $objDate->format('Y-m-d'));
                 $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));

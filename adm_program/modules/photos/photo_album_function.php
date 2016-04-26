@@ -74,15 +74,14 @@ if($getMode === 'new' || $getMode === 'change')
     // Beginn
     if(strlen($_POST['pho_begin']) > 0)
     {
-        $startDate = new DateTimeExtended($_POST['pho_begin'], $gPreferences['system_date']);
-
-        if($startDate->isValid())
+        $startDate = DateTime::createFromFormat($gPreferences['system_date'], $_POST['pho_begin']);
+        if($startDate === false)
         {
-            $_POST['pho_begin'] = $startDate->format('Y-m-d');
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
         }
         else
         {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
+            $_POST['pho_begin'] = $startDate->format('Y-m-d');
         }
     }
     else
@@ -93,15 +92,14 @@ if($getMode === 'new' || $getMode === 'change')
     // Ende
     if(strlen($_POST['pho_end']) > 0)
     {
-        $endDate = new DateTimeExtended($_POST['pho_end'], $gPreferences['system_date']);
-
-        if($endDate->isValid())
+        $endDate = DateTime::createFromFormat($gPreferences['system_date'], $_POST['pho_end']);
+        if($endDate === false)
         {
-            $_POST['pho_end'] = $endDate->format('Y-m-d');
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
         }
         else
         {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
+            $_POST['pho_end'] = $endDate->format('Y-m-d');
         }
     }
     else

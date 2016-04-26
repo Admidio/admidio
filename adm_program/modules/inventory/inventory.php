@@ -83,7 +83,7 @@ $irow = 1;  // count for line in table
 
 while($row = $mglStatement->fetch())
 {
-    $timestampChange = new DateTimeExtended($row['timestamp'], 'Y-m-d H:i:s');
+    $timestampChange = DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
 
     $room = new TableRooms($gDb, $row['room_id']);
     $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$row['room_id'].'&amp;inline=true';

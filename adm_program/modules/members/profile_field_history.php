@@ -20,7 +20,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // calculate default date from which the profile fields history should be shown
-$filterDateFrom = new DateTimeExtended(DATE_NOW, 'Y-m-d');
+$filterDateFrom = DateTime::createFromFormat('Y-m-d', DATE_NOW);
 $filterDateFrom->modify('-'.$gPreferences['members_days_field_history'].' day');
 
 // Initialize and check the parameters
@@ -183,7 +183,7 @@ $table->addRowHeadingByArray($columnHeading);
 
 while($row = $fieldHistoryStatement->fetch())
 {
-    $timestampCreate = new DateTimeExtended($row['usl_timestamp_create'], 'Y-m-d H:i:s');
+    $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['usl_timestamp_create']);
     $columnValues    = array();
 
     if($getUserId === 0)

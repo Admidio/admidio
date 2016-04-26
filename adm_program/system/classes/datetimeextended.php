@@ -40,6 +40,7 @@ class DateTimeExtended extends DateTime
 
     /**
      * gibt true oder false zurueck, je nachdem ob DateTime gueltig ist
+     * @deprecated 3.2.0:4.0.0 Switched to native DateTime method. Use DateTime::createFromFormat() === false
      * @return bool
      */
     public function isValid()
@@ -49,6 +50,8 @@ class DateTimeExtended extends DateTime
 
     /**
      * berechnet aus dem Datum das Alter einer Person
+     * @deprecated 3.2.0:4.0.0 Switched to native DateTime method.
+     *             Use DateTime::createFromFormat()->diff(new DateTime('now'))->y
      * @return int
      */
     public function getAge()

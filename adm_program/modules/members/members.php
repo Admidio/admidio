@@ -196,8 +196,6 @@ $irow = 1;  // Zahler fuer die jeweilige Zeile
 
 while($row = $mglStatement->fetch())
 {
-    $timestampChange = new DateTimeExtended($row['timestamp'], 'Y-m-d H:i:s');
-
     // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
     if($row['member_this_orga'] > 0)
     {
@@ -251,7 +249,7 @@ while($row = $mglStatement->fetch())
     if(strlen($row['birthday']) > 0)
     {
         // date must be formated
-        $date = new DateTimeExtended($row['birthday'], 'Y-m-d');
+        $date = DateTime::createFromFormat('Y-m-d', $row['birthday']);
         $columnValues[] = $date->format($gPreferences['system_date']);
     }
     else
@@ -259,7 +257,8 @@ while($row = $mglStatement->fetch())
         $columnValues[] = '';
     }
 
-    $columnValues[] = $timestampChange->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
+    $timestampChange = DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
+    $columnValues[]  = $timestampChange->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
 
     $userAdministration = '';
 
