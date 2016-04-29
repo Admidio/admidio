@@ -72,18 +72,18 @@ abstract class Modules
      */
     public function __construct()
     {
-        $this->activeRole    = '';
-        $this->headline      = '';
-        $this->catId         = 0;
-        $this->id            = 0;
-        $this->daterange     = array();
-        $this->mode          = 'Default';
-        $this->order         = '';
-        $this->start         = '';
-        $this->properties    = $_GET;
-        $this->validModes    = array('Default');
-        $this->parameters    = array();
-        $this->arrParameters = array();
+        $this->activeRole   = '';
+        $this->headline     = '';
+        $this->catId        = 0;
+        $this->id           = 0;
+        $this->daterange    = array();
+        $this->mode         = 'Default';
+        $this->order        = '';
+        $this->start        = '';
+        $this->properties   = $_GET;
+        $this->validModes   = array('Default');
+        $this->parameters   = array();
+        $this->arrParameter = array();
 
         // Set parameters
         $this->setId();

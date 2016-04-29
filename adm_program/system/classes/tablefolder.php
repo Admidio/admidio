@@ -224,7 +224,7 @@ class TableFolder extends TableAccess
             $condition = 'fol_id     = '.$folderId.'
                       AND fol_type   = \'DOWNLOAD\'
                       AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
-            parent::readData($condition);
+            $this->readData($condition);
         }
         else
         {
@@ -232,7 +232,7 @@ class TableFolder extends TableAccess
                       AND fol_type   = \'DOWNLOAD\'
                       AND fol_path   = \'/adm_my_files\'
                       AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
-            parent::readData($condition);
+            $this->readData($condition);
         }
 
         // Gucken ob ueberhaupt ein Datensatz gefunden wurde...
@@ -284,13 +284,14 @@ class TableFolder extends TableAccess
 
     /**
      * Inhalt des aktuellen Ordners, abhaengig von den Benutzerrechten, als Array zurueckliefern...
+     * @return array
      */
     public function getFolderContentsForDownload()
     {
         global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
 
         // RueckgabeArray initialisieren
-        $completeFolder = null;
+        $completeFolder = array();
 
         // Erst einmal alle Unterordner auslesen, die in diesem Verzeichnis enthalten sind
         $sql_folders = 'SELECT *

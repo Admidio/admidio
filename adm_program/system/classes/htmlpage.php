@@ -59,7 +59,6 @@ class HtmlPage
         $this->showMenu      = true;
         $this->showModal     = false;
         $this->hasNavbar     = false;
-        $this->hasModal      = false;
         $this->printMode     = false;
         $this->javascriptContent        = '';
         $this->javascriptContentExecute = '';

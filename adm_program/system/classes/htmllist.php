@@ -187,7 +187,7 @@ class HtmlList extends HtmlElement
     public function getHtmlList()
     {
         $this->closeParentElement('.$this->currentElement().');
-        return parent::getHtmlElement();
+        return $this->getHtmlElement();
     }
 
 }

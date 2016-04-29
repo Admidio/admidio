@@ -85,9 +85,9 @@ class HtmlDiv extends HtmlElement
         // Div elements do not need having child elements an can be nested straight forward.
         // For this exception in html we have to take care that the flag of the parent class is always reseted, otherwise the
         // attributes are not parsed, because parent class htmlElement()  determines that the attributes of the
-        // parent element are already parsed if flag has value 1 and the next element is a child with optional attributes and closing tag.
+        // parent element are already parsed if flag has value true and the next element is a child with optional attributes and closing tag.
         // So we must overwrite the protected parent variable
-        $this->parentFlag = 0;
+        $this->parentFlag = false;
         // Define new div element
         $this->addParentElement('div');
 
@@ -197,6 +197,6 @@ class HtmlDiv extends HtmlElement
         {
             $this->closeParentElement('div');
         }
-        return parent::getHtmlElement();
+        return $this->getHtmlElement();
     }
 }

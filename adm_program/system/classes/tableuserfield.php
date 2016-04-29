@@ -120,11 +120,11 @@ class TableUserField extends TableAccess
      * Get the value of a column of the database table.
      * If the value was manipulated before with @b setValue than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format For column @c usf_value_list the following format is accepted: @n
-     *               @b database returns database value of usf_value_list; @n
-     *               @b text extract only text from usf_value_list, image infos will be ignored @n
-     *               For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011' @n
-     *               For text columns the format can be @b database that would be the database value without any transformations
+     * @param string $format     For column @c usf_value_list the following format is accepted: @n
+     *                           @b database returns database value of usf_value_list; @n
+     *                           @b text extract only text from usf_value_list, image infos will be ignored @n
+     *                           For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011' @n
+     *                           For text columns the format can be @b database that would be the database value without any transformations
      * @return mixed Returns the value of the database column.
      *               If the value was manipulated before with @b setValue than the manipulated value is returned.
      */

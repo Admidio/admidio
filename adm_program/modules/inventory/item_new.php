@@ -139,26 +139,23 @@ foreach($gInventoryFields->mInventoryFields as $field)
         $form->addHtml('<a name="cat-'. $field->getValue('cat_id'). '"></a>');
         $form->openGroupBox('gb_category_name', $field->getValue('cat_name'));
 
-        if($field->getValue('cat_name_intern') === 'MASTER_DATA')
+        if($field->getValue('cat_name_intern') === 'MASTER_DATA' && $getItemId > 0)
         {
-            if($getItemId > 0)
+            // add inventoryname to form
+            $fieldProperty = FIELD_DEFAULT;
+            $fieldHelpId   = null;
+
+            if(!$gCurrentUser->isAdministrator() && $getNewItem === 0)
             {
-                // add inventoryname to form
-                $fieldProperty = FIELD_DEFAULT;
-                $fieldHelpId   = null;
-
-                if(!$gCurrentUser->isAdministrator() && $getNewItem === 0)
-                {
-                    $fieldProperty = FIELD_DISABLED;
-                }
-                elseif($getNewItem > 0)
-                {
-                    $fieldProperty = FIELD_REQUIRED;
-                    $fieldHelpId   = 'PRO_inventoryNAME_DESCRIPTION';
-                }
-
-                $form->addLine();
+                $fieldProperty = FIELD_DISABLED;
             }
+            elseif($getNewItem > 0)
+            {
+                $fieldProperty = FIELD_REQUIRED;
+                $fieldHelpId   = 'PRO_inventoryNAME_DESCRIPTION';
+            }
+
+            $form->addLine();
         }
     }
 
@@ -186,7 +183,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
 
         if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'CHECKBOX')
         {
-            $form->addCheckbox(
+            $form->addCheckbox( // TODO fix parameters
                 'inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
                 $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                 $inventory->getValue($field->getValue('inf_name_intern')), $fieldProperty, $helpId, null,
@@ -212,7 +209,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
                           ORDER BY room_name';
                 }
                 $defaultValue = '';
-                if($getNewItem == 0)
+                if($getNewItem === 0)
                 {
                     $defaultValue = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id');
                 }
@@ -226,7 +223,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
             {
                 $arrListValues = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_value_list');
                 $defaultValue  = $inventory->getValue($field->getValue('inf_name_intern'), 'database');
-                $form->addSelectBox(
+                $form->addSelectBox( // TODO fix parameters
                     'inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
                     $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                     $arrListValues, $fieldProperty, $defaultValue, true, $helpId, null,
@@ -245,13 +242,24 @@ foreach($gInventoryFields->mInventoryFields as $field)
                 $showDummyRadioButton = true;
             }
 
-            $form->addRadioButton('inf-'.$gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
-                $arrListValues, $fieldProperty, $inventory->getValue($field->getValue('inf_name_intern'), 'database'), $showDummyRadioButton, $helpId, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
+            $form->addRadioButton( // TODO fix parameters
+                'inf-'.$gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
+                $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
+                $arrListValues, $fieldProperty,
+                $inventory->getValue($field->getValue('inf_name_intern'), 'database'),
+                $showDummyRadioButton, $helpId,
+                $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database')
+            );
         }
         elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'TEXT_BIG')
         {
-            $form->addMultilineTextInput('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
-                $inventory->getValue($field->getValue('inf_name_intern')), 3, 4000, $fieldProperty, $helpId, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
+            $form->addMultilineTextInput( // TODO fix parameters
+                'inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
+                $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
+                $inventory->getValue($field->getValue('inf_name_intern')),
+                3, 4000, $fieldProperty, $helpId,
+                $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database')
+            );
         }
         else
         {

@@ -18,6 +18,7 @@ class DateTimeExtended extends DateTime
 
     /**
      * es muss das Datum und das dazugehoerige Format uebergeben werden
+     * @deprecated 3.2.0:4.0.0 Switched to native DateTime method. Use DateTime::createFromFormat()
      * @param string        $date     String mit dem Datum
      * @param string        $format   das zum Datum passende Format (Schreibweise aus date())
      * @param \DateTimeZone $timezone DateTimeZone

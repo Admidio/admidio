@@ -104,7 +104,7 @@ class ModuleMessages
     /**
      * return an array with all Email-Messages of the given user.
      * @param int $userId
-     * @return array
+     * @return \PDOStatement
      */
     public function msgGetUserEmails($userId)
     {
@@ -121,7 +121,7 @@ class ModuleMessages
     /**
      * return an array with all unread Messages of the given user.
      * @param int $userId
-     * @return array
+     * @return \PDOStatement
      */
     public function msgGetUserUnread($userId)
     {
@@ -139,7 +139,7 @@ class ModuleMessages
     /**
      * return an array with all unread Messages of the given user.
      * @param int $userId
-     * @return array
+     * @return \PDOStatement
      */
     public function msgGetUser($userId)
     {
@@ -157,7 +157,7 @@ class ModuleMessages
 
     /**
      * return the message ID of the admidio chat.
-     * @return
+     * @return int
      */
     public function msgGetChatId()
     {
@@ -167,9 +167,9 @@ class ModuleMessages
                   FROM '. TBL_MESSAGES. '
                  WHERE msg_type = \'CHAT\'';
         $statement = $gDb->query($sql);
-        $row = $statement->fetch();
+        $msgId = $statement->fetchColumn();
 
-        return $row['msg_id'];
+        return (int) $msgId;
     }
 
 }

@@ -27,6 +27,7 @@
 class Inventory extends TableInventory
 {
     public $mInventoryFieldsData;           ///< object with current user field structure
+    public $mProfileFieldsData  = array();
     protected $list_view_rights = array();  ///< Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
     protected $organizationId;              ///< the organization for which the rights are read, could be changed with method @b setOrganization
 
@@ -290,7 +291,7 @@ class Inventory extends TableInventory
             else
             {
                 // Benutzer, die alle Listen einsehen duerfen, koennen auch alle Profile sehen
-                if($this->checkRolesRight('rol_inventory'))
+                if($gCurrentUser->checkRolesRight('rol_inventory'))
                 {
                     $viewProfile = true;
                 }

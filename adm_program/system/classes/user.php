@@ -342,13 +342,13 @@ class User extends TableAccess
                        AND mem_end    > \''.DATE_NOW.'\'
                        AND cat_org_id = '.$this->organizationId;
             $userStatement = $this->db->query($sql);
+            $userRow = $userStatement->fetch();
 
             if ($userStatement->rowCount() === 0)
             {
                 return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', $userRow['org_longname']);
             }
 
-            $userRow = $userStatement->fetch();
             if ($isAdministrator && version_compare($installedDbVersion, '2.4.0') === 1 && $userRow['administrator'] == 0)
             {
                 return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', $userRow['org_longname']);

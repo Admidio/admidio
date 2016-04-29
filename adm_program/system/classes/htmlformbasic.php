@@ -361,6 +361,6 @@ class HtmlFormBasic extends HtmlElement
      */
     public function getHtmlForm()
     {
-        return parent::getHtmlElement();
+        return $this->getHtmlElement();
     }
 }
