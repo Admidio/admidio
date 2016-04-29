@@ -127,7 +127,7 @@ if($gValidLogin)
         $currentUserRankTitle = '';
         $rankTitle = reset($plg_rank);
 
-        while($rankTitle != false)
+        while ($rankTitle !== false)
         {
             $rankAssessment = key($plg_rank);
             if($rankAssessment < $gCurrentUser->getValue('usr_number_login'))
@@ -178,7 +178,7 @@ if($gValidLogin)
 else
 {
     // create and show the login form
-    if($plg_show_icons == 1)
+    if($plg_show_icons)
     {
         $iconCode  = THEME_PATH. '/icons/key.png';
     }

@@ -447,7 +447,7 @@ class TableFolder extends TableAccess
                 $dirHandle = @opendir($folderPath);
                 if($dirHandle)
                 {
-                    while(($entry = readdir($dirHandle)) !== false)
+                    while (($entry = readdir($dirHandle)) !== false)
                     {
                         if ($entry === '.' || $entry === '..' || strpos($entry, '.') === 0)
                         {

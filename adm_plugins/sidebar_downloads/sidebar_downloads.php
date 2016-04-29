@@ -60,7 +60,7 @@ $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 if ($gPreferences['enable_download_module'] == 1)
 {
     echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
-    if($plg_show_headline == 1)
+    if($plg_show_headline)
     {
         echo '<h3>'.$gL10n->get('PLG_DOWNLOADS_HEADLINE').'</h3>';
     }

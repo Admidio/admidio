@@ -76,7 +76,7 @@ if(!isset($plg_photos_show_link))
 }
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
-if($plg_show_headline == 1)
+if($plg_show_headline)
 {
     echo '<h3>'.$gL10n->get('PHO_PHOTOS').'</h3>';
 }
@@ -91,7 +91,7 @@ $sql = 'SELECT *
       ORDER BY pho_begin DESC';
 
 // Limit setzen falls gefordert
-if($plg_photos_albums != 0)
+if($plg_photos_albums > 0)
 {
     $sql = $sql.' LIMIT '.$plg_photos_albums;
 }
@@ -113,7 +113,7 @@ while(!file_exists($picPath) && $i < 20 && $albumStatement->rowCount() > 0)
     $album->setArray($albumList[mt_rand(0, $albumStatement->rowCount()-1)]);
 
     // Falls gewuensch Bild per Zufall auswaehlen
-    if($plg_photos_picnr == 0)
+    if($plg_photos_picnr === 0)
     {
         $picNr = mt_rand(1, $album->getValue('pho_quantity'));
     }

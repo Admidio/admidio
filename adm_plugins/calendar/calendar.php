@@ -29,7 +29,7 @@ if(!defined('PLUGIN_PATH'))
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
-if(isset($_GET['ajax_change']) && $plg_ajax_change == 1)
+if(isset($_GET['ajax_change']) && $plg_ajax_change)
 {
     // Header kodieren
     header('Content-Type: text/html; charset=UTF-8');
@@ -124,7 +124,6 @@ $plg_link = '';
 $currentMonth = '';
 $currentYear  = '';
 $today        = 0;
-$lastDayCurrentMonth = '';
 
 // Date ID auslesen oder aktuellen Monat und Jahr erzeugen
 if(array_key_exists('date_id', $_GET))
@@ -164,7 +163,7 @@ else
     $today        = (int) date('d');
 }
 
-$lastDayCurrentMonth = date('t', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
+$lastDayCurrentMonth = (int) date('t', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
 $dateMonthStart = $currentYear.'-'.$currentMonth.'-01 00:00:01';    // add 1 second to ignore all day events that end at 00:00:00
 $dateMonthEnd   = $currentYear.'-'.$currentMonth.'-'.$lastDayCurrentMonth.' 23:59:59';
 $eventsMonthDayArray    = array();
@@ -178,7 +177,7 @@ if(isset($page) && is_object($page))
 }
 
 // query of all events
-if($plg_ter_aktiv == 1)
+if($plg_ter_aktiv)
 {
     // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
     $plg_organizations = '';
@@ -202,7 +201,7 @@ if($plg_ter_aktiv == 1)
         $sqlSyntax = ' AND cat_type = \'DAT\' AND ( ';
         for($i = 0, $iMax = count($plg_kal_cat); $i < $iMax; ++$i)
         {
-            $sqlSyntax = $sqlSyntax. 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
+            $sqlSyntax .= 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
         }
         $sqlSyntax = substr($sqlSyntax, 0, -4). ') ';
     }
@@ -239,9 +238,9 @@ if($plg_ter_aktiv == 1)
         $endDate   = new DateTime($row['dat_end']);
 
         // set custom name of plugin for calendar or use default Admidio name
-        if($plg_kal_cat_show == 1)
+        if($plg_kal_cat_show)
         {
-            if(substr($row['cat_name'], 3, 1) === '_')
+            if($row['cat_name'][3] === '_')
             {
                 $calendarName = $gL10n->get($row['cat_name']);
             }
@@ -316,7 +315,7 @@ if($plg_ter_aktiv == 1)
 }
 
 // query of all birthdays
-if($plg_geb_aktiv == 1)
+if($plg_geb_aktiv)
 {
     if($gDbType === 'postgresql')
     {
@@ -401,29 +400,29 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
 
 <table border="0" id="plgCalendarTable">
     <tr>';
-        if($plg_ajax_change == 1)
+        if($plg_ajax_change)
         {
-            echo "<th style=\"text-align: center;\" class=\"plgCalendarHeader\"><a href=\"#\" onclick=\"$.ajax({
-                type: 'GET',
-                url: '".$g_root_path."/adm_plugins/".$plugin_folder."/calendar.php',
+            echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.ajax({
+                type: "GET",
+                url: "'.$g_root_path.'/adm_plugins/'.$plugin_folder.'/calendar.php",
                 cache: false,
-                data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $currentMonth - 1, 1, $currentYear))."',
+                data: "ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth - 1, 1, $currentYear)).'",
                 success: function(html) {
-                    $('#plgCalendarContent').replaceWith(html);
-                    $('.admidio-calendar-link').popover();
+                    $("#plgCalendarContent").replaceWith(html);
+                    $(".admidio-calendar-link").popover();
                 }
-            }); return false;\">&laquo;</a></th>";
+            }); return false;">&laquo;</a></th>';
             echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>';
-            echo "<th style=\"text-align: center;\" class=\"plgCalendarHeader\"><a href=\"#\" onclick=\"$.ajax({
-                type: 'GET',
-                url: '".$g_root_path."/adm_plugins/".$plugin_folder."/calendar.php',
+            echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.ajax({
+                type: "GET",
+                url: "'.$g_root_path.'/adm_plugins/'.$plugin_folder.'/calendar.php",
                 cache: false,
-                data: 'ajax_change&amp;date_id=".date('mY', mktime(0, 0, 0, $currentMonth + 1, 1, $currentYear))."',
+                data: "ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth + 1, 1, $currentYear)).'",
                 success: function(html) {
-                    $('#plgCalendarContent').replaceWith(html);
-                    $('.admidio-calendar-link').popover();
+                    $("#plgCalendarContent").replaceWith(html);
+                    $(".admidio-calendar-link").popover();
                 }
-            }); return false;\">&raquo;</a></th>";
+            }); return false;">&raquo;</a></th>';
         }
         else
         {
@@ -461,32 +460,32 @@ while($currentDay <= $lastDayCurrentMonth)
     $dateObj = DateTime::createFromFormat('Y-m-j', $currentYear.'-'.$currentMonth.'-'.$currentDay);
 
     // Terminanzeige generieren
-    if($plg_ter_aktiv == 1)
+    if($plg_ter_aktiv)
     {
-        $ter_valid = 0;
-        if($plg_ter_login == 0)
+        $terValid = false;
+        if(!$plg_ter_login)
         {
-            $ter_valid = 1;
+            $terValid = true;
         }
-        if($plg_ter_login == 1 && $gValidLogin)
+        if($plg_ter_login && $gValidLogin)
         {
-            $ter_valid = 1;
+            $terValid = true;
         }
 
-        if($ter_valid == 1 && array_key_exists($currentDay, $eventsMonthDayArray))
+        if($terValid && array_key_exists($currentDay, $eventsMonthDayArray))
         {
             $hasEvents = true;
 
             foreach($eventsMonthDayArray[$currentDay] as $eventArray)
             {
-                if($plg_ajaxbox == 1 || $countEvents === 0)
+                if($plg_ajaxbox || $countEvents === 0)
                 {
                     if($eventArray['location'] !== '')
                     {
                         $eventArray['location'] = ', '. $eventArray['location'];
                     }
 
-                    if($htmlContent !== '' && $plg_ajaxbox == 1)
+                    if($htmlContent !== '' && $plg_ajaxbox)
                     {
                         $htmlContent .= '<br />';
                     }
@@ -527,20 +526,20 @@ while($currentDay <= $lastDayCurrentMonth)
     }
 
     // Geburtstagsanzeige generieren
-    if($plg_geb_aktiv == 1)
+    if($plg_geb_aktiv)
     {
-        $geb_valid = 0;
+        $gebValid = false;
 
-        if($plg_geb_login == 0)
+        if(!$plg_geb_login)
         {
-            $geb_valid = 1;
+            $gebValid = true;
         }
-        if($plg_geb_login == 1 && $gValidLogin)
+        if($plg_geb_login && $gValidLogin)
         {
-            $geb_valid = 1;
+            $gebValid = true;
         }
 
-        if($geb_valid == 1 && array_key_exists($currentDay, $birthdaysMonthDayArray))
+        if($gebValid && array_key_exists($currentDay, $birthdaysMonthDayArray))
         {
             foreach($birthdaysMonthDayArray[$currentDay] as $birthdayArray)
             {
@@ -552,7 +551,7 @@ while($currentDay <= $lastDayCurrentMonth)
                     $textContent .= ', ';
                 }
 
-                if($plg_geb_icon == 1)
+                if($plg_geb_icon)
                 {
                     $icon = '<img src=\''.$g_root_path.'/adm_plugins/'.$plugin_folder.'/cake.png\' alt=\'Birthday\' /> ';
                 }
@@ -641,7 +640,7 @@ while($currentDay <= $lastDayCurrentMonth)
 
         if($hasEvents || $hasBirthdays)
         {
-            if($plg_ajaxbox == 1)
+            if($plg_ajaxbox)
             {
                 if($ter_link !== '' && $geb_link !== '')
                 {
@@ -676,7 +675,7 @@ while($currentDay <= $lastDayCurrentMonth)
         echo $currentDay;
     }
     echo '</td>';
-    if($rest === 0 || $currentDay == $lastDayCurrentMonth)
+    if($rest === 0 || $currentDay === $lastDayCurrentMonth)
     {
         echo '</tr>';
         $boolNewStart = true;

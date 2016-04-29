@@ -45,7 +45,7 @@ class FunctionClass
         $dirHandle = @opendir($directory);
         if($dirHandle)
         {
-            while(($entry = readdir($dirHandle)) !== false)
+            while (($entry = readdir($dirHandle)) !== false)
             {
                 if($entry !== '.' && $entry !== '..' && is_file($directory.'/'.$entry))
                 {

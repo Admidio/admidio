@@ -76,7 +76,7 @@ if(!isset($plg_show_future) || !is_numeric($plg_show_names_extern))
 {
     $plg_show_future = 10;
 }
-// Prüfen, ob die Rollenbedingung gesetzt wurde            //
+// Prüfen, ob die Rollenbedingung gesetzt wurde
 if(!isset($plg_rolle_sql) || $plg_rolle_sql === '')
 {
     $rol_sql = 'is not null';
@@ -86,7 +86,7 @@ else
     $rol_sql = 'in '.$plg_rolle_sql;
 }
 
-// Prüfen, ob die Sotierbedingung gesetzt wurde            //
+// Prüfen, ob die Sotierbedingung gesetzt wurde
 if(!isset($plg_sort_sql) || $plg_sort_sql === '')
 {
     $sort_sql = 'desc';
@@ -97,7 +97,7 @@ else
 }
 
 // ist der Benutzer ausgeloggt und soll nur die Anzahl der Geb-Kinder angezeigt werden, dann Zeitraum auf 0 Tage setzen
-if($plg_show_names_extern == 0 && !$gValidLogin)
+if($plg_show_names_extern === 0 && !$gValidLogin)
 {
     $plg_show_zeitraum = 0;
     $plg_show_future = 0;
@@ -170,35 +170,36 @@ $birthdayStatement = $gDb->query($sql);
 $numberBirthdays = $birthdayStatement->rowCount();
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
-if($plg_show_headline == 1)
+if($plg_show_headline)
 {
     echo '<h3>'.$gL10n->get('PLG_BIRTHDAY_HEADLINE').'</h3>';
 }
 
 if($numberBirthdays > 0)
 {
-    if($plg_show_names_extern == 1 || $gValidLogin)
+    if($plg_show_names_extern === 1 || $gValidLogin)
     {
 
         echo '<ul id="plgBirthdayNameList">';
             while($row = $birthdayStatement->fetch())
             {
                 // Anzeigeart des Namens beruecksichtigen
-                if($plg_show_names == 2)        // Nachname, Vorname
+                switch ($plg_show_names)
                 {
-                    $plg_show_name = $row['last_name']. ', '. $row['first_name'];
-                }
-                elseif($plg_show_names == 3)    // Vorname
-                {
-                    $plg_show_name = $row['first_name'];
-                }
-                elseif($plg_show_names == 4)    // Loginname
-                {
-                    $plg_show_name = $row['usr_login_name'];
-                }
-                else                            // Vorname Nachname
-                {
-                    $plg_show_name = $row['first_name']. ' '. $row['last_name'];
+                    case 1:  // Vorname, Nachname
+                        $plg_show_name = $row['first_name']. ' '. $row['last_name'];
+                        break;
+                    case 2:  // Nachname, Vorname
+                        $plg_show_name = $row['last_name']. ', '. $row['first_name'];
+                        break;
+                    case 3:  // Vorname
+                        $plg_show_name = $row['first_name'];
+                        break;
+                    case 4:  // Loginname
+                        $plg_show_name = $row['usr_login_name'];
+                        break;
+                    default: // Vorname, Nachname
+                        $plg_show_name = $row['first_name']. ' '. $row['last_name'];
                 }
 
                 // ab einem festgelegten Alter wird fuer ausgeloggte Besucher nur der Nachname mit Anrede angezeigt
@@ -228,7 +229,7 @@ if($numberBirthdays > 0)
                             src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
                     }
                 }
-                elseif($plg_show_email_extern == 1 && strlen($row['email']) > 0)
+                elseif($plg_show_email_extern === 1 && strlen($row['email']) > 0)
                 {
                     $plg_show_name = $plg_show_name.'
                         <a class="admidio-icon-link" href="mailto:'. $row['email']. '"><img
@@ -301,7 +302,7 @@ if($numberBirthdays > 0)
 else
 {
     // Bei entsprechend gesetzter Konfiguration wird auch im Fall, dass keiner Geburtstag hat, eine Meldung ausgegeben.
-    if($plg_show_hinweis_keiner == 0)
+    if(!$plg_show_hinweis_keiner)
     {
         echo '<p>'.$gL10n->get('PLG_BIRTHDAY_NO_USER').'</p>';
     }
