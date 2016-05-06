@@ -15,7 +15,7 @@
  ***********************************************************************************************
  */
 
-// Select your database system for example 'mysql' or 'postgresql'
+// Select your database system for example 'mysql' or 'pgsql'
 $gDbType = 'mysql';
 
 // Table prefix for Admidio-Tables in database

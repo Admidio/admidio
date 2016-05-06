@@ -222,7 +222,7 @@ echo 'Edit data of database ...<br />';
 include_once('data_edit.php');
 
 // in postgresql all sequences must get a new start value because our inserts have given ids
-if($gDbType === 'postgresql')
+if($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
 {
     $sql = 'SELECT c.relname FROM pg_class c WHERE c.relkind = \'S\' ';
     $sqlStatement = $db->query($sql);
