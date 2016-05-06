@@ -57,7 +57,6 @@ class LanguageData
             $this->addLanguagePath($languagePath);
         }
         $this->setLanguage($language);
-        $this->textCache = array();
     }
 
     /**
@@ -67,7 +66,7 @@ class LanguageData
      */
     public function addLanguagePath($path)
     {
-        if(!in_array($path, $this->languageFilePath, true) && $path !== '')
+        if($path !== '' && !in_array($path, $this->languageFilePath, true))
         {
             $this->languageFilePath[] = $path;
         }

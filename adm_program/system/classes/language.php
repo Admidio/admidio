@@ -66,6 +66,47 @@ class Language
     }
 
     /**
+     * Reads a text string out of a language xml file that is identified with a unique text id e.g. SYS_COMMON.
+     * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @return string Returns the text string of the text id or empty string if not found.
+     */
+    protected function getTextFromTextId($textId)
+    {
+        // first read text from cache if it exists there
+        if(array_key_exists($textId, $this->languageData->textCache))
+        {
+            return $this->languageData->textCache[$textId];
+        }
+
+        // search for text id in every SimpleXMLElement (language file) of the object array
+        foreach($this->languageData->getLanguagePaths() as $languagePath)
+        {
+            $text = $this->searchLanguageText($this->xmlLanguageObjects, $languagePath,
+                $this->languageData->getLanguage(), $textId);
+
+            if($text !== '')
+            {
+                return $text;
+            }
+        }
+
+        // if text id wasn't found than search for it in reference language
+        // search for text id in every SimpleXMLElement (language file) of the object array
+        foreach($this->languageData->getLanguagePaths() as $languagePath)
+        {
+            $text = $this->searchLanguageText($this->xmlReferenceLanguageObjects, $languagePath,
+                $this->languageData->getLanguage(true), $textId);
+
+            if($text !== '')
+            {
+                return $text;
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * Reads a text string out of a language xml file that is identified
      * with a unique text id e.g. SYS_COMMON. If the text contains placeholders
      * than you must set more parameters to replace them.
@@ -91,64 +132,29 @@ class Language
             return 'Error: '.$this->languageData.' is not an object!';
         }
 
-        $text = '';
-
-        // first read text from cache if it exists there
-        if(array_key_exists($textId, $this->languageData->textCache))
-        {
-            $text = $this->languageData->textCache[$textId];
-        }
-        else
-        {
-            // search for text id in every SimpleXMLElement (language file) of the object array
-            foreach($this->languageData->getLanguagePaths() as $languagePath)
-            {
-                if($text === '')
-                {
-                    $text = $this->searchLanguageText($this->xmlLanguageObjects, $languagePath,
-                                                      $this->languageData->getLanguage(), $textId);
-                }
-            }
-
-            // if text id wasn't found than search for it in reference language
-            if($text === '')
-            {
-                // search for text id in every SimpleXMLElement (language file) of the object array
-                foreach($this->languageData->getLanguagePaths() as $languagePath)
-                {
-                    if($text === '')
-                    {
-                        $text = $this->searchLanguageText($this->xmlReferenceLanguageObjects, $languagePath,
-                                                          $this->languageData->getLanguage(true), $textId);
-                    }
-                }
-            }
-        }
-
-        if($text !== '')
-        {
-            // replace placeholder with value of parameters
-            $paramCount = func_num_args();
-            $paramArray = func_get_args();
-
-            for($paramNumber = 1; $paramNumber < $paramCount; ++$paramNumber)
-            {
-                $replaceArray = array(
-                    '#VAR'.$paramNumber.'#'      => $paramArray[$paramNumber],
-                    '#VAR'.$paramNumber.'_BOLD#' => '<strong>'.$paramArray[$paramNumber].'</strong>'
-                );
-                $text = str_replace(array_keys($replaceArray), array_values($replaceArray), $text);
-            }
-
-            // replace square brackets with html tags
-            $text = strtr($text, '[]', '<>');
-        }
+        $text = $this->getTextFromTextId($textId);
 
         // no text found then write #undefined text#
         if($text === '')
         {
-            $text = '#'.$textId.'#';
+            return '#'.$textId.'#';
         }
+
+        // replace placeholder with value of parameters
+        $paramCount = func_num_args();
+        $paramArray = func_get_args();
+
+        for($paramNumber = 1; $paramNumber < $paramCount; ++$paramNumber)
+        {
+            $replaceArray = array(
+                '#VAR'.$paramNumber.'#'      => $paramArray[$paramNumber],
+                '#VAR'.$paramNumber.'_BOLD#' => '<strong>'.$paramArray[$paramNumber].'</strong>'
+            );
+            $text = str_replace(array_keys($replaceArray), array_values($replaceArray), $text);
+        }
+
+        // replace square brackets with html tags
+        $text = strtr($text, '[]', '<>');
 
         return $text;
     }
