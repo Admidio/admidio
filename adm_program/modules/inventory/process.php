@@ -116,8 +116,8 @@ switch($postFunction)
         $row = $statement->fetch();
         $msgId = $row['max_id'] + 1;
 
-        $sql = "INSERT INTO ".TBL_MESSAGES." (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read)
-            VALUES ('CHAT', '0', '".$msgId."', '".$postNickname."', '', '', '".$postMessage."', CURRENT_TIMESTAMP, '0')";
+        $sql = 'INSERT INTO '.TBL_MESSAGES.' (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read)
+            VALUES (\'CHAT\', \'0\', \''.$msgId.'\', \''.$postNickname.'\', \'\', \'\', \''.$postMessage.'\', CURRENT_TIMESTAMP, \'0\')';
 
         $gDb->query($sql);
         break;

@@ -480,8 +480,8 @@ else
     {
         $PMId2 = 1;
 
-        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-                VALUES ('".$getMsgType."', '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', CURRENT_TIMESTAMP, '1')";
+        $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
+                VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', \''.$gCurrentUser->getValue('usr_id').'\', \''.$postTo[0].'\', CURRENT_TIMESTAMP, \'1\')';
 
         $gDb->query($sql);
         $getMsgId = $gDb->lastInsertId();
@@ -490,14 +490,14 @@ else
     {
         $PMId2 = $message->countMessageParts() + 1;
 
-        $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '1', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = '".$gCurrentUser->getValue('usr_id')."', msg_usr_id_receiver = '".$postTo[0]."'
-                WHERE msg_id = ".$getMsgId;
+        $sql = 'UPDATE '. TBL_MESSAGES. ' SET  msg_read = \'1\', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = \''.$gCurrentUser->getValue('usr_id').'\', msg_usr_id_receiver = \''.$postTo[0].'\'
+                WHERE msg_id = '.$getMsgId;
 
         $gDb->query($sql);
     }
 
-    $sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-            VALUES ('".$getMsgId."', '".$PMId2."', '".$gCurrentUser->getValue('usr_id')."', '".$postBodySQL."', CURRENT_TIMESTAMP)";
+    $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. ' (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
+            VALUES (\''.$getMsgId.'\', \''.$PMId2.'\', \''.$gCurrentUser->getValue('usr_id').'\', \''.$postBodySQL.'\', CURRENT_TIMESTAMP)';
 
     if ($gDb->query($sql))
     {
@@ -511,14 +511,14 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
     // save mail also to database
     if ($getMsgType !== 'PM' && $gValidLogin)
     {
-        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-                VALUES ('".$getMsgType."', '".$postSubjectSQL."', ".$gCurrentUser->getValue('usr_id').", '".$ReceiverString."', CURRENT_TIMESTAMP, 0)";
+        $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
+                VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', '.$gCurrentUser->getValue('usr_id').', \''.$ReceiverString.'\', CURRENT_TIMESTAMP, 0)';
 
         $gDb->query($sql);
         $getMsgId = $gDb->lastInsertId();
 
-        $sql = "INSERT INTO ". TBL_MESSAGES_CONTENT. " (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-                VALUES (".$getMsgId.", 1, ".$gCurrentUser->getValue('usr_id').", '".$postBodySQL."', CURRENT_TIMESTAMP)";
+        $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. ' (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
+                VALUES ('.$getMsgId.', 1, '.$gCurrentUser->getValue('usr_id').', \''.$postBodySQL.'\', CURRENT_TIMESTAMP)';
 
         $gDb->query($sql);
     }

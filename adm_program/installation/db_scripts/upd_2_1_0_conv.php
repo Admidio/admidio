@@ -94,7 +94,7 @@ while($row_orga = $orgaStatement->fetch())
 
     // Alle Termine der neuen Kategorie zuordnen
     $sql = 'UPDATE '.TBL_DATES.' SET dat_cat_id = '. $category_common. '
-             WHERE dat_cat_id is null
+             WHERE dat_cat_id IS NULL
                AND dat_org_shortname LIKE \''. $row_orga['org_shortname']. '\'';
     $gDb->query($sql);
 

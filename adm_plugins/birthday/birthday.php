@@ -79,17 +79,17 @@ if(!isset($plg_show_future) || !is_numeric($plg_show_names_extern))
 // Prüfen, ob die Rollenbedingung gesetzt wurde
 if(!isset($plg_rolle_sql) || $plg_rolle_sql === '')
 {
-    $rol_sql = 'is not null';
+    $rol_sql = 'IS NOT NULL';
 }
 else
 {
-    $rol_sql = 'in '.$plg_rolle_sql;
+    $rol_sql = 'IN '.$plg_rolle_sql;
 }
 
 // Prüfen, ob die Sotierbedingung gesetzt wurde
 if(!isset($plg_sort_sql) || $plg_sort_sql === '')
 {
-    $sort_sql = 'desc';
+    $sort_sql = 'DESC';
 }
 else
 {
