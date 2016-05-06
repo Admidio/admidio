@@ -24,9 +24,9 @@
  */
 class Organization extends TableAccess
 {
-    protected $bCheckChildOrganizations;     ///< Flag will be set if the class had already search for child organizations
-    protected $childOrganizations = array(); ///< Array with all child organizations of this organization
-    protected $preferences = array();        ///< Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
+    protected $bCheckChildOrganizations = false;   ///< Flag will be set if the class had already search for child organizations
+    protected $childOrganizations       = array(); ///< Array with all child organizations of this organization
+    protected $preferences              = array(); ///< Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
 
     /**
      * Constructor that will create an object of a recordset of the table adm_organizations.
@@ -76,18 +76,21 @@ class Organization extends TableAccess
         // read id of system user from database
         $sql = 'SELECT usr_id
                   FROM '.TBL_USERS.'
-                 WHERE usr_login_name LIKE \''.$gL10n->get('SYS_SYSTEM').'\' ';
+                 WHERE usr_login_name LIKE \''.$gL10n->get('SYS_SYSTEM').'\'';
         $systemUserStatement = $this->db->query($sql);
-        $row = $systemUserStatement->fetch();
-        $systemUserId = $row['usr_id'];
+        $systemUserId = (int) $systemUserStatement->fetchColumn();
 
         // create all systemmail texts and write them into table adm_texts
-        $systemmailsTexts = array('SYSMAIL_REGISTRATION_USER'      => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
-                                  'SYSMAIL_REGISTRATION_WEBMASTER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
-                                  'SYSMAIL_REFUSE_REGISTRATION'    => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
-                                  'SYSMAIL_NEW_PASSWORD'           => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
-                                  'SYSMAIL_ACTIVATION_LINK'        => $gL10n->get('SYS_SYSMAIL_ACTIVATION_LINK'));
+        $systemmailsTexts = array(
+            'SYSMAIL_REGISTRATION_USER'      => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
+            'SYSMAIL_REGISTRATION_WEBMASTER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
+            'SYSMAIL_REFUSE_REGISTRATION'    => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
+            'SYSMAIL_NEW_PASSWORD'           => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
+            'SYSMAIL_ACTIVATION_LINK'        => $gL10n->get('SYS_SYSMAIL_ACTIVATION_LINK')
+        );
         $text = new TableText($this->db);
+
+        $orgId = $this->getValue('org_id');
 
         foreach($systemmailsTexts as $key => $value)
         {
@@ -95,7 +98,7 @@ class Organization extends TableAccess
             $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $value);
 
             $text->clear();
-            $text->setValue('txt_org_id', $this->getValue('org_id'));
+            $text->setValue('txt_org_id', $orgId);
             $text->setValue('txt_name', $key);
             $text->setValue('txt_text', $value);
             $text->save();
@@ -103,26 +106,26 @@ class Organization extends TableAccess
 
         // create default category for roles, events and weblinks
         $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                               VALUES ('. $this->getValue('org_id'). ', \'ROL\', \'COMMON\', \'SYS_COMMON\', 0, 1, 1, '.$systemUserId.',\''. DATETIME_NOW.'\')';
+                                        VALUES ('.$orgId.', \'ROL\', \'COMMON\', \'SYS_COMMON\', 0, 1, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')';
         $this->db->query($sql);
         $categoryCommon = $this->db->lastInsertId();
 
         $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                         VALUES ('. $this->getValue('org_id').', \'ROL\', \'GROUPS\',  \'INS_GROUPS\', 0, 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\')
-                                              , ('. $this->getValue('org_id').', \'ROL\', \'COURSES\', \'INS_COURSES\', 0, 0, 0, 3, '.$systemUserId.',\''. DATETIME_NOW.'\')
-                                              , ('. $this->getValue('org_id').', \'ROL\', \'TEAMS\',   \'INS_TEAMS\', 0, 0, 0, 4, '.$systemUserId.',\''. DATETIME_NOW.'\')
-                                              , ('. $this->getValue('org_id').', \'LNK\', \'COMMON\',  \'SYS_COMMON\', 0, 1, 0, 1, '.$systemUserId.',\''. DATETIME_NOW.'\')
-                                              , ('. $this->getValue('org_id').', \'LNK\', \'INTERN\',  \'INS_INTERN\', 1, 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\')
-                                              , ('. $this->getValue('org_id').', \'DAT\', \'COMMON\',  \'SYS_COMMON\', 0, 1, 0, 1, '.$systemUserId.',\''. DATETIME_NOW.'\')
-                                              , ('. $this->getValue('org_id').', \'DAT\', \'TRAINING\',\'INS_TRAINING\', 0, 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\')
-                                              , ('. $this->getValue('org_id').', \'DAT\', \'COURSES\', \'INS_COURSES\', 0, 0, 0, 3, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
+                                        VALUES ('.$orgId.', \'ROL\', \'GROUPS\',   \'INS_GROUPS\',   0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'ROL\', \'COURSES\',  \'INS_COURSES\',  0, 0, 0, 3, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'ROL\', \'TEAMS\',    \'INS_TEAMS\',    0, 0, 0, 4, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'LNK\', \'COMMON\',   \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'LNK\', \'INTERN\',   \'INS_INTERN\',   1, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'DAT\', \'COMMON\',   \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'DAT\', \'TRAINING\', \'INS_TRAINING\', 0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'DAT\', \'COURSES\',  \'INS_COURSES\',  0, 0, 0, 3, '.$systemUserId.', \''.DATETIME_NOW.'\')';
         $this->db->query($sql);
 
         // create default folder for download module in database
         $sql = 'INSERT INTO '.TBL_FOLDERS.' (fol_org_id, fol_type, fol_name, fol_path,
-                                               fol_locked, fol_public, fol_timestamp)
-                                        VALUES ('. $this->getValue('org_id'). ', \'DOWNLOAD\', \'download\', \'/adm_my_files\',
-                                                0,1,\''.DATETIME_NOW.'\')';
+                                             fol_locked, fol_public, fol_timestamp)
+                                     VALUES ('.$orgId.', \'DOWNLOAD\', \'download\', \'/adm_my_files\',
+                                             0, 1, \''.DATETIME_NOW.'\')';
         $this->db->query($sql);
 
         // now create default roles
@@ -184,12 +187,12 @@ class Organization extends TableAccess
         $member->startMembership($roleMember->getValue('rol_id'),    $userId);
 
         // create object with current user field structure
-        $gProfileFields = new ProfileFields($this->db, $this->getValue('org_id'));
+        $gProfileFields = new ProfileFields($this->db, $orgId);
 
         // create default list configurations
         $addressList = new ListConfiguration($this->db);
         $addressList->setValue('lst_name', $gL10n->get('INS_ADDRESS_LIST'));
-        $addressList->setValue('lst_org_id', $this->getValue('org_id'));
+        $addressList->setValue('lst_org_id', $orgId);
         $addressList->setValue('lst_global', 1);
         $addressList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
         $addressList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
@@ -201,13 +204,13 @@ class Organization extends TableAccess
 
         // set addresslist to default configuration
         $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$addressList->getValue('lst_id').'\'
-                 WHERE prf_org_id = '.$this->getValue('org_id').'
+                 WHERE prf_org_id = '.$orgId.'
                    AND prf_name   = \'lists_default_configuation\' ';
         $this->db->query($sql);
 
         $phoneList = new ListConfiguration($this->db);
         $phoneList->setValue('lst_name', $gL10n->get('INS_PHONE_LIST'));
-        $phoneList->setValue('lst_org_id', $this->getValue('org_id'));
+        $phoneList->setValue('lst_org_id', $orgId);
         $phoneList->setValue('lst_global', 1);
         $phoneList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
         $phoneList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
@@ -219,7 +222,7 @@ class Organization extends TableAccess
 
         $contactList = new ListConfiguration($this->db);
         $contactList->setValue('lst_name', $gL10n->get('SYS_CONTACT_DETAILS'));
-        $contactList->setValue('lst_org_id', $this->getValue('org_id'));
+        $contactList->setValue('lst_org_id', $orgId);
         $contactList->setValue('lst_global', 1);
         $contactList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
         $contactList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
@@ -234,7 +237,7 @@ class Organization extends TableAccess
 
         $formerList = new ListConfiguration($this->db);
         $formerList->setValue('lst_name', $gL10n->get('INS_MEMBERSHIP'));
-        $formerList->setValue('lst_org_id', $this->getValue('org_id'));
+        $formerList->setValue('lst_org_id', $orgId);
         $formerList->setValue('lst_global', 1);
         $formerList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
         $formerList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
@@ -253,26 +256,29 @@ class Organization extends TableAccess
      */
     public function getFamilySQL($shortname = false)
     {
-        $organizationsId = '';
-        $organizationsShortname = '';
-        $arr_ref_orgas = $this->getOrganizationsInRelationship(true, true);
-
-        foreach($arr_ref_orgas as $key => $value)
-        {
-            $organizationsShortname .= '\''.$value.'\',';
-            $organizationsId .= $key.',';
-        }
-
-        $organizationsShortname .= '\''. $this->getValue('org_shortname'). '\'';
-        $organizationsId .= $this->getValue('org_id');
+        $organizations = $this->getOrganizationsInRelationship(true, true);
 
         if($shortname)
         {
-            return $organizationsShortname;
+            /**
+             * @param string $value
+             * @return string
+             */
+            function addQuotationMarks($value)
+            {
+                return '\''.$value.'\'';
+            }
+
+            $organizationShortnames = array_values($organizations);
+            $organizationShortnames[] = $this->getValue('org_shortname');
+            $organizationShortnames = array_map('addQuotationMarks', $organizationShortnames);
+            return implode(',', $organizationShortnames);
         }
         else
         {
-            return $organizationsId;
+            $organizationIds = array_keys($organizations);
+            $organizationIds[] = $this->getValue('org_id');
+            return implode(',', $organizationIds);
         }
     }
 
@@ -286,9 +292,7 @@ class Organization extends TableAccess
      */
     public function getOrganizationsInRelationship($child = true, $parent = true, $longname = false)
     {
-        $arr_child_orgas = array();
-
-        $sql = 'SELECT *
+        $sql = 'SELECT org_id, org_longname, org_shortname
                   FROM '.TBL_ORGANIZATIONS.'
                  WHERE ';
         if($child)
@@ -305,18 +309,19 @@ class Organization extends TableAccess
         }
         $organizationsStatement = $this->db->query($sql);
 
+        $childOrganizations = array();
         while($row = $organizationsStatement->fetch())
         {
             if($longname)
             {
-                $arr_child_orgas[$row['org_id']] = $row['org_longname'];
+                $childOrganizations[$row['org_id']] = $row['org_longname'];
             }
             else
             {
-                $arr_child_orgas[$row['org_id']] = $row['org_shortname'];
+                $childOrganizations[$row['org_id']] = $row['org_shortname'];
             }
         }
-        return $arr_child_orgas;
+        return $childOrganizations;
     }
 
     /**
@@ -329,14 +334,14 @@ class Organization extends TableAccess
     {
         if(count($this->preferences) === 0)
         {
-            $sql = 'SELECT *
+            $sql = 'SELECT prf_name, prf_value
                       FROM '.TBL_PREFERENCES.'
                      WHERE prf_org_id = '. $this->getValue('org_id');
             $preferencesStatement = $this->db->query($sql);
 
-            while($prf_row = $preferencesStatement->fetch())
+            while($prfRow = $preferencesStatement->fetch())
             {
-                $this->preferences[$prf_row['prf_name']] = $prf_row['prf_value'];
+                $this->preferences[$prfRow['prf_name']] = $prfRow['prf_value'];
             }
         }
 
@@ -344,10 +349,9 @@ class Organization extends TableAccess
     }
 
     /**
-     * Method checks if this organization is the parent of other organizations.
-     * @return bool Return @b true if the organization has child organizations.
+     * @return array Returns an array with all child organizations
      */
-    public function hasChildOrganizations()
+    protected function getChildOrganizations()
     {
         if(!$this->bCheckChildOrganizations)
         {
@@ -356,7 +360,16 @@ class Organization extends TableAccess
             $this->bCheckChildOrganizations = true;
         }
 
-        if(count($this->childOrganizations) > 0)
+        return $this->childOrganizations;
+    }
+
+    /**
+     * Method checks if this organization is the parent of other organizations.
+     * @return bool Return @b true if the organization has child organizations.
+     */
+    public function hasChildOrganizations()
+    {
+        if(count($this->getChildOrganizations()) > 0)
         {
             return true;
         }
@@ -374,27 +387,13 @@ class Organization extends TableAccess
      */
     public function isChildOrganization($organizationId = 0)
     {
-        $returnCode = false;
-
-        if(!$this->bCheckChildOrganizations)
-        {
-            // read parent organization from database
-            $this->childOrganizations = $this->getOrganizationsInRelationship(true, false);
-            $this->bCheckChildOrganizations = true;
-        }
-
         // if no organization was set in parameter then check the organization of this object
         if($organizationId === 0)
         {
             $organizationId = $this->getValue('org_id');
         }
 
-        if(is_numeric($organizationId))
-        {
-            $returnCode = array_key_exists($organizationId, $this->childOrganizations);
-        }
-
-        return $returnCode;
+        return array_key_exists($organizationId, $this->getChildOrganizations());
     }
 
     /**
@@ -407,17 +406,19 @@ class Organization extends TableAccess
     public function setPreferences($preferences, $update = true)
     {
         $this->db->startTransaction();
-        $db_preferences = $this->getPreferences();
+        $this->getPreferences();
+
+        $orgId = $this->getValue('org_id');
 
         foreach($preferences as $key => $value)
         {
-            if(array_key_exists($key, $db_preferences))
+            if(array_key_exists($key, $this->preferences))
             {
-                if($update && $value != $db_preferences[$key])
+                if($update && $value != $this->preferences[$key])
                 {
                     // Pref existiert in DB, aber Wert hat sich geaendert
                     $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$value.'\'
-                             WHERE prf_org_id = '. $this->getValue('org_id'). '
+                             WHERE prf_org_id = '.$orgId.'
                                AND prf_name   = \''.$key.'\' ';
                     $this->db->query($sql);
                 }
@@ -426,7 +427,7 @@ class Organization extends TableAccess
             {
                 // Parameter existiert noch nicht in DB
                 $sql = 'INSERT INTO '.TBL_PREFERENCES.' (prf_org_id, prf_name, prf_value)
-                        VALUES   ('. $this->getValue('org_id'). ', \''.$key.'\', \''.$value.'\') ';
+                             VALUES ('.$orgId.', \''.$key.'\', \''.$value.'\') ';
                 $this->db->query($sql);
             }
         }
@@ -448,7 +449,8 @@ class Organization extends TableAccess
         {
             return false;
         }
-        elseif($columnName === 'org_homepage' && $newValue !== '')
+
+        if($columnName === 'org_homepage' && $newValue !== '')
         {
             // Homepage noch mit http vorbelegen
             if(strpos(admStrToLower($newValue), 'http://')  === false
