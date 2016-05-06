@@ -61,29 +61,34 @@ class SystemMail extends Email
         }
 
         // read email text from text table in database
-        if($this->smTextObject->getValue('txt_name') != $systemMailId)
+        if($this->smTextObject->getValue('txt_name') !== $systemMailId)
         {
-            $this->smTextObject->readDataByColumns(array('txt_name'   => $systemMailId,
-                                                         'txt_org_id' => $this->smOrganization->getValue('org_id')));
+            $this->smTextObject->readDataByColumns(array(
+                'txt_name'   => $systemMailId,
+                'txt_org_id' => $this->smOrganization->getValue('org_id')
+            ));
         }
 
         $mailSrcText = $this->smTextObject->getValue('txt_text');
 
         // now replace all parameters in email text
-        $mailSrcText = preg_replace('/#user_first_name#/', $user->getValue('FIRST_NAME', 'database'),  $mailSrcText);
-        $mailSrcText = preg_replace('/#user_last_name#/',  $user->getValue('LAST_NAME', 'database'), $mailSrcText);
-        $mailSrcText = preg_replace('/#user_login_name#/', $user->getValue('usr_login_name'), $mailSrcText);
-        $mailSrcText = preg_replace('/#user_email#/', $user->getValue('EMAIL'),   $mailSrcText);
-        $mailSrcText = preg_replace('/#administrator_email#/', $gPreferences['email_administrator'],  $mailSrcText);
-        $mailSrcText = preg_replace('/#organization_short_name#/', $this->smOrganization->getValue('org_shortname'), $mailSrcText);
-        $mailSrcText = preg_replace('/#organization_long_name#/',  $this->smOrganization->getValue('org_longname'), $mailSrcText);
-        $mailSrcText = preg_replace('/#organization_homepage#/',   $this->smOrganization->getValue('org_homepage'), $mailSrcText);
+        $pregRepArray = array(
+            '/#user_first_name#/'         => $user->getValue('FIRST_NAME', 'database'),
+            '/#user_last_name#/'          => $user->getValue('LAST_NAME', 'database'),
+            '/#user_login_name#/'         => $user->getValue('usr_login_name'),
+            '/#user_email#/'              => $user->getValue('EMAIL'),
+            '/#administrator_email#/'     => $gPreferences['email_administrator'],
+            '/#organization_short_name#/' => $this->smOrganization->getValue('org_shortname'),
+            '/#organization_long_name#/'  => $this->smOrganization->getValue('org_longname'),
+            '/#organization_homepage#/'   => $this->smOrganization->getValue('org_homepage')
+        );
+
+        $mailSrcText = preg_replace(array_keys($pregRepArray), array_values($pregRepArray), $mailSrcText);
 
         // zusaetzliche Variablen ersetzen
-        $iMax = count($this->smVariables);
-        for($i = 1; $i <= $iMax; ++$i)
+        foreach ($this->smVariables as $number => $value)
         {
-            $mailSrcText = preg_replace('/#variable'.$i.'#/', $this->smVariables[$i], $mailSrcText);
+            $mailSrcText = preg_replace('/#variable'.$number.'#/', $value, $mailSrcText);
         }
 
         // Betreff und Inhalt anhand von Kennzeichnungen splitten oder ggf. Default-Inhalte nehmen
