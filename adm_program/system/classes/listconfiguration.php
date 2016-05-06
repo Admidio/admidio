@@ -28,18 +28,18 @@
  */
 class ListConfiguration extends TableLists
 {
-    protected $columns = array(); // Array ueber alle Listenspaltenobjekte
+    protected $columns = array(); // Array with all Listenspaltenobjekte
 
     /**
      * Constructor that will create an object to handle the configuration of lists.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $lst_id   The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $lstId    The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $lst_id = 0)
+    public function __construct(&$database, $lstId = 0)
     {
-        parent::__construct($database, $lst_id);
+        parent::__construct($database, $lstId);
 
-        if($lst_id > 0)
+        if($lstId > 0)
         {
             $this->readColumns();
         }
@@ -47,42 +47,45 @@ class ListConfiguration extends TableLists
 
     /**
      * Add new column to column array
-     * @param int    $number
-     * @param        $field
-     * @param string $sort
-     * @param string $filter
+     * @param int        $number
+     * @param int|string $field
+     * @param string     $sort
+     * @param string     $filter
      * @return bool
      */
     public function addColumn($number, $field, $sort = '', $filter = '')
     {
         // can join max. 61 tables
         // Passed parameters must be set carefully
-        if(count($this->columns) < 57 && $number > 0 && $field !== '')
+        if($number === 0 || $field === '' || count($this->columns) >= 57)
         {
-            // If colum doesn't exist create object
-            if(!isset($this->columns[$number]))
-            {
-                $this->columns[$number] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
-                $this->columns[$number]->setValue('lsc_lsf_id', $this->getValue('lst_id'));
-            }
-
-            // Assign content of column
-            $this->columns[$number]->setValue('lsc_number', $number);
-            if(is_numeric($field))
-            {
-                $this->columns[$number]->setValue('lsc_usf_id', $field);
-                $this->columns[$number]->setValue('lsc_special_field', '');
-            }
-            else
-            {
-                $this->columns[$number]->setValue('lsc_usf_id', '');
-                $this->columns[$number]->setValue('lsc_special_field', $field);
-            }
-            $this->columns[$number]->setValue('lsc_sort', $sort);
-            $this->columns[$number]->setValue('lsc_filter', $filter);
-            return true;
+            return false;
         }
-        return false;
+
+        // If column doesn't exist create object
+        if(!array_key_exists($number, $this->columns))
+        {
+            $this->columns[$number] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
+            $this->columns[$number]->setValue('lsc_lsf_id', $this->getValue('lst_id'));
+        }
+
+        // Assign content of column
+        if(is_numeric($field))
+        {
+            $this->columns[$number]->setValue('lsc_usf_id', $field);
+            $this->columns[$number]->setValue('lsc_special_field', '');
+        }
+        else
+        {
+            $this->columns[$number]->setValue('lsc_usf_id', '');
+            $this->columns[$number]->setValue('lsc_special_field', $field);
+        }
+
+        $this->columns[$number]->setValue('lsc_number', $number);
+        $this->columns[$number]->setValue('lsc_sort', $sort);
+        $this->columns[$number]->setValue('lsc_filter', $filter);
+
+        return true;
     }
 
     public function clear()
@@ -105,37 +108,41 @@ class ListConfiguration extends TableLists
      * Delete pointed columns out of configuration
      * @param int  $number
      * @param bool $all Define all columns to be deleted
+     * @return bool
      */
     public function deleteColumn($number, $all = false)
     {
-        if($number <= $this->countColumns())
+        if($number > $this->countColumns()) {
+            return false;
+        }
+
+        if($all)
         {
-            if($all)
+            // Delete all columns starting with number
+            for($newColumnNumber = $this->countColumns(); $newColumnNumber >= $number; --$newColumnNumber)
             {
-                // Delete all columns starting with number
-                for($newColumnNumber = $this->countColumns(); $newColumnNumber >= $number; --$newColumnNumber)
-                {
-                    $this->columns[$newColumnNumber]->delete();
-                    array_pop($this->columns);
-                }
-            }
-            else
-            {
-                // only 1 columns is deleted and following are going 1 step up
-                for($newColumnNumber = $number, $max = $this->countColumns(); $newColumnNumber < $max; ++$newColumnNumber)
-                {
-                    $newColumn = $this->columns[$newColumnNumber];
-                    $oldColumn = $this->columns[$newColumnNumber + 1];
-                    $newColumn->setValue('lsc_usf_id',        $oldColumn->getValue('lsc_usf_id'));
-                    $newColumn->setValue('lsc_special_field', $oldColumn->getValue('lsc_special_field'));
-                    $newColumn->setValue('lsc_sort',          $oldColumn->getValue('lsc_sort'));
-                    $newColumn->setValue('lsc_filter',        $oldColumn->getValue('lsc_filter'));
-                    $newColumn->save();
-                }
                 $this->columns[$newColumnNumber]->delete();
                 array_pop($this->columns);
             }
         }
+        else
+        {
+            // only 1 columns is deleted and following are going 1 step up
+            for($newColumnNumber = $number, $max = $this->countColumns(); $newColumnNumber < $max; ++$newColumnNumber)
+            {
+                $newColumn = $this->columns[$newColumnNumber];
+                $oldColumn = $this->columns[$newColumnNumber + 1];
+                $newColumn->setValue('lsc_usf_id',        $oldColumn->getValue('lsc_usf_id'));
+                $newColumn->setValue('lsc_special_field', $oldColumn->getValue('lsc_special_field'));
+                $newColumn->setValue('lsc_sort',          $oldColumn->getValue('lsc_sort'));
+                $newColumn->setValue('lsc_filter',        $oldColumn->getValue('lsc_filter'));
+                $newColumn->save();
+            }
+            $this->columns[$newColumnNumber]->delete();
+            array_pop($this->columns);
+        }
+
+        return true;
     }
 
     /**
@@ -144,32 +151,28 @@ class ListConfiguration extends TableLists
      * column list. If that won't help then @b null will be returned.
      * @param int $number The internal number of the column.
      *                    This will be the position of the column in the list.
-     * @return object|null Returns a TableAccess object of the database table @b adm_list_columns.
+     * @return \TableAccess|null Returns a TableAccess object of the database table @b adm_list_columns.
      */
     public function getColumnObject($number)
     {
-        if(isset($this->columns[$number]))
+        if(array_key_exists($number, $this->columns))
         {
             return $this->columns[$number];
         }
-        else
+
+        // column not found, then try to repair list
+        $this->repair();
+        if(array_key_exists($number, $this->columns))
         {
-            // column not found, then try to repair list
-            $this->repair();
-            if(isset($this->columns[$number]))
-            {
-                return $this->columns[$number];
-            }
-            else
-            {
-                return null;
-            }
+            return $this->columns[$number];
         }
+
+        return null;
     }
 
     /**
      * prepare SQL to list configuration
-     * @param array  $roleIds Array with all roles, which members are shown
+     * @param int[]  $roleIds Array with all roles, which members are shown
      * @param int    $memberStatus 0 - Only active members of a role
      *                             1 - Only former members
      *                             2 - Active and former members of a role
@@ -181,31 +184,25 @@ class ListConfiguration extends TableLists
     {
         global $gL10n, $gProfileFields, $gCurrentOrganization, $gDbType;
 
-        $sqlSelect  = '';
-        $sqlJoin    = '';
-        $sqlWhere   = '';
-        $sqlOrderBy = '';
-        $sqlRoleIds = '';
-        $sqlMemberStatus = '';
+        $sqlColumnNames = array();
+        $sqlOrderBys    = array();
+        $sqlJoin  = '';
+        $sqlWhere = '';
 
-        foreach($this->columns as $number => $listColumn)
+        foreach($this->columns as $listColumn)
         {
-            // add column
-            if($sqlSelect !== '')
-            {
-                $sqlSelect .= ', ';
-            }
+            $lscUsfId = (int) $listColumn->getValue('lsc_usf_id');
 
             $tableAlias = '';
-            if($listColumn->getValue('lsc_usf_id') > 0)
+            if($lscUsfId > 0)
             {
                 // dynamic profile field
-                $tableAlias = 'row'. $listColumn->getValue('lsc_number'). 'id'. $listColumn->getValue('lsc_usf_id');
+                $tableAlias = 'row'. $listColumn->getValue('lsc_number'). 'id'. $lscUsfId;
 
                 // define JOIN - Syntax
-                $sqlJoin = $sqlJoin.' LEFT JOIN '.TBL_USER_DATA.' '.$tableAlias.'
-                                             ON '.$tableAlias.'.usd_usr_id = usr_id
-                                            AND '.$tableAlias.'.usd_usf_id = '.$listColumn->getValue('lsc_usf_id');
+                $sqlJoin .= ' LEFT JOIN '.TBL_USER_DATA.' '.$tableAlias.'
+                                     ON '.$tableAlias.'.usd_usr_id = usr_id
+                                    AND '.$tableAlias.'.usd_usf_id = '.$lscUsfId;
 
                 // usf_id is prefix for the table
                 $dbColumnName = $tableAlias.'.usd_value';
@@ -216,18 +213,14 @@ class ListConfiguration extends TableLists
                 $dbColumnName = $listColumn->getValue('lsc_special_field');
             }
 
-            $sqlSelect .= $dbColumnName;
+            $sqlColumnNames[] = $dbColumnName;
 
-            $userFieldType = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type');
+            $userFieldType = $gProfileFields->getPropertyById($lscUsfId, 'usf_type');
 
             // create a valid sort
-            if(strlen($listColumn->getValue('lsc_sort')) > 0)
+            $lscSort = $listColumn->getValue('lsc_sort');
+            if($lscSort !== '')
             {
-                if($sqlOrderBy !== '')
-                {
-                    $sqlOrderBy .= ', ';
-                }
-
                 if($userFieldType === 'NUMBER' || $userFieldType === 'DECIMAL')
                 {
                     // if a field has numeric values then there must be a cast because database
@@ -241,22 +234,22 @@ class ListConfiguration extends TableLists
                         // mysql
                         $columnType = 'unsigned';
                     }
-                    $sqlOrderBy = $sqlOrderBy. ' CAST('.$dbColumnName. ' AS '.$columnType.') '. $listColumn->getValue('lsc_sort');
+                    $sqlOrderBys[] = ' CAST('.$dbColumnName.' AS '.$columnType.') '.$lscSort;
                 }
                 else
                 {
-                    $sqlOrderBy = $sqlOrderBy. $dbColumnName. ' '. $listColumn->getValue('lsc_sort');
+                    $sqlOrderBys[] = $dbColumnName.' '.$lscSort;
                 }
             }
 
             // Handle the conditions for the columns
-            if(strlen($listColumn->getValue('lsc_filter')) > 0)
+            if($listColumn->getValue('lsc_filter') !== '')
             {
                 $value = $listColumn->getValue('lsc_filter');
                 $type = '';
 
                 // custom profile field
-                if($listColumn->getValue('lsc_usf_id') > 0)
+                if($lscUsfId > 0)
                 {
                     switch ($userFieldType)
                     {
@@ -274,7 +267,7 @@ class ListConfiguration extends TableLists
                             $type = 'int';
 
                             // replace all field values with their internal numbers
-                            $arrListValues = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_value_list', 'text');
+                            $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
                             $value = array_search(admStrToLower($value), array_map('admStrToLower', $arrListValues), true);
                             break;
 
@@ -313,34 +306,25 @@ class ListConfiguration extends TableLists
                 $parser = new ConditionParser();
 
                 // if profile field then add not exists condition
-                if($listColumn->getValue('lsc_usf_id') > 0)
+                if($lscUsfId > 0)
                 {
                     $parser->setNotExistsStatement('SELECT 1
                                                       FROM '.TBL_USER_DATA.' '.$tableAlias.'s
                                                      WHERE '.$tableAlias.'s.usd_usr_id = usr_id
-                                                       AND '.$tableAlias.'s.usd_usf_id = '.$listColumn->getValue('lsc_usf_id'));
+                                                       AND '.$tableAlias.'s.usd_usf_id = '.$lscUsfId);
                 }
 
                 // now transform condition into SQL
-                $condition = $parser->makeSqlStatement($value, $dbColumnName, $type, $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name')); // TODO Excpetion handling
-                $sqlWhere .= $condition;
+                $sqlWhere .= $parser->makeSqlStatement($value, $dbColumnName, $type, $gProfileFields->getPropertyById($lscUsfId, 'usf_name')); // TODO Exception handling
             }
         }
 
-        // Create role-IDs
-        foreach($roleIds as $key => $value)
-        {
-            if(is_numeric($key))
-            {
-                if($sqlRoleIds !== '')
-                {
-                    $sqlRoleIds .= ', ';
-                }
-                $sqlRoleIds .= $value;
-            }
-        }
+        $sqlColumnNames = implode(', ', $sqlColumnNames);
+        $sqlOrderBys    = implode(', ', $sqlOrderBys);
+        $sqlRoleIds     = implode(', ', $roleIds);
 
         // Set state of membership
+        $sqlMemberStatus = '';
         if ($memberStatus === 0)
         {
             if ($startDate === null)
@@ -351,6 +335,7 @@ class ListConfiguration extends TableLists
             {
                 $sqlMemberStatus = 'AND mem_begin <= \''.$endDate.' 23:59:59\'';
             }
+
             if ($endDate === null)
             {
                 $sqlMemberStatus .= 'AND mem_end >= \''.DATE_NOW.'\'';
@@ -366,7 +351,7 @@ class ListConfiguration extends TableLists
         }
 
         // Set SQL-Statement
-        $sql = 'SELECT mem_leader, usr_id, '.$sqlSelect.'
+        $sql = 'SELECT mem_leader, usr_id, '.$sqlColumnNames.'
                   FROM '.TBL_MEMBERS.'
             INNER JOIN '.TBL_ROLES.'
                     ON rol_id = mem_rol_id
@@ -382,9 +367,9 @@ class ListConfiguration extends TableLists
                        '.$sqlMemberStatus.'
                        '.$sqlWhere.'
               ORDER BY mem_leader DESC';
-        if($sqlOrderBy !== '')
+        if($sqlOrderBys !== '')
         {
-            $sql = $sql. ', '. $sqlOrderBy;
+            $sql .= ', '.$sqlOrderBys;
         }
 
         return $sql;
@@ -401,10 +386,11 @@ class ListConfiguration extends TableLists
               ORDER BY lsc_number ASC';
         $lscStatement = $this->db->query($sql);
 
-        while($lsc_row = $lscStatement->fetch())
+        while($lscRow = $lscStatement->fetch())
         {
-            $this->columns[$lsc_row['lsc_number']] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
-            $this->columns[$lsc_row['lsc_number']]->setArray($lsc_row);
+            $lscNumber = (int) $lscRow['lsc_number'];
+            $this->columns[$lscNumber] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
+            $this->columns[$lscNumber]->setArray($lscRow);
         }
     }
 
@@ -423,7 +409,7 @@ class ListConfiguration extends TableLists
         // check for every column if the number is expected otherwise set new number
         foreach($this->columns as $number => $listColumn)
         {
-            if($number != $newColumnNumber)
+            if($number !== $newColumnNumber)
             {
                 $this->columns[$number]->setValue('lsc_number', $newColumnNumber);
                 $this->columns[$number]->save();
