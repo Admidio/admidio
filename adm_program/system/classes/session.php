@@ -131,22 +131,21 @@ class Session extends TableAccess
      */
     public function &getObject($objectName)
     {
-        $returnParam = false;
-
-        if(array_key_exists($objectName, $this->mObjectArray))
+        if(!array_key_exists($objectName, $this->mObjectArray))
         {
-            // if object has database connection add database object
-            if(method_exists($this->mObjectArray[$objectName], 'setDatabase'))
-            {
-                $this->mObjectArray[$objectName]->setDatabase($this->db);
-            }
-
-            // return reference of object
-            return $this->mObjectArray[$objectName];
+            // use parameter because we return a reference so only value will return an error
+            $returnValue = false;
+            return $returnValue;
         }
 
-        // use parameter because we return a reference so only value will return an error
-        return $returnParam;
+        // if object has database connection add database object
+        if(method_exists($this->mObjectArray[$objectName], 'setDatabase'))
+        {
+            $this->mObjectArray[$objectName]->setDatabase($this->db);
+        }
+
+        // return reference of object
+        return $this->mObjectArray[$objectName];
     }
 
     /**
@@ -177,6 +176,15 @@ class Session extends TableAccess
         return array_key_exists($objectName, $this->mObjectArray);
     }
 
+    protected function clearUserData()
+    {
+        if (isset($gCurrentUser))
+        {
+            $gCurrentUser->clear();
+        }
+        $this->setValue('ses_usr_id', '');
+    }
+
     /**
      * Check if the current session has a valid user login. Therefore the user id must be stored
      * within the session and the timestamps must be valid
@@ -192,33 +200,23 @@ class Session extends TableAccess
             if($this->getValue('ses_usr_id') === $userId)
             {
                 // session has a user assigned -> check if login is still valid
-                $time_gap = time() - strtotime($this->getValue('ses_timestamp', 'Y-m-d H:i:s'));
+                $timeGap = time() - strtotime($this->getValue('ses_timestamp', 'Y-m-d H:i:s'));
 
                 // Check how long the user was inactive. If time range is to long -> logout
                 // if user has auto login than session is also valid
-                if($time_gap < $gPreferences['logout_minutes'] * 60 || is_object($this->mAutoLogin))
+                if($timeGap < $gPreferences['logout_minutes'] * 60 || is_object($this->mAutoLogin))
                 {
                     $this->setValue('ses_timestamp', DATETIME_NOW);
                     return true;
                 }
-                else
-                {
-                    // user was inactive -> clear user data and remove him from session
-                    if (isset($gCurrentUser))
-                    {
-                        $gCurrentUser->clear();
-                    }
-                    $this->setValue('ses_usr_id', '');
-                }
+
+                // user was inactive -> clear user data and remove him from session
+                $this->clearUserData();
             }
             else
             {
                 // something is wrong -> clear user data
-                if (isset($gCurrentUser))
-                {
-                    $gCurrentUser->clear();
-                }
-                $this->setValue('ses_usr_id', '');
+                $this->clearUserData();
             }
         }
 
@@ -263,27 +261,32 @@ class Session extends TableAccess
 
         // check if current connection has same ip address as of session initialization
         // if config parameter $gCheckIpAddress = 0 then don't check ip address
-        if($this->getValue('ses_ip_address') !== $_SERVER['REMOTE_ADDR']
-        && $this->getValue('ses_ip_address') !== ''
-        && (isset($gCheckIpAddress) && $gCheckIpAddress === 1))
+        if($this->getValue('ses_ip_address') !== ''
+        && $this->getValue('ses_ip_address') !== $_SERVER['REMOTE_ADDR']
+        && isset($gCheckIpAddress) && $gCheckIpAddress === 1)
         {
-            error_log('Admidio stored session ip address: '.$this->getValue('ses_ip_address'). ' :: Remode ip address: '.$_SERVER['REMOTE_ADDR']);
+            error_log('Admidio stored session ip address: '.$this->getValue('ses_ip_address'). ' :: Remote ip address: '.$_SERVER['REMOTE_ADDR']);
 
             unset($_SESSION['gCurrentSession']);
             $this->mObjectArray = array();
             $this->clear();
 
-            exit('The IP address doesnot match with the IP address the current session was started! For safety reasons the current session was closed.');
+            exit('The IP address does not match with the IP address the current session was started! For safety reasons the current session was closed.');
         }
 
         // if AutoLogin is set then refresh the auto_login_id for security reasons
         if(is_object($this->mAutoLogin))
         {
-            $this->mAutoLogin->setValue('atl_auto_login_id', $this->mAutoLogin->generateAutoLoginId($this->getValue('ses_usr_id')));
+            $autoLoginId = $this->mAutoLogin->generateAutoLoginId($this->getValue('ses_usr_id'));
+            $this->mAutoLogin->setValue('atl_auto_login_id', $autoLoginId);
             $this->mAutoLogin->save();
 
             // save cookie for autologin
-            $timestampExpired = time() + 60*60*24*365;
+            $currDateTime = new DateTime();
+            $oneYearDateInterval = new DateInterval('P1Y');
+            $oneYearAfterDateTime = $currDateTime->add($oneYearDateInterval);
+            $timestampExpired = $oneYearAfterDateTime->getTimestamp();
+
             setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired, '/', $this->mDomain, 0);
         }
 
@@ -318,7 +321,7 @@ class Session extends TableAccess
     public function renewUserObject($userId = 0)
     {
         $sqlCondition = '';
-        if(is_numeric($userId) && $userId > 0)
+        if($userId > 0)
         {
             $sqlCondition = ' WHERE ses_usr_id = ' . $userId;
         }
@@ -372,7 +375,11 @@ class Session extends TableAccess
         $this->mAutoLogin->save();
 
         // save cookie for autologin
-        $timestampExpired = time() + 60*60*24*365;
+        $currDateTime = new DateTime();
+        $oneYearDateInterval = new DateInterval('P1Y');
+        $oneYearAfterDateTime = $currDateTime->add($oneYearDateInterval);
+        $timestampExpired = $oneYearAfterDateTime->getTimestamp();
+
         setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired, '/', $this->mDomain, 0);
     }
 
