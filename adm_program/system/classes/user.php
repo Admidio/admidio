@@ -38,10 +38,10 @@ class User extends TableAccess
 
     public $mProfileFieldsData;                   ///< object with current user field structure
     public $roles_rights = array();               ///< Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
-    protected $list_view_rights = array();        ///< Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
-    protected $role_mail_rights = array();        ///< Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
-    protected $rolesMembership  = array();        ///< Array with all roles who the user is assigned
-    protected $rolesMembershipLeader = array();   ///< Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
+    protected $listViewRights  = array();         ///< Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
+    protected $listMailRights  = array();         ///< Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
+    protected $rolesMembership = array();         ///< Array with all roles who the user is assigned
+    protected $rolesMembershipLeader   = array(); ///< Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
     protected $rolesMembershipNoLeader = array(); ///< Array with all roles who the user is assigned and is not a leader of the role
     protected $organizationId;                    ///< the organization for which the rights are read, could be changed with method @b setOrganization
     protected $assignRoles;                       ///< Flag if the user has the right to assign at least one role
@@ -67,7 +67,7 @@ class User extends TableAccess
             $this->mProfileFieldsData->setDatabase($database);
         }
 
-        $this->organizationId = $gCurrentOrganization->getValue('org_id');
+        $this->organizationId = (int) $gCurrentOrganization->getValue('org_id');
 
         parent::__construct($database, TBL_USERS, 'usr', $userId);
     }
@@ -97,10 +97,10 @@ class User extends TableAccess
             $gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
         }
 
-        while($row = $defaultRolesStatement->fetch())
+        while($rolId = $defaultRolesStatement->fetchColumn())
         {
             // starts a membership for role from now
-            $this->setRoleMembership($row['rol_id']);
+            $this->setRoleMembership($rolId);
         }
 
         $this->db->endTransaction();
@@ -124,21 +124,21 @@ class User extends TableAccess
             if(count($this->roles_rights) === 0)
             {
                 $this->assignRoles = false;
-                $tmp_roles_rights  = array(
-                    'rol_assign_roles'       => '0',
-                    'rol_approve_users'      => '0',
-                    'rol_announcements'      => '0',
-                    'rol_dates'              => '0',
-                    'rol_download'           => '0',
-                    'rol_edit_user'          => '0',
-                    'rol_guestbook'          => '0',
-                    'rol_guestbook_comments' => '0',
-                    'rol_mail_to_all'        => '0',
-                    'rol_photo'              => '0',
-                    'rol_profile'            => '0',
-                    'rol_weblinks'           => '0',
-                    'rol_all_lists_view'     => '0',
-                    'rol_inventory'          => '0'
+                $tmpRolesRights = array(
+                    'rol_assign_roles'       => false,
+                    'rol_approve_users'      => false,
+                    'rol_announcements'      => false,
+                    'rol_dates'              => false,
+                    'rol_download'           => false,
+                    'rol_edit_user'          => false,
+                    'rol_guestbook'          => false,
+                    'rol_guestbook_comments' => false,
+                    'rol_mail_to_all'        => false,
+                    'rol_photo'              => false,
+                    'rol_profile'            => false,
+                    'rol_weblinks'           => false,
+                    'rol_all_lists_view'     => false,
+                    'rol_inventory'          => false
                 );
 
                 // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
@@ -176,19 +176,19 @@ class User extends TableAccess
                         }
                         else
                         {
-                            $this->rolesMembershipNoLeader[] = $row['rol_id'];
+                            $this->rolesMembershipNoLeader[] = (int) $row['rol_id'];
                         }
 
                         // add role to membership array
-                        $this->rolesMembership[] = $row['rol_id'];
+                        $this->rolesMembership[] = (int) $row['rol_id'];
 
                         // Rechte der Rollen in das Array uebertragen,
                         // falls diese noch nicht durch andere Rollen gesetzt wurden
-                        foreach($tmp_roles_rights as $key => $value)
+                        foreach($tmpRolesRights as $key => $value)
                         {
-                            if($value == '0' && $row[$key] == '1')
+                            if(!$value && $row[$key] == '1')
                             {
-                                $tmp_roles_rights[$key] = '1';
+                                $tmpRolesRights[$key] = true;
                             }
                         }
 
@@ -210,16 +210,16 @@ class User extends TableAccess
                     if($row['mem_usr_id'] > 0 && ($row['rol_this_list_view'] > 0 || $row['mem_leader'] == 1))
                     {
                         // Mitgliedschaft bei der Rolle und diese nicht gesperrt, dann anschauen
-                        $this->list_view_rights[$row['rol_id']] = 1;
+                        $this->listViewRights[$row['rol_id']] = true;
                     }
                     elseif($row['rol_this_list_view'] == 2)
                     {
                         // andere Rollen anschauen, wenn jeder sie sehen darf
-                        $this->list_view_rights[$row['rol_id']] = 1;
+                        $this->listViewRights[$row['rol_id']] = true;
                     }
                     else
                     {
-                        $this->list_view_rights[$row['rol_id']] = 0;
+                        $this->listViewRights[$row['rol_id']] = false;
                     }
 
                     // Mailrechte setzen
@@ -227,41 +227,35 @@ class User extends TableAccess
                     if($row['mem_usr_id'] > 0 && ($row['rol_mail_this_role'] > 0 || $row['mem_leader'] == 1))
                     {
                         // Mitgliedschaft bei der Rolle und diese nicht gesperrt, dann anschauen
-                        $this->role_mail_rights[$row['rol_id']] = 1;
+                        $this->listMailRights[$row['rol_id']] = true;
                     }
                     elseif($row['rol_mail_this_role'] >= 2)
                     {
                         // andere Rollen anschauen, wenn jeder sie sehen darf
-                        $this->role_mail_rights[$row['rol_id']] = 1;
+                        $this->listMailRights[$row['rol_id']] = true;
                     }
                     else
                     {
-                        $this->role_mail_rights[$row['rol_id']] = 0;
+                        $this->listMailRights[$row['rol_id']] = false;
                     }
                 }
-                $this->roles_rights = $tmp_roles_rights;
+                $this->roles_rights = $tmpRolesRights;
 
                 // ist das Recht 'alle Listen einsehen' gesetzt, dann dies auch im Array bei allen Rollen setzen
                 if($this->roles_rights['rol_all_lists_view'])
                 {
-                    foreach($this->list_view_rights as $key => $value)
-                    {
-                        $this->list_view_rights[$key] = 1;
-                    }
+                    $this->listViewRights = array_fill_keys(array_keys($this->listViewRights), true);
                 }
 
                 // ist das Recht 'allen Rollen EMails schreiben' gesetzt, dann dies auch im Array bei allen Rollen setzen
                 if($this->roles_rights['rol_mail_to_all'])
                 {
-                    foreach($this->role_mail_rights as $key => $value)
-                    {
-                        $this->role_mail_rights[$key] = 1;
-                    }
+                    $this->listMailRights = array_fill_keys(array_keys($this->listMailRights), true);
                 }
 
             }
 
-            if($right === '' || $this->roles_rights[$right] == 1)
+            if($right === '' || $this->roles_rights[$right])
             {
                 return true;
             }
@@ -454,14 +448,7 @@ class User extends TableAccess
      */
     public function columnsValueChanged()
     {
-        if($this->columnsValueChanged || $this->mProfileFieldsData->columnsValueChanged)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return $this->columnsValueChanged || $this->mProfileFieldsData->columnsValueChanged;
     }
 
     /**
@@ -475,147 +462,162 @@ class User extends TableAccess
 
         $this->db->startTransaction();
 
+        $usrId = $this->getValue('usr_id');
+        $currUsrId = $gCurrentUser->getValue('usr_id');
+
         $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_usr_id_create = NULL
-                 WHERE ann_usr_id_create = '.$this->getValue('usr_id');
+                 WHERE ann_usr_id_create = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_usr_id_change = NULL
-                 WHERE ann_usr_id_change = '.$this->getValue('usr_id');
+                 WHERE ann_usr_id_change = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_DATES.' SET dat_usr_id_create = NULL
-                 WHERE dat_usr_id_create = '.$this->getValue('usr_id');
+                 WHERE dat_usr_id_create = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_DATES.' SET dat_usr_id_change = NULL
-                 WHERE dat_usr_id_change = '.$this->getValue('usr_id');
+                 WHERE dat_usr_id_change = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_FOLDERS.' SET fol_usr_id = NULL
-                 WHERE fol_usr_id = '.$this->getValue('usr_id');
+                 WHERE fol_usr_id = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_FILES.' SET fil_usr_id = NULL
-                 WHERE fil_usr_id = '.$this->getValue('usr_id');
+                 WHERE fil_usr_id = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_usr_id_create = NULL
-                 WHERE gbo_usr_id_create = '.$this->getValue('usr_id');
+                 WHERE gbo_usr_id_create = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_usr_id_change = NULL
-                 WHERE gbo_usr_id_change = '.$this->getValue('usr_id');
+                 WHERE gbo_usr_id_change = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_LINKS.' SET lnk_usr_id_create = NULL
-                 WHERE lnk_usr_id_create = '.$this->getValue('usr_id');
+                 WHERE lnk_usr_id_create = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_LINKS.' SET lnk_usr_id_change = NULL
-                 WHERE lnk_usr_id_change = '.$this->getValue('usr_id');
+                 WHERE lnk_usr_id_change = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_LISTS.' SET lst_usr_id = NULL
                  WHERE lst_global = 1
-                   AND lst_usr_id = '.$this->getValue('usr_id');
+                   AND lst_usr_id = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_PHOTOS.' SET pho_usr_id_create = NULL
-                 WHERE pho_usr_id_create = '.$this->getValue('usr_id');
+                 WHERE pho_usr_id_create = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_PHOTOS.' SET pho_usr_id_change = NULL
-                 WHERE pho_usr_id_change = '.$this->getValue('usr_id');
+                 WHERE pho_usr_id_change = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_ROLES.' SET rol_usr_id_create = NULL
-                 WHERE rol_usr_id_create = '.$this->getValue('usr_id');
+                 WHERE rol_usr_id_create = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_ROLES.' SET rol_usr_id_change = NULL
-                 WHERE rol_usr_id_change = '.$this->getValue('usr_id');
+                 WHERE rol_usr_id_change = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_ROLE_DEPENDENCIES.' SET rld_usr_id = NULL
-                 WHERE rld_usr_id = '.$this->getValue('usr_id');
+                 WHERE rld_usr_id = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_USER_LOG.' SET usl_usr_id_create = NULL
-                 WHERE usl_usr_id_create = '.$this->getValue('usr_id');
+                 WHERE usl_usr_id_create = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_USERS.' SET usr_usr_id_create = NULL
-                 WHERE usr_usr_id_create = '.$this->getValue('usr_id');
+                 WHERE usr_usr_id_create = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'UPDATE '.TBL_USERS.' SET usr_usr_id_change = NULL
-                 WHERE usr_usr_id_change = '.$this->getValue('usr_id');
+                 WHERE usr_usr_id_change = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'DELETE FROM '.TBL_LIST_COLUMNS.'
                  WHERE lsc_lst_id IN (SELECT lst_id
                                         FROM '.TBL_LISTS.'
-                                       WHERE lst_usr_id = '.$this->getValue('usr_id').'
+                                       WHERE lst_usr_id = '.$usrId.'
                                          AND lst_global = 0)';
         $this->db->query($sql);
 
-        $sql = 'DELETE FROM '.TBL_LISTS.' WHERE lst_global = 0 AND lst_usr_id = '.$this->getValue('usr_id');
+        $sql = 'DELETE FROM '.TBL_LISTS.'
+                 WHERE lst_global = 0
+                   AND lst_usr_id = '.$usrId;
         $this->db->query($sql);
 
-        $sql = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.' WHERE gbc_usr_id_create = '.$this->getValue('usr_id');
+        $sql = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.'
+                 WHERE gbc_usr_id_create = '.$usrId;
         $this->db->query($sql);
 
-        $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$this->getValue('usr_id');
+        $sql = 'DELETE FROM '.TBL_MEMBERS.'
+                 WHERE mem_usr_id = '.$usrId;
         $this->db->query($sql);
 
         // MySQL couldn't create delete statement with same table in subquery.
         // Therefore we fill a temporary table with all ids that should be deleted and reference on this table
-        $sql = 'DELETE FROM '.TBL_IDS.' WHERE ids_usr_id = '. $gCurrentUser->getValue('usr_id');
+        $sql = 'DELETE FROM '.TBL_IDS.'
+                 WHERE ids_usr_id = '.$currUsrId;
         $this->db->query($sql);
 
         $sql = 'INSERT INTO '.TBL_IDS.' (ids_usr_id, ids_reference_id)
-                   SELECT '.$gCurrentUser->getValue('usr_id').', msc_msg_id
-                     FROM '.TBL_MESSAGES_CONTENT.'
-                    WHERE msc_usr_id = '.$this->getValue('usr_id');
+                SELECT '.$currUsrId.', msc_msg_id
+                  FROM '.TBL_MESSAGES_CONTENT.'
+                 WHERE msc_usr_id = '.$usrId;
         $this->db->query($sql);
 
         $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
                  WHERE msc_msg_id IN (SELECT ids_reference_id
                                         FROM '.TBL_IDS.'
-                                       WHERE ids_usr_id = '.$gCurrentUser->getValue('usr_id').')';
+                                       WHERE ids_usr_id = '.$currUsrId.')';
         $this->db->query($sql);
 
         $sql = 'DELETE FROM '.TBL_MESSAGES.'
                  WHERE msg_id IN (SELECT ids_reference_id
                                     FROM '.TBL_IDS.'
-                                   WHERE ids_usr_id = '.$gCurrentUser->getValue('usr_id').')';
+                                   WHERE ids_usr_id = '.$currUsrId.')';
         $this->db->query($sql);
 
-        $sql = 'DELETE FROM '.TBL_IDS.' WHERE ids_usr_id = '. $gCurrentUser->getValue('usr_id');
+        $sql = 'DELETE FROM '.TBL_IDS.'
+                 WHERE ids_usr_id = '.$currUsrId;
         $this->db->query($sql);
 
         $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
                  WHERE msc_msg_id IN (SELECT msg_id
                                         FROM '.TBL_MESSAGES.'
-                                       WHERE msg_usr_id_sender = '.$this->getValue('usr_id').')';
+                                       WHERE msg_usr_id_sender = '.$usrId.')';
         $this->db->query($sql);
 
-        $sql = 'DELETE FROM '.TBL_MESSAGES.' WHERE msg_usr_id_sender = '. $this->getValue('usr_id');
+        $sql = 'DELETE FROM '.TBL_MESSAGES.'
+                 WHERE msg_usr_id_sender = '.$usrId;
         $this->db->query($sql);
 
-        $sql = 'DELETE FROM '.TBL_REGISTRATIONS.' WHERE reg_usr_id = '.$this->getValue('usr_id');
+        $sql = 'DELETE FROM '.TBL_REGISTRATIONS.'
+                 WHERE reg_usr_id = '.$usrId;
         $this->db->query($sql);
 
-        $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.' WHERE atl_usr_id = '.$this->getValue('usr_id');
+        $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
+                 WHERE atl_usr_id = '.$usrId;
         $this->db->query($sql);
 
-        $sql = 'DELETE FROM '.TBL_SESSIONS.' WHERE ses_usr_id = '.$this->getValue('usr_id');
+        $sql = 'DELETE FROM '.TBL_SESSIONS.'
+                 WHERE ses_usr_id = '.$usrId;
         $this->db->query($sql);
 
-        $sql = 'DELETE FROM '.TBL_USER_LOG.' WHERE usl_usr_id = '.$this->getValue('usr_id');
+        $sql = 'DELETE FROM '.TBL_USER_LOG.'
+                 WHERE usl_usr_id = '.$usrId;
         $this->db->query($sql);
 
-        $sql = 'DELETE FROM '.TBL_USER_DATA.' WHERE usd_usr_id = '.$this->getValue('usr_id');
+        $sql = 'DELETE FROM '.TBL_USER_DATA.'
+                 WHERE usd_usr_id = '.$usrId;
         $this->db->query($sql);
 
         $return = parent::delete();
@@ -665,6 +667,7 @@ class User extends TableAccess
         {
             return false;
         }
+
         $this->db->startTransaction();
 
         // search for membership with same role and user and overlapping dates
@@ -749,22 +752,31 @@ class User extends TableAccess
     }
 
     /**
+     * @param array $rightsList
+     * @return int[]
+     */
+    private function getAllRolesWithRight(array $rightsList)
+    {
+        $visibleRoles = array();
+        $this->checkRolesRight();
+
+        foreach($rightsList as $roleId => $hasRight)
+        {
+            if($hasRight)
+            {
+                $visibleRoles[] = $roleId;
+            }
+        }
+        return $visibleRoles;
+    }
+
+    /**
      * Creates an array with all roles where the user has the right to mail them
      * @return array Array with role ids where user has the right to mail them
      */
     public function getAllMailRoles()
     {
-        $visibleRoles = array();
-        $this->checkRolesRight();
-
-        foreach($this->role_mail_rights as $role => $right)
-        {
-            if($right == 1)
-            {
-                $visibleRoles[] = $role;
-            }
-        }
-        return $visibleRoles;
+        return $this->getAllRolesWithRight($this->listMailRights);
     }
 
     /**
@@ -773,17 +785,7 @@ class User extends TableAccess
      */
     public function getAllVisibleRoles()
     {
-        $visibleRoles = array();
-        $this->checkRolesRight();
-
-        foreach($this->list_view_rights as $role => $right)
-        {
-            if($right == 1)
-            {
-                $visibleRoles[] = $role;
-            }
-        }
-        return $visibleRoles;
+        return $this->getAllRolesWithRight($this->listViewRights);
     }
 
     /**
@@ -793,14 +795,7 @@ class User extends TableAccess
      */
     public function getOrganization()
     {
-        if($this->organizationId > 0)
-        {
-            return $this->organizationId;
-        }
-        else
-        {
-            return 0;
-        }
+        return $this->organizationId;
     }
 
     /**
@@ -844,22 +839,18 @@ class User extends TableAccess
     {
         global $gPreferences;
 
-        if(strpos($columnName, 'usr_') === 0)
-        {
-            if($columnName === 'usr_photo' && $gPreferences['profile_photo_storage'] == 0
-            && file_exists(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))
-            {
-                return file_get_contents(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg');
-            }
-            else
-            {
-                return parent::getValue($columnName, $format);
-            }
-        }
-        else
+        if(strpos($columnName, 'usr_') !== 0)
         {
             return $this->mProfileFieldsData->getValue($columnName, $format);
         }
+
+        if($columnName === 'usr_photo' && $gPreferences['profile_photo_storage'] == 0
+        && is_file(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))
+        {
+            return file_get_contents(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg');
+        }
+
+        return parent::getValue($columnName, $format);
     }
 
     /**
@@ -922,7 +913,7 @@ class User extends TableAccess
         {
             $vcard .= 'EMAIL;PREF;INTERNET:' . $this->getValue('EMAIL'). "\r\n";
         }
-        if (file_exists(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
+        if (is_file(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
         {
             $img_handle = fopen(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg', 'rb');
             $vcard .= 'PHOTO;ENCODING=BASE64;TYPE=JPEG:'.base64_encode(fread($img_handle, filesize(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))). "\r\n";
@@ -938,13 +929,13 @@ class User extends TableAccess
         {
             if($this->getValue('GENDER') == 1)
             {
-                $wab_gender = 2;
+                $wabGender = 2;
             }
             else
             {
-                $wab_gender = 1;
+                $wabGender = 1;
             }
-            $vcard .= 'X-WAB-GENDER:' . $wab_gender . "\r\n";
+            $vcard .= 'X-WAB-GENDER:' . $wabGender . "\r\n";
         }
         if (strlen($this->getValue('usr_timestamp_change')) > 0)
         {
@@ -952,6 +943,7 @@ class User extends TableAccess
         }
 
         $vcard .= 'END:VCARD'."\r\n";
+
         return $vcard;
     }
 
@@ -973,9 +965,7 @@ class User extends TableAccess
             if($user->getValue('usr_id') === $this->getValue('usr_id')
             && $this->getValue('usr_id') > 0 && $checkOwnProfile)
             {
-                $edit_profile = $this->checkRolesRight('rol_profile');
-
-                if($edit_profile == 1)
+                if($this->checkRolesRight('rol_profile') == 1)
                 {
                     return true;
                 }
@@ -996,7 +986,7 @@ class User extends TableAccess
                 if(count($this->rolesMembershipLeader) > 0)
                 {
                     // leaders are not allowed to edit profiles of other leaders but to edit their own profile
-                    if($user->getValue('usr_id') == $this->getValue('usr_id'))
+                    if((int) $user->getValue('usr_id') === (int) $this->getValue('usr_id'))
                     {
                         // check if current user is a group leader of a role where $user is only a member
                         $rolesMembership = $user->getRoleMemberships();
@@ -1010,7 +1000,7 @@ class User extends TableAccess
                     foreach($this->rolesMembershipLeader as $roleId => $leaderRights)
                     {
                         // is group leader of role and has the right to edit users ?
-                        if(in_array($roleId, $rolesMembership) && $leaderRights > 1)
+                        if(in_array($roleId, $rolesMembership, true) && $leaderRights > 1)
                         {
                             $returnValue = true;
                         }
@@ -1026,30 +1016,36 @@ class User extends TableAccess
     }
 
     /**
+     * @param array  $rightsList
+     * @param string $rightName
+     * @param int    $roleId
+     * @return bool
+     */
+    private function hasRightRole(array $rightsList, $rightName, $roleId)
+    {
+        // if user has right to view all lists then he could also view this role
+        if($this->checkRolesRight($rightName))
+        {
+            return true;
+        }
+
+        // check if user has the right to view this role
+        if(array_key_exists($roleId, $rightsList) && $rightsList[$roleId])
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Checks if the current user has the right to send an email to the role.
      * @param int $roleId Id of the role that should be checked.
      * @return bool Return @b true if the user has the right to send an email to the role.
      */
     public function hasRightSendMailToRole($roleId)
     {
-        if(is_numeric($roleId))
-        {
-            // Abfrage ob der User durch irgendeine Rolle das Recht bekommt alle Listen einzusehen
-            if($this->checkRolesRight('rol_mail_to_all'))
-            {
-                return true;
-            }
-            else
-            {
-                // Falls er das Recht nicht hat Kontrolle ob fuer eine bestimmte Rolle
-                if(isset($this->role_mail_rights[$roleId]) && $this->role_mail_rights[$roleId] > 0)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return $this->hasRightRole($this->listMailRights, 'rol_mail_to_all', $roleId);
     }
 
     /**
@@ -1061,57 +1057,53 @@ class User extends TableAccess
      */
     public function hasRightViewProfile($user)
     {
-        if(is_object($user))
+        // if user is allowed to edit the profile then he can also view it
+        if($this->hasRightEditProfile($user))
         {
-            // if user is allowed to edit the profile then he can also view it
-            if($this->hasRightEditProfile($user))
+            return true;
+        }
+
+        // every user is allowed to view his own profile
+        if((int) $user->getValue('usr_id') === (int) $this->getValue('usr_id'))
+        {
+            return true;
+        }
+
+        // Benutzer, die alle Listen einsehen duerfen, koennen auch alle Profile sehen
+        if($this->checkRolesRight('rol_all_lists_view'))
+        {
+            return true;
+        }
+
+        $sql = 'SELECT rol_id, rol_this_list_view
+                  FROM '.TBL_MEMBERS.'
+            INNER JOIN '.TBL_ROLES.'
+                    ON rol_id = mem_rol_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE rol_valid  = 1
+                   AND mem_begin <= \''.DATE_NOW.'\'
+                   AND mem_end    > \''.DATE_NOW.'\'
+                   AND mem_usr_id = '.$user->getValue('usr_id').'
+                   AND (  cat_org_id = '.$this->organizationId.'
+                       OR cat_org_id IS NULL ) ';
+        $listViewStatement = $this->db->query($sql);
+
+        if($listViewStatement->rowCount() > 0)
+        {
+            while($row = $listViewStatement->fetch())
             {
-                return true;
-            }
-            // every user is allowed to view his own profile
-            elseif($user->getValue('usr_id') == $this->getValue('usr_id'))
-            {
-                return true;
-            }
-            else
-            {
-                // Benutzer, die alle Listen einsehen duerfen, koennen auch alle Profile sehen
-                if($this->checkRolesRight('rol_all_lists_view'))
+                if($row['rol_this_list_view'] == 2)
                 {
+                    // alle angemeldeten Benutzer duerfen Rollenlisten/-profile sehen
                     return true;
                 }
-                else
-                {
-                    $sql = 'SELECT rol_id, rol_this_list_view
-                              FROM '.TBL_MEMBERS.'
-                        INNER JOIN '.TBL_ROLES.'
-                                ON rol_id = mem_rol_id
-                        INNER JOIN '.TBL_CATEGORIES.'
-                                ON cat_id = rol_cat_id
-                             WHERE rol_valid  = 1
-                               AND mem_begin <= \''.DATE_NOW.'\'
-                               AND mem_end    > \''.DATE_NOW.'\'
-                               AND mem_usr_id = '.$user->getValue('usr_id').'
-                               AND (  cat_org_id = '.$this->organizationId.'
-                                   OR cat_org_id IS NULL ) ';
-                    $listViewStatement = $this->db->query($sql);
 
-                    if($listViewStatement->rowCount() > 0)
-                    {
-                        while($row = $listViewStatement->fetch())
-                        {
-                            if($row['rol_this_list_view'] == 2)
-                            {
-                                // alle angemeldeten Benutzer duerfen Rollenlisten/-profile sehen
-                                return true;
-                            }
-                            elseif($row['rol_this_list_view'] == 1 && isset($this->list_view_rights[$row['rol_id']]))
-                            {
-                                // nur Rollenmitglieder duerfen Rollenlisten/-profile sehen
-                                return true;
-                            }
-                        }
-                    }
+                if($row['rol_this_list_view'] == 1
+                && array_key_exists($row['rol_id'], $this->listViewRights) && $this->listViewRights[$row['rol_id']])
+                {
+                    // nur Rollenmitglieder duerfen Rollenlisten/-profile sehen
+                    return true;
                 }
             }
         }
@@ -1121,26 +1113,12 @@ class User extends TableAccess
 
     /**
      * Check if the user of this object has the right to view the role that is set in the parameter.
-     * @param int|string $roleId The id of the role that should be checked.
+     * @param int $roleId The id of the role that should be checked.
      * @return bool Return @b true if the user has the right to view the role otherwise @b false.
      */
     public function hasRightViewRole($roleId)
     {
-        // if user has right to view all lists then he could also view this role
-        if($this->checkRolesRight('rol_all_lists_view'))
-        {
-            return true;
-        }
-        else
-        {
-            // check if user has the right to view this role
-            if(isset($this->list_view_rights[$roleId]) && $this->list_view_rights[$roleId] > 0)
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->hasRightRole($this->listMailRights, 'rol_all_lists_view', $roleId);
     }
 
     /**
@@ -1155,36 +1133,22 @@ class User extends TableAccess
 
     /**
      * check if user is leader of a role
-     * @param int|string $roleId
+     * @param int $roleId
      * @return bool
      */
     public function isLeaderOfRole($roleId)
     {
-        if(array_key_exists($roleId, $this->rolesMembershipLeader))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return array_key_exists($roleId, $this->rolesMembershipLeader);
     }
 
     /**
      * check if user is member of a role
-     * @param int|string $roleId
+     * @param int $roleId
      * @return bool
      */
     public function isMemberOfRole($roleId)
     {
-        if(in_array($roleId, $this->rolesMembership, true))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return in_array((int) $roleId, $this->rolesMembership, true);
     }
 
     /**
@@ -1236,10 +1200,10 @@ class User extends TableAccess
     public function renewRoleData()
     {
         // initialize rights arrays
-        $this->roles_rights     = array();
-        $this->list_view_rights = array();
-        $this->role_mail_rights = array();
-        $this->rolesMembership  = array();
+        $this->roles_rights    = array();
+        $this->listViewRights  = array();
+        $this->listMailRights  = array();
+        $this->rolesMembership = array();
         $this->rolesMembershipLeader   = array();
         $this->rolesMembershipNoLeader = array();
     }
@@ -1259,16 +1223,16 @@ class User extends TableAccess
     {
         global $gCurrentSession, $gCurrentUser;
 
-        $fields_changed = $this->columnsValueChanged;
-        $updateCreateUserId = false;
+        $usrId = (int) $this->getValue('usr_id');
 
         // if current user is new or is allowed to edit this user than save data
-        if($this->getValue('usr_id') == 0 || $gCurrentUser->hasRightEditProfile($this) || $this->saveChangesWithoutRights)
+        if($usrId === 0 || $gCurrentUser->hasRightEditProfile($this) || $this->saveChangesWithoutRights)
         {
             $this->db->startTransaction();
 
             // if new user then set create id
-            if($this->getValue('usr_id') == 0 && $gCurrentUser->getValue('usr_id') == 0)
+            $updateCreateUserId = false;
+            if($usrId === 0 && (int) $gCurrentUser->getValue('usr_id') === 0)
             {
                 $updateCreateUserId = true;
                 $updateFingerPrint  = false;
@@ -1286,21 +1250,21 @@ class User extends TableAccess
             if($updateCreateUserId)
             {
                 $this->setValue('usr_timestamp_create', DATETIME_NOW);
-                $this->setValue('usr_usr_id_create', $this->getValue('usr_id'));
+                $this->setValue('usr_usr_id_create', $usrId);
                 $returnValue = parent::save($updateFingerPrint);
             }
 
             if(is_object($this->mProfileFieldsData))
             {
                 // save data of all user fields
-                $this->mProfileFieldsData->saveUserData($this->getValue('usr_id'));
+                $this->mProfileFieldsData->saveUserData($usrId);
             }
 
-            if($fields_changed && is_object($gCurrentSession))
+            if($this->columnsValueChanged && is_object($gCurrentSession))
             {
                 // now set user object in session of that user to invalid,
                 // because he has new data and maybe new rights
-                $gCurrentSession->renewUserObject($this->getValue('usr_id'));
+                $gCurrentSession->renewUserObject($usrId);
             }
             $this->db->endTransaction();
 
@@ -1331,11 +1295,8 @@ class User extends TableAccess
      */
     public function setOrganization($organizationId)
     {
-        if(is_numeric($organizationId))
-        {
-            $this->organizationId = $organizationId;
-            $this->roles_rights   = array();
-        }
+        $this->organizationId = (int) $organizationId;
+        $this->roles_rights   = array();
     }
 
     /**
@@ -1361,12 +1322,17 @@ class User extends TableAccess
         {
             // get the saved cost value that fits your server performance best and rehash your password
             $cost = 10;
-            if(isset($gPreferences['system_hashing_cost']))
+            if(array_key_exists('system_hashing_cost', $gPreferences))
             {
                 $cost = (int) $gPreferences['system_hashing_cost'];
             }
 
             $newPassword = PasswordHashing::hash($newPassword, PASSWORD_DEFAULT, array('cost' => $cost));
+
+            if ($newPassword === false)
+            {
+                return false;
+            }
         }
 
         return parent::setValue($columnName, $newPassword, false);
@@ -1517,6 +1483,8 @@ class User extends TableAccess
 
         if(strpos($columnName, 'usr_') !== 0)
         {
+            $usrId = (int) $this->getValue('usr_id');
+
             // user data from adm_user_fields table
 
             $oldFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
@@ -1530,7 +1498,7 @@ class User extends TableAccess
                 if($this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 0
                 || ($this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 1
                    && $gCurrentUser->hasRightEditProfile($this, false))
-                || ($gCurrentUser->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
+                || ((int) $gCurrentUser->getValue('usr_id') === 0 && $usrId === 0))
                 {
                     $returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
                 }
@@ -1542,11 +1510,11 @@ class User extends TableAccess
             // usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
             // Felder, die mit usr_ beginnen, werden nicht geloggt
             // Falls die Feldwerte sich nicht geaendert haben, wird natuerlich ebenfalls nicht geloggt
-            if($gPreferences['profile_log_edit_fields'] == 1 && $this->getValue('usr_id') != 0
+            if($gPreferences['profile_log_edit_fields'] == 1 && $usrId > 0
             && $newFieldValue !== $oldFieldValue && $returnCode === true)
             {
                 $logEntry = new TableAccess($this->db, TBL_USER_LOG, 'usl');
-                $logEntry->setValue('usl_usr_id', $this->getValue('usr_id'));
+                $logEntry->setValue('usl_usr_id', $usrId);
                 $logEntry->setValue('usl_usf_id', $this->mProfileFieldsData->getProperty($columnName, 'usf_id'));
                 $logEntry->setValue('usl_value_old', $oldFieldValue);
                 $logEntry->setValue('usl_value_new', $newFieldValue);
