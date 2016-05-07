@@ -178,6 +178,8 @@ class Session extends TableAccess
 
     protected function clearUserData()
     {
+        global $gCurrentUser;
+
         if (isset($gCurrentUser))
         {
             $gCurrentUser->clear();
@@ -193,7 +195,7 @@ class Session extends TableAccess
      */
     public function isValidLogin($userId)
     {
-        global $gPreferences, $gCurrentUser;
+        global $gPreferences;
 
         if($userId > 0)
         {
