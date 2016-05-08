@@ -299,93 +299,7 @@ class User extends TableAccess
 
         $currHash = $this->getValue('usr_password');
 
-        if (PasswordHashing::verify($password, $currHash))
-        {
-            // Password correct
-
-            // if user is not activated/valid return error message
-            if (!$this->getValue('usr_valid'))
-            {
-                return $gL10n->get('SYS_LOGIN_NOT_ACTIVATED');
-            }
-
-            $sqlAdministrator = '';
-            // only check for administrator role if version > 3.1 because before it was webmaster role
-            if($isAdministrator && version_compare($installedDbVersion, '3.2.0') === 1)
-            {
-                $sqlAdministrator = ', rol_administrator AS administrator';
-            }
-            // only check for webmaster role if version > 2.3 because before we don't have that flag
-            elseif($isAdministrator && version_compare($installedDbVersion, '2.4.0') === 1)
-            {
-                $sqlAdministrator = ', rol_webmaster AS administrator';
-            }
-
-            // Check if user is currently member of a role of an organisation
-            $sql = 'SELECT DISTINCT mem_usr_id, org_longname'.$sqlAdministrator.'
-                      FROM '.TBL_MEMBERS.'
-                INNER JOIN '.TBL_ROLES.'
-                        ON rol_id = mem_rol_id
-                INNER JOIN '.TBL_CATEGORIES.'
-                        ON cat_id = rol_cat_id
-                INNER JOIN '.TBL_ORGANIZATIONS.'
-                        ON org_id = cat_org_id
-                     WHERE mem_usr_id = '.$this->getValue('usr_id').'
-                       AND rol_valid  = 1
-                       AND mem_begin <= \''.DATE_NOW.'\'
-                       AND mem_end    > \''.DATE_NOW.'\'
-                       AND cat_org_id = '.$this->organizationId;
-            $userStatement = $this->db->query($sql);
-            $userRow = $userStatement->fetch();
-
-            if ($userStatement->rowCount() === 0)
-            {
-                return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', $userRow['org_longname']);
-            }
-
-            if ($isAdministrator && version_compare($installedDbVersion, '2.4.0') === 1 && $userRow['administrator'] == 0)
-            {
-                return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', $userRow['org_longname']);
-            }
-
-            // Rehash password if the hash is outdated and rehashing is enabled
-            if ($updateHash && PasswordHashing::needsRehash($currHash))
-            {
-                $this->saveChangesWithoutRights();
-                $this->setPassword($password);
-                $this->save(); // TODO Exception handling
-            }
-
-            if ($updateSessionCookies)
-            {
-                $gCurrentSession->setValue('ses_usr_id', $this->getValue('usr_id'));
-                $gCurrentSession->save();
-            }
-
-            // should the user stayed logged in automatically, than the cookie would expire in one year
-            if ($setAutoLogin && $gPreferences['enable_auto_login'] == 1)
-            {
-                $gCurrentSession->setAutoLogin();
-            }
-            else
-            {
-                $this->setValue('usr_last_session_id', null);
-            }
-
-            if ($updateSessionCookies)
-            {
-                // set cookie for session id and remove ports from domain
-                $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
-                setcookie($gCookiePraefix. '_ID', $gSessionId, 0, '/', $domain, 0);
-
-                // count logins and update login dates
-                $this->saveChangesWithoutRights();
-                $this->updateLoginData();
-            }
-
-            return true;
-        }
-        else
+        if (!PasswordHashing::verify($password, $currHash))
         {
             // Password wrong
 
@@ -413,6 +327,90 @@ class User extends TableAccess
                 return $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
             }
         }
+
+        // Password correct
+
+        // if user is not activated/valid return error message
+        if (!$this->getValue('usr_valid'))
+        {
+            return $gL10n->get('SYS_LOGIN_NOT_ACTIVATED');
+        }
+
+        $sqlAdministrator = '';
+        // only check for administrator role if version > 3.1 because before it was webmaster role
+        if ($isAdministrator && version_compare($installedDbVersion, '3.2.0') === 1)
+        {
+            $sqlAdministrator = ', rol_administrator AS administrator';
+        }
+        // only check for webmaster role if version > 2.3 because before we don't have that flag
+        elseif ($isAdministrator && version_compare($installedDbVersion, '2.4.0') === 1)
+        {
+            $sqlAdministrator = ', rol_webmaster AS administrator';
+        }
+
+        // Check if user is currently member of a role of an organisation
+        $sql = 'SELECT DISTINCT mem_usr_id, org_longname'.$sqlAdministrator.'
+                  FROM '.TBL_MEMBERS.'
+            INNER JOIN '.TBL_ROLES.'
+                    ON rol_id = mem_rol_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+            INNER JOIN '.TBL_ORGANIZATIONS.'
+                    ON org_id = cat_org_id
+                 WHERE mem_usr_id = '.$this->getValue('usr_id').'
+                   AND rol_valid  = 1
+                   AND mem_begin <= \''.DATE_NOW.'\'
+                   AND mem_end    > \''.DATE_NOW.'\'
+                   AND cat_org_id = '.$this->organizationId;
+        $userStatement = $this->db->query($sql);
+        $userRow = $userStatement->fetch();
+
+        if ($userStatement->rowCount() === 0)
+        {
+            return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', $userRow['org_longname']);
+        }
+
+        if ($isAdministrator && version_compare($installedDbVersion, '2.4.0') === 1 && $userRow['administrator'] == 0)
+        {
+            return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', $userRow['org_longname']);
+        }
+
+        // Rehash password if the hash is outdated and rehashing is enabled
+        if ($updateHash && PasswordHashing::needsRehash($currHash))
+        {
+            $this->saveChangesWithoutRights();
+            $this->setPassword($password);
+            $this->save(); // TODO Exception handling
+        }
+
+        if ($updateSessionCookies)
+        {
+            $gCurrentSession->setValue('ses_usr_id', $this->getValue('usr_id'));
+            $gCurrentSession->save();
+        }
+
+        // should the user stayed logged in automatically, than the cookie would expire in one year
+        if ($setAutoLogin && $gPreferences['enable_auto_login'] == 1)
+        {
+            $gCurrentSession->setAutoLogin();
+        }
+        else
+        {
+            $this->setValue('usr_last_session_id', null);
+        }
+
+        if ($updateSessionCookies)
+        {
+            // set cookie for session id and remove ports from domain
+            $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
+            setcookie($gCookiePraefix. '_ID', $gSessionId, 0, '/', $domain, 0);
+
+            // count logins and update login dates
+            $this->saveChangesWithoutRights();
+            $this->updateLoginData();
+        }
+
+        return true;
     }
 
     /**
@@ -851,60 +849,61 @@ class User extends TableAccess
       */
      public function hasRightEditProfile(&$user, $checkOwnProfile = true)
     {
+        if (!is_object($user))
+        {
+            return false;
+        }
+
+        $usrId  = (int) $this->getValue('usr_id');
+        $userId = (int) $user->getValue('usr_id');
+
+        // edit own profile ?
+        if ($usrId > 0 && $usrId === $userId && $checkOwnProfile && $this->checkRolesRight('rol_profile'))
+        {
+            return true;
+        }
+
+        // first check if user is in cache
+        if (array_key_exists($userId, $this->usersEditAllowed))
+        {
+            return $this->usersEditAllowed[$userId];
+        }
+
         $returnValue = false;
 
-        if(is_object($user))
+        if ($this->editUsers())
         {
-            // edit own profile ?
-            if($user->getValue('usr_id') === $this->getValue('usr_id')
-            && $this->getValue('usr_id') > 0 && $checkOwnProfile)
-            {
-                if($this->checkRolesRight('rol_profile') == 1)
-                {
-                    return true;
-                }
-            }
-
-            // first check if user is in cache
-            if(array_key_exists($user->getValue('usr_id'), $this->usersEditAllowed))
-            {
-                return $this->usersEditAllowed[$user->getValue('usr_id')];
-            }
-
-            if($this->editUsers())
-            {
-                $returnValue = true;
-            }
-            else
-            {
-                if(count($this->rolesMembershipLeader) > 0)
-                {
-                    // leaders are not allowed to edit profiles of other leaders but to edit their own profile
-                    if((int) $user->getValue('usr_id') === (int) $this->getValue('usr_id'))
-                    {
-                        // check if current user is a group leader of a role where $user is only a member
-                        $rolesMembership = $user->getRoleMemberships();
-                    }
-                    else
-                    {
-                        // check if current user is a group leader of a role where $user is only a member and not a leader
-                        $rolesMembership = $user->getRoleMembershipsNoLeader();
-                    }
-
-                    foreach($this->rolesMembershipLeader as $roleId => $leaderRights)
-                    {
-                        // is group leader of role and has the right to edit users ?
-                        if(in_array($roleId, $rolesMembership, true) && $leaderRights > 1)
-                        {
-                            $returnValue = true;
-                        }
-                    }
-                }
-            }
-
-            // add result into cache
-            $this->usersEditAllowed[$user->getValue('usr_id')] = $returnValue;
+            $returnValue = true;
         }
+        else
+        {
+            if (count($this->rolesMembershipLeader) > 0)
+            {
+                // leaders are not allowed to edit profiles of other leaders but to edit their own profile
+                if ($usrId === $userId)
+                {
+                    // check if current user is a group leader of a role where $user is only a member
+                    $rolesMembership = $user->getRoleMemberships();
+                }
+                else
+                {
+                    // check if current user is a group leader of a role where $user is only a member and not a leader
+                    $rolesMembership = $user->getRoleMembershipsNoLeader();
+                }
+
+                foreach ($this->rolesMembershipLeader as $roleId => $leaderRights)
+                {
+                    // is group leader of role and has the right to edit users ?
+                    if (in_array($roleId, $rolesMembership, true) && $leaderRights > 1)
+                    {
+                        $returnValue = true;
+                    }
+                }
+            }
+        }
+
+        // add result into cache
+        $this->usersEditAllowed[$userId] = $returnValue;
 
         return $returnValue;
     }
@@ -1119,56 +1118,54 @@ class User extends TableAccess
 
         $usrId = (int) $this->getValue('usr_id');
 
-        // if current user is new or is allowed to edit this user than save data
-        if($usrId === 0 || $gCurrentUser->hasRightEditProfile($this) || $this->saveChangesWithoutRights)
-        {
-            $this->db->startTransaction();
-
-            // if new user then set create id
-            $updateCreateUserId = false;
-            if($usrId === 0 && (int) $gCurrentUser->getValue('usr_id') === 0)
-            {
-                $updateCreateUserId = true;
-                $updateFingerPrint  = false;
-            }
-
-            // if value of a field changed then update timestamp of user object
-            if(is_object($this->mProfileFieldsData) && $this->mProfileFieldsData->columnsValueChanged)
-            {
-                $this->columnsValueChanged = true;
-            }
-
-            $returnValue = parent::save($updateFingerPrint);
-
-            // if this was an registration then set this user id to create user id
-            if($updateCreateUserId)
-            {
-                $this->setValue('usr_timestamp_create', DATETIME_NOW);
-                $this->setValue('usr_usr_id_create', $usrId);
-                $returnValue = parent::save($updateFingerPrint);
-            }
-
-            if(is_object($this->mProfileFieldsData))
-            {
-                // save data of all user fields
-                $this->mProfileFieldsData->saveUserData($usrId);
-            }
-
-            if($this->columnsValueChanged && is_object($gCurrentSession))
-            {
-                // now set user object in session of that user to invalid,
-                // because he has new data and maybe new rights
-                $gCurrentSession->renewUserObject($usrId);
-            }
-            $this->db->endTransaction();
-
-            return $returnValue;
+        // if current user is not new and is not allowed to edit this user
+        // and saveChangesWithoutRights isn't true than throw exception
+        if ($usrId > 0 && !$gCurrentUser->hasRightEditProfile($this) && !$this->saveChangesWithoutRights) {
+            throw new AdmException('The profile data of user ' . $this->getValue('FIRST_NAME') . ' '
+                . $this->getValue('LAST_NAME') . ' could not be saved because you don\'t have the right to do this.');
         }
-        else
+
+        $this->db->startTransaction();
+
+        // if new user then set create id
+        $updateCreateUserId = false;
+        if ($usrId === 0 && (int) $gCurrentUser->getValue('usr_id') === 0)
         {
-            throw new AdmException('The profile data of user '.$this->getValue('FIRST_NAME').' '
-                .$this->getValue('LAST_NAME').' could not be saved because you don\'t have the right to do this.');
+            $updateCreateUserId = true;
+            $updateFingerPrint  = false;
         }
+
+        // if value of a field changed then update timestamp of user object
+        if (is_object($this->mProfileFieldsData) && $this->mProfileFieldsData->columnsValueChanged)
+        {
+            $this->columnsValueChanged = true;
+        }
+
+        $returnValue = parent::save($updateFingerPrint);
+
+        // if this was an registration then set this user id to create user id
+        if ($updateCreateUserId)
+        {
+            $this->setValue('usr_timestamp_create', DATETIME_NOW);
+            $this->setValue('usr_usr_id_create', $usrId);
+            $returnValue = $returnValue && parent::save($updateFingerPrint);
+        }
+
+        if (is_object($this->mProfileFieldsData))
+        {
+            // save data of all user fields
+            $this->mProfileFieldsData->saveUserData($usrId);
+        }
+
+        if ($this->columnsValueChanged && is_object($gCurrentSession))
+        {
+            // now set user object in session of that user to invalid,
+            // because he has new data and maybe new rights
+            $gCurrentSession->renewUserObject($usrId);
+        }
+        $this->db->endTransaction();
+
+        return $returnValue;
     }
 
     /**
@@ -1422,82 +1419,79 @@ class User extends TableAccess
      * If the user log is activated than the change of the value will be logged in @b adm_user_log.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value or the
-     *                            internal unique profile field name
+     *                           internal unique profile field name
      * @param mixed  $newValue   The new value that should be stored in the database field
      * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will
-     *                            not be checked.
+     *                           not be checked.
      * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      * @par Examples
-     * @code  // set data of adm_users column
-     *                           $gCurrentUser->getValue('usr_login_name', 'Admidio');
-     *                           // reads data of adm_user_fields
-     *                           $gCurrentUser->getValue('EMAIL', 'webmaster@admidio.org'); @endcode
+     * @code
+     * // set data of adm_users column
+     * $gCurrentUser->getValue('usr_login_name', 'Admidio');
+     * // reads data of adm_user_fields
+     * $gCurrentUser->getValue('EMAIL', 'webmaster@admidio.org');
+     * @endcode
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         global $gCurrentUser, $gPreferences;
 
-        $returnCode = true;
-
-        if(strpos($columnName, 'usr_') !== 0)
+        // users data from adm_users table
+        if (strpos($columnName, 'usr_') === 0)
         {
-            $usrId = (int) $this->getValue('usr_id');
-
-            // user data from adm_user_fields table
-
-            $oldFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
-
-            // only to a update if value has changed
-            if(strcmp($newValue, $oldFieldValue) !== 0)
-            {
-                // Disabled fields can only be edited by users with the right "edit_users" except on registration.
-                // Here is no need to check hidden fields because we check on save() method that only users who
-                // can edit the profile are allowed to save and change data.
-                if($this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 0
-                || ($this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 1
-                   && $gCurrentUser->hasRightEditProfile($this, false))
-                || ((int) $gCurrentUser->getValue('usr_id') === 0 && $usrId === 0))
-                {
-                    $returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
-                }
-            }
-
-            $newFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
-
-            // Nicht alle Aenderungen werden geloggt. Ausnahmen:
-            // usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
-            // Felder, die mit usr_ beginnen, werden nicht geloggt
-            // Falls die Feldwerte sich nicht geaendert haben, wird natuerlich ebenfalls nicht geloggt
-            if($gPreferences['profile_log_edit_fields'] == 1 && $usrId > 0
-            && $newFieldValue !== $oldFieldValue && $returnCode === true)
-            {
-                $logEntry = new TableAccess($this->db, TBL_USER_LOG, 'usl');
-                $logEntry->setValue('usl_usr_id', $usrId);
-                $logEntry->setValue('usl_usf_id', $this->mProfileFieldsData->getProperty($columnName, 'usf_id'));
-                $logEntry->setValue('usl_value_old', $oldFieldValue);
-                $logEntry->setValue('usl_value_new', $newFieldValue);
-                $logEntry->setValue('usl_comm', '');
-                $logEntry->save();
-            }
-        }
-        else
-        {
-            // users data from adm_users table
-
-            if($columnName === 'usr_password' || $columnName === 'usr_new_password')
+            // don't change user password; use $user->setPassword()
+            if ($columnName === 'usr_password' || $columnName === 'usr_new_password')
             {
                 return false;
             }
+
             // username should not contain special characters
-            elseif($columnName === 'usr_login_name')
+            if ($columnName === 'usr_login_name' && $newValue !== '' && !strValidCharacters($newValue, 'noSpecialChar'))
             {
-                if($newValue !== '' && !strValidCharacters($newValue, 'noSpecialChar'))
-                {
-                    return false;
-                }
+                return false;
             }
 
-            $returnCode = parent::setValue($columnName, $newValue);
+            return parent::setValue($columnName, $newValue, $checkValue);
+        }
+
+        // user data from adm_user_fields table
+        $oldFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
+        $newValue = (string) $newValue;
+
+        // only to a update if value has changed
+        if (strcmp($oldFieldValue, $newValue) === 0) // https://secure.php.net/manual/en/function.strcmp.php#108563
+        {
+            return false;
+        }
+
+        $usrId = (int) $this->getValue('usr_id');
+
+        $returnCode = false;
+
+        // Disabled fields can only be edited by users with the right "edit_users" except on registration.
+        // Here is no need to check hidden fields because we check on save() method that only users who
+        // can edit the profile are allowed to save and change data.
+        if ($this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 0
+        || ($this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 1
+            && $gCurrentUser->hasRightEditProfile($this, false))
+        || ($usrId === 0 && (int) $gCurrentUser->getValue('usr_id') === 0))
+        {
+            $returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
+        }
+
+        // Nicht alle Aenderungen werden geloggt. Ausnahmen:
+        // Felder, die mit usr_ beginnen
+        // Felder, die sich nicht geändert haben
+        // Wenn usr_id ist 0 (der User neu angelegt wird; Das wird bereits dokumentiert)
+        if ($returnCode && $usrId > 0 && $gPreferences['profile_log_edit_fields'] == 1)
+        {
+            $logEntry = new TableAccess($this->db, TBL_USER_LOG, 'usl');
+            $logEntry->setValue('usl_usr_id', $usrId);
+            $logEntry->setValue('usl_usf_id', $this->mProfileFieldsData->getProperty($columnName, 'usf_id'));
+            $logEntry->setValue('usl_value_old', $oldFieldValue);
+            $logEntry->setValue('usl_value_new', $newValue);
+            $logEntry->setValue('usl_comm', '');
+            $logEntry->save();
         }
 
         return $returnCode;
