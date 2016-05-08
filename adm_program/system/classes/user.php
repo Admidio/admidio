@@ -117,151 +117,147 @@ class User extends TableAccess
      *                      is not set then only the arrays are filled.
      * @return bool Return true if a special right should be checked and the user has this right.
      */
-    public function checkRolesRight($right = '')
+    public function checkRolesRight($right = null)
     {
-        if($this->getValue('usr_id') > 0)
+        if ((int) $this->getValue('usr_id') === 0)
         {
-            if(count($this->roles_rights) === 0)
+            return false;
+        }
+
+        if (count($this->roles_rights) === 0)
+        {
+            $this->assignRoles = false;
+            $tmpRolesRights = array(
+                'rol_all_lists_view'     => false,
+                'rol_announcements'      => false,
+                'rol_approve_users'      => false,
+                'rol_assign_roles'       => false,
+                'rol_dates'              => false,
+                'rol_download'           => false,
+                'rol_edit_user'          => false,
+                'rol_guestbook'          => false,
+                'rol_guestbook_comments' => false,
+                'rol_mail_to_all'        => false,
+                'rol_photo'              => false,
+                'rol_profile'            => false,
+                'rol_weblinks'           => false,
+                'rol_inventory'          => false
+            );
+
+            // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
+            $sql = 'SELECT *
+                      FROM '.TBL_ROLES.'
+                INNER JOIN '.TBL_CATEGORIES.'
+                        ON cat_id = rol_cat_id
+                 LEFT JOIN '.TBL_MEMBERS.'
+                        ON mem_rol_id = rol_id
+                       AND mem_usr_id = '.$this->getValue('usr_id').'
+                       AND mem_begin <= \''.DATE_NOW.'\'
+                       AND mem_end    > \''.DATE_NOW.'\'
+                     WHERE rol_valid  = 1
+                       AND (  cat_org_id = '.$this->organizationId.'
+                           OR cat_org_id IS NULL )';
+            $rolesStatement = $this->db->query($sql);
+
+            while ($row = $rolesStatement->fetch())
             {
-                $this->assignRoles = false;
-                $tmpRolesRights = array(
-                    'rol_assign_roles'       => false,
-                    'rol_approve_users'      => false,
-                    'rol_announcements'      => false,
-                    'rol_dates'              => false,
-                    'rol_download'           => false,
-                    'rol_edit_user'          => false,
-                    'rol_guestbook'          => false,
-                    'rol_guestbook_comments' => false,
-                    'rol_mail_to_all'        => false,
-                    'rol_photo'              => false,
-                    'rol_profile'            => false,
-                    'rol_weblinks'           => false,
-                    'rol_all_lists_view'     => false,
-                    'rol_inventory'          => false
-                );
-
-                // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
-                $sql = 'SELECT *
-                          FROM '.TBL_ROLES.'
-                    INNER JOIN '.TBL_CATEGORIES.'
-                            ON cat_id = rol_cat_id
-                     LEFT JOIN '.TBL_MEMBERS.'
-                            ON mem_rol_id = rol_id
-                           AND mem_usr_id = '.$this->getValue('usr_id').'
-                           AND mem_begin <= \''.DATE_NOW.'\'
-                           AND mem_end    > \''.DATE_NOW.'\'
-                         WHERE rol_valid  = 1
-                           AND (  cat_org_id = '.$this->organizationId.'
-                               OR cat_org_id IS NULL ) ';
-                $rolesStatement = $this->db->query($sql);
-
-                while($row = $rolesStatement->fetch())
+                if ($row['mem_usr_id'] > 0)
                 {
-                    if($row['mem_usr_id'] > 0)
+                    // Sql selects all roles. Only consider roles where user is a member.
+                    if ($row['mem_leader'] == 1)
                     {
-                        // Sql selects all roles. Only consider roles where user is a member.
-                        if($row['mem_leader'] == 1)
-                        {
-                            // if user is leader in this role than add role id and leader rights to array
-                            $this->rolesMembershipLeader[$row['rol_id']] = $row['rol_leader_rights'];
+                        // if user is leader in this role than add role id and leader rights to array
+                        $this->rolesMembershipLeader[$row['rol_id']] = $row['rol_leader_rights'];
 
-                            // if role leader could assign new members then remember this setting
-                            // roles for confirmation of dates should be ignored
-                            if($row['cat_name_intern'] !== 'CONFIRMATION_OF_PARTICIPATION'
-                            && ($row['rol_leader_rights'] == ROLE_LEADER_MEMBERS_ASSIGN || $row['rol_leader_rights'] == ROLE_LEADER_MEMBERS_ASSIGN_EDIT))
-                            {
-                                $this->assignRoles = true;
-                            }
-                        }
-                        else
-                        {
-                            $this->rolesMembershipNoLeader[] = (int) $row['rol_id'];
-                        }
-
-                        // add role to membership array
-                        $this->rolesMembership[] = (int) $row['rol_id'];
-
-                        // Rechte der Rollen in das Array uebertragen,
-                        // falls diese noch nicht durch andere Rollen gesetzt wurden
-                        foreach($tmpRolesRights as $key => $value)
-                        {
-                            if(!$value && $row[$key] == '1')
-                            {
-                                $tmpRolesRights[$key] = true;
-                            }
-                        }
-
-                        // set flag assignRoles of user can manage roles
-                        if($row['rol_assign_roles'] == 1)
+                        // if role leader could assign new members then remember this setting
+                        // roles for confirmation of dates should be ignored
+                        if ($row['cat_name_intern'] !== 'CONFIRMATION_OF_PARTICIPATION'
+                        && ($row['rol_leader_rights'] == ROLE_LEADER_MEMBERS_ASSIGN || $row['rol_leader_rights'] == ROLE_LEADER_MEMBERS_ASSIGN_EDIT))
                         {
                             $this->assignRoles = true;
                         }
+                    }
+                    else
+                    {
+                        $this->rolesMembershipNoLeader[] = (int) $row['rol_id'];
+                    }
 
-                        // set administrator flag
-                        if($row['rol_administrator'] == 1)
+                    // add role to membership array
+                    $this->rolesMembership[] = (int) $row['rol_id'];
+
+                    // Rechte der Rollen in das Array uebertragen,
+                    // falls diese noch nicht durch andere Rollen gesetzt wurden
+                    foreach ($tmpRolesRights as $key => $value)
+                    {
+                        if (!$value && $row[$key] == '1')
                         {
-                            $this->administrator = true;
+                            $tmpRolesRights[$key] = true;
                         }
                     }
 
-                    // Listenansichtseinstellung merken
-                    // Leiter duerfen die Rolle sehen
-                    if($row['mem_usr_id'] > 0 && ($row['rol_this_list_view'] > 0 || $row['mem_leader'] == 1))
+                    // set flag assignRoles of user can manage roles
+                    if ($row['rol_assign_roles'] == 1)
                     {
-                        // Mitgliedschaft bei der Rolle und diese nicht gesperrt, dann anschauen
-                        $this->listViewRights[$row['rol_id']] = true;
-                    }
-                    elseif($row['rol_this_list_view'] == 2)
-                    {
-                        // andere Rollen anschauen, wenn jeder sie sehen darf
-                        $this->listViewRights[$row['rol_id']] = true;
-                    }
-                    else
-                    {
-                        $this->listViewRights[$row['rol_id']] = false;
+                        $this->assignRoles = true;
                     }
 
-                    // Mailrechte setzen
-                    // Leiter duerfen der Rolle Mails schreiben
-                    if($row['mem_usr_id'] > 0 && ($row['rol_mail_this_role'] > 0 || $row['mem_leader'] == 1))
+                    // set administrator flag
+                    if ($row['rol_administrator'] == 1)
                     {
-                        // Mitgliedschaft bei der Rolle und diese nicht gesperrt, dann anschauen
-                        $this->listMailRights[$row['rol_id']] = true;
-                    }
-                    elseif($row['rol_mail_this_role'] >= 2)
-                    {
-                        // andere Rollen anschauen, wenn jeder sie sehen darf
-                        $this->listMailRights[$row['rol_id']] = true;
-                    }
-                    else
-                    {
-                        $this->listMailRights[$row['rol_id']] = false;
+                        $this->administrator = true;
                     }
                 }
-                $this->roles_rights = $tmpRolesRights;
 
-                // ist das Recht 'alle Listen einsehen' gesetzt, dann dies auch im Array bei allen Rollen setzen
-                if($this->roles_rights['rol_all_lists_view'])
+                // Listenansichtseinstellung merken
+                // Leiter duerfen die Rolle sehen
+                if ($row['mem_usr_id'] > 0 && ($row['rol_this_list_view'] > 0 || $row['mem_leader'] == 1))
                 {
-                    $this->listViewRights = array_fill_keys(array_keys($this->listViewRights), true);
+                    // Mitgliedschaft bei der Rolle und diese nicht gesperrt, dann anschauen
+                    $this->listViewRights[$row['rol_id']] = true;
                 }
-
-                // ist das Recht 'allen Rollen EMails schreiben' gesetzt, dann dies auch im Array bei allen Rollen setzen
-                if($this->roles_rights['rol_mail_to_all'])
+                elseif ($row['rol_this_list_view'] == 2)
                 {
-                    $this->listMailRights = array_fill_keys(array_keys($this->listMailRights), true);
+                    // andere Rollen anschauen, wenn jeder sie sehen darf
+                    $this->listViewRights[$row['rol_id']] = true;
+                }
+                else
+                {
+                    $this->listViewRights[$row['rol_id']] = false;
                 }
 
+                // Mailrechte setzen
+                // Leiter duerfen der Rolle Mails schreiben
+                if ($row['mem_usr_id'] > 0 && ($row['rol_mail_this_role'] > 0 || $row['mem_leader'] == 1))
+                {
+                    // Mitgliedschaft bei der Rolle und diese nicht gesperrt, dann anschauen
+                    $this->listMailRights[$row['rol_id']] = true;
+                }
+                elseif ($row['rol_mail_this_role'] >= 2)
+                {
+                    // andere Rollen anschauen, wenn jeder sie sehen darf
+                    $this->listMailRights[$row['rol_id']] = true;
+                }
+                else
+                {
+                    $this->listMailRights[$row['rol_id']] = false;
+                }
+            }
+            $this->roles_rights = $tmpRolesRights;
+
+            // ist das Recht 'alle Listen einsehen' gesetzt, dann dies auch im Array bei allen Rollen setzen
+            if ($this->roles_rights['rol_all_lists_view'])
+            {
+                $this->listViewRights = array_fill_keys(array_keys($this->listViewRights), true);
             }
 
-            if($right === '' || $this->roles_rights[$right])
+            // ist das Recht 'allen Rollen EMails schreiben' gesetzt, dann dies auch im Array bei allen Rollen setzen
+            if ($this->roles_rights['rol_mail_to_all'])
             {
-                return true;
+                $this->listMailRights = array_fill_keys(array_keys($this->listMailRights), true);
             }
         }
 
-        return false;
+        return $right === null || $this->roles_rights[$right];
     }
 
     /**
@@ -756,70 +752,70 @@ class User extends TableAccess
     {
         global $gPreferences;
 
-        $vcard  = 'BEGIN:VCARD'."\r\n";
-        $vcard .= 'VERSION:2.1'."\r\n";
-        if($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_hidden') == 0))
+        $vCard  = 'BEGIN:VCARD'."\r\n";
+        $vCard .= 'VERSION:2.1'."\r\n";
+        if ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_hidden') == 0))
         {
-            $vcard .= 'N;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('LAST_NAME', 'database')). ';'. utf8_decode($this->getValue('FIRST_NAME', 'database')) . ";;;\r\n";
+            $vCard .= 'N;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('LAST_NAME', 'database')). ';'. utf8_decode($this->getValue('FIRST_NAME', 'database')) . ";;;\r\n";
         }
-        if($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_hidden') == 0))
+        if ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_hidden') == 0))
         {
-            $vcard .= 'FN;CHARSET=ISO-8859-1:'. utf8_decode($this->getValue('FIRST_NAME')) . ' '. utf8_decode($this->getValue('LAST_NAME')) . "\r\n";
+            $vCard .= 'FN;CHARSET=ISO-8859-1:'. utf8_decode($this->getValue('FIRST_NAME')) . ' '. utf8_decode($this->getValue('LAST_NAME')) . "\r\n";
         }
-        if (strlen($this->getValue('usr_login_name')) > 0)
+        if ($this->getValue('usr_login_name') !== '')
         {
-            $vcard .= 'NICKNAME;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('usr_login_name')). "\r\n";
+            $vCard .= 'NICKNAME;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('usr_login_name')). "\r\n";
         }
-        if (strlen($this->getValue('PHONE')) > 0
+        if ($this->getValue('PHONE') !== ''
         && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('PHONE', 'usf_hidden') == 0)))
         {
-            $vcard .= 'TEL;HOME;VOICE:' . $this->getValue('PHONE'). "\r\n";
+            $vCard .= 'TEL;HOME;VOICE:' . $this->getValue('PHONE'). "\r\n";
         }
-        if (strlen($this->getValue('MOBILE')) > 0
+        if ($this->getValue('MOBILE') !== ''
         && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('MOBILE', 'usf_hidden') == 0)))
         {
-            $vcard .= 'TEL;CELL;VOICE:' . $this->getValue('MOBILE'). "\r\n";
+            $vCard .= 'TEL;CELL;VOICE:' . $this->getValue('MOBILE'). "\r\n";
         }
-        if (strlen($this->getValue('FAX')) > 0
+        if ($this->getValue('FAX') !== ''
         && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('FAX', 'usf_hidden') == 0)))
         {
-            $vcard .= 'TEL;HOME;FAX:' . $this->getValue('FAX'). "\r\n";
+            $vCard .= 'TEL;HOME;FAX:' . $this->getValue('FAX'). "\r\n";
         }
-        if($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('ADDRESS', 'usf_hidden') == 0 && $this->mProfileFieldsData->getProperty('CITY', 'usf_hidden') == 0
+        if ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('ADDRESS', 'usf_hidden') == 0 && $this->mProfileFieldsData->getProperty('CITY', 'usf_hidden') == 0
         && $this->mProfileFieldsData->getProperty('POSTCODE', 'usf_hidden') == 0  && $this->mProfileFieldsData->getProperty('COUNTRY', 'usf_hidden') == 0))
         {
-            $vcard .= 'ADR;CHARSET=ISO-8859-1;HOME:;;' . utf8_decode($this->getValue('ADDRESS', 'database')). ';' . utf8_decode($this->getValue('CITY', 'database')). ';;' . utf8_decode($this->getValue('POSTCODE', 'database')). ';' . utf8_decode($this->getValue('COUNTRY', 'database')). "\r\n";
+            $vCard .= 'ADR;CHARSET=ISO-8859-1;HOME:;;' . utf8_decode($this->getValue('ADDRESS', 'database')). ';' . utf8_decode($this->getValue('CITY', 'database')). ';;' . utf8_decode($this->getValue('POSTCODE', 'database')). ';' . utf8_decode($this->getValue('COUNTRY', 'database')). "\r\n";
         }
-        if (strlen($this->getValue('WEBSITE')) > 0
+        if ($this->getValue('WEBSITE') !== ''
         && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('WEBSITE', 'usf_hidden') == 0)))
         {
-            $vcard .= 'URL;HOME:' . $this->getValue('WEBSITE'). "\r\n";
+            $vCard .= 'URL;HOME:' . $this->getValue('WEBSITE'). "\r\n";
         }
-        if (strlen($this->getValue('BIRTHDAY')) > 0
+        if ($this->getValue('BIRTHDAY') !== ''
         && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('BIRTHDAY', 'usf_hidden') == 0)))
         {
-            $vcard .= 'BDAY:' . $this->getValue('BIRTHDAY', 'Ymd') . "\r\n";
+            $vCard .= 'BDAY:' . $this->getValue('BIRTHDAY', 'Ymd') . "\r\n";
         }
-        if (strlen($this->getValue('EMAIL')) > 0
+        if ($this->getValue('EMAIL') !== ''
         && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('EMAIL', 'usf_hidden') == 0)))
         {
-            $vcard .= 'EMAIL;PREF;INTERNET:' . $this->getValue('EMAIL'). "\r\n";
+            $vCard .= 'EMAIL;PREF;INTERNET:' . $this->getValue('EMAIL'). "\r\n";
         }
         if (is_file(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
         {
             $img_handle = fopen(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg', 'rb');
-            $vcard .= 'PHOTO;ENCODING=BASE64;TYPE=JPEG:'.base64_encode(fread($img_handle, filesize(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))). "\r\n";
+            $vCard .= 'PHOTO;ENCODING=BASE64;TYPE=JPEG:'.base64_encode(fread($img_handle, filesize(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))). "\r\n";
             fclose($img_handle);
         }
-        if (strlen($this->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
+        if ($this->getValue('usr_photo') !== '' && $gPreferences['profile_photo_storage'] == 0)
         {
-            $vcard .= 'PHOTO;ENCODING=BASE64;TYPE=JPEG:'.base64_encode($this->getValue('usr_photo')). "\r\n";
+            $vCard .= 'PHOTO;ENCODING=BASE64;TYPE=JPEG:'.base64_encode($this->getValue('usr_photo')). "\r\n";
         }
         // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
         if ($this->getValue('GENDER') > 0
         && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('GENDER', 'usf_hidden') == 0)))
         {
-            if($this->getValue('GENDER') == 1)
+            if ($this->getValue('GENDER') == 1)
             {
                 $wabGender = 2;
             }
@@ -827,19 +823,19 @@ class User extends TableAccess
             {
                 $wabGender = 1;
             }
-            $vcard .= 'X-WAB-GENDER:' . $wabGender . "\r\n";
+            $vCard .= 'X-WAB-GENDER:' . $wabGender . "\r\n";
         }
-        if (strlen($this->getValue('usr_timestamp_change')) > 0)
+        if ($this->getValue('usr_timestamp_change') !== '')
         {
-            $vcard .= 'REV:' . $this->getValue('usr_timestamp_change', 'ymdThis') . "\r\n";
+            $vCard .= 'REV:' . $this->getValue('usr_timestamp_change', 'ymdThis') . "\r\n";
         }
 
-        $vcard .= 'END:VCARD'."\r\n";
+        $vCard .= 'END:VCARD'."\r\n";
 
-        return $vcard;
+        return $vCard;
     }
 
-     /**
+    /**
       * Checks if the current user is allowed to edit the profile of the user of the parameter.
       * If will check if user can generally edit all users or if he is a group leader and can edit users
       * of a special role where @b $user is a member or if it's the own profile and he could edit this.
@@ -847,7 +843,7 @@ class User extends TableAccess
       * @param bool  $checkOwnProfile If set to @b false than this method don't check the role right to edit the own profile.
       * @return bool Return @b true if the current user is allowed to edit the profile of the user from @b $user.
       */
-     public function hasRightEditProfile(&$user, $checkOwnProfile = true)
+    public function hasRightEditProfile(&$user, $checkOwnProfile = true)
     {
         if (!is_object($user))
         {
