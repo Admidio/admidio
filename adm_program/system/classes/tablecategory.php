@@ -278,7 +278,7 @@ class TableCategory extends TableAccess
      * @param array $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns @b true if one record is found
      */
-    public function readDataByColumns($columnArray)
+    public function readDataByColumns(array $columnArray)
     {
         $returnValue = parent::readDataByColumns($columnArray);
 

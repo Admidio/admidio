@@ -735,7 +735,7 @@ class TableFolder extends TableAccess
      * @param array $rolesArray
      * @param int   $folderId
      */
-    public function setRolesOnFolder($rolesArray, $folderId = 0)
+    public function setRolesOnFolder(array $rolesArray, $folderId = 0)
     {
         if ($folderId === 0)
         {

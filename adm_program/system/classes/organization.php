@@ -403,7 +403,7 @@ class Organization extends TableAccess
      *                           database. array('name_of_preference' => 'value')
      * @param bool  $update      If set to @b false then no update will be done, only inserts
      */
-    public function setPreferences($preferences, $update = true)
+    public function setPreferences(array $preferences, $update = true)
     {
         $this->db->startTransaction();
         $this->getPreferences();

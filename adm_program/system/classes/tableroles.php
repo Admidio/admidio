@@ -56,7 +56,7 @@ class TableRoles extends TableAccess
      * @param \User $user UserObject of user who should be checked
      * @return bool
      */
-    public function allowedToAssignMembers($user)
+    public function allowedToAssignMembers(User $user)
     {
         global $gL10n;
 
@@ -91,7 +91,7 @@ class TableRoles extends TableAccess
      * @param \User $user UserObject of user who should be checked
      * @return bool
      */
-    public function allowedToEditMembers($user)
+    public function allowedToEditMembers(User $user)
     {
         // you aren't allowed to edit users of not active roles
         if($this->getValue('rol_valid'))

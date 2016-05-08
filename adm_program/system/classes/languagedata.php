@@ -112,12 +112,9 @@ class LanguageData
      * Save the array with all countries and their ISO codes in an internal parameter for later use
      * @param array $countries Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
-    public function setCountriesArray($countries)
+    public function setCountriesArray(array $countries)
     {
-        if(is_array($countries))
-        {
-            $this->countries = $countries;
-        }
+        $this->countries = $countries;
     }
 
     /**

@@ -47,7 +47,7 @@ class HtmlNavbar
      *                            default: will be the standard navbar of all modules.
      *                            filter:  should be used if this navbar is used to filter data of within the script.
      */
-    public function __construct($id, $name = null, $htmlPage = null, $type = 'default')
+    public function __construct($id, $name = null, HtmlPage $htmlPage = null, $type = 'default')
     {
         global $gL10n;
 
@@ -79,7 +79,7 @@ class HtmlNavbar
      * @param array $data An array with all data if the item. This will be @id, @url, @text and @icon.
      * @return string Returns the html for the menu entry
      */
-    protected function createHtmlLink($data)
+    protected function createHtmlLink(array $data)
     {
         $icon = '';
 

@@ -168,7 +168,7 @@ class HtmlTableBasic extends HtmlElement {
      * @param array        $arrAttributes Further attributes as array with key/value pairs
      * @param string       $col           Column element 'td' or 'th' (Default: 'td')
      */
-    public function addColumn($data = '', $arrAttributes = null, $col = 'td')
+    public function addColumn($data = '', array $arrAttributes = null, $col = 'td')
     {
         if($col === 'td' || $col === 'th')
         {
@@ -181,7 +181,7 @@ class HtmlTableBasic extends HtmlElement {
         }
 
         // Check optional attributes in associative array and set all attributes
-        if($arrAttributes !== null && is_array($arrAttributes))
+        if($arrAttributes !== null)
         {
             $this->setAttributesFromArray($arrAttributes);
         }
@@ -201,7 +201,7 @@ class HtmlTableBasic extends HtmlElement {
      * @param array        $arrAttributes Further attributes as array with key/value pairs
      * @param string       $col           Column element 'td' or 'th' (Default: 'td')
      */
-    public function addRow($data = '', $arrAttributes = null, $col = 'td')
+    public function addRow($data = '', array $arrAttributes = null, $col = 'td')
     {
         // Clear column counter
         $this->columnCount = 0;
@@ -217,7 +217,7 @@ class HtmlTableBasic extends HtmlElement {
             $this->addParentElement('tr');
 
             // Check optional attributes in associative array and set all attributes
-            if($arrAttributes !== null && is_array($arrAttributes))
+            if($arrAttributes !== null)
             {
                 $this->setAttributesFromArray($arrAttributes);
             }
@@ -491,20 +491,17 @@ class HtmlTableBasic extends HtmlElement {
      * that will be set by the browser doesn't fit your needs.
      * @param array $array Array with all width values of each column. Here you can set all valid CSS values e.g. '100%' or '300px'
      */
-    public function setColumnsWidth($array)
+    public function setColumnsWidth(array $array)
     {
-        if(is_array($array))
+        foreach ($array as $column)
         {
-            foreach ($array as $column)
+            if($column !== '')
             {
-                if($column !== '')
-                {
-                    $this->columnsWidth[] = $column;
-                }
-                else
-                {
-                    $this->columnsWidth[] = '';
-                }
+                $this->columnsWidth[] = $column;
+            }
+            else
+            {
+                $this->columnsWidth[] = '';
             }
         }
     }

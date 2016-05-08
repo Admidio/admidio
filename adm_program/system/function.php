@@ -414,7 +414,7 @@ function admFuncProcessableImageSize()
  * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old')));
  * @endcode
  */
-function admFuncVariableIsValid($array, $variableName, $datatype, array $options = array())
+function admFuncVariableIsValid(array $array, $variableName, $datatype, array $options = array())
 {
     global $gL10n, $gMessage, $gPreferences;
 

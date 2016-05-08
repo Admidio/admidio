@@ -54,7 +54,7 @@ class HtmlTable extends HtmlTableBasic
      * @param string    $class      (optional) An additional css classname. The class @b table
      *                              is set as default and need not set with this parameter.
      */
-    public function __construct($id, $htmlPage = null, $hoverRows = true, $datatables = false, $class = '')
+    public function __construct($id, HtmlPage $htmlPage = null, $hoverRows = true, $datatables = false, $class = '')
     {
         global $g_root_path, $gL10n;
 
@@ -104,7 +104,7 @@ class HtmlTable extends HtmlTableBasic
      * @param int    $startColspan      (optional) Number of column where the colspan should start. The first column of a table will be 1.
      * @param int    $colspan           (optional) Number of columns that should be join together.
      */
-    public function addRowHeadingByArray($arrayColumnValues, $id = null, $arrAttributes = null, $startColspan = 0, $colspan = 0)
+    public function addRowHeadingByArray(array $arrayColumnValues, $id = null, array $arrAttributes = null, $startColspan = 0, $colspan = 0)
     {
         // set an id to the column
         if($id !== null)
@@ -149,7 +149,7 @@ class HtmlTable extends HtmlTableBasic
      * @param int    $startColspan      (optional) Number of column where the colspan should start. The first column of a table will be 1.
      * @param int    $colspan           (optional) Number of columns that should be join together.
      */
-    public function addRowByArray($arrayColumnValues, $id = null, $arrAttributes = null, $startColspan = 0, $colspan = 0)
+    public function addRowByArray(array $arrayColumnValues, $id = null, array $arrAttributes = null, $startColspan = 0, $colspan = 0)
     {
         // set an id to the column
         if($id !== null)
@@ -244,7 +244,7 @@ class HtmlTable extends HtmlTableBasic
      * @param string[] $arrayColumnAlign An array which contains the align for each column of the table.
      *                                   E.g. array('center', 'left', 'left', 'right') for a table with 4 columns.
      */
-    public function setColumnAlignByArray($arrayColumnAlign)
+    public function setColumnAlignByArray(array $arrayColumnAlign)
     {
         $this->columnAlign = $arrayColumnAlign;
     }
@@ -329,7 +329,7 @@ class HtmlTable extends HtmlTableBasic
      * // sort all rows after first column descending and third column ascending
      * $table->setDatatablesOrderColumns(array(array(1, 'desc'), array(3, 'asc'))); @endcode
      */
-    public function setDatatablesOrderColumns($arrayOrderColumns)
+    public function setDatatablesOrderColumns(array $arrayOrderColumns)
     {
         if(is_array($arrayOrderColumns))
         {

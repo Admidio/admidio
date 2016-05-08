@@ -69,7 +69,7 @@ class HtmlForm extends HtmlFormBasic
      *                            - @b class : An additional css classname. The class @b form-horizontal
      *                              is set as default and need not set with this parameter.
      */
-    public function __construct($id, $action, $htmlPage = null, array $options = array())
+    public function __construct($id, $action, HtmlPage $htmlPage = null, array $options = array())
     {
         // create array with all options
         $optionsDefault = array(
@@ -1003,7 +1003,7 @@ class HtmlForm extends HtmlFormBasic
      *                        - @b class : An additional css classname. The class @b admSelectbox
      *                          is set as default and need not set with this parameter.
      */
-    public function addRadioButton($id, $label, $values, array $options = array())
+    public function addRadioButton($id, $label, array $values, array $options = array())
     {
         $attributes = array('class' => '');
         ++$this->countElements;
@@ -1108,7 +1108,7 @@ class HtmlForm extends HtmlFormBasic
      *                        - @b class : An additional css classname. The class @b admSelectbox
      *                          is set as default and need not set with this parameter.
      */
-    public function addSelectBox($id, $label, $values, array $options = array())
+    public function addSelectBox($id, $label, array $values, array $options = array())
     {
         global $gL10n, $g_root_path, $gPreferences;
 
@@ -1356,7 +1356,7 @@ class HtmlForm extends HtmlFormBasic
      * $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, array('defaultValue' => $gL10n->get('SYS_SURNAME'), 'showContextDependentFirstEntry' => true));
      * $form->show(); @endcode
      */
-    public function addSelectBoxFromSql($id, $label, $database, $sql, array $options = array())
+    public function addSelectBoxFromSql($id, $label, Database $database, $sql, array $options = array())
     {
         $selectboxEntries = array();
 
@@ -1474,7 +1474,7 @@ class HtmlForm extends HtmlFormBasic
      *                              is set as default and need not set with this parameter.
      * @return
      */
-    public function addSelectBoxForCategories($id, $label, $database, $categoryType, $selectboxModus, array $options = array())
+    public function addSelectBoxForCategories($id, $label, Database $database, $categoryType, $selectboxModus, array $options = array())
     {
         global $gCurrentOrganization, $gValidLogin, $gL10n;
 

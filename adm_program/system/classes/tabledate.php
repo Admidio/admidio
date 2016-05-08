@@ -374,7 +374,7 @@ class TableDate extends TableAccess
      * die Methode erwartet ein Array mit den fuer den Termin sichtbaren Rollen-IDs
      * @param array $arrVisibleRoles
      */
-    public function setVisibleRoles($arrVisibleRoles)
+    public function setVisibleRoles(array $arrVisibleRoles)
     {
         if(count(array_diff($arrVisibleRoles, $this->visibleRoles)) > 0)
         {

@@ -52,7 +52,7 @@ function admStrToUpper($string)
  * @param string[] $srcArray
  * @return string[]
  */
-function admStrStripTagsSpecial($srcArray)
+function admStrStripTagsSpecial(array $srcArray)
 {
     foreach($srcArray as $key => $value)
     {

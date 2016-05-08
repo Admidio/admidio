@@ -65,7 +65,7 @@ class ComponentUpdate extends Component
      * the update script.
      * @param \SimpleXMLElement $xmlNode A SimpleXML node of the current update step.
      */
-    private function executeStep($xmlNode)
+    private function executeStep(SimpleXMLElement $xmlNode)
     {
         global $g_tbl_praefix, $gDbType;
 

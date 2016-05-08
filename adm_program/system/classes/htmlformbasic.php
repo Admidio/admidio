@@ -122,7 +122,7 @@ class HtmlFormBasic extends HtmlElement
      * @param string   $value         Value of the field (Default: empty)
      * @param string[] $arrAttributes Further attributes as array with key/value pairs
      */
-    public function addSimpleInput($type, $name, $id = '', $value = '', $arrAttributes = null)
+    public function addSimpleInput($type, $name, $id = '', $value = '', array $arrAttributes = null)
     {
         $this->addElement('input', '', '', '',  true);
 
@@ -138,7 +138,7 @@ class HtmlFormBasic extends HtmlElement
         $this->addAttribute('value', $value);
 
         // Check optional attributes in associative array and set all attributes
-        if($arrAttributes !== null && is_array($arrAttributes))
+        if($arrAttributes !== null)
         {
             $this->setAttributesFromArray($arrAttributes);
         }
@@ -211,7 +211,7 @@ class HtmlFormBasic extends HtmlElement
      * @param array  $arrAttributes Further attributes as array with key/value pairs
      * @param bool   $disable       Disable option group (Default: false)
      */
-    public function addOptionGroup($label, $id = '', $arrAttributes = null, $disable = false)
+    public function addOptionGroup($label, $id = '', array $arrAttributes = null, $disable = false)
     {
         $this->addParentElement('optgroup');
 
@@ -224,7 +224,7 @@ class HtmlFormBasic extends HtmlElement
         }
 
         // Check optional attributes in associative array and set all attributes
-        if($arrAttributes !== null && is_array($arrAttributes))
+        if($arrAttributes !== null)
         {
             $this->setAttributesFromArray($arrAttributes);
         }
@@ -242,7 +242,7 @@ class HtmlFormBasic extends HtmlElement
      * @param array  $arrAttributes Further attributes as array with key/value pairs
      * @param bool   $disable       Disable select (Default: false)
      */
-    public function addSelect($name, $id = '', $arrAttributes = null, $disable = false)
+    public function addSelect($name, $id = '', array $arrAttributes = null, $disable = false)
     {
         $this->addParentElement('select', 'name', $name);
 
@@ -253,7 +253,7 @@ class HtmlFormBasic extends HtmlElement
         }
 
         // Check optional attributes in associative array and set all attributes
-        if($arrAttributes !== null && is_array($arrAttributes))
+        if($arrAttributes !== null)
         {
             $this->setAttributesFromArray($arrAttributes);
         }
@@ -303,7 +303,7 @@ class HtmlFormBasic extends HtmlElement
      * @param array  $arrAttributes Further attributes as array with key/value pairs
      * @param bool   $disable       Disable text area (Default: false)
      */
-    public function addTextArea($name, $rows, $cols, $text = '', $id = '', $arrAttributes = null, $disable = false)
+    public function addTextArea($name, $rows, $cols, $text = '', $id = '', array $arrAttributes = null, $disable = false)
     {
         $this->addElement('textarea');
 
@@ -318,7 +318,7 @@ class HtmlFormBasic extends HtmlElement
         }
 
         // Check optional attributes in associative array and set all attributes
-        if($arrAttributes !== null && is_array($arrAttributes))
+        if($arrAttributes !== null)
         {
             $this->setAttributesFromArray($arrAttributes);
         }

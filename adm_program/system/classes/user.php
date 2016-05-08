@@ -57,7 +57,7 @@ class User extends TableAccess
      * @param int $userId                The id of the user who should be loaded. If id isn't set than an empty
      *                                   object with no specific user is created.
      */
-    public function __construct(&$database, $userFields = null, $userId = 0)
+    public function __construct(&$database, ProfileFields $userFields = null, $userId = 0)
     {
         global $gCurrentOrganization;
 
@@ -944,7 +944,7 @@ class User extends TableAccess
      * @param \User $user User object of the user that should be checked if the current user can view his profile.
      * @return bool Return @b true if the current user is allowed to view the profile of the user from @b $user.
      */
-    public function hasRightViewProfile($user)
+    public function hasRightViewProfile(User $user)
     {
         // if user is allowed to edit the profile then he can also view it
         if($this->hasRightEditProfile($user))

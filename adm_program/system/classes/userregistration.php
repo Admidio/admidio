@@ -47,7 +47,7 @@ class UserRegistration extends User
      * @param int            $organizationId The id of the organization for which the user should be registered.
      *                                       If no id is set than the user will be registered for the current organization.
      */
-    public function __construct(&$database, $userFields, $userId = 0, $organizationId = 0)
+    public function __construct(&$database, ProfileFields $userFields, $userId = 0, $organizationId = 0)
     {
         global $gCurrentOrganization;
 

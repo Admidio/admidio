@@ -737,7 +737,7 @@ class Database
      * @return mixed|null Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
      * @see <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">PDOStatement::fetch</a>
      */
-    public function fetch_array($pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
+    public function fetch_array(PDOStatement $pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
     {
         // if pdo statement is committed then fetch this object
         if (is_object($pdoStatement))
@@ -764,7 +764,7 @@ class Database
      * @return mixed|null Returns an object that corresponds to the fetched row and moves the internal data pointer ahead.
      * @see <a href="https://secure.php.net/manual/en/pdostatement.fetchobject.php">PDOStatement::fetchObject</a>
      */
-    public function fetch_object($pdoStatement = null)
+    public function fetch_object(PDOStatement $pdoStatement = null)
     {
         // if pdo statement is committed then fetch this object
         if (is_object($pdoStatement))
@@ -802,7 +802,7 @@ class Database
      * @return int|null Return the number of rows of the result of the sql statement.
      * @see <a href="https://secure.php.net/manual/en/pdostatement.rowcount.php">PDOStatement::rowCount</a>
      */
-    public function num_rows($pdoStatement = null)
+    public function num_rows(PDOStatement $pdoStatement = null)
     {
         // if pdo statement is committed then fetch this object
         if (is_object($pdoStatement))

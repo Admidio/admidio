@@ -385,7 +385,7 @@ class TableAccess
      * @see TableAccess#readData
      * @see TableAccess#readDataById
      */
-    public function readDataByColumns($columnArray)
+    public function readDataByColumns(array $columnArray)
     {
         $returnCode = false;
         $sqlWhereCondition = '';
@@ -565,7 +565,7 @@ class TableAccess
      *     ...
      * } @endcode
      */
-    public function setArray($fieldArray)
+    public function setArray(array $fieldArray)
     {
         foreach($fieldArray as $field => $value)
         {

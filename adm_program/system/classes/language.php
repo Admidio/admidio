@@ -301,7 +301,7 @@ class Language
      * @param string $textId       The id of the text that will be searched in the file.
      * @return string Return the text in the language or nothing if text id wasn't found.
      */
-    public function searchLanguageText(&$objectArray, $languagePath, $language, $textId)
+    public function searchLanguageText(array &$objectArray, $languagePath, $language, $textId)
     {
         // if not exists create a SimpleXMLElement of the language file in the language path
         // and add it to the array of language objects

@@ -180,7 +180,7 @@ class ListConfiguration extends TableLists
      * @param string $endDate
      * @return string
      */
-    public function getSQL($roleIds, $memberStatus = 0, $startDate = null, $endDate = null)
+    public function getSQL(array $roleIds, $memberStatus = 0, $startDate = null, $endDate = null)
     {
         global $gL10n, $gProfileFields, $gCurrentOrganization, $gDbType;
 

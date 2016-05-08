@@ -22,7 +22,7 @@ class FunctionClass
     /**
      * @param \Language $gL10n
      */
-    public function __construct($gL10n)
+    public function __construct(Language $gL10n)
     {
         $this->nameRecipientString      = $gL10n->get('ECA_RECIPIENT_NAME');
         $this->emailRecipientString     = $gL10n->get('ECA_RECIPIENT_EMAIL');

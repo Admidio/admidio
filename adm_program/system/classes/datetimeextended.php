@@ -23,7 +23,7 @@ class DateTimeExtended extends DateTime
      * @param string        $format   das zum Datum passende Format (Schreibweise aus date())
      * @param \DateTimeZone $timezone DateTimeZone
      */
-    public function __construct($date, $format, $timezone = null)
+    public function __construct($date, $format, DateTimeZone $timezone = null)
     {
         $datetime = DateTime::createFromFormat($format, $date);
 

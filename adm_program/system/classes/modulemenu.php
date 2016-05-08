@@ -94,7 +94,7 @@ class ModuleMenu
      * @param array $menuEntry menu entry element which was added with addItem
      * @param bool  $selected  determines if drop down element should be pre selected
      */
-    private function addDropDownItem(&$menuEntry, $selected = false)
+    private function addDropDownItem(array &$menuEntry, $selected = false)
     {
         if ($this->ddJS !== '')
         {
@@ -161,7 +161,7 @@ class ModuleMenu
      * @param array $menuEntry menu entry element which was added with addItem
      * @return string HTML of created item
      */
-    private function createIconTextLink(&$menuEntry)
+    private function createIconTextLink(array &$menuEntry)
     {
         $html = '';
 
