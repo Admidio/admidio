@@ -32,9 +32,13 @@ unset($_SESSION['dates_request']);
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
+
 // Daterange defined in preferences
-$startDate = date('Y-m-d', time() - $gPreferences['dates_ical_days_past']   * 60*60*24);
-$endDate   = date('Y-m-d', time() + $gPreferences['dates_ical_days_future'] * 60*60*24);
+$now = new DateTime();
+$dayOffsetPast   = new DateInterval('P'.$gPreferences['dates_ical_days_past'].'D');
+$dayOffsetFuture = new DateInterval('P'.$gPreferences['dates_ical_days_future'].'D');
+$startDate = $now->sub($dayOffsetPast)->format('Y-m-d');
+$endDate   = $now->add($dayOffsetFuture)->format('Y-m-d');
 
 // Message if module is disabled
 if($gPreferences['enable_dates_module'] == 0)

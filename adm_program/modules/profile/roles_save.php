@@ -172,7 +172,7 @@ foreach($rolesList as $row)
     // but don't change their own membership, because there must be at least one administrator
     if($row['rol_administrator'] == 0
     || ($row['rol_administrator'] == 1 && $gCurrentUser->isAdministrator()
-        && $getUserId != $gCurrentUser->getValue('usr_id')))
+        && $getUserId !== (int) $gCurrentUser->getValue('usr_id')))
     {
         $roleAssign = false;
         if(isset($_POST['role-'.$row['rol_id']]) && $_POST['role-'.$row['rol_id']] == 1)
@@ -180,10 +180,10 @@ foreach($rolesList as $row)
             $roleAssign = true;
         }
 
-        $roleLeader = 0;
+        $roleLeader = false;
         if(isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == 1)
         {
-            $roleLeader = 1;
+            $roleLeader = true;
         }
 
         // update role membership
@@ -208,7 +208,9 @@ foreach($rolesList as $row)
             if($row['mem_id'] > 0)
             {
                 // subtract one day, so that user leaves role immediately
-                $newEndDate = date('Y-m-d', time() - (24 * 60 * 60));
+                $now = new DateTime();
+                $oneDayOffset = new DateInterval('P1D');
+                $newEndDate = $now->sub($oneDayOffset)->format('Y-m-d');
                 $user->editRoleMembership($row['mem_id'], $row['mem_begin'], $newEndDate, $roleLeader);
             }
         }

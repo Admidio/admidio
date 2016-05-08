@@ -95,8 +95,13 @@ else
     if($getDateId === 0)
     {
         // bei neuem Termin Datum mit aktuellen Daten vorbelegen
-        $date->setValue('dat_begin', date('Y-m-d H:00:00', time() + 60 * 60 * 1));
-        $date->setValue('dat_end', date('Y-m-d H:00:00', time() + 60 * 60 * 2));
+        $now = new DateTime();
+        $oneHourOffset = new DateInterval('PT1H');
+        $twoHourOffset = new DateInterval('PT2H');
+        $beginDate = $now->add($oneHourOffset)->format('Y-m-d H:00:00');
+        $endDate   = $now->add($twoHourOffset)->format('Y-m-d H:00:00');
+        $date->setValue('dat_begin', $beginDate);
+        $date->setValue('dat_end',   $endDate);
 
         // a new event will be visible for all users per default
         $date->setVisibleRoles(array('0'));
