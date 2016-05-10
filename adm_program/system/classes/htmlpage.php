@@ -455,7 +455,7 @@ class HtmlPage
         {
             // add modules and administration modules to the menu
             $this->addDefaultMenu();
-            $htmlMenu = $this->menu->show(false);
+            $htmlMenu = $this->menu->show();
         }
 
         if($this->headline !== '')

@@ -198,7 +198,7 @@ if($getViewMode === 'html')
     $form->addInput('view', '', $getView, array('property' => FIELD_HIDDEN));
     $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
     $FilterNavbar->addForm($form->show(false));
-    $page->addHtml($FilterNavbar->show(false));
+    $page->addHtml($FilterNavbar->show());
 }
 elseif($getViewMode === 'print')
 {

@@ -313,7 +313,7 @@ if ($getMode !== 'csv')
             $form->addInput('show_members', '', $getShowMembers, array('property' => FIELD_HIDDEN));
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
             $filterNavbar->addForm($form->show(false));
-            $page->addHtml($filterNavbar->show(false));
+            $page->addHtml($filterNavbar->show());
         }
 
         $page->addHtml('<h5>'.$htmlSubHeadline.'</h5>');
