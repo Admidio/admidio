@@ -111,10 +111,7 @@
  */
 class HtmlTableBasic extends HtmlElement {
     protected $border;                   ///< String with border attribute and value of the table
-    protected $lineChange;               ///< Integer value for class change mode for table rows.
-    protected $class_1;                  ///< Class name for standard design of table rows
-    protected $class_2;                  ///< Class name for changed design of table rows
-    protected $changeClass;              ///< Class name for the next table row using class change mode
+    protected $rowClasses;               ///< Class names to design table rows
     protected $columnsWidth;             ///< Array with values for the columns width
     protected $thead;                    ///< Internal Flag for setted thead element
     protected $tfoot;                    ///< Internal Flag for setted tfoot element
@@ -126,35 +123,34 @@ class HtmlTableBasic extends HtmlElement {
      * Constructor initializing all class variables
      * @param string $id     Id of the table
      * @param string $class  Class name of the table
-     * @param int    $border Set table border
+     * @param int    $border Set the table border width
      */
-    public function __construct($id = '', $class = '', $border = 0)
+    public function __construct($id = null, $class = null, $border = 0)
     {
-        $this->border       = is_numeric($border) ? $border : 0;
-        $this->lineChange   = '';
-        $this->changeClass  = '';
+        $this->border       = $border;
+        $this->rowClasses   = array();
         $this->columnsWidth = array();
-        $this->thead        = -1;
-        $this->tfoot        = -1;
-        $this->tbody        = -1;
+        $this->thead        = false;
+        $this->tfoot        = false;
+        $this->tbody        = false;
         $this->columnCount  = 0;
         $this->rowCount     = 0;
 
         parent::__construct('table', '', '', true);
 
-        if($id !== '')
+        if ($id !== null)
         {
             $this->addAttribute('id', $id);
         }
 
-        if($class !== '')
+        if ($class !== null)
         {
             $this->addAttribute('class', $class);
         }
 
-        if($border == 1)
+        if ($this->border > 0)
         {
-            $this->addAttribute('border', '1');
+            $this->addAttribute('border', $this->border);
         }
     }
 
@@ -165,29 +161,48 @@ class HtmlTableBasic extends HtmlElement {
      * You can define an attribute for each column. If you need further attributes for the column first do the settings with addAttribute();
      * If all settings are done for the column use the addData(); to define your column content.
      * @param string|array $data          Content for the column as string, or array
-     * @param array        $arrAttributes Further attributes as array with key/value pairs
+     * @param string[]     $arrAttributes Further attributes as array with key/value pairs
      * @param string       $col           Column element 'td' or 'th' (Default: 'td')
      */
     public function addColumn($data = '', array $arrAttributes = null, $col = 'td')
     {
-        if($col === 'td' || $col === 'th')
-        {
-            $this->addElement($col);
-        }
+        $this->addElement($col);
 
-        if(count($this->columnsWidth) > 0 && isset($this->columnsWidth[$this->columnCount]))
+        if (array_key_exists($this->columnCount, $this->columnsWidth) && count($this->columnsWidth) > 0)
         {
-            $this->addAttribute('style', 'width:' . $this->columnsWidth[$this->columnCount].';');
+            $this->addAttribute('style', 'width: ' . $this->columnsWidth[$this->columnCount] . ';');
         }
 
         // Check optional attributes in associative array and set all attributes
-        if($arrAttributes !== null)
+        if ($arrAttributes !== null)
         {
             $this->setAttributesFromArray($arrAttributes);
         }
 
         $this->addData($data);
         ++$this->columnCount;
+    }
+
+    /**
+     * @param string|array $data Content for the table row as string, or array
+     * @param string       $col  Column element 'td' or 'th' (Default: 'td')
+     */
+    private function addColumnsData($data = '', $col = 'td')
+    {
+        if ($data !== '')
+        {
+            if (is_array($data))
+            {
+                foreach ($data as $column)
+                {
+                    $this->addColumn($column, null, $col);
+                }
+            }
+            else
+            {
+                $this->addColumn($data, null, $col);
+            }
+        }
     }
 
     /**
@@ -198,7 +213,7 @@ class HtmlTableBasic extends HtmlElement {
      * The element and attributes are stored in buffer first and will be parsed and written in the output string if the content is defined.
      * After all settings are done use addColumn(); to define your columns with content.
      * @param string|array $data          Content for the table row as string, or array
-     * @param array        $arrAttributes Further attributes as array with key/value pairs
+     * @param string[]     $arrAttributes Further attributes as array with key/value pairs
      * @param string       $col           Column element 'td' or 'th' (Default: 'td')
      */
     public function addRow($data = '', array $arrAttributes = null, $col = 'td')
@@ -207,140 +222,73 @@ class HtmlTableBasic extends HtmlElement {
         $this->columnCount = 0;
 
         // If row is active we must close it first before starting new one
-        if(in_array('tr', $this->arrParentElements, true))
+        if (in_array('tr', $this->arrParentElements, true))
         {
             $this->closeParentElement('tr');
         }
 
-        if($this->lineChange === '' && count($this->columnsWidth) === 0)
+        $this->addParentElement('tr');
+
+        // Check optional attributes in associative array and set all attributes
+        if ($arrAttributes !== null)
         {
-            $this->addParentElement('tr');
-
-            // Check optional attributes in associative array and set all attributes
-            if($arrAttributes !== null)
-            {
-                $this->setAttributesFromArray($arrAttributes);
-            }
-
-            if($data !== '')
-            {
-                $this->addColumn($data, null, $col);
-                $this->closeParentElement('tr');
-            }
-
+            $this->setAttributesFromArray($arrAttributes);
         }
-        elseif($this->lineChange === '' && count($this->columnsWidth) > 0)
+
+        if (count($this->rowClasses) === 0)
         {
-            $this->addParentElement('tr');
-
-            // Check optional attributes in associative array and set all attributes
-            if($arrAttributes != null && is_array($arrAttributes))
+            if (count($this->columnsWidth) === 0)
             {
-                $this->setAttributesFromArray($arrAttributes);
-            }
-
-            if($data !== '')
-            {
-                if(is_array($data))
+                if ($data !== '')
                 {
-                    foreach($data as $column)
-                    {
-                        $this->addColumn($column, null, $col);
-                    }
-                }
-                else
-                {
-                    // String
                     $this->addColumn($data, null, $col);
+                    $this->closeParentElement('tr');
                 }
             }
-        }
-        elseif($this->lineChange !== '' && count($this->columnsWidth) === 0)
-        {
-            $this->addParentElement('tr');
-
-            // Check optional attributes in associative array and set all attributes
-            if($arrAttributes != null && is_array($arrAttributes))
+            else
             {
-                $this->setAttributesFromArray($arrAttributes);
-            }
-
-            if($this->tbody == 1)
-            {
-                // Only allowed in body element of the table
-                if($this->rowCount % $this->lineChange === 0)
-                {
-                    $this->changeClass = $this->class_1;
-                }
-                else
-                {
-                    $this->changeClass = $this->class_2;
-                }
-                $modulo = $this->changeClass;
-                $this->addAttribute('class', $modulo, 'tr');
-            }
-
-            if($data !== '')
-            {
-                if(is_array($data))
-                {
-                    foreach($data as $column)
-                    {
-                        $this->addColumn($column, null, $col);
-                    }
-                }
-                else
-                {
-                        $this->addColumn($data, null, $col);
-                }
+                $this->addColumnsData($data, $col);
             }
         }
         else
         {
-            $this->addParentElement('tr');
-
-            // Check optional attributes in associative array and set all attributes
-            if($arrAttributes != null && is_array($arrAttributes))
-            {
-                $this->setAttributesFromArray($arrAttributes);
-            }
-
-            if($this->tbody == 1)
+            if ($this->tbody)
             {
                 // Only allowed in body element of the table
-                if($this->rowCount % $this->lineChange === 0)
-                {
-                    $this->changeClass = $this->class_1;
-                }
-                else
-                {
-                    $this->changeClass = $this->class_2;
-                }
-                $modulo = $this->changeClass;
-                $this->addAttribute('class', $modulo, 'tr');
+                $rowClass = $this->rowClasses[$this->rowCount % count($this->rowClasses)];
+                $this->addAttribute('class', $rowClass, 'tr');
             }
 
-            if($data !== '')
-            {
-                if(is_array($data))
-                {
-                    foreach($data as $column)
-                    {
-                        $this->addColumn($column, null, $col);
-                    }
-                }
-                else
-                {
-                    // String
-                    $this->addColumn($data, null, $col);
-                }
-            }
+            $this->addColumnsData($data, $col);
         }
 
-        // only increase rowcount if this is a data row and not the header
-        if($col === 'td')
+        // only increase rowCount if this is a data row and not the header
+        if ($col === 'td')
         {
             ++$this->rowCount;
+        }
+    }
+
+    /**
+     * @param string       $element   Element (thead, tbody, tfoot)
+     * @param string       $attribute Attribute
+     * @param string       $value     Value of the attribute
+     * @param string|array $data      Content for the element as string, or array
+     * @param string       $col
+     */
+    private function addTableSection($element, $attribute = null, $value = null, $data = '', $col = 'td')
+    {
+        $this->addParentElement($element);
+        $this->tbody = true;
+
+        if ($attribute !== null && $value !== null)
+        {
+            $this->addAttribute($attribute, $value);
+        }
+
+        if ($data !== '')
+        {
+            $this->addRow($data, null, $col);
         }
     }
 
@@ -352,34 +300,24 @@ class HtmlTableBasic extends HtmlElement {
      * @param string|array $data      Content for the element as string, or array
      * @param string       $col
      */
-    public function addTableBody($attribute = '', $value = '', $data = '', $col = 'td')
+    public function addTableBody($attribute = null, $value = null, $data = '', $col = 'td')
     {
-        if($this->tfoot != -1 && in_array('tfoot', $this->arrParentElements, true))
+        if ($this->tfoot && in_array('tfoot', $this->arrParentElements, true))
         {
             $this->closeParentElement('tr');
         }
 
-        if($this->tfoot == 1)
+        if ($this->tfoot)
         {
             $this->closeParentElement('tfoot');
         }
 
-        if($this->thead == 1)
+        if ($this->thead)
         {
             $this->closeParentElement('thead');
         }
 
-        $this->addParentElement('tbody');
-        $this->tbody = 1;
-        if($attribute !== '' && $value !== '')
-        {
-            $this->addAttribute($attribute, $value);
-        }
-
-        if($data !== '')
-        {
-            $this->addRow($data, null, $col);
-        }
+        $this->addTableSection('tbody', $attribute, $value, $data, $col);
     }
 
     /**
@@ -391,31 +329,24 @@ class HtmlTableBasic extends HtmlElement {
      * @param string       $col
      * @return bool Returns @b false if tfoot element is already set
      */
-    public function addTableFooter($attribute = '', $value = '', $data = '', $col = 'td')
+    public function addTableFooter($attribute = null, $value = null, $data = '', $col = 'td')
     {
-        if($this->thead != -1 && in_array('thead', $this->arrParentElements, true))
+        if ($this->thead && in_array('thead', $this->arrParentElements, true))
         {
             $this->closeParentElement('thead');
         }
+
         // Check if table footer already exists
-        if($this->tfoot != 1)
+        if (!$this->tfoot)
         {
-            $this->closeParentElement('thead');
-            $this->addParentElement('tfoot');
-            $this->tfoot = 1;
-
-            if($attribute !== '' && $value !== '')
-            {
-                $this->addAttribute($attribute, $value);
-            }
-
-            if($data !== '')
-            {
-                $this->addRow($data, null, $col);
-            }
-            return true;
+            return false;
         }
-        return false;
+
+        $this->closeParentElement('thead');
+
+        $this->addTableSection('tfoot', $attribute, $value, $data, $col);
+
+        return true;
     }
 
     /**
@@ -427,26 +358,17 @@ class HtmlTableBasic extends HtmlElement {
      * @param string       $col
      * @return bool Returns @b false if thead element is already set
      */
-    public function addTableHeader($attribute = '', $value = '', $data = '', $col = 'td')
+    public function addTableHeader($attribute = null, $value = null, $data = '', $col = 'td')
     {
         // Check if table head already exists
-        if($this->thead != 1)
+        if (!$this->thead)
         {
-            $this->addParentElement('thead');
-            $this->thead = 1;
-
-            if($attribute !== '' && $value !== '')
-            {
-                $this->addAttribute($attribute, $value);
-            }
-
-            if($data !== '')
-            {
-                $this->addRow($data, null, $col);
-            }
-            return true;
+            return false;
         }
-        return false;
+
+        $this->addTableSection('thead', $attribute, $value, $data, $col);
+
+        return true;
     }
 
     /**
@@ -457,53 +379,29 @@ class HtmlTableBasic extends HtmlElement {
     {
         $this->closeParentElement('tr');
         $this->closeParentElement('tbody');
-        return '<div class="table-responsive">'.$this->getHtmlElement().'</div>';
+
+        return '<div class="table-responsive">' . $this->getHtmlElement() . '</div>';
     }
 
     /**
      * @par Set line Change mode
-     * In body elements you can use this option. You have to define two class names and a counter as integer value.
-     * The first class name is the standard class and the second name is the class used if the class is changed regarding the counter.
-     * As default value, every second row is to be changed.
+     * In body elements you can use this option. You have to define class names.
      *
-     * @param string $class_1 Name of the standard class used for lineChange mode
-     * @param string $class_2 Name of the change class used for lineChange mode
-     * @param int    $line    Number of the line that is changed to Class_2 (Default: 2)
-     * @return bool
+     * @param string[] $rowClasses Name of the standard class used for lineChange mode
      */
-    public function setClassChange($class_1 = '', $class_2 = '', $line = 2)
+    public function setRowClasses(array $rowClasses)
     {
-        if(!is_numeric($line))
-        {
-            return false;
-        }
-
-        $this->lineChange = $line;
-
-        $this->class_1 = $class_1;
-        $this->class_2 = $class_2;
-
-        return true;
+        $this->rowClasses = $rowClasses;
     }
 
     /**
      * Set a specific width for all columns of the table. This is useful if the automatically
      * that will be set by the browser doesn't fit your needs.
-     * @param array $array Array with all width values of each column. Here you can set all valid CSS values e.g. '100%' or '300px'
+     * @param string[] $array Array with all width values of each column. Here you can set all valid CSS values e.g. '100%' or '300px'
      */
     public function setColumnsWidth(array $array)
     {
-        foreach ($array as $column)
-        {
-            if($column !== '')
-            {
-                $this->columnsWidth[] = $column;
-            }
-            else
-            {
-                $this->columnsWidth[] = '';
-            }
-        }
+        $this->columnsWidth = $array;
     }
 
     /**
@@ -514,10 +412,7 @@ class HtmlTableBasic extends HtmlElement {
      */
     public function setColumnWidth($column, $width)
     {
-        if($column > 0 && $width !== '')
-        {
-            // internal datatable columns starts with 0
-            $this->columnsWidth[$column - 1] = $width;
-        }
+        // internal datatable columns starts with 0
+        $this->columnsWidth[$column - 1] = $width;
     }
 }
