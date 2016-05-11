@@ -39,7 +39,7 @@ function showNotice($message, $url, $buttonText, $buttonIcon, $update = false)
 
     $form->setFormDescription($message);
     $form->addSubmitButton('next_page', $buttonText, array('icon' => $buttonIcon, 'onClickText' => $onClickText));
-    $form->show();
+    echo $form->show();
     exit();
 }
 

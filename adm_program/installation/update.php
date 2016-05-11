@@ -213,7 +213,7 @@ if($getMode === 1)
                 </div>');
         }
         $form->addSubmitButton('next_page', $gL10n->get('INS_UPDATE_DATABASE'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_IS_UPDATED')));
-        $form->show();
+        echo $form->show();
     }
     // if versions are equal > no update
     elseif(version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT) === 0 && $maxUpdateStep === $currentUpdateStep)
@@ -457,5 +457,5 @@ elseif($getMode === 2)
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
     $form->addButton('main_page', $gL10n->get('SYS_LATER'), array('icon' => 'layout/application_view_list.png', 'link' => '../index.php'));
     $form->closeButtonGroup();
-    $form->show();
+    echo $form->show();
 }

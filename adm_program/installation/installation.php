@@ -150,7 +150,7 @@ if($getMode === 1) // (Default) Choose language
                                'ISOCODE', 'NAME', array('property' => FIELD_REQUIRED));
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png'));
-    $form->show();
+    echo $form->show();
 }
 elseif($getMode === 2)  // Welcome to installation
 {
@@ -193,7 +193,7 @@ elseif($getMode === 2)  // Welcome to installation
     $form->setFormDescription($message, $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=1'));
     $form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'layout/forward.png'));
-    $form->show();
+    echo $form->show();
 }
 elseif($getMode === 3)  // Enter database access information
 {
@@ -229,7 +229,7 @@ elseif($getMode === 3)  // Enter database access information
     $form->closeGroupBox();
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=2'));
     $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'layout/forward.png'));
-    $form->show();
+    echo $form->show();
 }
 elseif($getMode === 4)  // Creating organization
 {
@@ -347,7 +347,7 @@ elseif($getMode === 4)  // Creating organization
     $form->closeGroupBox();
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=3'));
     $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), array('icon' => 'layout/forward.png'));
-    $form->show();
+    echo $form->show();
 }
 elseif($getMode === 5)  // Creating addministrator
 {
@@ -397,7 +397,7 @@ elseif($getMode === 5)  // Creating addministrator
     $form->closeGroupBox();
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=4'));
     $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'layout/forward.png'));
-    $form->show();
+    echo $form->show();
 }
 elseif($getMode === 6)  // Creating configuration file
 {
@@ -508,7 +508,7 @@ elseif($getMode === 6)  // Creating configuration file
         $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=8');
         $form->setFormDescription($gL10n->get('INS_DATA_FULLY_ENTERED'), $gL10n->get('INS_INSTALL_ADMIDIO'));
         $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
-        $form->show();
+        echo $form->show();
     }
     else
     {
@@ -518,7 +518,7 @@ elseif($getMode === 6)  // Creating configuration file
         $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=5'));
         $form->addButton('download_config', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'), array('icon' => 'layout/page_white_download.png', 'link' => 'installation.php?mode=7'));
         $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
-        $form->show();
+        echo $form->show();
     }
 }
 elseif($getMode === 7) // Download configuration file
@@ -724,7 +724,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
                            15, '.$gCurrentUser->getValue('usr_id').',\''.DATETIME_NOW.'\')';
     $db->query($sql);
 
-    // first create a user object "current user" with administrator rights 
+    // first create a user object "current user" with administrator rights
     // because administrator is allowed to edit firstname and lastname
     $gCurrentUser = new User($db, $gProfileFields, $administrator->getValue('usr_id'));
     $gCurrentUser->setValue('LAST_NAME',  $_SESSION['user_last_name']);
@@ -762,5 +762,5 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
     $form->addButton('main_page', $gL10n->get('SYS_LATER'), array('icon' => 'layout/application_view_list.png', 'link' => '../index.php'));
     $form->closeButtonGroup();
-    $form->show();
+    echo $form->show();
 }

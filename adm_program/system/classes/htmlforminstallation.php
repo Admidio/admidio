@@ -38,6 +38,9 @@ class HtmlFormInstallation extends HtmlForm
     public function __construct($id, $action)
     {
         parent::__construct($id, $action);
+
+        $this->descriptionText  = '';
+        $this->descriptionTitle = '';
     }
 
     /**
@@ -60,6 +63,7 @@ class HtmlFormInstallation extends HtmlForm
     public function setInstallationModus()
     {
         global $gL10n;
+
         $this->title = $gL10n->get('INS_INSTALLATION');
         $this->headline = $gL10n->get('INS_INSTALLATION_VERSION', ADMIDIO_VERSION_TEXT);
     }
@@ -70,6 +74,7 @@ class HtmlFormInstallation extends HtmlForm
     public function setUpdateModus()
     {
         global $gL10n;
+
         $this->title = $gL10n->get('INS_UPDATE');
         $this->headline = $gL10n->get('INS_UPDATE_VERSION', ADMIDIO_VERSION_TEXT);
     }
@@ -77,16 +82,14 @@ class HtmlFormInstallation extends HtmlForm
     /**
      * This method will create the whole html installation/update code. It will show the headline,
      * text and the configured form. If no modus is set the installation modus will be set here.
-     * @param bool $directOutput If set to @b true (default) the form html will be directly send
-     *                      to the browser. If set to @b false the html will be returned.
-     * @return string|void If $directOutput is set to @b false this method will return the html code of the form.
+     * @return string Return the html code of the form.
      */
-    public function show($directOutput = true)
+    public function show()
     {
         global $gL10n;
 
         // if no modus set then set installation modus
-        if(strlen($this->title) === 0)
+        if ($this->title === '')
         {
             $this->setInstallationModus();
         }
@@ -99,11 +102,11 @@ class HtmlFormInstallation extends HtmlForm
             <!-- (c) 2004 - 2016 The Admidio Team - http://www.admidio.org -->
 
             <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
             <meta name="author"   content="Admidio Team" />
             <meta name="robots"   content="noindex" />
 
-            <title>Admidio - '. $this->title. '</title>
+            <title>Admidio - ' . $this->title . '</title>
 
             <link rel="shortcut icon" type="image/x-icon" href="layout/favicon.png" />
 
@@ -117,15 +120,15 @@ class HtmlFormInstallation extends HtmlForm
         <body>
             <div class="admidio-container" id="adm_content">&nbsp;
                 <img id="admidio-logo" src="layout/logo.png" alt="Logo" />
-                <h1>'. $this->headline. '</h1>';
+                <h1>' . $this->headline . '</h1>';
                 // if set then show description
-                if(strlen($this->descriptionText) > 0)
+                if ($this->descriptionText !== '')
                 {
-                    if(strlen($this->descriptionTitle) > 0)
+                    if ($this->descriptionTitle !== '')
                     {
-                        $html .= '<h3>'.$this->descriptionTitle.'</h3>';
+                        $html .= '<h3>' . $this->descriptionTitle . '</h3>';
                     }
-                    $html .= '<p>'.$this->descriptionText.'</p>';
+                    $html .= '<p>' . $this->descriptionText . '</p>';
                 }
                 // now show the configured form
                 $html .= parent::show(false);
@@ -133,13 +136,6 @@ class HtmlFormInstallation extends HtmlForm
         </body>
         </html>';
 
-        if($directOutput)
-        {
-            echo $html;
-        }
-        else
-        {
-            return $html;
-        }
+        return $html;
     }
 }
