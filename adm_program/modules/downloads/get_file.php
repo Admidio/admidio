@@ -55,8 +55,8 @@ $file->setValue('fil_counter', $file->getValue('fil_counter') + 1);
 $file->save();
 
 // Dateigroese ermitteln
-$fileSize   = filesize($completePath);
-$filename   = $file->getValue('fil_name');
+$fileSize = filesize($completePath);
+$filename = $file->getValue('fil_name');
 
 // for IE the filename must have special chars in hexadecimal
 if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
