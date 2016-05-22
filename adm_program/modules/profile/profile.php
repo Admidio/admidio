@@ -50,7 +50,7 @@ function getFieldCode($fieldNameIntern, User $user)
     $value = $user->getValue($fieldNameIntern, 'html');
 
     // if birthday then show age
-    if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') === 'BIRTHDAY')
+    if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') === 'BIRTHDAY' && $value !== '')
     {
         $birthday = DateTime::createFromFormat('Y-m-d', $user->getValue($fieldNameIntern, 'Y-m-d'));
         $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->diff(new DateTime('now'))->y. ' '.$gL10n->get('PRO_YEARS').')';
