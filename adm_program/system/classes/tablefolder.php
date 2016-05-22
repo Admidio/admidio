@@ -7,26 +7,14 @@
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- */
-
-/**
  * @class TableFolder
  * Diese Klasse dient dazu ein Folderobjekt zu erstellen.
  * Ein Ordner kann ueber diese Klasse in der Datenbank verwaltet werden
- *
- * Beside the methods of the parent class there are the following additional methods:
- *
- * getFolderForDownload($folderId)
- *                         - Folder mit der uebergebenen ID aus der Datenbank
- *                           fuer das Downloadmodul auslesen
- * getFolderContentsForDownload()
- *                         - Inhalt des aktuellen Ordners, abhaengig von den
- *                           Benutzerrechten, als Array zurueckliefern
- * ...
  */
 class TableFolder extends TableAccess
 {
     protected $folderPath;
+    protected $folderViewRolesObject;   ///< Object with all roles that could view the current folder
 
     /**
      * Constructor that will create an object of a recordset of the table adm_folders.
@@ -39,6 +27,42 @@ class TableFolder extends TableAccess
         parent::__construct($database, TBL_FOLDERS, 'fol', $folderId);
 
         $this->folderPath = new Folder();
+    }
+
+    /**
+     * Add all roles of the array to the current folder and all of the subfolders. The
+     * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
+     * @param string $rolesRightNameIntern Name of the right where the roles should be added
+     */
+    public function addRolesOnFolder($rolesRightNameIntern, array $rolesArray, $folderId = 0)
+    {
+        if ($folderId === 0)
+        {
+            $folderId = $this->getValue('fol_id');
+        }
+
+        $this->db->startTransaction();
+
+        // read all subfolders of the current folder
+        $sql_subfolders = 'SELECT *
+                             FROM '.TBL_FOLDERS.'
+                            WHERE fol_fol_id_parent = '.$folderId;
+        $subfoldersStatement = $this->db->query($sql_subfolders);
+
+        while($row_subfolders = $subfoldersStatement->fetchObject())
+        {
+            // recursive call for every subfolder
+            $this->addRolesOnFolder($rolesRightNameIntern, $rolesArray, $row_subfolders->fol_id);
+        }
+
+        // add new rights to folder
+        if (count($rolesArray) > 0)
+        {
+            $folderRolesRights = new RolesRights($this->db, $rolesRightNameIntern, $folderId);
+            $folderRolesRights->addRoles($rolesArray);
+        }
+
+        $this->db->endTransaction();
     }
 
     /**
@@ -104,10 +128,16 @@ class TableFolder extends TableAccess
                               WHERE fil_fol_id = '.$folderId;
         $this->db->query($sql_delete_files);
 
-        // In der DB die verknuepften Berechtigungen zu dieser Folder_ID loeschen...
-        $sql_delete_fol_rol = 'DELETE FROM '.TBL_FOLDER_ROLES.'
-                                WHERE flr_fol_id = '.$folderId;
-        $this->db->query($sql_delete_fol_rol);
+        // delete all roles assignments that have the right to view this folder
+        if($folderId == $this->getValue('fol_id'))
+        {
+            $this->folderViewRolesObject->delete();
+        }
+        else
+        {
+            $folderViewRoles = new RolesRights($this->db, 'folder_view', $folderId);
+            $folderViewRoles->delete();
+        }
 
         // In der DB den Eintrag des Ordners selber loeschen
         $sql_delete_folder = 'DELETE FROM '.TBL_FOLDERS.'
@@ -252,21 +282,8 @@ class TableFolder extends TableAccess
             }
             elseif (!$gCurrentUser->editDownloadRight() && !$this->getValue('fol_public'))
             {
-                // Wenn der Ordner nicht public ist und der Benutzer keine DownloadAdminrechte hat, muessen die Rechte untersucht werden
-                $sql_rights = 'SELECT COUNT(*) AS count
-                                 FROM '.TBL_FOLDER_ROLES.'
-                           INNER JOIN '.TBL_MEMBERS.'
-                                   ON mem_rol_id = flr_rol_id
-                                WHERE flr_fol_id = '.$this->getValue('fol_id').'
-                                  AND mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
-                                  AND mem_begin <= \''.DATE_NOW.'\'
-                                  AND mem_end    > \''.DATE_NOW.'\'';
-                $rightsStatement = $this->db->query($sql_rights);
-                $rowRights = $rightsStatement->fetch();
-
-                // Falls der User in keiner Rolle Mitglied ist, die Rechte an dem Ordner besitzt
-                // wird auch kein Ordner geliefert.
-                if ((int) $rowRights['count'] === 0)
+                // check if user has a membership in a role that is assigned to the current folder
+                if(!$this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
                 {
                     $this->clear();
                     throw new AdmException('DOW_FOLDER_NO_RIGHTS');
@@ -320,21 +337,8 @@ class TableFolder extends TableAccess
             }
             elseif ($gValidLogin)
             {
-                // Gucken ob der angemeldete Benutzer Rechte an dem Unterordner hat...
-                $sql_rights = 'SELECT COUNT(*) AS count
-                                 FROM '.TBL_FOLDER_ROLES.'
-                           INNER JOIN '.TBL_MEMBERS.'
-                                   ON mem_rol_id = flr_rol_id
-                                WHERE flr_fol_id = '.$row_folders->fol_id.'
-                                  AND mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
-                                  AND mem_begin <= \''.DATE_NOW.'\'
-                                  AND mem_end    > \''.DATE_NOW.'\'';
-                $rightsStatement = $this->db->query($sql_rights);
-                $rowRights = $rightsStatement->fetch();
-
-                // Falls der User in mindestens einer Rolle Mitglied ist, die Rechte an dem Ordner besitzt
-                // wird der Ordner natuerlich ins Array gepackt.
-                if ($rowRights['count'] > 0)
+                // check if user has a membership in a role that is assigned to the current folder
+                if($this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
                 {
                     $addToArray = true;
                 }
@@ -612,39 +616,11 @@ class TableFolder extends TableAccess
 
     /**
      * Creates an array with all roles ids that have the right to view the folder.
-     * If you need also the name of the folder then set the parameter to true.
-     * @param bool $readRolesName In addition to the id also read the name of the role and return them.
      * @return array Returns an array with all roles ids that have the right to view the folder.
      */
-    public function getRoleArrayOfFolder($readRolesName = false)
+    public function getRoleViewArrayOfFolder($readRolesName = false)
     {
-        // RueckgabeArray initialisieren
-        $roleArray = array();
-
-        // Erst einmal die aktuellen Rollenberechtigungen fuer den Ordner auslesen
-        $sql_rolset = 'SELECT *
-                         FROM '.TBL_FOLDER_ROLES.'
-                   INNER JOIN '.TBL_ROLES.'
-                           ON rol_id = flr_rol_id
-                        WHERE flr_fol_id = '.$this->getValue('fol_id');
-        $rolesetStatement = $this->db->query($sql_rolset);
-
-        while($rowRoleset = $rolesetStatement->fetchObject())
-        {
-            if($readRolesName)
-            {
-                // Jede Rolle wird nun dem Array hinzugefuegt
-                $roleArray[] = array(
-                                    'rol_id'   => $rowRoleset->rol_id,
-                                    'rol_name' => $rowRoleset->rol_name);
-            }
-            else
-            {
-                $roleArray[] = $rowRoleset->rol_id;
-            }
-        }
-
-        return $roleArray;
+        return $this->folderViewRolesObject->getRolesIds();
     }
 
     /**
@@ -667,6 +643,61 @@ class TableFolder extends TableAccess
         }
 
         return $value;
+    }
+
+    /**
+     * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
+     * If the sql will find more than one record the method returns @b false.
+     * Per default all columns of the default table will be read and stored in the object.
+     * @param string $sqlWhereCondition Conditions for the table to select one record
+     * @return bool Returns @b true if one record is found
+     * @see TableAccess#readDataById
+     * @see TableAccess#readDataByColumns
+     */
+    protected function readData($sqlWhereCondition)
+    {
+        if(parent::readData($sqlWhereCondition))
+        {
+            $this->folderViewRolesObject = new RolesRights($this->db, 'folder_view', $this->getValue('fol_id'));
+        }
+
+        return false;
+    }
+
+    /**
+     * Remove all roles of the array from the current folder and all of the subfolders. The
+     * roles will be removed from the right that was set through parameter $rolesRightNameIntern.
+     * @param string $rolesRightNameIntern Name of the right where the roles should be removed
+     */
+    public function removeRolesOnFolder($rolesRightNameIntern, array $rolesArray, $folderId = 0)
+    {
+        if ($folderId === 0)
+        {
+            $folderId = $this->getValue('fol_id');
+        }
+
+        $this->db->startTransaction();
+
+        // read all subfolders of the current folder
+        $sql_subfolders = 'SELECT *
+                             FROM '.TBL_FOLDERS.'
+                            WHERE fol_fol_id_parent = '.$folderId;
+        $subfoldersStatement = $this->db->query($sql_subfolders);
+
+        while($row_subfolders = $subfoldersStatement->fetchObject())
+        {
+            // recursive call for every subfolder
+            $this->removeRolesOnFolder($rolesRightNameIntern, $rolesArray, $row_subfolders->fol_id);
+        }
+
+        // add new rights to folder
+        if (count($rolesArray) > 0)
+        {
+            $folderRolesRights = new RolesRights($this->db, $rolesRightNameIntern, $folderId);
+            $folderRolesRights->removeRoles($rolesArray);
+        }
+
+        $this->db->endTransaction();
     }
 
     /**
@@ -727,51 +758,5 @@ class TableFolder extends TableAccess
             $this->setValue('fol_org_id', $gCurrentOrganization->getValue('org_id'));
         }
         return parent::save($updateFingerPrint);
-    }
-
-    /**
-     * Setzt Berechtigungen fuer Rollen auf einer vorhandenen Ordnerinstanz
-     * und all seinen Unterordnern rekursiv
-     * @param array $rolesArray
-     * @param int   $folderId
-     */
-    public function setRolesOnFolder(array $rolesArray, $folderId = 0)
-    {
-        if ($folderId === 0)
-        {
-            $folderId = $this->getValue('fol_id');
-        }
-
-        $this->db->startTransaction();
-
-        // Alle Unterordner auslesen, die im uebergebenen Ordner enthalten sind
-        $sql_subfolders = 'SELECT *
-                             FROM '.TBL_FOLDERS.'
-                            WHERE fol_fol_id_parent = '.$folderId;
-        $subfoldersStatement = $this->db->query($sql_subfolders);
-
-        while($row_subfolders = $subfoldersStatement->fetchObject())
-        {
-            // rekursiver Aufruf mit jedem einzelnen Unterordner
-            $this->setRolesOnFolder($rolesArray, $row_subfolders->fol_id);
-        }
-
-        // Erst die alten Berechtigungen loeschen fuer die aktuelle OrdnerId
-        $sql_delete = 'DELETE FROM '.TBL_FOLDER_ROLES.'
-                             WHERE flr_fol_id = '.$folderId;
-        $this->db->query($sql_delete);
-
-        // Jetzt die neuen Berechtigungen schreiben
-        if (count($rolesArray) > 0)
-        {
-            foreach($rolesArray as $rolesId)
-            {
-                $sql_insert = 'INSERT INTO '.TBL_FOLDER_ROLES.' (flr_fol_id, flr_rol_id)
-                                    VALUES ('. $folderId. ', '. $rolesId. ')';
-                $this->db->query($sql_insert);
-            }
-        }
-
-        $this->db->endTransaction();
     }
 }

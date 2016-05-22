@@ -47,69 +47,56 @@ try
     // get recordset of current folder from database
     $folder = new TableFolder($gDb);
     $folder->getFolderForDownload($getFolderId);
+
+    // Parentordner holen
+    $rolesViewRightParentFolder = array();
+    $sqlRolesViewRight = '';
+
+    if ($folder->getValue('fol_fol_id_parent'))
+    {
+        // get recordset of parent folder from database
+        $parentFolder = new TableFolder($gDb);
+        $parentFolder->getFolderForDownload($folder->getValue('fol_fol_id_parent'));
+
+        // get assigned roles of the parent folder
+        $rolesViewRightParentFolder = $parentFolder->getRoleViewArrayOfFolder();
+        if(count($rolesViewRightParentFolder) > 0)
+        {
+            $sqlRolesViewRight = ' AND rol_id IN ('.implode(',', $rolesViewRightParentFolder).')';
+        }
+    }
 }
 catch(AdmException $e)
 {
     $e->showHtml();
 }
 
-// Parentordner holen
-$parentRoleSet = array();
+// wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
+// alle aus der DB aus lesen
+$sql_roles = 'SELECT *
+                FROM '.TBL_ROLES.'
+          INNER JOIN '.TBL_CATEGORIES.'
+                  ON cat_id = rol_cat_id
+               WHERE rol_valid  = 1
+                 AND rol_system = 0
+                     '.$sqlRolesViewRight.'
+                 AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+            ORDER BY rol_name';
+$rolesStatement = $gDb->query($sql_roles);
 
-if ($folder->getValue('fol_fol_id_parent'))
+if (count($rolesViewRightParentFolder) === 0)
 {
-    try
-    {
-        // get recordset of parent folder from database
-        $parentFolder = new TableFolder($gDb);
-        $parentFolder->getFolderForDownload($folder->getValue('fol_fol_id_parent'));
-    }
-    catch(AdmException $e)
-    {
-        $e->showHtml();
-    }
-
-    // get assigned roles of the parent folder
-    $parentRoleSet = $parentFolder->getRoleArrayOfFolder(true);
-}
-
-if (count($parentRoleSet) === 0)
-{
-    // wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
-    // alle aus der DB aus lesen
-    $sql_roles = 'SELECT *
-                    FROM '.TBL_ROLES.'
-              INNER JOIN '.TBL_CATEGORIES.'
-                      ON cat_id = rol_cat_id
-                   WHERE rol_valid  = 1
-                     AND rol_system = 0
-                     AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                ORDER BY rol_name';
-    $rolesStatement = $gDb->query($sql_roles);
-
     $parentRoleSet[] = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
-
-    while($row_roles = $rolesStatement->fetchObject())
-    {
-        // Jede Rolle wird nun dem Array hinzugefuegt
-        $parentRoleSet[] = array($row_roles->rol_id, $row_roles->rol_name, $row_roles->cat_name);
-    }
 }
-else
+
+while($row_roles = $rolesStatement->fetchObject())
 {
-    // create new array with numeric keys for logic of method addSelectBox
-    $newParentRoleSet = array();
-
-    foreach($parentRoleSet as $role)
-    {
-        $newParentRoleSet[] = array($role['rol_id'], $role['rol_name'], null);
-    }
-
-    $parentRoleSet = $newParentRoleSet;
+    // Jede Rolle wird nun dem Array hinzugefuegt
+    $parentRoleSet[] = array($row_roles->rol_id, $row_roles->rol_name, $row_roles->cat_name);
 }
 
 // get assigned roles of this folder
-$roleSet = $folder->getRoleArrayOfFolder();
+$roleSet = $folder->getRoleViewArrayOfFolder();
 
 // if no roles are assigned then set "all users" as default
 if(count($roleSet) === 0)

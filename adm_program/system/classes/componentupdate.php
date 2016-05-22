@@ -260,6 +260,25 @@ class ComponentUpdate extends Component
     }
 
     /**
+     * This method migrate the data of the table adm_folder_roles to the
+     * new table adm_roles_rights_data.
+     */
+    public function updateStepMigrateFolderRoles()
+    {
+        global $g_tbl_praefix;
+
+        $sql = 'SELECT ror_id FROM '.TBL_ROLES_RIGHTS.' WHERE ror_name_intern = \'folder_view\' ';
+        $rolesRightsStatement = $this->db->query($sql);
+
+        $row = $rolesRightsStatement->fetch();
+
+        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
+                SELECT '.$row['ror_id'].', flr_rol_id, flr_fol_id
+                  FROM '.$g_tbl_praefix.'_folder_roles ';
+        $this->db->query($sql);
+    }
+
+    /**
      * This method renames the webmaster role to administrator.
      */
     public function updateStepRenameWebmasterToAdministrator()

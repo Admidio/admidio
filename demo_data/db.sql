@@ -31,6 +31,8 @@ drop table if exists %PREFIX%_preferences cascade;
 drop table if exists %PREFIX%_registrations cascade;
 drop table if exists %PREFIX%_role_dependencies cascade;
 drop table if exists %PREFIX%_roles cascade;
+drop table if exists %PREFIX%_roles_rights cascade;
+drop table if exists %PREFIX%_roles_rights_data cascade;
 drop table if exists %PREFIX%_list_columns cascade;
 drop table if exists %PREFIX%_lists cascade;
 drop table if exists %PREFIX%_rooms cascade;

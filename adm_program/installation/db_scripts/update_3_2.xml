@@ -5,5 +5,35 @@
     <step id="30">UPDATE %PREFIX%_roles SET rol_administrator = rol_webmaster</step>
     <step id="40">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_webmaster</step>
     <step id="50">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '#webmaster_email#', '#administrator_email#')</step>
+    <step id="60">create table %PREFIX%_roles_rights
+        (
+            ror_id                         integer       unsigned not null AUTO_INCREMENT,
+            ror_name_intern                varchar(50)   not null,
+            ror_table                      varchar(50)   not null,
+            primary key (ror_id)
+        )
+        engine = InnoDB
+        default character set = utf8
+        collate = utf8_unicode_ci</step>
+    <step id="70">create table %PREFIX%_roles_rights_data
+        (
+            rrd_id                         integer       unsigned not null AUTO_INCREMENT,
+            rrd_ror_id                     integer       unsigned not null,
+            rrd_rol_id                     integer       unsigned not null,
+            rrd_object_id                  integer       unsigned not null,
+            rrd_usr_id_create              integer       unsigned,
+            rrd_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
+            primary key (rrd_id)
+        )
+        engine = InnoDB
+        default character set = utf8
+        collate = utf8_unicode_ci</step>
+    <step id="80">create unique index IDX_%PREFIX%_RRD_ROR_ROL_OBJECT_ID on %PREFIX%_roles_rights_data (rrd_ror_id, rrd_rol_id, rrd_object_id)</step>
+    <step id="90">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
+                  VALUES ('folder_view', 'adm_folders'),
+                         ('folder_upload', 'adm_folders')
+    </step>
+    <step id="100">ComponentUpdate::updateStepMigrateFolderRoles</step>
+    <step id="110">DROP TABLE %PREFIX%_folder_roles</step>
     <step>stop</step>
 </update>

@@ -21,9 +21,9 @@ if($gDbType === 'mysql')
     $gDb->query($sql, false);
     $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP INDEX IDX_MEM_ROL_USR_ID';
     $gDb->query($sql, false);
-    $sql = 'ALTER TABLE '.TBL_FOLDER_ROLES.' DROP INDEX FLR_FOL_FK';
+    $sql = 'ALTER TABLE '.$g_tbl_praefix.'_folder_roles DROP INDEX FLR_FOL_FK';
     $gDb->query($sql, false);
-    $sql = 'ALTER TABLE '.TBL_FOLDER_ROLES.' DROP INDEX FLR_ROL_FK';
+    $sql = 'ALTER TABLE '.$g_tbl_praefix.'_folder_roles DROP INDEX FLR_ROL_FK';
     $gDb->query($sql, false);
     $sql = 'ALTER TABLE '.TBL_ROLE_DEPENDENCIES.' DROP INDEX RLD_ROL_PARENT_FK';
     $gDb->query($sql, false);

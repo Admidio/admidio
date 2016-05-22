@@ -133,8 +133,9 @@ elseif ($getMode === 3)
                     $newFolder->setValue('fol_public', $targetFolder->getValue('fol_public'));
                     $newFolder->save();
 
-                    // Ordnerberechtigungen des ParentOrdners uebernehmen
-                    $newFolder->setRolesOnFolder($targetFolder->getRoleArrayOfFolder());
+                    // get roles rights of parent folder
+                    $rightParentFolderView = new RolesRights($gDb, 'folder_view', $targetFolder->getValue('fol_id'));
+                    $newFolder->addRolesOnFolder('folder_view', $rightParentFolderView->getRolesIds());
                 }
                 else
                 {
@@ -358,8 +359,9 @@ elseif ($getMode === 6)
         $newFolder->setValue('fol_public', $targetFolder->getValue('fol_public'));
         $newFolder->save();
 
-        // Ordnerberechtigungen des ParentOrdners uebernehmen
-        $newFolder->setRolesOnFolder($targetFolder->getRoleArrayOfFolder());
+        // get roles rights of parent folder
+        $rightParentFolderView = new RolesRights($gDb, 'folder_view', $targetFolder->getValue('fol_id'));
+        $newFolder->addRolesOnFolder('folder_view', $rightParentFolderView->getRolesIds());
 
         // Zurueck zur letzten Seite
         $gNavigation->addUrl(CURRENT_URL);
@@ -396,19 +398,28 @@ elseif ($getMode === 7)
             $parentFolder->getFolderForDownload($targetFolder->getValue('fol_fol_id_parent'));
         }
 
+        // Read current roles rights of the folder
+        $rightFolderView = new RolesRights($gDb, 'folder_view', $getFolderId);
+        $rolesFolderView = $rightFolderView->getRolesIds();
+
         if(in_array('0', $_POST['adm_allowed_roles'], true))
         {
             // set flag public for this folder and all child folders
             $targetFolder->editPublicFlagOnFolder(true);
             // if all users have access then delete all existing roles
-            $targetFolder->setRolesOnFolder(array());
+            $targetFolder->removeRolesOnFolder('folder_view', $rolesFolderView);
         }
         else
         {
             // set flag public for this folder and all child folders
             $targetFolder->editPublicFlagOnFolder(false);
-            // save all set roles in the database
-            $targetFolder->setRolesOnFolder($_POST['adm_allowed_roles']);
+
+            // get new roles and removed roles
+            $addRoles = array_diff($_POST['adm_allowed_roles'], $rolesFolderView);
+            $removeRoles = array_diff($rolesFolderView, $_POST['adm_allowed_roles']);
+
+            $targetFolder->addRolesOnFolder('folder_view', $addRoles);
+            $targetFolder->removeRolesOnFolder('folder_view', $removeRoles);
         }
 
         $targetFolder->save();
