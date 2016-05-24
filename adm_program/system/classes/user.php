@@ -1209,7 +1209,7 @@ class User extends TableAccess
         {
             // get the saved cost value that fits your server performance best and rehash your password
             $cost = 10;
-            if(array_key_exists('system_hashing_cost', $gPreferences))
+            if(isset($gPreferences) && array_key_exists('system_hashing_cost', $gPreferences))
             {
                 $cost = (int) $gPreferences['system_hashing_cost'];
             }
