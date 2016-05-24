@@ -555,10 +555,17 @@ INSERT INTO %PREFIX%_date_role (dtr_id, dtr_dat_id, dtr_rol_id) VALUES
 
 INSERT INTO %PREFIX%_folders (fol_id, fol_org_id, fol_fol_id_parent, fol_type, fol_name, fol_description, fol_path, fol_locked, fol_public, fol_usr_id, fol_timestamp) VALUES
 (1, 1, NULL, 'DOWNLOAD', 'download', NULL, '/adm_my_files', 0, 1, NULL, '2014-01-01 22:35:07'),
-(2, 1, 1, 'DOWNLOAD', 'licenses', NULL, '/adm_my_files/download', 0, 1, NULL, '2014-02-05 14:05:34');
+(2, 1, 1, 'DOWNLOAD', 'licenses', NULL, '/adm_my_files/download', 0, 1, NULL, '2014-02-05 14:05:34'),
+(3, 1, 1, 'DOWNLOAD', 'board-meeting', NULL, '/adm_my_files/download', 0, 0, NULL, '2016-04-15 13:25:06');
 
 --
--- Data for table adm_folders
+-- Data for table adm_folder_roles
+--
+INSERT INTO %PREFIX%_folder_roles (flr_fol_id, flr_rol_id) VALUES
+(3, 3);
+
+--
+-- Data for table adm_files
 --
 
 INSERT INTO %PREFIX%_files (fil_id, fil_fol_id, fil_name, fil_description, fil_locked, fil_counter, fil_usr_id, fil_timestamp) VALUES
@@ -567,7 +574,8 @@ INSERT INTO %PREFIX%_files (fil_id, fil_fol_id, fil_name, fil_description, fil_l
 (3, 2, 'gpl-3.0.txt', null, 0, 8, 1, '2015-08-13 08:24:45'),
 (4, 2, 'lgpl-3.0.txt', null, 0, 0, 1, '2015-08-13 08:24:45'),
 (5, 1, 'admidio-readme.md', null, 0, 134, 1, '2015-07-01 10:05:23'),
-(6, 1, 'admidio-logo.png', null, 0, 45, 1, '2015-07-01 10:07:23');
+(6, 1, 'admidio-logo.png', null, 0, 45, 1, '2015-07-01 10:07:23'),
+(7, 3, '20160511_meeting.txt', null, 0, 45, 1, '2015-07-01 10:07:23');
 
 --
 -- Data for table adm_guestbook
