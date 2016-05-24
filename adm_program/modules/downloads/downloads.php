@@ -17,8 +17,6 @@ require_once('../../system/file_extension_icons.php');
 
 unset($_SESSION['download_request']);
 
-$buffer = '';
-
 // Initialize and check the parameters
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
 

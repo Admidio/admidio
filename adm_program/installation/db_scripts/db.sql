@@ -889,11 +889,6 @@ alter table %PREFIX%_files add constraint %PREFIX%_FK_FIL_FOL foreign key (fil_f
 alter table %PREFIX%_files add constraint %PREFIX%_FK_FIL_USR foreign key (fil_usr_id)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
-alter table %PREFIX%_folder_roles add constraint %PREFIX%_FK_FLR_FOL foreign key (flr_fol_id)
-      references %PREFIX%_folders (fol_id) on delete restrict on update restrict;
-alter table %PREFIX%_folder_roles add constraint %PREFIX%_FK_FLR_ROL foreign key (flr_rol_id)
-      references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
-
 alter table %PREFIX%_folders add constraint %PREFIX%_FK_FOL_ORG foreign key (fol_org_id)
       references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
 alter table %PREFIX%_folders add constraint %PREFIX%_FK_FOL_FOL_PARENT foreign key (fol_fol_id_parent)
@@ -986,6 +981,13 @@ alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_LST_ID foreign key (ro
 alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_USR_CREATE foreign key (rol_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_USR_CHANGE foreign key (rol_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_ROR foreign key (rrd_ror_id)
+      references %PREFIX%_roles_rights (ror_id) on delete restrict on update restrict;
+alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_ROL foreign key (rrd_rol_id)
+      references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
+alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_USR_CREATE foreign key (rrd_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 alter table %PREFIX%_rooms add constraint %PREFIX%_FK_ROOM_USR_CREATE foreign key (room_usr_id_create)
