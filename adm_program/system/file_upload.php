@@ -84,8 +84,10 @@ elseif($getModule === 'downloads')
         $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     }
 
+    $folder = new TableFolder($gDb, $getId);
+
     // check if current user has right to upload files
-    if (!$gCurrentUser->editDownloadRight())
+    if (!$folder->hasUploadRight())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -105,7 +107,6 @@ elseif($getModule === 'downloads')
     try
     {
         // get recordset of current folder from database
-        $folder = new TableFolder($gDb);
         $folder->getFolderForDownload($getId);
         $uploadDir = $folder->getCompletePathOfFolder().'/';
         $uploadUrl = $g_root_path. $folder->getValue('fol_path'). '/'. $folder->getValue('fol_name').'/';

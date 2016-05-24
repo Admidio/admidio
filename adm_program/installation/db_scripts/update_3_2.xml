@@ -33,7 +33,7 @@
                   VALUES ('folder_view', 'adm_folders'),
                          ('folder_upload', 'adm_folders')
     </step>
-    <step id="100">ComponentUpdate::updateStepMigrateFolderRoles</step>
+    <step id="100">ComponentUpdate::updateStepMigrateToFolderRights</step>
     <step id="110">DROP TABLE %PREFIX%_folder_roles</step>
     <step>stop</step>
 </update>

@@ -137,7 +137,7 @@
     <string name="DOW_NEW_FILE_NAME">Neuer Dateiname</string>
     <string name="DOW_NEW_NAME">Neuer Name</string>
     <string name="DOW_PREVIOUS_NAME">Bisheriger Name</string>
-    <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen und die Dateien herunterladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben.</string>
+    <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Benutzer von Rollen mit der Berechtigung #VAR2_BOLD# haben immer alle Rechte für den Ordner.</string>
     <string name="DOW_SELECT_FILES">Dateien auswählen</string>
     <string name="DOW_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
     <string name="DOW_UNMANAGED_FILES">Nicht verwaltete Dateien</string>
@@ -894,9 +894,10 @@
     <string name="ROL_RIGHT_ASSIGN_ROLES">Rollen verwalten und zuordnen</string>
     <string name="ROL_RIGHT_ASSIGN_ROLES_DESC">Benutzer dieser Rolle haben Zugriff auf die Rollenverwaltung und können neue Rollen erstellen, verwalten und anderen Benutzern Rollen zuordnen.</string>
     <string name="ROL_RIGHT_DATES">Termine anlegen und bearbeiten</string>
-    <string name="ROL_RIGHT_DOWNLOAD">Downloads hochladen und bearbeiten</string>
+    <string name="ROL_RIGHT_DOWNLOAD">Downloads verwalten</string>
+    <string name="ROL_RIGHT_DOWNLOAD_DESC">Rollen mit dieser Berechtigung können im Downloadmodul die Rechte vergeben, welche Rollen welche Ordner sehen oder Dateien hochladen dürfen.</string>
     <string name="ROL_RIGHT_EDIT_USER">Profildaten aller Benutzer bearbeiten</string>
-    <string name="ROL_RIGHT_EDIT_USER_DESC">Rollen, die diese Option aktiviert haben, haben die Berechtigung alle Benutzerdaten (außer Passwörter) anderer Mitglieder zu bearbeiten.\nAußerdem haben sie Zugriff auf die Benutzerverwaltung und können dort neue Benutzer anlegen oder alte Benutzer löschen.</string>
+    <string name="ROL_RIGHT_EDIT_USER_DESC">Rollen mit dieser Berechtigung können alle Benutzerdaten (außer Passwörter) anderer Mitglieder bearbeiten.\nAußerdem haben sie Zugriff auf die Benutzerverwaltung und können dort neue Benutzer anlegen oder alte Benutzer löschen.</string>
     <string name="ROL_RIGHT_GUESTBOOK">Gästebucheinträge bearbeiten und löschen</string>
     <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Kommentare zu Gästebucheinträgen anlegen</string>
     <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Diese Einstellung steuert, wer das Recht hat über das Mailmodul E-Mails an diese Rolle zu schicken. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>

@@ -263,19 +263,50 @@ class ComponentUpdate extends Component
      * This method migrate the data of the table adm_folder_roles to the
      * new table adm_roles_rights_data.
      */
-    public function updateStepMigrateFolderRoles()
+    public function updateStepMigrateToFolderRights()
     {
-        global $g_tbl_praefix;
+        global $g_tbl_praefix, $g_organization;
 
+        // migrate adm_folder_roles to adm_roles_rights
         $sql = 'SELECT ror_id FROM '.TBL_ROLES_RIGHTS.' WHERE ror_name_intern = \'folder_view\' ';
         $rolesRightsStatement = $this->db->query($sql);
-
         $row = $rolesRightsStatement->fetch();
 
         $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
                 SELECT '.$row['ror_id'].', flr_rol_id, flr_fol_id
                   FROM '.$g_tbl_praefix.'_folder_roles ';
         $this->db->query($sql);
+
+        // add new right folder_update to adm_roles_rights
+        $sql = 'SELECT fol_id FROM '.TBL_FOLDERS.'
+                 WHERE fol_type = \'DOWNLOAD\'
+                   AND fol_name = \'download\' ';
+        $rolesRightsStatement = $this->db->query($sql);
+        $rowFolderId = $rolesRightsStatement->fetch();
+
+        $sql = 'SELECT rol_id FROM '.TBL_ROLES.'
+                  LEFT JOIN '.TBL_CATEGORIES.' ON cat_id = rol_cat_id
+                  LEFT JOIN '.TBL_ORGANIZATIONS.' ON org_id = cat_org_id
+                   AND org_shortname = \''.$g_organization.'\'
+                 WHERE rol_download = 1 ';
+        $rolesDownloadStatement = $this->db->query($sql);
+        $rolesArray = array();
+
+        while($row = $rolesDownloadStatement->fetch())
+        {
+            $rolesArray[] = $row['rol_id'];
+        }
+
+        try
+        {
+            // get recordset of current folder from database
+            $folder = new TableFolder($this->db, $rowFolderId['fol_id']);
+            $folder->addRolesOnFolder('folder_upload', $rolesArray);
+        }
+        catch(AdmException $e)
+        {
+            $e->showText();
+        }
     }
 
     /**

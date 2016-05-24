@@ -80,8 +80,6 @@ class RolesRights extends TableAccess
     {
         if(count($assignedRoles) > 0)
         {
-            error_log(print_r($this->rolesIds, true));
-            error_log(print_r($assignedRoles, true));
             if(count(array_intersect($this->rolesIds, $assignedRoles)) > 0)
             {
                 return true;

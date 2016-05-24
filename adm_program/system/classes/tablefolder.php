@@ -15,6 +15,7 @@ class TableFolder extends TableAccess
 {
     protected $folderPath;
     protected $folderViewRolesObject;   ///< Object with all roles that could view the current folder
+    protected $folderUploadRolesObject; ///< Object with all roles that could upload files the current folder
 
     /**
      * Constructor that will create an object of a recordset of the table adm_folders.
@@ -36,33 +37,33 @@ class TableFolder extends TableAccess
      */
     public function addRolesOnFolder($rolesRightNameIntern, array $rolesArray, $folderId = 0)
     {
-        if ($folderId === 0)
-        {
-            $folderId = $this->getValue('fol_id');
-        }
-
-        $this->db->startTransaction();
-
-        // read all subfolders of the current folder
-        $sql_subfolders = 'SELECT *
-                             FROM '.TBL_FOLDERS.'
-                            WHERE fol_fol_id_parent = '.$folderId;
-        $subfoldersStatement = $this->db->query($sql_subfolders);
-
-        while($row_subfolders = $subfoldersStatement->fetchObject())
-        {
-            // recursive call for every subfolder
-            $this->addRolesOnFolder($rolesRightNameIntern, $rolesArray, $row_subfolders->fol_id);
-        }
-
-        // add new rights to folder
         if (count($rolesArray) > 0)
         {
+            if ($folderId === 0)
+            {
+                $folderId = $this->getValue('fol_id');
+            }
+
+            $this->db->startTransaction();
+
+            // read all subfolders of the current folder
+            $sql_subfolders = 'SELECT *
+                                 FROM '.TBL_FOLDERS.'
+                                WHERE fol_fol_id_parent = '.$folderId;
+            $subfoldersStatement = $this->db->query($sql_subfolders);
+
+            while($row_subfolders = $subfoldersStatement->fetchObject())
+            {
+                // recursive call for every subfolder
+                $this->addRolesOnFolder($rolesRightNameIntern, $rolesArray, $row_subfolders->fol_id);
+            }
+
+            // add new rights to folder
             $folderRolesRights = new RolesRights($this->db, $rolesRightNameIntern, $folderId);
             $folderRolesRights->addRoles($rolesArray);
-        }
 
-        $this->db->endTransaction();
+            $this->db->endTransaction();
+        }
     }
 
     /**
@@ -132,11 +133,14 @@ class TableFolder extends TableAccess
         if($folderId == $this->getValue('fol_id'))
         {
             $this->folderViewRolesObject->delete();
+            $this->folderUploadRolesObject->delete();
         }
         else
         {
             $folderViewRoles = new RolesRights($this->db, 'folder_view', $folderId);
             $folderViewRoles->delete();
+            $folderUploadRoles = new RolesRights($this->db, 'folder_upload', $folderId);
+            $folderUploadRoles->delete();
         }
 
         // In der DB den Eintrag des Ordners selber loeschen
@@ -252,8 +256,7 @@ class TableFolder extends TableAccess
         if ($folderId > 0)
         {
             $condition = 'fol_id     = '.$folderId.'
-                      AND fol_type   = \'DOWNLOAD\'
-                      AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
+                      AND fol_type   = \'DOWNLOAD\' ';
             $this->readData($condition);
         }
         else
@@ -615,12 +618,21 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Creates an array with all roles ids that have the right to view the folder.
+     * Returns an array with all roles ids that have the right to view the folder.
      * @return array Returns an array with all roles ids that have the right to view the folder.
      */
-    public function getRoleViewArrayOfFolder($readRolesName = false)
+    public function getRoleViewArrayOfFolder()
     {
         return $this->folderViewRolesObject->getRolesIds();
+    }
+
+    /**
+     * Returns an array with all roles ids that have the right to upload files to the folder.
+     * @return array Returns an array with all roles ids that have the right to upload files to the folder.
+     */
+    public function getRoleUploadArrayOfFolder()
+    {
+        return $this->folderUploadRolesObject->getRolesIds();
     }
 
     /**
@@ -646,6 +658,36 @@ class TableFolder extends TableAccess
     }
 
     /**
+     * Checks if the current user has the right to upload files to the current folder.
+     * @return Return @b true if the user has the right to upload files
+     */
+    public function hasUploadRight()
+    {
+        global $gCurrentUser;
+
+        if($this->folderUploadRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->editDownloadRight())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the current user has the right to view files of the current folder.
+     * @return Return @b true if the user has the right to view files
+     */
+    public function hasViewRight()
+    {
+        global $gCurrentUser;
+
+        if($this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->editDownloadRight())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
@@ -659,6 +701,8 @@ class TableFolder extends TableAccess
         if(parent::readData($sqlWhereCondition))
         {
             $this->folderViewRolesObject = new RolesRights($this->db, 'folder_view', $this->getValue('fol_id'));
+            $this->folderUploadRolesObject = new RolesRights($this->db, 'folder_upload', $this->getValue('fol_id'));
+            return true;
         }
 
         return false;
@@ -671,33 +715,33 @@ class TableFolder extends TableAccess
      */
     public function removeRolesOnFolder($rolesRightNameIntern, array $rolesArray, $folderId = 0)
     {
-        if ($folderId === 0)
-        {
-            $folderId = $this->getValue('fol_id');
-        }
-
-        $this->db->startTransaction();
-
-        // read all subfolders of the current folder
-        $sql_subfolders = 'SELECT *
-                             FROM '.TBL_FOLDERS.'
-                            WHERE fol_fol_id_parent = '.$folderId;
-        $subfoldersStatement = $this->db->query($sql_subfolders);
-
-        while($row_subfolders = $subfoldersStatement->fetchObject())
-        {
-            // recursive call for every subfolder
-            $this->removeRolesOnFolder($rolesRightNameIntern, $rolesArray, $row_subfolders->fol_id);
-        }
-
-        // add new rights to folder
         if (count($rolesArray) > 0)
         {
+            if ($folderId === 0)
+            {
+                $folderId = $this->getValue('fol_id');
+            }
+
+            $this->db->startTransaction();
+
+            // read all subfolders of the current folder
+            $sql_subfolders = 'SELECT *
+                                 FROM '.TBL_FOLDERS.'
+                                WHERE fol_fol_id_parent = '.$folderId;
+            $subfoldersStatement = $this->db->query($sql_subfolders);
+
+            while($row_subfolders = $subfoldersStatement->fetchObject())
+            {
+                // recursive call for every subfolder
+                $this->removeRolesOnFolder($rolesRightNameIntern, $rolesArray, $row_subfolders->fol_id);
+            }
+
+            // add new rights to folder
             $folderRolesRights = new RolesRights($this->db, $rolesRightNameIntern, $folderId);
             $folderRolesRights->removeRoles($rolesArray);
-        }
 
-        $this->db->endTransaction();
+            $this->db->endTransaction();
+        }
     }
 
     /**
