@@ -1146,7 +1146,6 @@
     <string name="SYS_MESSAGES">Nachrichten</string>
     <string name="SYS_MINUTES">Minuten</string>
     <string name="SYS_MOBILE">Handy</string>
-    <string name="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" translation="edited">Dieses Modul kann nur von der Organisation genutzt werden, die in der config.php hinterlegt ist. Dies ist die Organisation #VAR1#.</string>
     <string name="SYS_MODULE_DISABLED">Dieses Modul ist nicht freigegeben.</string>
     <string name="SYS_MODULE_PREFERENCES">Moduleinstellungen</string>
     <string name="SYS_MODULES">Module</string>

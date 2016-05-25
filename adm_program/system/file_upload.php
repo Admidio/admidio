@@ -92,12 +92,6 @@ elseif($getModule === 'downloads')
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
-    // download module can only be used from organization set in config.php
-    if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0)
-    {
-        $gMessage->show($gL10n->get('SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY', $g_organization));
-    }
-
     // upload only possible if upload filesize > 0
     if ($gPreferences['max_file_upload_size'] == 0)
     {

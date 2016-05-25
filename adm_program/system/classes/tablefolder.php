@@ -243,6 +243,27 @@ class TableFolder extends TableAccess
     }
 
     /**
+     * Create a unique folder name for the root folder of the download module that contains
+     * the shortname of the current organization
+     * @return string Returns the root foldername for the download module.
+     */
+    public static function getRootFolderName()
+    {
+        global $gCurrentOrganization;
+
+        $replaceArray = array(
+            ' '       => '_',
+            '.'       => '_',
+            ','       => '_',
+            '\''      => '_',
+            '"'       => '_',
+            '´'       => '_',
+            '`'       => '_'
+        );
+        return 'download_'.strtolower(str_replace(array_keys($replaceArray), array_values($replaceArray), $gCurrentOrganization->getValue('org_shortname')));
+    }
+
+    /**
      * Reads the folder recordset from database table @b adm_folders and throws an
      * AdmException if the user has no right to see the folder or the folder id doesn't exists.
      * @param int $folderId The id of the folder. If the id is 0 then the root folder will be shown.
@@ -255,16 +276,17 @@ class TableFolder extends TableAccess
 
         if ($folderId > 0)
         {
-            $condition = 'fol_id     = '.$folderId.'
-                      AND fol_type   = \'DOWNLOAD\' ';
+            // get folder of the parameter
+            $condition = ' fol_id     = '.$folderId.'
+                       AND fol_type   = \'DOWNLOAD\' ';
             $this->readData($condition);
         }
         else
         {
-            $condition = 'fol_name   = \'download\'
-                      AND fol_type   = \'DOWNLOAD\'
-                      AND fol_path   = \'/adm_my_files\'
-                      AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
+            // get first folder of current organization
+            $condition = ' fol_fol_id_parent IS NULL
+                       AND fol_type   = \'DOWNLOAD\'
+                       AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
             $this->readData($condition);
         }
 
@@ -561,9 +583,8 @@ class TableFolder extends TableAccess
                 // wenn der Ordner einen Mutterordner hat muss der Rootordner ermittelt werden
                 $sql_rootFolder = 'SELECT *
                                      FROM '.TBL_FOLDERS.'
-                                    WHERE fol_name   = \'download\'
-                                      AND fol_type   = \'DOWNLOAD\'
-                                      AND fol_path   = \'/adm_my_files\'
+                                    WHERE fol_type   = \'DOWNLOAD\'
+                                      AND fol_fol_id_parent IS NULL
                                       AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
                 $rootFolderStatement = $this->db->query($sql_rootFolder);
                 $rootFolderRow = $rootFolderStatement->fetchObject();

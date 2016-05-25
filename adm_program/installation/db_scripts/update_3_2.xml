@@ -35,5 +35,12 @@
     </step>
     <step id="100">ComponentUpdate::updateStepMigrateToFolderRights</step>
     <step id="110">DROP TABLE %PREFIX%_folder_roles</step>
+    <step id="120">alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_ROR foreign key (rrd_ror_id)
+        references %PREFIX%_roles_rights (ror_id) on delete restrict on update restrict</step>
+    <step id="130">alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_ROL foreign key (rrd_rol_id)
+        references %PREFIX%_roles (rol_id) on delete restrict on update restrict</step>
+    <step id="140">alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_USR_CREATE foreign key (rrd_usr_id_create)
+        references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="150">ComponentUpdate::updateStepNewDownloadRootFolderName</step>
     <step>stop</step>
 </update>

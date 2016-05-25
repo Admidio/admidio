@@ -310,6 +310,57 @@ class ComponentUpdate extends Component
     }
 
     /**
+     * Create a unique folder name for the root folder of the download module that contains
+     * the shortname of the current organization
+     */
+    public function updateStepNewDownloadRootFolderName()
+    {
+        global $gCurrentOrganization, $g_organization;
+
+        $tempOrganization = $gCurrentOrganization;
+
+        $sql = 'SELECT org_id, org_shortname FROM '.TBL_ORGANIZATIONS;
+        $organizationStatement = $this->db->query($sql);
+
+        while($row = $organizationStatement->fetch())
+        {
+            $gCurrentOrganization->readDataById($row['org_id']);
+
+            $sql = 'SELECT fol_id, fol_name FROM '.TBL_FOLDERS.'
+                     WHERE fol_org_id = '.$row['org_id'].'
+                       AND fol_fol_id_parent IS NULL ';
+            $folderStatement = $this->db->query($sql);
+
+            if($rowFolder = $folderStatement->fetch())
+            {
+                $folder = new TableFolder($this->db, $rowFolder['fol_id']);
+                $folderOldName = $folder->getCompletePathOfFolder();
+                $folder->setValue('fol_name', TableFolder::getRootFolderName());
+                $folder->save();
+
+                $sql = 'UPDATE '.TBL_FOLDERS.' SET fol_path = REPLACE(fol_path, \'/'.$rowFolder['fol_name'].'\', \'/'.TableFolder::getRootFolderName().'\')
+                         WHERE fol_org_id = '.$row['org_id'];
+                $this->db->query($sql);
+
+                if($row['org_shortname'] === $g_organization)
+                {
+                    rename($folderOldName, $folder->getCompletePathOfFolder());
+                }
+            }
+            else
+            {
+                $sql = 'INSERT INTO '.TBL_FOLDERS.' (fol_org_id, fol_type, fol_name, fol_path,
+                                                     fol_locked, fol_public, fol_timestamp)
+                                             VALUES ('.$row['org_id'].', \'DOWNLOAD\', \''.TableFolder::getRootFolderName().'\', \'/adm_my_files\',
+                                                     0, 1, \''.DATETIME_NOW.'\')';
+                $this->db->query($sql);
+            }
+        }
+
+        $gCurrentOrganization = $tempOrganization;
+    }
+
+    /**
      * This method renames the webmaster role to administrator.
      */
     public function updateStepRenameWebmasterToAdministrator()
