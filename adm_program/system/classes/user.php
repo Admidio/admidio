@@ -928,7 +928,7 @@ class User extends TableUsers
                                 // alle angemeldeten Benutzer duerfen Rollenlisten/-profile sehen
                                 return true;
                             }
-                            elseif($row['rol_this_list_view'] == 1 && isset($this->list_view_rights[$row['rol_id']]))
+                            elseif($row['rol_this_list_view'] == 1 && array_key_exists($row['rol_id'], $this->list_view_rights) && $this->list_view_rights[$row['rol_id']])
                             {
                                 // nur Rollenmitglieder duerfen Rollenlisten/-profile sehen
                                 return true;
