@@ -679,6 +679,26 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
                  , ('.$cat_id_master_inf.', \'NUMBER\', \'ROOM_ID\', \'SYS_ROOM\', NULL, 1, 1, 1, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                  , ('.$cat_id_master_inf.', \'NUMBER\', \'PRICE\',   \'SYS_QUANTITY\', NULL, 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
+    
+    // Menu entries for the standart installation
+    $sql = 'INSERT INTO '.TBL_MENU.' (men_id, men_group, men_order, men_display_right, men_display_index, men_display_boot, men_modul_name, men_url, men_icon, men_translat_name, men_translat_desc, men_need_enable, men_need_login, men_need_admin) 
+            VALUES (1, 2, 1, 1, 0, 1, \'overview\', \'/adm_program/index.php\', \'/icons/home.png\', \'SYS_OVERVIEW\', \'\', 0, 0, 0)
+                    , (2, 2, 3, 1, 1, 1, \'download\', \'/adm_program/modules/downloads/downloads.php\', \'/icons/download.png\', \'DOW_DOWNLOADS\', \'DOW_DOWNLOADS_DESC\', 1, 0, 0)
+                    , (3, 2, 7, 1, 1, 1, \'lists\', \'/adm_program/modules/lists/lists.php\', \'/icons/lists.png\', \'LST_LISTS\', \'LST_LISTS_DESC\', 0, 0, 0)
+                    , (4, 2, 8, 1, 0, 1, \'mylist\', \'/adm_program/modules/lists/mylist.php\', \'/icons/mylist.png\', \'LST_MY_LIST\', \'\', 0, 1, 0)
+                    , (5, 2, 2, 1, 1, 1, \'announcements\', \'/adm_program/modules/announcements/announcements.php\', \'/icons/announcements.png\', \'ANN_ANNOUNCEMENTS\', \'ANN_ANNOUNCEMENTS_DESC\', 1, 0, 0)
+                    , (6, 2, 5, 1, 1, 1, \'photo\', \'/adm_program/modules/photos/photos.php\', \'/icons/photo.png\', \'PHO_PHOTOS\', \'PHO_PHOTOS_DESC\', 1, 0, 0)
+                    , (8, 2, 6, 1, 1, 1, \'guestbook\', \'/adm_program/modules/guestbook/guestbook.php\', \'/icons/guestbook.png\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\', 1, 0, 0)
+                    , (9, 2, 8, 1, 1, 1, \'dates\', \'/adm_program/modules/dates/dates.php\', \'/icons/dates.png\', \'DAT_DATES\', \'DAT_DATES_DESC\', 1, 0, 0)
+                    , (10, 2, 9, 1, 1, 1, \'weblinks\', \'/adm_program/modules/links/links.php\', \'/icons/weblinks.png\', \'LNK_WEBLINKS\', \'LNK_WEBLINKS_DESC\', 1, 0, 0)
+                    , (11, 1, 4, 1, 1, 1, \'dbback\', \'/adm_program/modules/backup/backup.php\', \'/icons/backup.png\', \'BAC_DATABASE_BACKUP\', \'BAC_DATABASE_BACKUP_DESC\', 0, 1, 1)
+                    , (12, 1, 5, 1, 1, 1, \'orgprop\', \'/adm_program/modules/preferences/preferences.php\', \'/icons/options.png\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\', 0, 1, 1)
+                    , (13, 2, 4, 1, 1, 1, \'mail\', \'/adm_program/modules/messages/messages_write.php\', \'/icons/email.png\', \'SYS_EMAIL\', \'MAI_EMAIL_DESC\', 0, 0, 0)
+                    , (14, 1, 1, 1, 1, 1, \'newreg\', \'/adm_program/modules/registration/registration.php\', \'/icons/new_registrations.png\', \'NWU_NEW_REGISTRATIONS\', \'NWU_MANAGE_NEW_REGISTRATIONS_DESC\', 0, 1, 0)
+                    , (15, 1, 2, 1, 1, 1, \'usrmgt\', \'/adm_program/modules/members/members.php\', \'/icons/user_administration.png\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\', 0, 1, 0)
+                    , (16, 1, 3, 1, 1, 1, \'roladm\', \'/adm_program/modules/roles/roles.php\', \'/icons/roles.png\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\', 0, 1, 0)
+                    , (17, 1, 6, 1, 1, 1, \'menu\', \'/adm_program/modules/menu/menu.php\', \'/icons/application_view_tile.png\', \'SYS_MENU\', \'\', 0, 0, 1)';
+    $db->query($sql);
 
     if($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
     {
