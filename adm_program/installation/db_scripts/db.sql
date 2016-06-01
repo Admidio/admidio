@@ -43,6 +43,7 @@ drop table if exists %PREFIX%_categories cascade;
 drop table if exists %PREFIX%_users cascade;
 drop table if exists %PREFIX%_organizations cascade;
 drop table if exists %PREFIX%_ids cascade;
+drop table if exists %PREFIX%_menu cascade;
 
 
 /*==============================================================*/
@@ -823,6 +824,34 @@ default character set = utf8
 collate = utf8_unicode_ci;
 
 create unique index IDX_%PREFIX%_USR_LOGIN_NAME on %PREFIX%_users (usr_login_name);
+
+/*==============================================================*/
+/* Table: adm_menu                                             */
+/*==============================================================*/
+create table %PREFIX%_menu
+(
+    men_id                         integer       unsigned not null AUTO_INCREMENT,
+    men_group                      integer,
+    men_order                      integer,
+    men_display_right              integer,
+    men_display_index              integer,
+    men_display_boot               integer,
+    men_modul_name                 varchar(255),
+    men_url                        varchar(255),
+    men_icon                       varchar(2000),
+    men_translat_name              varchar(255),
+    men_translat_desc              varchar(255),
+    men_need_enable                boolean       not null default '0',
+    men_need_login                 boolean       not null default '0',
+    men_need_admin                 boolean       not null default '0',
+    primary key (men_id)
+)
+engine = InnoDB
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
+
+create unique index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_id);
 
 /*==============================================================*/
 /* Constraints                                                  */
