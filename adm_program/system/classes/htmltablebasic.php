@@ -130,9 +130,9 @@ class HtmlTableBasic extends HtmlElement {
         $this->border       = $border;
         $this->rowClasses   = array();
         $this->columnsWidth = array();
-        $this->thead        = false;
-        $this->tfoot        = false;
-        $this->tbody        = false;
+        $this->thead        = null;
+        $this->tfoot        = null;
+        $this->tbody        = null;
         $this->columnCount  = 0;
         $this->rowCount     = 0;
 
@@ -189,19 +189,21 @@ class HtmlTableBasic extends HtmlElement {
      */
     private function addColumnsData($data = '', $col = 'td')
     {
-        if ($data !== '')
+        if ($data === '')
         {
-            if (is_array($data))
+            return;
+        }
+
+        if (is_array($data))
+        {
+            foreach ($data as $column)
             {
-                foreach ($data as $column)
-                {
-                    $this->addColumn($column, null, $col);
-                }
+                $this->addColumn($column, null, $col);
             }
-            else
-            {
-                $this->addColumn($data, null, $col);
-            }
+        }
+        else
+        {
+            $this->addColumn($data, null, $col);
         }
     }
 
@@ -279,7 +281,8 @@ class HtmlTableBasic extends HtmlElement {
     private function addTableSection($element, $attribute = null, $value = null, $data = '', $col = 'td')
     {
         $this->addParentElement($element);
-        $this->tbody = true;
+
+        $this->{$element} = true;
 
         if ($attribute !== null && $value !== null)
         {
@@ -302,7 +305,7 @@ class HtmlTableBasic extends HtmlElement {
      */
     public function addTableBody($attribute = null, $value = null, $data = '', $col = 'td')
     {
-        if ($this->tfoot && in_array('tfoot', $this->arrParentElements, true))
+        if ($this->tfoot !== null && in_array('tfoot', $this->arrParentElements, true))
         {
             $this->closeParentElement('tr');
         }
@@ -331,13 +334,13 @@ class HtmlTableBasic extends HtmlElement {
      */
     public function addTableFooter($attribute = null, $value = null, $data = '', $col = 'td')
     {
-        if ($this->thead && in_array('thead', $this->arrParentElements, true))
+        if ($this->thead !== null && in_array('thead', $this->arrParentElements, true))
         {
             $this->closeParentElement('thead');
         }
 
         // Check if table footer already exists
-        if (!$this->tfoot)
+        if ($this->tfoot !== true)
         {
             return false;
         }
@@ -361,7 +364,7 @@ class HtmlTableBasic extends HtmlElement {
     public function addTableHeader($attribute = null, $value = null, $data = '', $col = 'td')
     {
         // Check if table head already exists
-        if (!$this->thead)
+        if ($this->thead !== true)
         {
             return false;
         }
