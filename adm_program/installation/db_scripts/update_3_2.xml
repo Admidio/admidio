@@ -27,7 +27,7 @@
                 auto_increment = 1
                 default character set = utf8
                 collate = utf8_unicode_ci</step>
-    <step id="70">create unique index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_id)</step>
+    <step id="70">create unique index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_group)</step>
     <step id="80">INSERT INTO %PREFIX%_menu (men_id, men_group, men_order, men_display_right, men_display_index, men_display_boot, men_modul_name, men_url, men_icon, men_translat_name, men_translat_desc, men_need_enable, men_need_login, men_need_admin) 
             VALUES (1, 2, 1, 1, 0, 1, 'overview', '/adm_program/index.php', '/icons/home.png', 'SYS_OVERVIEW', '', 0, 0, 0)
                     , (2, 2, 3, 1, 1, 1, 'download', '/adm_program/modules/downloads/downloads.php', '/icons/download.png', 'DOW_DOWNLOADS', 'DOW_DOWNLOADS_DESC', 1, 0, 0)

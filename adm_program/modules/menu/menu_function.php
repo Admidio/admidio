@@ -12,77 +12,39 @@
 /******************************************************************************
  * Parameters:
  *
- * cat_id: Id of the category that should be edited
- * type  : Type of categories that could be maintained
- *         ROL = Categories for roles
- *         LNK = Categories for weblinks
- *         USF = Categories for profile fields
- *         DAT = Calendars for events
- *         INF = Categories for Inventory
- * mode  : 1 - Create or edit categories
- *         2 - Delete category
- *         4 - Change sequence for parameter cat_id
- * sequence: New sequence for the parameter cat_id
+ * men_id: Id of the menu that should be edited
+ * mode  : 1 - Create or edit menu
+ *         2 - Delete menu
+ *         3 - Change sequence for parameter men_id
+ * sequence: New sequence for the parameter men_id
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
-$getType     = admFuncVariableIsValid($_GET, 'type',     'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
-$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
-$getTitle    = admFuncVariableIsValid($_GET, 'title',    'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
-$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
+$getMenId    = admFuncVariableIsValid($_GET, 'men_id',    'int');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',      'int',    array('requireValue' => true));
+$getSequence = admFuncVariableIsValid($_GET, 'sequence',  'string', array('validValues' => array('UP', 'DOWN')));
 
-// Modus und Rechte pruefen
-if($getType === 'ROL' && !$gCurrentUser->manageRoles())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-}
-elseif($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-}
-elseif($getType === 'USF' && !$gCurrentUser->editUsers())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-}
-elseif($getType === 'DAT' && !$gCurrentUser->editDates())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-}
-elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
+// check rights
+if(!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// create category object
-$category = new TableCategory($gDb);
+// create menu object
+$menu = new TableMenu($gDb);
 
-if($getCatId > 0)
+if($getMenId > 0)
 {
-    $category->readDataById($getCatId);
-
-    // check if category belongs to actual organization
-    if($category->getValue('cat_org_id') > 0
-    && $category->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
-    {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    }
-
-    // if system category then set cat_name to default
-    if($category->getValue('cat_system') == 1)
-    {
-        $_POST['cat_name'] = $category->getValue('cat_name');
-    }
+    $menu->readDataById($getMenId);
 }
 else
 {
-    // create a new category
-    $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
-    $category->setValue('cat_type', $getType);
+    // create a new menu
+    $menu->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
+    $menu->setValue('cat_type', $getType);
 }
 
 if($getMode === 1)
@@ -198,10 +160,10 @@ if($getMode === 1)
 }
 elseif($getMode === 2)
 {
-    // delete category
+    // delete menu
     try
     {
-        if($category->delete())
+        if($menu->delete())
         {
             echo 'done';
         }
@@ -211,9 +173,9 @@ elseif($getMode === 2)
         $e->showText();
     }
 }
-elseif($getMode === 4)
+elseif($getMode === 3)
 {
     // Kategoriereihenfolge aktualisieren
-    $category->moveSequence($getSequence);
+    $menu->moveSequence($getSequence);
     exit();
 }

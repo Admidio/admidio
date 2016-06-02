@@ -39,113 +39,6 @@ class TableMenu extends TableAccess
     }
 
     /**
-     * Deletes the selected record of the table and all references in other tables.
-     * After that the class will be initialize. The method throws exceptions if
-     * the category couldn't be deleted.
-     * @throws AdmException SYS_DELETE_SYSTEM_CATEGORY
-     *                      CAT_DONT_DELETE_CATEGORY
-     *                      SYS_DELETE_LAST_CATEGORY
-     * @return bool @b true if no error occurred
-     */
-    public function delete()
-    {
-        global $gCurrentSession;
-
-        // system-category couldn't be deleted
-        if($this->getValue('cat_system') == 1)
-        {
-            throw new AdmException('SYS_DELETE_SYSTEM_CATEGORY');
-        }
-
-        // checks if there exists another category of this type. Don't delete the last category of a type!
-        $sql = 'SELECT COUNT(*) AS count
-                  FROM '.TBL_CATEGORIES.'
-                 WHERE (  cat_org_id = '. $gCurrentSession->getValue('ses_org_id'). '
-                       OR cat_org_id IS NULL )
-                   AND cat_type     = \''. $this->getValue('cat_type'). '\'';
-        $categoriesStatement = $this->db->query($sql);
-        $row = $categoriesStatement->fetch();
-
-        if($row['count'] > 1)
-        {
-            $this->db->startTransaction();
-
-            // Luecke in der Reihenfolge schliessen
-            $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_sequence = cat_sequence - 1
-                     WHERE (  cat_org_id = '. $gCurrentSession->getValue('ses_org_id'). '
-                           OR cat_org_id IS NULL )
-                       AND cat_sequence > '. $this->getValue('cat_sequence'). '
-                       AND cat_type     = \''. $this->getValue('cat_type'). '\'';
-            $this->db->query($sql);
-
-            // alle zugehoerigen abhaengigen Objekte suchen und mit weiteren Abhaengigkeiten loeschen
-            $sql = 'SELECT *
-                      FROM '.$this->elementTable.'
-                     WHERE '.$this->elementColumn.' = '. $this->getValue('cat_id');
-            $recordsetsStatement = $this->db->query($sql);
-
-            if($recordsetsStatement->rowCount() > 0)
-            {
-                throw new AdmException('CAT_DONT_DELETE_CATEGORY', $this->getValue('cat_name'), $this->getNumberElements());
-            }
-
-            $return = parent::delete();
-
-            $this->db->endTransaction();
-            return $return;
-        }
-        else
-        {
-            // Don't delete the last category of a type!
-            throw new AdmException('SYS_DELETE_LAST_CATEGORY');
-        }
-    }
-
-    /**
-     * diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
-     * dieser bildet sich aus dem Namen in Grossbuchstaben und der naechsten freien Nummer (index)
-     * Beispiel: 'Gruppen' => 'GRUPPEN_2'
-     * @param string $name
-     * @param int    $index
-     * @return string
-     */
-    private function getNewNameIntern($name, $index)
-    {
-        $newNameIntern = strtoupper(str_replace(' ', '_', $name));
-        if($index > 1)
-        {
-            $newNameIntern = $newNameIntern.'_'.$index;
-        }
-        $sql = 'SELECT cat_id
-                  FROM '.TBL_CATEGORIES.'
-                 WHERE cat_name_intern = \''.$newNameIntern.'\'';
-        $categoriesStatement = $this->db->query($sql);
-
-        if($categoriesStatement->rowCount() > 0)
-        {
-            ++$index;
-            $newNameIntern = $this->getNewNameIntern($name, $index);
-        }
-
-        return $newNameIntern;
-    }
-
-    /**
-     * Read number of child recordsets of this category.
-     * @return int Returns the number of child elements of this category
-     */
-    public function getNumberElements()
-    {
-        $sql = 'SELECT COUNT(*) AS count
-                  FROM '.$this->elementTable.'
-                 WHERE '.$this->elementColumn.' = '. $this->getValue('cat_id');
-        $elementsStatement = $this->db->query($sql);
-        $row = $elementsStatement->fetch();
-
-        return (int) $row['count'];
-    }
-
-    /**
      * Get the value of a column of the database table.
      * If the value was manipulated before with @b setValue than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
@@ -188,40 +81,34 @@ class TableMenu extends TableAccess
         // count all categories that are organization independent because these categories should not
         // be mixed with the organization categories. Hidden categories are sidelined.
         $sql = 'SELECT COUNT(*) AS count
-                  FROM '.TBL_CATEGORIES.'
-                 WHERE cat_type = \''. $this->getValue('cat_type'). '\'
-                   AND cat_name_intern NOT LIKE \'CONFIRMATION_OF_PARTICIPATION\'
-                   AND cat_org_id IS NULL ';
-        $countCategoriesStatement = $this->db->query($sql);
-        $row = $countCategoriesStatement->fetch();
+                  FROM '.TBL_MENU.'
+                 WHERE men_group = \''. $this->getValue('men_group'). '\'';
+        $countMenuStatement = $this->db->query($sql);
+        $row = $countMenuStatement->fetch();
 
-        // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
+        // die Sortierung wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
         if(admStrToUpper($mode) === 'UP')
         {
-            if($this->getValue('cat_org_id') == 0 || $this->getValue('cat_sequence') > $row['count']+1)
+            if($this->getValue('men_order') > 1)
             {
-                $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_sequence = '.$this->getValue('cat_sequence').'
-                         WHERE cat_type = \''. $this->getValue('cat_type'). '\'
-                           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                                          OR cat_org_id IS NULL )
-                           AND cat_sequence = '.$this->getValue('cat_sequence').' - 1 ';
+                $sql = 'UPDATE '.TBL_MENU.' SET men_order = '.$this->getValue('men_order').'
+                         WHERE men_group = \''. $this->getValue('men_group'). '\'
+                           AND men_order = '.$this->getValue('men_order').' - 1 ';
                 $this->db->query($sql);
-                $this->setValue('cat_sequence', $this->getValue('cat_sequence')-1);
+                $this->setValue('men_order', $this->getValue('men_order')-1);
                 $this->save();
             }
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
         elseif(admStrToUpper($mode) === 'DOWN')
         {
-            if($this->getValue('cat_org_id') > 0 || $this->getValue('cat_sequence') < $row['count'])
+            if($this->getValue('men_order') < $row['count'])
             {
-                $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_sequence = '.$this->getValue('cat_sequence').'
-                         WHERE cat_type = \''. $this->getValue('cat_type'). '\'
-                           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                                          OR cat_org_id IS NULL )
-                           AND cat_sequence = '.$this->getValue('cat_sequence').' + 1 ';
+                $sql = 'UPDATE '.TBL_MENU.' SET men_order = '.$this->getValue('men_order').'
+                         WHERE men_group = \''. $this->getValue('men_group'). '\'
+                           AND men_order = '.$this->getValue('men_order').' + 1 ';
                 $this->db->query($sql);
-                $this->setValue('cat_sequence', $this->getValue('cat_sequence')+1);
+                $this->setValue('men_order', $this->getValue('men_order')+1);
                 $this->save();
             }
         }

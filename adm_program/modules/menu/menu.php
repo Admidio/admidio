@@ -30,7 +30,7 @@ $page = new HtmlPage($gL10n->get('SYS_MENU'));
 $page->enableModal();
 
 $page->addJavascript('
-    function moveCategory(direction, menID) {
+    function moveMenu(direction, menID) {
         var actRow = document.getElementById("row_" + menID);
         var childs = actRow.parentNode.childNodes;
         var prevNode    = null;
@@ -72,7 +72,7 @@ $page->addJavascript('
 
         if (secondSequence > 0) {
             // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-            $.get(gRootPath + "/adm_program/modules/menu/menu_function.php?men_id=" + menID + "&mode=4&sequence=" + direction);
+            $.get(gRootPath + "/adm_program/modules/menu/menu_function.php?men_id=" + menID + "&mode=3&sequence=" + direction);
         }
     }');
 
@@ -104,7 +104,7 @@ $sql = 'SELECT *
 
 $menuStatement = $gDb->query($sql);
 
-$menuId = 0;
+$menuGroup = 0;
 
 $menu = new TableMenu($gDb);
 
@@ -114,9 +114,9 @@ while($menu_row = $menuStatement->fetch())
     $menu->clear();
     $menu->setArray($menu_row);
     
-    if($menuId != $menu->getValue('men_group'))
+    if($menuGroup != $menu->getValue('men_group'))
     {
-        $block_id = 'admMenu'.$menu->getValue('men_group');
+        $block_id = 'admMenu_'.$menu->getValue('men_group');
 
         $menuOverview->addTableBody();
         $menuOverview->addRow('', array('class' => 'admidio-group-heading'));
@@ -124,12 +124,12 @@ while($menu_row = $menuStatement->fetch())
                           array('id' => 'group_'.$block_id, 'colspan' => '8'), 'td');
         $menuOverview->addTableBody('id', $block_id);
 
-        $menuId = $menu->getValue('men_group');
+        $menuGroup = $menu->getValue('men_group');
     }
 
-    $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveCategory(\'up\', '.$menu->getValue('cat_id').')"><img
+    $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'up\', '.$menu->getValue('men_id').')"><img
                             src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', $getTitle).'" title="'.$gL10n->get('CAT_MOVE_UP', $getTitle).'" /></a>
-                       <a class="admidio-icon-link" href="javascript:moveCategory(\'down\', '.$menu->getValue('cat_id').')"><img
+                       <a class="admidio-icon-link" href="javascript:moveMenu(\'down\', '.$menu->getValue('men_id').')"><img
                             src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', $getTitle).'" title="'.$gL10n->get('CAT_MOVE_DOWN', $getTitle).'" /></a>';
 
 
@@ -155,8 +155,8 @@ while($menu_row = $menuStatement->fetch())
                                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
 
     $menuAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                    href="'.$g_root_path.'/adm_program/system/popup_message.php?type=cat&amp;element_id=row_'.
-                                    $menu->getValue('cat_id').'&amp;name='.urlencode($menu->getValue('cat_name')).'&amp;database_id='.$menu->getValue('men_id').'"><img
+                                    href="'.$g_root_path.'/adm_program/system/popup_message.php?type=men&amp;element_id=row_'.
+                                    $menu->getValue('men_id').'&amp;name='.urlencode($menu->getValue('men_name')).'&amp;database_id='.$menu->getValue('men_id').'"><img
                                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
 
     // create array with all column values
@@ -168,7 +168,7 @@ while($menu_row = $menuStatement->fetch())
         $htmlNeedAdmin,
         $menuAdministration
     );
-    $menuOverview->addRowByArray($columnValues, 'row_'. $menu->getValue('cat_id'));
+    $menuOverview->addRowByArray($columnValues, 'row_'. $menu->getValue('men_id'));
 }
 
 $page->addHtml($menuOverview->show(false));

@@ -851,7 +851,7 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-create unique index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_id);
+create unique index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_group);
 
 /*==============================================================*/
 /* Constraints                                                  */
