@@ -130,9 +130,9 @@ class HtmlTableBasic extends HtmlElement {
         $this->border       = $border;
         $this->rowClasses   = array();
         $this->columnsWidth = array();
-        $this->thead        = null;
-        $this->tfoot        = null;
-        $this->tbody        = null;
+        $this->thead        = false;
+        $this->tfoot        = false;
+        $this->tbody        = false;
         $this->columnCount  = 0;
         $this->rowCount     = 0;
 
@@ -305,7 +305,7 @@ class HtmlTableBasic extends HtmlElement {
      */
     public function addTableBody($attribute = null, $value = null, $data = '', $col = 'td')
     {
-        if ($this->tfoot !== null && in_array('tfoot', $this->arrParentElements, true))
+        if ($this->tfoot && in_array('tfoot', $this->arrParentElements, true))
         {
             $this->closeParentElement('tr');
         }
@@ -334,13 +334,13 @@ class HtmlTableBasic extends HtmlElement {
      */
     public function addTableFooter($attribute = null, $value = null, $data = '', $col = 'td')
     {
-        if ($this->thead !== null && in_array('thead', $this->arrParentElements, true))
+        if ($this->thead && in_array('thead', $this->arrParentElements, true))
         {
             $this->closeParentElement('thead');
         }
 
         // Check if table footer already exists
-        if ($this->tfoot !== true)
+        if ($this->tfoot)
         {
             return false;
         }
@@ -364,7 +364,7 @@ class HtmlTableBasic extends HtmlElement {
     public function addTableHeader($attribute = null, $value = null, $data = '', $col = 'td')
     {
         // Check if table head already exists
-        if ($this->thead !== true)
+        if ($this->thead)
         {
             return false;
         }
