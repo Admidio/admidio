@@ -158,7 +158,7 @@ class HtmlTable extends HtmlTableBasic
         }
 
         // if body area wasn't defined until now then do it
-        if($this->tbody == -1)
+        if($this->tbody === null)
         {
             $this->addTableBody();
         }
