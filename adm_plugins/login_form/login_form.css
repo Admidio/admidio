@@ -9,6 +9,9 @@
  */
 
 /* special css adjustments for login form */
+#plugin-login-form select.form-control {
+    width: 100%;
+}
 
 #plugin_login_form button[type="submit"] {
     margin-bottom: 10px;
