@@ -180,5 +180,4 @@ class HtmlList extends HtmlElement
 
         return $this->getHtmlElement();
     }
-
 }
