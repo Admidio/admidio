@@ -133,7 +133,7 @@ if($getMode === 'show_list')
         $table->addRowByArray($columnValues);
     }
 
-    $page->addHtml($table->show(false));
+    $page->addHtml($table->show());
 }
 elseif($getMode === 'create_backup')
 {

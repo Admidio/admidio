@@ -238,5 +238,5 @@ while($row = $statement->fetch())
     $table->addRowByArray($columnValues, 'row_usf_'.$userField->getValue('usf_id'));
 }
 
-$page->addHtml($table->show(false));
+$page->addHtml($table->show());
 $page->show();

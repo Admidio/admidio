@@ -204,7 +204,7 @@ if(isset($statement))
 $table->setDatatablesOrderColumns(array(array(4, 'desc')));
 
 // add table to the form
-$page->addHtml($table->show(false));
+$page->addHtml($table->show());
 
 // add form to html page and show page
 $page->show();

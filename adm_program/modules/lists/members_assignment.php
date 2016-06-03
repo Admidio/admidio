@@ -454,7 +454,7 @@ else
         $table->addRowByArray($columnValues, 'userid_'.$user['usr_id']);
     }//End While
 
-    $page->addHtml($table->show(false));
+    $page->addHtml($table->show());
     $page->addHtml('<p>'.$gL10n->get('SYS_CHECKBOX_AUTOSAVE').'</p>');
 
     $page->show();

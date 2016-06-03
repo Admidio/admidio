@@ -249,7 +249,7 @@ if (isset($folderContent['files']))
 // Create download table
 $downloadOverview->setDatatablesColumnsHide(array(1));
 $downloadOverview->setDatatablesOrderColumns(array(1, 3));
-$htmlDownloadOverview = $downloadOverview->show(false);
+$htmlDownloadOverview = $downloadOverview->show();
 
 /**************************************************************************/
 // Add Admin table to html page
@@ -317,7 +317,7 @@ if ($gCurrentUser->editDownloadRight())
                 $adminTable->addRowByArray($columnValues);
             }
         }
-        $htmlAdminTable = $adminTable->show(false);
+        $htmlAdminTable = $adminTable->show();
     }
 }
 

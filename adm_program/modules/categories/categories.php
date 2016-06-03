@@ -251,5 +251,5 @@ while($cat_row = $categoryStatement->fetch())
     $categoriesOverview->addRowByArray($columnValues, 'row_'. $category->getValue('cat_id'));
 }
 
-$page->addHtml($categoriesOverview->show(false));
+$page->addHtml($categoriesOverview->show());
 $page->show();

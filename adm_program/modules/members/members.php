@@ -323,7 +323,7 @@ while($row = $mglStatement->fetch())
     ++$irow;
 }
 
-$page->addHtml($membersTable->show(false));
+$page->addHtml($membersTable->show());
 
 // show html of complete page
 $page->show();

@@ -217,5 +217,5 @@ while($row = $fieldHistoryStatement->fetch())
     $table->addRowByArray($columnValues);
 }
 
-$page->addHtml($table->show(false));
+$page->addHtml($table->show());
 $page->show();

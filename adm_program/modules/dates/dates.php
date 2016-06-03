@@ -810,7 +810,7 @@ else
     // Output table bottom for compact view
     if ($getView === 'compact' || $getView === 'room' || $getView === 'participants' || $getView === 'description')
     {
-        $page->addHtml($compactTable->show(false));
+        $page->addHtml($compactTable->show());
     }
 }
 

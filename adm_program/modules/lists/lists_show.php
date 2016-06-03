@@ -509,7 +509,7 @@ foreach ($membersList as $member)
 
             if ($getMode === 'print' || $getMode === 'pdf')
             {
-                $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), 1, $list->countColumns() + 1);
+                $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), $list->countColumns() + 1);
             }
             $lastGroupHead = $member['mem_leader'];
         }
@@ -749,7 +749,7 @@ elseif ($getMode === 'pdf')
 elseif ($getMode === 'html' || $getMode === 'print')
 {
     // add table list to the page
-    $page->addHtml($table->show(false));
+    $page->addHtml($table->show());
 
     // create a infobox for the role
     if ($getMode === 'html' && $numberRoles === 1)
