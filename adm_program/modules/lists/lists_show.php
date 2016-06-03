@@ -485,18 +485,20 @@ else
     $table->addTableBody();
 }
 
-$lastGroupHead = -1; // Mark for change between leader and member
+$lastGroupHead = null; // Mark for change between leader and member
 $listRowNumber = 1;
 
 foreach ($membersList as $member)
 {
+    $memberIsLeader = (bool) $member['mem_leader'];
+
     if ($getMode !== 'csv')
     {
         // in print preview and pdf we group the role leaders and the members and
         // add a specific header for them
-        if ($lastGroupHead != $member['mem_leader'] && ($member['mem_leader'] != 0 || $lastGroupHead != -1))
+        if ($memberIsLeader !== $lastGroupHead && ($memberIsLeader || $lastGroupHead !== null))
         {
-            if ($member['mem_leader'] == 1)
+            if ($memberIsLeader)
             {
                 $title = $gL10n->get('SYS_LEADERS');
             }
@@ -511,14 +513,15 @@ foreach ($membersList as $member)
             {
                 $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), $list->countColumns() + 1);
             }
-            $lastGroupHead = $member['mem_leader'];
+            $lastGroupHead = $memberIsLeader;
         }
     }
 
     // if html mode and the role has leaders then group all data between leaders and members
     if ($getMode === 'html')
     {
-        if ($member['mem_leader'] != 0)
+        // TODO set only once (yet it is set x times as members gets displayed)
+        if ($memberIsLeader)
         {
             $table->setDatatablesGroupColumn(2);
         }
@@ -562,7 +565,7 @@ foreach ($membersList as $member)
                 // enable the grouping function of jquery datatables
                 if ($getMode === 'html')
                 {
-                    if ($member['mem_leader'] == 1)
+                    if ($memberIsLeader)
                     {
                         $columnValues[] = $gL10n->get('SYS_LEADERS');
                     }
