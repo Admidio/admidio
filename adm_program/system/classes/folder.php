@@ -250,4 +250,15 @@ class Folder
         }
         return false;
     }
+
+    /**
+     * Attempts to rename oldname to newname, moving it between directories if necessary.
+     * If newname exists, it will be overwritten.
+     * @param string $newName The new name of the folder.
+     * @return bool Returns @b true on success or @b false on failure.
+     */
+    public function rename($newName)
+    {
+        return rename($this->folderWithPath, $newName);
+    }
 }

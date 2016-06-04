@@ -121,11 +121,11 @@ class Organization extends TableAccess
                                              , ('.$orgId.', \'DAT\', \'COURSES\',  \'INS_COURSES\',  0, 0, 0, 3, '.$systemUserId.', \''.DATETIME_NOW.'\')';
         $this->db->query($sql);
 
-        // create default folder for download module in database
+        // insert root folder name for download module
         $sql = 'INSERT INTO '.TBL_FOLDERS.' (fol_org_id, fol_type, fol_name, fol_path,
-                                             fol_locked, fol_public, fol_timestamp)
-                                     VALUES ('.$orgId.', \'DOWNLOAD\', \'download\', \'/adm_my_files\',
-                                             0, 1, \''.DATETIME_NOW.'\')';
+                                             fol_locked, fol_public, fol_usr_id, fol_timestamp)
+                                     VALUES ('.$orgId.', \'DOWNLOAD\', \''.TableFolder::getRootFolderName().'\', \'/adm_my_files\',
+                                             0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')';
         $this->db->query($sql);
 
         // now create default roles

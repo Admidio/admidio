@@ -94,7 +94,7 @@ if(!$pdoStatement || $pdoStatement->rowCount() === 0)
     header('Location: installation.php');
 }
 
-// Daten der aktuellen Organisation einlesen
+// create an organization object of the current organization
 $gCurrentOrganization = new Organization($gDb, $g_organization);
 
 if($gCurrentOrganization->getValue('org_id') == 0)
@@ -105,6 +105,8 @@ if($gCurrentOrganization->getValue('org_id') == 0)
 
 // organisationsspezifische Einstellungen aus adm_preferences auslesen
 $gPreferences = $gCurrentOrganization->getPreferences();
+
+$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization->getValue('org_id'));
 
 // create language and language data object to handle translations
 if(!isset($gPreferences['system_language']))
@@ -274,7 +276,6 @@ elseif($getMode === 2)
             $userRow = $userStatement->fetch();
 
             // create object with current user field structure und user object
-            $gProfileFields = new ProfileFields($gDb, $gCurrentOrganization->getValue('org_id'));
             $gCurrentUser   = new User($gDb, $gProfileFields, $userRow['usr_id']);
 
             // check login data. If login failed an exception will be thrown.
@@ -422,6 +423,13 @@ elseif($getMode === 2)
     // since version 3 we do the update with xml files and a new class model
     if($mainVersion >= 3)
     {
+        // set system user as current user, but this user only exists since version 3
+        $sql = 'SELECT usr_id FROM '.TBL_USERS.' WHERE usr_login_name = \''.$gL10n->get('SYS_SYSTEM').'\' ';
+        $systemUserStatement = $gDb->query($sql);
+        $row = $systemUserStatement->fetch();
+
+        $gCurrentUser   = new User($gDb, $gProfileFields, $row['usr_id']);
+
         // reread component because in version 3.0 the component will be created within the update
         $componentUpdateHandle = new ComponentUpdate($gDb);
         $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
@@ -452,6 +460,7 @@ elseif($getMode === 2)
 
     // show notice that update was successful
     $form = new HtmlFormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
+    $form->setUpdateModus();
     $form->setFormDescription($gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION_TEXT).'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'), '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong></div>');
     $form->openButtonGroup();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
