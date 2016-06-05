@@ -130,7 +130,7 @@ if (isset($folderContent['folders']))
         $nextFolder = $folderContent['folders'][$i];
 
         $folderDescription = '';
-        if(strlen($nextFolder['fol_description']) > 0)
+        if($nextFolder['fol_description'] !== null)
         {
             $folderDescription = '<img class="admidio-icon-help" src="'. THEME_PATH. '/icons/info.png" data-toggle="popover" data-trigger="hover"
                 data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$nextFolder['fol_description'].'" alt="Info" />';
@@ -196,7 +196,7 @@ if (isset($folderContent['files']))
         $timestamp = DateTime::createFromFormat('Y-m-d H:i:s', $nextFile['fil_timestamp']);
 
         $fileDescription = '';
-        if($nextFile['fil_description'] !== '')
+        if($nextFile['fil_description'] !== null)
         {
             $fileDescription = '<img class="admidio-icon-help" src="'. THEME_PATH. '/icons/info.png" data-toggle="popover" data-trigger="hover"
                 data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$nextFile['fil_description'].'" alt="Info" />';

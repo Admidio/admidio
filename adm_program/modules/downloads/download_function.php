@@ -166,10 +166,9 @@ elseif ($getMode === 3)
 // Datei / Ordner umbenennen
 elseif ($getMode === 4)
 {
-    if ((!$getFileId && !$getFolderId) || ($getFileId && $getFolderId))
+    if (!$getFileId && !$getFolderId)
     {
-        // Es muss entweder eine FileID ODER eine FolderId uebergeben werden
-        // beides ist auch nicht erlaubt
+        // fileid and/or folderid must be set
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
