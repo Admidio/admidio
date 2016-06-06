@@ -99,25 +99,15 @@ class TableFile extends TableAccess
             }
             elseif (!$gCurrentUser->editDownloadRight() && !$this->getValue('fol_public'))
             {
-                // Wenn der Ordner nicht public ist und der Benutzer keine Downloadadminrechte hat, muessen die Rechte untersucht werden
-                $sql_rights = 'SELECT COUNT(*) AS count
-                                 FROM '.TBL_FOLDER_ROLES.'
-                           INNER JOIN '.TBL_MEMBERS.'
-                                   ON mem_rol_id = flr_rol_id
-                                WHERE flr_fol_id = '.$this->getValue('fol_id').'
-                                  AND mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
-                                  AND mem_begin <= \''.DATE_NOW.'\'
-                                  AND mem_end    > \''.DATE_NOW.'\'';
-                $rightsStatement = $this->db->query($sql_rights);
-                $row_rights = $rightsStatement->fetch();
+                // check if user has a membership in a role that is assigned to the current folder
+                $folderViewRolesObject = new RolesRights($this->db, 'folder_view', $this->getValue('fol_id'));
 
-                // Falls der User in keiner Rolle Mitglied ist, die Rechte an dem Ordner besitzt
-                // wird auch kein Ordner geliefert.
-                if ((int) $row_rights['count'] === 0)
+                if(!$folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
                 {
                     $this->clear();
                     throw new AdmException('DOW_FOLDER_NO_RIGHTS');
                 }
+
                 return true;
             }
             else

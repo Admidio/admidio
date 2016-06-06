@@ -37,11 +37,20 @@ class MyFiles extends Folder
      */
     public function __construct($module)
     {
-        global $g_root_path;
+        global $g_root_path, $gCurrentOrganization;
+
+        if($module === 'DOWNLOAD')
+        {
+            $folderName = TableFolder::getRootFolderName();
+        }
+        else
+        {
+            $folderName = strtolower($module);
+        }
 
         $this->module      = $module;
-        $this->modulePath  = SERVER_PATH.'/adm_my_files/'.strtolower($module);
-        $this->currentPath = SERVER_PATH.'/adm_my_files/'.strtolower($module);
+        $this->modulePath  = SERVER_PATH.'/adm_my_files/'.$folderName;
+        $this->currentPath = SERVER_PATH.'/adm_my_files/'.$folderName;
         $this->webPath     = $g_root_path.'/adm_my_files';
 
         parent::__construct($this->modulePath);

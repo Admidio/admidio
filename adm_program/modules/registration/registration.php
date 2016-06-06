@@ -121,5 +121,5 @@ while($row = $usrStatement->fetch())
     $table->addRowByArray($columnValues, 'row_user_'.$row['usr_id']);
 }
 
-$page->addHtml($table->show(false));
+$page->addHtml($table->show());
 $page->show();

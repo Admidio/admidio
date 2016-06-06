@@ -225,7 +225,7 @@ if($gPreferences['enable_photo_module'] > 0)
 if($gPreferences['enable_download_module'] > 0)
 {
     $form->addCheckbox('rol_download', $gL10n->get('ROL_RIGHT_DOWNLOAD'), $role->getValue('rol_download'),
-                       array('icon' => 'download.png'));
+                       array('helpTextIdLabel' => 'ROL_RIGHT_DOWNLOAD_DESC', 'icon' => 'download.png'));
 }
 if($gPreferences['enable_guestbook_module'] > 0)
 {

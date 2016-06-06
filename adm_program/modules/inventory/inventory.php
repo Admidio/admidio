@@ -121,7 +121,7 @@ while($row = $mglStatement->fetch())
     ++$irow;
 }
 
-$page->addHtml($itemsTable->show(false));
+$page->addHtml($itemsTable->show());
 
 // show html of complete page
 $page->show();

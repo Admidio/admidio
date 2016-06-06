@@ -17,8 +17,6 @@ require_once('../../system/file_extension_icons.php');
 
 unset($_SESSION['download_request']);
 
-$buffer = '';
-
 // Initialize and check the parameters
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
 
@@ -26,13 +24,6 @@ $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
 if ($gPreferences['enable_download_module'] != 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-}
-
-// Only available from master organization
-if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0)
-{
-    // is not master organization
-    $gMessage->show($gL10n->get('SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY', $g_organization));
 }
 
 try
@@ -80,7 +71,7 @@ $page->addJavascript('
 // get module menu
 $DownloadsMenu = $page->getMenu();
 
-if ($gCurrentUser->editDownloadRight())
+if ($currentFolder->hasUploadRight())
 {
     // upload only possible if upload filesize > 0
     if ($gPreferences['max_file_upload_size'] > 0)
@@ -93,8 +84,11 @@ if ($gCurrentUser->editDownloadRight())
                             $gL10n->get('DOW_UPLOAD_FILES'), 'page_white_upload.png');
     }
 
-    $DownloadsMenu->addItem('menu_item_config_folder', $g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$getFolderId,
-                        $gL10n->get('SYS_AUTHORIZATION'), 'lock.png');
+    if($gCurrentUser->editDownloadRight())
+    {
+        $DownloadsMenu->addItem('menu_item_config_folder', $g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$getFolderId,
+                            $gL10n->get('SYS_AUTHORIZATION'), 'lock.png');
+    }
 }
 
 if($gCurrentUser->isAdministrator())
@@ -117,7 +111,7 @@ $columnHeading = array(
     $gL10n->get('DOW_COUNTER')
 );
 
-if ($gCurrentUser->editDownloadRight())
+if ($currentFolder->hasUploadRight())
 {
     $columnHeading[] = '&nbsp;';
     $downloadOverview->disableDatatablesColumnsSort(7);
@@ -136,7 +130,7 @@ if (isset($folderContent['folders']))
         $nextFolder = $folderContent['folders'][$i];
 
         $folderDescription = '';
-        if(strlen($nextFolder['fol_description']) > 0)
+        if($nextFolder['fol_description'] !== null)
         {
             $folderDescription = '<img class="admidio-icon-help" src="'. THEME_PATH. '/icons/info.png" data-toggle="popover" data-trigger="hover"
                 data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$nextFolder['fol_description'].'" alt="Info" />';
@@ -153,7 +147,7 @@ if (isset($folderContent['folders']))
             ''
         );
 
-        if ($gCurrentUser->editDownloadRight())
+        if ($currentFolder->hasUploadRight())
         {
             // Links for change and delete
             $additionalFolderFunctions = '';
@@ -164,7 +158,7 @@ if (isset($folderContent['folders']))
                 <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?folder_id='. $nextFolder['fol_id']. '"><img
                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
             }
-            else
+            elseif($gCurrentUser->editDownloadRight())
             {
                 $additionalFolderFunctions = '
                 <img class="admidio-icon-help" src="'. THEME_PATH. '/icons/warning.png" data-toggle="popover" data-trigger="hover" data-placement="left"
@@ -202,7 +196,7 @@ if (isset($folderContent['files']))
         $timestamp = DateTime::createFromFormat('Y-m-d H:i:s', $nextFile['fil_timestamp']);
 
         $fileDescription = '';
-        if($nextFile['fil_description'] !== '')
+        if($nextFile['fil_description'] !== null)
         {
             $fileDescription = '<img class="admidio-icon-help" src="'. THEME_PATH. '/icons/info.png" data-toggle="popover" data-trigger="hover"
                 data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$nextFile['fil_description'].'" alt="Info" />';
@@ -219,7 +213,7 @@ if (isset($folderContent['files']))
             ($nextFile['fil_counter'] !== '') ? $nextFile['fil_counter'] : '0'
         );
 
-        if ($gCurrentUser->editDownloadRight())
+        if ($currentFolder->hasUploadRight())
         {
             // Links for change and delete
             $additionalFileFunctions = '';
@@ -227,10 +221,10 @@ if (isset($folderContent['files']))
             if($nextFile['fil_exists'] === true)
             {
                 $additionalFileFunctions = '
-                <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?file_id='. $nextFile['fil_id']. '"><img
+                <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?folder_id='.$getFolderId.'&file_id='. $nextFile['fil_id']. '"><img
                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
             }
-            else
+            elseif($gCurrentUser->editDownloadRight())
             {
                 $additionalFileFunctions = '
                 <img class="admidio-icon-help" src="'. THEME_PATH. '/icons/warning.png" data-toggle="popover" data-trigger="hover" data-placement="left"
@@ -239,7 +233,7 @@ if (isset($folderContent['files']))
             $columnValues[] = $additionalFileFunctions.'
             <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                 href="'.$g_root_path.'/adm_program/system/popup_message.php?type=fil&amp;element_id=row_file_'.
-                $nextFile['fil_id'].'&amp;name='.urlencode($nextFile['fil_name']).'&amp;database_id='.$nextFile['fil_id'].'"><img
+                $nextFile['fil_id'].'&amp;name='.urlencode($nextFile['fil_name']).'&amp;database_id='.$nextFile['fil_id'].'&amp;database_id_2='.$getFolderId.'"><img
                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
         }
         $downloadOverview->addRowByArray($columnValues, 'row_file_'.$nextFile['fil_id']);
@@ -249,7 +243,7 @@ if (isset($folderContent['files']))
 // Create download table
 $downloadOverview->setDatatablesColumnsHide(array(1));
 $downloadOverview->setDatatablesOrderColumns(array(1, 3));
-$htmlDownloadOverview = $downloadOverview->show(false);
+$htmlDownloadOverview = $downloadOverview->show();
 
 /**************************************************************************/
 // Add Admin table to html page
@@ -317,7 +311,7 @@ if ($gCurrentUser->editDownloadRight())
                 $adminTable->addRowByArray($columnValues);
             }
         }
-        $htmlAdminTable = $adminTable->show(false);
+        $htmlAdminTable = $adminTable->show();
     }
 }
 

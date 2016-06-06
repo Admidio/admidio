@@ -230,5 +230,5 @@ while($row = $statement->fetch())
     $table->addRowByArray($columnValues, 'row_inf_'.$userField->getValue('inf_id'));
 }
 
-$page->addHtml($table->show(false));
+$page->addHtml($table->show());
 $page->show();

@@ -285,7 +285,7 @@ while($row = $statement->fetch())
         $table->addRowByArray($columnValues);
     }
 }
-$html .= $table->show(false);
+$html .= $table->show();
 
 $html .= '
     <button class="btn-primary btn" id="btn_save" type="submit"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>

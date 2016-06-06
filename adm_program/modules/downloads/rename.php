@@ -37,26 +37,6 @@ if ($gPreferences['enable_download_module'] != 1)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-// nur von eigentlicher OragHompage erreichbar
-if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0)
-{
-    // das Modul ist deaktiviert
-    $gMessage->show($gL10n->get('SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY', $g_organization));
-}
-
-// erst prüfen, ob der User auch die entsprechenden Rechte hat
-if (!$gCurrentUser->editDownloadRight())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-}
-
-if ((!$getFileId && !$getFolderId) or ($getFileId && $getFolderId))
-{
-    // Es muss entweder eine FileID ODER eine FolderId uebergeben werden
-    // beides ist auch nicht erlaubt
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 if(isset($_SESSION['download_request']))
@@ -68,6 +48,15 @@ else
 {
     $form_values['new_name'] = null;
     $form_values['new_description'] = null;
+}
+
+// check the rights of the current folder
+// user must be administrator or must have the right to upload files
+$targetFolder = new TableFolder($gDb, $getFolderId);
+
+if (!$targetFolder->hasUploadRight())
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 $originalName = '';

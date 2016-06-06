@@ -5,7 +5,43 @@
     <step id="30">UPDATE %PREFIX%_roles SET rol_administrator = rol_webmaster</step>
     <step id="40">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_webmaster</step>
     <step id="50">UPDATE %PREFIX%_texts SET txt_text = REPLACE(txt_text, '#webmaster_email#', '#administrator_email#')</step>
-    <step id="60">CREATE TABLE %PREFIX%_menu
+    <step id="60">create table %PREFIX%_roles_rights
+        (
+            ror_id                         integer       unsigned not null AUTO_INCREMENT,
+            ror_name_intern                varchar(50)   not null,
+            ror_table                      varchar(50)   not null,
+            primary key (ror_id)
+        )
+        engine = InnoDB
+        default character set = utf8
+        collate = utf8_unicode_ci</step>
+    <step id="70">create table %PREFIX%_roles_rights_data
+        (
+            rrd_id                         integer       unsigned not null AUTO_INCREMENT,
+            rrd_ror_id                     integer       unsigned not null,
+            rrd_rol_id                     integer       unsigned not null,
+            rrd_object_id                  integer       unsigned not null,
+            rrd_usr_id_create              integer       unsigned,
+            rrd_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
+            primary key (rrd_id)
+        )
+        engine = InnoDB
+        default character set = utf8
+        collate = utf8_unicode_ci</step>
+    <step id="80">create unique index IDX_%PREFIX%_RRD_ROR_ROL_OBJECT_ID on %PREFIX%_roles_rights_data (rrd_ror_id, rrd_rol_id, rrd_object_id)</step>
+    <step id="90">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
+                  VALUES ('folder_view', 'adm_folders'),
+                         ('folder_upload', 'adm_folders')</step>
+    <step id="100">ComponentUpdate::updateStepMigrateToFolderRights</step>
+    <step id="110">DROP TABLE %PREFIX%_folder_roles</step>
+    <step id="120">alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_ROR foreign key (rrd_ror_id)
+        references %PREFIX%_roles_rights (ror_id) on delete restrict on update restrict</step>
+    <step id="130">alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_ROL foreign key (rrd_rol_id)
+        references %PREFIX%_roles (rol_id) on delete restrict on update restrict</step>
+    <step id="140">alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_USR_CREATE foreign key (rrd_usr_id_create)
+        references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="150">ComponentUpdate::updateStepNewDownloadRootFolderName</step>
+    <step id="160">CREATE TABLE %PREFIX%_menu
                 (
                     men_id                         integer       unsigned not null AUTO_INCREMENT,
                     men_group                      integer,
@@ -27,8 +63,8 @@
                 auto_increment = 1
                 default character set = utf8
                 collate = utf8_unicode_ci</step>
-    <step id="70">create unique index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_group)</step>
-    <step id="80">INSERT INTO %PREFIX%_menu (men_id, men_group, men_order, men_display_right, men_display_index, men_display_boot, men_modul_name, men_url, men_icon, men_translat_name, men_translat_desc, men_need_enable, men_need_login, men_need_admin) 
+    <step id="170">create unique index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_group)</step>
+    <step id="180">INSERT INTO %PREFIX%_menu (men_id, men_group, men_order, men_display_right, men_display_index, men_display_boot, men_modul_name, men_url, men_icon, men_translat_name, men_translat_desc, men_need_enable, men_need_login, men_need_admin) 
             VALUES (1, 2, 1, 1, 0, 1, 'overview', '/adm_program/index.php', '/icons/home.png', 'SYS_OVERVIEW', '', 0, 0, 0)
                     , (2, 2, 3, 1, 1, 1, 'download', '/adm_program/modules/downloads/downloads.php', '/icons/download.png', 'DOW_DOWNLOADS', 'DOW_DOWNLOADS_DESC', 1, 0, 0)
                     , (3, 2, 7, 1, 1, 1, 'lists', '/adm_program/modules/lists/lists.php', '/icons/lists.png', 'LST_LISTS', 'LST_LISTS_DESC', 0, 0, 0)

@@ -58,7 +58,7 @@ switch ($get_type)
         $url = 'dates_function.php?mode=2&dat_id='.$get_database_id;
         break;
     case 'fil':
-        $url = 'download_function.php?mode=2&file_id='.$get_database_id;
+        $url = 'download_function.php?mode=2&file_id='.$get_database_id.'&folder_id='.$get_database_id_2;
         break;
     case 'fol':
         $url = 'download_function.php?mode=5&folder_id='.$get_database_id;

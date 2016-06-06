@@ -7,9 +7,6 @@
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- */
-
-/******************************************************************************
  * Parameters:
  *
  * mode   :  2 - Delete file
@@ -21,8 +18,7 @@
  * folder_id : Id of the folder in the database
  * file_id   : Id of the file in the database
  * name      : Name of the file/folder that should be added to the database
- *
- *****************************************************************************/
+ ***********************************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
@@ -32,12 +28,6 @@ if ($gPreferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-}
-
-// erst pruefen, ob der User auch die entsprechenden Rechte hat
-if (!$gCurrentUser->editDownloadRight())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // Initialize and check the parameters
@@ -53,6 +43,15 @@ $myFilesDownload = new MyFiles('DOWNLOAD');
 if(!$myFilesDownload->checkSettings())
 {
     $gMessage->show($gL10n->get($myFilesDownload->errorText, $myFilesDownload->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+}
+
+// check the rights of the current folder
+// user must be administrator or must have the right to upload files
+$folder = new TableFolder($gDb, $getFolderId);
+
+if (!$folder->hasUploadRight())
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // Delete file
@@ -86,7 +85,7 @@ if ($getMode === 2)
     unset($_SESSION['download_request']);
 }
 
-// Ordner erstellen
+// create folder
 elseif ($getMode === 3)
 {
     if ($getFolderId === 0)
@@ -98,8 +97,7 @@ elseif ($getMode === 3)
     try
     {
         // get recordset of current folder from database
-        $targetFolder = new TableFolder($gDb);
-        $targetFolder->getFolderForDownload($getFolderId);
+        $folder->getFolderForDownload($getFolderId);
 
         $newFolderName = null;
 
@@ -110,31 +108,34 @@ elseif ($getMode === 3)
             $newFolderDescription = $_POST['new_description'];
 
             // Test ob der Ordner schon existiert im Filesystem
-            if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$newFolderName))
+            if (file_exists($folder->getCompletePathOfFolder(). '/'.$newFolderName))
             {
                 $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolderName));
             }
             else
             {
                 // Ordner erstellen
-                $b_return = $targetFolder->createFolder($newFolderName);
+                $b_return = $folder->createFolder($newFolderName);
 
                 if(strlen($b_return['text']) === 0)
                 {
                     // Jetzt noch den Ordner der DB hinzufuegen...
                     $newFolder = new TableFolder($gDb);
 
-                    $newFolder->setValue('fol_fol_id_parent', $targetFolder->getValue('fol_id'));
+                    $newFolder->setValue('fol_fol_id_parent', $folder->getValue('fol_id'));
                     $newFolder->setValue('fol_type', 'DOWNLOAD');
                     $newFolder->setValue('fol_name', $newFolderName);
                     $newFolder->setValue('fol_description', $newFolderDescription);
-                    $newFolder->setValue('fol_path', $targetFolder->getValue('fol_path'). '/'.$targetFolder->getValue('fol_name'));
-                    $newFolder->setValue('fol_locked', $targetFolder->getValue('fol_locked'));
-                    $newFolder->setValue('fol_public', $targetFolder->getValue('fol_public'));
+                    $newFolder->setValue('fol_path', $folder->getValue('fol_path'). '/'.$folder->getValue('fol_name'));
+                    $newFolder->setValue('fol_locked', $folder->getValue('fol_locked'));
+                    $newFolder->setValue('fol_public', $folder->getValue('fol_public'));
                     $newFolder->save();
 
-                    // Ordnerberechtigungen des ParentOrdners uebernehmen
-                    $newFolder->setRolesOnFolder($targetFolder->getRoleArrayOfFolder());
+                    // get roles rights of parent folder
+                    $rightParentFolderView = new RolesRights($gDb, 'folder_view', $folder->getValue('fol_id'));
+                    $newFolder->addRolesOnFolder('folder_view', $rightParentFolderView->getRolesIds());
+                    $rightParentFolderUpload = new RolesRights($gDb, 'folder_upload', $folder->getValue('fol_id'));
+                    $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
                 }
                 else
                 {
@@ -165,10 +166,9 @@ elseif ($getMode === 3)
 // Datei / Ordner umbenennen
 elseif ($getMode === 4)
 {
-    if ((!$getFileId && !$getFolderId) || ($getFileId && $getFolderId))
+    if (!$getFileId && !$getFolderId)
     {
-        // Es muss entweder eine FileID ODER eine FolderId uebergeben werden
-        // beides ist auch nicht erlaubt
+        // fileid and/or folderid must be set
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
@@ -220,7 +220,6 @@ elseif ($getMode === 4)
         elseif($getFolderId > 0)
         {
             // get recordset of current folder from database and throw exception if necessary
-            $folder = new TableFolder($gDb);
             $folder->getFolderForDownload($getFolderId);
 
             $oldFolder = $folder->getCompletePathOfFolder();
@@ -288,7 +287,6 @@ elseif ($getMode === 5)
         try
         {
             // get recordset of current folder from database
-            $folder = new TableFolder($gDb);
             $folder->getFolderForDownload($getFolderId);
         }
         catch(AdmException $e)
@@ -315,13 +313,18 @@ elseif ($getMode === 6)
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
+    // only users with download administration rights should set new roles rights
+    if(!$gCurrentUser->editDownloadRight())
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    }
+
     try
     {
         $getName = urldecode($getName);
 
         // get recordset of current folder from database
-        $targetFolder = new TableFolder($gDb);
-        $targetFolder->getFolderForDownload($getFolderId);
+        $folder->getFolderForDownload($getFolderId);
     }
     catch(AdmException $e)
     {
@@ -329,13 +332,13 @@ elseif ($getMode === 6)
     }
 
     // Pruefen ob das neue Element eine Datei order ein Ordner ist.
-    if (is_file($targetFolder->getCompletePathOfFolder(). '/'. $getName))
+    if (is_file($folder->getCompletePathOfFolder(). '/'. $getName))
     {
         // Datei hinzufuegen
         $newFile = new TableFile($gDb);
-        $newFile->setValue('fil_fol_id', $targetFolder->getValue('fol_id'));
+        $newFile->setValue('fil_fol_id', $folder->getValue('fol_id'));
         $newFile->setValue('fil_name', $getName);
-        $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
+        $newFile->setValue('fil_locked', $folder->getValue('fol_locked'));
         $newFile->setValue('fil_counter', '0');
         $newFile->save();
 
@@ -345,21 +348,24 @@ elseif ($getMode === 6)
         header($location);
         exit();
     }
-    elseif (is_dir($targetFolder->getCompletePathOfFolder(). '/'. $getName))
+    elseif (is_dir($folder->getCompletePathOfFolder(). '/'. $getName))
     {
 
         // Ordner der DB hinzufuegen
         $newFolder = new TableFolder($gDb);
-        $newFolder->setValue('fol_fol_id_parent', $targetFolder->getValue('fol_id'));
+        $newFolder->setValue('fol_fol_id_parent', $folder->getValue('fol_id'));
         $newFolder->setValue('fol_type', 'DOWNLOAD');
         $newFolder->setValue('fol_name', $getName);
-        $newFolder->setValue('fol_path', $targetFolder->getValue('fol_path'). '/'.$targetFolder->getValue('fol_name'));
-        $newFolder->setValue('fol_locked', $targetFolder->getValue('fol_locked'));
-        $newFolder->setValue('fol_public', $targetFolder->getValue('fol_public'));
+        $newFolder->setValue('fol_path', $folder->getValue('fol_path'). '/'.$folder->getValue('fol_name'));
+        $newFolder->setValue('fol_locked', $folder->getValue('fol_locked'));
+        $newFolder->setValue('fol_public', $folder->getValue('fol_public'));
         $newFolder->save();
 
-        // Ordnerberechtigungen des ParentOrdners uebernehmen
-        $newFolder->setRolesOnFolder($targetFolder->getRoleArrayOfFolder());
+        // get roles rights of parent folder
+        $rightParentFolderView = new RolesRights($gDb, 'folder_view', $folder->getValue('fol_id'));
+        $newFolder->addRolesOnFolder('folder_view', $rightParentFolderView->getRolesIds());
+        $rightParentFolderUpload = new RolesRights($gDb, 'folder_upload', $folder->getValue('fol_id'));
+        $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
 
         // Zurueck zur letzten Seite
         $gNavigation->addUrl(CURRENT_URL);
@@ -369,49 +375,74 @@ elseif ($getMode === 6)
     }
 }
 
-// Berechtigungen fuer einen Ordner speichern
+// save view or upload rights for a folder
 elseif ($getMode === 7)
 {
-    if(!isset($_POST['adm_allowed_roles']))
+    if(!isset($_POST['adm_roles_view_right']))
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
     }
 
-    if ($getFolderId === 0 || !is_array($_POST['adm_allowed_roles']))
+    if ($getFolderId === 0 || !is_array($_POST['adm_roles_view_right']) || !is_array($_POST['adm_roles_upload_right']))
     {
         // FolderId ist zum hinzufuegen erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
+    // only users with download administration rights should set new roles rights
+    if(!$gCurrentUser->editDownloadRight())
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    }
+
     try
     {
         // get recordset of current folder from database
-        $targetFolder = new TableFolder($gDb);
-        $targetFolder->getFolderForDownload($getFolderId);
+        $folder->getFolderForDownload($getFolderId);
 
-        if ($targetFolder->getValue('fol_fol_id_parent'))
+        if ($folder->getValue('fol_fol_id_parent'))
         {
             // get recordset of parent folder from database
             $parentFolder = new TableFolder($gDb);
-            $parentFolder->getFolderForDownload($targetFolder->getValue('fol_fol_id_parent'));
+            $parentFolder->getFolderForDownload($folder->getValue('fol_fol_id_parent'));
         }
 
-        if(in_array('0', $_POST['adm_allowed_roles'], true))
+        // Read current roles rights of the folder
+        $rightFolderView = new RolesRights($gDb, 'folder_view', $getFolderId);
+        $rolesFolderView = $rightFolderView->getRolesIds();
+
+        if(in_array('0', $_POST['adm_roles_view_right'], true))
         {
             // set flag public for this folder and all child folders
-            $targetFolder->editPublicFlagOnFolder(true);
+            $folder->editPublicFlagOnFolder(true);
             // if all users have access then delete all existing roles
-            $targetFolder->setRolesOnFolder(array());
+            $folder->removeRolesOnFolder('folder_view', $rolesFolderView);
         }
         else
         {
             // set flag public for this folder and all child folders
-            $targetFolder->editPublicFlagOnFolder(false);
-            // save all set roles in the database
-            $targetFolder->setRolesOnFolder($_POST['adm_allowed_roles']);
+            $folder->editPublicFlagOnFolder(false);
+
+            // get new roles and removed roles
+            $addRoles = array_diff($_POST['adm_roles_view_right'], $rolesFolderView);
+            $removeRoles = array_diff($rolesFolderView, $_POST['adm_roles_view_right']);
+
+            $folder->addRolesOnFolder('folder_view', $addRoles);
+            $folder->removeRolesOnFolder('folder_view', $removeRoles);
         }
 
-        $targetFolder->save();
+        // save upload right
+        $rightFolderUpload = new RolesRights($gDb, 'folder_upload', $getFolderId);
+        $rolesFolderUpload = $rightFolderUpload->getRolesIds();
+
+        // get new roles and removed roles
+        $addRoles = array_diff($_POST['adm_roles_upload_right'], $rolesFolderUpload);
+        $removeRoles = array_diff($rolesFolderUpload, $_POST['adm_roles_upload_right']);
+
+        $folder->addRolesOnFolder('folder_upload', $addRoles);
+        $folder->removeRolesOnFolder('folder_upload', $removeRoles);
+
+        $folder->save();
 
         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
         $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
