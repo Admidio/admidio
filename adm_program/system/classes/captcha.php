@@ -23,12 +23,12 @@
  * Um in einem Formular ein Captcha einzubinden, muss nur diese Datei als
  * Bild eingebunden werden. Zusaetzlich muss natuerlich ein Formularfeld
  * existieren, in das der User den Code eingibt. Die Captcha-Klasse speichert
- * seine eigene Loesung in der SessionVariable $_SESSION['captchacode']. Der
+ * seine eigene Loesung in der SessionVariable $_SESSION['captcha_code']. Der
  * vom User eingegebene Code muss nun im aufgerufenen Script verglichen werden.
  *
  * Beispiel:
  *
- * if ( strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
+ * if ( strtoupper($_SESSION['captcha_code']) != strtoupper($_POST['captcha']) )
  * {
  *         echo "Das Captcha wurde nicht richtig geloest...";
  * }
@@ -45,9 +45,9 @@
  * Zum Beispiel so:
  *
  * // Der CaptchaCode wird bei erfolgreicher Aktion aus der Session geloescht
- * if (isset($_SESSION['captchacode']))
+ * if (isset($_SESSION['captcha_code']))
  * {
- *    unset($_SESSION['captchacode']);
+ *    unset($_SESSION['captcha_code']);
  * }
  */
 class Captcha
@@ -176,11 +176,11 @@ class Captcha
         }
 
         // Lösung in der Session speichern
-        $_SESSION['captchacode'] = $result;
+        $_SESSION['captcha_code'] = $result;
 
         // Aufgabe ausgeben
         return $textPart1.' '.$number[0].$operator_value[0].$number[1].$operator_value[1].$number[2].' '.$textPart2.' '.$operator_value[2].' '.$number[3].' '.$textPart4;
-        //echo "<br>= $result (".$_SESSION['captchacode'].")";
+        //echo "<br>= $result (".$_SESSION['captcha_code'].")";
     }
 
     private function generateNewCaptchaCode()
@@ -198,7 +198,7 @@ class Captcha
         }
 
         // hier wird der Code jetzt in der Session gespeichert...
-        $_SESSION['captchacode'] = $this->captchaCode;
+        $_SESSION['captcha_code'] = $this->captchaCode;
     }
 
     private function makeCaptcha()

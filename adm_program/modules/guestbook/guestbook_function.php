@@ -124,7 +124,7 @@ if ($getMode === 1 || $getMode === 3)
     // muss natuerlich der Code ueberprueft werden
     if ($getMode === 1 && !$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
     {
-        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($_POST['captcha']))
+        if (!isset($_SESSION['captcha_code']) || admStrToUpper($_SESSION['captcha_code']) !== admStrToUpper($_POST['captcha']))
         {
             if($gPreferences['captcha_type'] === 'pic')
             {
@@ -239,9 +239,9 @@ if ($getMode === 1 || $getMode === 3)
         $gNavigation->deleteLastUrl();
 
         // Der CaptchaCode wird bei erfolgreichem insert/update aus der Session geloescht
-        if (isset($_SESSION['captchacode']))
+        if (isset($_SESSION['captcha_code']))
         {
-            unset($_SESSION['captchacode']);
+            unset($_SESSION['captcha_code']);
         }
 
         $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline;
@@ -316,7 +316,7 @@ elseif($getMode === 4 || $getMode === 8)
     // muss natuerlich der Code ueberprueft werden
     if ($getMode === 4 && !$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
     {
-        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($_POST['captcha']))
+        if (!isset($_SESSION['captcha_code']) || admStrToUpper($_SESSION['captcha_code']) !== admStrToUpper($_POST['captcha']))
         {
             if($gPreferences['captcha_type'] === 'pic')
             {
@@ -431,9 +431,9 @@ elseif($getMode === 4 || $getMode === 8)
         $gNavigation->deleteLastUrl();
 
         // Der CaptchaCode wird bei erfolgreichem insert/update aus der Session geloescht
-        if (isset($_SESSION['captchacode']))
+        if (isset($_SESSION['captcha_code']))
         {
-            unset($_SESSION['captchacode']);
+            unset($_SESSION['captcha_code']);
         }
 
         $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook_comment->getValue('gbc_gbo_id'). '&headline='. $getHeadline;

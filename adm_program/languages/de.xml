@@ -582,14 +582,12 @@
     <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Hintergrundfarbe</string>
     <string name="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT">Hier kann die Hintergrundfarbe (Hex-Angabe) für den Captcha-Code ausgewählt werden. (Standard: #FFEFC4)</string>
     <string name="ORG_CAPTCHA_FONT">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (Standard: Theme-Schriftart)</string>
-    <string name="ORG_CAPTCHA_FONT_SIZE">Hier kann die Schriftgrösse für den Captcha-Code ausgewählt werden. (Standard: 20)</string>
     <string name="ORG_CAPTCHA_HEIGHT">Captcha-Höhe</string>
     <string name="ORG_CAPTCHA_HEIGHT_DESC">Angabe der Höhe des Captcha-Bildchens. Hierdurch können zusammen mit der Angabe der Breite des Captcha-Bildchens die Zeichen im Captcha gestreckt oder gestaucht werden. (Standard: 60)</string>
     <string name="ORG_CAPTCHA_PREVIEW">Captcha-Vorschau</string>
     <string name="ORG_CAPTCHA_PREVIEW_TEXT">Hier kann eine Vorschau des Captchas aufgerufen werden. Ungespeicherte Angaben werden nicht berücksichtigt!</string>
     <string name="ORG_CAPTCHA_REGISTRATION">Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
     <string name="ORG_CAPTCHA_SIGNATURE">Captcha Untertitel</string>
-    <string name="ORG_CAPTCHA_SIGNATURE_FONT_SIZE">Hier kann die Schriftgrösse des Captcha Untertitel festgelegt werden. (Standard: 13)</string>
     <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</string>
     <string name="ORG_CAPTCHA_SIGNS">Zulässige Captcha-Zeichen</string>
     <string name="ORG_CAPTCHA_SIGNS_TEXT">Hier können die zu verwendenen Captcha-Zeichen angegeben werden.</string>
@@ -1079,7 +1077,6 @@
     <string name="SYS_FORMER">Ehemaliger</string>
     <string name="SYS_FORMER_PL">Ehemalige</string>
     <string name="SYS_FONT">Schriftart</string>
-    <string name="SYS_FONT_SIZE">Schriftgröße</string>
     <string name="SYS_FORGOT_MY_PASSWORD">Ich habe mein Passwort vergessen!</string>
     <string name="SYS_FRIDAY">Freitag</string>
     <string name="SYS_FULL_SCREEN">Vollbild</string>

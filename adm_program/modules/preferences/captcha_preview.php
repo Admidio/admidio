@@ -30,7 +30,7 @@ echo '
                                       $gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),
                                       $gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'), $gL10n->get('SYS_CAPTCHA_CALC_PART4'));
 
-        echo '<br><i>('.$gL10n->get('SYS_CAPTCHA_CALC').': '.$_SESSION['captchacode'].')</i>';
+        echo '<br><i>('.$gL10n->get('SYS_CAPTCHA_CALC').': '.$_SESSION['captcha_code'].')</i>';
     }
 
 echo '</div>';

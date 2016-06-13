@@ -24,7 +24,7 @@ if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_r
 // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
 // muss natuerlich der Code ueberprueft werden
 if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1 && !empty($_POST['captcha'])
-&& (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($_POST['captcha'])))
+&& (!isset($_SESSION['captcha_code']) || admStrToUpper($_SESSION['captcha_code']) !== admStrToUpper($_POST['captcha'])))
 {
     if($gPreferences['captcha_type'] === 'pic')
     {
@@ -160,7 +160,7 @@ else
     // if captchas are enabled then visitors of the website must resolve this
     if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
     {
-        $form->addCaptcha('captcha', $gPreferences['captcha_type']);
+        $form->addCaptcha('captcha_code', $gPreferences['captcha_type']);
     }
 
     $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH.'/icons/email.png'));

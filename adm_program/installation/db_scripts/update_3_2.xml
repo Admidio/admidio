@@ -42,5 +42,8 @@
     <step id="140">alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_USR_CREATE foreign key (rrd_usr_id_create)
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
     <step id="150">ComponentUpdate::updateStepNewDownloadRootFolderName</step>
+    <step id="160">UPDATE %PREFIX%_preferences SET prf_value = 'AHGBold.ttf' WHERE prf_name = 'captcha_fonts'</step>
+    <step id="170">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_font_size'</step>
+    <step id="170">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_signature_font_size'</step>
     <step>stop</step>
 </update>

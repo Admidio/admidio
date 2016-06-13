@@ -21,6 +21,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
+require_once(SERVER_PATH.'/adm_program/libs/securimage/securimage.php');
 
 // Initialize and check the parameters
 $getUserId  = admFuncVariableIsValid($_GET, 'user_id',  'int');
@@ -249,7 +250,13 @@ if($getNewUser === 2)
     // muss natuerlich der Code ueberprueft werden
     if ($gPreferences['enable_registration_captcha'] == 1)
     {
-        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($_POST['captcha']))
+        $securimage = new Securimage();
+
+        if ($securimage->check($_POST['captcha_code']) == false)
+        {
+            $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
+        }
+/*        if (!isset($_SESSION['captcha_code']) || admStrToUpper($_SESSION['captcha_code']) !== admStrToUpper($_POST['captcha']))
         {
             if($gPreferences['captcha_type'] === 'pic')
             {
@@ -259,7 +266,7 @@ if($getNewUser === 2)
             {
                 $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
             }
-        }
+        }*/
     }
 }
 
