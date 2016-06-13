@@ -83,6 +83,10 @@ $page->addJavascript('
             data:    $(this).serialize(),
             success: function(data) {
                 if (data === "success") {
+                    if(id === "captcha_preferences_form") {
+                        // reload captcha if form is saved
+                        $("#captcha").attr("src", "'.$g_root_path.'/adm_program/libs/securimage/securimage_show.php?" + Math.random());
+                    }
                     $("#"+id+" .form-alert").attr("class", "alert alert-success form-alert");
                     $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                     $("#"+id+" .form-alert").fadeIn("slow");
@@ -375,10 +379,7 @@ $page->addHtml('
                         {
                             $captcha_parameter = '';
                         }
-                        $html = '<a class="btn" data-toggle="modal" data-target="#admidio_modal"
-                                    href="captcha_preview.php?inline=true'.$captcha_parameter.'"><img
-                                    src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('SYS_PREVIEW').'" />'.$gL10n->get('SYS_PREVIEW').'</a>';
-                        $form->addCustomContent($gL10n->get('ORG_CAPTCHA_PREVIEW'), $html, array('helpTextIdInline' => 'ORG_CAPTCHA_PREVIEW_TEXT'));
+                        $form->addCustomContent($gL10n->get('ORG_CAPTCHA_PREVIEW'), '<img id="captcha" src="'.$g_root_path.'/adm_program/libs/securimage/securimage_show.php" alt="CAPTCHA Image" />', array('helpTextIdInline' => 'ORG_CAPTCHA_PREVIEW_TEXT'));
 
                         $form->addSubmitButton('btn_save_captcha', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
                         $page->addHtml($form->show(false));

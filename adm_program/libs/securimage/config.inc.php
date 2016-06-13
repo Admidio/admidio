@@ -23,7 +23,7 @@ return array(
     /**** CAPTCHA Appearance Options ****/
     'captcha_type'     => Securimage::SI_CAPTCHA_MATHEMATIC,
     'image_width'      => $gPreferences['captcha_width'],       // width of captcha image in pixels
-    'image_height'     => $gPreferences['captcha_height'],        // height of captcha image in pixels
+    'image_height'     => (int)($gPreferences['captcha_width'] * 0.30),        // height of captcha image in pixels
     'code_length'      => 6,         // # of characters for captcha code
     'image_bg_color'   => $gPreferences['captcha_background_color'], // hex color for image background
     'text_color'       => '#707070', // hex color for captcha text
@@ -33,6 +33,8 @@ return array(
     'wordlist_file'    => 'words/words.txt', // text file for word captcha
     'use_wordlist'     => false,             // true to use word list
     'wordlist_file_encoding' => null,        // character encoding of word file if other than ASCII (e.g. UTF-8, GB2312)
+
+    'image_signature'  => $gPreferences['captcha_signature'],
 
     // example UTF-8 charset (TTF file must support symbols being used
     // 'charset'          => "абвгдeжзийклмнопрстуфхцчшщъьюяАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯ",
