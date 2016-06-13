@@ -19,12 +19,25 @@
 */
 global $gCookiePraefix, $gPreferences;
 
+if($gPreferences['captcha_type'] === 'pic')
+{
+    $captchaType = Securimage::SI_CAPTCHA_STRING;
+}
+elseif($gPreferences['captcha_type'] === 'calc')
+{
+    $captchaType = Securimage::SI_CAPTCHA_MATHEMATIC;
+}
+elseif($gPreferences['captcha_type'] === 'word')
+{
+    $captchaType = Securimage::SI_CAPTCHA_WORDS;
+}
+
 return array(
     /**** CAPTCHA Appearance Options ****/
-    'captcha_type'     => Securimage::SI_CAPTCHA_MATHEMATIC,
+    'captcha_type'     => $captchaType,
     'image_width'      => $gPreferences['captcha_width'],       // width of captcha image in pixels
     'image_height'     => (int)($gPreferences['captcha_width'] * 0.30),        // height of captcha image in pixels
-    'code_length'      => 6,         // # of characters for captcha code
+    'code_length'      => rand(4, 6),         // # of characters for captcha code
     'image_bg_color'   => $gPreferences['captcha_background_color'], // hex color for image background
     'text_color'       => '#707070', // hex color for captcha text
     'line_color'       => '#707070', // hex color for lines over text

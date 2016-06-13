@@ -160,7 +160,7 @@ else
     // if captchas are enabled then visitors of the website must resolve this
     if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
     {
-        $form->addCaptcha('captcha_code', $gPreferences['captcha_type']);
+        $form->addCaptcha('captcha_code');
     }
 
     $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH.'/icons/email.png'));

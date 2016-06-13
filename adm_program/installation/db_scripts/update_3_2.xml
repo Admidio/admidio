@@ -45,5 +45,7 @@
     <step id="160">UPDATE %PREFIX%_preferences SET prf_value = 'AHGBold.ttf' WHERE prf_name = 'captcha_fonts'</step>
     <step id="170">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_font_size'</step>
     <step id="170">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_signature_font_size'</step>
+    <step id="170">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_height'</step>
+    <step id="180">UPDATE %PREFIX%_preferences SET prf_value = 'Powered by Admidio.org' WHERE prf_name = 'captcha_signature' and prf_value = 'POWERED  BY   A D M I D I O . O R G'</step>
     <step>stop</step>
 </update>

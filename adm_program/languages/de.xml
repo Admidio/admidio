@@ -582,10 +582,8 @@
     <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Hintergrundfarbe</string>
     <string name="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT">Hier kann die Hintergrundfarbe (Hex-Angabe) für den Captcha-Code ausgewählt werden. (Standard: #FFEFC4)</string>
     <string name="ORG_CAPTCHA_FONT">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (Standard: Theme-Schriftart)</string>
-    <string name="ORG_CAPTCHA_HEIGHT">Captcha-Höhe</string>
-    <string name="ORG_CAPTCHA_HEIGHT_DESC">Angabe der Höhe des Captcha-Bildchens. Hierdurch können zusammen mit der Angabe der Breite des Captcha-Bildchens die Zeichen im Captcha gestreckt oder gestaucht werden. (Standard: 60)</string>
     <string name="ORG_CAPTCHA_PREVIEW">Captcha-Vorschau</string>
-    <string name="ORG_CAPTCHA_PREVIEW_TEXT">Hier kann eine Vorschau des Captchas aufgerufen werden. Ungespeicherte Angaben werden nicht berücksichtigt!</string>
+    <string name="ORG_CAPTCHA_PREVIEW_TEXT">Die Captcha-Vorschau berücksichtigt nur die bereits gespeicherten Einstellungen.</string>
     <string name="ORG_CAPTCHA_REGISTRATION">Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
     <string name="ORG_CAPTCHA_SIGNATURE">Captcha Untertitel</string>
     <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</string>
@@ -593,10 +591,11 @@
     <string name="ORG_CAPTCHA_SIGNS_TEXT">Hier können die zu verwendenen Captcha-Zeichen angegeben werden.</string>
     <string name="ORG_CAPTCHA_TYPE">Captcha Art</string>
     <string name="ORG_CAPTCHA_TYPE_CALC">Rechenaufgabe</string>
-    <string name="ORG_CAPTCHA_TYPE_PIC">Bildchen</string>
-    <string name="ORG_CAPTCHA_TYPE_TEXT">Hier kann die Art des Captchas gewählt werden. Das Captcha kann mit den weiteren Einstellungen als generiertes Bildchen ausgegeben werden oder als einfache Rechenaufgabe im Textformat. (Standard: Bildchen)</string>
+    <string name="ORG_CAPTCHA_TYPE_PIC">Zufällige Zeichen</string>
+    <string name="ORG_CAPTCHA_TYPE_WORDS">Wörter (englisch)</string>
+    <string name="ORG_CAPTCHA_TYPE_TEXT">Hier kann die Art des Captchas gewählt werden. Das Captcha wird als Bild angezeigt und kann aus zufälligen Zeichen, aus einer kleinen Rechenaufgabe oder aus 2 Wörtern bestehen. Mit den weiteren Einstellungen kann das Bild angepasst werden. (Standard: Zufällige Zeichen)</string>
     <string name="ORG_CAPTCHA_WIDTH">Captcha-Breite</string>
-    <string name="ORG_CAPTCHA_WIDTH_DESC">Angabe der Breite des Captcha-Bildchens. Hierdurch können zusammen mit der Angabe der Höhe des Captcha-Bildchens die Zeichen im Captcha gestreckt oder gestaucht werden. (Standard: 250)</string>
+    <string name="ORG_CAPTCHA_WIDTH_DESC">Angabe der Breite in Pixel des Captcha-Bildes. Die Höhe wird proportional zur Breite errechnet. Über diese Einstellung wird auch die Größe der Zeichen bestimmt. (Standard: 215)</string>
     <string name="ORG_CONFIRM_REGISTRATION">Bestätigung der Anmeldung nach der manuellen Freigabe</string>
     <string name="ORG_CREATE_ITEM_FIELD">Neues Artikelfeld</string>
     <string name="ORG_CREATE_PROFILE_FIELD">Profilfeld anlegen</string>
@@ -964,11 +963,6 @@
     <string name="SYS_CAPTCHA_CALC">Ergebnis der Rechnung</string>
     <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Das Ergebnis der Rechnung wurde falsch eingegeben.</string>
     <string name="SYS_CAPTCHA_CALC_DESCRIPTION">Bei der Rechenaufgabe handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Rechenaufgabe wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage die Lösung der Rechenaufgabe in das Formularfeld ein.</string>
-    <string name="SYS_CAPTCHA_CALC_PART1">Bitte berechne</string>
-    <string name="SYS_CAPTCHA_CALC_PART2">und zähle</string>
-    <string name="SYS_CAPTCHA_CALC_PART3_THIRD">ein Drittel von</string>
-    <string name="SYS_CAPTCHA_CALC_PART3_HALF">die Hälfte von</string>
-    <string name="SYS_CAPTCHA_CALC_PART4">dazu.</string>
     <string name="SYS_CAPTCHA_CODE_INVALID">Der Bestätigungscode wurde falsch eingegeben.</string>
     <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Bestätigungscode</string>
     <string name="SYS_CAPTCHA_DESCRIPTION">Bei dem Bestätigungscode handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</string>
@@ -1213,6 +1207,7 @@
     <string name="SYS_REGISTERED_AS">Angemeldet als</string>
     <string name="SYS_REGISTRATION">Registrierung</string>
     <string name="SYS_REGISTRATION_SAVED">Deine Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Deine Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung wirst du per E-Mail benachrichtigt.</string>
+    <string name="SYS_RELOAD">Neuladen</string>
     <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>
     <string name="SYS_REMOVE">Entfernen</string>
     <string name="SYS_REPEAT">Wiederholen</string>

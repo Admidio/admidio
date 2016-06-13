@@ -60,11 +60,10 @@ $orga_preferences = array(
 
     // Captcha
     'captcha_background_color'    => '#FFEFC4',
-    'captcha_fonts'               => 'Theme',
+    'captcha_fonts'               => 'AHGBold.ttf',
     'captcha_width'               => '215',
-    'captcha_height'              => '80',
     'captcha_signs'               => '23456789ABCDEFGHJKLMNPQRSTUVWXYZ',
-    'captcha_signature'           => 'POWERED  BY   A D M I D I O . O R G',
+    'captcha_signature'           => 'Powered by Admidio.org',
     'captcha_type'                => 'pic',
 
     // Announcements

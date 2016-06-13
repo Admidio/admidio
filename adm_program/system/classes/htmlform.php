@@ -248,12 +248,10 @@ class HtmlForm extends HtmlFormBasic
      * Add a captcha with an input field to the form. The captcha could be a picture with a character code
      * or a simple mathematical calculation that must be solved.
      * @param string $id    Id of the captcha field. This will also be the name of the captcha field.
-     * @param string $type  The of captcha that should be shown. This can be characters in a image or
-     *                      simple mathematical calculation. Possible values are @b pic or @b calc.
      * @param string $class (optional) An additional css classname. The class @b admTextInput
      *                      is set as default and need not set with this parameter.
      */
-    public function addCaptcha($id, $type, $class = '')
+    public function addCaptcha($id, $class = '')
     {
         global $gL10n, $g_root_path;
 
@@ -269,48 +267,17 @@ class HtmlForm extends HtmlFormBasic
         // add a row with the captcha puzzle
         $this->openControlStructure('captcha_puzzle', '');
 
-        $captchaLabel = '';
-        $captchaDescription = '';
+        $captchaLabel = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
+        $captchaDescription = 'SYS_CAPTCHA_DESCRIPTION';
+        $this->addHtml('<img id="captcha" src="'.$g_root_path.'/adm_program/libs/securimage/securimage_show.php" alt="CAPTCHA Image" />
+                        <a class="admidio-icon-link" href="#" onclick="document.getElementById(\'captcha\').src=\''.$g_root_path.'/adm_program/libs/securimage/securimage_show.php?\' + Math.random(); return false"><img
+                            src="'.THEME_PATH.'/icons/view-refresh.png" alt="'.$gL10n->get('SYS_RELOAD').'" title="'.$gL10n->get('SYS_RELOAD').'" /></a>');
+        $this->closeControlStructure();
 
-        if($type === 'pic')
-        {
-            $captchaLabel = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
-            $captchaDescription = 'SYS_CAPTCHA_DESCRIPTION';
-            $this->addHtml('<img id="captcha" src="'.$g_root_path.'/adm_program/libs/securimage/securimage_show.php" alt="CAPTCHA Image" />');
-            $this->closeControlStructure();
-
-            // now add a row with a text field where the user can write the solution for the puzzle
-            $this->addInput($id, $captchaLabel, '', array('property'        => FIELD_REQUIRED,
-                                                          'helpTextIdLabel' => $captchaDescription,
-                                                          'class'           => 'form-control-small',
-                                                          'htmlAfter'       => '<a href="#" onclick="document.getElementById(\'captcha\').src = \''.$g_root_path.'/adm_program/libs/securimage/securimage_show.php?\' + Math.random(); return false">[ Different Image ]</a>'));
-        }
-        else
-        {
-            if($type === 'pic')
-            {
-                $this->addHtml('<img src="'.$g_root_path.'/adm_program/system/show_captcha.php?id='.time().'" alt="'.$gL10n->get('SYS_CAPTCHA').'" />');
-                $captchaLabel = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
-                $captchaDescription = 'SYS_CAPTCHA_DESCRIPTION';
-            }
-            elseif($type === 'calc')
-            {
-                $captcha = new Captcha();
-                $this->addHtml($captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),
-                                                        $gL10n->get('SYS_CAPTCHA_CALC_PART2'),
-                                                        $gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),
-                                                        $gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),
-                                                        $gL10n->get('SYS_CAPTCHA_CALC_PART4')));
-                $captchaLabel = $gL10n->get('SYS_CAPTCHA_CALC');
-                $captchaDescription = 'SYS_CAPTCHA_CALC_DESCRIPTION';
-            }
-            $this->closeControlStructure();
-
-            // now add a row with a text field where the user can write the solution for the puzzle
-            $this->addInput($id, $captchaLabel, '', array('property'        => FIELD_REQUIRED,
-                                                          'helpTextIdLabel' => $captchaDescription,
-                                                          'class'           => 'form-control-small'));
-        }
+        // now add a row with a text field where the user can write the solution for the puzzle
+        $this->addInput($id, $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE'), '', array('property'        => FIELD_REQUIRED,
+                                                                                     'helpTextIdLabel' => 'SYS_CAPTCHA_DESCRIPTION',
+                                                                                     'class'           => 'form-control-small'));
     }
 
     /**
