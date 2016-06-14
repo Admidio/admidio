@@ -95,16 +95,13 @@ if ($getMsgType !== 'PM')
     // Check Captcha if enabled and user logged out
     if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
     {
-        if (!isset($_SESSION['captcha_code']) || admStrToUpper($_SESSION['captcha_code']) !== admStrToUpper($postCaptcha))
+        try
         {
-            if($gPreferences['captcha_type'] === 'pic')
-            {
-                $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
-            }
-            elseif($gPreferences['captcha_type'] === 'calc')
-            {
-                $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
-            }
+            FormValidation::checkCaptcha($postCaptcha);
+        }
+        catch(AdmException $e)
+        {
+            $e->showHtml();
         }
     }
 }
@@ -521,12 +518,6 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
                 VALUES ('.$getMsgId.', 1, '.$gCurrentUser->getValue('usr_id').', \''.$postBodySQL.'\', CURRENT_TIMESTAMP)';
 
         $gDb->query($sql);
-    }
-
-    // Delete CaptchaCode if send/save was correct
-    if (isset($_SESSION['captcha_code']))
-    {
-        unset($_SESSION['captcha_code']);
     }
 
     // after sending remove the actual Page from the NaviObject and remove also the send-page

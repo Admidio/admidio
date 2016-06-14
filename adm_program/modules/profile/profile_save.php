@@ -21,7 +21,6 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once(SERVER_PATH.'/adm_program/libs/securimage/securimage.php');
 
 // Initialize and check the parameters
 $getUserId  = admFuncVariableIsValid($_GET, 'user_id',  'int');
@@ -246,27 +245,17 @@ if($getNewUser === 2)
 {
     $user->setPassword($_POST['usr_password']);
 
-    // Falls der User sich registrieren wollte, aber ein Captcha geschaltet ist,
-    // muss natuerlich der Code ueberprueft werden
+    // At user registration with acitvated captcha check the captcha input
     if ($gPreferences['enable_registration_captcha'] == 1)
     {
-        $securimage = new Securimage();
-
-        if ($securimage->check($_POST['captcha_code']) == false)
+        try
         {
-            $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
+            FormValidation::checkCaptcha($_POST['captcha_code']);
         }
-/*        if (!isset($_SESSION['captcha_code']) || admStrToUpper($_SESSION['captcha_code']) !== admStrToUpper($_POST['captcha']))
+        catch(AdmException $e)
         {
-            if($gPreferences['captcha_type'] === 'pic')
-            {
-                $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
-            }
-            elseif($gPreferences['captcha_type'] === 'calc')
-            {
-                $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
-            }
-        }*/
+            $e->showHtml();
+        }
     }
 }
 
