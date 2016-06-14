@@ -43,9 +43,11 @@
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
     <step id="150">ComponentUpdate::updateStepNewDownloadRootFolderName</step>
     <step id="160">UPDATE %PREFIX%_preferences SET prf_value = 'AHGBold.ttf' WHERE prf_name = 'captcha_fonts'</step>
-    <step id="170">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_font_size'</step>
-    <step id="170">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_signature_font_size'</step>
-    <step id="170">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_height'</step>
-    <step id="180">UPDATE %PREFIX%_preferences SET prf_value = 'Powered by Admidio.org' WHERE prf_name = 'captcha_signature' and prf_value = 'POWERED  BY   A D M I D I O . O R G'</step>
+    <step id="170">UPDATE %PREFIX%_preferences SET prf_name = 'captcha_charset' WHERE prf_name = 'captcha_signs'</step>
+    <step id="180">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_font_size'</step>
+    <step id="190">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_signature_font_size'</step>
+    <step id="200">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_height'</step>
+    <step id="210">UPDATE %PREFIX%_preferences SET prf_value = 'Powered by Admidio.org' WHERE prf_name = 'captcha_signature' and prf_value = 'POWERED  BY   A D M I D I O . O R G'</step>
+    <step id="220">UPDATE %PREFIX%_preferences SET prf_value = '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxy' WHERE prf_name = 'captcha_charset' and prf_value = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'</step>
     <step>stop</step>
 </update>

@@ -580,8 +580,12 @@
     <string name="ORG_BROWSER_UPDATE_CHECK">Update Meldung für veraltete Browser</string>
     <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Nach Aktivierung wird Benutzern mit veraltetem Browser geraten ein Browserupdate durchzuführen. Neuere Browser schützen besser vor Betrug, Viren, Trojanern, Datendiebstahl und anderen Bedrohungen Ihrer Privatsphäre und Sicherheit. Jede neue Browsergeneration verbessert die Geschwindigkeit und die Unterstützung neuer Webtechniken, mit der Webseiten besser dargestellt werden können. Hierzu wird das Service von https://browser-update.org/ verwendet.</string>
     <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Hintergrundfarbe</string>
-    <string name="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT">Hier kann die Hintergrundfarbe (Hex-Angabe) für den Captcha-Code ausgewählt werden. (Standard: #FFEFC4)</string>
+    <string name="ORG_CAPTCHA_CHARACTERS_COLOR">Zeichenfarbe</string>
+    <string name="ORG_CAPTCHA_COLOR_DESC">Die Hintergrundfarbe sollte sich von der Zeichenfarbe absetzen. Sind Linienfarbe und Zeichenfarbe identisch ist es für Skripte und Bots schwieriger das Captcha zu lösen. Die einzelnen Farben müssen als #VAR1#hexadezimaler Wert#VAR2# angegeben werden.</string>
     <string name="ORG_CAPTCHA_FONT">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (Standard: Theme-Schriftart)</string>
+    <string name="ORG_CAPTCHA_LINE_COLOR">Linienfarbe</string>
+    <string name="ORG_CAPTCHA_LINES_NUMBERS">Anzahl Linien</string>
+    <string name="ORG_CAPTCHA_LINES_NUMBERS_DESC">Die Linien auf dem Captcha sollen es Skripten/Bots erschweren diese zu lösen. Je mehr Linien gezeichnet werden, desto schwieriger ist es dieses zu lösen. Leider gilt dies aber auch für Menschen. (Standard: 5)</string>
     <string name="ORG_CAPTCHA_PREVIEW">Captcha-Vorschau</string>
     <string name="ORG_CAPTCHA_PREVIEW_TEXT">Die Captcha-Vorschau berücksichtigt nur die bereits gespeicherten Einstellungen.</string>
     <string name="ORG_CAPTCHA_REGISTRATION">Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
