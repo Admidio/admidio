@@ -4,3 +4,13 @@
 # Images
 *.png binary
 *.jpg binary
+
+# exclude some folders in zip
+/demo_data/ export-ignore
+/adm_plugins/birthday/ export-ignore
+/adm_plugins/calendar/ export-ignore
+/adm_plugins/random_photo/ export-ignore
+/adm_plugins/sidebar_announcements/ export-ignore
+/adm_plugins/sidebar_dates/ export-ignore
+/adm_plugins/sidebar_downloads/ export-ignore
+/adm_plugins/sidebar_online/ export-ignore
