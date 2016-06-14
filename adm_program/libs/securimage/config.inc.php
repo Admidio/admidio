@@ -43,6 +43,7 @@ return array(
     'line_color'       => $gPreferences['captcha_line_color'], // hex color for lines over text
     'num_lines'        => $gPreferences['captcha_lines_numbers'],         // # of lines to draw over text
     'charset'          => $gPreferences['captcha_charset'], // hex color for lines over text
+    'perturbation'     => $gPreferences['captcha_perturbation'],
 
     'wordlist_file'    => 'words/words.txt', // text file for word captcha
     'use_wordlist'     => false,             // true to use word list

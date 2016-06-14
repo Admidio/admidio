@@ -51,12 +51,6 @@ require_once dirname(__FILE__) . '/securimage.php';
 
 // ***** START ADMIDIO CODE *****
 require_once('../../system/common.php');
-// set Admidio session name to securimage
-/*require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_my_files/config.php');
-$gCookiePraefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;
-$gCookiePraefix = strtr($gCookiePraefix, ' .,;:[]', '_______');
-session_name($gCookiePraefix . '_PHP_ID');
-session_start();*/
 // ***** END ADMIDIO CODE *****
 
 $img = new Securimage();
@@ -84,7 +78,16 @@ $img = new Securimage();
 // set namespace if supplied to script via HTTP GET
 if (!empty($_GET['namespace'])) $img->setNamespace($_GET['namespace']);
 
+// ***** START ADMIDIO CODE *****
+if($gPreferences['captcha_background_image'] !== '')
+{
+    $img->show(SERVER_PATH.'/adm_program/libs/securimage/backgrounds/'.$gPreferences['captcha_background_image']);
+}
+else
+{
+    $img->show();  // outputs the image and content headers to the browser
+}
+// ***** END ADMIDIO CODE *****
 
-$img->show();  // outputs the image and content headers to the browser
 // alternate use:
 // $img->show('/path/to/background_image.jpg');

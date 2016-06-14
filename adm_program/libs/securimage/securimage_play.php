@@ -46,14 +46,8 @@ $options = array(
 );
 
 // ***** START ADMIDIO CODE *****
-// set Admidio session name to securimage
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_my_files/config.php');
-$gCookiePraefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;
-$gCookiePraefix = strtr($gCookiePraefix, ' .,;:[]', '_______');
-session_name($gCookiePraefix . '_PHP_ID');
-session_start();
+require_once('../../system/common.php');
 // ***** END ADMIDIO CODE *****
-
 
 $img = new Securimage();
 

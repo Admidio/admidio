@@ -107,6 +107,7 @@ and sharing great software.
 - [jQuery](https://jquery.com/): JavaScript-Library
 - [CKEditor](http://ckeditor.com/): Javascript-Editor
 - [PHPMailer](https://github.com/PHPMailer/PHPMailer): Email sending library for PHP
+- [SecurImage](https://www.phpcaptcha.org/): PHP CAPTCHA script for generating complex images and CAPTCHA codes to protect forms from spam and abuse.
 - [Datatables](https://www.datatables.net/): Table plugin for jQuery
 - [Select2](https://select2.github.io/): jQuery replacement for select boxes
 - [jQuery-File-Upload](https://blueimp.github.io/jQuery-File-Upload/): jQuery file upload plugin

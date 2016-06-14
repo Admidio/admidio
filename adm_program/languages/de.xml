@@ -580,8 +580,12 @@
     <string name="ORG_BROWSER_UPDATE_CHECK">Update Meldung für veraltete Browser</string>
     <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Nach Aktivierung wird Benutzern mit veraltetem Browser geraten ein Browserupdate durchzuführen. Neuere Browser schützen besser vor Betrug, Viren, Trojanern, Datendiebstahl und anderen Bedrohungen Ihrer Privatsphäre und Sicherheit. Jede neue Browsergeneration verbessert die Geschwindigkeit und die Unterstützung neuer Webtechniken, mit der Webseiten besser dargestellt werden können. Hierzu wird das Service von https://browser-update.org/ verwendet.</string>
     <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Hintergrundfarbe</string>
+    <string name="ORG_CAPTCHA_BACKGROUND_IMAGE">Hintergrundbild</string>
+    <string name="ORG_CAPTCHA_BACKGROUND_IMAGE_DESC">Es kann ein Hintergrundbild ausgewählt werden, welches als Grundlage für das Captcha-Bild dient. Die Farben der Zeichen sollten dann so darauf abgestimmt werden, dass das Captcha weiterhin lesbar ist. (Standard: kein Bild)</string>
     <string name="ORG_CAPTCHA_CHARACTERS_COLOR">Zeichenfarbe</string>
     <string name="ORG_CAPTCHA_COLOR_DESC">Die Hintergrundfarbe sollte sich von der Zeichenfarbe absetzen. Sind Linienfarbe und Zeichenfarbe identisch ist es für Skripte und Bots schwieriger das Captcha zu lösen. Die einzelnen Farben müssen als #VAR1#hexadezimaler Wert#VAR2# angegeben werden.</string>
+    <string name="ORG_CAPTCHA_DISTORTION">Verzerrung</string>
+    <string name="ORG_CAPTCHA_DISTORTION_DESC">Dieser Wert gibt an, wie stark die Zeichen verzerrt werden sollen. 0 bedeutet keine Verzerrung, 3 ist bereits eine so starke Verzerrung, dass einzelne Zeichen nicht mehr erkannt werden können. (Standard: 0.75)</string>
     <string name="ORG_CAPTCHA_FONT">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (Standard: Theme-Schriftart)</string>
     <string name="ORG_CAPTCHA_LINE_COLOR">Linienfarbe</string>
     <string name="ORG_CAPTCHA_LINES_NUMBERS">Anzahl Linien</string>
@@ -591,14 +595,13 @@
     <string name="ORG_CAPTCHA_REGISTRATION">Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
     <string name="ORG_CAPTCHA_SIGNATURE">Captcha Untertitel</string>
     <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</string>
-    <string name="ORG_CAPTCHA_SIGNS">Zulässige Captcha-Zeichen</string>
-    <string name="ORG_CAPTCHA_SIGNS_TEXT">Hier können die zu verwendenen Captcha-Zeichen angegeben werden.</string>
+    <string name="ORG_CAPTCHA_SIGNS">Zulässige Zeichen</string>
+    <string name="ORG_CAPTCHA_SIGNS_TEXT">Hier können die zu verwendenen Captcha-Zeichen angegeben werden. Zeichen, welche leicht verwechselt werden können, wie z.B. l oder I sollten dabei vermieden werden.</string>
     <string name="ORG_CAPTCHA_TYPE">Captcha Art</string>
     <string name="ORG_CAPTCHA_TYPE_CALC">Rechenaufgabe</string>
     <string name="ORG_CAPTCHA_TYPE_PIC">Zufällige Zeichen</string>
     <string name="ORG_CAPTCHA_TYPE_WORDS">Wörter (englisch)</string>
     <string name="ORG_CAPTCHA_TYPE_TEXT">Hier kann die Art des Captchas gewählt werden. Das Captcha wird als Bild angezeigt und kann aus zufälligen Zeichen, aus einer kleinen Rechenaufgabe oder aus 2 Wörtern bestehen. Mit den weiteren Einstellungen kann das Bild angepasst werden. (Standard: Zufällige Zeichen)</string>
-    <string name="ORG_CAPTCHA_WIDTH">Captcha-Breite</string>
     <string name="ORG_CAPTCHA_WIDTH_DESC">Angabe der Breite in Pixel des Captcha-Bildes. Die Höhe wird proportional zur Breite errechnet. Über diese Einstellung wird auch die Größe der Zeichen bestimmt. (Standard: 215)</string>
     <string name="ORG_CONFIRM_REGISTRATION">Bestätigung der Anmeldung nach der manuellen Freigabe</string>
     <string name="ORG_CREATE_ITEM_FIELD">Neues Artikelfeld</string>
@@ -1295,5 +1298,6 @@
     <string name="SYS_WEBSITE">Webseite</string>
     <string name="SYS_WEDNESDAY">Mittwoch</string>
     <string name="SYS_WHAT_TO_DO">Was ist zu tun?</string>
+    <string name="SYS_WIDTH">Breite</string>
     <string name="SYS_YES">Ja</string>
 </resources>

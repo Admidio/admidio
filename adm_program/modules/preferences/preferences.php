@@ -365,8 +365,12 @@ $page->addHtml('
                         $fonts = admFuncGetDirectoryEntries('../../system/fonts/');
                         asort($fonts);
                         $form->addSelectBox('captcha_fonts', $gL10n->get('SYS_FONT'), $fonts, array('defaultValue' => $form_values['captcha_fonts'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_FONT'));
-                        $form->addInput('captcha_width', $gL10n->get('ORG_CAPTCHA_WIDTH').' ('.$gL10n->get('ORG_PIXEL').')', $form_values['captcha_width'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_CAPTCHA_WIDTH_DESC'));
+                        $form->addInput('captcha_width', $gL10n->get('SYS_WIDTH').' ('.$gL10n->get('ORG_PIXEL').')', $form_values['captcha_width'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_CAPTCHA_WIDTH_DESC'));
                         $form->addInput('captcha_lines_numbers', $gL10n->get('ORG_CAPTCHA_LINES_NUMBERS'), $form_values['captcha_lines_numbers'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 25, 'helpTextIdInline' => 'ORG_CAPTCHA_LINES_NUMBERS_DESC'));
+                        $form->addInput('captcha_perturbation', $gL10n->get('ORG_CAPTCHA_DISTORTION'), $form_values['captcha_perturbation'], array('type' => 'string', 'helpTextIdInline' => 'ORG_CAPTCHA_DISTORTION_DESC', 'class' => 'form-control-small'));
+                        $backgrounds = admFuncGetDirectoryEntries('../../libs/securimage/backgrounds/');
+                        asort($backgrounds);
+                        $form->addSelectBox('captcha_background_image', $gL10n->get('ORG_CAPTCHA_BACKGROUND_IMAGE'), $backgrounds, array('defaultValue' => $form_values['captcha_background_image'], 'showContextDependentFirstEntry' => true, 'helpTextIdInline' => 'ORG_CAPTCHA_BACKGROUND_IMAGE_DESC'));
                         $form->addInput('captcha_background_color', $gL10n->get('ORG_CAPTCHA_BACKGROUND_COLOR'), $form_values['captcha_background_color'], array('maxLength' => 7, 'class' => 'form-control-small'));
                         $form->addInput('captcha_text_color', $gL10n->get('ORG_CAPTCHA_CHARACTERS_COLOR'), $form_values['captcha_text_color'], array('maxLength' => 7, 'class' => 'form-control-small'));
                         $form->addInput('captcha_line_color', $gL10n->get('ORG_CAPTCHA_LINE_COLOR'), $form_values['captcha_line_color'], array('maxLength' => 7, 'helpTextIdInline' => array('ORG_CAPTCHA_COLOR_DESC', '<a href="https://en.wikipedia.org/wiki/Web_colors">', '</a>'), 'class' => 'form-control-small'));
