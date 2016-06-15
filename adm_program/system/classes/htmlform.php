@@ -266,9 +266,6 @@ class HtmlForm extends HtmlFormBasic
 
         // add a row with the captcha puzzle
         $this->openControlStructure('captcha_puzzle', '');
-
-        $captchaLabel = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
-        $captchaDescription = 'SYS_CAPTCHA_DESCRIPTION';
         $this->addHtml('<img id="captcha" src="'.$g_root_path.'/adm_program/libs/securimage/securimage_show.php" alt="CAPTCHA Image" />
                         <a class="admidio-icon-link" href="#" onclick="document.getElementById(\'captcha\').src=\''.$g_root_path.'/adm_program/libs/securimage/securimage_show.php?\' + Math.random(); return false"><img
                             src="'.THEME_PATH.'/icons/view-refresh.png" alt="'.$gL10n->get('SYS_RELOAD').'" title="'.$gL10n->get('SYS_RELOAD').'" /></a>');
