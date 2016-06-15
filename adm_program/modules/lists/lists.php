@@ -254,7 +254,6 @@ foreach($listsResult['recordset'] as $row)
                 }
 
                 // add count of participants to role
-                //$html = $row['num_members'];
                 $html = '<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_ids='. $role->getValue('rol_id'). '&amp;show_members=0">'.$row['num_members'].'</a>';
 
                 if($role->getValue('rol_max_members') > 0)
