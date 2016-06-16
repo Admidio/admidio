@@ -394,7 +394,7 @@ $form->closeGroupBox();
 if($getNewUser === 2 && $gPreferences['enable_registration_captcha'] == 1)
 {
     $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
-    $form->addCaptcha('captcha', $gPreferences['captcha_type']);
+    $form->addCaptcha('captcha_code');
     $form->closeGroupBox();
 }
 

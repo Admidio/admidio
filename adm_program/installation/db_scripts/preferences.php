@@ -59,15 +59,17 @@ $orga_preferences = array(
     'enable_email_notification'   => '0',
 
     // Captcha
-    'captcha_background_color'    => '#FFEFC4',
-    'captcha_font_size'           => '20',
-    'captcha_fonts'               => 'Theme',
-    'captcha_width'               => '250',
-    'captcha_height'              => '60',
-    'captcha_signs'               => '23456789ABCDEFGHJKLMNPQRSTUVWXYZ',
-    'captcha_signature'           => 'POWERED  BY   A D M I D I O . O R G',
-    'captcha_signature_font_size' => '13',
     'captcha_type'                => 'pic',
+    'captcha_fonts'               => 'AHGBold.ttf',
+    'captcha_width'               => '215',
+    'captcha_lines_numbers'       => '5',
+    'captcha_perturbation'        => '0.75',
+    'captcha_background_image'    => '',
+    'captcha_background_color'    => '#B6D6DB',
+    'captcha_text_color'          => '#707070',
+    'captcha_line_color'          => '#707070',
+    'captcha_charset'             => '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxy',
+    'captcha_signature'           => 'Powered by Admidio.org',
 
     // Announcements
     'enable_announcements_module' => '1',
