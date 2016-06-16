@@ -83,6 +83,10 @@ $page->addJavascript('
             data:    $(this).serialize(),
             success: function(data) {
                 if (data === "success") {
+                    if(id === "captcha_preferences_form") {
+                        // reload captcha if form is saved
+                        $("#captcha").attr("src", "'.$g_root_path.'/adm_program/libs/securimage/securimage_show.php?" + Math.random());
+                    }
                     $("#"+id+" .form-alert").attr("class", "alert alert-success form-alert");
                     $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                     $("#"+id+" .form-alert").fadeIn("slow");
@@ -355,34 +359,26 @@ $page->addHtml('
                     <div class="panel-body">');
                         // show form
                         $form = new HtmlForm('captcha_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=captcha', $page, array('class' => 'form-preferences'));
-                        $selectBoxEntries = array('pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'), 'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'));
+                        $selectBoxEntries = array('pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'), 'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'), 'word' => $gL10n->get('ORG_CAPTCHA_TYPE_WORDS'));
                         $form->addSelectBox('captcha_type', $gL10n->get('ORG_CAPTCHA_TYPE'), $selectBoxEntries, array('defaultValue' => $form_values['captcha_type'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_TYPE_TEXT'));
 
                         $fonts = admFuncGetDirectoryEntries('../../system/fonts/');
-                        $fonts['Theme'] = 'Theme';
                         asort($fonts);
                         $form->addSelectBox('captcha_fonts', $gL10n->get('SYS_FONT'), $fonts, array('defaultValue' => $form_values['captcha_fonts'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_FONT'));
-                        $selectBoxEntries = array('11' => '11', '12' => '12', '13' => '13', '14' => '14', '16' => '16', '18' => '18', '20' => '20', '22' => '22', '24' => '24', '30' => '30');
-                        $form->addSelectBox('captcha_font_size', $gL10n->get('SYS_FONT_SIZE'), $selectBoxEntries, array('defaultValue' => $form_values['captcha_font_size'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_FONT_SIZE'));
-                        $form->addInput('captcha_background_color', $gL10n->get('ORG_CAPTCHA_BACKGROUND_COLOR'), $form_values['captcha_background_color'], array('maxLength' => 7, 'helpTextIdInline' => 'ORG_CAPTCHA_BACKGROUND_COLOR_TEXT', 'class' => 'form-control-small'));
-                        $form->addInput('captcha_width', $gL10n->get('ORG_CAPTCHA_WIDTH').' ('.$gL10n->get('ORG_PIXEL').')', $form_values['captcha_width'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_CAPTCHA_WIDTH_DESC'));
-                        $form->addInput('captcha_height', $gL10n->get('ORG_CAPTCHA_HEIGHT').' ('.$gL10n->get('ORG_PIXEL').')', $form_values['captcha_height'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_CAPTCHA_HEIGHT_DESC'));
-                        $form->addInput('captcha_signs', $gL10n->get('ORG_CAPTCHA_SIGNS'), $form_values['captcha_signs'], array('maxLength' => 80, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNS_TEXT'));
+                        $form->addInput('captcha_width', $gL10n->get('SYS_WIDTH').' ('.$gL10n->get('ORG_PIXEL').')', $form_values['captcha_width'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_CAPTCHA_WIDTH_DESC'));
+                        $form->addInput('captcha_lines_numbers', $gL10n->get('ORG_CAPTCHA_LINES_NUMBERS'), $form_values['captcha_lines_numbers'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 25, 'helpTextIdInline' => 'ORG_CAPTCHA_LINES_NUMBERS_DESC'));
+                        $form->addInput('captcha_perturbation', $gL10n->get('ORG_CAPTCHA_DISTORTION'), $form_values['captcha_perturbation'], array('type' => 'string', 'helpTextIdInline' => 'ORG_CAPTCHA_DISTORTION_DESC', 'class' => 'form-control-small'));
+                        $backgrounds = admFuncGetDirectoryEntries('../../libs/securimage/backgrounds/');
+                        asort($backgrounds);
+                        $form->addSelectBox('captcha_background_image', $gL10n->get('ORG_CAPTCHA_BACKGROUND_IMAGE'), $backgrounds, array('defaultValue' => $form_values['captcha_background_image'], 'showContextDependentFirstEntry' => true, 'helpTextIdInline' => 'ORG_CAPTCHA_BACKGROUND_IMAGE_DESC'));
+                        $form->addInput('captcha_background_color', $gL10n->get('ORG_CAPTCHA_BACKGROUND_COLOR'), $form_values['captcha_background_color'], array('maxLength' => 7, 'class' => 'form-control-small'));
+                        $form->addInput('captcha_text_color', $gL10n->get('ORG_CAPTCHA_CHARACTERS_COLOR'), $form_values['captcha_text_color'], array('maxLength' => 7, 'class' => 'form-control-small'));
+                        $form->addInput('captcha_line_color', $gL10n->get('ORG_CAPTCHA_LINE_COLOR'), $form_values['captcha_line_color'], array('maxLength' => 7, 'helpTextIdInline' => array('ORG_CAPTCHA_COLOR_DESC', '<a href="https://en.wikipedia.org/wiki/Web_colors">', '</a>'), 'class' => 'form-control-small'));
+                        $form->addInput('captcha_charset', $gL10n->get('ORG_CAPTCHA_SIGNS'), $form_values['captcha_charset'], array('maxLength' => 80, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNS_TEXT'));
                         $form->addInput('captcha_signature', $gL10n->get('ORG_CAPTCHA_SIGNATURE'), $form_values['captcha_signature'], array('maxLength' => 60, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNATURE_TEXT'));
-                        $selectBoxEntries = array('11' => '11', '12' => '12', '13' => '13', '14' => '14', '16' => '16', '18' => '18', '20' => '20', '22' => '22', '24' => '24', '30' => '30');
-                        $form->addSelectBox('captcha_signature_font_size', $gL10n->get('SYS_FONT_SIZE'), $selectBoxEntries, array('defaultValue' => $form_values['captcha_signature_font_size'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNATURE_FONT_SIZE'));
-
-                        if($gPreferences['captcha_type'] === 'pic')
-                        {
-                            $captcha_parameter = '&amp;type=pic';
-                        }
-                        else
-                        {
-                            $captcha_parameter = '';
-                        }
-                        $html = '<a class="btn" data-toggle="modal" data-target="#admidio_modal"
-                                    href="captcha_preview.php?inline=true'.$captcha_parameter.'"><img
-                                    src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('SYS_PREVIEW').'" />'.$gL10n->get('SYS_PREVIEW').'</a>';
+                        $html = '<img id="captcha" src="'.$g_root_path.'/adm_program/libs/securimage/securimage_show.php" alt="CAPTCHA Image" />
+                                 <a class="admidio-icon-link" href="#" onclick="document.getElementById(\'captcha\').src=\''.$g_root_path.'/adm_program/libs/securimage/securimage_show.php?\' + Math.random(); return false"><img
+                                    src="'.THEME_PATH.'/icons/view-refresh.png" alt="'.$gL10n->get('SYS_RELOAD').'" title="'.$gL10n->get('SYS_RELOAD').'" /></a>';
                         $form->addCustomContent($gL10n->get('ORG_CAPTCHA_PREVIEW'), $html, array('helpTextIdInline' => 'ORG_CAPTCHA_PREVIEW_TEXT'));
 
                         $form->addSubmitButton('btn_save_captcha', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
