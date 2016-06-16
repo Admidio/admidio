@@ -408,11 +408,10 @@ class HtmlTable extends HtmlTableBasic
         // show table content
         if ($this->datatables && is_object($this->htmlPage))
         {
-            $this->htmlPage->addJavascriptFile('adm_program/libs/datatables/js/jquery.dataTables.js');
-            $this->htmlPage->addJavascriptFile('adm_program/libs/datatables/js/dataTables.bootstrap.js');
+            $this->htmlPage->addJavascriptFile('adm_program/libs/datatables/datatables.js');
             $this->htmlPage->addJavascriptFile('adm_program/libs/moment/moment.js');
             $this->htmlPage->addJavascriptFile('adm_program/libs/moment/datetime-moment.js');
-            $this->htmlPage->addCssFile('adm_program/libs/datatables/css/dataTables.bootstrap.css');
+            $this->htmlPage->addCssFile('adm_program/libs/datatables/datatables.css');
 
             if ($this->rowCount > 10)
             {
@@ -427,6 +426,9 @@ class HtmlTable extends HtmlTableBasic
 
             // set order columns
             $this->datatablesInitParameters[] = '"order": [' . implode(',', $this->columnsOrder) . ']';
+
+            // use DataTables Responsive extension
+            $this->datatablesInitParameters[] = '"responsive": true';
 
             $javascriptGroup = '';
             $javascriptGroupFunction = '';
