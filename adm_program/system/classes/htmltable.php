@@ -477,8 +477,10 @@ class HtmlTable extends HtmlTableBasic
                     $javascriptGroup . '
                 });
                 ' . $javascriptGroupFunction, true);
+
+            return $this->getHtmlTable();
         }
 
-        return $this->getHtmlTable();
+        return '<div class="table-responsive">' . $this->getHtmlTable() . '</div>';
     }
 }
