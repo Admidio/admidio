@@ -42,6 +42,8 @@ class HtmlTable extends HtmlTableBasic
     protected $datatablesColumnDefs;     ///< Array that contains several elements for DataTables columnDefs parameter.
     protected $messageNoRowsFound;       ///< The text that should be shown if no row was added to the table
     protected $htmlPage;                 ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
+    protected $serverSideProcessing;     ///< A flag that set the server-side processing for datatables.
+    protected $serverSideFile;           ///< The script that should be called when using server-side processing.
 
     /**
      * Constructor creates the table element
@@ -80,6 +82,8 @@ class HtmlTable extends HtmlTableBasic
         $this->datatablesInitParameters = array();
         $this->datatablesColumnDefs     = array();
         $this->messageNoRowsFound       = $gL10n->get('SYS_NO_DATA_FOUND');
+        $this->serverSideProcessing     = false;
+        $this->serverSideFile           = '';
 
         // when using DataTables we must set the width attribute so that all columns will change
         // dynamic their width if the browser window size change.
@@ -126,53 +130,6 @@ class HtmlTable extends HtmlTableBasic
         {
             $this->prepareAndAddColumn($type, $key, $value, $colspan, $colspanOffset);
         }
-    }
-
-    /**
-     * Adds a column to the table.
-     * @param string          $type          'th' for header row or 'td' for body row.
-     * @param int             $key           Column number (starts with 0).
-     * @param string|string[] $value         Column value or array with column value and attributes.
-     * @param int             $colspan       (optional) Number of columns that should be join together.
-     * @param int             $colspanOffset (optional) Number of the column where the colspan should start.
-     *                                       The first column of a table will be 1.
-     */
-    private function prepareAndAddColumn($type, $key, $value, $colspan = 1, $colspanOffset = 1)
-    {
-        $columnAttributes = array();
-
-        // set colspan if parameters are set
-        if ($colspan >= 2 && $colspanOffset === ($key + 1))
-        {
-            $columnAttributes['colspan'] = $colspan;
-        }
-
-        if (is_array($this->columnsAlign))
-        {
-            $columnAttributes['style'] = 'text-align: ' . $this->columnsAlign[$key] . ';';
-        }
-
-        // if is array than check for sort or search values
-        if (is_array($value))
-        {
-            $columnValue = $value['value'];
-
-            if (array_key_exists('order', $value))
-            {
-                $columnAttributes['data-order'] = $value['order'];
-            }
-            if (array_key_exists('search', $value))
-            {
-                $columnAttributes['data-search'] = $value['search'];
-            }
-        }
-        else
-        {
-            $columnValue = $value;
-        }
-
-        // now add column to row
-        $this->addColumn($columnValue, $columnAttributes, $type);
     }
 
     /**
@@ -242,6 +199,53 @@ class HtmlTable extends HtmlTableBasic
     public function getDatatablesGroupColumn()
     {
         return $this->groupedColumn;
+    }
+
+    /**
+     * Adds a column to the table.
+     * @param string          $type          'th' for header row or 'td' for body row.
+     * @param int             $key           Column number (starts with 0).
+     * @param string|string[] $value         Column value or array with column value and attributes.
+     * @param int             $colspan       (optional) Number of columns that should be join together.
+     * @param int             $colspanOffset (optional) Number of the column where the colspan should start.
+     *                                       The first column of a table will be 1.
+     */
+    private function prepareAndAddColumn($type, $key, $value, $colspan = 1, $colspanOffset = 1)
+    {
+        $columnAttributes = array();
+
+        // set colspan if parameters are set
+        if ($colspan >= 2 && $colspanOffset === ($key + 1))
+        {
+            $columnAttributes['colspan'] = $colspan;
+        }
+
+        if (is_array($this->columnsAlign))
+        {
+            $columnAttributes['style'] = 'text-align: ' . $this->columnsAlign[$key] . ';';
+        }
+
+        // if is array than check for sort or search values
+        if (is_array($value))
+        {
+            $columnValue = $value['value'];
+
+            if (array_key_exists('order', $value))
+            {
+                $columnAttributes['data-order'] = $value['order'];
+            }
+            if (array_key_exists('search', $value))
+            {
+                $columnAttributes['data-search'] = $value['search'];
+            }
+        }
+        else
+        {
+            $columnValue = $value;
+        }
+
+        // now add column to row
+        $this->addColumn($columnValue, $columnAttributes, $type);
     }
 
     /**
@@ -390,6 +394,19 @@ class HtmlTable extends HtmlTableBasic
     }
 
     /**
+     * With server-side processing enabled, all paging, searching, ordering actions that DataTables performs
+     * are handed off to a server where an SQL engine (or similar) can perform these actions on the large data
+     * set. As such, each draw of the table will result in a new Ajax request being made to get the required data.
+     * @param string $file The url with the filename that should be called by Datatables to get the data. The
+     *                     called script must return a json string.
+     */
+    public function setServerSideProcessing($file)
+    {
+        $this->serverSideProcessing = true;
+        $this->serverSideFile = $file;
+    }
+
+    /**
      * This method send the whole html code of the table to the browser. If the jQuery plugin DataTables
      * is activated then the javascript for that plugin will be added. Call this method if you
      * have finished your form layout. If table has no rows then a message will be shown.
@@ -399,7 +416,7 @@ class HtmlTable extends HtmlTableBasic
     {
         global $g_root_path, $gPreferences;
 
-        if ($this->rowCount === 0)
+        if ($this->rowCount === 0 && !$this->serverSideProcessing)
         {
             // if table contains no rows then show message and not the table
             return '<p>' . $this->messageNoRowsFound . '</p>';
@@ -413,7 +430,7 @@ class HtmlTable extends HtmlTableBasic
             $this->htmlPage->addJavascriptFile('adm_program/libs/moment/datetime-moment.js');
             $this->htmlPage->addCssFile('adm_program/libs/datatables/datatables.css');
 
-            if ($this->rowCount > 10)
+            if ($this->rowCount > 10 || $this->serverSideProcessing)
             {
                 // set default page length of the table
                 $this->datatablesInitParameters[] = '"pageLength": ' . $this->rowsPerPage;
@@ -429,6 +446,14 @@ class HtmlTable extends HtmlTableBasic
 
             // use DataTables Responsive extension
             $this->datatablesInitParameters[] = '"responsive": true';
+
+            // set server-side processing
+            if($this->serverSideProcessing)
+            {
+                $this->datatablesInitParameters[] = '"processing": true';
+                $this->datatablesInitParameters[] = '"serverSide": true';
+                $this->datatablesInitParameters[] = '"ajax": "'.$this->serverSideFile.'"';
+            }
 
             $javascriptGroup = '';
             $javascriptGroupFunction = '';

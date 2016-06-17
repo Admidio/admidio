@@ -38,78 +38,6 @@ $headline = $gL10n->get('MEM_USER_MANAGEMENT');
 // Navigation of the module starts here
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
-$memberCondition = '';
-
-// Create condition if only active members should be shown
-if($getMembers)
-{
-    $memberCondition = ' AND EXISTS
-        (SELECT 1
-           FROM '.TBL_MEMBERS.'
-     INNER JOIN '.TBL_ROLES.'
-             ON rol_id = mem_rol_id
-     INNER JOIN '.TBL_CATEGORIES.'
-             ON cat_id = rol_cat_id
-          WHERE mem_usr_id = usr_id
-            AND mem_begin <= \''.DATE_NOW.'\'
-            AND mem_end    > \''.DATE_NOW.'\'
-            AND rol_valid  = 1
-            AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-            AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-                OR cat_org_id IS NULL ))';
-}
-
-// alle Mitglieder zur Auswahl selektieren
-// unbestaetigte User werden dabei nicht angezeigt
-$sql = 'SELECT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name,
-               email.usd_value AS email, gender.usd_value AS gender, birthday.usd_value AS birthday,
-               usr_login_name, COALESCE(usr_timestamp_change, usr_timestamp_create) AS timestamp,
-               (SELECT COUNT(*)
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
-                    ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
-                    ON cat_id = rol_cat_id
-                 WHERE rol_valid = 1
-                   AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-                   AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-                       OR cat_org_id IS NULL )
-                   AND mem_begin <= \''.DATE_NOW.'\'
-                   AND mem_end    > \''.DATE_NOW.'\'
-                   AND mem_usr_id = usr_id) AS member_this_orga,
-               (SELECT COUNT(*)
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
-                    ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
-                    ON cat_id = rol_cat_id
-                 WHERE rol_valid = 1
-                   AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-                   AND cat_org_id <> '.$gCurrentOrganization->getValue('org_id').'
-                   AND mem_begin  <= \''.DATE_NOW.'\'
-                   AND mem_end     > \''.DATE_NOW.'\'
-                   AND mem_usr_id  = usr_id) AS member_other_orga
-          FROM '.TBL_USERS.'
-    INNER JOIN '.TBL_USER_DATA.' AS last_name
-            ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-    INNER JOIN '.TBL_USER_DATA.' AS first_name
-            ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-     LEFT JOIN '.TBL_USER_DATA.' AS email
-            ON email.usd_usr_id = usr_id
-           AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
-     LEFT JOIN '.TBL_USER_DATA.' AS gender
-            ON gender.usd_usr_id = usr_id
-           AND gender.usd_usf_id = '.$gProfileFields->getProperty('GENDER', 'usf_id').'
-     LEFT JOIN '.TBL_USER_DATA.' AS birthday
-            ON birthday.usd_usr_id = usr_id
-           AND birthday.usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').'
-         WHERE usr_valid = 1
-               '.$memberCondition.'
-      ORDER BY last_name.usd_value, first_name.usd_value';
-$mglStatement = $gDb->query($sql);
-
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
 $flagShowMembers = !$getMembers;
 
@@ -182,6 +110,7 @@ $columnHeading = array(
     '&nbsp;'
 );
 
+$membersTable->setServerSideProcessing($g_root_path.'/adm_program/modules/members/members_data.php');
 $membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
 $membersTable->disableDatatablesColumnsSort(count($columnHeading)); // disable sort in last column
 $membersTable->addRowHeadingByArray($columnHeading);
@@ -189,7 +118,7 @@ $membersTable->setDatatablesRowsPerPage($gPreferences['members_users_per_page'])
 $membersTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 
 $rowNumber = 0; // Zahler fuer die jeweilige Zeile
-
+/*
 while($row = $mglStatement->fetch())
 {
     ++$rowNumber;
@@ -317,7 +246,7 @@ while($row = $mglStatement->fetch())
     $columnValues[] = $userAdministration;
 
     $membersTable->addRowByArray($columnValues);
-}
+}*/
 
 $page->addHtml($membersTable->show());
 
