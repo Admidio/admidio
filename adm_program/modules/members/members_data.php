@@ -14,6 +14,7 @@
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
+
 error_log(print_r($_GET, true));
 
 // Initialize and check the parameters
@@ -33,11 +34,45 @@ if($gPreferences['members_show_all_users'] == 0)
 // only legitimate users are allowed to call the user management
 if (!$gCurrentUser->editUsers())
 {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
 }
 
 $memberCondition = '';
 $limitCondition = '';
+$orderCondition = '';
+$orderColumns = array('no', 'member_this_orga', 'name', 'usr_login_name', 'gender', 'birthday', 'timestamp');
+
+// create order statement
+if(array_key_exists('order', $_GET))
+{
+    foreach($_GET['order'] as $order)
+    {
+        if(is_numeric($order['column']))
+        {
+            if($orderCondition === '')
+            {
+                $orderCondition = ' ORDER BY ';
+            }
+            else
+            {
+                $orderCondition .= ', ';
+            }
+
+            if(strtoupper($order['dir']) === 'ASC')
+            {
+                $orderCondition .= $orderColumns[$order['column']]. ' ASC ';
+            }
+            else
+            {
+                $orderCondition .= $orderColumns[$order['column']]. ' DESC ';
+            }
+        }
+    }
+}
+else
+{
+    $orderCondition = ' ORDER BY name ASC ';
+}
 
 // Create condition if only active members should be shown
 if($getMembers)
@@ -63,9 +98,27 @@ if($getLength > 0)
     $limitCondition = ' LIMIT '.$getLength.' OFFSET '.$getStart;
 }
 
-// alle Mitglieder zur Auswahl selektieren
-// unbestaetigte User werden dabei nicht angezeigt
-$sql = 'SELECT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name,
+// get count of all found users
+$sql = 'SELECT COUNT(1) AS count_members
+          FROM '.TBL_USERS.'
+    INNER JOIN '.TBL_USER_DATA.' AS last_name
+            ON last_name.usd_usr_id = usr_id
+           AND last_name.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+    INNER JOIN '.TBL_USER_DATA.' AS first_name
+            ON first_name.usd_usr_id = usr_id
+           AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+         WHERE usr_valid = 1
+               '.$memberCondition;
+$membersCountStatement = $gDb->query($sql);
+$rowTotalCount = $membersCountStatement->fetch();
+
+$jsonArray['recordsTotal'] = $rowTotalCount['count_members'];
+$jsonArray['recordsFiltered'] = $rowTotalCount['count_members'];
+
+// show all members (not accepted users should not be shown)
+$sql = 'SELECT usr_id, name, email, gender, birthday, usr_login_name, timestamp, member_this_orga, member_other_orga
+          FROM (
+        SELECT usr_id, last_name.usd_value || \', \' || first_name.usd_value AS name,
                email.usd_value AS email, gender.usd_value AS gender, birthday.usd_value AS birthday,
                usr_login_name, COALESCE(usr_timestamp_change, usr_timestamp_create) AS timestamp,
                (SELECT COUNT(*)
@@ -110,13 +163,10 @@ $sql = 'SELECT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS
             ON birthday.usd_usr_id = usr_id
            AND birthday.usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').'
          WHERE usr_valid = 1
-               '.$memberCondition.'
-      ORDER BY last_name.usd_value, first_name.usd_value
-               '.$limitCondition;
+               '.$memberCondition.') members
+               '.$orderCondition
+                .$limitCondition;
 $mglStatement = $gDb->query($sql);
-
-// Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
-$flagShowMembers = !$getMembers;
 
 $orgName   = $gCurrentOrganization->getValue('org_longname');
 $rowNumber = 0; // Zahler fuer die jeweilige Zeile
@@ -129,7 +179,7 @@ while($row = $mglStatement->fetch())
     $memberOfOtherOrganization = (bool) $row['member_other_orga'];
 
     // Create row and add first column "Rownumber"
-    $columnValues = array($rowNumber);
+    $columnValues = array($getStart + $rowNumber);
 
     // Add icon for "Orgamitglied" or "Nichtmitglied"
     if($memberOfThisOrganization)
@@ -143,16 +193,11 @@ while($row = $mglStatement->fetch())
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $orgName);
     }
 
-    /*$columnValues[] = array(
-        'value' => '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'"><img
-             src="'.THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>',
-        'order' => (int) $memberOfThisOrganization
-    );*/
     $columnValues[] = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'"><img
              src="'.THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>';
 
     // Add "Lastname" and "Firstname"
-    $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a>';
+    $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['name'].'</a>';
 
     // Add "Loginname"
     if(strlen($row['usr_login_name']) > 0)
@@ -169,12 +214,10 @@ while($row = $mglStatement->fetch())
     {
         // show selected text of optionfield or combobox
         $arrListValues  = $gProfileFields->getProperty('GENDER', 'usf_value_list');
-        //$columnValues[] = array('value' => $arrListValues[$row['gender']], 'order' => $row['gender']);
         $columnValues[] = $arrListValues[$row['gender']];
     }
     else
     {
-        //$columnValues[] = array('value' => '', 'order' => '0');
         $columnValues[] = '';
     }
 
@@ -255,8 +298,6 @@ while($row = $mglStatement->fetch())
     $jsonArray['data'][] = $columnValues;
 }
 
-// set record count
-$jsonArray['recordsTotal'] = $rowNumber;
 //error_log(json_encode($jsonArray));
 //error_log(print_r($jsonArray, true));
 echo json_encode($jsonArray);
