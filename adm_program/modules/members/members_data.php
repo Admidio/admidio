@@ -15,14 +15,12 @@
  */
 require_once('../../system/common.php');
 
-error_log(print_r($_GET, true));
-
 // Initialize and check the parameters
 $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));
 $getDraw    = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
 $getStart   = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
 $getLength  = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
-$getSearch = admFuncVariableIsValid($_GET['search'], 'value', 'string');
+$getSearch  = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 
 $jsonArray = array('draw' => $getDraw);
 
@@ -39,6 +37,8 @@ if (!$gCurrentUser->editUsers())
 }
 
 $memberCondition = '';
+$memberOfThisOrganizationCondition = '';
+$memberOfOtherOrganizationCondition = '';
 $searchCondition = '';
 $limitCondition = '';
 $orderCondition = '';
@@ -98,23 +98,52 @@ if($getSearch !== '')
     $searchCondition .= ') ';
 }
 
-// Create condition if only active members should be shown
-if($getMembers)
-{
-    $memberCondition = ' AND EXISTS
-        (SELECT 1
+// create a subselect to check if the user is an acitve member of the current organization
+$sql = '(SELECT COUNT(*)
            FROM '.TBL_MEMBERS.'
      INNER JOIN '.TBL_ROLES.'
              ON rol_id = mem_rol_id
      INNER JOIN '.TBL_CATEGORIES.'
              ON cat_id = rol_cat_id
-          WHERE mem_usr_id = usr_id
-            AND mem_begin <= \''.DATE_NOW.'\'
-            AND mem_end    > \''.DATE_NOW.'\'
-            AND rol_valid  = 1
+          WHERE mem_usr_id  = usr_id
+            AND mem_begin  <= \''.DATE_NOW.'\'
+            AND mem_end     > \''.DATE_NOW.'\'
+            AND rol_valid = 1
             AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
             AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                 OR cat_org_id IS NULL ))';
+
+if($getMembers)
+{
+    $memberCondition = ' AND '.$sql.' > 0 ';
+    $memberOfThisOrganizationCondition = ' 1 ';
+}
+else
+{
+    $memberCondition = '';
+    $memberOfThisOrganizationCondition = $sql;
+}
+
+// create a subselect to check if the user is also an active member of another organization
+if($gCurrentOrganization->countAllRecords() > 1)
+{
+    $memberOfOtherOrganizationCondition = '
+        (SELECT COUNT(*)
+           FROM '.TBL_MEMBERS.'
+     INNER JOIN '.TBL_ROLES.'
+             ON rol_id = mem_rol_id
+     INNER JOIN '.TBL_CATEGORIES.'
+             ON cat_id = rol_cat_id
+          WHERE mem_usr_id  = usr_id
+            AND mem_begin  <= \''.DATE_NOW.'\'
+            AND mem_end     > \''.DATE_NOW.'\'
+            AND rol_valid = 1
+            AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+            AND cat_org_id <> '.$gCurrentOrganization->getValue('org_id').')';
+}
+else
+{
+    $memberOfOtherOrganizationCondition = ' 0 ';
 }
 
 if($getLength > 0)
@@ -123,7 +152,7 @@ if($getLength > 0)
 }
 
 // get count of all found users
-$sql = 'SELECT COUNT(1) AS count_members
+$sql = 'SELECT COUNT(1) AS count_total
           FROM '.TBL_USERS.'
     INNER JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
@@ -133,43 +162,17 @@ $sql = 'SELECT COUNT(1) AS count_members
            AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
          WHERE usr_valid = 1
                '.$memberCondition;
-$membersCountStatement = $gDb->query($sql);
-$rowTotalCount = $membersCountStatement->fetch();
+$countTotalStatement = $gDb->query($sql);
+$rowCountTotal = $countTotalStatement->fetch();
 
-$jsonArray['recordsTotal'] = $rowTotalCount['count_members'];
-$jsonArray['recordsFiltered'] = $rowTotalCount['count_members'];
+$jsonArray['recordsTotal'] = $rowCountTotal['count_total'];
 
 // show all members (not accepted users should not be shown)
-$sql = 'SELECT usr_id, name, email, gender, birthday, usr_login_name, timestamp, member_this_orga, member_other_orga
-          FROM (
-        SELECT usr_id, last_name.usd_value || \', \' || first_name.usd_value AS name,
+$mainSql = 'SELECT usr_id, last_name.usd_value || \', \' || first_name.usd_value AS name,
                email.usd_value AS email, gender.usd_value AS gender, birthday.usd_value AS birthday,
                usr_login_name, COALESCE(usr_timestamp_change, usr_timestamp_create) AS timestamp,
-               (SELECT COUNT(*)
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
-                    ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
-                    ON cat_id = rol_cat_id
-                 WHERE rol_valid = 1
-                   AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-                   AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-                       OR cat_org_id IS NULL )
-                   AND mem_begin <= \''.DATE_NOW.'\'
-                   AND mem_end    > \''.DATE_NOW.'\'
-                   AND mem_usr_id = usr_id) AS member_this_orga,
-               (SELECT COUNT(*)
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
-                    ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
-                    ON cat_id = rol_cat_id
-                 WHERE rol_valid = 1
-                   AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-                   AND cat_org_id <> '.$gCurrentOrganization->getValue('org_id').'
-                   AND mem_begin  <= \''.DATE_NOW.'\'
-                   AND mem_end     > \''.DATE_NOW.'\'
-                   AND mem_usr_id  = usr_id) AS member_other_orga
+               '.$memberOfThisOrganizationCondition.' AS member_this_orga,
+               '.$memberOfOtherOrganizationCondition.' AS member_other_orga
           FROM '.TBL_USERS.'
     INNER JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
@@ -187,14 +190,25 @@ $sql = 'SELECT usr_id, name, email, gender, birthday, usr_login_name, timestamp,
             ON birthday.usd_usr_id = usr_id
            AND birthday.usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').'
          WHERE usr_valid = 1
-               '.$memberCondition.') members
+               '.$memberCondition;
+
+if($getSearch === 0)
+{
+    // no search condition entered then return all records in dependence of order, limit and offset
+    $sql = $mainSql. $orderCondition. $limitCondition;
+}
+else
+{
+    $sql = 'SELECT usr_id, name, email, gender, birthday, usr_login_name, timestamp, member_this_orga, member_other_orga
+              FROM ('.$mainSql.') members
                '.$searchCondition
                 .$orderCondition
                 .$limitCondition;
+}
 $mglStatement = $gDb->query($sql);
 
 $orgName   = $gCurrentOrganization->getValue('org_longname');
-$rowNumber = 0; // Zahler fuer die jeweilige Zeile
+$rowNumber = $getStart; // Zahler fuer die jeweilige Zeile
 
 while($row = $mglStatement->fetch())
 {
@@ -204,7 +218,7 @@ while($row = $mglStatement->fetch())
     $memberOfOtherOrganization = (bool) $row['member_other_orga'];
 
     // Create row and add first column "Rownumber"
-    $columnValues = array($getStart + $rowNumber);
+    $columnValues = array($rowNumber);
 
     // Add icon for "Orgamitglied" or "Nichtmitglied"
     if($memberOfThisOrganization)
@@ -323,12 +337,33 @@ while($row = $mglStatement->fetch())
     $jsonArray['data'][] = $columnValues;
 }
 
+// set count of filtered records
+if($getSearch !== 0)
+{
+    if($rowNumber < $getStart + $getLength)
+    {
+        $jsonArray['recordsFiltered'] = $rowNumber;
+    }
+    else
+    {
+        // read count of all filtered records without limit and offset
+        $sql = 'SELECT count(1) AS count_filtered
+                  FROM ('.$mainSql.') members
+                       '.$searchCondition;
+        $countFilteredStatement = $gDb->query($sql);
+        $rowCountFitered = $countFilteredStatement->fetch();
+        $jsonArray['recordsFiltered'] = $rowCountFitered['count_filtered'];
+    }
+}
+else
+{
+    $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
+}
+
 // add empty data element if no rows where found
 if(!array_key_exists('data', $jsonArray))
 {
     $jsonArray['data'] = array();
 }
 
-//error_log(json_encode($jsonArray));
-//error_log(print_r($jsonArray, true));
 echo json_encode($jsonArray);

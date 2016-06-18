@@ -27,6 +27,7 @@ class Organization extends TableAccess
     protected $bCheckChildOrganizations = false;   ///< Flag will be set if the class had already search for child organizations
     protected $childOrganizations       = array(); ///< Array with all child organizations of this organization
     protected $preferences              = array(); ///< Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
+    protected $countOrganizations       = 0;       ///< Number of all organizations in database
 
     /**
      * Constructor that will create an object of a recordset of the table adm_organizations.
@@ -61,6 +62,19 @@ class Organization extends TableAccess
         $this->bCheckChildOrganizations = false;
         $this->childOrganizations       = array();
         $this->preferences              = array();
+    }
+
+    /**
+     * Reads the number of all records of this table
+     * @return int Number of records of this table
+     */
+    public function countAllRecords()
+    {
+        if($this->countOrganizations === 0)
+        {
+            $this->countOrganizations = parent::countAllRecords();
+        }
+        return $this->countOrganizations;
     }
 
     /**
