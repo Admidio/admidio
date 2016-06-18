@@ -9,8 +9,8 @@
  *
  * Parameters:
  *
- * members - false : (Default) Show only active members of the current organization
- *           true  : Show active and inactive members of all organizations in database
+ * members - true : (Default) Show only active members of the current organization
+ *           false  : Show active and inactive members of all organizations in database
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
@@ -22,6 +22,7 @@ $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultVal
 $getDraw    = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
 $getStart   = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
 $getLength  = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
+$getSearch = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 
 $jsonArray = array('draw' => $getDraw);
 
@@ -38,9 +39,11 @@ if (!$gCurrentUser->editUsers())
 }
 
 $memberCondition = '';
+$searchCondition = '';
 $limitCondition = '';
 $orderCondition = '';
 $orderColumns = array('no', 'member_this_orga', 'name', 'usr_login_name', 'gender', 'birthday', 'timestamp');
+$searchColumns = array(array('name', 'string'), array('usr_login_name', 'string'), array('CASE WHEN gender = 1 THEN \''.$gL10n->get('SYS_MALE').'\' WHEN gender = 2 THEN \''.$gL10n->get('SYS_FEMALE').'\' END ', 'string'), array('birthday', 'datetime'), array('timestamp', 'datetime'));
 
 // create order statement
 if(array_key_exists('order', $_GET))
@@ -72,6 +75,27 @@ if(array_key_exists('order', $_GET))
 else
 {
     $orderCondition = ' ORDER BY name ASC ';
+}
+
+// create search conditions
+if($getSearch !== '')
+{
+
+    foreach($searchColumns as $columnsArray)
+    {
+        if($searchCondition === '')
+        {
+            $searchCondition = ' WHERE ( ';
+        }
+        else
+        {
+            $searchCondition .= ' OR ';
+        }
+
+         $searchCondition .= $columnsArray[0]. ' LIKE \'%'.$getSearch.'%\' ';
+    }
+
+    $searchCondition .= ') ';
 }
 
 // Create condition if only active members should be shown
@@ -164,7 +188,8 @@ $sql = 'SELECT usr_id, name, email, gender, birthday, usr_login_name, timestamp,
            AND birthday.usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').'
          WHERE usr_valid = 1
                '.$memberCondition.') members
-               '.$orderCondition
+               '.$searchCondition
+                .$orderCondition
                 .$limitCondition;
 $mglStatement = $gDb->query($sql);
 
@@ -296,6 +321,12 @@ while($row = $mglStatement->fetch())
 
     // add current row to json array
     $jsonArray['data'][] = $columnValues;
+}
+
+// add empty data element if no rows where found
+if(!array_key_exists('data', $jsonArray))
+{
+    $jsonArray['data'] = array();
 }
 
 //error_log(json_encode($jsonArray));

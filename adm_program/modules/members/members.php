@@ -9,8 +9,8 @@
  *
  * Parameters:
  *
- * members - false : (Default) Show only active members of the current organization
- *           true  : Show active and inactive members of all organizations in database
+ * members - true : (Default) Show only active members of the current organization
+ *           false  : Show active and inactive members of all organizations in database
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
@@ -110,7 +110,7 @@ $columnHeading = array(
     '&nbsp;'
 );
 
-$membersTable->setServerSideProcessing($g_root_path.'/adm_program/modules/members/members_data.php');
+$membersTable->setServerSideProcessing($g_root_path.'/adm_program/modules/members/members_data.php?members='.(int) $getMembers);
 $membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
 $membersTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
 $membersTable->addRowHeadingByArray($columnHeading);
