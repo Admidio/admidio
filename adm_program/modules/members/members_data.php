@@ -1,16 +1,45 @@
 <?php
 /**
  ***********************************************************************************************
- * Show and manage all members of the organization
- *
  * @copyright 2004-2016 The Admidio Team
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ * Server side script for Datatables to return the requested userlist
+ *
+ * This script will read all necessary users and their data from the database. It is optimized to
+ + work with the javascript DataTables and will return the data in json format.
+ *
+ * @par Examples
+ * @code // the returned json data string
+ * {
+ *    "draw":1,
+ *    "recordsTotal":"147",
+ *    "data": [  [ 1,
+ *                 "Link to profile",
+ *                 "Webmaster, Heinz",
+ *                 "Admin",
+ *                 "Gender",
+ *                 "16.06.1991",
+ *                 "14.02.2009 15:24",
+ *                 "Functions"],
+ *                [ ... ],
+ *             ],
+ *    "recordsFiltered":"147"
+ * } @endcode
  *
  * Parameters:
  *
  * members - true : (Default) Show only active members of the current organization
  *           false  : Show active and inactive members of all organizations in database
+ * draw    - Number to validate the right inquiry from DataTables.
+ * start   - Paging first record indicator. This is the start point in the current data set
+ *           (0 index based - i.e. 0 is the first record).
+ * length  - Number of records that the table can display in the current draw. It is expected that
+ *           the number of records returned will be equal to this number, unless the server has
+ *           fewer records to return. Note that this can be -1 to indicate that all records should
+ *           be returned (although that negates any benefits of server-side processing!)
+ * search[value] - Global search value.
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
@@ -365,5 +394,5 @@ if(!array_key_exists('data', $jsonArray))
 {
     $jsonArray['data'] = array();
 }
-
+error_log(json_encode($jsonArray));
 echo json_encode($jsonArray);
