@@ -166,9 +166,8 @@ if ($getMsgType === 'EMAIL')
                           FROM '.TBL_ROLES.'
                     INNER JOIN '.TBL_CATEGORIES.'
                             ON cat_id = rol_cat_id
-                         WHERE rol_id = '.$group[0].'
-                           AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-                               OR cat_org_id IS NULL)';
+                           AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                         WHERE rol_id = '.$group[0];
                 $statement = $gDb->query($sql);
                 $row = $statement->fetch();
 
