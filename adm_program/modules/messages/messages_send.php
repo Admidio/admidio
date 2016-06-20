@@ -373,11 +373,12 @@ if ($getMsgType === 'EMAIL')
         }
     }
 
+    // get array with unique receivers
     $sendresult = array_map('unserialize', array_unique(array_map('serialize', $receiver)));
     $receivers = count($sendresult);
     foreach ($sendresult as $address)
     {
-        if ($gPreferences['mail_into_to'] == 1 || $receivers === 1)
+        if ($receivers === 1)
         {
             $email->addRecipient($address[0], $address[1]);
         }

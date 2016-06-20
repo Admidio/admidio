@@ -431,12 +431,23 @@ class Email extends PHPMailer
                 try
                 {
                     // if number of bcc recipients = 1 then send the mail directly to the user and not as bcc
-                    if(count($bccArray) === 1)
+                    if(count($bccArray) === 1 || $gPreferences['mail_into_to'] == 1)
                     {
                         // remove all current recipients from mail
                         $this->clearAllRecipients();
 
-                        $this->addAddress($bccArray[0]['address'], $bccArray[0]['name']);
+                        if($gPreferences['mail_into_to'] == 1)
+                        {
+                            // add all recipients as bcc to the mail
+                            foreach($bccArray as $bcc)
+                            {
+                                $this->addAddress($bcc['address'], $bcc['name']);
+                            }
+                        }
+                        else
+                        {
+                            $this->addAddress($bccArray[0]['address'], $bccArray[0]['name']);
+                        }
                     }
                     else
                     {
