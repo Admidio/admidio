@@ -65,9 +65,9 @@ if (!$gCurrentUser->editUsers())
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
 }
 
-$memberCondition = '';
 $memberOfThisOrganizationCondition = '';
-$memberOfOtherOrganizationCondition = '';
+$memberOfThisOrganizationSelect = '';
+$memberOfOtherOrganizationSelect = '';
 $searchCondition = '';
 $limitCondition = '';
 $orderCondition = '';
@@ -144,19 +144,19 @@ $sql = '(SELECT COUNT(*)
 
 if($getMembers)
 {
-    $memberCondition = ' AND '.$sql.' > 0 ';
-    $memberOfThisOrganizationCondition = ' 1 ';
+    $memberOfThisOrganizationCondition = ' AND '.$sql.' > 0 ';
+    $memberOfThisOrganizationSelect = ' 1 ';
 }
 else
 {
-    $memberCondition = '';
-    $memberOfThisOrganizationCondition = $sql;
+    $memberOfThisOrganizationCondition = '';
+    $memberOfThisOrganizationSelect = $sql;
 }
 
 // create a subselect to check if the user is also an active member of another organization
 if($gCurrentOrganization->countAllRecords() > 1)
 {
-    $memberOfOtherOrganizationCondition = '
+    $memberOfOtherOrganizationSelect = '
         (SELECT COUNT(*)
            FROM '.TBL_MEMBERS.'
      INNER JOIN '.TBL_ROLES.'
@@ -172,7 +172,7 @@ if($gCurrentOrganization->countAllRecords() > 1)
 }
 else
 {
-    $memberOfOtherOrganizationCondition = ' 0 ';
+    $memberOfOtherOrganizationSelect = ' 0 ';
 }
 
 if($getLength > 0)
@@ -190,7 +190,7 @@ $sql = 'SELECT COUNT(1) AS count_total
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
          WHERE usr_valid = 1
-               '.$memberCondition;
+               '.$memberOfThisOrganizationCondition;
 $countTotalStatement = $gDb->query($sql);
 $rowCountTotal = $countTotalStatement->fetch();
 
@@ -200,8 +200,8 @@ $jsonArray['recordsTotal'] = $rowCountTotal['count_total'];
 $mainSql = 'SELECT usr_id, last_name.usd_value || \', \' || first_name.usd_value AS name,
                email.usd_value AS email, gender.usd_value AS gender, birthday.usd_value AS birthday,
                usr_login_name, COALESCE(usr_timestamp_change, usr_timestamp_create) AS timestamp,
-               '.$memberOfThisOrganizationCondition.' AS member_this_orga,
-               '.$memberOfOtherOrganizationCondition.' AS member_other_orga
+               '.$memberOfThisOrganizationSelect.' AS member_this_orga,
+               '.$memberOfOtherOrganizationSelect.' AS member_other_orga
           FROM '.TBL_USERS.'
     INNER JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
@@ -219,9 +219,9 @@ $mainSql = 'SELECT usr_id, last_name.usd_value || \', \' || first_name.usd_value
             ON birthday.usd_usr_id = usr_id
            AND birthday.usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').'
          WHERE usr_valid = 1
-               '.$memberCondition;
+               '.$memberOfThisOrganizationCondition;
 
-if($getSearch === 0)
+if($getSearch === '')
 {
     // no search condition entered then return all records in dependence of order, limit and offset
     $sql = $mainSql. $orderCondition. $limitCondition;
@@ -237,7 +237,7 @@ else
 $mglStatement = $gDb->query($sql);
 
 $orgName   = $gCurrentOrganization->getValue('org_longname');
-$rowNumber = $getStart; // Zahler fuer die jeweilige Zeile
+$rowNumber = $getStart; // count for every row
 
 while($row = $mglStatement->fetch())
 {
@@ -367,7 +367,7 @@ while($row = $mglStatement->fetch())
 }
 
 // set count of filtered records
-if($getSearch !== 0)
+if($getSearch !== '')
 {
     if($rowNumber < $getStart + $getLength)
     {
@@ -394,5 +394,5 @@ if(!array_key_exists('data', $jsonArray))
 {
     $jsonArray['data'] = array();
 }
-error_log(json_encode($jsonArray));
+
 echo json_encode($jsonArray);

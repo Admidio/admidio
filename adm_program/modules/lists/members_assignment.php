@@ -6,16 +6,14 @@
  * @copyright 2004-2016 The Admidio Team
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/******************************************************************************
+ *
  * Parameters:
  *
  * mode        - html   : Default mode to show a html list with all users to add them to the role
  *               assign : Add membership of a specific user to the role.
  * rol_id               : Id of role to which members should be assigned or removed
  * usr_id               : Id of the user whose membership should be assigned or removed
+ * filter_rol_id        : If set only users from this role will be shown in list.
  * mem_show_all - true  : (Default) Show only active members of the current organization
  *                false : Show active and inactive members of all organizations in database
  *
@@ -131,90 +129,6 @@ else
     {
         $gNavigation->addUrl(CURRENT_URL, $headline);
     }
-
-    // create sql for all relevant users
-    $memberCondition = '';
-
-    if($getMembersShowAll)
-    {
-        // Falls gefordert, aufrufen alle Benutzer aus der Datenbank
-        $memberCondition = ' usr_valid = 1 ';
-    }
-    else
-    {
-        // Falls gefordert, nur Aufruf von aktiven Mitgliedern der Organisation
-        $roleCondition = '';
-
-        if($getFilterRoleId > 0)
-        {
-            $roleCondition = ' AND mem_rol_id = '.$getFilterRoleId.' ';
-        }
-
-        $memberCondition = ' EXISTS
-            (SELECT 1
-               FROM '.TBL_MEMBERS.'
-         INNER JOIN '.TBL_ROLES.'
-                 ON rol_id = mem_rol_id
-         INNER JOIN '.TBL_CATEGORIES.'
-                 ON cat_id = rol_cat_id
-              WHERE mem_usr_id = usr_id
-                    '.$roleCondition.'
-                AND mem_begin <= \''.DATE_NOW.'\'
-                AND mem_end    > \''.DATE_NOW.'\'
-                AND rol_valid  = 1
-                AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-                AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                    OR cat_org_id IS NULL )) ';
-    }
-
-     // SQL-Statement zusammensetzen
-    $sql = 'SELECT DISTINCT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, birthday.usd_value AS birthday,
-                   city.usd_value AS city, address.usd_value AS address, zip_code.usd_value AS zip_code, country.usd_value AS country,
-                   mem_usr_id AS member_this_role, mem_leader AS leader_this_role,
-                      (SELECT COUNT(*)
-                         FROM '.TBL_ROLES.' rol2, '.TBL_CATEGORIES.' cat2, '.TBL_MEMBERS.' mem2
-                        WHERE rol2.rol_valid   = 1
-                          AND rol2.rol_cat_id  = cat2.cat_id
-                          AND cat2.cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-                          AND (  cat2.cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                              OR cat2.cat_org_id IS NULL )
-                          AND mem2.mem_rol_id  = rol2.rol_id
-                          AND mem2.mem_begin  <= \''.DATE_NOW.'\'
-                          AND mem2.mem_end     > \''.DATE_NOW.'\'
-                          AND mem2.mem_usr_id  = usr_id) AS member_this_orga
-              FROM '.TBL_USERS.'
-         LEFT JOIN '.TBL_USER_DATA.' AS last_name
-                ON last_name.usd_usr_id = usr_id
-               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' AS first_name
-                ON first_name.usd_usr_id = usr_id
-               AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' AS birthday
-                ON birthday.usd_usr_id = usr_id
-               AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' AS city
-                ON city.usd_usr_id = usr_id
-               AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' AS address
-                ON address.usd_usr_id = usr_id
-               AND address.usd_usf_id = '. $gProfileFields->getProperty('ADDRESS', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' AS zip_code
-                ON zip_code.usd_usr_id = usr_id
-               AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' AS country
-                ON country.usd_usr_id = usr_id
-               AND country.usd_usf_id = '. $gProfileFields->getProperty('COUNTRY', 'usf_id'). '
-         LEFT JOIN '.TBL_ROLES.' rol
-                ON rol.rol_valid   = 1
-               AND rol.rol_id      = '.$getRoleId.'
-         LEFT JOIN '.TBL_MEMBERS.' mem
-                ON mem.mem_rol_id  = rol.rol_id
-               AND mem.mem_begin  <= \''.DATE_NOW.'\'
-               AND mem.mem_end     > \''.DATE_NOW.'\'
-               AND mem.mem_usr_id  = usr_id
-             WHERE '. $memberCondition. '
-          ORDER BY last_name, first_name ';
-    $userStatement = $gDb->query($sql);
 
     // create html page object
     $page = new HtmlPage($headline);
@@ -361,98 +275,9 @@ else
         $gL10n->get('SYS_BIRTHDAY'),
         $htmlLeaderColumn);
 
-    $table->setColumnAlignByArray(array('left', 'center', 'left', 'left', 'left', 'left', 'left', 'center'));
-    $table->setDatatablesOrderColumns(array(3, 4));
+    $table->setServerSideProcessing($g_root_path.'/adm_program/modules/lists/members_assignment_data.php?rol_id='.$getRoleId.'&mem_show_all='.$getMembersShowAll);
+    $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'left'));
     $table->addRowHeadingByArray($columnHeading);
-    $table->disableDatatablesColumnsSort(array(2, 7));
-
-    // show rows with all organization users
-    while($user = $userStatement->fetch())
-    {
-        $addressText  = ' ';
-        $htmlAddress  = '&nbsp;';
-        $htmlBirthday = '&nbsp;';
-
-        if($user['member_this_orga'] > 0)
-        {
-            $memberOfThisOrganization = '1';
-        }
-        else
-        {
-            $memberOfThisOrganization = '0';
-        }
-
-        // create string with user address
-        if(strlen($user['country']) > 0)
-        {
-            $addressText .= $gL10n->getCountryByCode($user['country']);
-        }
-        if(strlen($user['zip_code']) > 0 || strlen($user['city']) > 0)
-        {
-            $addressText .= ' - '. $user['zip_code']. ' '. $user['city'];
-        }
-        if(strlen($user['address']) > 0)
-        {
-            $addressText .= ' - '. $user['address'];
-        }
-
-        // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
-        if($user['member_this_orga'] > 0)
-        {
-            $icon = 'profile.png';
-            $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
-        }
-        else
-        {
-            $icon = 'no_profile.png';
-            $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
-        }
-
-        // Haekchen setzen ob jemand Mitglied ist oder nicht
-        if($user['member_this_role'])
-        {
-            $htmlMemberStatus = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>';
-        }
-        else
-        {
-            $htmlMemberStatus = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" class="memlist_checkbox memlist_member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>';
-        }
-
-        if(strlen($addressText) > 1)
-        {
-            $htmlAddress = '<img class="admidio-icon-info" src="'. THEME_PATH.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
-        }
-
-        // Haekchen setzen ob jemand Leiter ist oder nicht
-        if($user['leader_this_role'])
-        {
-            $htmlRoleLeader = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_leader" />';
-        }
-        else
-        {
-            $htmlRoleLeader = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" class="memlist_checkbox memlist_leader" />';
-        }
-
-        // Geburtstag nur ausgeben wenn bekannt
-        if(strlen($user['birthday']) > 0)
-        {
-            $birthdayDate = DateTime::createFromFormat('Y-m-d', $user['birthday']);
-            $htmlBirthday = $birthdayDate->format($gPreferences['system_date']);
-        }
-
-        // create array with all column values
-        $columnValues = array(
-            array('value' => '<img class="admidio-icon-info" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
-                  'order' => $memberOfThisOrganization),
-            $htmlMemberStatus,
-            '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['last_name'].'</a>',
-            '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['first_name'].'</a>',
-            array('value' => $htmlAddress, 'order' => $addressText),
-            $htmlBirthday,
-            $htmlRoleLeader.'<b id="loadindicator_leader_'.$user['usr_id'].'"></b>');
-
-        $table->addRowByArray($columnValues, 'userid_'.$user['usr_id']);
-    }//End While
 
     $page->addHtml($table->show());
     $page->addHtml('<p>'.$gL10n->get('SYS_CHECKBOX_AUTOSAVE').'</p>');
