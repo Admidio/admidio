@@ -163,9 +163,8 @@ if ($getMsgType === 'EMAIL')
                           FROM '.TBL_ROLES.'
                     INNER JOIN '.TBL_CATEGORIES.'
                             ON cat_id = rol_cat_id
-                         WHERE rol_id = '.$group[0].'
-                           AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-                               OR cat_org_id IS NULL)';
+                           AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                         WHERE rol_id = '.$group[0];
                 $statement = $gDb->query($sql);
                 $row = $statement->fetch();
 
@@ -371,11 +370,12 @@ if ($getMsgType === 'EMAIL')
         }
     }
 
+    // get array with unique receivers
     $sendresult = array_map('unserialize', array_unique(array_map('serialize', $receiver)));
     $receivers = count($sendresult);
     foreach ($sendresult as $address)
     {
-        if ($gPreferences['mail_into_to'] == 1 || $receivers === 1)
+        if ($receivers === 1)
         {
             $email->addRecipient($address[0], $address[1]);
         }

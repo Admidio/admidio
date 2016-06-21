@@ -447,7 +447,7 @@
   <string name="MAI_SENDER_EMAIL">Sender\'s e-mail</string>
   <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Certain service provider do to not allow unidentified sender information. Due to that please provide an e-mail address as default sender e-mail address that will be used by the e-mail module (e.g. outbox@#VAR1#).\nIf field remains empty, sender\'s registered e-mail address will appear as sender information. (default: empty)</string>
   <string name="MAI_SENDER_INTO_TO">Sender as recipient</string>
-  <string name="MAI_SENDER_INTO_TO_DESC">If an email is send to a role all recipient addresses will be placed in the BCC field. The TO field will then contain \"Undisclosed Recipients\". If this results is an error you can use this option to fill the recipient addresses into the TO field. The other addresses will remain in the BCC field. (Default: Deactivated)</string>
+  <string name="MAI_SENDER_INTO_TO_DESC">If an email is send to a role all recipient addresses will be placed in the BCC field. The TO field will then contain "Undisclosed Recipients". If this results is an error you can use this option to fill the sender address into the TO field. The recipients will remain in the BCC field. (Default: Deactivated)</string>
   <string name="MAI_SENDER_NAME">Name of sender</string>
   <string name="MAI_SENDER_NAME_DESC">Name of the sender according to the used email address.</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(Sender was logged out. Due to that sender\'s information might be incorrect.)</string>
