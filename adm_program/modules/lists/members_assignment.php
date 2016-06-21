@@ -14,8 +14,8 @@
  * rol_id               : Id of role to which members should be assigned or removed
  * usr_id               : Id of the user whose membership should be assigned or removed
  * filter_rol_id        : If set only users from this role will be shown in list.
- * mem_show_all - true  : (Default) Show only active members of the current organization
- *                false : Show active and inactive members of all organizations in database
+ * mem_show_all - true  : (Default) Show active and inactive members of all organizations in database
+ *                false : Show only active members of the current organization
  *
  *****************************************************************************/
 require_once('../../system/common.php');
@@ -32,7 +32,7 @@ $getMode           = admFuncVariableIsValid($_GET, 'mode',          'string', ar
 $getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'int',    array('requireValue' => true, 'directOutput' => true));
 $getUserId         = admFuncVariableIsValid($_GET, 'usr_id',        'int',    array('directOutput' => true));
 $getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
-$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'bool');
+$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'bool',   array('defaultValue' => false));
 
 $_SESSION['set_rol_id'] = $getRoleId;
 
@@ -275,7 +275,7 @@ else
         $gL10n->get('SYS_BIRTHDAY'),
         $htmlLeaderColumn);
 
-    $table->setServerSideProcessing($g_root_path.'/adm_program/modules/lists/members_assignment_data.php?rol_id='.$getRoleId.'&mem_show_all='.$getMembersShowAll);
+    $table->setServerSideProcessing($g_root_path.'/adm_program/modules/lists/members_assignment_data.php?rol_id='.$getRoleId.'&filter_rol_id='.$getFilterRoleId.'&mem_show_all='.$getMembersShowAll);
     $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'left'));
     $table->addRowHeadingByArray($columnHeading);
 

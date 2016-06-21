@@ -32,8 +32,8 @@
  *
  * rol_id        - Id of role to which members should be assigned or removed
  * filter_rol_id - If set only users from this role will be shown in list.
- * mem_show_all  - true  : (Default) Show only active members of the current organization
- *                 false : Show active and inactive members of all organizations in database
+ * mem_show_all  - true  : (Default) Show active and inactive members of all organizations in database
+ *                 false : Show only active members of the current organization
  * draw          - Number to validate the right inquiry from DataTables.
  * start         - Paging first record indicator. This is the start point in the current data set
  *                 (0 index based - i.e. 0 is the first record).
@@ -48,13 +48,15 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'int',    array('requireValue' => true, 'directOutput' => true));
+$getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'int', array('requireValue' => true, 'directOutput' => true));
 $getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
-$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'bool');
+$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'bool', array('defaultValue' => false));
 $getDraw    = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
 $getStart   = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
 $getLength  = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
 $getSearch  = admFuncVariableIsValid($_GET['search'], 'value', 'string');
+
+error_log('bool::'.$getMembersShowAll);
 
 $jsonArray = array('draw' => $getDraw);
 
@@ -73,11 +75,6 @@ if(!$role->allowedToAssignMembers($gCurrentUser))
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
 }
 
-if($getMembersShowAll)
-{
-    $getFilterRoleId = 0;
-}
-
 if($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId))
 {
     echo json_encode(array('error' => $gL10n->get('LST_NO_RIGHTS_VIEW_LIST')));
@@ -86,11 +83,25 @@ if($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId))
 $rowNumber = $getStart; // count for every row
 $memberOfThisOrganizationSelect = '';
 $memberOfThisOrganizationCondition = '';
+$filterRoleCondition = '';
 $searchCondition = '';
 $limitCondition = '';
 $orderCondition = '';
 $orderColumns = array('member_this_orga', 'member_this_role', 'last_name', 'first_name', 'birthday', 'address', 'leader_this_role');
 $searchColumns = array(array('last_name', 'string'), array('first_name', 'string'), array('birthday', 'datetime'), array('address', 'string'), array('city', 'string'), array('zip_code', 'string'), array('country', 'string'));
+
+if($getMembersShowAll)
+{
+    $getFilterRoleId = 0;
+}
+else
+{
+    // show only members of current organization
+    if($getFilterRoleId > 0)
+    {
+        $filterRoleCondition = ' AND mem_rol_id = '.$getFilterRoleId.' ';
+    }
+}
 
 // create order statement
 if(array_key_exists('order', $_GET))
@@ -155,53 +166,21 @@ $sql = '(SELECT COUNT(*)
           WHERE mem_usr_id  = usr_id
             AND mem_begin  <= \''.DATE_NOW.'\'
             AND mem_end     > \''.DATE_NOW.'\'
+                '.$filterRoleCondition.'
             AND rol_valid = 1
             AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-            AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-                OR cat_org_id IS NULL ))';
+            AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').')';
 
 if($getMembersShowAll)
 {
-    $memberOfThisOrganizationCondition = ' AND '.$sql.' > 0 ';
-    $memberOfThisOrganizationSelect = ' 1 ';
-}
-else
-{
+    // show all users
     $memberOfThisOrganizationCondition = '';
     $memberOfThisOrganizationSelect = $sql;
 }
-
-
-// create sql for all relevant users
-if($getMembersShowAll)
-{
-    // Falls gefordert, aufrufen alle Benutzer aus der Datenbank
-    $memberOfThisOrganizationCondition = ' usr_valid = 1 ';
-}
 else
 {
-    // Falls gefordert, nur Aufruf von aktiven Mitgliedern der Organisation
-    $roleCondition = '';
-
-    if($getFilterRoleId > 0)
-    {
-        $roleCondition = ' AND mem_rol_id = '.$getFilterRoleId.' ';
-    }
-
-    $memberOfThisOrganizationCondition = ' EXISTS
-        (SELECT 1
-           FROM '.TBL_MEMBERS.'
-     INNER JOIN '.TBL_ROLES.'
-             ON rol_id = mem_rol_id
-     INNER JOIN '.TBL_CATEGORIES.'
-             ON cat_id = rol_cat_id
-          WHERE mem_usr_id = usr_id
-                '.$roleCondition.'
-            AND mem_begin <= \''.DATE_NOW.'\'
-            AND mem_end    > \''.DATE_NOW.'\'
-            AND rol_valid  = 1
-            AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-            AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). ') ';
+    $memberOfThisOrganizationCondition = ' AND '.$sql.' > 0 ';
+    $memberOfThisOrganizationSelect = ' 1 ';
 }
 
 if($getLength > 0)
@@ -219,7 +198,7 @@ $sql = 'SELECT COUNT(1) AS count_total
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
          WHERE usr_valid = 1
-           AND '.$memberOfThisOrganizationCondition;
+               '.$memberOfThisOrganizationCondition;
 $countTotalStatement = $gDb->query($sql);
 $rowCountTotal = $countTotalStatement->fetch();
 
@@ -228,17 +207,7 @@ $jsonArray['recordsTotal'] = $rowCountTotal['count_total'];
  // SQL-Statement zusammensetzen
 $mainSql = 'SELECT DISTINCT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, birthday.usd_value AS birthday,
                city.usd_value AS city, address.usd_value AS address, zip_code.usd_value AS zip_code, country.usd_value AS country,
-               mem_usr_id AS member_this_role, mem_leader AS leader_this_role,
-                  (SELECT COUNT(*)
-                     FROM '.TBL_ROLES.' rol2, '.TBL_CATEGORIES.' cat2, '.TBL_MEMBERS.' mem2
-                    WHERE rol2.rol_valid   = 1
-                      AND rol2.rol_cat_id  = cat2.cat_id
-                      AND cat2.cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-                      AND cat2.cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                      AND mem2.mem_rol_id  = rol2.rol_id
-                      AND mem2.mem_begin  <= \''.DATE_NOW.'\'
-                      AND mem2.mem_end     > \''.DATE_NOW.'\'
-                      AND mem2.mem_usr_id  = usr_id) AS member_this_orga
+               mem_usr_id AS member_this_role, mem_leader AS leader_this_role, '.$memberOfThisOrganizationSelect.' AS member_this_orga
           FROM '.TBL_USERS.'
     INNER JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
@@ -270,7 +239,7 @@ $mainSql = 'SELECT DISTINCT usr_id, last_name.usd_value AS last_name, first_name
            AND mem.mem_end     > \''.DATE_NOW.'\'
            AND mem.mem_usr_id  = usr_id
          WHERE usr_valid = 1
-           AND '. $memberOfThisOrganizationCondition;
+               '. $memberOfThisOrganizationCondition;
 
 if($getSearch === '')
 {
