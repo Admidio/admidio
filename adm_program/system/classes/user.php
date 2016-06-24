@@ -1455,7 +1455,7 @@ class User extends TableAccess
         // only to a update if value has changed
         if (strcmp($oldFieldValue, $newValue) === 0) // https://secure.php.net/manual/en/function.strcmp.php#108563
         {
-            return false;
+            return true;
         }
 
         $usrId = (int) $this->getValue('usr_id');
