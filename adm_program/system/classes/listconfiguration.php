@@ -351,7 +351,7 @@ class ListConfiguration extends TableLists
         }
 
         // Set SQL-Statement
-        $sql = 'SELECT mem_leader, usr_id, '.$sqlColumnNames.'
+        $sql = 'SELECT DISTINCT mem_leader, usr_id, '.$sqlColumnNames.'
                   FROM '.TBL_MEMBERS.'
             INNER JOIN '.TBL_ROLES.'
                     ON rol_id = mem_rol_id

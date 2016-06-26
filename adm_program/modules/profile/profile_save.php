@@ -245,20 +245,16 @@ if($getNewUser === 2)
 {
     $user->setPassword($_POST['usr_password']);
 
-    // Falls der User sich registrieren wollte, aber ein Captcha geschaltet ist,
-    // muss natuerlich der Code ueberprueft werden
+    // At user registration with acitvated captcha check the captcha input
     if ($gPreferences['enable_registration_captcha'] == 1)
     {
-        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($_POST['captcha']))
+        try
         {
-            if($gPreferences['captcha_type'] === 'pic')
-            {
-                $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
-            }
-            elseif($gPreferences['captcha_type'] === 'calc')
-            {
-                $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
-            }
+            FormValidation::checkCaptcha($_POST['captcha_code']);
+        }
+        catch(AdmException $e)
+        {
+            $e->showHtml();
         }
     }
 }

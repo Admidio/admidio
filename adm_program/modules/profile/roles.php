@@ -201,7 +201,7 @@ while($row = $statement->fetch())
     {
         // if user is assigned to this role
         // or if user is created in members.php of list module
-        if($row['mem_usr_id'] > 0 || $role->getValue('rol_id') == $setRoleId)
+        if($row['mem_usr_id'] > 0 || ($getNewUser == 1 && $role->getValue('rol_id') == $setRoleId))
         {
             $memberChecked = ' checked="checked" ';
         }

@@ -28,7 +28,7 @@ $postSubjectSQL = admFuncVariableIsValid($_POST, 'subject',  'string');
 $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postBodySQL    = admFuncVariableIsValid($_POST, 'msg_body', 'string');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
-$postCaptcha    = admFuncVariableIsValid($_POST, 'captcha', 'string');
+$postCaptcha    = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
 
 // save form data in session for back navigation
 $_SESSION['message_request'] = $_POST;
@@ -95,16 +95,13 @@ if ($getMsgType !== 'PM')
     // Check Captcha if enabled and user logged out
     if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
     {
-        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($postCaptcha))
+        try
         {
-            if($gPreferences['captcha_type'] === 'pic')
-            {
-                $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
-            }
-            elseif($gPreferences['captcha_type'] === 'calc')
-            {
-                $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
-            }
+            FormValidation::checkCaptcha($postCaptcha);
+        }
+        catch(AdmException $e)
+        {
+            $e->showHtml();
         }
     }
 }
@@ -166,9 +163,8 @@ if ($getMsgType === 'EMAIL')
                           FROM '.TBL_ROLES.'
                     INNER JOIN '.TBL_CATEGORIES.'
                             ON cat_id = rol_cat_id
-                         WHERE rol_id = '.$group[0].'
-                           AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-                               OR cat_org_id IS NULL)';
+                           AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                         WHERE rol_id = '.$group[0];
                 $statement = $gDb->query($sql);
                 $row = $statement->fetch();
 
@@ -374,11 +370,12 @@ if ($getMsgType === 'EMAIL')
         }
     }
 
+    // get array with unique receivers
     $sendresult = array_map('unserialize', array_unique(array_map('serialize', $receiver)));
     $receivers = count($sendresult);
     foreach ($sendresult as $address)
     {
-        if ($gPreferences['mail_into_to'] == 1 || $receivers === 1)
+        if ($receivers === 1)
         {
             $email->addRecipient($address[0], $address[1]);
         }
@@ -521,12 +518,6 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
                 VALUES ('.$getMsgId.', 1, '.$gCurrentUser->getValue('usr_id').', \''.$postBodySQL.'\', CURRENT_TIMESTAMP)';
 
         $gDb->query($sql);
-    }
-
-    // Delete CaptchaCode if send/save was correct
-    if (isset($_SESSION['captchacode']))
-    {
-        unset($_SESSION['captchacode']);
     }
 
     // after sending remove the actual Page from the NaviObject and remove also the send-page

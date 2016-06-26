@@ -21,20 +21,6 @@ if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_r
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-// Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
-// muss natuerlich der Code ueberprueft werden
-if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1 && !empty($_POST['captcha'])
-&& (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($_POST['captcha'])))
-{
-    if($gPreferences['captcha_type'] === 'pic')
-    {
-        $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
-    }
-    elseif($gPreferences['captcha_type'] === 'calc')
-    {
-        $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
-    }
-}
 if($gValidLogin)
 {
     $gMessage->setForwardUrl($g_root_path.'/adm_program/', 2000);
@@ -45,6 +31,12 @@ if(!empty($_POST['recipient_email']))
 {
     try
     {
+        // if user is not logged in and captcha is activated then check captcha
+        if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
+        {
+            FormValidation::checkCaptcha($_POST['captcha_code']);
+        }
+
         if(strValidCharacters($_POST['recipient_email'], 'email'))
         {
             // search for user with the email address that have a valid login and membership to a role
@@ -160,7 +152,7 @@ else
     // if captchas are enabled then visitors of the website must resolve this
     if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
     {
-        $form->addCaptcha('captcha', $gPreferences['captcha_type']);
+        $form->addCaptcha('captcha_code');
     }
 
     $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH.'/icons/email.png'));

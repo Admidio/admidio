@@ -41,7 +41,13 @@
     <step id="140">alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_USR_CREATE foreign key (rrd_usr_id_create)
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
     <step id="150">ComponentUpdate::updateStepNewDownloadRootFolderName</step>
-    <step id="160">CREATE TABLE %PREFIX%_menu
+    <step id="160">UPDATE %PREFIX%_preferences SET prf_value = 'AHGBold.ttf' WHERE prf_name = 'captcha_fonts'</step>
+    <step id="170">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_font_size'</step>
+    <step id="180">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_signature_font_size'</step>
+    <step id="190">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_height'</step>
+    <step id="200">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_signs'</step>
+    <step id="210">UPDATE %PREFIX%_preferences SET prf_value = 'Powered by Admidio.org' WHERE prf_name = 'captcha_signature' and prf_value = 'POWERED  BY   A D M I D I O . O R G'</step>
+    <step id="220">CREATE TABLE %PREFIX%_menu
                 (
                     men_id                         integer       unsigned not null AUTO_INCREMENT,
                     men_group                      integer,
@@ -63,8 +69,8 @@
                 auto_increment = 1
                 default character set = utf8
                 collate = utf8_unicode_ci</step>
-    <step id="170">create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_group)</step>
-    <step id="180">INSERT INTO %PREFIX%_menu (men_id, men_group, men_order, men_display_right, men_display_index, men_display_boot, men_modul_name, men_url, men_icon, men_translat_name, men_translat_desc, men_need_enable, men_need_login, men_need_admin) 
+    <step id="230">create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_group)</step>
+    <step id="240">INSERT INTO %PREFIX%_menu (men_id, men_group, men_order, men_display_right, men_display_index, men_display_boot, men_modul_name, men_url, men_icon, men_translat_name, men_translat_desc, men_need_enable, men_need_login, men_need_admin) 
             VALUES (1, 2, 1, 1, 0, 1, 'overview', '/adm_program/index.php', '/icons/home.png', 'SYS_OVERVIEW', '', 0, 0, 0)
                     , (2, 2, 3, 1, 1, 1, 'download', '/adm_program/modules/downloads/downloads.php', '/icons/download.png', 'DOW_DOWNLOADS', 'DOW_DOWNLOADS_DESC', 1, 0, 0)
                     , (3, 2, 7, 1, 1, 1, 'lists', '/adm_program/modules/lists/lists.php', '/icons/lists.png', 'LST_LISTS', 'LST_LISTS_DESC', 0, 0, 0)

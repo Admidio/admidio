@@ -1112,11 +1112,9 @@ class User extends TableAccess
     {
         global $gCurrentSession, $gCurrentUser;
 
-        $usrId = (int) $this->getValue('usr_id');
-
         // if current user is not new and is not allowed to edit this user
         // and saveChangesWithoutRights isn't true than throw exception
-        if ($usrId > 0 && !$gCurrentUser->hasRightEditProfile($this) && !$this->saveChangesWithoutRights) {
+        if ($this->getValue('usr_id') > 0 && !$gCurrentUser->hasRightEditProfile($this) && !$this->saveChangesWithoutRights) {
             throw new AdmException('The profile data of user ' . $this->getValue('FIRST_NAME') . ' '
                 . $this->getValue('LAST_NAME') . ' could not be saved because you don\'t have the right to do this.');
         }
@@ -1125,7 +1123,7 @@ class User extends TableAccess
 
         // if new user then set create id
         $updateCreateUserId = false;
-        if ($usrId === 0 && (int) $gCurrentUser->getValue('usr_id') === 0)
+        if ((int) $this->getValue('usr_id') === 0 && (int) $gCurrentUser->getValue('usr_id') === 0)
         {
             $updateCreateUserId = true;
             $updateFingerPrint  = false;
@@ -1143,21 +1141,21 @@ class User extends TableAccess
         if ($updateCreateUserId)
         {
             $this->setValue('usr_timestamp_create', DATETIME_NOW);
-            $this->setValue('usr_usr_id_create', $usrId);
+            $this->setValue('usr_usr_id_create', $this->getValue('usr_id'));
             $returnValue = $returnValue && parent::save($updateFingerPrint);
         }
 
         if (is_object($this->mProfileFieldsData))
         {
             // save data of all user fields
-            $this->mProfileFieldsData->saveUserData($usrId);
+            $this->mProfileFieldsData->saveUserData($this->getValue('usr_id'));
         }
 
         if ($this->columnsValueChanged && is_object($gCurrentSession))
         {
             // now set user object in session of that user to invalid,
             // because he has new data and maybe new rights
-            $gCurrentSession->renewUserObject($usrId);
+            $gCurrentSession->renewUserObject($this->getValue('usr_id'));
         }
         $this->db->endTransaction();
 
@@ -1457,7 +1455,7 @@ class User extends TableAccess
         // only to a update if value has changed
         if (strcmp($oldFieldValue, $newValue) === 0) // https://secure.php.net/manual/en/function.strcmp.php#108563
         {
-            return false;
+            return true;
         }
 
         $usrId = (int) $this->getValue('usr_id');

@@ -435,18 +435,32 @@ class Email extends PHPMailer
 
             foreach($bccArrays as $bccArray)
             {
-                // remove all current recipients from mail
-                $this->clearAllRecipients();
-
                 try
                 {
                     // if number of bcc recipients = 1 then send the mail directly to the user and not as bcc
-                    if(count($bccArray) === 1)
+                    if(count($bccArray) === 1 || $gPreferences['mail_into_to'] == 1)
                     {
-                        $this->addAddress($bccArray[0]['address'], $bccArray[0]['name']);
+                        // remove all current recipients from mail
+                        $this->clearAllRecipients();
+
+                        if($gPreferences['mail_into_to'] == 1)
+                        {
+                            // add all recipients as bcc to the mail
+                            foreach($bccArray as $bcc)
+                            {
+                                $this->addAddress($bcc['address'], $bcc['name']);
+                            }
+                        }
+                        else
+                        {
+                            $this->addAddress($bccArray[0]['address'], $bccArray[0]['name']);
+                        }
                     }
                     else
                     {
+                        // remove only all BCC because to-address could be explicit set if undisclosed recipients won't work
+                        $this->clearBCCs();
+
                         // add all recipients as bcc to the mail
                         foreach($bccArray as $bcc)
                         {

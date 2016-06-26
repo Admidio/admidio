@@ -120,20 +120,16 @@ if ($getMode === 1 || $getMode === 3)
         $_POST['gbo_name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
     }
 
-    // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
-    // muss natuerlich der Code ueberprueft werden
+    // if user is not logged in and captcha is activated then check captcha
     if ($getMode === 1 && !$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
     {
-        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($_POST['captcha']))
+        try
         {
-            if($gPreferences['captcha_type'] === 'pic')
-            {
-                $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
-            }
-            elseif($gPreferences['captcha_type'] === 'calc')
-            {
-                $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
-            }
+            FormValidation::checkCaptcha($_POST['captcha_code']);
+        }
+        catch(AdmException $e)
+        {
+            $e->showHtml();
         }
     }
 
@@ -238,12 +234,6 @@ if ($getMode === 1 || $getMode === 3)
         unset($_SESSION['guestbook_entry_request']);
         $gNavigation->deleteLastUrl();
 
-        // Der CaptchaCode wird bei erfolgreichem insert/update aus der Session geloescht
-        if (isset($_SESSION['captchacode']))
-        {
-            unset($_SESSION['captchacode']);
-        }
-
         $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline;
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
@@ -312,20 +302,16 @@ elseif($getMode === 4 || $getMode === 8)
         $_POST['gbc_name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
     }
 
-    // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
-    // muss natuerlich der Code ueberprueft werden
+    // if user is not logged in and captcha is activated then check captcha
     if ($getMode === 4 && !$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
     {
-        if (!isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) !== admStrToUpper($_POST['captcha']))
+        try
         {
-            if($gPreferences['captcha_type'] === 'pic')
-            {
-                $gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));
-            }
-            elseif($gPreferences['captcha_type'] === 'calc')
-            {
-                $gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));
-            }
+            FormValidation::checkCaptcha($_POST['captcha_code']);
+        }
+        catch(AdmException $e)
+        {
+            $e->showHtml();
         }
     }
 
@@ -429,12 +415,6 @@ elseif($getMode === 4 || $getMode === 8)
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
         unset($_SESSION['guestbook_comment_request']);
         $gNavigation->deleteLastUrl();
-
-        // Der CaptchaCode wird bei erfolgreichem insert/update aus der Session geloescht
-        if (isset($_SESSION['captchacode']))
-        {
-            unset($_SESSION['captchacode']);
-        }
 
         $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook_comment->getValue('gbc_gbo_id'). '&headline='. $getHeadline;
 

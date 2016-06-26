@@ -4,3 +4,7 @@
 # Images
 *.png binary
 *.jpg binary
+
+# exclude some folders in zip
+/.* export-ignore
+/demo_data/ export-ignore

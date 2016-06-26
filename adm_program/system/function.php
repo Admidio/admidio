@@ -734,7 +734,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
 }
 
 /**
- * Search all files or directories in the specified directory.
+ * Search all visible files or directories in the specified directory.
  * @param string $directory  The directory where the files or directories should be searched.
  * @param string $searchType This could be @b file, @b dir, @b both or @b all and represent
  *                           the type of entries that should be searched.
@@ -753,7 +753,7 @@ function admFuncGetDirectoryEntries($directory, $searchType = 'file')
             {
                 $entries[$entry] = $entry; // $entries[] = $entry;
             }
-            elseif ($entry !== '.' && $entry !== '..')
+            elseif (strpos($entry, '.') !== 0)
             {
                 $resource = $directory . '/' . $entry;
 

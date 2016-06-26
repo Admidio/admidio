@@ -152,7 +152,7 @@ $form->addEditor('gbc_text', $gL10n->get('SYS_COMMENT'), $guestbook_comment->get
 if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
 {
     $form->openGroupBox('gb_confirmation_of_entry', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
-    $form->addCaptcha('captcha', $gPreferences['captcha_type']);
+    $form->addCaptcha('captcha_code');
     $form->closeGroupBox();
 }
 
