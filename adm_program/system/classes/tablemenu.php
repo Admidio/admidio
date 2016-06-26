@@ -115,42 +115,21 @@ class TableMenu extends TableAccess
     }
 
     /**
-     * Reads a category out of the table in database selected by the unique category id in the table.
-     * Per default all columns of adm_categories will be read and stored in the object.
-     * @param int $cat_id Unique cat_id
+     * Reads a menu out of the table in database selected by the unique menu id in the table.
+     * Per default all columns of adm_menu will be read and stored in the object.
+     * @param int $men_id Unique men_id
      * @return bool Returns @b true if one record is found
      */
-    public function readDataById($cat_id)
+    public function readDataById($men_id)
     {
         global $g_tbl_praefix;
 
-        $returnValue = parent::readDataById($cat_id);
+        $returnValue = parent::readDataById($men_id);
 
         if($returnValue)
         {
-            switch ($this->getValue('cat_type'))
-            {
-                case 'ROL':
-                    $this->elementTable = TBL_ROLES;
-                    $this->elementColumn = 'rol_cat_id';
-                    break;
-                case 'LNK':
-                    $this->elementTable = TBL_LINKS;
-                    $this->elementColumn = 'lnk_cat_id';
-                    break;
-                case 'USF':
-                    $this->elementTable = TBL_USER_FIELDS;
-                    $this->elementColumn = 'usf_cat_id';
-                    break;
-                case 'DAT':
-                    $this->elementTable = TBL_DATES;
-                    $this->elementColumn = 'dat_cat_id';
-                    break;
-                case 'AWA':
-                    $this->elementTable  = $g_tbl_praefix.'_user_awards';
-                    $this->elementColumn = 'awa_cat_id';
-                    break;
-            }
+            $this->elementTable = TBL_MENU;
+            $this->elementColumn = 'men_id';
         }
 
         return $returnValue;
@@ -171,25 +150,8 @@ class TableMenu extends TableAccess
 
         if($returnValue)
         {
-            switch ($this->getValue('cat_type'))
-            {
-                case 'ROL':
-                    $this->elementTable = TBL_ROLES;
-                    $this->elementColumn = 'rol_cat_id';
-                    break;
-                case 'LNK':
-                    $this->elementTable = TBL_LINKS;
-                    $this->elementColumn = 'lnk_cat_id';
-                    break;
-                case 'USF':
-                    $this->elementTable = TBL_USER_FIELDS;
-                    $this->elementColumn = 'usf_cat_id';
-                    break;
-                case 'DAT':
-                    $this->elementTable = TBL_DATES;
-                    $this->elementColumn = 'dat_cat_id';
-                    break;
-            }
+            $this->elementTable = TBL_MENU;
+            $this->elementColumn = 'men_id';
         }
 
         return $returnValue;
@@ -260,35 +222,5 @@ class TableMenu extends TableAccess
         $this->db->endTransaction();
 
         return $returnValue;
-    }
-
-    /**
-     * Set a new value for a column of the database table.
-     * The value is only saved in the object. You must call the method @b save to store the new value to the database
-     * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
-     */
-    public function setValue($columnName, $newValue, $checkValue = true)
-    {
-        global $gCurrentOrganization;
-
-        // Systemkategorien duerfen nicht umbenannt werden
-        if($columnName === 'cat_name' && $this->getValue('cat_system') == 1)
-        {
-            return false;
-        }
-        elseif($columnName === 'cat_default' && $newValue == '1')
-        {
-            // es darf immer nur eine Default-Kategorie je Bereich geben
-            $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_default = 0
-                     WHERE cat_type = \''. $this->getValue('cat_type'). '\'
-                       AND (  cat_org_id IS NOT NULL
-                           OR cat_org_id = '.$gCurrentOrganization->getValue('org_id').')';
-            $this->db->query($sql);
-        }
-
-        return parent::setValue($columnName, $newValue, $checkValue);
     }
 }

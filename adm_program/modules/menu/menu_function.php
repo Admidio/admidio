@@ -47,57 +47,14 @@ else
     $menu->setValue('cat_type', $getType);
 }
 
+// create menu or update it
 if($getMode === 1)
 {
-    // Kategorie anlegen oder updaten
+    $_SESSION['menu_request'] = $_POST;
 
-    $_SESSION['categories_request'] = $_POST;
-
-    if((!array_key_exists('cat_name', $_POST) || $_POST['cat_name'] === '')
-    && $category->getValue('cat_system') == 0)
-    {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
-    }
-
-    $sqlSearchOrga = '';
-
-    // Profilfelderkategorien bei einer Orga oder wenn Haekchen gesetzt, immer Orgaunabhaengig anlegen
-    // Terminbestaetigungskategorie bleibt auch Orgaunabhaengig
-    if(($getType === 'USF'
-    && (isset($_POST['show_in_several_organizations']) || $gCurrentOrganization->countAllRecords() == 1))
-    || ($getType === 'ROL' && $category->getValue('cat_name_intern') === 'CONFIRMATION_OF_PARTICIPATION'))
-    {
-        $category->setValue('cat_org_id', '0');
-        $sqlSearchOrga = ' AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                             OR cat_org_id IS NULL )';
-    }
-    else
-    {
-        $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
-        $sqlSearchOrga = ' AND cat_org_id  = '. $gCurrentOrganization->getValue('org_id');
-    }
-
-    if($category->getValue('cat_name') !== $_POST['cat_name'])
-    {
-        // Schauen, ob die Kategorie bereits existiert
-        $sql = 'SELECT COUNT(*) AS count
-                  FROM '.TBL_CATEGORIES.'
-                 WHERE cat_type    = \''. $getType. '\'
-                   AND cat_name LIKE \''. $_POST['cat_name']. '\'
-                   AND cat_id     <> '.$getCatId.
-                       $sqlSearchOrga;
-        $categoriesStatement = $gDb->query($sql);
-        $row = $categoriesStatement->fetch();
-
-        if($row['count'] > 0)
-        {
-            $gMessage->show($gL10n->get('CAT_CATEGORY_EXIST'));
-        }
-    }
-
-    // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
-    // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
-    $checkboxes = array('cat_hidden', 'cat_default');
+    // check all values from Checkboxes, because if there is no value set, we need
+    // to set it on 0 as default
+    $checkboxes = array('men_display_right', 'men_display_index', 'men_display_boot', 'men_need_enable', 'men_need_login', 'men_need_admin');
 
     foreach($checkboxes as $key => $value)
     {
@@ -107,53 +64,25 @@ if($getMode === 1)
         }
     }
 
-    // POST Variablen in das UserField-Objekt schreiben
+    // write POST variables to the object
     foreach($_POST as $key => $value)
     {
-        if(strpos($key, 'cat_') === 0)
+        if(strpos($key, 'men_') === 0)
         {
-            $category->setValue($key, $value);
+            $menu->setValue($key, $value);
         }
     }
 
-    $cat_org_merker = $category->getValue('cat_org_id');
-
-    // Daten in Datenbank schreiben
-    $returnCode = $category->save();
+    // save Data to Table
+    $returnCode = $menu->save();
 
     if($returnCode < 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
-    // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
-    // dann muss die Sequenz fuer den alle Kategorien dieses Typs neu gesetzt werden
-    if(isset($_POST['cat_org_id']) && $_POST['cat_org_id'] != $cat_org_merker)
-    {
-        $sequenceCategory = new TableCategory($gDb);
-        $sequence = 0;
-
-        $sql = 'SELECT *
-                  FROM '.TBL_CATEGORIES.'
-                 WHERE cat_type = "'. $getType. '"
-                   AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                       OR cat_org_id IS NULL )
-              ORDER BY cat_org_id ASC, cat_sequence ASC';
-        $categoriesStatement = $gDb->query($sql);
-
-        while($row = $categoriesStatement->fetch())
-        {
-            ++$sequence;
-            $sequenceCategory->clear();
-            $sequenceCategory->setArray($row);
-
-            $sequenceCategory->setValue('cat_sequence', $sequence);
-            $sequenceCategory->save();
-        }
-    }
-
     $gNavigation->deleteLastUrl();
-    unset($_SESSION['categories_request']);
+    unset($_SESSION['menu_request']);
 
     header('Location: '. $gNavigation->getUrl());
     exit();
