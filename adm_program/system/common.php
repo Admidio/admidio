@@ -198,7 +198,7 @@ if($sesRenew === 1 || $sesRenew === 3)
 {
     // read new field structure in object and than create new user object with new field structure
     $gProfileFields->readProfileFields($gCurrentOrganization->getValue('org_id'));
-    $gCurrentUser->readDataById($gCurrentUser->getValue('usr_id'));
+    $gCurrentUser->readDataById((int) $gCurrentUser->getValue('usr_id'));
     $gCurrentSession->setValue('ses_renew', 0);
 }
 

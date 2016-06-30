@@ -598,7 +598,7 @@ elseif($getMode === 8) // Start installation
     $gCurrentUser->setValue('usr_valid', '0');
     $gCurrentUser->setValue('usr_timestamp_create', DATETIME_NOW);
     $gCurrentUser->save(false); // no registered user -> UserIdCreate couldn't be filled
-    $systemUserId = $gCurrentUser->getValue('usr_id');
+    $systemUserId = (int) $gCurrentUser->getValue('usr_id');
 
     // create all modules components
     $sql = 'INSERT INTO '.TBL_COMPONENTS.' (com_type, com_name, com_name_intern, com_version, com_beta)

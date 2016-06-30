@@ -1064,7 +1064,7 @@ class User extends TableAccess
     /**
      * Reads a user record out of the table adm_users in database selected by the unique user id.
      * Also all profile fields of the object @b mProfileFieldsData will be read.
-     * @param int|string $userId Unique id of the user that should be read
+     * @param int $userId Unique id of the user that should be read
      * @return bool Returns @b true if one record is found
      */
     public function readDataById($userId)
@@ -1148,7 +1148,7 @@ class User extends TableAccess
         if (is_object($this->mProfileFieldsData))
         {
             // save data of all user fields
-            $this->mProfileFieldsData->saveUserData($this->getValue('usr_id'));
+            $this->mProfileFieldsData->saveUserData((int) $this->getValue('usr_id'));
         }
 
         if ($this->columnsValueChanged && is_object($gCurrentSession))
