@@ -122,7 +122,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // Set specific parameters that are necessary for file upload with a form
-        if($optionsAll['enableFileUpload'] === true)
+        if($optionsAll['enableFileUpload'])
         {
             $this->addAttribute('enctype', 'multipart/form-data');
         }
@@ -133,7 +133,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // if its not a navbar form and not a static form then first field of form should get focus
-        if($optionsAll['setFocus'] === true)
+        if($optionsAll['setFocus'])
         {
             if(is_object($htmlPage))
             {
@@ -473,7 +473,7 @@ class HtmlForm extends HtmlFormBasic
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        if($optionsAll['labelVertical'] === true)
+        if($optionsAll['labelVertical'])
         {
             $this->type = 'vertical';
         }
@@ -640,9 +640,9 @@ class HtmlForm extends HtmlFormBasic
 
         // if multi uploads are enabled then the file upload field could be hidden
         // until the user will click on the button to add a new upload field
-        if($optionsAll['hideUploadField'] === false || $optionsAll['enableMultiUploads'] === false)
+        if(!$optionsAll['hideUploadField'] || !$optionsAll['enableMultiUploads'])
         {
-            $this->addSimpleInput('file', 'userfile[]', '', '', $attributes);
+            $this->addSimpleInput('file', 'userfile[]', null, '', $attributes);
         }
 
         if($optionsAll['enableMultiUploads'])
@@ -692,7 +692,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addInput($id, $label, $value, array $options = array())
     {
-        global $gL10n, $gPreferences, $g_root_path;
+        global $gL10n, $gPreferences;
 
         $attributes = array('class' => 'form-control');
         ++$this->countElements;
@@ -777,7 +777,7 @@ class HtmlForm extends HtmlFormBasic
                 $datepickerOptions = ' todayBtn: "linked", ';
             }
 
-            if($this->datepickerInitialized === false || $optionsAll['type'] === 'birthday')
+            if(!$this->datepickerInitialized || $optionsAll['type'] === 'birthday')
             {
                 $javascriptCode = '
                     $("input[data-provide=\''.$attributes['data-provide'].'\']").datepicker({
@@ -886,7 +886,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addMultilineTextInput($id, $label, $value, $rows, array $options = array())
     {
-        global $gL10n, $g_root_path;
+        global $gL10n;
 
         $attributes = array('class' => 'form-control');
         ++$this->countElements;
@@ -1026,7 +1026,7 @@ class HtmlForm extends HtmlFormBasic
         $this->openControlStructure('', $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
 
         // set one radio button with no value will be set in front of the other array.
-        if($optionsAll['showNoValueButton'] === true)
+        if($optionsAll['showNoValueButton'])
         {
             if($optionsAll['defaultValue'] === '')
             {
@@ -1034,7 +1034,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             $this->addHtml('<label for="'.($id.'_0').'" class="radio-inline">');
-            $this->addSimpleInput('radio', $id, $id.'_0', null, $attributes);
+            $this->addSimpleInput('radio', $id, $id.'_0', '', $attributes);
             $this->addHtml('---</label>');
         }
 
@@ -1097,7 +1097,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addSelectBox($id, $label, array $values, array $options = array())
     {
-        global $gL10n, $g_root_path, $gPreferences;
+        global $gL10n, $gPreferences;
 
         $attributes = array('class' => 'form-control');
         $name       = $id;
@@ -1128,13 +1128,13 @@ class HtmlForm extends HtmlFormBasic
             $attributes['disabled'] = 'disabled';
         }
         // multiselect couldn't handle the required property
-        elseif($optionsAll['property'] === FIELD_REQUIRED && $optionsAll['multiselect'] === false)
+        elseif($optionsAll['property'] === FIELD_REQUIRED && !$optionsAll['multiselect'])
         {
             $attributes['required'] = 'required';
         }
 
         $placeholder = '';
-        if($optionsAll['multiselect'] === true)
+        if($optionsAll['multiselect'])
         {
             $attributes['multiple'] = 'multiple';
             $name = $id.'[]';
@@ -1144,7 +1144,7 @@ class HtmlForm extends HtmlFormBasic
                 $optionsAll['defaultValue'] = array($optionsAll['defaultValue']);
             }
 
-            if($optionsAll['showContextDependentFirstEntry'] === true && $optionsAll['property'] === FIELD_REQUIRED)
+            if($optionsAll['showContextDependentFirstEntry'] && $optionsAll['property'] === FIELD_REQUIRED)
             {
                 $placeholder = $gL10n->get('SYS_SELECT_FROM_LIST');
 
@@ -1165,7 +1165,7 @@ class HtmlForm extends HtmlFormBasic
         $this->addSelect($name, $id, $attributes);
 
         // add an additional first entry to the select box and set this as preselected if necessary
-        if($optionsAll['showContextDependentFirstEntry'] === true || $optionsAll['firstEntry'] !== '')
+        if($optionsAll['showContextDependentFirstEntry'] || $optionsAll['firstEntry'] !== '')
         {
             $defaultEntry = false;
             if($optionsAll['defaultValue'] === '')
@@ -1175,20 +1175,17 @@ class HtmlForm extends HtmlFormBasic
 
             if($optionsAll['firstEntry'] !== '')
             {
-                $this->addOption('', '- '.$optionsAll['firstEntry'].' -', '', $defaultEntry);
+                $this->addOption('', '- '.$optionsAll['firstEntry'].' -', null, $defaultEntry);
             }
-            else
+            elseif($optionsAll['showContextDependentFirstEntry'])
             {
-                if($optionsAll['showContextDependentFirstEntry'] === true)
+                if($optionsAll['property'] === FIELD_REQUIRED)
                 {
-                    if($optionsAll['property'] === FIELD_REQUIRED)
-                    {
-                        $this->addOption('', '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -', '', $defaultEntry);
-                    }
-                    else
-                    {
-                        $this->addOption('', ' ', '', $defaultEntry);
-                    }
+                    $this->addOption('', '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -', null, $defaultEntry);
+                }
+                else
+                {
+                    $this->addOption('', ' ', null, $defaultEntry);
                 }
             }
         }
@@ -1217,22 +1214,22 @@ class HtmlForm extends HtmlFormBasic
                 }
 
                 // add option
-                if($optionsAll['multiselect'] === false && $optionsAll['defaultValue'] == $values[$arrayCount][0])
+                if(!$optionsAll['multiselect'] && $optionsAll['defaultValue'] == $values[$arrayCount][0])
                 {
                     $defaultEntry = true;
                 }
 
-                $this->addOption($values[$arrayCount][0], $values[$arrayCount][1], '', $defaultEntry);
+                $this->addOption($values[$arrayCount][0], $values[$arrayCount][1], null, $defaultEntry);
             }
             else
             {
                 // array has only key and value then create a normal selectbox without optiongroups
-                if($optionsAll['multiselect'] === false && $optionsAll['defaultValue'] == key($values))
+                if(!$optionsAll['multiselect'] && $optionsAll['defaultValue'] == key($values))
                 {
                     $defaultEntry = true;
                 }
 
-                $this->addOption(key($values), $value, '', $defaultEntry);
+                $this->addOption(key($values), $value, null, $defaultEntry);
             }
 
             $value = next($values);
@@ -1351,10 +1348,10 @@ class HtmlForm extends HtmlFormBasic
         $statement = $database->query($sql);
 
         // create array from sql result
-        while($row = $statement->fetch())
+        while ($row = $statement->fetch())
         {
             // if result has 3 columns then create a array in array
-            if(array_key_exists(2, $row))
+            if (count($row) === 3)
             {
                 $selectboxEntries[] = array($row[0], $row[1], $row[2]);
             }
@@ -1364,11 +1361,8 @@ class HtmlForm extends HtmlFormBasic
             }
         }
 
-        if(count($selectboxEntries) > 0)
-        {
-            // now call default method to create a selectbox
-            $this->addSelectBox($id, $label, $selectboxEntries, $options);
-        }
+        // now call default method to create a selectbox
+        $this->addSelectBox($id, $label, $selectboxEntries, $options);
     }
 
     /**
@@ -1414,16 +1408,25 @@ class HtmlForm extends HtmlFormBasic
     {
         $selectboxEntries = array();
 
-        // write content of xml file to an array
-        $data = implode('', file($xmlFile));
-        $p = xml_parser_create();
-        xml_parse_into_struct($p, $data, $vals, $index);
-        xml_parser_free($p);
-
-        // transform the two complex arrays to one simply array
-        for($i = 0, $arrayMax = count($index[$xmlValueTag]); $i < $arrayMax; ++$i)
+        $xmlRootNode = new SimpleXMLElement($xmlFile, null, true);
+        foreach ($xmlRootNode->children() as $xmlChildNode)
         {
-            $selectboxEntries[$vals[$index[$xmlValueTag][$i]]['value']] = $vals[$index[$xmlViewTag][$i]]['value'];
+            $key   = '';
+            $value = '';
+
+            foreach ($xmlChildNode->children() as $xmlChildChildNode)
+            {
+                if ($xmlChildChildNode->getName() === $xmlValueTag)
+                {
+                    $key = (string) $xmlChildChildNode;
+                }
+                if ($xmlChildChildNode->getName() === $xmlViewTag)
+                {
+                    $value = (string) $xmlChildChildNode;
+                }
+            }
+
+            $selectboxEntries[$key] = $value;
         }
 
         // now call default method to create a selectbox
@@ -1459,7 +1462,6 @@ class HtmlForm extends HtmlFormBasic
      *                            - @b icon : An icon can be set. This will be placed in front of the label.
      *                            - @b class : An additional css classname. The class @b admSelectbox
      *                              is set as default and need not set with this parameter.
-     * @return
      */
     public function addSelectBoxForCategories($id, $label, Database $database, $categoryType, $selectboxModus, array $options = array())
     {
@@ -1481,7 +1483,6 @@ class HtmlForm extends HtmlFormBasic
 
         $sqlTables       = '';
         $sqlCondidtions  = '';
-        $categoriesArray = array();
 
         // create sql conditions if category must have child elements
         if($selectboxModus === 'FILTER_CATEGORIES')
@@ -1507,7 +1508,7 @@ class HtmlForm extends HtmlFormBasic
             }
         }
 
-        if($optionsAll['showSystemCategory'] === false)
+        if(!$optionsAll['showSystemCategory'])
         {
             $sqlCondidtions .= ' AND cat_system = 0 ';
         }
@@ -1529,17 +1530,23 @@ class HtmlForm extends HtmlFormBasic
         $statement = $database->query($sql);
         $countCategories = $statement->rowCount();
 
-        // if only one category exists then select this if not in filter modus
-        if($countCategories === 1)
+        // if no or only one category exist and in filter modus, than don't show category
+        if(($countCategories === 0 || $countCategories === 1) && $selectboxModus === 'FILTER_CATEGORIES')
         {
-            // in filter modus selectbox shouldn't be shown with one entry
-            if($selectboxModus === 'FILTER_CATEGORIES')
-            {
-                return null;
-            }
+            return;
+        }
 
-            $row = $statement->fetch();
-            if($optionsAll['defaultValue'] === '')
+        $categoriesArray = array();
+
+        if($countCategories > 1 && $selectboxModus === 'FILTER_CATEGORIES')
+        {
+            $categoriesArray[0] = $gL10n->get('SYS_ALL');
+        }
+
+        while($row = $statement->fetch())
+        {
+            // if several categories exist than select default category
+            if($optionsAll['defaultValue'] === '' && ($countCategories === 1 || $row['cat_default'] === '1'))
             {
                 $optionsAll['defaultValue'] = $row['cat_id'];
             }
@@ -1553,37 +1560,6 @@ class HtmlForm extends HtmlFormBasic
             {
                 $categoriesArray[$row['cat_id']] = $row['cat_name'];
             }
-        }
-        // if several categories exist than select default category
-        elseif($countCategories > 1)
-        {
-            if($selectboxModus === 'FILTER_CATEGORIES')
-            {
-                $categoriesArray[0] = $gL10n->get('SYS_ALL');
-            }
-
-            while($row = $statement->fetch())
-            {
-                // if text is a translation-id then translate it
-                if(strpos($row['cat_name'], '_') === 3)
-                {
-                    $categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
-                }
-                else
-                {
-                    $categoriesArray[$row['cat_id']] = $row['cat_name'];
-                }
-
-                if($row['cat_default'] === '1' && $optionsAll['defaultValue'] === '')
-                {
-                    $optionsAll['defaultValue'] = $row['cat_id'];
-                }
-            }
-        }
-        // if no categories exist and in filter modus, than don't show category
-        elseif($selectboxModus === 'FILTER_CATEGORIES')
-        {
-            return null;
         }
 
         // now call method to create selectbox from array
@@ -1610,7 +1586,7 @@ class HtmlForm extends HtmlFormBasic
      *                        - @b class : An additional css classname. The class @b admSelectbox
      *                          is set as default and need not set with this parameter.
      */
-    public function addStaticControl($id, $label, $value, array $options = array()) //, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = '')
+    public function addStaticControl($id, $label, $value, array $options = array())
     {
         $attributes = array('class' => 'form-control-static');
         ++$this->countElements;
@@ -1661,7 +1637,7 @@ class HtmlForm extends HtmlFormBasic
         // now add button to form
         $this->addButton($id, $text, $optionsAll);
 
-        if($this->buttonGroupOpen === false)
+        if(!$this->buttonGroupOpen)
         {
             $this->addHtml('<div class="form-alert" style="display: none;">&nbsp;</div>');
         }
@@ -1678,66 +1654,55 @@ class HtmlForm extends HtmlFormBasic
 
     /**
      * Closes a field structure that was added with the method openControlStructure.
-     * @param string|array $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                                 If set the complete text will be shown after the form element.
-     *                                 If you need an additional parameter for the text you can add an array. The first entry
-     *                                 must be the unique text id and the second entry will be a parameter of the text id.
+     * @param string $helpTextId   A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                             If set the complete text will be shown after the form element.
+     * @param string[] $parameters If you need an additional parameter for the text you can set this array.
      */
-    protected function closeControlStructure($helpTextId = '')
+    protected function closeControlStructure($helpTextId = null, array $parameters = array())
     {
         global $gL10n;
 
-        if($helpTextId !== '')
+        if ($helpTextId !== null)
         {
-            if(is_array($helpTextId))
+            if (count($parameters) === 0)
             {
                 // if text is a translation-id then translate it
-                if(isset($helpTextId[2]) && strpos($helpTextId[2], '_') === 3)
+                if (strpos($helpTextId, '_') === 3)
                 {
-                    if(strpos($helpTextId[1], '_') === 3)
-                    {
-                        $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId[0], $gL10n->get($helpTextId[1]), $gL10n->get($helpTextId[2])).'</div>');
-                    }
-                    else
-                    {
-                        $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId[0], $helpTextId[1], $gL10n->get($helpTextId[2])).'</div>');
-                    }
-                }
-                elseif(isset($helpTextId[2]))
-                {
-                    if(strpos($helpTextId[1], '_') === 3)
-                    {
-                        $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId[0], $gL10n->get($helpTextId[1]), $helpTextId[2]).'</div>');
-                    }
-                    else
-                    {
-                        $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId[0], $helpTextId[1], $helpTextId[2]).'</div>');
-                    }
-                }
-                elseif(strpos($helpTextId[1], '_') === 3)
-                {
-                    $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId[0], $gL10n->get($helpTextId[1])).'</div>');
+                    $helpText = $gL10n->get($helpTextId);
                 }
                 else
                 {
-                    $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId[0], $helpTextId[1]).'</div>');
+                    $helpText = $helpTextId;
                 }
             }
             else
             {
-                // if text is a translation-id then translate it
-                if(strpos($helpTextId, '_') === 3)
+                foreach ($parameters as &$parameter)
                 {
-                    $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId).'</div>');
+                    // if parameter is a translation-id then translate it
+                    if (strpos($parameter, '_') === 3)
+                    {
+                        $parameter = $gL10n->get($parameter);
+                    }
+                }
+                unset($parameter);
+
+                // PHP 5.6+ use: $helpText = $gL10n->get($helpTextId, ...$parameters);
+                if (count($parameters) === 1)
+                {
+                    $helpText = $gL10n->get($helpTextId, $parameters[0]);
                 }
                 else
                 {
-                    $this->addHtml('<div class="help-block">'.$helpTextId.'</div>');
+                    $helpText = $gL10n->get($helpTextId, $parameters[0], $parameters[1]);
                 }
             }
+
+            $this->addHtml('<div class="help-block">'.$helpText.'</div>');
         }
 
-        if($this->type === 'vertical' || $this->type === 'navbar')
+        if ($this->type === 'vertical' || $this->type === 'navbar')
         {
             $this->addHtml('</div>');
         }
@@ -1797,8 +1762,7 @@ class HtmlForm extends HtmlFormBasic
         // if necessary set css class for a mandatory element
         if($property === FIELD_REQUIRED && $this->showRequiredFields)
         {
-            $cssClassMandatory = ' admidio-form-group-required';
-            $cssClassRow .= $cssClassMandatory;
+            $cssClassRow .= ' admidio-form-group-required';
             $this->flagRequiredFields = true;
         }
 
@@ -1860,11 +1824,11 @@ class HtmlForm extends HtmlFormBasic
      * @param string $class    (optional) An additional css classname for the row. The class @b admFieldRow
      *                         is set as default and need not set with this parameter.
      */
-    public function openGroupBox($id, $headline = '', $class = '')
+    public function openGroupBox($id, $headline = null, $class = '')
     {
         $this->addHtml('<div id="'.$id.'" class="panel panel-default '.$class.'">');
         // add headline to groupbox
-        if($headline !== '')
+        if($headline !== null)
         {
             $this->addHtml('<div class="panel-heading">'.$headline.'</div>');
         }
@@ -1874,48 +1838,32 @@ class HtmlForm extends HtmlFormBasic
     /**
      * Add a small help icon to the form at the current element which shows the
      * translated text of the text-id on mouseover or when you click on the icon.
-     * @param string|array $textId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                             If you need an additional parameter for the text you can add an array. The first entry must
-     *                             be the unique text id and the second entry will be a parameter of the text id.
+     * @param string $textId    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     * @param string $parameter If you need an additional parameter for the text you can set this parameter.
      * @return string Return a html snippet that contains a help icon with a link to a popup box that shows the message.
      */
-    public static function getHelpTextIcon($textId)
+    public static function getHelpTextIcon($textId, $parameter = null)
     {
-        global $g_root_path, $gL10n, $gProfileFields;
+        global $gL10n, $gProfileFields;
 
-        $parameters = null;
-        $text       = null;
-
-        if(is_array($textId))
+        if ($parameter === null)
         {
-            $parameters = 'message_id='.$textId[0].'&amp;message_var1='.urlencode($textId[1]);
-            if($textId[0] === 'user_field_description')
+            $text = $gL10n->get($textId);
+        }
+        else
+        {
+            if ($textId === 'user_field_description')
             {
-                $text = $gProfileFields->getProperty($textId[1], 'usf_description');
+                $text = $gProfileFields->getProperty($parameter, 'usf_description');
             }
             else
             {
-                $text = $gL10n->get($textId[0], $textId[1]);
-            }
-        }
-        else
-        {
-            if($textId !== '')
-            {
-                $parameters = 'message_id='.$textId;
-                $text = $gL10n->get($textId);
+                $text = $gL10n->get($textId, $parameter);
             }
         }
 
-        if($parameters !== null)
-        {
-            return '<img class="admidio-icon-help" src="'. THEME_PATH. '/icons/help.png" data-toggle="popover" data-html="true" data-trigger="hover"
-                data-placement="auto" title="'.$gL10n->get('SYS_NOTE').'" data-content="'.htmlspecialchars($text).'" alt="Help" />';
-        }
-        else
-        {
-            return '';
-        }
+        return '<img class="admidio-icon-help" src="'.THEME_PATH.'/icons/help.png" title="'.$gL10n->get('SYS_NOTE').'" alt="Help"
+            data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto" data-content="'.htmlspecialchars($text).'" />';
     }
 
     /**
@@ -1930,13 +1878,13 @@ class HtmlForm extends HtmlFormBasic
     {
         global $gL10n;
 
-        $html = '';
-
         // if there are no elements in the form then return nothing
         if($this->countElements === 0)
         {
             return null;
         }
+
+        $html = '';
 
         // If required fields were set than a notice which marker represents the required fields will be shown.
         if($this->flagRequiredFields && $this->showRequiredFields)

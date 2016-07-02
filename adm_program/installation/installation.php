@@ -147,7 +147,7 @@ if($getMode === 1) // (Default) Choose language
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_CHOOSE_LANGUAGE'));
     $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'),
                                SERVER_PATH.'/adm_program/languages/languages.xml',
-                               'ISOCODE', 'NAME', array('property' => FIELD_REQUIRED));
+                               'isocode', 'name', array('property' => FIELD_REQUIRED));
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png'));
     echo $form->show();
@@ -220,7 +220,7 @@ elseif($getMode === 3)  // Enter database access information
     $form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
     $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), SERVER_PATH.'/adm_program/system/databases.xml',
-                               'IDENTIFIER', 'NAME', array('property' => FIELD_REQUIRED, 'defaultValue' => $dbType));
+                               'identifier', 'name', array('property' => FIELD_REQUIRED, 'defaultValue' => $dbType));
     $form->addInput('db_server', $gL10n->get('SYS_SERVER'), $server, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('db_user', $gL10n->get('SYS_USERNAME'), $user, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('db_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password'));
