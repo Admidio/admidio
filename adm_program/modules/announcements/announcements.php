@@ -80,7 +80,7 @@ if($gCurrentUser->editAnnouncements())
 {
     // show link to create new announcement
     $announcementsMenu->addItem('menu_item_new_announcement', $g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline,
-                                $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
+                                $gL10n->get('SYS_CREATE_ENTRY'), 'add.png');
 }
 
 if($gCurrentUser->isAdministrator())

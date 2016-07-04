@@ -33,3 +33,7 @@ $plg_max_char_per_word = 0;
 // 1 = (Default) Überschrift wird angezeigt
 // 0 = Überschrift wird nicht angezeigt
 $plg_show_headline = 1;
+
+// Set a custom headline for the plugin and also for the announcements module.
+// The headline could also be a translation string e.g. SYS_HEADLINE
+$plg_headline = '';
