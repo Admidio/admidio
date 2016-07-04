@@ -28,6 +28,9 @@ if(!defined('PLUGIN_PATH'))
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
+// integrate language file of plugin to Admidio language object
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
 if(!isset($plg_announcements_count) || !is_numeric($plg_announcements_count))
@@ -76,9 +79,6 @@ elseif(strpos($plg_headline, '_') === 3)
     // if text is a translation-id then translate it
     $plg_headline = $gL10n->get($plg_headline);
 }
-
-// integrate language file of plugin to Admidio language object
-$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 // create announcements object
 $plg_announcements = new ModuleAnnouncements();

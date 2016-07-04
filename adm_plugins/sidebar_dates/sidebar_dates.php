@@ -28,7 +28,7 @@ if(!defined('PLUGIN_PATH'))
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
-// Sprachdatei des Plugins einbinden
+// integrate language file of plugin to Admidio language object
 $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
@@ -74,6 +74,11 @@ else
 if(!isset($plg_kal_cat))
 {
     $plg_kal_cat = array('all');
+}
+
+if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
+{
+    $plg_show_headline = 1;
 }
 
 // Prüfen ob the Link-URL gesetzt wurde oder leer ist
