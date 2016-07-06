@@ -1845,13 +1845,19 @@ class HtmlForm extends HtmlFormBasic
     /**
      * Add a small help icon to the form at the current element which shows the
      * translated text of the text-id on mouseover or when you click on the icon.
-     * @param string $textId    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     * @param string $parameter If you need an additional parameter for the text you can set this parameter.
+     * @param string|string[] $textId    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     * @param string          $parameter If you need an additional parameter for the text you can set this parameter.
      * @return string Return a html snippet that contains a help icon with a link to a popup box that shows the message.
      */
     public static function getHelpTextIcon($textId, $parameter = null)
     {
         global $gL10n, $gProfileFields;
+
+        // backwards compatibility
+        if (is_array($textId))
+        {
+            list($textId, $parameter) = $textId;
+        }
 
         if ($parameter === null)
         {
