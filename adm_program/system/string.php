@@ -211,7 +211,7 @@ function strValidCharacters($string, $checkType)
                 $validRegex = '/^[\d\/() +-]+$/';
                 break;
             case 'url':
-                $validRegex = '/^[áàâåäæcccçéèeênnñóòôöõøœúùûüß\w\.\/@$&!?%=#:() +-]+$/';
+                $validRegex = '/^[áàâåäæcccçéèeênnñóòôöõøœúùûüß\w\.\/@$&!?%=#:() +-~]+$/';
                 break;
             default:
                 return false;
