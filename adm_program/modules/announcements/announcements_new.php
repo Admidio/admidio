@@ -36,11 +36,11 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 // set headline of the script
 if($getAnnId > 0)
 {
-    $headline = $gL10n->get('SYS_EDIT_VAR', $gL10n->get('ANN_ANNOUNCEMENT'));
+    $headline = $getHeadline. ' - '. $gL10n->get('SYS_EDIT_ENTRY');
 }
 else
 {
-    $headline = $gL10n->get('SYS_CREATE_VAR', $gL10n->get('ANN_ANNOUNCEMENT'));
+    $headline = $getHeadline. ' - '. $gL10n->get('SYS_CREATE_ENTRY');
 }
 
 // add current url to navigation stack

@@ -191,8 +191,8 @@ while($row = $fieldHistoryStatement->fetch())
         $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usl_usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a>';
     }
 
-    $columnValues[] = $gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name');
-    $uslValueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new']);
+    $columnValues[] = $gProfileFields->getPropertyById((int) $row['usl_usf_id'], 'usf_name');
+    $uslValueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new']);
     if($uslValueNew !== '')
     {
         $columnValues[] = $uslValueNew;
@@ -202,7 +202,7 @@ while($row = $fieldHistoryStatement->fetch())
         $columnValues[] = '&nbsp;';
     }
 
-    $uslValueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old']);
+    $uslValueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old']);
     if($uslValueOld !== '')
     {
         $columnValues[] = $uslValueOld;

@@ -1,0 +1,12 @@
+Short description to update the current lib
+
+1. Go to https://datatables.net/download/
+2. Now select the following options for download:
+   Styling: Bootstrap
+   Datatables: Datatables
+   Responsive: Responsive
+   Minification: Minify
+   Concatenate: Individual files
+   CDN: Local Files
+2. Download and unzip the file
+3. Copy the 2 css and 2 js files from the main folder to the lib folder

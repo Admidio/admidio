@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Sidebar Announcements
  *
- * Version 1.8.1
+ * Version 1.9.0
  *
  * Plugin das die letzten X Ankuendigungen in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -27,6 +27,9 @@ if(!defined('PLUGIN_PATH'))
 }
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
+
+// integrate language file of plugin to Admidio language object
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -62,16 +65,28 @@ if(!isset($plg_show_preview) || !is_numeric($plg_show_preview))
     $plg_show_preview = 0;
 }
 
-// Sprachdatei des Plugins einbinden
-$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
+{
+    $plg_show_headline = 1;
+}
 
-// Objekt anlegen
+if(!isset($plg_headline))
+{
+    $plg_headline = $gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE');
+}
+elseif(strpos($plg_headline, '_') === 3)
+{
+    // if text is a translation-id then translate it
+    $plg_headline = $gL10n->get($plg_headline);
+}
+
+// create announcements object
 $plg_announcements = new ModuleAnnouncements();
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
-if($plg_show_headline)
+if($plg_show_headline === 1)
 {
-    echo '<h3>'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE').'</h3>';
+    echo '<h3>'.$plg_headline.'</h3>';
 }
 
 if($plg_announcements->getDataSetCount() === 0)
@@ -80,7 +95,7 @@ if($plg_announcements->getDataSetCount() === 0)
 }
 else
 {
-    // Daten holen
+    // get announcements data
     $plg_getAnnouncements = $plg_announcements->getDataSet(0, $plg_announcements_count);
     $plg_announcement = new TableAnnouncement($gDb);
 
@@ -89,7 +104,7 @@ else
         $plg_announcement->clear();
         $plg_announcement->setArray($plg_row);
 
-        echo '<div><a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue('ann_id'). '&amp;headline='. $gL10n->get('PLG_ANNOUNCEMENTS_HEADLINE'). '" target="'. $plg_link_target. '">';
+        echo '<h4><a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue("ann_id"). '&amp;headline='. $plg_headline. '" target="'. $plg_link_target. '">';
 
         if($plg_max_char_per_word > 0)
         {
@@ -111,11 +126,11 @@ else
                     $plg_new_headline = $plg_new_headline.' '. $plg_value;
                 }
             }
-            echo $plg_new_headline.'</a></div>';
+            echo $plg_new_headline.'</a></h4>';
         }
         else
         {
-            echo $plg_announcement->getValue('ann_headline').'</a></div>';
+            echo $plg_announcement->getValue('ann_headline').'</a></h4>';
         }
 
         // Vorschau-Text anzeigen
@@ -130,7 +145,7 @@ else
 
             echo '<div>'.$textPrev.'
             <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
-                href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue('ann_id'). '&amp;headline='. $gL10n->get('PLG_ANNOUNCEMENTS_HEADLINE'). '"><span
+                href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue("ann_id"). '&amp;headline='. $plg_headline. '"><span
                 class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_MORE').'</a></div>';
         }
 
@@ -140,6 +155,6 @@ else
 
     }
 
-    echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ANNOUNCEMENTS').'</a>';
+    echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$plg_headline.'" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES').'</a>';
 }
 echo '</div>';

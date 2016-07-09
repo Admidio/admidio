@@ -8,6 +8,22 @@
  * @class FormValidation
  * @brief Validate various content of form elements
  *
+ * This class can be used to validate form input. Therefore the methods can be called and get the
+ * form input as parameter. The method will return @b true if validation was succesfull. Otherwise
+ * an AdmException will be thrown. To catch this exception all method calls of this class should
+ * be within a try and catch structure. Also all method are declared static.
+ *
+ * @par Examples
+ * @code // validate the captcha code
+ * try
+ * {
+ *     FormValidation::checkCaptcha($_POST['captcha_code']);
+ * }
+ * catch(AdmException $e)
+ * {
+ *     $e->showHtml();
+ * } @endcode
+ ***********************************************************************************************
  */
 
 require_once(SERVER_PATH.'/adm_program/libs/securimage/securimage.php');

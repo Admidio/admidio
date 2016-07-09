@@ -1003,6 +1003,7 @@
     <string name="SYS_COUNTRY">Land</string>
     <string name="SYS_COUNTRY_EG" translation="edited">DEU</string>
     <string name="SYS_CREATE">Anlegen</string>
+    <string name="SYS_CREATE_ENTRY">Eintrag anlegen</string>
     <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
     <string name="SYS_CREATE_NEW_USER">Neuen Benutzer anlegen</string>
     <string name="SYS_CREATE_NOT_FOUND_USER">Falls der neue Benutzer nicht unter den gefundenen Benutzern aufgelistet ist, kannst du diesen neu anlegen.</string>
@@ -1038,6 +1039,7 @@
     <string name="SYS_DONT_SHOW">Nicht anzeigen</string>
     <string name="SYS_DROPDOWN_LISTBOX">Dropdown-Listenfeld</string>
     <string name="SYS_EDIT">Bearbeiten</string>
+    <string name="SYS_EDIT_ENTRY">Eintrag bearbeiten</string>
     <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
     <string name="SYS_EDIT_VAR">#VAR1# bearbeiten</string>
     <string name="SYS_EDITED_BY">Geändert von</string>

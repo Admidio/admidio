@@ -5,9 +5,6 @@
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- */
-
-/**
  * @class Organization
  * @brief Handle organization data of Admidio and is connected to database table adm_organizations
  *
@@ -21,12 +18,14 @@
  * $preferences  = $organization->getPreferences();
  * $language     = $preferences['system_language'];
  * // language = 'de' @endcode
+ ***********************************************************************************************
  */
 class Organization extends TableAccess
 {
     protected $bCheckChildOrganizations = false;   ///< Flag will be set if the class had already search for child organizations
     protected $childOrganizations       = array(); ///< Array with all child organizations of this organization
     protected $preferences              = array(); ///< Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
+    protected $countOrganizations       = 0;       ///< Number of all organizations in database
 
     /**
      * Constructor that will create an object of a recordset of the table adm_organizations.
@@ -61,6 +60,20 @@ class Organization extends TableAccess
         $this->bCheckChildOrganizations = false;
         $this->childOrganizations       = array();
         $this->preferences              = array();
+    }
+
+    /**
+     * Reads the number of all records of this table. In addition to the parent method
+     * this method will cache the value and will return the cached value on multiple calls.
+     * @return int Number of all organizations in database.
+     */
+    public function countAllRecords()
+    {
+        if($this->countOrganizations === 0)
+        {
+            $this->countOrganizations = parent::countAllRecords();
+        }
+        return $this->countOrganizations;
     }
 
     /**
