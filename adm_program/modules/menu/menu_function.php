@@ -108,3 +108,89 @@ elseif($getMode === 3)
     $menu->moveSequence($getSequence);
     exit();
 }
+// save view or upload rights for a folder
+elseif ($getMode === 4)
+{
+
+    // only users with administration rights should
+    if(!$gCurrentUser->isAdministrator())
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    }
+
+    try
+    {
+
+        // Read current roles rights of the folder
+        $rightFolderView = new RolesRights($gDb, 'men_display_right', $getMenId);
+        $rolesFolderView = $rightFolderView->getRolesIds();
+
+        if(in_array('0', $_POST['men_display_right'], true))
+        {
+            // set flag public for this folder and all child folders
+            $folder->editPublicFlagOnFolder(true);
+            // if all users have access then delete all existing roles
+            $folder->removeRolesOnFolder('folder_view', $rolesFolderView);
+        }
+        else
+        {
+            // get new roles and removed roles
+            $addRoles = array_diff($_POST['men_display_right'], $rolesFolderView);
+            $removeRoles = array_diff($rolesFolderView, $_POST['men_display_right']);
+
+            $folder->addRolesOnFolder('folder_view', $addRoles);
+            $folder->removeRolesOnFolder('folder_view', $removeRoles);
+        }
+
+        // save upload right
+        $rightFolderUpload = new RolesRights($gDb, 'men_display_index', $getMenId);
+        $rolesFolderUpload = $rightFolderUpload->getRolesIds();
+
+        if(in_array('0', $_POST['men_display_right'], true))
+        {
+            // set flag public for this folder and all child folders
+            $folder->editPublicFlagOnFolder(true);
+            // if all users have access then delete all existing roles
+            $folder->removeRolesOnFolder('folder_view', $rolesFolderView);
+        }
+        else
+        {
+            // get new roles and removed roles
+            $addRoles = array_diff($_POST['men_display_right'], $rolesFolderView);
+            $removeRoles = array_diff($rolesFolderView, $_POST['men_display_right']);
+
+            $folder->addRolesOnFolder('folder_view', $addRoles);
+            $folder->removeRolesOnFolder('folder_view', $removeRoles);
+        }
+        
+        // save upload right
+        $rightFolderUpload = new RolesRights($gDb, 'men_display_index', $getMenId);
+        $rolesFolderUpload = $rightFolderUpload->getRolesIds();
+
+        if(in_array('0', $_POST['men_display_right'], true))
+        {
+            // set flag public for this folder and all child folders
+            $folder->editPublicFlagOnFolder(true);
+            // if all users have access then delete all existing roles
+            $folder->removeRolesOnFolder('folder_view', $rolesFolderView);
+        }
+        else
+        {
+            // get new roles and removed roles
+            $addRoles = array_diff($_POST['men_display_right'], $rolesFolderView);
+            $removeRoles = array_diff($rolesFolderView, $_POST['men_display_right']);
+
+            $folder->addRolesOnFolder('folder_view', $addRoles);
+            $folder->removeRolesOnFolder('folder_view', $removeRoles);
+        }
+
+        $folder->save();
+
+        $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+        $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+    }
+    catch(AdmException $e)
+    {
+        $e->showHtml();
+    }
+}

@@ -699,6 +699,14 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
                     , (16, 1, 3, 1, 1, 1, \'roladm\', \'/adm_program/modules/roles/roles.php\', \'/icons/roles.png\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\', 0, 1, 0)
                     , (17, 1, 6, 1, 1, 1, \'menu\', \'/adm_program/modules/menu/menu.php\', \'/icons/application_view_tile.png\', \'SYS_MENU\', \'\', 0, 0, 1)';
     $db->query($sql);
+    
+    // Menu security
+    $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.' (ror_name_intern, ror_table)
+              VALUES (\'men_display_right\', \''.$g_tbl_praefix.'_menu\'),
+                     (\'men_display_index\', \''.$g_tbl_praefix.'_menu\'),
+                     (\'men_display_boot\', \''.$g_tbl_praefix.'_menu\'),
+                     (\'men_need_enable\', \''.$g_tbl_praefix.'_menu\')';
+    $db->query($sql);
 
     if($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
     {

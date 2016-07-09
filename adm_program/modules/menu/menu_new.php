@@ -87,6 +87,30 @@ $page = new HtmlPage($headline);
 $categoryCreateMenu = $page->getMenu();
 $categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
+$roleViewSet[] = 0;
+// if no roles are assigned then set "all users" as default
+if(count($roleViewSet) === 0)
+{
+    $roleViewSet[] = 0;
+}
+
+// alle aus der DB aus lesen
+$sqlRoles =  'SELECT *
+                FROM '.TBL_ROLES.'
+          INNER JOIN '.TBL_CATEGORIES.'
+                  ON cat_id = rol_cat_id
+               WHERE rol_valid  = 1
+                 AND rol_system = 0
+                 AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+            ORDER BY rol_name';
+$rolesViewStatement = $gDb->query($sqlRoles);
+
+while($rowViewRoles = $rolesViewStatement->fetchObject())
+{
+    // Jede Rolle wird nun dem Array hinzugefuegt
+    $parentRoleViewSet[] = array($rowViewRoles->rol_id, $rowViewRoles->rol_name, $rowViewRoles->cat_name);
+}
+
 // show form
 $form = new HtmlForm('categories_edit_form', $g_root_path.'/adm_program/modules/menu/menu_function.php?men_id='.$getMenId.'&amp;mode=1', $page);
 
@@ -100,11 +124,23 @@ if($menu->getValue('cat_system') == 1)
 $form->addSelectBox('men-group', 'Menu Group',  $men_groups,
                 array('property' => FIELD_REQUIRED, 'defaultValue' => '3', 'firstEntry' => ''));
 
-$form->addCheckbox('men_display_right', 'Display in right main menu', $menu->getValue('men_display_right'), array('property' => FIELD_REQUIRED));
+//$form->addCheckbox('men_display_right', 'Display in right main menu', $menu->getValue('men_display_right'), array('property' => FIELD_REQUIRED));
 
-$form->addCheckbox('men_display_index', 'Display in center menu', $menu->getValue('men_display_index'), array('property' => FIELD_REQUIRED));
+$form->addSelectBox('men_display_right', 'Display in right main menu '.$gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED,
+                                                                                              'defaultValue' => $roleViewSet,
+                                                                                              'multiselect'  => true));
 
-$form->addCheckbox('men_display_boot', 'Display in bootstrap menu', $menu->getValue('men_display_boot'), array('property' => FIELD_REQUIRED));
+//$form->addCheckbox('men_display_index', 'Display in center menu', $menu->getValue('men_display_index'), array('property' => FIELD_REQUIRED));
+
+$form->addSelectBox('men_display_index', 'Display in center menu '.$gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED,
+                                                                                              'defaultValue' => $roleViewSet,
+                                                                                              'multiselect'  => true));
+
+//$form->addCheckbox('men_display_boot', 'Display in bootstrap menu', $menu->getValue('men_display_boot'), array('property' => FIELD_REQUIRED));
+
+$form->addSelectBox('men_display_boot', 'Display in bootstrap menu '.$gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED,
+                                                                                              'defaultValue' => $roleViewSet,
+                                                                                              'multiselect'  => true));
 
 $form->addInput('cat_name', $gL10n->get('SYS_NAME'), $menu->getValue('cat_name', 'database'),
                 array('maxLength' => 100, 'property' => $fieldPropertyCatName));
