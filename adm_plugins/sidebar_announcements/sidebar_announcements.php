@@ -142,6 +142,7 @@ else
             // Anfang des Textes auslesen auf die angegebene Länge plus 15 Zeichen, um am Ende eines Wortes abzubrechen
             $textPrev = substr($textPrev, 0, $plg_show_preview + 15);
             $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...';
+            $textPrev = pluginAnnouncementsCloseTags($textPrev);
 
             echo '<div>'.$textPrev.'
             <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
@@ -158,3 +159,29 @@ else
     echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$plg_headline.'" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES').'</a>';
 }
 echo '</div>';
+
+
+/**
+ *  Function will analyse a html string and close open html tags at the end of the string.
+ *  @param string $html The html string to parse.
+ *  @return string Returns the parsed html string with all tags closed.
+ */
+function pluginAnnouncementsCloseTags($html) {
+    preg_match_all('#<(?!meta|img|br|hr|input\b)\b([a-z]+)(?: .*)?(?<![/|/ ])>#iU', $html, $result);
+    $openedtags = $result[1];
+    preg_match_all('#</([a-z]+)>#iU', $html, $result);
+    $closedtags = $result[1];
+    $len_opened = count($openedtags);
+    if (count($closedtags) == $len_opened) {
+        return $html;
+    }
+    $openedtags = array_reverse($openedtags);
+    for ($i=0; $i < $len_opened; $i++) {
+        if (!in_array($openedtags[$i], $closedtags)) {
+            $html .= '</'.$openedtags[$i].'>';
+        } else {
+            unset($closedtags[array_search($openedtags[$i], $closedtags)]);
+        }
+    }
+    return $html;
+} 
