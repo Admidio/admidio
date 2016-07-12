@@ -175,6 +175,22 @@ class Database
      */
     private function setConnectionOptions()
     {
+        global $gDebug;
+
+        if ($gDebug === 1)
+        {
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // maybe change to PDO::ERRMODE_WARNING
+        }
+        else
+        {
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+        }
+
+        $this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+        $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true); // change to false if we convert to prepared statements
+        $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH); // maybe change in future to PDO::FETCH_ASSOC or PDO::FETCH_OBJ
+        $this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+
         // Connect to database with UTF8
         $this->query('SET NAMES \'UTF8\'');
 
