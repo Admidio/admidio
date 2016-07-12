@@ -55,12 +55,11 @@ function getBacktrace()
 {
     $output = '<div style="font-family: monospace;">';
     $backtrace = debug_backtrace();
-    $path = SERVER_PATH;
 
     foreach ($backtrace as $number => $trace)
     {
         // We skip the first one, because it only shows this file/function
-        if ($number == 0)
+        if ($number === 0)
         {
             continue;
         }
@@ -72,7 +71,7 @@ function getBacktrace()
         }
         else
         {
-            $trace['file'] = str_replace(array($path, '\\'), array('', '/'), $trace['file']);
+            $trace['file'] = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $trace['file']);
             $trace['file'] = substr($trace['file'], 1);
         }
         $args = array();
@@ -88,20 +87,21 @@ function getBacktrace()
             if (!empty($trace['args'][0]))
             {
                 $argument = htmlentities($trace['args'][0]);
-                $argument = str_replace(array($path, '\\'), array('', '/'), $argument);
+                $argument = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $argument);
                 $argument = substr($argument, 1);
                 $args[] = "'{$argument}'";
             }
         }
 
-        $trace['class'] = (!isset($trace['class'])) ? '' : $trace['class'];
-        $trace['type'] = (!isset($trace['type'])) ? '' : $trace['type'];
+        $trace['class'] = array_key_exists('class', $trace) ? $trace['class'] : '';
+        $trace['type']  = array_key_exists('type',  $trace) ? $trace['type']  : '';
 
         $output .= '<br />';
-        $output .= '<b>FILE:</b> ' . htmlentities($trace['file']) . '<br />';
-        $output .= '<b>LINE:</b> ' . ((!empty($trace['line'])) ? $trace['line'] : '') . '<br />';
+        $output .= '<strong>FILE:</strong> '.htmlentities($trace['file']).'<br />';
+        $output .= '<strong>LINE:</strong> '.((!empty($trace['line'])) ? $trace['line'] : '').'<br />';
 
-        $output .= '<b>CALL:</b> ' . htmlentities($trace['class'] . $trace['type'] . $trace['function']) . '(' . (count($args) ? implode(', ', $args) : '') . ')<br />';
+        $output .= '<strong>CALL:</strong> '.htmlentities($trace['class'].$trace['type'].$trace['function']).
+            '('.(count($args) ? implode(', ', $args) : '').')<br />';
     }
     $output .= '</div>';
 
@@ -157,65 +157,64 @@ if($gDbType === 'mysql')
     $db->query($sql);
 }
 
-$filename = 'db.sql';
-$file     = fopen($filename, 'r')
-            or exit('<p style="color: #cc0000;">File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
-$content  = fread($file, filesize($filename));
-$sql_arr  = explode(';', $content);
-fclose($file);
 
-echo 'Read file db.sql ...<br />';
-
-foreach($sql_arr as $sql)
+/**
+ * @param string    $filename The SQL filename (db.sql, data.sql)
+ * @param \Database $database
+ */
+function readAndExecuteSQLFromFile($filename, &$database)
 {
-    if(trim($sql) !== '')
+    global $g_tbl_praefix, $gL10n;
+
+    $file = fopen($filename, 'r');
+    if ($file === false)
     {
-        // set prefix for all tables and execute sql statement
-        $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
-        $db->query($sql);
+        exit('<p style="color: #cc0000;">File <strong>data.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
     }
-}
+    $content  = fread($file, filesize($filename));
+    $sqlArray = explode(';', $content);
+    fclose($file);
 
-$filename = 'data.sql';
-$file     = fopen($filename, 'r')
-            or exit('<p style="color: #cc0000;">File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
-$content  = fread($file, filesize($filename));
-$sql_arr  = explode(';', $content);
-fclose($file);
+    echo 'Read file '.$filename.' ...<br />';
 
-echo 'Read file data.sql ...<br />';
-
-foreach($sql_arr as $sql)
-{
-    if(trim($sql) !== '')
+    foreach($sqlArray as $sql)
     {
-        // set prefix for all tables and execute sql statement
-        $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
-
-        // search for translation strings with the prefix DEMO or SYS and try replace them
-        preg_match_all('/(DEMO_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/', $sql, $results);
-
-        foreach($results[0] as $key => $value)
+        if(trim($sql) !== '')
         {
-            // if it's a string of a systemmail then html linefeeds must be replaced
-            if(strpos($value, 'SYS_SYSMAIL') === false)
+            // set prefix for all tables and execute sql statement
+            $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
+
+            if ($filename === 'data.sql')
             {
-                $convertedText = $gL10n->get($value);
-            }
-            else
-            {
-                // convert <br /> to a normal line feed
-                $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));
+                // search for translation strings with the prefix DEMO or SYS and try replace them
+                preg_match_all('/(DEMO_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/', $sql, $results);
+
+                foreach($results[0] as $key => $value)
+                {
+                    // if it's a string of a systemmail then html linefeeds must be replaced
+                    if(strpos($value, 'SYS_SYSMAIL') === false)
+                    {
+                        $convertedText = $gL10n->get($value);
+                    }
+                    else
+                    {
+                        // convert <br /> to a normal line feed
+                        $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));
+                    }
+
+                    // search for the exact value as a separate word and replace it with the translation
+                    // in l10n the single quote is transformed in html entity, but we need the original sql escaped
+                    $sql = preg_replace('/\b'.$value.'\b/', $database->escapeString(str_replace('&rsquo;', '\'', $convertedText)), $sql);
+                }
             }
 
-            // search for the exact value as a separate word and replace it with the translation
-            // in l10n the single quote is transformed in html entity, but we need the original sql escaped
-            $sql = preg_replace('/\b'.$value.'\b/', $db->escapeString(str_replace('&rsquo;', '\'', $convertedText)), $sql);
+            $database->query($sql);
         }
-
-        $db->query($sql);
     }
 }
+
+readAndExecuteSQLFromFile('db.sql', $db);
+readAndExecuteSQLFromFile('data.sql', $db);
 
 // manipulate some dates so that it's suitable to the current date
 echo 'Edit data of database ...<br />';
@@ -277,7 +276,7 @@ else
     $databaseVersion = $systemComponent->getValue('com_version');
 }
 
-echo '<p>Database and testdata have the Admidio version '.$databaseVersion.'.<br />
+echo '<p>Database and test-data have the Admidio version '.$databaseVersion.'.<br />
  Your files have Admidio version '.ADMIDIO_VERSION.'.<br /><br />
  Please perform an <a href="../adm_program/installation/update.php">update of your database</a>.</p>
- <p style="font-size: 9pt;">&copy; 2004 - 2015&nbsp;&nbsp;The Admidio team</p>';
+ <p style="font-size: 9pt;">&copy; 2004 - 2016&nbsp;&nbsp;The Admidio team</p>';

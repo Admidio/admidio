@@ -290,6 +290,7 @@ class Database
         if (!$result)
         {
             $this->showError();
+            // => EXIT
         }
 
         $this->transactions = 1;
@@ -333,6 +334,7 @@ class Database
         if (!$result)
         {
             $this->showError();
+            // => EXIT
         }
 
         $this->transactions = 0;
@@ -361,7 +363,6 @@ class Database
     {
         $output = '<div style="font-family: monospace;">';
         $backtrace = debug_backtrace();
-        $path = SERVER_PATH;
 
         foreach ($backtrace as $number => $trace)
         {
@@ -378,7 +379,7 @@ class Database
             }
             else
             {
-                $trace['file'] = str_replace(array($path, '\\'), array('', '/'), $trace['file']);
+                $trace['file'] = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $trace['file']);
                 $trace['file'] = substr($trace['file'], 1);
             }
             $args = array();
@@ -394,14 +395,14 @@ class Database
                 if (!empty($trace['args'][0]))
                 {
                     $argument = htmlentities($trace['args'][0]);
-                    $argument = str_replace(array($path, '\\'), array('', '/'), $argument);
+                    $argument = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $argument);
                     $argument = substr($argument, 1);
                     $args[] = "'{$argument}'";
                 }
             }
 
-            $trace['class'] = (!isset($trace['class'])) ? '' : $trace['class'];
-            $trace['type']  = (!isset($trace['type']))  ? '' : $trace['type'];
+            $trace['class'] = array_key_exists('class', $trace) ? $trace['class'] : '';
+            $trace['type']  = array_key_exists('type',  $trace) ? $trace['type']  : '';
 
             $output .= '<br />';
             $output .= '<strong>FILE:</strong> '.htmlentities($trace['file']).'<br />';
@@ -411,6 +412,7 @@ class Database
                        '('.(count($args) ? implode(', ', $args) : '').')<br />';
         }
         $output .= '</div>';
+
         return $output;
     }
 
@@ -492,11 +494,13 @@ class Database
         $this->pdoStatement = $this->pdo->query($sql);
 
         // if we got an db error then show this error
-        if ($this->pdo->errorCode() !== null && $this->pdo->errorCode() !== '00000')
+        $errorCode = $this->pdo->errorCode();
+        if ($errorCode !== null && $errorCode !== '00000')
         {
             if ($throwError)
             {
-                return $this->showError();
+                $this->showError();
+                // => EXIT
             }
         }
         elseif ($gDebug && strpos(strtoupper($sql), 'SELECT') === 0)
@@ -532,6 +536,7 @@ class Database
             if (!$result)
             {
                 $this->showError();
+                // => EXIT
             }
 
             $this->transactions = 0;
@@ -559,7 +564,7 @@ class Database
      */
     public function showColumns($table, $showColumnProperties = true)
     {
-        if (!isset($this->dbStructure[$table]))
+        if (!array_key_exists($table, $this->dbStructure))
         {
             $columnProperties = array();
 
@@ -691,19 +696,14 @@ class Database
             $this->pdo->rollBack();
         }
 
-        if (!headers_sent() && isset($gPreferences) && defined('THEME_SERVER_PATH'))
-        {
-            // create html page object
-            $page = new HtmlPage($gL10n->get('SYS_DATABASE_ERROR'));
-        }
-
         // transform the database error to html
+        $errorCode = $this->pdo->errorCode();
         $errorInfo = $this->pdo->errorInfo();
 
         $htmlOutput = '
             <div style="font-family: monospace;">
                  <p><strong>S Q L - E R R O R</strong></p>
-                 <p><strong>CODE:</strong> '.$this->pdo->errorCode().'</p>
+                 <p><strong>CODE:</strong> '.$errorCode.'</p>
                  '.$errorInfo[1].'<br /><br />
                  '.$errorInfo[2].'<br /><br />
                  <strong>B A C K T R A C E</strong><br />
@@ -713,12 +713,14 @@ class Database
         // in debug mode show error in log file
         if ($gDebug)
         {
-            error_log($this->pdo->errorCode().': '.$errorInfo[1]."\n".$errorInfo[2]);
+            error_log($errorCode.': '.$errorInfo[1]."\n".$errorInfo[2]);
         }
 
         // display database error to user
-        if (isset($gPreferences, $page) && defined('THEME_SERVER_PATH') && !headers_sent())
+        if (isset($gPreferences) && defined('THEME_SERVER_PATH') && !headers_sent())
         {
+            // create html page object
+            $page = new HtmlPage($gL10n->get('SYS_DATABASE_ERROR'));
             $page->addHtml($htmlOutput);
             $page->show();
         }
