@@ -19,7 +19,7 @@ require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_my
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/constants.php');
 
 // if there is no debug flag in config.php than set debug to false
-if(!isset($gDebug) || $gDebug !== 1)
+if(!isset($gDebug) || !$gDebug)
 {
     $gDebug = 0;
 }

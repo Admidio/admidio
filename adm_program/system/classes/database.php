@@ -177,7 +177,7 @@ class Database
     {
         global $gDebug;
 
-        if ($gDebug === 1)
+        if ($gDebug)
         {
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // maybe change to PDO::ERRMODE_WARNING
         }
@@ -280,7 +280,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        if ($gDebug === 1)
+        if ($gDebug)
         {
             error_log('START TRANSACTION');
         }
@@ -323,7 +323,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        if ($gDebug === 1)
+        if ($gDebug)
         {
             error_log('COMMIT');
         }
@@ -483,7 +483,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        if ($gDebug === 1)
+        if ($gDebug)
         {
             error_log($sql);
         }
@@ -499,7 +499,7 @@ class Database
                 return $this->showError();
             }
         }
-        elseif ($gDebug === 1 && strpos(strtoupper($sql), 'SELECT') === 0)
+        elseif ($gDebug && strpos(strtoupper($sql), 'SELECT') === 0)
         {
             // if debug modus then show number of selected rows
             error_log('Found rows: '.$this->pdoStatement->rowCount());
@@ -522,7 +522,7 @@ class Database
         if ($this->transactions > 0)
         {
             // if debug mode then log all sql statements
-            if ($gDebug === 1)
+            if ($gDebug)
             {
                 error_log('ROLLBACK');
             }
@@ -711,13 +711,13 @@ class Database
              </div>';
 
         // in debug mode show error in log file
-        if ($gDebug === 1)
+        if ($gDebug)
         {
             error_log($this->pdo->errorCode().': '.$errorInfo[1]."\n".$errorInfo[2]);
         }
 
         // display database error to user
-        if (isset($page) && !headers_sent() && isset($gPreferences) && defined('THEME_SERVER_PATH'))
+        if (isset($gPreferences, $page) && defined('THEME_SERVER_PATH') && !headers_sent())
         {
             $page->addHtml($htmlOutput);
             $page->show();

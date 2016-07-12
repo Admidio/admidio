@@ -44,7 +44,7 @@ if($g_tbl_praefix === '')
 }
 
 // if there is no debug flag in config.php than set debug to false
-if(!isset($gDebug) || $gDebug != 1)
+if(!isset($gDebug) || !$gDebug)
 {
     $gDebug = 0;
 }

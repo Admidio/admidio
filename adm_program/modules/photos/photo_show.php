@@ -62,7 +62,7 @@ $ordner  = SERVER_PATH. '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin
 $picpath = $ordner.'/'.$getPhotoNr.'.jpg';
 
 // im Debug-Modus den ermittelten Bildpfad ausgeben
-if($gDebug == 1)
+if($gDebug)
 {
     error_log($picpath);
 }
