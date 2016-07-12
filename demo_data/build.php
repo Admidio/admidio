@@ -38,7 +38,7 @@ if(!isset($gImportDemoData) || $gImportDemoData != 1)
 {
     exit('<p style="color: #cc0000;">Error: Demo data could not be imported because you have
     not set the preference <strong>gImportDemoData</strong> in your configuration file.</p>
-    <p style="color: #cc0000;">Please add the following line to your config.php :<br /><i>$gImportDemoData = 1;</i></p>');
+    <p style="color: #cc0000;">Please add the following line to your config.php:<br /><em>$gImportDemoData = 1;</em></p>');
 }
 
 // default database type should be MySQL

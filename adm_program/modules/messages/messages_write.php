@@ -532,7 +532,7 @@ elseif (!isset($messageStatement))
 
 if (isset($messageStatement))
 {
-    $page->addHtml('<br>');
+    $page->addHtml('<br />');
     while ($row = $messageStatement->fetch())
     {
         if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))

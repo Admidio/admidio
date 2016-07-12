@@ -430,10 +430,13 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
         }
     echo '</tr>
     <tr>
-        <td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_MONDAY_SHORT').'</b></td><td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_TUESDAY_SHORT').'</b></td>
-        <td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_WEDNESDAY_SHORT').'</b></td><td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_THURSDAY_SHORT').'</b></td>
-        <td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_FRIDAY_SHORT').'</b></td><td class="plgCalendarWeekdaySaturday"><b>'.$gL10n->get('PLG_CALENDAR_SATURDAY_SHORT').'</b></td>
-        <td class="plgCalendarWeekdaySunday"><b>'.$gL10n->get('PLG_CALENDAR_SUNDAY_SHORT').'</b></td>
+        <td class="plgCalendarWeekday"><strong>'.$gL10n->get('PLG_CALENDAR_MONDAY_SHORT').'</strong></td>
+        <td class="plgCalendarWeekday"><strong>'.$gL10n->get('PLG_CALENDAR_TUESDAY_SHORT').'</strong></td>
+        <td class="plgCalendarWeekday"><strong>'.$gL10n->get('PLG_CALENDAR_WEDNESDAY_SHORT').'</strong></td>
+        <td class="plgCalendarWeekday"><strong>'.$gL10n->get('PLG_CALENDAR_THURSDAY_SHORT').'</strong></td>
+        <td class="plgCalendarWeekday"><strong>'.$gL10n->get('PLG_CALENDAR_FRIDAY_SHORT').'</strong></td>
+        <td class="plgCalendarWeekdaySaturday"><strong>'.$gL10n->get('PLG_CALENDAR_SATURDAY_SHORT').'</strong></td>
+        <td class="plgCalendarWeekdaySunday"><strong>'.$gL10n->get('PLG_CALENDAR_SUNDAY_SHORT').'</strong></td>
     </tr>
     <tr>';
 

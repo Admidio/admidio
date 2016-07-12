@@ -132,11 +132,11 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
 
     // Begin original backupDB (removed table optimize and repair part because some user database had problems with this)
 
-    OutputInformation('', '<br><span id="topprogress" style="font-weight: bold;">Overall Progress:</span><br>');
+    OutputInformation('', '<br /><span id="topprogress" style="font-weight: bold;">Overall Progress:</span><br />');
     $overallrows = 0;
     foreach ($SelectedTables as $dbname => $value)
     {
-        echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables[$dbname]) / TABLES_PER_COL).'"><b>'.htmlentities($dbname).'</b></th></tr><tr><td nowrap valign="top">';
+        echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables[$dbname]) / TABLES_PER_COL).'"><strong>'.htmlentities($dbname).'</strong></th></tr><tr><td nowrap valign="top">';
         $tablecounter = 0;
         for ($t = 0, $tMax = count($SelectedTables[$dbname]); $t < $tMax; ++$t)
         {
@@ -151,9 +151,9 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
             $row = $countTablesStatement->fetch();
             $rows[$t] = $row['num'];
             $overallrows += $rows[$t];
-            echo '<span id="rows_'.$dbname.'_'.$SelectedTables[$dbname][$t].'">'.htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records)</span><br>';
+            echo '<span id="rows_'.$dbname.'_'.$SelectedTables[$dbname][$t].'">'.htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records)</span><br />';
         }
-        echo '</td></tr></table><br>';
+        echo '</td></tr></table><br />';
     }
 
     $alltablesstructure = '';
@@ -162,7 +162,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
         for ($t = 0, $tMax = count($SelectedTables[$dbname]); $t < $tMax; ++$t)
         {
             @set_time_limit(60);
-            OutputInformation('statusinfo', 'Creating structure for <b>'.htmlentities($dbname.'.'.$SelectedTables[$dbname][$t]).'</b>');
+            OutputInformation('statusinfo', 'Creating structure for <strong>'.htmlentities($dbname.'.'.$SelectedTables[$dbname][$t]).'</strong>');
 
             $fieldnames = array();
 
@@ -474,7 +474,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                         @set_time_limit(60);
                         if ($DHTMLenabled)
                         {
-                            OutputInformation('rows_'.$dbname.'_'.$SelectedTables[$dbname][$t], '<b>'.htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records, ['.number_format(($currentrow / $rows[$t])*100).'%])</b>');
+                            OutputInformation('rows_'.$dbname.'_'.$SelectedTables[$dbname][$t], '<strong>'.htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records, ['.number_format(($currentrow / $rows[$t])*100).'%])</strong>');
                             $elapsedtime = getmicrotime() - $datastarttime;
                             $percentprocessed = ($processedrows + $currentrow) / $overallrows;
                             $overallprogress = 'Overall Progress: '.number_format($processedrows + $currentrow).' / '.number_format($overallrows).' ('.number_format($percentprocessed * 100, 1).'% done) ['.FormattedTimeRemaining($elapsedtime).' elapsed';
@@ -492,7 +492,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                         if (!@$gDb->connect(DB_HOST, DB_USER, DB_PASS))
                         {
                             mail(ADMIN_EMAIL, 'backupDB: FAILURE! Failed to connect to MySQL database (line '.__LINE__.')', 'Failed to reconnect to SQL database (row #'.$currentrow.') on line '.__LINE__.' in file '.@$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].LINE_TERMINATOR.$gDb->db_error());
-                            exit('There was a problem connecting to the database:<br>'.LINE_TERMINATOR.$gDb->db_error());
+                            exit('There was a problem connecting to the database:<br />'.LINE_TERMINATOR.$gDb->db_error());
                         }
                     }
                 }
@@ -553,10 +553,10 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
 }
 else
 {
-    echo '<b>Warning:</b> failed to open '.$backupabsolutepath.$tempbackupfilename.' for writing!<br><br>';
+    echo '<strong>Warning:</strong> failed to open '.$backupabsolutepath.$tempbackupfilename.' for writing!<br /><br />';
     if (is_dir($backupabsolutepath))
     {
-        echo '<i>CHMOD 777</i> on the directory ('.htmlentities($backupabsolutepath).') should fix that.';
+        echo '<em>CHMOD 777</em> on the directory ('.htmlentities($backupabsolutepath).') should fix that.';
     }
     else
     {

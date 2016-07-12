@@ -94,62 +94,62 @@ switch ($getMessageId)
                 <tbody>
                     <tr>
                         <td>'.$gL10n->get('SYS_LASTNAME').'</td>
-                        <td><b>'.$gL10n->get('LST_SEARCH_LASTNAME_EXAMPLE').'</b></td>
+                        <td><strong>'.$gL10n->get('LST_SEARCH_LASTNAME_EXAMPLE').'</strong></td>
                         <td>'.$gL10n->get('LST_SEARCH_LASTNAME_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_LASTNAME').'</td>
-                        <td><b>'.$gL10n->get('LST_SEARCH_LASTNAME_BEGINS_EXAMPLE').'</b></td>
+                        <td><strong>'.$gL10n->get('LST_SEARCH_LASTNAME_BEGINS_EXAMPLE').'</strong></td>
                         <td>'.$gL10n->get('LST_SEARCH_LASTNAME_BEGINS_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_BIRTHDAY').'</td>
-                        <td><b>&gt; '.$gL10n->get('LST_SEARCH_DATE_EXAMPLE').'</b></td>
+                        <td><strong>&gt; '.$gL10n->get('LST_SEARCH_DATE_EXAMPLE').'</strong></td>
                         <td>'.$gL10n->get('LST_SEARCH_DATE_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_BIRTHDAY').'</td>
-                        <td><b>&gt; '.$gL10n->get('LST_SEARCH_AGE_EXAMPLE').'</b></td>
+                        <td><strong>&gt; '.$gL10n->get('LST_SEARCH_AGE_EXAMPLE').'</strong></td>
                         <td>'.$gL10n->get('LST_SEARCH_AGE_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_GENDER').'</td>
-                        <td><b>'.$gL10n->get('SYS_MALE').'</b></td>
+                        <td><strong>'.$gL10n->get('SYS_MALE').'</strong></td>
                         <td>'.$gL10n->get('LST_SEARCH_GENDER_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_LOCATION').'</td>
-                        <td><b>'.$gL10n->get('LST_SEARCH_LOCATION_EXAMPLE').'</b></td>
+                        <td><strong>'.$gL10n->get('LST_SEARCH_LOCATION_EXAMPLE').'</strong></td>
                         <td>'.$gL10n->get('LST_SEARCH_LOCATION_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_PHONE').'</td>
-                        <td><b>'.$gL10n->get('LST_SEARCH_TELEFON_EXAMPLE').'</b></td>
+                        <td><strong>'.$gL10n->get('LST_SEARCH_TELEFON_EXAMPLE').'</strong></td>
                         <td>'.$gL10n->get('LST_SEARCH_TELEFON_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('LST_SEARCH_YES_NO_FIELD').'</td>
-                        <td><b>'.$gL10n->get('SYS_YES').'</b></td>
+                        <td><strong>'.$gL10n->get('SYS_YES').'</strong></td>
                         <td>'.$gL10n->get('LST_SEARCH_YES_NO_FIELD_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_FIRSTNAME').'</td>
-                        <td><b>&lt;&gt; '.$gL10n->get('LST_EXCLUDE_EXAMPLE').'</b></td>
+                        <td><strong>&lt;&gt; '.$gL10n->get('LST_EXCLUDE_EXAMPLE').'</strong></td>
                         <td>'.$gL10n->get('LST_EXCLUDE_EXAMPLE_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_ADDRESS').'</td>
-                        <td><b>'.$gL10n->get('SYS_EMPTY').'</b></td>
+                        <td><strong>'.$gL10n->get('SYS_EMPTY').'</strong></td>
                         <td>'.$gL10n->get('LST_EMPTY_EXAMPLE_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_ADDRESS').'</td>
-                        <td><b>'.$gL10n->get('SYS_NOT_EMPTY').'</b></td>
+                        <td><strong>'.$gL10n->get('SYS_NOT_EMPTY').'</strong></td>
                         <td>'.$gL10n->get('LST_NOT_EMPTY_EXAMPLE_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_COUNTRY').'</td>
-                        <td><b>'.$gL10n->get('SYS_COUNTRY_EG').'</b></td>
+                        <td><strong>'.$gL10n->get('SYS_COUNTRY_EG').'</strong></td>
                         <td>'.$gL10n->get('LST_COUNTRY_ISO').'</td>
                     </tr>
                 </tbody>

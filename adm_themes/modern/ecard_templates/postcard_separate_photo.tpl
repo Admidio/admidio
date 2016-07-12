@@ -53,7 +53,7 @@
                                                     <table border="0" cellpadding="0" style="height: 270px; min-height: 400px; width: 400px;" cellspacing="2">
                                                         <tbody>
                                                             <tr>
-                                                                <td><%ecard_greeting_card_from%>: <b><a href="<%g_root_path%>/adm_program/modules/messages/messages_write.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
+                                                                <td><%ecard_greeting_card_from%>: <strong><a href="<%g_root_path%>/adm_program/modules/messages/messages_write.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></strong></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="height: 10px;"></td>
@@ -90,7 +90,7 @@
                                                                 <td style="height: 90%; vertical-align: middle; padding: 5px; width: 300px;">
                                                                     <table cellpadding="0" cellspacing="0" rules="none" border="0" width="300px">
                                                                         <tr>
-                                                                            <td><b><%ecard_to_string%>:</b></td>
+                                                                            <td><strong><%ecard_to_string%>:</strong></td>
                                                                             <td style="padding-left: 5px;"><%ecard_reciepient_name%></td>
                                                                         </tr>
                                                                         <tr style="height: 1px;">
@@ -98,7 +98,7 @@
                                                                             <td><hr style="border: 1px solid #000000;"/></td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td><b><%ecard_email_string%>:</b></td>
+                                                                            <td><strong><%ecard_email_string%>:</strong></td>
                                                                             <td style="padding-left: 5px;"><%ecard_reciepient_email%></td>
                                                                         </tr>
                                                                         <tr style="height: 1px;">

@@ -137,7 +137,7 @@ else
         if($plg_show_preview > 0)
         {
             // HTML-Tags rausnehmen
-            $textPrev = strip_tags($plg_announcement->getValue('ann_description'), '<p></p><br><br/><br /><i></i><b></b>');
+            $textPrev = strip_tags($plg_announcement->getValue('ann_description'), '<p></p><br><br/><br /><i></i><b></b><strong></strong><em></em>');
 
             // Anfang des Textes auslesen auf die angegebene Länge plus 15 Zeichen, um am Ende eines Wortes abzubrechen
             $textPrev = substr($textPrev, 0, $plg_show_preview + 15);
@@ -150,7 +150,7 @@ else
                 class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_MORE').'</a></div>';
         }
 
-        echo '<div><i>('. $plg_announcement->getValue('ann_timestamp_create', $gPreferences['system_date']). ')</i></div>';
+        echo '<div><em>('. $plg_announcement->getValue('ann_timestamp_create', $gPreferences['system_date']). ')</em></div>';
 
         echo '<hr />';
 
@@ -184,4 +184,4 @@ function pluginAnnouncementsCloseTags($html) {
         }
     }
     return $html;
-} 
+}

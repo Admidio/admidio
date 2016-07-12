@@ -201,8 +201,8 @@ if($getMode === 'choose_files')
                 src="'. $iconUploadPath .'" alt="'.$textSelectFiles.'" />'.$textSelectFiles.'
                 <input id="fileupload" type="file" name="files[]" multiple>
             </span>
-            <br>
-            <br>
+            <br />
+            <br />
             <div id="progress" class="progress">
                 <div class="progress-bar progress-bar-success"></div>
             </div>

@@ -24,7 +24,7 @@ elseif(file_exists('../../config.php'))
     // config file at destination of version 2.0 exists -> copy config file to new destination
     if(!@copy('../../config.php', '../../adm_my_files/config.php'))
     {
-        exit('<div style="color: #cc0000;">Error: The file <b>config.php</b> could not be copied to the folder <b>adm_my_files</b>.
+        exit('<div style="color: #cc0000;">Error: The file <strong>config.php</strong> could not be copied to the folder <strong>adm_my_files</strong>.
             Please check if this folder has the necessary write rights. If it\'s not possible to set this right then copy the
             config.php from the Admidio main folder to adm_my_files with your FTP program.</div>');
     }

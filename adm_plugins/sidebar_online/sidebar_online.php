@@ -109,8 +109,8 @@ if($onlineUsersStatement->rowCount() > 0)
         {
             if($row->ses_usr_id != $usr_id_merker)
             {
-                echo '<b><a class="'. $plg_link_class. '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'"
-                    href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row->ses_usr_id. '">'. $row->usr_login_name. '</a></b>';
+                echo '<strong><a class="'. $plg_link_class. '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'"
+                    href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row->ses_usr_id. '">'. $row->usr_login_name. '</a></strong>';
 
                 // User neben-/untereinander anzeigen
                 if($plg_show_users_side_by_side)

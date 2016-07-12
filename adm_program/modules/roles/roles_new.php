@@ -261,7 +261,7 @@ $form->openGroupBox('gb_dependencies', $gL10n->get('ROL_DEPENDENCIES').'&nbsp;&n
 $rolename_var = $gL10n->get('ROL_NEW_ROLE');
 if($role->getValue('rol_name') !== '')
 {
-    $rolename_var = $gL10n->get('SYS_ROLE').' <b>'.$role->getValue('rol_name').'</b>';
+    $rolename_var = $gL10n->get('SYS_ROLE').' <strong>'.$role->getValue('rol_name').'</strong>';
 }
 $form->addHtml('<p>'.$gL10n->get('ROL_ROLE_DEPENDENCIES', $rolename_var).'</p>');
 
