@@ -165,21 +165,21 @@ if($plgDatesResult['numResults'] > 0)
             echo $plg_date->getValue('dat_headline'). '</a></div>';
         }
 
-        // Vorschau-Text anzeigen
+        // show preview text
         if($plg_dates_show_preview > 0)
         {
-            // HTML-Tags rausnehmen
+            // remove all html tags except some format tags
             $textPrev = strip_tags($plg_date->getValue('dat_description'), '<p></p><br><br/><br /><i></i><b></b><strong></strong><em></em>');
 
-            // Anfang des Textes auslesen auf die angegebene Länge plus 15 Zeichen, um am Ende eines Wortes abzubrechen
+            // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
             $textPrev = substr($textPrev, 0, $plg_dates_show_preview + 15);
-            $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...';
+            $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
+                <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
+                    href="'.$plg_link_url.'?view_mode=html&amp;view=detail&amp;id='. $plg_date->getValue('dat_id'). '"><span
+                    class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_DATES_MORE').'</a>';
             $textPrev = pluginDatesCloseTags($textPrev);
 
-            echo '<div>'.$textPrev.'
-            <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
-                href="'.$plg_link_url.'?view_mode=html&amp;view=detail&amp;id='. $plg_date->getValue('dat_id'). '"><span
-                class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_DATES_MORE').'</a></div>';
+            echo '<div>'.$textPrev.'</div>';
         }
 
         echo '<hr>';

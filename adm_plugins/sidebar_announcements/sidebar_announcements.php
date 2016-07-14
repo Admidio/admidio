@@ -133,21 +133,21 @@ else
             echo $plg_announcement->getValue('ann_headline').'</a></h4>';
         }
 
-        // Vorschau-Text anzeigen
+        // show preview text
         if($plg_show_preview > 0)
         {
-            // HTML-Tags rausnehmen
+            // remove all html tags except some format tags
             $textPrev = strip_tags($plg_announcement->getValue('ann_description'), '<p></p><br><br/><br /><i></i><b></b><strong></strong><em></em>');
 
-            // Anfang des Textes auslesen auf die angegebene Länge plus 15 Zeichen, um am Ende eines Wortes abzubrechen
+            // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
             $textPrev = substr($textPrev, 0, $plg_show_preview + 15);
-            $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...';
+            $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
+                <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
+                    href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue("ann_id"). '&amp;headline='. $plg_headline. '"><span
+                    class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_MORE').'</a>';
             $textPrev = pluginAnnouncementsCloseTags($textPrev);
 
-            echo '<div>'.$textPrev.'
-            <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
-                href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue("ann_id"). '&amp;headline='. $plg_headline. '"><span
-                class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_MORE').'</a></div>';
+            echo '<div>'.$textPrev.'</div>';
         }
 
         echo '<div><em>('. $plg_announcement->getValue('ann_timestamp_create', $gPreferences['system_date']). ')</em></div>';
