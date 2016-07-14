@@ -5,6 +5,10 @@
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
+ */
+require_once(SERVER_PATH.'/adm_program/libs/securimage/securimage.php');
+
+/**
  * @class FormValidation
  * @brief Validate various content of form elements
  *
@@ -23,17 +27,15 @@
  * {
  *     $e->showHtml();
  * } @endcode
- ***********************************************************************************************
  */
-
-require_once(SERVER_PATH.'/adm_program/libs/securimage/securimage.php');
-
 class FormValidation
 {
-    /** Checks if the value of the captcha input matches with the captcha image.
-     *  @param string $value Value of the captcha input field.
-     *  @return Returns @b true if the value matches the captcha image. Otherwise throw an
-     *          exception SYS_CAPTCHA_CODE_INVALID.
+    /**
+     * Checks if the value of the captcha input matches with the captcha image.
+     * @param string $value Value of the captcha input field.
+     * @throws AdmException SYS_CAPTCHA_CALC_CODE_INVALID, SYS_CAPTCHA_CODE_INVALID
+     * @return true Returns @b true if the value matches the captcha image.
+     *              Otherwise throw an exception SYS_CAPTCHA_CODE_INVALID.
      */
     public static function checkCaptcha($value)
     {

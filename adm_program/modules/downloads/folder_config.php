@@ -145,12 +145,26 @@ $page->addHtml('<p class="lead">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC'
 
 // show form
 $form = new HtmlForm('folder_rights_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page);
-$form->addSelectBox('adm_roles_view_right', $gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED,
-                                                                                              'defaultValue' => $roleViewSet,
-                                                                                              'multiselect'  => true));
-$form->addSelectBox('adm_roles_upload_right', $gL10n->get('DOW_UPLOAD_FILES'), $parentRoleUploadSet, array('property' => FIELD_REQUIRED,
-                                                                                              'defaultValue' => $roleUploadSet,
-                                                                                              'multiselect'  => true));
+$form->addSelectBox(
+    'adm_roles_view_right',
+    $gL10n->get('DAT_VISIBLE_TO'),
+    $parentRoleViewSet,
+    array(
+        'property'     => FIELD_REQUIRED,
+        'defaultValue' => $roleViewSet,
+        'multiselect'  => true
+    )
+);
+$form->addSelectBox(
+    'adm_roles_upload_right',
+    $gL10n->get('DOW_UPLOAD_FILES'),
+    $parentRoleUploadSet,
+    array(
+        'property'     => FIELD_REQUIRED,
+        'defaultValue' => $roleUploadSet,
+        'multiselect'  => true
+    )
+);
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon'  => THEME_PATH.'/icons/disk.png',
                                                                   'class' => ' col-sm-offset-3'));
 

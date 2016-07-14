@@ -195,11 +195,10 @@ else
 
 echo '</div>';
 
-
 /**
- *  Function will analyse a html string and close open html tags at the end of the string.
- *  @param string $html The html string to parse.
- *  @return string Returns the parsed html string with all tags closed.
+ * Function will analyse a html string and close open html tags at the end of the string.
+ * @param string $html The html string to parse.
+ * @return string Returns the parsed html string with all tags closed.
  */
 function pluginDatesCloseTags($html) {
     preg_match_all('#<(?!meta|img|br|hr|input\b)\b([a-z]+)(?: .*)?(?<![/|/ ])>#iU', $html, $result);
@@ -207,7 +206,7 @@ function pluginDatesCloseTags($html) {
     preg_match_all('#</([a-z]+)>#iU', $html, $result);
     $closedtags = $result[1];
     $len_opened = count($openedtags);
-    if (count($closedtags) == $len_opened) {
+    if (count($closedtags) === $len_opened) {
         return $html;
     }
     $openedtags = array_reverse($openedtags);

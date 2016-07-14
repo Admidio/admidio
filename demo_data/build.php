@@ -157,7 +157,6 @@ if($gDbType === 'mysql')
     $db->query($sql);
 }
 
-
 /**
  * @param string    $filename The SQL filename (db.sql, data.sql)
  * @param \Database $database

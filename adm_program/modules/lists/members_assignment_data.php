@@ -42,7 +42,6 @@
  *                 fewer records to return. Note that this can be -1 to indicate that all records should
  *                 be returned (although that negates any benefits of server-side processing!)
  * search[value] - Global search value.
- *
  *****************************************************************************/
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');

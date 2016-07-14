@@ -19,7 +19,6 @@
  * file_id   : Id of the file in the database
  * name      : Name of the file/folder that should be added to the database
  ***********************************************************************************************/
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
