@@ -35,22 +35,27 @@ $getTitle = admFuncVariableIsValid($_GET, 'title',  'string');
 if($getType === 'ROL' && !$gCurrentUser->manageRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 elseif($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 elseif($getType === 'USF' && !$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 elseif($getType === 'DAT' && !$gCurrentUser->editDates())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // set module headline
@@ -102,6 +107,7 @@ if($getCatId > 0)
     && $category->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 }
 

@@ -35,6 +35,7 @@ if ($gPreferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 elseif ($gPreferences['enable_photo_module'] == 2)
 {

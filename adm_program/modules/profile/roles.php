@@ -36,6 +36,7 @@ $html = '';
 if(!$gCurrentUser->assignRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 $user = new User($gDb, $gProfileFields, $getUserId);

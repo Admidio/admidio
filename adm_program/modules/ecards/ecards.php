@@ -35,6 +35,7 @@ if ($gPreferences['enable_ecard_module'] != 1)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // URL auf Navigationstack ablegen
@@ -62,6 +63,7 @@ else
 if($getPhotoId > 0 && $photo_album->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }
 
 if ($gValidLogin && strlen($gCurrentUser->getValue('EMAIL')) === 0)
@@ -69,6 +71,7 @@ if ($gValidLogin && strlen($gCurrentUser->getValue('EMAIL')) === 0)
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
     $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
+    // => EXIT
 }
 
 if ($getUserId > 0)
@@ -81,12 +84,14 @@ if ($getUserId > 0)
     || strlen($user->getValue('usr_id')) === 0)
     {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
+        // => EXIT
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
     if (!strValidCharacters($user->getValue('EMAIL'), 'email'))
     {
         $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
+        // => EXIT
     }
 }
 
@@ -164,6 +169,7 @@ $templates = admFuncGetDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates');
 if (!is_array($templates))
 {
     $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
+    // => EXIT
 }
 foreach($templates as $key => $templateName)
 {

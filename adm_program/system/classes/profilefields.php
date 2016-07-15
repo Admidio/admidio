@@ -219,6 +219,7 @@ class ProfileFields
                             catch(AdmException $e)
                             {
                                 $e->showText();
+                                // => EXIT
                             }
                         }
 

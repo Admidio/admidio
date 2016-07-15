@@ -30,6 +30,7 @@ if($gPreferences['members_show_all_users'] == 0)
 if (!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // set headline of the script

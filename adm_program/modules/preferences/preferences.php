@@ -25,6 +25,7 @@ $headline = $gL10n->get('SYS_SETTINGS');
 if(!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // read organization values into form array
@@ -153,6 +154,7 @@ $page->addHtml('
                         if (!is_array($themes))
                         {
                             $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
+                            // => EXIT
                         }
                         $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, array('property' => FIELD_REQUIRED, 'defaultValue' => $form_values['theme'], 'helpTextIdInline' => 'ORG_ADMIDIO_THEME_DESC'));
                         $form->addInput('homepage_logout', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('SYS_VISITORS').')', $form_values['homepage_logout'],
@@ -636,6 +638,7 @@ $page->addHtml('
                         if (!is_array($templates))
                         {
                             $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
+                            // => EXIT
                         }
                         foreach($templates as $key => $templateName)
                         {

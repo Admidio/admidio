@@ -25,12 +25,14 @@ if ($gPreferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if (!$gCurrentUser->editDownloadRight())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);

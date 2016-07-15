@@ -27,6 +27,7 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 if(!$gCurrentUser->hasRightViewProfile($user))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 /**

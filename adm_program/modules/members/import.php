@@ -15,12 +15,14 @@ require_once('../../system/login_valid.php');
 if(!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') !== '1')
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
+    // => EXIT
 }
 
 $headline = $gL10n->get('MEM_IMPORT_USERS');

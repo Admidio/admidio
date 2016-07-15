@@ -131,6 +131,7 @@ if(array_key_exists('date_id', $_GET))
     if(!is_numeric($_GET['date_id']))
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
     }
     else
     {

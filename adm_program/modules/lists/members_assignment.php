@@ -42,12 +42,14 @@ $role = new TableRoles($gDb, $getRoleId);
 if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // check if user is allowed to assign members to this role
 if(!$role->allowedToAssignMembers($gCurrentUser))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 if($getMembersShowAll)
@@ -58,6 +60,7 @@ if($getMembersShowAll)
 if($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId))
 {
     $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
+    // => EXIT
 }
 
 if($getMode === 'assign')
@@ -109,11 +112,13 @@ if($getMode === 'assign')
         else
         {
             $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', $role->getValue('rol_name')));
+            // => EXIT
         }
     }
     catch(AdmException $e)
     {
         $e->showText();
+        // => EXIT
     }
 }
 else

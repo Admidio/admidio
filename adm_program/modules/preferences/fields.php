@@ -16,6 +16,7 @@ require_once('../../system/login_valid.php');
 if (!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // set module headline

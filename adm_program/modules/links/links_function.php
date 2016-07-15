@@ -27,12 +27,14 @@ if ($gPreferences['enable_weblinks_module'] == 0)
 {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
 if (!$gCurrentUser->editWeblinksRight())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // Linkobjekt anlegen
@@ -45,14 +47,17 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
     if(strlen(strStripTags($_POST['lnk_name'])) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('LNK_LINK_NAME')));
+        // => EXIT
     }
     if(strlen(strStripTags($_POST['lnk_url'])) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('LNK_LINK_ADDRESS')));
+        // => EXIT
     }
     if(strlen($_POST['lnk_cat_id']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
+        // => EXIT
     }
 
     // make html in description secure
@@ -69,6 +74,7 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
                 if($key === 'lnk_url')
                 {
                     $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE')));
+                    // => EXIT
                 }
             }
         }
@@ -86,6 +92,7 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
     if($returnCode === false)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     if($returnCode === true && $getMode === 1)
@@ -102,7 +109,6 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
     header('Location: '. $gNavigation->getUrl());
     exit();
 }
-
 elseif ($getMode === 2 && $getLinkId > 0)
 {
     // Loeschen von Weblinks...
@@ -111,9 +117,9 @@ elseif ($getMode === 2 && $getLinkId > 0)
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';
 }
-
 else
 {
     // Falls der mode unbekannt ist, ist natürlich Ende...
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }

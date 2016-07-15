@@ -14,6 +14,7 @@ require_once('../../system/common.php');
 if (!$gValidLogin)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }
 
 // check if the call of the page was allowed by settings
@@ -21,6 +22,7 @@ if ($gPreferences['enable_chat_module'] != 1)
 {
     // message if the Chat is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 $headline = 'Admidio Chat';

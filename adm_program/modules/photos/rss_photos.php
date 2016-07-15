@@ -28,6 +28,7 @@ if ($gPreferences['enable_rss'] != 1)
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
+    // => EXIT
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -35,6 +36,7 @@ if ($gPreferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 elseif($gPreferences['enable_photo_module'] == 2)
 {

@@ -26,6 +26,7 @@ $getInvisible = admFuncVariableIsValid($_GET, 'invisible', 'bool');
 if(!$gCurrentUser->manageRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // set headline of the script

@@ -22,12 +22,14 @@ if ($gPreferences['enable_announcements_module'] == 0)
 {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // pruefen, ob der User auch die entsprechenden Rechte hat
 if(!$gCurrentUser->editAnnouncements())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // Initialize and check the parameters
@@ -45,6 +47,7 @@ if($getAnnId > 0)
     if(!$announcement->editRight())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 }
 
@@ -60,10 +63,12 @@ if($getMode === 1)
     if(strlen($_POST['ann_headline']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_HEADLINE')));
+        // => EXIT
     }
     if(strlen($_POST['ann_description']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TEXT')));
+        // => EXIT
     }
 
     // make html in description secure
@@ -84,6 +89,7 @@ if($getMode === 1)
     if($return_code === false)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
     else
     {

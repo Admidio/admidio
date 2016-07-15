@@ -26,6 +26,7 @@ $registrationOrgId = $gCurrentOrganization->getValue('org_id');
 if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // if new_inventory isn't set and no inventory id is set then show dialog to create a inventory
@@ -49,6 +50,7 @@ if($getItemId > 0 && $getNewItem === 1)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
+// => EXIT
 
 // read inventory data
 $gInventoryFields = new InventoryFields($gDb, $gCurrentOrganization->getValue('org_id'));
@@ -62,6 +64,7 @@ switch($getNewItem)
         if(!$gCurrentUser->editInventory($inventory))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
         break;
 
@@ -70,6 +73,7 @@ switch($getNewItem)
         if(!$gCurrentUser->editInventory())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
         break;
 }

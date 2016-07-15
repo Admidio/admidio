@@ -26,12 +26,14 @@ if ($gPreferences['enable_weblinks_module'] == 0)
 {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // Ist ueberhaupt das Recht vorhanden?
 if (!$gCurrentUser->editWeblinksRight())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // Weblinkobjekt anlegen

@@ -23,12 +23,14 @@ require_once('backup.functions.php');
 if(!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // module not available for other databases except MySQL
 if($gDbType !== 'mysql')
 {
     $gMessage->show($gL10n->get('BAC_ONLY_MYSQL'));
+    // => EXIT
 }
 
 // set db in non-strict mode so that table names and field names get a single quote

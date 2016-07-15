@@ -95,6 +95,7 @@ class User extends TableAccess
         if($defaultRolesStatement->rowCount() === 0)
         {
             $gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
+            // => EXIT
         }
 
         while($rolId = $defaultRolesStatement->fetchColumn())

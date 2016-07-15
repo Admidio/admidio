@@ -44,18 +44,21 @@ else
 {
     // message when no receiver is given
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TO')));
+    // => EXIT
 }
 
 if($postSubjectSQL === '')
 {
     // message when no subject is given
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('MAI_SUBJECT')));
+    // => EXIT
 }
 
 if($postBodySQL === '')
 {
     // message when no subject is given
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_MESSAGE')));
+    // => EXIT
 }
 
 $message = new TableMessage($gDb, $getMsgId);
@@ -74,6 +77,7 @@ if ($getMsgType !== 'PM')
     if($gPreferences['enable_mail_module'] != 1)
     {
         $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+        // => EXIT
     }
 
     // allow option to send a copy to your email address only for registered users because of spam abuse
@@ -90,6 +94,7 @@ if ($getMsgType !== 'PM')
     if(empty($_POST))
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
     }
 
     // Check Captcha if enabled and user logged out
@@ -110,6 +115,7 @@ if ($getMsgType !== 'PM')
 if($gPreferences['enable_pm_module'] != 1 && $getMsgType === 'PM')
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // if user is logged in then show sender name and email
@@ -126,10 +132,12 @@ else
     if($postName === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('MAI_YOUR_NAME')));
+        // => EXIT
     }
     elseif(!strValidCharacters($postFrom, 'email'))
     {
         $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_YOUR_EMAIL')));
+        // => EXIT
     }
 }
 
@@ -176,6 +184,7 @@ if ($getMsgType === 'EMAIL')
                 || $row['rol_id'] === null)
                 {
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+                    // => EXIT
                 }
 
                 if($group[1] == 1 && $gPreferences['mail_show_former'] == 1)
@@ -270,18 +279,21 @@ if ($getMsgType === 'EMAIL')
     {
         // message when no receiver is given
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
     }
 
     // if no valid recipients exists show message
     if(count($receiver) === 0)
     {
         $gMessage->show($gL10n->get('MSG_NO_VALID_RECIPIENTS'));
+        // => EXIT
     }
 
     // check if name is given
     if($postName === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+        // => EXIT
     }
 
     // if valid login then sender should always current user
@@ -303,6 +315,7 @@ if ($getMsgType === 'EMAIL')
                 if (!$gValidLogin)
                 {
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+                    // => EXIT
                 }
                 $attachmentSize = 0;
                 // add now every attachment
@@ -312,6 +325,7 @@ if ($getMsgType === 'EMAIL')
                     if (($_FILES['userfile']['error'][$currentAttachmentNo] != 0) && ($_FILES['userfile']['error'][$currentAttachmentNo] != 4))
                     {
                         $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
+                        // => EXIT
                     }
 
                     if ($_FILES['userfile']['error'][$currentAttachmentNo] == 0)
@@ -321,6 +335,7 @@ if ($getMsgType === 'EMAIL')
                         if($attachmentSize > Email::getMaxAttachementSize('b'))
                         {
                             $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
+                            // => EXIT
                         }
 
                         // set filetyp to standart if not given
@@ -337,6 +352,7 @@ if ($getMsgType === 'EMAIL')
                         catch (phpmailerException $e)
                         {
                             $gMessage->show($e->errorMessage());
+                            // => EXIT
                         }
                     }
                 }
@@ -345,11 +361,13 @@ if ($getMsgType === 'EMAIL')
         else
         {
             $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('MAI_SUBJECT')));
+            // => EXIT
         }
     }
     else
     {
         $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
+        // => EXIT
     }
 
     // if possible send html mail
@@ -462,12 +480,14 @@ else
     if((!$gCurrentUser->editUsers() && !isMember($user->getValue('usr_id'))) || $user->getValue('usr_id') === '')
     {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
+        // => EXIT
     }
 
     // check if receiver of message has valid login
     if($user->getValue('usr_login_name') === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TO')));
+        // => EXIT
     }
 
     // save page in navigation - to have a check for a navigation back.
@@ -537,10 +557,12 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
     if ($getMsgType !== 'PM')
     {
         $gMessage->show($gL10n->get('SYS_EMAIL_SEND'));
+        // => EXIT
     }
     else
     {
         $gMessage->show($gL10n->get('MSG_PM_SEND', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
+        // => EXIT
     }
 }
 else
@@ -548,9 +570,11 @@ else
     if ($getMsgType !== 'PM')
     {
         $gMessage->show($sendResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $gL10n->get('SYS_RECIPIENT'), $sendResult));
+        // => EXIT
     }
     else
     {
         $gMessage->show($sendResult.'<br />'.$gL10n->get('MSG_PM_NOT_SEND', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $sendResult));
+        // => EXIT
     }
 }

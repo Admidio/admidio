@@ -25,6 +25,7 @@ if ($gPreferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 $folder = new TableFolder($gDb, $getFolderId);
@@ -33,6 +34,7 @@ $folder = new TableFolder($gDb, $getFolderId);
 if (!$folder->hasUploadRight())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);

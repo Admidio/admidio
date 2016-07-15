@@ -12,6 +12,7 @@ require_once('../../system/common.php');
 if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 $postFunction = admFuncVariableIsValid($_POST, 'function', 'string');

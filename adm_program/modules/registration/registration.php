@@ -14,6 +14,7 @@ require_once('../../system/common.php');
 if($gPreferences['registration_mode'] == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // if there is no login then show a profile form where the user can register himself
@@ -27,6 +28,7 @@ if(!$gValidLogin)
 if(!$gCurrentUser->approveUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // set headline of the script
@@ -60,6 +62,7 @@ if ($members_found === 0)
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('NWU_NO_REGISTRATIONS'), $gL10n->get('SYS_REGISTRATION'));
+    // => EXIT
 }
 
 // create html page object

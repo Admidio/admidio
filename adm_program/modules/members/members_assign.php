@@ -18,15 +18,18 @@ $gMessage->showHtmlTextOnly(true);
 if (!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 if(strlen($_POST['lastname']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LASTNAME')));
+    // => EXIT
 }
 if(strlen($_POST['firstname']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_FIRSTNAME')));
+    // => EXIT
 }
 
 // Initialize and check the parameters

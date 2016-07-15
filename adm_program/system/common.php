@@ -78,6 +78,7 @@ try
 catch(AdmException $e)
 {
     $e->showText();
+    // => EXIT
 }
 
 // create an installation unique cookie prefix and remove special characters

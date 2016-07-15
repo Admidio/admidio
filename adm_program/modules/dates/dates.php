@@ -49,6 +49,7 @@ if($gPreferences['enable_dates_module'] == 0)
 {
     // Module is not active
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 elseif($gPreferences['enable_dates_module'] == 2)
 {

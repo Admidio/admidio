@@ -35,6 +35,7 @@ if ($gPreferences['enable_announcements_module'] == 0)
 {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 elseif($gPreferences['enable_announcements_module'] == 2)
 {

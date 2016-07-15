@@ -37,6 +37,7 @@ $getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue'
 if(!$gCurrentUser->manageRoles() && $getMode !== 9)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // Rollenobjekt anlegen
@@ -50,6 +51,7 @@ if($getRoleId > 0)
     if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 }
 
@@ -94,11 +96,13 @@ elseif($getMode === 2)
     {
         // es sind nicht alle Felder gefuellt
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+        // => EXIT
     }
     if($_POST['rol_cat_id'] == 0)
     {
         // es sind nicht alle Felder gefuellt
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
+        // => EXIT
     }
 
     if($role->getValue('rol_name') !== $_POST['rol_name'])
@@ -119,6 +123,7 @@ elseif($getMode === 2)
         if($row['count'] > 0)
         {
             $gMessage->show($gL10n->get('ROL_ROLE_NAME_EXISTS'));
+            // => EXIT
         }
     }
 
@@ -171,6 +176,7 @@ elseif($getMode === 2)
         if(!$validFromDate)
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('ROL_VALID_FROM'), $gPreferences['system_date']));
+            // => EXIT
         }
         else
         {
@@ -185,6 +191,7 @@ elseif($getMode === 2)
         if(!$validToDate)
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('ROL_VALID_TO'), $gPreferences['system_date']));
+            // => EXIT
         }
         else
         {
@@ -199,6 +206,7 @@ elseif($getMode === 2)
         if ($validFromDate > $validToDate)
         {
             $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+            // => EXIT
         }
 
     }
@@ -213,6 +221,7 @@ elseif($getMode === 2)
         if(!$validFromTime)
         {
             $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('ROL_TIME_FROM'), $gPreferences['system_time']));
+            // => EXIT
         }
         else
         {
@@ -227,6 +236,7 @@ elseif($getMode === 2)
         if(!$validToTime)
         {
             $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('ROL_TIME_TO'), $gPreferences['system_time']));
+            // => EXIT
         }
         else
         {
@@ -245,6 +255,7 @@ elseif($getMode === 2)
         if($num_free_places < 0)
         {
             $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', $role->getValue('rol_name')));
+            // => EXIT
         }
     }
 
@@ -259,6 +270,7 @@ elseif($getMode === 2)
             if(!$returnCode && $key === 'rol_default_registration')
             {
                 $gMessage->show($gL10n->get('ROL_NO_DEFAULT_ROLE', $gL10n->get('ROL_DEFAULT_REGISTRATION')));
+                // => EXIT
             }
         }
     }
@@ -269,6 +281,7 @@ elseif($getMode === 2)
     if($returnCode < 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     // holt die Role ID des letzten Insert Statements
@@ -328,6 +341,7 @@ elseif($getMode === 2)
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+    // => EXIT
 }
 elseif($getMode === 3)
 {
@@ -337,10 +351,12 @@ elseif($getMode === 3)
     if($return_code < 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $gL10n->get('SYS_INACTIVE')));
+    // => EXIT
 }
 elseif($getMode === 4)
 {
@@ -356,6 +372,7 @@ elseif($getMode === 4)
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_DELETE_DATA'));
+    // => EXIT
 }
 elseif($getMode === 5)
 {
@@ -365,16 +382,19 @@ elseif($getMode === 5)
     if($return_code < 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $gL10n->get('SYS_ACTIVE')));
+    // => EXIT
 }
 elseif($getMode === 6)
 {
     // Fragen, ob die inaktive Rolle geloescht werden soll
     $gMessage->setForwardYesNo($g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$getRoleId.'&amp;mode=4');
     $gMessage->show($gL10n->get('ROL_ROLE_DELETE_DESC', $role->getValue('rol_name')));
+    // => EXIT
 }
 elseif($getMode === 7)
 {
@@ -383,6 +403,7 @@ elseif($getMode === 7)
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $gL10n->get('SYS_INVISIBLE')));
+    // => EXIT
 }
 elseif($getMode === 8)
 {
@@ -391,6 +412,7 @@ elseif($getMode === 8)
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $gL10n->get('SYS_VISIBLE')));
+    // => EXIT
 }
 elseif($getMode === 9)
 {

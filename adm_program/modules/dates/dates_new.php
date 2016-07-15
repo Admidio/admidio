@@ -28,11 +28,13 @@ if($gPreferences['enable_dates_module'] == 0)
 {
     // Module is not active
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 if(!$gCurrentUser->editDates())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -118,6 +120,7 @@ else
         if(!$date->editRight())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
     }
 

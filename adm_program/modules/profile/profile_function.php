@@ -78,6 +78,7 @@ elseif($getMode === 2)
         catch(AdmException $e)
         {
             $e->showText();
+            // => EXIT
         }
 
         // Beendigung erfolgreich -> Rueckgabe fuer XMLHttpRequest

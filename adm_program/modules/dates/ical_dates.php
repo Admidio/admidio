@@ -45,6 +45,7 @@ if($gPreferences['enable_dates_module'] == 0)
 {
     // Module disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 elseif($gPreferences['enable_dates_module'] == 2)
 {
@@ -57,6 +58,7 @@ if ($gPreferences['enable_dates_ical'] != 1)
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_ICAL_DISABLED'));
+    // => EXIT
 }
 
 // create Object

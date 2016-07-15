@@ -126,6 +126,7 @@ if($url === '')
 {
     $gMessage->showThemeBody(false);
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }
 
 header('Content-type: text/html; charset=utf-8');

@@ -22,12 +22,14 @@ $getNewUserId = admFuncVariableIsValid($_GET, 'new_user_id', 'int', array('requi
 if(!$gCurrentUser->approveUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // pruefen, ob Modul aufgerufen werden darf
 if($gPreferences['registration_mode'] == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // set headline of the script

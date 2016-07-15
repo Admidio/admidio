@@ -27,12 +27,14 @@ if ($gPreferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
 if(!$gCurrentUser->editPhotoRight())
 {
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
+    // => EXIT
 }
 
 $headline = '';
@@ -59,6 +61,7 @@ if ($getMode === 'change')
     if($photoAlbum->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 }
 
