@@ -549,8 +549,8 @@ class TableAccess
      * table and want to use an table object for each recordset. So you don't have to do an
      * separate sql read for each record. This is a performant way to fill the object with
      * the necessary data.
-     * @param array $fieldArray An array with all fields and their values of the table. If the
-     *                           object has more connected tables than you should add the fields of these tables, too.
+     * @param array $fieldArray An array with all fields and their values of the table. If the object has
+     *                          more connected tables than you should add the fields of these tables, too.
      * @par Examples
      * @code // read all announcements with their categories
      * $sql = 'SELECT * FROM adm_announcements, adm_categories WHERE ann_cat_id = cat_id';
@@ -581,10 +581,7 @@ class TableAccess
      */
     public function setDatabase(&$database)
     {
-        if(is_object($database))
-        {
-            $this->db =& $database;
-        }
+        $this->db =& $database;
     }
 
     /**

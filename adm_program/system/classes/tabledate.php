@@ -372,15 +372,15 @@ class TableDate extends TableAccess
 
     /**
      * die Methode erwartet ein Array mit den fuer den Termin sichtbaren Rollen-IDs
-     * @param array $arrVisibleRoles
+     * @param int[] $arrVisibleRoleIds
      */
-    public function setVisibleRoles(array $arrVisibleRoles)
+    public function setVisibleRoles(array $arrVisibleRoleIds)
     {
-        if(count(array_diff($arrVisibleRoles, $this->visibleRoles)) > 0)
+        if(count(array_diff($arrVisibleRoleIds, $this->visibleRoles)) > 0)
         {
             $this->changeVisibleRoles = true;
         }
 
-        $this->visibleRoles = $arrVisibleRoles;
+        $this->visibleRoles = $arrVisibleRoleIds;
     }
 }

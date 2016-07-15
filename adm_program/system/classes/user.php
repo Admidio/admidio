@@ -641,7 +641,7 @@ class User extends TableAccess
     }
 
     /**
-     * @param array $rightsList
+     * @param bool[] $rightsList
      * @return int[]
      */
     private function getAllRolesWithRight(array $rightsList)
@@ -906,7 +906,7 @@ class User extends TableAccess
     }
 
     /**
-     * @param array  $rightsList
+     * @param bool[] $rightsList
      * @param string $rightName
      * @param int    $roleId
      * @return bool

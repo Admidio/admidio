@@ -415,8 +415,8 @@ class Organization extends TableAccess
     /**
      * Writes all preferences of the array @b $preferences in the database table @b adm_preferences.
      * The method will only insert or update changed preferences.
-     * @param array $preferences Array with all preferences that should be stored in
-     *                           database. array('name_of_preference' => 'value')
+     * @param array $preferences Array with all preferences that should be stored in database.
+     *                           array('name_of_preference' => 'value')
      * @param bool  $update      If set to @b false then no update will be done, only inserts
      */
     public function setPreferences(array $preferences, $update = true)
