@@ -5,6 +5,9 @@
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
+ */
+
+/**
  * @class RolesRights
  * @brief Manages a special right of the table adm_roles_rights for a special object.
  *
