@@ -187,7 +187,8 @@ foreach($gInventoryFields->mInventoryFields as $field)
 
         if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'CHECKBOX')
         {
-            $form->addCheckbox( // TODO fix parameters
+            // TODO fix parameters
+            $form->addCheckbox(
                 'inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
                 $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                 $inventory->getValue($field->getValue('inf_name_intern')), $fieldProperty, $helpId, null,
@@ -227,7 +228,8 @@ foreach($gInventoryFields->mInventoryFields as $field)
             {
                 $arrListValues = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_value_list');
                 $defaultValue  = $inventory->getValue($field->getValue('inf_name_intern'), 'database');
-                $form->addSelectBox( // TODO fix parameters
+                // TODO fix parameters
+                $form->addSelectBox(
                     'inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
                     $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                     $arrListValues, $fieldProperty, $defaultValue, true, $helpId, null,
@@ -246,7 +248,8 @@ foreach($gInventoryFields->mInventoryFields as $field)
                 $showDummyRadioButton = true;
             }
 
-            $form->addRadioButton( // TODO fix parameters
+            // TODO fix parameters
+            $form->addRadioButton(
                 'inf-'.$gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
                 $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                 $arrListValues, $fieldProperty,
@@ -257,7 +260,8 @@ foreach($gInventoryFields->mInventoryFields as $field)
         }
         elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'TEXT_BIG')
         {
-            $form->addMultilineTextInput( // TODO fix parameters
+            // TODO fix parameters
+            $form->addMultilineTextInput(
                 'inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
                 $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                 $inventory->getValue($field->getValue('inf_name_intern')),
