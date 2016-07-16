@@ -169,16 +169,13 @@ class ModuleWeblinks extends Modules
         $weblinksStatement = $gDb->query($sql);
 
         // array for results
-        $weblinks = array();
-        $weblinks['recordset']  = $weblinksStatement->fetchAll();
-        $weblinks['numResults'] = $weblinksStatement->rowCount();
-        $weblinks['limit']      = $limit;
-        $weblinks['totalCount'] = $this->getDataSetCount();
-
-        // Push parameter to array
-        $weblinks['parameter'] = $this->getParameters();
-
-        return $weblinks;
+        return array(
+            'recordset'  => $weblinksStatement->fetchAll(),
+            'numResults' => $weblinksStatement->rowCount(),
+            'limit'      => $limit,
+            'totalCount' => $this->getDataSetCount(),
+            'parameter'  => $this->getParameters()
+        );
     }
 
     /**

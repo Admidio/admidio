@@ -64,7 +64,14 @@ class Menu
             $icon = THEME_PATH . $icon;
         }
 
-        return array('id' => $id, 'link' => $link, 'text' => $text, 'icon' => $icon, 'desc' => $desc, 'subitems' => array());
+        return array(
+            'id'       => $id,
+            'link'     => $link,
+            'text'     => $text,
+            'icon'     => $icon,
+            'desc'     => $desc,
+            'subitems' => array()
+        );
     }
 
     /**

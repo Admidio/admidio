@@ -316,14 +316,13 @@ class ModuleLists extends Modules
         $listsStatement = $gDb->query($sql);
 
         // array for results
-        $lists = array();
-        $lists['recordset']  = $listsStatement->fetchAll();
-        $lists['numResults'] = $listsStatement->rowCount();
-        $lists['limit']      = $limit;
-        $lists['totalCount'] = $this->getDataSetCount();
-        $lists['parameter']  = $this->getParameters();
-
-        return $lists;
+        return array(
+            'recordset'  => $listsStatement->fetchAll(),
+            'numResults' => $listsStatement->rowCount(),
+            'limit'      => $limit,
+            'totalCount' => $this->getDataSetCount(),
+            'parameter'  => $this->getParameters()
+        );
     }
 
     /**
