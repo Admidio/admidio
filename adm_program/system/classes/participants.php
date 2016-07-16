@@ -49,15 +49,15 @@ class Participants
     /**
      * This function checks the passed Id if it is numeric and compares it to the current object variable
      * If the values are different the current object variable will be updated with the new value
-     * @param int $rolId
+     * @param int $roleId
      * @return bool
      */
-    private function checkId($rolId)
+    private function checkId($roleId)
     {
         // check passed parameter and compare to current object
-        if(is_numeric($rolId) && ($this->rolId === -1 || ($this->rolId === 0 && $this->rolId !== $rolId)))
+        if($this->rolId === -1 || ($this->rolId === 0 && $this->rolId !== $roleId))
         {
-            $this->rolId = $rolId;
+            $this->rolId = $roleId;
             return true;
         }
         else
@@ -161,45 +161,47 @@ class Participants
 
     /**
      * Return all participants with surname,firstname and leader status as array
-     * @param int    $rolId
+     * @param int    $roleId
      * @param string $order Values ASC/DESC Default: 'ASC'
      * @return array|false Returns all participants in an array with fieldnames ['surname'], ['firstname'], ['leader'].
      */
-    public function getParticipantsArray($rolId = 0, $order = 'ASC')
+    public function getParticipantsArray($roleId = 0, $order = 'ASC')
     {
-        $participants = '';
         global $gProfileFields;
 
-        $this->checkId($rolId);
-
-        if(!in_array($order, array('ASC', 'DESC'), true))
+        if (!in_array($order, array('ASC', 'DESC'), true))
         {
             return false;
         }
-        else
+
+        $this->checkId($roleId);
+
+        $this->order = $order;
+
+        $sql = 'SELECT DISTINCT
+                       surname.usd_value AS surname, firstname.usd_value AS firstname, mem_leader
+                  FROM '.TBL_MEMBERS.'
+             LEFT JOIN '. TBL_USER_DATA .' surname
+                    ON surname.usd_usr_id = mem_usr_id
+                   AND surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+             LEFT JOIN '. TBL_USER_DATA .' firstname
+                    ON firstname.usd_usr_id = mem_usr_id
+                   AND firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+                 WHERE mem_rol_id = '.$this->rolId.'
+              ORDER BY surname '.$this->order;
+        $membersStatement = $this->mDb->query($sql);
+
+        $participants = array();
+        while ($row = $membersStatement->fetch())
         {
-            $this->order = $order;
-
-            $sql = 'SELECT DISTINCT
-                           surname.usd_value AS surname, firstname.usd_value AS firstname, mem_leader
-                      FROM '.TBL_MEMBERS.'
-                 LEFT JOIN '. TBL_USER_DATA .' surname
-                        ON surname.usd_usr_id = mem_usr_id
-                       AND surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-                 LEFT JOIN '. TBL_USER_DATA .' firstname
-                        ON firstname.usd_usr_id = mem_usr_id
-                       AND firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-                     WHERE mem_rol_id = '.$this->rolId.'
-                  ORDER BY surname '.$this->order;
-            $membersStatement = $this->mDb->query($sql);
-
-            while ($row = $membersStatement->fetch())
-            {
-                $participants[] = array('surname' => $row['surname'], 'firstname' => $row['firstname'], 'leader' => $row['mem_leader']);
-            }
-
-            $this->memberDate = $participants;
-            return $this->memberDate;
+            $participants[] = array(
+                'surname'   => $row['surname'],
+                'firstname' => $row['firstname'],
+                'leader'    => $row['mem_leader']
+            );
         }
+        $this->memberDate = $participants;
+
+        return $this->memberDate;
     }
 }

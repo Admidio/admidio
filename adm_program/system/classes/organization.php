@@ -304,7 +304,7 @@ class Organization extends TableAccess
      * @param bool $parent   If set to @b true (default) then the parent organization will be in the array
      * @param bool $longname If set to @b true then the value of the array will be the @b org_longname
      *                       otherwise it will be @b org_shortname
-     * @return array Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
+     * @return string[] Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
      */
     public function getOrganizationsInRelationship($child = true, $parent = true, $longname = false)
     {
@@ -365,7 +365,7 @@ class Organization extends TableAccess
     }
 
     /**
-     * @return array Returns an array with all child organizations
+     * @return string[] Returns an array with all child organizations
      */
     protected function getChildOrganizations()
     {

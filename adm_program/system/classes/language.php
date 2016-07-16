@@ -156,7 +156,7 @@ class Language
 
     /**
      * Returns an array with all countries and their ISO codes
-     * @return array Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     * @return string[] Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
     public function getCountries()
     {
@@ -270,7 +270,7 @@ class Language
     /**
      * Creates an array with all languages that are possible in Admidio.
      * The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)
-     * @return array Return an array with all available languages.
+     * @return string[] Return an array with all available languages.
      */
     public function getAvailableLanguages()
     {

@@ -333,7 +333,7 @@ class TableFolder extends TableAccess
 
     /**
      * Inhalt des aktuellen Ordners, abhaengig von den Benutzerrechten, als Array zurueckliefern...
-     * @return array
+     * @return array[]
      */
     public function getFolderContentsForDownload()
     {
@@ -647,7 +647,7 @@ class TableFolder extends TableAccess
 
     /**
      * Returns an array with all roles ids that have the right to view the folder.
-     * @return array Returns an array with all roles ids that have the right to view the folder.
+     * @return int[] Returns an array with all role ids that have the right to view the folder.
      */
     public function getRoleViewArrayOfFolder()
     {
@@ -656,7 +656,7 @@ class TableFolder extends TableAccess
 
     /**
      * Returns an array with all roles ids that have the right to upload files to the folder.
-     * @return array Returns an array with all roles ids that have the right to upload files to the folder.
+     * @return int[] Returns an array with all role ids that have the right to upload files to the folder.
      */
     public function getRoleUploadArrayOfFolder()
     {

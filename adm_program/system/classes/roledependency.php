@@ -109,25 +109,24 @@ class RoleDependency
     /**
      * @param \Database $database
      * @param int       $parentId
-     * @return array
+     * @return int[]
      */
     public static function getChildRoles(&$database, $parentId)
     {
         $allChildIds = array();
 
-        if(is_numeric($parentId) && $parentId > 0)
+        if($parentId > 0)
         {
             $sql = 'SELECT rld_rol_id_child
                       FROM '. TBL_ROLE_DEPENDENCIES.
                    ' WHERE rld_rol_id_parent = '.$parentId;
             $pdoStatement = $database->query($sql);
 
-            $numRows = $pdoStatement->rowCount();
-            if ($numRows)
+            if ($pdoStatement->rowCount() > 0)
             {
                 while ($row = $pdoStatement->fetchObject())
                 {
-                    $allChildIds[] = $row->rld_rol_id_child;
+                    $allChildIds[] = (int) $row->rld_rol_id_child;
                 }
             }
         }
@@ -138,25 +137,24 @@ class RoleDependency
     /**
      * @param \Database $database
      * @param int       $childId
-     * @return array
+     * @return int[]
      */
     public static function getParentRoles(&$database, $childId)
     {
         $allParentIds = array();
 
-        if(is_numeric($childId) && $childId > 0)
+        if($childId > 0)
         {
             $sql = 'SELECT rld_rol_id_parent
                       FROM '.TBL_ROLE_DEPENDENCIES.
                    ' WHERE rld_rol_id_child = '.$childId;
             $pdoStatement = $database->query($sql);
 
-            $numRows = $pdoStatement->rowCount();
-            if ($numRows)
+            if ($pdoStatement->rowCount() > 0)
             {
                 while ($row = $pdoStatement->fetchObject())
                 {
-                    $allParentIds[] = $row->rld_rol_id_parent;
+                    $allParentIds[] = (int) $row->rld_rol_id_parent;
                 }
             }
         }

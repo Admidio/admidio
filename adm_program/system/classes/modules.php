@@ -103,7 +103,7 @@ abstract class Modules
 
     /**
      * Return the daterange
-     * @return array Returns daterange as array with English format and system format
+     * @return array[] Returns daterange as array with English format and system format
      */
     public function getDaterange()
     {
