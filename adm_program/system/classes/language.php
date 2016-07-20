@@ -39,8 +39,8 @@ class Language
 {
     private $languageData;                  ///< An object of the class @b LanguageData that stores all necessary language data in a session
     private $languages = array();           ///< An Array with all available languages and their ISO codes
-    private $xmlLanguageObjects = array();  ///< An array with all SimpleXML object of the language from all paths that are set in @b $languageData.
-    private $xmlReferenceLanguageObjects = array(); ///< An array with all SimpleXML object of the reference language from all paths that are set in @b $languageData.
+    private $xmlLanguageObjects = array();  ///< An array with all SimpleXMLElement object of the language from all paths that are set in @b $languageData.
+    private $xmlReferenceLanguageObjects = array(); ///< An array with all SimpleXMLElement object of the reference language from all paths that are set in @b $languageData.
 
     /**
      * Adds a language data object to this class. The object contains all necessary
@@ -49,10 +49,7 @@ class Language
      */
     public function addLanguageData(&$languageDataObject)
     {
-        if(is_object($languageDataObject))
-        {
-            $this->languageData =& $languageDataObject;
-        }
+        $this->languageData =& $languageDataObject;
     }
 
     /**
@@ -81,8 +78,7 @@ class Language
         // search for text id in every SimpleXMLElement (language file) of the object array
         foreach($this->languageData->getLanguagePaths() as $languagePath)
         {
-            $text = $this->searchLanguageText($this->xmlLanguageObjects, $languagePath,
-                $this->languageData->getLanguage(), $textId);
+            $text = $this->searchLanguageText($this->xmlLanguageObjects, $languagePath, $this->languageData->getLanguage(), $textId);
 
             if($text !== '')
             {
@@ -94,8 +90,7 @@ class Language
         // search for text id in every SimpleXMLElement (language file) of the object array
         foreach($this->languageData->getLanguagePaths() as $languagePath)
         {
-            $text = $this->searchLanguageText($this->xmlReferenceLanguageObjects, $languagePath,
-                $this->languageData->getLanguage(true), $textId);
+            $text = $this->searchLanguageText($this->xmlReferenceLanguageObjects, $languagePath, $this->languageData->getLanguage(true), $textId);
 
             if($text !== '')
             {
@@ -161,7 +156,7 @@ class Language
 
     /**
      * Returns an array with all countries and their ISO codes
-     * @return array Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     * @return string[] Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
     public function getCountries()
     {
@@ -275,7 +270,7 @@ class Language
     /**
      * Creates an array with all languages that are possible in Admidio.
      * The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)
-     * @return array Return an array with all available languages.
+     * @return string[] Return an array with all available languages.
      */
     public function getAvailableLanguages()
     {
@@ -295,10 +290,10 @@ class Language
 
     /**
      * Search for text id in a language xml file and return the text. If no text was found than nothing is returned.
-     * @param array  $objectArray  The reference to an array where every SimpleXMLElement of each language path is stored
-     * @param string $languagePath The path in which the different language xml files are.
-     * @param string $language     The ISO code of the language in which the text will be searched
-     * @param string $textId       The id of the text that will be searched in the file.
+     * @param SimpleXMLElement[] $objectArray  The reference to an array where every SimpleXMLElement of each language path is stored
+     * @param string             $languagePath The path in which the different language xml files are.
+     * @param string             $language     The ISO code of the language in which the text will be searched
+     * @param string             $textId       The id of the text that will be searched in the file.
      * @return string Return the text in the language or nothing if text id wasn't found.
      */
     public function searchLanguageText(array &$objectArray, $languagePath, $language, $textId)

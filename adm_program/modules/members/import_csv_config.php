@@ -15,11 +15,13 @@ require('../../system/login_valid.php');
 if(!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 if(count($_SESSION['file_lines']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
+    // => EXIT
 }
 
 $headline = $gL10n->get('MEM_ASSIGN_FIELDS');

@@ -25,6 +25,7 @@ $showSystemCategory = false;
 if(!$gCurrentUser->manageRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 if($getRoleId > 0)
@@ -49,12 +50,14 @@ if($getRoleId > 0)
     if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     // Administrator role could only be created or edited by administrators
     if($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     // hidden roles can also see hidden categories

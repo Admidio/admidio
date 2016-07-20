@@ -25,6 +25,7 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 if (!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // set headline of the script

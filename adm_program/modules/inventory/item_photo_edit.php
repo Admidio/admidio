@@ -28,6 +28,7 @@ $getMode   = admFuncVariableIsValid($_GET, 'mode',   'string', array('defaultVal
 if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // in ajax mode only return simple text on error
@@ -40,6 +41,7 @@ if($getMode === 'delete')
 if (ini_get('file_uploads') !== '1')
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
+    // => EXIT
 }
 
 // read user data and show error if user doesn't exists
@@ -54,12 +56,14 @@ if($gPreferences['profile_photo_storage'] == 1)
     if(!$myFilesProfilePhotos->checkSettings())
     {
         $gMessage->show($gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+        // => EXIT
     }
 }
 
 if($inventory->getValue('inv_id') == 0)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }
 
 if($getMode === 'save')
@@ -124,6 +128,7 @@ elseif($getMode === 'dont_save')
     // zur Ausgangsseite zurueck
     $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/inventory/item.php?item_id='.$getItemId, 2000);
     $gMessage->show($gL10n->get('SYS_PROCESS_CANCELED'));
+    // => EXIT
 }
 elseif($getMode === 'delete')
 {
@@ -186,12 +191,14 @@ elseif($getMode === 'upload')
     if ($_FILES['userfile']['error'][0] == 1)
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', round(admFuncMaxUploadSize()/pow(1024, 2))));
+        // => EXIT
     }
 
     // Kontrolle ob Fotos ausgewaehlt wurden
     if(!file_exists($_FILES['userfile']['tmp_name'][0]))
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_NOT_CHOOSEN'));
+        // => EXIT
     }
 
     // Dateiendung
@@ -199,6 +206,7 @@ elseif($getMode === 'upload')
     if ($image_properties['mime'] !== 'image/jpeg' && $image_properties['mime'] !== 'image/png')
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_FORMAT_INVALID'));
+        // => EXIT
     }
 
     // Auflösungskontrolle
@@ -206,6 +214,7 @@ elseif($getMode === 'upload')
     if($image_dimensions > admFuncProcessableImageSize())
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', round(admFuncProcessableImageSize()/1000000, 2)));
+        // => EXIT
     }
 
     // Foto auf entsprechende Groesse anpassen

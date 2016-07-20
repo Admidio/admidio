@@ -49,7 +49,7 @@ class Menu
      * @param string $text
      * @param string $icon
      * @param string $desc
-     * @return array
+     * @return string[]
      */
     private function mkItem($id, $link, $text, $icon, $desc = '')
     {
@@ -64,7 +64,14 @@ class Menu
             $icon = THEME_PATH . $icon;
         }
 
-        return array('id' => $id, 'link' => $link, 'text' => $text, 'icon' => $icon, 'desc' => $desc, 'subitems' => array());
+        return array(
+            'id'       => $id,
+            'link'     => $link,
+            'text'     => $text,
+            'icon'     => $icon,
+            'desc'     => $desc,
+            'subitems' => array()
+        );
     }
 
     /**

@@ -23,6 +23,7 @@ $getItemId = admFuncVariableIsValid($_GET, 'item_id', 'int');
 if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // create item object
@@ -33,6 +34,7 @@ $inventory = new Inventory($gDb, $gInventoryFields, $getItemId);
 if($gPreferences['enable_inventory_module'] >= 0 && !$gValidLogin)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder

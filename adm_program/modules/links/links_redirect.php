@@ -26,6 +26,7 @@ if ($gPreferences['enable_weblinks_module'] == 0)
 {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 if($gPreferences['enable_weblinks_module'] == 2)
 {
@@ -40,6 +41,7 @@ $weblink = new TableWeblink($gDb, $getLinkId);
 if(strlen($weblink->getValue('lnk_url')) === 0 || (!$gValidLogin && $weblink->getValue('cat_hidden') == 1))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }
 
 // Wenn Link gültig ist, Counter um eine Position erhöhen

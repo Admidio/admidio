@@ -35,3 +35,4 @@ $message_code = 'SYS_LOGOUT_SUCCESSFUL';
 // message logout successful and go to homepage
 $gMessage->setForwardUrl($gHomepage, 2000);
 $gMessage->show($gL10n->get($message_code));
+// => EXIT

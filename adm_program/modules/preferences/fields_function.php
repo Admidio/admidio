@@ -32,6 +32,7 @@ $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validV
 if (!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // create user field object
@@ -46,6 +47,7 @@ if($getUsfId > 0)
     && $userField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     // if system profile field then set usf_type to default
@@ -66,32 +68,38 @@ if($getMode === 1)
     if($userField->getValue('usf_system') == 0 && $_POST['usf_name'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+        // => EXIT
     }
 
     if($userField->getValue('usf_system') == 0 && $_POST['usf_type'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATATYPE')));
+        // => EXIT
     }
 
     if($userField->getValue('usf_system') == 0 && $_POST['usf_cat_id'] == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
+        // => EXIT
     }
 
     if(($_POST['usf_type'] === 'DROPDOWN' || $_POST['usf_type'] === 'RADIO_BUTTON')
     && $_POST['usf_value_list'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_VALUE_LIST')));
+        // => EXIT
     }
 
     if($_POST['usf_icon'] !== '' && !strValidCharacters($_POST['usf_icon'], 'url'))
     {
         $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_ICON')));
+        // => EXIT
     }
 
     if($_POST['usf_url'] !== '' && !strValidCharacters($_POST['usf_url'], 'url'))
     {
         $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('ORG_URL')));
+        // => EXIT
     }
 
     // Nachname und Vorname sollen immer Pflichtfeld bleiben
@@ -115,6 +123,7 @@ if($getMode === 1)
         if($row['count'] > 0)
         {
             $gMessage->show($gL10n->get('ORG_FIELD_EXIST'));
+            // => EXIT
         }
     }
 
@@ -150,6 +159,7 @@ if($getMode === 1)
                 if($key === 'usf_url')
                 {
                     $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('ORG_URL')));
+                    // => EXIT
                 }
             }
         }
@@ -161,6 +171,7 @@ if($getMode === 1)
     if($return_code < 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     $gNavigation->deleteLastUrl();
@@ -169,6 +180,7 @@ if($getMode === 1)
     // zu den Organisationseinstellungen zurueck
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+    // => EXIT
 }
 elseif($getMode === 2)
 {
@@ -176,6 +188,7 @@ elseif($getMode === 2)
     {
         // Systemfelder duerfen nicht geloescht werden
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
     }
 
     // Feld loeschen

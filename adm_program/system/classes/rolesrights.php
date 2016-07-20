@@ -5,6 +5,9 @@
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
+ */
+
+/**
  * @class RolesRights
  * @brief Manages a special right of the table adm_roles_rights for a special object.
  *
@@ -50,13 +53,13 @@ class RolesRights extends TableAccess
 
     /**
      * Add all roles of the parameter array to the current roles rights object.
-     * @param array $roles Array with all roles ids that should be add.
+     * @param int[] $roleIds Array with all role ids that should be add.
      */
-    public function addRoles(array $roles)
+    public function addRoles(array $roleIds)
     {
-        foreach($roles as $roleId)
+        foreach($roleIds as $roleId)
         {
-            if(!in_array($roleId, $this->rolesIds))
+            if(!in_array((int) $roleId, $this->rolesIds, true))
             {
                 $rolesRightsData = new TableAccess($this->db, TBL_ROLES_RIGHTS_DATA, 'rrd');
                 $rolesRightsData->setValue('rrd_ror_id', $this->getValue('ror_id'));
@@ -65,7 +68,7 @@ class RolesRights extends TableAccess
                 $rolesRightsData->save();
 
                 $this->rolesRightsDataObjects[$roleId] = $rolesRightsData;
-                $this->rolesIds[] = $roleId;
+                $this->rolesIds[] = (int) $roleId;
             }
         }
     }
@@ -73,19 +76,12 @@ class RolesRights extends TableAccess
     /**
      * Check if one of the assigned roles is also a role of the current object.
      * Method will return true if at least one role was found.
-     * @param array $assignedRoles Array with all assigned roles of the user whose rights should be checked
-     * @return Return @b true if at least one role of the assigned roles exists at the current object.
+     * @param int[] $assignedRoles Array with all assigned roles of the user whose rights should be checked
+     * @return bool Return @b true if at least one role of the assigned roles exists at the current object.
      */
     public function hasRight(array $assignedRoles)
     {
-        if(count($assignedRoles) > 0)
-        {
-            if(count(array_intersect($this->rolesIds, $assignedRoles)) > 0)
-            {
-                return true;
-            }
-        }
-        return false;
+        return count($assignedRoles) > 0 && count(array_intersect($this->rolesIds, $assignedRoles)) > 0;
     }
 
     /**
@@ -123,7 +119,7 @@ class RolesRights extends TableAccess
 
     /**
      * Get all roles ids that where assigned to the current roles right and the selected object.
-     * @return array Returns an array with all roles ids
+     * @return int[] Returns an array with all role ids
      */
     public function getRolesIds()
     {
@@ -152,7 +148,7 @@ class RolesRights extends TableAccess
             {
                 $this->rolesRightsDataObjects[$row['rrd_rol_id']] = new TableAccess($this->db, TBL_ROLES_RIGHTS_DATA, 'rrd');
                 $this->rolesRightsDataObjects[$row['rrd_rol_id']]->setArray($row);
-                $this->rolesIds[] = $row['rrd_rol_id'];
+                $this->rolesIds[] = (int) $row['rrd_rol_id'];
             }
         }
 
@@ -161,13 +157,13 @@ class RolesRights extends TableAccess
 
     /**
      * Remove all roles of the parameter array from the current roles rights object.
-     * @param array $roles Array with all roles ids that should be removed.
+     * @param int[] $roleIds Array with all role ids that should be removed.
      */
-    public function removeRoles(array $roles)
+    public function removeRoles(array $roleIds)
     {
-        foreach($roles as $roleId)
+        foreach($roleIds as $roleId)
         {
-            if(in_array($roleId, $this->rolesIds))
+            if(in_array((int) $roleId, $this->rolesIds, true))
             {
                 $this->rolesRightsDataObjects[$roleId]->delete();
             }

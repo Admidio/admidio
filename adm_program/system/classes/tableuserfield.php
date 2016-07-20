@@ -229,6 +229,7 @@ class TableUserField extends TableAccess
                                 catch(AdmException $e)
                                 {
                                     $e->showText();
+                                    // => EXIT
                                 }
                             }
                         }
@@ -267,6 +268,7 @@ class TableUserField extends TableAccess
                 catch(AdmException $e)
                 {
                     $e->showText();
+                    // => EXIT
                 }
             }
 

@@ -40,22 +40,27 @@ $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validV
 if($getType === 'ROL' && !$gCurrentUser->manageRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 elseif($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 elseif($getType === 'USF' && !$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 elseif($getType === 'DAT' && !$gCurrentUser->editDates())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // create category object
@@ -70,6 +75,7 @@ if($getCatId > 0)
     && $category->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     // if system category then set cat_name to default
@@ -95,6 +101,7 @@ if($getMode === 1)
     && $category->getValue('cat_system') == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+        // => EXIT
     }
 
     $sqlSearchOrga = '';
@@ -130,6 +137,7 @@ if($getMode === 1)
         if($row['count'] > 0)
         {
             $gMessage->show($gL10n->get('CAT_CATEGORY_EXIST'));
+            // => EXIT
         }
     }
 
@@ -162,6 +170,7 @@ if($getMode === 1)
     if($returnCode < 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
@@ -209,6 +218,7 @@ elseif($getMode === 2)
     catch(AdmException $e)
     {
         $e->showText();
+        // => EXIT
     }
 }
 elseif($getMode === 4)

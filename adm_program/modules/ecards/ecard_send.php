@@ -28,11 +28,13 @@ if ($gPreferences['enable_ecard_module'] != 1)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 // pruefen ob User eingeloggt ist
 if(!$gValidLogin)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }
 
 $senderName  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
@@ -42,11 +44,13 @@ if(!isset($_POST['ecard_recipients']) || !is_array($_POST['ecard_recipients']))
 {
     $_SESSION['ecard_request']['ecard_recipients'] = '';
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TO')));
+    // => EXIT
 }
 
 if(strlen($_POST['ecard_message']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_MESSAGE')));
+    // => EXIT
 }
 
 // Template wird geholt
@@ -56,6 +60,7 @@ $ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName);
 if($ecardDataToParse === null)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // check if user has right to send mail to selected roles and users
@@ -152,8 +157,10 @@ if($ecardSendResult)
 {
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
     $gMessage->show($gL10n->get('ECA_SUCCESSFULLY_SEND'));
+    // => EXIT
 }
 else
 {
     $gMessage->show($gL10n->get('ECA_NOT_SUCCESSFULLY_SEND'));
+    // => EXIT
 }

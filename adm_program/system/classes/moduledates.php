@@ -232,13 +232,12 @@ class ModuleDates extends Modules
         $datesStatement = $gDb->query($sql);
 
         // array for results
-        $dates = array();
-        $dates['recordset']  = $datesStatement->fetchAll();
-        $dates['numResults'] = $datesStatement->rowCount();
-        $dates['limit']      = $limit;
-        $dates['totalCount'] = $this->getDataSetCount();
-
-        return $dates;
+        return array(
+            'recordset'  => $datesStatement->fetchAll(),
+            'numResults' => $datesStatement->rowCount(),
+            'limit'      => $limit,
+            'totalCount' => $this->getDataSetCount()
+        );
     }
 
     /**

@@ -23,20 +23,24 @@ unset($_SESSION['import_csv_request']);
 if(!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 if(strlen($_FILES['userfile']['tmp_name'][0]) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_FILE')));
+    // => EXIT
 }
 elseif($_FILES['userfile']['error'][0] == 1)
 {
     // Dateigroesse ueberpruefen Servereinstellungen
     $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', $gPreferences['max_file_upload_size']));
+    // => EXIT
 }
 elseif($postRoleId === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROLE')));
+    // => EXIT
 }
 
 // Rolle einlesen und pruefen, ob der User diese selektieren kann und dadurch nicht
@@ -47,6 +51,7 @@ if(!$gCurrentUser->hasRightViewRole($role->getValue('rol_id'))
 || (!$gCurrentUser->manageRoles() && $role->getValue('rol_assign_roles') == false))
 {
     $gMessage->show($gL10n->get('MEM_ROLE_SELECT_RIGHT', $role->getValue('rol_name')));
+    // => EXIT
 }
 
 // read file in an array; auto-detect the line endings of different os

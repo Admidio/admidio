@@ -27,6 +27,7 @@ if ($gPreferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // Initialize and check the parameters
@@ -42,6 +43,7 @@ $myFilesDownload = new MyFiles('DOWNLOAD');
 if(!$myFilesDownload->checkSettings())
 {
     $gMessage->show($gL10n->get($myFilesDownload->errorText, $myFilesDownload->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+    // => EXIT
 }
 
 // check the rights of the current folder
@@ -51,6 +53,7 @@ $folder = new TableFolder($gDb, $getFolderId);
 if (!$folder->hasUploadRight())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // Delete file
@@ -67,6 +70,7 @@ if ($getMode === 2)
         catch(AdmException $e)
         {
             $e->showText();
+            // => EXIT
         }
 
         if ($file->delete())
@@ -79,6 +83,7 @@ if ($getMode === 2)
     {
         // if no file id was set then show error
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
     }
 
     unset($_SESSION['download_request']);
@@ -91,6 +96,7 @@ elseif ($getMode === 3)
     {
         // FolderId ist zum Anlegen eines Unterordners erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
     }
 
     try
@@ -110,6 +116,7 @@ elseif ($getMode === 3)
             if (file_exists($folder->getCompletePathOfFolder(). '/'.$newFolderName))
             {
                 $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolderName));
+                // => EXIT
             }
             else
             {
@@ -141,10 +148,12 @@ elseif ($getMode === 3)
                     // der entsprechende Ordner konnte nicht angelegt werden
                     $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
                     $gMessage->show($gL10n->get($b_return['text'], $b_return['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+                    // => EXIT
                 }
 
                 $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
                 $gMessage->show($gL10n->get('DOW_FOLDER_CREATED', $newFolderName));
+                // => EXIT
             }
         }
     }
@@ -169,6 +178,7 @@ elseif ($getMode === 4)
     {
         // fileid and/or folderid must be set
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
     }
 
     try
@@ -193,6 +203,7 @@ elseif ($getMode === 4)
                  && file_exists(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
                 {
                     $gMessage->show($gL10n->get('DOW_FILE_EXIST', $newFile));
+                    // => EXIT
                 }
                 else
                 {
@@ -207,11 +218,13 @@ elseif ($getMode === 4)
 
                         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
                         $gMessage->show($gL10n->get('DOW_FILE_RENAME', $oldName));
+                        // => EXIT
                     }
                     else
                     {
                         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
                         $gMessage->show($gL10n->get('DOW_FILE_RENAME_ERROR', $oldName));
+                        // => EXIT
                     }
                 }
             }
@@ -235,6 +248,7 @@ elseif ($getMode === 4)
                 && file_exists(SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
                 {
                     $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolder));
+                    // => EXIT
                 }
                 else
                 {
@@ -248,11 +262,13 @@ elseif ($getMode === 4)
 
                         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
                         $gMessage->show($gL10n->get('DOW_FOLDER_RENAME', $oldName));
+                        // => EXIT
                     }
                     else
                     {
                         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
                         $gMessage->show($gL10n->get('DOW_FOLDER_RENAME_ERROR', $oldName));
+                        // => EXIT
                     }
                 }
             }
@@ -280,6 +296,7 @@ elseif ($getMode === 5)
     {
         // Es muss eine FolderId uebergeben werden
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
     }
     elseif ($getFolderId > 0)
     {
@@ -291,6 +308,7 @@ elseif ($getMode === 5)
         catch(AdmException $e)
         {
             $e->showText();
+            // => EXIT
         }
 
         if ($folder->delete())
@@ -310,12 +328,14 @@ elseif ($getMode === 6)
     {
         // FolderId ist zum hinzufuegen erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
     }
 
     // only users with download administration rights should set new roles rights
     if(!$gCurrentUser->editDownloadRight())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     try
@@ -380,18 +400,21 @@ elseif ($getMode === 7)
     if(!isset($_POST['adm_roles_view_right']))
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
+        // => EXIT
     }
 
     if ($getFolderId === 0 || !is_array($_POST['adm_roles_view_right']) || !is_array($_POST['adm_roles_upload_right']))
     {
         // FolderId ist zum hinzufuegen erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
     }
 
     // only users with download administration rights should set new roles rights
     if(!$gCurrentUser->editDownloadRight())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     try
@@ -445,6 +468,7 @@ elseif ($getMode === 7)
 
         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
         $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+        // => EXIT
     }
     catch(AdmException $e)
     {

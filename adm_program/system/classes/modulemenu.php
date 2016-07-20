@@ -91,8 +91,8 @@ class ModuleMenu
 
     /**
      * add a drop down item
-     * @param array $menuEntry menu entry element which was added with addItem
-     * @param bool  $selected  determines if drop down element should be pre selected
+     * @param string[] $menuEntry menu entry element which was added with addItem
+     * @param bool     $selected  determines if drop down element should be pre selected
      */
     private function addDropDownItem(array &$menuEntry, $selected = false)
     {
@@ -158,7 +158,7 @@ class ModuleMenu
 
     /**
      * creates an text link icon
-     * @param array $menuEntry menu entry element which was added with addItem
+     * @param string[] $menuEntry menu entry element which was added with addItem
      * @return string HTML of created item
      */
     private function createIconTextLink(array &$menuEntry)
@@ -235,7 +235,7 @@ class ModuleMenu
      * @param string $text Link text
      * @param string $icon Icon of the menu item, that will also be linked
      * @param string $js   Javascript to be executed
-     * @return array
+     * @return string[]
      */
     private function mkItem($id, $type, $link, $text, $icon, $js = '')
     {

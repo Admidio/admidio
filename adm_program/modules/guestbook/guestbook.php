@@ -27,6 +27,7 @@ if ($gPreferences['enable_guestbook_module'] == 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 elseif($gPreferences['enable_guestbook_module'] == 2)
 {
@@ -43,6 +44,7 @@ $getModeration = admFuncVariableIsValid($_GET, 'moderation', 'bool');
 if($getModeration && !$gCurrentUser->editGuestbookRight())
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }
 
 // Navigation faengt hier im Modul an, wenn keine Eintrag direkt aufgerufen wird

@@ -52,11 +52,13 @@ if(array_key_exists('plg_usr_login_name', $_POST) && $_POST['plg_usr_login_name'
 if($loginname === '')
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME')));
+    // => EXIT
 }
 
 if($password === '')
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
+    // => EXIT
 }
 
 // TODO Future: check Password min/max Length
@@ -74,6 +76,7 @@ $userStatement = $gDb->query($sql);
 if ($userStatement->rowCount() === 0)
 {
     $gMessage->show($gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT'));
+    // => EXIT
 }
 else
 {
@@ -102,6 +105,7 @@ else
     if (is_string($checkLoginReturn))
     {
         $gMessage->show($checkLoginReturn);
+        // => EXIT
     }
     else
     {

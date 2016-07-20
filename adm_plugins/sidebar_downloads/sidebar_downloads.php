@@ -101,6 +101,7 @@ if ($gPreferences['enable_download_module'] == 1)
                 if($errorCode !== 'DOW_FOLDER_NO_RIGHTS')
                 {
                     $e->showText();
+                    // => EXIT
                 }
             }
 

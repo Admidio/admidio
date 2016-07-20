@@ -23,6 +23,7 @@ $getUserId       = admFuncVariableIsValid($_GET, 'usr_id', 'int',    array('requ
 if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_recovery'] != 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 $user = new User($gDb, $gProfileFields, $getUserId);
@@ -37,8 +38,10 @@ if($user->getValue('usr_activation_code') === $getActivationId)
 
     $gMessage->setForwardUrl($g_root_path.'/adm_program/system/login.php', 2000);
     $gMessage->show($gL10n->get('SYS_PWACT_PW_SAVED'));
+    // => EXIT
 }
 else
 {
     $gMessage->show($gL10n->get('SYS_PWACT_CODE_INVALID'));
+    // => EXIT
 }

@@ -95,6 +95,7 @@ class User extends TableAccess
         if($defaultRolesStatement->rowCount() === 0)
         {
             $gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
+            // => EXIT
         }
 
         while($rolId = $defaultRolesStatement->fetchColumn())
@@ -640,7 +641,7 @@ class User extends TableAccess
     }
 
     /**
-     * @param array $rightsList
+     * @param bool[] $rightsList
      * @return int[]
      */
     private function getAllRolesWithRight(array $rightsList)
@@ -905,7 +906,7 @@ class User extends TableAccess
     }
 
     /**
-     * @param array  $rightsList
+     * @param bool[] $rightsList
      * @param string $rightName
      * @param int    $roleId
      * @return bool

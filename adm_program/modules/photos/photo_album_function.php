@@ -27,12 +27,14 @@ if ($gPreferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
 if(!$gCurrentUser->editPhotoRight())
 {
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
+    // => EXIT
 }
 
 // Gepostete Variablen in Session speichern
@@ -49,6 +51,7 @@ if($getMode !== 'new' && $getPhotoId > 0)
     if($photo_album->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 }
 
@@ -69,6 +72,7 @@ if($getMode === 'new' || $getMode === 'change')
     if(strlen($_POST['pho_name']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('PHO_ALBUM')));
+        // => EXIT
     }
 
     // Beginn
@@ -78,6 +82,7 @@ if($getMode === 'new' || $getMode === 'change')
         if($startDate === false)
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
+            // => EXIT
         }
         else
         {
@@ -87,6 +92,7 @@ if($getMode === 'new' || $getMode === 'change')
     else
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_START')));
+        // => EXIT
     }
 
     // Ende
@@ -96,6 +102,7 @@ if($getMode === 'new' || $getMode === 'change')
         if($endDate === false)
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
+            // => EXIT
         }
         else
         {
@@ -111,6 +118,7 @@ if($getMode === 'new' || $getMode === 'change')
     if(strlen($_POST['pho_end']) > 0 && $_POST['pho_end'] < $_POST['pho_begin'])
     {
         $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+        // => EXIT
     }
 
     // Photographen
@@ -142,6 +150,7 @@ if($getMode === 'new' || $getMode === 'change')
             // der entsprechende Ordner konnte nicht angelegt werden
             $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
             $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+            // => EXIT
         }
 
         if(strlen($error['text']) === 0)
@@ -170,6 +179,7 @@ if($getMode === 'new' || $getMode === 'change')
             {
                 $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
                 $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+                // => EXIT
             }
         }
 

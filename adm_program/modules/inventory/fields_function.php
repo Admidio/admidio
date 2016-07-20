@@ -28,6 +28,7 @@ $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validV
 if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // create item field object
@@ -42,6 +43,7 @@ if($getInfId > 0)
     && $itemField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     // if system profile field then set usf_type to default
@@ -62,16 +64,19 @@ if($getMode === 1)
     if($itemField->getValue('inf_system') == 0 && strlen($_POST['inf_name']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+        // => EXIT
     }
 
     if($itemField->getValue('inf_system') == 0 && strlen($_POST['inf_type']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATATYPE')));
+        // => EXIT
     }
 
     if($itemField->getValue('inf_system') == 0 && $_POST['inf_cat_id'] == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
+        // => EXIT
     }
 
     if(isset($_POST['inf_name']) && $itemField->getValue('inf_name') != $_POST['inf_name'])
@@ -88,6 +93,7 @@ if($getMode === 1)
         if($row['count'] > 0)
         {
             $gMessage->show($gL10n->get('ORG_FIELD_EXIST'));
+            // => EXIT
         }
     }
 
@@ -127,6 +133,7 @@ if($getMode === 1)
     if($return_code < 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     $gNavigation->deleteLastUrl();
@@ -135,6 +142,7 @@ if($getMode === 1)
     // zu den Organisationseinstellungen zurueck
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+    // => EXIT
 }
 elseif($getMode === 2)
 {
@@ -142,6 +150,7 @@ elseif($getMode === 2)
     {
         // Systemfelder duerfen nicht geloescht werden
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
     }
 
     // Feld loeschen

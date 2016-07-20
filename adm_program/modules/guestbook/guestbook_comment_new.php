@@ -27,12 +27,14 @@ if ($gPreferences['enable_guestbook_module'] == 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // Es muss ein (nicht zwei) Parameter uebergeben werden: Entweder id oder cid...
 if($getGboId > 0 && $getGbcId > 0)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }
 
 // set create or edit mode
@@ -59,6 +61,7 @@ if(($gPreferences['enable_guestbook_module'] == 2 || $gPreferences['enable_gbook
     {
         // der User hat kein Recht zu kommentieren
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 }
 
@@ -71,6 +74,7 @@ if($getGbcId > 0)
     {
         // der User hat kein Recht Kommentare zu editieren
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
 }
@@ -88,6 +92,7 @@ if($getGbcId > 0)
     if($guestbook_comment->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 }
 
@@ -124,6 +129,7 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
     {
         // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
         $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));
+        // => EXIT
     }
 }
 

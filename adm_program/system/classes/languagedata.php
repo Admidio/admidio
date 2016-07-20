@@ -74,7 +74,7 @@ class LanguageData
 
     /**
      * Returns an array with all countries and their ISO codes
-     * @return array Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     * @return string[] Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
     public function getCountriesArray()
     {
@@ -101,7 +101,7 @@ class LanguageData
 
     /**
      * Returns an array with all language paths that were set.
-     * @return array with all language paths that were set.
+     * @return string[] with all language paths that were set.
      */
     public function getLanguagePaths()
     {
@@ -110,7 +110,7 @@ class LanguageData
 
     /**
      * Save the array with all countries and their ISO codes in an internal parameter for later use
-     * @param array $countries Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     * @param string[] $countries Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
     public function setCountriesArray(array $countries)
     {

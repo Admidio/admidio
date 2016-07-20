@@ -182,14 +182,13 @@ class ModuleAnnouncements extends Modules
         $announcementsStatement = $gDb->query($sql);
 
         // array for results
-        $announcements = array();
-        $announcements['recordset']  = $announcementsStatement->fetchAll();
-        $announcements['numResults'] = $announcementsStatement->rowCount();
-        $announcements['limit']      = $limit;
-        $announcements['totalCount'] = $this->getDataSetCount();
-        $announcements['parameter']  = $this->getParameters();
-
-        return $announcements;
+        return array(
+            'recordset'  => $announcementsStatement->fetchAll(),
+            'numResults' => $announcementsStatement->rowCount(),
+            'limit'      => $limit,
+            'totalCount' => $this->getDataSetCount(),
+            'parameter'  => $this->getParameters()
+        );
     }
 
     /**

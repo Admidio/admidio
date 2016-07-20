@@ -34,6 +34,7 @@ if ($gPreferences['enable_guestbook_module'] == 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 elseif($gPreferences['enable_guestbook_module'] == 2)
 {
@@ -56,6 +57,7 @@ if ($getMode === 2 || $getMode === 3 || $getMode === 4 || $getMode === 5 || $get
             if (!$gCurrentUser->commentGuestbookRight())
             {
                 $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+                // => EXIT
             }
         }
 
@@ -72,6 +74,7 @@ if ($getMode === 2 || $getMode === 3 || $getMode === 4 || $getMode === 5 || $get
         if(!$gCurrentUser->editGuestbookRight())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
     }
 }
@@ -89,6 +92,7 @@ if ($getMode === 1 || $getMode === 2 || $getMode === 3 || $getMode === 9)
         if($guestbook->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
     }
 }
@@ -147,10 +151,12 @@ if ($getMode === 1 || $getMode === 3)
                 if($key === 'gbo_email')
                 {
                     $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
+                    // => EXIT
                 }
                 elseif($key === 'gbo_homepage')
                 {
                     $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE')));
+                    // => EXIT
                 }
             }
         }
@@ -186,6 +192,7 @@ if ($getMode === 1 || $getMode === 3)
                 {
                     // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
                     $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));
+                    // => EXIT
                 }
             }
         }
@@ -203,6 +210,7 @@ if ($getMode === 1 || $getMode === 3)
         if($return_code === false)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
 
         if($return_code === true)
@@ -242,6 +250,7 @@ if ($getMode === 1 || $getMode === 3)
         {
             $gMessage->setForwardUrl($url);
             $gMessage->show($gL10n->get('GBO_ENTRY_QUEUED'));
+            // => EXIT
         }
 
         header('Location: '.$url);
@@ -252,10 +261,12 @@ if ($getMode === 1 || $getMode === 3)
         if(strlen($guestbook->getValue('gbo_name')) > 0)
         {
             $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TEXT')));
+            // => EXIT
         }
         else
         {
             $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TEXT')));
+            // => EXIT
         }
     }
 }
@@ -329,6 +340,7 @@ elseif($getMode === 4 || $getMode === 8)
                 if($key === 'gbc_email')
                 {
                     $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
+                    // => EXIT
                 }
             }
         }
@@ -368,6 +380,7 @@ elseif($getMode === 4 || $getMode === 8)
                 {
                     // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
                     $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));
+                    // => EXIT
                 }
             }
         }
@@ -385,6 +398,7 @@ elseif($getMode === 4 || $getMode === 8)
         if($return_code === false)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
 
         if($return_code === true)
@@ -424,6 +438,7 @@ elseif($getMode === 4 || $getMode === 8)
         {
             $gMessage->setForwardUrl($url);
             $gMessage->show($gL10n->get('GBO_ENTRY_QUEUED'));
+            // => EXIT
         }
 
         header('Location: '.$url);
@@ -434,10 +449,12 @@ elseif($getMode === 4 || $getMode === 8)
         if(strlen($guestbook_comment->getValue('gbc_name')) > 0)
         {
             $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_COMMENT')));
+            // => EXIT
         }
         else
         {
             $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+            // => EXIT
         }
     }
 }
@@ -445,4 +462,5 @@ else
 {
     // Falls der Mode unbekannt ist, ist natürlich auch Ende...
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }

@@ -575,6 +575,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             }
 
             $gMessage->show($errorMessage);
+            // => EXIT
         }
         else
         {

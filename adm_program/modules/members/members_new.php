@@ -15,6 +15,7 @@ require_once('../../system/login_valid.php');
 if (!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 echo '

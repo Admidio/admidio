@@ -60,11 +60,13 @@ $numberRoles = count($roleIds);
 if ($numberRoles === 0)
 {
     $gMessage->show($gL10n->get('LST_NO_ROLE_GIVEN'));
+    // => EXIT
 }
 
 if($objDateFrom > $objDateTo)
 {
     $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+    // => EXIT
 }
 
 // determine all roles relevant data
@@ -85,6 +87,7 @@ if ($numberRoles > 1)
         if (!$gCurrentUser->hasRightViewRole($role['rol_id']))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
 
         $htmlSubHeadline .= ', '.$role['rol_name'];
@@ -100,6 +103,7 @@ else
     if (!$gCurrentUser->hasRightViewRole($roleIds[0]))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     $roleName         = $role->getValue('rol_name');
@@ -115,6 +119,7 @@ if ($numberRoles === 1 && $getListId === 0)
     if ($getListId === 0)
     {
         $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
+        // => EXIT
     }
 }
 
@@ -198,6 +203,7 @@ if ($numMembers === 0)
 {
     // Es sind keine Daten vorhanden !
     $gMessage->show($gL10n->get('LST_NO_USER_FOUND'));
+    // => EXIT
 }
 
 // define title (html) and headline

@@ -35,6 +35,7 @@ if(file_exists('adm_my_files/config.php'))
     catch(AdmException $e)
     {
         $e->showText();
+        // => EXIT
     }
 
     // if database doesn't contain the components table then link to update wizard

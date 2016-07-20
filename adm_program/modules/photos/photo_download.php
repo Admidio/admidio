@@ -36,6 +36,7 @@ if ($gPreferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 elseif($gPreferences['enable_photo_module'] == 2)
 {
@@ -48,6 +49,7 @@ if ($gPreferences['photo_download_enabled'] == 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('PHO_DOWNLOAD_DISABLED'));
+    // => EXIT
 }
 
 // Fotoalbumobjekt anlegen
@@ -60,12 +62,14 @@ $photo_album->readDataById($getPhotoId);
 if($photo_album->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // check whether album is locked
 if($photo_album->getValue('pho_locked') == 1 && !$gCurrentUser->editPhotoRight())
 {
     $gMessage->show($gL10n->get('PHO_ALBUM_NOT_APPROVED'));
+    // => EXIT
 }
 
 $albumFolder = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
@@ -73,6 +77,7 @@ $albumFolder = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_
 if($photo_album->getValue('pho_quantity') == 0)
 {
     $gMessage->show($gL10n->get('PHO_NO_ALBUM_CONTENT'));
+    // => EXIT
 }
 
 // check whether to take original version instead of scaled one

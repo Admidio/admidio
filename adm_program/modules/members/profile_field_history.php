@@ -51,6 +51,7 @@ if ($gPreferences['profile_log_edit_fields'] == 0
     || ($getUserId > 0   && !$gCurrentUser->hasRightEditProfile($user)))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // add page to navigation history
@@ -84,6 +85,7 @@ if($objDateTo === false)
 if($objDateFrom > $objDateTo)
 {
     $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+    // => EXIT
 }
 
 $dateFromIntern = $objDateFrom->format('Y-m-d');
@@ -136,10 +138,12 @@ if($fieldHistoryStatement->rowCount() === 0)
     if($getUserId > 0)
     {
         $gMessage->show($gL10n->get('MEM_NO_CHANGES_PROFIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
+        // => EXIT
     }
     else
     {
         $gMessage->show($gL10n->get('MEM_NO_CHANGES'));
+        // => EXIT
     }
 }
 

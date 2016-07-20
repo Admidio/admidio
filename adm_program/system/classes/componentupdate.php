@@ -306,6 +306,7 @@ class ComponentUpdate extends Component
         catch(AdmException $e)
         {
             $e->showText();
+            // => EXIT
         }
     }
 

@@ -7,6 +7,9 @@
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
+ */
+
+/**
  * @class TableFolder
  * Diese Klasse dient dazu ein Folderobjekt zu erstellen.
  * Ein Ordner kann ueber diese Klasse in der Datenbank verwaltet werden
@@ -34,36 +37,40 @@ class TableFolder extends TableAccess
      * Add all roles of the array to the current folder and all of the subfolders. The
      * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
      * @param string $rolesRightNameIntern Name of the right where the roles should be added
+     * @param int[]  $rolesArray
+     * @param int    $folderId
      */
     public function addRolesOnFolder($rolesRightNameIntern, array $rolesArray, $folderId = 0)
     {
-        if (count($rolesArray) > 0)
+        if (count($rolesArray) === 0)
         {
-            if ($folderId === 0)
-            {
-                $folderId = $this->getValue('fol_id');
-            }
-
-            $this->db->startTransaction();
-
-            // read all subfolders of the current folder
-            $sql_subfolders = 'SELECT *
-                                 FROM '.TBL_FOLDERS.'
-                                WHERE fol_fol_id_parent = '.$folderId;
-            $subfoldersStatement = $this->db->query($sql_subfolders);
-
-            while($row_subfolders = $subfoldersStatement->fetchObject())
-            {
-                // recursive call for every subfolder
-                $this->addRolesOnFolder($rolesRightNameIntern, $rolesArray, $row_subfolders->fol_id);
-            }
-
-            // add new rights to folder
-            $folderRolesRights = new RolesRights($this->db, $rolesRightNameIntern, $folderId);
-            $folderRolesRights->addRoles($rolesArray);
-
-            $this->db->endTransaction();
+            return;
         }
+
+        if ($folderId === 0)
+        {
+            $folderId = $this->getValue('fol_id');
+        }
+
+        $this->db->startTransaction();
+
+        // read all subfolders of the current folder
+        $sql_subfolders = 'SELECT *
+                             FROM '.TBL_FOLDERS.'
+                            WHERE fol_fol_id_parent = '.$folderId;
+        $subfoldersStatement = $this->db->query($sql_subfolders);
+
+        while($row_subfolders = $subfoldersStatement->fetchObject())
+        {
+            // recursive call for every subfolder
+            $this->addRolesOnFolder($rolesRightNameIntern, $rolesArray, $row_subfolders->fol_id);
+        }
+
+        // add new rights to folder
+        $folderRolesRights = new RolesRights($this->db, $rolesRightNameIntern, $folderId);
+        $folderRolesRights->addRoles($rolesArray);
+
+        $this->db->endTransaction();
     }
 
     /**
@@ -326,7 +333,7 @@ class TableFolder extends TableAccess
 
     /**
      * Inhalt des aktuellen Ordners, abhaengig von den Benutzerrechten, als Array zurueckliefern...
-     * @return array
+     * @return array[]
      */
     public function getFolderContentsForDownload()
     {
@@ -640,7 +647,7 @@ class TableFolder extends TableAccess
 
     /**
      * Returns an array with all roles ids that have the right to view the folder.
-     * @return array Returns an array with all roles ids that have the right to view the folder.
+     * @return int[] Returns an array with all role ids that have the right to view the folder.
      */
     public function getRoleViewArrayOfFolder()
     {
@@ -649,7 +656,7 @@ class TableFolder extends TableAccess
 
     /**
      * Returns an array with all roles ids that have the right to upload files to the folder.
-     * @return array Returns an array with all roles ids that have the right to upload files to the folder.
+     * @return int[] Returns an array with all role ids that have the right to upload files to the folder.
      */
     public function getRoleUploadArrayOfFolder()
     {
@@ -733,36 +740,40 @@ class TableFolder extends TableAccess
      * Remove all roles of the array from the current folder and all of the subfolders. The
      * roles will be removed from the right that was set through parameter $rolesRightNameIntern.
      * @param string $rolesRightNameIntern Name of the right where the roles should be removed
+     * @param int[]  $rolesArray
+     * @param int    $folderId
      */
     public function removeRolesOnFolder($rolesRightNameIntern, array $rolesArray, $folderId = 0)
     {
-        if (count($rolesArray) > 0)
+        if (count($rolesArray) === 0)
         {
-            if ($folderId === 0)
-            {
-                $folderId = $this->getValue('fol_id');
-            }
-
-            $this->db->startTransaction();
-
-            // read all subfolders of the current folder
-            $sql_subfolders = 'SELECT *
-                                 FROM '.TBL_FOLDERS.'
-                                WHERE fol_fol_id_parent = '.$folderId;
-            $subfoldersStatement = $this->db->query($sql_subfolders);
-
-            while($row_subfolders = $subfoldersStatement->fetchObject())
-            {
-                // recursive call for every subfolder
-                $this->removeRolesOnFolder($rolesRightNameIntern, $rolesArray, $row_subfolders->fol_id);
-            }
-
-            // add new rights to folder
-            $folderRolesRights = new RolesRights($this->db, $rolesRightNameIntern, $folderId);
-            $folderRolesRights->removeRoles($rolesArray);
-
-            $this->db->endTransaction();
+            return;
         }
+
+        if ($folderId === 0)
+        {
+            $folderId = $this->getValue('fol_id');
+        }
+
+        $this->db->startTransaction();
+
+        // read all subfolders of the current folder
+        $sql_subfolders = 'SELECT *
+                             FROM '.TBL_FOLDERS.'
+                            WHERE fol_fol_id_parent = '.$folderId;
+        $subfoldersStatement = $this->db->query($sql_subfolders);
+
+        while($row_subfolders = $subfoldersStatement->fetchObject())
+        {
+            // recursive call for every subfolder
+            $this->removeRolesOnFolder($rolesRightNameIntern, $rolesArray, $row_subfolders->fol_id);
+        }
+
+        // add new rights to folder
+        $folderRolesRights = new RolesRights($this->db, $rolesRightNameIntern, $folderId);
+        $folderRolesRights->removeRoles($rolesArray);
+
+        $this->db->endTransaction();
     }
 
     /**
