@@ -52,7 +52,7 @@ class PasswordHashing
             }
 
             $salt = self::genRandomPassword(8, './ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
-            return crypt($password, '$6$' . $options['rounds'] . '$' . $salt . '$');
+            return crypt($password, '$6$rounds=' . $options['rounds'] . '$' . $salt . '$');
         }
 
         if (!array_key_exists('cost', $options))
@@ -80,9 +80,9 @@ class PasswordHashing
         {
             return password_verify($password, $hash);
         }
-        elseif (strlen($hash) === 98 && strpos($hash, '$6$') === 0)
+        elseif (strlen($hash) >= 110 && strpos($hash, '$6$') === 0)
         {
-            $passwordHash = crypt($password, substr($hash, 0, 12));
+            $passwordHash = crypt($password, $hash);
 
             if (function_exists('hash_equals'))
             {
