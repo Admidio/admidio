@@ -164,7 +164,6 @@ $sql = 'SELECT DISTINCT usr_id, usr_login_name,
          WHERE usr_valid = 1
            AND mem_rol_id '.$rol_sql.'
       ORDER BY days_to_bdate '.$sort_sql.', last_name, first_name ';
-//echo $sql; exit();
 $birthdayStatement = $gDb->query($sql);
 
 $numberBirthdays = $birthdayStatement->rowCount();

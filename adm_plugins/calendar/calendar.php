@@ -29,6 +29,9 @@ if(!defined('PLUGIN_PATH'))
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
+// Initialize and check the parameters
+$getDateId = admFuncVariableIsValid($_GET, 'date_id',   'int');
+
 if(isset($_GET['ajax_change']) && $plg_ajax_change)
 {
     // Header kodieren
@@ -126,41 +129,28 @@ $currentYear  = '';
 $today        = 0;
 
 // Date ID auslesen oder aktuellen Monat und Jahr erzeugen
-if(array_key_exists('date_id', $_GET))
+if($getDateId > 0)
 {
-    if(!is_numeric($_GET['date_id']))
-    {
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    else
-    {
-        $date_id = $_GET['date_id'];
-        $currentMonth = substr($date_id, 0, 2);
-        $currentYear  = substr($date_id, 2, 4);
-        $_SESSION['plugin_calendar_last_month'] = $currentMonth.$currentYear;
-
-        if($currentMonth === date('m') && $currentYear === date('Y'))
-        {
-            $today = (int) date('d');
-        }
-    }
+    $currentMonth = substr($getDateId, 0, 2);
+    $currentYear  = substr($getDateId, 2, 4);
+    $_SESSION['plugin_calendar_last_month'] = $currentMonth.$currentYear;
 }
 elseif(isset($_SESSION['plugin_calendar_last_month']))
 {
     // Zuletzt gewählten Monat anzeigen
     $currentMonth = substr($_SESSION['plugin_calendar_last_month'], 0, 2);
     $currentYear  = substr($_SESSION['plugin_calendar_last_month'], 2, 4);
-    if($currentMonth === date('m') && $currentYear === date('Y'))
-    {
-        $today = (int) date('d');
-    }
 }
 else
 {
     // show current month
     $currentMonth = date('m');
     $currentYear  = date('Y');
-    $today        = (int) date('d');
+}
+
+if($currentMonth === date('m') && $currentYear === date('Y'))
+{
+    $today = (int) date('d');
 }
 
 $lastDayCurrentMonth = (int) date('t', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
