@@ -69,6 +69,8 @@ if($getMode !== 2)
 // Liste speichern
 if ($getMode === 1 || $getMode === 2)
 {
+    $globalConfiguration = admFuncVariableIsValid($_POST, 'cbx_global_configuration', 'bool', array('defaultValue' => false));
+
     // alle vorhandenen Spalten durchgehen
     for($columnNumber = 1; isset($_POST['column'. $columnNumber]); ++$columnNumber)
     {
@@ -88,9 +90,9 @@ if ($getMode === 1 || $getMode === 2)
     }
 
     // set list global only in save mode
-    if($getMode === 1 && $gCurrentUser->isAdministrator() && isset($_POST['cbx_global_configuration']))
+    if($getMode === 1 && $gCurrentUser->isAdministrator())
     {
-        $list->setValue('lst_global', $_POST['cbx_global_configuration']);
+        $list->setValue('lst_global', $globalConfiguration);
     }
     else
     {

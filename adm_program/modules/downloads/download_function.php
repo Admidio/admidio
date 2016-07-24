@@ -101,60 +101,54 @@ elseif ($getMode === 3)
 
     try
     {
+        $newFolderName = admFuncVariableIsValid($_POST, 'new_folder', 'file', array('requireValue' => true));
+        $newFolderDescription = admFuncVariableIsValid($_POST, 'new_folder', 'string');
+
         // get recordset of current folder from database
         $folder->getFolderForDownload($getFolderId);
 
-        $newFolderName = null;
-
-        // check filename and throw exception if something is wrong
-        if(admStrIsValidFileName($_POST['new_folder']))
+        // Test ob der Ordner schon existiert im Filesystem
+        if (file_exists($folder->getCompletePathOfFolder(). '/'.$newFolderName))
         {
-            $newFolderName        = $_POST['new_folder'];
-            $newFolderDescription = $_POST['new_description'];
+            $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolderName));
+            // => EXIT
+        }
+        else
+        {
+            // Ordner erstellen
+            $b_return = $folder->createFolder($newFolderName);
 
-            // Test ob der Ordner schon existiert im Filesystem
-            if (file_exists($folder->getCompletePathOfFolder(). '/'.$newFolderName))
+            if(strlen($b_return['text']) === 0)
             {
-                $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolderName));
-                // => EXIT
+                // Jetzt noch den Ordner der DB hinzufuegen...
+                $newFolder = new TableFolder($gDb);
+
+                $newFolder->setValue('fol_fol_id_parent', $folder->getValue('fol_id'));
+                $newFolder->setValue('fol_type', 'DOWNLOAD');
+                $newFolder->setValue('fol_name', $newFolderName);
+                $newFolder->setValue('fol_description', $newFolderDescription);
+                $newFolder->setValue('fol_path', $folder->getValue('fol_path'). '/'.$folder->getValue('fol_name'));
+                $newFolder->setValue('fol_locked', $folder->getValue('fol_locked'));
+                $newFolder->setValue('fol_public', $folder->getValue('fol_public'));
+                $newFolder->save();
+
+                // get roles rights of parent folder
+                $rightParentFolderView = new RolesRights($gDb, 'folder_view', $folder->getValue('fol_id'));
+                $newFolder->addRolesOnFolder('folder_view', $rightParentFolderView->getRolesIds());
+                $rightParentFolderUpload = new RolesRights($gDb, 'folder_upload', $folder->getValue('fol_id'));
+                $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
             }
             else
             {
-                // Ordner erstellen
-                $b_return = $folder->createFolder($newFolderName);
-
-                if(strlen($b_return['text']) === 0)
-                {
-                    // Jetzt noch den Ordner der DB hinzufuegen...
-                    $newFolder = new TableFolder($gDb);
-
-                    $newFolder->setValue('fol_fol_id_parent', $folder->getValue('fol_id'));
-                    $newFolder->setValue('fol_type', 'DOWNLOAD');
-                    $newFolder->setValue('fol_name', $newFolderName);
-                    $newFolder->setValue('fol_description', $newFolderDescription);
-                    $newFolder->setValue('fol_path', $folder->getValue('fol_path'). '/'.$folder->getValue('fol_name'));
-                    $newFolder->setValue('fol_locked', $folder->getValue('fol_locked'));
-                    $newFolder->setValue('fol_public', $folder->getValue('fol_public'));
-                    $newFolder->save();
-
-                    // get roles rights of parent folder
-                    $rightParentFolderView = new RolesRights($gDb, 'folder_view', $folder->getValue('fol_id'));
-                    $newFolder->addRolesOnFolder('folder_view', $rightParentFolderView->getRolesIds());
-                    $rightParentFolderUpload = new RolesRights($gDb, 'folder_upload', $folder->getValue('fol_id'));
-                    $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
-                }
-                else
-                {
-                    // der entsprechende Ordner konnte nicht angelegt werden
-                    $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
-                    $gMessage->show($gL10n->get($b_return['text'], $b_return['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
-                    // => EXIT
-                }
-
-                $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-                $gMessage->show($gL10n->get('DOW_FOLDER_CREATED', $newFolderName));
+                // der entsprechende Ordner konnte nicht angelegt werden
+                $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
+                $gMessage->show($gL10n->get($b_return['text'], $b_return['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
                 // => EXIT
             }
+
+            $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+            $gMessage->show($gL10n->get('DOW_FOLDER_CREATED', $newFolderName));
+            // => EXIT
         }
     }
     catch(AdmException $e)
@@ -183,6 +177,9 @@ elseif ($getMode === 4)
 
     try
     {
+        $newName = admFuncVariableIsValid($_POST, 'new_name', 'file', array('requireValue' => true));
+        $newDescription = admFuncVariableIsValid($_POST, 'new_description', 'string');
+
         if($getFileId > 0)
         {
             // get recordset of current file from database and throw exception if necessary
@@ -190,42 +187,35 @@ elseif ($getMode === 4)
             $file->getFileForDownload($getFileId);
 
             $oldFile = $file->getCompletePathOfFile();
-            $newFile = null;
+            $newFile = $newName. '.'. pathinfo($oldFile, PATHINFO_EXTENSION);
 
-            // check filename and throw exception if something is wrong
-            if(admStrIsValidFileName($_POST['new_name'], true))
+            // Test ob die Datei schon existiert im Filesystem
+            if ($newFile !== $file->getValue('fil_name')
+             && file_exists(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
             {
-                $newFile        = $_POST['new_name'].'.'.pathinfo($oldFile, PATHINFO_EXTENSION);
-                $newDescription = $_POST['new_description'];
+                $gMessage->show($gL10n->get('DOW_FILE_EXIST', $newFile));
+                // => EXIT
+            }
+            else
+            {
+                $oldName = $file->getValue('fil_name');
 
-                // Test ob die Datei schon existiert im Filesystem
-                if ($newFile !== $file->getValue('fil_name')
-                 && file_exists(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
+                // Datei umbenennen im Filesystem und in der Datenbank
+                if (rename($oldFile, SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
                 {
-                    $gMessage->show($gL10n->get('DOW_FILE_EXIST', $newFile));
+                    $file->setValue('fil_name', $newFile);
+                    $file->setValue('fil_description', $newDescription);
+                    $file->save();
+
+                    $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                    $gMessage->show($gL10n->get('DOW_FILE_RENAME', $oldName));
                     // => EXIT
                 }
                 else
                 {
-                    $oldName = $file->getValue('fil_name');
-
-                    // Datei umbenennen im Filesystem und in der Datenbank
-                    if (rename($oldFile, SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
-                    {
-                        $file->setValue('fil_name', $newFile);
-                        $file->setValue('fil_description', $newDescription);
-                        $file->save();
-
-                        $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-                        $gMessage->show($gL10n->get('DOW_FILE_RENAME', $oldName));
-                        // => EXIT
-                    }
-                    else
-                    {
-                        $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-                        $gMessage->show($gL10n->get('DOW_FILE_RENAME_ERROR', $oldName));
-                        // => EXIT
-                    }
+                    $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                    $gMessage->show($gL10n->get('DOW_FILE_RENAME_ERROR', $oldName));
+                    // => EXIT
                 }
             }
         }
@@ -235,41 +225,34 @@ elseif ($getMode === 4)
             $folder->getFolderForDownload($getFolderId);
 
             $oldFolder = $folder->getCompletePathOfFolder();
-            $newFolder = null;
+            $newFolder = $newName;
 
-            // check foldername and throw exception if something is wrong
-            if(admStrIsValidFileName($_POST['new_name']))
+            // Test ob der Ordner schon existiert im Filesystem
+            if ($newFolder !== $folder->getValue('fol_name')
+            && file_exists(SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
             {
-                $newFolder      = $_POST['new_name'];
-                $newDescription = $_POST['new_description'];
+                $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolder));
+                // => EXIT
+            }
+            else
+            {
+                $oldName = $folder->getValue('fol_name');
 
-                // Test ob der Ordner schon existiert im Filesystem
-                if ($newFolder !== $folder->getValue('fol_name')
-                && file_exists(SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
+                // Ordner umbenennen im Filesystem und in der Datenbank
+                if (rename($oldFolder, SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
                 {
-                    $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolder));
+                    $folder->setValue('fol_description', $newDescription);
+                    $folder->rename($newFolder, $folder->getValue('fol_path'));
+
+                    $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                    $gMessage->show($gL10n->get('DOW_FOLDER_RENAME', $oldName));
                     // => EXIT
                 }
                 else
                 {
-                    $oldName = $folder->getValue('fol_name');
-
-                    // Ordner umbenennen im Filesystem und in der Datenbank
-                    if (rename($oldFolder, SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
-                    {
-                        $folder->setValue('fol_description', $newDescription);
-                        $folder->rename($newFolder, $folder->getValue('fol_path'));
-
-                        $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-                        $gMessage->show($gL10n->get('DOW_FOLDER_RENAME', $oldName));
-                        // => EXIT
-                    }
-                    else
-                    {
-                        $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-                        $gMessage->show($gL10n->get('DOW_FOLDER_RENAME_ERROR', $oldName));
-                        // => EXIT
-                    }
+                    $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                    $gMessage->show($gL10n->get('DOW_FOLDER_RENAME_ERROR', $oldName));
+                    // => EXIT
                 }
             }
         }
