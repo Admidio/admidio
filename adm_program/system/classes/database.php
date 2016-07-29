@@ -102,6 +102,7 @@ class Database
         $this->options  = $options;
 
         $this->transactions = 0;
+        $this->dbStructure  = array();
         $this->fetchArray   = array();
         $this->dbStructure  = array();
         $this->minRequiredVersion = '';
