@@ -787,6 +787,8 @@
     <string name="PRO_ADD_USER">Benutzer anlegen</string>
     <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</string>
     <string name="PRO_CANCEL_MEMBERSHIP">Mitgliedschaft beenden</string>
+    <string name="PRO_CANCEL_USER_RELATION">Beziehung löschen</string>
+    <string name="PRO_ADD_USER_RELATION">Beziehung erstellen</string>
     <string name="PRO_CHANGE_DATE">Datum ändern</string>
     <string name="PRO_CHANGE_PROFILE_PICTURE">Profilbild hochladen</string>
     <string name="PRO_CHOOSE_PHOTO">Foto auswählen</string>
@@ -846,6 +848,8 @@
     <string name="PRO_SHOW_ROLE_MEMBERSHIP_DESC">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied ist. Dazu werden die entsprechenden Berechtigungen und das Eintrittsdatum aufgelistet. (Standard: ja)</string>
     <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Rollen anderer Organisationen anzeigen</string>
     <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Ist der Benutzer Mitglied in Rollen einer anderen Organisation, so wird ein Kasten mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt. (Standard: ja)</string>
+    <string name="PRO_SHOW_USER_RELATIONS">Beziehungen anzeigen</string>
+    <string name="PRO_SHOW_USER_RELATIONS_DESC">Es wird ein Kasten mit allen Beziehungen des Benutzers zu anderen Benutzern angezeigt. (Standard: ja)</string>
     <string name="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS">zur Profilfeldpflege wechseln</string>
     <string name="PRO_UPLOAD_HELP_1">Auf den Button #VAR1_BOLD# klicken und die gewünschte Fotodatei von der Festplatte auswählen.</string>
     <string name="PRO_UPLOAD_HELP_2">Danach auf #VAR1_BOLD# klicken und ein wenig Geduld haben.</string>
@@ -1216,6 +1220,15 @@
     <string name="SYS_REGISTERED_AS">Angemeldet als</string>
     <string name="SYS_REGISTRATION">Registrierung</string>
     <string name="SYS_REGISTRATION_SAVED">Deine Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Deine Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung wirst du per E-Mail benachrichtigt.</string>
+    <string name="SYS_USER_RELATION">Beziehung</string>
+    <string name="SYS_USER_RELATIONS">Beziehungen</string>
+    <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
+    <string name="SYS_USER_RELATION_TYPES">Beziehungstypen</string>
+    <string name="SYS_USER_RELATION_TYPE_FORWARD_SINGULAR">Vorwärts Einzahl</string>
+    <string name="SYS_USER_RELATION_TYPE_FORWARD_PLURAL">Vorwärts Mehrzahl</string>
+    <string name="SYS_USER_RELATION_TYPE_BACKWARD_SINGULAR">Rückwärts Einzahl</string>
+    <string name="SYS_USER_RELATION_TYPE_BACKWARD_PLURAL">Rückwärts Mehrzahl</string>
+    <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Beziehungstypen pflegen</string>
     <string name="SYS_RELOAD">Neuladen</string>
     <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>
     <string name="SYS_REMOVE">Entfernen</string>

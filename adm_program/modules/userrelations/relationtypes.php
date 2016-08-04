@@ -1,0 +1,109 @@
+<?php
+/**
+ ***********************************************************************************************
+ * Overview and maintenance of all relationtypes
+ *
+ * @copyright 2004-2016 The Admidio Team
+ * @see http://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+/******************************************************************************
+ * Parameters:
+ *
+ * type  : Type of categories that could be maintained
+ *         ROL = Categories for roles
+ *         LNK = Categories for weblinks
+ *         USF = Categories for profile fields
+ *         DAT = Calendars for events
+ *         INF = Categories for Inventory
+ * title : Parameter for the synonym of the categorie
+ *
+ ****************************************************************************/
+
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+
+if (!$gCurrentUser->isAdministrator())
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
+}
+
+// set module headline
+$headline = $gL10n->get('SYS_USER_RELATION_TYPES');
+$gNavigation->addUrl(CURRENT_URL, $headline);
+
+// create html page object
+$page = new HtmlPage($headline);
+$page->enableModal();
+
+// get module menu
+$relationtypesMenu = $page->getMenu();
+
+// show back link
+$relationtypesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+
+// define link to create new category
+$relationtypesMenu->addItem('admMenuItemNewRelationType', $g_root_path.'/adm_program/modules/userrelations/relationtypes_new.php',
+                         $gL10n->get('SYS_CREATE_VAR', $gL10n->get('SYS_USER_RELATION_TYPE')), 'add.png');
+
+// Create table object
+$relationtypesOverview = new HtmlTable('tbl_relationtypes', $page, true);
+
+// create array with all column heading values
+$columnHeading = array(
+    $gL10n->get('SYS_USER_RELATION_TYPE_FORWARD_SINGULAR'),
+    $gL10n->get('SYS_USER_RELATION_TYPE_FORWARD_PLURAL'),
+    $gL10n->get('SYS_USER_RELATION_TYPE_BACKWARD_SINGULAR'),
+    $gL10n->get('SYS_USER_RELATION_TYPE_BACKWARD_PLURAL'),
+    '&nbsp;'
+);
+$relationtypesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
+$relationtypesOverview->addRowHeadingByArray($columnHeading);
+
+$sql = 'SELECT urt1.*, urt2.urt_name_singular AS urt_name_singular_inverse, urt2.urt_name_plural AS urt_name_plural_inverse
+          FROM '.TBL_USER_RELATION_TYPES.' AS urt1
+          INNER JOIN '.TBL_USER_RELATION_TYPES.' AS urt2
+                  ON urt1.urt_id_inverse=urt2.urt_id
+         WHERE urt1.urt_id < urt1.urt_id_inverse
+      ORDER BY urt1.urt_name_singular, urt1.urt_name_plural, urt2.urt_name_singular, urt2.urt_name_plural';
+
+$relationtypesStatement = $gDb->query($sql);
+
+$relationtype1 = new TableUserRelationType($gDb);
+$relationtype2 = new TableUserRelationType($gDb);
+
+// Get data
+while($rel_row = $relationtypesStatement->fetch())
+{
+    $relationtype1->clear();
+    $relationtype1->setArray($rel_row);
+    $relationtype2->clear();
+    $rel_row2 = $rel_row;
+    $rel_row2['urt_id'] = $rel_row2['urt_id_inverse'];
+    $rel_row2['urt_name_singular'] = $rel_row2['urt_name_singular_inverse'];
+    $rel_row2['urt_name_plural'] = $rel_row2['urt_name_plural_inverse'];
+    $relationtype2->setArray($rel_row2);
+
+    $relationtypeAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/userrelations/relationtypes_new.php?urt_id='. $relationtype1->getValue('urt_id'). '"><img
+                                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
+    $relationtypeAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                        href="'.$g_root_path.'/adm_program/system/popup_message.php?type=urt&amp;element_id=row_'.
+                                        $relationtype1->getValue('urt_id').'&amp;name='.urlencode($relationtype1->getValue('urt_name_singular').'/'.$relationtype2->getValue('urt_name_singular')).'&amp;database_id='.$relationtype1->getValue('urt_id').'"><img
+                                           src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+
+    // create array with all column values
+    $columnValues = array(
+            $relationtype1->getValue('urt_name_singular'),
+            $relationtype1->getValue('urt_name_plural'),
+            $relationtype2->getValue('urt_name_singular'),
+            $relationtype2->getValue('urt_name_plural'),
+            $relationtypeAdministration
+    );
+    $relationtypesOverview->addRowByArray($columnValues, 'row_'. $relationtype1->getValue('urt_id'));
+}
+
+$page->addHtml($relationtypesOverview->show());
+$page->show();

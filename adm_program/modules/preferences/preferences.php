@@ -731,6 +731,7 @@ $page->addHtml('
                         $form->addCheckbox('profile_show_map_link', $gL10n->get('PRO_SHOW_MAP_LINK'), $form_values['profile_show_map_link'], array('helpTextIdInline' => 'PRO_SHOW_MAP_LINK_DESC'));
                         $form->addCheckbox('profile_show_roles', $gL10n->get('PRO_SHOW_ROLE_MEMBERSHIP'), $form_values['profile_show_roles'], array('helpTextIdInline' => 'PRO_SHOW_ROLE_MEMBERSHIP_DESC'));
                         $form->addCheckbox('profile_show_former_roles', $gL10n->get('PRO_SHOW_FORMER_ROLE_MEMBERSHIP'), $form_values['profile_show_former_roles'], array('helpTextIdInline' => 'PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC'));
+                        $form->addCheckbox('profile_show_user_relations', $gL10n->get('PRO_SHOW_USER_RELATIONS'), $form_values['profile_show_user_relations'], array('helpTextIdInline' => 'PRO_SHOW_USER_RELATIONS_DESC'));
 
                         if($gCurrentOrganization->getValue('org_org_id_parent') > 0
                         || $gCurrentOrganization->hasChildOrganizations())

@@ -140,6 +140,7 @@ $orga_preferences = array(
     'profile_show_roles'        => '1',
     'profile_show_former_roles' => '1',
     'profile_show_extern_roles' => '1',
+	'profile_show_user_relations' => '1',
     'profile_photo_storage'     => '0',
 
     // Events
