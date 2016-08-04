@@ -114,8 +114,17 @@ class AdmException extends Exception
     {
         global $gMessage;
 
-        $gMessage->show($this->getText());
-        // => EXIT
+        // display database error to user
+        if(is_object($gMessage))
+        {
+            $gMessage->show($this->getText());
+            // => EXIT
+        }
+        else
+        {
+            echo $this->getText();
+            exit();
+        }
     }
 
     /**

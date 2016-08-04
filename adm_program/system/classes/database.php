@@ -441,13 +441,13 @@ class Database
      * then also the number of rows will be logged. If an error occurred the script will
      * be terminated and the error with a backtrace will be send to the browser.
      * @param string $sql        A string with the sql statement that should be executed in database.
-     * @param bool   $throwError Default will be @b true and if an error the script will be terminated and
+     * @param bool   $showError  Default will be @b true and if an error the script will be terminated and
      *                           occurred the error with a backtrace will be send to the browser. If set to
      *                           @b false no error will be shown and the script will be continued.
      * @return \PDOStatement For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
      *                       This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
      */
-    public function query($sql, $throwError = true)
+    public function query($sql, $showError = true)
     {
         global $gDebug;
 
@@ -490,20 +490,21 @@ class Database
             error_log($sql);
         }
 
-        $this->fetchArray   = array();
-        $this->pdoStatement = $this->pdo->query($sql);
-
-        // if we got an db error then show this error
-        $errorCode = $this->pdo->errorCode();
-        if ($errorCode !== null && $errorCode !== '00000')
+        try
         {
-            if ($throwError)
+            $this->fetchArray   = array();
+            $this->pdoStatement = $this->pdo->query($sql);
+        }
+        catch (PDOException $e)
+        {
+            if($showError)
             {
                 $this->showError();
                 // => EXIT
             }
         }
-        elseif ($gDebug && strpos(strtoupper($sql), 'SELECT') === 0)
+
+        if ($gDebug && strpos(strtoupper($sql), 'SELECT') === 0)
         {
             // if debug modus then show number of selected rows
             error_log('Found rows: '.$this->pdoStatement->rowCount());
@@ -680,11 +681,9 @@ class Database
      * Display the error code and error message to the user if a database error occurred.
      * The error must be read by the child method. This method will call a backtrace so
      * you see the script and specific line in which the error occurred.
-     * @param int    $code    The database error code that will be displayed.
-     * @param string $message The database error message that will be displayed.
      * @return void Will exit the script and returns a html output with the error information.
      */
-    public function showError($code = 0, $message = '')
+    public function showError()
     {
         global $g_root_path, $gMessage, $gPreferences, $gCurrentOrganization, $gDebug, $gL10n;
 
