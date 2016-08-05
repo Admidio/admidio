@@ -80,14 +80,14 @@ if($getInline)
             event.preventDefault();
 
             $.post({
-                url:  action,
+                url: action,
                 data: $(this).serialize(),
                 success: function(data) {
-                    if(data === "success") {
+                    if (data === "success") {
                         rolesFormAlert.attr("class", "alert alert-success form-alert");
                         rolesFormAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                         rolesFormAlert.fadeIn("slow");
-                        setTimeout(function () {
+                        setTimeout(function() {
                             $("#admidio_modal").modal("hide");
                         }, 2000);
 
@@ -134,7 +134,8 @@ $columnHeading = array(
     '&nbsp;',
     $gL10n->get('SYS_ROLE'),
     $gL10n->get('SYS_DESCRIPTION'),
-    $gL10n->get('SYS_LEADER'));
+    $gL10n->get('SYS_LEADER')
+);
 $table->addRowHeadingByArray($columnHeading);
 $table->setColumnAlignByArray(array('center', 'left', 'left', 'left'));
 $table->setColumnsWidth(array('10%', '30%', '45%', '15%'));
