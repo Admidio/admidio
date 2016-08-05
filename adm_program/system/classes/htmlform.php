@@ -143,7 +143,9 @@ class HtmlForm extends HtmlFormBasic
             {
                 $this->addHtml('
                     <script type="text/javascript"><!--
-                        $(document).ready(function() { $(".form-dialog:first *:input:enabled:first").focus(); });
+                        $(function() {
+                            $(".form-dialog:first *:input:enabled:first").focus();
+                        });
                     //--></script>');
             }
         }
@@ -229,7 +231,7 @@ class HtmlForm extends HtmlFormBasic
             {
                 $this->addHtml('
                 <script type="text/javascript"><!--
-                    $(document).ready(function() {
+                    $(function() {
                         '.$javascriptCode.'
                     });
                 //--></script>');
@@ -509,7 +511,7 @@ class HtmlForm extends HtmlFormBasic
             {
                 $this->addHtml('
                     <script type="text/javascript">
-                        $(document).ready(function() {
+                        $(function() {
                             '.$javascriptCode.'
                         });
                     </script>');
@@ -627,7 +629,7 @@ class HtmlForm extends HtmlFormBasic
             {
                 $this->addHtml('
                     <script type="text/javascript"><!--
-                        $(document).ready(function() {
+                        $(function() {
                             '.$javascriptCode.'
                         });
                     //--></script>');
@@ -940,7 +942,7 @@ class HtmlForm extends HtmlFormBasic
             {
                 $this->addHtml('
                     <script type="text/javascript">
-                        $(document).ready(function() {
+                        $(function() {
                             '.$javascriptCode.'
                         });
                     </script>');

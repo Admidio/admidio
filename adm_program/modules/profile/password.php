@@ -114,7 +114,7 @@ elseif($getMode === 'html')
     /***********************************************************************/
 
     echo '<script type="text/javascript"><!--
-    $(document).ready(function() {
+    $(function() {
         $("body").on("shown.bs.modal", ".modal", function () {
             $("#password_form:first *:input[type!=hidden]:first").focus();
         });

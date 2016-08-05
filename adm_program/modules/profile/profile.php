@@ -161,8 +161,7 @@ $page->addJavascript('
 
             $("#membership_period_form_"+memberId+" .form-alert").hide();
 
-            $.ajax({
-                type:    "GET",
+            $.get({
                 url:     action,
                 success: function(data) {
                     if(data === "success") {

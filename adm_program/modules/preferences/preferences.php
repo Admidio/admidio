@@ -78,8 +78,7 @@ $page->addJavascript('
         // disable default form submit
         event.preventDefault();
 
-        $.ajax({
-            type:    "POST",
+        $.post({
             url:     action,
             data:    $(this).serialize(),
             success: function(data) {

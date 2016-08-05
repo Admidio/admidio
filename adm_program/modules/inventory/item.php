@@ -121,8 +121,7 @@ $page->addJavascript('
         // disable default form submit
         event.preventDefault();
 
-        $.ajax({
-            type:    "GET",
+        $.get({
             url:     action,
             data:    $(this).serialize(),
             success: function(data) {

@@ -25,9 +25,8 @@ $log = array();
 echo '<script>
 $(function() {
     $("button#submit").click(function() {
-        $.ajax({
+        $.post({
             url: "process.php",
-            type: "POST",
             data: $("#template-form").serialize(),
             success: function(data) {
                 $("#responsestatus").val(data);

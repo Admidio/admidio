@@ -128,9 +128,8 @@ $page->addJavascript('
         $("#ecard_form input[id=\'submit_action\']").val("preview");
         $("#ecard_form textarea[name=\'ecard_message\']").text( CKEDITOR.instances.ecard_message.getData() );
 
-        $.ajax({ // create an AJAX call...
+        $.post({ // create an AJAX call...
             data: $("#ecard_form").serialize(), // get the form data
-            type: "POST", // GET or POST
             url: "ecard_preview.php", // the file to call
             success: function(response) { // on success..
                 $(".modal-content").html(response);

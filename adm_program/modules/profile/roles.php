@@ -66,7 +66,7 @@ if($getInline)
     header('Content-type: text/html; charset=utf-8');
 
     $html .= '<script type="text/javascript"><!--
-    $(document).ready(function() {
+    $(function() {
         $(".admidio-group-heading").click(function() {
             showHideBlock($(this).attr("id"));
         });
@@ -79,8 +79,7 @@ if($getInline)
             // disable default form submit
             event.preventDefault();
 
-            $.ajax({
-                type: "POST",
+            $.post({
                 url:  action,
                 data: $(this).serialize(),
                 success: function(data) {
@@ -230,7 +229,7 @@ while($row = $statement->fetch())
 
         $columnValues = array(
             '<input type="checkbox" id="role-'.$role->getValue('rol_id').'" name="role-'.$role->getValue('rol_id').'" '.
-                $memberChecked.$memberDisabled.' onclick="javascript:profileJS.unMarkLeader(this);" value="1" />',
+                $memberChecked.$memberDisabled.' onclick="profileJS.unMarkLeader(this);" value="1" />',
             '<label for="role-'.$role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label>',
             $role->getValue('rol_description'));
 
@@ -250,7 +249,7 @@ while($row = $statement->fetch())
         }
 
         $leaderRights = '<input type="checkbox" id="leader-'.$role->getValue('rol_id').'" name="leader-'.$role->getValue('rol_id').'" '.
-                           $leaderChecked.$leaderDisabled.' onclick="javascript:profileJS.markLeader(this);" value="1" />';
+                           $leaderChecked.$leaderDisabled.' onclick="profileJS.markLeader(this);" value="1" />';
 
         // show icon that leaders have no additional rights
         if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
