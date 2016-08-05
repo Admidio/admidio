@@ -220,9 +220,9 @@ class ModuleAnnouncements extends Modules
     }
 
     /**
-     * @param {string} $dateRange
-     * @param {string} $dateRangePoint
-     * @param {string} $dateFormat
+     * @param string $dateRange
+     * @param string $dateRangePoint
+     * @param string $dateFormat
      * @return bool
      */
     private function setDateRangeParams($dateRange, $dateRangePoint, $dateFormat)
