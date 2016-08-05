@@ -279,7 +279,7 @@ class ModuleDates extends Modules
      */
     public function getDataSetCount()
     {
-        if($this->id == 0)
+        if($this->id === 0)
         {
             global $gDb, $gCurrentOrganization;
 
@@ -314,7 +314,7 @@ class ModuleDates extends Modules
      * This method can be used to fill a html form
      * @param string $date      Date is to be checked to reference and default date '1970-01-01'.
      * @param string $reference Reference date
-     * @return string String with date value, or an empty string, if $date is '1970-01-01' or reference date
+     * @return string|false String with date value, or an empty string, if $date is '1970-01-01' or reference date
      */
     public function getFormValue($date, $reference)
     {
@@ -372,11 +372,11 @@ class ModuleDates extends Modules
 
         if($objDateFrom === false)
         {
-            // check if date_from  has system format
+            // check if date_from has system format
             $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], $dateRangeStart);
         }
 
-        if(!is_object($objDateFrom))
+        if($objDateFrom === false)
         {
             return false;
         }
@@ -384,7 +384,7 @@ class ModuleDates extends Modules
         $this->setParameter('dateStartFormatEnglish', $objDateFrom->format('Y-m-d'));
         $this->setParameter('dateStartFormatAdmidio', $objDateFrom->format($gPreferences['system_date']));
 
-        // Create date object and format date_to in English format and sytem format and push to daterange array
+        // Create date object and format date_to in English format and system format and push to daterange array
         $objDateTo = DateTime::createFromFormat('Y-m-d', $dateRangeEnd);
 
         if($objDateTo === false)
@@ -393,7 +393,7 @@ class ModuleDates extends Modules
             $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], $dateRangeEnd);
         }
 
-        if(!is_object($objDateTo))
+        if($objDateTo === false)
         {
             return false;
         }
@@ -402,7 +402,7 @@ class ModuleDates extends Modules
         $this->setParameter('dateEndFormatAdmidio', $objDateTo->format($gPreferences['system_date']));
 
         // DateTo should be greater than DateFrom (Timestamp must be less)
-        if($objDateFrom->format('U') > $objDateTo->format('U'))
+        if($objDateFrom->getTimestamp() > $objDateTo->getTimestamp())
         {
             throw new AdmException('SYS_DATE_END_BEFORE_BEGIN');
         }

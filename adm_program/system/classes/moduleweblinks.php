@@ -110,9 +110,6 @@ class ModuleWeblinks extends Modules
      */
     public function __construct()
     {
-        global $gValidLogin;
-        global $gL10n;
-
         // get parent instance with all parameters from $_GET Array
         parent::__construct();
     }
@@ -184,8 +181,7 @@ class ModuleWeblinks extends Modules
      */
     public function getDataSetCount()
     {
-        global $gCurrentOrganization;
-        global $gDb;
+        global $gCurrentOrganization, $gDb;
 
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_LINKS.'

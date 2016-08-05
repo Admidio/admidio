@@ -122,22 +122,12 @@ class Menu
      * @param string $text
      * @param string $icon
      * @param string $desc
-     * @return bool
      */
     public function insertItem($position, $id, $link, $text, $icon, $desc = '')
     {
-        if (!is_numeric($position))
-        {
-            return false;
-        }
-        else
-        {
-            $item = $this->mkItem($id, $link, $text, $icon, $desc);
-            $insert = array($id => $item);
-            $this->items = array_splice($this->items, $position, 0, $insert);
-
-            return true;
-        }
+        $item = $this->mkItem($id, $link, $text, $icon, $desc);
+        $insert = array($id => $item);
+        $this->items = array_splice($this->items, $position, 0, $insert);
     }
 
     /**

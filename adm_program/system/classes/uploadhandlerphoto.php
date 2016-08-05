@@ -64,7 +64,7 @@ class UploadHandlerPhoto extends UploadHandler
                     }
                 }
 
-                $newFotoFileNumber = $photoAlbum->getValue('pho_quantity') + 1;
+                $newPhotoFileNumber = $photoAlbum->getValue('pho_quantity') + 1;
 
                 // read image size
                 $imageProperties = getimagesize($fileLocation);
@@ -72,7 +72,7 @@ class UploadHandlerPhoto extends UploadHandler
 
                 if($imageDimensions > admFuncProcessableImageSize())
                 {
-                    $errorText = $gL10n->get('PHO_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('MEGA_PIXEL');
+                    $errorText = $gL10n->get('PHO_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize() / 1000000, 2).' '.$gL10n->get('MEGA_PIXEL');
                     throw new AdmException($errorText);
                 }
 
@@ -94,7 +94,7 @@ class UploadHandlerPhoto extends UploadHandler
                 $image = new Image($fileLocation);
                 $image->setImageType('jpeg');
                 $image->scaleLargerSide($gPreferences['photo_save_scale']);
-                $image->copyToFile(null, $albumFolder.'/'.$newFotoFileNumber.'.jpg');
+                $image->copyToFile(null, $albumFolder.'/'.$newPhotoFileNumber.'.jpg');
                 $image->delete();
 
                 // if enabled then save original image
@@ -106,7 +106,7 @@ class UploadHandlerPhoto extends UploadHandler
                         $folder->createFolder('originals', true);
                     }
 
-                    rename($fileLocation, $albumFolder.'/originals/'.$newFotoFileNumber.'.'.$fileExtension);
+                    rename($fileLocation, $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension);
                 }
 
                 // save thumbnail
@@ -118,7 +118,7 @@ class UploadHandlerPhoto extends UploadHandler
 
                 $image = new Image($fileLocation);
                 $image->scaleLargerSide($gPreferences['photo_thumbs_scale']);
-                $image->copyToFile(null, $albumFolder.'/thumbnails/'.$newFotoFileNumber.'.jpg');
+                $image->copyToFile(null, $albumFolder.'/thumbnails/'.$newPhotoFileNumber.'.jpg');
                 $image->delete();
 
                 // delete image from upload folder
@@ -128,7 +128,7 @@ class UploadHandlerPhoto extends UploadHandler
                 }
 
                 // if image was successfully saved in filesystem then update image count of album
-                if(file_exists($albumFolder.'/'.$newFotoFileNumber.'.jpg'))
+                if(file_exists($albumFolder.'/'.$newPhotoFileNumber.'.jpg'))
                 {
                     $photoAlbum->setValue('pho_quantity', $photoAlbum->getValue('pho_quantity')+1);
                     $photoAlbum->save();

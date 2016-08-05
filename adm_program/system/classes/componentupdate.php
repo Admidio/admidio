@@ -127,7 +127,7 @@ class ComponentUpdate extends Component
     public function getMaxUpdateStep()
     {
         $maxUpdateStep = 0;
-        $this->currentVersionArray = explode('.', $this->getValue('com_version'));
+        $this->currentVersionArray = array_map('intval', explode('.', $this->getValue('com_version')));
 
         // open xml file for this version
         if($this->createXmlObject($this->currentVersionArray[0], $this->currentVersionArray[1]))
@@ -151,7 +151,7 @@ class ComponentUpdate extends Component
      */
     public function setTargetVersion($version)
     {
-        $this->targetVersionArray = explode('.', $version);
+        $this->targetVersionArray = array_map('intval', explode('.', $version));
     }
 
     /**
@@ -164,14 +164,14 @@ class ComponentUpdate extends Component
         global $gDebug;
 
         $this->updateFinished = false;
-        $this->currentVersionArray = explode('.', $this->getValue('com_version'));
+        $this->currentVersionArray = array_map('intval', explode('.', $this->getValue('com_version')));
         $initialSubVersion = $this->currentVersionArray[1];
 
         for($mainVersion = $this->currentVersionArray[0]; $mainVersion <= $this->targetVersionArray[0]; ++$mainVersion)
         {
             // Set max subversion for iteration. If we are in the loop of the target main version
             // then set target subversion to the max version
-            if($mainVersion == $this->targetVersionArray[0])
+            if($mainVersion === $this->targetVersionArray[0])
             {
                 $maxSubVersion = $this->targetVersionArray[1];
             }
@@ -183,7 +183,7 @@ class ComponentUpdate extends Component
             for($subVersion = $initialSubVersion; $subVersion <= $maxSubVersion; ++$subVersion)
             {
                 // if version is not equal to current version then start update step with 0
-                if($mainVersion != $this->currentVersionArray[0] || $subVersion != $this->currentVersionArray[1])
+                if($mainVersion !== $this->currentVersionArray[0] || $subVersion !== $this->currentVersionArray[1])
                 {
                     $this->setValue('com_update_step', 0);
                     $this->save();

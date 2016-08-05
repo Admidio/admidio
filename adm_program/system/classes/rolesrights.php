@@ -37,9 +37,9 @@ class RolesRights extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_roles_rights.
      * If the id is set than the specific category will be loaded.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param string $rolesRightsName The recordset of the roles right with this name will be loaded.
-     * @param string $objectId        Id of the object of which the roles should be loaded.
+     * @param \Database $database       Object of the class Database. This should be the default global object @b $gDb.
+     * @param string    $rolesRightName The recordset of the roles right with this name will be loaded.
+     * @param string    $objectId       Id of the object of which the roles should be loaded.
      */
     public function __construct(&$database, $rolesRightName, $objectId)
     {
