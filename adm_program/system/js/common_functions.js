@@ -29,28 +29,24 @@ function showHideBlock(elementId) {
     }
 }
 
-var entryDeleted;
-
 /**
  * This function can be used to call a specific url and hide an html element
  * in dependence from the returned data. If the data received is "done" then
  * the element will be hidden otherwise the data will be shown in an error block.
- * @param {string} elementId          This is the id of a html element that should be hidden.
- * @param {string} url                This is the url that will be called.
- * @param {object} [callbackFunction] A name of a function that should be called if the return was positive.
+ * @param {string}   elementId  This is the id of a html element that should be hidden.
+ * @param {string}   url        This is the url that will be called.
+ * @param {function} [callback] A name of a function that should be called if the return was positive.
  */
-function callUrlHideElement(elementId, url, callbackFunction) {
-    callbackFunction = typeof callbackFunction !== 'undefined' ? callbackFunction : "";
-    entryDeleted = document.getElementById(elementId);
-    var fn = window[callbackFunction];
+function callUrlHideElement(elementId, url, callback) {
+    var entryDeleted = document.getElementById(elementId);
 
-    // send RequestObjekt and delete entry
+    // send RequestObject and delete entry
     $.get(url, function(data) {
         if (data === "done") {
             $("#admidio_modal").modal("hide");
 
-            if (typeof fn === "function") {
-                $(entryDeleted).fadeOut("slow", fn());
+            if (callback && typeof callback === "function") {
+                $(entryDeleted).fadeOut("slow", callback());
             } else {
                 $(entryDeleted).fadeOut("slow");
             }
@@ -59,13 +55,10 @@ function callUrlHideElement(elementId, url, callbackFunction) {
             $("#btn_yes").hide();
             $("#btn_no").hide();
             $("#btn_close").attr("class", "btn btn-default");
-            var html = $("#message_text").html();
 
-            if (data.length > 0) {
-                $("#message_text").html(html + "<br /><div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-exclamation-sign\">" + data + "</span></div>");
-            } else {
-                $("#message_text").html(html + "<br /><div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-exclamation-sign\">Error: Entry not deleted</span></div>");
-            }
+            var message = (data.length > 0) ? data : "Error: Entry not deleted";
+            var messageText = $("#message_text");
+            messageText.html(messageText.html() + "<br /><div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-exclamation-sign\">" + message + "</span></div>");
         }
     });
 }
