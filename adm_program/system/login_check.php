@@ -14,7 +14,7 @@ require_once('common.php');
 $bAutoLogin = false;
 $loginname  = '';
 $password   = '';
-$organizationId = $gCurrentOrganization->getValue('org_id');
+$organizationId = (int) $gCurrentOrganization->getValue('org_id');
 
 // Filter parameters
 // parameters could be from login dialog or login plugin !!!
@@ -35,7 +35,7 @@ function initLoginParams($prefix = '')
     // if user can choose organization then save the selection
     if(array_key_exists($prefix.'org_id', $_POST) && is_numeric($_POST[$prefix.'org_id']) && $_POST[$prefix.'org_id'] > 0)
     {
-        $organizationId = $_POST[$prefix.'org_id'];
+        $organizationId = (int) $_POST[$prefix.'org_id'];
     }
 }
 
@@ -81,7 +81,7 @@ if ($userStatement->rowCount() === 0)
 else
 {
     // if login organization is different to organization of config file then create new session variables
-    if($organizationId != $gCurrentOrganization->getValue('org_id'))
+    if($organizationId !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         // read organization of config file with their preferences
         $gCurrentOrganization->readDataById($organizationId);
