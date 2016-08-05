@@ -1244,8 +1244,6 @@ class User extends TableAccess
         $minStartDate = $startDate;
         $maxEndDate   = $endDate;
 
-        $member = new TableMembers($this->db);
-
         $this->db->startTransaction();
 
         if ($mode === 'set')
@@ -1265,6 +1263,8 @@ class User extends TableAccess
         // search for membership with same role and user and overlapping dates
         if ($mode === 'set')
         {
+            $member = new TableMembers($this->db);
+
             $sql = 'SELECT *
                   FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = '.$id.'
@@ -1275,6 +1275,8 @@ class User extends TableAccess
         }
         else
         {
+            $member = new TableMembers($this->db, $id);
+
             $sql = 'SELECT *
                   FROM '.TBL_MEMBERS.'
                  WHERE mem_id    <> '.$id.'
