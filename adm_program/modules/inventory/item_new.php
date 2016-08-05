@@ -110,7 +110,7 @@ if(isset($_SESSION['profile_request']))
 $page = new HtmlPage($headline);
 
 $page->addJavascript('
-    var profileJS = new profileJSClass();
+    var profileJS = new ProfileJS(gRootPath);
     profileJS.init();', true);
 
 // add back link to module menu

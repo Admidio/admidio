@@ -8,19 +8,19 @@
  ***********************************************************************************************
  */
 
-function profileJSClass() {
+function ProfileJS(gRootPath) {
+    this.url                     = gRootPath + "/adm_program/modules/profile/profile_function.php";
     this.formerRoleCount         = 0;
     this.futureRoleCount         = 0;
-    this.usr_id                  = 0;
+    this.userId                  = 0;
     this.deleteRole_ConfirmText  = "";
     this.deleteFRole_ConfirmText = "";
     this.setBy_Text              = "";
     this.errorID                 = 0;
 
     this.reloadRoleMemberships = function() {
-        $.ajax({
-            type: "GET",
-            url: gRootPath + "/adm_program/modules/profile/profile_function.php?mode=4&user_id=" + this.usr_id,
+        $.get({
+            url: this.url + "?mode=4&user_id=" + this.userId,
             dataType: "html",
             success: function(responseText) {
                 $("#profile_roles_box_body").html(responseText);
@@ -31,21 +31,9 @@ function profileJSClass() {
             }
         });
     };
-    this.reloadFutureRoleMemberships = function() {
-        $.ajax({
-            type: "GET",
-            url: gRootPath + "/adm_program/modules/profile/profile_function.php?mode=6&user_id=" + this.usr_id,
-            dataType: "html",
-            success: function(responseText) {
-                $("#profile_future_roles_box_body").html(responseText);
-                formSubmitEvent();
-            }
-        });
-    };
     this.reloadFormerRoleMemberships = function() {
-        $.ajax({
-            type: "GET",
-            url: gRootPath + "/adm_program/modules/profile/profile_function.php?mode=5&user_id=" + this.usr_id,
+        $.get({
+            url: this.url + "?mode=5&user_id=" + this.userId,
             dataType: "html",
             success: function(responseText) {
                 $("#profile_former_roles_box_body").html(responseText);
@@ -53,17 +41,25 @@ function profileJSClass() {
             }
         });
     };
+    this.reloadFutureRoleMemberships = function() {
+        $.get({
+            url: this.url + "?mode=6&user_id=" + this.userId,
+            dataType: "html",
+            success: function(responseText) {
+                $("#profile_future_roles_box_body").html(responseText);
+                formSubmitEvent();
+            }
+        });
+    };
 
     this.markLeader = function(element) {
-        if(element.checked)
-        {
+        if (element.checked) {
             var roleName = getRoleName(element);
             $("#" + roleName).attr("checked", true);
         }
     };
     this.unMarkLeader = function(element) {
-        if(!element.checked)
-        {
+        if (!element.checked) {
             var roleName = getRoleName(element);
             $("#" + roleName).attr("checked", false);
         }
@@ -81,10 +77,18 @@ function profileJSClass() {
     this.deleteShowInfo = function() {
         $("#profile_authorization_content:first-child").text(this.setBy_Text + ": ");
     };
-    this.toggleDetailsOn = function(member_id) {
-        $("#membership_period_" + member_id).css({"visibility": "visible","display": "block"});
+    this.toggleDetailsOn = function(memberId) {
+        $("#membership_period_" + memberId).css({"visibility": "visible", "display": "block"});
     };
-    this.toggleDetailsOff = function(member_id) {
-        $("#membership_period_" + member_id).css({"visibility": "hidden","display": "none"});
+    this.toggleDetailsOff = function(memberId) {
+        $("#membership_period_" + memberId).css({"visibility": "hidden", "display": "none"});
     };
+}
+
+/**
+ * @deprecated 3.2.0:4.0.0
+ */
+function profileJSClass() {
+    /** global: gRootPath */
+    return ProfileJS(gRootPath);
 }

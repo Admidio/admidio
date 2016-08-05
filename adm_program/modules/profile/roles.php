@@ -118,7 +118,7 @@ else
     $page = new HtmlPage($headline);
     $page->addJavascriptFile('adm_program/modules/profile/profile.js');
 
-    $page->addJavascript('var profileJS = new profileJSClass();');
+    $page->addJavascript('var profileJS = new ProfileJS(gRootPath);');
 
     // add back link to module menu
     $rolesMenu = $page->getMenu();

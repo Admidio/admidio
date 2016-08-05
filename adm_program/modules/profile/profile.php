@@ -103,11 +103,11 @@ $page->addJavascriptFile('adm_program/libs/bootstrap-datepicker/locales/bootstra
 $page->addJavascriptFile('adm_program/modules/profile/profile.js');
 
 $page->addJavascript('
-    var profileJS = new profileJSClass();
+    var profileJS = new ProfileJS(gRootPath);
     profileJS.deleteRole_ConfirmText  = "'.$gL10n->get('ROL_MEMBERSHIP_DEL', '[rol_name]').'";
     profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
     profileJS.setBy_Text              = "'.$gL10n->get('SYS_SET_BY').'";
-    profileJS.usr_id                  = '.$userId.';
+    profileJS.userId                  = '.$userId.';
 
     function showHideMembershipInformation(element) {
         id = "#" + element.attr("id") + "_Content";
