@@ -37,30 +37,12 @@ $page->addCssFile(THEME_PATH.'/css/chat.css');
 $page->addJavascriptFile('adm_program/modules/messages/chat.js');
 
 $page->addJavascript('
-    // kick off chat
+    // Initialize Chat
     var chat = new Chat();
 
-    chat.getState();
-
     $(function() {
-        // watch textarea for release of key press [enter]
-        $("#sendie").keyup(function(e) {
-            if (e.keyCode === 13) {
-                var text = $(this).val().trim();
-                if (text.length > 0)
-                {
-                    chat.send(text);
-                }
-                $(this).val("");
-            }
-        });
+        var chat.init("#sendie", "#chat-area");
     });
-
-    $(document).ready(function()
-    {
-        var intervalID = setInterval(chat.update, 2500);
-    });
-
 ');
 
 // add back link to module menu

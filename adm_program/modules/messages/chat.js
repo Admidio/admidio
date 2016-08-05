@@ -10,64 +10,98 @@
  * Name: Admidio Chat Engine
  */
 
-var instanse = false;
-var state;
-var mes;
-
+/**
+ * Creates a Chat instance
+ * @constructor
+ */
 function Chat() {
-    this.getState = getStateOfChat;
-    this.update = updateChat;
-    this.send = sendChat;
-}
+    this.inputId       = "";
+    this.chatId        = "";
+    this.intervalId    = null;
+    this.state         = 0;
+    this.isUpdateingse = false;
 
-// gets the state of the chat
-function getStateOfChat() {
-    state = 0;
-}
+    /**
+     * Init Chat
+     * @param {string} inputId
+     * @param {string} chatId
+     */
+    this.init = function(inputId, chatId) {
+        var self = this;
 
-// Updates the chat
-function updateChat() {
-    if(!instanse)
-    {
-        instanse = true;
-        $.ajax({
-            type: "POST",
-            url: "process.php",
-            data: {
-                "function": "update",
-                "state": state
-            },
-            dataType: "json",
-            success: function(data) {
-                if (data.text)
-                {
-                    for (var i = 0; i < data.text.length; i++)
-                    {
-                        $("#chat-area").append($("<p>" + data.text[i] + "</p>"));
-                    }
-                    document.getElementById("chat-area").scrollTop = document.getElementById("chat-area").scrollHeight;
+        this.inputId = inputId;
+        this.chatId  = chatId;
+
+        // Start update interval
+        this.intervalId = setInterval(this.update, 2500);
+
+        // watch textarea for release of key press [enter]
+        $(this.inputId).keyup(function(e) {
+            if (e.keyCode === 13) {
+                var text = $(this).val().trim();
+                if (text.length > 0) {
+                    self.send(text);
                 }
-                instanse = false;
-                state = data.state;
+                $(this).val("");
             }
         });
-    }
-}
+    };
 
-// send the message
-function sendChat(message) {
-    updateChat();
-    $.ajax({
-        type: "POST",
-        url: "process.php",
-        data: {
-            "function": "send",
-            "message": message,
-            "state": state
-        },
-        dataType: "json",
-        success: function(data) {
-            updateChat();
+    /**
+     * Update the chat
+     * @param {function} [callback] Optional callback function that is executed after the update
+     */
+    this.update = function(callback) {
+        var self = this;
+
+        if (!this.isUpdateing) {
+            this.isUpdateing = true;
+            $.post({
+                url: "process.php",
+                data: {
+                    "function": "update",
+                    "state": this.state
+                },
+                dataType: "json",
+                success: function(data) {
+                    if (data.text) {
+                        var chatArea = $(self.chatId);
+                        data.text.forEach(function (text) {
+                            chatArea.append($("<p>" + text + "</p>"));
+                        });
+                        chatArea.scrollTop(chatArea[0].scrollHeight);
+                    }
+                    self.isUpdateing = false;
+                    self.state = data.state;
+
+                    if (callback && typeof callback === "function") {
+                        callback();
+                    }
+                }
+            });
         }
-    });
+    };
+
+    /**
+     * Send the message
+     * @param {string} message
+     */
+    this.send = function(message) {
+        var self = this;
+
+        this.update(function () {
+            $.post({
+                url: "process.php",
+                data: {
+                    "function": "send",
+                    "message": message,
+                    "state": this.state
+                },
+                dataType: "json",
+                success: function() {
+                    self.update();
+                }
+            });
+        });
+    };
 }
