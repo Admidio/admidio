@@ -47,3 +47,7 @@ $gTimezone = 'Europe/Berlin';
 // for an update of the Admidio database to a new version of Admidio.
 // For a more comfortable and easy update you can set this preference = 0.
 $gLoginForUpdate = 1;
+
+// Set the preferred password hashing algorithm. Default is the PHP default "PASSWORD_DEFAULT"
+// Possible values are: PASSWORD_DEFAULT, PASSWORD_BCRYPT, 'SHA512'
+$gPasswordHashAlgorithm = PASSWORD_DEFAULT;

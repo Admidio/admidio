@@ -37,14 +37,14 @@ class PasswordHashing
     /**
      * Hash the given password with the given options. The default algorithm uses the password_* methods,
      * otherwise the builtin helper for SHA-512 crypt hashes from the operating system. Minimum cost is 10.
-     * @param string $password  The password string
-     * @param int    $algorithm The hash-algorithm constant
-     * @param array  $options   The hash-options array
+     * @param string     $password  The password string
+     * @param int|string $algorithm The hash-algorithm constant
+     * @param array      $options   The hash-options array
      * @return string|false Returns the hashed password or false if an error occurs
      */
     public static function hash($password, $algorithm = PASSWORD_DEFAULT, array $options = array())
     {
-        if ($algorithm === null)
+        if ($algorithm === 'SHA512')
         {
             if (!array_key_exists('rounds', $options))
             {
@@ -120,9 +120,10 @@ class PasswordHashing
      */
     public static function needsRehash($hash, $algorithm = PASSWORD_DEFAULT, array $options = array())
     {
-        if ($algorithm === null)
+        if ($algorithm === 'SHA512')
         {
-            return strpos($hash, '$6$') !== 0;
+            return strlen($hash) < 110 || strpos($hash, '$6$') !== 0
+            || (int) substr(explode('$', $hash)[2], 7) !== $options['rounds'];
         }
 
         return password_needs_rehash($hash, $algorithm, $options);
@@ -241,7 +242,7 @@ class PasswordHashing
         {
             return password_get_info($hash);
         }
-        elseif (strlen($hash) === 98 && strpos($hash, '$6$') === 0)
+        elseif (strlen($hash) >= 110 && strpos($hash, '$6$') === 0)
         {
             return 'SHA512';
         }
