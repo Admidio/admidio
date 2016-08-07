@@ -65,7 +65,13 @@ if(!get_magic_quotes_gpc())
 // global parameters
 $gValidLogin = false;
 
- // create database object and establish connection to database
+// set default password-hash algorithm
+if (!isset($gPasswordHashAlgorithm))
+{
+    $gPasswordHashAlgorithm = PASSWORD_DEFAULT;
+}
+
+// create database object and establish connection to database
 if(!isset($gDbType))
 {
     $gDbType = 'mysql';

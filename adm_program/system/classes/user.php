@@ -1195,7 +1195,7 @@ class User extends TableAccess
      */
     public function setPassword($newPassword, $isNewPassword = false, $doHashing = true)
     {
-        global $gPreferences;
+        global $gPreferences, $gPasswordHashAlgorithm;
 
         $columnName = 'usr_password';
 
@@ -1213,9 +1213,20 @@ class User extends TableAccess
                 $cost = (int) $gPreferences['system_hashing_cost'];
             }
 
-            $newPassword = PasswordHashing::hash($newPassword, PASSWORD_DEFAULT, array('cost' => $cost));
+            if (is_int($gPasswordHashAlgorithm))
+            {
+                $newPasswordHash = PasswordHashing::hash($newPassword, $gPasswordHashAlgorithm, array('cost' => $cost));
+            }
+            elseif (is_string($gPasswordHashAlgorithm))
+            {
+                $newPasswordHash = PasswordHashing::hash($newPassword, $gPasswordHashAlgorithm, array('rounds' => 5000));
+            }
+            else
+            {
+                $newPasswordHash = PasswordHashing::hash($newPassword, PASSWORD_DEFAULT, array('cost' => $cost));
+            }
 
-            if ($newPassword === false)
+            if ($newPasswordHash === false)
             {
                 return false;
             }
