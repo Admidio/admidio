@@ -46,13 +46,13 @@ class PasswordHashing
     {
         if ($algorithm === 'SHA512')
         {
-            if (!array_key_exists('rounds', $options))
+            if (!array_key_exists('cost', $options))
             {
-                $options['rounds'] = 5000;
+                $options['cost'] = 100000;
             }
 
             $salt = self::genRandomPassword(8, './ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
-            return crypt($password, '$6$rounds=' . $options['rounds'] . '$' . $salt . '$');
+            return crypt($password, '$6$rounds=' . $options['cost'] . '$' . $salt . '$');
         }
 
         if (!array_key_exists('cost', $options))
@@ -123,7 +123,7 @@ class PasswordHashing
         if ($algorithm === 'SHA512')
         {
             return strlen($hash) < 110 || strpos($hash, '$6$') !== 0
-            || (int) substr(explode('$', $hash)[2], 7) !== $options['rounds'];
+            || (int) substr(explode('$', $hash)[2], 7) !== $options['cost'];
         }
 
         return password_needs_rehash($hash, $algorithm, $options);
@@ -260,25 +260,39 @@ class PasswordHashing
 
     /**
      * Run a benchmark to get the best fitting cost value. The cost value can vary from 4 to 31.
-     * @param float  $maxTime   The maximum time the hashing process should take in seconds
-     * @param string $password  The password to test
-     * @param int    $algorithm The algorithm to test
-     * @param array  $options   The options to test
+     * @param float      $maxTime   The maximum time the hashing process should take in seconds
+     * @param string     $password  The password to test
+     * @param int|string $algorithm The algorithm to test
+     * @param array      $options   The options to test
      * @return array Returns an array with the maximum tested cost with the required time
      */
     public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = PASSWORD_DEFAULT, array $options = array('cost' => 12))
     {
-        $cost = $options['cost'];
         $time = 0;
         $results = array();
+        $cost = $options['cost'];
 
-        if ($cost < 4)
+        if ($algorithm === 'SHA512')
         {
-            $cost = 4;
+            $maxCost = 999999999;
+            $costIncrement = 50000;
+            if ($cost < 1000)
+            {
+                $cost = 1000;
+            }
+        }
+        else
+        {
+            $maxCost = 31;
+            $costIncrement = 1;
+            if ($cost < 4)
+            {
+                $cost = 4;
+            }
         }
 
         // loop through the cost value until the needed hashing time reaches the maximum set time
-        while ($time <= $maxTime && $cost <= 31)
+        while ($time <= $maxTime && $cost <= $maxCost)
         {
             $options['cost'] = $cost;
 
@@ -289,7 +303,7 @@ class PasswordHashing
             $time = $end - $start;
 
             $results = array('cost' => $cost, 'time' => $time);
-            ++$cost;
+            $cost += $costIncrement;
         }
 
         return $results;

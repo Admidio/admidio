@@ -1213,18 +1213,7 @@ class User extends TableAccess
                 $cost = (int) $gPreferences['system_hashing_cost'];
             }
 
-            if (is_int($gPasswordHashAlgorithm))
-            {
-                $newPasswordHash = PasswordHashing::hash($newPassword, $gPasswordHashAlgorithm, array('cost' => $cost));
-            }
-            elseif (is_string($gPasswordHashAlgorithm))
-            {
-                $newPasswordHash = PasswordHashing::hash($newPassword, $gPasswordHashAlgorithm, array('rounds' => 5000));
-            }
-            else
-            {
-                $newPasswordHash = PasswordHashing::hash($newPassword, PASSWORD_DEFAULT, array('cost' => $cost));
-            }
+            $newPasswordHash = PasswordHashing::hash($newPassword, $gPasswordHashAlgorithm, array('cost' => $cost));
 
             if ($newPasswordHash === false)
             {
