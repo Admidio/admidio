@@ -113,9 +113,9 @@ class PasswordHashing
     /**
      * Checks if the given hash is generated from the given options. The default algorithm uses the
      * password_* methods, otherwise the builtin helper for SHA-512 crypt hashes from the operating system.
-     * @param string $hash      The hash string that should checked
-     * @param int    $algorithm The hash-algorithm the hash should match to
-     * @param array  $options   The hash-options the hash should match to
+     * @param string     $hash      The hash string that should checked
+     * @param int|string $algorithm The hash-algorithm the hash should match to
+     * @param array      $options   The hash-options the hash should match to
      * @return bool Returns false if the hash match the given options and false if not
      */
     public static function needsRehash($hash, $algorithm = PASSWORD_DEFAULT, array $options = array())
