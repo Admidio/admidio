@@ -14,7 +14,7 @@ require_once('common.php');
 $bAutoLogin = false;
 $loginname  = '';
 $password   = '';
-$organizationId = $gCurrentOrganization->getValue('org_id');
+$organizationId = (int) $gCurrentOrganization->getValue('org_id');
 
 // Filter parameters
 // parameters could be from login dialog or login plugin !!!
@@ -35,7 +35,7 @@ function initLoginParams($prefix = '')
     // if user can choose organization then save the selection
     if(array_key_exists($prefix.'org_id', $_POST) && is_numeric($_POST[$prefix.'org_id']) && $_POST[$prefix.'org_id'] > 0)
     {
-        $organizationId = $_POST[$prefix.'org_id'];
+        $organizationId = (int) $_POST[$prefix.'org_id'];
     }
 }
 
@@ -52,11 +52,13 @@ if(array_key_exists('plg_usr_login_name', $_POST) && $_POST['plg_usr_login_name'
 if($loginname === '')
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME')));
+    // => EXIT
 }
 
 if($password === '')
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
+    // => EXIT
 }
 
 // TODO Future: check Password min/max Length
@@ -74,11 +76,12 @@ $userStatement = $gDb->query($sql);
 if ($userStatement->rowCount() === 0)
 {
     $gMessage->show($gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT'));
+    // => EXIT
 }
 else
 {
     // if login organization is different to organization of config file then create new session variables
-    if($organizationId != $gCurrentOrganization->getValue('org_id'))
+    if($organizationId !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         // read organization of config file with their preferences
         $gCurrentOrganization->readDataById($organizationId);
@@ -102,6 +105,7 @@ else
     if (is_string($checkLoginReturn))
     {
         $gMessage->show($checkLoginReturn);
+        // => EXIT
     }
     else
     {

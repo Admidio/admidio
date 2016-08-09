@@ -31,12 +31,14 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 if($user->getValue('usr_id') == 0)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }
 
 // Testen ob Recht besteht Profil einzusehn
 if(!$gCurrentUser->hasRightViewProfile($user))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // Foto aus adm_my_files

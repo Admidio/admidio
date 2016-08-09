@@ -28,6 +28,7 @@ if ($gPreferences['enable_rss'] != 1)
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
+    // => EXIT
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -35,6 +36,7 @@ if ($gPreferences['enable_guestbook_module'] != 1)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // Initialize and check the parameters

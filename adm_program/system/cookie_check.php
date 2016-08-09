@@ -23,6 +23,7 @@ if(!isset($_COOKIE[$gCookiePraefix . '_ID']))
     unset($_SESSION['login_forward_url']);
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_COOKIE_NOT_SET', $gCurrentOrganization->getValue('org_homepage')));
+    // => EXIT
 }
 else
 {
@@ -46,4 +47,5 @@ else
     unset($_SESSION['login_forward_url']);
 
     $gMessage->show($gL10n->get($getMessageCode));
+    // => EXIT
 }

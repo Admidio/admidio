@@ -22,6 +22,7 @@ $getUsfId = admFuncVariableIsValid($_GET, 'usf_id', 'int');
 if (!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // set headline of the script
@@ -58,6 +59,7 @@ if($getUsfId > 0)
     && $userField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 }
 else

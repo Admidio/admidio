@@ -45,7 +45,7 @@ class ProfileFields
     /**
      * Called on serialization of this object. The database object could not
      * be serialized and should be ignored.
-     * @return array Returns all class variables that should be serialized.
+     * @return string[] Returns all class variables that should be serialized.
      */
     public function __sleep()
     {
@@ -219,6 +219,7 @@ class ProfileFields
                             catch(AdmException $e)
                             {
                                 $e->showText();
+                                // => EXIT
                             }
                         }
 
@@ -506,7 +507,7 @@ class ProfileFields
     /**
      * set value for column usd_value of field
      * @param string $fieldNameIntern
-     * @param        $fieldValue
+     * @param mixed  $fieldValue
      * @return bool
      */
     public function setValue($fieldNameIntern, $fieldValue)
@@ -582,7 +583,7 @@ class ProfileFields
                 case 'URL':
                     // Set http hat the beginning if no protocol was defined
                     if(strpos(admStrToLower($fieldValue), 'http://')  === false
-                        && strpos(admStrToLower($fieldValue), 'https://') === false)
+                    && strpos(admStrToLower($fieldValue), 'https://') === false)
                     {
                         $fieldValue = 'http://'. $fieldValue;
                     }

@@ -26,6 +26,7 @@ $registrationOrgId = $gCurrentOrganization->getValue('org_id');
 if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // if new_inventory isn't set and no inventory id is set then show dialog to create a inventory
@@ -49,6 +50,7 @@ if($getItemId > 0 && $getNewItem === 1)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
+// => EXIT
 
 // read inventory data
 $gInventoryFields = new InventoryFields($gDb, $gCurrentOrganization->getValue('org_id'));
@@ -62,6 +64,7 @@ switch($getNewItem)
         if(!$gCurrentUser->editInventory($inventory))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
         break;
 
@@ -70,6 +73,7 @@ switch($getNewItem)
         if(!$gCurrentUser->editInventory())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
         break;
 }
@@ -106,7 +110,7 @@ if(isset($_SESSION['profile_request']))
 $page = new HtmlPage($headline);
 
 $page->addJavascript('
-    var profileJS = new profileJSClass();
+    var profileJS = new ProfileJS(gRootPath);
     profileJS.init();', true);
 
 // add back link to module menu
@@ -183,7 +187,8 @@ foreach($gInventoryFields->mInventoryFields as $field)
 
         if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'CHECKBOX')
         {
-            $form->addCheckbox( // TODO fix parameters
+            // TODO fix parameters
+            $form->addCheckbox(
                 'inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
                 $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                 $inventory->getValue($field->getValue('inf_name_intern')), $fieldProperty, $helpId, null,
@@ -223,7 +228,8 @@ foreach($gInventoryFields->mInventoryFields as $field)
             {
                 $arrListValues = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_value_list');
                 $defaultValue  = $inventory->getValue($field->getValue('inf_name_intern'), 'database');
-                $form->addSelectBox( // TODO fix parameters
+                // TODO fix parameters
+                $form->addSelectBox(
                     'inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
                     $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                     $arrListValues, $fieldProperty, $defaultValue, true, $helpId, null,
@@ -242,7 +248,8 @@ foreach($gInventoryFields->mInventoryFields as $field)
                 $showDummyRadioButton = true;
             }
 
-            $form->addRadioButton( // TODO fix parameters
+            // TODO fix parameters
+            $form->addRadioButton(
                 'inf-'.$gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
                 $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                 $arrListValues, $fieldProperty,
@@ -253,7 +260,8 @@ foreach($gInventoryFields->mInventoryFields as $field)
         }
         elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') === 'TEXT_BIG')
         {
-            $form->addMultilineTextInput( // TODO fix parameters
+            // TODO fix parameters
+            $form->addMultilineTextInput(
                 'inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
                 $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
                 $inventory->getValue($field->getValue('inf_name_intern')),

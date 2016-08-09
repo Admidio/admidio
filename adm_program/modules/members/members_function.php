@@ -33,6 +33,7 @@ $getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue'
 if(!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // nun erst einmal allgemein pruefen, ob der User zur aktuellen Orga gehoert
@@ -104,6 +105,7 @@ elseif($getMode === 2)
     if(!$gCurrentUser->isAdministrator() && $user->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     // User muss zur aktuellen Orga dazugehoeren
@@ -111,6 +113,7 @@ elseif($getMode === 2)
     if(!$this_orga || $gCurrentUser->getValue('usr_id') == $getUserId)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     $member = new TableMembers($gDb);
@@ -138,6 +141,7 @@ elseif($getMode === 2)
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP_OK', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')));
+    // => EXIT
 }
 elseif($getMode === 3)
 {
@@ -147,6 +151,7 @@ elseif($getMode === 3)
     if(!$gCurrentUser->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     // User darf in keiner anderen Orga aktiv sein
@@ -154,6 +159,7 @@ elseif($getMode === 3)
     if($otherOrgaCount > 0 || $gCurrentUser->getValue('usr_id') == $getUserId)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     $phrase = $gL10n->get('SYS_DELETE_DATA');
@@ -169,6 +175,7 @@ elseif($getMode === 4)
     if(!$gCurrentUser->isAdministrator() || $gPreferences['enable_system_mails'] != 1 || !$this_orga)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     if($gPreferences['enable_system_mails'] == 1)
@@ -188,10 +195,12 @@ elseif($getMode === 4)
 
             $gMessage->setForwardUrl($gNavigation->getUrl());
             $gMessage->show($gL10n->get('SYS_EMAIL_SEND'));
+            // => EXIT
         }
         catch(AdmException $e)
         {
             $e->showText();
+            // => EXIT
         }
     }
 }
@@ -200,6 +209,7 @@ elseif($getMode === 5)
     // Fragen, ob Zugangsdaten verschickt werden sollen
     $gMessage->setForwardYesNo($g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=4');
     $gMessage->show($gL10n->get('MEM_SEND_NEW_LOGIN', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')));
+    // => EXIT
 }
 elseif($getMode === 6)
 {
@@ -216,14 +226,17 @@ elseif($getMode === 6)
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
         $gMessage->setForwardYesNo($g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=3');
         $gMessage->show($gL10n->get('MEM_USER_DELETE', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')), $gL10n->get('SYS_DELETE'));
+        // => EXIT
     }
     else
     {
         // User kann nur aus dieser Orga entfernt werden
         $gMessage->setForwardYesNo($g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=2');
         $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')), $gL10n->get('SYS_REMOVE'));
+        // => EXIT
     }
 }
 
 $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
 $gMessage->show($phrase);
+// => EXIT

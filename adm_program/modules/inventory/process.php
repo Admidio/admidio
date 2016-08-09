@@ -12,6 +12,7 @@ require_once('../../system/common.php');
 if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 $postFunction = admFuncVariableIsValid($_POST, 'function', 'string');
@@ -24,9 +25,8 @@ $log = array();
 echo '<script>
 $(function() {
     $("button#submit").click(function() {
-        $.ajax({
+        $.post({
             url: "process.php",
-            type: "POST",
             data: $("#template-form").serialize(),
             success: function(data) {
                 $("#responsestatus").val(data);

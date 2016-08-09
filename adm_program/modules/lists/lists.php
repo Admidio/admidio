@@ -115,10 +115,12 @@ if($numberOfRoles === 0)
         if($getActiveRole == 0)
         {
             $gMessage->show($gL10n->get('LST_NO_ROLES_REMOVED'));
+            // => EXIT
         }
         else
         {
             $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
+            // => EXIT
         }
     }
     else

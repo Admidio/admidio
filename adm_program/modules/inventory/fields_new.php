@@ -22,6 +22,7 @@ $getInfId = admFuncVariableIsValid($_GET, 'inf_id', 'int');
 if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // set headline of the script
@@ -58,6 +59,7 @@ if($getInfId > 0)
     && $itemField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 }
 else

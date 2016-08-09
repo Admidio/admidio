@@ -29,6 +29,9 @@ if(!defined('PLUGIN_PATH'))
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
+// Initialize and check the parameters
+$getDateId = admFuncVariableIsValid($_GET, 'date_id',   'int');
+
 if(isset($_GET['ajax_change']) && $plg_ajax_change)
 {
     // Header kodieren
@@ -126,41 +129,28 @@ $currentYear  = '';
 $today        = 0;
 
 // Date ID auslesen oder aktuellen Monat und Jahr erzeugen
-if(array_key_exists('date_id', $_GET))
+if($getDateId > 0)
 {
-    if(!is_numeric($_GET['date_id']))
-    {
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    else
-    {
-        $date_id = $_GET['date_id'];
-        $currentMonth = substr($date_id, 0, 2);
-        $currentYear  = substr($date_id, 2, 4);
-        $_SESSION['plugin_calendar_last_month'] = $currentMonth.$currentYear;
-
-        if($currentMonth === date('m') && $currentYear === date('Y'))
-        {
-            $today = (int) date('d');
-        }
-    }
+    $currentMonth = substr($getDateId, 0, 2);
+    $currentYear  = substr($getDateId, 2, 4);
+    $_SESSION['plugin_calendar_last_month'] = $currentMonth.$currentYear;
 }
 elseif(isset($_SESSION['plugin_calendar_last_month']))
 {
     // Zuletzt gewählten Monat anzeigen
     $currentMonth = substr($_SESSION['plugin_calendar_last_month'], 0, 2);
     $currentYear  = substr($_SESSION['plugin_calendar_last_month'], 2, 4);
-    if($currentMonth === date('m') && $currentYear === date('Y'))
-    {
-        $today = (int) date('d');
-    }
 }
 else
 {
     // show current month
     $currentMonth = date('m');
     $currentYear  = date('Y');
-    $today        = (int) date('d');
+}
+
+if($currentMonth === date('m') && $currentYear === date('Y'))
+{
+    $today = (int) date('d');
 }
 
 $lastDayCurrentMonth = (int) date('t', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
@@ -402,8 +392,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
     <tr>';
         if($plg_ajax_change)
         {
-            echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.ajax({
-                type: "GET",
+            echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
                 url: "'.$g_root_path.'/adm_plugins/'.$plugin_folder.'/calendar.php",
                 cache: false,
                 data: "ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth - 1, 1, $currentYear)).'",
@@ -413,8 +402,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
                 }
             }); return false;">&laquo;</a></th>';
             echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>';
-            echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.ajax({
-                type: "GET",
+            echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
                 url: "'.$g_root_path.'/adm_plugins/'.$plugin_folder.'/calendar.php",
                 cache: false,
                 data: "ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth + 1, 1, $currentYear)).'",
@@ -430,10 +418,13 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
         }
     echo '</tr>
     <tr>
-        <td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_MONDAY_SHORT').'</b></td><td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_TUESDAY_SHORT').'</b></td>
-        <td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_WEDNESDAY_SHORT').'</b></td><td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_THURSDAY_SHORT').'</b></td>
-        <td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_FRIDAY_SHORT').'</b></td><td class="plgCalendarWeekdaySaturday"><b>'.$gL10n->get('PLG_CALENDAR_SATURDAY_SHORT').'</b></td>
-        <td class="plgCalendarWeekdaySunday"><b>'.$gL10n->get('PLG_CALENDAR_SUNDAY_SHORT').'</b></td>
+        <td class="plgCalendarWeekday"><strong>'.$gL10n->get('PLG_CALENDAR_MONDAY_SHORT').'</strong></td>
+        <td class="plgCalendarWeekday"><strong>'.$gL10n->get('PLG_CALENDAR_TUESDAY_SHORT').'</strong></td>
+        <td class="plgCalendarWeekday"><strong>'.$gL10n->get('PLG_CALENDAR_WEDNESDAY_SHORT').'</strong></td>
+        <td class="plgCalendarWeekday"><strong>'.$gL10n->get('PLG_CALENDAR_THURSDAY_SHORT').'</strong></td>
+        <td class="plgCalendarWeekday"><strong>'.$gL10n->get('PLG_CALENDAR_FRIDAY_SHORT').'</strong></td>
+        <td class="plgCalendarWeekdaySaturday"><strong>'.$gL10n->get('PLG_CALENDAR_SATURDAY_SHORT').'</strong></td>
+        <td class="plgCalendarWeekdaySunday"><strong>'.$gL10n->get('PLG_CALENDAR_SUNDAY_SHORT').'</strong></td>
     </tr>
     <tr>';
 
@@ -687,8 +678,7 @@ echo '</table>';
 
 if($currentMonth.$currentYear !== date('mY'))
 {
-    echo '<div id="plgCalendarReset"><a href="#" onclick="$.ajax({
-            type: \'GET\',
+    echo '<div id="plgCalendarReset"><a href="#" onclick="$.get({
             url: \''.$g_root_path.'/adm_plugins/'.$plugin_folder.'/calendar.php\',
             cache: false,
             data: \'ajax_change&amp;date_id='.date('mY').'\',

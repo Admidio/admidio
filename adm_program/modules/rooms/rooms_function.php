@@ -24,6 +24,7 @@ $getMode   = admFuncVariableIsValid($_GET, 'mode',    'int', array('requireValue
 if (!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // Raumobjekt anlegen
@@ -40,10 +41,12 @@ if ($getMode === 1)
     if (!array_key_exists('room_name', $_POST) || $_POST['room_name'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROOM')));
+        // => EXIT
     }
     if (!array_key_exists('room_capacity', $_POST) || $_POST['room_capacity'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ROO_CAPACITY')));
+        // => EXIT
     }
 
     // make html in description secure

@@ -29,6 +29,7 @@ $picpath = THEME_SERVER_PATH. '/images/no_profile_pic.png';
 if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // read inventory data and show error if inventory doesn't exists
@@ -38,6 +39,7 @@ $inventory = new Inventory($gDb, $gInventoryFields, $getItemId);
 if($inventory->getValue('inv_id') == 0)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }
 
 // Foto aus adm_my_files

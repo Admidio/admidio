@@ -36,6 +36,7 @@ $html = '';
 if(!$gCurrentUser->assignRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 $user = new User($gDb, $gProfileFields, $getUserId);
@@ -65,7 +66,7 @@ if($getInline)
     header('Content-type: text/html; charset=utf-8');
 
     $html .= '<script type="text/javascript"><!--
-    $(document).ready(function() {
+    $(function() {
         $(".admidio-group-heading").click(function() {
             showHideBlock($(this).attr("id"));
         });
@@ -78,16 +79,15 @@ if($getInline)
             // disable default form submit
             event.preventDefault();
 
-            $.ajax({
-                type: "POST",
-                url:  action,
+            $.post({
+                url: action,
                 data: $(this).serialize(),
                 success: function(data) {
-                    if(data === "success") {
+                    if (data === "success") {
                         rolesFormAlert.attr("class", "alert alert-success form-alert");
                         rolesFormAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                         rolesFormAlert.fadeIn("slow");
-                        setTimeout(function () {
+                        setTimeout(function() {
                             $("#admidio_modal").modal("hide");
                         }, 2000);
 
@@ -118,7 +118,7 @@ else
     $page = new HtmlPage($headline);
     $page->addJavascriptFile('adm_program/modules/profile/profile.js');
 
-    $page->addJavascript('var profileJS = new profileJSClass();');
+    $page->addJavascript('var profileJS = new ProfileJS(gRootPath);');
 
     // add back link to module menu
     $rolesMenu = $page->getMenu();
@@ -134,7 +134,8 @@ $columnHeading = array(
     '&nbsp;',
     $gL10n->get('SYS_ROLE'),
     $gL10n->get('SYS_DESCRIPTION'),
-    $gL10n->get('SYS_LEADER'));
+    $gL10n->get('SYS_LEADER')
+);
 $table->addRowHeadingByArray($columnHeading);
 $table->setColumnAlignByArray(array('center', 'left', 'left', 'left'));
 $table->setColumnsWidth(array('10%', '30%', '45%', '15%'));
@@ -229,7 +230,7 @@ while($row = $statement->fetch())
 
         $columnValues = array(
             '<input type="checkbox" id="role-'.$role->getValue('rol_id').'" name="role-'.$role->getValue('rol_id').'" '.
-                $memberChecked.$memberDisabled.' onclick="javascript:profileJS.unMarkLeader(this);" value="1" />',
+                $memberChecked.$memberDisabled.' onclick="profileJS.unMarkLeader(this);" value="1" />',
             '<label for="role-'.$role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label>',
             $role->getValue('rol_description'));
 
@@ -249,7 +250,7 @@ while($row = $statement->fetch())
         }
 
         $leaderRights = '<input type="checkbox" id="leader-'.$role->getValue('rol_id').'" name="leader-'.$role->getValue('rol_id').'" '.
-                           $leaderChecked.$leaderDisabled.' onclick="javascript:profileJS.markLeader(this);" value="1" />';
+                           $leaderChecked.$leaderDisabled.' onclick="profileJS.markLeader(this);" value="1" />';
 
         // show icon that leaders have no additional rights
         if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)

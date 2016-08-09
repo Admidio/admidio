@@ -198,6 +198,7 @@ class InventoryFields
                                 catch(AdmException $e)
                                 {
                                     $e->showText();
+                                    // => EXIT
                                 }
                             }
                         }

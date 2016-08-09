@@ -109,13 +109,22 @@ class AdmException extends Exception
 
     /**
      * Show html message window with translated message
-     * @return string Returns a html formated message with the exception text
      */
     public function showHtml()
     {
         global $gMessage;
 
-        return $gMessage->show($this->getText());
+        // display database error to user
+        if(is_object($gMessage))
+        {
+            $gMessage->show($this->getText());
+            // => EXIT
+        }
+        else
+        {
+            echo $this->getText();
+            exit();
+        }
     }
 
     /**

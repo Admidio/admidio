@@ -22,6 +22,7 @@ if ($gPreferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 try
@@ -42,6 +43,7 @@ $completePath = $file->getCompletePathOfFile();
 if (!file_exists($completePath))
 {
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
+    // => EXIT
 }
 
 // Downloadcounter inkrementieren

@@ -95,6 +95,7 @@ class User extends TableAccess
         if($defaultRolesStatement->rowCount() === 0)
         {
             $gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
+            // => EXIT
         }
 
         while($rolId = $defaultRolesStatement->fetchColumn())
@@ -640,7 +641,7 @@ class User extends TableAccess
     }
 
     /**
-     * @param array $rightsList
+     * @param bool[] $rightsList
      * @return int[]
      */
     private function getAllRolesWithRight(array $rightsList)
@@ -836,13 +837,13 @@ class User extends TableAccess
     }
 
     /**
-      * Checks if the current user is allowed to edit the profile of the user of the parameter.
-      * If will check if user can generally edit all users or if he is a group leader and can edit users
-      * of a special role where @b $user is a member or if it's the own profile and he could edit this.
-      * @param \User $user            User object of the user that should be checked if the current user can edit his profile.
-      * @param bool  $checkOwnProfile If set to @b false than this method don't check the role right to edit the own profile.
-      * @return bool Return @b true if the current user is allowed to edit the profile of the user from @b $user.
-      */
+     * Checks if the current user is allowed to edit the profile of the user of the parameter.
+     * If will check if user can generally edit all users or if he is a group leader and can edit users
+     * of a special role where @b $user is a member or if it's the own profile and he could edit this.
+     * @param \User $user            User object of the user that should be checked if the current user can edit his profile.
+     * @param bool  $checkOwnProfile If set to @b false than this method don't check the role right to edit the own profile.
+     * @return bool Return @b true if the current user is allowed to edit the profile of the user from @b $user.
+     */
     public function hasRightEditProfile(&$user, $checkOwnProfile = true)
     {
         if (!is_object($user))
@@ -905,7 +906,7 @@ class User extends TableAccess
     }
 
     /**
-     * @param array  $rightsList
+     * @param bool[] $rightsList
      * @param string $rightName
      * @param int    $roleId
      * @return bool
@@ -1194,7 +1195,7 @@ class User extends TableAccess
      */
     public function setPassword($newPassword, $isNewPassword = false, $doHashing = true)
     {
-        global $gPreferences;
+        global $gPreferences, $gPasswordHashAlgorithm;
 
         $columnName = 'usr_password';
 
@@ -1212,9 +1213,9 @@ class User extends TableAccess
                 $cost = (int) $gPreferences['system_hashing_cost'];
             }
 
-            $newPassword = PasswordHashing::hash($newPassword, PASSWORD_DEFAULT, array('cost' => $cost));
+            $newPasswordHash = PasswordHashing::hash($newPassword, $gPasswordHashAlgorithm, array('cost' => $cost));
 
-            if ($newPassword === false)
+            if ($newPasswordHash === false)
             {
                 return false;
             }
@@ -1243,8 +1244,6 @@ class User extends TableAccess
         $minStartDate = $startDate;
         $maxEndDate   = $endDate;
 
-        $member = new TableMembers($this->db);
-
         $this->db->startTransaction();
 
         if ($mode === 'set')
@@ -1264,6 +1263,8 @@ class User extends TableAccess
         // search for membership with same role and user and overlapping dates
         if ($mode === 'set')
         {
+            $member = new TableMembers($this->db);
+
             $sql = 'SELECT *
                   FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = '.$id.'
@@ -1274,6 +1275,8 @@ class User extends TableAccess
         }
         else
         {
+            $member = new TableMembers($this->db, $id);
+
             $sql = 'SELECT *
                   FROM '.TBL_MEMBERS.'
                  WHERE mem_id    <> '.$id.'

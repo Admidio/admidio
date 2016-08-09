@@ -42,6 +42,7 @@ if(!isMember($getUserId)
 || ($gCurrentUser->isAdministrator() && $user->getValue('usr_password') !== '' && $user->getValue('EMAIL') === '' && $gPreferences['enable_system_mails'] == 1))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 if($getMode === 'change')
@@ -113,7 +114,7 @@ elseif($getMode === 'html')
     /***********************************************************************/
 
     echo '<script type="text/javascript"><!--
-    $(document).ready(function() {
+    $(function() {
         $("body").on("shown.bs.modal", ".modal", function () {
             $("#password_form:first *:input[type!=hidden]:first").focus();
         });

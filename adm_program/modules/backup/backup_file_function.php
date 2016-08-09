@@ -25,6 +25,7 @@ $getFilename = admFuncVariableIsValid($_GET, 'filename', 'file',   array('requir
 if(!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 $backupAbsolutePath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
@@ -36,6 +37,7 @@ $completePath = $backupAbsolutePath.$getFilename;
 if(!file_exists($completePath))
 {
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
+    // => EXIT
 }
 
 switch($getJob)

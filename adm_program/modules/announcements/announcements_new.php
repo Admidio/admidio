@@ -22,11 +22,13 @@ if ($gPreferences['enable_announcements_module'] == 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 if(!$gCurrentUser->editAnnouncements())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // Initialize and check the parameters
@@ -57,6 +59,7 @@ if($getAnnId > 0)
     if(!$announcement->editRight())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 }
 

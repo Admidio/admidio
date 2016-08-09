@@ -165,20 +165,21 @@ if($plgDatesResult['numResults'] > 0)
             echo $plg_date->getValue('dat_headline'). '</a></div>';
         }
 
-        // Vorschau-Text anzeigen
+        // show preview text
         if($plg_dates_show_preview > 0)
         {
-            // HTML-Tags rausnehmen
-            $textPrev = strip_tags($plg_date->getValue('dat_description'), '<p></p><br><br/><br /><i></i><b></b>');
+            // remove all html tags except some format tags
+            $textPrev = strip_tags($plg_date->getValue('dat_description'), '<p></p><br><br/><br /><i></i><b></b><strong></strong><em></em>');
 
-            // Anfang des Textes auslesen auf die angegebene Länge plus 15 Zeichen, um am Ende eines Wortes abzubrechen
+            // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
             $textPrev = substr($textPrev, 0, $plg_dates_show_preview + 15);
-            $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...';
+            $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
+                <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
+                    href="'.$plg_link_url.'?view_mode=html&amp;view=detail&amp;id='. $plg_date->getValue('dat_id'). '"><span
+                    class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_DATES_MORE').'</a>';
+            $textPrev = pluginDatesCloseTags($textPrev);
 
-            echo '<div>'.$textPrev.'
-            <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
-                href="'.$plg_link_url.'?view_mode=html&amp;view=detail&amp;id='. $plg_date->getValue('dat_id'). '"><span
-                class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_DATES_MORE').'</a></div>';
+            echo '<div>'.$textPrev.'</div>';
         }
 
         echo '<hr>';
@@ -193,3 +194,28 @@ else
 }
 
 echo '</div>';
+
+/**
+ * Function will analyse a html string and close open html tags at the end of the string.
+ * @param string $html The html string to parse.
+ * @return string Returns the parsed html string with all tags closed.
+ */
+function pluginDatesCloseTags($html) {
+    preg_match_all('#<(?!meta|img|br|hr|input\b)\b([a-z]+)(?: .*)?(?<![/|/ ])>#iU', $html, $result);
+    $openedtags = $result[1];
+    preg_match_all('#</([a-z]+)>#iU', $html, $result);
+    $closedtags = $result[1];
+    $len_opened = count($openedtags);
+    if (count($closedtags) === $len_opened) {
+        return $html;
+    }
+    $openedtags = array_reverse($openedtags);
+    for ($i=0; $i < $len_opened; $i++) {
+        if (!in_array($openedtags[$i], $closedtags)) {
+            $html .= '</'.$openedtags[$i].'>';
+        } else {
+            unset($closedtags[array_search($openedtags[$i], $closedtags)]);
+        }
+    }
+    return $html;
+}

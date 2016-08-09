@@ -35,6 +35,7 @@ if ($gPreferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 elseif ($gPreferences['enable_photo_module'] == 2)
 {
@@ -62,7 +63,7 @@ $ordner  = SERVER_PATH. '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin
 $picpath = $ordner.'/'.$getPhotoNr.'.jpg';
 
 // im Debug-Modus den ermittelten Bildpfad ausgeben
-if($gDebug == 1)
+if($gDebug)
 {
     error_log($picpath);
 }

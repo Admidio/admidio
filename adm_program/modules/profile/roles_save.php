@@ -40,6 +40,7 @@ if($getInline)
 if(!$gCurrentUser->assignRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // detect number of selected roles
@@ -57,8 +58,8 @@ if($roleCount === 0)
 {
     if(!$getInline)
     {
-        // "$gMessage->show();" executes "exit();"
         $gMessage->show($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
+        // => EXIT
     }
     else
     {
@@ -153,6 +154,7 @@ foreach($rolesList as $row)
                 if(!$getInline)
                 {
                     $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']));
+                    // => EXIT
                 }
                 else
                 {
@@ -244,6 +246,7 @@ if($getNewUser > 0 && $assignedCount === 0)
     if(!$getInline)
     {
         $gMessage->show($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
+        // => EXIT
     }
     else
     {
@@ -275,4 +278,5 @@ else
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get($messageId));
+    // => EXIT
 }

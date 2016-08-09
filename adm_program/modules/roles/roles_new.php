@@ -25,6 +25,7 @@ $showSystemCategory = false;
 if(!$gCurrentUser->manageRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 if($getRoleId > 0)
@@ -49,12 +50,14 @@ if($getRoleId > 0)
     if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     // Administrator role could only be created or edited by administrators
     if($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     // hidden roles can also see hidden categories
@@ -261,7 +264,7 @@ $form->openGroupBox('gb_dependencies', $gL10n->get('ROL_DEPENDENCIES').'&nbsp;&n
 $rolename_var = $gL10n->get('ROL_NEW_ROLE');
 if($role->getValue('rol_name') !== '')
 {
-    $rolename_var = $gL10n->get('SYS_ROLE').' <b>'.$role->getValue('rol_name').'</b>';
+    $rolename_var = $gL10n->get('SYS_ROLE').' <strong>'.$role->getValue('rol_name').'</strong>';
 }
 $form->addHtml('<p>'.$gL10n->get('ROL_ROLE_DEPENDENCIES', $rolename_var).'</p>');
 

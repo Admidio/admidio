@@ -19,13 +19,18 @@ require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_my
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/constants.php');
 
 // if there is no debug flag in config.php than set debug to false
-if(!isset($gDebug) || $gDebug !== 1)
+if(!isset($gDebug) || !$gDebug)
 {
     $gDebug = 0;
 }
 
 if($gDebug)
 {
+    // https://secure.php.net/manual/en/errorfunc.configuration.php
+    error_reporting(E_ALL | E_STRICT); // PHP 5.3 fallback (https://secure.php.net/manual/en/function.error-reporting.php)
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+
     // write actual script with parameters in log file
     error_log('--------------------------------------------------------------------------------'."\n" .
               $_SERVER['SCRIPT_FILENAME'] . "\n? " . $_SERVER['QUERY_STRING']);
@@ -60,7 +65,13 @@ if(!get_magic_quotes_gpc())
 // global parameters
 $gValidLogin = false;
 
- // create database object and establish connection to database
+// set default password-hash algorithm
+if (!isset($gPasswordHashAlgorithm))
+{
+    $gPasswordHashAlgorithm = PASSWORD_DEFAULT;
+}
+
+// create database object and establish connection to database
 if(!isset($gDbType))
 {
     $gDbType = 'mysql';
@@ -73,6 +84,7 @@ try
 catch(AdmException $e)
 {
     $e->showText();
+    // => EXIT
 }
 
 // create an installation unique cookie prefix and remove special characters

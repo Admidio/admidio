@@ -507,7 +507,7 @@ $javascriptCode .= '
         }
     }';
 $page->addJavascript($javascriptCode);
-$page->addJavascript('$(document).ready(function() {
+$page->addJavascript('$(function() {
     $("#sel_select_configuation").change(function() { loadList(); });
     $("#btn_show_list").click(function() { send("show"); });
     $("#btn_add_column").click(function() { addColumn(); });

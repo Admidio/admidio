@@ -23,6 +23,7 @@ $getItemId = admFuncVariableIsValid($_GET, 'item_id', 'int');
 if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // create item object
@@ -33,6 +34,7 @@ $inventory = new Inventory($gDb, $gInventoryFields, $getItemId);
 if($gPreferences['enable_inventory_module'] >= 0 && !$gValidLogin)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder
@@ -89,53 +91,56 @@ $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js
 $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gPreferences['system_language'].'.js');
 
 $page->addJavascript('
-    var profileJS = new profileJSClass();
-    profileJS.deleteRole_ConfirmText    = "'.$gL10n->get('ROL_MEMBERSHIP_DEL', '[rol_name]').'";
-    profileJS.deleteFRole_ConfirmText   = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
-    profileJS.setBy_Text                = "'.$gL10n->get('SYS_SET_BY').'";
-    profileJS.inv_id                    = '.$inventory->getValue('inv_id').';
+    var profileJS = new ProfileJS(gRootPath);
+    profileJS.deleteRole_ConfirmText  = "'.$gL10n->get('ROL_MEMBERSHIP_DEL', '[rol_name]').'";
+    profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
+    profileJS.setBy_Text              = "'.$gL10n->get('SYS_SET_BY').'";
+    profileJS.inv_id                  = '.$inventory->getValue('inv_id').';
 
     function showHideMembershipInformation(element) {
-        id = "#" + element.attr("id") + "_Content";
-
-        if($(id).css("display") === "none") {
-            $(id).show("fast");
-        } else {
-            $(id).hide("fast");
-        }
+        $("#" + element.attr("id") + "_Content").toggle("fast");
     }');
 $page->addJavascript('
     profileJS.init();
-    $(".admidio-icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function() { $("#admButtonNo").focus(); }});
+    $(".admidio-icon-link-popup").colorbox({
+        rel: "nofollow",
+        scrolling: false,
+        onComplete: function() {
+            $("#admButtonNo").focus();
+        }
+    });
     $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)); });
     $("#profile_authorizations_box_body").mouseout(function () { profileJS.deleteShowInfo(); });
 
     $(".admidio-form-membership-period").submit(function(event) {
         var id = $(this).attr("id");
-        var parentId = $("#"+id).parent().parent().attr("id");
+        var parentId = $("#" + id).parent().parent().attr("id");
+        var parent = $("#" + parentId);
         var action = $(this).attr("action");
-        $("#"+id+" .form-alert").hide();
+
+        var formAlert = $("#" + id + " .form-alert");
+        formAlert.hide();
 
         // disable default form submit
         event.preventDefault();
 
-        $.ajax({
-            type:    "GET",
-            url:     action,
-            data:    $(this).serialize(),
+        $.get({
+            url: action,
+            data: $(this).serialize(),
             success: function(data) {
-                if(data === "success") {
-                    $("#"+id+" .form-alert").attr("class", "alert alert-success form-alert");
-                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
-                    $("#"+id+" .form-alert").fadeIn("slow");
-                    $("#"+id+" .form-alert").animate({opacity: 1.0}, 2500);
-                    $("#"+id+" .form-alert").fadeOut("slow");
-                    $("#"+parentId).animate({opacity: 1.0}, 2500);
-                    $("#"+parentId).fadeOut("slow");
+                if (data === "success") {
+                    formAlert.attr("class", "alert alert-success form-alert");
+                    formAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                    formAlert.fadeIn("slow");
+                    formAlert.animate({opacity: 1.0}, 2500);
+                    formAlert.fadeOut("slow");
+
+                    parent.animate({opacity: 1.0}, 2500);
+                    parent.fadeOut("slow");
                 } else {
-                    $("#"+id+" .form-alert").attr("class", "alert alert-danger form-alert");
-                    $("#"+id+" .form-alert").fadeIn();
-                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
+                    formAlert.attr("class", "alert alert-danger form-alert");
+                    formAlert.fadeIn();
+                    formAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
                 }
             }
         });

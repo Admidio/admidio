@@ -19,12 +19,14 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_recovery'] != 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 if($gValidLogin)
 {
     $gMessage->setForwardUrl($g_root_path.'/adm_program/', 2000);
     $gMessage->show($gL10n->get('SYS_LOSTPW_AREADY_LOGGED_ID'));
+    // => EXIT
 }
 
 if(!empty($_POST['recipient_email']))
@@ -90,6 +92,7 @@ if(!empty($_POST['recipient_email']))
         if($count > 1)
         {
             $gMessage->show($gL10n->get('SYS_LOSTPW_SEVERAL_EMAIL', $_POST['recipient_email']));
+            // => EXIT
         }
         elseif($count === 1)
         {
@@ -121,10 +124,12 @@ if(!empty($_POST['recipient_email']))
         if(strValidCharacters($_POST['recipient_email'], 'email'))
         {
             $gMessage->show($gL10n->get('SYS_LOSTPW_SEND_EMAIL', $_POST['recipient_email']));
+            // => EXIT
         }
         else
         {
             $gMessage->show($gL10n->get('SYS_LOSTPW_SEND_USERNAME', $_POST['recipient_email']));
+            // => EXIT
         }
     }
     catch(AdmException $e)

@@ -44,18 +44,21 @@ if (($gPreferences['enable_mail_module'] != 1 && $getMsgType !== 'PM')
 {
     // message if the sending of PM is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // check for valid login
 if (!$gValidLogin && $getUserId === 0 && $getMsgType === 'PM')
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }
 
 // check if user has email address for sending a email
 if ($gValidLogin && $getMsgType !== 'PM' && $gCurrentUser->getValue('EMAIL') === '')
 {
     $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
+    // => EXIT
 }
 
 // Update the read status of the message
@@ -117,6 +120,7 @@ if ($gValidLogin && $getMsgType === 'PM' && count($gCurrentUser->getAllVisibleRo
     if(count($list) === 0)
     {
         $gMessage->show($gL10n->get('MSG_NO_ROLES_AND_USERS'));
+        // => EXIT
     }
 }
 
@@ -129,6 +133,7 @@ if ($getUserId > 0)
     if ((!$gCurrentUser->editUsers() && !isMember($user->getValue('usr_id'))) || $user->getValue('usr_id') === '')
     {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
+        // => EXIT
     }
 }
 
@@ -241,6 +246,7 @@ elseif (!isset($messageStatement))
         if (!strValidCharacters($user->getValue('EMAIL'), 'email'))
         {
             $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
+            // => EXIT
         }
     }
     elseif ($getRoleId > 0)
@@ -257,6 +263,7 @@ elseif (!isset($messageStatement))
         || $role->getValue('rol_id') == null)
         {
            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+            // => EXIT
         }
 
         $rollenName = $role->getValue('rol_name');
@@ -426,6 +433,7 @@ elseif (!isset($messageStatement))
     if(count($list) === 0)
     {
         $gMessage->show($gL10n->get('MSG_NO_ROLES_AND_USERS'));
+        // => EXIT
     }
 
     $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'               => FIELD_REQUIRED,
@@ -532,7 +540,7 @@ elseif (!isset($messageStatement))
 
 if (isset($messageStatement))
 {
-    $page->addHtml('<br>');
+    $page->addHtml('<br />');
     while ($row = $messageStatement->fetch())
     {
         if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))

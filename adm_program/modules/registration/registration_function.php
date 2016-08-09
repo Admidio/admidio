@@ -33,12 +33,14 @@ $getUserId    = admFuncVariableIsValid($_GET, 'user_id',     'int');
 if(!$gCurrentUser->approveUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // pruefen, ob Modul aufgerufen werden darf
 if($gPreferences['registration_mode'] == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 // create user objects
@@ -103,6 +105,7 @@ if($getMode === 1 || $getMode === 3)
             $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user);
 
             $gMessage->show($gL10n->get('NWU_ASSIGN_LOGIN_EMAIL', $user->getValue('EMAIL')));
+            // => EXIT
         }
         catch(AdmException $e)
         {
@@ -112,6 +115,7 @@ if($getMode === 1 || $getMode === 3)
     else
     {
         $gMessage->show($gL10n->get('NWU_ASSIGN_LOGIN_SUCCESSFUL'));
+        // => EXIT
     }
 }
 elseif($getMode === 4)
@@ -124,6 +128,7 @@ elseif($getMode === 4)
     catch(AdmException $e)
     {
         $e->showText();
+        // => EXIT
     }
 
     // return successful delete for XMLHttpRequest
@@ -153,6 +158,7 @@ elseif($getMode === 5)
     {
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
         $gMessage->show($gL10n->get('PRO_ASSIGN_REGISTRATION_SUCCESSFUL'));
+        // => EXIT
     }
 }
 elseif($getMode === 6)

@@ -273,7 +273,6 @@ class TableDate extends TableAccess
         if(count($this->visibleRoles) === 0)
         {
             // alle Rollen-IDs einlesen, die diesen Termin sehen duerfen
-            $this->visibleRoles = array();
             $sql = 'SELECT dtr_rol_id
                       FROM '.TBL_DATE_ROLE.'
                      WHERE dtr_dat_id = '.$this->getValue('dat_id');
@@ -287,7 +286,7 @@ class TableDate extends TableAccess
                 }
                 else
                 {
-                    $this->visibleRoles[] = $row['dtr_rol_id'];
+                    $this->visibleRoles[] = (int) $row['dtr_rol_id'];
                 }
             }
         }
@@ -323,13 +322,13 @@ class TableDate extends TableAccess
             // nun alle Rollenzuordnungen wegschreiben
             $date_role = new TableAccess($this->db, TBL_DATE_ROLE, 'dtr');
 
-            foreach($this->visibleRoles as $roleID)
+            foreach($this->visibleRoles as $roleId)
             {
-                if(is_numeric($roleID))
+                if(is_numeric($roleId)) // TODO necessary?
                 {
-                    if($roleID > 0)
+                    if($roleId > 0)
                     {
-                        $date_role->setValue('dtr_rol_id', $roleID);
+                        $date_role->setValue('dtr_rol_id', $roleId);
                     }
 
                     $date_role->setValue('dtr_dat_id', $this->getValue('dat_id'));
@@ -372,15 +371,15 @@ class TableDate extends TableAccess
 
     /**
      * die Methode erwartet ein Array mit den fuer den Termin sichtbaren Rollen-IDs
-     * @param array $arrVisibleRoles
+     * @param int[] $arrVisibleRoleIds
      */
-    public function setVisibleRoles(array $arrVisibleRoles)
+    public function setVisibleRoles(array $arrVisibleRoleIds)
     {
-        if(count(array_diff($arrVisibleRoles, $this->visibleRoles)) > 0)
+        if(count(array_diff($arrVisibleRoleIds, $this->visibleRoles)) > 0)
         {
             $this->changeVisibleRoles = true;
         }
 
-        $this->visibleRoles = $arrVisibleRoles;
+        $this->visibleRoles = $arrVisibleRoleIds;
     }
 }

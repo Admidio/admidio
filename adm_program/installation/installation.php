@@ -745,7 +745,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     $orga_preferences['system_language']     = $language;
 
     // calculate the best cost value for your server performance
-    $benchmarkResults = PasswordHashing::costBenchmark();
+    $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm);
     $orga_preferences['system_hashing_cost'] = $benchmarkResults['cost'];
 
     // create all necessary data for this organization

@@ -73,6 +73,7 @@ if($getRemoveUrl == 1)
 if($getUserId > 0 && $getNewUser !== 0 && $getNewUser !== 3)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }
 
 // read user data
@@ -86,6 +87,7 @@ switch($getNewUser)
         if(!$gCurrentUser->hasRightEditProfile($user))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
         break;
 
@@ -94,6 +96,7 @@ switch($getNewUser)
         if(!$gCurrentUser->editUsers())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
 
         // wurde Nachname und Vorname uebergeben, dann diese bereits vorbelegen
@@ -107,6 +110,7 @@ switch($getNewUser)
         if($gPreferences['registration_mode'] == 0)
         {
             $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+            // => EXIT
         }
         break;
 }

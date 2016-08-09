@@ -33,6 +33,7 @@ if($getMode === 1)
 if(!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 switch($getMode)
@@ -53,11 +54,13 @@ switch($getMode)
                     || !file_exists(SERVER_PATH.'/adm_themes/'.$_POST['theme'].'/index.html'))
                     {
                         $gMessage->show($gL10n->get('ORG_INVALID_THEME'));
+                        // => EXIT
                     }
 
                     if(!is_numeric($_POST['logout_minutes']) || $_POST['logout_minutes'] <= 0)
                     {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER')));
+                        // => EXIT
                     }
 
                     if(!isset($_POST['enable_auto_login']) && $gPreferences['enable_auto_login'] == 1)
@@ -75,6 +78,7 @@ switch($getMode)
                     if($_POST['org_longname'] === '')
                     {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+                        // => EXIT
                     }
                     break;
 
@@ -83,16 +87,19 @@ switch($getMode)
                     || !file_exists(SERVER_PATH.'/adm_program/languages/'.$_POST['system_language'].'.xml'))
                     {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LANGUAGE')));
+                        // => EXIT
                     }
 
                     if($_POST['system_date'] === '')
                     {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATE_FORMAT')));
+                        // => EXIT
                     }
 
                     if($_POST['system_time'] === '')
                     {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_TIME_FORMAT')));
+                        // => EXIT
                     }
                     break;
 
@@ -110,6 +117,7 @@ switch($getMode)
                     if($_POST['email_administrator'] === '')
                     {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
+                        // => EXIT
                     }
                     else
                     {
@@ -117,6 +125,7 @@ switch($getMode)
                         if(!strValidCharacters($_POST['email_administrator'], 'email'))
                         {
                             $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
+                            // => EXIT
                         }
                     }
                     break;
@@ -158,6 +167,7 @@ switch($getMode)
                         if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
                         {
                             $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_SENDER_EMAIL')));
+                            // => EXIT
                         }
                     }
                     break;
@@ -179,6 +189,7 @@ switch($getMode)
                     if(!is_numeric($_POST['weblinks_redirect_seconds']) || $_POST['weblinks_redirect_seconds'] < 0)
                     {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('LNK_DISPLAY_REDIRECT')));
+                        // => EXIT
                     }
                     break;
 
@@ -187,11 +198,13 @@ switch($getMode)
 
                 default:
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+                // => EXIT
             }
         }
         catch(AdmException $e)
         {
             $e->showText();
+            // => EXIT
         }
         // check every checkbox if a value was committed
         // if no value is found then set 0 because 0 will not be committed in a html checkbox element
@@ -306,6 +319,7 @@ switch($getMode)
         if($_POST['orgaShortName'] === '' || $_POST['orgaLongName'] === '')
         {
             $gMessage->show($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'));
+            // => EXIT
         }
 
         // check if orga shortname exists
@@ -313,6 +327,7 @@ switch($getMode)
         if($organization->getValue('org_id') > 0)
         {
             $gMessage->show($gL10n->get('INS_ORGA_SHORTNAME_EXISTS', $_POST['orgaShortName']));
+            // => EXIT
         }
 
         // set execution time to 2 minutes because we have a lot to do :)

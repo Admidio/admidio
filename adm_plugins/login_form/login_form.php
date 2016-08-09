@@ -113,7 +113,7 @@ if($gValidLogin)
     {
         echo '
         <script type="text/javascript">
-            $(document).ready(function() {
+            $(function() {
                 '.$jsContent.'
             });
         </script>';

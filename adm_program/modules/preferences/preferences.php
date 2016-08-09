@@ -25,6 +25,7 @@ $headline = $gL10n->get('SYS_SETTINGS');
 if(!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // read organization values into form array
@@ -77,8 +78,7 @@ $page->addJavascript('
         // disable default form submit
         event.preventDefault();
 
-        $.ajax({
-            type:    "POST",
+        $.post({
             url:     action,
             data:    $(this).serialize(),
             success: function(data) {
@@ -153,6 +153,7 @@ $page->addHtml('
                         if (!is_array($themes))
                         {
                             $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
+                            // => EXIT
                         }
                         $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, array('property' => FIELD_REQUIRED, 'defaultValue' => $form_values['theme'], 'helpTextIdInline' => 'ORG_ADMIDIO_THEME_DESC'));
                         $form->addInput('homepage_logout', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('SYS_VISITORS').')', $form_values['homepage_logout'],
@@ -315,7 +316,7 @@ $page->addHtml('
                         $form = new HtmlForm('system_notification_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=system_notification', $page, array('class' => 'form-preferences'));
                         $form->addCheckbox('enable_system_mails', $gL10n->get('ORG_ACTIVATE_SYSTEM_MAILS'), $form_values['enable_system_mails'], array('helpTextIdInline' => 'ORG_ACTIVATE_SYSTEM_MAILS_DESC'));
                         $form->addInput('email_administrator', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $form_values['email_administrator'], array('type' => 'email', 'maxLength' => 50, 'helpTextIdInline' => 'ORG_SYSTEM_MAIL_ADDRESS_DESC'));
-                        $form->addCheckbox('enable_email_notification', $gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES'), $form_values['enable_email_notification'], array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', '<i>'.$gPreferences['email_administrator'].'</i>')));
+                        $form->addCheckbox('enable_email_notification', $gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES'), $form_values['enable_email_notification'], array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', '<em>'.$gPreferences['email_administrator'].'</em>')));
                         $form->addCustomContent($gL10n->get('SYS_SYSTEM_MAILS'),
                             '<p>'.$gL10n->get('ORG_SYSTEM_MAIL_TEXTS_DESC').':</p>
                             <p><strong>#user_first_name#</strong> - '.$gL10n->get('ORG_VARIABLE_FIRST_NAME').'<br />
@@ -636,6 +637,7 @@ $page->addHtml('
                         if (!is_array($templates))
                         {
                             $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
+                            // => EXIT
                         }
                         foreach($templates as $key => $templateName)
                         {

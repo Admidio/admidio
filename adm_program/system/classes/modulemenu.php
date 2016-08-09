@@ -31,7 +31,7 @@ class ModuleMenu
     protected $id;
     protected $items;
     protected $ddItemCnt;
-    protected $root_path;
+    protected $rootPath;
     protected $customCssClass;
     protected $maxMenuLinkItem;
     protected $ddJS;
@@ -48,7 +48,7 @@ class ModuleMenu
         $this->id        = $id;
         $this->items     = array();
         $this->ddItemCnt = 0;
-        $this->root_path = $g_root_path;
+        $this->rootPath  = $g_root_path;
         $this->customCssClass  = '';
         $this->maxMenuLinkItem = $maxMenuLinkItem;
     }
@@ -86,13 +86,13 @@ class ModuleMenu
      */
     public function addCssClass($className)
     {
-        $this->customCssClass = ' '. $className;
+        $this->customCssClass = ' ' . $className;
     }
 
     /**
      * add a drop down item
-     * @param array $menuEntry menu entry element which was added with addItem
-     * @param bool  $selected  determines if drop down element should be pre selected
+     * @param string[] $menuEntry menu entry element which was added with addItem
+     * @param bool     $selected  determines if drop down element should be pre selected
      */
     private function addDropDownItem(array &$menuEntry, $selected = false)
     {
@@ -158,7 +158,7 @@ class ModuleMenu
 
     /**
      * creates an text link icon
-     * @param array $menuEntry menu entry element which was added with addItem
+     * @param string[] $menuEntry menu entry element which was added with addItem
      * @return string HTML of created item
      */
     private function createIconTextLink(array &$menuEntry)
@@ -170,7 +170,7 @@ class ModuleMenu
         {
             $html .= '
                 <script type="text/javascript"><!--
-                    $(document).ready(function() {
+                    $(function() {
                         $("#'.$menuEntry['id'].'").click(function () {
                             '.$menuEntry['js'].'
                         });
@@ -208,23 +208,13 @@ class ModuleMenu
      * @param string $text
      * @param string $icon
      * @param string $desc
-     * @return bool
      */
     public function insertItem($position, $id, $link, $text, $icon, $desc = '')
     {
-        if (!is_numeric($position))
-        {
-            return false;
-        }
-        else
-        {
-            $head = array_slice($this->items, 0, $position);
-            $insert = array($id => $this->mkItem($id, $link, $text, $icon, $desc));
-            $tail = array_slice($this->items, $position);
-            $this->items = array_merge($head, $insert, $tail);
-
-            return true;
-        }
+        $head = array_slice($this->items, 0, $position);
+        $insert = array($id => $this->mkItem($id, $link, $text, $icon, $desc));
+        $tail = array_slice($this->items, $position);
+        $this->items = array_merge($head, $insert, $tail);
     }
 
     /**
@@ -235,7 +225,7 @@ class ModuleMenu
      * @param string $text Link text
      * @param string $icon Icon of the menu item, that will also be linked
      * @param string $js   Javascript to be executed
-     * @return array
+     * @return string[]
      */
     private function mkItem($id, $type, $link, $text, $icon, $js = '')
     {
@@ -244,7 +234,7 @@ class ModuleMenu
             // add root path to link unless the full URL is given
             if (preg_match('/^http(s?):\/\//', $link) !== 1)
             {
-                $link = $this->root_path.$link;
+                $link = $this->rootPath.$link;
             }
         }
         else

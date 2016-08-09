@@ -192,6 +192,7 @@ class TableInventoryField extends TableAccess
                                 catch(AdmException $e)
                                 {
                                     $e->showText();
+                                    // => EXIT
                                 }
                             }
                         }

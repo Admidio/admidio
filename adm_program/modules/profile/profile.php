@@ -27,6 +27,7 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 if(!$gCurrentUser->hasRightViewProfile($user))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 /**
@@ -102,90 +103,85 @@ $page->addJavascriptFile('adm_program/libs/bootstrap-datepicker/locales/bootstra
 $page->addJavascriptFile('adm_program/modules/profile/profile.js');
 
 $page->addJavascript('
-    var profileJS = new profileJSClass();
+    var profileJS = new ProfileJS(gRootPath);
     profileJS.deleteRole_ConfirmText  = "'.$gL10n->get('ROL_MEMBERSHIP_DEL', '[rol_name]').'";
     profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
     profileJS.setBy_Text              = "'.$gL10n->get('SYS_SET_BY').'";
-    profileJS.usr_id                  = '.$userId.';
+    profileJS.userId                  = '.$userId.';
 
     function showHideMembershipInformation(element) {
-        id = "#" + element.attr("id") + "_Content";
-
-        if($(id).css("display") === "none") {
-            $(id).show("fast");
-        } else {
-            $(id).hide("fast");
-        }
+        $("#" + element.attr("id") + "_Content").toggle("fast");
     }
 
     function callbackProfilePhoto() {
-        var img_src = $("#profile_photo").attr("src");
+        var imgSrc = $("#profile_photo").attr("src");
         var timestamp = new Date().getTime();
         $("#btn_delete_photo").hide();
-        $("#profile_photo").attr("src",img_src+"&"+timestamp);
+        $("#profile_photo").attr("src", imgSrc + "&" + timestamp);
     }
 
     function callbackRoles() {
-        if(profileJS) {
+        if (profileJS) {
             profileJS.formerRoleCount++;
             profileJS.reloadFormerRoleMemberships();
-        };
+        }
     }
 
     function callbackFormerRoles() {
-        if(profileJS) {
+        if (profileJS) {
             profileJS.formerRoleCount--;
-            if(profileJS.formerRoleCount === 0) {
+            if (profileJS.formerRoleCount === 0) {
                 $("#profile_former_roles_box").fadeOut("slow");
             }
-        };
+        }
     }
 
     function callbackFutureRoles() {
-        if(profileJS) {
+        if (profileJS) {
             profileJS.futureRoleCount--;
-            if(profileJS.futureRoleCount === 0) {
+            if (profileJS.futureRoleCount === 0) {
                 $("#profile_future_roles_box").fadeOut("slow");
             }
-        };
+        }
     }
 
-    function formSubmitEvent()
-    {
+    function formSubmitEvent() {
         $(".button-membership-period-form").click(function(event) {
             var memberId  = $(this).attr("data-admidio");
-            var dateStart = $("#membership_start_date_"+memberId).val();
-            var dateEnd   = $("#membership_end_date_"+memberId).val();
-            var action    = $("#membership_period_form_"+memberId).attr("action")+"&membership_start_date_"+memberId+"="+dateStart+"&membership_end_date_"+memberId+"="+dateEnd;
+            var dateStart = $("#membership_start_date_" + memberId).val();
+            var dateEnd   = $("#membership_end_date_" + memberId).val();
+            var action    = $("#membership_period_form_" + memberId).attr("action") + "&membership_start_date_" + memberId + "=" + dateStart + "&membership_end_date_" + memberId + "=" + dateEnd;
 
-            $("#membership_period_form_"+memberId+" .form-alert").hide();
+            var formAlert = $("#membership_period_form_" + memberId + " .form-alert");
+            formAlert.hide();
 
-            $.ajax({
-                type:    "GET",
-                url:     action,
+            $.get({
+                url: action,
                 success: function(data) {
-                    if(data === "success") {
-                        $("#membership_period_form_"+memberId+" .form-alert").attr("class", "alert alert-success form-alert");
-                        $("#membership_period_form_"+memberId+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
-                        $("#membership_period_form_"+memberId+" .form-alert").fadeIn("slow");
-                        $("#membership_period_form_"+memberId+" .form-alert").animate({opacity: 1.0}, 2500);
-                        $("#membership_period_form_"+memberId+" .form-alert").fadeOut("slow");
-                        $("#membership_period_"+memberId).animate({opacity: 1.0}, 2500);
-                        $("#membership_period_"+memberId).fadeOut("slow");
+                    if (data === "success") {
+                        formAlert.attr("class", "alert alert-success form-alert");
+                        formAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                        formAlert.fadeIn("slow");
+                        formAlert.animate({opacity: 1.0}, 2500);
+                        formAlert.fadeOut("slow");
+
+                        var membershipPeriod = $("#membership_period_" + memberId);
+                        membershipPeriod.animate({opacity: 1.0}, 2500);
+                        membershipPeriod.fadeOut("slow");
+
                         profileJS.reloadRoleMemberships();
                         profileJS.reloadFormerRoleMemberships();
                         profileJS.reloadFutureRoleMemberships();
                     } else {
-                        $("#membership_period_form_"+memberId+" .form-alert").attr("class", "alert alert-danger form-alert");
-                        $("#membership_period_form_"+memberId+" .form-alert").fadeIn();
-                        $("#membership_period_form_"+memberId+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
+                        formAlert.attr("class", "alert alert-danger form-alert");
+                        formAlert.fadeIn();
+                        formAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
                     }
                 }
             });
         });
     }
-
-    ');
+');
 $page->addJavascript('
     $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
     $("#profile_authorizations_box_body").mouseout(function () { profileJS.deleteShowInfo()});

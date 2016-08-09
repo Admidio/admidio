@@ -27,16 +27,19 @@ define('USER_IMPORT_COMPLETE', '4');
 if(!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // Lastname und firstname are mandatory fields
 if(strlen($_POST['usf-'.$gProfileFields->getProperty('LAST_NAME', 'usf_id')]) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gProfileFields->getProperty('LAST_NAME', 'usf_name')));
+    // => EXIT
 }
 if(strlen($_POST['usf-'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gProfileFields->getProperty('FIRST_NAME', 'usf_name')));
+    // => EXIT
 }
 
 if(array_key_exists('first_row', $_POST))
@@ -271,3 +274,4 @@ $_SESSION['value_separator']  = '';
 
 $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/members/members.php');
 $gMessage->show($gL10n->get('MEM_IMPORT_SUCCESSFUL', $countImportNewUser, $countImportEditUser, $countImportEditRole));
+// => EXIT

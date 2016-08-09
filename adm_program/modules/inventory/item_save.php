@@ -24,6 +24,7 @@ $getNewItem = admFuncVariableIsValid($_GET, 'new_item', 'int');
 if (!$gCurrentUser->editInventory())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // save form data in session for back navigation
@@ -46,6 +47,7 @@ switch($getNewItem)
         if(!$gCurrentUser->editInventory($inventory))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
         break;
 
@@ -54,6 +56,7 @@ switch($getNewItem)
         if(!$gCurrentUser->editInventory())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
         break;
 }
@@ -77,6 +80,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
             if($field->getValue('inf_mandatory') == 1 && strlen($_POST[$post_id]) === 0)
             {
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('inf_name')));
+                // => EXIT
             }
 
             // Wert aus Feld in das User-Klassenobjekt schreiben
@@ -89,19 +93,24 @@ foreach($gInventoryFields->mInventoryFields as $field)
                 {
                     case 'CHECKBOX':
                         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+                        // => EXIT
                         break;
                     case 'DATE':
                         $gMessage->show($gL10n->get('SYS_DATE_INVALID', $field->getValue('inf_name'), $gPreferences['system_date']));
+                        // => EXIT
                         break;
                     case 'EMAIL':
                         $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $field->getValue('inf_name')));
+                        // => EXIT
                         break;
                     case 'NUMBER':
                     case 'DECIMAL':
                         $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('inf_name')));
+                        // => EXIT
                         break;
                     case 'URL':
                         $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $field->getValue('inf_name')));
+                        // => EXIT
                         break;
                 }
             }
@@ -116,6 +125,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
             elseif($field->getValue('inf_mandatory') == 1)
             {
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('inf_name')));
+                // => EXIT
             }
         }
     }
@@ -168,10 +178,12 @@ if($getNewItem === 1)
 {
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+    // => EXIT
 }
 else
 {
     // go back to profile view
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+    // => EXIT
 }

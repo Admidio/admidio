@@ -30,6 +30,7 @@ $_SESSION['mylist_request'] = $_POST;
 if(!isset($_POST['column1']) || strlen($_POST['column1']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', '1. '.$gL10n->get('LST_COLUMN')));
+    // => EXIT
 }
 
 // Rolle muss beim Anzeigen gefuellt sein
@@ -37,6 +38,7 @@ if($getMode === 2
 && (!isset($_POST['sel_roles_ids']) || $_POST['sel_roles_ids'] == 0 || !is_array($_POST['sel_roles_ids'])))
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROLE')));
+    // => EXIT
 }
 
 if(!isset($_POST['sel_show_members']))
@@ -54,18 +56,21 @@ if($getMode !== 2)
     if($list->getValue('lst_global') == 1 && !$gCurrentUser->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
     elseif($list->getValue('lst_usr_id') != $gCurrentUser->getValue('usr_id')
-    && $list->getValue('lst_global') == 0
-    && $list->getValue('lst_id') > 0)
+    && $list->getValue('lst_global') == 0 && $list->getValue('lst_id') > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 }
 
 // Liste speichern
 if ($getMode === 1 || $getMode === 2)
 {
+    $globalConfiguration = admFuncVariableIsValid($_POST, 'cbx_global_configuration', 'bool', array('defaultValue' => false));
+
     // alle vorhandenen Spalten durchgehen
     for($columnNumber = 1; isset($_POST['column'. $columnNumber]); ++$columnNumber)
     {
@@ -85,9 +90,9 @@ if ($getMode === 1 || $getMode === 2)
     }
 
     // set list global only in save mode
-    if($getMode === 1 && $gCurrentUser->isAdministrator() && isset($_POST['cbx_global_configuration']))
+    if($getMode === 1 && $gCurrentUser->isAdministrator())
     {
-        $list->setValue('lst_global', $_POST['cbx_global_configuration']);
+        $list->setValue('lst_global', $globalConfiguration);
     }
     else
     {

@@ -42,6 +42,7 @@ if($gPreferences['enable_dates_module'] == 0)
 {
     // Module is not active
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 if($getMode !== 6 || $gPreferences['enable_dates_module'] == 2)
@@ -54,6 +55,7 @@ if($getMode !== 6 || $gPreferences['enable_dates_module'] == 2)
 if(!$gCurrentUser->editDates() && $getMode !== 3 && $getMode !== 4 && $getMode !== 6)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 if($getCopy)
@@ -73,6 +75,7 @@ if($getDateId > 0)
     if(!$date->editRight())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 }
 
@@ -87,26 +90,32 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     if(strlen($_POST['dat_headline']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TITLE')));
+        // => EXIT
     }
     if(strlen($_POST['date_from']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_START')));
+        // => EXIT
     }
     if(strlen($_POST['date_to']) === 0 && $_POST['dat_repeat_type'] == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_END')));
+        // => EXIT
     }
     if(strlen($_POST['date_from_time']) === 0 && !isset($_POST['dat_all_day']))
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START')));
+        // => EXIT
     }
     if(strlen($_POST['date_to_time']) === 0 && !isset($_POST['dat_all_day']))
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END')));
+        // => EXIT
     }
     if(strlen($_POST['dat_cat_id']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_CALENDAR')));
+        // => EXIT
     }
 
     if(isset($_POST['dat_all_day']))
@@ -125,6 +134,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     {
         $_SESSION['dates_request']['date_roles'] = '';
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
+        // => EXIT
     }
 
     // das Land nur zusammen mit dem Ort abspeichern
@@ -146,10 +156,12 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         if(!$startDateTime)
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
+            // => EXIT
         }
         else
         {
-        $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START'), $gPreferences['system_time']));
+            $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START'), $gPreferences['system_time']));
+            // => EXIT
         }
     }
     else
@@ -178,10 +190,12 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         if(!$endDateTime)
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
+            // => EXIT
         }
         else
         {
             $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END'), $gPreferences['system_time']));
+            // => EXIT
         }
     }
     else
@@ -194,6 +208,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     if($startDateTime > $endDateTime)
     {
         $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+        // => EXIT
     }
 
     if(!isset($_POST['dat_highlight']))
@@ -244,12 +259,13 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             if($row->is_reserved)
             {
                 $gMessage->show($gL10n->get('DAT_ROOM_RESERVED'));
+                // => EXIT
             }
 
             $date->setValue('dat_room_id', $_POST['dat_room_id']);
             $room = new TableRooms($gDb);
             $room->readDataById($_POST['dat_room_id']);
-            $number = intval($room->getValue('room_capacity')) + intval($room->getValue('room_overhang'));
+            $number = (int) $room->getValue('room_capacity') + (int) $room->getValue('room_overhang');
             $date->setValue('dat_max_members', $number);
             if($_POST['dat_max_members']<$number && $_POST['dat_max_members']>0)
             {
@@ -396,6 +412,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         {
             $date->delete();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
 
         // dat_rol_id anpassen (Referenz zwischen date und role)
@@ -405,6 +422,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         {
             $role->delete();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
     }
     elseif($_POST['date_registration_possible'] == 0 && $date->getValue('dat_rol_id') > 0)
@@ -484,6 +502,7 @@ elseif($getMode === 3)  // Benutzer zum Termin anmelden
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
+    // => EXIT
 }
 elseif($getMode === 4)  // Benutzer vom Termin abmelden
 {
@@ -492,6 +511,7 @@ elseif($getMode === 4)  // Benutzer vom Termin abmelden
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
+    // => EXIT
 }
 elseif($getMode === 6)  // Termin im iCal-Format exportieren
 {

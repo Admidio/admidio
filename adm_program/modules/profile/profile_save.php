@@ -64,6 +64,7 @@ switch($getNewUser)
         if(!$gCurrentUser->hasRightEditProfile($user))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
         break;
 
@@ -72,6 +73,7 @@ switch($getNewUser)
         if(!$gCurrentUser->editUsers())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
         }
         break;
 
@@ -81,6 +83,7 @@ switch($getNewUser)
         if($gPreferences['registration_mode'] == 0)
         {
             $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+            // => EXIT
         }
         break;
 }
@@ -95,23 +98,27 @@ if($getNewUser === 2)
     if($_POST['usr_login_name'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME')));
+        // => EXIT
     }
 
     // Passwort muss mindestens 8 Zeichen lang sein
     if(strlen($_POST['usr_password']) < 8)
     {
         $gMessage->show($gL10n->get('PRO_PASSWORD_LENGTH'));
+        // => EXIT
     }
 
     // beide Passwortfelder muessen identisch sein
     if($_POST['usr_password'] !== $_POST['password_confirm'])
     {
         $gMessage->show($gL10n->get('PRO_PASSWORDS_NOT_EQUAL'));
+        // => EXIT
     }
 
     if($_POST['usr_password'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
+        // => EXIT
     }
 }
 
@@ -133,6 +140,7 @@ foreach($gProfileFields->mProfileFields as $field)
             || (strlen($_POST[$post_id]) === 0 && $field->getValue('usf_name_intern') === 'EMAIL' && $getNewUser === 2))
             {
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
+                // => EXIT
             }
 
             // if social network then extract username from url
@@ -174,22 +182,28 @@ foreach($gProfileFields->mProfileFields as $field)
                 {
                     case 'CHECKBOX':
                         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+                        // => EXIT
                         break;
                     case 'DATE':
                         $gMessage->show($gL10n->get('SYS_DATE_INVALID', $field->getValue('usf_name'), $gPreferences['system_date']));
+                        // => EXIT
                         break;
                     case 'EMAIL':
                         $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
+                        // => EXIT
                         break;
                     case 'NUMBER':
                     case 'DECIMAL':
                         $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
+                        // => EXIT
                         break;
                     case 'PHONE':
                         $gMessage->show($gL10n->get('SYS_PHONE_INVALID_CHAR', $field->getValue('usf_name')));
+                        // => EXIT
                         break;
                     case 'URL':
                         $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $field->getValue('usf_name')));
+                        // => EXIT
                         break;
                 }
             }
@@ -204,6 +218,7 @@ foreach($gProfileFields->mProfileFields as $field)
             elseif($field->getValue('usf_mandatory') == 1)
             {
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
+                // => EXIT
             }
         }
     }
@@ -229,6 +244,7 @@ if($gCurrentUser->isAdministrator() || $getNewUser > 0)
                 if(strcmp($row['usr_id'], $getUserId) !== 0)
                 {
                     $gMessage->show($gL10n->get('PRO_LOGIN_NAME_EXIST'));
+                    // => EXIT
                 }
             }
         }
@@ -236,6 +252,7 @@ if($gCurrentUser->isAdministrator() || $getNewUser > 0)
         if(!$user->setValue('usr_login_name', $_POST['usr_login_name']))
         {
             $gMessage->show($gL10n->get('SYS_FIELD_INVALID_CHAR', $gL10n->get('SYS_USERNAME')));
+            // => EXIT
         }
     }
 }
@@ -328,6 +345,7 @@ if($getNewUser === 1 || $getNewUser === 3)
     {
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
         $gMessage->show($gL10n->get($messageId));
+        // => EXIT
     }
 }
 elseif($getNewUser === 2)
@@ -335,16 +353,19 @@ elseif($getNewUser === 2)
     // registration was successful then go to homepage
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_REGISTRATION_SAVED'));
+    // => EXIT
 }
 elseif($getNewUser === 0 && $user->getValue('usr_valid') == 0)
 {
     // a registration was edited then go back to profile view
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+    // => EXIT
 }
 else
 {
     // go back to profile view
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+    // => EXIT
 }

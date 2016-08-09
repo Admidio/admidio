@@ -175,6 +175,22 @@ class Database
      */
     private function setConnectionOptions()
     {
+        global $gDebug;
+
+        if ($gDebug)
+        {
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // maybe change to PDO::ERRMODE_WARNING
+        }
+        else
+        {
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+        }
+
+        $this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+        $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true); // change to false if we convert to prepared statements
+        $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH); // maybe change in future to PDO::FETCH_ASSOC or PDO::FETCH_OBJ
+        $this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+
         // Connect to database with UTF8
         $this->query('SET NAMES \'UTF8\'');
 
@@ -264,7 +280,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        if ($gDebug === 1)
+        if ($gDebug)
         {
             error_log('START TRANSACTION');
         }
@@ -274,6 +290,7 @@ class Database
         if (!$result)
         {
             $this->showError();
+            // => EXIT
         }
 
         $this->transactions = 1;
@@ -307,7 +324,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        if ($gDebug === 1)
+        if ($gDebug)
         {
             error_log('COMMIT');
         }
@@ -317,6 +334,7 @@ class Database
         if (!$result)
         {
             $this->showError();
+            // => EXIT
         }
 
         $this->transactions = 0;
@@ -345,7 +363,6 @@ class Database
     {
         $output = '<div style="font-family: monospace;">';
         $backtrace = debug_backtrace();
-        $path = SERVER_PATH;
 
         foreach ($backtrace as $number => $trace)
         {
@@ -362,7 +379,7 @@ class Database
             }
             else
             {
-                $trace['file'] = str_replace(array($path, '\\'), array('', '/'), $trace['file']);
+                $trace['file'] = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $trace['file']);
                 $trace['file'] = substr($trace['file'], 1);
             }
             $args = array();
@@ -378,14 +395,14 @@ class Database
                 if (!empty($trace['args'][0]))
                 {
                     $argument = htmlentities($trace['args'][0]);
-                    $argument = str_replace(array($path, '\\'), array('', '/'), $argument);
+                    $argument = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $argument);
                     $argument = substr($argument, 1);
                     $args[] = "'{$argument}'";
                 }
             }
 
-            $trace['class'] = (!isset($trace['class'])) ? '' : $trace['class'];
-            $trace['type']  = (!isset($trace['type']))  ? '' : $trace['type'];
+            $trace['class'] = array_key_exists('class', $trace) ? $trace['class'] : '';
+            $trace['type']  = array_key_exists('type',  $trace) ? $trace['type']  : '';
 
             $output .= '<br />';
             $output .= '<strong>FILE:</strong> '.htmlentities($trace['file']).'<br />';
@@ -395,6 +412,7 @@ class Database
                        '('.(count($args) ? implode(', ', $args) : '').')<br />';
         }
         $output .= '</div>';
+
         return $output;
     }
 
@@ -423,13 +441,13 @@ class Database
      * then also the number of rows will be logged. If an error occurred the script will
      * be terminated and the error with a backtrace will be send to the browser.
      * @param string $sql        A string with the sql statement that should be executed in database.
-     * @param bool   $throwError Default will be @b true and if an error the script will be terminated and
+     * @param bool   $showError  Default will be @b true and if an error the script will be terminated and
      *                           occurred the error with a backtrace will be send to the browser. If set to
      *                           @b false no error will be shown and the script will be continued.
      * @return \PDOStatement For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
      *                       This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
      */
-    public function query($sql, $throwError = true)
+    public function query($sql, $showError = true)
     {
         global $gDebug;
 
@@ -467,23 +485,26 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        if ($gDebug === 1)
+        if ($gDebug)
         {
             error_log($sql);
         }
 
-        $this->fetchArray   = array();
-        $this->pdoStatement = $this->pdo->query($sql);
-
-        // if we got an db error then show this error
-        if ($this->pdo->errorCode() !== null && $this->pdo->errorCode() !== '00000')
+        try
         {
-            if ($throwError)
+            $this->fetchArray   = array();
+            $this->pdoStatement = $this->pdo->query($sql);
+        }
+        catch (PDOException $e)
+        {
+            if($showError)
             {
-                return $this->showError();
+                $this->showError();
+                // => EXIT
             }
         }
-        elseif ($gDebug === 1 && strpos(strtoupper($sql), 'SELECT') === 0)
+
+        if ($gDebug && strpos(strtoupper($sql), 'SELECT') === 0)
         {
             // if debug modus then show number of selected rows
             error_log('Found rows: '.$this->pdoStatement->rowCount());
@@ -506,7 +527,7 @@ class Database
         if ($this->transactions > 0)
         {
             // if debug mode then log all sql statements
-            if ($gDebug === 1)
+            if ($gDebug)
             {
                 error_log('ROLLBACK');
             }
@@ -516,6 +537,7 @@ class Database
             if (!$result)
             {
                 $this->showError();
+                // => EXIT
             }
 
             $this->transactions = 0;
@@ -528,7 +550,7 @@ class Database
      * Methods reads all columns and their properties from the database table.
      * @param string $table                Name of the database table for which the columns should be shown.
      * @param bool   $showColumnProperties If this is set to @b false only the column names were returned.
-     * @return array Returns an array with each column and their properties if $showColumnProperties is set to @b true.
+     * @return string[]|array[] Returns an array with each column and their properties if $showColumnProperties is set to @b true.
      *               The array has the following format:
      *               array (
      *                   'column1' => array (
@@ -543,7 +565,7 @@ class Database
      */
     public function showColumns($table, $showColumnProperties = true)
     {
-        if (!isset($this->dbStructure[$table]))
+        if (!array_key_exists($table, $this->dbStructure))
         {
             $columnProperties = array();
 
@@ -659,11 +681,9 @@ class Database
      * Display the error code and error message to the user if a database error occurred.
      * The error must be read by the child method. This method will call a backtrace so
      * you see the script and specific line in which the error occurred.
-     * @param int    $code    The database error code that will be displayed.
-     * @param string $message The database error message that will be displayed.
      * @return void Will exit the script and returns a html output with the error information.
      */
-    public function showError($code = 0, $message = '')
+    public function showError()
     {
         global $g_root_path, $gMessage, $gPreferences, $gCurrentOrganization, $gDebug, $gL10n;
 
@@ -675,19 +695,14 @@ class Database
             $this->pdo->rollBack();
         }
 
-        if (!headers_sent() && isset($gPreferences) && defined('THEME_SERVER_PATH'))
-        {
-            // create html page object
-            $page = new HtmlPage($gL10n->get('SYS_DATABASE_ERROR'));
-        }
-
         // transform the database error to html
+        $errorCode = $this->pdo->errorCode();
         $errorInfo = $this->pdo->errorInfo();
 
         $htmlOutput = '
             <div style="font-family: monospace;">
                  <p><strong>S Q L - E R R O R</strong></p>
-                 <p><strong>CODE:</strong> '.$this->pdo->errorCode().'</p>
+                 <p><strong>CODE:</strong> '.$errorCode.'</p>
                  '.$errorInfo[1].'<br /><br />
                  '.$errorInfo[2].'<br /><br />
                  <strong>B A C K T R A C E</strong><br />
@@ -695,14 +710,16 @@ class Database
              </div>';
 
         // in debug mode show error in log file
-        if ($gDebug === 1)
+        if ($gDebug)
         {
-            error_log($this->pdo->errorCode().': '.$errorInfo[1]."\n".$errorInfo[2]);
+            error_log($errorCode.': '.$errorInfo[1]."\n".$errorInfo[2]);
         }
 
         // display database error to user
-        if (isset($page) && !headers_sent() && isset($gPreferences) && defined('THEME_SERVER_PATH'))
+        if (isset($gPreferences) && defined('THEME_SERVER_PATH') && !headers_sent())
         {
+            // create html page object
+            $page = new HtmlPage($gL10n->get('SYS_DATABASE_ERROR'));
             $page->addHtml($htmlOutput);
             $page->show();
         }

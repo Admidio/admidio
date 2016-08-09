@@ -24,6 +24,7 @@ $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
 if ($gPreferences['enable_download_module'] != 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 try

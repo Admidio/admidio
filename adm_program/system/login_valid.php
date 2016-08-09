@@ -20,11 +20,11 @@ if(!$gValidLogin)
 {
     if(!isset($_SESSION['login_forward_url']))
     {
-        // aufgerufene URL merken, damit diese nach dem Einloggen sofort aufgerufen werden kann
+        // remember requested URL, so we could redirect to this URL again after login
         $_SESSION['login_forward_url'] = CURRENT_URL;
     }
 
-    // User nicht eingeloggt -> Loginseite aufrufen
+    // User not logged in -> Request login site
     header('Location: '.$g_root_path.'/adm_program/system/login.php');
     exit();
 }

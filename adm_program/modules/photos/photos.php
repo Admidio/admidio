@@ -28,6 +28,7 @@ if ($gPreferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 elseif ($gPreferences['enable_photo_module'] == 2)
 {
@@ -87,6 +88,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 if($getPhotoId > 0 && $photoAlbum->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }
 
 /*********************LOCKED************************************/
@@ -97,6 +99,7 @@ if($getLocked === 0 || $getLocked === 1)
     if(!$gCurrentUser->editPhotoRight())
     {
         $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
+        // => EXIT
     }
 
     $photoAlbum->setValue('pho_locked', $getLocked);

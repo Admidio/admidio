@@ -35,16 +35,27 @@ require_once(SERVER_PATH.'/adm_program/libs/phpass/passwordhash.php');
 class PasswordHashing
 {
     /**
-     * Hash the given password with the given options
-     * Minimum cost is 10
-     * @param string $password  The password string
-     * @param int    $algorithm The hash-algorithm constant
-     * @param array  $options   The hash-options array
+     * Hash the given password with the given options. The default algorithm uses the password_* methods,
+     * otherwise the builtin helper for SHA-512 crypt hashes from the operating system. Minimum cost is 10.
+     * @param string     $password  The password string
+     * @param int|string $algorithm The hash-algorithm constant
+     * @param array      $options   The hash-options array
      * @return string|false Returns the hashed password or false if an error occurs
      */
     public static function hash($password, $algorithm = PASSWORD_DEFAULT, array $options = array())
     {
-        if (!in_array('cost', $options, true))
+        if ($algorithm === 'SHA512')
+        {
+            if (!array_key_exists('cost', $options))
+            {
+                $options['cost'] = 100000;
+            }
+
+            $salt = self::genRandomPassword(8, './ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+            return crypt($password, '$6$rounds=' . $options['cost'] . '$' . $salt . '$');
+        }
+
+        if (!array_key_exists('cost', $options))
         {
             $options['cost'] = 12;
         }
@@ -69,6 +80,23 @@ class PasswordHashing
         {
             return password_verify($password, $hash);
         }
+        elseif (strlen($hash) >= 110 && strpos($hash, '$6$') === 0)
+        {
+            $passwordHash = crypt($password, $hash);
+
+            if (function_exists('hash_equals'))
+            {
+                return hash_equals($passwordHash, $hash);
+            }
+            else
+            {
+                $status = 0;
+                for ($i = 0, $iMax = strlen($passwordHash); $i < $iMax; $i++) {
+                    $status |= (ord($passwordHash[$i]) ^ ord($hash[$i]));
+                }
+                return $status === 0;
+            }
+        }
         elseif (strlen($hash) === 34 && strpos($hash, '$P$') === 0)
         {
             $passwordHasher = new PasswordHash(9, true);
@@ -83,14 +111,21 @@ class PasswordHashing
     }
 
     /**
-     * Checks if the given hash is generated from the given options
-     * @param string $hash      The hash string that should checked
-     * @param int    $algorithm The hash-algorithm the hash should match to
-     * @param array  $options   The hash-options the hash should match to
+     * Checks if the given hash is generated from the given options. The default algorithm uses the
+     * password_* methods, otherwise the builtin helper for SHA-512 crypt hashes from the operating system.
+     * @param string     $hash      The hash string that should checked
+     * @param int|string $algorithm The hash-algorithm the hash should match to
+     * @param array      $options   The hash-options the hash should match to
      * @return bool Returns false if the hash match the given options and false if not
      */
     public static function needsRehash($hash, $algorithm = PASSWORD_DEFAULT, array $options = array())
     {
+        if ($algorithm === 'SHA512')
+        {
+            return strlen($hash) < 110 || strpos($hash, '$6$') !== 0
+            || (int) substr(explode('$', $hash)[2], 7) !== $options['cost'];
+        }
+
         return password_needs_rehash($hash, $algorithm, $options);
     }
 
@@ -207,6 +242,10 @@ class PasswordHashing
         {
             return password_get_info($hash);
         }
+        elseif (strlen($hash) >= 110 && strpos($hash, '$6$') === 0)
+        {
+            return 'SHA512';
+        }
         elseif (strlen($hash) === 34 && strpos($hash, '$P$') === 0)
         {
             return 'PRIVATE/PORTABLE_HASH';
@@ -221,25 +260,39 @@ class PasswordHashing
 
     /**
      * Run a benchmark to get the best fitting cost value. The cost value can vary from 4 to 31.
-     * @param float  $maxTime   The maximum time the hashing process should take in seconds
-     * @param string $password  The password to test
-     * @param int    $algorithm The algorithm to test
-     * @param array  $options   The options to test
+     * @param float      $maxTime   The maximum time the hashing process should take in seconds
+     * @param string     $password  The password to test
+     * @param int|string $algorithm The algorithm to test
+     * @param array      $options   The options to test
      * @return array Returns an array with the maximum tested cost with the required time
      */
     public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = PASSWORD_DEFAULT, array $options = array('cost' => 12))
     {
-        $cost = $options['cost'];
         $time = 0;
         $results = array();
+        $cost = $options['cost'];
 
-        if ($cost < 4)
+        if ($algorithm === 'SHA512')
         {
-            $cost = 4;
+            $maxCost = 999999999;
+            $costIncrement = 50000;
+            if ($cost < 1000)
+            {
+                $cost = 1000;
+            }
+        }
+        else
+        {
+            $maxCost = 31;
+            $costIncrement = 1;
+            if ($cost < 4)
+            {
+                $cost = 4;
+            }
         }
 
         // loop through the cost value until the needed hashing time reaches the maximum set time
-        while ($time <= $maxTime && $cost <= 31)
+        while ($time <= $maxTime && $cost <= $maxCost)
         {
             $options['cost'] = $cost;
 
@@ -250,7 +303,7 @@ class PasswordHashing
             $time = $end - $start;
 
             $results = array('cost' => $cost, 'time' => $time);
-            ++$cost;
+            $cost += $costIncrement;
         }
 
         return $results;

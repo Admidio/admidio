@@ -89,8 +89,7 @@ class ModuleAnnouncements extends Modules
      */
     public function getDataSetCount()
     {
-        global $gCurrentOrganization;
-        global $gDb;
+        global $gCurrentOrganization, $gDb;
 
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_ANNOUNCEMENTS.'
@@ -111,10 +110,7 @@ class ModuleAnnouncements extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization;
-        global $gPreferences;
-        global $gProfileFields;
-        global $gDb;
+        global $gCurrentOrganization, $gPreferences, $gProfileFields, $gDb;
 
         // Bedingungen
         if($this->getParameter('id') > 0)
@@ -182,14 +178,13 @@ class ModuleAnnouncements extends Modules
         $announcementsStatement = $gDb->query($sql);
 
         // array for results
-        $announcements = array();
-        $announcements['recordset']  = $announcementsStatement->fetchAll();
-        $announcements['numResults'] = $announcementsStatement->rowCount();
-        $announcements['limit']      = $limit;
-        $announcements['totalCount'] = $this->getDataSetCount();
-        $announcements['parameter']  = $this->getParameters();
-
-        return $announcements;
+        return array(
+            'recordset'  => $announcementsStatement->fetchAll(),
+            'numResults' => $announcementsStatement->rowCount(),
+            'limit'      => $limit,
+            'totalCount' => $this->getDataSetCount(),
+            'parameter'  => $this->getParameters()
+        );
     }
 
     /**
@@ -201,59 +196,49 @@ class ModuleAnnouncements extends Modules
      * @param string $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
      * @return bool Returns false if invalid date format is submitted
      */
-    public function setDateRange($dateRangeStart, $dateRangeEnd)
+    public function setDateRange($dateRangeStart = '1970-01-01', $dateRangeEnd = DATE_NOW)
     {
         global $gPreferences;
 
-        if($dateRangeStart === '')
+        if (!$this->setDateRangeParams($dateRangeStart, 'Start', 'Y-m-d'))
         {
-            $dateRangeStart = '1970-01-01';
-            $dateRangeEnd   = DATE_NOW;
-        }
-
-        // Create date object and format date_from in English format and system format and push to daterange array
-        $objDate = DateTime::createFromFormat('Y-m-d', $dateRangeStart);
-        if($objDate !== false)
-        {
-            $this->setParameter('dateStartFormatEnglish', $objDate->format('Y-m-d'));
-            $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
-        }
-        else
-        {
-            // check if date_from  has system format
-            $objDate = DateTime::createFromFormat($gPreferences['system_date'], $dateRangeStart);
-            if($objDate !== false)
-            {
-                $this->setParameter('dateStartFormatEnglish', $objDate->format('Y-m-d'));
-                $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
-            }
-            else
+            if (!$this->setDateRangeParams($dateRangeStart, 'Start', $gPreferences['system_date']))
             {
                 return false;
             }
         }
 
-        // Create date object and format date_to in English format and sytem format and push to daterange array
-        $objDate = DateTime::createFromFormat('Y-m-d', $dateRangeEnd);
-        if($objDate !== false)
+        if (!$this->setDateRangeParams($dateRangeEnd, 'End', 'Y-m-d'))
         {
-            $this->setParameter('dateEndFormatEnglish', $objDate->format('Y-m-d'));
-            $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));
-        }
-        else
-        {
-            // check if date_from  has system format
-            $objDate = DateTime::createFromFormat($gPreferences['system_date'], $dateRangeEnd);
-            if($objDate !== false)
-            {
-                $this->setParameter('dateEndFormatEnglish', $objDate->format('Y-m-d'));
-                $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));
-            }
-            else
+            if (!$this->setDateRangeParams($dateRangeEnd, 'End', $gPreferences['system_date']))
             {
                 return false;
             }
         }
+
+        return true;
+    }
+
+    /**
+     * @param string $dateRange
+     * @param string $dateRangePoint
+     * @param string $dateFormat
+     * @return bool
+     */
+    private function setDateRangeParams($dateRange, $dateRangePoint, $dateFormat)
+    {
+        global $gPreferences;
+
+        $objDate = DateTime::createFromFormat($dateFormat, $dateRange);
+
+        if($objDate === false)
+        {
+            return false;
+        }
+
+        $this->setParameter('date' . $dateRangePoint . 'FormatEnglish', $objDate->format('Y-m-d'));
+        $this->setParameter('date' . $dateRangePoint . 'FormatAdmidio', $objDate->format($gPreferences['system_date']));
+
         return true;
     }
 }

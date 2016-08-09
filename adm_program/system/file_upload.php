@@ -40,12 +40,14 @@ if($getModule === 'photos')
     if ($gPreferences['enable_photo_module'] == 0)
     {
         $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+        // => EXIT
     }
 
     // check if current user has right to upload photos
     if (!$gCurrentUser->editPhotoRight())
     {
         $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
+        // => EXIT
     }
 
     // create photo object or read it from session
@@ -64,6 +66,7 @@ if($getModule === 'photos')
     if($photoAlbum->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
     }
 
     $uploadDir = SERVER_PATH.'/adm_my_files/photos/upload/';
@@ -82,6 +85,7 @@ elseif($getModule === 'downloads')
     if ($gPreferences['enable_download_module'] != 1)
     {
         $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+        // => EXIT
     }
 
     $folder = new TableFolder($gDb, $getId);
@@ -90,12 +94,14 @@ elseif($getModule === 'downloads')
     if (!$folder->hasUploadRight())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
     // upload only possible if upload filesize > 0
     if ($gPreferences['max_file_upload_size'] == 0)
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
     }
 
     try
@@ -123,6 +129,7 @@ elseif($getModule === 'downloads')
 if (ini_get('file_uploads') !== '1')
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
+    // => EXIT
 }
 
 if($getMode === 'choose_files')
@@ -201,8 +208,8 @@ if($getMode === 'choose_files')
                 src="'. $iconUploadPath .'" alt="'.$textSelectFiles.'" />'.$textSelectFiles.'
                 <input id="fileupload" type="file" name="files[]" multiple>
             </span>
-            <br>
-            <br>
+            <br />
+            <br />
             <div id="progress" class="progress">
                 <div class="progress-bar progress-bar-success"></div>
             </div>

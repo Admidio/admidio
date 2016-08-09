@@ -86,15 +86,7 @@ class Message
     public function setForwardUrl($url, $timer = 0)
     {
         $this->forwardUrl = $url;
-
-        if(is_numeric($timer) && $timer > 0)
-        {
-            $this->timer = $timer;
-        }
-        else
-        {
-            $this->timer = 0;
-        }
+        $this->timer      = $timer;
     }
 
     /**

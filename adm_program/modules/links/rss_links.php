@@ -31,6 +31,7 @@ if ($gPreferences['enable_rss'] != 1)
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
+    // => EXIT
 }
 
 // check if module is active or is public
@@ -38,6 +39,7 @@ if ($gPreferences['enable_weblinks_module'] != 1)
 {
     // disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
 }
 
 if($gPreferences['system_show_create_edit'] == 1)

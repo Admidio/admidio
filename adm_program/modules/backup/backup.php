@@ -31,12 +31,14 @@ $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' 
 if(!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // module not available for other databases except MySQL
 if($gDbType !== 'mysql')
 {
     $gMessage->show($gL10n->get('BAC_ONLY_MYSQL'));
+    // => EXIT
 }
 
 // check backup path in adm_my_files and create it if necessary
@@ -44,6 +46,7 @@ $myFilesBackup = new MyFiles('BACKUP');
 if(!$myFilesBackup->checkSettings())
 {
     $gMessage->show($gL10n->get($myFilesBackup->errorText, $myFilesBackup->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+    // => EXIT
 }
 
 $headline = $gL10n->get('BAC_DATABASE_BACKUP');

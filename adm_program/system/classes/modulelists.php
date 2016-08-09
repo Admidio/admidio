@@ -259,10 +259,7 @@ class ModuleLists extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization;
-        global $gPreferences;
-        global $gDb;
-        global $gValidLogin;
+        global $gCurrentOrganization, $gPreferences, $gValidLogin, $gDb;
 
         // Parameter
         if($limit === null)
@@ -316,14 +313,13 @@ class ModuleLists extends Modules
         $listsStatement = $gDb->query($sql);
 
         // array for results
-        $lists = array();
-        $lists['recordset']  = $listsStatement->fetchAll();
-        $lists['numResults'] = $listsStatement->rowCount();
-        $lists['limit']      = $limit;
-        $lists['totalCount'] = $this->getDataSetCount();
-        $lists['parameter']  = $this->getParameters();
-
-        return $lists;
+        return array(
+            'recordset'  => $listsStatement->fetchAll(),
+            'numResults' => $listsStatement->rowCount(),
+            'limit'      => $limit,
+            'totalCount' => $this->getDataSetCount(),
+            'parameter'  => $this->getParameters()
+        );
     }
 
     /**
@@ -332,9 +328,7 @@ class ModuleLists extends Modules
      */
     public function getDataSetCount()
     {
-        global $gCurrentOrganization;
-        global $gDb;
-        global $gValidLogin;
+        global $gCurrentOrganization, $gValidLogin, $gDb;
 
         // assemble conditions
         $sql_conditions = $this->getCategorySql().$this->getVisibleRolesSql();
@@ -365,9 +359,7 @@ class ModuleLists extends Modules
      */
     public function getListConfigurations()
     {
-        global $gCurrentOrganization;
-        global $gCurrentUser;
-        global $gDb;
+        global $gCurrentOrganization, $gCurrentUser, $gDb;
 
         $sql = 'SELECT lst_id, lst_name, lst_global
                   FROM '.TBL_LISTS.'

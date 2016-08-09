@@ -5,6 +5,9 @@
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
+ */
+
+/**
  * @class Organization
  * @brief Handle organization data of Admidio and is connected to database table adm_organizations
  *
@@ -301,7 +304,7 @@ class Organization extends TableAccess
      * @param bool $parent   If set to @b true (default) then the parent organization will be in the array
      * @param bool $longname If set to @b true then the value of the array will be the @b org_longname
      *                       otherwise it will be @b org_shortname
-     * @return array Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
+     * @return string[] Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
      */
     public function getOrganizationsInRelationship($child = true, $parent = true, $longname = false)
     {
@@ -362,7 +365,7 @@ class Organization extends TableAccess
     }
 
     /**
-     * @return array Returns an array with all child organizations
+     * @return string[] Returns an array with all child organizations
      */
     protected function getChildOrganizations()
     {
@@ -412,8 +415,8 @@ class Organization extends TableAccess
     /**
      * Writes all preferences of the array @b $preferences in the database table @b adm_preferences.
      * The method will only insert or update changed preferences.
-     * @param array $preferences Array with all preferences that should be stored in
-     *                           database. array('name_of_preference' => 'value')
+     * @param array $preferences Array with all preferences that should be stored in database.
+     *                           array('name_of_preference' => 'value')
      * @param bool  $update      If set to @b false then no update will be done, only inserts
      */
     public function setPreferences(array $preferences, $update = true)

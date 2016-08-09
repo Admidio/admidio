@@ -63,6 +63,7 @@ class AutoLogin extends TableAccess
         catch(AdmException $e)
         {
             $e->showText();
+            // => EXIT
         }
 
         return $loginId;
