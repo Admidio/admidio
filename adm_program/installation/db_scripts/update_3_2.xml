@@ -52,8 +52,9 @@
     <step id="220">create table %PREFIX%_user_relation_types
         (
             urt_id int(10) unsigned not null AUTO_INCREMENT,
-            urt_name_singular varchar(100) not null,
-            urt_name_plural varchar(100) not null,
+            urt_name varchar(100) not null,
+            urt_name_male varchar(100) not null,
+            urt_name_female varchar(100) not null,
             urt_id_inverse int(10) unsigned default null,
             urt_usr_id_create int(10) unsigned default null,
             urt_timestamp_create timestamp not null default CURRENT_TIMESTAMP,
@@ -65,7 +66,8 @@
         auto_increment = 1
         default character set = utf8
         collate = utf8_unicode_ci</step>
-    <step id="230">create table %PREFIX%_user_relations
+    <step id="230">create unique index %PREFIX%_IDX_URE_URT_NAME on %PREFIX%_user_relation_types (urt_name)</step>
+    <step id="240">create table %PREFIX%_user_relations
         (
             ure_id int(10) unsigned not null AUTO_INCREMENT,
             ure_urt_id int(10) unsigned not null,
@@ -81,22 +83,22 @@
         auto_increment = 1
         default character set = utf8
         collate = utf8_unicode_ci</step>
-    <step id="240">create unique index %PREFIX%_IDX_URE_URT_USR on %PREFIX%_user_relations (ure_urt_id,ure_usr_id1,ure_usr_id2)</step>
-    <step id="250">alter table %PREFIX%_user_relation_types add constraint %PREFIX%_FK_URT_ID_INVERSE foreign key (urt_id_inverse)
+    <step id="250">create unique index %PREFIX%_IDX_URE_URT_USR on %PREFIX%_user_relations (ure_urt_id,ure_usr_id1,ure_usr_id2)</step>
+    <step id="260">alter table %PREFIX%_user_relation_types add constraint %PREFIX%_FK_URT_ID_INVERSE foreign key (urt_id_inverse)
         references %PREFIX%_user_relation_types (urt_id) on delete cascade on update restrict</step>
-    <step id="260">alter table %PREFIX%_user_relation_types add constraint %PREFIX%_FK_URT_USR_CHANGE foreign key (urt_usr_id_change)
+    <step id="270">alter table %PREFIX%_user_relation_types add constraint %PREFIX%_FK_URT_USR_CHANGE foreign key (urt_usr_id_change)
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
-    <step id="270">alter table %PREFIX%_user_relation_types add constraint %PREFIX%_FK_URT_USR_CREATE foreign key (urt_usr_id_create)
+    <step id="280">alter table %PREFIX%_user_relation_types add constraint %PREFIX%_FK_URT_USR_CREATE foreign key (urt_usr_id_create)
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
-    <step id="280">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_URT foreign key (ure_urt_id)
+    <step id="290">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_URT foreign key (ure_urt_id)
         references %PREFIX%_user_relation_types (urt_id) on delete restrict on update restrict</step>
-    <step id="290">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_CHANGE foreign key (ure_usr_id_change)
+    <step id="300">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_CHANGE foreign key (ure_usr_id_change)
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
-    <step id="300">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_CHILD foreign key (ure_usr_id2)
+    <step id="310">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_CHILD foreign key (ure_usr_id2)
         references %PREFIX%_users (usr_id) on delete cascade on update restrict</step>
-    <step id="310">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_CREATE foreign key (ure_usr_id_create)
+    <step id="320">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_CREATE foreign key (ure_usr_id_create)
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
-    <step id="320">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_PARENT foreign key (ure_usr_id1)
+    <step id="330">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_PARENT foreign key (ure_usr_id1)
         references %PREFIX%_users (usr_id) on delete cascade on update restrict</step>
 
     <step>stop</step>

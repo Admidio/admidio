@@ -54,21 +54,19 @@ $relationtypesOverview = new HtmlTable('tbl_relationtypes', $page, true);
 
 // create array with all column heading values
 $columnHeading = array(
-    $gL10n->get('SYS_USER_RELATION_TYPE_FORWARD_SINGULAR'),
-    $gL10n->get('SYS_USER_RELATION_TYPE_FORWARD_PLURAL'),
-    $gL10n->get('SYS_USER_RELATION_TYPE_BACKWARD_SINGULAR'),
-    $gL10n->get('SYS_USER_RELATION_TYPE_BACKWARD_PLURAL'),
+    $gL10n->get('SYS_USER_RELATION_TYPE_FORWARD'),
+    $gL10n->get('SYS_USER_RELATION_TYPE_BACKWARD'),
     '&nbsp;'
 );
-$relationtypesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
+$relationtypesOverview->setColumnAlignByArray(array('left', 'left', 'right'));
 $relationtypesOverview->addRowHeadingByArray($columnHeading);
 
-$sql = 'SELECT urt1.*, urt2.urt_name_singular AS urt_name_singular_inverse, urt2.urt_name_plural AS urt_name_plural_inverse
+$sql = 'SELECT urt1.*, urt2.urt_name AS urt_name_inverse, urt2.urt_name_male AS urt_name_male_inverse, urt2.urt_name_female AS urt_name_female_inverse
           FROM '.TBL_USER_RELATION_TYPES.' AS urt1
           INNER JOIN '.TBL_USER_RELATION_TYPES.' AS urt2
                   ON urt1.urt_id_inverse=urt2.urt_id
          WHERE urt1.urt_id < urt1.urt_id_inverse
-      ORDER BY urt1.urt_name_singular, urt1.urt_name_plural, urt2.urt_name_singular, urt2.urt_name_plural';
+      ORDER BY urt1.urt_name, urt2.urt_name';
 
 $relationtypesStatement = $gDb->query($sql);
 
@@ -83,23 +81,22 @@ while($rel_row = $relationtypesStatement->fetch())
     $relationtype2->clear();
     $rel_row2 = $rel_row;
     $rel_row2['urt_id'] = $rel_row2['urt_id_inverse'];
-    $rel_row2['urt_name_singular'] = $rel_row2['urt_name_singular_inverse'];
-    $rel_row2['urt_name_plural'] = $rel_row2['urt_name_plural_inverse'];
+    $rel_row2['urt_name'] = $rel_row2['urt_name_inverse'];
+    $rel_row2['urt_name_male'] = $rel_row2['urt_name_male_inverse'];
+    $rel_row2['urt_name_female'] = $rel_row2['urt_name_female_inverse'];
     $relationtype2->setArray($rel_row2);
 
     $relationtypeAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/userrelations/relationtypes_new.php?urt_id='. $relationtype1->getValue('urt_id'). '"><img
                                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
     $relationtypeAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                         href="'.$g_root_path.'/adm_program/system/popup_message.php?type=urt&amp;element_id=row_'.
-                                        $relationtype1->getValue('urt_id').'&amp;name='.urlencode($relationtype1->getValue('urt_name_singular').'/'.$relationtype2->getValue('urt_name_singular')).'&amp;database_id='.$relationtype1->getValue('urt_id').'"><img
+                                        $relationtype1->getValue('urt_id').'&amp;name='.urlencode($relationtype1->getValue('urt_name').'/'.$relationtype2->getValue('urt_name')).'&amp;database_id='.$relationtype1->getValue('urt_id').'"><img
                                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
 
     // create array with all column values
     $columnValues = array(
-            $relationtype1->getValue('urt_name_singular'),
-            $relationtype1->getValue('urt_name_plural'),
-            $relationtype2->getValue('urt_name_singular'),
-            $relationtype2->getValue('urt_name_plural'),
+            $relationtype1->getValue('urt_name'),
+            $relationtype2->getValue('urt_name'),
             $relationtypeAdministration
     );
     $relationtypesOverview->addRowByArray($columnValues, 'row_'. $relationtype1->getValue('urt_id'));

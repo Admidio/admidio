@@ -852,8 +852,9 @@ create unique index IDX_%PREFIX%_USR_LOGIN_NAME on %PREFIX%_users (usr_login_nam
 create table %PREFIX%_user_relation_types
 (
     urt_id int(10) unsigned not null AUTO_INCREMENT,
-    urt_name_singular varchar(100) not null,
-    urt_name_plural varchar(100) not null,
+    urt_name varchar(100) not null,
+    urt_name_male varchar(100) not null,
+    urt_name_female varchar(100) not null,
     urt_id_inverse int(10) unsigned default null,
     urt_usr_id_create int(10) unsigned default null,
     urt_timestamp_create timestamp not null default CURRENT_TIMESTAMP,
@@ -865,6 +866,8 @@ engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
+
+create unique index %PREFIX%_IDX_URE_URT_NAME on %PREFIX%_user_relation_types (urt_name);
 
 /*==============================================================*/
 /* Table: adm_user_relation_types                               */

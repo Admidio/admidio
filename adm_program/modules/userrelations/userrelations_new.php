@@ -52,13 +52,13 @@ $relationEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL
 $form = new HtmlForm('relation_edit_form',
                      $g_root_path.'/adm_program/modules/userrelations/userrelations_function.php?usr_id='.$getUsrId.'&amp;mode=1', $page);
 
-$form->addInput('SYS_USER_RELATION', $gL10n->get('SYS_USER'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'),
+$form->addInput('usr_id', $gL10n->get('SYS_USER'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'),
          array('maxLength' => 100, 'property' => FIELD_DISABLED));
 
 // select box showing all relation types 
-$sql = 'SELECT urt_id, urt_name_singular
+$sql = 'SELECT urt_id, urt_name
           FROM '.TBL_USER_RELATION_TYPES.'
-      ORDER BY urt_name_singular, urt_name_plural'; 
+      ORDER BY urt_name';
 $form->addSelectBoxFromSql('urt_id', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql, array('property' => FIELD_REQUIRED));
 
 // select box showing all users (TODO: check edit right)
@@ -76,7 +76,7 @@ $sql = 'SELECT usr_id, concat(LAST_NAME.usd_value, \' \', FIRST_NAME.usd_value) 
              LEFT JOIN '.TBL_USER_DATA.' FIRST_NAME
                     ON FIRST_NAME.usd_usr_id = usr_id
                    AND FIRST_NAME.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-                 WHERE usr_id <> '.$gCurrentUser->getValue('usr_id').'
+                 WHERE usr_id <> '.$user->getValue('usr_id').'
                    AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL )

@@ -48,10 +48,12 @@ if($getMode === 1)
         $relationtype2->readDataById($relationtype->getValue('urt_id_inverse'));
     }
 
-    $relationtype->setValue('urt_name_singular', empty($_POST['urt_name_singular']) ? $_POST['urt_name_plural'] : $_POST['urt_name_singular']);
-    $relationtype->setValue('urt_name_plural', empty($_POST['urt_name_plural']) ? $_POST['urt_name_singular'] : $_POST['urt_name_plural']);
-    $relationtype2->setValue('urt_name_singular', empty($_POST['urt_name_singular_inverse']) ? $_POST['urt_name_plural_inverse'] : $_POST['urt_name_singular_inverse']);
-    $relationtype2->setValue('urt_name_plural', empty($_POST['urt_name_plural_inverse']) ? $_POST['urt_name_singular_inverse'] : $_POST['urt_name_plural_inverse']);
+    $relationtype->setValue('urt_name', $_POST['urt_name']);
+    $relationtype->setValue('urt_name_male', empty($_POST['urt_name_male']) ? $_POST['urt_name'] : $_POST['urt_name_male']);
+    $relationtype->setValue('urt_name_female', empty($_POST['urt_name_female']) ? $_POST['urt_name'] : $_POST['urt_name_female']);
+    $relationtype2->setValue('urt_name', $_POST['urt_name_inverse']);
+    $relationtype2->setValue('urt_name_male', empty($_POST['urt_name_male_inverse']) ? $_POST['urt_name_inverse'] : $_POST['urt_name_male_inverse']);
+    $relationtype2->setValue('urt_name_female', empty($_POST['urt_name_female_inverse']) ? $_POST['urt_name_inverse'] : $_POST['urt_name_female_inverse']);
 
     // Daten in Datenbank schreiben
     $gDb->startTransaction();

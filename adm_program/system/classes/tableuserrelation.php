@@ -43,5 +43,5 @@ class TableUserRelation extends TableAccess
             return null;
         }
         return $inverse;
-    } 
+    }
 }

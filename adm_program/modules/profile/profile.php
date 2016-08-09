@@ -815,7 +815,7 @@ if($gPreferences['profile_show_user_relations'] == 1)
           FROM ' . TBL_USER_RELATIONS . '
           INNER JOIN ' . TBL_USER_RELATION_TYPES . '
                   ON ure_urt_id=urt_id
-         WHERE ure_usr_id1 = ' . $userId . ' AND urt_name_singular != \'\' AND urt_name_plural!= \'\'';
+         WHERE ure_usr_id1 = ' . $userId . ' AND urt_name != \'\' AND urt_name_male!= \'\' AND urt_name_female!= \'\'';
     $statement = $gDb->query($sql);
     $row = $statement->fetch();
     if($row['count'] > 0) {
@@ -828,17 +828,16 @@ if($gPreferences['profile_show_user_relations'] == 1)
               FROM '.TBL_USER_RELATIONS.'
               INNER JOIN '.TBL_USER_RELATION_TYPES.'
                       ON ure_urt_id=urt_id
-             WHERE ure_usr_id1 = '.$userId.' AND urt_name_singular != \'\' AND urt_name_plural!= \'\'
-          ORDER BY urt_name_singular, urt_name_plural';
+             WHERE ure_usr_id1 = '.$userId.' AND urt_name != \'\' AND urt_name_male!= \'\' AND urt_name_female!= \'\'
+          ORDER BY urt_name';
         $relationStatement = $gDb->query($sql);
         
         $relationtype = new TableUserRelationType($gDb);
         $relation = new TableUserRelation($gDb);
         $otherUser = new User($gDb, $gProfileFields);
         
-        $page->addHtml('<dl>');
+        $page->addHtml('<ul class="list-group admidio-list-roles-assign">');
         
-        $lastRelationType = '';
         while($row = $relationStatement->fetch())
         {
             $relationtype->clear();
@@ -848,14 +847,19 @@ if($gPreferences['profile_show_user_relations'] == 1)
             $otherUser->clear();
             $otherUser->readDataById($relation->getValue('ure_usr_id2'));
             
-            if ( $lastRelationType != $relationtype->getValue('urt_name_plural') )
+            $relationName = $relationtype->getValue('urt_name');
+            if ($otherUser->getValue('GENDER', 'text') == $gL10n->get('SYS_MALE'))
             {
-                $page->addHtml('<dt>'.$relationtype->getValue('urt_name_plural').'</dt>');
-                $lastRelationType = $relationtype->getValue('urt_name_plural');
+                $relationName = $relationtype->getValue('urt_name_male');
             }
-            $page->addHtml('<dd id="row_ure_'.$relation->getValue('ure_id').'">');
+            else if ($otherUser->getValue('GENDER', 'text') == $gL10n->get('SYS_FEMALE'))
+            {
+                $relationName = $relationtype->getValue('urt_name_female');
+            }
+            
+            $page->addHtml('<li id="row_ure_'.$relation->getValue('ure_id').'" class="list-group-item">');
             $page->addHtml('<div>');
-            $page->addHtml('<span><a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.
+            $page->addHtml('<span>'.$relationName.' - <a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.
                             $otherUser->getValue('usr_id').'">'.$otherUser->getValue('FIRST_NAME') . ' ' . $otherUser->getValue('LAST_NAME').'</a><span>');
             $page->addHtml('<span class="pull-right text-right">');
             
@@ -864,7 +868,7 @@ if($gPreferences['profile_show_user_relations'] == 1)
                  $page->addHtml('<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                  href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ure&amp;element_id=row_ure_'.
                                  $relation->getValue('ure_id').'&amp;database_id='.$relation->getValue('ure_id').
-                                  '&amp;name='.urlencode($relationtype->getValue('urt_name_singular').': '.$otherUser->getValue('FIRST_NAME').' '.$otherUser->getValue('LAST_NAME').' -> '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')).'"><img
+                                  '&amp;name='.urlencode($relationtype->getValue('urt_name').': '.$otherUser->getValue('FIRST_NAME').' '.$otherUser->getValue('LAST_NAME').' -> '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')).'"><img
                                  src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'" title="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'" /></a>');
              }
             
@@ -881,10 +885,10 @@ if($gPreferences['profile_show_user_relations'] == 1)
                     admFuncShowCreateChangeInfoById($relation->getValue('ure_usr_id_create'), $relation->getValue('ure_timestamp_create'), $relation->getValue('ure_usr_id_change'), $relation->getValue('ure_timestamp_change'))).
                     '</div>';
             }
-            $page->addHtml('</dd>');
+            $page->addHtml('</li>');
         }
         
-        $page->addHtml('</dl>');
+        $page->addHtml('</ul>');
         
         $page->addHtml('
             </div>

@@ -25,4 +25,13 @@ class TableUserRelationType extends TableAccess
     {
         parent::__construct($database, TBL_USER_RELATION_TYPES, 'urt', $id);
     }
+    
+    public function getInverse()
+    {
+        $inverse = new TableUserRelationType($this->db, $this->getValue('urt_id_inverse'));
+        if ($inverse->isNewRecord()) {
+            return null;
+        }
+        return $inverse;
+    }
 }
