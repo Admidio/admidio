@@ -71,7 +71,7 @@ $message = '';
 // set default password-hash algorithm
 if (!isset($gPasswordHashAlgorithm))
 {
-    $gPasswordHashAlgorithm = PASSWORD_DEFAULT;
+    $gPasswordHashAlgorithm = 'DEFAULT';
 }
 
 // Default-DB-Type ist immer MySql

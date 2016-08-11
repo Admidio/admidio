@@ -48,13 +48,6 @@ $gTimezone = 'Europe/Berlin';
 // For a more comfortable and easy update you can set this preference = 0.
 $gLoginForUpdate = 1;
 
-// Set the preferred password hashing algorithm. Default is the PHP default "PASSWORD_DEFAULT"
-// Deprecated: Fix for PHP 5.3-5.4
-if (!defined('PASSWORD_BCRYPT'))
-{
-    define('PASSWORD_BCRYPT', 1);
-    define('PASSWORD_DEFAULT', PASSWORD_BCRYPT);
-    define('PASSWORD_BCRYPT_DEFAULT_COST', 10);
-}
-// Possible values are: PASSWORD_DEFAULT, PASSWORD_BCRYPT, 'SHA512'
-$gPasswordHashAlgorithm = PASSWORD_DEFAULT;
+// Set the preferred password hashing algorithm.
+// Possible values are: 'DEFAULT', 'BCRYPT', 'SHA512'
+$gPasswordHashAlgorithm = 'DEFAULT';
