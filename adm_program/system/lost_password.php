@@ -97,9 +97,7 @@ if(!empty($_POST['recipient_email']))
         elseif($count === 1)
         {
             // a valid username or email was found then send new password
-
-            $row  = $userStatement->fetch();
-            $user = new User($gDb, $gProfileFields, $row['usr_id']);
+            $user = new User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());
 
             // create and save new password and activation id
             $newPassword  = PasswordHashing::genRandomPassword(12);

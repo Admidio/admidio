@@ -209,11 +209,11 @@ $page->addHtml('
                                           FROM '.TBL_ROOMS.'
                                          WHERE room_id = ' . $field['value'];
                             }
-                            $statement = $gDb->query($sql);
-                            $row = $statement->fetch();
-                            if($statement->rowCount() > 0)
+                            $pdoStatement = $gDb->query($sql);
+
+                            if($pdoStatement->rowCount() > 0)
                             {
-                                $form->addStaticControl('address', $field['label'], $row['name']);
+                                $form->addStaticControl('address', $field['label'], $pdoStatement->fetchColumn());
                             }
                             else
                             {

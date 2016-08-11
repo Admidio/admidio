@@ -288,9 +288,7 @@ class TableInventoryField extends TableAccess
                      WHERE inf_cat_id = '.$newValue;
             $pdoStatement = $this->db->query($sql);
 
-            $row = $pdoStatement->fetch();
-
-            $this->setValue('inf_sequence', $row['count'] + 1);
+            $this->setValue('inf_sequence', $pdoStatement->fetchColumn() + 1);
         }
         elseif($columnName === 'inf_description')
         {

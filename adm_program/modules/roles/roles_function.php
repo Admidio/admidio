@@ -117,10 +117,9 @@ elseif($getMode === 2)
                    AND rol_id    <> '. $getRoleId. '
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL )';
-        $statement = $gDb->query($sql);
-        $row = $statement->fetch();
+        $pdoStatement = $gDb->query($sql);
 
-        if($row['count'] > 0)
+        if($pdoStatement->fetchColumn() > 0)
         {
             $gMessage->show($gL10n->get('ROL_ROLE_NAME_EXISTS'));
             // => EXIT

@@ -129,7 +129,7 @@ if($getPhotoNr == null)
     /************************add sub albums as subfolders*************************************/
 
     // get sub albums
-    $sql = 'SELECT *
+    $sql = 'SELECT pho_id
               FROM '.TBL_PHOTOS.'
              WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
     if($getPhotoId === 0)
@@ -146,17 +146,15 @@ if($getPhotoNr == null)
     }
 
     $sql .= ' ORDER BY pho_begin DESC';
-    $statement = $gDb->query($sql);
+    $pdoStatement = $gDb->query($sql);
 
     // number of sub albums
-    $albums = $statement->rowCount();
+    $albums = $pdoStatement->rowCount();
 
     for($x = 0; $x < $albums; ++$x)
     {
-        $adm_photo_list = $statement->fetch();
-
         // get id of album
-        $photo_album->readDataById($adm_photo_list['pho_id']);
+        $photo_album->readDataById((int) $pdoStatement->fetchColumn());
 
         // ignore locked albums owned by others
         if($photo_album->getValue('pho_locked') == 0 || $gCurrentUser->editPhotoRight())

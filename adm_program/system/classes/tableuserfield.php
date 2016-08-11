@@ -366,9 +366,7 @@ class TableUserField extends TableAccess
                      WHERE usf_cat_id = '.$newValue;
             $countUserFieldsStatement = $this->db->query($sql);
 
-            $row = $countUserFieldsStatement->fetch();
-
-            $this->setValue('usf_sequence', $row['count'] + 1);
+            $this->setValue('usf_sequence', $countUserFieldsStatement->fetchColumn() + 1);
         }
         elseif($columnName === 'usf_description')
         {

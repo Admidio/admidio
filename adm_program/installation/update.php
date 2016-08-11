@@ -279,10 +279,8 @@ elseif($getMode === 2)
         }
         else
         {
-            $userRow = $userStatement->fetch();
-
             // create object with current user field structure und user object
-            $gCurrentUser   = new User($gDb, $gProfileFields, $userRow['usr_id']);
+            $gCurrentUser = new User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());
 
             // check login data. If login failed an exception will be thrown.
             // Don't update the current session with user id and don't do a rehash of the password
@@ -325,12 +323,12 @@ elseif($getMode === 2)
     $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm, array('cost' => $cost));
     $orga_preferences['system_hashing_cost'] = $benchmarkResults['cost'];
 
-    $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
+    $sql = 'SELECT org_id FROM '. TBL_ORGANIZATIONS;
     $orgaStatement = $gDb->query($sql);
 
-    while($row_orga = $orgaStatement->fetch())
+    while($orgId = $orgaStatement->fetchColumn())
     {
-        $gCurrentOrganization->setValue('org_id', $row_orga['org_id']);
+        $gCurrentOrganization->setValue('org_id', $orgId);
         $gCurrentOrganization->setPreferences($orga_preferences, false);
     }
 
@@ -437,9 +435,8 @@ elseif($getMode === 2)
         // set system user as current user, but this user only exists since version 3
         $sql = 'SELECT usr_id FROM '.TBL_USERS.' WHERE usr_login_name = \''.$gL10n->get('SYS_SYSTEM').'\' ';
         $systemUserStatement = $gDb->query($sql);
-        $row = $systemUserStatement->fetch();
 
-        $gCurrentUser   = new User($gDb, $gProfileFields, $row['usr_id']);
+        $gCurrentUser = new User($gDb, $gProfileFields, (int) $systemUserStatement->fetchColumn());
 
         // reread component because in version 3.0 the component will be created within the update
         $componentUpdateHandle = new ComponentUpdate($gDb);

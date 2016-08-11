@@ -45,10 +45,8 @@ $msg_id = $modulemessages->msgGetChatId();
 $sql = 'SELECT MAX(msc_part_id) AS max_id
           FROM '.TBL_MESSAGES_CONTENT.'
          WHERE msc_msg_id = \''.$msg_id.'\'';
-
-$statement = $gDb->query($sql);
-$row = $statement->fetch();
-$msgId = $row['max_id'];
+$pdoStatement = $gDb->query($sql);
+$msgId = $pdoStatement->fetchColumn();
 if(!$msgId)
 {
     $msgId = 0;

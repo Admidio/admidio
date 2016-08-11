@@ -95,10 +95,8 @@ else
         $gCurrentSession->save();
     }
 
-    $userRow = $userStatement->fetch();
-
     // create user object
-    $gCurrentUser = new User($gDb, $gProfileFields, $userRow['usr_id']);
+    $gCurrentUser = new User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());
 
     $checkLoginReturn = $gCurrentUser->checkLogin($password, $bAutoLogin);
 

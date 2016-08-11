@@ -45,9 +45,8 @@ switch($postFunction)
                   FROM '.TBL_MESSAGES.'
                  WHERE msg_converation_id = 0';
 
-        $statement = $gDb->query($sql);
-        $row = $statement->fetch();
-        $msgId = $row['max_id'];
+        $pdoStatement = $gDb->query($sql);
+        $msgId = (int) $pdoStatement->fetchColumn();
 
         if($msgId + 25 < $postLines)
         {
@@ -111,10 +110,8 @@ switch($postFunction)
         $sql = 'SELECT MAX(msg_part_id) AS max_id
                   FROM '. TBL_MESSAGES.'
                  WHERE msg_converation_id = 0';
-
-        $statement = $gDb->query($sql);
-        $row = $statement->fetch();
-        $msgId = $row['max_id'] + 1;
+        $pdoStatement = $gDb->query($sql);
+        $msgId = $pdoStatement->fetchColumn() + 1;
 
         $sql = 'INSERT INTO '.TBL_MESSAGES.' (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read)
             VALUES (\'CHAT\', \'0\', \''.$msgId.'\', \''.$postNickname.'\', \'\', \'\', \''.$postMessage.'\', CURRENT_TIMESTAMP, \'0\')';

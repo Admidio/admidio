@@ -252,9 +252,9 @@ class ComponentUpdate extends Component
                                     WHERE dat_rol_id = rol_id)';
         $rolesStatement = $this->db->query($sql);
 
-        while($row = $rolesStatement->fetch())
+        while($roleId = $rolesStatement->fetchColumn())
         {
-            $role = new TableRoles($this->db, $row['rol_id']);
+            $role = new TableRoles($this->db, (int) $roleId);
             $role->delete(); // TODO Exception handling
         }
     }
@@ -270,10 +270,10 @@ class ComponentUpdate extends Component
         // migrate adm_folder_roles to adm_roles_rights
         $sql = 'SELECT ror_id FROM '.TBL_ROLES_RIGHTS.' WHERE ror_name_intern = \'folder_view\' ';
         $rolesRightsStatement = $this->db->query($sql);
-        $row = $rolesRightsStatement->fetch();
+        $rolesRightId = $rolesRightsStatement->fetchColumn();
 
         $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
-                SELECT '.$row['ror_id'].', flr_rol_id, flr_fol_id
+                SELECT '.$rolesRightId.', flr_rol_id, flr_fol_id
                   FROM '.$g_tbl_praefix.'_folder_roles ';
         $this->db->query($sql);
 
@@ -282,7 +282,7 @@ class ComponentUpdate extends Component
                  WHERE fol_type = \'DOWNLOAD\'
                    AND fol_name = \'download\' ';
         $rolesRightsStatement = $this->db->query($sql);
-        $rowFolderId = $rolesRightsStatement->fetch();
+        $folderId = (int) $rolesRightsStatement->fetchColumn();
 
         $sql = 'SELECT rol_id FROM '.TBL_ROLES.'
                   LEFT JOIN '.TBL_CATEGORIES.' ON cat_id = rol_cat_id
@@ -290,17 +290,17 @@ class ComponentUpdate extends Component
                    AND org_shortname = \''.$g_organization.'\'
                  WHERE rol_download = 1 ';
         $rolesDownloadStatement = $this->db->query($sql);
-        $rolesArray = array();
 
-        while($row = $rolesDownloadStatement->fetch())
+        $rolesArray = array();
+        while($roleId = $rolesDownloadStatement->fetchColumn())
         {
-            $rolesArray[] = $row['rol_id'];
+            $rolesArray[] = (int) $roleId;
         }
 
         try
         {
             // get recordset of current folder from database
-            $folder = new TableFolder($this->db, $rowFolderId['fol_id']);
+            $folder = new TableFolder($this->db, $folderId);
             $folder->addRolesOnFolder('folder_upload', $rolesArray);
         }
         catch(AdmException $e)
@@ -393,10 +393,10 @@ class ComponentUpdate extends Component
                      WHERE lst_org_id  = '. $organization['org_id'].'
                        AND lst_default = 1 ';
             $defaultListStatement = $this->db->query($sql);
-            $defaultListId = $defaultListStatement->fetch();
+            $listId = $defaultListStatement->fetchColumn();
 
             // save default list to preferences
-            $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$defaultListId['lst_id'].'\'
+            $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$listId.'\'
                      WHERE prf_org_id = '.$organization['org_id'].'
                        AND prf_name   = \'lists_default_configuation\' ';
             $this->db->query($sql);

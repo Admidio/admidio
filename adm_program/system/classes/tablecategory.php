@@ -64,9 +64,8 @@ class TableCategory extends TableAccess
                        OR cat_org_id IS NULL )
                    AND cat_type     = \''. $this->getValue('cat_type'). '\'';
         $categoriesStatement = $this->db->query($sql);
-        $row = $categoriesStatement->fetch();
 
-        if($row['count'] > 1)
+        if($categoriesStatement->fetchColumn() > 1)
         {
             $this->db->startTransaction();
 
@@ -140,9 +139,8 @@ class TableCategory extends TableAccess
                   FROM '.$this->elementTable.'
                  WHERE '.$this->elementColumn.' = '. $this->getValue('cat_id');
         $elementsStatement = $this->db->query($sql);
-        $row = $elementsStatement->fetch();
 
-        return (int) $row['count'];
+        return (int) $elementsStatement->fetchColumn();
     }
 
     /**
@@ -193,12 +191,12 @@ class TableCategory extends TableAccess
                    AND cat_name_intern NOT LIKE \'CONFIRMATION_OF_PARTICIPATION\'
                    AND cat_org_id IS NULL ';
         $countCategoriesStatement = $this->db->query($sql);
-        $row = $countCategoriesStatement->fetch();
+        $rowCount = $countCategoriesStatement->fetchColumn();
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
         if(admStrToUpper($mode) === 'UP')
         {
-            if($this->getValue('cat_org_id') == 0 || $this->getValue('cat_sequence') > $row['count']+1)
+            if($this->getValue('cat_org_id') == 0 || $this->getValue('cat_sequence') > $rowCount + 1)
             {
                 $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_sequence = '.$this->getValue('cat_sequence').'
                          WHERE cat_type = \''. $this->getValue('cat_type'). '\'
@@ -213,7 +211,7 @@ class TableCategory extends TableAccess
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
         elseif(admStrToUpper($mode) === 'DOWN')
         {
-            if($this->getValue('cat_org_id') > 0 || $this->getValue('cat_sequence') < $row['count'])
+            if($this->getValue('cat_org_id') > 0 || $this->getValue('cat_sequence') < $rowCount)
             {
                 $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_sequence = '.$this->getValue('cat_sequence').'
                          WHERE cat_type = \''. $this->getValue('cat_type'). '\'
@@ -341,9 +339,7 @@ class TableCategory extends TableAccess
                            '.$org_condition;
             $countCategoriesStatement = $this->db->query($sql);
 
-            $row = $countCategoriesStatement->fetch();
-
-            $this->setValue('cat_sequence', $row['count'] + 1);
+            $this->setValue('cat_sequence', $countCategoriesStatement->fetchColumn() + 1);
 
             if($this->getValue('cat_org_id') == 0)
             {

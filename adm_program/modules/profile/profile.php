@@ -550,9 +550,9 @@ if($gPreferences['profile_show_roles'] == 1)
         $roleStatement = $gDb->query($sql);
         $berechtigungsHerkunft[$authorization_db_name] = null;
 
-        while($row = $roleStatement->fetch())
+        while($roleName = $roleStatement->fetchColumn())
         {
-            $berechtigungsHerkunft[$authorization_db_name] = $berechtigungsHerkunft[$authorization_db_name].', '.$row['rol_name'];
+            $berechtigungsHerkunft[$authorization_db_name] = $berechtigungsHerkunft[$authorization_db_name].', '.$roleName;
         }
     }
 

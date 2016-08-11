@@ -236,10 +236,9 @@ else
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL ) ';
         $administratorStatement = $gDb->query($sql);
-        $row = $administratorStatement->fetch();
 
         // create role object for administrator
-        $roleAdministrator = new TableRoles($gDb, $row['rol_id']);
+        $roleAdministrator = new TableRoles($gDb, (int) $administratorStatement->fetchColumn());
 
         $linkText = $gL10n->get('SYS_LOGIN_PROBLEMS');
 

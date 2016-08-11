@@ -278,15 +278,15 @@ class TableDate extends TableAccess
                      WHERE dtr_dat_id = '.$this->getValue('dat_id');
             $dateRolesStatement = $this->db->query($sql);
 
-            while($row = $dateRolesStatement->fetch())
+            while($roleId = $dateRolesStatement->fetchColumn())
             {
-                if($row['dtr_rol_id'] === null)
+                if($roleId === null)
                 {
                     $this->visibleRoles[] = 0;
                 }
                 else
                 {
-                    $this->visibleRoles[] = (int) $row['dtr_rol_id'];
+                    $this->visibleRoles[] = (int) $roleId;
                 }
             }
         }

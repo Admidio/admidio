@@ -99,9 +99,9 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
              WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
                AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                AND gbo_ip_address = \''. $guestbook->getValue('gbo_ip_address'). '\'';
-    $statement = $gDb->query($sql);
-    $row = $statement->fetch();
-    if($row['count'] > 0)
+    $pdoStatement = $gDb->query($sql);
+
+    if($pdoStatement->fetchColumn() > 0)
     {
         // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
         $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));

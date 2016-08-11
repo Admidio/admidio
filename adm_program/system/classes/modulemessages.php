@@ -48,7 +48,7 @@ class ModuleMessages
 
         $group = $this->msgGroupSplit($roleIdsString);
 
-        $sql = 'SELECT rol_name, rol_id
+        $sql = 'SELECT rol_name
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
@@ -56,26 +56,26 @@ class ModuleMessages
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL)';
         $statement = $gDb->query($sql);
-        $row = $statement->fetch();
+        $roleName = $statement->fetchColumn();
 
         if($group[1] == 1)
         {
             // only former members
-            $ReceiverNameLong = $row['rol_name'] . ' (' .$gL10n->get('LST_FORMER_MEMBERS') . ')';
+            $receiverNameLong = $roleName . ' (' .$gL10n->get('LST_FORMER_MEMBERS') . ')';
         }
         elseif($group[1] == 2)
         {
             // former members and active members
-            $ReceiverNameLong = $row['rol_name'] . ' (' . $gL10n->get('LST_ACTIVE_FORMER_MEMBERS') . ')';
+            $receiverNameLong = $roleName . ' (' . $gL10n->get('LST_ACTIVE_FORMER_MEMBERS') . ')';
         }
         else
         {
             // only active members then only show rolename and not the status
-            $ReceiverNameLong = $row['rol_name'];
-            //$ReceiverNameLong = $row['rol_name'] . ' (' .$gL10n->get('LST_ACTIVE_MEMBERS') . ')';
+            $receiverNameLong = $roleName;
+            //$receiverNameLong = $roleName . ' (' .$gL10n->get('LST_ACTIVE_MEMBERS') . ')';
         }
 
-        return $ReceiverNameLong;
+        return $receiverNameLong;
     }
 
     /**

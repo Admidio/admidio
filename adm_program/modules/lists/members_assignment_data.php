@@ -199,9 +199,8 @@ $sql = 'SELECT COUNT(*) AS count_total
          WHERE usr_valid = 1
                '.$memberOfThisOrganizationCondition;
 $countTotalStatement = $gDb->query($sql);
-$rowCountTotal = $countTotalStatement->fetch();
 
-$jsonArray['recordsTotal'] = $rowCountTotal['count_total'];
+$jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
 
  // SQL-Statement zusammensetzen
 $mainSql = 'SELECT DISTINCT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, birthday.usd_value AS birthday,
@@ -352,12 +351,11 @@ if($getSearch !== '')
     else
     {
         // read count of all filtered records without limit and offset
-        $sql = 'SELECT count(1) AS count_filtered
+        $sql = 'SELECT COUNT(*) AS count
                   FROM ('.$mainSql.') members
                        '.$searchCondition;
         $countFilteredStatement = $gDb->query($sql);
-        $rowCountFitered = $countFilteredStatement->fetch();
-        $jsonArray['recordsFiltered'] = $rowCountFitered['count_filtered'];
+        $jsonArray['recordsFiltered'] = (int) $countFilteredStatement->fetchColumn();
     }
 }
 else

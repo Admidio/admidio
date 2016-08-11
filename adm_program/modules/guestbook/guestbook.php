@@ -136,8 +136,7 @@ $sql = 'SELECT COUNT(*) AS count
          WHERE gbo_org_id = '.$gCurrentOrganization->getValue('org_id').
                $conditions;
 $pdoStatement = $gDb->query($sql);
-$row = $pdoStatement->fetch();
-$num_guestbook = (int) $row['count'];
+$num_guestbook = (int) $pdoStatement->fetchColumn();
 
 // Anzahl Gaestebucheintraege pro Seite
 if($gPreferences['guestbook_entries_per_page'] > 0)
