@@ -70,6 +70,12 @@ define('THEME_PATH', 'layout');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
 $message = '';
 
+// set default password-hash algorithm
+if (!isset($gPasswordHashAlgorithm))
+{
+    $gPasswordHashAlgorithm = PASSWORD_DEFAULT;
+}
+
 // default database type is always MySQL and must be set because of old config files
 if(!isset($gDbType))
 {

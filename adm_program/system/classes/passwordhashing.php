@@ -122,8 +122,10 @@ class PasswordHashing
     {
         if ($algorithm === 'SHA512')
         {
-            return strlen($hash) < 110 || strpos($hash, '$6$') !== 0
-            || (int) substr(explode('$', $hash)[2], 7) !== $options['cost'];
+            $hashParts = explode('$', $hash);
+            $cost = (int) substr($hashParts[2], 7);
+
+            return strlen($hash) < 110 || strpos($hash, '$6$') !== 0 || $cost !== $options['cost'];
         }
 
         return password_needs_rehash($hash, $algorithm, $options);
