@@ -156,7 +156,7 @@ if($getSearch !== '')
 }
 
 // create a subselect to check if the user is an acitve member of the current organization
-$sql = '(SELECT COUNT(*)
+$sql = '(SELECT COUNT(*) AS count_this
            FROM '.TBL_MEMBERS.'
      INNER JOIN '.TBL_ROLES.'
              ON rol_id = mem_rol_id
@@ -188,7 +188,7 @@ if($getLength > 0)
 }
 
 // get count of all found users
-$sql = 'SELECT COUNT(1) AS count_total
+$sql = 'SELECT COUNT(*) AS count_total
           FROM '.TBL_USERS.'
     INNER JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id

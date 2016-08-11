@@ -446,7 +446,7 @@ elseif (!isset($messageStatement))
 
     if ($gCurrentUser->getValue('usr_id') > 0)
     {
-        $sql = 'SELECT COUNT(*)
+        $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_USER_FIELDS.'
             INNER JOIN '. TBL_USER_DATA .'
                     ON usd_usf_id = usf_id
