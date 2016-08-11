@@ -165,8 +165,7 @@ class TableRoles extends TableAccess
                        AND mem_end     > \''.DATE_NOW.'\'';
             $countMembersStatement = $this->db->query($sql);
 
-            $row = $countMembersStatement->fetch();
-            $this->countMembers = (int) $row['count'];
+            $this->countMembers = (int) $countMembersStatement->fetchColumn();
         }
         return $this->countMembers;
     }

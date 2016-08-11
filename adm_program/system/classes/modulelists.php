@@ -278,15 +278,15 @@ class ModuleLists extends Modules
         }
 
         $sql = 'SELECT rol.*, cat.*,
-                       (SELECT COUNT(*)
+                       (SELECT COUNT(*) AS count
                           FROM '.TBL_MEMBERS.' mem
                          WHERE mem.mem_rol_id = rol.rol_id '.$this->getMemberStatusSql().'
                            AND mem_leader = 0) AS num_members,
-                       (SELECT COUNT(*)
+                       (SELECT COUNT(*) AS count
                           FROM '.TBL_MEMBERS.' mem
                          WHERE mem.mem_rol_id = rol.rol_id '.$this->getMemberStatusSql().'
                            AND mem_leader = 1) AS num_leader,
-                       (SELECT COUNT(*)
+                       (SELECT COUNT(*) AS count
                           FROM '.TBL_MEMBERS.' mem
                          WHERE mem.mem_rol_id = rol.rol_id
                            AND mem_end < \''. DATE_NOW.'\') AS num_former

@@ -298,9 +298,8 @@ class ModuleDates extends Modules
                            .$this->sqlConditionsGet();
 
             $statement = $gDb->query($sql);
-            $row = $statement->fetch();
 
-            return (int) $row['count'];
+            return (int) $statement->fetchColumn();
         }
 
         return 1;
