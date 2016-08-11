@@ -76,7 +76,7 @@ class TableFolder extends TableAccess
     /**
      * Legt einen neuen Ordner im Dateisystem an
      * @param string $folderName
-     * @return array
+     * @return string[]
      */
     public function createFolder($folderName)
     {
@@ -231,8 +231,8 @@ class TableFolder extends TableAccess
 
         // Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
         $sqlSubfolders = 'SELECT *
-                             FROM '.TBL_FOLDERS.'
-                            WHERE fol_fol_id_parent = '.$folderId;
+                            FROM '.TBL_FOLDERS.'
+                           WHERE fol_fol_id_parent = '.$folderId;
         $subfoldersStatement = $this->db->query($sqlSubfolders);
 
         while($rowSubfolders = $subfoldersStatement->fetchObject())
@@ -687,32 +687,24 @@ class TableFolder extends TableAccess
 
     /**
      * Checks if the current user has the right to upload files to the current folder.
-     * @return Return @b true if the user has the right to upload files
+     * @return bool Return @b true if the user has the right to upload files
      */
     public function hasUploadRight()
     {
         global $gCurrentUser;
 
-        if($this->folderUploadRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->editDownloadRight())
-        {
-            return true;
-        }
-        return false;
+        return $this->folderUploadRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->editDownloadRight();
     }
 
     /**
      * Checks if the current user has the right to view files of the current folder.
-     * @return Return @b true if the user has the right to view files
+     * @return bool Return @b true if the user has the right to view files
      */
     public function hasViewRight()
     {
         global $gCurrentUser;
 
-        if($this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->editDownloadRight())
-        {
-            return true;
-        }
-        return false;
+        return $this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->editDownloadRight();
     }
 
     /**

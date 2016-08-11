@@ -34,7 +34,7 @@ if(!$gCurrentUser->hasRightViewProfile($user))
  * diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder dabei wird der Inhalt richtig formatiert
  * @param string $fieldNameIntern
  * @param \User  $user
- * @return array|string
+ * @return false|string[]
  */
 function getFieldCode($fieldNameIntern, User $user)
 {
@@ -42,7 +42,7 @@ function getFieldCode($fieldNameIntern, User $user)
 
     if(!$gCurrentUser->hasRightEditProfile($user) && $gProfileFields->getProperty($fieldNameIntern, 'usf_hidden') == 1)
     {
-        return '';
+        return false;
     }
 
     $html = array('label' => '', 'value' => '');
@@ -413,7 +413,7 @@ $page->addHtml('
 
                         default:
                             $field = getFieldCode($field->getValue('usf_name_intern'), $user);
-                            if(strlen($field['value']) > 0)
+                            if(is_array($field) && $field['value'] !== '')
                             {
                                 $form->addStaticControl('address', $field['label'], $field['value']);
                             }
@@ -490,7 +490,7 @@ foreach($gProfileFields->mProfileFields as $field)
         if(strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 || $field->getValue('usf_type') === 'CHECKBOX')
         {
             $field = getFieldCode($field->getValue('usf_name_intern'), $user);
-            if(strlen($field['value']) > 0)
+            if(is_array($field) && $field['value'] !== '')
             {
                 $form->addStaticControl('address', $field['label'], $field['value']);
             }
