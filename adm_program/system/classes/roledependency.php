@@ -276,28 +276,28 @@ class RoleDependency
      */
     public function updateMembership()
     {
-        if ($this->roleIdParent > 0 && $this->roleIdChild > 0)
+        if ($this->roleIdParent === 0 || $this->roleIdChild === 0)
         {
-            $sql = 'SELECT mem_usr_id
-                      FROM '.TBL_MEMBERS.
-                   ' WHERE mem_rol_id = '.$this->roleIdChild.'
-                       AND mem_begin <= \''.DATE_NOW.'\'
-                       AND mem_end    > \''.DATE_NOW.'\'';
-            $membershipStatement = $this->db->query($sql);
-
-            if ($membershipStatement->rowCount() > 0)
-            {
-                $member = new TableMembers($this->db);
-
-                while ($memberUserId = $membershipStatement->fetchColumn())
-                {
-                    $member->startMembership($this->roleIdParent, (int) $memberUserId);
-                }
-            }
-
-            return true;
+            return false;
         }
 
-        return false;
+        $sql = 'SELECT mem_usr_id
+                  FROM '.TBL_MEMBERS.
+               ' WHERE mem_rol_id = '.$this->roleIdChild.'
+                   AND mem_begin <= \''.DATE_NOW.'\'
+                   AND mem_end    > \''.DATE_NOW.'\'';
+        $membershipStatement = $this->db->query($sql);
+
+        if ($membershipStatement->rowCount() > 0)
+        {
+            $member = new TableMembers($this->db);
+
+            while ($memberUserId = $membershipStatement->fetchColumn())
+            {
+                $member->startMembership($this->roleIdParent, (int) $memberUserId);
+            }
+        }
+
+        return true;
     }
 }
