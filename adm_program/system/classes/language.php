@@ -224,7 +224,7 @@ class Language
      * Returns the three digits ISO code of the country. The country will be identified
      * by the name in the language of this object
      * @param string $country The name of the country in the language of this object.
-     * @return string Return the three digits ISO code of the country.
+     * @return string|false Return the three digits ISO code of the country or false if country not found.
      */
     public function getCountryByName($country)
     {

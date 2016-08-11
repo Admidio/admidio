@@ -49,7 +49,7 @@ class Menu
      * @param string $text
      * @param string $icon
      * @param string $desc
-     * @return string[]
+     * @return array<string,string|array>
      */
     private function mkItem($id, $link, $text, $icon, $desc = '')
     {

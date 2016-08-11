@@ -355,7 +355,7 @@ function admFuncMaxUploadSize()
 
 /**
  * Funktion gibt die maximale Pixelzahl zurück die der Speicher verarbeiten kann
- * @return int
+ * @return double
  */
 function admFuncProcessableImageSize()
 {

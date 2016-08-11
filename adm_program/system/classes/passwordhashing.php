@@ -199,7 +199,7 @@ class PasswordHashing
     /**
      * Provides infos about the given password (length, number, lowerCase, upperCase, symbol)
      * @param string $password The password you want the get infos about
-     * @return array Returns an array with infos about the given password
+     * @return array<string,int|bool> Returns an array with infos about the given password
      */
     public static function passwordInfo($password)
     {
