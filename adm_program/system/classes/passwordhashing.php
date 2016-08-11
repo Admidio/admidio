@@ -38,11 +38,11 @@ class PasswordHashing
      * Hash the given password with the given options. The default algorithm uses the password_* methods,
      * otherwise the builtin helper for SHA-512 crypt hashes from the operating system. Minimum cost is 10.
      * @param string     $password  The password string
-     * @param int|string $algorithm The hash-algorithm constant
+     * @param string     $algorithm The hash-algorithm method. Possible values are 'DEFAULT', 'BCRYPT' or 'SHA512'.
      * @param array      $options   The hash-options array
      * @return string|false Returns the hashed password or false if an error occurs
      */
-    public static function hash($password, $algorithm = PASSWORD_DEFAULT, array $options = array())
+    public static function hash($password, $algorithm = 'DEFAULT', array $options = array())
     {
         if ($algorithm === 'SHA512')
         {
@@ -53,6 +53,14 @@ class PasswordHashing
 
             $salt = self::genRandomPassword(8, './ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
             return crypt($password, '$6$rounds=' . $options['cost'] . '$' . $salt . '$');
+        }
+        elseif($algorithm === 'BCRYPT')
+        {
+            $algorithmPhpConstant = PASSWORD_BCRYPT;
+        }
+        else
+        {
+            $algorithmPhpConstant = PASSWORD_DEFAULT;
         }
 
         if (!array_key_exists('cost', $options))
@@ -65,7 +73,7 @@ class PasswordHashing
             $options['cost'] = 10;
         }
 
-        return password_hash($password, $algorithm, $options);
+        return password_hash($password, $algorithmPhpConstant, $options);
     }
 
     /**

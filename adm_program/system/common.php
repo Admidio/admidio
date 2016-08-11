@@ -68,7 +68,7 @@ $gValidLogin = false;
 // set default password-hash algorithm
 if (!isset($gPasswordHashAlgorithm))
 {
-    $gPasswordHashAlgorithm = PASSWORD_DEFAULT;
+    $gPasswordHashAlgorithm = 'DEFAULT';
 }
 
 // create database object and establish connection to database
