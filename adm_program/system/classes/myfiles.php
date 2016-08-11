@@ -28,7 +28,8 @@ class MyFiles extends Folder
     protected $modulePath;  // absolute path of the module
     protected $currentPath; // absolute path that is set with setSubFolder
     protected $webPath;     // the path starts with adm_my_file
-    public $errorText, $errorPath;
+    public $errorText;
+    public $errorPath;
 
     /**
      * module name should be the folder name in adm_my_files for this module

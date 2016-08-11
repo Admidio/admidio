@@ -130,7 +130,7 @@ while($row_orga = $orgaStatement->fetch())
     {
         $all_cat_ids[] = $row_cat['cat_id'];
     }
-    $all_cat_str = implode(",", $all_cat_ids);
+    $all_cat_str = implode(',', $all_cat_ids);
 
     // neue Rollenfelder fuellen
     $sql = 'UPDATE '.TBL_ROLES.' SET rol_timestamp_create = rol_timestamp_change

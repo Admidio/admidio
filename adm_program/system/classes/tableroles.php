@@ -251,11 +251,11 @@ class TableRoles extends TableAccess
 
             $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
                      WHERE dtr_rol_id = '.$this->getValue('rol_id');
-            $result = $this->db->query($sql);
+            $this->db->query($sql);
 
             $sql = 'DELETE FROM '.TBL_ROLES_RIGHTS_DATA.'
                      WHERE rrd_rol_id = '.$this->getValue('rol_id');
-            $result = $this->db->query($sql);
+            $this->db->query($sql);
 
             $return = parent::delete();
 
