@@ -248,32 +248,29 @@ function strValidCharacters($string, $checkType)
 function admStrIsValidFileName($filename, $checkExtension = false)
 {
     // If the filename was not empty
-    if(trim($filename) !== '')
-    {
-        // filename should only contains valid characters and don't start with a dot
-        if(strValidCharacters($filename, 'file') && strpos($filename, '.') !== 0)
-        {
-            if($checkExtension)
-            {
-                // check if the extension is not blacklisted
-                $extensionBlacklist = array('php', 'php3', 'php4', 'php5', 'html', 'htm', 'htaccess', 'htpasswd', 'pl',
-                                            'js', 'vbs', 'asp', 'cgi', 'ssi');
-                $fileExtension = substr($filename, strrpos($filename, '.') + 1);
-
-                if(in_array(strtolower($fileExtension), $extensionBlacklist, true))
-                {
-                    throw new AdmException('DOW_FILE_EXTENSION_INVALID');
-                }
-            }
-            return true;
-        }
-        else
-        {
-            throw new AdmException('BAC_FILE_NAME_INVALID');
-        }
-    }
-    else
+    if (trim($filename) === '')
     {
         throw new AdmException('SYS_FILENAME_EMPTY');
     }
+
+    // filename should only contains valid characters and don't start with a dot
+    if (basename($filename) !== $filename || !strValidCharacters($filename, 'file') || strpos($filename, '.') === 0)
+    {
+        throw new AdmException('BAC_FILE_NAME_INVALID');
+    }
+
+    if ($checkExtension)
+    {
+        // check if the extension is not blacklisted
+        $extensionBlacklist = array('php', 'php3', 'php4', 'php5', 'html', 'htm', 'htaccess', 'htpasswd', 'pl',
+                                    'js', 'vbs', 'asp', 'cgi', 'ssi');
+        $fileExtension = substr($filename, strrpos($filename, '.') + 1);
+
+        if (in_array(strtolower($fileExtension), $extensionBlacklist, true))
+        {
+            throw new AdmException('DOW_FILE_EXTENSION_INVALID');
+        }
+    }
+
+    return true;
 }

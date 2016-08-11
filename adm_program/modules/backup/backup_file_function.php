@@ -44,7 +44,7 @@ switch($getJob)
 {
     case 'get_file':
         // Dateigroese ermitteln
-        $fileSize   = filesize($completePath);
+        $fileSize = filesize($completePath);
 
         // for IE the filename must have special chars in hexadecimal
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
