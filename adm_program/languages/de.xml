@@ -848,7 +848,7 @@
     <string name="PRO_SHOW_ROLE_MEMBERSHIP_DESC">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied ist. Dazu werden die entsprechenden Berechtigungen und das Eintrittsdatum aufgelistet. (Standard: ja)</string>
     <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Rollen anderer Organisationen anzeigen</string>
     <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Ist der Benutzer Mitglied in Rollen einer anderen Organisation, so wird ein Kasten mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt. (Standard: ja)</string>
-    <string name="PRO_SHOW_USER_RELATIONS">Beziehungen anzeigen</string>
+    <string name="PRO_SHOW_USER_RELATIONS">Beziehungen pflegen und anzeigen</string>
     <string name="PRO_SHOW_USER_RELATIONS_DESC">Es wird ein Kasten mit allen Beziehungen des Benutzers zu anderen Benutzern angezeigt. (Standard: ja)</string>
     <string name="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS">zur Profilfeldpflege wechseln</string>
     <string name="PRO_UPLOAD_HELP_1">Auf den Button #VAR1_BOLD# klicken und die gewünschte Fotodatei von der Festplatte auswählen.</string>
