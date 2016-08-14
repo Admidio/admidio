@@ -1226,6 +1226,9 @@
     <string name="SYS_USER_RELATION_TYPES">Beziehungstypen</string>
     <string name="SYS_USER_RELATION_TYPE_FORWARD">Vorwärts</string>
     <string name="SYS_USER_RELATION_TYPE_BACKWARD">Rückwärts</string>
+    <string name="SYS_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
+    <string name="SYS_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
+    <string name="SYS_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
     <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Beziehungstypen pflegen</string>
     <string name="SYS_RELOAD">Neuladen</string>
     <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>

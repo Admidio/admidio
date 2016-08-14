@@ -46,12 +46,50 @@ $relationtypeEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(),
 // show form
 $form = new HtmlForm('relationtype_edit_form',
                      $g_root_path.'/adm_program/modules/userrelations/relationtypes_function.php?urt_id='.$getUrtId.'&amp;mode=1', $page);
+
 $form->addInput('urt_name', $gL10n->get('SYS_USER_RELATION_TYPE_FORWARD'), $relationtype1->getValue('urt_name'),
         array('maxLength' => 100, 'property' => FIELD_REQUIRED));
 $form->addInput('urt_name_male', $gL10n->get('SYS_USER_RELATION_TYPE_FORWARD').' '.$gL10n->get('SYS_MALE'), $relationtype1->getValue('urt_name_male')!=$relationtype1->getValue('urt_name') ? $relationtype1->getValue('urt_name_male') : '',
         array('maxLength' => 100));
 $form->addInput('urt_name_female', $gL10n->get('SYS_USER_RELATION_TYPE_FORWARD').' '.$gL10n->get('SYS_FEMALE'), $relationtype1->getValue('urt_name_female')!=$relationtype1->getValue('urt_name') ? $relationtype1->getValue('urt_name_female') : '',
     array('maxLength' => 100));
+
+$options = array('defaultValue'=>$relationtype1->getRelationTypeString());
+if ( !$relationtype1->isNewRecord() )
+{
+    $options['property'] = FIELD_DISABLED;
+}
+ 
+$form->addRadioButton('relation_type', $gL10n->get('SYS_USER_RELATION_TYPE'),
+    array('asymmetrical'=>$gL10n->get('SYS_USER_RELATION_TYPE_ASYMMETRICAL'), 'symmetrical'=>$gL10n->get('SYS_USER_RELATION_TYPE_SYMMETRICAL'), 'unidirectional'=>$gL10n->get('SYS_USER_RELATION_TYPE_UNIDIRECTIONAL')),
+    $options);
+$page->addJavascript('
+    function updateRelationType(element) {
+      if($(element).val()=="unidirectional") {
+        $("#urt_name_inverse").prop("required", false);
+        $("#urt_name_inverse_group").hide("slow");
+        $("#urt_name_male_inverse_group").hide("slow");
+        $("#urt_name_female_inverse_group").hide("slow");
+      }
+      else if($(element).val()=="symmetrical") {
+        $("#urt_name_inverse").prop("required", false);
+        $("#urt_name_inverse_group").hide("slow");
+        $("#urt_name_male_inverse_group").hide("slow");
+        $("#urt_name_female_inverse_group").hide("slow");
+      }
+      else if($(element).val()=="asymmetrical") {
+        $("#urt_name_inverse").prop("required", true);
+        $("#urt_name_inverse_group").show("slow");
+        $("#urt_name_male_inverse_group").show("slow");
+        $("#urt_name_female_inverse_group").show("slow");
+      }
+    }
+    $("input[type=radio][name=relation_type]").change(function() {
+      updateRelationType(this);
+    });
+    updateRelationType($("input[type=radio][name=relation_type]:checked"));
+    ', true);
+
 $form->addInput('urt_name_inverse', $gL10n->get('SYS_USER_RELATION_TYPE_BACKWARD'), $relationtype2->getValue('urt_name'),
         array('maxLength' => 100, 'property' => FIELD_REQUIRED));
 $form->addInput('urt_name_male_inverse', $gL10n->get('SYS_USER_RELATION_TYPE_BACKWARD').' '.$gL10n->get('SYS_MALE'), $relationtype2->getValue('urt_name_male')!=$relationtype2->getValue('urt_name') ? $relationtype2->getValue('urt_name_male') : '',

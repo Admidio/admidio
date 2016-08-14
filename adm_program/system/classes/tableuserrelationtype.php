@@ -26,10 +26,42 @@ class TableUserRelationType extends TableAccess
         parent::__construct($database, TBL_USER_RELATION_TYPES, 'urt', $id);
     }
     
+    public function isUnidirectional()
+    {
+        return $this->getRelationTypeString() == 'unidirectional';
+    }
+    
+    public function isSymmetrical()
+    {
+        return $this->getRelationTypeString() == 'symmetrical';
+    }
+    
+    public function isAsymmetrical()
+    {
+        return $this->getRelationTypeString() == 'asymmetrical';
+    }
+    
+    public function getRelationTypeString()
+    {
+        if (!$this->isNewRecord())
+        {
+            if ($this->getValue('urt_id_inverse')==null)
+            {
+                return 'unidirectional';
+            }
+            else if ($this->getValue('urt_id_inverse')==$this->getValue('urt_id'))
+            {
+                return 'symmetrical';
+            }
+        }
+        return 'asymmetrical';
+    }
+    
     public function getInverse()
     {
         $inverse = new TableUserRelationType($this->db, $this->getValue('urt_id_inverse'));
-        if ($inverse->isNewRecord()) {
+        if ($inverse->isNewRecord())
+        {
             return null;
         }
         return $inverse;

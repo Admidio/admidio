@@ -97,11 +97,14 @@ if($getMode === 1)
     $relation1->setValue('ure_usr_id2', $user2->getValue('usr_id'));
     $relation1->save();
     
-    $relation2 = new TableUserRelation($gDb);
-    $relation2->setValue('ure_urt_id', $relationtype->getValue('urt_id_inverse'));
-    $relation2->setValue('ure_usr_id1', $user2->getValue('usr_id'));
-    $relation2->setValue('ure_usr_id2', $user1->getValue('usr_id'));
-    $relation2->save();
+    if ( !$relationtype->isUnidirectional() )
+    {
+        $relation2 = new TableUserRelation($gDb);
+        $relation2->setValue('ure_urt_id', $relationtype->getValue('urt_id_inverse'));
+        $relation2->setValue('ure_usr_id1', $user2->getValue('usr_id'));
+        $relation2->setValue('ure_usr_id2', $user1->getValue('usr_id'));
+        $relation2->save();
+    }
     
     $gDb->endTransaction();
     
@@ -114,13 +117,10 @@ elseif($getMode === 2)
     // delete relation
     try
     {
-        $gDb->startTransaction();
-        $inverse = $relation->getInverse();
-        if($relation->delete() && $inverse->delete())
+        if($relation->delete())
         {
             echo 'done';
         }
-        $gDb->endTransaction();
     }
     catch(AdmException $e)
     {

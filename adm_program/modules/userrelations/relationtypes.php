@@ -63,9 +63,9 @@ $relationtypesOverview->addRowHeadingByArray($columnHeading);
 
 $sql = 'SELECT urt1.*, urt2.urt_name AS urt_name_inverse, urt2.urt_name_male AS urt_name_male_inverse, urt2.urt_name_female AS urt_name_female_inverse
           FROM '.TBL_USER_RELATION_TYPES.' AS urt1
-          INNER JOIN '.TBL_USER_RELATION_TYPES.' AS urt2
+          LEFT OUTER JOIN '.TBL_USER_RELATION_TYPES.' AS urt2
                   ON urt1.urt_id_inverse=urt2.urt_id
-         WHERE urt1.urt_id < urt1.urt_id_inverse
+         WHERE urt1.urt_id <= urt1.urt_id_inverse OR urt1.urt_id_inverse IS NULL
       ORDER BY urt1.urt_name, urt2.urt_name';
 
 $relationtypesStatement = $gDb->query($sql);
