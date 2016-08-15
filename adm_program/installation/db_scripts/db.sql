@@ -1081,7 +1081,7 @@ alter table %PREFIX%_user_relation_types add constraint %PREFIX%_FK_URT_USR_CREA
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_URT foreign key (ure_urt_id)
-      references %PREFIX%_user_relation_types (urt_id) on delete restrict on update restrict;
+      references %PREFIX%_user_relation_types (urt_id) on delete cascade on update restrict;
 alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR1 foreign key (ure_usr_id1)
       references %PREFIX%_users (usr_id) on delete cascade on update restrict;
 alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR2 foreign key (ure_usr_id2)
