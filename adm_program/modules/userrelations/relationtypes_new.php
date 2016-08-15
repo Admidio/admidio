@@ -64,6 +64,11 @@ $form->addRadioButton('relation_type', $gL10n->get('SYS_USER_RELATION_TYPE'),
     array('asymmetrical'=>$gL10n->get('SYS_USER_RELATION_TYPE_ASYMMETRICAL'), 'symmetrical'=>$gL10n->get('SYS_USER_RELATION_TYPE_SYMMETRICAL'), 'unidirectional'=>$gL10n->get('SYS_USER_RELATION_TYPE_UNIDIRECTIONAL')),
     $options);
 $page->addJavascript('
+    function checkRelationTypeNames() {
+        $("#btn_save").prop("disabled", $("#urt_name").val() == $("#urt_name_inverse").val());
+    }
+    $("#urt_name").on("input", checkRelationTypeNames);
+    $("#urt_name_inverse").on("input", checkRelationTypeNames);
     function updateRelationType(element, duration) {
       if($(element).val()=="unidirectional") {
         $("#urt_name_inverse").prop("required", false);
