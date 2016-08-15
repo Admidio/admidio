@@ -64,28 +64,28 @@ $form->addRadioButton('relation_type', $gL10n->get('SYS_USER_RELATION_TYPE'),
     array('asymmetrical'=>$gL10n->get('SYS_USER_RELATION_TYPE_ASYMMETRICAL'), 'symmetrical'=>$gL10n->get('SYS_USER_RELATION_TYPE_SYMMETRICAL'), 'unidirectional'=>$gL10n->get('SYS_USER_RELATION_TYPE_UNIDIRECTIONAL')),
     $options);
 $page->addJavascript('
-    function updateRelationType(element) {
+    function updateRelationType(element, duration) {
       if($(element).val()=="unidirectional") {
         $("#urt_name_inverse").prop("required", false);
-        $("#urt_name_inverse_group").hide("slow");
-        $("#urt_name_male_inverse_group").hide("slow");
-        $("#urt_name_female_inverse_group").hide("slow");
+        $("#urt_name_inverse_group").hide(duration);
+        $("#urt_name_male_inverse_group").hide(duration);
+        $("#urt_name_female_inverse_group").hide(duration);
       }
       else if($(element).val()=="symmetrical") {
         $("#urt_name_inverse").prop("required", false);
-        $("#urt_name_inverse_group").hide("slow");
-        $("#urt_name_male_inverse_group").hide("slow");
-        $("#urt_name_female_inverse_group").hide("slow");
+        $("#urt_name_inverse_group").hide(duration);
+        $("#urt_name_male_inverse_group").hide(duration);
+        $("#urt_name_female_inverse_group").hide(duration);
       }
       else if($(element).val()=="asymmetrical") {
         $("#urt_name_inverse").prop("required", true);
-        $("#urt_name_inverse_group").show("slow");
-        $("#urt_name_male_inverse_group").show("slow");
-        $("#urt_name_female_inverse_group").show("slow");
+        $("#urt_name_inverse_group").show(duration);
+        $("#urt_name_male_inverse_group").show(duration);
+        $("#urt_name_female_inverse_group").show(duration);
       }
     }
     $("input[type=radio][name=relation_type]").change(function() {
-      updateRelationType(this);
+      updateRelationType(this, "slow");
     });
     updateRelationType($("input[type=radio][name=relation_type]:checked"));
     ', true);

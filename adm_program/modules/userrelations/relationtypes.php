@@ -9,19 +9,6 @@
  ***********************************************************************************************
  */
 
-/******************************************************************************
- * Parameters:
- *
- * type  : Type of categories that could be maintained
- *         ROL = Categories for roles
- *         LNK = Categories for weblinks
- *         USF = Categories for profile fields
- *         DAT = Calendars for events
- *         INF = Categories for Inventory
- * title : Parameter for the synonym of the categorie
- *
- ****************************************************************************/
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
