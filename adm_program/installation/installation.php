@@ -455,6 +455,13 @@ elseif($getMode === 6)  // Creating configuration file
             showNotice($gL10n->get('INS_PASSWORDS_NOT_EQUAL'), 'installation.php?mode=5',
                        $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
+
+        // check if password is strong enough
+        if(PasswordHashing::passwordStrength($_SESSION['user_password']) < PASSWORD_MIN_STRENGTH)
+        {
+            showNotice($gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'), 'installation.php?mode=5',
+                $gL10n->get('SYS_BACK'), 'layout/back.png');
+        }
     }
 
     // if config file exists than don't create a new one

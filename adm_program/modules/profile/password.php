@@ -34,11 +34,12 @@ else
 }
 
 $user = new User($gDb, $gProfileFields, $getUserId);
+$currUserId = (int) $gCurrentUser->getValue('usr_id');
 
 // only the own password could be individual set.
 // Administrator could only send a generated password or set a password if no password was set before
 if(!isMember($getUserId)
-|| (!$gCurrentUser->isAdministrator() && $gCurrentUser->getValue('usr_id') != $getUserId)
+|| (!$gCurrentUser->isAdministrator() && $currUserId !== $getUserId)
 || ($gCurrentUser->isAdministrator() && $user->getValue('usr_password') !== '' && $user->getValue('EMAIL') === '' && $gPreferences['enable_system_mails'] == 1))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -47,7 +48,7 @@ if(!isMember($getUserId)
 
 if($getMode === 'change')
 {
-    if($gCurrentUser->isAdministrator() && $gCurrentUser->getValue('usr_id') != $getUserId)
+    if($gCurrentUser->isAdministrator() && $currUserId !== $getUserId)
     {
         $oldPassword = '';
     }
@@ -67,32 +68,40 @@ if($getMode === 'change')
     {
         if(strlen($newPassword) >= PASSWORD_MIN_LENGTH)
         {
-            if ($newPassword === $newPasswordConfirm)
+            if (PasswordHashing::passwordStrength($newPassword) >= PASSWORD_MIN_STRENGTH)
             {
-                // check if old password is correct.
-                // Administrator could change password of other users without this verification.
-                if(PasswordHashing::verify($oldPassword, $user->getValue('usr_password')) || $gCurrentUser->isAdministrator() && $gCurrentUser->getValue('usr_id') != $getUserId)
+                if ($newPassword === $newPasswordConfirm)
                 {
-                    $user->saveChangesWithoutRights();
-                    $user->setPassword($newPassword);
-                    $user->save();
-
-                    // if password of current user changed, then update value in current session
-                    if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
+                    // check if old password is correct.
+                    // Administrator could change password of other users without this verification.
+                    if (PasswordHashing::verify($oldPassword, $user->getValue('usr_password'))
+                    || ($gCurrentUser->isAdministrator() && $currUserId !== $getUserId))
                     {
-                        $gCurrentUser->setPassword($newPassword);
-                    }
+                        $user->saveChangesWithoutRights();
+                        $user->setPassword($newPassword);
+                        $user->save();
 
-                    $phrase = 'success';
+                        // if password of current user changed, then update value in current session
+                        if ($currUserId === (int) $user->getValue('usr_id'))
+                        {
+                            $gCurrentUser->setPassword($newPassword);
+                        }
+
+                        $phrase = 'success';
+                    }
+                    else
+                    {
+                        $phrase = $gL10n->get('PRO_PASSWORD_OLD_WRONG');
+                    }
                 }
                 else
                 {
-                    $phrase = $gL10n->get('PRO_PASSWORD_OLD_WRONG');
+                    $phrase = $gL10n->get('PRO_PASSWORDS_NOT_EQUAL');
                 }
             }
             else
             {
-                $phrase = $gL10n->get('PRO_PASSWORDS_NOT_EQUAL');
+                $phrase = $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH');
             }
         }
         else
@@ -172,7 +181,7 @@ elseif($getMode === 'html')
     <div class="modal-body">';
         // show form
         $form = new HtmlForm('password_form', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='.$getUserId.'&amp;mode=change');
-        if($gCurrentUser->getValue('usr_id') == $getUserId)
+        if($currUserId === $getUserId)
         {
             // to change own password user must enter the valid old password for verification
             // TODO Future: 'minLength' => PASSWORD_MIN_LENGTH

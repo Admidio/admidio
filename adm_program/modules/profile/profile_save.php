@@ -120,6 +120,12 @@ if($getNewUser === 2)
         $gMessage->show($gL10n->get('PRO_PASSWORDS_NOT_EQUAL'));
         // => EXIT
     }
+
+    if(PasswordHashing::passwordStrength($_SESSION['user_password']) < PASSWORD_MIN_STRENGTH)
+    {
+        $gMessage->show($gL10n->get('PRO_PASSWORDS_NOT_STRONG_ENOUGH'));
+        // => EXIT
+    }
 }
 
 // nun alle Profilfelder pruefen

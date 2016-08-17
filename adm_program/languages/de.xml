@@ -824,6 +824,7 @@
     <string name="PRO_PASSWORD_LENGTH">Das Passwort muss aus mindestens 8 Zeichen bestehen.</string>
     <string name="PRO_PASSWORD_OLD_WRONG">Das alte Passwort ist falsch.</string>
     <string name="PRO_PASSWORDS_NOT_EQUAL">Das Passwort stimmt nicht mit der Wiederholung überein.</string>
+    <string name="PRO_PASSWORD_NOT_STRONG_ENOUGH">Das Passwort ist nicht sicher genug.</string>
     <string name="PRO_PHOTO_DELETED">Das Profilfoto wurde gelöscht.</string>
     <string name="PRO_PHOTO_FILE_TO_LARGE">Das hochgeladene Foto übersteigt die vom Server zugelassene Dateigröße von #VAR1# B.</string>
     <string name="PRO_PHOTO_FORMAT_INVALID">Es können nur Fotos im JPG und PNG-Format hochgeladen und angezeigt werden.</string>

@@ -820,6 +820,7 @@
   <string name="PRO_PASSWORD_LENGTH">Password must have at least 8 characters.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">Old password is incorrect.</string>
   <string name="PRO_PASSWORDS_NOT_EQUAL">Original and retyped passwords are different.</string>
+  <string name="PRO_PASSWORD_NOT_STRONG_ENOUGH">The password is not secure enough.</string>
   <string name="PRO_PHOTO_DELETED">Profile picture has been deleted.</string>
   <string name="PRO_PHOTO_FILE_TO_LARGE">Size of uploaded photo exceeds server allowed file size of #VAR1# B.</string>
   <string name="PRO_PHOTO_FORMAT_INVALID">Only JPG and PNG formated photos are allowed.</string>
