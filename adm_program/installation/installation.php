@@ -442,16 +442,17 @@ elseif($getMode === 6)  // Creating configuration file
                        $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
 
+        // Password min length is 8 chars
+        if(strlen($_SESSION['user_password']) < PASSWORD_MIN_LENGTH)
+        {
+            showNotice($gL10n->get('PRO_PASSWORD_LENGTH'), 'installation.php?mode=5',
+                $gL10n->get('SYS_BACK'), 'layout/back.png');
+        }
+
         // password must be the same with password confirm
         if($_SESSION['user_password'] !== $_SESSION['user_password_confirm'])
         {
             showNotice($gL10n->get('INS_PASSWORDS_NOT_EQUAL'), 'installation.php?mode=5',
-                       $gL10n->get('SYS_BACK'), 'layout/back.png');
-        }
-
-        if(strlen($_SESSION['user_password']) < 8 || strlen($_SESSION['user_password_confirm']) < 8)
-        {
-            showNotice($gL10n->get('PRO_PASSWORD_LENGTH'), 'installation.php?mode=5',
                        $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
     }

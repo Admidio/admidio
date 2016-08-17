@@ -101,3 +101,6 @@ define('ROLE_LEADER_MEMBERS_ASSIGN_EDIT', 3);
 
 // Password settings
 define('PASSWORD_MIN_LENGTH', 8);
+define('PASSWORD_GEN_LENGTH', 16);
+define('PASSWORD_GEN_CHARS', '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+define('PASSWORD_MIN_STRENGTH', 2);
