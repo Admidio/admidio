@@ -113,10 +113,30 @@ elseif($getMode === 'html')
     /* Show password form */
     /***********************************************************************/
 
+    $zxcvbnUserInputs = json_encode(array(
+        $user->getValue('FIRST_NAME'),
+        $user->getValue('LAST_NAME'),
+        $user->getValue('usr_login_name'),
+        $user->getValue('BIRTHDAY', 'Y-m-d'),
+        DateTime::createFromFormat('Y-m-d', $user->getValue('BIRTHDAY', 'Y-m-d'))->format('d.m.Y'),
+        $user->getValue('EMAIL'),
+        $user->getValue('ADDRESS'),
+        $user->getValue('CITY'),
+        $user->getValue('POSTCODE'),
+        $user->getValue('COUNTRY')
+    ), JSON_UNESCAPED_UNICODE);
+
     echo '<script type="text/javascript"><!--
     $(function() {
+        $("#new_password").after("<div id=\"admidio-password-strength\"><div id=\"admidio-password-strength-indicator\"></div></div>");
+
         $("body").on("shown.bs.modal", ".modal", function () {
             $("#password_form:first *:input[type!=hidden]:first").focus();
+        });
+
+        $("#new_password").keyup(function(e) {
+            var result = zxcvbn(e.target.value, '.$zxcvbnUserInputs.');
+            $("#admidio-password-strength-indicator").removeClass().addClass("admidio-password-strength-indicator-" + result.score);
         });
 
         $("#password_form").submit(function(event) {

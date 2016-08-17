@@ -763,6 +763,34 @@ input[type="time"] {
     padding: 0 0 5px 0;
 }
 
+#admidio-password-strength {
+    height: 8px;
+    margin: 8px 0;
+    border: 1px solid #000000;
+}
+#admidio-password-strength-indicator {
+    height: 100%;
+}
+.admidio-password-strength-indicator-0 {
+    width: 0;
+}
+.admidio-password-strength-indicator-1 {
+    width: 25%;
+    background-color: #ff0000;
+}
+.admidio-password-strength-indicator-2 {
+    width: 50%;
+    background-color: #ff8800;
+}
+.admidio-password-strength-indicator-3 {
+    width: 75%;
+    background-color: #ffff00;
+}
+.admidio-password-strength-indicator-4 {
+    width: 100%;
+    background-color: #00ff00;
+}
+
 /* Fullscreen mode for lists */
 
 body > .admidio-content {
