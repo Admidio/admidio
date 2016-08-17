@@ -33,6 +33,7 @@ $getMode        = admFuncVariableIsValid($_GET, 'mode',         'string', array(
 $getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'int');
 $getRoleIds     = admFuncVariableIsValid($_GET, 'rol_ids',      'string'); // could be int or int[], so string is necessary
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
+$getRelationtypeIds = admFuncVariableIsValid($_GET, 'urt_ids',  'string'); // could be int or int[], so string is necessary
 $getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen',  'bool');
 
 // Create date objects and format dates in system format
@@ -110,6 +111,21 @@ else
     $htmlSubHeadline .= $role->getValue('cat_name');
 }
 
+$relationtypeName = '';
+$relationtypeIds = array_map('intval', array_filter(explode(',', $getRelationtypeIds), 'is_numeric'));
+if (count($relationtypeIds) > 0)
+{
+    $sql = 'SELECT urt_id, urt_name
+              FROM '.TBL_USER_RELATION_TYPES.'
+              WHERE urt_id IN ('.implode(',', $relationtypeIds).')
+              ORDER BY urt_name';
+    $relationtypesStatement = $gDb->query($sql);
+    while($relationtype = $relationtypesStatement->fetch())
+    {
+        $relationtypeName .= (empty($relationtypeName)?'':', ').$relationtype['urt_name'];
+    }
+}
+
 // if no list parameter is set then load role default list configuration or system default list configuration
 if ($numberRoles === 1 && $getListId === 0)
 {
@@ -185,7 +201,7 @@ try
 {
     // create list configuration object and create a sql statement out of it
     $list = new ListConfiguration($gDb, $getListId);
-    $mainSql = $list->getSQL($roleIds, $getShowMembers, $startDateEnglishFormat, $endDateEnglishFormat);
+    $mainSql = $list->getSQL($roleIds, $getShowMembers, $startDateEnglishFormat, $endDateEnglishFormat, $relationtypeIds);
     // echo $mainSql; exit();
 }
 catch (AdmException $e)
@@ -217,6 +233,15 @@ else
     $headline = $roleName;
 }
 
+if (count($relationtypeIds) == 1)
+{
+    $headline .= ' - '.$relationtypeName;
+}
+else if (count($relationtypeIds) > 1)
+{
+    $headline .= ' - '.$gL10n->get('LST_VARIOUS_RELATION_TYPES');
+}
+
 // if html mode and last url was not a list view then save this url to navigation stack
 if ($getMode === 'html' && strpos($gNavigation->getUrl(), 'lists_show.php') === false)
 {
@@ -241,6 +266,11 @@ if ($getMode !== 'csv')
         $htmlSubHeadline .= ' - '.$gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }
 
+    if (count($relationtypeIds) > 1)
+    {
+        $htmlSubHeadline .= ' - '.$relationtypeName;
+    }
+    
     if ($getMode === 'print')
     {
         // create html page object without the custom theme files

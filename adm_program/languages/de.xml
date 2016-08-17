@@ -403,6 +403,7 @@
     <string name="LST_YOUR_LISTS">Deine Listen</string>
     <string name="LST_USER_PHOTO">Benutzerfoto</string>
     <string name="LST_VARIOUS_ROLES">Verschiedene Rollen</string>
+    <string name="LST_VARIOUS_RELATION_TYPES">Verschiedene Beziehungen</string>
     <string name="LST_WANT_CONFIGURATION_FOR_ALL_USERS">Willst du die aktuelle Listenkonfiguration allen Benutzern zur Verfügung stellen?</string>
     <string name="LST_Z_TO_A">Z bis A</string>
     <!-- Phrases only in Mailmodule -->
