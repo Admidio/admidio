@@ -708,6 +708,8 @@ class HtmlForm extends HtmlFormBasic
             'maxNumber'        => null,
             'step'             => 1,
             'property'         => FIELD_DEFAULT,
+            'passwordStrength' => false,
+            'passwordUserData' => array(),
             'helpTextIdLabel'  => '',
             'helpTextIdInline' => '',
             'icon'             => '',
@@ -844,6 +846,29 @@ class HtmlForm extends HtmlFormBasic
         if($optionsAll['htmlAfter'] !== '')
         {
             $this->addHtml($optionsAll['htmlAfter']);
+        }
+
+        if($optionsAll['passwordStrength'])
+        {
+            if(is_object($this->htmlPage))
+            {
+                $zxcvbnUserInputs = json_encode($optionsAll['passwordUserData'], JSON_UNESCAPED_UNICODE);
+                $javascriptCode = '
+                    $("#new_password").keyup(function(e) {
+                        var result = zxcvbn(e.target.value, '.$zxcvbnUserInputs.');
+                        $("#admidio-password-strength-indicator").removeClass().addClass("admidio-password-strength-indicator-" + result.score);
+                    });
+                ';
+                $this->htmlPage->addJavascriptFile('adm_program/libs/zxcvbn/dist/zxcvbn.js');
+                $this->htmlPage->addJavascript($javascriptCode, true);
+            }
+            $this->addHtml('
+                <div id="admidio-password-strength">
+                    <div id="admidio-password-strength-indicator">
+                        <div id="admidio-password-strength-minimum" style="margin-left: calc('.PASSWORD_MIN_STRENGTH.' * 25% - 3px);"></div>
+                    </div>
+                </div>
+            ');
         }
 
         if($optionsAll['property'] !== FIELD_HIDDEN)

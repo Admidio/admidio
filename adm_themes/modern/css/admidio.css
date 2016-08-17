@@ -764,12 +764,20 @@ input[type="time"] {
 }
 
 #admidio-password-strength {
-    height: 8px;
+    position: relative;
+    height: 12px;
     margin: 8px 0;
     border: 1px solid #000000;
 }
 #admidio-password-strength-indicator {
     height: 100%;
+}
+#admidio-password-strength-minimum {
+    position: absolute;
+    border: 6px solid transparent;
+    border-left-color: #000000;
+    border-right-width: 0;
+    margin-top: -1px;
 }
 .admidio-password-strength-indicator-0 {
     width: 0;
