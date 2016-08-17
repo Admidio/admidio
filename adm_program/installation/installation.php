@@ -457,7 +457,13 @@ elseif($getMode === 6)  // Creating configuration file
         }
 
         // check if password is strong enough
-        if(PasswordHashing::passwordStrength($_SESSION['user_password']) < PASSWORD_MIN_STRENGTH)
+        $userData = array(
+            $_SESSION['user_last_name'],
+            $_SESSION['user_first_name'],
+            $_SESSION['user_email'],
+            $_SESSION['user_login']
+        );
+        if(PasswordHashing::passwordStrength($_SESSION['user_password'], $userData) < PASSWORD_MIN_STRENGTH)
         {
             showNotice($gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'), 'installation.php?mode=5',
                 $gL10n->get('SYS_BACK'), 'layout/back.png');

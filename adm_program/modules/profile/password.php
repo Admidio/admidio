@@ -68,7 +68,7 @@ if($getMode === 'change')
     {
         if(strlen($newPassword) >= PASSWORD_MIN_LENGTH)
         {
-            if (PasswordHashing::passwordStrength($newPassword) >= PASSWORD_MIN_STRENGTH)
+            if (PasswordHashing::passwordStrength($newPassword, $user->getPasswordUserData()) >= PASSWORD_MIN_STRENGTH)
             {
                 if ($newPassword === $newPasswordConfirm)
                 {
@@ -122,18 +122,7 @@ elseif($getMode === 'html')
     /* Show password form */
     /***********************************************************************/
 
-    $zxcvbnUserInputs = json_encode(array(
-        $user->getValue('FIRST_NAME'),
-        $user->getValue('LAST_NAME'),
-        $user->getValue('usr_login_name'),
-        $user->getValue('BIRTHDAY', 'Y-m-d'),
-        DateTime::createFromFormat('Y-m-d', $user->getValue('BIRTHDAY', 'Y-m-d'))->format('d.m.Y'),
-        $user->getValue('EMAIL'),
-        $user->getValue('ADDRESS'),
-        $user->getValue('CITY'),
-        $user->getValue('POSTCODE'),
-        $user->getValue('COUNTRY')
-    ), JSON_UNESCAPED_UNICODE);
+    $zxcvbnUserInputs = json_encode($user->getPasswordUserData(), JSON_UNESCAPED_UNICODE);
 
     echo '<script type="text/javascript"><!--
     $(function() {
