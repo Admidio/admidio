@@ -1219,6 +1219,8 @@ class User extends TableAccess
             {
                 return false;
             }
+
+            $newPassword = $newPasswordHash;
         }
 
         return parent::setValue($columnName, $newPassword, false);
