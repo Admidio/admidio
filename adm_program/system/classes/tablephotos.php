@@ -132,11 +132,11 @@ class TablePhotos extends TableAccess
                  WHERE pho_pho_id_parent = '.$photoId;
         $childAlbumStatement = $this->db->query($sql);
 
-        while($row = $childAlbumStatement->fetch())
+        while($phoId = $childAlbumStatement->fetchColumn())
         {
             if($returnValue)
             {
-                $returnValue = $this->deleteInDatabase($row['pho_id']);
+                $returnValue = $this->deleteInDatabase((int) $phoId);
             }
         }
 
@@ -181,9 +181,7 @@ class TablePhotos extends TableAccess
                      WHERE pho_pho_id_parent = '.$this->getValue('pho_id');
             $countChildAlbums = $this->db->query($sql);
 
-            $row = $countChildAlbums->fetch();
-
-            if($row['count'] > 0)
+            if($countChildAlbums->fetchColumn() > 0)
             {
                 $this->hasChildAlbums = true;
             }

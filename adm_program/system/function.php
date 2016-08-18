@@ -115,9 +115,8 @@ function isMember($userId)
                    AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL )';
         $statement = $gDb->query($sql);
-        $row = $statement->fetch();
 
-        if($row['count'] > 0)
+        if ($statement->fetchColumn() > 0)
         {
             return true;
         }
@@ -355,7 +354,7 @@ function admFuncMaxUploadSize()
 
 /**
  * Funktion gibt die maximale Pixelzahl zurück die der Speicher verarbeiten kann
- * @return int
+ * @return float
  */
 function admFuncProcessableImageSize()
 {

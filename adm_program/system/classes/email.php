@@ -194,7 +194,7 @@ class Email extends PHPMailer
     /**
      * Returns the maximum size of an attachment
      * @param string $sizeUnit 'b' = byte, 'kib' = kilobyte, 'mib' = megabyte, 'gib' = gigabyte, 'tib' = terabyte
-     * @return int The maximum attachment size in the given size-unit
+     * @return float The maximum attachment size in the given size-unit
      */
     public static function getMaxAttachementSize($sizeUnit = 'mib')
     {

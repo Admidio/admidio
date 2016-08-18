@@ -1347,10 +1347,10 @@ class HtmlForm extends HtmlFormBasic
         $selectboxEntries = array();
 
         // execute the sql statement
-        $statement = $database->query($sql);
+        $pdoStatement = $database->query($sql);
 
         // create array from sql result
-        while ($row = $statement->fetch())
+        while ($row = $pdoStatement->fetch())
         {
             // if result has 3 columns then create a array in array
             if (count($row) === 3)
@@ -1529,8 +1529,8 @@ class HtmlForm extends HtmlFormBasic
                    AND cat_type = \''.$categoryType.'\'
                        '.$sqlCondidtions.'
               ORDER BY cat_sequence ASC';
-        $statement = $database->query($sql);
-        $countCategories = $statement->rowCount();
+        $pdoStatement = $database->query($sql);
+        $countCategories = $pdoStatement->rowCount();
 
         // if no or only one category exist and in filter modus, than don't show category
         if(($countCategories === 0 || $countCategories === 1) && $selectboxModus === 'FILTER_CATEGORIES')
@@ -1545,7 +1545,7 @@ class HtmlForm extends HtmlFormBasic
             $categoriesArray[0] = $gL10n->get('SYS_ALL');
         }
 
-        while($row = $statement->fetch())
+        while($row = $pdoStatement->fetch())
         {
             // if several categories exist than select default category
             if($optionsAll['defaultValue'] === '' && ($countCategories === 1 || $row['cat_default'] === '1'))

@@ -225,7 +225,7 @@ class ModuleMenu
      * @param string $text Link text
      * @param string $icon Icon of the menu item, that will also be linked
      * @param string $js   Javascript to be executed
-     * @return string[]
+     * @return array<string,string|array>
      */
     private function mkItem($id, $type, $link, $text, $icon, $js = '')
     {

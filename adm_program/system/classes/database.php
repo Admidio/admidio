@@ -103,6 +103,7 @@ class Database
 
         $this->transactions = 0;
         $this->fetchArray   = array();
+        $this->dbStructure  = array();
         $this->minRequiredVersion = '';
         $this->databaseName       = '';
 

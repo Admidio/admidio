@@ -132,9 +132,8 @@ if($getMode === 1)
                    AND cat_id     <> '.$getCatId.
                        $sqlSearchOrga;
         $categoriesStatement = $gDb->query($sql);
-        $row = $categoriesStatement->fetch();
 
-        if($row['count'] > 0)
+        if($categoriesStatement->fetchColumn() > 0)
         {
             $gMessage->show($gL10n->get('CAT_CATEGORY_EXIST'));
             // => EXIT

@@ -151,8 +151,8 @@ class TableAccess
     {
         $sql = 'SELECT COUNT(*) AS count FROM '.$this->tableName;
         $countStatement = $this->db->query($sql);
-        $row = $countStatement->fetch();
-        return (int) $row['count'];
+
+        return (int) $countStatement->fetchColumn();
     }
 
     /**

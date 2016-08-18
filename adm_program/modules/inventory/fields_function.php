@@ -88,9 +88,8 @@ if($getMode === 1)
                    AND inf_cat_id  = '.$_POST['inf_cat_id'].'
                    AND inf_id     <> '.$getInfId;
         $statement = $gDb->query($sql);
-        $row = $statement->fetch();
 
-        if($row['count'] > 0)
+        if($statement->fetchColumn() > 0)
         {
             $gMessage->show($gL10n->get('ORG_FIELD_EXIST'));
             // => EXIT

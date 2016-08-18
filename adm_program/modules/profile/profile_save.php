@@ -239,9 +239,7 @@ if($gCurrentUser->isAdministrator() || $getNewUser > 0)
 
             if($pdoStatement->rowCount() > 0)
             {
-                $row = $pdoStatement->fetch();
-
-                if(strcmp($row['usr_id'], $getUserId) !== 0)
+                if(strcmp($pdoStatement->fetchColumn(), $getUserId) !== 0)
                 {
                     $gMessage->show($gL10n->get('PRO_LOGIN_NAME_EXIST'));
                     // => EXIT

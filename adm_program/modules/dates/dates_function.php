@@ -248,15 +248,15 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     {
         if($_POST['dat_room_id'] > 0)
         {
-            $sql = 'SELECT COUNT(*) AS is_reserved
+            $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_DATES.'
                      WHERE dat_begin  <= \''.$endDateTime->format('Y-m-d H:i:s').'\'
                        AND dat_end    >= \''.$startDateTime->format('Y-m-d H:i:s').'\'
                        AND dat_room_id = '.$_POST['dat_room_id'].'
                        AND dat_id     <> '.$getDateId;
             $datesStatement = $gDb->query($sql);
-            $row = $datesStatement->fetchObject();
-            if($row->is_reserved)
+
+            if($datesStatement->fetchColumn())
             {
                 $gMessage->show($gL10n->get('DAT_ROOM_RESERVED'));
                 // => EXIT
@@ -318,8 +318,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
                       FROM '.TBL_CATEGORIES.'
                      WHERE cat_id = '.$_POST['dat_cat_id'];
         $pdoStatement = $gDb->query($sql_cal);
-        $row_cal  = $pdoStatement->fetch();
-        $calendar = $row_cal['cat_name'];
+        $calendar = $pdoStatement->fetchColumn();
 
         if(strlen($_POST['dat_location']) > 0)
         {
@@ -370,13 +369,6 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
 
     if($_POST['date_registration_possible'] == 1 && strlen($date->getValue('dat_rol_id')) === 0)
     {
-        // Kategorie fuer Terminbestaetigungen einlesen
-        $sql = 'SELECT cat_id
-                  FROM '.TBL_CATEGORIES.'
-                 WHERE cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'';
-        $pdoStatement = $gDb->query($sql);
-        $row = $pdoStatement->fetch();
-
         // create role for participations
         if($getCopy)
         {
@@ -385,17 +377,21 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
                       FROM '.TBL_DATES.'
                      WHERE dat_id = '.$originalDateId;
             $pdoStatement = $gDb->query($sql);
-            $row = $pdoStatement->fetch();
 
-            $role = new TableRoles($gDb, $row['dat_rol_id']);
+            $role = new TableRoles($gDb, (int) $pdoStatement->fetchColumn());
             $role->setValue('rol_id', '0');
         }
         else
         {
+            // Kategorie fuer Terminbestaetigungen einlesen
+            $sql = 'SELECT cat_id
+                      FROM '.TBL_CATEGORIES.'
+                     WHERE cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'';
+            $pdoStatement = $gDb->query($sql);
             $role = new TableRoles($gDb);
 
             // these are the default settings for a date role
-            $role->setValue('rol_cat_id', $row['cat_id']);
+            $role->setValue('rol_cat_id', $pdoStatement->fetchColumn());
             $role->setValue('rol_this_list_view', '1');    // role members are allowed to view lists
             $role->setValue('rol_mail_this_role', '1');    // role members are allowed to send mail to this role
             $role->setValue('rol_visible', '0');

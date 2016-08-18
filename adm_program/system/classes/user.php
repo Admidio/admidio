@@ -1278,13 +1278,13 @@ class User extends TableAccess
             $member = new TableMembers($this->db, $id);
 
             $sql = 'SELECT *
-                  FROM '.TBL_MEMBERS.'
-                 WHERE mem_id    <> '.$id.'
-                   AND mem_rol_id = '.$member->getValue('mem_rol_id').'
-                   AND mem_usr_id = '.$this->getValue('usr_id').'
-                   AND mem_begin <= \''.$endDate.'\'
-                   AND mem_end   >= \''.$startDate.'\'
-              ORDER BY mem_begin ASC';
+                      FROM '.TBL_MEMBERS.'
+                     WHERE mem_id    <> '.$id.'
+                       AND mem_rol_id = '.$member->getValue('mem_rol_id').'
+                       AND mem_usr_id = '.$this->getValue('usr_id').'
+                       AND mem_begin <= \''.$endDate.'\'
+                       AND mem_end   >= \''.$startDate.'\'
+                  ORDER BY mem_begin ASC';
         }
         $membershipStatement = $this->db->query($sql);
 

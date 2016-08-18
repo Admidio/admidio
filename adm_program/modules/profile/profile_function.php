@@ -226,21 +226,17 @@ elseif ($getMode === 8)
         header('Pragma: public');
 
         // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-        $sql = 'SELECT
-                    bm.mem_usr_id
-                FROM
-                    '.TBL_MEMBERS.' bm
-                WHERE
-                    bm.mem_rol_id = '.$getRoleId.'
-                    AND bm.mem_begin <= \''.DATE_NOW.'\'
-                    AND bm.mem_end > \''.DATE_NOW.'\'';
+        $sql = 'SELECT mem_usr_id
+                  FROM '.TBL_MEMBERS.'
+                 WHERE mem_rol_id = '.$getRoleId.'
+                   AND mem_begin <= \''.DATE_NOW.'\'
+                   AND mem_end > \''.DATE_NOW.'\'';
+        $pdoStatement = $gDb->query($sql);
 
-        $statement = $gDb->query($sql);
-
-        while($row = $statement->fetch())
+        while($memberUserId = $pdoStatement->fetchColumn())
         {
             // create user object
-            $user = new User($gDb, $gProfileFields, $row['mem_usr_id']);
+            $user = new User($gDb, $gProfileFields, (int) $memberUserId);
             // create vcard and check if user is allowed to edit profile, so he can see more data
             echo $user->getVCard($gCurrentUser->hasRightEditProfile($user));
         }

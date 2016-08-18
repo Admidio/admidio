@@ -156,7 +156,7 @@ if($getSearch !== '')
 }
 
 // create a subselect to check if the user is an acitve member of the current organization
-$sql = '(SELECT COUNT(*)
+$sql = '(SELECT COUNT(*) AS count_this
            FROM '.TBL_MEMBERS.'
      INNER JOIN '.TBL_ROLES.'
              ON rol_id = mem_rol_id
@@ -188,7 +188,7 @@ if($getLength > 0)
 }
 
 // get count of all found users
-$sql = 'SELECT COUNT(1) AS count_total
+$sql = 'SELECT COUNT(*) AS count_total
           FROM '.TBL_USERS.'
     INNER JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
@@ -199,9 +199,8 @@ $sql = 'SELECT COUNT(1) AS count_total
          WHERE usr_valid = 1
                '.$memberOfThisOrganizationCondition;
 $countTotalStatement = $gDb->query($sql);
-$rowCountTotal = $countTotalStatement->fetch();
 
-$jsonArray['recordsTotal'] = $rowCountTotal['count_total'];
+$jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
 
  // SQL-Statement zusammensetzen
 $mainSql = 'SELECT DISTINCT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, birthday.usd_value AS birthday,
@@ -352,12 +351,11 @@ if($getSearch !== '')
     else
     {
         // read count of all filtered records without limit and offset
-        $sql = 'SELECT count(1) AS count_filtered
+        $sql = 'SELECT COUNT(*) AS count
                   FROM ('.$mainSql.') members
                        '.$searchCondition;
         $countFilteredStatement = $gDb->query($sql);
-        $rowCountFitered = $countFilteredStatement->fetch();
-        $jsonArray['recordsFiltered'] = $rowCountFitered['count_filtered'];
+        $jsonArray['recordsFiltered'] = (int) $countFilteredStatement->fetchColumn();
     }
 }
 else

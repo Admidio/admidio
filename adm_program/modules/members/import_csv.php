@@ -182,14 +182,14 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                    AND first_name.usd_usf_id = '.  $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
                    AND first_name.usd_value  = \''. $gDb->escapeString($user->getValue('FIRST_NAME', 'database')). '\'
                  WHERE usr_valid = 1 ';
-        $statement = $gDb->query($sql);
-        $rowDuplicateUser = $statement->fetch();
-        if($rowDuplicateUser['usr_id'] > 0)
+        $pdoStatement = $gDb->query($sql);
+        $maxUserId = (int) $pdoStatement->fetchColumn();
+        if($maxUserId > 0)
         {
-            $duplicate_user = new User($gDb, $gProfileFields, $rowDuplicateUser['usr_id']);
+            $duplicate_user = new User($gDb, $gProfileFields, $maxUserId);
         }
 
-        if($rowDuplicateUser['usr_id'] > 0)
+        if($maxUserId > 0)
         {
             if($_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
             {
@@ -231,16 +231,15 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
             }
         }
 
-        if($rowDuplicateUser['usr_id'] == 0
-        || ($rowDuplicateUser['usr_id']  > 0 && $_SESSION['user_import_mode'] > USER_IMPORT_NOT_EDIT))
+        if($maxUserId === 0 || ($maxUserId > 0 && $_SESSION['user_import_mode'] > USER_IMPORT_NOT_EDIT))
         {
             // if user doesn't exists or should be duplicated then count as new user
-            if($rowDuplicateUser['usr_id'] == 0 || $_SESSION['user_import_mode'] == USER_IMPORT_DUPLICATE)
+            if($maxUserId === 0 || $_SESSION['user_import_mode'] == USER_IMPORT_DUPLICATE)
             {
                 ++$countImportNewUser;
             }
             // existing users count as edited if mode is displace or complete
-            elseif($rowDuplicateUser['usr_id']  > 0 && $user->columnsValueChanged())
+            elseif($maxUserId > 0 && $user->columnsValueChanged())
             {
                 ++$countImportEditUser;
             }

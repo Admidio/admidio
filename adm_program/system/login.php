@@ -25,10 +25,9 @@ $sql = 'SELECT rol_id
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                OR cat_org_id IS NULL )';
 $pdoStatement = $gDb->query($sql);
-$row = $pdoStatement->fetch();
 
 // create role object for administrator
-$roleAdministrator = new TableRoles($gDb, $row['rol_id']);
+$roleAdministrator = new TableRoles($gDb, $pdoStatement->fetchColumn());
 
 // create html page object
 $page = new HtmlPage($headline);

@@ -222,12 +222,12 @@ include_once('data_edit.php');
 // in postgresql all sequences must get a new start value because our inserts have given ids
 if($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
 {
-    $sql = 'SELECT c.relname FROM pg_class c WHERE c.relkind = \'S\' ';
+    $sql = 'SELECT relname FROM pg_class WHERE relkind = \'S\' ';
     $sqlStatement = $db->query($sql);
 
-    while($row = $sqlStatement->fetch())
+    while($relname = $sqlStatement->fetchColumn())
     {
-        $sql = 'SELECT setval(\''.$row['relname'].'\', 1000000)';
+        $sql = 'SELECT setval(\''.$relname.'\', 1000000)';
         $db->query($sql);
     }
 }
@@ -265,8 +265,7 @@ if(!$db->query('SELECT 1 FROM '.TBL_COMPONENTS, false))
              WHERE prf_name   = \'db_version\'
                AND prf_org_id = 1';
     $pdoStatement = $db->query($sql);
-    $row = $pdoStatement->fetch();
-    $databaseVersion = $row['prf_value'];
+    $databaseVersion = $pdoStatement->fetchColumn();
 }
 else
 {

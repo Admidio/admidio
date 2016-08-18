@@ -136,8 +136,7 @@ $sql = 'SELECT COUNT(*) AS count
          WHERE gbo_org_id = '.$gCurrentOrganization->getValue('org_id').
                $conditions;
 $pdoStatement = $gDb->query($sql);
-$row = $pdoStatement->fetch();
-$num_guestbook = (int) $row['count'];
+$num_guestbook = (int) $pdoStatement->fetchColumn();
 
 // Anzahl Gaestebucheintraege pro Seite
 if($gPreferences['guestbook_entries_per_page'] > 0)
@@ -169,11 +168,11 @@ if($getGboId > 0 || $getModeration)
 if(!$getModeration && $gCurrentUser->editGuestbookRight() && $gPreferences['enable_guestbook_moderation'] > 0)
 {
     // show link to moderation with number of entries that must be moderated
-    $sql = 'SELECT (SELECT COUNT(*)
+    $sql = 'SELECT (SELECT COUNT(*) AS count
                       FROM '.TBL_GUESTBOOK.'
                      WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        AND gbo_locked = 1) AS count_locked_guestbook,
-                   (SELECT COUNT(*)
+                   (SELECT COUNT(*) AS count
                       FROM '.TBL_GUESTBOOK_COMMENTS.'
                 INNER JOIN '.TBL_GUESTBOOK.'
                         ON gbo_id = gbc_gbo_id

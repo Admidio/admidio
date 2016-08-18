@@ -42,8 +42,8 @@ class TableMessage extends TableAccess
                  WHERE msg_usr_id_receiver LIKE \''. $usrId .'\'
                    AND msg_read = 1';
         $countStatement = $this->db->query($sql);
-        $row = $countStatement->fetch();
-        return (int) $row['count'];
+
+        return (int) $countStatement->fetchColumn();
     }
 
     /**
@@ -54,8 +54,8 @@ class TableMessage extends TableAccess
     {
         $sql = 'SELECT COUNT(*) AS count FROM '. TBL_MESSAGES;
         $countStatement = $this->db->query($sql);
-        $row = $countStatement->fetch();
-        return (int) $row['count'];
+
+        return (int) $countStatement->fetchColumn();
     }
 
     /**
@@ -68,8 +68,8 @@ class TableMessage extends TableAccess
                   FROM '.TBL_MESSAGES_CONTENT.'
                  WHERE msc_msg_id = '.$this->getValue('msg_id');
         $countStatement = $this->db->query($sql);
-        $row = $countStatement->fetch();
-        return (int) $row['count'];
+
+        return (int) $countStatement->fetchColumn();
     }
 
     /**

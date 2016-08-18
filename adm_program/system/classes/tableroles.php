@@ -141,8 +141,7 @@ class TableRoles extends TableAccess
                        AND mem_end    > \''.DATE_NOW.'\'';
             $countMembersStatement = $this->db->query($sql);
 
-            $row = $countMembersStatement->fetch();
-            $this->countLeaders = (int) $row['count'];
+            $this->countLeaders = (int) $countMembersStatement->fetchColumn();
         }
         return $this->countLeaders;
     }
@@ -165,17 +164,16 @@ class TableRoles extends TableAccess
                        AND mem_end     > \''.DATE_NOW.'\'';
             $countMembersStatement = $this->db->query($sql);
 
-            $row = $countMembersStatement->fetch();
-            $this->countMembers = (int) $row['count'];
+            $this->countMembers = (int) $countMembersStatement->fetchColumn();
         }
         return $this->countMembers;
     }
 
     /**
      * die Funktion gibt die Anzahl freier Plaetze zurueck
-     * ist rol_max_members nicht gesetzt so wird immer 999 zurueckgegeben
+     * ist rol_max_members nicht gesetzt so wird INF zurueckgegeben
      * @param bool $countLeaders
-     * @return int
+     * @return int|double
      */
     public function countVacancies($countLeaders = false)
     {
@@ -194,7 +192,7 @@ class TableRoles extends TableAccess
 
             return $this->getValue('rol_max_members') - $membersStatement->rowCount();
         }
-        return 999;
+        return INF;
     }
 
     /**
@@ -218,9 +216,8 @@ class TableRoles extends TableAccess
                        AND rol_id    <> '.$this->getValue('rol_id').'
                        AND cat_org_id = '.$gCurrentOrganization->getValue('org_id');
             $countRolesStatement = $this->db->query($sql);
-            $row = $countRolesStatement->fetch();
 
-            if((int) $row['count'] === 0)
+            if((int) $countRolesStatement->fetchColumn() === 0)
             {
                 throw new AdmException('ROL_DELETE_NO_DEFAULT_ROLE', $this->getValue('rol_name'), $gL10n->get('ROL_DEFAULT_REGISTRATION'));
             }
@@ -254,11 +251,11 @@ class TableRoles extends TableAccess
 
             $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
                      WHERE dtr_rol_id = '.$this->getValue('rol_id');
-            $result = $this->db->query($sql);
+            $this->db->query($sql);
 
             $sql = 'DELETE FROM '.TBL_ROLES_RIGHTS_DATA.'
                      WHERE rrd_rol_id = '.$this->getValue('rol_id');
-            $result = $this->db->query($sql);
+            $this->db->query($sql);
 
             $return = parent::delete();
 
@@ -358,9 +355,8 @@ class TableRoles extends TableAccess
                    AND (  mem_begin > \''.DATE_NOW.'\'
                        OR mem_end   < \''.DATE_NOW.'\')';
         $countMembersStatement = $this->db->query($sql);
-        $row = $countMembersStatement->fetch();
 
-        return $row['count'] > 0;
+        return $countMembersStatement->fetchColumn() > 0;
     }
 
     /**
@@ -461,9 +457,8 @@ class TableRoles extends TableAccess
                        AND rol_id    <> '.$this->getValue('rol_id').'
                        AND cat_org_id = '.$gCurrentOrganization->getValue('org_id');
             $countRolesStatement = $this->db->query($sql);
-            $row = $countRolesStatement->fetch();
 
-            if((int) $row['count'] === 0)
+            if((int) $countRolesStatement->fetchColumn() === 0)
             {
                 return false;
             }

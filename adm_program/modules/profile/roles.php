@@ -232,7 +232,8 @@ while($row = $statement->fetch())
             '<input type="checkbox" id="role-'.$role->getValue('rol_id').'" name="role-'.$role->getValue('rol_id').'" '.
                 $memberChecked.$memberDisabled.' onclick="profileJS.unMarkLeader(this);" value="1" />',
             '<label for="role-'.$role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label>',
-            $role->getValue('rol_description'));
+            $role->getValue('rol_description')
+        );
 
         // if new category than display a category header
         if($category != $role->getValue('cat_id'))

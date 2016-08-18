@@ -131,9 +131,7 @@ foreach($rolesList as $row)
                    AND mem_end    > \''.DATE_NOW.'\'';
         $pdoStatement = $gDb->query($sql);
 
-        $row_usr = $pdoStatement->fetch();
-
-        if((int) $row_usr['count'] === 0)
+        if((int) $pdoStatement->fetchColumn() === 0)
         {
             // Benutzer ist der Rolle noch nicht zugeordnet, dann schauen, ob die Anzahl ueberschritten wird
             $sql = 'SELECT COUNT(*) AS count
@@ -144,10 +142,8 @@ foreach($rolesList as $row)
                        AND mem_end    > \''.DATE_NOW.'\'';
             $pdoStatement = $gDb->query($sql);
 
-            $row_members = $pdoStatement->fetch();
-
             // Bedingungen fuer Abbruch und Abbruch
-            if($row_members['count'] >= $row['rol_max_members']
+            if($pdoStatement->fetchColumn() >= $row['rol_max_members']
             && isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == false
             && isset($_POST['role-'.$row['rol_id']])   && $_POST['role-'.$row['rol_id']]   == true)
             {

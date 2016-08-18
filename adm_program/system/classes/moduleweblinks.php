@@ -190,9 +190,9 @@ class ModuleWeblinks extends Modules
                  WHERE cat_type   = \'LNK\'
                    AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        '.$this->getConditions;
-        $statement = $gDb->query($sql);
-        $row = $statement->fetch();
-        return (int) $row['count'];
+        $pdoStatement = $gDb->query($sql);
+
+        return (int) $pdoStatement->fetchColumn();
     }
 
     /**

@@ -105,8 +105,7 @@ $sql = 'SELECT COUNT(*) AS count
          WHERE 1 = 1 '.
                $sqlConditions;
 $pdoStatement = $gDb->query($sql);
-$row = $pdoStatement->fetch();
-$countChanges = (int) $row['count'];
+$countChanges = (int) $pdoStatement->fetchColumn();
 
 // create select statement with all necessary data
 $sql = 'SELECT usl_usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, usl_usf_id, usl_value_old, usl_value_new,
