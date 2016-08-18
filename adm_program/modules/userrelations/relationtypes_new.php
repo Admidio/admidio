@@ -54,7 +54,7 @@ $form->addInput('urt_name_male', $gL10n->get('REL_USER_RELATION_TYPE_FORWARD').'
 $form->addInput('urt_name_female', $gL10n->get('REL_USER_RELATION_TYPE_FORWARD').' '.$gL10n->get('SYS_FEMALE'), $relationtype1->getValue('urt_name_female')!=$relationtype1->getValue('urt_name') ? $relationtype1->getValue('urt_name_female') : '',
     array('maxLength' => 100));
 
-$options = array('defaultValue'=>$relationtype1->getRelationTypeString());
+$options = array('defaultValue'=>$relationtype1->getRelationTypeString(), 'helpTextIdLabel'=>'REL_USER_RELATION_TYPE_DESC');
 if ( !$relationtype1->isNewRecord() )
 {
     $options['property'] = FIELD_DISABLED;

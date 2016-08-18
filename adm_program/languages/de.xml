@@ -866,6 +866,7 @@
     <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
     <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
     <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
+    <string name="REL_USER_RELATION_TYPE_DESC">Eine asymmetrisch Beziehung wird z.B. für Elternteil/Kind verwendet, während symmetrische Beziehungen z.B. für Geschwister verwendet werden können. Diese sind immer zweiseitig, hingegen zeigen unidirektionale Beziehungen nur in eine Richtung.</string>
     <string name="REL_USER_RELATION_TYPE_DEL">Willst du den Beziehungstyp #VAR1_BOLD# löschen? Achtung: Dies löscht alle existierenden Beziehungen dieses Typs.</string>
     <!-- Phrases only in Rolesmodule -->
     <string name="ROL_ACTIV_ROLES">Aktive Rollen</string>
