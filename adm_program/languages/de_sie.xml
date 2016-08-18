@@ -404,6 +404,7 @@
   <string name="LST_YOUR_LISTS">Deine Listen</string>
   <string name="LST_USER_PHOTO">Benutzerfoto</string>
   <string name="LST_VARIOUS_ROLES">Verschiedene Rollen</string>
+  <string name="LST_VARIOUS_USER_RELATION_TYPES">Verschiedene Beziehungen</string>
   <string name="LST_WANT_CONFIGURATION_FOR_ALL_USERS">Wollne Sie die aktuelle Listenkonfiguration allen Benutzern zur Verfügung stellen?</string>
   <string name="LST_Z_TO_A">Z bis A</string>
   <!--Phrases only in Mailmodule-->
@@ -781,8 +782,10 @@
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Neues Profilfoto übernehmen</string>
   <string name="PRO_ADD_USER">Benutzer anlegen</string>
+  <string name="PRO_ADD_USER_RELATION">Beziehung erstellen</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Mitgliedschaft beenden</string>
+  <string name="PRO_CANCEL_USER_RELATION">Beziehung löschen</string>
   <string name="PRO_CHANGE_DATE">Datum ändern</string>
   <string name="PRO_CHANGE_PROFILE_PICTURE">Profilbild hochladen</string>
   <string name="PRO_CHOOSE_PHOTO">Foto auswählen</string>
@@ -842,6 +845,8 @@
   <string name="PRO_SHOW_ROLE_MEMBERSHIP_DESC">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied ist. Dazu werden die entsprechenden Berechtigungen und das Eintrittsdatum aufgelistet. (Standard: ja)</string>
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Rollen anderer Organisationen anzeigen</string>
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Ist der Benutzer Mitglied in Rollen einer anderen Organisation, so wird ein Kasten mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt. (Standard: ja)</string>
+  <string name="PRO_SHOW_USER_RELATIONS">Beziehungen pflegen und anzeigen</string>
+  <string name="PRO_SHOW_USER_RELATIONS_DESC">Es wird ein Kasten mit allen Beziehungen des Benutzers zu anderen Benutzern angezeigt. (Standard: ja)</string>
   <string name="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS">zur Profilfeldpflege wechseln</string>
   <string name="PRO_UPLOAD_HELP_1">Auf den Button #VAR1_BOLD# klicken und die gewünschte Fotodatei von der Festplatte auswählen.</string>
   <string name="PRO_UPLOAD_HELP_2">Danach auf #VAR1_BOLD# klicken und ein wenig Geduld haben.</string>
@@ -850,6 +855,15 @@
   <string name="PRO_VIEW_ROLES_OTHER_ORGAS">Es werden Ihnen hier nur Rollen anderer Organisationen angezeigt, die dort für alle angemeldete Benutzer sichtbar sind. Falls Sie auch Mitglied dieser Organisation sind, werden Ihnen zusätzlich die Rollen angezeigt, die Sie mit Ihren Rechten innerhalb der jeweiligen Organisation sehen dürfen.</string>
   <string name="PRO_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
   <string name="PRO_YEARS">Jahre</string>
+  <!-- Phrases only in Relationssmodule -->
+  <string name="REL_NO_USER_RELATION_TYPES_FOUND">Es existieren noch keine Beziehungstypen. Beziehungstypen können in der Benutzerverwaltung erstellt werden.</string>
+  <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
+  <string name="REL_USER_RELATION_TYPE_BACKWARD">Rückwärts</string>
+  <string name="REL_USER_RELATION_TYPE_DEL">Willst du den Beziehungstyp #VAR1_BOLD# löschen? Achtung: Dies löscht alle existierenden Beziehungen dieses Typs.</string>
+  <string name="REL_USER_RELATION_TYPE_DESC">Eine asymmetrisch Beziehung wird z.B. für Elternteil/Kind verwendet, während symmetrische Beziehungen z.B. für Geschwister verwendet werden können. Diese sind immer zweiseitig, hingegen zeigen unidirektionale Beziehungen nur in eine Richtung.</string>
+  <string name="REL_USER_RELATION_TYPE_FORWARD">Vorwärts</string>
+  <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
+  <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Aktive Rollen</string>
   <string name="ROL_ALL_GUESTS">Alle Besucher der Seite</string>
@@ -1123,6 +1137,7 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">Die E-Mail-Adresse #VAR1_BOLD# wurde mehrfach zugeordnet. Es konnte kein eindeutiger Benutzer gefunden werden.</string>
   <string name="SYS_MAIL_DISPATCH">E-Mailversand</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Kategorien pflegen</string>
+  <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Beziehungstypen pflegen</string>
   <string name="SYS_MALE">Männlich</string>
   <string name="SYS_MANDATORY_FIELD">Pflichtfeld</string>
   <string name="SYS_MAP">Karte</string>
@@ -1278,6 +1293,10 @@
   <string name="SYS_USER">Benutzer</string>
   <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</string>
   <string name="SYS_USER_NO_EMAIL">Der Benutzer #VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
+  <string name="SYS_USER_RELATION">Beziehung</string>
+  <string name="SYS_USER_RELATIONS">Beziehungen</string>
+  <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
+  <string name="SYS_USER_RELATION_TYPES">Beziehungstypen</string>
   <string name="SYS_USERNAME">Benutzername</string>
   <string name="SYS_USERNAME_OR_EMAIL">Benutzername oder E-Mail</string>
   <string name="SYS_USERS_FOUND">Gefundene Benutzer</string>

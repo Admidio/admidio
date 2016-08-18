@@ -786,10 +786,10 @@
     <!-- Phrases only in Profilemodule -->
     <string name="PRO_ACCEPT_NEW_PICTURE">Neues Profilfoto übernehmen</string>
     <string name="PRO_ADD_USER">Benutzer anlegen</string>
+    <string name="PRO_ADD_USER_RELATION">Beziehung erstellen</string>
     <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</string>
     <string name="PRO_CANCEL_MEMBERSHIP">Mitgliedschaft beenden</string>
     <string name="PRO_CANCEL_USER_RELATION">Beziehung löschen</string>
-    <string name="PRO_ADD_USER_RELATION">Beziehung erstellen</string>
     <string name="PRO_CHANGE_DATE">Datum ändern</string>
     <string name="PRO_CHANGE_PROFILE_PICTURE">Profilbild hochladen</string>
     <string name="PRO_CHOOSE_PHOTO">Foto auswählen</string>
@@ -861,13 +861,13 @@
     <string name="PRO_YEARS">Jahre</string>
     <!-- Phrases only in Relationssmodule -->
     <string name="REL_NO_USER_RELATION_TYPES_FOUND">Es existieren noch keine Beziehungstypen. Beziehungstypen können in der Benutzerverwaltung erstellt werden.</string>
-    <string name="REL_USER_RELATION_TYPE_FORWARD">Vorwärts</string>
-    <string name="REL_USER_RELATION_TYPE_BACKWARD">Rückwärts</string>
     <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
+    <string name="REL_USER_RELATION_TYPE_BACKWARD">Rückwärts</string>
+    <string name="REL_USER_RELATION_TYPE_DEL">Willst du den Beziehungstyp #VAR1_BOLD# löschen? Achtung: Dies löscht alle existierenden Beziehungen dieses Typs.</string>
+    <string name="REL_USER_RELATION_TYPE_DESC">Eine asymmetrisch Beziehung wird z.B. für Elternteil/Kind verwendet, während symmetrische Beziehungen z.B. für Geschwister verwendet werden können. Diese sind immer zweiseitig, hingegen zeigen unidirektionale Beziehungen nur in eine Richtung.</string>
+    <string name="REL_USER_RELATION_TYPE_FORWARD">Vorwärts</string>
     <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
     <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
-    <string name="REL_USER_RELATION_TYPE_DESC">Eine asymmetrisch Beziehung wird z.B. für Elternteil/Kind verwendet, während symmetrische Beziehungen z.B. für Geschwister verwendet werden können. Diese sind immer zweiseitig, hingegen zeigen unidirektionale Beziehungen nur in eine Richtung.</string>
-    <string name="REL_USER_RELATION_TYPE_DEL">Willst du den Beziehungstyp #VAR1_BOLD# löschen? Achtung: Dies löscht alle existierenden Beziehungen dieses Typs.</string>
     <!-- Phrases only in Rolesmodule -->
     <string name="ROL_ACTIV_ROLES">Aktive Rollen</string>
     <string name="ROL_ALL_GUESTS">Alle Besucher der Seite</string>
@@ -1144,6 +1144,7 @@
     <string name="SYS_LOSTPW_SEVERAL_EMAIL">Die E-Mail-Adresse #VAR1_BOLD# wurde mehrfach zugeordnet. Es konnte kein eindeutiger Benutzer gefunden werden.</string>
     <string name="SYS_MAIL_DISPATCH">E-Mailversand</string>
     <string name="SYS_MAINTAIN_CATEGORIES">Kategorien pflegen</string>
+    <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Beziehungstypen pflegen</string>
     <string name="SYS_MALE">Männlich</string>
     <string name="SYS_MANDATORY_FIELD">Pflichtfeld</string>
     <string name="SYS_MAP">Karte</string>
@@ -1230,11 +1231,6 @@
     <string name="SYS_REGISTERED_AS">Angemeldet als</string>
     <string name="SYS_REGISTRATION">Registrierung</string>
     <string name="SYS_REGISTRATION_SAVED">Deine Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Deine Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung wirst du per E-Mail benachrichtigt.</string>
-    <string name="SYS_USER_RELATION">Beziehung</string>
-    <string name="SYS_USER_RELATIONS">Beziehungen</string>
-    <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
-    <string name="SYS_USER_RELATION_TYPES">Beziehungstypen</string>
-    <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Beziehungstypen pflegen</string>
     <string name="SYS_RELOAD">Neuladen</string>
     <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>
     <string name="SYS_REMOVE">Entfernen</string>
@@ -1304,6 +1300,10 @@
     <string name="SYS_USER">Benutzer</string>
     <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</string>
     <string name="SYS_USER_NO_EMAIL">Der Benutzer #VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
+    <string name="SYS_USER_RELATION">Beziehung</string>
+    <string name="SYS_USER_RELATIONS">Beziehungen</string>
+    <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
+    <string name="SYS_USER_RELATION_TYPES">Beziehungstypen</string>
     <string name="SYS_USERNAME">Benutzername</string>
     <string name="SYS_USERNAME_OR_EMAIL">Benutzername oder E-Mail</string>
     <string name="SYS_USERS_FOUND">Gefundene Benutzer</string>
