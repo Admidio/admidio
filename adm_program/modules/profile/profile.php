@@ -823,7 +823,7 @@ if($gPreferences['profile_show_user_relations'] == 1)
         <div class="panel panel-default" id="profile_user_relations_box">
             <div class="panel-heading">' . $gL10n->get('SYS_USER_RELATIONS') . '</div>
             <div class="panel-body" id="profile_user_relations_box_body">');
-        
+
         $sql = 'SELECT *
               FROM '.TBL_USER_RELATIONS.'
               INNER JOIN '.TBL_USER_RELATION_TYPES.'
@@ -831,13 +831,13 @@ if($gPreferences['profile_show_user_relations'] == 1)
              WHERE ure_usr_id1 = '.$userId.' AND urt_name != \'\' AND urt_name_male!= \'\' AND urt_name_female!= \'\'
           ORDER BY urt_name';
         $relationStatement = $gDb->query($sql);
-        
+
         $relationtype = new TableUserRelationType($gDb);
         $relation = new TableUserRelation($gDb);
         $otherUser = new User($gDb, $gProfileFields);
-        
+
         $page->addHtml('<ul class="list-group admidio-list-roles-assign">');
-        
+
         while($row = $relationStatement->fetch())
         {
             $relationtype->clear();
@@ -846,23 +846,23 @@ if($gPreferences['profile_show_user_relations'] == 1)
             $relation->setArray($row);
             $otherUser->clear();
             $otherUser->readDataById($relation->getValue('ure_usr_id2'));
-            
+
             $relationName = $relationtype->getValue('urt_name');
             if ($otherUser->getValue('GENDER', 'text') == $gL10n->get('SYS_MALE'))
             {
                 $relationName = $relationtype->getValue('urt_name_male');
             }
-            else if ($otherUser->getValue('GENDER', 'text') == $gL10n->get('SYS_FEMALE'))
+            elseif ($otherUser->getValue('GENDER', 'text') == $gL10n->get('SYS_FEMALE'))
             {
                 $relationName = $relationtype->getValue('urt_name_female');
             }
-            
+
             $page->addHtml('<li id="row_ure_'.$relation->getValue('ure_id').'" class="list-group-item">');
             $page->addHtml('<div>');
             $page->addHtml('<span>'.$relationName.' - <a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.
                             $otherUser->getValue('usr_id').'">'.$otherUser->getValue('FIRST_NAME') . ' ' . $otherUser->getValue('LAST_NAME').'</a><span>');
             $page->addHtml('<span class="pull-right text-right">');
-            
+
              if($gCurrentUser->hasRightEditProfile($otherUser))
              {
                  $page->addHtml('<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
@@ -871,7 +871,7 @@ if($gPreferences['profile_show_user_relations'] == 1)
                                   '&amp;name='.urlencode($relationtype->getValue('urt_name').': '.$otherUser->getValue('FIRST_NAME').' '.$otherUser->getValue('LAST_NAME').' -> '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')).'"><img
                                  src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'" title="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'" /></a>');
              }
-            
+
             // only show info if system setting is activated
             if($gPreferences['system_show_create_edit'] > 0)
             {
@@ -887,9 +887,9 @@ if($gPreferences['profile_show_user_relations'] == 1)
             }
             $page->addHtml('</li>');
         }
-        
+
         $page->addHtml('</ul>');
-        
+
         $page->addHtml('
             </div>
         </div>');

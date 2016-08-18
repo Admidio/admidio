@@ -135,13 +135,13 @@ $orga_preferences = array(
     'ecard_template'            => 'postcard.tpl',
 
     // Profile
-    'profile_log_edit_fields'   => '1',
-    'profile_show_map_link'     => '1',
-    'profile_show_roles'        => '1',
-    'profile_show_former_roles' => '1',
-    'profile_show_extern_roles' => '1',
-	'profile_show_user_relations' => '1',
-    'profile_photo_storage'     => '0',
+    'profile_log_edit_fields'     => '1',
+    'profile_show_map_link'       => '1',
+    'profile_show_roles'          => '1',
+    'profile_show_former_roles'   => '1',
+    'profile_show_extern_roles'   => '1',
+    'profile_show_user_relations' => '1',
+    'profile_photo_storage'       => '0',
 
     // Events
     'enable_dates_module'       => '1',

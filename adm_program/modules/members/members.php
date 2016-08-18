@@ -93,7 +93,7 @@ if($gCurrentUser->isAdministrator())
         $membersAdministrationMenu->addItem('menu_item_maintain_user_relation_types', $g_root_path.'/adm_program/modules/userrelations/relationtypes.php',
             $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES'), 'user_administration.png', 'right', 'menu_item_extras');
     }
-    
+
     // show link to system preferences of weblinks
     $membersAdministrationMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=user_management',
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');

@@ -361,7 +361,7 @@ class ListConfiguration extends TableLists
                                     ON usr_id = ure_usr_id2';
             $sqlRelationtypeWhere = 'AND ure_urt_id IN ('.implode(', ', $relationtypeIds).')';
         }
-        
+
         // Set SQL-Statement
         $sql = 'SELECT DISTINCT mem_leader, usr_id, '.$sqlColumnNames.'
                   FROM '.TBL_MEMBERS.'

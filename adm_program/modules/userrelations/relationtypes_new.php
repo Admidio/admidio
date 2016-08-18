@@ -55,13 +55,13 @@ $form->addInput('urt_name_female', $gL10n->get('REL_USER_RELATION_TYPE_FORWARD')
     array('maxLength' => 100));
 
 $options = array('defaultValue'=>$relationtype1->getRelationTypeString(), 'helpTextIdLabel'=>'REL_USER_RELATION_TYPE_DESC');
-if ( !$relationtype1->isNewRecord() )
+if (!$relationtype1->isNewRecord())
 {
     $options['property'] = FIELD_DISABLED;
 }
- 
+
 $form->addRadioButton('relation_type', $gL10n->get('SYS_USER_RELATION_TYPE'),
-    array('asymmetrical'=>$gL10n->get('REL_USER_RELATION_TYPE_ASYMMETRICAL'), 'symmetrical'=>$gL10n->get('REL_USER_RELATION_TYPE_SYMMETRICAL'), 'unidirectional'=>$gL10n->get('REL_USER_RELATION_TYPE_UNIDIRECTIONAL')),
+    array('asymmetrical'=> $gL10n->get('REL_USER_RELATION_TYPE_ASYMMETRICAL'), 'symmetrical'=>$gL10n->get('REL_USER_RELATION_TYPE_SYMMETRICAL'), 'unidirectional'=>$gL10n->get('REL_USER_RELATION_TYPE_UNIDIRECTIONAL')),
     $options);
 $page->addJavascript('
     function checkRelationTypeNames() {

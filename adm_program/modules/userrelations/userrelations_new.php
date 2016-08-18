@@ -18,7 +18,7 @@ require_once('../../system/login_valid.php');
 // Initialize and check the parameters
 $getUsrId = admFuncVariableIsValid($_GET, 'usr_id', 'int');
 
-if( $getUsrId <= 0 )
+if($getUsrId <= 0)
 {
     $gMessage->show($gL10n->get('SYS_NO_ENTRY'));
     // => EXIT
@@ -26,7 +26,7 @@ if( $getUsrId <= 0 )
 
 $user = new User($gDb, $gProfileFields, $getUsrId);
 
-if( $user->isNewRecord() )
+if($user->isNewRecord())
 {
     $gMessage->show($gL10n->get('SYS_NO_ENTRY'));
     // => EXIT

@@ -41,7 +41,7 @@ if($getUrtId > 0)
 if($getMode === 1)
 {
     // relationtype anlegen oder updaten
-    
+
     $relationtype2 = new TableUserRelationType($gDb);
     if($getUrtId > 0)
     {
@@ -62,32 +62,32 @@ if($getMode === 1)
 
     // Daten in Datenbank schreiben
     $gDb->startTransaction();
-    
+
     $relationtype->save();
-    
+
     if ($postRelationType == 'asymmetrical')
     {
         if($getUrtId <= 0)
         {
             $relationtype2->setValue('urt_id_inverse', $relationtype->getValue('urt_id'));
         }
-        
+
         $relationtype2->save();
-        
+
         if($getUrtId <= 0)
         {
             $relationtype->setValue('urt_id_inverse', $relationtype2->getValue('urt_id'));
             $relationtype->save();
         }
     }
-    else if ($postRelationType == 'symmetrical')
+    elseif ($postRelationType == 'symmetrical')
     {
         $relationtype->setValue('urt_id_inverse', $relationtype->getValue('urt_id'));
         $relationtype->save();
     }
 
     $gDb->endTransaction();
-    
+
     $gNavigation->deleteLastUrl();
     header('Location: '. $gNavigation->getUrl());
     exit();

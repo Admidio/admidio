@@ -52,52 +52,52 @@ if($getMode === 1)
 {
     $getUsrId = admFuncVariableIsValid($_GET, 'usr_id',   'int');
     $user1->readDataById($getUsrId);
-    
-    if( $user1->isNewRecord() )
+
+    if($user1->isNewRecord())
     {
         $gMessage->show($gL10n->get('SYS_NO_ENTRY'));
         // => EXIT
     }
-    
+
     if(!$gCurrentUser->hasRightEditProfile($user1))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
-    
-    $postUsrId2 = admFuncVariableIsValid($_POST, 'usr_id2', 'int');    
+
+    $postUsrId2 = admFuncVariableIsValid($_POST, 'usr_id2', 'int');
     $user2->readDataById($postUsrId2);
-    
-    if( $user2->isNewRecord() )
+
+    if($user2->isNewRecord())
     {
         $gMessage->show($gL10n->get('SYS_NO_ENTRY'));
         // => EXIT
     }
-    
+
     if(!$gCurrentUser->hasRightEditProfile($user2))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
-    
+
     $postUrtId = admFuncVariableIsValid($_POST, 'urt_id', 'int');
     $relationtype = new TableUserRelationType($gDb, $postUrtId);
-    
-    if( $relationtype->isNewRecord() )
+
+    if($relationtype->isNewRecord())
     {
         $gMessage->show($gL10n->get('SYS_NO_ENTRY'));
         // => EXIT
     }
-    
+
     $gDb->startTransaction();
-    
+
     $relation1 = new TableUserRelation($gDb);
     $relation1->setValue('ure_urt_id', $relationtype->getValue('urt_id'));
     $relation1->setValue('ure_usr_id1', $user1->getValue('usr_id'));
     $relation1->setValue('ure_usr_id2', $user2->getValue('usr_id'));
     $relation1->save();
-    
-    if ( !$relationtype->isUnidirectional() )
+
+    if (!$relationtype->isUnidirectional())
     {
         $relation2 = new TableUserRelation($gDb);
         $relation2->setValue('ure_urt_id', $relationtype->getValue('urt_id_inverse'));
@@ -105,9 +105,9 @@ if($getMode === 1)
         $relation2->setValue('ure_usr_id2', $user1->getValue('usr_id'));
         $relation2->save();
     }
-    
+
     $gDb->endTransaction();
-    
+
     $gNavigation->deleteLastUrl();
     header('Location: '. $gNavigation->getUrl());
     exit();

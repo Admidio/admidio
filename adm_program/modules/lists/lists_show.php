@@ -122,7 +122,7 @@ if (count($relationtypeIds) > 0)
     $relationtypesStatement = $gDb->query($sql);
     while($relationtype = $relationtypesStatement->fetch())
     {
-        $relationtypeName .= (empty($relationtypeName)?'':', ').$relationtype['urt_name'];
+        $relationtypeName .= (empty($relationtypeName) ? '' : ', ').$relationtype['urt_name'];
     }
 }
 
@@ -237,7 +237,7 @@ if (count($relationtypeIds) == 1)
 {
     $headline .= ' - '.$relationtypeName;
 }
-else if (count($relationtypeIds) > 1)
+elseif (count($relationtypeIds) > 1)
 {
     $headline .= ' - '.$gL10n->get('LST_VARIOUS_USER_RELATION_TYPES');
 }
@@ -270,7 +270,7 @@ if ($getMode !== 'csv')
     {
         $htmlSubHeadline .= ' - '.$relationtypeName;
     }
-    
+
     if ($getMode === 'print')
     {
         // create html page object without the custom theme files

@@ -8,7 +8,6 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
@@ -77,7 +76,7 @@ while($rel_row = $relationtypesStatement->fetch())
                                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
     $relationtypeAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                         href="'.$g_root_path.'/adm_program/system/popup_message.php?type=urt&amp;element_id=row_'.
-                                        $relationtype1->getValue('urt_id').'&amp;name='.urlencode($relationtype1->getValue('urt_name').($relationtype1->isUnidirectional()?'':('/'.$relationtype2->getValue('urt_name')))).'&amp;database_id='.$relationtype1->getValue('urt_id').'"><img
+                                        $relationtype1->getValue('urt_id').'&amp;name='.urlencode($relationtype1->getValue('urt_name').($relationtype1->isUnidirectional() ? '' : ('/'.$relationtype2->getValue('urt_name')))).'&amp;database_id='.$relationtype1->getValue('urt_id').'"><img
                                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
 
     // create array with all column values
