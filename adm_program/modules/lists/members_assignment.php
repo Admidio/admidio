@@ -164,10 +164,10 @@ else
         });
 
         // if checkbox of user is clicked then change membership
-        $("input[type=checkbox].memlist_checkbox").click(function() {
+        $("#tbl_assign_role_membership").on("click", "input[type=checkbox].memlist_checkbox", function() {
             var checkbox = $(this);
             // get user id
-            var row_id = $(this).parent().parent().attr("id");
+            var row_id = $(this).attr("id");
             var pos = row_id.search("_");
             var userid = row_id.substring(pos+1);
 
