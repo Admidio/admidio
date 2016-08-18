@@ -178,7 +178,7 @@ switch($getMode)
 
                 case 'profile':
                     $checkboxes = array('profile_log_edit_fields', 'profile_show_map_link', 'profile_show_roles',
-                                        'profile_show_former_roles', 'profile_show_extern_roles');
+                                        'profile_show_former_roles', 'profile_show_extern_roles', 'profile_show_user_relations');
                     break;
 
                 case 'events':

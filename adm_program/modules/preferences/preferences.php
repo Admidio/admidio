@@ -731,7 +731,6 @@ $page->addHtml('
                         $form->addCheckbox('profile_show_map_link', $gL10n->get('PRO_SHOW_MAP_LINK'), $form_values['profile_show_map_link'], array('helpTextIdInline' => 'PRO_SHOW_MAP_LINK_DESC'));
                         $form->addCheckbox('profile_show_roles', $gL10n->get('PRO_SHOW_ROLE_MEMBERSHIP'), $form_values['profile_show_roles'], array('helpTextIdInline' => 'PRO_SHOW_ROLE_MEMBERSHIP_DESC'));
                         $form->addCheckbox('profile_show_former_roles', $gL10n->get('PRO_SHOW_FORMER_ROLE_MEMBERSHIP'), $form_values['profile_show_former_roles'], array('helpTextIdInline' => 'PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC'));
-                        $form->addCheckbox('profile_show_user_relations', $gL10n->get('PRO_SHOW_USER_RELATIONS'), $form_values['profile_show_user_relations'], array('helpTextIdInline' => 'PRO_SHOW_USER_RELATIONS_DESC'));
 
                         if($gCurrentOrganization->getValue('org_org_id_parent') > 0
                         || $gCurrentOrganization->hasChildOrganizations())
@@ -739,6 +738,7 @@ $page->addHtml('
                             $form->addCheckbox('profile_show_extern_roles', $gL10n->get('PRO_SHOW_ROLES_OTHER_ORGANIZATIONS'), $form_values['profile_show_extern_roles'], array('helpTextIdInline' => 'PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC'));
                         }
 
+                        $form->addCheckbox('profile_show_user_relations', $gL10n->get('PRO_SHOW_USER_RELATIONS'), $form_values['profile_show_user_relations'], array('helpTextIdInline' => 'PRO_SHOW_USER_RELATIONS_DESC'));
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
                         $form->addSelectBox('profile_photo_storage', $gL10n->get('PRO_LOCATION_PROFILE_PICTURES'), $selectBoxEntries, array('defaultValue' => $form_values['profile_photo_storage'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'PRO_LOCATION_PROFILE_PICTURES_DESC'));
                         $form->addSubmitButton('btn_save_profile', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
