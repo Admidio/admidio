@@ -355,9 +355,9 @@ class ListConfiguration extends TableLists
         $sqlRelationtypeWhere = '';
         if ($relationtypeIds)
         {
-            $sqlUserJoin = 'INNER JOIN adm_user_relations
+            $sqlUserJoin = 'INNER JOIN '.TBL_USER_RELATIONS.'
                                     ON ure_usr_id1 = mem_usr_id
-                            INNER JOIN adm_users
+                            INNER JOIN '.TBL_USERS.'
                                     ON usr_id = ure_usr_id2';
             $sqlRelationtypeWhere = 'AND ure_urt_id IN ('.implode(', ', $relationtypeIds).')';
         }
