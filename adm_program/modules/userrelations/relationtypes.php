@@ -41,8 +41,8 @@ $relationtypesOverview = new HtmlTable('tbl_relationtypes', $page, true);
 
 // create array with all column heading values
 $columnHeading = array(
-    $gL10n->get('SYS_USER_RELATION_TYPE_FORWARD'),
-    $gL10n->get('SYS_USER_RELATION_TYPE_BACKWARD'),
+    $gL10n->get('REL_USER_RELATION_TYPE_FORWARD'),
+    $gL10n->get('REL_USER_RELATION_TYPE_BACKWARD'),
     '&nbsp;'
 );
 $relationtypesOverview->setColumnAlignByArray(array('left', 'left', 'right'));

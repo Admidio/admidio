@@ -38,6 +38,14 @@ if(!$gCurrentUser->hasRightEditProfile($user))
     // => EXIT
 }
 
+$sql = 'SELECT count(urt_id) FROM '.TBL_USER_RELATION_TYPES;
+$relationsStatement = $gDb->query($sql);
+if($relationsStatement->fetchColumn() == 0)
+{
+    $gMessage->show($gL10n->get('REL_NO_RELATION_TYPES_FOUND'));
+    // => EXIT
+}
+
 $headline = $gL10n->get('PRO_ADD_USER_RELATION');
 $gNavigation->addUrl(CURRENT_URL, $headline);
 

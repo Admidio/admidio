@@ -403,7 +403,7 @@
     <string name="LST_YOUR_LISTS">Deine Listen</string>
     <string name="LST_USER_PHOTO">Benutzerfoto</string>
     <string name="LST_VARIOUS_ROLES">Verschiedene Rollen</string>
-    <string name="LST_VARIOUS_RELATION_TYPES">Verschiedene Beziehungen</string>
+    <string name="LST_VARIOUS_USER_RELATION_TYPES">Verschiedene Beziehungen</string>
     <string name="LST_WANT_CONFIGURATION_FOR_ALL_USERS">Willst du die aktuelle Listenkonfiguration allen Benutzern zur Verfügung stellen?</string>
     <string name="LST_Z_TO_A">Z bis A</string>
     <!-- Phrases only in Mailmodule -->
@@ -859,6 +859,14 @@
     <string name="PRO_VIEW_ROLES_OTHER_ORGAS">Es werden dir hier nur Rollen anderer Organisationen angezeigt, die dort für alle angemeldete Benutzer sichtbar sind. Falls du auch Mitglied dieser Organisation bist, werden dir zusätzlich die Rollen angezeigt, die du mit deinen Rechten innerhalb der jeweiligen Organisation sehen darfst.</string>
     <string name="PRO_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
     <string name="PRO_YEARS">Jahre</string>
+    <!-- Phrases only in Relationssmodule -->
+    <string name="REL_NO_USER_RELATION_TYPES_FOUND">Es existieren noch keine Beziehungstypen. Beziehungstypen können in der Benutzerverwaltung erstellt werden.</string>
+    <string name="REL_USER_RELATION_TYPE_FORWARD">Vorwärts</string>
+    <string name="REL_USER_RELATION_TYPE_BACKWARD">Rückwärts</string>
+    <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
+    <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
+    <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
+    <string name="REL_USER_RELATION_TYPE_DEL">Willst du den Beziehungstyp #VAR1_BOLD# löschen? Achtung: Dies löscht alle existierenden Beziehungen dieses Typs.</string>
     <!-- Phrases only in Rolesmodule -->
     <string name="ROL_ACTIV_ROLES">Aktive Rollen</string>
     <string name="ROL_ALL_GUESTS">Alle Besucher der Seite</string>
@@ -1225,12 +1233,6 @@
     <string name="SYS_USER_RELATIONS">Beziehungen</string>
     <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
     <string name="SYS_USER_RELATION_TYPES">Beziehungstypen</string>
-    <string name="SYS_USER_RELATION_TYPE_FORWARD">Vorwärts</string>
-    <string name="SYS_USER_RELATION_TYPE_BACKWARD">Rückwärts</string>
-    <string name="SYS_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
-    <string name="SYS_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
-    <string name="SYS_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
-    <string name="SYS_USER_RELATION_TYPE_DEL">Willst du den Beziehungstyp #VAR1_BOLD# löschen? Achtung: Dies löscht alle existierenden Beziehungen dieses Typs.</string>
     <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Beziehungstypen pflegen</string>
     <string name="SYS_RELOAD">Neuladen</string>
     <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>

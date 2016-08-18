@@ -239,7 +239,7 @@ if (count($relationtypeIds) == 1)
 }
 else if (count($relationtypeIds) > 1)
 {
-    $headline .= ' - '.$gL10n->get('LST_VARIOUS_RELATION_TYPES');
+    $headline .= ' - '.$gL10n->get('LST_VARIOUS_USER_RELATION_TYPES');
 }
 
 // if html mode and last url was not a list view then save this url to navigation stack
