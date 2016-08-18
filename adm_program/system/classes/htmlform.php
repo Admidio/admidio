@@ -854,7 +854,7 @@ class HtmlForm extends HtmlFormBasic
             {
                 $zxcvbnUserInputs = json_encode($optionsAll['passwordUserData'], JSON_UNESCAPED_UNICODE);
                 $javascriptCode = '
-                    $("#new_password").keyup(function(e) {
+                    $("#'.$id.'").keyup(function(e) {
                         var result = zxcvbn(e.target.value, '.$zxcvbnUserInputs.');
                         $("#admidio-password-strength-indicator").removeClass().addClass("admidio-password-strength-indicator-" + result.score);
                     });
@@ -863,7 +863,7 @@ class HtmlForm extends HtmlFormBasic
                 $this->htmlPage->addJavascript($javascriptCode, true);
             }
             $this->addHtml('
-                <div id="admidio-password-strength">
+                <div id="admidio-password-strength" class="'.$optionsAll['class'].'">
                     <div id="admidio-password-strength-indicator">
                         <div id="admidio-password-strength-minimum" style="margin-left: calc('.PASSWORD_MIN_STRENGTH.' * 25% - 3px);"></div>
                     </div>

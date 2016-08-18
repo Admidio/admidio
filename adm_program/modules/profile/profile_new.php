@@ -223,8 +223,7 @@ foreach($gProfileFields->mProfileFields as $field)
                     // at registration add password and password confirm to form
                     $form->addInput('usr_password', $gL10n->get('SYS_PASSWORD'), null,
                                     array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH,
-                                          'passwordStrength' => true, 'passwordUserData' => $user->getPasswordUserData(),
-                                          'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION', 'class' => 'form-control-small'));
+                                          'passwordStrength' => true, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION', 'class' => 'form-control-small'));
                     $form->addInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'class' => 'form-control-small'));
 
                     // show selectbox with all organizations of database
