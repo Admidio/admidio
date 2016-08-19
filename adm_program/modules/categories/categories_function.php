@@ -166,28 +166,25 @@ if($getMode === 1)
 
     // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
     // dann muss die Sequenz fuer den alle Kategorien dieses Typs neu gesetzt werden
-    if(isset($_POST['cat_org_id']) && $_POST['cat_org_id'] != $cat_org_merker)
+    $sequenceCategory = new TableCategory($gDb);
+    $sequence = 0;
+
+    $sql = 'SELECT *
+              FROM '.TBL_CATEGORIES.'
+             WHERE cat_type = \''. $getType. '\'
+               AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+                   OR cat_org_id IS NULL )
+          ORDER BY cat_org_id ASC, cat_sequence ASC';
+    $categoriesStatement = $gDb->query($sql);
+
+    while($row = $categoriesStatement->fetch())
     {
-        $sequenceCategory = new TableCategory($gDb);
-        $sequence = 0;
+        ++$sequence;
+        $sequenceCategory->clear();
+        $sequenceCategory->setArray($row);
 
-        $sql = 'SELECT *
-                  FROM '.TBL_CATEGORIES.'
-                 WHERE cat_type = "'. $getType. '"
-                   AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                       OR cat_org_id IS NULL )
-              ORDER BY cat_org_id ASC, cat_sequence ASC';
-        $categoriesStatement = $gDb->query($sql);
-
-        while($row = $categoriesStatement->fetch())
-        {
-            ++$sequence;
-            $sequenceCategory->clear();
-            $sequenceCategory->setArray($row);
-
-            $sequenceCategory->setValue('cat_sequence', $sequence);
-            $sequenceCategory->save();
-        }
+        $sequenceCategory->setValue('cat_sequence', $sequence);
+        $sequenceCategory->save();
     }
 
     $gNavigation->deleteLastUrl();
