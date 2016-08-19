@@ -25,6 +25,12 @@ require_once('../../system/login_valid.php');
 $getUrtId    = admFuncVariableIsValid($_GET, 'urt_id',   'int');
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
 
+if ($gPreferences['members_enable_user_relations'] == 0)
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
 if (!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

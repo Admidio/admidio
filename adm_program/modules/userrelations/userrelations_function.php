@@ -25,6 +25,12 @@ require_once('../../system/login_valid.php');
 $getUreId    = admFuncVariableIsValid($_GET, 'ure_id',   'int');
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
 
+if ($gPreferences['members_enable_user_relations'] == 0)
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
 // nur berechtigte User duerfen Funktionen aufrufen
 if(!$gCurrentUser->editUsers())
 {

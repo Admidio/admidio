@@ -87,7 +87,7 @@ if($gCurrentUser->isAdministrator())
     $membersAdministrationMenu->addItem('menu_item_maintain_profile_fields', $g_root_path.'/adm_program/modules/preferences/fields.php',
                                 $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
 
-    if($gPreferences['profile_show_user_relations'] == 1)
+    if($gPreferences['members_enable_user_relations'] == 1)
     {
         // show link to relation types
         $membersAdministrationMenu->addItem('menu_item_maintain_user_relation_types', $g_root_path.'/adm_program/modules/userrelations/relationtypes.php',

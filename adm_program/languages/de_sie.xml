@@ -494,6 +494,8 @@
   <string name="MEM_DAYS_FIELD_HISTORY_DESC">Zeitraum in Tagen in denen in der Änderungshistorie der Profilfelder die Veränderungen angezeigt werden. Dies ist der Standardfilter, welcher durch den Benutzer nachher beliebig geändert werden kann. Bei großen Datenbanken dient dies dazu die Datenmenge bei normalen Aufruf der Änderungshistorie einzuschränken. (Standard: 365)</string>
   <string name="MEM_DUPLICATE">Duplizieren</string>
   <string name="MEM_EDIT_USER">Benutzer bearbeiten</string>
+  <string name="MEM_ENABLE_USER_RELATIONS">Beziehungen pflegen und anzeigen</string>
+  <string name="MEM_ENABLE_USER_RELATIONS_DESC">Wenn diese Einstellung gesetzt ist, können Beziehungen zwischen Benutzer gepflegt und angezeigt werden. (Standard: ja)</string>
   <string name="MEM_EXISTING_USERS">Existierende Benutzer</string>
   <string name="MEM_FILE_COLUMN">Dateispalte</string>
   <string name="MEM_FIRST_LINE_COLUMN_NAME">Erste Zeile beinhaltet die Spaltenbezeichnungen</string>
@@ -845,8 +847,6 @@
   <string name="PRO_SHOW_ROLE_MEMBERSHIP_DESC">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied ist. Dazu werden die entsprechenden Berechtigungen und das Eintrittsdatum aufgelistet. (Standard: ja)</string>
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Rollen anderer Organisationen anzeigen</string>
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Ist der Benutzer Mitglied in Rollen einer anderen Organisation, so wird ein Kasten mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt. (Standard: ja)</string>
-  <string name="PRO_SHOW_USER_RELATIONS">Beziehungen pflegen und anzeigen</string>
-  <string name="PRO_SHOW_USER_RELATIONS_DESC">Es wird ein Kasten mit allen Beziehungen des Benutzers zu anderen Benutzern angezeigt. (Standard: ja)</string>
   <string name="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS">zur Profilfeldpflege wechseln</string>
   <string name="PRO_UPLOAD_HELP_1">Auf den Button #VAR1_BOLD# klicken und die gewünschte Fotodatei von der Festplatte auswählen.</string>
   <string name="PRO_UPLOAD_HELP_2">Danach auf #VAR1_BOLD# klicken und ein wenig Geduld haben.</string>

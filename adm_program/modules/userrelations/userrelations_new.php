@@ -18,6 +18,12 @@ require_once('../../system/login_valid.php');
 // Initialize and check the parameters
 $getUsrId = admFuncVariableIsValid($_GET, 'usr_id', 'int');
 
+if ($gPreferences['members_enable_user_relations'] == 0)
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
 if($getUsrId <= 0)
 {
     $gMessage->show($gL10n->get('SYS_NO_ENTRY'));

@@ -76,9 +76,10 @@ $orga_preferences = array(
     'announcements_per_page'      => '10',
 
     // User management
-    'members_users_per_page'      => '25',
-    'members_days_field_history'  => '365',
-    'members_show_all_users'      => '1',
+    'members_users_per_page'        => '25',
+    'members_days_field_history'    => '365',
+    'members_show_all_users'        => '1',
+    'members_enable_user_relations' => '1',
 
     // Downloads
     'enable_download_module' => '1',
@@ -135,13 +136,12 @@ $orga_preferences = array(
     'ecard_template'            => 'postcard.tpl',
 
     // Profile
-    'profile_log_edit_fields'     => '1',
-    'profile_show_map_link'       => '1',
-    'profile_show_roles'          => '1',
-    'profile_show_former_roles'   => '1',
-    'profile_show_extern_roles'   => '1',
-    'profile_show_user_relations' => '1',
-    'profile_photo_storage'       => '0',
+    'profile_log_edit_fields'   => '1',
+    'profile_show_map_link'     => '1',
+    'profile_show_roles'        => '1',
+    'profile_show_former_roles' => '1',
+    'profile_show_extern_roles' => '1',
+    'profile_photo_storage'     => '0',
 
     // Events
     'enable_dates_module'       => '1',

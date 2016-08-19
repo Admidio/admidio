@@ -494,6 +494,8 @@
   <string name="MEM_DAYS_FIELD_HISTORY_DESC">Changes in profile fields will be listed for the given period of time in days. This is the default filter option which can be changed by the user later on. For huge databases this option is used to limit the change history list. (Default: 365)</string>
   <string name="MEM_DUPLICATE">Duplicate</string>
   <string name="MEM_EDIT_USER">Edit user</string>
+  <string name="MEM_ENABLE_USER_RELATIONS">Show and manage relationships</string>
+  <string name="MEM_ENABLE_USER_RELATIONS_DESC">If enabled, relationships between users can be shown and managed. (default: yes)</string>
   <string name="MEM_EXISTING_USERS">Existing user</string>
   <string name="MEM_FILE_COLUMN">File column</string>
   <string name="MEM_FIRST_LINE_COLUMN_NAME">First line contains the column name</string>
@@ -845,8 +847,6 @@
   <string name="PRO_SHOW_ROLE_MEMBERSHIP_DESC">A box will be shown with all roles of the user in the current organization. Permissions and registration date will be displayed. (default: yes)</string>
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Display role of other organizations</string>
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">When user is member in roles of another organization, a box will be displayed showing all roles and the registration date. (default: yes)</string>
-  <string name="PRO_SHOW_USER_RELATIONS">Show and manage relationships</string>
-  <string name="PRO_SHOW_USER_RELATIONS_DESC">A box will be shown with all relationships of the user to other users. (default: yes)</string>
   <string name="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS">go to profile preferences</string>
   <string name="PRO_UPLOAD_HELP_1">Press button #VAR1_BOLD# in order to select photo files on harddrive for upload.</string>
   <string name="PRO_UPLOAD_HELP_2">Press then #VAR1_BOLD# and be patient.</string>
