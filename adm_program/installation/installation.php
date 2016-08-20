@@ -399,9 +399,10 @@ elseif($getMode === 5)  // Creating addministrator
     $form->addInput('user_email', $gL10n->get('SYS_EMAIL'), $userEmail, array('maxLength' => 255, 'property' => FIELD_REQUIRED));
     $form->addInput('user_login', $gL10n->get('SYS_USERNAME'), $userLogin, array('maxLength' => 35, 'property' => FIELD_REQUIRED));
     $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
-    $form->addInput('user_password', $gL10n->get('SYS_PASSWORD'), null,
-                    array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH,
-                          'passwordStrength' => true, 'passwordUserData' => $userData, 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'));
+    $form->addInput(
+        'user_password', $gL10n->get('SYS_PASSWORD'), null,
+        array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $userData, 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION')
+    );
     $form->addInput('user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH));
     $form->closeGroupBox();
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=4'));
@@ -466,7 +467,8 @@ elseif($getMode === 6)  // Creating configuration file
             $_SESSION['user_email'],
             $_SESSION['user_login']
         );
-        if(PasswordHashing::passwordStrength($_SESSION['user_password'], $userData) < PASSWORD_MIN_STRENGTH)
+        // Admin Password should have a minimum strength of 1
+        if(PasswordHashing::passwordStrength($_SESSION['user_password'], $userData) < 1)
         {
             showNotice($gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'), 'installation.php?mode=5',
                 $gL10n->get('SYS_BACK'), 'layout/back.png');

@@ -121,7 +121,7 @@ if($getNewUser === 2)
         // => EXIT
     }
 
-    if(PasswordHashing::passwordStrength($_SESSION['user_password'], $user->getPasswordUserData()) < PASSWORD_MIN_STRENGTH)
+    if(PasswordHashing::passwordStrength($_SESSION['user_password'], $user->getPasswordUserData()) < $gPreferences['password_min_strength'])
     {
         $gMessage->show($gL10n->get('PRO_PASSWORDS_NOT_STRONG_ENOUGH'));
         // => EXIT

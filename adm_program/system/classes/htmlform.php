@@ -865,7 +865,7 @@ class HtmlForm extends HtmlFormBasic
             $this->addHtml('
                 <div id="admidio-password-strength" class="'.$optionsAll['class'].'">
                     <div id="admidio-password-strength-indicator">
-                        <div id="admidio-password-strength-minimum" style="margin-left: calc('.PASSWORD_MIN_STRENGTH.' * 25% - 3px);"></div>
+                        <div id="admidio-password-strength-minimum" style="margin-left: calc('.$gPreferences['password_min_strength'].' * 25% - 3px);"></div>
                     </div>
                 </div>
             ');

@@ -656,6 +656,13 @@
     <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">Die Organisation #VAR1_BOLD# wurde hinzugefügt. Du kannst diese nun bei der Anmeldung auswählen.\n\nFalls du für diese Organisation eine separate Homepage erstellt hast, muss du auf der entsprechenden Seite noch die neue Organisation in die config.php eingetragen.</string>
     <string name="ORG_PARENT_ORGANIZATION">Übergeordnete Organisation</string>
     <string name="ORG_PARENT_ORGANIZATION_DESC">Hier kannst du die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kannst du festlegen wie sicher/komplex Passwörter mindestens sein müssen.\n\nKeine: riskantes Passwort (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte online Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte online Angriffe. (&lt;10^8)\nHoch: Mäßiger schutz gegen offline-hashing Angriffe. (&lt;10^10)\nExtrem: Starker Schutz gegen offline-hashing Angriffe. (&gt;=10^10)</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Keine</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Niedrig</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Mittel</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Hoch</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_EXTREME">Extrem</string>
     <string name="ORG_PIXEL">Pixel</string>
     <string name="ORG_PROFILE_FIELDS">Profilfelder</string>
     <string name="ORG_REFUSE_REGISTRATION">Benachrichtigung bei einer Ablehnung der Registrierung</string>
