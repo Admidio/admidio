@@ -260,58 +260,61 @@ abstract class HtmlElement {
     {
         // if previous current element was not written to html string and the same child element is set
         // than this could be a call of parent class so do not reinitialize the current element
-        if ($this->currentElementDataWritten || $childElement !== $this->currentElement)
+        if (!$this->currentElementDataWritten && $childElement === $this->currentElement)
         {
-            $this->currentElementDataWritten = false;
+            return;
+        }
 
-            if ($attrKey !== '' || $attrValue !== '')
-            {
-                $this->addAttribute($attrKey, $attrValue);
-            }
-            // check if parent element is set, then write first the tag and attributes for the previous element
-            if ($this->parentFlag)
-            {
-                // Main element attributes are set in own variable, so in nesting mode main element can be set again
-                if ($this->currentElement === $this->mainElement)
-                {
-                    $this->currentElementAttributes = $this->mainElementAttributes;
-                }
+        $this->currentElementDataWritten = false;
 
-                $this->htmlString .= '<' . $this->currentElement . $this->getCurrentElementAttributesString() . '>';
-                $this->currentElement = $childElement;
-                $this->currentElementAttributes = array();
-                $this->parentFlag = false;
+        if ($attrKey !== '' || $attrValue !== '')
+        {
+            $this->addAttribute($attrKey, $attrValue);
+        }
+
+        // check if parent element is set, then write first the tag and attributes for the previous element
+        if ($this->parentFlag)
+        {
+            // Main element attributes are set in own variable, so in nesting mode main element can be set again
+            if ($this->currentElement === $this->mainElement)
+            {
+                $this->currentElementAttributes = $this->mainElementAttributes;
             }
 
-            // If first child is set start writing the html beginning with main element and attributes
-            if ($this->currentElement === $this->mainElement && $this->mainElement !== '' && !$this->mainElementWritten)
-            {
-                $this->htmlString .= '<' . $this->mainElement . $this->getMainElementAttributesString() . '>';
-                $this->mainElementWritten = true;
-            }
+            $this->htmlString .= '<' . $this->currentElement . $this->getCurrentElementAttributesString() . '>';
+            $this->currentElement = $childElement;
+            $this->currentElementAttributes = array();
+            $this->parentFlag = false;
+        }
 
-            // If nesting is enabled, main element can be set again
-            if ($childElement === $this->mainElement && $this->nesting)
-            {
-                // now set as current position
-                $this->currentElement = $childElement;
-                // clear attribute buffer
-                $this->currentElementAttributes = array();
-            }
+        // If first child is set start writing the html beginning with main element and attributes
+        if ($this->currentElement === $this->mainElement && $this->mainElement !== '' && !$this->mainElementWritten)
+        {
+            $this->htmlString .= '<' . $this->mainElement . $this->getMainElementAttributesString() . '>';
+            $this->mainElementWritten = true;
+        }
 
-            if ($childElement !== $this->mainElement)
-            {
-                // now set as current position
-                $this->currentElement = $childElement;
-                // clear attribute buffer
-                $this->currentElementAttributes = array();
-            }
+        // If nesting is enabled, main element can be set again
+        if ($childElement === $this->mainElement && $this->nesting)
+        {
+            // now set as current position
+            $this->currentElement = $childElement;
+            // clear attribute buffer
+            $this->currentElementAttributes = array();
+        }
 
-            // add content if exists
-            if ($data !== '')
-            {
-                $this->addData($data, $selfClosing);
-            }
+        if ($childElement !== $this->mainElement)
+        {
+            // now set as current position
+            $this->currentElement = $childElement;
+            // clear attribute buffer
+            $this->currentElementAttributes = array();
+        }
+
+        // add content if exists
+        if ($data !== '')
+        {
+            $this->addData($data, $selfClosing);
         }
     }
 
@@ -347,54 +350,56 @@ abstract class HtmlElement {
     public function addParentElement($parentElement, $attrKey = '', $attrValue = '')
     {
         // Only possible for child elements of the main element or nesting mode is active!
-        if ($this->currentElement !== $this->mainElement || $this->nesting)
+        if (!$this->nesting && $this->currentElement === $this->mainElement)
         {
-            // check if already parent element is set, then write first the tag and attributes for the previous element
-            if ($this->parentFlag)
-            {
-                $this->htmlString .= '<' . $this->currentElement . $this->getCurrentElementAttributesString() . '>';
-                //$this->currentElementAttributes = array();
-            }
-            else
-            {
-                // set Flag
-                $this->parentFlag = true;
-
-                if ($this->currentElement === $this->mainElement && $this->nesting && !$this->mainElementWritten)
-                {
-                    $this->htmlString .= '<' . $this->currentElement . $this->getMainElementAttributesString() . '>';
-                    $this->mainElementAttributes = array();
-                }
-            }
-
-            if (!in_array($parentElement, $this->arrParentElements, true))
-            {
-                // If currently not defined and element has own child elements then log in array to define endtags later
-                $this->arrParentElements[] = $parentElement;
-            }
-            elseif ($this->nesting)
-            {
-                // in nesting mode always log elements
-                $this->arrParentElements[] = $parentElement;
-            }
-            else
-            {
-                // already set and we need the endtag first before setting again
-                $this->closeParentElement($parentElement);
-                $this->arrParentElements[] = $parentElement;
-            }
-            // set parent element to current element
-            $this->currentElement = $parentElement;
-            // initialize attributes because parent element should not get attributes of previous element
-            $this->currentElementAttributes = array();
-
-            // save attribute for parent element
-            if ($attrKey !== '')
-            {
-                $this->addAttribute($attrKey, $attrValue);
-            }
-            //$this->mainElementAttributes = array();
+            return;
         }
+
+        // check if already parent element is set, then write first the tag and attributes for the previous element
+        if ($this->parentFlag)
+        {
+            $this->htmlString .= '<' . $this->currentElement . $this->getCurrentElementAttributesString() . '>';
+            //$this->currentElementAttributes = array();
+        }
+        else
+        {
+            // set Flag
+            $this->parentFlag = true;
+
+            if ($this->currentElement === $this->mainElement && $this->nesting && !$this->mainElementWritten)
+            {
+                $this->htmlString .= '<' . $this->currentElement . $this->getMainElementAttributesString() . '>';
+                $this->mainElementAttributes = array();
+            }
+        }
+
+        if (!in_array($parentElement, $this->arrParentElements, true))
+        {
+            // If currently not defined and element has own child elements then log in array to define endtags later
+            $this->arrParentElements[] = $parentElement;
+        }
+        elseif ($this->nesting)
+        {
+            // in nesting mode always log elements
+            $this->arrParentElements[] = $parentElement;
+        }
+        else
+        {
+            // already set and we need the endtag first before setting again
+            $this->closeParentElement($parentElement);
+            $this->arrParentElements[] = $parentElement;
+        }
+        // set parent element to current element
+        $this->currentElement = $parentElement;
+        // initialize attributes because parent element should not get attributes of previous element
+        $this->currentElementAttributes = array();
+
+        // save attribute for parent element
+        if ($attrKey !== '')
+        {
+            $this->addAttribute($attrKey, $attrValue);
+        }
+        //$this->mainElementAttributes = array();
     }
 
     /**
