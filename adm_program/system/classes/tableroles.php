@@ -173,7 +173,7 @@ class TableRoles extends TableAccess
      * die Funktion gibt die Anzahl freier Plaetze zurueck
      * ist rol_max_members nicht gesetzt so wird INF zurueckgegeben
      * @param bool $countLeaders
-     * @return int|double
+     * @return int|float
      */
     public function countVacancies($countLeaders = false)
     {

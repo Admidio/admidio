@@ -44,8 +44,7 @@ $getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'int', arr
 $getLocked         = admFuncVariableIsValid($_GET, 'locked',          'int', array('defaultValue' => -1));
 $getPhotoNr        = admFuncVariableIsValid($_GET, 'photo_nr',        'int');
 
-unset($_SESSION['photo_album_request']);
-unset($_SESSION['ecard_request']);
+unset($_SESSION['photo_album_request'], $_SESSION['ecard_request']);
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
 if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
