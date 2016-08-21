@@ -250,10 +250,8 @@ class Language
         {
             return 'de';
         }
-        else
-        {
-            return $language;
-        }
+
+        return $language;
     }
 
     /**

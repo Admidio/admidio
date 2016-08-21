@@ -28,10 +28,9 @@ function admReadTemplateFile($filename)
         {
             $str .= fread($fp, 1024);
         }
+
         return $str;
     }
-    else
-    {
-        return '#message#';
-    }
+
+    return '#message#';
 }

@@ -232,44 +232,42 @@ class TableRoles extends TableAccess
         {
             throw new AdmException('ROL_DELETE_ROLE', $gL10n->get('SYS_ADMINISTRATOR'));
         }
-        else
+
+        $this->db->startTransaction();
+
+        $sql = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.'
+                 WHERE rld_rol_id_parent = '. $this->getValue('rol_id'). '
+                    OR rld_rol_id_child  = '. $this->getValue('rol_id');
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_MEMBERS.'
+                 WHERE mem_rol_id = '. $this->getValue('rol_id');
+        $this->db->query($sql);
+
+        $sql = 'UPDATE '.TBL_DATES.' SET dat_rol_id = NULL
+                 WHERE dat_rol_id = '.$this->getValue('rol_id');
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
+                 WHERE dtr_rol_id = '.$this->getValue('rol_id');
+        $this->db->query($sql);
+
+        $sql = 'DELETE FROM '.TBL_ROLES_RIGHTS_DATA.'
+                 WHERE rrd_rol_id = '.$this->getValue('rol_id');
+        $this->db->query($sql);
+
+        $return = parent::delete();
+
+        $this->db->endTransaction();
+
+        if(isset($gCurrentSession))
         {
-            $this->db->startTransaction();
-
-            $sql = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.'
-                     WHERE rld_rol_id_parent = '. $this->getValue('rol_id'). '
-                        OR rld_rol_id_child  = '. $this->getValue('rol_id');
-            $this->db->query($sql);
-
-            $sql = 'DELETE FROM '.TBL_MEMBERS.'
-                     WHERE mem_rol_id = '. $this->getValue('rol_id');
-            $this->db->query($sql);
-
-            $sql = 'UPDATE '.TBL_DATES.' SET dat_rol_id = NULL
-                     WHERE dat_rol_id = '.$this->getValue('rol_id');
-            $this->db->query($sql);
-
-            $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
-                     WHERE dtr_rol_id = '.$this->getValue('rol_id');
-            $this->db->query($sql);
-
-            $sql = 'DELETE FROM '.TBL_ROLES_RIGHTS_DATA.'
-                     WHERE rrd_rol_id = '.$this->getValue('rol_id');
-            $this->db->query($sql);
-
-            $return = parent::delete();
-
-            $this->db->endTransaction();
-
-            if(isset($gCurrentSession))
-            {
-                // all active users must renew their user data because maybe their
-                // rights have been changed if they where members of this role
-                $gCurrentSession->renewUserObject();
-            }
-
-            return $return;
+            // all active users must renew their user data because maybe their
+            // rights have been changed if they where members of this role
+            $gCurrentSession->renewUserObject();
         }
+
+        return $return;
     }
 
     /**
@@ -294,10 +292,8 @@ class TableRoles extends TableAccess
         {
             return $costPeriods[$costPeriod];
         }
-        else
-        {
-            return $costPeriods;
-        }
+
+        return $costPeriods;
     }
 
     /**
@@ -476,40 +472,34 @@ class TableRoles extends TableAccess
     {
         global $gCurrentUser, $gValidLogin;
 
-        if($gValidLogin)
+        if(!$gValidLogin)
         {
-            if($this->getValue('cat_name_intern') === 'CONFIRMATION_OF_PARTICIPATION')
-            {
-                if($this->getValue('rol_this_list_view') == 0)
-                {
-                    return false;
-                }
-                else
-                {
-                    // pruefen, ob der Benutzer Mitglied einer Rolle ist, die den Termin sehen darf
-                    $sql = 'SELECT dtr_rol_id
-                              FROM '.TBL_DATE_ROLE.'
-                        INNER JOIN '.TBL_DATES.'
-                                ON dat_id = dtr_dat_id
-                             WHERE dat_rol_id = '.$this->getValue('rol_id').'
-                               AND (  dtr_rol_id IS NULL
-                                   OR EXISTS (SELECT 1
-                                                FROM '.TBL_MEMBERS.'
-                                               WHERE mem_rol_id = dtr_rol_id
-                                                 AND mem_usr_id = '.$gCurrentUser->getValue('usr_id').'))';
-                    $memberDatesStatement = $this->db->query($sql);
-
-                    if($memberDatesStatement->rowCount() > 0)
-                    {
-                        return true;
-                    }
-                }
-            }
-            else
-            {
-                return $gCurrentUser->hasRightViewRole($this->getValue('rol_id'));
-            }
+            return false;
         }
-        return false;
+
+        if($this->getValue('cat_name_intern') !== 'CONFIRMATION_OF_PARTICIPATION')
+        {
+            return $gCurrentUser->hasRightViewRole($this->getValue('rol_id'));
+        }
+
+        if($this->getValue('rol_this_list_view') == 0)
+        {
+            return false;
+        }
+
+        // pruefen, ob der Benutzer Mitglied einer Rolle ist, die den Termin sehen darf
+        $sql = 'SELECT dtr_rol_id
+                  FROM '.TBL_DATE_ROLE.'
+            INNER JOIN '.TBL_DATES.'
+                    ON dat_id = dtr_dat_id
+                 WHERE dat_rol_id = '.$this->getValue('rol_id').'
+                   AND (  dtr_rol_id IS NULL
+                       OR EXISTS (SELECT 1
+                                    FROM '.TBL_MEMBERS.'
+                                   WHERE mem_rol_id = dtr_rol_id
+                                     AND mem_usr_id = '.$gCurrentUser->getValue('usr_id').'))';
+        $memberDatesStatement = $this->db->query($sql);
+
+        return $memberDatesStatement->rowCount() > 0;
     }
 }

@@ -93,10 +93,8 @@ class LanguageData
         {
             return $this->referenceLanguage;
         }
-        else
-        {
-            return $this->language;
-        }
+
+        return $this->language;
     }
 
     /**

@@ -81,14 +81,7 @@ function hasRole($roleName, $userId = 0)
                    OR cat_org_id IS NULL )';
     $statement = $gDb->query($sql);
 
-    if ($statement->rowCount() === 1)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return $statement->rowCount() === 1;
 }
 
 /**
@@ -564,23 +557,21 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
     {
         return $value;
     }
+
+    if(isset($gMessage))
+    {
+        if($optionsAll['directOutput'])
+        {
+            $gMessage->showTextOnly(true);
+        }
+
+        $gMessage->show($errorMessage);
+        // => EXIT
+    }
     else
     {
-        if(isset($gMessage))
-        {
-            if($optionsAll['directOutput'])
-            {
-                $gMessage->showTextOnly(true);
-            }
-
-            $gMessage->show($errorMessage);
-            // => EXIT
-        }
-        else
-        {
-            echo $errorMessage;
-            exit();
-        }
+        echo $errorMessage;
+        exit();
     }
 
     return null;

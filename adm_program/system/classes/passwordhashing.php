@@ -96,14 +96,13 @@ class PasswordHashing
             {
                 return hash_equals($passwordHash, $hash);
             }
-            else
-            {
-                $status = 0;
-                for ($i = 0, $iMax = strlen($passwordHash); $i < $iMax; $i++) {
-                    $status |= (ord($passwordHash[$i]) ^ ord($hash[$i]));
-                }
-                return $status === 0;
+
+            $status = 0;
+            for ($i = 0, $iMax = strlen($passwordHash); $i < $iMax; $i++) {
+                $status |= (ord($passwordHash[$i]) ^ ord($hash[$i]));
             }
+
+            return $status === 0;
         }
         elseif (strlen($hash) === 34 && strpos($hash, '$P$') === 0)
         {

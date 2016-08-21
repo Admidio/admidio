@@ -290,12 +290,10 @@ class Organization extends TableAccess
             $organizationShortnames = array_map('addQuotationMarks', $organizationShortnames);
             return implode(',', $organizationShortnames);
         }
-        else
-        {
-            $organizationIds = array_keys($organizations);
-            $organizationIds[] = $this->getValue('org_id');
-            return implode(',', $organizationIds);
-        }
+
+        $organizationIds = array_keys($organizations);
+        $organizationIds[] = $this->getValue('org_id');
+        return implode(',', $organizationIds);
     }
 
     /**
@@ -385,14 +383,7 @@ class Organization extends TableAccess
      */
     public function hasChildOrganizations()
     {
-        if(count($this->getChildOrganizations()) > 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return count($this->getChildOrganizations()) > 0;
     }
 
     /**

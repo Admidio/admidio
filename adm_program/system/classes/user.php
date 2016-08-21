@@ -319,10 +319,8 @@ class User extends TableAccess
             {
                 return $gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN');
             }
-            else
-            {
-                return $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
-            }
+
+            return $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
         }
 
         // Password correct
@@ -1076,10 +1074,8 @@ class User extends TableAccess
             $this->mProfileFieldsData->readUserData($userId, $this->organizationId);
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     /**
