@@ -27,6 +27,8 @@ $getMenId    = admFuncVariableIsValid($_GET, 'men_id',    'int');
 $getMode     = admFuncVariableIsValid($_GET, 'mode',      'int',    array('requireValue' => true));
 $getSequence = admFuncVariableIsValid($_GET, 'sequence',  'string', array('validValues' => array('UP', 'DOWN')));
 
+$postModuleName = admFuncVariableIsValid($_POST, 'men_modul_name',  'string', array('default' => ''));
+
 // check rights
 if(!$gCurrentUser->isAdministrator())
 {
@@ -40,52 +42,97 @@ if($getMenId > 0)
 {
     $menu->readDataById($getMenId);
 }
-else
-{
-    // create a new menu
-    $menu->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
-    $menu->setValue('cat_type', $getType);
-}
 
 // create menu or update it
 if($getMode === 1)
-{
-    $_SESSION['menu_request'] = $_POST;
-
-    // check all values from Checkboxes, because if there is no value set, we need
-    // to set it on 0 as default
-    $checkboxes = array('men_display_right', 'men_display_index', 'men_display_boot', 'men_need_enable', 'men_need_login', 'men_need_admin');
-
-    foreach($checkboxes as $key => $value)
+{    
+    try
     {
-        if(!isset($_POST[$value]) || $_POST[$value] != 1)
+        $menu->setValue('men_group', $_POST['men_group']);
+        $menu->setValue('men_modul_name', $postModuleName);
+        $menu->setValue('men_url',  $_POST['men_url']);
+        $menu->setValue('men_icon', $_POST['men_icon']);
+        $menu->setValue('men_translate_name', $_POST['men_translate_name']);
+        $menu->setValue('men_translate_desc', $_POST['men_translate_desc']);
+        
+        // check all values from Checkboxes, because if there is no value set, we need
+        // to set it on 0 as default
+        if(!isset($_POST['men_need_enable']) || $_POST['men_need_enable'] != 1)
         {
-            $_POST[$value] = 0;
+            $menu->setValue('men_need_enable', 0);
         }
-    }
-
-    // write POST variables to the object
-    foreach($_POST as $key => $value)
-    {
-        if(strpos($key, 'men_') === 0)
+        else
         {
-            $menu->setValue($key, $value);
+            $menu->setValue('men_need_enable', 1);
         }
+        
+        $getMenId = $menu->getValue('men_id');
+
+        // save Data to Table
+        $returnCode = $menu->save();
+
+        if($returnCode < 0)
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        }
+        
+        // Read current roles rights of the menu
+        $displayRight = new RolesRights($gDb, 'men_display_right', $getMenId);
+        $rolesDisplayRight = $displayRight->getRolesIds();
+
+        if(in_array('0', $_POST['men_display_right'], true))
+        {
+            // remove all entries, so it is allowed without login
+            $displayRight->removeRoles($rolesDisplayRight);
+        }
+        else
+        {
+            // add new or update roles
+            $displayRight->addRoles($_POST['men_display_right']);
+        }
+
+        $displayIndex = new RolesRights($gDb, 'men_display_index', $getMenId);
+        $rolesDisplayIndex = $displayIndex->getRolesIds();
+
+        if(in_array('0', $_POST['men_display_index'], true))
+        {
+            // remove all entries, so it is allowed without login
+            $displayIndex->removeRoles($rolesDisplayIndex);
+        }
+        else
+        {
+            // add new or update roles
+            $displayIndex->addRoles($_POST['men_display_index']);
+        }
+        
+        if(isset($_POST['men_display_boot']))
+        {
+            $displayBoot = new RolesRights($gDb, 'men_display_boot', $getMenId);
+            $rolesDisplayBoot = $displayBoot->getRolesIds();
+
+            if(in_array('0', $_POST['men_display_boot'], true))
+            {
+                // remove all entries, so it is allowed without login
+                $displayBoot->removeRoles($rolesDisplayIndex);
+            }
+            else
+            {
+                // add new or update roles
+                $displayBoot->addRoles($_POST['men_display_boot']);
+            }
+        }
+
+        $gNavigation->deleteLastUrl();
+        unset($_SESSION['menu_request']);
+
+        header('Location: '. $gNavigation->getUrl());
+        exit();
+        
     }
-
-    // save Data to Table
-    $returnCode = $menu->save();
-
-    if($returnCode < 0)
+    catch(AdmException $e)
     {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        $e->showHtml();
     }
-
-    $gNavigation->deleteLastUrl();
-    unset($_SESSION['menu_request']);
-
-    header('Location: '. $gNavigation->getUrl());
-    exit();
 }
 elseif($getMode === 2)
 {
@@ -107,90 +154,4 @@ elseif($getMode === 3)
     // Kategoriereihenfolge aktualisieren
     $menu->moveSequence($getSequence);
     exit();
-}
-// save view or upload rights for a folder
-elseif ($getMode === 4)
-{
-
-    // only users with administration rights should
-    if(!$gCurrentUser->isAdministrator())
-    {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    }
-
-    try
-    {
-
-        // Read current roles rights of the folder
-        $rightFolderView = new RolesRights($gDb, 'men_display_right', $getMenId);
-        $rolesFolderView = $rightFolderView->getRolesIds();
-
-        if(in_array('0', $_POST['men_display_right'], true))
-        {
-            // set flag public for this folder and all child folders
-            $folder->editPublicFlagOnFolder(true);
-            // if all users have access then delete all existing roles
-            $folder->removeRolesOnFolder('folder_view', $rolesFolderView);
-        }
-        else
-        {
-            // get new roles and removed roles
-            $addRoles = array_diff($_POST['men_display_right'], $rolesFolderView);
-            $removeRoles = array_diff($rolesFolderView, $_POST['men_display_right']);
-
-            $folder->addRolesOnFolder('folder_view', $addRoles);
-            $folder->removeRolesOnFolder('folder_view', $removeRoles);
-        }
-
-        // save upload right
-        $rightFolderUpload = new RolesRights($gDb, 'men_display_index', $getMenId);
-        $rolesFolderUpload = $rightFolderUpload->getRolesIds();
-
-        if(in_array('0', $_POST['men_display_right'], true))
-        {
-            // set flag public for this folder and all child folders
-            $folder->editPublicFlagOnFolder(true);
-            // if all users have access then delete all existing roles
-            $folder->removeRolesOnFolder('folder_view', $rolesFolderView);
-        }
-        else
-        {
-            // get new roles and removed roles
-            $addRoles = array_diff($_POST['men_display_right'], $rolesFolderView);
-            $removeRoles = array_diff($rolesFolderView, $_POST['men_display_right']);
-
-            $folder->addRolesOnFolder('folder_view', $addRoles);
-            $folder->removeRolesOnFolder('folder_view', $removeRoles);
-        }
-        
-        // save upload right
-        $rightFolderUpload = new RolesRights($gDb, 'men_display_index', $getMenId);
-        $rolesFolderUpload = $rightFolderUpload->getRolesIds();
-
-        if(in_array('0', $_POST['men_display_right'], true))
-        {
-            // set flag public for this folder and all child folders
-            $folder->editPublicFlagOnFolder(true);
-            // if all users have access then delete all existing roles
-            $folder->removeRolesOnFolder('folder_view', $rolesFolderView);
-        }
-        else
-        {
-            // get new roles and removed roles
-            $addRoles = array_diff($_POST['men_display_right'], $rolesFolderView);
-            $removeRoles = array_diff($rolesFolderView, $_POST['men_display_right']);
-
-            $folder->addRolesOnFolder('folder_view', $addRoles);
-            $folder->removeRolesOnFolder('folder_view', $removeRoles);
-        }
-
-        $folder->save();
-
-        $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-        $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
-    }
-    catch(AdmException $e)
-    {
-        $e->showHtml();
-    }
 }

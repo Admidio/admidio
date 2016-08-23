@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Class manages access to database table adm_categories
+ * Class manages access to database table adm_menu
  *
  * @copyright 2004-2016 The Admidio Team
  * @see http://www.admidio.org/
@@ -10,7 +10,7 @@
  */
 
 /**
- * @class TableCategory
+ * @class TableMenu
  * Diese Klasse dient dazu einen Kategorieobjekt zu erstellen.
  * Eine Kategorieobjekt kann ueber diese Klasse in der Datenbank verwaltet werden
  *
@@ -51,18 +51,10 @@ class TableMenu extends TableAccess
     {
         global $gL10n;
 
-        if($columnName === 'cat_name_intern')
-        {
-            // internal name should be read with no conversion
-            $value = parent::getValue($columnName, 'database');
-        }
-        else
-        {
-            $value = parent::getValue($columnName, $format);
-        }
+        $value = parent::getValue($columnName, $format);
 
         // if text is a translation-id then translate it
-        if($columnName === 'cat_name' && $format !== 'database' && strpos($value, '_') === 3)
+        if($columnName === 'men_translate_name' && $format !== 'database')
         {
             $value = $gL10n->get(admStrToUpper($value));
         }
@@ -168,56 +160,23 @@ class TableMenu extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentOrganization, $gCurrentSession;
+        global $gCurrentSession;
         $fields_changed = $this->columnsValueChanged;
         $this->db->startTransaction();
 
         if($this->new_record)
         {
-            if($this->getValue('cat_org_id') > 0)
-            {
-                $org_condition = ' AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                                       OR cat_org_id IS NULL ) ';
-            }
-            else
-            {
-                $org_condition = ' AND cat_org_id IS NULL ';
-            }
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) AS count
-                      FROM '.TBL_CATEGORIES.'
-                     WHERE cat_type = \''. $this->getValue('cat_type'). '\'
-                           '.$org_condition;
-            $countCategoriesStatement = $this->db->query($sql);
+                      FROM '.TBL_MENU.'
+                     WHERE men_group = \''. $this->getValue('men_group'). '\'';
+            $countMenuStatement = $this->db->query($sql);
 
-            $row = $countCategoriesStatement->fetch();
-
-            $this->setValue('cat_sequence', $row['count'] + 1);
-
-            if($this->getValue('cat_org_id') == 0)
-            {
-                // eine Orga-uebergreifende Kategorie ist immer am Anfang, also Kategorien anderer Orgas nach hinten schieben
-                $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_sequence = cat_sequence + 1
-                         WHERE cat_type = \''. $this->getValue('cat_type'). '\'
-                           AND cat_org_id IS NOT NULL ';
-                $this->db->query($sql);
-            }
-        }
-
-        // if new category than generate new name intern, otherwise no change will be made
-        if($this->new_record)
-        {
-            $this->setValue('cat_name_intern', $this->getNewNameIntern($this->getValue('cat_name'), 1));
+            $row = $countMenuStatement->fetch();
+            $this->setValue('men_order', $row['count'] + 1);
         }
 
         $returnValue = parent::save($updateFingerPrint);
-
-        // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
-        if($fields_changed && $this->getValue('cat_type') === 'USF' && is_object($gCurrentSession))
-        {
-            // all active users must renew their user data because the user field structure has been changed
-            $gCurrentSession->renewUserObject();
-        }
 
         $this->db->endTransaction();
 

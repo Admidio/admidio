@@ -22,11 +22,11 @@ if(!$gCurrentUser->isAdministrator())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$getTitle = $gL10n->get('SYS_MENU');
 $men_groups = array('1' => 'Administration', '2' => 'Modules', '3' => 'Plugins');
+$headline = $gL10n->get('SYS_MENU');
 
 // create html page object
-$page = new HtmlPage($gL10n->get('SYS_MENU'));
+$page = new HtmlPage($headline);
 $page->enableModal();
 
 $page->addJavascript('
@@ -79,6 +79,8 @@ $page->addJavascript('
 // get module menu
 $menuMenu = $page->getMenu();
 
+$gNavigation->addStartUrl(CURRENT_URL, $headline);
+
 // define link to create new menu
 $menuMenu->addItem('admMenuItemNewCategory', $g_root_path.'/adm_program/modules/menu/menu_new.php',
                          $gL10n->get('SYS_CREATE_VAR', $gL10n->get('SYS_MENU')), 'add.png');
@@ -90,12 +92,11 @@ $menuOverview = new HtmlTable('tbl_menues', $page, true);
 $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     'Order',
-    '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/star.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" />',
-    '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/no_profile.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" />',
-    '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" />',
+    'need to enable in menu <img class="admidio-icon-info" src="'.THEME_PATH.'/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" />',
+    'Standart Menu',
     '&nbsp;'
 );
-$menuOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));
+$menuOverview->setColumnAlignByArray(array('left', 'left', 'center', 'left', 'right'));
 $menuOverview->addRowHeadingByArray($columnHeading);
 
 $sql = 'SELECT *
@@ -128,44 +129,47 @@ while($menu_row = $menuStatement->fetch())
     }
 
     $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'up\', '.$menu->getValue('men_id').')"><img
-                            src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', $getTitle).'" title="'.$gL10n->get('CAT_MOVE_UP', $getTitle).'" /></a>
+                            src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', $headline).'" title="'.$gL10n->get('CAT_MOVE_UP', $headline).'" /></a>
                        <a class="admidio-icon-link" href="javascript:moveMenu(\'down\', '.$menu->getValue('men_id').')"><img
-                            src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', $getTitle).'" title="'.$gL10n->get('CAT_MOVE_DOWN', $getTitle).'" /></a>';
+                            src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', $headline).'" title="'.$gL10n->get('CAT_MOVE_DOWN', $headline).'" /></a>';
 
 
     $htmlEnabledMenu = '&nbsp;';
     if($menu->getValue('men_need_enable') == 1)
     {
-        $htmlEnabledMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" />';
+        $htmlEnabledMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" />';
     }
     
-    $htmlNeedLogin = '&nbsp;';
-    if($menu->getValue('men_need_login') == 1)
+    $htmlStandartMenu = '&nbsp;';
+    if($menu->getValue('men_standart') == 1)
     {
-        $htmlNeedLogin = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/no_profile.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" />';
-    }
-    
-    $htmlNeedAdmin = '&nbsp;';
-    if($menu->getValue('men_need_login') == 1)
-    {
-        $htmlNeedAdmin = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/user_key.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" />';
+        $htmlStandartMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" />';
     }
 
-    $menuAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/menu/menu_new.php?men_id='. $menu->getValue('men_id'). '&amp;title='.$getTitle.'"><img
+    $menuAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/menu/menu_new.php?men_id='. $menu->getValue('men_id'). '"><img
                                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
 
-    $menuAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+    //don't allow delete for standart menus
+    if($menu->getValue('men_standart') == 0)
+    {
+        $menuAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                     href="'.$g_root_path.'/adm_program/system/popup_message.php?type=men&amp;element_id=row_'.
                                     $menu->getValue('men_id').'&amp;name='.urlencode($menu->getValue('men_name')).'&amp;database_id='.$menu->getValue('men_id').'"><img
                                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+    }
+    
+    $naming = $menu->getValue('men_translate_name');
+    if($naming == '##')
+    {
+        $naming = $menu->getValue('men_translate_name', 'database');
+    }
 
     // create array with all column values
     $columnValues = array(
-        $gL10n->get($menu->getValue('men_translat_name')),
+        $naming,
         $htmlMoveRow,
         $htmlEnabledMenu,
-        $htmlNeedLogin,
-        $htmlNeedAdmin,
+        $htmlStandartMenu,
         $menuAdministration
     );
     $menuOverview->addRowByArray($columnValues, 'row_'. $menu->getValue('men_id'));

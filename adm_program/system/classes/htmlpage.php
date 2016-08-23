@@ -158,207 +158,112 @@ class HtmlPage
     {
         global $gL10n, $gPreferences, $gValidLogin, $gDb, $gCurrentUser;
         
-        // Plugin Menu
         $sql = 'SELECT *
           FROM '.TBL_MENU.'
-         WHERE men_group = 3 and men_display_boot = 1
-         ORDER BY men_order';
+         ORDER BY men_group DESC, men_order';
         $statement = $gDb->query($sql);
 
         if($statement->rowCount() > 0)
         {
-            $this->menu->addItem('menu_item_plugins', null, $gL10n->get('SYS_PLUGIN'), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
+            $men_groups = array('1' => 'Administration', '2' => 'Modules', '3' => 'Plugins');
+            $men_heads = array('1' => 'SYS_ADMINISTRATION', '2' => 'SYS_MODULES', '3' => 'SYS_PLUGIN');
+            $last = 0;
+            
             while ($row = $statement->fetchObject())
             {
-                $men_need_login = false;
-                if(($row->men_need_login == 1 && $gValidLogin) || $row->men_need_login == 0)
+                if($row->men_group <> $last)
                 {
-                    $men_need_login = true;
+                    $this->menu->addItem('menu_item_'.$men_groups[$row->men_group], null, $gL10n->get($men_heads[$row->men_group]), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
+                    $last = $row->men_group;
                 }
                 
-                $men_need_admin = false;
-                if(($row->men_need_admin == 1 && $gCurrentUser->isAdministrator()) || $row->men_need_admin == 0)
-                {
-                    $men_need_admin = true;
-                }
-                
+                $men_display = true;
                 $desc = '';
-                if(strlen($row->men_translat_desc) > 2)
-                {
-                    $desc = $gL10n->get($row->men_translat_desc);
-                }
-
-                if($men_need_login == true && $men_need_admin == true)
-                {
-                    $this->menu->addItem($row->men_modul_name, $row->men_url,
-                            $gL10n->get($row->men_translat_name), $row->men_icon, 'right', 'menu_item_plugins', 'admidio-default-menu-item');
-                }
-            }
-        }
-
-        $this->menu->addItem('menu_item_modules', null, $gL10n->get('SYS_MODULES'), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
-
-        $sql = 'SELECT *
-          FROM '.TBL_MENU.'
-         WHERE men_group = 2 and men_display_boot = 1
-         ORDER BY men_order';
-        $statement = $gDb->query($sql);
-
-        if($statement->rowCount() > 0)
-        {
-            while ($row = $statement->fetchObject())
-            {
                 
-                $men_need_enable = false;
+                if(strlen($row->men_translate_desc) > 2)
+                {
+                    $desc = $gL10n->get($row->men_translate_desc);
+                }
+                
+                // Read current roles rights of the menu
+                $displayMenu = new RolesRights($gDb, 'men_display_boot', $row->men_id);
+                $rolesDisplayRight = $displayMenu->getRolesIds();
+
                 if($row->men_need_enable == 1)
                 {
-                    if($gPreferences['enable_'.$row->men_modul_name.'_module'] == 1)
+                    if($gPreferences['enable_'.$row->men_modul_name.'_module'] == 1  || ($gPreferences['enable_'.$row->men_modul_name.'_module'] == 2 && $gValidLogin))
                     {
-                        $men_need_enable = true;
+                        $men_display = true;
                     }
-                    elseif($gPreferences['enable_'.$row->men_modul_name.'_module'] == 2 && $gValidLogin)
+                    else
                     {
-                        $men_need_enable = true;
+                        $men_display = false;
                     }
                 }
-                elseif($row->men_need_enable == 0)
-                {
-                    $men_need_enable = true;
-                }
-                
-                $men_need_login = false;
-                if(($row->men_need_login == 1 && $gValidLogin) || $row->men_need_login == 0)
-                {
-                    $men_need_login = true;
-                }
-                
-                $men_need_admin = false;
-                if(($row->men_need_admin == 1 && $gCurrentUser->isAdministrator()) || $row->men_need_admin == 0)
-                {
-                    $men_need_admin = true;
-                }
-                
-                $desc = '';
-                if(strlen($row->men_translat_desc) > 2)
-                {
-                    $desc = $gL10n->get($row->men_translat_desc);
-                }
-                
+
                 $men_url = $row->men_url;
                 $men_icon = $row->men_icon;
-                $men_translat_name = $gL10n->get($row->men_translat_name);
-                
+                $men_translate_name = $gL10n->get($row->men_translate_name);
+
                 //special case because there are differnent links if you are logged in or out for mail
                 if($row->men_modul_name === 'mail' && $gValidLogin)
                 {
-                    if($gPreferences['enable_pm_module'] == 1 || $men_need_enable == true)
+                    $unreadBadge = '';
+
+                    // get number of unread messages for user
+                    $message = new TableMessage($gDb);
+                    $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
+
+                    if($unread > 0)
                     {
-                        $unreadBadge = '';
-
-                        // get number of unread messages for user
-                        $message = new TableMessage($gDb);
-                        $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
-
-                        if($unread > 0)
-                        {
-                            $unreadBadge = '<span class="badge">' . $unread . '</span>';
-                        }
-                        
-                        $men_url = '/adm_program/modules/messages/messages.php';
-                        $men_icon = '/icons/messages.png';
-                        $men_translat_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
+                        $unreadBadge = '<span class="badge">' . $unread . '</span>';
                     }
+                    
+                    $men_url = '/adm_program/modules/messages/messages.php';
+                    $men_icon = '/icons/messages.png';
+                    $men_translate_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                 }
 
-                if($men_need_enable == true && $men_need_login == true && $men_need_admin == true)
-                { 
-                    $this->menu->addItem($row->men_modul_name, $men_url,
-                            $men_translat_name, $men_icon, 'right', 'menu_item_modules', 'admidio-default-menu-item');
-                }
-            }
-        }
-        
-        // Administration Menu
-        if($gCurrentUser->approveUsers() || $gCurrentUser->editUsers()
-        || $gCurrentUser->manageRoles()  || $gCurrentUser->isAdministrator())
-        {
-            
-            $sql = 'SELECT *
-              FROM '.TBL_MENU.'
-             WHERE men_group = 1 and men_display_boot = 1
-             ORDER BY men_order';
-            $statement = $gDb->query($sql);
-
-            if($statement->rowCount() > 0)
-            {
-                $this->menu->addItem('menu_item_administration', null, $gL10n->get('SYS_ADMINISTRATION'), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
-                while ($row = $statement->fetchObject())
+                if(count($rolesDisplayRight) >= 1)
                 {
-                    
-                    $men_need_enable = false;
-                    if($row->men_need_enable == 1)
+                    // check for rigth to show the menue
+                    if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
                     {
-                        if($gPreferences['enable_'.$row->men_modul_name.'_module'] == 1)
-                        {
-                            $men_need_enable = true;
-                        }
-                        elseif($gPreferences['enable_'.$row->men_modul_name.'_module'] == 2 && $gValidLogin)
-                        {
-                            $men_need_enable = true;
-                        }
+                        $men_display = false;
                     }
-                    elseif($row->men_need_enable == 0)
-                    {
-                        $men_need_enable = true;
-                    }
-                    
-                    $men_need_admin = false;
-                    if(($row->men_need_admin == 1 && $gCurrentUser->isAdministrator()) || $row->men_need_admin == 0)
-                    {
-                        $men_need_admin = true;
-                    }
+                }
 
-                    $desc = '';
-                    if(strlen($row->men_translat_desc) > 2)
+                // special check for "newreg"
+                if($row->men_modul_name === 'newreg')
+                {
+                    $men_display = false;
+                    if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
                     {
-                        $desc = $gL10n->get($row->men_translat_desc);
+                        $men_display = true;
                     }
-                    
-                    // special check for "newreg"
-                    if($row->men_modul_name === 'newreg')
-                    {
-                        $men_need_admin = false;
-                        if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
-                        {
-                            $men_need_admin = true;
-                        }
-                    }
-                    
-                    // special check for "usrmgt"
-                    if($row->men_modul_name === 'usrmgt')
-                    {
-                        $men_need_admin = false;
-                        if($gCurrentUser->editUsers())
-                        {
-                            $men_need_admin = true;
-                        }
-                    }
-                    
-                    // special check for "roladm"
-                    if($row->men_modul_name === 'roladm')
-                    {
-                        $men_need_admin = false;
-                        if($gCurrentUser->manageRoles())
-                        {
-                            $men_need_admin = true;
-                        }
-                    }
+                }
 
-                    if($men_need_enable == true && $men_need_admin == true)
+                // special check for "usrmgt"
+                if($row->men_modul_name === 'usrmgt')
+                {
+                    if(!$gCurrentUser->editUsers())
                     {
-                        $this->menu->addItem($row->men_modul_name, $row->men_url,
-                            $gL10n->get($row->men_translat_name), $row->men_icon, 'right', 'menu_item_administration', 'admidio-default-menu-item');
+                        $men_display = false;
                     }
+                }
+
+                // special check for "roladm"
+                if($row->men_modul_name === 'roladm')
+                {
+                    if(!$gCurrentUser->manageRoles())
+                    {
+                        $men_display = false;
+                    }
+                }
+
+                if($men_display == true)
+                {
+                    $this->menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, 'right', 'menu_item_'.$men_groups[$row->men_group], 'admidio-default-menu-item');
                 }
             }
         }

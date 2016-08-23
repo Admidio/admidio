@@ -12,14 +12,7 @@
 /******************************************************************************
  * Parameters:
  *
- * cat_id: Id of the category that should be edited
- * type  : Type of categories that could be maintained
- *         ROL = Categories for roles
- *         LNK = Categories for weblinks
- *         USF = Categories for profile fields
- *         DAT = Calendars for events
- *         INF = Categories for Inventory
- * title : Parameter for the synonym of the categorie
+ * men_id: Id of the menu that should be edited
  *
  ****************************************************************************/
 
@@ -27,8 +20,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getMenId = admFuncVariableIsValid($_GET, 'cat_id', 'int');
-$getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => false, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
+$getMenId = admFuncVariableIsValid($_GET, 'men_id', 'int');
 
 $men_groups = array('1' => 'Administration', '2' => 'Modules', '3' => 'Plugins');
 
@@ -56,43 +48,12 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // UserField-objekt anlegen
 $menu = new TableMenu($gDb);
 
-if($getMenId > 0)
-{
-    $category->readDataById($getCatId);
-
-    // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
-    if($category->getValue('cat_org_id') > 0
-    && $category->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
-    {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    }
-}
-
-if(isset($_SESSION['categories_request']))
-{
-    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-    $category->setArray($_SESSION['categories_request']);
-    if(!isset($_SESSION['categories_request']['show_in_several_organizations']))
-    {
-        $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
-    }
-    unset($_SESSION['categories_request']);
-}
-
 // create html page object
 $page = new HtmlPage($headline);
 
 // add back link to module menu
-$categoryCreateMenu = $page->getMenu();
-$categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-
-$roleViewSet[] = 0;
-// if no roles are assigned then set "all users" as default
-if(count($roleViewSet) === 0)
-{
-    $roleViewSet[] = 0;
-}
+$menuCreateMenu = $page->getMenu();
+$menuCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // alle aus der DB aus lesen
 $sqlRoles =  'SELECT *
@@ -101,7 +62,6 @@ $sqlRoles =  'SELECT *
                   ON cat_id = rol_cat_id
                WHERE rol_valid  = 1
                  AND rol_system = 0
-                 AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
             ORDER BY rol_name';
 $rolesViewStatement = $gDb->query($sqlRoles);
 
@@ -112,48 +72,64 @@ while($rowViewRoles = $rolesViewStatement->fetchObject())
 }
 
 // show form
-$form = new HtmlForm('categories_edit_form', $g_root_path.'/adm_program/modules/menu/menu_function.php?men_id='.$getMenId.'&amp;mode=1', $page);
+$form = new HtmlForm('menu_edit_form', $g_root_path.'/adm_program/modules/menu/menu_function.php?men_id='.$getMenId.'&amp;mode=1', $page);
 
 // systemcategories should not be renamed
-$fieldPropertyCatName = FIELD_REQUIRED;
-if($menu->getValue('cat_system') == 1)
+$fieldPropertyStandart = FIELD_REQUIRED;
+$standart = 0;
+$roleViewSet_right[] = 0;
+$roleViewSet_index[] = 0;
+$roleViewSet_boot[] = 0;
+
+if($getMenId > 0)
 {
-    $fieldPropertyCatName = FIELD_DISABLED;
+    $menu->readDataById($getMenId);
+    $fieldPropertyStandart = FIELD_DISABLED;
+    $standart = $menu->getValue('men_standart');
+    
+    // Read current roles rights of the menu
+    $display = new RolesRights($gDb, 'men_display_right', $getMenId);
+    $roleViewSet_right = $display->getRolesIds();
+    $display = new RolesRights($gDb, 'men_display_index', $getMenId);
+    $roleViewSet_index = $display->getRolesIds();
+    $display = new RolesRights($gDb, 'men_display_boot', $getMenId);
+    $roleViewSet_boot = $display->getRolesIds();
 }
 
-$form->addSelectBox('men-group', 'Menu Group',  $men_groups,
-                array('property' => FIELD_REQUIRED, 'defaultValue' => '3', 'firstEntry' => ''));
+$form->addSelectBox('men_group', 'Menu Group',  $men_groups,
+                array('property' => FIELD_REQUIRED, 'defaultValue' => $menu->getValue('men_group', 'database'), 'firstEntry' => ''));
 
-//$form->addCheckbox('men_display_right', 'Display in right main menu', $menu->getValue('men_display_right'), array('property' => FIELD_REQUIRED));
+$form->addInput('men_modul_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_modul_name', 'database'), array('maxLength' => 100, 'property' => $fieldPropertyStandart));
+
+$form->addCheckbox('men_need_enable', 'need to be enabled in config', $menu->getValue('men_need_enable'), array('icon' => 'star.png'));
 
 $form->addSelectBox('men_display_right', 'Display in right main menu '.$gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED,
-                                                                                              'defaultValue' => $roleViewSet,
+                                                                                              'defaultValue' => $roleViewSet_right,
                                                                                               'multiselect'  => true));
-
-//$form->addCheckbox('men_display_index', 'Display in center menu', $menu->getValue('men_display_index'), array('property' => FIELD_REQUIRED));
 
 $form->addSelectBox('men_display_index', 'Display in center menu '.$gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED,
-                                                                                              'defaultValue' => $roleViewSet,
+                                                                                              'defaultValue' => $roleViewSet_index,
                                                                                               'multiselect'  => true));
-
-//$form->addCheckbox('men_display_boot', 'Display in bootstrap menu', $menu->getValue('men_display_boot'), array('property' => FIELD_REQUIRED));
 
 $form->addSelectBox('men_display_boot', 'Display in bootstrap menu '.$gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED,
-                                                                                              'defaultValue' => $roleViewSet,
+                                                                                              'defaultValue' => $roleViewSet_boot,
                                                                                               'multiselect'  => true));
 
-$form->addInput('cat_name', $gL10n->get('SYS_NAME'), $menu->getValue('cat_name', 'database'),
-                array('maxLength' => 100, 'property' => $fieldPropertyCatName));
+$form->addInput('men_url', $gL10n->get('ORG_URL'), $menu->getValue('men_url', 'database'), array('maxLength' => 100));
+                
+$form->addInput('men_icon', $gL10n->get('SYS_ICON'), $menu->getValue('men_icon', 'database'), array('maxLength' => 100));
 
+$form->addInput('men_translate_name', 'Translation '.$gL10n->get('SYS_NAME'), $menu->getValue('men_translate_name', 'database'), array('maxLength' => 100));
 
-$form->addCheckbox('cat_hidden', $gL10n->get('SYS_VISIBLE_TO_USERS', $gL10n->get('SYS_MENU')), $menu->getValue('cat_hidden'),
-                   array('icon' => 'user_key.png'));
+$form->addInput('men_translate_desc', 'Translation '.$gL10n->get('SYS_DESCRIPTION'), $menu->getValue('men_translate_desc', 'database'), array('maxLength' => 100));
 
-$form->addCheckbox('cat_default', $gL10n->get('CAT_DEFAULT_VAR', $gL10n->get('SYS_MENU')), $menu->getValue('cat_default'),
-                   array('icon' => 'star.png'));
+if($fieldPropertyStandart == FIELD_DISABLED)
+{
+    $form->addInput('men_modul_name', null, $menu->getValue('men_modul_name', 'database'), array('type' => 'hidden'));
+}
+$form->addInput('men_standart', null, $standart, array('type' => 'hidden'));
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
-$form->addHtml(admFuncShowCreateChangeInfoById($menu->getValue('cat_usr_id_create'), $menu->getValue('cat_timestamp_create'), $menu->getValue('cat_usr_id_change'), $menu->getValue('cat_timestamp_change')));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));
