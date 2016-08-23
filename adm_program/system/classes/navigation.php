@@ -187,15 +187,11 @@ class Navigation
         {
             return null;
         }
-        elseif($count === 1)
-        {
-            // Only one url, take this one
-            return $this->urlStack[1]['url'];
-        }
-        else
-        {
-            return $this->urlStack[$count - 2]['url'];
-        }
+
+        // Only one url, take this one
+        $entry = min(1, $count - 2);
+
+        return $this->urlStack[$entry]['url'];
     }
 
     /**
@@ -210,9 +206,7 @@ class Navigation
         {
             return $this->urlStack[$count - 1]['url'];
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 }

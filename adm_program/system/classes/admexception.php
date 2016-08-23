@@ -81,10 +81,8 @@ class AdmException extends Exception
         {
             return $gL10n->get($this->message, $this->param1, $this->param2, $this->param3, $this->param4);
         }
-        else
-        {
-            return $this->message;
-        }
+
+        return $this->message;
     }
 
     /**

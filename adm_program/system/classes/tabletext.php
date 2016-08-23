@@ -46,10 +46,8 @@ class TableText extends TableAccess
         {
             return $this->dbColumns['txt_text'];
         }
-        else
-        {
-            return parent::getValue($columnName, $format);
-        }
+
+        return parent::getValue($columnName, $format);
     }
 
     /**

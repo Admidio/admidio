@@ -555,11 +555,9 @@ class ProfileFields
                     {
                         return false;
                     }
-                    else
-                    {
-                        // numbers don't have leading zero
-                        $fieldValue = ltrim($fieldValue, '0');
-                    }
+
+                    // numbers don't have leading zero
+                    $fieldValue = ltrim($fieldValue, '0');
                     break;
                 case 'DECIMAL':
                     // A number must be numeric
@@ -567,11 +565,9 @@ class ProfileFields
                     {
                         return false;
                     }
-                    else
-                    {
-                        // numbers don't have leading zero
-                        $fieldValue = ltrim($fieldValue, '0');
-                    }
+
+                    // numbers don't have leading zero
+                    $fieldValue = ltrim($fieldValue, '0');
                     break;
                 case 'PHONE':
                     // check phone number for valid characters

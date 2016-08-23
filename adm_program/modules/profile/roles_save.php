@@ -187,7 +187,14 @@ foreach($rolesList as $row)
         // update role membership
         if($roleAssign)
         {
-            $user->setRoleMembership($row['rol_id'], DATE_NOW, '9999-12-31', $roleLeader);
+            $roleAssignmentEndDate = '9999-12-31';
+
+            if($row['mem_end'] > date('Y-m-d'))
+            {
+                $roleAssignmentEndDate = $row['mem_end'];
+            }
+
+            $user->setRoleMembership($row['rol_id'], DATE_NOW, $roleAssignmentEndDate, $roleLeader);
             ++$assignedCount;
 
             // find the parent roles and assign user to parent roles

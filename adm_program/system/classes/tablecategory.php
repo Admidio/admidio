@@ -91,13 +91,12 @@ class TableCategory extends TableAccess
             $return = parent::delete();
 
             $this->db->endTransaction();
+
             return $return;
         }
-        else
-        {
-            // Don't delete the last category of a type!
-            throw new AdmException('SYS_DELETE_LAST_CATEGORY');
-        }
+
+        // Don't delete the last category of a type!
+        throw new AdmException('SYS_DELETE_LAST_CATEGORY');
     }
 
     /**

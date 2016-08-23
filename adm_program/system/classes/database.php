@@ -403,7 +403,7 @@ class Database
             }
 
             $trace['class'] = array_key_exists('class', $trace) ? $trace['class'] : '';
-            $trace['type']  = array_key_exists('type',  $trace) ? $trace['type']  : '';
+            $trace['type']  = array_key_exists('type',  $trace) ? $trace['type'] : '';
 
             $output .= '<br />';
             $output .= '<strong>FILE:</strong> '.htmlentities($trace['file']).'<br />';
@@ -430,10 +430,8 @@ class Database
             $lastValStatement = $this->query('SELECT lastval()');
             return $lastValStatement->fetchColumn();
         }
-        else
-        {
-            return $this->pdo->lastInsertId();
-        }
+
+        return $this->pdo->lastInsertId();
     }
 
     /**
@@ -664,18 +662,16 @@ class Database
             // returns all columns with their properties of the table
             return $this->dbStructure[$table];
         }
-        else
+
+        // returns only the column names of the table.
+        $tableColumns = array();
+
+        foreach ($this->dbStructure[$table] as $columnName => $columnProperties)
         {
-            // returns only the column names of the table.
-            $tableColumns = array();
-
-            foreach ($this->dbStructure[$table] as $columnName => $columnProperties)
-            {
-                $tableColumns[] = $columnName;
-            }
-
-            return $tableColumns;
+            $tableColumns[] = $columnName;
         }
+
+        return $tableColumns;
     }
 
     /**

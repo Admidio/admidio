@@ -250,10 +250,8 @@ class Language
         {
             return 'de';
         }
-        else
-        {
-            return $language;
-        }
+
+        return $language;
     }
 
     /**
@@ -326,7 +324,7 @@ class Language
                 // set line break with html
                 // Within Android string resource all apostrophe are escaped so we must remove the escape char
                 // replace highly comma, so there are no problems in the code later
-                $text = str_replace(array("\\n", "\\'", "'"), array('<br />', "'", '&rsquo;'), $node[0]);
+                $text = str_replace(array('\\n', '\\\'', '\''), array('<br />', '\'', '&rsquo;'), $node[0]);
                 $this->languageData->textCache[$textId] = $text;
 
                 return $text;

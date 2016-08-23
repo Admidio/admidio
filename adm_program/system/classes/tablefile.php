@@ -110,10 +110,8 @@ class TableFile extends TableAccess
 
                 return true;
             }
-            else
-            {
-                return true;
-            }
+
+            return true;
         }
         throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }

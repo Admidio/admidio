@@ -60,10 +60,8 @@ class Participants
             $this->rolId = $roleId;
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     /**

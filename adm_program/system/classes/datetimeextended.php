@@ -83,10 +83,8 @@ class DateTimeExtended extends DateTime
         {
             return $weekdays[$weekday];
         }
-        else
-        {
-            return $weekdays;
-        }
+
+        return $weekdays;
     }
 
     /**

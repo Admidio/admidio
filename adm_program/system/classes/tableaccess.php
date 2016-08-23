@@ -251,15 +251,9 @@ class TableAccess
                 }
                 return $columnValue;
             }
-            else
-            {
-                return $columnValue;
-            }
-        }
-        else
-        {
             return $columnValue;
         }
+        return $columnValue;
     }
 
     /**
@@ -336,13 +330,13 @@ class TableAccess
                         $this->dbColumns[$key] = $value;
                     }
                 }
+
                 return true;
             }
-            else
-            {
-                $this->clear();
-            }
+
+            $this->clear();
         }
+
         return false;
     }
 

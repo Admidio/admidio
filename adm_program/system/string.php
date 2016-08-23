@@ -22,10 +22,8 @@ function admStrToLower($string)
     {
         return mb_strtolower($string, 'UTF-8');
     }
-    else
-    {
-        return strtolower($string);
-    }
+
+    return strtolower($string);
 }
 
 /**
@@ -40,10 +38,8 @@ function admStrToUpper($string)
     {
         return mb_strtoupper($string, 'UTF-8');
     }
-    else
-    {
-        return strtoupper($string);
-    }
+
+    return strtoupper($string);
 }
 
 /**

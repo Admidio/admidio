@@ -323,10 +323,8 @@ class TableFolder extends TableAccess
 
                 return true;
             }
-            else
-            {
-                return true;
-            }
+
+            return true;
         }
         throw new AdmException('DOW_FOLDER_NOT_FOUND', $folderId);
     }
@@ -625,10 +623,8 @@ class TableFolder extends TableAccess
                 // naechster Aufruf mit ParentFolder
                 return $this->getNavigationForDownload($currentFolderRow->fol_fol_id_parent, $currentNavigation);
             }
-            else
-            {
-                return $currentNavigation;
-            }
+
+            return $currentNavigation;
         }
 
         if ($originalCall)
