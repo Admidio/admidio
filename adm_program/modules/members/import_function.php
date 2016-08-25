@@ -55,7 +55,7 @@ if(!$gCurrentUser->hasRightViewRole($role->getValue('rol_id'))
 }
 
 // read file in an array; auto-detect the line endings of different os
-ini_set('auto_detect_line_endings', 1);
+ini_set('auto_detect_line_endings', '1');
 $_SESSION['file_lines']       = file($_FILES['userfile']['tmp_name'][0]);
 $_SESSION['rol_id']           = $role->getValue('rol_id');
 $_SESSION['user_import_mode'] = $postUserImportMode;

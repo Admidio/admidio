@@ -45,7 +45,7 @@ class TableFile extends TableAccess
      */
     public function delete()
     {
-        @chmod($this->getCompletePathOfFile(), 0777);
+        chmod($this->getCompletePathOfFile(), 0777);
         @unlink($this->getCompletePathOfFile());
 
         // Auch wenn das Loeschen nicht klappt wird true zurueckgegeben,
