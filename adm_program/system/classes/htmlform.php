@@ -852,7 +852,7 @@ class HtmlForm extends HtmlFormBasic
         {
             if(is_object($this->htmlPage))
             {
-                $zxcvbnUserInputs = json_encode($optionsAll['passwordUserData'], JSON_UNESCAPED_UNICODE);
+                $zxcvbnUserInputs = json_encode($optionsAll['passwordUserData'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                 $javascriptCode = '
                     $("#'.$id.'").keyup(function(e) {
                         var result = zxcvbn(e.target.value, '.$zxcvbnUserInputs.');

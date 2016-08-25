@@ -122,7 +122,7 @@ elseif($getMode === 'html')
     /* Show password form */
     /***********************************************************************/
 
-    $zxcvbnUserInputs = json_encode($user->getPasswordUserData(), JSON_UNESCAPED_UNICODE);
+    $zxcvbnUserInputs = json_encode($user->getPasswordUserData(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
     echo '<script type="text/javascript"><!--
     $(function() {

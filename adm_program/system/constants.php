@@ -99,6 +99,13 @@ define('ROLE_LEADER_MEMBERS_ASSIGN', 1);
 define('ROLE_LEADER_MEMBERS_EDIT', 2);
 define('ROLE_LEADER_MEMBERS_ASSIGN_EDIT', 3);
 
+// Define Constants for PHP 5.3 (deprecated)
+if (!defined('JSON_UNESCAPED_SLASHES'))
+{
+    define('JSON_UNESCAPED_SLASHES', 64);
+    define('JSON_UNESCAPED_UNICODE', 256);
+}
+
 // Password settings
 define('PASSWORD_MIN_LENGTH', 8);
 define('PASSWORD_GEN_LENGTH', 16);
