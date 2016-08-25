@@ -48,23 +48,22 @@ class TableFile extends TableAccess
         chmod($this->getCompletePathOfFile(), 0777);
         @unlink($this->getCompletePathOfFile());
 
-        // Auch wenn das Loeschen nicht klappt wird true zurueckgegeben,
-        // damit der Eintrag aus der DB verschwindet.
+        // Even if the delete won't work, return true, so that the entry of the DB disappears
         return parent::delete();
     }
 
     /**
-     * Gibt den kompletten Pfad der Datei zurueck
-     * @return string
+     * Returns the complete filepath
+     * @return string Complete filepath
      */
     public function getCompletePathOfFile()
     {
-        // Dateinamen und Pfad zusammen setzen
-        $fileName     = $this->getValue('fil_name');
-        $folderPath   = $this->getValue('fol_path');
-        $folderName   = $this->getValue('fol_name');
+        // Put the path and the filename together
+        $fileName   = $this->getValue('fil_name');
+        $folderPath = $this->getValue('fol_path');
+        $folderName = $this->getValue('fol_name');
 
-        return SERVER_PATH. $folderPath. '/'. $folderName. '/'. $fileName;
+        return SERVER_PATH . $folderPath . '/' . $folderName . '/' . $fileName;
     }
 
     /**
@@ -77,43 +76,45 @@ class TableFile extends TableAccess
      */
     public function getFileForDownload($fileId)
     {
-        global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
+        global $gCurrentUser;
 
         $this->readDataById($fileId);
 
-        // Pruefen ob der aktuelle Benutzer Rechte an der Datei hat
-        // Gucken ob ueberhaupt ein Datensatz gefunden wurde...
-        if ($this->getValue('fil_id') > 0)
+        // Check if a dataset is found
+        if ((int) $this->getValue('fil_id') === 0)
         {
-            // Falls die Datei gelocked ist und der User keine Downloadadminrechte hat, bekommt er nix zu sehen..
-            if (!$gCurrentUser->editDownloadRight() && $this->getValue('fil_locked'))
-            {
-                $this->clear();
-                throw new AdmException('DOW_FOLDER_NO_RIGHTS');
-            }
-            elseif (!$gValidLogin && !$this->getValue('fol_public'))
-            {
-                // Wenn der Ordner nicht public ist und der Benutzer nicht eingeloggt ist, bekommt er nix zu sehen..
-                $this->clear();
-                throw new AdmException('DOW_FOLDER_NO_RIGHTS');
-            }
-            elseif (!$gCurrentUser->editDownloadRight() && !$this->getValue('fol_public'))
-            {
-                // check if user has a membership in a role that is assigned to the current folder
-                $folderViewRolesObject = new RolesRights($this->db, 'folder_view', $this->getValue('fol_id'));
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        }
 
-                if(!$folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
-                {
-                    $this->clear();
-                    throw new AdmException('DOW_FOLDER_NO_RIGHTS');
-                }
-
-                return true;
-            }
-
+        // If current user has download-admin-rights => allow
+        if ($gCurrentUser->editDownloadRight())
+        {
             return true;
         }
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+
+        // If file is locked (and no download-admin-rights) => throw exception
+        if ($this->getValue('fil_locked'))
+        {
+            $this->clear();
+            throw new AdmException('DOW_FOLDER_NO_RIGHTS');
+        }
+
+        // If folder is public (and file is not locked) => allow
+        if ($this->getValue('fol_public'))
+        {
+            return true;
+        }
+
+        // check if user has a membership in a role that is assigned to the current folder
+        $folderViewRolesObject = new RolesRights($this->db, 'folder_view', $this->getValue('fol_id'));
+
+        if ($folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
+        {
+            return true;
+        }
+
+        $this->clear();
+        throw new AdmException('DOW_FOLDER_NO_RIGHTS');
     }
 
     /**
@@ -126,12 +127,10 @@ class TableFile extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        global $gL10n;
-
         $value = parent::getValue($columnName, $format);
 
         // getValue transforms & to html chars. This must be undone.
-        if($columnName === 'fil_name')
+        if ($columnName === 'fil_name')
         {
             $value = htmlspecialchars_decode($value);
         }
@@ -149,13 +148,14 @@ class TableFile extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentOrganization, $gCurrentUser;
+        global $gCurrentUser;
 
-        if($this->new_record)
+        if ($this->new_record)
         {
             $this->setValue('fil_timestamp', DATETIME_NOW);
             $this->setValue('fil_usr_id', $gCurrentUser->getValue('usr_id'));
         }
+
         return parent::save($updateFingerPrint);
     }
 }
