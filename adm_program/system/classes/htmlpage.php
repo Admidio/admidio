@@ -171,7 +171,7 @@ class HtmlPage
             
             while ($row = $statement->fetchObject())
             {
-                if($row->men_group <> $last)
+                if($row->men_group != $last)
                 {
                     $this->menu->addItem('menu_item_'.$men_groups[$row->men_group], null, $gL10n->get($men_heads[$row->men_group]), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
                     $last = $row->men_group;

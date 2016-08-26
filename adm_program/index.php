@@ -66,13 +66,13 @@ if($statement->rowCount() > 0)
     
     while ($row = $statement->fetchObject())
     {
-        if($row->men_group <> $last)
+        if($row->men_group != $last)
         {
             if($last > 0)
             {
-                $page->addHtml($Menu->show(true));
+                $page->addHtml($menu->show(true));
             }
-            $Menu = new Menu($men_groups[$row->men_group], $gL10n->get($men_heads[$row->men_group]));
+            $menu = new Menu($men_groups[$row->men_group], $gL10n->get($men_heads[$row->men_group]));
             $last = $row->men_group;
         }
         
@@ -162,15 +162,15 @@ if($statement->rowCount() > 0)
 
         if($men_display == true)
         {
-            $Menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, $desc);
+            $menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, $desc);
         }
         
         //Submenu for Lists
         if($gValidLogin && $row->men_modul_name === 'lists')
         {
-            $Menu->addSubItem('lists', 'mylist', '/adm_program/modules/lists/mylist.php',
+            $menu->addSubItem('lists', 'mylist', '/adm_program/modules/lists/mylist.php',
                                     $gL10n->get('LST_MY_LIST'));
-            $Menu->addSubItem('lists', 'rolinac', '/adm_program/modules/lists/lists.php?active_role=0',
+            $menu->addSubItem('lists', 'rolinac', '/adm_program/modules/lists/lists.php?active_role=0',
                                     $gL10n->get('ROL_INACTIV_ROLE'));
         }
         
@@ -178,12 +178,12 @@ if($statement->rowCount() > 0)
         if(($gPreferences['enable_dates_module'] == 1 && $row->men_modul_name === 'dates')
         || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin && $row->men_modul_name === 'dates'))
         {
-            $Menu->addSubItem('dates', 'olddates', '/adm_program/modules/dates/dates.php?mode=old',
+            $menu->addSubItem('dates', 'olddates', '/adm_program/modules/dates/dates.php?mode=old',
                                     $gL10n->get('DAT_PREVIOUS_DATES', $gL10n->get('DAT_DATES')));
         }
     }
 
-    $page->addHtml($Menu->show(true));
+    $page->addHtml($menu->show(true));
 }
 
 $page->show();

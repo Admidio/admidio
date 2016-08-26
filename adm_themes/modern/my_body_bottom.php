@@ -30,7 +30,7 @@
                         
                         while ($row = $statement->fetchObject())
                         {
-                            if($row->men_group <> $last)
+                            if($row->men_group != $last)
                             {
                                 if($last > 0)
                                 {
