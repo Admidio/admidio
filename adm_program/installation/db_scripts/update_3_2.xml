@@ -100,6 +100,7 @@
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
     <step id="330">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_CREATE foreign key (ure_usr_id_create)
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="340">ComponentUpdate::updateStepInstallDefaultUserRelationTypes</step>
 
     <step>stop</step>
 </update>
