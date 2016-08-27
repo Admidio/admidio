@@ -57,6 +57,11 @@ class TableUserRelationType extends TableAccess
         return 'asymmetrical';
     }
 
+    /**
+     * Returns the inverse relationtype.
+     *
+     * @return TableUserRelationType Returns the inverse relationtype
+     */
     public function getInverse()
     {
         $inverse = new self($this->db, $this->getValue('urt_id_inverse'));

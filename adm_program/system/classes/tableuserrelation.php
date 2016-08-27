@@ -48,6 +48,10 @@ class TableUserRelation extends TableAccess
         return $inverse;
     }
 
+    /**
+     * Deletes the selected record of the table and initializes the class
+     * @return true Returns @b true if no error occurred
+     */
     public function delete($deleteInverse = true)
     {
         $this->db->startTransaction();
