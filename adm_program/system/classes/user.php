@@ -1238,8 +1238,9 @@ class User extends TableAccess
             $this->getValue('LAST_NAME'),
             $this->getValue('usr_login_name'),
             // Birthday
-            $this->getValue('BIRTHDAY', 'Y-m-d'),
-            DateTime::createFromFormat('Y-m-d', $this->getValue('BIRTHDAY', 'Y-m-d'))->format('d.m.Y'),
+            $this->getValue('BIRTHDAY', 'Y'), // YYYY
+            $this->getValue('BIRTHDAY', 'md'), // MMDD
+            $this->getValue('BIRTHDAY', 'dm'), // DDMM
             // Email
             $this->getValue('EMAIL'),
             // Address
@@ -1249,7 +1250,16 @@ class User extends TableAccess
             $this->getValue('COUNTRY')
         );
 
-        return $userData;
+        /**
+         * @param string $value
+         * @return bool
+         */
+        function filterEmptyStrings($value)
+        {
+            return $value !== '';
+        }
+
+        return array_filter($userData, 'filterEmptyStrings');
     }
 
     /**
