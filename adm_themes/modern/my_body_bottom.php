@@ -14,113 +14,122 @@
                 ?>
                 <div id="plugin_menu" class="admidio-plugin-content">
                     <?php
+                    
+                    // display Menu
 
-                    // Module Menu
-                    $moduleMenu = new Menu('modules', $gL10n->get('SYS_MODULES'));
+                    $sql = 'SELECT *
+                      FROM '.TBL_MENU.'
+                     ORDER BY men_group DESC, men_order';
+                    $statement = $gDb->query($sql);
 
-                    $moduleMenu->addItem('overview', '/adm_program/index.php',
-                                         $gL10n->get('SYS_OVERVIEW'), '/icons/home.png');
-
-                    if($gPreferences['enable_announcements_module'] == 1
-                    || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
+                    if($statement->rowCount() > 0)
                     {
-                        $moduleMenu->addItem('announcements', '/adm_program/modules/announcements/announcements.php',
-                                             $gL10n->get('ANN_ANNOUNCEMENTS'), '/icons/announcements.png');
-                    }
-                    if($gPreferences['enable_download_module'] == 1)
-                    {
-                        $moduleMenu->addItem('download', '/adm_program/modules/downloads/downloads.php',
-                                             $gL10n->get('DOW_DOWNLOADS'), '/icons/download.png');
-                    }
-                    if($gPreferences['enable_mail_module'] == 1 && !$gValidLogin)
-                    {
-                        $moduleMenu->addItem('email', '/adm_program/modules/messages/messages_write.php',
-                                             $gL10n->get('SYS_EMAIL'), '/icons/email.png');
-                    }
-                    if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
-                    {
-                        $unreadBadge = '';
-
-                        // get number of unread messages for user
-                        $message = new TableMessage($gDb);
-                        $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
-
-                        if($unread > 0)
+                        $men_groups = array('1' => 'Administration', '2' => 'Modules', '3' => 'Plugins');
+                        $men_heads = array('1' => 'SYS_ADMINISTRATION', '2' => 'SYS_MODULES', '3' => 'SYS_PLUGIN');
+                        $last = 0;
+                        
+                        while ($row = $statement->fetchObject())
                         {
-                            $unreadBadge = '<span class="badge">' . $unread . '</span>';
+                            if($row->men_group != $last)
+                            {
+                                if($last > 0)
+                                {
+                                    echo $Menu->show();
+                                }
+                                $Menu = new Menu($men_groups[$row->men_group], $gL10n->get($men_heads[$row->men_group]));
+                                $last = $row->men_group;
+                            }
+                            
+                            $men_display = true;
+                            $desc = '';
+                            
+                            if(strlen($row->men_translate_desc) > 2)
+                            {
+                                $desc = $gL10n->get($row->men_translate_desc);
+                            }
+                            
+                            // Read current roles rights of the menu
+                            $displayMenu = new RolesRights($gDb, 'men_display_right', $row->men_id);
+                            $rolesDisplayRight = $displayMenu->getRolesIds();
+
+                            if($row->men_need_enable == 1)
+                            {
+                                if($gPreferences['enable_'.$row->men_modul_name.'_module'] == 1  || ($gPreferences['enable_'.$row->men_modul_name.'_module'] == 2 && $gValidLogin))
+                                {
+                                    $men_display = true;
+                                }
+                                else
+                                {
+                                    $men_display = false;
+                                }
+                            }
+
+                            $men_url = $row->men_url;
+                            $men_icon = $row->men_icon;
+                            $men_translate_name = $gL10n->get($row->men_translate_name);
+
+                            //special case because there are differnent links if you are logged in or out for mail
+                            if($row->men_modul_name === 'mail' && $gValidLogin)
+                            {
+                                $unreadBadge = '';
+
+                                // get number of unread messages for user
+                                $message = new TableMessage($gDb);
+                                $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
+
+                                if($unread > 0)
+                                {
+                                    $unreadBadge = '<span class="badge">' . $unread . '</span>';
+                                }
+                                
+                                $men_url = '/adm_program/modules/messages/messages.php';
+                                $men_icon = '/icons/messages.png';
+                                $men_translate_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
+                            }
+
+                            if(count($rolesDisplayRight) >= 1)
+                            {
+                                // check for rigth to show the menue
+                                if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                                {
+                                    $men_display = false;
+                                }
+                            }
+
+                            // special check for "newreg"
+                            if($row->men_modul_name === 'newreg')
+                            {
+                                $men_display = false;
+                                if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
+                                {
+                                    $men_display = true;
+                                }
+                            }
+
+                            // special check for "usrmgt"
+                            if($row->men_modul_name === 'usrmgt')
+                            {
+                                if(!$gCurrentUser->editUsers())
+                                {
+                                    $men_display = false;
+                                }
+                            }
+
+                            // special check for "roladm"
+                            if($row->men_modul_name === 'roladm')
+                            {
+                                if(!$gCurrentUser->manageRoles())
+                                {
+                                    $men_display = false;
+                                }
+                            }
+
+                            if($men_display == true)
+                            {
+                                $Menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, $desc);
+                            }
                         }
-
-                        $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages.php',
-                                             $gL10n->get('SYS_MESSAGES') . $unreadBadge, '/icons/messages.png');
-                    }
-                    if($gPreferences['enable_photo_module'] == 1
-                    || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
-                    {
-                        $moduleMenu->addItem('photo', '/adm_program/modules/photos/photos.php',
-                                             $gL10n->get('PHO_PHOTOS'), '/icons/photo.png');
-                    }
-                    if($gPreferences['enable_guestbook_module'] == 1
-                    || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
-                    {
-                        $moduleMenu->addItem('guestbk', '/adm_program/modules/guestbook/guestbook.php',
-                                             $gL10n->get('GBO_GUESTBOOK'), '/icons/guestbook.png');
-                    }
-
-                    $moduleMenu->addItem('lists', '/adm_program/modules/lists/lists.php',
-                                         $gL10n->get('LST_LISTS'), '/icons/lists.png');
-
-                    if($gValidLogin)
-                    {
-                        $moduleMenu->addItem('mylist', '/adm_program/modules/lists/mylist.php',
-                                             $gL10n->get('LST_MY_LIST'), '/icons/mylist.png');
-                    }
-
-                    if($gPreferences['enable_dates_module'] == 1
-                    || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
-                    {
-                        $moduleMenu->addItem('dates', '/adm_program/modules/dates/dates.php',
-                                             $gL10n->get('DAT_DATES'), '/icons/dates.png');
-                    }
-
-                    if($gPreferences['enable_weblinks_module'] == 1
-                    || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
-                    {
-                        $moduleMenu->addItem('links', '/adm_program/modules/links/links.php',
-                                             $gL10n->get('LNK_WEBLINKS'), '/icons/weblinks.png');
-                    }
-
-                    echo $moduleMenu->show();
-
-                    // Administration Menu
-                    if($gCurrentUser->approveUsers() || $gCurrentUser->editUsers()
-                    || $gCurrentUser->manageRoles()  || $gCurrentUser->isAdministrator())
-                    {
-                        $adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
-
-                        if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
-                        {
-                            $adminMenu->addItem('newreg', '/adm_program/modules/registration/registration.php',
-                                                $gL10n->get('NWU_NEW_REGISTRATIONS'), '/icons/new_registrations.png');
-                        }
-                        if($gCurrentUser->editUsers())
-                        {
-                            $adminMenu->addItem('usrmgt', '/adm_program/modules/members/members.php',
-                                                $gL10n->get('MEM_USER_MANAGEMENT'), '/icons/user_administration.png');
-                        }
-                        if($gCurrentUser->manageRoles())
-                        {
-                            $adminMenu->addItem('roladm', '/adm_program/modules/roles/roles.php',
-                                                $gL10n->get('ROL_ROLE_ADMINISTRATION'), '/icons/roles.png');
-                        }
-                        if($gCurrentUser->isAdministrator())
-                        {
-                            $adminMenu->addItem('dbback', '/adm_program/modules/backup/backup.php',
-                                                $gL10n->get('BAC_DATABASE_BACKUP'), '/icons/backup.png');
-                            $adminMenu->addItem('orgprop', '/adm_program/modules/preferences/preferences.php',
-                                                $gL10n->get('SYS_SETTINGS'), '/icons/options.png');
-                        }
-
-                        echo $adminMenu->show();
+                        echo $Menu->show();
                     }
 
                     ?>

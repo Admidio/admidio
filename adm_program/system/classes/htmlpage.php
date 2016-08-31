@@ -157,106 +157,114 @@ class HtmlPage
     public function addDefaultMenu()
     {
         global $gL10n, $gPreferences, $gValidLogin, $gDb, $gCurrentUser;
+        
+        $sql = 'SELECT *
+          FROM '.TBL_MENU.'
+         ORDER BY men_group DESC, men_order';
+        $statement = $gDb->query($sql);
 
-        $this->menu->addItem('menu_item_modules', null, $gL10n->get('SYS_MODULES'), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
-
-        $this->menu->addItem('menu_item_overview', '/adm_program/index.php',
-                            $gL10n->get('SYS_OVERVIEW'), 'home.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-
-        if($gPreferences['enable_announcements_module'] == 1
-        || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
+        if($statement->rowCount() > 0)
         {
-            $this->menu->addItem('menu_item_announcements', '/adm_program/modules/announcements/announcements.php',
-                                $gL10n->get('ANN_ANNOUNCEMENTS'), 'announcements.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-        }
-        if($gPreferences['enable_download_module'] == 1)
-        {
-            $this->menu->addItem('menu_item_download', '/adm_program/modules/downloads/downloads.php',
-                                $gL10n->get('DOW_DOWNLOADS'), 'download.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-        }
-        if($gPreferences['enable_mail_module'] == 1 && !$gValidLogin)
-        {
-            $this->menu->addItem('menu_item_email', '/adm_program/modules/messages/messages_write.php',
-                                $gL10n->get('SYS_EMAIL'), 'email.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-        }
-
-        if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
-        {
-            // get number of unread messages for user
-            $message = new TableMessage($gDb);
-            $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
-
-            if ($unread > 0)
+            $men_groups = array('1' => 'Administration', '2' => 'Modules', '3' => 'Plugins');
+            $men_heads = array('1' => 'SYS_ADMINISTRATION', '2' => 'SYS_MODULES', '3' => 'SYS_PLUGIN');
+            $last = 0;
+            
+            while ($row = $statement->fetchObject())
             {
-                $this->menu->addItem('menu_item_private_message', '/adm_program/modules/messages/messages.php',
-                                $gL10n->get('SYS_MESSAGES').'<span class="badge">'.$unread.'</span>', 'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-            }
-            else
-            {
-                $this->menu->addItem('menu_item_private_message', '/adm_program/modules/messages/messages.php',
-                                $gL10n->get('SYS_MESSAGES'), 'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-            }
-        }
-        if($gPreferences['enable_photo_module'] == 1
-        || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
-        {
-            $this->menu->addItem('menu_item_photo', '/adm_program/modules/photos/photos.php',
-                                $gL10n->get('PHO_PHOTOS'), 'photo.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-        }
-        if($gPreferences['enable_guestbook_module'] == 1
-        || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
-        {
-            $this->menu->addItem('menu_item_guestbook', '/adm_program/modules/guestbook/guestbook.php',
-                                $gL10n->get('GBO_GUESTBOOK'), 'guestbook.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-        }
+                if($row->men_group != $last)
+                {
+                    $this->menu->addItem('menu_item_'.$men_groups[$row->men_group], null, $gL10n->get($men_heads[$row->men_group]), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
+                    $last = $row->men_group;
+                }
+                
+                $men_display = true;
+                $desc = '';
+                
+                if(strlen($row->men_translate_desc) > 2)
+                {
+                    $desc = $gL10n->get($row->men_translate_desc);
+                }
+                
+                // Read current roles rights of the menu
+                $displayMenu = new RolesRights($gDb, 'men_display_boot', $row->men_id);
+                $rolesDisplayRight = $displayMenu->getRolesIds();
 
-        $this->menu->addItem('menu_item_lists', '/adm_program/modules/lists/lists.php',
-                            $gL10n->get('LST_LISTS'), 'lists.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-        if($gValidLogin)
-        {
-            $this->menu->addItem('menu_item_mylist', '/adm_program/modules/lists/mylist.php',
-                                $gL10n->get('LST_MY_LIST'), 'mylist.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-        }
+                if($row->men_need_enable == 1)
+                {
+                    if($gPreferences['enable_'.$row->men_modul_name.'_module'] == 1  || ($gPreferences['enable_'.$row->men_modul_name.'_module'] == 2 && $gValidLogin))
+                    {
+                        $men_display = true;
+                    }
+                    else
+                    {
+                        $men_display = false;
+                    }
+                }
 
-        if($gPreferences['enable_dates_module'] == 1
-        || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
-        {
-            $this->menu->addItem('menu_item_dates', '/adm_program/modules/dates/dates.php',
-                                $gL10n->get('DAT_DATES'), 'dates.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-        }
+                $men_url = $row->men_url;
+                $men_icon = $row->men_icon;
+                $men_translate_name = $gL10n->get($row->men_translate_name);
 
-        if($gPreferences['enable_weblinks_module'] == 1
-        || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
-        {
-            $this->menu->addItem('menu_item_links', '/adm_program/modules/links/links.php',
-                                $gL10n->get('LNK_WEBLINKS'), 'weblinks.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-        }
+                //special case because there are differnent links if you are logged in or out for mail
+                if($row->men_modul_name === 'mail' && $gValidLogin)
+                {
+                    $unreadBadge = '';
 
-        if($gCurrentUser->isAdministrator() || $gCurrentUser->manageRoles() || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
-        {
-            $this->menu->addItem('menu_item_administration', null, $gL10n->get('SYS_ADMINISTRATION'), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
+                    // get number of unread messages for user
+                    $message = new TableMessage($gDb);
+                    $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
 
-            if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
-            {
-                $this->menu->addItem('menu_item_registration', '/adm_program/modules/registration/registration.php',
-                                    $gL10n->get('NWU_NEW_REGISTRATIONS'), 'new_registrations.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
-            }
-            if($gCurrentUser->editUsers())
-            {
-                $this->menu->addItem('menu_item_members', '/adm_program/modules/members/members.php',
-                                    $gL10n->get('MEM_USER_MANAGEMENT'), 'user_administration.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
-            }
-            if($gCurrentUser->manageRoles())
-            {
-                $this->menu->addItem('menu_item_roles', '/adm_program/modules/roles/roles.php',
-                                    $gL10n->get('ROL_ROLE_ADMINISTRATION'), 'roles.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
-            }
-            if($gCurrentUser->isAdministrator())
-            {
-                $this->menu->addItem('menu_item_backup', '/adm_program/modules/backup/backup.php',
-                                    $gL10n->get('BAC_DATABASE_BACKUP'), 'backup.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
-                $this->menu->addItem('menu_item_options', '/adm_program/modules/preferences/preferences.php',
-                                    $gL10n->get('SYS_SETTINGS'), 'options.png', 'right', 'menu_item_administration', 'admidio-default-menu-item');
+                    if($unread > 0)
+                    {
+                        $unreadBadge = '<span class="badge">' . $unread . '</span>';
+                    }
+                    
+                    $men_url = '/adm_program/modules/messages/messages.php';
+                    $men_icon = '/icons/messages.png';
+                    $men_translate_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
+                }
+
+                if(count($rolesDisplayRight) >= 1)
+                {
+                    // check for rigth to show the menue
+                    if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                    {
+                        $men_display = false;
+                    }
+                }
+
+                // special check for "newreg"
+                if($row->men_modul_name === 'newreg')
+                {
+                    $men_display = false;
+                    if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
+                    {
+                        $men_display = true;
+                    }
+                }
+
+                // special check for "usrmgt"
+                if($row->men_modul_name === 'usrmgt')
+                {
+                    if(!$gCurrentUser->editUsers())
+                    {
+                        $men_display = false;
+                    }
+                }
+
+                // special check for "roladm"
+                if($row->men_modul_name === 'roladm')
+                {
+                    if(!$gCurrentUser->manageRoles())
+                    {
+                        $men_display = false;
+                    }
+                }
+
+                if($men_display == true)
+                {
+                    $this->menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, 'right', 'menu_item_'.$men_groups[$row->men_group], 'admidio-default-menu-item');
+                }
             }
         }
 
