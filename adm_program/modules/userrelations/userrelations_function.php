@@ -12,7 +12,7 @@
 /******************************************************************************
  * Parameters:
  *
- * urt_id: Id of the category that should be edited
+ * ure_id: Id of the user relation that should be edited
  * mode  : 1 - Create relation
  *         2 - Delete relation
  *

@@ -12,7 +12,7 @@
 /******************************************************************************
  * Parameters:
  *
- * urt_id: Id of the category that should be edited
+ * urt_id: Id of the relation type that should be edited
  * mode  : 1 - Create or edit relationtype
  *         2 - Delete relationtype
  *

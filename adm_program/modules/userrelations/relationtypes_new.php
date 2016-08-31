@@ -9,7 +9,7 @@
  *
  * Parameters:
  *
- * urt_id : relation type id that should be edited
+ * urt_id : Id of the relation type that should be edited
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
