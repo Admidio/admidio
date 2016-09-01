@@ -37,6 +37,8 @@ drop table if exists %PREFIX%_lists cascade;
 drop table if exists %PREFIX%_rooms cascade;
 drop table if exists %PREFIX%_sessions cascade;
 drop table if exists %PREFIX%_texts cascade;
+drop table if exists %PREFIX%_user_relations cascade;
+drop table if exists %PREFIX%_user_relation_types cascade;
 drop table if exists %PREFIX%_user_log cascade;
 drop table if exists %PREFIX%_user_data cascade;
 drop table if exists %PREFIX%_user_fields cascade;
