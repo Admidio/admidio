@@ -27,14 +27,14 @@ require_once('../../system/common.php');
 unset($list);
 
 // Initialize and check the parameters
-$getDateFrom    = admFuncVariableIsValid($_GET, 'date_from',    'date',   array('defaultValue' => DATE_NOW));
-$getDateTo      = admFuncVariableIsValid($_GET, 'date_to',      'date',   array('defaultValue' => DATE_NOW));
-$getMode        = admFuncVariableIsValid($_GET, 'mode',         'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
-$getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'int');
-$getRoleIds     = admFuncVariableIsValid($_GET, 'rol_ids',      'string'); // could be int or int[], so string is necessary
-$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
-$getRelationtypeIds = admFuncVariableIsValid($_GET, 'urt_ids',  'string'); // could be int or int[], so string is necessary
-$getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen',  'bool');
+$getDateFrom        = admFuncVariableIsValid($_GET, 'date_from',    'date',   array('defaultValue' => DATE_NOW));
+$getDateTo          = admFuncVariableIsValid($_GET, 'date_to',      'date',   array('defaultValue' => DATE_NOW));
+$getMode            = admFuncVariableIsValid($_GET, 'mode',         'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
+$getListId          = admFuncVariableIsValid($_GET, 'lst_id',       'int');
+$getRoleIds         = admFuncVariableIsValid($_GET, 'rol_ids',      'string'); // could be int or int[], so string is necessary
+$getShowMembers     = admFuncVariableIsValid($_GET, 'show_members', 'int');
+$getRelationtypeIds = admFuncVariableIsValid($_GET, 'urt_ids',      'string'); // could be int or int[], so string is necessary
+$getFullScreen      = admFuncVariableIsValid($_GET, 'full_screen',  'bool');
 
 // Create date objects and format dates in system format
 $objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
@@ -117,8 +117,8 @@ if (count($relationtypeIds) > 0)
 {
     $sql = 'SELECT urt_id, urt_name
               FROM '.TBL_USER_RELATION_TYPES.'
-              WHERE urt_id IN ('.implode(',', $relationtypeIds).')
-              ORDER BY urt_name';
+             WHERE urt_id IN ('.implode(',', $relationtypeIds).')
+          ORDER BY urt_name';
     $relationtypesStatement = $gDb->query($sql);
     while($relationtype = $relationtypesStatement->fetch())
     {

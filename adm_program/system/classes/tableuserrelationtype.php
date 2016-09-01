@@ -26,49 +26,63 @@ class TableUserRelationType extends TableAccess
         parent::__construct($database, TBL_USER_RELATION_TYPES, 'urt', $id);
     }
 
-    public function isUnidirectional()
-    {
-        return $this->getRelationTypeString() == 'unidirectional';
-    }
-
-    public function isSymmetrical()
-    {
-        return $this->getRelationTypeString() == 'symmetrical';
-    }
-
-    public function isAsymmetrical()
-    {
-        return $this->getRelationTypeString() == 'asymmetrical';
-    }
-
+    /**
+     * @return string
+     */
     public function getRelationTypeString()
     {
         if (!$this->isNewRecord())
         {
-            if ($this->getValue('urt_id_inverse')==null)
+            if ($this->getValue('urt_id_inverse') === null)
             {
                 return 'unidirectional';
             }
-            elseif ($this->getValue('urt_id_inverse')==$this->getValue('urt_id'))
+            elseif ((int) $this->getValue('urt_id_inverse') === (int) $this->getValue('urt_id'))
             {
                 return 'symmetrical';
             }
         }
+
         return 'asymmetrical';
     }
 
     /**
+     * @return bool
+     */
+    public function isUnidirectional()
+    {
+        return $this->getRelationTypeString() === 'unidirectional';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSymmetrical()
+    {
+        return $this->getRelationTypeString() === 'symmetrical';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAsymmetrical()
+    {
+        return $this->getRelationTypeString() === 'asymmetrical';
+    }
+
+    /**
      * Returns the inverse relationtype.
-     *
-     * @return TableUserRelationType Returns the inverse relationtype
+     * @return null|\TableUserRelationType Returns the inverse relationtype
      */
     public function getInverse()
     {
         $inverse = new self($this->db, $this->getValue('urt_id_inverse'));
+
         if ($inverse->isNewRecord())
         {
             return null;
         }
+
         return $inverse;
     }
 }

@@ -22,8 +22,8 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUreId    = admFuncVariableIsValid($_GET, 'ure_id',   'int');
-$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
+$getUreId = admFuncVariableIsValid($_GET, 'ure_id', 'int');
+$getMode  = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
 
 if ($gPreferences['members_enable_user_relations'] == 0)
 {
@@ -56,7 +56,7 @@ if($getUreId > 0)
 
 if($getMode === 1)
 {
-    $getUsrId = admFuncVariableIsValid($_GET, 'usr_id',   'int');
+    $getUsrId = admFuncVariableIsValid($_GET, 'usr_id', 'int');
     $user1->readDataById($getUsrId);
 
     if($user1->isNewRecord())

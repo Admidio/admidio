@@ -811,30 +811,38 @@ if($gPreferences['members_enable_user_relations'] == 1)
         // *******************************************************************************
         // user relations block
         // *******************************************************************************
-    $sql = 'SELECT count(*) as count
-          FROM ' . TBL_USER_RELATIONS . '
-          INNER JOIN ' . TBL_USER_RELATION_TYPES . '
-                  ON ure_urt_id=urt_id
-         WHERE ure_usr_id1 = ' . $userId . ' AND urt_name != \'\' AND urt_name_male!= \'\' AND urt_name_female!= \'\'';
+    $sql = 'SELECT COUNT(*) AS count
+              FROM ' . TBL_USER_RELATIONS . '
+        INNER JOIN ' . TBL_USER_RELATION_TYPES . '
+                ON ure_urt_id  = urt_id
+             WHERE ure_usr_id1 = ' . $userId . '
+               AND urt_name        <> \'\'
+               AND urt_name_male   <> \'\'
+               AND urt_name_female <> \'\'';
     $statement = $gDb->query($sql);
-    $row = $statement->fetch();
-    if($row['count'] > 0) {
+    $count = (int) $statement->fetchColumn();
+
+    if($count > 0)
+    {
         $page->addHtml('
         <div class="panel panel-default" id="profile_user_relations_box">
             <div class="panel-heading">' . $gL10n->get('SYS_USER_RELATIONS') . '</div>
             <div class="panel-body" id="profile_user_relations_box_body">');
 
         $sql = 'SELECT *
-              FROM '.TBL_USER_RELATIONS.'
-              INNER JOIN '.TBL_USER_RELATION_TYPES.'
-                      ON ure_urt_id=urt_id
-             WHERE ure_usr_id1 = '.$userId.' AND urt_name != \'\' AND urt_name_male!= \'\' AND urt_name_female!= \'\'
-          ORDER BY urt_name';
+                  FROM '.TBL_USER_RELATIONS.'
+            INNER JOIN '.TBL_USER_RELATION_TYPES.'
+                    ON ure_urt_id  = urt_id
+                 WHERE ure_usr_id1 = '.$userId.'
+                   AND urt_name        <> \'\'
+                   AND urt_name_male   <> \'\'
+                   AND urt_name_female <> \'\'
+              ORDER BY urt_name';
         $relationStatement = $gDb->query($sql);
 
         $relationtype = new TableUserRelationType($gDb);
-        $relation = new TableUserRelation($gDb);
-        $otherUser = new User($gDb, $gProfileFields);
+        $relation     = new TableUserRelation($gDb);
+        $otherUser    = new User($gDb, $gProfileFields);
 
         $page->addHtml('<ul class="list-group admidio-list-roles-assign">');
 
@@ -848,11 +856,11 @@ if($gPreferences['members_enable_user_relations'] == 1)
             $otherUser->readDataById($relation->getValue('ure_usr_id2'));
 
             $relationName = $relationtype->getValue('urt_name');
-            if ($otherUser->getValue('GENDER', 'text') == $gL10n->get('SYS_MALE'))
+            if ($otherUser->getValue('GENDER', 'text') === $gL10n->get('SYS_MALE'))
             {
                 $relationName = $relationtype->getValue('urt_name_male');
             }
-            elseif ($otherUser->getValue('GENDER', 'text') == $gL10n->get('SYS_FEMALE'))
+            elseif ($otherUser->getValue('GENDER', 'text') === $gL10n->get('SYS_FEMALE'))
             {
                 $relationName = $relationtype->getValue('urt_name_female');
             }
@@ -868,7 +876,7 @@ if($gPreferences['members_enable_user_relations'] == 1)
                  $page->addHtml('<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                  href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ure&amp;element_id=row_ure_'.
                                  $relation->getValue('ure_id').'&amp;database_id='.$relation->getValue('ure_id').
-                                  '&amp;name='.urlencode($relationtype->getValue('urt_name').': '.$otherUser->getValue('FIRST_NAME').' '.$otherUser->getValue('LAST_NAME').' -> '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')).'"><img
+                                 '&amp;name='.urlencode($relationtype->getValue('urt_name').': '.$otherUser->getValue('FIRST_NAME').' '.$otherUser->getValue('LAST_NAME').' -> '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')).'"><img
                                  src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'" title="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'" /></a>');
              }
 
@@ -877,13 +885,14 @@ if($gPreferences['members_enable_user_relations'] == 1)
             {
                   $page->addHtml('<a class="admidio-icon-link admMemberInfo" id="relation_info_'.$relation->getValue('ure_id').'" href="javascript:"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATIONS').'" title="'.$gL10n->get('SYS_INFORMATIONS').'"/></a>');
             }
-            $page->addHtml('</span>');
-            $page->addHtml('</div>');
+            $page->addHtml('</span></div>');
             if($gPreferences['system_show_create_edit'] > 0)
             {
-                $page->addHtml('<div id="relation_info_'.$relation->getValue('ure_id').'_Content" style="display: none;">'.
-                    admFuncShowCreateChangeInfoById($relation->getValue('ure_usr_id_create'), $relation->getValue('ure_timestamp_create'), $relation->getValue('ure_usr_id_change'), $relation->getValue('ure_timestamp_change'))).
-                    '</div>';
+                $page->addHtml(
+                    '<div id="relation_info_'.$relation->getValue('ure_id').'_Content" style="display: none;">'.
+                    admFuncShowCreateChangeInfoById($relation->getValue('ure_usr_id_create'), $relation->getValue('ure_timestamp_create'), $relation->getValue('ure_usr_id_change'), $relation->getValue('ure_timestamp_change')).
+                    '</div>'
+                );
             }
             $page->addHtml('</li>');
         }

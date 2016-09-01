@@ -28,33 +28,41 @@ class TableUserRelation extends TableAccess
 
     /**
      * Returns the inverse relation.
-     * 
-     * @return TableUserRelation Returns the inverse relation
+     * @return null|\TableUserRelation Returns the inverse relation
      */
     public function getInverse()
     {
         $relationtype = new TableUserRelationType($this->db, $this->getValue('ure_urt_id'));
-        if ($relationtype->getValue('urt_id_inverse') == null)
+        if ($relationtype->getValue('urt_id_inverse') === null)
         {
             return null;
         }
-        $selectColumns = array('ure_urt_id'=> $relationtype->getValue('urt_id_inverse'),
-            'ure_usr_id1'                  => $this->getValue('ure_usr_id2'), 'ure_usr_id2'=>$this->getValue('ure_usr_id1'));
+
+        $selectColumns = array(
+            'ure_urt_id'  => $relationtype->getValue('urt_id_inverse'),
+            'ure_usr_id1' => $this->getValue('ure_usr_id2'),
+            'ure_usr_id2' => $this->getValue('ure_usr_id1')
+        );
         $inverse = new self($this->db);
         $inverse->readDataByColumns($selectColumns);
-        if ($inverse->isNewRecord()) {
+
+        if ($inverse->isNewRecord())
+        {
             return null;
         }
+
         return $inverse;
     }
 
     /**
      * Deletes the selected record of the table and initializes the class
-     * @return true Returns @b true if no error occurred
+     * @param bool $deleteInverse
+     * @return bool Returns @b true if no error occurred
      */
     public function delete($deleteInverse = true)
     {
         $this->db->startTransaction();
+
         if ($deleteInverse)
         {
             $inverse = $this->getInverse();
@@ -64,6 +72,7 @@ class TableUserRelation extends TableAccess
             }
         }
         parent::delete();
+
         return $this->db->endTransaction();
     }
 }

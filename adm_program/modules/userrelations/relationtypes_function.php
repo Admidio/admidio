@@ -22,8 +22,8 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUrtId    = admFuncVariableIsValid($_GET, 'urt_id',   'int');
-$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
+$getUrtId = admFuncVariableIsValid($_GET, 'urt_id', 'int');
+$getMode  = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
 
 if ($gPreferences['members_enable_user_relations'] == 0)
 {
@@ -58,8 +58,11 @@ if($getMode === 1)
     $relationtype->setValue('urt_name_male', empty($_POST['urt_name_male']) ? $_POST['urt_name'] : $_POST['urt_name_male']);
     $relationtype->setValue('urt_name_female', empty($_POST['urt_name_female']) ? $_POST['urt_name'] : $_POST['urt_name_female']);
 
-    $postRelationType = admFuncVariableIsValid($_POST, 'relation_type', 'string', array('defaultValue' => $relationtype->getRelationTypeString(), 'validValues' => array('asymmetrical', 'symmetrical', 'unidirectional')));
-    if ($postRelationType == 'asymmetrical')
+    $postRelationType = admFuncVariableIsValid(
+        $_POST, 'relation_type', 'string',
+        array('defaultValue' => $relationtype->getRelationTypeString(), 'validValues' => array('asymmetrical', 'symmetrical', 'unidirectional'))
+    );
+    if ($postRelationType === 'asymmetrical')
     {
         $relationtype2->setValue('urt_name', $_POST['urt_name_inverse']);
         $relationtype2->setValue('urt_name_male', empty($_POST['urt_name_male_inverse']) ? $_POST['urt_name_inverse'] : $_POST['urt_name_male_inverse']);
@@ -71,7 +74,7 @@ if($getMode === 1)
 
     $relationtype->save();
 
-    if ($postRelationType == 'asymmetrical')
+    if ($postRelationType === 'asymmetrical')
     {
         if($getUrtId <= 0)
         {
@@ -86,7 +89,7 @@ if($getMode === 1)
             $relationtype->save();
         }
     }
-    elseif ($postRelationType == 'symmetrical')
+    elseif ($postRelationType === 'symmetrical')
     {
         $relationtype->setValue('urt_id_inverse', $relationtype->getValue('urt_id'));
         $relationtype->save();
