@@ -847,6 +847,52 @@ collate = utf8_unicode_ci;
 create unique index IDX_%PREFIX%_USR_LOGIN_NAME on %PREFIX%_users (usr_login_name);
 
 /*==============================================================*/
+/* Table: adm_user_relation_types                               */
+/*==============================================================*/
+create table %PREFIX%_user_relation_types
+(
+    urt_id int(10) unsigned not null AUTO_INCREMENT,
+    urt_name varchar(100) not null,
+    urt_name_male varchar(100) not null,
+    urt_name_female varchar(100) not null,
+    urt_id_inverse int(10) unsigned default null,
+    urt_usr_id_create int(10) unsigned default null,
+    urt_timestamp_create timestamp not null default CURRENT_TIMESTAMP,
+    urt_usr_id_change int(10) unsigned default null,
+    urt_timestamp_change timestamp null default null,
+    primary key (urt_id)
+)
+engine = InnoDB
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
+
+create unique index %PREFIX%_IDX_URE_URT_NAME on %PREFIX%_user_relation_types (urt_name);
+
+/*==============================================================*/
+/* Table: adm_user_relation_types                               */
+/*==============================================================*/
+
+create table %PREFIX%_user_relations
+(
+    ure_id int(10) unsigned not null AUTO_INCREMENT,
+    ure_urt_id int(10) unsigned not null,
+    ure_usr_id1 int(10) unsigned not null,
+    ure_usr_id2 int(10) unsigned not null,
+    ure_usr_id_create int(10) unsigned default null,
+    ure_timestamp_create timestamp not null default CURRENT_TIMESTAMP,
+    ure_usr_id_change int(10) unsigned default null,
+    ure_timestamp_change timestamp null default null,
+    primary key (ure_id)
+)
+engine = InnoDB
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
+
+create unique index %PREFIX%_IDX_URE_URT_USR on %PREFIX%_user_relations (ure_urt_id,ure_usr_id1,ure_usr_id2);
+
+/*==============================================================*/
 /* Constraints                                                  */
 /*==============================================================*/
 alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_ORG foreign key (ann_org_id)
@@ -1025,4 +1071,22 @@ alter table %PREFIX%_user_log add CONSTRAINT %PREFIX%_FK_USER_LOG_3 FOREIGN KEY 
 alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_CREATE foreign key (usr_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_CHANGE foreign key (usr_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PREFIX%_user_relation_types add constraint %PREFIX%_FK_URT_ID_INVERSE foreign key (urt_id_inverse)
+      references %PREFIX%_user_relation_types (urt_id) on delete cascade on update restrict;
+alter table %PREFIX%_user_relation_types add constraint %PREFIX%_FK_URT_USR_CHANGE foreign key (urt_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_user_relation_types add constraint %PREFIX%_FK_URT_USR_CREATE foreign key (urt_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_URT foreign key (ure_urt_id)
+      references %PREFIX%_user_relation_types (urt_id) on delete cascade on update restrict;
+alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR1 foreign key (ure_usr_id1)
+      references %PREFIX%_users (usr_id) on delete cascade on update restrict;
+alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR2 foreign key (ure_usr_id2)
+      references %PREFIX%_users (usr_id) on delete cascade on update restrict;
+alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_CHANGE foreign key (ure_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_CREATE foreign key (ure_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;

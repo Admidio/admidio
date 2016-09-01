@@ -112,6 +112,13 @@ switch ($get_type)
         $url = 'messages.php?msg_id='.$get_database_id;
         $text = 'MSG_DELETE_DESC';
         break;
+    case 'urt':
+        $url = 'relationtypes_function.php?mode=2&urt_id='.$get_database_id;
+        $text = 'REL_USER_RELATION_TYPE_DEL';
+        break;
+    case 'ure':
+        $url = $g_root_path.'/adm_program/modules/userrelations/userrelations_function.php?mode=2&ure_id='.$get_database_id;
+        break;
     default:
         $url = '';
         break;

@@ -364,7 +364,7 @@ class ProfileFields
                             // the value in db is only the position, now search for the text
                             if($value > 0 && $format !== 'html')
                             {
-                                $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list');
+                                $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', $format);
                                 $value = $arrListValues[$value];
 
                             }

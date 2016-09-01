@@ -92,6 +92,8 @@ define('TBL_USERS',              $g_tbl_praefix . '_users');
 define('TBL_USER_DATA',          $g_tbl_praefix . '_user_data');
 define('TBL_USER_FIELDS',        $g_tbl_praefix . '_user_fields');
 define('TBL_USER_LOG',           $g_tbl_praefix . '_user_log');
+define('TBL_USER_RELATIONS',     $g_tbl_praefix . '_user_relations');
+define('TBL_USER_RELATION_TYPES', $g_tbl_praefix . '_user_relation_types');
 
 // constants for column rol_leader_rights
 define('ROLE_LEADER_NO_RIGHTS', 0);
