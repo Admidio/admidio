@@ -76,9 +76,10 @@ $orga_preferences = array(
     'announcements_per_page'      => '10',
 
     // User management
-    'members_users_per_page'      => '25',
-    'members_days_field_history'  => '365',
-    'members_show_all_users'      => '1',
+    'members_users_per_page'        => '25',
+    'members_days_field_history'    => '365',
+    'members_show_all_users'        => '1',
+    'members_enable_user_relations' => '1',
 
     // Downloads
     'enable_download_module' => '1',

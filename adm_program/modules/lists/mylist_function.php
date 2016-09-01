@@ -112,7 +112,7 @@ if ($getMode === 1 || $getMode === 2)
     }
 
     // weiterleiten zur allgemeinen Listeseite
-    header('Location: '.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$list->getValue('lst_id').'&mode=html&show_members='.$_POST['sel_show_members'].'&rol_ids='.implode(',', $_POST['sel_roles_ids']));
+    header('Location: '.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$list->getValue('lst_id').'&mode=html&show_members='.$_POST['sel_show_members'].'&rol_ids='.implode(',', $_POST['sel_roles_ids']).'&urt_ids='.implode(',', $_POST['sel_relationtype_ids']));
     exit();
 }
 elseif ($getMode === 3)
