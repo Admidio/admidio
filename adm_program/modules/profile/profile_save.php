@@ -123,7 +123,7 @@ if($getNewUser === 2)
 
     if(PasswordHashing::passwordStrength($_POST['usr_password'], $user->getPasswordUserData()) < $gPreferences['password_min_strength'])
     {
-        $gMessage->show($gL10n->get('PRO_PASSWORDS_NOT_STRONG_ENOUGH'));
+        $gMessage->show($gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'));
         // => EXIT
     }
 }

@@ -1250,13 +1250,16 @@ class User extends TableAccess
             $this->getValue('COUNTRY')
         );
 
-        /**
-         * @param string $value
-         * @return bool
-         */
-        function filterEmptyStrings($value)
+        if (!function_exists('filterEmptyStrings'))
         {
-            return $value !== '';
+            /**
+             * @param string $value
+             * @return bool
+             */
+            function filterEmptyStrings($value)
+            {
+                return $value !== '';
+            }
         }
 
         return array_filter($userData, 'filterEmptyStrings');
