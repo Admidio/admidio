@@ -24,11 +24,11 @@ class TableGuestbook extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_guestbook.
      * If the id is set than the specific guestbook will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $gbo_id   The recordset of the guestbook with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $gboId    The recordset of the guestbook with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $gbo_id = 0)
+    public function __construct(&$database, $gboId = 0)
     {
-        parent::__construct($database, TBL_GUESTBOOK, 'gbo', $gbo_id);
+        parent::__construct($database, TBL_GUESTBOOK, 'gbo', $gboId);
     }
 
     /**
@@ -40,13 +40,14 @@ class TableGuestbook extends TableAccess
     {
         $this->db->startTransaction();
 
-        // erst einmal alle vorhanden Kommentare zu diesem Gaestebucheintrag loeschen...
-        $sql = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.' WHERE gbc_gbo_id = '. $this->getValue('gbo_id');
+        // Delete all available comments to this guestbook entry
+        $sql = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.' WHERE gbc_gbo_id = '.$this->getValue('gbo_id');
         $this->db->query($sql);
 
         $return = parent::delete();
 
         $this->db->endTransaction();
+
         return $return;
     }
 
@@ -61,13 +62,13 @@ class TableGuestbook extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        if($columnName === 'gbo_text')
+        if ($columnName === 'gbo_text')
         {
-            if(!isset($this->dbColumns['gbo_text']))
+            if (!isset($this->dbColumns['gbo_text']))
             {
                 $value = '';
             }
-            elseif($format === 'database')
+            elseif ($format === 'database')
             {
                 $value = html_entity_decode(strStripTags($this->dbColumns['gbo_text']));
             }
@@ -75,13 +76,11 @@ class TableGuestbook extends TableAccess
             {
                 $value = $this->dbColumns['gbo_text'];
             }
-        }
-        else
-        {
-            $value = parent::getValue($columnName, $format);
+
+            return $value;
         }
 
-        return $value;
+        return parent::getValue($columnName, $format);
     }
 
     /**
@@ -107,7 +106,7 @@ class TableGuestbook extends TableAccess
     {
         global $gCurrentOrganization;
 
-        if($this->new_record)
+        if ($this->new_record)
         {
             $this->setValue('gbo_org_id', $gCurrentOrganization->getValue('org_id'));
             $this->setValue('gbo_ip_address', $_SERVER['REMOTE_ADDR']);
@@ -126,37 +125,38 @@ class TableGuestbook extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($newValue !== '')
+        if ($columnName === 'gbo_text')
         {
-            if($columnName === 'gbo_email')
+            return parent::setValue($columnName, $newValue, false);
+        }
+
+        if ($newValue !== '')
+        {
+            if ($columnName === 'gbo_email')
             {
                 $newValue = admStrToLower($newValue);
+
+                // If Email has a invalid format, it won't be set
                 if (!strValidCharacters($newValue, 'email'))
                 {
-                    // falls die Email ein ungueltiges Format aufweist wird sie nicht gesetzt
                     return false;
                 }
             }
-            elseif($columnName === 'gbo_homepage')
+            elseif ($columnName === 'gbo_homepage')
             {
-                // Homepage noch mit http vorbelegen
-                if(strpos(admStrToLower($newValue), 'http://')  === false
-                && strpos(admStrToLower($newValue), 'https://') === false)
+                // Homepage url have to start with "http://"
+                if (strpos(admStrToLower($newValue), 'http://')  === false
+                &&  strpos(admStrToLower($newValue), 'https://') === false)
                 {
-                    $newValue = 'http://'. $newValue;
+                    $newValue = 'http://' . $newValue;
                 }
 
-                // Homepage darf nur gueltige Zeichen enthalten
+                // For Homepage only valid url chars are allowed
                 if (!strValidCharacters($newValue, 'url'))
                 {
                     return false;
                 }
             }
-        }
-
-        if($columnName === 'gbo_text')
-        {
-            return parent::setValue($columnName, $newValue, false);
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
