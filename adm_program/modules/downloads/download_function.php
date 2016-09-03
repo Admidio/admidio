@@ -116,9 +116,9 @@ elseif ($getMode === 3)
         else
         {
             // Ordner erstellen
-            $b_return = $folder->createFolder($newFolderName);
+            $error = $folder->createFolder($newFolderName);
 
-            if(strlen($b_return['text']) === 0)
+            if($error === null)
             {
                 // Jetzt noch den Ordner der DB hinzufuegen...
                 $newFolder = new TableFolder($gDb);
@@ -142,7 +142,7 @@ elseif ($getMode === 3)
             {
                 // der entsprechende Ordner konnte nicht angelegt werden
                 $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
-                $gMessage->show($gL10n->get($b_return['text'], $b_return['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+                $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
                 // => EXIT
             }
 
