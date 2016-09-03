@@ -136,10 +136,12 @@ else
 if($date->getValue('dat_rol_id') > 0)
 {
     $dateRoleID = $date->getValue('dat_rol_id');
+    $role = new TableRoles($gDb, $dateRoleID);
 }
 else
 {
     $dateRoleID = '0';
+    $role = new TableRoles($gDb);
 }
 
 // create html page object
@@ -300,6 +302,10 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
     }
     $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE'));
     $form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC'));
+
+    $form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), $role->getValue('rol_this_list_view'));
+    $form->addCheckbox('date_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), $role->getValue('rol_mail_this_role'));
+
     $form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'),
                     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
 $form->closeGroupBox();
