@@ -57,7 +57,7 @@ class UploadHandlerPhoto extends UploadHandler
                 {
                     $error = $photoAlbum->createFolder();
 
-                    if($error['text'] !== '')
+                    if(is_array($error))
                     {
                         $file->error = $gL10n->get($error['text'], $error['path']);
                         return $file;
