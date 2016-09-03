@@ -375,7 +375,7 @@ class TableFolder extends TableAccess
             }
 
             // Jetzt noch pruefen ob der Ordner physikalisch vorhanden ist
-            if (is_dir(SERVER_PATH. $rowFolders->fol_path. '/'. $rowFolders->fol_name))
+            if (is_dir(SERVER_PATH. $row_folders->fol_path. '/'. $row_folders->fol_name))
             {
                 $folderExists = true;
             }
