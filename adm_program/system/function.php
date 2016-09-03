@@ -773,11 +773,9 @@ function admFuncGetDirectoryEntries($directory, $searchType = 'file')
  */
 function admFuncCheckUrl($url)
 {
-    $url = admStrToLower($url);
-
     // Homepage url have to start with "http://"
-    if (strpos($url, 'http://')  === false
-    &&  strpos($url, 'https://') === false)
+    if (strpos(admStrToLower($url), 'http://')  !== 0
+    &&  strpos(admStrToLower($url), 'https://') !== 0)
     {
         $url = 'http://' . $url;
     }
