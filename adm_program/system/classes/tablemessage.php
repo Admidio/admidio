@@ -15,19 +15,19 @@
  */
 class TableMessage extends TableAccess
 {
-    protected $msg_id;
+    protected $msgId;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_messages.
      * If the id is set than the specific message will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $msg_id   The recordset of the message with this conversation id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $msgId    The recordset of the message with this conversation id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $msg_id = 0)
+    public function __construct(&$database, $msgId = 0)
     {
-        $this->msg_id = $msg_id;
+        $this->msgId = $msgId;
 
-        parent::__construct($database, TBL_MESSAGES, 'msg', $this->msg_id);
+        parent::__construct($database, TBL_MESSAGES, 'msg', $this->msgId);
     }
 
     /**
@@ -79,9 +79,11 @@ class TableMessage extends TableAccess
      */
     public function setReadValue($usrId)
     {
-        $sql = 'UPDATE '.TBL_MESSAGES.' SET  msg_read = \'0\'
-                 WHERE msg_id = '.$this->msg_id.'
+        $sql = 'UPDATE '.TBL_MESSAGES.'
+                   SET msg_read = \'0\'
+                 WHERE msg_id   = '.$this->msgId.'
                    AND msg_usr_id_receiver LIKE \''.$usrId.'\'';
+
         return $this->db->query($sql);
     }
 
@@ -96,6 +98,7 @@ class TableMessage extends TableAccess
                   FROM '. TBL_MESSAGES_CONTENT. '
                  WHERE msc_msg_id = '. $msgId .'
               ORDER BY msc_part_id DESC';
+
         return $this->db->query($sql);
     }
 
@@ -107,17 +110,16 @@ class TableMessage extends TableAccess
      */
     public function getConversationPartner($usrId)
     {
-        $sql = 'SELECT msg_id,
+        $sql = 'SELECT
                   CASE WHEN msg_usr_id_sender = '. $usrId .' THEN msg_usr_id_receiver
                   ELSE msg_usr_id_sender
                    END AS user
                   FROM '.TBL_MESSAGES.'
                  WHERE msg_type = \'PM\'
-                   AND msg_id = '. $this->msg_id;
+                   AND msg_id = '. $this->msgId;
         $partnerStatement = $this->db->query($sql);
-        $row = $partnerStatement->fetch();
 
-        return $row['user'];
+        return (int) $partnerStatement->fetchColumn();
     }
 
     /**
@@ -132,30 +134,37 @@ class TableMessage extends TableAccess
 
         $this->db->startTransaction();
 
-        if($this->getValue('msg_read') == 2 || $this->getValue('msg_type') === 'EMAIL')
+        $msgId = (int) $this->getValue('msg_id');
+
+        if ($this->getValue('msg_type') === 'EMAIL' || (int) $this->getValue('msg_read') === 2)
         {
             $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
-             WHERE msc_msg_id = '. $this->getValue('msg_id');
+                     WHERE msc_msg_id = '.$msgId;
             $this->db->query($sql);
 
             parent::delete();
         }
         else
         {
-            $other = $this->getValue('msg_usr_id_sender');
-            if($other == $gCurrentUser->getValue('usr_id'))
+            $usrId = (int) $gCurrentUser->getValue('usr_id');
+
+            $other = (int) $this->getValue('msg_usr_id_sender');
+            if ($other === $usrId)
             {
-                $other = $this->getValue('msg_usr_id_receiver');
+                $other = (int) $this->getValue('msg_usr_id_receiver');
             }
 
-            $sql = 'UPDATE '.TBL_MESSAGES.
-                     ' SET msg_read = 2, msg_timestamp = CURRENT_TIMESTAMP,
-                           msg_usr_id_sender = '.$gCurrentUser->getValue('usr_id').', msg_usr_id_receiver = \''.$other.'\'
-                     WHERE msg_id = '.$this->getValue('msg_id');
+            $sql = 'UPDATE '.TBL_MESSAGES.'
+                       SET msg_read = 2,
+                           msg_timestamp = CURRENT_TIMESTAMP,
+                           msg_usr_id_sender = '.$usrId.',
+                           msg_usr_id_receiver = \''.$other.'\'
+                     WHERE msg_id = '.$msgId;
             $this->db->query($sql);
         }
 
         $this->db->endTransaction();
+
         return true;
     }
 }
