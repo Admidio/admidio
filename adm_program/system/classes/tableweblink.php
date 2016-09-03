@@ -44,13 +44,13 @@ class TableWeblink extends TableAccess
     {
         global $gL10n;
 
-        if($columnName === 'lnk_description')
+        if ($columnName === 'lnk_description')
         {
-            if(!isset($this->dbColumns['lnk_description']))
+            if (!isset($this->dbColumns['lnk_description']))
             {
                 $value = '';
             }
-            elseif($format === 'database')
+            elseif ($format === 'database')
             {
                 $value = html_entity_decode(strStripTags($this->dbColumns['lnk_description']));
             }
@@ -65,7 +65,7 @@ class TableWeblink extends TableAccess
         }
 
         // if text is a translation-id then translate it
-        if($columnName === 'cat_name' && $format !== 'database' && strpos($value, '_') === 3)
+        if ($columnName === 'cat_name' && $format !== 'database' && strpos($value, '_') === 3)
         {
             $value = $gL10n->get(admStrToUpper($value));
         }
@@ -83,25 +83,27 @@ class TableWeblink extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($columnName === 'lnk_url' && $newValue !== '')
+        if ($columnName === 'lnk_description')
         {
-            // Homepage noch mit http vorbelegen
-            if(strpos(admStrToLower($newValue), 'http://')  === false
-            && strpos(admStrToLower($newValue), 'https://') === false)
+            return parent::setValue($columnName, $newValue, false);
+        }
+
+        if ($columnName === 'lnk_url' && $newValue !== '')
+        {
+            // Homepage url have to start with "http://"
+            if (strpos(admStrToLower($newValue), 'http://')  === false
+            &&  strpos(admStrToLower($newValue), 'https://') === false)
             {
-                $newValue = 'http://'.$newValue;
+                $newValue = 'http://' . $newValue;
             }
 
-            // Homepage darf nur gueltige Zeichen enthalten
-            if(!strValidCharacters($newValue, 'url'))
+            // For Homepage only valid url chars are allowed
+            if (!strValidCharacters($newValue, 'url'))
             {
                 return false;
             }
         }
-        elseif($columnName === 'lnk_description')
-        {
-            return parent::setValue($columnName, $newValue, false);
-        }
+
         return parent::setValue($columnName, $newValue, $checkValue);
     }
 }

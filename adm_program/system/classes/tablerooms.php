@@ -39,13 +39,13 @@ class TableRooms extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        if($columnName === 'room_description')
+        if ($columnName === 'room_description')
         {
-            if(!isset($this->dbColumns['room_description']))
+            if (!isset($this->dbColumns['room_description']))
             {
                 $value = '';
             }
-            elseif($format === 'database')
+            elseif ($format === 'database')
             {
                 $value = html_entity_decode(strStripTags($this->dbColumns['room_description']));
             }
@@ -53,13 +53,11 @@ class TableRooms extends TableAccess
             {
                 $value = $this->dbColumns['room_description'];
             }
-        }
-        else
-        {
-            $value = parent::getValue($columnName, $format);
+
+            return $value;
         }
 
-        return $value;
+        return parent::getValue($columnName, $format);
     }
 
     /**
@@ -72,10 +70,11 @@ class TableRooms extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($columnName === 'room_description')
+        if ($columnName === 'room_description')
         {
             return parent::setValue($columnName, $newValue, false);
         }
+
         return parent::setValue($columnName, $newValue, $checkValue);
     }
 }
