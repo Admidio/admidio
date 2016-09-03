@@ -106,7 +106,7 @@ else
         $date->setValue('dat_end',   $endDate);
 
         // a new event will be visible for all users per default
-        $date->setVisibleRoles(array('0'));
+        $date->setVisibleRoles(array(0));
         $dateRoles = array(0);
     }
     else

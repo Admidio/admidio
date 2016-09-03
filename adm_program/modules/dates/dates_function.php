@@ -286,7 +286,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     }
 
     // now save array with all roles that should see this event to date object
-    $date->setVisibleRoles($_POST['date_roles']);
+    $date->setVisibleRoles(array_map('intval', $_POST['date_roles']));
 
     // save event in database
     $return_code = $date->save();
