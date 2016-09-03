@@ -25,11 +25,11 @@ class TableAnnouncement extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_announcements.
      * If the id is set than the specific announcement will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $ann_id   The recordset of the announcement with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $annId    The recordset of the announcement with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $ann_id = 0)
+    public function __construct(&$database, $annId = 0)
     {
-        parent::__construct($database, TBL_ANNOUNCEMENTS, 'ann', $ann_id);
+        parent::__construct($database, TBL_ANNOUNCEMENTS, 'ann', $annId);
     }
 
     /**
