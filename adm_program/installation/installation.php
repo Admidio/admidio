@@ -23,7 +23,7 @@ session_name('admidio_php_session_id');
 session_start();
 
 // if config file already exists then load file with their variables
-if(file_exists('../../adm_my_files/config.php'))
+if(is_file('../../adm_my_files/config.php'))
 {
     require_once('../../adm_my_files/config.php');
 }
@@ -96,7 +96,7 @@ $gLanguageData = new LanguageData($language);
 $gL10n->addLanguageData($gLanguageData);
 
 // if config file exists then connect to database
-if(file_exists('../../adm_my_files/config.php'))
+if(is_file('../../adm_my_files/config.php'))
 {
     try
     {
@@ -136,7 +136,7 @@ if(file_exists('../../adm_my_files/config.php'))
         exit();
     }
 }
-elseif(file_exists('../../config.php'))
+elseif(is_file('../../config.php'))
 {
     // Config file found at location of version 2. Then go to update
     header('Location: update.php');
@@ -281,7 +281,7 @@ elseif($getMode === 4)  // Creating organization
         }
 
         // for security reasons only check database connection if no config file exists
-        if(!file_exists('../../adm_my_files/config.php'))
+        if(!is_file('../../adm_my_files/config.php'))
         {
             // check database connections
             try
@@ -541,7 +541,7 @@ elseif($getMode === 7) // Download configuration file
 elseif($getMode === 8) // Start installation
 {
     // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
-    if(!file_exists('../../adm_my_files/config.php'))
+    if(!is_file('../../adm_my_files/config.php'))
     {
         showNotice($gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6',
                    $gL10n->get('SYS_BACK'), 'layout/back.png');

@@ -51,7 +51,7 @@ switch($getMode)
                                         'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check');
 
                     if(!admStrIsValidFileName($_POST['theme'])
-                    || !file_exists(SERVER_PATH.'/adm_themes/'.$_POST['theme'].'/index.html'))
+                    || !is_file(SERVER_PATH.'/adm_themes/'.$_POST['theme'].'/index.html'))
                     {
                         $gMessage->show($gL10n->get('ORG_INVALID_THEME'));
                         // => EXIT
@@ -84,7 +84,7 @@ switch($getMode)
 
                 case 'regional_settings':
                     if(!admStrIsValidFileName($_POST['system_language'])
-                    || !file_exists(SERVER_PATH.'/adm_program/languages/'.$_POST['system_language'].'.xml'))
+                    || !is_file(SERVER_PATH.'/adm_program/languages/'.$_POST['system_language'].'.xml'))
                     {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LANGUAGE')));
                         // => EXIT

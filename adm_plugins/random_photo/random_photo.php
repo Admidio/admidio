@@ -107,7 +107,7 @@ $linkText = '';
 $album = new TablePhotos($gDb);
 
 // Schleife, falls nicht direkt ein Bild gefunden wird, aber auf 20 Durchlaeufe begrenzen
-while(!file_exists($picPath) && $i < 20 && $albumStatement->rowCount() > 0)
+while(!is_file($picPath) && $i < 20 && $albumStatement->rowCount() > 0)
 {
     // Ausgewähltendatendatz holen
     $album->setArray($albumList[mt_rand(0, $albumStatement->rowCount()-1)]);
@@ -127,7 +127,7 @@ while(!file_exists($picPath) && $i < 20 && $albumStatement->rowCount() > 0)
     ++$i;
 }
 
-if(!file_exists($picPath))
+if(!is_file($picPath))
 {
     $picPath = THEME_SERVER_PATH. '/images/nopix.jpg';
 }

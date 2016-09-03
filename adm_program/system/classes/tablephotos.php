@@ -147,7 +147,7 @@ class TablePhotos extends TableAccess
             $folder = SERVER_PATH. '/adm_my_files/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$photoId;
 
             // aktuellen Ordner incl. Unterordner und Dateien loeschen, falls er existiert
-            if(file_exists($folder))
+            if(is_dir($folder))
             {
                 // nun erst rekursiv den Ordner im Dateisystem loeschen
                 $myFilesPhotos = new MyFiles('PHOTOS');

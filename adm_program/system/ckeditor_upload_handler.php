@@ -68,7 +68,7 @@ try
             // so we have a scheme for the filenames and the risk of duplicates is low
             $localFile = time() . substr($_FILES['upload']['name'], strrpos($_FILES['upload']['name'], '.'));
             $serverUrl = $myFilesProfilePhotos->getServerPath().'/'.$localFile;
-            if(file_exists($serverUrl))
+            if(is_file($serverUrl))
             {
                 // if file exists than create a random number and append it to the filename
                 $serverUrl = $myFilesProfilePhotos->getServerPath() . '/' .

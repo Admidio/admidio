@@ -142,7 +142,7 @@ while ($row = $statement->fetch())
             $photoPath = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$photoNr.'.jpg';
 
             // show only photo if that photo exists
-            if (file_exists($photoPath))
+            if (is_file($photoPath))
             {
                 $description = $description.
                     '<a href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.'"><img

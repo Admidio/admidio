@@ -108,7 +108,7 @@ elseif ($getMode === 3)
         $folder->getFolderForDownload($getFolderId);
 
         // Test ob der Ordner schon existiert im Filesystem
-        if (file_exists($folder->getCompletePathOfFolder(). '/'.$newFolderName))
+        if (is_dir($folder->getCompletePathOfFolder(). '/'.$newFolderName))
         {
             $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolderName));
             // => EXIT
@@ -191,7 +191,7 @@ elseif ($getMode === 4)
 
             // Test ob die Datei schon existiert im Filesystem
             if ($newFile !== $file->getValue('fil_name')
-             && file_exists(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
+            && is_file(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
             {
                 $gMessage->show($gL10n->get('DOW_FILE_EXIST', $newFile));
                 // => EXIT
@@ -229,7 +229,7 @@ elseif ($getMode === 4)
 
             // Test ob der Ordner schon existiert im Filesystem
             if ($newFolder !== $folder->getValue('fol_name')
-            && file_exists(SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
+            && is_dir(SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
             {
                 $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolder));
                 // => EXIT

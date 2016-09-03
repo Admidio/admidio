@@ -44,7 +44,7 @@ if(!$gCurrentUser->hasRightViewProfile($user))
 // Foto aus adm_my_files
 if($gPreferences['profile_photo_storage'] == 1 && !$getNewPhoto)
 {
-    if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
+    if(is_file(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
     {
         $picPath = SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg';
     }

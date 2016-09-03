@@ -14,12 +14,12 @@
  */
 
 // embed config file
-if(file_exists('../adm_my_files/config.php'))
+if(is_file('../adm_my_files/config.php'))
 {
     // search in path of version 3.x
     require_once('../adm_my_files/config.php');
 }
-elseif(file_exists('../config.php'))
+elseif(is_file('../config.php'))
 {
     // search in path of version 1.x and 2.x
     require_once('../config.php');

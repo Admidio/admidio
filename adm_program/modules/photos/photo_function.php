@@ -53,7 +53,7 @@ function deleteThumbnail(&$photo_album, $pic_nr)
         $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/thumbnails/'.$pic_nr.'.jpg';
 
         // Thumbnail loeschen
-        if(file_exists($photo_path))
+        if(is_file($photo_path))
         {
             chmod($photo_path, 0777);
             unlink($photo_path);
@@ -66,7 +66,7 @@ function deleteThumbnail(&$photo_album, $pic_nr)
  */
 function tryDelete($path)
 {
-    if(file_exists($path))
+    if(is_file($path))
     {
         chmod($path, 0777);
         unlink($path);
@@ -79,7 +79,7 @@ function tryDelete($path)
  */
 function tryRename($path, $newPath)
 {
-    if(file_exists($path))
+    if(is_file($path))
     {
         chmod($path, 0777);
         rename($path, $newPath);
@@ -115,7 +115,7 @@ function deletePhoto($pho_id, $pic_nr)
 
         for($act_pic_nr = 1; $act_pic_nr <= $photo_album->getValue('pho_quantity'); ++$act_pic_nr)
         {
-            if(file_exists($album_path.'/'.$act_pic_nr.'.jpg'))
+            if(is_file($album_path.'/'.$act_pic_nr.'.jpg'))
             {
                 if($act_pic_nr > $new_pic_nr)
                 {

@@ -320,7 +320,7 @@ class HtmlPage
         $filepathDebug = '/' . $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
         $filepathMin   = '/' . $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
 
-        if ((!$gDebug && file_exists(SERVER_PATH.$filepathMin)) || !file_exists(SERVER_PATH.$filepathDebug))
+        if ((!$gDebug && is_file(SERVER_PATH.$filepathMin)) || !is_file(SERVER_PATH.$filepathDebug))
         {
             return $g_root_path.$filepathMin;
         }
@@ -467,7 +467,7 @@ class HtmlPage
         $this->addCssFile(THEME_PATH.'/css/admidio.css');
 
         // add custom css file if it exists to add own css styles without edit the original admidio css
-        if(file_exists(THEME_PATH.'/css/custom.css'))
+        if(is_file(THEME_PATH.'/css/custom.css'))
         {
             $this->addCssFile(THEME_PATH.'/css/custom.css');
         }

@@ -46,7 +46,7 @@ class ComponentUpdate extends Component
         {
             $updateFile = SERVER_PATH.'/adm_program/installation/db_scripts/update_'.$mainVersion.'_'.$subVersion.'.xml';
 
-            if(file_exists($updateFile))
+            if(is_file($updateFile))
             {
                 $this->xmlObject = new SimpleXMLElement($updateFile, null, true);
                 return true;
@@ -215,7 +215,7 @@ class ComponentUpdate extends Component
                 // check if an php update file exists and then execute the script
                 $phpUpdateFile = SERVER_PATH.'/adm_program/installation/db_scripts/upd_'.$mainVersion.'_'.$subVersion.'_0_conv.php';
 
-                if(file_exists($phpUpdateFile))
+                if(is_file($phpUpdateFile))
                 {
                     require_once($phpUpdateFile);
                 }

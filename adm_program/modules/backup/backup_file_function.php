@@ -34,7 +34,7 @@ $backupAbsolutePath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to incl
 $completePath = $backupAbsolutePath.$getFilename;
 
 // pruefen ob File ueberhaupt physikalisch existiert
-if(!file_exists($completePath))
+if(!is_file($completePath))
 {
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
     // => EXIT
