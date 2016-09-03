@@ -524,16 +524,11 @@ class InventoryFields
                     break;
 
                 case 'URL':
-                    // Homepage darf nur gueltige Zeichen enthalten
-                    if (!strValidCharacters($fieldValue, 'url') && !$this->noValueCheck)
+                    $fieldValue = admFuncCheckUrl($fieldValue);
+
+                    if (!$this->noValueCheck && $fieldValue === false)
                     {
                         return false;
-                    }
-                    // Homepage noch mit http vorbelegen
-                    if(strpos(admStrToLower($fieldValue), 'http://')  === false
-                    && strpos(admStrToLower($fieldValue), 'https://') === false)
-                    {
-                        $fieldValue = 'http://'. $fieldValue;
                     }
                     break;
             }

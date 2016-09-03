@@ -144,15 +144,9 @@ class TableGuestbook extends TableAccess
             }
             elseif ($columnName === 'gbo_homepage')
             {
-                // Homepage url have to start with "http://"
-                if (strpos(admStrToLower($newValue), 'http://')  === false
-                &&  strpos(admStrToLower($newValue), 'https://') === false)
-                {
-                    $newValue = 'http://' . $newValue;
-                }
+                $newValue = admFuncCheckUrl($newValue);
 
-                // For Homepage only valid url chars are allowed
-                if (!strValidCharacters($newValue, 'url'))
+                if ($newValue === false)
                 {
                     return false;
                 }

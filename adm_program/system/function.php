@@ -765,3 +765,28 @@ function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 
     return false;
 }
+
+/**
+ * Prefix url with "http://" if no protocol is defined and check if is valid url
+ * @param $url string
+ * @return false|string
+ */
+function admFuncCheckUrl($url)
+{
+    $url = admStrToLower($url);
+
+    // Homepage url have to start with "http://"
+    if (strpos($url, 'http://')  === false
+    &&  strpos($url, 'https://') === false)
+    {
+        $url = 'http://' . $url;
+    }
+
+    // For Homepage only valid url chars are allowed
+    if (!strValidCharacters($url, 'url'))
+    {
+        return false;
+    }
+
+    return $url;
+}

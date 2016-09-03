@@ -374,15 +374,9 @@ class TableUserField extends TableAccess
         }
         elseif($columnName === 'usf_url' && $newValue !== '')
         {
-            // Homepage noch mit http vorbelegen
-            if(strpos(admStrToLower($newValue), 'http://')  === false
-            && strpos(admStrToLower($newValue), 'https://') === false)
-            {
-                $newValue = 'http://'.$newValue;
-            }
+            $newValue = admFuncCheckUrl($newValue);
 
-            // Homepage darf nur gueltige Zeichen enthalten
-            if(!strValidCharacters($newValue, 'url'))
+            if ($newValue === false)
             {
                 return false;
             }
