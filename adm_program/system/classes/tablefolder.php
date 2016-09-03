@@ -264,8 +264,8 @@ class TableFolder extends TableAccess
         if ($folderId > 0)
         {
             // get folder of the parameter
-            $condition = ' fol_id     = '.$folderId.'
-                       AND fol_type   = \'DOWNLOAD\' ';
+            $condition = ' fol_id   = '.$folderId.'
+                       AND fol_type = \'DOWNLOAD\' ';
             $this->readData($condition);
         }
         else
@@ -616,15 +616,15 @@ class TableFolder extends TableAccess
             return $currentNavigation;
         }
 
-        $parentId = (int) $this->getValue('fol_fol_id_parent');
+        $parentId = $this->getValue('fol_fol_id_parent');
 
         // If there is no parent folder, navigation-bar isn't necessary
-        if ($parentId === null)
+        if ($parentId === '')
         {
             return '';
         }
 
-        $currentNavigation = $this->getNavigationForDownload($parentId, $currentNavigation);
+        $currentNavigation = $this->getNavigationForDownload((int) $parentId, $currentNavigation);
 
         // If the folder has a parent folder we need the root folder
         $sqlRootFolder = 'SELECT fol_id
