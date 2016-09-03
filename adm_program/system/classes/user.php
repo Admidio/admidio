@@ -1006,7 +1006,7 @@ class User extends TableAccess
      */
     public function hasRightViewRole($roleId)
     {
-        return $this->hasRightRole($this->listMailRights, 'rol_all_lists_view', $roleId);
+        return $this->hasRightRole($this->listViewRights, 'rol_all_lists_view', $roleId);
     }
 
     /**
