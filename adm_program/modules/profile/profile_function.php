@@ -195,7 +195,7 @@ elseif($getMode === 7)
     }
     else
     {
-        $formatedEndDate = '9999-12-31';
+        $formatedEndDate = DATE_MAX;
     }
 
     // save role membership

@@ -22,7 +22,7 @@
  *                        Berechtigung, ob der User die Liste einsehen darf
  *                      - aehnlich getProperty, allerdings suche ueber usf_id
  * getVCard()           - Es wird eine vCard des Users als String zurueckgegeben
- * setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = '9999-12-31', $leader = '')
+ * setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = '')
  *                      - set a role membership for the current user
  *                        if memberships to this user and role exists within the period than merge them to one new membership
  * viewProfile          - Ueberprueft ob der User das Profil eines uebrgebenen
@@ -1252,7 +1252,7 @@ class User extends TableAccess
 
             $startDate = DateTime::createFromFormat('Y-m-d', $startDate)->sub($oneDayOffset)->format('Y-m-d');
             // add 1 to max date because we subtract one day if a membership ends
-            if ($endDate !== '9999-12-31')
+            if ($endDate !== DATE_MAX)
             {
                 $endDate = DateTime::createFromFormat('Y-m-d', $endDate)->add($oneDayOffset)->format('Y-m-d');
             }
@@ -1387,7 +1387,7 @@ class User extends TableAccess
      *                          might get more rights for this role.
      * @return bool Return @b true if the membership was successfully added.
      */
-    public function setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = '9999-12-31', $leader = null)
+    public function setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
     {
         return $this->changeRoleMembership('set', $roleId, $startDate, $endDate, $leader);
     }
@@ -1398,12 +1398,12 @@ class User extends TableAccess
      * In opposite to setRoleMembership this method is useful to end a membership earlier.
      * @param int    $memberId  Id of the current membership that should be edited.
      * @param string $startDate New start date of the membership. Default will be @b DATE_NOW.
-     * @param string $endDate   New end date of the membership. Default will be @b 9999-12-31
+     * @param string $endDate   New end date of the membership. Default will be @b DATE_MAX
      * @param bool   $leader    If set to @b 1 then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return @b true if the membership was successfully edited.
      */
-    public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = '9999-12-31', $leader = null)
+    public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
     {
         return $this->changeRoleMembership('edit', $memberId, $startDate, $endDate, $leader);
     }

@@ -45,7 +45,7 @@ $sql = 'DELETE FROM '.TBL_PREFERENCES.'
               WHERE prf_name = \'photo_preview_scale\'';
 $gDb->query($sql);
 
-$sql = 'UPDATE '.TBL_MEMBERS.' SET mem_end = \'9999-12-31\'
+$sql = 'UPDATE '.TBL_MEMBERS.' SET mem_end = '.DATE_MAX.'
          WHERE mem_end = \'\'
             OR mem_end = \'0000-00-00\' ';
 $gDb->query($sql);

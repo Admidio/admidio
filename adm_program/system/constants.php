@@ -55,6 +55,7 @@ date_default_timezone_set($gTimezone);
 // date and time for use in scripts
 define('DATE_NOW', date('Y-m-d', time()));
 define('DATETIME_NOW', date('Y-m-d H:i:s', time()));
+define('DATE_MAX', '9999-12-31');
 
 // Defines for all database tables
 define('TBL_ANNOUNCEMENTS',       $g_tbl_praefix . '_announcements');
