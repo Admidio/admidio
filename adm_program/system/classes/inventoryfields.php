@@ -507,11 +507,9 @@ class InventoryFields
                     {
                         return false;
                     }
-                    else
-                    {
-                        // numbers don't have leading zero
-                        $fieldValue = ltrim($fieldValue, '0');
-                    }
+
+                    // numbers don't have leading zero
+                    $fieldValue = ltrim($fieldValue, '0');
                     break;
 
                 case 'DECIMAL':
@@ -520,11 +518,9 @@ class InventoryFields
                     {
                         return false;
                     }
-                    else
-                    {
-                        // numbers don't have leading zero
-                        $fieldValue = ltrim($fieldValue, '0');
-                    }
+
+                    // numbers don't have leading zero
+                    $fieldValue = ltrim($fieldValue, '0');
                     break;
 
                 case 'URL':

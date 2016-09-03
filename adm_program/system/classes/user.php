@@ -319,10 +319,8 @@ class User extends TableAccess
             {
                 return $gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN');
             }
-            else
-            {
-                return $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
-            }
+
+            return $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
         }
 
         // Password correct
@@ -1076,10 +1074,8 @@ class User extends TableAccess
             $this->mProfileFieldsData->readUserData($userId, $this->organizationId);
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     /**
@@ -1204,26 +1200,26 @@ class User extends TableAccess
             $columnName = 'usr_new_password';
         }
 
-        if($doHashing)
+        if(!$doHashing)
         {
-            // get the saved cost value that fits your server performance best and rehash your password
-            $cost = 10;
-            if(isset($gPreferences) && array_key_exists('system_hashing_cost', $gPreferences))
-            {
-                $cost = (int) $gPreferences['system_hashing_cost'];
-            }
-
-            $newPasswordHash = PasswordHashing::hash($newPassword, $gPasswordHashAlgorithm, array('cost' => $cost));
-
-            if ($newPasswordHash === false)
-            {
-                return false;
-            }
-
-            $newPassword = $newPasswordHash;
+            return parent::setValue($columnName, $newPassword, false);
         }
 
-        return parent::setValue($columnName, $newPassword, false);
+        // get the saved cost value that fits your server performance best and rehash your password
+        $cost = 10;
+        if(isset($gPreferences) && array_key_exists('system_hashing_cost', $gPreferences))
+        {
+            $cost = (int) $gPreferences['system_hashing_cost'];
+        }
+
+        $newPasswordHash = PasswordHashing::hash($newPassword, $gPasswordHashAlgorithm, array('cost' => $cost));
+
+        if ($newPasswordHash === false)
+        {
+            return false;
+        }
+
+        return parent::setValue($columnName, $newPasswordHash, false);
     }
 
     /**

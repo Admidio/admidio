@@ -402,11 +402,8 @@ class Email extends PHPMailer
             // Verschicken
             return $this->sendEmail();
         }
-        else
-        {
-            return false;
-        }
 
+        return false;
     }
 
     /**

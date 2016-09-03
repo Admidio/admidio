@@ -160,10 +160,8 @@ class Session extends TableAccess
         {
             return (int) $this->mAutoLogin->getValue('atl_org_id');
         }
-        else
-        {
-            return (int) $this->getValue('ses_org_id');
-        }
+
+        return (int) $this->getValue('ses_org_id');
     }
 
     /**

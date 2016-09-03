@@ -326,7 +326,8 @@ elseif (!isset($messageStatement))
                       FROM '.TBL_ROLES.'
                 INNER JOIN '.TBL_CATEGORIES.'
                         ON cat_id = rol_cat_id
-                       AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                       AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                           OR cat_org_id IS NULL)
                      WHERE rol_id IN ('.$sqlRoleIds.')
                        AND rol_valid = 1
                            '.$sqlParticipationRoles.'
@@ -416,7 +417,8 @@ elseif (!isset($messageStatement))
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                   AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                       OR cat_org_id IS NULL)
                  WHERE rol_mail_this_role = 3
                    AND rol_valid  = 1
               ORDER BY cat_sequence, rol_name ';

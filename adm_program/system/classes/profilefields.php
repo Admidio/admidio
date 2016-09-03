@@ -364,7 +364,7 @@ class ProfileFields
                             // the value in db is only the position, now search for the text
                             if($value > 0 && $format !== 'html')
                             {
-                                $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list');
+                                $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', $format);
                                 $value = $arrListValues[$value];
 
                             }
@@ -555,11 +555,9 @@ class ProfileFields
                     {
                         return false;
                     }
-                    else
-                    {
-                        // numbers don't have leading zero
-                        $fieldValue = ltrim($fieldValue, '0');
-                    }
+
+                    // numbers don't have leading zero
+                    $fieldValue = ltrim($fieldValue, '0');
                     break;
                 case 'DECIMAL':
                     // A number must be numeric
@@ -567,11 +565,9 @@ class ProfileFields
                     {
                         return false;
                     }
-                    else
-                    {
-                        // numbers don't have leading zero
-                        $fieldValue = ltrim($fieldValue, '0');
-                    }
+
+                    // numbers don't have leading zero
+                    $fieldValue = ltrim($fieldValue, '0');
                     break;
                 case 'PHONE':
                     // check phone number for valid characters

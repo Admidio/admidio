@@ -235,19 +235,15 @@ class ModuleLists extends Modules
             // if inactive roles should be shown, then show all of them to administrator
             return '';
         }
-        else
+
+        // create a list with all rol_ids that the user is allowed to view
+        $visibleRoles = implode(',', $gCurrentUser->getAllVisibleRoles());
+        if($visibleRoles !== '')
         {
-            // create a list with all rol_ids that the user is allowed to view
-            $visibleRoles = implode(',', $gCurrentUser->getAllVisibleRoles());
-            if($visibleRoles !== '')
-            {
-                return ' AND rol_id IN ('.$visibleRoles.')';
-            }
-            else
-            {
-                return ' AND rol_id = 0 ';
-            }
+            return ' AND rol_id IN ('.$visibleRoles.')';
         }
+
+        return ' AND rol_id = 0 ';
     }
 
     /**

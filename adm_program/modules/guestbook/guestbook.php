@@ -19,8 +19,7 @@
  */
 require_once('../../system/common.php');
 
-unset($_SESSION['guestbook_entry_request']);
-unset($_SESSION['guestbook_comment_request']);
+unset($_SESSION['guestbook_entry_request'], $_SESSION['guestbook_comment_request']);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_guestbook_module'] == 0)

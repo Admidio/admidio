@@ -100,7 +100,7 @@ class Folder
         // der Ordner existiert, aber die Schreibrechte noch nicht
         if($writable && is_dir($newPath) && !is_writable($newPath))
         {
-            $returnValue = @chmod($newPath, 0777);
+            $returnValue = chmod($newPath, 0777);
         }
         return $returnValue;
     }

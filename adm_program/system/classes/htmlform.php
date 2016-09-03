@@ -1940,9 +1940,7 @@ class HtmlForm extends HtmlFormBasic
             echo $html;
             return null;
         }
-        else
-        {
-            return $html;
-        }
+
+        return $html;
     }
 }

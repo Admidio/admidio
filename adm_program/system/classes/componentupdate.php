@@ -403,4 +403,22 @@ class ComponentUpdate extends Component
         }
     }
 
+    /**
+     * This method installs the default user relation types
+     */
+    public function updateStepInstallDefaultUserRelationTypes()
+    {
+        global $gL10n, $gCurrentUser;
+
+        $sql = 'INSERT INTO '.TBL_USER_RELATION_TYPES.' (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
+                VALUES (1, \''.$gL10n->get('INS_PARENT').'\', \''.$gL10n->get('INS_FATHER').'\', \''.$gL10n->get('INS_MOTHER').'\', 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                     , (2, \''.$gL10n->get('INS_CHILD').'\', \''.$gL10n->get('INS_SON').'\', \''.$gL10n->get('INS_DAUGHTER').'\', 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                     , (3, \''.$gL10n->get('INS_SIBLING').'\', \''.$gL10n->get('INS_BROTHER').'\', \''.$gL10n->get('INS_SISTER').'\', 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                     , (4, \''.$gL10n->get('INS_SPOUSE').'\', \''.$gL10n->get('INS_HUSBAND').'\', \''.$gL10n->get('INS_WIFE').'\', 4, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                     , (5, \''.$gL10n->get('INS_COHABITANT').'\', \''.$gL10n->get('INS_COHABITANT_MALE').'\', \''.$gL10n->get('INS_COHABITANT_FEMALE').'\', 5, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                     , (6, \''.$gL10n->get('INS_COMPANION').'\', \''.$gL10n->get('INS_BOYFRIEND').'\', \''.$gL10n->get('INS_GIRLFRIEND').'\', 6, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                     , (7, \''.$gL10n->get('INS_SUPERIOR').'\', \''.$gL10n->get('INS_SUPERIOR_MALE').'\', \''.$gL10n->get('INS_SUPERIOR_FEMALE').'\', 8, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                     , (8, \''.$gL10n->get('INS_SUBORDINATE').'\', \''.$gL10n->get('INS_SUBORDINATE_MALE').'\', \''.$gL10n->get('INS_SUBORDINATE_FEMALE').'\', 7, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')';
+        $this->db->query($sql);
+    }
 }

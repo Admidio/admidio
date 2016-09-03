@@ -76,8 +76,7 @@ error_reporting(E_ALL);
 $_REQUEST['StartBackup'] = 'complete';
 $TypeEngineKey = 'Engine';
 $newfullfilename = $backupabsolutepath.$fullbackupfilename;
-unset($SelectedTables);
-unset($tables);
+unset($SelectedTables, $tables);
 
 // create a list with all tables with configured table prefix
 $sql = 'SHOW TABLES LIKE \''.$g_tbl_praefix.'\_%\'';

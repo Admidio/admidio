@@ -137,7 +137,7 @@ switch($getMode)
                     break;
 
                 case 'user_management':
-                    $checkboxes = array('members_show_all_users');
+                    $checkboxes = array('members_show_all_users', 'members_enable_user_relations');
                     break;
 
                 case 'downloads':

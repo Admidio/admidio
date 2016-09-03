@@ -203,9 +203,7 @@ class Menu
         {
             return $html;
         }
-        else
-        {
-            return '';
-        }
+
+        return '';
     }
 }

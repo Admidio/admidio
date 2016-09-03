@@ -287,6 +287,30 @@
   <string name="INS_XING">Xing</string>
   <string name="INS_XING_DESC">Would you like to set a link to your Xing profile? Your Xing login name is required. Log in to your Xing account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Xing profile directly.</string>
   <string name="INS_YAHOO_MESSENGER">Yahoo! Messenger</string>
+  <string name="INS_BOYFRIEND">Boyfriend</string>
+  <string name="INS_BROTHER">Brother</string>
+  <string name="INS_CHILD">Child</string>
+  <string name="INS_COHABITANT">Cohabitant</string>
+  <string name="INS_COHABITANT_MALE">Cohabitant</string>
+  <string name="INS_COHABITANT_FEMALE">Cohabitant</string>
+  <string name="INS_COMPANION">Companion</string>
+  <string name="INS_DAUGHTER">Daughter</string>
+  <string name="INS_FATHER">Father</string>
+  <string name="INS_GIRLFRIEND">Girlfriend</string>
+  <string name="INS_HUSBAND">Husband</string>
+  <string name="INS_MOTHER">Mother</string>
+  <string name="INS_PARENT">Parent</string>
+  <string name="INS_SUBORDINATE">Subordinate</string>
+  <string name="INS_SUBORDINATE_MALE">Subordinate</string>
+  <string name="INS_SUBORDINATE_FEMALE">Subordinate</string>
+  <string name="INS_SUPERIOR">Superior</string>
+  <string name="INS_SUPERIOR_MALE">Superior</string>
+  <string name="INS_SUPERIOR_FEMALE">Superior</string>
+  <string name="INS_SIBLING">Sibling</string>
+  <string name="INS_SISTER">Sister</string>
+  <string name="INS_SON">Son</string>
+  <string name="INS_SPOUSE">Spouse</string>
+  <string name="INS_WIFE">Wife</string>
   <!--Phrases only in Inventorymodule-->
   <string name="INV_CREATE_ITEM">Create article</string>
   <string name="INV_INVENTORY">Inventory management</string>
@@ -404,6 +428,7 @@
   <string name="LST_YOUR_LISTS">Own lists</string>
   <string name="LST_USER_PHOTO">User picture</string>
   <string name="LST_VARIOUS_ROLES">Various roles</string>
+  <string name="LST_VARIOUS_USER_RELATION_TYPES">Various relationships</string>
   <string name="LST_WANT_CONFIGURATION_FOR_ALL_USERS">Would you like to make selected list configuration available to all users?</string>
   <string name="LST_Z_TO_A">Z to A</string>
   <!--Phrases only in Mailmodule-->
@@ -493,6 +518,8 @@
   <string name="MEM_DAYS_FIELD_HISTORY_DESC">Changes in profile fields will be listed for the given period of time in days. This is the default filter option which can be changed by the user later on. For huge databases this option is used to limit the change history list. (Default: 365)</string>
   <string name="MEM_DUPLICATE">Duplicate</string>
   <string name="MEM_EDIT_USER">Edit user</string>
+  <string name="MEM_ENABLE_USER_RELATIONS">Show and manage relationships</string>
+  <string name="MEM_ENABLE_USER_RELATIONS_DESC">If enabled, relationships between users can be shown and managed. (default: yes)</string>
   <string name="MEM_EXISTING_USERS">Existing user</string>
   <string name="MEM_FILE_COLUMN">File column</string>
   <string name="MEM_FIRST_LINE_COLUMN_NAME">First line contains the column name</string>
@@ -781,8 +808,10 @@
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Confirm new profile picture</string>
   <string name="PRO_ADD_USER">Add user</string>
+  <string name="PRO_ADD_USER_RELATION">Add relationship</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL"> Registration has been confirmed. The user can now log on to the system.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Cancel membership</string>
+  <string name="PRO_CANCEL_USER_RELATION">Delete relationship</string>
   <string name="PRO_CHANGE_DATE">Change date</string>
   <string name="PRO_CHANGE_PROFILE_PICTURE">Upload profile image</string>
   <string name="PRO_CHOOSE_PHOTO">Select image</string>
@@ -851,6 +880,15 @@
   <string name="PRO_VIEW_ROLES_OTHER_ORGAS">Only roles of other organizations which are visible to all registered users are displayed. If you are a member of this organization, you will also be shown the roles that you may see with your rights within the organization.</string>
   <string name="PRO_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
   <string name="PRO_YEARS">Years</string>
+  <!-- Phrases only in Relationssmodule -->
+  <string name="REL_NO_USER_RELATION_TYPES_FOUND">There are no existing relationship definitions. Relationship definitions can be created in the user management.</string>
+  <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrical</string>
+  <string name="REL_USER_RELATION_TYPE_BACKWARD">Backward</string>
+  <string name="REL_USER_RELATION_TYPE_DEL">Do you really want to delete the relatonship definition #VAR1_BOLD#? Attention: All existing relationships of this type will be deleted too.</string>
+  <string name="REL_USER_RELATION_TYPE_DESC">An asymmetrical relationship is used e.g. for parent/child. A symmetrical relationship is used e.g. for siblings. Both are always bidirectional, whereas unidirectional relationships are pointing only in one direction.</string>
+  <string name="REL_USER_RELATION_TYPE_FORWARD">Forward</string>
+  <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrical</string>
+  <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirectional</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Active roles</string>
   <string name="ROL_ALL_GUESTS">All guests of the site</string>
@@ -1127,6 +1165,7 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">E-mail address #VAR1_BOLD# has been assigned to multiple registrations. A unique user registration could not be identified.</string>
   <string name="SYS_MAIL_DISPATCH">Email delivery</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Manage categories</string>
+  <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Manage relationship definitions</string>
   <string name="SYS_MALE">Male</string>
   <string name="SYS_MANDATORY_FIELD">Mandatory field</string>
   <string name="SYS_MAP">Map</string>
@@ -1282,6 +1321,10 @@
   <string name="SYS_USER">User</string>
   <string name="SYS_USER_ID_NOT_FOUND">No user could be found with this ID!</string>
   <string name="SYS_USER_NO_EMAIL">User #VAR1_BOLD# has no valid e-mail address in personal information!</string>
+  <string name="SYS_USER_RELATION">Relationship</string>
+  <string name="SYS_USER_RELATIONS">Relationships</string>
+  <string name="SYS_USER_RELATION_TYPE">Relationship definition</string>
+  <string name="SYS_USER_RELATION_TYPES">Relationship definitions</string>
   <string name="SYS_USERNAME">Username</string>
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERS_FOUND">User found</string>

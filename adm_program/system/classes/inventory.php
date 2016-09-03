@@ -117,21 +117,18 @@ class Inventory extends TableInventory
     public function getValue($columnName, $format = '')
     {
         global $gPreferences;
+
         if(strpos($columnName, 'inv_') === 0)
         {
             if($columnName === 'inv_photo' && file_exists(SERVER_PATH. '/adm_my_files/invent_profile_photos/'.$this->getValue('inv_id').'.jpg'))
             {
                 return file_get_contents(SERVER_PATH. '/adm_my_files/invent_profile_photos/'.$this->getValue('inv_id').'.jpg');
             }
-            else
-            {
-                return parent::getValue($columnName, $format);
-            }
+
+            return parent::getValue($columnName, $format);
         }
-        else
-        {
-            return $this->mInventoryFieldsData->getValue($columnName, $format);
-        }
+
+        return $this->mInventoryFieldsData->getValue($columnName, $format);
     }
 
     /**
@@ -197,10 +194,8 @@ class Inventory extends TableInventory
 
             return $returnValue;
         }
-        else
-        {
-            throw new AdmException('The inventory-data for item ', $this->getValue('FIRST_NAME').' '.$this->getValue('LAST_NAME').' could not be saved because you don\'t have the right to do this.');
-        }
+
+        throw new AdmException('The inventory-data for item ', $this->getValue('FIRST_NAME').' '.$this->getValue('LAST_NAME').' could not be saved because you don\'t have the right to do this.');
     }
 
     /**

@@ -287,6 +287,30 @@
   <string name="INS_XING">Xing</string>
   <string name="INS_XING_DESC">Wollen Sie Ihr Xing-Profil hier verlinken? Dazu benötigen Sie Ihren eindeutigen Namen bei Xing. Melden Sie sich bei Xing an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher aus Ihrem Profil direkt Ihr Xing-Profil aufrufen.</string>
   <string name="INS_YAHOO_MESSENGER">Yahoo! Messenger</string>
+  <string name="INS_BOYFRIEND">Freund</string>
+  <string name="INS_BROTHER">Bruder</string>
+  <string name="INS_CHILD">Kind</string>
+  <string name="INS_COHABITANT">Partnerin/Partner</string>
+  <string name="INS_COHABITANT_MALE">Partner</string>
+  <string name="INS_COHABITANT_FEMALE">Partnerin</string>
+  <string name="INS_COMPANION">Freundin/Freund</string>
+  <string name="INS_DAUGHTER">Tochter</string>
+  <string name="INS_FATHER">Vater</string>
+  <string name="INS_GIRLFRIEND">Freundin</string>
+  <string name="INS_HUSBAND">Ehemann</string>
+  <string name="INS_MOTHER">Mutter</string>
+  <string name="INS_PARENT">Elternteil</string>
+  <string name="INS_SUBORDINATE">Untergebene/Untergebener</string>
+  <string name="INS_SUBORDINATE_MALE">Untergebener</string>
+  <string name="INS_SUBORDINATE_FEMALE">Untergebene</string>
+  <string name="INS_SUPERIOR">Vorgesetze/Vorgesetzter</string>
+  <string name="INS_SUPERIOR_MALE">Vorgesetzer</string>
+  <string name="INS_SUPERIOR_FEMALE">Vorgesetzte</string>
+  <string name="INS_SIBLING">Geschwister</string>
+  <string name="INS_SISTER">Schwester</string>
+  <string name="INS_SON">Sohn</string>
+  <string name="INS_SPOUSE">Ehepartnerin/Ehepartner</string>
+  <string name="INS_WIFE">Ehefrau</string>
   <!--Phrases only in Inventorymodule-->
   <string name="INV_CREATE_ITEM">Neuer Artikel</string>
   <string name="INV_INVENTORY">Inventarverwaltung</string>
@@ -404,6 +428,7 @@
   <string name="LST_YOUR_LISTS">Deine Listen</string>
   <string name="LST_USER_PHOTO">Benutzerfoto</string>
   <string name="LST_VARIOUS_ROLES">Verschiedene Rollen</string>
+  <string name="LST_VARIOUS_USER_RELATION_TYPES">Verschiedene Beziehungen</string>
   <string name="LST_WANT_CONFIGURATION_FOR_ALL_USERS">Wollne Sie die aktuelle Listenkonfiguration allen Benutzern zur Verfügung stellen?</string>
   <string name="LST_Z_TO_A">Z bis A</string>
   <!--Phrases only in Mailmodule-->
@@ -493,6 +518,8 @@
   <string name="MEM_DAYS_FIELD_HISTORY_DESC">Zeitraum in Tagen in denen in der Änderungshistorie der Profilfelder die Veränderungen angezeigt werden. Dies ist der Standardfilter, welcher durch den Benutzer nachher beliebig geändert werden kann. Bei großen Datenbanken dient dies dazu die Datenmenge bei normalen Aufruf der Änderungshistorie einzuschränken. (Standard: 365)</string>
   <string name="MEM_DUPLICATE">Duplizieren</string>
   <string name="MEM_EDIT_USER">Benutzer bearbeiten</string>
+  <string name="MEM_ENABLE_USER_RELATIONS">Beziehungen pflegen und anzeigen</string>
+  <string name="MEM_ENABLE_USER_RELATIONS_DESC">Wenn diese Einstellung gesetzt ist, können Beziehungen zwischen Benutzer gepflegt und angezeigt werden. (Standard: ja)</string>
   <string name="MEM_EXISTING_USERS">Existierende Benutzer</string>
   <string name="MEM_FILE_COLUMN">Dateispalte</string>
   <string name="MEM_FIRST_LINE_COLUMN_NAME">Erste Zeile beinhaltet die Spaltenbezeichnungen</string>
@@ -781,8 +808,10 @@
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Neues Profilfoto übernehmen</string>
   <string name="PRO_ADD_USER">Benutzer anlegen</string>
+  <string name="PRO_ADD_USER_RELATION">Beziehung erstellen</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Mitgliedschaft beenden</string>
+  <string name="PRO_CANCEL_USER_RELATION">Beziehung löschen</string>
   <string name="PRO_CHANGE_DATE">Datum ändern</string>
   <string name="PRO_CHANGE_PROFILE_PICTURE">Profilbild hochladen</string>
   <string name="PRO_CHOOSE_PHOTO">Foto auswählen</string>
@@ -851,6 +880,15 @@
   <string name="PRO_VIEW_ROLES_OTHER_ORGAS">Es werden Ihnen hier nur Rollen anderer Organisationen angezeigt, die dort für alle angemeldete Benutzer sichtbar sind. Falls Sie auch Mitglied dieser Organisation sind, werden Ihnen zusätzlich die Rollen angezeigt, die Sie mit Ihren Rechten innerhalb der jeweiligen Organisation sehen dürfen.</string>
   <string name="PRO_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
   <string name="PRO_YEARS">Jahre</string>
+  <!-- Phrases only in Relationssmodule -->
+  <string name="REL_NO_USER_RELATION_TYPES_FOUND">Es existieren noch keine Beziehungstypen. Beziehungstypen können in der Benutzerverwaltung erstellt werden.</string>
+  <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
+  <string name="REL_USER_RELATION_TYPE_BACKWARD">Rückwärts</string>
+  <string name="REL_USER_RELATION_TYPE_DEL">Willst du den Beziehungstyp #VAR1_BOLD# löschen? Achtung: Dies löscht alle existierenden Beziehungen dieses Typs.</string>
+  <string name="REL_USER_RELATION_TYPE_DESC">Eine asymmetrisch Beziehung wird z.B. für Elternteil/Kind verwendet, während symmetrische Beziehungen z.B. für Geschwister verwendet werden können. Diese sind immer zweiseitig, hingegen zeigen unidirektionale Beziehungen nur in eine Richtung.</string>
+  <string name="REL_USER_RELATION_TYPE_FORWARD">Vorwärts</string>
+  <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
+  <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Aktive Rollen</string>
   <string name="ROL_ALL_GUESTS">Alle Besucher der Seite</string>
@@ -1124,6 +1162,7 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">Die E-Mail-Adresse #VAR1_BOLD# wurde mehrfach zugeordnet. Es konnte kein eindeutiger Benutzer gefunden werden.</string>
   <string name="SYS_MAIL_DISPATCH">E-Mailversand</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Kategorien pflegen</string>
+  <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Beziehungstypen pflegen</string>
   <string name="SYS_MALE">Männlich</string>
   <string name="SYS_MANDATORY_FIELD">Pflichtfeld</string>
   <string name="SYS_MAP">Karte</string>
@@ -1279,6 +1318,10 @@
   <string name="SYS_USER">Benutzer</string>
   <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</string>
   <string name="SYS_USER_NO_EMAIL">Der Benutzer #VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
+  <string name="SYS_USER_RELATION">Beziehung</string>
+  <string name="SYS_USER_RELATIONS">Beziehungen</string>
+  <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
+  <string name="SYS_USER_RELATION_TYPES">Beziehungstypen</string>
   <string name="SYS_USERNAME">Benutzername</string>
   <string name="SYS_USERNAME_OR_EMAIL">Benutzername oder E-Mail</string>
   <string name="SYS_USERS_FOUND">Gefundene Benutzer</string>

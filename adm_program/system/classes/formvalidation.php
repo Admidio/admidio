@@ -49,10 +49,8 @@ class FormValidation
             {
                 throw new AdmException('SYS_CAPTCHA_CALC_CODE_INVALID');
             }
-            else
-            {
-                throw new AdmException('SYS_CAPTCHA_CODE_INVALID');
-            }
+
+            throw new AdmException('SYS_CAPTCHA_CODE_INVALID');
         }
         return true;
     }

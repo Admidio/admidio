@@ -28,8 +28,8 @@ if($gDebug)
 {
     // https://secure.php.net/manual/en/errorfunc.configuration.php
     error_reporting(E_ALL | E_STRICT); // PHP 5.3 fallback (https://secure.php.net/manual/en/function.error-reporting.php)
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
+    ini_set('display_errors', '1');
+    ini_set('display_startup_errors', '1');
 
     // write actual script with parameters in log file
     error_log('--------------------------------------------------------------------------------'."\n" .
