@@ -24,14 +24,14 @@ class TableGuestbookComment extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_guestbook_comments.
      * If the id is set than the specific guestbook comment will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $gbc_id   The recordset of the guestbook comment with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $gbcId    The recordset of the guestbook comment with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $gbc_id = 0)
+    public function __construct(&$database, $gbcId = 0)
     {
         // read also data of assigned guestbook entry
         $this->connectAdditionalTable(TBL_GUESTBOOK, 'gbo_id', 'gbc_gbo_id');
 
-        parent::__construct($database, TBL_GUESTBOOK_COMMENTS, 'gbc', $gbc_id);
+        parent::__construct($database, TBL_GUESTBOOK_COMMENTS, 'gbc', $gbcId);
     }
 
     /**
@@ -45,13 +45,13 @@ class TableGuestbookComment extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        if($columnName === 'gbc_text')
+        if ($columnName === 'gbc_text')
         {
-            if(!isset($this->dbColumns['gbc_text']))
+            if (!isset($this->dbColumns['gbc_text']))
             {
                 $value = '';
             }
-            elseif($format === 'database')
+            elseif ($format === 'database')
             {
                 $value = html_entity_decode(strStripTags($this->dbColumns['gbc_text']));
             }
@@ -59,13 +59,11 @@ class TableGuestbookComment extends TableAccess
             {
                 $value = $this->dbColumns['gbc_text'];
             }
-        }
-        else
-        {
-            $value = parent::getValue($columnName, $format);
+
+            return $value;
         }
 
-        return $value;
+        return parent::getValue($columnName, $format);
     }
 
     /**
@@ -91,7 +89,7 @@ class TableGuestbookComment extends TableAccess
     {
         global $gCurrentOrganization;
 
-        if($this->new_record)
+        if ($this->new_record)
         {
             $this->setValue('gbc_org_id', $gCurrentOrganization->getValue('org_id'));
             $this->setValue('gbc_ip_address', $_SERVER['REMOTE_ADDR']);
@@ -110,19 +108,20 @@ class TableGuestbookComment extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($newValue !== '' && $columnName === 'gbc_email')
-        {
-            $newValue = admStrToLower($newValue);
-            if (!strValidCharacters($newValue, 'email'))
-            {
-                // falls die Email ein ungueltiges Format aufweist wird sie nicht gesetzt
-                return false;
-            }
-        }
-
-        if($columnName === 'gbc_text')
+        if ($columnName === 'gbc_text')
         {
             return parent::setValue($columnName, $newValue, false);
+        }
+
+        if ($newValue !== '' && $columnName === 'gbc_email')
+        {
+            $newValue = admStrToLower($newValue);
+
+            // If Email has a invalid format, it won't be set
+            if (!strValidCharacters($newValue, 'email'))
+            {
+                return false;
+            }
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);

@@ -53,11 +53,11 @@ class UploadHandlerPhoto extends UploadHandler
                 $albumFolder  = SERVER_PATH.'/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
 
                 // create folder if not exists
-                if(!file_exists($albumFolder))
+                if(!is_dir($albumFolder))
                 {
                     $error = $photoAlbum->createFolder();
 
-                    if($error['text'] !== '')
+                    if(is_array($error))
                     {
                         $file->error = $gL10n->get($error['text'], $error['path']);
                         return $file;
@@ -100,7 +100,7 @@ class UploadHandlerPhoto extends UploadHandler
                 // if enabled then save original image
                 if ($gPreferences['photo_keep_original'] == 1)
                 {
-                    if(!file_exists($albumFolder.'/originals'))
+                    if(!is_dir($albumFolder.'/originals'))
                     {
                         $folder = new Folder($albumFolder);
                         $folder->createFolder('originals', true);
@@ -110,7 +110,7 @@ class UploadHandlerPhoto extends UploadHandler
                 }
 
                 // save thumbnail
-                if(!file_exists($albumFolder.'/thumbnails'))
+                if(!is_dir($albumFolder.'/thumbnails'))
                 {
                     $folder = new Folder($albumFolder);
                     $folder->createFolder('thumbnails', true);
@@ -122,13 +122,13 @@ class UploadHandlerPhoto extends UploadHandler
                 $image->delete();
 
                 // delete image from upload folder
-                if(file_exists($fileLocation))
+                if(is_file($fileLocation))
                 {
                     unlink($fileLocation);
                 }
 
                 // if image was successfully saved in filesystem then update image count of album
-                if(file_exists($albumFolder.'/'.$newPhotoFileNumber.'.jpg'))
+                if(is_file($albumFolder.'/'.$newPhotoFileNumber.'.jpg'))
                 {
                     $photoAlbum->setValue('pho_quantity', $photoAlbum->getValue('pho_quantity')+1);
                     $photoAlbum->save();

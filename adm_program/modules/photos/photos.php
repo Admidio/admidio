@@ -428,14 +428,14 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
     $ordner = SERVER_PATH. '/adm_my_files/photos/'.$childPhotoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$childPhotoAlbum->getValue('pho_id');
 
     // show album if album is not locked or it has child albums or the user has the photo module edit right
-    if(file_exists($ordner) && $childPhotoAlbum->getValue('pho_locked') == 0
+    if(is_dir($ordner) && $childPhotoAlbum->getValue('pho_locked') == 0
     || $childPhotoAlbum->hasChildAlbums() || $gCurrentUser->editPhotoRight())
     {
         // Zufallsbild fuer die Vorschau ermitteln
         $shuffle_image = $childPhotoAlbum->shuffleImage();
 
         // Album angaben
-        if(file_exists($ordner) || $childPhotoAlbum->hasChildAlbums())
+        if(is_dir($ordner) || $childPhotoAlbum->hasChildAlbums())
         {
             $albumTitle = '<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'">'.$childPhotoAlbum->getValue('pho_name').'</a><br />';
         }
@@ -497,13 +497,13 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
                     </div>');
 
                     // Notice for users with foto edit rights that the folder of the album doesn't exists
-                    if(!file_exists($ordner) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->editPhotoRight())
+                    if(!is_dir($ordner) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->editPhotoRight())
                     {
                         $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('PHO_FOLDER_NOT_FOUND').'</div>');
                     }
 
                     // Notice for users with foto edit right that this album is locked
-                    if($childPhotoAlbum->getValue('pho_locked') == 1 && file_exists($ordner))
+                    if($childPhotoAlbum->getValue('pho_locked') == 1 && is_dir($ordner))
                     {
                         $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('PHO_ALBUM_NOT_APPROVED').'</div>');
                     }

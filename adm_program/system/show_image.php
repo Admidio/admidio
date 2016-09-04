@@ -23,7 +23,7 @@ $getFile   = admFuncVariableIsValid($_GET, 'file',   'file', array('requireValue
 $imageServerPath = SERVER_PATH.'/adm_my_files/'.$getModule.'/images/'.$getFile;
 
 // check if image exists
-if(file_exists($imageServerPath))
+if(is_file($imageServerPath))
 {
     $image = new Image($imageServerPath);
     header('Content-Type: '.$image->getMimeType());

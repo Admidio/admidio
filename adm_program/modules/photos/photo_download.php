@@ -105,13 +105,13 @@ if($getPhotoNr == null)
         {
             // try to find the original version if available, if not fallback to the scaled one
             $path = $albumFolder.'/originals/'.$i;
-            if(file_exists($path.'.jpg'))
+            if(is_file($path.'.jpg'))
             {
                 $path .= '.jpg';
                 $zip->addFromString(basename($path),  file_get_contents($path));
                 continue;
             }
-            elseif(file_exists($path.'.png'))
+            elseif(is_file($path.'.png'))
             {
                 $path .= '.png';
                 $zip->addFromString(basename($path),  file_get_contents($path));
@@ -120,7 +120,7 @@ if($getPhotoNr == null)
         }
 
         $path = $albumFolder.'/'.$i.'.jpg';
-        if(file_exists($path))
+        if(is_file($path))
         {
             $zip->addFromString(basename($path),  file_get_contents($path));
         }
@@ -169,13 +169,13 @@ if($getPhotoNr == null)
                 {
                     // try to find the original version if available, if not fallback to the scaled one
                     $path = $albumFolder.'/originals/'.$i;
-                    if(file_exists($path.'.jpg'))
+                    if(is_file($path.'.jpg'))
                     {
                         $path .= '.jpg';
                         $zip->addFromString($photo_album_name.'/'.basename($path),  file_get_contents($path));
                         continue;
                     }
-                    elseif(file_exists($path.'.png'))
+                    elseif(is_file($path.'.png'))
                     {
                         $path .= '.png';
                         $zip->addFromString($photo_album_name.'/'.basename($path),  file_get_contents($path));
@@ -183,7 +183,7 @@ if($getPhotoNr == null)
                     }
                 }
                 $path = $albumFolder.'/'.$i.'.jpg';
-                if(file_exists($path))
+                if(is_file($path))
                 {
                     $zip->addFromString($photo_album_name.'/'.basename($path),  file_get_contents($path));
                 }
@@ -218,7 +218,7 @@ else
     {
         // try to find the original version if available, if not fallback to the scaled one
         $path = $albumFolder.'/originals/'.$getPhotoNr;
-        if(file_exists($path.'.jpg'))
+        if(is_file($path.'.jpg'))
         {
             header('Content-Type: application/jpeg');
             header('Content-disposition: attachment; filename="'.$getPhotoNr.'.jpg"');
@@ -226,7 +226,7 @@ else
             fpassthru($fp);
             exit;
         }
-        elseif(file_exists($path.'.png'))
+        elseif(is_file($path.'.png'))
         {
             header('Content-Type: application/png');
             header('Content-disposition: attachment; filename="'.$getPhotoNr.'.png"');
@@ -238,7 +238,7 @@ else
 
     $path = $albumFolder.'/'.$getPhotoNr.'.jpg';
 
-    if(file_exists($path))
+    if(is_file($path))
     {
         header('Content-Type: application/jpeg');
         header('Content-disposition: attachment; filename="'.$getPhotoNr.'.jpg"');

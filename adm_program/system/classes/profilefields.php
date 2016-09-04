@@ -577,15 +577,9 @@ class ProfileFields
                     }
                     break;
                 case 'URL':
-                    // Set http hat the beginning if no protocol was defined
-                    if(strpos(admStrToLower($fieldValue), 'http://')  === false
-                    && strpos(admStrToLower($fieldValue), 'https://') === false)
-                    {
-                        $fieldValue = 'http://'. $fieldValue;
-                    }
+                    $fieldValue = admFuncCheckUrl($fieldValue);
 
-                    // now check url for valid characters
-                    if (!$this->noValueCheck && !strValidCharacters($fieldValue, 'url'))
+                    if (!$this->noValueCheck && $fieldValue === false)
                     {
                         return false;
                     }

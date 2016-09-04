@@ -459,15 +459,9 @@ class Organization extends TableAccess
 
         if($columnName === 'org_homepage' && $newValue !== '')
         {
-            // Homepage noch mit http vorbelegen
-            if(strpos(admStrToLower($newValue), 'http://')  === false
-            && strpos(admStrToLower($newValue), 'https://') === false)
-            {
-                $newValue = 'http://'. $newValue;
-            }
+            $newValue = admFuncCheckUrl($newValue);
 
-            // Homepage darf nur gueltige Zeichen enthalten
-            if (!strValidCharacters($newValue, 'url'))
+            if ($newValue === false)
             {
                 return false;
             }

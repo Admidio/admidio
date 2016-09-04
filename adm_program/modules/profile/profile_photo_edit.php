@@ -74,9 +74,9 @@ if($getMode === 'save')
         // Foto im Dateisystem speichern
 
         // Nachsehen ob fuer den User ein Photo gespeichert war
-        if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
+        if(is_file(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
         {
-            if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
+            if(is_file(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
             {
                 unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
             }
@@ -113,7 +113,7 @@ elseif($getMode === 'dont_save')
     // Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
+        if(is_file(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
         {
             unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg');
         }
@@ -194,7 +194,7 @@ elseif($getMode === 'upload')
     }
 
     // Kontrolle ob Fotos ausgewaehlt wurden
-    if(!file_exists($_FILES['userfile']['tmp_name'][0]))
+    if(!is_file($_FILES['userfile']['tmp_name'][0]))
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_NOT_CHOOSEN'));
         // => EXIT

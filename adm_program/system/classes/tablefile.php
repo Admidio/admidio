@@ -28,14 +28,14 @@ class TableFile extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_files.
      * If the id is set than the specific files will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $fil_id   The recordset of the files with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $filId    The recordset of the files with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $fil_id = 0)
+    public function __construct(&$database, $filId = 0)
     {
         // read also data of assigned folder
         $this->connectAdditionalTable(TBL_FOLDERS, 'fol_id', 'fil_fol_id');
 
-        parent::__construct($database, TBL_FILES, 'fil', $fil_id);
+        parent::__construct($database, TBL_FILES, 'fil', $filId);
     }
 
     /**

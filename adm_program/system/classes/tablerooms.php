@@ -21,11 +21,11 @@ class TableRooms extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_rooms.
      * If the id is set than the specific room will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $room_id  The recordset of the room with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $roomId   The recordset of the room with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $room_id = 0)
+    public function __construct(&$database, $roomId = 0)
     {
-        parent::__construct($database, TBL_ROOMS, 'room', $room_id);
+        parent::__construct($database, TBL_ROOMS, 'room', $roomId);
     }
 
     /**
@@ -39,13 +39,13 @@ class TableRooms extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        if($columnName === 'room_description')
+        if ($columnName === 'room_description')
         {
-            if(!isset($this->dbColumns['room_description']))
+            if (!isset($this->dbColumns['room_description']))
             {
                 $value = '';
             }
-            elseif($format === 'database')
+            elseif ($format === 'database')
             {
                 $value = html_entity_decode(strStripTags($this->dbColumns['room_description']));
             }
@@ -53,13 +53,11 @@ class TableRooms extends TableAccess
             {
                 $value = $this->dbColumns['room_description'];
             }
-        }
-        else
-        {
-            $value = parent::getValue($columnName, $format);
+
+            return $value;
         }
 
-        return $value;
+        return parent::getValue($columnName, $format);
     }
 
     /**
@@ -72,10 +70,11 @@ class TableRooms extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($columnName === 'room_description')
+        if ($columnName === 'room_description')
         {
             return parent::setValue($columnName, $newValue, false);
         }
+
         return parent::setValue($columnName, $newValue, $checkValue);
     }
 }

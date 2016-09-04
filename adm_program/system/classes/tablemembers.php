@@ -135,7 +135,7 @@ class TableMembers extends TableAccess
                 $this->setValue('mem_leader', $leader);
             }
 
-            $this->setValue('mem_end', '9999-12-31');
+            $this->setValue('mem_end', DATE_MAX);
 
             if($this->columnsValueChanged)
             {

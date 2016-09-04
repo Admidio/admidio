@@ -546,7 +546,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
         fclose($fp);
     }
 
-    if (file_exists($newfullfilename))
+    if (is_file($newfullfilename))
     {
         unlink($newfullfilename); // Windows won't allow overwriting via rename
     }

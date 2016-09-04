@@ -143,7 +143,7 @@ if($getMode === 'new' || $getMode === 'change')
 
         $error = $photo_album->createFolder();
 
-        if(strlen($error['text']) > 0)
+        if(is_array($error))
         {
             $photo_album->delete();
 
@@ -153,7 +153,7 @@ if($getMode === 'new' || $getMode === 'change')
             // => EXIT
         }
 
-        if(strlen($error['text']) === 0)
+        if($error === null)
         {
             // Benachrichtigungs-Email für neue Einträge
             $notification = new Email();

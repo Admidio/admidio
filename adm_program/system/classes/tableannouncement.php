@@ -25,11 +25,11 @@ class TableAnnouncement extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_announcements.
      * If the id is set than the specific announcement will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $ann_id   The recordset of the announcement with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $annId    The recordset of the announcement with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $ann_id = 0)
+    public function __construct(&$database, $annId = 0)
     {
-        parent::__construct($database, TBL_ANNOUNCEMENTS, 'ann', $ann_id);
+        parent::__construct($database, TBL_ANNOUNCEMENTS, 'ann', $annId);
     }
 
     /**
@@ -40,14 +40,16 @@ class TableAnnouncement extends TableAccess
     {
         global $gCurrentOrganization;
 
+        $orgId = (int) $this->getValue('ann_org_id');
+
         // Ankuendigung der eigenen Orga darf bearbeitet werden
-        if($this->getValue('ann_org_id') === $gCurrentOrganization->getValue('org_id'))
+        if ((int) $gCurrentOrganization->getValue('org_id') === $orgId)
         {
             return true;
         }
+
         // Ankuendigung von Kinder-Orgas darf bearbeitet werden, wenn diese als global definiert wurden
-        elseif($this->getValue('ann_global') == true
-        && $gCurrentOrganization->isChildOrganization($this->getValue('ann_org_id')))
+        if ($gCurrentOrganization->isChildOrganization($orgId) && $this->getValue('ann_global'))
         {
             return true;
         }
@@ -66,14 +68,14 @@ class TableAnnouncement extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        if($columnName === 'ann_description')
+        if ($columnName === 'ann_description')
         {
-            if(!isset($this->dbColumns['ann_description']))
+            if (!isset($this->dbColumns['ann_description']))
             {
                 $value = '';
             }
 
-            elseif($format === 'database')
+            elseif ($format === 'database')
             {
                 $value = html_entity_decode(strStripTags($this->dbColumns['ann_description']), ENT_QUOTES, 'UTF-8');
             }
@@ -81,13 +83,11 @@ class TableAnnouncement extends TableAccess
             {
                 $value = $this->dbColumns['ann_description'];
             }
-        }
-        else
-        {
-            $value = parent::getValue($columnName, $format);
+
+            return $value;
         }
 
-        return $value;
+        return parent::getValue($columnName, $format);
     }
 
     /**
@@ -102,7 +102,7 @@ class TableAnnouncement extends TableAccess
     {
         global $gCurrentOrganization;
 
-        if($this->new_record)
+        if ($this->new_record)
         {
             $this->setValue('ann_org_id', $gCurrentOrganization->getValue('org_id'));
         }
@@ -120,10 +120,11 @@ class TableAnnouncement extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($columnName === 'ann_description')
+        if ($columnName === 'ann_description')
         {
             return parent::setValue($columnName, $newValue, false);
         }
+
         return parent::setValue($columnName, $newValue, $checkValue);
     }
 }

@@ -45,7 +45,7 @@ if($inventory->getValue('inv_id') == 0)
 // Foto aus adm_my_files
 if($gPreferences['profile_photo_storage'] == 1 && !$getNewPhoto)
 {
-    if(file_exists(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg'))
+    if(is_file(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg'))
     {
         $picpath = SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg';
     }

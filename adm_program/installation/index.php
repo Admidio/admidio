@@ -10,7 +10,7 @@
  */
 
 // check if installation is necessary
-if(file_exists('../../adm_my_files/config.php'))
+if(is_file('../../adm_my_files/config.php'))
 {
     $page = 'update.php';
 }

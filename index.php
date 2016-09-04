@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-if(file_exists('adm_my_files/config.php'))
+if(is_file('adm_my_files/config.php'))
 {
     require_once('adm_my_files/config.php');
 

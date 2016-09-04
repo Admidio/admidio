@@ -120,7 +120,7 @@ class Inventory extends TableInventory
 
         if(strpos($columnName, 'inv_') === 0)
         {
-            if($columnName === 'inv_photo' && file_exists(SERVER_PATH. '/adm_my_files/invent_profile_photos/'.$this->getValue('inv_id').'.jpg'))
+            if($columnName === 'inv_photo' && is_file(SERVER_PATH. '/adm_my_files/invent_profile_photos/'.$this->getValue('inv_id').'.jpg'))
             {
                 return file_get_contents(SERVER_PATH. '/adm_my_files/invent_profile_photos/'.$this->getValue('inv_id').'.jpg');
             }

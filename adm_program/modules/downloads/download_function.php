@@ -108,7 +108,7 @@ elseif ($getMode === 3)
         $folder->getFolderForDownload($getFolderId);
 
         // Test ob der Ordner schon existiert im Filesystem
-        if (file_exists($folder->getCompletePathOfFolder(). '/'.$newFolderName))
+        if (is_dir($folder->getCompletePathOfFolder(). '/'.$newFolderName))
         {
             $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolderName));
             // => EXIT
@@ -116,9 +116,9 @@ elseif ($getMode === 3)
         else
         {
             // Ordner erstellen
-            $b_return = $folder->createFolder($newFolderName);
+            $error = $folder->createFolder($newFolderName);
 
-            if(strlen($b_return['text']) === 0)
+            if($error === null)
             {
                 // Jetzt noch den Ordner der DB hinzufuegen...
                 $newFolder = new TableFolder($gDb);
@@ -142,7 +142,7 @@ elseif ($getMode === 3)
             {
                 // der entsprechende Ordner konnte nicht angelegt werden
                 $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
-                $gMessage->show($gL10n->get($b_return['text'], $b_return['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+                $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
                 // => EXIT
             }
 
@@ -191,7 +191,7 @@ elseif ($getMode === 4)
 
             // Test ob die Datei schon existiert im Filesystem
             if ($newFile !== $file->getValue('fil_name')
-             && file_exists(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
+            && is_file(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
             {
                 $gMessage->show($gL10n->get('DOW_FILE_EXIST', $newFile));
                 // => EXIT
@@ -229,7 +229,7 @@ elseif ($getMode === 4)
 
             // Test ob der Ordner schon existiert im Filesystem
             if ($newFolder !== $folder->getValue('fol_name')
-            && file_exists(SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
+            && is_dir(SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
             {
                 $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolder));
                 // => EXIT

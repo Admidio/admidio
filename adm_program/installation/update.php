@@ -15,11 +15,11 @@
  ***********************************************************************************************
  */
 // embed config and constants file
-if(file_exists('../../adm_my_files/config.php'))
+if(is_file('../../adm_my_files/config.php'))
 {
     require_once('../../adm_my_files/config.php');
 }
-elseif(file_exists('../../config.php'))
+elseif(is_file('../../config.php'))
 {
     // config file at destination of version 2.0 exists -> copy config file to new destination
     if(!@copy('../../config.php', '../../adm_my_files/config.php'))
@@ -124,7 +124,7 @@ $gLanguageData = new LanguageData($gPreferences['system_language']);
 $gL10n->addLanguageData($gLanguageData);
 
 // config.php exists at wrong place
-if(file_exists('../../config.php') && file_exists('../../adm_my_files/config.php'))
+if(is_file('../../config.php') && is_file('../../adm_my_files/config.php'))
 {
     // try to delete the config file at the old place otherwise show notice to user
     if(!@unlink('../../config.php'))
@@ -368,7 +368,7 @@ elseif($getMode === 2)
                         error_log('Update to version '.$version);
                     }
 
-                    if(file_exists($sqlUpdateFile))
+                    if(is_file($sqlUpdateFile))
                     {
                         // SQL-Script abarbeiten
                         $file    = fopen($sqlUpdateFile, 'r')
@@ -393,7 +393,7 @@ elseif($getMode === 2)
                     }
 
                     // check if an php update file exists and then execute the script
-                    if(file_exists($phpUpdateFile))
+                    if(is_file($phpUpdateFile))
                     {
                         include($phpUpdateFile);
                         $flagNextVersion = true;

@@ -34,13 +34,13 @@ class TablePhotos extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_photos.
      * If the id is set than the specific photo album will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $photoId  The recordset of the photo album with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $phoId    The recordset of the photo album with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $photoId = 0)
+    public function __construct(&$database, $phoId = 0)
     {
         $this->hasChildAlbums = null;
 
-        parent::__construct($database, TBL_PHOTOS, 'pho', $photoId);
+        parent::__construct($database, TBL_PHOTOS, 'pho', $phoId);
     }
 
     /**
@@ -53,23 +53,23 @@ class TablePhotos extends TableAccess
     {
         $totalImages = 0;
 
-        // wurde keine ID uebergeben, dann Anzahl Bilder des aktuellen Albums ermitteln
-        if($phoId == 0)
+        // If no phoId is set, calculate the amount of pictures in the current album
+        if ($phoId === 0)
         {
-            $phoId = $this->getValue('pho_id');
-            $totalImages = $this->getValue('pho_quantity');
+            $phoId = (int) $this->getValue('pho_id');
+            $totalImages = (int) $this->getValue('pho_quantity');
         }
 
-        // alle Unteralben ermitteln
+        // Get all sub-albums
         $sql = 'SELECT pho_id, pho_quantity
                   FROM '.TBL_PHOTOS.'
                  WHERE pho_pho_id_parent = '.$phoId.'
                    AND pho_locked = 0';
         $childAlbumsStatement = $this->db->query($sql);
 
-        while($pho_row = $childAlbumsStatement->fetch())
+        while ($phoRow = $childAlbumsStatement->fetch())
         {
-            $totalImages = $totalImages + $pho_row['pho_quantity'] + $this->countImages($pho_row['pho_id']);
+            $totalImages += (int) $phoRow['pho_quantity'] + $this->countImages((int) $phoRow['pho_id']);
         }
 
         return $totalImages;
@@ -77,29 +77,31 @@ class TablePhotos extends TableAccess
 
     /**
      * Legt den Ordner fuer die Veranstaltung im Dateisystem an
-     * @return string[]
+     * @return string[]|null
      */
     public function createFolder()
     {
-        $error = array('code' => '0', 'text' => '');
-
         // Pfad in adm_my_files pruefen und ggf. anlegen
         $myFilesPhotos = new MyFiles('PHOTOS');
-        if(!$myFilesPhotos->checkSettings())
+        if (!$myFilesPhotos->checkSettings())
         {
-            $error['text'] = $myFilesPhotos->errorText;
-            $error['path'] = $myFilesPhotos->errorPath;
-            return $error;
+            return array(
+                'text' => $myFilesPhotos->errorText,
+                'path' => $myFilesPhotos->errorPath
+            );
         }
 
         // nun den Ordner fuer die Veranstaltung anlegen
-        $folderName = $this->getValue('pho_begin', 'Y-m-d'). '_'. $this->getValue('pho_id');
-        if(!$myFilesPhotos->createFolder($folderName, true))
+        $folderName = $this->getValue('pho_begin', 'Y-m-d') . '_' . $this->getValue('pho_id');
+        if (!$myFilesPhotos->createFolder($folderName, true))
         {
-            $error['text'] = 'SYS_FOLDER_NOT_CREATED';
-            $error['path'] = 'adm_my_files/photos/'.$folderName;
+            return array(
+                'text' => 'SYS_FOLDER_NOT_CREATED',
+                'path' => 'adm_my_files/photos/'.$folderName
+            );
         }
-        return $error;
+
+        return null;
     }
 
     /**
@@ -109,10 +111,11 @@ class TablePhotos extends TableAccess
      */
     public function delete()
     {
-        if($this->deleteInDatabase($this->getValue('pho_id')))
+        if ($this->deleteInDatabase((int) $this->getValue('pho_id')))
         {
             return parent::delete();
         }
+
         return false;
     }
 
@@ -124,6 +127,7 @@ class TablePhotos extends TableAccess
     public function deleteInDatabase($photoId)
     {
         $returnValue = true;
+
         $this->db->startTransaction();
 
         // erst einmal rekursiv zur tiefsten Tochterveranstaltung gehen
@@ -132,22 +136,22 @@ class TablePhotos extends TableAccess
                  WHERE pho_pho_id_parent = '.$photoId;
         $childAlbumStatement = $this->db->query($sql);
 
-        while($phoId = $childAlbumStatement->fetchColumn())
+        while ($phoId = $childAlbumStatement->fetchColumn())
         {
-            if($returnValue)
+            if ($returnValue)
             {
                 $returnValue = $this->deleteInDatabase((int) $phoId);
             }
         }
 
         // nun DB-Eintrag und Ordner loeschen
-        if($returnValue)
+        if ($returnValue)
         {
             // Ordnerpfad zusammensetzen
-            $folder = SERVER_PATH. '/adm_my_files/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$photoId;
+            $folder = SERVER_PATH.'/adm_my_files/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$photoId;
 
             // aktuellen Ordner incl. Unterordner und Dateien loeschen, falls er existiert
-            if(file_exists($folder))
+            if (is_dir($folder))
             {
                 // nun erst rekursiv den Ordner im Dateisystem loeschen
                 $myFilesPhotos = new MyFiles('PHOTOS');
@@ -155,7 +159,7 @@ class TablePhotos extends TableAccess
                 $returnValue = $myFilesPhotos->delete($folder);
             }
 
-            if($returnValue)
+            if ($returnValue)
             {
                 // Veranstaltung jetzt in DB loeschen
                 $sql = 'DELETE FROM '.TBL_PHOTOS.'
@@ -165,6 +169,7 @@ class TablePhotos extends TableAccess
         }
 
         $this->db->endTransaction();
+
         return $returnValue;
     }
 
@@ -174,14 +179,14 @@ class TablePhotos extends TableAccess
      */
     public function hasChildAlbums()
     {
-        if($this->hasChildAlbums === null)
+        if ($this->hasChildAlbums === null)
         {
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_PHOTOS.'
                      WHERE pho_pho_id_parent = '.$this->getValue('pho_id');
             $countChildAlbums = $this->db->query($sql);
 
-            if($countChildAlbums->fetchColumn() > 0)
+            if ($countChildAlbums->fetchColumn() > 0)
             {
                 $this->hasChildAlbums = true;
             }
@@ -207,7 +212,7 @@ class TablePhotos extends TableAccess
     {
         global $gCurrentOrganization;
 
-        if($this->new_record)
+        if ($this->new_record)
         {
             $this->setValue('pho_org_id', $gCurrentOrganization->getValue('org_id'));
         }
@@ -226,46 +231,47 @@ class TablePhotos extends TableAccess
         $shuffleImage = array('shuffle_pho_id' => 0, 'shuffle_img_nr' => 0, 'shuffle_img_begin' => '');
 
         // wurde keine ID uebergeben, dann versuchen das Zufallsbild aus dem aktuellen Album zu nehmen
-        if($phoId === 0)
+        if ($phoId === 0)
         {
-            $phoId = $this->getValue('pho_id');
-            $shuffleImage['shuffle_pho_id']    = $this->getValue('pho_id');
+            $phoId = (int) $this->getValue('pho_id');
+            $shuffleImage['shuffle_pho_id']    = $phoId;
             $shuffleImage['shuffle_img_begin'] = $this->getValue('pho_begin', 'Y-m-d');
 
-            if($this->getValue('pho_quantity') > 0)
+            if ($this->getValue('pho_quantity') > 0)
             {
                 $shuffleImage['shuffle_img_nr'] = mt_rand(1, $this->getValue('pho_quantity'));
             }
         }
 
-        if($shuffleImage['shuffle_img_nr'] == 0)
+        if ($shuffleImage['shuffle_img_nr'] === 0)
         {
             // kein Bild vorhanden, dann in einem Unteralbum suchen
-            $sql = 'SELECT *
+            $sql = 'SELECT pho_id, pho_begin, pho_quantity
                       FROM '.TBL_PHOTOS.'
                      WHERE pho_pho_id_parent = '.$phoId.'
                        AND pho_locked = 0
                   ORDER BY pho_quantity DESC';
             $childAlbumsStatement = $this->db->query($sql);
 
-            while($phoRow = $childAlbumsStatement->fetch())
+            while ($phoRow = $childAlbumsStatement->fetch())
             {
-                if($shuffleImage['shuffle_img_nr'] == 0)
+                if ($shuffleImage['shuffle_img_nr'] === 0)
                 {
-                    $shuffleImage['shuffle_pho_id'] = $phoRow['pho_id'];
+                    $shuffleImage['shuffle_pho_id']    = (int) $phoRow['pho_id'];
                     $shuffleImage['shuffle_img_begin'] = $phoRow['pho_begin'];
 
-                    if($phoRow['pho_quantity'] > 0)
+                    if ($phoRow['pho_quantity'] > 0)
                     {
                         $shuffleImage['shuffle_img_nr'] = mt_rand(1, $phoRow['pho_quantity']);
                     }
                     else
                     {
-                        $shuffleImage = $this->shuffleImage($phoRow['pho_id']);
+                        $shuffleImage = $this->shuffleImage((int) $phoRow['pho_id']);
                     }
                 }
             }
         }
+
         return $shuffleImage;
     }
 }

@@ -28,14 +28,14 @@ class TableDate extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_dates.
      * If the id is set than the specific date will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $dat_id   The recordset of the date with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $datId    The recordset of the date with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $dat_id = 0)
+    public function __construct(&$database, $datId = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'dat_cat_id');
 
-        parent::__construct($database, TBL_DATES, 'dat', $dat_id);
+        parent::__construct($database, TBL_DATES, 'dat', $datId);
     }
 
     /**
@@ -56,18 +56,24 @@ class TableDate extends TableAccess
      */
     public function delete()
     {
+        $datId     = (int) $this->getValue('dat_id');
+        $datRoleId = (int) $this->getValue('dat_rol_id');
+
         $this->db->startTransaction();
 
-        $sql = 'DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
+        $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
+                 WHERE dtr_dat_id = '.$datId;
         $this->db->query($sql);
 
         // if date has participants then the role with their memberships must be deleted
-        if($this->getValue('dat_rol_id') > 0)
+        if ($datRoleId > 0)
         {
-            $sql = 'UPDATE '.TBL_DATES.' SET dat_rol_id = NULL WHERE dat_id = '.$this->getValue('dat_id');
+            $sql = 'UPDATE '.TBL_DATES.'
+                       SET dat_rol_id = NULL
+                     WHERE dat_id = '.$datId;
             $this->db->query($sql);
 
-            $dateRole = new TableRoles($this->db, $this->getValue('dat_rol_id'));
+            $dateRole = new TableRoles($this->db, $datRoleId);
             $dateRole->delete(); // TODO Exception handling
         }
 
@@ -84,13 +90,16 @@ class TableDate extends TableAccess
     {
         global $gCurrentOrganization;
 
+        $catOrgId = (int) $this->getValue('cat_org_id');
+
         // Termine der eigenen Orga darf bearbeitet werden
-        if($this->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
+        if ($catOrgId === (int) $gCurrentOrganization->getValue('org_id'))
         {
             return true;
         }
+
         // Termine von Kinder-Orgas darf bearbeitet werden, wenn diese als global definiert wurden
-        elseif($this->getValue('dat_global') && $gCurrentOrganization->isChildOrganization($this->getValue('cat_org_id')))
+        if ($this->getValue('dat_global') && $gCurrentOrganization->isChildOrganization($catOrgId))
         {
             return true;
         }
@@ -105,11 +114,11 @@ class TableDate extends TableAccess
      */
     public function getIcal($domain)
     {
-        $ical = $this->getIcalHeader().
+        $iCal = $this->getIcalHeader().
                 $this->getIcalVEvent($domain).
                 $this->getIcalFooter();
 
-        return $ical;
+        return $iCal;
     }
 
     /**
@@ -118,33 +127,35 @@ class TableDate extends TableAccess
      */
     public function getIcalHeader()
     {
-        $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';
+        $defaultTimezone = date_default_timezone_get();
 
-        $icalHeader = 'BEGIN:VCALENDAR'."\r\n".
-                      'METHOD:PUBLISH'."\r\n".
-                      'PRODID:'. $prodid. "\r\n".
-                      'VERSION:2.0'."\r\n".
-                      'X-WR-TIMEZONE:'.date_default_timezone_get()."\r\n".
-                      'BEGIN:VTIMEZONE'."\r\n".
-                      'TZID:'.date_default_timezone_get()."\r\n".
-                      'X-LIC-LOCATION:'.date_default_timezone_get()."\r\n".
-                      'BEGIN:STANDARD'."\r\n".
-                      'DTSTART:19701025T030000'."\r\n".
-                      'TZOFFSETFROM:+0200'."\r\n".
-                      'TZOFFSETTO:+0100'."\r\n".
-                      'TZNAME:CET'."\r\n".
-                      'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10'."\r\n".
-                      'END:STANDARD'."\r\n".
-                      'BEGIN:DAYLIGHT'."\r\n".
-                      'DTSTART:19700329T020000'."\r\n".
-                      'TZOFFSETFROM:+0100'."\r\n".
-                      'TZOFFSETTO:+0200'."\r\n".
-                      'TZNAME:CEST'."\r\n".
-                      'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3'."\r\n".
-                      'END:DAYLIGHT'."\r\n".
-                      'END:VTIMEZONE'."\r\n";
+        $icalHeader = array(
+            'BEGIN:VCALENDAR',
+            'METHOD:PUBLISH',
+            'PRODID:-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE',
+            'VERSION:2.0',
+            'X-WR-TIMEZONE:' . $defaultTimezone,
+            'BEGIN:VTIMEZONE',
+            'TZID:' . $defaultTimezone,
+            'X-LIC-LOCATION:' . $defaultTimezone,
+            'BEGIN:STANDARD',
+            'DTSTART:19701025T030000',
+            'TZOFFSETFROM:+0200',
+            'TZOFFSETTO:+0100',
+            'TZNAME:CET',
+            'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10',
+            'END:STANDARD',
+            'BEGIN:DAYLIGHT',
+            'DTSTART:19700329T020000',
+            'TZOFFSETFROM:+0100',
+            'TZOFFSETTO:+0200',
+            'TZNAME:CEST',
+            'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3',
+            'END:DAYLIGHT',
+            'END:VTIMEZONE'
+        );
 
-        return $icalHeader;
+        return implode("\r\n", $icalHeader) . "\r\n";
     }
 
     /**
@@ -163,39 +174,39 @@ class TableDate extends TableAccess
      */
     public function getIcalVEvent($domain)
     {
-        $uid = $this->getValue('dat_timestamp_create', 'ymdThis').'+'.$this->getValue('dat_usr_id_create').'@'.$domain;
+        $iCalVEvent = array(
+            'BEGIN:VEVENT',
+            'CREATED:'.$this->getValue('dat_timestamp_create', 'Ymd').'T'.$this->getValue('dat_timestamp_create', 'His')
+        );
 
-        $icalVEevent = 'BEGIN:VEVENT'."\r\n".
-                       'CREATED:'.$this->getValue('dat_timestamp_create', 'Ymd').'T'.$this->getValue('dat_timestamp_create', 'His')."\r\n";
-
-        if($this->getValue('dat_timestamp_change') !== null)
+        if ($this->getValue('dat_timestamp_change') !== null)
         {
-            $icalVEevent .= 'LAST-MODIFIED:'.$this->getValue('dat_timestamp_change', 'Ymd').'T'.$this->getValue('dat_timestamp_change', 'His')."\r\n";
+            $iCalVEvent[] = 'LAST-MODIFIED:'.$this->getValue('dat_timestamp_change', 'Ymd').'T'.$this->getValue('dat_timestamp_change', 'His');
         }
 
         // Semicolons herausfiltern
-        $icalVEevent .= 'UID:'.$uid."\r\n".
-                        'SUMMARY:'.str_replace(';', '.', $this->getValue('dat_headline'))."\r\n".
-                        'DESCRIPTION:'.trim(str_replace("\r\n", '', str_replace(';', '.', $this->getValue('dat_description', 'database'))))."\r\n".
-                        'DTSTAMP:'.date('Ymd').'T'.date('His')."\r\n".
-                        'LOCATION:'.str_replace(';', '.', $this->getValue('dat_location'))."\r\n";
+        $iCalVEvent[] = 'UID:'.$this->getValue('dat_timestamp_create', 'ymdThis').'+'.$this->getValue('dat_usr_id_create').'@'.$domain;
+        $iCalVEvent[] = 'SUMMARY:'.str_replace(';', '.', $this->getValue('dat_headline'));
+        $iCalVEvent[] = 'DESCRIPTION:'.trim(str_replace("\r\n", '', str_replace(';', '.', $this->getValue('dat_description', 'database'))));
+        $iCalVEvent[] = 'DTSTAMP:'.date('Ymd').'T'.date('His');
+        $iCalVEvent[] = 'LOCATION:'.str_replace(';', '.', $this->getValue('dat_location'));
 
-        if($this->getValue('dat_all_day') == 1)
+        if ((int) $this->getValue('dat_all_day') === 1)
         {
             // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
             // Outlook und Co. zeigen es erst dann korrekt an
-            $icalVEevent .= 'DTSTART;VALUE=DATE:'.$this->getValue('dat_begin', 'Ymd')."\r\n".
-                            'DTEND;VALUE=DATE:'.date('Ymd', $this->getValue('dat_end', 'U')+60*60*24)."\r\n";
+            $iCalVEvent[] = 'DTSTART;VALUE=DATE:'.$this->getValue('dat_begin', 'Ymd');
+            $iCalVEvent[] = 'DTEND;VALUE=DATE:'.date('Ymd', $this->getValue('dat_end', 'U') + 60*60*24);
         }
         else
         {
-            $icalVEevent .= 'DTSTART;TZID='.date_default_timezone_get().':'.$this->getValue('dat_begin', 'Ymd').'T'.$this->getValue('dat_begin', 'His')."\r\n".
-                            'DTEND;TZID='.date_default_timezone_get().':'.$this->getValue('dat_end', 'Ymd').'T'.$this->getValue('dat_end', 'His')."\r\n";
+            $iCalVEvent[] = 'DTSTART;TZID='.date_default_timezone_get().':'.$this->getValue('dat_begin', 'Ymd').'T'.$this->getValue('dat_begin', 'His');
+            $iCalVEvent[] = 'DTEND;TZID='  .date_default_timezone_get().':'.$this->getValue('dat_end',   'Ymd').'T'.$this->getValue('dat_end',   'His');
         }
 
-        $icalVEevent .= 'END:VEVENT'."\r\n";
+        $iCalVEvent[] = 'END:VEVENT';
 
-        return $icalVEevent;
+        return implode("\r\n", $iCalVEvent) . "\r\n";
     }
 
     /**
@@ -213,9 +224,9 @@ class TableDate extends TableAccess
     {
         global $gL10n;
 
-        if($columnName === 'dat_end' && $this->dbColumns['dat_all_day'] == 1)
+        if ($columnName === 'dat_end' && (int) $this->dbColumns['dat_all_day'] === 1)
         {
-            if($format === '')
+            if ($format === '')
             {
                 $format = 'Y-m-d';
             }
@@ -224,13 +235,13 @@ class TableDate extends TableAccess
             list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $this->dbColumns['dat_end']);
             $value = date($format, mktime($hour, $minute, $second, $month, $day, $year) - 60*60*24);
         }
-        elseif($columnName === 'dat_description')
+        elseif ($columnName === 'dat_description')
         {
-            if(!isset($this->dbColumns['dat_description']))
+            if (!isset($this->dbColumns['dat_description']))
             {
                 $value = '';
             }
-            elseif($format === 'database')
+            elseif ($format === 'database')
             {
                 $value = html_entity_decode(strStripTags($this->dbColumns['dat_description']), ENT_QUOTES, 'UTF-8');
             }
@@ -244,17 +255,17 @@ class TableDate extends TableAccess
             $value = parent::getValue($columnName, $format);
         }
 
-        if($format !== 'database')
+        if ($format !== 'database')
         {
-            if($columnName === 'dat_country' && $value !== '')
+            if ($columnName === 'dat_country' && $value !== '')
             {
                 // beim Land die sprachabhaengige Bezeichnung auslesen
                 $value = $gL10n->getCountryByCode($value);
             }
-            elseif($columnName === 'cat_name')
+            elseif ($columnName === 'cat_name')
             {
                 // if text is a translation-id then translate it
-                if(strpos($value, '_') === 3)
+                if (strpos($value, '_') === 3)
                 {
                     $value = $gL10n->get(admStrToUpper($value));
                 }
@@ -270,7 +281,7 @@ class TableDate extends TableAccess
      */
     public function getVisibleRoles()
     {
-        if(count($this->visibleRoles) === 0)
+        if (count($this->visibleRoles) === 0)
         {
             // alle Rollen-IDs einlesen, die diesen Termin sehen duerfen
             $sql = 'SELECT dtr_rol_id
@@ -278,9 +289,9 @@ class TableDate extends TableAccess
                      WHERE dtr_dat_id = '.$this->getValue('dat_id');
             $dateRolesStatement = $this->db->query($sql);
 
-            while($roleId = $dateRolesStatement->fetchColumn())
+            while ($roleId = $dateRolesStatement->fetchColumn())
             {
-                if($roleId === null)
+                if ($roleId === null)
                 {
                     $this->visibleRoles[] = 0;
                 }
@@ -309,32 +320,30 @@ class TableDate extends TableAccess
 
         $returnValue = parent::save($updateFingerPrint);
 
-        if($this->changeVisibleRoles)
+        if ($this->changeVisibleRoles)
         {
             // Sichbarkeit der Rollen wegschreiben
-            if(!$this->new_record)
+            if (!$this->new_record)
             {
                 // erst einmal alle bisherigen Rollenzuordnungen loeschen, damit alles neu aufgebaut werden kann
-                $sql = 'DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
+                $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
+                         WHERE dtr_dat_id = '.$this->getValue('dat_id');
                 $this->db->query($sql);
             }
 
             // nun alle Rollenzuordnungen wegschreiben
-            $date_role = new TableAccess($this->db, TBL_DATE_ROLE, 'dtr');
+            $dateRole = new TableAccess($this->db, TBL_DATE_ROLE, 'dtr');
 
-            foreach($this->visibleRoles as $roleId)
+            foreach ($this->visibleRoles as $roleId)
             {
-                if(is_numeric($roleId)) // TODO necessary?
+                if ($roleId > 0)
                 {
-                    if($roleId > 0)
-                    {
-                        $date_role->setValue('dtr_rol_id', $roleId);
-                    }
-
-                    $date_role->setValue('dtr_dat_id', $this->getValue('dat_id'));
-                    $date_role->save();
-                    $date_role->clear();
+                    $dateRole->setValue('dtr_rol_id', $roleId);
                 }
+
+                $dateRole->setValue('dtr_dat_id', $this->getValue('dat_id'));
+                $dateRole->save();
+                $dateRole->clear();
             }
         }
 
@@ -354,16 +363,17 @@ class TableDate extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($columnName === 'dat_end' && $this->getValue('dat_all_day') == 1)
+        if ($columnName === 'dat_description')
+        {
+            return parent::setValue($columnName, $newValue, false);
+        }
+
+        if ($columnName === 'dat_end' && (int) $this->getValue('dat_all_day') === 1)
         {
             // hier muss bei ganztaegigen Terminen das bis-Datum um einen Tag hochgesetzt werden
             // damit der Termin bei SQL-Abfragen richtig beruecksichtigt wird
             list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $newValue);
             $newValue = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year) + 60*60*24);
-        }
-        elseif($columnName === 'dat_description')
-        {
-            return parent::setValue($columnName, $newValue, false);
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
@@ -375,7 +385,7 @@ class TableDate extends TableAccess
      */
     public function setVisibleRoles(array $arrVisibleRoleIds)
     {
-        if(count(array_diff($arrVisibleRoleIds, $this->visibleRoles)) > 0)
+        if (count(array_diff($arrVisibleRoleIds, $this->visibleRoles)) > 0)
         {
             $this->changeVisibleRoles = true;
         }

@@ -21,14 +21,14 @@ class TableWeblink extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_links.
      * If the id is set than the specific weblink will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $lnk_id   The recordset of the weblink with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $lnkId    The recordset of the weblink with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $lnk_id = 0)
+    public function __construct(&$database, $lnkId = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'lnk_cat_id');
 
-        parent::__construct($database, TBL_LINKS, 'lnk', $lnk_id);
+        parent::__construct($database, TBL_LINKS, 'lnk', $lnkId);
     }
 
     /**
@@ -44,13 +44,13 @@ class TableWeblink extends TableAccess
     {
         global $gL10n;
 
-        if($columnName === 'lnk_description')
+        if ($columnName === 'lnk_description')
         {
-            if(!isset($this->dbColumns['lnk_description']))
+            if (!isset($this->dbColumns['lnk_description']))
             {
                 $value = '';
             }
-            elseif($format === 'database')
+            elseif ($format === 'database')
             {
                 $value = html_entity_decode(strStripTags($this->dbColumns['lnk_description']));
             }
@@ -65,7 +65,7 @@ class TableWeblink extends TableAccess
         }
 
         // if text is a translation-id then translate it
-        if($columnName === 'cat_name' && $format !== 'database' && strpos($value, '_') === 3)
+        if ($columnName === 'cat_name' && $format !== 'database' && strpos($value, '_') === 3)
         {
             $value = $gL10n->get(admStrToUpper($value));
         }
@@ -83,25 +83,21 @@ class TableWeblink extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($columnName === 'lnk_url' && $newValue !== '')
+        if ($columnName === 'lnk_description')
         {
-            // Homepage noch mit http vorbelegen
-            if(strpos(admStrToLower($newValue), 'http://')  === false
-            && strpos(admStrToLower($newValue), 'https://') === false)
-            {
-                $newValue = 'http://'.$newValue;
-            }
+            return parent::setValue($columnName, $newValue, false);
+        }
 
-            // Homepage darf nur gueltige Zeichen enthalten
-            if(!strValidCharacters($newValue, 'url'))
+        if ($columnName === 'lnk_url' && $newValue !== '')
+        {
+            $newValue = admFuncCheckUrl($newValue);
+
+            if ($newValue === false)
             {
                 return false;
             }
         }
-        elseif($columnName === 'lnk_description')
-        {
-            return parent::setValue($columnName, $newValue, false);
-        }
+
         return parent::setValue($columnName, $newValue, $checkValue);
     }
 }

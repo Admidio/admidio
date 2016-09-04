@@ -24,11 +24,11 @@ class TableLists extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_lists.
      * If the id is set than the specific list will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $lst_id   The recordset of the list with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $lstId    The recordset of the list with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $lst_id = 0)
+    public function __construct(&$database, $lstId = 0)
     {
-        parent::__construct($database, TBL_LISTS, 'lst', $lst_id);
+        parent::__construct($database, TBL_LISTS, 'lst', $lstId);
     }
 
     /**
@@ -41,21 +41,24 @@ class TableLists extends TableAccess
     {
         global $gPreferences;
 
+        $lstId = (int) $this->getValue('lst_id');
+
         // if this list is the default configuration than it couldn't be deleted
-        if($this->getValue('lst_id') == $gPreferences['lists_default_configuation'])
+        if ($lstId === (int) $gPreferences['lists_default_configuation'])
         {
             throw new AdmException('LST_ERROR_DELETE_DEFAULT_LIST', $this->getValue('lst_name'));
         }
 
         $this->db->startTransaction();
 
-        // alle Spalten der Liste loeschen
-        $sql = 'DELETE FROM '.TBL_LIST_COLUMNS.' WHERE lsc_lst_id = '. $this->getValue('lst_id');
+        // Delete all columns of the list
+        $sql = 'DELETE FROM '.TBL_LIST_COLUMNS.' WHERE lsc_lst_id = '.$lstId;
         $this->db->query($sql);
 
         $return = parent::delete();
 
         $this->db->endTransaction();
+
         return $return;
     }
 
@@ -72,24 +75,16 @@ class TableLists extends TableAccess
     {
         global $gCurrentOrganization, $gCurrentUser;
 
-        // Standardfelder fuellen
-        if($this->new_record)
+        $this->setValue('lst_timestamp', DATETIME_NOW);
+        $this->setValue('lst_usr_id', $gCurrentUser->getValue('usr_id'));
+
+        if ($this->new_record && empty($this->getValue('lst_org_id')))
         {
-            $this->setValue('lst_timestamp', DATETIME_NOW);
-            $this->setValue('lst_usr_id', $gCurrentUser->getValue('usr_id'));
-            if(strlen($this->getValue('lst_org_id')) === 0)
-            {
-                $this->setValue('lst_org_id', $gCurrentOrganization->getValue('org_id'));
-            }
-        }
-        else
-        {
-            $this->setValue('lst_timestamp', DATETIME_NOW);
-            $this->setValue('lst_usr_id', $gCurrentUser->getValue('usr_id'));
+            $this->setValue('lst_org_id', $gCurrentOrganization->getValue('org_id'));
         }
 
-        // falls nicht explizit auf global = 1 gesetzt wurde, immer auf 0 setzen
-        if($this->getValue('lst_global') != 1)
+        // if "lst_global" isn't set explicit to "1", set it to "0"
+        if ((int) $this->getValue('lst_global') !== 1)
         {
             $this->setValue('lst_global', 0);
         }

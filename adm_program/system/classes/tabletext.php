@@ -42,7 +42,7 @@ class TableText extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        if($columnName === 'txt_text')
+        if ($columnName === 'txt_text')
         {
             return $this->dbColumns['txt_text'];
         }
@@ -61,12 +61,14 @@ class TableText extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        if($this->new_record && $this->getValue('txt_org_id') === '')
+        global $gCurrentOrganization;
+
+        if ($this->new_record && $this->getValue('txt_org_id') === '')
         {
             // Insert
-            global $gCurrentOrganization;
             $this->setValue('txt_org_id', $gCurrentOrganization->getValue('org_id'));
         }
+
         return parent::save($updateFingerPrint);
     }
 }

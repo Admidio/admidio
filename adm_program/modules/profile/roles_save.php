@@ -187,7 +187,7 @@ foreach($rolesList as $row)
         // update role membership
         if($roleAssign)
         {
-            $roleAssignmentEndDate = '9999-12-31';
+            $roleAssignmentEndDate = DATE_MAX;
 
             if($row['mem_end'] > date('Y-m-d'))
             {
@@ -228,7 +228,7 @@ if(count($parentRoles) > 0)
 {
     foreach($parentRoles as $actRole)
     {
-        $user->setRoleMembership($actRole, DATE_NOW, '9999-12-31');
+        $user->setRoleMembership($actRole, DATE_NOW, DATE_MAX);
     }
 }
 

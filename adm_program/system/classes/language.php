@@ -170,11 +170,11 @@ class Language
         // set path to language file of countries
         $countriesFilesPath = SERVER_PATH.'/adm_program/languages/countries_';
 
-        if(file_exists($countriesFilesPath.$this->languageData->getLanguage().'.xml'))
+        if(is_file($countriesFilesPath.$this->languageData->getLanguage().'.xml'))
         {
             $file = $countriesFilesPath.$this->languageData->getLanguage().'.xml';
         }
-        elseif(file_exists($countriesFilesPath.$this->languageData->getLanguage(true).'.xml'))
+        elseif(is_file($countriesFilesPath.$this->languageData->getLanguage(true).'.xml'))
         {
             $file = $countriesFilesPath.$this->languageData->getLanguage(true).'.xml';
         }
@@ -302,7 +302,7 @@ class Language
         {
             $languageFile = $languagePath.'/'.$language.'.xml';
 
-            if(file_exists($languageFile))
+            if(is_file($languageFile))
             {
                 $objectArray[$languagePath] = new SimpleXMLElement($languageFile, null, true);
             }
