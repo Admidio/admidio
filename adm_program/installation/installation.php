@@ -390,15 +390,27 @@ elseif($getMode === 5)  // Creating addministrator
         $userLogin     = '';
     }
 
+    $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
+
     // create a page to enter all necessary data to create a administrator user
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=6');
+    $form->addHeader('<script type="text/javascript" src="../libs/zxcvbn/dist/zxcvbn.js"></script>');
+    $form->addHeader('
+        <script type="text/javascript">
+            $(function() {
+                $("#user_password").keyup(function(e) {
+                    var result = zxcvbn(e.target.value, ' . json_encode($userData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ');
+                    $("#admidio-password-strength-indicator").removeClass().addClass("admidio-password-strength-indicator-" + result.score);
+                });
+            });
+        </script>
+    ');
     $form->setFormDescription($gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'), $gL10n->get('INS_CREATE_ADMINISTRATOR'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATA_OF_ADMINISTRATOR'));
     $form->addInput('user_last_name', $gL10n->get('SYS_LASTNAME'), $userLastName, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('user_first_name', $gL10n->get('SYS_FIRSTNAME'), $userFirstName, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('user_email', $gL10n->get('SYS_EMAIL'), $userEmail, array('maxLength' => 255, 'property' => FIELD_REQUIRED));
     $form->addInput('user_login', $gL10n->get('SYS_USERNAME'), $userLogin, array('maxLength' => 35, 'property' => FIELD_REQUIRED));
-    $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
     $form->addInput(
         'user_password', $gL10n->get('SYS_PASSWORD'), null,
         array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $userData, 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION')

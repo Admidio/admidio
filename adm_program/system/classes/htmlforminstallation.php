@@ -29,6 +29,7 @@ class HtmlFormInstallation extends HtmlForm
     private $descriptionText;   ///< A text that will be shown after the headline before the form will be set
     private $headline;          ///< Headline of the form
     private $title;             ///< Title of the html page
+    private $headers;
 
     /**
      * Constructor creates the form element
@@ -41,6 +42,7 @@ class HtmlFormInstallation extends HtmlForm
 
         $this->descriptionText  = '';
         $this->descriptionTitle = '';
+        $this->headers = array();
     }
 
     /**
@@ -77,6 +79,14 @@ class HtmlFormInstallation extends HtmlForm
 
         $this->title = $gL10n->get('INS_UPDATE');
         $this->headline = $gL10n->get('INS_UPDATE_VERSION', ADMIDIO_VERSION_TEXT);
+    }
+
+    /**
+     * @param $header string
+     */
+    public function addHeader($header)
+    {
+        $this->headers[] = $header;
     }
 
     /**
@@ -117,6 +127,7 @@ class HtmlFormInstallation extends HtmlForm
             <script type="text/javascript" src="../libs/jquery/jquery.min.js"></script>
             <script type="text/javascript" src="../libs/bootstrap/js/bootstrap.min.js"></script>
             <script type="text/javascript" src="../system/js/common_functions.js"></script>
+            ' . implode(' ', $this->headers) . '
         </head>
         <body>
             <div class="admidio-container" id="adm_content">&nbsp;

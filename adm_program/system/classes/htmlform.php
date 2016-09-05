@@ -862,10 +862,16 @@ class HtmlForm extends HtmlFormBasic
                 $this->htmlPage->addJavascriptFile('adm_program/libs/zxcvbn/dist/zxcvbn.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
             }
+
+            $passwordStrengthLevel = 1;
+            if ($gPreferences['password_min_strength'])
+            {
+                $passwordStrengthLevel = $gPreferences['password_min_strength'];
+            }
             $this->addHtml('
                 <div id="admidio-password-strength" class="'.$optionsAll['class'].'">
                     <div id="admidio-password-strength-indicator">
-                        <div id="admidio-password-strength-minimum" style="margin-left: calc('.$gPreferences['password_min_strength'].' * 25% - 3px);"></div>
+                        <div id="admidio-password-strength-minimum" style="margin-left: calc('.$passwordStrengthLevel.' * 25% - 3px);"></div>
                     </div>
                 </div>
             ');
