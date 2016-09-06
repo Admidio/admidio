@@ -40,6 +40,8 @@ class HtmlFormInstallation extends HtmlForm
     {
         parent::__construct($id, $action);
 
+        $this->title = '';
+        $this->headline = '';
         $this->descriptionText  = '';
         $this->descriptionTitle = '';
         $this->headers = array();
