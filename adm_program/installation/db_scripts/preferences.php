@@ -32,6 +32,7 @@ $orga_preferences = array(
     'system_organization_select'     => '0',
     'system_search_similar'          => '1',
     'system_time'                    => 'H:i',
+    'password_min_strength'          => '1',
     'system_browser_update_check'    => '0',
     'system_hashing_cost'            => '10',
 

@@ -1223,6 +1223,45 @@ class User extends TableAccess
     }
 
     /**
+     * Returns data from the user to improve dictionary attack check
+     * @return string[]
+     */
+    public function getPasswordUserData()
+    {
+        $userData = array(
+            // Names
+            $this->getValue('FIRST_NAME'),
+            $this->getValue('LAST_NAME'),
+            $this->getValue('usr_login_name'),
+            // Birthday
+            $this->getValue('BIRTHDAY', 'Y'), // YYYY
+            $this->getValue('BIRTHDAY', 'md'), // MMDD
+            $this->getValue('BIRTHDAY', 'dm'), // DDMM
+            // Email
+            $this->getValue('EMAIL'),
+            // Address
+            $this->getValue('ADDRESS'),
+            $this->getValue('CITY'),
+            $this->getValue('POSTCODE'),
+            $this->getValue('COUNTRY')
+        );
+
+        if (!function_exists('filterEmptyStrings'))
+        {
+            /**
+             * @param string $value
+             * @return bool
+             */
+            function filterEmptyStrings($value)
+            {
+                return $value !== '';
+            }
+        }
+
+        return array_filter($userData, 'filterEmptyStrings');
+    }
+
+    /**
      * @param string $mode      'set' or 'edit'
      * @param int $id           Id of the role for which the membership should be set,
      *                          or id of the current membership that should be edited.

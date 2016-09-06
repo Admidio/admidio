@@ -101,8 +101,14 @@ if($getNewUser === 2)
         // => EXIT
     }
 
+    if($_POST['usr_password'] === '')
+    {
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
+        // => EXIT
+    }
+
     // Passwort muss mindestens 8 Zeichen lang sein
-    if(strlen($_POST['usr_password']) < 8)
+    if(strlen($_POST['usr_password']) < PASSWORD_MIN_LENGTH)
     {
         $gMessage->show($gL10n->get('PRO_PASSWORD_LENGTH'));
         // => EXIT
@@ -115,9 +121,9 @@ if($getNewUser === 2)
         // => EXIT
     }
 
-    if($_POST['usr_password'] === '')
+    if(PasswordHashing::passwordStrength($_POST['usr_password'], $user->getPasswordUserData()) < $gPreferences['password_min_strength'])
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
+        $gMessage->show($gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'));
         // => EXIT
     }
 }
@@ -260,7 +266,7 @@ if($getNewUser === 2)
 {
     $user->setPassword($_POST['usr_password']);
 
-    // At user registration with acitvated captcha check the captcha input
+    // At user registration with activated captcha check the captcha input
     if ($gPreferences['enable_registration_captcha'] == 1)
     {
         try

@@ -148,13 +148,13 @@ class PasswordHashing
 
     /**
      * Generate a cryptographically strong random password
-     * @param int    $length  The length of the generated password (default = 12)
+     * @param int    $length  The length of the generated password (default = 16)
      * @param string $charset A string of all possible characters to choose from (default = [0-9a-zA-z])
      * @throws AdmException SYS_GEN_RANDOM_TWO_DISTINCT_CHARS, SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_FAIL
      * @return string Returns a cryptographically strong random password string
      * @link https://paragonie.com/b/JvICXzh_jhLyt4y3
      */
-    public static function genRandomPassword($length = 12, $charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    public static function genRandomPassword($length = 16, $charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
     {
         if ($length < 1)
         {
@@ -246,6 +246,19 @@ class PasswordHashing
         }
 
         return $passwordInfo;
+    }
+
+    /**
+     * Calculates the strength of a given password from 0-4.
+     * @param string   $password The password to check
+     * @param string[] $userData An array of strings for dictionary attacks
+     * @return int Returns the score of the password
+     */
+    public static function passwordStrength($password, array $userData = array())
+    {
+        $zxcvbn = new \ZxcvbnPhp\Zxcvbn();
+        $strength = $zxcvbn->passwordStrength($password, $userData);
+        return $strength['score'];
     }
 
     /**

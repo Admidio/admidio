@@ -390,16 +390,32 @@ elseif($getMode === 5)  // Creating addministrator
         $userLogin     = '';
     }
 
+    $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
+
     // create a page to enter all necessary data to create a administrator user
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=6');
+    $form->addHeader('<script type="text/javascript" src="../libs/zxcvbn/dist/zxcvbn.js"></script>');
+    $form->addHeader('
+        <script type="text/javascript">
+            $(function() {
+                $("#user_password").keyup(function(e) {
+                    var result = zxcvbn(e.target.value, ' . json_encode($userData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ');
+                    $("#admidio-password-strength-indicator").removeClass().addClass("admidio-password-strength-indicator-" + result.score);
+                });
+            });
+        </script>
+    ');
     $form->setFormDescription($gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'), $gL10n->get('INS_CREATE_ADMINISTRATOR'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATA_OF_ADMINISTRATOR'));
     $form->addInput('user_last_name', $gL10n->get('SYS_LASTNAME'), $userLastName, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('user_first_name', $gL10n->get('SYS_FIRSTNAME'), $userFirstName, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('user_email', $gL10n->get('SYS_EMAIL'), $userEmail, array('maxLength' => 255, 'property' => FIELD_REQUIRED));
     $form->addInput('user_login', $gL10n->get('SYS_USERNAME'), $userLogin, array('maxLength' => 35, 'property' => FIELD_REQUIRED));
-    $form->addInput('user_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 8));
-    $form->addInput('user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => 8));
+    $form->addInput(
+        'user_password', $gL10n->get('SYS_PASSWORD'), null,
+        array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $userData, 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION')
+    );
+    $form->addInput('user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH));
     $form->closeGroupBox();
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=4'));
     $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'layout/forward.png'));
@@ -442,6 +458,13 @@ elseif($getMode === 6)  // Creating configuration file
                        $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
 
+        // Password min length is 8 chars
+        if(strlen($_SESSION['user_password']) < PASSWORD_MIN_LENGTH)
+        {
+            showNotice($gL10n->get('PRO_PASSWORD_LENGTH'), 'installation.php?mode=5',
+                $gL10n->get('SYS_BACK'), 'layout/back.png');
+        }
+
         // password must be the same with password confirm
         if($_SESSION['user_password'] !== $_SESSION['user_password_confirm'])
         {
@@ -449,10 +472,18 @@ elseif($getMode === 6)  // Creating configuration file
                        $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
 
-        if(strlen($_SESSION['user_password']) < 8 || strlen($_SESSION['user_password_confirm']) < 8)
+        // check if password is strong enough
+        $userData = array(
+            $_SESSION['user_last_name'],
+            $_SESSION['user_first_name'],
+            $_SESSION['user_email'],
+            $_SESSION['user_login']
+        );
+        // Admin Password should have a minimum strength of 1
+        if(PasswordHashing::passwordStrength($_SESSION['user_password'], $userData) < 1)
         {
-            showNotice($gL10n->get('PRO_PASSWORD_LENGTH'), 'installation.php?mode=5',
-                       $gL10n->get('SYS_BACK'), 'layout/back.png');
+            showNotice($gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'), 'installation.php?mode=5',
+                $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
     }
 
