@@ -46,6 +46,8 @@ $statement = $gDb->query($sql);
 
 if($statement->rowCount() > 0)
 {
+    $page->addHtml('<div class="panel-body">This Plugin is already installed</div>');
+    $page->addHtml('<div class="panel-body"><a href="'.$g_root_path.'/adm_program/modules/menu/menu.php">use this menu for delete</a></div>');
 }
 else
 {
@@ -71,6 +73,7 @@ else
     $form->addInput('men_group', 'Menu Group',  'Special entry', array('property' => FIELD_DISABLED));
     $form->addInput('men_group', null, 4, array('type' => 'hidden'));
     
+    $form->addInput('men_modul_name', $gL10n->get('SYS_NAME'), 'Plugin - Calendar', array('maxLength' => 100, 'property' => FIELD_REQUIRED));
 
     $form->addInput('men_modul_name', $gL10n->get('SYS_NAME'), 'plg_calendar', array('property' => FIELD_DISABLED));
     $form->addInput('men_modul_name', null, 'plg_calendar', array('type' => 'hidden'));
