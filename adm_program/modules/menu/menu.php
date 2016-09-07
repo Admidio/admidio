@@ -106,6 +106,7 @@ $sql = 'SELECT *
 $menuStatement = $gDb->query($sql);
 
 $menuGroup = 0;
+$special   = false;
 
 $menu = new TableMenu($gDb);
 
@@ -121,7 +122,17 @@ while($menu_row = $menuStatement->fetch())
 
         $menuOverview->addTableBody();
         $menuOverview->addRow('', array('class' => 'admidio-group-heading'));
-        $menuOverview->addColumn('<span id="caret_'.$block_id.'" class="caret"></span>'.$men_groups[$menu->getValue('men_group')],
+        
+        if($menu->getValue('men_group') >= 4)
+        {
+            $group_head = 'Special (before or after rest)';
+            $special = true;
+        }
+        else
+        {
+            $group_head = $men_groups[$menu->getValue('men_group')];
+        }
+        $menuOverview->addColumn('<span id="caret_'.$block_id.'" class="caret"></span>'.$group_head,
                           array('id' => 'group_'.$block_id, 'colspan' => '8'), 'td');
         $menuOverview->addTableBody('id', $block_id);
 
@@ -145,10 +156,16 @@ while($menu_row = $menuStatement->fetch())
     {
         $htmlStandartMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" />';
     }
-
-    $menuAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/menu/menu_new.php?men_id='. $menu->getValue('men_id'). '"><img
+    
+    $menuAdministration = '';
+    
+    //don't allow change for special Menus
+    if($special == false)
+    {
+        $menuAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/menu/menu_new.php?men_id='. $menu->getValue('men_id'). '"><img
                                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
-
+    }
+    
     //don't allow delete for standart menus
     if($menu->getValue('men_standart') == 0)
     {
@@ -159,7 +176,7 @@ while($menu_row = $menuStatement->fetch())
     }
     
     $naming = $menu->getValue('men_translate_name');
-    if($naming == '##')
+    if($naming == '##' || $naming[0] == '#')
     {
         $naming = $menu->getValue('men_translate_name', 'database');
     }

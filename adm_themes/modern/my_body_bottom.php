@@ -15,10 +15,41 @@
                 <div id="plugin_menu" class="admidio-plugin-content">
                     <?php
                     
-                    // display Menu
-
                     $sql = 'SELECT *
                       FROM '.TBL_MENU.'
+                      where men_group = 4
+                     ORDER BY men_group DESC, men_order';
+                    $statement = $gDb->query($sql);
+
+                    if($statement->rowCount() > 0)
+                    {
+                        while ($row = $statement->fetchObject())
+                        {
+                            // Read current roles rights of the menu
+                            $displayMenu = new RolesRights($gDb, 'men_display_right', $row->men_id);
+                            $rolesDisplayRight = $displayMenu->getRolesIds();
+                            $men_display = true;
+                            
+                            if(count($rolesDisplayRight) >= 1)
+                            {
+                                // check for rigth to show the menue
+                                if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                                {
+                                    $men_display = false;
+                                }
+                            }
+
+                            if($men_display == true)
+                            {
+                                include(SERVER_PATH . $row->men_url);
+                            }
+                        }
+                    }
+                    
+                    // display Menu
+                    $sql = 'SELECT *
+                      FROM '.TBL_MENU.'
+                      where men_group < 4
                      ORDER BY men_group DESC, men_order';
                     $statement = $gDb->query($sql);
 
@@ -130,6 +161,37 @@
                             }
                         }
                         echo $Menu->show();
+                    }
+                    
+                    $sql = 'SELECT *
+                      FROM '.TBL_MENU.'
+                      where men_group = 5
+                     ORDER BY men_group DESC, men_order';
+                    $statement = $gDb->query($sql);
+
+                    if($statement->rowCount() > 0)
+                    {
+                        while ($row = $statement->fetchObject())
+                        {
+                            // Read current roles rights of the menu
+                            $displayMenu = new RolesRights($gDb, 'men_display_right', $row->men_id);
+                            $rolesDisplayRight = $displayMenu->getRolesIds();
+                            $men_display = true;
+                            
+                            if(count($rolesDisplayRight) >= 1)
+                            {
+                                // check for rigth to show the menue
+                                if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                                {
+                                    $men_display = false;
+                                }
+                            }
+
+                            if($men_display == true)
+                            {
+                                include(SERVER_PATH . $row->men_url);
+                            }
+                        }
                     }
 
                     ?>

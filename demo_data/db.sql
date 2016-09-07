@@ -47,6 +47,7 @@ drop table if exists %PREFIX%_categories cascade;
 drop table if exists %PREFIX%_users cascade;
 drop table if exists %PREFIX%_organizations cascade;
 drop table if exists %PREFIX%_ids cascade;
+drop table if exists %PREFIX%_menu cascade;
 
 
 /*==============================================================*/

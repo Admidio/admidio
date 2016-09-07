@@ -160,6 +160,7 @@ class HtmlPage
         
         $sql = 'SELECT *
           FROM '.TBL_MENU.'
+          where men_group < 4
          ORDER BY men_group DESC, men_order';
         $statement = $gDb->query($sql);
 
