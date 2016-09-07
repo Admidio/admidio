@@ -121,5 +121,7 @@ and sharing great software.
 - [phpass](http://www.openwall.com/phpass/): Portable PHP password hashing framework
 - [Html5Shiv](https://github.com/aFarkas/html5shiv): Enable Html5 for older browsers
 - [Respond](https://github.com/scottjehl/Respond): Polyfill for min/max-width CSS3 Media Queries
+- [zxcvbn](https://github.com/dropbox/zxcvbn): Add password strength indicator
+- [zxcvbn-php](https://github.com/bjeavons/zxcvbn-php): Test password strength in the backend
 
 Copyright (c) 2004 - 2016 The Admidio Team

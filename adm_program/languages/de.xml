@@ -683,6 +683,13 @@
     <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">Die Organisation #VAR1_BOLD# wurde hinzugefügt. Du kannst diese nun bei der Anmeldung auswählen.\n\nFalls du für diese Organisation eine separate Homepage erstellt hast, muss du auf der entsprechenden Seite noch die neue Organisation in die config.php eingetragen.</string>
     <string name="ORG_PARENT_ORGANIZATION">Übergeordnete Organisation</string>
     <string name="ORG_PARENT_ORGANIZATION_DESC">Hier kannst du die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kannst du festlegen wie sicher/komplex Passwörter mindestens sein müssen.\nIn () die geschätzten Versuche bis geknackt.\n\nKeine: riskantes Passwort (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte online Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte online Angriffe. (&lt;10^8)\nHoch: Mäßiger schutz gegen offline-hashing Angriffe. (&lt;10^10)\nExtrem: Starker Schutz gegen offline-hashing Angriffe. (&gt;=10^10)</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Keine</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Niedrig</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Mittel</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Hoch</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_EXTREME">Extrem</string>
     <string name="ORG_PIXEL">Pixel</string>
     <string name="ORG_PROFILE_FIELDS">Profilfelder</string>
     <string name="ORG_REFUSE_REGISTRATION">Benachrichtigung bei einer Ablehnung der Registrierung</string>
@@ -853,6 +860,7 @@
     <string name="PRO_PASSWORD_LENGTH">Das Passwort muss aus mindestens 8 Zeichen bestehen.</string>
     <string name="PRO_PASSWORD_OLD_WRONG">Das alte Passwort ist falsch.</string>
     <string name="PRO_PASSWORDS_NOT_EQUAL">Das Passwort stimmt nicht mit der Wiederholung überein.</string>
+    <string name="PRO_PASSWORD_NOT_STRONG_ENOUGH">Das Passwort ist nicht sicher genug.</string>
     <string name="PRO_PHOTO_DELETED">Das Profilfoto wurde gelöscht.</string>
     <string name="PRO_PHOTO_FILE_TO_LARGE">Das hochgeladene Foto übersteigt die vom Server zugelassene Dateigröße von #VAR1# B.</string>
     <string name="PRO_PHOTO_FORMAT_INVALID">Es können nur Fotos im JPG und PNG-Format hochgeladen und angezeigt werden.</string>

@@ -1,0 +1,11 @@
+*.js
+!zxcvbn*.js
+!demo/jquery.js
+!demo/require.js
+!demo/mustache.js
+node_modules
+lib
+*~
+*.swp
+*.swo
+tmux-*.log

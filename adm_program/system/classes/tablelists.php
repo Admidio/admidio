@@ -75,10 +75,12 @@ class TableLists extends TableAccess
     {
         global $gCurrentOrganization, $gCurrentUser;
 
+        $orgId = $this->getValue('lst_org_id');
+
         $this->setValue('lst_timestamp', DATETIME_NOW);
         $this->setValue('lst_usr_id', $gCurrentUser->getValue('usr_id'));
 
-        if ($this->new_record && empty($this->getValue('lst_org_id')))
+        if ($this->new_record && empty($orgId))
         {
             $this->setValue('lst_org_id', $gCurrentOrganization->getValue('org_id'));
         }
