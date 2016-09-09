@@ -66,7 +66,7 @@ class TableCategory extends TableAccess
         $categoriesStatement = $this->db->query($sql);
 
         // Don't delete the last category of a type!
-        if ($categoriesStatement->fetchColumn() === 1)
+        if ((int) $categoriesStatement->fetchColumn() === 1)
         {
             throw new AdmException('SYS_DELETE_LAST_CATEGORY');
         }
