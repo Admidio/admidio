@@ -746,6 +746,27 @@ class User extends TableAccess
     }
 
     /**
+     * @param bool   $allowedToEditProfile
+     * @param string $field
+     * @param bool   $notEmpty
+     * @return bool
+     */
+    private function isAllowedToEditVCardUserField($allowedToEditProfile, $field, $notEmpty = false)
+    {
+        if ($notEmpty && $this->getValue($field) === '')
+        {
+            return false;
+        }
+
+        if ($allowedToEditProfile)
+        {
+            return true;
+        }
+
+        return (int) $this->mProfileFieldsData->getProperty($field, 'usf_hidden') === 0;
+    }
+
+    /**
      * Creates a vcard with all data of this user object @n
      * (Windows XP address book can't process utf8, so vcard output is iso-8859-1)
      * @param bool $allowedToEditProfile If set to @b true than logged in user is allowed to edit profiles
@@ -756,87 +777,99 @@ class User extends TableAccess
     {
         global $gPreferences;
 
-        $vCard  = 'BEGIN:VCARD'."\r\n";
-        $vCard .= 'VERSION:2.1'."\r\n";
-        if ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_hidden') == 0))
+        $vCard = array(
+            'BEGIN:VCARD',
+            'VERSION:2.1'
+        );
+
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'FIRST_NAME'))
         {
-            $vCard .= 'N;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('LAST_NAME', 'database')). ';'. utf8_decode($this->getValue('FIRST_NAME', 'database')) . ";;;\r\n";
+            $vCard[] = 'N;CHARSET=ISO-8859-1:' .
+                utf8_decode($this->getValue('LAST_NAME',  'database')) . ';' .
+                utf8_decode($this->getValue('FIRST_NAME', 'database')) . ';;;';
         }
-        if ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_hidden') == 0))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'LAST_NAME'))
         {
-            $vCard .= 'FN;CHARSET=ISO-8859-1:'. utf8_decode($this->getValue('FIRST_NAME')) . ' '. utf8_decode($this->getValue('LAST_NAME')) . "\r\n";
+            $vCard[] = 'FN;CHARSET=ISO-8859-1:' .
+                utf8_decode($this->getValue('FIRST_NAME')) . ' ' .
+                utf8_decode($this->getValue('LAST_NAME'));
         }
         if ($this->getValue('usr_login_name') !== '')
         {
-            $vCard .= 'NICKNAME;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('usr_login_name')). "\r\n";
+            $vCard[] = 'NICKNAME;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('usr_login_name'));
         }
-        if ($this->getValue('PHONE') !== ''
-        && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('PHONE', 'usf_hidden') == 0)))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'PHONE', true))
         {
-            $vCard .= 'TEL;HOME;VOICE:' . $this->getValue('PHONE'). "\r\n";
+            $vCard[] = 'TEL;HOME;VOICE:' . $this->getValue('PHONE');
         }
-        if ($this->getValue('MOBILE') !== ''
-        && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('MOBILE', 'usf_hidden') == 0)))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'MOBILE', true))
         {
-            $vCard .= 'TEL;CELL;VOICE:' . $this->getValue('MOBILE'). "\r\n";
+            $vCard[] = 'TEL;CELL;VOICE:' . $this->getValue('MOBILE');
         }
-        if ($this->getValue('FAX') !== ''
-        && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('FAX', 'usf_hidden') == 0)))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'FAX', true))
         {
-            $vCard .= 'TEL;HOME;FAX:' . $this->getValue('FAX'). "\r\n";
+            $vCard[] = 'TEL;HOME;FAX:' . $this->getValue('FAX');
         }
-        if ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('ADDRESS', 'usf_hidden') == 0 && $this->mProfileFieldsData->getProperty('CITY', 'usf_hidden') == 0
-        && $this->mProfileFieldsData->getProperty('POSTCODE', 'usf_hidden') == 0  && $this->mProfileFieldsData->getProperty('COUNTRY', 'usf_hidden') == 0))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'ADDRESS')
+        &&  $this->isAllowedToEditVCardUserField($allowedToEditProfile, 'CITY')
+        &&  $this->isAllowedToEditVCardUserField($allowedToEditProfile, 'POSTCODE')
+        &&  $this->isAllowedToEditVCardUserField($allowedToEditProfile, 'COUNTRY'))
         {
-            $vCard .= 'ADR;CHARSET=ISO-8859-1;HOME:;;' . utf8_decode($this->getValue('ADDRESS', 'database')). ';' . utf8_decode($this->getValue('CITY', 'database')). ';;' . utf8_decode($this->getValue('POSTCODE', 'database')). ';' . utf8_decode($this->getValue('COUNTRY', 'database')). "\r\n";
+            $vCard[] = 'ADR;CHARSET=ISO-8859-1;HOME:;;' .
+                utf8_decode($this->getValue('ADDRESS',  'database')) . ';' .
+                utf8_decode($this->getValue('CITY',     'database')) . ';;' .
+                utf8_decode($this->getValue('POSTCODE', 'database')) . ';' .
+                utf8_decode($this->getValue('COUNTRY',  'database'));
         }
-        if ($this->getValue('WEBSITE') !== ''
-        && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('WEBSITE', 'usf_hidden') == 0)))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'WEBSITE', true))
         {
-            $vCard .= 'URL;HOME:' . $this->getValue('WEBSITE'). "\r\n";
+            $vCard[] = 'URL;HOME:' . $this->getValue('WEBSITE');
         }
-        if ($this->getValue('BIRTHDAY') !== ''
-        && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('BIRTHDAY', 'usf_hidden') == 0)))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'BIRTHDAY', true))
         {
-            $vCard .= 'BDAY:' . $this->getValue('BIRTHDAY', 'Ymd') . "\r\n";
+            $vCard[] = 'BDAY:' . $this->getValue('BIRTHDAY', 'Ymd');
         }
-        if ($this->getValue('EMAIL') !== ''
-        && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('EMAIL', 'usf_hidden') == 0)))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'EMAIL', true))
         {
-            $vCard .= 'EMAIL;PREF;INTERNET:' . $this->getValue('EMAIL'). "\r\n";
+            $vCard[] = 'EMAIL;PREF;INTERNET:' . $this->getValue('EMAIL');
         }
         if (is_file(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
         {
-            $img_handle = fopen(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg', 'rb');
-            $vCard .= 'PHOTO;ENCODING=BASE64;TYPE=JPEG:'.base64_encode(fread($img_handle, filesize(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))). "\r\n";
-            fclose($img_handle);
+            $imgHandle = fopen(SERVER_PATH . '/adm_my_files/user_profile_photos/' . $this->getValue('usr_id') . '.jpg', 'rb');
+            $base64Image = base64_encode(fread($imgHandle, filesize(SERVER_PATH . '/adm_my_files/user_profile_photos/' . $this->getValue('usr_id') . '.jpg')));
+            fclose($imgHandle);
+
+            $vCard[] = 'PHOTO;ENCODING=BASE64;TYPE=JPEG:' . $base64Image;
         }
         if ($this->getValue('usr_photo') !== '' && $gPreferences['profile_photo_storage'] == 0)
         {
-            $vCard .= 'PHOTO;ENCODING=BASE64;TYPE=JPEG:'.base64_encode($this->getValue('usr_photo')). "\r\n";
+            $vCard[] = 'PHOTO;ENCODING=BASE64;TYPE=JPEG:' . base64_encode($this->getValue('usr_photo'));
         }
         // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
-        if ($this->getValue('GENDER') > 0
-        && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('GENDER', 'usf_hidden') == 0)))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'GENDER') && $this->getValue('GENDER') > 0)
         {
-            if ($this->getValue('GENDER') == 1)
+            if ((int) $this->getValue('GENDER') === 1)
             {
-                $wabGender = 2;
+                $xGender = 'Male';
+                $xWabGender = 2;
             }
             else
             {
-                $wabGender = 1;
+                $xGender = 'Female';
+                $xWabGender = 1;
             }
-            $vCard .= 'X-WAB-GENDER:' . $wabGender . "\r\n";
+
+            $vCard[] = 'X-GENDER:' . $xGender;
+            $vCard[] = 'X-WAB-GENDER:' . $xWabGender;
         }
         if ($this->getValue('usr_timestamp_change') !== '')
         {
-            $vCard .= 'REV:' . $this->getValue('usr_timestamp_change', 'ymdThis') . "\r\n";
+            $vCard[] = 'REV:' . $this->getValue('usr_timestamp_change', 'Ymd\This');
         }
 
-        $vCard .= 'END:VCARD'."\r\n";
+        $vCard[] = 'END:VCARD';
 
-        return $vCard;
+        return implode("\r\n", $vCard) . "\r\n";
     }
 
     /**
