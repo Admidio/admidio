@@ -113,46 +113,47 @@ class ModuleAnnouncements extends Modules
         global $gCurrentOrganization, $gPreferences, $gProfileFields, $gDb;
 
         // Bedingungen
-        if($this->getParameter('id') > 0)
+        if ($this->getParameter('id') > 0)
         {
-            $this->getConditions = 'AND ann_id ='. $this->getParameter('id');
+            $this->getConditions = 'AND ann_id = '.$this->getParameter('id');
         }
         // Search announcements to date
-        elseif(strlen($this->getParameter('dateStartFormatEnglish')) > 0)
+        elseif (strlen($this->getParameter('dateStartFormatEnglish')) > 0)
         {
             $this->getConditions = 'AND ann_timestamp_create BETWEEN \''.$this->getParameter('dateStartFormatEnglish').' 00:00:00\' AND \''.$this->getParameter('dateEndFormatEnglish').' 23:59:59\'';
         }
 
-        if($gPreferences['system_show_create_edit'] == 1)
+        if ($gPreferences['system_show_create_edit'] == 1)
         {
             // show firstname and lastname of create and last change user
             $additionalFields = '
                 cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
                 cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name ';
             $additionalTables = '
-                                 LEFT JOIN '. TBL_USER_DATA .' cre_surname
-                                        ON cre_surname.usd_usr_id = ann_usr_id_create
-                                       AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-                                 LEFT JOIN '. TBL_USER_DATA .' cre_firstname
-                                        ON cre_firstname.usd_usr_id = ann_usr_id_create
-                                       AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-                                 LEFT JOIN '. TBL_USER_DATA .' cha_surname
-                                        ON cha_surname.usd_usr_id = ann_usr_id_change
-                                       AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-                                 LEFT JOIN '. TBL_USER_DATA .' cha_firstname
-                                        ON cha_firstname.usd_usr_id = ann_usr_id_change
-                                       AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
+                LEFT JOIN '.TBL_USER_DATA.' cre_surname
+                       ON cre_surname.usd_usr_id = ann_usr_id_create
+                      AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+                LEFT JOIN '.TBL_USER_DATA.' cre_firstname
+                       ON cre_firstname.usd_usr_id = ann_usr_id_create
+                      AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+                LEFT JOIN '.TBL_USER_DATA.' cha_surname
+                       ON cha_surname.usd_usr_id = ann_usr_id_change
+                      AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+                LEFT JOIN '.TBL_USER_DATA.' cha_firstname
+                       ON cha_firstname.usd_usr_id = ann_usr_id_change
+                      AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
         }
         else
         {
             // show username of create and last change user
-            $additionalFields = ' cre_username.usr_login_name AS create_name,
-                                  cha_username.usr_login_name AS change_name ';
+            $additionalFields = '
+                cre_username.usr_login_name AS create_name,
+                cha_username.usr_login_name AS change_name ';
             $additionalTables = '
-                                 LEFT JOIN '. TBL_USERS .' cre_username
-                                        ON cre_username.usr_id = ann_usr_id_create
-                                 LEFT JOIN '. TBL_USERS .' cha_username
-                                        ON cha_username.usr_id = ann_usr_id_change ';
+                LEFT JOIN '.TBL_USERS.' cre_username
+                       ON cre_username.usr_id = ann_usr_id_create
+                LEFT JOIN '.TBL_USERS.' cha_username
+                       ON cha_username.usr_id = ann_usr_id_change ';
         }
 
         // read announcements from database
@@ -166,11 +167,11 @@ class ModuleAnnouncements extends Modules
               ORDER BY ann_timestamp_create DESC';
 
         // Check if limit was set
-        if($limit > 0)
+        if ($limit > 0)
         {
             $sql .= ' LIMIT '.$limit;
         }
-        if($startElement > 0)
+        if ($startElement > 0)
         {
             $sql .= ' OFFSET '.$startElement;
         }
@@ -231,7 +232,7 @@ class ModuleAnnouncements extends Modules
 
         $objDate = DateTime::createFromFormat($dateFormat, $dateRange);
 
-        if($objDate === false)
+        if ($objDate === false)
         {
             return false;
         }
