@@ -463,160 +463,132 @@ class User extends TableAccess
         $usrId = $this->getValue('usr_id');
         $currUsrId = $gCurrentUser->getValue('usr_id');
 
-        $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_usr_id_create = NULL
-                 WHERE ann_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries = array();
 
-        $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_usr_id_change = NULL
-                 WHERE ann_usr_id_change = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_usr_id_create = NULL
+                          WHERE ann_usr_id_create = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_DATES.' SET dat_usr_id_create = NULL
-                 WHERE dat_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_usr_id_change = NULL
+                          WHERE ann_usr_id_change = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_DATES.' SET dat_usr_id_change = NULL
-                 WHERE dat_usr_id_change = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_DATES.' SET dat_usr_id_create = NULL
+                          WHERE dat_usr_id_create = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_FOLDERS.' SET fol_usr_id = NULL
-                 WHERE fol_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_DATES.' SET dat_usr_id_change = NULL
+                          WHERE dat_usr_id_change = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_FILES.' SET fil_usr_id = NULL
-                 WHERE fil_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_FOLDERS.' SET fol_usr_id = NULL
+                          WHERE fol_usr_id = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_usr_id_create = NULL
-                 WHERE gbo_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_FILES.' SET fil_usr_id = NULL
+                          WHERE fil_usr_id = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_usr_id_change = NULL
-                 WHERE gbo_usr_id_change = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_usr_id_create = NULL
+                          WHERE gbo_usr_id_create = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_LINKS.' SET lnk_usr_id_create = NULL
-                 WHERE lnk_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_usr_id_change = NULL
+                          WHERE gbo_usr_id_change = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_LINKS.' SET lnk_usr_id_change = NULL
-                 WHERE lnk_usr_id_change = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_LINKS.' SET lnk_usr_id_create = NULL
+                          WHERE lnk_usr_id_create = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_LISTS.' SET lst_usr_id = NULL
-                 WHERE lst_global = 1
-                   AND lst_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_LINKS.' SET lnk_usr_id_change = NULL
+                          WHERE lnk_usr_id_change = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_PHOTOS.' SET pho_usr_id_create = NULL
-                 WHERE pho_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_LISTS.' SET lst_usr_id = NULL
+                          WHERE lst_global = 1
+                            AND lst_usr_id = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_PHOTOS.' SET pho_usr_id_change = NULL
-                 WHERE pho_usr_id_change = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_PHOTOS.' SET pho_usr_id_create = NULL
+                          WHERE pho_usr_id_create = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_ROLES.' SET rol_usr_id_create = NULL
-                 WHERE rol_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_PHOTOS.' SET pho_usr_id_change = NULL
+                          WHERE pho_usr_id_change = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_ROLES.' SET rol_usr_id_change = NULL
-                 WHERE rol_usr_id_change = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_ROLES.' SET rol_usr_id_create = NULL
+                          WHERE rol_usr_id_create = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_ROLE_DEPENDENCIES.' SET rld_usr_id = NULL
-                 WHERE rld_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_ROLES.' SET rol_usr_id_change = NULL
+                          WHERE rol_usr_id_change = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_USER_LOG.' SET usl_usr_id_create = NULL
-                 WHERE usl_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_ROLE_DEPENDENCIES.' SET rld_usr_id = NULL
+                          WHERE rld_usr_id = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_USERS.' SET usr_usr_id_create = NULL
-                 WHERE usr_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_USER_LOG.' SET usl_usr_id_create = NULL
+                          WHERE usl_usr_id_create = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_USERS.' SET usr_usr_id_change = NULL
-                 WHERE usr_usr_id_change = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_USERS.' SET usr_usr_id_create = NULL
+                          WHERE usr_usr_id_create = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_LIST_COLUMNS.'
-                 WHERE lsc_lst_id IN (SELECT lst_id
-                                        FROM '.TBL_LISTS.'
-                                       WHERE lst_usr_id = '.$usrId.'
-                                         AND lst_global = 0)';
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_USERS.' SET usr_usr_id_change = NULL
+                          WHERE usr_usr_id_change = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_LISTS.'
-                 WHERE lst_global = 0
-                   AND lst_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_LIST_COLUMNS.'
+                          WHERE lsc_lst_id IN (SELECT lst_id
+                                                 FROM '.TBL_LISTS.'
+                                                WHERE lst_usr_id = '.$usrId.'
+                                                  AND lst_global = 0)';
 
-        $sql = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.'
-                 WHERE gbc_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_LISTS.'
+                          WHERE lst_global = 0
+                            AND lst_usr_id = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_MEMBERS.'
-                 WHERE mem_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.'
+                          WHERE gbc_usr_id_create = '.$usrId;
+
+        $sqlQueries[] = 'DELETE FROM '.TBL_MEMBERS.'
+                          WHERE mem_usr_id = '.$usrId;
 
         // MySQL couldn't create delete statement with same table in subquery.
         // Therefore we fill a temporary table with all ids that should be deleted and reference on this table
-        $sql = 'DELETE FROM '.TBL_IDS.'
-                 WHERE ids_usr_id = '.$currUsrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_IDS.'
+                          WHERE ids_usr_id = '.$currUsrId;
 
-        $sql = 'INSERT INTO '.TBL_IDS.' (ids_usr_id, ids_reference_id)
-                SELECT '.$currUsrId.', msc_msg_id
-                  FROM '.TBL_MESSAGES_CONTENT.'
-                 WHERE msc_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'INSERT INTO '.TBL_IDS.' (ids_usr_id, ids_reference_id)
+                         SELECT '.$currUsrId.', msc_msg_id
+                           FROM '.TBL_MESSAGES_CONTENT.'
+                          WHERE msc_usr_id = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
-                 WHERE msc_msg_id IN (SELECT ids_reference_id
-                                        FROM '.TBL_IDS.'
-                                       WHERE ids_usr_id = '.$currUsrId.')';
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
+                          WHERE msc_msg_id IN (SELECT ids_reference_id
+                                                 FROM '.TBL_IDS.'
+                                                WHERE ids_usr_id = '.$currUsrId.')';
 
-        $sql = 'DELETE FROM '.TBL_MESSAGES.'
-                 WHERE msg_id IN (SELECT ids_reference_id
-                                    FROM '.TBL_IDS.'
-                                   WHERE ids_usr_id = '.$currUsrId.')';
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES.'
+                          WHERE msg_id IN (SELECT ids_reference_id
+                                             FROM '.TBL_IDS.'
+                                            WHERE ids_usr_id = '.$currUsrId.')';
 
-        $sql = 'DELETE FROM '.TBL_IDS.'
-                 WHERE ids_usr_id = '.$currUsrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_IDS.'
+                          WHERE ids_usr_id = '.$currUsrId;
 
-        $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
-                 WHERE msc_msg_id IN (SELECT msg_id
-                                        FROM '.TBL_MESSAGES.'
-                                       WHERE msg_usr_id_sender = '.$usrId.')';
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
+                          WHERE msc_msg_id IN (SELECT msg_id
+                                                 FROM '.TBL_MESSAGES.'
+                                                WHERE msg_usr_id_sender = '.$usrId.')';
 
-        $sql = 'DELETE FROM '.TBL_MESSAGES.'
-                 WHERE msg_usr_id_sender = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES.'
+                          WHERE msg_usr_id_sender = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_REGISTRATIONS.'
-                 WHERE reg_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_REGISTRATIONS.'
+                          WHERE reg_usr_id = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
-                 WHERE atl_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_AUTO_LOGIN.'
+                          WHERE atl_usr_id = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_SESSIONS.'
-                 WHERE ses_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_SESSIONS.'
+                          WHERE ses_usr_id = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_USER_LOG.'
-                 WHERE usl_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_USER_LOG.'
+                          WHERE usl_usr_id = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_USER_DATA.'
-                 WHERE usd_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_USER_DATA.'
+                          WHERE usd_usr_id = '.$usrId;
+
+        foreach ($sqlQueries as $sqlQuery)
+        {
+            $this->db->query($sqlQuery);
+        }
 
         $return = parent::delete();
 
