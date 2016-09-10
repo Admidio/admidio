@@ -779,7 +779,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
 
     // create all necessary data for this organization
     $gCurrentOrganization->setPreferences($orga_preferences, false);
-    $gCurrentOrganization->createBasicData($administrator->getValue('usr_id'));
+    $gCurrentOrganization->createBasicData((int) $administrator->getValue('usr_id'));
 
     // create default room for room module in database
     $sql = 'INSERT INTO '.TBL_ROOMS.' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)

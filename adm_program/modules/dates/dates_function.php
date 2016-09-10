@@ -463,7 +463,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     {
         // user wants to participate -> add him to date
         $member = new TableMembers($gDb);
-        $member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'), true);
+        $member->startMembership((int) $role->getValue('rol_id'), (int) $gCurrentUser->getValue('usr_id'), true);
     }
     elseif(!isset($_POST['date_current_user_assigned'])
     && $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')))
@@ -497,7 +497,7 @@ elseif($getMode === 2)  // Termin loeschen
 elseif($getMode === 3)  // Benutzer zum Termin anmelden
 {
     $member = new TableMembers($gDb);
-    $member->startMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
+    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
@@ -506,7 +506,7 @@ elseif($getMode === 3)  // Benutzer zum Termin anmelden
 elseif($getMode === 4)  // Benutzer vom Termin abmelden
 {
     $member = new TableMembers($gDb);
-    $member->deleteMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
+    $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
