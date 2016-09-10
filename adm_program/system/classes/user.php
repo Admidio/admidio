@@ -288,7 +288,12 @@ class User extends TableAccess
         $invalidLoginCount = $this->getValue('usr_number_invalid');
 
         // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
-        if ($invalidLoginCount >= 3 && time() - strtotime($this->getValue('usr_date_invalid', 'Y-m-d H:i:s')) < 60 * 15)
+        $now = new DateTime();
+        $minutesOffset = new DateInterval('PT15M');
+        $now = $now->sub($minutesOffset);
+        $dateInvalid = DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('usr_date_invalid', 'Y-m-d H:i:s'));
+
+        if ($invalidLoginCount >= 3 && $now->getTimestamp() > $dateInvalid->getTimestamp())
         {
             $this->clear();
             return $gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN');
