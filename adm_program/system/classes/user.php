@@ -426,7 +426,7 @@ class User extends TableAccess
         $this->setValue('usr_valid', 1);
         $this->columnsValueChanged = false;
 
-        if(is_object($this->mProfileFieldsData))
+        if($this->mProfileFieldsData instanceof \ProfileFields)
         {
             // data of all profile fields will be deleted, the internal structure will not be destroyed
             $this->mProfileFieldsData->clearUserData();
@@ -854,7 +854,7 @@ class User extends TableAccess
      */
     public function hasRightEditProfile(&$user, $checkOwnProfile = true)
     {
-        if (!is_object($user))
+        if (!$user instanceof \User)
         {
             return false;
         }
@@ -1137,7 +1137,7 @@ class User extends TableAccess
         }
 
         // if value of a field changed then update timestamp of user object
-        if (is_object($this->mProfileFieldsData) && $this->mProfileFieldsData->columnsValueChanged)
+        if ($this->mProfileFieldsData instanceof \ProfileFields && $this->mProfileFieldsData->columnsValueChanged)
         {
             $this->columnsValueChanged = true;
         }
@@ -1152,13 +1152,13 @@ class User extends TableAccess
             $returnValue = $returnValue && parent::save($updateFingerPrint);
         }
 
-        if (is_object($this->mProfileFieldsData))
+        if ($this->mProfileFieldsData instanceof \ProfileFields)
         {
             // save data of all user fields
             $this->mProfileFieldsData->saveUserData((int) $this->getValue('usr_id'));
         }
 
-        if ($this->columnsValueChanged && is_object($gCurrentSession))
+        if ($this->columnsValueChanged && $gCurrentSession instanceof \Session)
         {
             // now set user object in session of that user to invalid,
             // because he has new data and maybe new rights

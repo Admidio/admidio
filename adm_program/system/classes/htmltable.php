@@ -94,7 +94,7 @@ class HtmlTable extends HtmlTableBasic
             $this->datatablesInitParameters[] = '"language": {"url": "' . $g_root_path . '/adm_program/libs/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.lang"}';
         }
 
-        if (is_object($htmlPage))
+        if ($htmlPage instanceof \HtmlPage)
         {
             $this->htmlPage =& $htmlPage;
         }
@@ -423,7 +423,7 @@ class HtmlTable extends HtmlTableBasic
         }
 
         // show table content
-        if ($this->datatables && is_object($this->htmlPage))
+        if ($this->datatables && $this->htmlPage instanceof \HtmlPage)
         {
             $this->htmlPage->addJavascriptFile('adm_program/libs/datatables/datatables.js');
             $this->htmlPage->addJavascriptFile('adm_program/libs/moment/moment.js');

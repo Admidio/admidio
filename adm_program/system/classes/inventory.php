@@ -276,7 +276,7 @@ class Inventory extends TableInventory
 
         $viewProfile = false;
 
-        if(is_object($item))
+        if($item instanceof \User)
         {
             // Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
             if(!$gCurrentUser->editInventory($item))

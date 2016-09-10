@@ -87,7 +87,7 @@ class TableMembers extends TableAccess
 
         $returnStatus = parent::save($updateFingerPrint);
 
-        if ($returnStatus && is_object($gCurrentSession))
+        if ($returnStatus && $gCurrentSession instanceof \Session)
         {
             // renew user object of the affected user because of edited role assignment
             $gCurrentSession->renewUserObject($this->getValue('mem_usr_id'));

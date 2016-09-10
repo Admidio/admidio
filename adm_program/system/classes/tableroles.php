@@ -372,7 +372,7 @@ class TableRoles extends TableAccess
         $returnValue = parent::save($updateFingerPrint);
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
-        if($fields_changed && is_object($gCurrentSession))
+        if ($fields_changed && $gCurrentSession instanceof \Session)
         {
             // all active users must renew their user data because maybe their
             // rights have been changed if they where members of this role

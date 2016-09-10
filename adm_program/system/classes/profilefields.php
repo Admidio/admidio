@@ -138,7 +138,7 @@ class ProfileFields
                     {
                         // date must be formated
                         $date = DateTime::createFromFormat('Y-m-d', $value);
-                        if(is_object($date))
+                        if($date instanceof \DateTime)
                         {
                             $htmlValue = $date->format($gPreferences['system_date']);
                         }

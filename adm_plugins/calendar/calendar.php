@@ -161,7 +161,7 @@ $birthdaysMonthDayArray = array();
 
 // if page object is set then integrate css file of this plugin
 global $page;
-if(isset($page) && is_object($page))
+if(isset($page) && $page instanceof \HtmlPage)
 {
     $page->addCssFile($g_root_path.'/adm_plugins/calendar/calendar.css');
 }

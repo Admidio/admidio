@@ -349,7 +349,7 @@ class TableUserField extends TableAccess
 
         $returnValue = parent::save($updateFingerPrint);
 
-        if ($fieldsChanged && is_object($gCurrentSession))
+        if ($fieldsChanged && $gCurrentSession instanceof \Session)
         {
             // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->renewUserObject();
