@@ -40,15 +40,15 @@ class TableRoles extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_roles.
      * If the id is set than the specific role will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $rol_id   The recordset of the role with this id will be loaded.
+     * @param int       $rolId    The recordset of the role with this id will be loaded.
      *                            If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $rol_id = 0)
+    public function __construct(&$database, $rolId = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'rol_cat_id');
 
-        parent::__construct($database, TBL_ROLES, 'rol', $rol_id);
+        parent::__construct($database, TBL_ROLES, 'rol', $rolId);
     }
 
     /**
@@ -58,31 +58,32 @@ class TableRoles extends TableAccess
      */
     public function allowedToAssignMembers(User $user)
     {
-        global $gL10n;
-
         // you aren't allowed to change membership of not active roles
-        if($this->getValue('rol_valid'))
+        if ((int) $this->getValue('rol_valid') === 1)
         {
-            if(!$user->manageRoles())
+            if ($user->manageRoles())
             {
-                // leader are allowed to assign members if it's configured in the role
-                if($user->isLeaderOfRole($this->getValue('rol_id'))
-                && ($this->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN
-                   || $this->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT))
+                $rolAdministrator = (int) $this->getValue('rol_administrator');
+
+                // only administrators are allowed to assign new members to administrator role
+                if ($rolAdministrator === 0 || ($rolAdministrator === 1 && $user->isAdministrator()))
                 {
                     return true;
                 }
             }
             else
             {
-                // only administrators are allowed to assign new members to administrator role
-                if($this->getValue('rol_administrator') == 0
-                || ($this->getValue('rol_administrator') == 1 && $user->isAdministrator()))
+                $rolLeaderRights = (int) $this->getValue('rol_leader_rights');
+
+                // leader are allowed to assign members if it's configured in the role
+                if (($rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+                    && $user->isLeaderOfRole((int) $this->getValue('rol_id')))
                 {
                     return true;
                 }
             }
         }
+
         return false;
     }
 
@@ -94,22 +95,24 @@ class TableRoles extends TableAccess
     public function allowedToEditMembers(User $user)
     {
         // you aren't allowed to edit users of not active roles
-        if($this->getValue('rol_valid'))
+        if ((int) $this->getValue('rol_valid') === 1)
         {
-            if($user->editUsers())
+            if ($user->editUsers())
             {
                 return true;
             }
 
+            $rolLeaderRights = (int) $this->getValue('rol_leader_rights');
+
             // leader are allowed to assign members if it's configured in the role
-            if ($user->isMemberOfRole($this->getValue('rol_id'))
-            &&    ($this->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
-                || $this->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT))
+            if (($rolLeaderRights === ROLE_LEADER_MEMBERS_EDIT || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+            && $user->isMemberOfRole((int) $this->getValue('rol_id')))
             {
                 return true;
             }
             return true;
         }
+
         return false;
     }
 
@@ -131,7 +134,7 @@ class TableRoles extends TableAccess
      */
     public function countLeaders()
     {
-        if($this->countLeaders === -1)
+        if ($this->countLeaders === -1)
         {
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MEMBERS.'
@@ -143,6 +146,7 @@ class TableRoles extends TableAccess
 
             $this->countLeaders = (int) $countMembersStatement->fetchColumn();
         }
+
         return $this->countLeaders;
     }
 
@@ -153,12 +157,12 @@ class TableRoles extends TableAccess
      */
     public function countMembers($exceptUserId = null)
     {
-        if($this->countMembers === -1)
+        if ($this->countMembers === -1)
         {
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id  = '.$this->getValue('rol_id').'
-                       AND mem_usr_id != '.$exceptUserId.'
+                       AND mem_usr_id <> '.$exceptUserId.'
                        AND mem_leader  = 0
                        AND mem_begin  <= \''.DATE_NOW.'\'
                        AND mem_end     > \''.DATE_NOW.'\'';
@@ -166,6 +170,7 @@ class TableRoles extends TableAccess
 
             $this->countMembers = (int) $countMembersStatement->fetchColumn();
         }
+
         return $this->countMembers;
     }
 
@@ -177,22 +182,25 @@ class TableRoles extends TableAccess
      */
     public function countVacancies($countLeaders = false)
     {
-        if($this->getValue('rol_max_members') !== '')
-        {
-            $sql = 'SELECT mem_usr_id
-                      FROM '.TBL_MEMBERS.'
-                     WHERE mem_rol_id = '. $this->getValue('rol_id'). '
-                       AND mem_begin <= \''.DATE_NOW.'\'
-                       AND mem_end    > \''.DATE_NOW.'\'';
-            if(!$countLeaders)
-            {
-                $sql .= ' AND mem_leader = 0 ';
-            }
-            $membersStatement = $this->db->query($sql);
+        $rolMaxMembers = $this->getValue('rol_max_members');
 
-            return $this->getValue('rol_max_members') - $membersStatement->rowCount();
+        if (!is_int($rolMaxMembers))
+        {
+            return INF;
         }
-        return INF;
+
+        $sql = 'SELECT mem_usr_id
+                  FROM '.TBL_MEMBERS.'
+                 WHERE mem_rol_id = '.$this->getValue('rol_id').'
+                   AND mem_begin <= \''.DATE_NOW.'\'
+                   AND mem_end    > \''.DATE_NOW.'\'';
+        if (!$countLeaders)
+        {
+            $sql .= ' AND mem_leader = 0 ';
+        }
+        $membersStatement = $this->db->query($sql);
+
+        return $rolMaxMembers - $membersStatement->rowCount();
     }
 
     /**
@@ -205,7 +213,9 @@ class TableRoles extends TableAccess
     {
         global $gCurrentSession, $gL10n, $gCurrentOrganization;
 
-        if($this->getValue('rol_default_registration') == 1)
+        $rolId = (int) $this->getValue('rol_id');
+
+        if ((int) $this->getValue('rol_default_registration') === 1)
         {
             // checks if at least one other role has this flag, if not than this role couldn't be deleted
             $sql = 'SELECT COUNT(*) AS count
@@ -213,54 +223,56 @@ class TableRoles extends TableAccess
                 INNER JOIN '.TBL_CATEGORIES.'
                         ON cat_id = rol_cat_id
                      WHERE rol_default_registration = 1
-                       AND rol_id    <> '.$this->getValue('rol_id').'
+                       AND rol_id    <> '.$rolId.'
                        AND cat_org_id = '.$gCurrentOrganization->getValue('org_id');
             $countRolesStatement = $this->db->query($sql);
 
-            if((int) $countRolesStatement->fetchColumn() === 0)
+            if ((int) $countRolesStatement->fetchColumn() === 0)
             {
                 throw new AdmException('ROL_DELETE_NO_DEFAULT_ROLE', $this->getValue('rol_name'), $gL10n->get('ROL_DEFAULT_REGISTRATION'));
             }
         }
 
         // users are not allowed to delete system roles
-        if($this->getValue('rol_system'))
+        if ((int) $this->getValue('rol_system') === 1)
         {
             throw new AdmException('ROL_DELETE_SYSTEM_ROLE', $this->getValue('rol_name'));
         }
-        elseif($this->getValue('rol_administrator'))
+        if ((int) $this->getValue('rol_administrator') === 1)
         {
             throw new AdmException('ROL_DELETE_ROLE', $gL10n->get('SYS_ADMINISTRATOR'));
         }
 
         $this->db->startTransaction();
 
-        $sql = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.'
-                 WHERE rld_rol_id_parent = '. $this->getValue('rol_id'). '
-                    OR rld_rol_id_child  = '. $this->getValue('rol_id');
-        $this->db->query($sql);
+        $sqlQueries = array();
 
-        $sql = 'DELETE FROM '.TBL_MEMBERS.'
-                 WHERE mem_rol_id = '. $this->getValue('rol_id');
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.'
+                          WHERE rld_rol_id_parent = '.$rolId.'
+                             OR rld_rol_id_child  = '.$rolId;
 
-        $sql = 'UPDATE '.TBL_DATES.' SET dat_rol_id = NULL
-                 WHERE dat_rol_id = '.$this->getValue('rol_id');
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_MEMBERS.'
+                          WHERE mem_rol_id = '.$rolId;
 
-        $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
-                 WHERE dtr_rol_id = '.$this->getValue('rol_id');
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_DATES.' SET dat_rol_id = NULL
+                          WHERE dat_rol_id = '.$rolId;
 
-        $sql = 'DELETE FROM '.TBL_ROLES_RIGHTS_DATA.'
-                 WHERE rrd_rol_id = '.$this->getValue('rol_id');
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_DATE_ROLE.'
+                          WHERE dtr_rol_id = '.$rolId;
+
+        $sqlQueries[] = 'DELETE FROM '.TBL_ROLES_RIGHTS_DATA.'
+                          WHERE rrd_rol_id = '.$rolId;
+
+        foreach ($sqlQueries as $sqlQuery)
+        {
+            $this->db->query($sqlQuery);
+        }
 
         $return = parent::delete();
 
         $this->db->endTransaction();
 
-        if(isset($gCurrentSession))
+        if ($gCurrentSession instanceof \Session)
         {
             // all active users must renew their user data because maybe their
             // rights have been changed if they where members of this role
@@ -288,7 +300,7 @@ class TableRoles extends TableAccess
             12 => $gL10n->get('ROL_MONTHLY')
         );
 
-        if($costPeriod > 0)
+        if ($costPeriod > 0)
         {
             return $costPeriods[$costPeriod];
         }
@@ -303,17 +315,18 @@ class TableRoles extends TableAccess
      */
     public function getDefaultList()
     {
-        global $gCurrentOrganization, $gPreferences;
+        global $gPreferences;
 
-        $defaultListId = $this->getValue('rol_lst_id');
+        $defaultListId = (int) $this->getValue('rol_lst_id');
 
-        // if default list is not set
-        if($defaultListId <= 0 || $defaultListId === null)
+        // if default list is set, return it
+        if ($defaultListId > 0)
         {
-            // read and set system default list configuration
-            $defaultListId = $gPreferences['lists_default_configuation'];
+            return $defaultListId;
         }
-        return $defaultListId;
+
+        // read system default list configuration
+        return (int) $gPreferences['lists_default_configuation'];
     }
 
     /**
@@ -328,10 +341,11 @@ class TableRoles extends TableAccess
     public function getValue($columnName, $format = '')
     {
         global $gL10n;
+
         $value = parent::getValue($columnName, $format);
 
         // if text is a translation-id then translate it
-        if($columnName === 'cat_name' && $format !== 'database' && strpos($value, '_') === 3)
+        if ($columnName === 'cat_name' && $format !== 'database' && strpos($value, '_') === 3)
         {
             $value = $gL10n->get(admStrToUpper($value));
         }
@@ -367,12 +381,12 @@ class TableRoles extends TableAccess
     {
         global $gCurrentSession;
 
-        $fields_changed = $this->columnsValueChanged;
+        $fieldsChanged = $this->columnsValueChanged;
 
         $returnValue = parent::save($updateFingerPrint);
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
-        if ($fields_changed && $gCurrentSession instanceof \Session)
+        if ($fieldsChanged && $gCurrentSession instanceof \Session)
         {
             // all active users must renew their user data because maybe their
             // rights have been changed if they where members of this role
@@ -383,27 +397,37 @@ class TableRoles extends TableAccess
     }
 
     /**
-     * aktuelle Rolle wird auf aktiv gesetzt
-     * @return int
+     * @param bool $status
+     * @return bool
      */
-    public function setActive()
+    private function toogleValid($status)
     {
         global $gCurrentSession;
 
         // die Systemrollem sind immer aktiv
-        if($this->getValue('rol_system') == false)
+        if ((int) $this->getValue('rol_system') === 0)
         {
-            $sql = 'UPDATE '.TBL_ROLES.' SET rol_valid = 1
-                     WHERE rol_id = '. $this->getValue('rol_id');
+            $sql = 'UPDATE '.TBL_ROLES.' SET rol_valid = '.(int) $status.'
+                     WHERE rol_id = '.$this->getValue('rol_id');
             $this->db->query($sql);
 
             // all active users must renew their user data because maybe their
             // rights have been changed if they where members of this role
             $gCurrentSession->renewUserObject();
 
-            return 0;
+            return true;
         }
-        return -1;
+
+        return false;
+    }
+
+    /**
+     * aktuelle Rolle wird auf aktiv gesetzt
+     * @return bool
+     */
+    public function setActive()
+    {
+        return $this->toogleValid(true);
     }
 
     /**
@@ -412,22 +436,7 @@ class TableRoles extends TableAccess
      */
     public function setInactive()
     {
-        global $gCurrentSession;
-
-        // die Systemrollem sind immer aktiv
-        if($this->getValue('rol_system') == false)
-        {
-            $sql = 'UPDATE '.TBL_ROLES.' SET rol_valid = 0
-                     WHERE rol_id = '. $this->getValue('rol_id');
-            $this->db->query($sql);
-
-            // all active users must renew their user data because maybe their
-            // rights have been changed if they where members of this role
-            $gCurrentSession->renewUserObject();
-
-            return 0;
-        }
-        return -1;
+        return $this->toogleValid(false);
     }
 
     /**
@@ -442,7 +451,7 @@ class TableRoles extends TableAccess
     {
         global $gCurrentOrganization;
 
-        if($columnName === 'rol_default_registration' && $newValue == '0' && $this->dbColumns[$columnName] == '1')
+        if ($columnName === 'rol_default_registration' && $newValue == '0' && $this->dbColumns[$columnName] == '1')
         {
             // checks if at least one other role has this flag
             $sql = 'SELECT COUNT(*) AS count
@@ -454,7 +463,7 @@ class TableRoles extends TableAccess
                        AND cat_org_id = '.$gCurrentOrganization->getValue('org_id');
             $countRolesStatement = $this->db->query($sql);
 
-            if((int) $countRolesStatement->fetchColumn() === 0)
+            if ((int) $countRolesStatement->fetchColumn() === 0)
             {
                 return false;
             }
@@ -472,17 +481,17 @@ class TableRoles extends TableAccess
     {
         global $gCurrentUser, $gValidLogin;
 
-        if(!$gValidLogin)
+        if (!$gValidLogin)
         {
             return false;
         }
 
-        if($this->getValue('cat_name_intern') !== 'CONFIRMATION_OF_PARTICIPATION')
+        if ($this->getValue('cat_name_intern') !== 'CONFIRMATION_OF_PARTICIPATION')
         {
             return $gCurrentUser->hasRightViewRole($this->getValue('rol_id'));
         }
 
-        if($this->getValue('rol_this_list_view') == 0)
+        if ((int) $this->getValue('rol_this_list_view') === 0)
         {
             return false;
         }
