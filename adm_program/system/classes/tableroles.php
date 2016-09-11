@@ -432,7 +432,7 @@ class TableRoles extends TableAccess
 
     /**
      * aktuelle Rolle wird auf inaktiv gesetzt
-     * @return int
+     * @return bool
      */
     public function setInactive()
     {
