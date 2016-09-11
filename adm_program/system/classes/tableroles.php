@@ -400,7 +400,7 @@ class TableRoles extends TableAccess
      * @param bool $status
      * @return bool
      */
-    private function toogleValid($status)
+    private function toggleValid($status)
     {
         global $gCurrentSession;
 
@@ -427,7 +427,7 @@ class TableRoles extends TableAccess
      */
     public function setActive()
     {
-        return $this->toogleValid(true);
+        return $this->toggleValid(true);
     }
 
     /**
@@ -436,7 +436,7 @@ class TableRoles extends TableAccess
      */
     public function setInactive()
     {
-        return $this->toogleValid(false);
+        return $this->toggleValid(false);
     }
 
     /**
