@@ -347,7 +347,7 @@ elseif($getMode === 3)
     // Rolle zur inaktiven Rolle machen
     $return_code = $role->setInactive();
 
-    if($return_code < 0)
+    if($return_code === false)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
