@@ -29,14 +29,14 @@ class TableMembers extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_members.
      * If the id is set than the specific membership will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $mem_id   The recordset of the membership with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $memId    The recordset of the membership with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $mem_id = 0)
+    public function __construct(&$database, $memId = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_ROLES, 'rol_id', 'mem_rol_id');
 
-        parent::__construct($database, TBL_MEMBERS, 'mem', $mem_id);
+        parent::__construct($database, TBL_MEMBERS, 'mem', $memId);
     }
 
     /**
@@ -52,22 +52,24 @@ class TableMembers extends TableAccess
         global $gCurrentUser;
 
         // if role and user is set, than search for this membership and load data into class
-        if(is_numeric($roleId) && is_numeric($userId) && $roleId > 0 && $userId > 0)
+        if ($roleId > 0 && $userId > 0)
         {
             $this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
         }
 
-        if($this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)
+        if ($this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)
         {
             $this->delete();
 
             // if role membership of current user will be changed then renew his rights arrays
-            if($gCurrentUser->getValue('usr_id') == $userId)
+            if ($userId === (int) $gCurrentUser->getValue('usr_id'))
             {
                 $gCurrentUser->renewRoleData();
             }
+
             return true;
         }
+
         return false;
     }
 
@@ -85,7 +87,7 @@ class TableMembers extends TableAccess
 
         $returnStatus = parent::save($updateFingerPrint);
 
-        if($returnStatus && is_object($gCurrentSession))
+        if ($returnStatus && $gCurrentSession instanceof \Session)
         {
             // renew user object of the affected user because of edited role assignment
             $gCurrentSession->renewUserObject($this->getValue('mem_usr_id'));
@@ -108,24 +110,23 @@ class TableMembers extends TableAccess
         global $gCurrentUser;
 
         // if role and user is set, than search for this membership and load data into class
-        if(is_numeric($roleId) && is_numeric($userId) && $roleId > 0 && $userId > 0)
+        if ($roleId > 0 && $userId > 0)
         {
             $this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
         }
 
-        if($this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)
+        if ($this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)
         {
             // Beginn nicht ueberschreiben, wenn schon existiert
-            if(strcmp($this->getValue('mem_begin', 'Y-m-d'), DATE_NOW) > 0
-            || $this->new_record)
+            if ($this->new_record || strcmp($this->getValue('mem_begin', 'Y-m-d'), DATE_NOW) > 0)
             {
                 $this->setValue('mem_begin', DATE_NOW);
             }
 
             // Leiter sollte nicht ueberschrieben werden, wenn nicht uebergeben wird
-            if($leader === null)
+            if ($leader === null)
             {
-                if($this->new_record)
+                if ($this->new_record)
                 {
                     $this->setValue('mem_leader', false);
                 }
@@ -137,12 +138,12 @@ class TableMembers extends TableAccess
 
             $this->setValue('mem_end', DATE_MAX);
 
-            if($this->columnsValueChanged)
+            if ($this->columnsValueChanged)
             {
                 $this->save();
 
                 // if role membership of current user will be changed then renew his rights arrays
-                if($gCurrentUser->getValue('usr_id') == $userId)
+                if ((int) $gCurrentUser->getValue('usr_id') === $userId)
                 {
                     $gCurrentUser->renewRoleData();
                 }
@@ -150,6 +151,7 @@ class TableMembers extends TableAccess
                 return true;
             }
         }
+
         return false;
     }
 
@@ -167,26 +169,27 @@ class TableMembers extends TableAccess
         global $gCurrentUser;
 
         // if role and user is set, than search for this membership and load data into class
-        if(is_numeric($roleId) && is_numeric($userId) && $roleId > 0 && $userId > 0)
+        if ($roleId > 0 && $userId > 0)
         {
             $this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
         }
 
-        if(!$this->new_record && $this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)
+        if (!$this->new_record && $this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)
         {
             // subtract one day, so that user leaves role immediately
             $now = new DateTime();
             $oneDayOffset = new DateInterval('P1D');
-            $newEndDate = $now->sub($oneDayOffset)->format('Y-m-d');
+            $nowDate = $now->format('Y-m-d');
+            $endDate = $now->sub($oneDayOffset)->format('Y-m-d');
 
             // only stop membership if there is an actual membership
             // the actual date must be after the beginning
             // and the actual date must be before the end date
-            if(strcmp(date('Y-m-d', time()), $this->getValue('mem_begin', 'Y-m-d')) >= 0
-            && strcmp($this->getValue('mem_end', 'Y-m-d'), $newEndDate) >= 0)
+            if (strcmp($nowDate, $this->getValue('mem_begin', 'Y-m-d')) >= 0
+            &&  strcmp($endDate, $this->getValue('mem_end',   'Y-m-d')) < 0)
             {
                 // if role administrator then check if this membership is the last one -> don't delete it
-                if($this->getValue('rol_administrator') == true)
+                if ((int) $this->getValue('rol_administrator') === 1)
                 {
                     $sql = 'SELECT mem_id
                               FROM '.TBL_MEMBERS.'
@@ -195,24 +198,24 @@ class TableMembers extends TableAccess
                                AND \''.DATE_NOW.'\' BETWEEN mem_begin AND mem_end ';
                     $memberStatement = $this->db->query($sql);
 
-                    if($memberStatement->rowCount() === 0)
+                    if ($memberStatement->rowCount() === 0)
                     {
                         throw new AdmException('LST_MUST_HAVE_ADMINISTRATOR');
                     }
                 }
 
                 // if start date is greater than end date than delete membership
-                if(strcmp($this->getValue('mem_begin', 'Y-m-d'), $newEndDate) >= 0)
+                if (strcmp($this->getValue('mem_begin', 'Y-m-d'), $endDate) >= 0)
                 {
                     $this->delete();
                     $this->clear();
                 }
                 else
                 {
-                    $this->setValue('mem_end', $newEndDate);
+                    $this->setValue('mem_end', $endDate);
 
                     // stop leader
-                    if($this->getValue('mem_leader') == 1)
+                    if ((int) $this->getValue('mem_leader') === 1)
                     {
                         $this->setValue('mem_leader', 0);
                     }
@@ -221,13 +224,15 @@ class TableMembers extends TableAccess
                 }
 
                 // if role membership of current user will be changed then renew his rights arrays
-                if($gCurrentUser->getValue('usr_id') == $this->getValue('mem_usr_id'))
+                if ((int) $gCurrentUser->getValue('usr_id') === (int) $this->getValue('mem_usr_id'))
                 {
                     $gCurrentUser->renewRoleData();
                 }
+
                 return true;
             }
         }
+
         return false;
     }
 }

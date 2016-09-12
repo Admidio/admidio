@@ -288,7 +288,12 @@ class User extends TableAccess
         $invalidLoginCount = $this->getValue('usr_number_invalid');
 
         // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
-        if ($invalidLoginCount >= 3 && time() - strtotime($this->getValue('usr_date_invalid', 'Y-m-d H:i:s')) < 60 * 15)
+        $now = new DateTime();
+        $minutesOffset = new DateInterval('PT15M');
+        $now = $now->sub($minutesOffset);
+        $dateInvalid = DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('usr_date_invalid', 'Y-m-d H:i:s'));
+
+        if ($invalidLoginCount >= 3 && $now->getTimestamp() > $dateInvalid->getTimestamp())
         {
             $this->clear();
             return $gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN');
@@ -421,7 +426,7 @@ class User extends TableAccess
         $this->setValue('usr_valid', 1);
         $this->columnsValueChanged = false;
 
-        if(is_object($this->mProfileFieldsData))
+        if($this->mProfileFieldsData instanceof \ProfileFields)
         {
             // data of all profile fields will be deleted, the internal structure will not be destroyed
             $this->mProfileFieldsData->clearUserData();
@@ -458,160 +463,132 @@ class User extends TableAccess
         $usrId = $this->getValue('usr_id');
         $currUsrId = $gCurrentUser->getValue('usr_id');
 
-        $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_usr_id_create = NULL
-                 WHERE ann_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries = array();
 
-        $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_usr_id_change = NULL
-                 WHERE ann_usr_id_change = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_usr_id_create = NULL
+                          WHERE ann_usr_id_create = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_DATES.' SET dat_usr_id_create = NULL
-                 WHERE dat_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_usr_id_change = NULL
+                          WHERE ann_usr_id_change = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_DATES.' SET dat_usr_id_change = NULL
-                 WHERE dat_usr_id_change = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_DATES.' SET dat_usr_id_create = NULL
+                          WHERE dat_usr_id_create = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_FOLDERS.' SET fol_usr_id = NULL
-                 WHERE fol_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_DATES.' SET dat_usr_id_change = NULL
+                          WHERE dat_usr_id_change = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_FILES.' SET fil_usr_id = NULL
-                 WHERE fil_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_FOLDERS.' SET fol_usr_id = NULL
+                          WHERE fol_usr_id = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_usr_id_create = NULL
-                 WHERE gbo_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_FILES.' SET fil_usr_id = NULL
+                          WHERE fil_usr_id = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_usr_id_change = NULL
-                 WHERE gbo_usr_id_change = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_usr_id_create = NULL
+                          WHERE gbo_usr_id_create = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_LINKS.' SET lnk_usr_id_create = NULL
-                 WHERE lnk_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_usr_id_change = NULL
+                          WHERE gbo_usr_id_change = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_LINKS.' SET lnk_usr_id_change = NULL
-                 WHERE lnk_usr_id_change = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_LINKS.' SET lnk_usr_id_create = NULL
+                          WHERE lnk_usr_id_create = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_LISTS.' SET lst_usr_id = NULL
-                 WHERE lst_global = 1
-                   AND lst_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_LINKS.' SET lnk_usr_id_change = NULL
+                          WHERE lnk_usr_id_change = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_PHOTOS.' SET pho_usr_id_create = NULL
-                 WHERE pho_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_LISTS.' SET lst_usr_id = NULL
+                          WHERE lst_global = 1
+                            AND lst_usr_id = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_PHOTOS.' SET pho_usr_id_change = NULL
-                 WHERE pho_usr_id_change = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_PHOTOS.' SET pho_usr_id_create = NULL
+                          WHERE pho_usr_id_create = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_ROLES.' SET rol_usr_id_create = NULL
-                 WHERE rol_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_PHOTOS.' SET pho_usr_id_change = NULL
+                          WHERE pho_usr_id_change = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_ROLES.' SET rol_usr_id_change = NULL
-                 WHERE rol_usr_id_change = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_ROLES.' SET rol_usr_id_create = NULL
+                          WHERE rol_usr_id_create = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_ROLE_DEPENDENCIES.' SET rld_usr_id = NULL
-                 WHERE rld_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_ROLES.' SET rol_usr_id_change = NULL
+                          WHERE rol_usr_id_change = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_USER_LOG.' SET usl_usr_id_create = NULL
-                 WHERE usl_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_ROLE_DEPENDENCIES.' SET rld_usr_id = NULL
+                          WHERE rld_usr_id = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_USERS.' SET usr_usr_id_create = NULL
-                 WHERE usr_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_USER_LOG.' SET usl_usr_id_create = NULL
+                          WHERE usl_usr_id_create = '.$usrId;
 
-        $sql = 'UPDATE '.TBL_USERS.' SET usr_usr_id_change = NULL
-                 WHERE usr_usr_id_change = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_USERS.' SET usr_usr_id_create = NULL
+                          WHERE usr_usr_id_create = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_LIST_COLUMNS.'
-                 WHERE lsc_lst_id IN (SELECT lst_id
-                                        FROM '.TBL_LISTS.'
-                                       WHERE lst_usr_id = '.$usrId.'
-                                         AND lst_global = 0)';
-        $this->db->query($sql);
+        $sqlQueries[] = 'UPDATE '.TBL_USERS.' SET usr_usr_id_change = NULL
+                          WHERE usr_usr_id_change = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_LISTS.'
-                 WHERE lst_global = 0
-                   AND lst_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_LIST_COLUMNS.'
+                          WHERE lsc_lst_id IN (SELECT lst_id
+                                                 FROM '.TBL_LISTS.'
+                                                WHERE lst_usr_id = '.$usrId.'
+                                                  AND lst_global = 0)';
 
-        $sql = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.'
-                 WHERE gbc_usr_id_create = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_LISTS.'
+                          WHERE lst_global = 0
+                            AND lst_usr_id = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_MEMBERS.'
-                 WHERE mem_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.'
+                          WHERE gbc_usr_id_create = '.$usrId;
+
+        $sqlQueries[] = 'DELETE FROM '.TBL_MEMBERS.'
+                          WHERE mem_usr_id = '.$usrId;
 
         // MySQL couldn't create delete statement with same table in subquery.
         // Therefore we fill a temporary table with all ids that should be deleted and reference on this table
-        $sql = 'DELETE FROM '.TBL_IDS.'
-                 WHERE ids_usr_id = '.$currUsrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_IDS.'
+                          WHERE ids_usr_id = '.$currUsrId;
 
-        $sql = 'INSERT INTO '.TBL_IDS.' (ids_usr_id, ids_reference_id)
-                SELECT '.$currUsrId.', msc_msg_id
-                  FROM '.TBL_MESSAGES_CONTENT.'
-                 WHERE msc_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'INSERT INTO '.TBL_IDS.' (ids_usr_id, ids_reference_id)
+                         SELECT '.$currUsrId.', msc_msg_id
+                           FROM '.TBL_MESSAGES_CONTENT.'
+                          WHERE msc_usr_id = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
-                 WHERE msc_msg_id IN (SELECT ids_reference_id
-                                        FROM '.TBL_IDS.'
-                                       WHERE ids_usr_id = '.$currUsrId.')';
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
+                          WHERE msc_msg_id IN (SELECT ids_reference_id
+                                                 FROM '.TBL_IDS.'
+                                                WHERE ids_usr_id = '.$currUsrId.')';
 
-        $sql = 'DELETE FROM '.TBL_MESSAGES.'
-                 WHERE msg_id IN (SELECT ids_reference_id
-                                    FROM '.TBL_IDS.'
-                                   WHERE ids_usr_id = '.$currUsrId.')';
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES.'
+                          WHERE msg_id IN (SELECT ids_reference_id
+                                             FROM '.TBL_IDS.'
+                                            WHERE ids_usr_id = '.$currUsrId.')';
 
-        $sql = 'DELETE FROM '.TBL_IDS.'
-                 WHERE ids_usr_id = '.$currUsrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_IDS.'
+                          WHERE ids_usr_id = '.$currUsrId;
 
-        $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
-                 WHERE msc_msg_id IN (SELECT msg_id
-                                        FROM '.TBL_MESSAGES.'
-                                       WHERE msg_usr_id_sender = '.$usrId.')';
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
+                          WHERE msc_msg_id IN (SELECT msg_id
+                                                 FROM '.TBL_MESSAGES.'
+                                                WHERE msg_usr_id_sender = '.$usrId.')';
 
-        $sql = 'DELETE FROM '.TBL_MESSAGES.'
-                 WHERE msg_usr_id_sender = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES.'
+                          WHERE msg_usr_id_sender = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_REGISTRATIONS.'
-                 WHERE reg_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_REGISTRATIONS.'
+                          WHERE reg_usr_id = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
-                 WHERE atl_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_AUTO_LOGIN.'
+                          WHERE atl_usr_id = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_SESSIONS.'
-                 WHERE ses_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_SESSIONS.'
+                          WHERE ses_usr_id = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_USER_LOG.'
-                 WHERE usl_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_USER_LOG.'
+                          WHERE usl_usr_id = '.$usrId;
 
-        $sql = 'DELETE FROM '.TBL_USER_DATA.'
-                 WHERE usd_usr_id = '.$usrId;
-        $this->db->query($sql);
+        $sqlQueries[] = 'DELETE FROM '.TBL_USER_DATA.'
+                          WHERE usd_usr_id = '.$usrId;
+
+        foreach ($sqlQueries as $sqlQuery)
+        {
+            $this->db->query($sqlQuery);
+        }
 
         $return = parent::delete();
 
@@ -741,6 +718,27 @@ class User extends TableAccess
     }
 
     /**
+     * @param bool   $allowedToEditProfile
+     * @param string $field
+     * @param bool   $notEmpty
+     * @return bool
+     */
+    private function isAllowedToEditVCardUserField($allowedToEditProfile, $field, $notEmpty = false)
+    {
+        if ($notEmpty && $this->getValue($field) === '')
+        {
+            return false;
+        }
+
+        if ($allowedToEditProfile)
+        {
+            return true;
+        }
+
+        return (int) $this->mProfileFieldsData->getProperty($field, 'usf_hidden') === 0;
+    }
+
+    /**
      * Creates a vcard with all data of this user object @n
      * (Windows XP address book can't process utf8, so vcard output is iso-8859-1)
      * @param bool $allowedToEditProfile If set to @b true than logged in user is allowed to edit profiles
@@ -751,87 +749,99 @@ class User extends TableAccess
     {
         global $gPreferences;
 
-        $vCard  = 'BEGIN:VCARD'."\r\n";
-        $vCard .= 'VERSION:2.1'."\r\n";
-        if ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_hidden') == 0))
+        $vCard = array(
+            'BEGIN:VCARD',
+            'VERSION:2.1'
+        );
+
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'FIRST_NAME'))
         {
-            $vCard .= 'N;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('LAST_NAME', 'database')). ';'. utf8_decode($this->getValue('FIRST_NAME', 'database')) . ";;;\r\n";
+            $vCard[] = 'N;CHARSET=ISO-8859-1:' .
+                utf8_decode($this->getValue('LAST_NAME',  'database')) . ';' .
+                utf8_decode($this->getValue('FIRST_NAME', 'database')) . ';;;';
         }
-        if ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_hidden') == 0))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'LAST_NAME'))
         {
-            $vCard .= 'FN;CHARSET=ISO-8859-1:'. utf8_decode($this->getValue('FIRST_NAME')) . ' '. utf8_decode($this->getValue('LAST_NAME')) . "\r\n";
+            $vCard[] = 'FN;CHARSET=ISO-8859-1:' .
+                utf8_decode($this->getValue('FIRST_NAME')) . ' ' .
+                utf8_decode($this->getValue('LAST_NAME'));
         }
         if ($this->getValue('usr_login_name') !== '')
         {
-            $vCard .= 'NICKNAME;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('usr_login_name')). "\r\n";
+            $vCard[] = 'NICKNAME;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('usr_login_name'));
         }
-        if ($this->getValue('PHONE') !== ''
-        && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('PHONE', 'usf_hidden') == 0)))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'PHONE', true))
         {
-            $vCard .= 'TEL;HOME;VOICE:' . $this->getValue('PHONE'). "\r\n";
+            $vCard[] = 'TEL;HOME;VOICE:' . $this->getValue('PHONE');
         }
-        if ($this->getValue('MOBILE') !== ''
-        && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('MOBILE', 'usf_hidden') == 0)))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'MOBILE', true))
         {
-            $vCard .= 'TEL;CELL;VOICE:' . $this->getValue('MOBILE'). "\r\n";
+            $vCard[] = 'TEL;CELL;VOICE:' . $this->getValue('MOBILE');
         }
-        if ($this->getValue('FAX') !== ''
-        && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('FAX', 'usf_hidden') == 0)))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'FAX', true))
         {
-            $vCard .= 'TEL;HOME;FAX:' . $this->getValue('FAX'). "\r\n";
+            $vCard[] = 'TEL;HOME;FAX:' . $this->getValue('FAX');
         }
-        if ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('ADDRESS', 'usf_hidden') == 0 && $this->mProfileFieldsData->getProperty('CITY', 'usf_hidden') == 0
-        && $this->mProfileFieldsData->getProperty('POSTCODE', 'usf_hidden') == 0  && $this->mProfileFieldsData->getProperty('COUNTRY', 'usf_hidden') == 0))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'ADDRESS')
+        &&  $this->isAllowedToEditVCardUserField($allowedToEditProfile, 'CITY')
+        &&  $this->isAllowedToEditVCardUserField($allowedToEditProfile, 'POSTCODE')
+        &&  $this->isAllowedToEditVCardUserField($allowedToEditProfile, 'COUNTRY'))
         {
-            $vCard .= 'ADR;CHARSET=ISO-8859-1;HOME:;;' . utf8_decode($this->getValue('ADDRESS', 'database')). ';' . utf8_decode($this->getValue('CITY', 'database')). ';;' . utf8_decode($this->getValue('POSTCODE', 'database')). ';' . utf8_decode($this->getValue('COUNTRY', 'database')). "\r\n";
+            $vCard[] = 'ADR;CHARSET=ISO-8859-1;HOME:;;' .
+                utf8_decode($this->getValue('ADDRESS',  'database')) . ';' .
+                utf8_decode($this->getValue('CITY',     'database')) . ';;' .
+                utf8_decode($this->getValue('POSTCODE', 'database')) . ';' .
+                utf8_decode($this->getValue('COUNTRY',  'database'));
         }
-        if ($this->getValue('WEBSITE') !== ''
-        && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('WEBSITE', 'usf_hidden') == 0)))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'WEBSITE', true))
         {
-            $vCard .= 'URL;HOME:' . $this->getValue('WEBSITE'). "\r\n";
+            $vCard[] = 'URL;HOME:' . $this->getValue('WEBSITE');
         }
-        if ($this->getValue('BIRTHDAY') !== ''
-        && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('BIRTHDAY', 'usf_hidden') == 0)))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'BIRTHDAY', true))
         {
-            $vCard .= 'BDAY:' . $this->getValue('BIRTHDAY', 'Ymd') . "\r\n";
+            $vCard[] = 'BDAY:' . $this->getValue('BIRTHDAY', 'Ymd');
         }
-        if ($this->getValue('EMAIL') !== ''
-        && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('EMAIL', 'usf_hidden') == 0)))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'EMAIL', true))
         {
-            $vCard .= 'EMAIL;PREF;INTERNET:' . $this->getValue('EMAIL'). "\r\n";
+            $vCard[] = 'EMAIL;PREF;INTERNET:' . $this->getValue('EMAIL');
         }
         if (is_file(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
         {
-            $img_handle = fopen(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg', 'rb');
-            $vCard .= 'PHOTO;ENCODING=BASE64;TYPE=JPEG:'.base64_encode(fread($img_handle, filesize(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))). "\r\n";
-            fclose($img_handle);
+            $imgHandle = fopen(SERVER_PATH . '/adm_my_files/user_profile_photos/' . $this->getValue('usr_id') . '.jpg', 'rb');
+            $base64Image = base64_encode(fread($imgHandle, filesize(SERVER_PATH . '/adm_my_files/user_profile_photos/' . $this->getValue('usr_id') . '.jpg')));
+            fclose($imgHandle);
+
+            $vCard[] = 'PHOTO;ENCODING=BASE64;TYPE=JPEG:' . $base64Image;
         }
         if ($this->getValue('usr_photo') !== '' && $gPreferences['profile_photo_storage'] == 0)
         {
-            $vCard .= 'PHOTO;ENCODING=BASE64;TYPE=JPEG:'.base64_encode($this->getValue('usr_photo')). "\r\n";
+            $vCard[] = 'PHOTO;ENCODING=BASE64;TYPE=JPEG:' . base64_encode($this->getValue('usr_photo'));
         }
         // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
-        if ($this->getValue('GENDER') > 0
-        && ($allowedToEditProfile || (!$allowedToEditProfile && $this->mProfileFieldsData->getProperty('GENDER', 'usf_hidden') == 0)))
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'GENDER') && $this->getValue('GENDER') > 0)
         {
-            if ($this->getValue('GENDER') == 1)
+            if ((int) $this->getValue('GENDER') === 1)
             {
-                $wabGender = 2;
+                $xGender = 'Male';
+                $xWabGender = 2;
             }
             else
             {
-                $wabGender = 1;
+                $xGender = 'Female';
+                $xWabGender = 1;
             }
-            $vCard .= 'X-WAB-GENDER:' . $wabGender . "\r\n";
+
+            $vCard[] = 'X-GENDER:' . $xGender;
+            $vCard[] = 'X-WAB-GENDER:' . $xWabGender;
         }
         if ($this->getValue('usr_timestamp_change') !== '')
         {
-            $vCard .= 'REV:' . $this->getValue('usr_timestamp_change', 'ymdThis') . "\r\n";
+            $vCard[] = 'REV:' . $this->getValue('usr_timestamp_change', 'Ymd\This');
         }
 
-        $vCard .= 'END:VCARD'."\r\n";
+        $vCard[] = 'END:VCARD';
 
-        return $vCard;
+        return implode("\r\n", $vCard) . "\r\n";
     }
 
     /**
@@ -844,7 +854,7 @@ class User extends TableAccess
      */
     public function hasRightEditProfile(&$user, $checkOwnProfile = true)
     {
-        if (!is_object($user))
+        if (!$user instanceof \User)
         {
             return false;
         }
@@ -1127,7 +1137,7 @@ class User extends TableAccess
         }
 
         // if value of a field changed then update timestamp of user object
-        if (is_object($this->mProfileFieldsData) && $this->mProfileFieldsData->columnsValueChanged)
+        if ($this->mProfileFieldsData instanceof \ProfileFields && $this->mProfileFieldsData->columnsValueChanged)
         {
             $this->columnsValueChanged = true;
         }
@@ -1142,13 +1152,13 @@ class User extends TableAccess
             $returnValue = $returnValue && parent::save($updateFingerPrint);
         }
 
-        if (is_object($this->mProfileFieldsData))
+        if ($this->mProfileFieldsData instanceof \ProfileFields)
         {
             // save data of all user fields
             $this->mProfileFieldsData->saveUserData((int) $this->getValue('usr_id'));
         }
 
-        if ($this->columnsValueChanged && is_object($gCurrentSession))
+        if ($this->columnsValueChanged && $gCurrentSession instanceof \Session)
         {
             // now set user object in session of that user to invalid,
             // because he has new data and maybe new rights

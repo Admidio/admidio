@@ -127,7 +127,7 @@ class HtmlForm extends HtmlFormBasic
             $this->addAttribute('enctype', 'multipart/form-data');
         }
 
-        if(is_object($htmlPage))
+        if($htmlPage instanceof \HtmlPage)
         {
             $this->htmlPage =& $htmlPage;
         }
@@ -135,7 +135,7 @@ class HtmlForm extends HtmlFormBasic
         // if its not a navbar form and not a static form then first field of form should get focus
         if($optionsAll['setFocus'])
         {
-            if(is_object($htmlPage))
+            if($htmlPage instanceof \HtmlPage)
             {
                 $this->htmlPage->addJavascript('$(".form-dialog:first *:input:enabled:first").focus();', true);
             }
@@ -223,7 +223,7 @@ class HtmlForm extends HtmlFormBasic
             });';
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if(is_object($this->htmlPage))
+            if($this->htmlPage instanceof \HtmlPage)
             {
                 $this->htmlPage->addJavascript($javascriptCode, true);
             }
@@ -502,7 +502,7 @@ class HtmlForm extends HtmlFormBasic
         if($gPreferences['system_js_editor_enabled'] == 1)
         {
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if(is_object($this->htmlPage))
+            if($this->htmlPage instanceof \HtmlPage)
             {
                 $this->htmlPage->addJavascriptFile('adm_program/libs/ckeditor/ckeditor.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
@@ -621,7 +621,7 @@ class HtmlForm extends HtmlFormBasic
                 });';
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if(is_object($this->htmlPage))
+            if($this->htmlPage instanceof \HtmlPage)
             {
                 $this->htmlPage->addJavascript($javascriptCode, true);
             }
@@ -798,7 +798,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if(is_object($this->htmlPage))
+            if($this->htmlPage instanceof \HtmlPage)
             {
                 $this->htmlPage->addCssFile('adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.css');
                 $this->htmlPage->addJavascriptFile('adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
@@ -850,7 +850,7 @@ class HtmlForm extends HtmlFormBasic
 
         if($optionsAll['passwordStrength'])
         {
-            if(is_object($this->htmlPage))
+            if($this->htmlPage instanceof \HtmlPage)
             {
                 $zxcvbnUserInputs = json_encode($optionsAll['passwordUserData'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                 $javascriptCode = '
@@ -964,7 +964,7 @@ class HtmlForm extends HtmlFormBasic
                 });';
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if(is_object($this->htmlPage))
+            if($this->htmlPage instanceof \HtmlPage)
             {
                 $this->htmlPage->addJavascriptFile('adm_program/libs/noblecount/jquery.noblecount.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
@@ -1304,7 +1304,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if(is_object($this->htmlPage))
+            if($this->htmlPage instanceof \HtmlPage)
             {
                 $this->htmlPage->addCssFile('adm_program/libs/select2/dist/css/select2.css');
                 $this->htmlPage->addCssFile('adm_program/libs/select2-bootstrap-theme/dist/select2-bootstrap.css');

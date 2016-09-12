@@ -878,14 +878,14 @@ create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_group);
 /*==============================================================*/
 create table %PREFIX%_user_relation_types
 (
-    urt_id int(10) unsigned not null AUTO_INCREMENT,
+    urt_id integer unsigned not null AUTO_INCREMENT,
     urt_name varchar(100) not null,
     urt_name_male varchar(100) not null,
     urt_name_female varchar(100) not null,
-    urt_id_inverse int(10) unsigned default null,
-    urt_usr_id_create int(10) unsigned default null,
+    urt_id_inverse integer unsigned default null,
+    urt_usr_id_create integer unsigned default null,
     urt_timestamp_create timestamp not null default CURRENT_TIMESTAMP,
-    urt_usr_id_change int(10) unsigned default null,
+    urt_usr_id_change integer unsigned default null,
     urt_timestamp_change timestamp null default null,
     primary key (urt_id)
 )
@@ -902,13 +902,13 @@ create unique index %PREFIX%_IDX_URE_URT_NAME on %PREFIX%_user_relation_types (u
 
 create table %PREFIX%_user_relations
 (
-    ure_id int(10) unsigned not null AUTO_INCREMENT,
-    ure_urt_id int(10) unsigned not null,
-    ure_usr_id1 int(10) unsigned not null,
-    ure_usr_id2 int(10) unsigned not null,
-    ure_usr_id_create int(10) unsigned default null,
+    ure_id integer unsigned not null AUTO_INCREMENT,
+    ure_urt_id integer unsigned not null,
+    ure_usr_id1 integer unsigned not null,
+    ure_usr_id2 integer unsigned not null,
+    ure_usr_id_create integer unsigned default null,
     ure_timestamp_create timestamp not null default CURRENT_TIMESTAMP,
-    ure_usr_id_change int(10) unsigned default null,
+    ure_usr_id_change integer unsigned default null,
     ure_timestamp_change timestamp null default null,
     primary key (ure_id)
 )

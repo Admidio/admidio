@@ -156,7 +156,7 @@ class Session extends TableAccess
      */
     public function getOrganizationId()
     {
-        if(is_object($this->mAutoLogin))
+        if($this->mAutoLogin instanceof \AutoLogin)
         {
             return (int) $this->mAutoLogin->getValue('atl_org_id');
         }
@@ -204,7 +204,7 @@ class Session extends TableAccess
 
                 // Check how long the user was inactive. If time range is to long -> logout
                 // if user has auto login than session is also valid
-                if($timeGap < $gPreferences['logout_minutes'] * 60 || is_object($this->mAutoLogin))
+                if($this->mAutoLogin instanceof \AutoLogin || $timeGap < $gPreferences['logout_minutes'] * 60)
                 {
                     $this->setValue('ses_timestamp', DATETIME_NOW);
                     return true;
@@ -235,7 +235,7 @@ class Session extends TableAccess
         $this->setValue('ses_usr_id', '');
         $this->save();
 
-        if(is_object($this->mAutoLogin))
+        if($this->mAutoLogin instanceof \AutoLogin)
         {
             // remove auto login cookie from users browser by setting expired timestamp to 0
             setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'), 0, '/', $this->mDomain, 0);
@@ -275,7 +275,7 @@ class Session extends TableAccess
         }
 
         // if AutoLogin is set then refresh the auto_login_id for security reasons
-        if(is_object($this->mAutoLogin))
+        if($this->mAutoLogin instanceof \AutoLogin)
         {
             $autoLoginId = $this->mAutoLogin->generateAutoLoginId($this->getValue('ses_usr_id'));
             $this->mAutoLogin->setValue('atl_auto_login_id', $autoLoginId);
@@ -391,7 +391,7 @@ class Session extends TableAccess
     {
         parent::setDatabase($database);
 
-        if(is_object($this->mAutoLogin))
+        if($this->mAutoLogin instanceof \AutoLogin)
         {
             $this->mAutoLogin->setDatabase($database);
         }

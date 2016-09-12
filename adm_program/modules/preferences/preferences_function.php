@@ -352,7 +352,7 @@ switch($getMode)
 
         // create all necessary data for this organization
         $newOrganization->setPreferences($orga_preferences, false);
-        $newOrganization->createBasicData($gCurrentUser->getValue('usr_id'));
+        $newOrganization->createBasicData((int) $gCurrentUser->getValue('usr_id'));
 
         // if installation of second organization than show organization select at login
         if($gCurrentOrganization->countAllRecords() === 2)

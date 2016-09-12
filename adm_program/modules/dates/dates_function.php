@@ -392,8 +392,10 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
 
             // these are the default settings for a date role
             $role->setValue('rol_cat_id', $pdoStatement->fetchColumn());
-            $role->setValue('rol_this_list_view', '1');    // role members are allowed to view lists
-            $role->setValue('rol_mail_this_role', '1');    // role members are allowed to send mail to this role
+            // role members are allowed to view lists
+            $role->setValue('rol_this_list_view', isset($_POST['date_right_list_view']) ? '1' : '0');
+            // role members are allowed to send mail to this role
+            $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? '1' : '0');
             $role->setValue('rol_visible', '0');
             $role->setValue('rol_leader_rights', ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participations
             $role->setValue('rol_max_members', $_POST['dat_max_members']);
@@ -445,13 +447,14 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             $roleName = $role->getValue('rol_name');
         }
 
-        if($role->getValue('rol_max_members') != $date->getValue('dat_max_members')
-        || $role->getValue('rol_name') !== $roleName)
-        {
-            $role->setValue('rol_name', $roleName);
-            $role->setValue('rol_max_members', $date->getValue('dat_max_members'));
-            $role->save();
-        }
+        $role->setValue('rol_name', $roleName);
+        // role members are allowed to view lists
+        $role->setValue('rol_this_list_view', isset($_POST['date_right_list_view']) ? '1' : '0');
+        // role members are allowed to send mail to this role
+        $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? '1' : '0');
+        $role->setValue('rol_max_members', $date->getValue('dat_max_members'));
+
+        $role->save();
     }
 
     // check if flag is set that current user wants to participate as leader to the date
@@ -460,7 +463,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     {
         // user wants to participate -> add him to date
         $member = new TableMembers($gDb);
-        $member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'), true);
+        $member->startMembership((int) $role->getValue('rol_id'), (int) $gCurrentUser->getValue('usr_id'), true);
     }
     elseif(!isset($_POST['date_current_user_assigned'])
     && $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')))
@@ -494,7 +497,7 @@ elseif($getMode === 2)  // Termin loeschen
 elseif($getMode === 3)  // Benutzer zum Termin anmelden
 {
     $member = new TableMembers($gDb);
-    $member->startMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
+    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
@@ -503,7 +506,7 @@ elseif($getMode === 3)  // Benutzer zum Termin anmelden
 elseif($getMode === 4)  // Benutzer vom Termin abmelden
 {
     $member = new TableMembers($gDb);
-    $member->deleteMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
+    $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));

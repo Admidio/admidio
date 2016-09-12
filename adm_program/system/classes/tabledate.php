@@ -131,9 +131,10 @@ class TableDate extends TableAccess
 
         $icalHeader = array(
             'BEGIN:VCALENDAR',
-            'METHOD:PUBLISH',
-            'PRODID:-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE',
             'VERSION:2.0',
+            'PRODID:-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE',
+            'CALSCALE:GREGORIAN',
+            'METHOD:PUBLISH',
             'X-WR-TIMEZONE:' . $defaultTimezone,
             'BEGIN:VTIMEZONE',
             'TZID:' . $defaultTimezone,
@@ -174,39 +175,60 @@ class TableDate extends TableAccess
      */
     public function getIcalVEvent($domain)
     {
+        $dateTimeFormat = 'Ymd\THis';
+
         $iCalVEvent = array(
             'BEGIN:VEVENT',
-            'CREATED:'.$this->getValue('dat_timestamp_create', 'Ymd').'T'.$this->getValue('dat_timestamp_create', 'His')
+            'CREATED:' . $this->getValue('dat_timestamp_create', $dateTimeFormat)
         );
 
         if ($this->getValue('dat_timestamp_change') !== null)
         {
-            $iCalVEvent[] = 'LAST-MODIFIED:'.$this->getValue('dat_timestamp_change', 'Ymd').'T'.$this->getValue('dat_timestamp_change', 'His');
+            $iCalVEvent[] = 'LAST-MODIFIED:' . $this->getValue('dat_timestamp_change', $dateTimeFormat);
         }
 
         // Semicolons herausfiltern
-        $iCalVEvent[] = 'UID:'.$this->getValue('dat_timestamp_create', 'ymdThis').'+'.$this->getValue('dat_usr_id_create').'@'.$domain;
-        $iCalVEvent[] = 'SUMMARY:'.str_replace(';', '.', $this->getValue('dat_headline'));
-        $iCalVEvent[] = 'DESCRIPTION:'.trim(str_replace("\r\n", '', str_replace(';', '.', $this->getValue('dat_description', 'database'))));
-        $iCalVEvent[] = 'DTSTAMP:'.date('Ymd').'T'.date('His');
-        $iCalVEvent[] = 'LOCATION:'.str_replace(';', '.', $this->getValue('dat_location'));
+        $iCalVEvent[] = 'UID:' . $this->getValue('dat_timestamp_create', $dateTimeFormat) . '+' . $this->getValue('dat_usr_id_create') . '@' . $domain;
+        $iCalVEvent[] = 'SUMMARY:' . $this->escapeIcalText($this->getValue('dat_headline'));
+        $iCalVEvent[] = 'DESCRIPTION:' . $this->escapeIcalText($this->getValue('dat_description', 'database'));
+        $iCalVEvent[] = 'DTSTAMP:' . date($dateTimeFormat);
+        $iCalVEvent[] = 'LOCATION:' . $this->escapeIcalText($this->getValue('dat_location'));
 
         if ((int) $this->getValue('dat_all_day') === 1)
         {
             // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
             // Outlook und Co. zeigen es erst dann korrekt an
-            $iCalVEvent[] = 'DTSTART;VALUE=DATE:'.$this->getValue('dat_begin', 'Ymd');
-            $iCalVEvent[] = 'DTEND;VALUE=DATE:'.date('Ymd', $this->getValue('dat_end', 'U') + 60*60*24);
+            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('dat_end', 'Y-m-d H:i:s'));
+            $oneDayOffset = new DateInterval('P1D');
+
+            $iCalVEvent[] = 'DTSTART;VALUE=DATE:' . $this->getValue('dat_begin', 'Ymd');
+            $iCalVEvent[] = 'DTEND;VALUE=DATE:' . $dateTime->add($oneDayOffset)->format('Ymd');
         }
         else
         {
-            $iCalVEvent[] = 'DTSTART;TZID='.date_default_timezone_get().':'.$this->getValue('dat_begin', 'Ymd').'T'.$this->getValue('dat_begin', 'His');
-            $iCalVEvent[] = 'DTEND;TZID='  .date_default_timezone_get().':'.$this->getValue('dat_end',   'Ymd').'T'.$this->getValue('dat_end',   'His');
+            $iCalVEvent[] = 'DTSTART;TZID=' . date_default_timezone_get() . ':' . $this->getValue('dat_begin', $dateTimeFormat);
+            $iCalVEvent[] = 'DTEND;TZID='   . date_default_timezone_get() . ':' . $this->getValue('dat_end',   $dateTimeFormat);
         }
 
         $iCalVEvent[] = 'END:VEVENT';
 
         return implode("\r\n", $iCalVEvent) . "\r\n";
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    private function escapeIcalText($text)
+    {
+        $searchReplace = array(
+            '\\'   => '\\\\',
+            ','    => '\,',
+            ';'    => '\;',
+            "\r\n" => "\n"
+        );
+
+        return trim(str_replace(array_keys($searchReplace), array_values($searchReplace), $text));
     }
 
     /**
@@ -232,8 +254,9 @@ class TableDate extends TableAccess
             }
 
             // bei ganztaegigen Terminen wird das Enddatum immer 1 Tag zurueckgesetzt
-            list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $this->dbColumns['dat_end']);
-            $value = date($format, mktime($hour, $minute, $second, $month, $day, $year) - 60*60*24);
+            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $this->dbColumns['dat_end']);
+            $oneDayOffset = new DateInterval('P1D');
+            $value = $dateTime->sub($oneDayOffset)->format($format);
         }
         elseif ($columnName === 'dat_description')
         {
@@ -372,8 +395,9 @@ class TableDate extends TableAccess
         {
             // hier muss bei ganztaegigen Terminen das bis-Datum um einen Tag hochgesetzt werden
             // damit der Termin bei SQL-Abfragen richtig beruecksichtigt wird
-            list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $newValue);
-            $newValue = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year) + 60*60*24);
+            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $newValue);
+            $oneDayOffset = new DateInterval('P1D');
+            $newValue = $dateTime->add($oneDayOffset)->format('Y-m-d H:i:s');
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);

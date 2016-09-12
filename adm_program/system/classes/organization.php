@@ -199,8 +199,8 @@ class Organization extends TableAccess
 
         // Create membership for user in role 'Administrator' and 'Members'
         $member = new TableMembers($this->db);
-        $member->startMembership($roleAdministrator->getValue('rol_id'), $userId);
-        $member->startMembership($roleMember->getValue('rol_id'),    $userId);
+        $member->startMembership((int) $roleAdministrator->getValue('rol_id'), $userId);
+        $member->startMembership((int) $roleMember->getValue('rol_id'), $userId);
 
         // create object with current user field structure
         $gProfileFields = new ProfileFields($this->db, $orgId);

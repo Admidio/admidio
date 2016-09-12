@@ -122,7 +122,7 @@ class Language
      */
     public function get($textId)
     {
-        if(!is_object($this->languageData))
+        if(!$this->languageData instanceof \LanguageData)
         {
             return 'Error: '.$this->languageData.' is not an object!';
         }
@@ -308,7 +308,7 @@ class Language
             }
         }
 
-        if(is_object($objectArray[$languagePath]))
+        if($objectArray[$languagePath] instanceof \SimpleXMLElement)
         {
             // text not in cache -> read from xml file in "Android Resource String" format
             $node = $objectArray[$languagePath]->xpath('/resources/string[@name="'.$textId.'"]');

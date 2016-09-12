@@ -75,7 +75,7 @@ if(!isset($plg_rank))
 
 // if page object is set then integrate css file of this plugin
 global $page;
-if(isset($page) && is_object($page))
+if(isset($page) && $page instanceof \HtmlPage)
 {
     $page->addCssFile($g_root_path.'/adm_plugins/login_form/login_form.css');
 }
@@ -105,7 +105,7 @@ if($gValidLogin)
 
     $jsContent = '$("#adm_logout_link").click(function() {'.$jsContentNextPage.'});';
 
-    if(isset($page) && is_object($page))
+    if(isset($page) && $page instanceof \HtmlPage)
     {
         $page->addJavascript($jsContent, true);
     }

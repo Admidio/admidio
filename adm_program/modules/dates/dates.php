@@ -494,7 +494,7 @@ else
             }
 
             // Link to participants list
-            if($gValidLogin)
+            if($gValidLogin && $gCurrentUser->hasRightViewRole($date->getValue('dat_rol_id')))
             {
                 if($outputNumberMembers > 0 || $outputNumberLeaders > 0)
                 {

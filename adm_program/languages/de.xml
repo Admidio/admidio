@@ -79,6 +79,8 @@
     <string name="DAT_REGISTRATION_NOT_POSSIBLE">Keine Anmeldung mehr möglich.</string>
     <string name="DAT_REGISTRATION_POSSIBLE">Anmeldung zu diesem Termin ermöglichen</string>
     <string name="DAT_REMOVE_APPLICATION">Willst du die Anmeldung für den Termin wirklich entfernen? Hierbei werden alle bisherigen Teilnehmer gelöscht werden.</string>
+    <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Teilnehmer können die Teilnehmerliste einsehen</string>
+    <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Teilnehmer können Mails an alle Teilnehmer senden</string>
     <string name="DAT_ROOM_INFORMATIONS">Rauminformationen</string>
     <string name="DAT_ROOM_OVERHANG">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzpätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</string>
     <string name="DAT_ROOM_RESERVED">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</string>

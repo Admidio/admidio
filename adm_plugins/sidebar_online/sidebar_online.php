@@ -70,14 +70,16 @@ else
 }
 
 // Referenzzeit setzen
-$ref_date = date('Y.m.d H:i:s', time() - 60 * $plg_time_online);
+$now = new DateTime();
+$minutesOffset = new DateInterval('PT' . $plg_time_online . 'M');
+$refDate = $now->sub($minutesOffset)->format('Y-m-d H:i:s');
 
 // User IDs alles Sessons finden, die in genannter aktueller und referenz Zeit sind
 $sql = 'SELECT ses_usr_id, usr_login_name
           FROM '.TBL_SESSIONS.'
      LEFT JOIN '.TBL_USERS.'
             ON usr_id = ses_usr_id
-         WHERE ses_timestamp BETWEEN \''.$ref_date.'\' AND \''.DATETIME_NOW.'\'
+         WHERE ses_timestamp BETWEEN \''.$refDate.'\' AND \''.DATETIME_NOW.'\'
            AND ses_org_id = '.$gCurrentOrganization->getValue('org_id');
 
 if(!$plg_show_visitors)

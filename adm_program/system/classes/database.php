@@ -754,12 +754,12 @@ class Database
     public function fetch_array(PDOStatement $pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
     {
         // if pdo statement is committed then fetch this object
-        if (is_object($pdoStatement))
+        if ($pdoStatement instanceof \PDOStatement)
         {
             return $pdoStatement->fetch($fetchType);
         }
         // if no pdo statement was committed then take the one from the last query
-        elseif (is_object($this->pdoStatement))
+        elseif ($this->pdoStatement instanceof \PDOStatement)
         {
             return $this->pdoStatement->fetch($fetchType);
         }
@@ -781,12 +781,12 @@ class Database
     public function fetch_object(PDOStatement $pdoStatement = null)
     {
         // if pdo statement is committed then fetch this object
-        if (is_object($pdoStatement))
+        if ($pdoStatement instanceof \PDOStatement)
         {
             return $pdoStatement->fetchObject();
         }
         // if no pdo statement was committed then take the one from the last query
-        elseif (is_object($this->pdoStatement))
+        elseif ($this->pdoStatement instanceof \PDOStatement)
         {
             return $this->pdoStatement->fetchObject();
         }
@@ -819,12 +819,12 @@ class Database
     public function num_rows(PDOStatement $pdoStatement = null)
     {
         // if pdo statement is committed then fetch this object
-        if (is_object($pdoStatement))
+        if ($pdoStatement instanceof \PDOStatement)
         {
             return $pdoStatement->rowCount();
         }
         // if no pdo statement was committed then take the one from the last query
-        elseif (is_object($this->pdoStatement))
+        elseif ($this->pdoStatement instanceof \PDOStatement)
         {
             return $this->pdoStatement->rowCount();
         }

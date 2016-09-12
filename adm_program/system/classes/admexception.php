@@ -53,7 +53,7 @@ class AdmException extends Exception
     {
         global $gDb;
 
-        if(is_object($gDb))
+        if($gDb instanceof \Database)
         {
             $gDb->endTransaction();
         }
@@ -113,7 +113,7 @@ class AdmException extends Exception
         global $gMessage;
 
         // display database error to user
-        if(is_object($gMessage))
+        if($gMessage instanceof \Message)
         {
             $gMessage->show($this->getText());
             // => EXIT

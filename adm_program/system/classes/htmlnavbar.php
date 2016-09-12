@@ -63,7 +63,7 @@ class HtmlNavbar
             }
         }
 
-        if (is_object($htmlPage))
+        if ($htmlPage instanceof \HtmlPage)
         {
             $this->htmlPage =& $htmlPage;
         }
@@ -275,7 +275,7 @@ class HtmlNavbar
         }
 
         // if navbar will be shown then set this flag in page object
-        if (is_object($this->htmlPage))
+        if ($this->htmlPage instanceof \HtmlPage)
         {
             $this->htmlPage->hasNavbar();
         }
