@@ -110,7 +110,6 @@ class TableRoles extends TableAccess
             {
                 return true;
             }
-            return true;
         }
 
         return false;
