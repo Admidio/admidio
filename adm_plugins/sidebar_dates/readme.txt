@@ -42,7 +42,7 @@ config.php eintragen.
 Haben Sie einen Fehler in unserer Software gefunden und ausgeschlossen,
 dass dieser nur in Ihrer Installation auftritt, können Sie diesen Fehler
 direkt in unserer Bug-Verwaltung auf Sourceforge melden.
-http://sourceforge.net/projects/admidio
+https://sourceforge.net/projects/admidio/
 
 Sie können den Fehler aber auch erst einmal in unserem Forum melden.
 http://forum.admidio.org
