@@ -1,71 +1,69 @@
 -------------------------------------------------------------------------
                             Random Photo
-                Copyright (c) 2004 - 2016 The Admidio Team
+                     2004 - 2016 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
 
- 1. Einleitung
+ 1. Introduction
  2. Installation
  3. Update
  4. Bugs
- 5. Lizenz
+ 5. Licence
  6. Copyright
 
 
- 1. Einleitung
+ 1. Introduction
 -------------------------------------------------------------------------
-Plugin zeigt ein zufaellig ausgewaehltes Foto aus dem Fotomodul an und
-und verlinkt neben dem Bild das dazugehörige Album
+This plugin will show a random photo of a random album of the photo
+module. If you click the photo the album will be called and the full
+sized photo will be shown.
 
-Random Photo ist ein Plugin zu der Online-Mitgliederverwaltung
-Admidio (http://www.admidio.org) und kann nicht ohne diese benutzt werden.
+Random Photo is a plugin of the online membership management
+Admidio (http://www.admidio.org) and can not be used without this.
 
 
  2. Installation
 -------------------------------------------------------------------------
-Beachten Sie bitte fuer eine fehlerfreie Installation unsere Onlinehilfe !
-http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:plugins
-
-Dort wird Ihnen Schritt fuer Schritt die Installation und Einrichtung
-eines Plugins erklärt.
+Please take a look at our Wiki for a detailed description how to integrate
+a plugin to your Admidio installation:
+http://www.admidio.org/dokuwiki/doku.php?id=en:2.0:plugins
 
 
  3. Update
 -------------------------------------------------------------------------
-Bei einem Update sollten Sie in der Regel nur die random_photo.php
-ersetzen.
+To update this plugin you should only replace the random_photo.php.
 
-Falls es mit der neuen Version neue Einstellungen gibt, die Sie gerne
-verändern möchten, so müssen Sie diese noch in die bereits vorhandene
-config.php eintragen.
+If there are new settings within the new version and you would like to
+use a different value for this setting than the default you must add
+this new setting to your existing config.php of this plugin.
 
 
  4. Bugs
 -------------------------------------------------------------------------
-Haben Sie einen Fehler in unserer Software gefunden und ausgeschlossen,
-dass dieser nur in Ihrer Installation auftritt, können Sie diesen Fehler
-direkt in unserer Bug-Verwaltung auf Sourceforge melden.
-https://sourceforge.net/projects/admidio/
+If you found an issue with this plugin you can report this at our
+plugin forum:
+http://forum.admidio.org/viewforum.php?f=10
 
-Sie können den Fehler aber auch erst einmal in unserem Forum melden.
-http://forum.admidio.org
+It is also possible to report an issue directly in our issue tracker at
+GitHub. There, however, it should be ensured that this is not a
+configuration issue, but in fact an error of the plugin.
+https://github.com/Admidio/admidio/issues
 
 
- 5. Lizenz
+ 5. Licence
 -------------------------------------------------------------------------
-Die Admidio Mitgliederverwaltung sowie dieses Plugin stehen unter der
-GNU General Public License 2. Bevor Sie Admidio oder dieses Plugin benutzen,
-sollten Sie unbedingt die mitgelieferte gpl-de.html durchlesen oder auf
-der GNU Homepage nachschauen.
+The Admidio membership administration and this plugin are under the
+GNU General Public License 2. Before using Admidio or this plugin,
+be sure to read the supplied licence.txt or look at the GNU website.
 https://www.gnu.org/licenses/gpl-2.0.html
 
 
  6. Copyright
 -------------------------------------------------------------------------
-Es ist nicht gestattet den Copyrighthinweis im Quellcode zu entfernen.
-Fuer weitere Informationen sollten Sie die gpl-de.html durchlesen.
+It is not allowed to remove the copyright notice in the source code.
+For more information you should read licence.txt.
 
 -------------------------------------------------------------------------
-              Copyright (c) 2004 - 2016 The Admidio Team
+                    2004 - 2016 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
