@@ -108,7 +108,7 @@ switch($getMode)
                     break;
 
                 case 'email_dispatch':
-                    $checkboxes = array('mail_sender_into_to', 'mail_smtp_auth');
+                    $checkboxes = array('mail_smtp_auth');
                     break;
 
                 case 'system_notification':

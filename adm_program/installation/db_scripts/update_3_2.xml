@@ -101,6 +101,9 @@
     <step id="330">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_CREATE foreign key (ure_usr_id_create)
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
     <step id="340">ComponentUpdate::updateStepInstallDefaultUserRelationTypes</step>
+    <step id="350" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'mail_sender_into_to' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name LIKE 'mail_recipients_with_roles'</step>
+    <step id="360" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'mail_sender_into_to' AND pr1.prf_name LIKE 'mail_recipients_with_roles'</step>
+    <step id="370">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_sender_into_to'</step>
 
     <step>stop</step>
 </update>

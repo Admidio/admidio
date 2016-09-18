@@ -456,6 +456,7 @@
     <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# hat an die ehemaligen Mitglieder der Rolle #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
     <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# hat an die aktiven und ehemaligen Mitglieder der Rolle #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
     <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# hat Dir von #VAR2# folgende E-Mail geschickt:</string>
+    <string name="MAI_HIDDEN">Versteckt</string>
     <string name="MAI_HTML_MAILS_REGISTERED_USERS">HTML-Mails</string>
     <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">Die Erstellung und der Versand von HTML-Mails kann für registrierte Benutzer aktiviert werden. Anstelle des normalen Textfeldes wird dann ein Javascript-Editor angezeigt über den der Text komfortabel editiert werden kann. Aus Sicherheitsgründen ist diese Funktion nicht für Gäste möglich.</string>
     <string name="MAI_INTO_TO">Empfänger im TO-Feld und nicht im BCC-Feld auflisten</string>
@@ -465,15 +466,16 @@
     <string name="MAI_MAX_RECEIVER_DESC">Dieser Wert gibt an, wieviele Empfänger man für ein E-Mail auswählen kann. Eine Rolle wird als ein einzelner Empfänger verstanden</string>
     <string name="MAI_MESSAGE_WENT_TO">Diese Nachricht ging an</string>
     <string name="MAI_PHP_MAIL">PHP mail()</string>
+    <string name="MAI_RECIPIENTS_WITH_ROLES">Empfänger bei Rollen</string>
+    <string name="MAI_RECIPIENTS_WITH_ROLES_DESC">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit "Undisclosed Recipients" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse bzw. der Administratoradresse aus den Systembenachrichtigungen gefüllt werden. Alle Emails an beliebige Rollen werden dann allerdings auch an diese Empfänger zusätzlich geschickt. Die Rollenmitglieder werden dabei weiterhin in das BCC-Feld geschrieben. (Standard: Deaktiviert)</string>
     <string name="MAI_SEND_COPY">Kopie der E-Mail an mich senden</string>
     <string name="MAI_SEND_EMAIL">E-Mail senden</string>
     <string name="MAI_SEND_MAIL_TO_ROLE">Deine E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn du eingeloggt bist stehen dir weitere Rollen und Empfänger zur Verfügung, an die du E-Mails schreiben kannst.</string>
     <string name="MAI_SEND_METHOD">Versenden über</string>
     <string name="MAI_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden Mailadresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</string>
+    <string name="MAI_SENDER">Absender</string>
     <string name="MAI_SENDER_EMAIL">Absender Mailadresse</string>
     <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter Mailadressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle Mails aus dem Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</string>
-    <string name="MAI_SENDER_INTO_TO">Absender als Adressat</string>
-    <string name="MAI_SENDER_INTO_TO_DESC">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit "Undisclosed Recipients" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse gefüllt werden. Alle Empfänger werden weiterhin in das BCC-Feld geschrieben. (Standard: Deaktiviert)</string>
     <string name="MAI_SENDER_NAME">Name des Absenders</string>
     <string name="MAI_SENDER_NAME_DESC">Name des Absenders zur verwendeten Versandmailadresse.</string>
     <string name="MAI_SENDER_NOT_LOGGED_IN">(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)</string>
