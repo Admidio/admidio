@@ -135,20 +135,29 @@ class HtmlForm extends HtmlFormBasic
         // if its not a navbar form and not a static form then first field of form should get focus
         if($optionsAll['setFocus'])
         {
-            if($htmlPage instanceof \HtmlPage)
-            {
-                $this->htmlPage->addJavascript('$(".form-dialog:first *:input:enabled:first").focus();', true);
-            }
-            else
-            {
-                $this->addHtml('
-                    <script type="text/javascript"><!--
-                        $(function() {
-                            $(".form-dialog:first *:input:enabled:first").focus();
-                        });
-                    //--></script>');
-            }
+            $this->addJavascriptCode('$(".form-dialog:first *:input:enabled:first").focus();', true);
         }
+    }
+
+    /**
+     * Adds any javascript content to the page. The javascript will be added to the page header or as inline script.
+     * @param string $javascriptCode       A valid javascript code that will be added to the header of the page or as inline script.
+     * @param bool   $executeAfterPageLoad (optional) If set to @b true the javascript code will be executed after
+     *                                     the page is fully loaded.
+     */
+    protected function addJavascriptCode($javascriptCode, $executeAfterPageLoad = false)
+    {
+        if ($this->htmlPage instanceof \HtmlPage)
+        {
+            $this->htmlPage->addJavascript($javascriptCode, $executeAfterPageLoad);
+            return;
+        }
+
+        if ($executeAfterPageLoad)
+        {
+            $javascriptCode = '$(function() { ' . $javascriptCode . ' });';
+        }
+        $this->addHtml('<script type="text/javascript">' . $javascriptCode . '</script>');
     }
 
     /**
@@ -223,19 +232,7 @@ class HtmlForm extends HtmlFormBasic
             });';
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if($this->htmlPage instanceof \HtmlPage)
-            {
-                $this->htmlPage->addJavascript($javascriptCode, true);
-            }
-            else
-            {
-                $this->addHtml('
-                <script type="text/javascript"><!--
-                    $(function() {
-                        '.$javascriptCode.'
-                    });
-                //--></script>');
-            }
+            $this->addJavascriptCode($javascriptCode, true);
         }
 
         if($optionsAll['class'] !== '')
@@ -305,8 +302,6 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addCheckbox($id, $label, $checked = false, array $options = array())
     {
-        global $gL10n;
-
         $attributes   = array('class' => '');
         $htmlIcon     = '';
         $htmlHelpIcon = '';
@@ -505,17 +500,8 @@ class HtmlForm extends HtmlFormBasic
             if($this->htmlPage instanceof \HtmlPage)
             {
                 $this->htmlPage->addJavascriptFile('adm_program/libs/ckeditor/ckeditor.js');
-                $this->htmlPage->addJavascript($javascriptCode, true);
             }
-            else
-            {
-                $this->addHtml('
-                    <script type="text/javascript">
-                        $(function() {
-                            '.$javascriptCode.'
-                        });
-                    </script>');
-            }
+            $this->addJavascriptCode($javascriptCode, true);
         }
 
         $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'],
@@ -621,19 +607,7 @@ class HtmlForm extends HtmlFormBasic
                 });';
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if($this->htmlPage instanceof \HtmlPage)
-            {
-                $this->htmlPage->addJavascript($javascriptCode, true);
-            }
-            else
-            {
-                $this->addHtml('
-                    <script type="text/javascript"><!--
-                        $(function() {
-                            '.$javascriptCode.'
-                        });
-                    //--></script>');
-            }
+            $this->addJavascriptCode($javascriptCode, true);
         }
 
         $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'],
@@ -719,25 +693,30 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         // set min/max input length
-        if($optionsAll['type'] === 'text' || $optionsAll['type'] === 'password' || $optionsAll['type'] === 'search' ||
-            $optionsAll['type'] === 'email' || $optionsAll['type'] === 'url' || $optionsAll['type'] === 'tel')
+        switch ($optionsAll['type'])
         {
-            $attributes['minlength'] = $optionsAll['minLength'];
+            case 'text':
+            case 'search':
+            case 'email':
+            case 'url':
+            case 'tel':
+            case 'password':
+                $attributes['minlength'] = $optionsAll['minLength'];
 
-            if($optionsAll['maxLength'] > 0)
-            {
-                $attributes['maxlength'] = $optionsAll['maxLength'];
-            }
-        }
-        elseif($optionsAll['type'] === 'number')
-        {
-            $attributes['min'] = $optionsAll['minNumber'];
-            $attributes['max'] = $optionsAll['maxNumber'];
-            $attributes['step'] = $optionsAll['step'];
+                if ($optionsAll['maxLength'] > 0)
+                {
+                    $attributes['maxlength'] = $optionsAll['maxLength'];
+                }
+                break;
+            case 'number':
+                $attributes['min'] = $optionsAll['minNumber'];
+                $attributes['max'] = $optionsAll['maxNumber'];
+                $attributes['step'] = $optionsAll['step'];
+                break;
         }
 
         // disable field
-        switch($optionsAll['property'])
+        switch ($optionsAll['property'])
         {
             case FIELD_DISABLED:
                 $attributes['disabled'] = 'disabled';
@@ -803,12 +782,8 @@ class HtmlForm extends HtmlFormBasic
                 $this->htmlPage->addCssFile('adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.css');
                 $this->htmlPage->addJavascriptFile('adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
                 $this->htmlPage->addJavascriptFile('adm_program/libs/bootstrap-datepicker/locales/bootstrap-datepicker.'.$gL10n->getLanguageIsoCode().'.min.js');
-                $this->htmlPage->addJavascript($javascriptCode, true);
             }
-            else
-            {
-                $this->addHtml('<script type="text/javascript">'.$javascriptCode.'</script>');
-            }
+            $this->addJavascriptCode($javascriptCode, true);
         }
 
         if($optionsAll['property'] !== FIELD_HIDDEN)
@@ -967,17 +942,8 @@ class HtmlForm extends HtmlFormBasic
             if($this->htmlPage instanceof \HtmlPage)
             {
                 $this->htmlPage->addJavascriptFile('adm_program/libs/noblecount/jquery.noblecount.js');
-                $this->htmlPage->addJavascript($javascriptCode, true);
             }
-            else
-            {
-                $this->addHtml('
-                    <script type="text/javascript">
-                        $(function() {
-                            '.$javascriptCode.'
-                        });
-                    </script>');
-            }
+            $this->addJavascriptCode($javascriptCode, true);
         }
 
         $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
@@ -1310,12 +1276,8 @@ class HtmlForm extends HtmlFormBasic
                 $this->htmlPage->addCssFile('adm_program/libs/select2-bootstrap-theme/dist/select2-bootstrap.css');
                 $this->htmlPage->addJavascriptFile('adm_program/libs/select2/dist/js/select2.js');
                 $this->htmlPage->addJavascriptFile('adm_program/libs/select2/dist/js/i18n/'.$gL10n->getLanguageIsoCode().'.js');
-                $this->htmlPage->addJavascript($javascriptCode, true);
             }
-            else
-            {
-                $this->addHtml('<script type="text/javascript">'.$javascriptCode.'</script>');
-            }
+            $this->addJavascriptCode($javascriptCode, true);
         }
 
         $this->closeSelect();
@@ -1375,7 +1337,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addSelectBoxFromSql($id, $label, Database $database, $sql, array $options = array())
     {
-        $selectboxEntries = array();
+        $selectBoxEntries = array();
 
         // execute the sql statement
         $pdoStatement = $database->query($sql);
@@ -1386,16 +1348,16 @@ class HtmlForm extends HtmlFormBasic
             // if result has 3 columns then create a array in array
             if (count($row) === 3)
             {
-                $selectboxEntries[] = array($row[0], $row[1], $row[2]);
+                $selectBoxEntries[] = array($row[0], $row[1], $row[2]);
             }
             else
             {
-                $selectboxEntries[$row[0]] = $row[1];
+                $selectBoxEntries[$row[0]] = $row[1];
             }
         }
 
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $options);
+        $this->addSelectBox($id, $label, $selectBoxEntries, $options);
     }
 
     /**
@@ -1439,7 +1401,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, array $options = array())
     {
-        $selectboxEntries = array();
+        $selectBoxEntries = array();
 
         $xmlRootNode = new SimpleXMLElement($xmlFile, null, true);
         foreach ($xmlRootNode->children() as $xmlChildNode)
@@ -1459,11 +1421,11 @@ class HtmlForm extends HtmlFormBasic
                 }
             }
 
-            $selectboxEntries[$key] = $value;
+            $selectBoxEntries[$key] = $value;
         }
 
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $options);
+        $this->addSelectBox($id, $label, $selectBoxEntries, $options);
     }
 
     /**
@@ -1473,7 +1435,7 @@ class HtmlForm extends HtmlFormBasic
      * @param string    $label          The label of the selectbox.
      * @param \Database $database       A Admidio database object that contains a valid connection to a database
      * @param string    $categoryType   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
-     * @param string    $selectboxModus The selectbox could be shown in 2 different modus.
+     * @param string    $selectBoxModus The selectbox could be shown in 2 different modus.
      *                                  - @b EDIT_CATEGORIES : First entry will be "Please choose" and default category will be preselected.
      *                                  - @b FILTER_CATEGORIES : First entry will be "All" and only categories with childs will be shown.
      * @param array     $options (optional) An array with the following possible entries:
@@ -1496,7 +1458,7 @@ class HtmlForm extends HtmlFormBasic
      *                            - @b class : An additional css classname. The class @b admSelectbox
      *                              is set as default and need not set with this parameter.
      */
-    public function addSelectBoxForCategories($id, $label, Database $database, $categoryType, $selectboxModus, array $options = array())
+    public function addSelectBoxForCategories($id, $label, Database $database, $categoryType, $selectBoxModus, array $options = array())
     {
         global $gCurrentOrganization, $gValidLogin, $gL10n;
 
@@ -1518,7 +1480,7 @@ class HtmlForm extends HtmlFormBasic
         $sqlCondidtions  = '';
 
         // create sql conditions if category must have child elements
-        if($selectboxModus === 'FILTER_CATEGORIES')
+        if($selectBoxModus === 'FILTER_CATEGORIES')
         {
             $optionsAll['showContextDependentFirstEntry'] = false;
 
@@ -1564,14 +1526,14 @@ class HtmlForm extends HtmlFormBasic
         $countCategories = $pdoStatement->rowCount();
 
         // if no or only one category exist and in filter modus, than don't show category
-        if(($countCategories === 0 || $countCategories === 1) && $selectboxModus === 'FILTER_CATEGORIES')
+        if(($countCategories === 0 || $countCategories === 1) && $selectBoxModus === 'FILTER_CATEGORIES')
         {
             return;
         }
 
         $categoriesArray = array();
 
-        if($countCategories > 1 && $selectboxModus === 'FILTER_CATEGORIES')
+        if($countCategories > 1 && $selectBoxModus === 'FILTER_CATEGORIES')
         {
             $categoriesArray[0] = $gL10n->get('SYS_ALL');
         }
