@@ -545,21 +545,19 @@ class HtmlPage
         // add javascript code to page
         if($this->javascriptContent !== '')
         {
-            $headerContent .= '<script type="text/javascript"><!--
-                '.$this->javascriptContent.'
-            --></script>';
+            $headerContent .= '<script type="text/javascript">' . $this->javascriptContent . '</script>';
         }
 
         // add javascript code to page that will be executed after page is fully loaded
         if($this->javascriptContentExecute !== '')
         {
-            $headerContent .= '<script type="text/javascript"><!--
+            $headerContent .= '<script type="text/javascript">
                 $(function() {
                     $("[data-toggle=\'popover\']").popover();
                     $(".admidio-icon-info, .admidio-icon-link img, [data-toggle=tooltip]").tooltip();
                     '.$this->javascriptContentExecute.'
                 });
-            --></script>';
+            </script>';
         }
 
         $html = '
@@ -574,10 +572,10 @@ class HtmlPage
 
                 <title>'.$this->title.'</title>
 
-                <script type="text/javascript"><!--
+                <script type="text/javascript">
                     var gRootPath  = "'. $g_root_path. '";
                     var gThemePath = "'. THEME_PATH. '";
-                --></script>';
+                </script>';
 
         $html .= $headerContent;
         $html .= $this->header;

@@ -169,13 +169,13 @@ class ModuleMenu
         if(isset($menuEntry['js']) && $menuEntry['js'] !== '')
         {
             $html .= '
-                <script type="text/javascript"><!--
+                <script type="text/javascript">
                     $(function() {
                         $("#'.$menuEntry['id'].'").click(function () {
                             '.$menuEntry['js'].'
                         });
                     });
-                //--></script>';
+                </script>';
         }
 
         // add html of menu item

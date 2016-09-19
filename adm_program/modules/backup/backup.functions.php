@@ -327,7 +327,12 @@ function OutputInformation($id, $dhtml, $text = '')
         {
             if ($id)
             {
-                echo '<script type="text/javascript">if (document.getElementById("'.$id.'")) document.getElementById("'.$id.'").innerHTML="'.str_replace('</', '<\\/', $dhtml).'"</script>';
+                echo '<script type="text/javascript">
+                    var element = document.getElementById("'.$id.'");
+                    if (element) {
+                        element.innerHTML = "' . str_replace('</', '<\\/', $dhtml) . '";
+                    }
+                </script>';
             }
             else
             {

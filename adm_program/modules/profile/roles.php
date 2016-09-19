@@ -65,45 +65,45 @@ if($getInline)
 {
     header('Content-type: text/html; charset=utf-8');
 
-    $html .= '<script type="text/javascript"><!--
-    $(function() {
-        $(".admidio-group-heading").click(function() {
-            showHideBlock($(this).attr("id"));
-        });
+    $html .= '<script type="text/javascript">
+        $(function() {
+            $(".admidio-group-heading").click(function() {
+                showHideBlock($(this).attr("id"));
+            });
 
-        $("#roles_assignment_form").submit(function(event) {
-            var action = $(this).attr("action");
-            var rolesFormAlert = $("#roles_assignment_form .form-alert");
-            rolesFormAlert.hide();
+            $("#roles_assignment_form").submit(function(event) {
+                var action = $(this).attr("action");
+                var rolesFormAlert = $("#roles_assignment_form .form-alert");
+                rolesFormAlert.hide();
 
-            // disable default form submit
-            event.preventDefault();
+                // disable default form submit
+                event.preventDefault();
 
-            $.post({
-                url: action,
-                data: $(this).serialize(),
-                success: function(data) {
-                    if (data === "success") {
-                        rolesFormAlert.attr("class", "alert alert-success form-alert");
-                        rolesFormAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
-                        rolesFormAlert.fadeIn("slow");
-                        setTimeout(function() {
-                            $("#admidio_modal").modal("hide");
-                        }, 2000);
+                $.post({
+                    url: action,
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        if (data === "success") {
+                            rolesFormAlert.attr("class", "alert alert-success form-alert");
+                            rolesFormAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                            rolesFormAlert.fadeIn("slow");
+                            setTimeout(function() {
+                                $("#admidio_modal").modal("hide");
+                            }, 2000);
 
-                        profileJS.reloadRoleMemberships();
-                        profileJS.reloadFormerRoleMemberships();
-                        profileJS.reloadFutureRoleMemberships();
-                    } else {
-                        rolesFormAlert.attr("class", "alert alert-danger form-alert");
-                        rolesFormAlert.fadeIn();
-                        rolesFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
+                            profileJS.reloadRoleMemberships();
+                            profileJS.reloadFormerRoleMemberships();
+                            profileJS.reloadFutureRoleMemberships();
+                        } else {
+                            rolesFormAlert.attr("class", "alert alert-danger form-alert");
+                            rolesFormAlert.fadeIn();
+                            rolesFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
+                        }
                     }
-                }
+                });
             });
         });
-    });
-    --></script>
+    </script>
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

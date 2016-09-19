@@ -19,7 +19,7 @@ if (!$gCurrentUser->editUsers())
 }
 
 echo '
-<script type="text/javascript"><!--
+<script type="text/javascript">
     $("body").on("shown.bs.modal", ".modal", function () {
         $("#form_members_create_user:first *:input[type!=hidden]:first").focus();
     });
@@ -55,7 +55,7 @@ echo '
             }
         });
     });
-//--></script>
+</script>
 
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
