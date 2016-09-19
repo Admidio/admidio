@@ -576,21 +576,21 @@ class Database
 
                 foreach ($columnsList as $properties)
                 {
-                    $columnProperties[$properties['Field']]['serial'] = 0;
-                    $columnProperties[$properties['Field']]['null']   = 0;
-                    $columnProperties[$properties['Field']]['key']    = 0;
+                    $columnProperties[$properties['Field']]['serial'] = false;
+                    $columnProperties[$properties['Field']]['null']   = false;
+                    $columnProperties[$properties['Field']]['key']    = false;
 
                     if ($properties['Extra'] === 'auto_increment')
                     {
-                        $columnProperties[$properties['Field']]['serial'] = 1;
+                        $columnProperties[$properties['Field']]['serial'] = true;
                     }
                     if ($properties['Null'] === 'YES')
                     {
-                        $columnProperties[$properties['Field']]['null'] = 1;
+                        $columnProperties[$properties['Field']]['null'] = true;
                     }
                     if ($properties['Key'] === 'PRI' || $properties['Key'] === 'MUL')
                     {
-                        $columnProperties[$properties['Field']]['key'] = 1;
+                        $columnProperties[$properties['Field']]['key'] = true;
                     }
 
                     if (strpos($properties['Type'], 'tinyint(1)') !== false)
@@ -621,21 +621,21 @@ class Database
 
                 foreach ($columnsList as $properties)
                 {
-                    $columnProperties[$properties['column_name']]['serial'] = 0;
-                    $columnProperties[$properties['column_name']]['null']   = 0;
-                    $columnProperties[$properties['column_name']]['key']    = 0;
+                    $columnProperties[$properties['column_name']]['serial'] = false;
+                    $columnProperties[$properties['column_name']]['null']   = false;
+                    $columnProperties[$properties['column_name']]['key']    = false;
 
                     if (strpos($properties['column_default'], 'nextval') !== false)
                     {
-                        $columnProperties[$properties['column_name']]['serial'] = 1;
+                        $columnProperties[$properties['column_name']]['serial'] = true;
                     }
                     if ($properties['is_nullable'] === 'YES')
                     {
-                        $columnProperties[$properties['column_name']]['null'] = 1;
+                        $columnProperties[$properties['column_name']]['null'] = true;
                     }
                     /*if ($properties['Key'] === 'PRI' || $properties['Key'] === 'MUL')
                     {
-                        $columnProperties[$properties['column_name']]['key'] = 1;
+                        $columnProperties[$properties['column_name']]['key'] = true;
                     }*/
 
                     if (strpos($properties['data_type'], 'timestamp') !== false)
