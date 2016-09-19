@@ -52,7 +52,7 @@ if(!isset($gDebug) || !$gDebug)
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1).'/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
-if(version_compare(phpversion(), MIN_PHP_VERSION) === -1)
+if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
 {
     exit('<div style="color: #cc0000;">Error: Your PHP version '.phpversion().' does not fulfill
         the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or higher.</div>');
@@ -196,8 +196,8 @@ if($getMode === 1)
 {
     // if database version is smaller then source version -> update
     // if database version is equal to source but beta has a difference -> update
-    if(version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT) === -1
-    ||(version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT) === 0 && $maxUpdateStep > $currentUpdateStep))
+    if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '<')
+    || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep))
     {
         // create a page with the notice that the installation must be configured on the next pages
         $form = new HtmlFormInstallation('update_login_form', 'update.php?mode=2');
@@ -225,7 +225,7 @@ if($getMode === 1)
         echo $form->show();
     }
     // if versions are equal > no update
-    elseif(version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT) === 0 && $maxUpdateStep === $currentUpdateStep)
+    elseif(version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep)
     {
         $message = '
             <div class="alert alert-success form-alert">
@@ -403,7 +403,7 @@ elseif($getMode === 2)
 
                 // keine Datei mit der Microversion gefunden, dann die Main- oder Subversion hochsetzen,
                 // solange bis die aktuelle Versionsnummer erreicht wurde
-                if(!$flagNextVersion && version_compare($mainVersion.'.'.$subVersion.'.'.$microVersion, ADMIDIO_VERSION) === -1)
+                if(!$flagNextVersion && version_compare($mainVersion.'.'.$subVersion.'.'.$microVersion, ADMIDIO_VERSION, '<'))
                 {
                     if($subVersion === 4) // we do not have more then 4 subversions with old updater
                     {

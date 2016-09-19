@@ -55,7 +55,7 @@ function checkDatabaseVersion(&$db)
     $message = '';
 
     // check database version
-    if(version_compare($db->getVersion(), $db->getMinimumRequiredVersion()) === -1)
+    if(version_compare($db->getVersion(), $db->getMinimumRequiredVersion(), '<'))
     {
         $message = $gL10n->get('SYS_DATABASE_VERSION').': <strong>'.$db->getVersion().'</strong><br /><br />'.
                    $gL10n->get('INS_WRONG_MYSQL_VERSION', ADMIDIO_VERSION_TEXT, $db->getMinimumRequiredVersion(),
@@ -75,7 +75,7 @@ function checkPhpVersion()
     $message = '';
 
     // check PHP version
-    if(version_compare(phpversion(), MIN_PHP_VERSION) === -1)
+    if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
     {
         $message = $gL10n->get('SYS_PHP_VERSION').': <strong>'.phpversion().'</strong><br /><br />'.
                    $gL10n->get('INS_WRONG_PHP_VERSION', ADMIDIO_VERSION_TEXT, MIN_PHP_VERSION,

@@ -66,14 +66,14 @@ function checkVersion($currentVersion, $checkStableVersion, $checkBetaVersion, $
     $update = 0;
 
     // Zunächst auf stabile Version prüfen
-    if(version_compare($checkStableVersion, $currentVersion) === 1)
+    if(version_compare($checkStableVersion, $currentVersion, '>'))
     {
         $update = 1;
     }
 
     // Jetzt auf Beta Version prüfen
     $status = version_compare($checkBetaVersion, $currentVersion);
-    if($status === 1 || ($status === 0 && version_compare($betaRelease, $betaFlag) === 1))
+    if($status === 1 || ($status === 0 && version_compare($betaRelease, $betaFlag, '>')))
     {
         if($update === 1)
         {

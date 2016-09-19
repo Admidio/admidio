@@ -420,7 +420,7 @@ $page->addHtml('
                         }
                         $form->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $gSystemComponent->getValue('com_update_step'));
 
-                        if(version_compare(phpversion(), MIN_PHP_VERSION) === -1)
+                        if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
                         {
                             $html = '<span class="text-danger"><strong>'.phpversion().'</strong></span> &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', MIN_PHP_VERSION);
                         }
@@ -430,7 +430,7 @@ $page->addHtml('
                         }
                         $form->addStaticControl('php_version', $gL10n->get('SYS_PHP_VERSION'), $html);
 
-                        if(version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion()) == -1)
+                        if(version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion(), '<'))
                         {
                             $html = '<span class="text-danger"><strong>'.$gDb->getVersion().'</strong></span> &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', $gDb->getMinimumRequiredVersion());
                         }
