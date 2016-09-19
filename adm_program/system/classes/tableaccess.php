@@ -38,7 +38,7 @@ class TableAccess
 
     protected $new_record;          // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
     protected $columnsValueChanged; ///< Flag will be set to true if data in array dbColumns was changed
-    public $dbColumns = array();    // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
+    public $dbColumns    = array(); // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
     public $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
 
     /**
@@ -51,13 +51,13 @@ class TableAccess
      */
     public function __construct(&$database, $tableName, $columnPrefix, $id = '')
     {
+        $this->additionalTables = array();
         $this->tableName    = $tableName;
         $this->columnPrefix = $columnPrefix;
-
-        $this->setDatabase($database);
+        $this->db =& $database;
 
         // if a id is commited, then read data out of database
-        if((!is_numeric($id) && $id !== '') || (is_numeric($id) && $id > 0))
+        if ($id > 0)
         {
             $this->readDataById($id);
         }
@@ -65,6 +65,15 @@ class TableAccess
         {
             $this->clear();
         }
+    }
+
+    /**
+     * Set the database object for communication with the database of this class.
+     * @param \Database $database An object of the class Database. This should be the global $gDb object.
+     */
+    public function setDatabase(&$database)
+    {
+        $this->db =& $database;
     }
 
     /**
@@ -84,25 +93,26 @@ class TableAccess
      */
     public function clear()
     {
-        $this->columnsValueChanged = false;
         $this->new_record = true;
+        $this->columnsValueChanged = false;
 
-        if(count($this->columnsInfos) > 0)
+        if (count($this->columnsInfos) > 0)
         {
             // die Spalteninfos wurden bereits eingelesen
             // und werden nun nur noch neu initialisiert
-            foreach($this->dbColumns as $field_name => $field_value)
+            foreach ($this->dbColumns as $fieldName => &$fieldValue)
             {
-                $this->dbColumns[$field_name] = '';
-                $this->columnsInfos[$field_name]['changed'] = false;
+                $fieldValue = ''; // $this->dbColumns[$fieldName] = '';
+                $this->columnsInfos[$fieldName]['changed'] = false;
             }
+            unset($fieldValue);
         }
         else
         {
             // alle Spalten der Tabelle ins Array einlesen und auf leer setzen
             $columnProperties = $this->db->showColumns($this->tableName);
 
-            foreach($columnProperties as $key => $value)
+            foreach ($columnProperties as $key => $value)
             {
                 $this->dbColumns[$key] = '';
                 $this->columnsInfos[$key]['changed'] = false;
@@ -111,7 +121,7 @@ class TableAccess
                 $this->columnsInfos[$key]['key']     = $value['key'];
                 $this->columnsInfos[$key]['serial']  = $value['serial'];
 
-                if($value['serial'] == 1)
+                if ($value['serial'])
                 {
                     $this->keyColumnName = $key;
                 }
@@ -161,10 +171,10 @@ class TableAccess
      */
     public function delete()
     {
-        if(strlen($this->dbColumns[$this->keyColumnName]) > 0)
+        if (strlen($this->dbColumns[$this->keyColumnName]) > 0)
         {
             $sql = 'DELETE FROM '.$this->tableName.'
-                     WHERE '.$this->keyColumnName.' = \''. $this->dbColumns[$this->keyColumnName]. '\'';
+                     WHERE '.$this->keyColumnName.' = \''.$this->dbColumns[$this->keyColumnName].'\'';
             $this->db->query($sql);
         }
 
@@ -185,12 +195,13 @@ class TableAccess
     public function getValue($columnName, $format = '')
     {
         global $gPreferences;
+
         $columnValue = '';
 
-        if(array_key_exists((string) $columnName, $this->dbColumns))
+        if (array_key_exists((string) $columnName, $this->dbColumns))
         {
             // wenn Schluesselfeld leer ist, dann 0 zurueckgeben
-            if($columnName === $this->keyColumnName && empty($this->dbColumns[$columnName]))
+            if ($this->keyColumnName === $columnName && empty($this->dbColumns[$columnName]))
             {
                 $columnValue = 0;
             }
@@ -200,59 +211,63 @@ class TableAccess
             }
         }
 
-        // if text field and format not 'database' then convert all quotes to html syntax
-        if(array_key_exists((string) $columnName, $this->columnsInfos) && array_key_exists('type', $this->columnsInfos[$columnName]))
+        if (array_key_exists((string) $columnName, $this->columnsInfos) && array_key_exists('type', $this->columnsInfos[$columnName]))
         {
-            if($format !== 'database'
-            && (strpos($this->columnsInfos[$columnName]['type'], 'char') !== false
-                || strpos($this->columnsInfos[$columnName]['type'], 'text') !== false))
+            switch ($this->columnsInfos[$columnName]['type'])
             {
-                return htmlspecialchars($columnValue, ENT_QUOTES);
-            }
-            // in PostgreSQL we must encode the stored hex value back to binary
-            elseif(strpos($this->columnsInfos[$columnName]['type'], 'bytea') !== false)
-            {
-                $columnValue = substr($columnValue, 2);
-                $columnValue = pack('H*', $columnValue);
-                return pack('H*', $columnValue);
-            }        // Datum in dem uebergebenen Format bzw. Systemformat zurueckgeben
-            elseif(strpos($this->columnsInfos[$columnName]['type'], 'timestamp') !== false
-                || strpos($this->columnsInfos[$columnName]['type'], 'date') !== false
-                || strpos($this->columnsInfos[$columnName]['type'], 'time') !== false)
-            {
-                if(strlen($columnValue) > 0)
-                {
-                    if($format === '' && isset($gPreferences))
+                // String
+                case 'char':
+                case 'varchar':
+                case 'text':
+                    if ($format !== 'database')
                     {
-                        if(strpos($this->columnsInfos[$columnName]['type'], 'timestamp') !== false)
-                        {
-                            $format = $gPreferences['system_date'].' '.$gPreferences['system_time'];
-                        }
-                        elseif(strpos($this->columnsInfos[$columnName]['type'], 'date') !== false)
-                        {
-                            $format = $gPreferences['system_date'];
-                        }
-                        else
-                        {
-                            $format = $gPreferences['system_time'];
-                        }
+                        // if text field and format not 'database' then convert all quotes to html syntax
+                        return htmlspecialchars($columnValue, ENT_QUOTES);
                     }
+                    break;
 
-                    // probieren das Datum zu formatieren, ansonsten Ausgabe der vorhandenen Daten
-                    try
+                // Byte
+                case 'bytea':
+                    // in PostgreSQL we must encode the stored hex value back to binary
+                    return pack('H*', pack('H*', substr($columnValue, 2)));
+                    break;
+
+                case 'timestamp':
+                case 'date':
+                case 'time':
+                    if ($columnValue !== '')
                     {
-                        $datetime = new DateTime($columnValue);
-                        $columnValue = $datetime->format($format);
+                        if ($format === '' && isset($gPreferences))
+                        {
+                            if (strpos($this->columnsInfos[$columnName]['type'], 'timestamp') !== false)
+                            {
+                                $format = $gPreferences['system_date'] . ' ' . $gPreferences['system_time'];
+                            }
+                            elseif (strpos($this->columnsInfos[$columnName]['type'], 'date') !== false)
+                            {
+                                $format = $gPreferences['system_date'];
+                            }
+                            else
+                            {
+                                $format = $gPreferences['system_time'];
+                            }
+                        }
+
+                        // try to format the date, else output the available data
+                        try
+                        {
+                            $datetime = new DateTime($columnValue);
+                            $columnValue = $datetime->format($format);
+                        }
+                        catch (Exception $e)
+                        {
+                            $columnValue = $this->dbColumns[$columnName];
+                        }
                     }
-                    catch(Exception $e)
-                    {
-                        $columnValue = $this->dbColumns[$columnName];
-                    }
-                }
-                return $columnValue;
+                    break;
             }
-            return $columnValue;
         }
+
         return $columnValue;
     }
 
@@ -291,9 +306,9 @@ class TableAccess
         $sqlAdditionalTables = '';
 
         // create sql to connect additional tables to the select statement
-        if(count($this->additionalTables) > 0)
+        if (count($this->additionalTables) > 0)
         {
-            foreach($this->additionalTables as $key => $arrAdditionalTable)
+            foreach ($this->additionalTables as $key => $arrAdditionalTable)
             {
                 $sqlAdditionalTables .= ', '.$arrAdditionalTable['table'];
                 $sqlWhereCondition   .= ' AND '.$arrAdditionalTable['columnNameAdditionalTable'].' = '.$arrAdditionalTable['columnNameClassTable'].' ';
@@ -301,27 +316,27 @@ class TableAccess
         }
 
         // if condition starts with AND then remove this
-        if(strpos(strtoupper($sqlWhereCondition), 'AND') < 2)
+        if (strpos(strtoupper($sqlWhereCondition), 'AND') < 2)
         {
             $sqlWhereCondition = substr($sqlWhereCondition, 4);
         }
 
-        if($sqlWhereCondition !== '')
+        if ($sqlWhereCondition !== '')
         {
             $sql = 'SELECT *
                       FROM '.$this->tableName.$sqlAdditionalTables.'
                      WHERE '.$sqlWhereCondition;
             $readDataStatement = $this->db->query($sql);
 
-            if($readDataStatement->rowCount() === 1)
+            if ($readDataStatement->rowCount() === 1)
             {
                 $row = $readDataStatement->fetch();
                 $this->new_record = false;
 
                 // Daten in das Klassenarray schieben
-                foreach($row as $key => $value)
+                foreach ($row as $key => $value)
                 {
-                    if($value === null)
+                    if ($value === null)
                     {
                         $this->dbColumns[$key] = '';
                     }
@@ -343,7 +358,7 @@ class TableAccess
     /**
      * Reads a record out of the table in database selected by the unique id column in the table.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param int|string $id Unique id of id column of the table.
+     * @param int $id Unique id of id column of the table.
      * @return bool Returns @b true if one record is found
      * @see TableAccess#readData
      * @see TableAccess#readDataByColumns
@@ -354,13 +369,12 @@ class TableAccess
         $this->clear();
 
         // add id to sql condition
-        if($id !== '' && $id != '0')
+        if ($id > 0)
         {
-            $sqlWhereCondition = ' AND '.$this->keyColumnName.' = \''.$id.'\' ';
-
             // call method to read data out of database
-            return $this->readData($sqlWhereCondition);
+            return $this->readData(' AND ' . $this->keyColumnName . ' = \'' . $id . '\' ');
         }
+
         return false;
     }
 
@@ -381,32 +395,34 @@ class TableAccess
      */
     public function readDataByColumns(array $columnArray)
     {
-        $returnCode = false;
-        $sqlWhereCondition = '';
-
         // initialize the object, so that all fields are empty
         $this->clear();
 
-        if(count($columnArray) > 0)
+        if (count($columnArray) === 0)
         {
-            // add every array element as a sql condition to the condition string
-            foreach($columnArray as $columnName => $columnValue)
-            {
-                $sqlWhereCondition .= ' AND '.$columnName.' = \''.$columnValue.'\' ';
-            }
+            return false;
+        }
 
-            // call method to read data out of database
-            $returnCode = $this->readData($sqlWhereCondition);
+        $sqlWhereCondition = '';
 
-            // save the array fields in the object
-            if(!$returnCode)
+        // add every array element as a sql condition to the condition string
+        foreach ($columnArray as $columnName => $columnValue)
+        {
+            $sqlWhereCondition .= ' AND ' . $columnName . ' = \'' . $columnValue . '\' ';
+        }
+
+        // call method to read data out of database
+        $returnCode = $this->readData($sqlWhereCondition);
+
+        // save the array fields in the object
+        if (!$returnCode)
+        {
+            foreach ($columnArray as $columnName => $columnValue)
             {
-                foreach($columnArray as $columnName => $columnValue)
-                {
-                    $this->setValue($columnName, $columnValue);
-                }
+                $this->setValue($columnName, $columnValue);
             }
         }
+
         return $returnCode;
     }
 
@@ -420,120 +436,123 @@ class TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        if($this->columnsValueChanged || $this->dbColumns[$this->keyColumnName] === '')
-        {
-            // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
-            $item_connection = '';
-            $sql_field_list  = '';
-            $sql_value_list  = '';
+        global $gCurrentUser;
 
-            if($updateFingerPrint)
+        if (!$this->columnsValueChanged && $this->dbColumns[$this->keyColumnName] !== '')
+        {
+            return false;
+        }
+
+        if ($updateFingerPrint)
+        {
+            // besitzt die Tabelle Felder zum Speichern des Erstellers und der letzten Aenderung,
+            // dann diese hier automatisiert fuellen
+            if ($this->new_record && array_key_exists($this->columnPrefix . '_usr_id_create', $this->dbColumns))
             {
-                // besitzt die Tabelle Felder zum Speichern des Erstellers und der letzten Aenderung,
-                // dann diese hier automatisiert fuellen
-                if($this->new_record && array_key_exists($this->columnPrefix . '_usr_id_create', $this->dbColumns))
+                $this->setValue($this->columnPrefix . '_timestamp_create', DATETIME_NOW);
+                $this->setValue($this->columnPrefix . '_usr_id_create', $gCurrentUser->getValue('usr_id'));
+            }
+            elseif (array_key_exists($this->columnPrefix . '_usr_id_change', $this->dbColumns))
+            {
+                // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
+                if ((int) $gCurrentUser->getValue('usr_id') !== (int) $this->getValue($this->columnPrefix . '_usr_id_create')
+                || time() > (strtotime($this->getValue($this->columnPrefix . '_timestamp_create')) + 900))
                 {
-                    global $gCurrentUser;
-                    $this->setValue($this->columnPrefix.'_timestamp_create', DATETIME_NOW);
-                    $this->setValue($this->columnPrefix.'_usr_id_create', $gCurrentUser->getValue('usr_id'));
-                }
-                elseif(array_key_exists($this->columnPrefix . '_usr_id_change', $this->dbColumns))
-                {
-                    global $gCurrentUser;
-                    // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-                    if(time() > (strtotime($this->getValue($this->columnPrefix.'_timestamp_create')) + 900)
-                    || $gCurrentUser->getValue('usr_id') != $this->getValue($this->columnPrefix.'_usr_id_create'))
-                    {
-                        $this->setValue($this->columnPrefix.'_timestamp_change', DATETIME_NOW);
-                        $this->setValue($this->columnPrefix.'_usr_id_change', $gCurrentUser->getValue('usr_id'));
-                    }
+                    $this->setValue($this->columnPrefix . '_timestamp_change', DATETIME_NOW);
+                    $this->setValue($this->columnPrefix . '_usr_id_change', $gCurrentUser->getValue('usr_id'));
                 }
             }
+        }
 
-            // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen
-            foreach($this->dbColumns as $key => $value)
+        // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
+        $itemConnection = '';
+        $sqlFieldList   = '';
+        $sqlValueList   = '';
+
+        // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen
+        foreach ($this->dbColumns as $key => $value)
+        {
+            // Auto-Increment-Felder duerfen nicht im Insert/Update erscheinen
+            // Felder anderer Tabellen auch nicht
+            if (strpos($key, $this->columnPrefix . '_') === 0
+            && !$this->columnsInfos[$key]['serial'] && $this->columnsInfos[$key]['changed'])
             {
-                // Auto-Increment-Felder duerfen nicht im Insert/Update erscheinen
-                // Felder anderer Tabellen auch nicht
-                if(strpos($key, $this->columnPrefix. '_') === 0
-                && $this->columnsInfos[$key]['serial'] == 0
-                && $this->columnsInfos[$key]['changed'])
+                if ($this->new_record)
                 {
-                    if($this->new_record)
+                    if ($value !== '')
                     {
-                        if($value !== '')
+                        // Daten fuer ein Insert aufbereiten
+                        $sqlFieldList .= ' ' . $itemConnection . ' ' . $key . ' ';
+                        $sqlValueList .= ' ' . $itemConnection;
+
+                        // unterscheiden zwischen Numerisch und Text
+                        if (strpos($this->columnsInfos[$key]['type'], 'integer')  !== false
+                        ||  strpos($this->columnsInfos[$key]['type'], 'smallint') !== false)
                         {
-                            // Daten fuer ein Insert aufbereiten
-                            $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' ';
-                            // unterscheiden zwischen Numerisch und Text
-                            if(strpos($this->columnsInfos[$key]['type'], 'integer')  !== false
-                            || strpos($this->columnsInfos[$key]['type'], 'smallint') !== false)
-                            {
-                                $sql_value_list = $sql_value_list. ' '.$item_connection.' '.$value.' ';
-                            }
-                            else
-                            {
-                                // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen,
-                                // damit sie auf jeden Fall da sind
-                                $value = stripslashes($value);
-                                $value = addslashes($value);
-                                $sql_value_list = $sql_value_list. ' '.$item_connection.' \''.$value.'\' ';
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Daten fuer ein Update aufbereiten
-                        if($value === '' || $value === null)
-                        {
-                            $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' = NULL ';
-                        }
-                        elseif(strpos($this->columnsInfos[$key]['type'], 'integer')  !== false
-                            || strpos($this->columnsInfos[$key]['type'], 'smallint') !== false)
-                        {
-                            // numerisch
-                            $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' = '.$value.' ';
+                            $sqlValueList .= ' ' . $value . ' ';
                         }
                         else
                         {
                             // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen,
                             // damit sie auf jeden Fall da sind
-                            $value = stripslashes($value);
-                            $value = addslashes($value);
-                            $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' = \''.$value.'\' ';
+                            $value = addslashes(stripslashes($value));
+                            $sqlValueList .= ' \'' . $value . '\' ';
                         }
                     }
-                    if($item_connection === '' && $sql_field_list !== '')
-                    {
-                        $item_connection = ',';
-                    }
-                    $this->columnsInfos[$key]['changed'] = false;
                 }
-            }
-
-            if($this->new_record)
-            {
-                // insert record and mark this object as not new and remember the new id
-                $sql = 'INSERT INTO '.$this->tableName.' ('.$sql_field_list.') VALUES ('.$sql_value_list.') ';
-                $this->db->query($sql);
-                $this->new_record = false;
-                if($this->keyColumnName !== '')
+                else
                 {
-                    $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
-                }
-            }
-            else
-            {
-                $sql = 'UPDATE '.$this->tableName.' SET '.$sql_field_list.'
-                         WHERE '.$this->keyColumnName.' = \''. $this->dbColumns[$this->keyColumnName]. '\'';
-                $this->db->query($sql);
-            }
+                    $sqlFieldList .= ' ' . $itemConnection . ' ' . $key;
 
-            $this->columnsValueChanged = false;
-            return true;
+                    // Daten fuer ein Update aufbereiten
+                    if ($value === '' || $value === null)
+                    {
+                        $sqlFieldList .= ' = NULL ';
+                    }
+                    elseif (strpos($this->columnsInfos[$key]['type'], 'integer')  !== false
+                        ||  strpos($this->columnsInfos[$key]['type'], 'smallint') !== false)
+                    {
+                        // numerisch
+                        $sqlFieldList .= ' = ' . $value . ' ';
+                    }
+                    else
+                    {
+                        // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen,
+                        // damit sie auf jeden Fall da sind
+                        $value = addslashes(stripslashes($value));
+                        $sqlFieldList .= ' = \'' . $value . '\' ';
+                    }
+                }
+
+                if ($itemConnection === '' && $sqlFieldList !== '')
+                {
+                    $itemConnection = ',';
+                }
+                $this->columnsInfos[$key]['changed'] = false;
+            }
         }
 
-        return false;
+        if ($this->new_record)
+        {
+            // insert record and mark this object as not new and remember the new id
+            $sql = 'INSERT INTO '.$this->tableName.' ('.$sqlFieldList.') VALUES ('.$sqlValueList.') ';
+            $this->db->query($sql);
+            $this->new_record = false;
+            if ($this->keyColumnName !== '')
+            {
+                $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
+            }
+        }
+        else
+        {
+            $sql = 'UPDATE '.$this->tableName.' SET '.$sqlFieldList.'
+                     WHERE '.$this->keyColumnName.' = \''.$this->dbColumns[$this->keyColumnName].'\'';
+            $this->db->query($sql);
+        }
+
+        $this->columnsValueChanged = false;
+
+        return true;
     }
 
     /**
@@ -561,21 +580,13 @@ class TableAccess
      */
     public function setArray(array $fieldArray)
     {
-        foreach($fieldArray as $field => $value)
+        foreach ($fieldArray as $field => $value)
         {
             $this->dbColumns[$field] = $value;
             $this->columnsInfos[$field]['changed'] = false;
         }
-        $this->new_record = false;
-    }
 
-    /**
-     * Set the database object for communication with the database of this class.
-     * @param \Database $database An object of the class Database. This should be the global $gDb object.
-     */
-    public function setDatabase(&$database)
-    {
-        $this->db =& $database;
+        $this->new_record = false;
     }
 
     /**
@@ -590,76 +601,80 @@ class TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if(array_key_exists($columnName, $this->dbColumns))
+        if (!array_key_exists($columnName, $this->dbColumns))
         {
-            // Allgemeine Plausibilitaets-Checks anhand des Feldtyps
-            if($newValue !== '' && $checkValue)
+            return false;
+        }
+
+        // Allgemeine Plausibilitaets-Checks anhand des Feldtyps
+        if ($checkValue && $newValue !== '')
+        {
+            switch ($this->columnsInfos[$columnName]['type'])
             {
-                // Numerische Felder
-                if($this->columnsInfos[$columnName]['type'] === 'integer'
-                || $this->columnsInfos[$columnName]['type'] === 'smallint')
-                {
-                    if(!is_numeric($newValue))
+                // Numeric
+                case 'integer':
+                case 'smallint':
+                    if (!is_numeric($newValue))
                     {
                         $newValue = '';
                     }
 
                     // Schluesselfelder duerfen keine 0 enthalten
-                    if(($this->columnsInfos[$columnName]['key'] == 1 || $this->columnsInfos[$columnName]['null'] == 1)
-                    && $newValue == 0)
+                    if ((int) $newValue === 0 &&
+                        ($this->columnsInfos[$columnName]['key'] || $this->columnsInfos[$columnName]['null']))
                     {
                         $newValue = '';
                     }
-                }
+                    break;
 
-                // Strings
-                elseif(strpos($this->columnsInfos[$columnName]['type'], 'char') !== false
-                ||     strpos($this->columnsInfos[$columnName]['type'], 'text') !== false)
-                {
+                // String
+                case 'char':
+                case 'varchar':
+                case 'text':
                     $newValue = strStripTags($newValue);
-                }
+                    break;
 
-                elseif($this->columnsInfos[$columnName]['type'] === 'blob'
-                ||     $this->columnsInfos[$columnName]['type'] === 'bytea')
-                {
+                // Byte/Blob
+                case 'bytea':
                     // PostgreSQL can only store hex values in bytea, so we must decode binary in hex
-                    if($this->columnsInfos[$columnName]['type'] === 'bytea')
-                    {
-                        $newValue = bin2hex($newValue);
-                    }
+                    // we must add slashes to binary data of blob fields so that the default stripslashes don't remove necessary slashes
+                    $newValue = addslashes(bin2hex($newValue));
+                    break;
+                case 'blob':
                     // we must add slashes to binary data of blob fields so that the default stripslashes don't remove necessary slashes
                     $newValue = addslashes($newValue);
-                }
-            }
-
-            // wurde das Schluesselfeld auf 0 gesetzt, dann soll ein neuer Datensatz angelegt werden
-            if($columnName == $this->keyColumnName && $newValue == 0)
-            {
-                $this->new_record = true;
-
-                // now mark all other columns with values of this object as changed
-                foreach($this->dbColumns as $column => $value)
-                {
-                    if(strlen($value) > 0)
-                    {
-                        $this->columnsInfos[$column]['changed'] = true;
-                    }
-                }
-            }
-
-            if(array_key_exists($columnName, $this->dbColumns))
-            {
-                // only mark as "changed" if the value is different (use binary safe function!)
-                if(strcmp($newValue, $this->dbColumns[$columnName]) !== 0)
-                {
-                    $this->dbColumns[$columnName] = $newValue;
-                    $this->columnsValueChanged = true;
-                    $this->columnsInfos[$columnName]['changed'] = true;
-                }
-
-                return true;
+                    break;
             }
         }
+
+        // wurde das Schluesselfeld auf 0 gesetzt, dann soll ein neuer Datensatz angelegt werden
+        if ($this->keyColumnName === $columnName && (int) $newValue === 0)
+        {
+            $this->new_record = true;
+
+            // now mark all other columns with values of this object as changed
+            foreach ($this->dbColumns as $column => $value)
+            {
+                if (strlen($value) > 0)
+                {
+                    $this->columnsInfos[$column]['changed'] = true;
+                }
+            }
+        }
+
+        if (array_key_exists($columnName, $this->dbColumns))
+        {
+            // only mark as "changed" if the value is different (use binary safe function!)
+            if (strcmp($this->dbColumns[$columnName], $newValue) !== 0)
+            {
+                $this->dbColumns[$columnName] = $newValue;
+                $this->columnsValueChanged = true;
+                $this->columnsInfos[$columnName]['changed'] = true;
+            }
+
+            return true;
+        }
+
         return false;
     }
 }
