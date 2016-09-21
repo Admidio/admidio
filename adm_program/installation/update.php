@@ -4,7 +4,7 @@
  * Handle update of Admidio database to a new version
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
@@ -244,7 +244,7 @@ if($getMode === 1)
                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                 <strong>'.$gL10n->get('SYS_ERROR').'</strong>
                 <p>'.$gL10n->get('SYS_FILESYSTEM_VERSION_INVALID', $installedDbVersion, ADMIDIO_VERSION_TEXT, '
-                    <a href="http://www.admidio.org/index.php?page=download">', '</a>').'
+                    <a href="https://www.admidio.org/index.php?page=download">', '</a>').'
                 </p>
             </div>';
         showNotice($message, $g_root_path.'/adm_program/index.php',
@@ -468,7 +468,7 @@ elseif($getMode === 2)
     unset($_SESSION['gCurrentSession']);
 
     // show notice that update was successful
-    $form = new HtmlFormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
+    $form = new HtmlFormInstallation('installation-form', 'https://www.admidio.org/index.php?page=donate');
     $form->setUpdateModus();
     $form->setFormDescription($gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION_TEXT).'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'), '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong></div>');
     $form->openButtonGroup();

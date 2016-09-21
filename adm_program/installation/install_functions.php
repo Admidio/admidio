@@ -4,7 +4,7 @@
  * Common functions for update and installation
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -59,7 +59,7 @@ function checkDatabaseVersion(&$db)
     {
         $message = $gL10n->get('SYS_DATABASE_VERSION').': <strong>'.$db->getVersion().'</strong><br /><br />'.
                    $gL10n->get('INS_WRONG_MYSQL_VERSION', ADMIDIO_VERSION_TEXT, $db->getMinimumRequiredVersion(),
-                               '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
+                               '<a href="https://www.admidio.org/index.php?page=download">', '</a>');
     }
 
     return $message;
@@ -79,7 +79,7 @@ function checkPhpVersion()
     {
         $message = $gL10n->get('SYS_PHP_VERSION').': <strong>'.phpversion().'</strong><br /><br />'.
                    $gL10n->get('INS_WRONG_PHP_VERSION', ADMIDIO_VERSION_TEXT, MIN_PHP_VERSION,
-                               '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
+                               '<a href="https://www.admidio.org/index.php?page=download">', '</a>');
     }
 
     return $message;

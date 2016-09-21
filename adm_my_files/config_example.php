@@ -4,7 +4,7 @@
  * Configuration file of Admidio
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * !!!!!!!!!!!!!!!!!!!!!!!!!! I M P O R T A N T !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -29,8 +29,8 @@ $g_adm_pw  = 'Password';                    // Password
 $g_adm_db  = 'Databasename';                // Database
 
 // URL to this Admidio installation
-// Example: 'http://www.admidio.org/example'
-$g_root_path = 'http://www.your-website.de/admidio';
+// Example: 'https://www.admidio.org/example'
+$g_root_path = 'https://www.your-website.de/admidio';
 
 // Short description of the organization that is running Admidio
 // This short description must correspond to your input in the installation wizard !!!

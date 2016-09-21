@@ -132,7 +132,7 @@
 
 
 <p id="copyright">
-    <a href="http://www.admidio.org/" style="text-decoration: none;">
+    <a href="https://www.admidio.org/" style="text-decoration: none;">
         <img src="<?php echo THEME_PATH; ?>/images/admidio_logo_20.png"
              alt="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>"
              title="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>"

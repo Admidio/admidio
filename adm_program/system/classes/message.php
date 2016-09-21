@@ -2,7 +2,7 @@
 /**
  ***********************************************************************************************
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -22,11 +22,11 @@
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
  *
  * // show a message and set a link to a page that should be shown after user click ok
- * $gMessage->setForwardUrl('http://www.example.de/mypage.php');
+ * $gMessage->setForwardUrl('https://www.example.com/mypage.php');
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
  *
  * // show a message with yes and no button and set a link to a page that should be shown after user click yes
- * $gMessage->setForwardYesNo('http://www.example.de/mypage.php');
+ * $gMessage->setForwardYesNo('https://www.example.com/mypage.php');
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID')); @endcode
  */
 class Message

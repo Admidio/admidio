@@ -19,14 +19,14 @@ the login data and call the verification of his data. A registered user
 will see a link to his profile and a timestamp of his login.
 
 Login Form is a plugin of the online membership management
-Admidio (http://www.admidio.org) and can not be used without this.
+Admidio (https://www.admidio.org) and can not be used without this.
 
 
  2. Installation
 -------------------------------------------------------------------------
 Please take a look at our Wiki for a detailed description how to integrate
 a plugin to your Admidio installation:
-http://www.admidio.org/dokuwiki/doku.php?id=en:2.0:plugins
+https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:plugins
 
 Please don't forget to add the login_form.css to the head of your html page.
 
@@ -45,7 +45,7 @@ this new setting to your existing config.php of this plugin.
 -------------------------------------------------------------------------
 If you found an issue with this plugin you can report this at our
 plugin forum:
-http://forum.admidio.org/viewforum.php?f=10
+https://forum.admidio.org/viewforum.php?f=10
 
 It is also possible to report an issue directly in our issue tracker at
 GitHub. There, however, it should be ensured that this is not a
