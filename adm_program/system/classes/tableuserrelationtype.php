@@ -33,7 +33,7 @@ class TableUserRelationType extends TableAccess
     {
         if (!$this->isNewRecord())
         {
-            if ($this->getValue('urt_id_inverse') === null)
+            if (empty($this->getValue('urt_id_inverse')))
             {
                 return 'unidirectional';
             }
