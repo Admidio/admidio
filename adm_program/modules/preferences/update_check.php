@@ -91,7 +91,7 @@ function checkVersion($currentVersion, $checkStableVersion, $checkBetaVersion, $
 // Erreichbarkeit der Updateinformation prüfen und bei Verbindung
 // verfügbare Admidio Versionen vom Server einlesen (Textfile)
 // Zunächst die Methode selektieren (CURL bevorzugt)
-if(@file_get_contents('https://www.admidio.org/update.txt') === false)
+if(@file_get_contents(ADMIDIO_HOMEPAGE.'update.txt') === false)
 {
     // Admidio Versionen nicht auslesbar
     $stableVersion = 'n/a';
@@ -102,7 +102,7 @@ if(@file_get_contents('https://www.admidio.org/update.txt') === false)
 }
 else
 {
-    $update_info = file_get_contents('https://www.admidio.org/update.txt');
+    $update_info = file_get_contents(ADMIDIO_HOMEPAGE.'update.txt');
 
     // Admidio Versionen vom Server übergeben
     $stableVersion = getUpdateVersion($update_info, 'Version=');
@@ -150,7 +150,7 @@ if($getMode === 2)
     }
     elseif($versionUpdate === 99)
     {
-        $admidioLink = '<a href="https://www.admidio.org/index.php?page=download" target="_blank">Admidio</a>';
+        $admidioLink = '<a href="'.ADMIDIO_HOMEPAGE.'index.php?page=download" target="_blank">Admidio</a>';
         $versionstext = $gL10n->get('UPD_CONNECTION_ERROR', $admidioLink);
     }
     else
@@ -169,7 +169,7 @@ if($getMode === 2)
     echo '
         <p>'.$gL10n->get('UPD_CURRENT_VERSION').':&nbsp;'.ADMIDIO_VERSION_TEXT.'</p>
         <p>'.$gL10n->get('UPD_STABLE_VERSION').':&nbsp;
-            <a class="btn" href="https://www.admidio.org/index.php?page=download" target="_blank">
+            <a class="btn" href="'.ADMIDIO_HOMEPAGE.'index.php?page=download" target="_blank">
                 <img src="'.THEME_PATH.'/icons/update_link.png" alt="'.$gL10n->get('UPD_ADMIDIO').'" />'.$stableVersion.'
             </a>
             <br />
@@ -178,7 +178,7 @@ if($getMode === 2)
     if($versionUpdate !== 99 && $betaVersion !== 'n/a')
     {
         echo '
-            <a class="btn" href="https://www.admidio.org/index.php?page=download" target="_blank">
+            <a class="btn" href="'.ADMIDIO_HOMEPAGE.'index.php?page=download" target="_blank">
                 <img src="'.THEME_PATH.'/icons/update_link.png" alt="'.$gL10n->get('UPD_ADMIDIO').'" />
                 '.$betaVersion.'&nbsp;Beta&nbsp;'.$betaRelease.'
             </a>';

@@ -92,7 +92,7 @@ $page->addHtml('
         <small><a href="'.$mail_link.'">'.$gL10n->get('SYS_FORGOT_MY_PASSWORD').'</a></small>
     </div>
     <div id="login_admidio_link">
-        <small>Powered by <a href="https://www.admidio.org/">Admidio</a></small>
+        <small>Powered by <a href="'.ADMIDIO_HOMEPAGE.'">Admidio</a></small>
     </div>');
 
 $page->show();

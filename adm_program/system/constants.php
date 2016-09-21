@@ -13,6 +13,8 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'constants.php')
     exit('This page may not be called directly!');
 }
 
+define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
+
 // !!! Please do not edit these version numbers !!!
 define('MIN_PHP_VERSION', '5.3.7');
 

@@ -112,7 +112,7 @@ class HtmlFormInstallation extends HtmlForm
         <!DOCTYPE html>
         <html>
         <head>
-            <!-- (c) 2004 - 2016 The Admidio Team - https://www.admidio.org/ -->
+            <!-- (c) 2004 - 2016 The Admidio Team - ' . ADMIDIO_HOMEPAGE . ' -->
 
             <meta http-equiv="content-type" content="text/html; charset=utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
