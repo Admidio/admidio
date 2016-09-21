@@ -33,7 +33,7 @@ like member lists, event manager, guestbook, photo album or download area.
 
 You can install Admidio on your webspace if the script language [PHP](https://secure.php.net/) in version 5.3.7
 or higher is available. Admidio also needs a [MySQL](https://www.mysql.com/) (version 5.0 or higher) or
-[PostgreSQL](http://www.postgresql.org/) (version 9.0 or higher) database to run.
+[PostgreSQL](https://www.postgresql.org/) (version 9.0 or higher) database to run.
 
 For a successful installation please follow our [online instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:installation).
 There we describe step by step the installation process.
@@ -114,7 +114,7 @@ and sharing great software.
 - [Bootstrap-Datepicker](https://github.com/eternicode/bootstrap-datepicker): Datepicker for bootstrap 3
 - [Lightbox](https://ashleydw.github.io/lightbox/): Lightbox for bootstrap 3
 - [Moment](http://momentjs.com/): Parse, validate, manipulate, and display dates in JavaScript
-- [NobleCount](http://tpgblog.com/NobleCount/): NobleCount… for a more ‘proper’ count of the characters remaining.
+- [NobleCount](https://tpgblog.com/NobleCount/): NobleCount… for a more ‘proper’ count of the characters remaining.
 - [James Heinrich](http://www.silisoftware.com/): backupDB
 - [password_compat](https://github.com/ircmaxell/password_compat/): Compatibility with the password_* functions that ship with PHP 5.5
 - [htmLawed](http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/): PHP code to purify & filter HTML
