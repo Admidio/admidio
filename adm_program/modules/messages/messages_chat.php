@@ -41,7 +41,7 @@ $page->addJavascript('
     var chat = new Chat();
 
     $(function() {
-        var chat.init("#sendie", "#chat-area");
+        chat.init("#sendie", "#chat-area");
     });
 ');
 
