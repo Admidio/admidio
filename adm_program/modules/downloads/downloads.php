@@ -295,7 +295,7 @@ if ($gCurrentUser->editDownloadRight())
                 $nextFile = $folderContent['additionalFiles'][$i];
 
                 // Get filetyp
-                $fileExtension  = admStrToLower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], '.')+1));
+                $fileExtension = admStrToLower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], '.')+1));
 
                 // Choose icon for the file
                 $iconFile = 'page_white_question.png';

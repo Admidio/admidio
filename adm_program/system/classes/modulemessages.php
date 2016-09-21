@@ -167,9 +167,8 @@ class ModuleMessages
                   FROM '. TBL_MESSAGES. '
                  WHERE msg_type = \'CHAT\'';
         $statement = $gDb->query($sql);
-        $msgId = $statement->fetchColumn();
 
-        return (int) $msgId;
+        return (int) $statement->fetchColumn();
     }
 
 }

@@ -177,7 +177,7 @@ abstract class Modules
     protected function setId()
     {
         // check optional user parameter and make secure. Otherwise set default value
-        $this->id = admFuncVariableIsValid($this->properties, 'id', 'numeric');
+        $this->id = admFuncVariableIsValid($this->properties, 'id', 'int');
     }
 
     /**
