@@ -176,7 +176,7 @@ $page->addHtml('
                             1 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_LOW'),
                             2 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_MID'),
                             3 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_HIGH'),
-                            4 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_EXTREME')
+                            4 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH')
                         );
                         $form->addSelectBox('password_min_strength', $gL10n->get('ORG_PASSWORD_MIN_STRENGTH'), $selectBoxEntries, array('defaultValue' => $form_values['password_min_strength'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_PASSWORD_MIN_STRENGTH_DESC'));
                         $form->addCheckbox('system_browser_update_check', $gL10n->get('ORG_BROWSER_UPDATE_CHECK'), $form_values['system_browser_update_check'], array('helpTextIdInline' => 'ORG_BROWSER_UPDATE_CHECK_DESC'));
