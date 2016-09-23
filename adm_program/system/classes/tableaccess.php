@@ -110,20 +110,20 @@ class TableAccess
         else
         {
             // alle Spalten der Tabelle ins Array einlesen und auf leer setzen
-            $columnProperties = $this->db->getTableColumnsProperties($this->tableName);
+            $tableColumnsProperties = $this->db->getTableColumnsProperties($this->tableName);
 
-            foreach ($columnProperties as $key => $value)
+            foreach ($tableColumnsProperties as $columnName => $property)
             {
-                $this->dbColumns[$key] = '';
-                $this->columnsInfos[$key]['changed'] = false;
-                $this->columnsInfos[$key]['type']    = $value['type'];
-                $this->columnsInfos[$key]['null']    = $value['null'];
-                $this->columnsInfos[$key]['key']     = $value['key'];
-                $this->columnsInfos[$key]['serial']  = $value['serial'];
+                $this->dbColumns[$columnName] = '';
+                $this->columnsInfos[$columnName]['changed'] = false;
+                $this->columnsInfos[$columnName]['type']    = $property['type'];
+                $this->columnsInfos[$columnName]['null']    = $property['null'];
+                $this->columnsInfos[$columnName]['key']     = $property['key'];
+                $this->columnsInfos[$columnName]['serial']  = $property['serial'];
 
-                if ($value['serial'])
+                if ($property['serial'])
                 {
-                    $this->keyColumnName = $key;
+                    $this->keyColumnName = $columnName;
                 }
             }
         }
@@ -222,14 +222,14 @@ class TableAccess
                     if ($format !== 'database')
                     {
                         // if text field and format not 'database' then convert all quotes to html syntax
-                        return htmlspecialchars($columnValue, ENT_QUOTES);
+                        $columnValue = htmlspecialchars($columnValue, ENT_QUOTES);
                     }
                     break;
 
                 // Byte
                 case 'bytea':
                     // in PostgreSQL we must encode the stored hex value back to binary
-                    return pack('H*', pack('H*', substr($columnValue, 2)));
+                    $columnValue = pack('H*', pack('H*', substr($columnValue, 2)));
                     break;
 
                 case 'timestamp':
