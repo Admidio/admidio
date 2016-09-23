@@ -1113,6 +1113,7 @@ class HtmlForm extends HtmlFormBasic
             'showContextDependentFirstEntry' => true,
             'firstEntry'                     => '',
             'multiselect'                    => false,
+            'search'                         => false,
             'maximumSelectionNumber'         => 0,
             'helpTextIdLabel'                => '',
             'helpTextIdInline'               => '',
@@ -1239,18 +1240,20 @@ class HtmlForm extends HtmlFormBasic
             $this->closeOptionGroup();
         }
 
-        if($optionsAll['multiselect'])
+        if($optionsAll['multiselect'] || $optionsAll['search'])
         {
             $maximumSelectionNumber = '';
+            $allowClear = 'false';
 
             if($optionsAll['maximumSelectionNumber'] > 0)
             {
                 $maximumSelectionNumber = ' maximumSelectionLength: '.$optionsAll['maximumSelectionNumber'].', ';
+                $allowClear = 'true';
             }
 
             $javascriptCode = '$("#'.$id.'").select2({
                 theme: "bootstrap",
-                allowClear: true,
+                allowClear: '.$allowClear.',
                 '.$maximumSelectionNumber.'
                 placeholder: "'.$placeholder.'",
                 language: "'.$gPreferences['system_language'].'"
