@@ -110,7 +110,7 @@ class TableAccess
         else
         {
             // alle Spalten der Tabelle ins Array einlesen und auf leer setzen
-            $columnProperties = $this->db->showColumns($this->tableName);
+            $columnProperties = $this->db->getTableColumnsProperties($this->tableName);
 
             foreach ($columnProperties as $key => $value)
             {
@@ -171,7 +171,7 @@ class TableAccess
      */
     public function delete()
     {
-        if (strlen($this->dbColumns[$this->keyColumnName]) > 0)
+        if (array_key_exists($this->keyColumnName, $this->dbColumns) && $this->dbColumns[$this->keyColumnName] !== '')
         {
             $sql = 'DELETE FROM '.$this->tableName.'
                      WHERE '.$this->keyColumnName.' = \''.$this->dbColumns[$this->keyColumnName].'\'';

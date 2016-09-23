@@ -455,14 +455,13 @@ class Database
             $sqlCompare = strtolower($sql);
 
             // prepare the sql statement to be compatible with PostgreSQL
+            if (strpos($sqlCompare, 'create table') !== false)
+            {
+                // on a create-table-statement if necessary cut existing MySQL table options
+                $sql = substr($sql, 0, strrpos($sql, ')') + 1);
+            }
             if (strpos($sqlCompare, 'create table') !== false || strpos($sqlCompare, 'alter table') !== false)
             {
-                if (strpos($sqlCompare, 'create table') !== false)
-                {
-                    // on a create-table-statement if necessary cut existing MySQL table options
-                    $sql = substr($sql, 0, strrpos($sql, ')') + 1);
-                }
-
                 $replaceArray = array(
                     // PostgreSQL doesn't know unsigned
                     'unsigned' => '',
@@ -523,155 +522,161 @@ class Database
     {
         global $gDebug;
 
-        if ($this->transactions > 0)
+        if ($this->transactions === 0)
         {
-            // if debug mode then log all sql statements
-            if ($gDebug)
-            {
-                error_log('ROLLBACK');
-            }
-
-            $result = $this->pdo->rollBack();
-
-            if (!$result)
-            {
-                $this->showError();
-                // => EXIT
-            }
-
-            $this->transactions = 0;
-            return true;
+            return false;
         }
-        return false;
+
+        // if debug mode then log all sql statements
+        if ($gDebug)
+        {
+            error_log('ROLLBACK');
+        }
+
+        $result = $this->pdo->rollBack();
+
+        if (!$result)
+        {
+            $this->showError();
+            // => EXIT
+        }
+
+        $this->transactions = 0;
+
+        return true;
     }
 
     /**
-     * Methods reads all columns and their properties from the database table.
-     * @param string $table                Name of the database table for which the columns should be shown.
-     * @param bool   $showColumnProperties If this is set to @b false only the column names were returned.
-     * @return string[]|array[] Returns an array with each column and their properties if $showColumnProperties is set to @b true.
-     *               The array has the following format:
-     *               array (
-     *                   'column1' => array (
-     *                       'serial' => '1',
-     *                       'null'   => '0',
-     *                       'key'    => '0',
-     *                       'type'   => 'integer'
-     *                    ),
-     *                   'column2' => array (...)
-     *               ...
-     *               )
+     * Method gets all columns and their properties from the database table.
+     *
+     * The array has the following format:
+     * array (
+     *     'columnName1' => array (
+     *         'serial'   => true,
+     *         'null'     => false,
+     *         'key'      => false,
+     *         'unsigned' => true,
+     *         'default'  => 10
+     *         'type'     => 'integer'
+     *     ),
+     *     'columnName2' => array (...),
+     *     ...
+     * )
+     *
+     * @param string $table Name of the database table for which the columns-properties should be loaded.
+     *
+     * TODO: Links for improvements
+     *       https://secure.php.net/manual/en/pdostatement.getcolumnmeta.php
+     *       https://www.postgresql.org/docs/9.5/static/infoschema-columns.html
+     *       https://dev.mysql.com/doc/refman/5.7/en/columns-table.html
      */
-    public function showColumns($table, $showColumnProperties = true)
+    private function loadTableColumnsProperties($table)
+    {
+        $tableColumnsProperties = array();
+
+        if ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql')
+        {
+            $sql = 'SHOW COLUMNS FROM '.$table;
+            $columnsStatement = $this->query($sql);
+            $columnsList      = $columnsStatement->fetchAll();
+
+            foreach ($columnsList as $properties)
+            {
+                $props = array(
+                    'serial'   => $properties['Extra'] === 'auto_increment',
+                    'null'     => $properties['Null'] === 'YES',
+                    'key'      => $properties['Key'] === 'PRI' || $properties['Key'] === 'MUL',
+                    'default'  => $properties['Default'],
+                    'unsigned' => strpos($properties['Type'], 'unsigned' !== false)
+                );
+
+                if (strpos($properties['Type'], 'tinyint(1)') !== false)
+                {
+                    $props['type'] = 'boolean';
+                }
+                elseif (strpos($properties['Type'], 'smallint') !== false)
+                {
+                    $props['type'] = 'smallint';
+                }
+                elseif (strpos($properties['Type'], 'int') !== false)
+                {
+                    $props['type'] = 'integer';
+                }
+                else
+                {
+                    $props['type'] = $properties['Type'];
+                }
+
+                $tableColumnsProperties[$properties['Field']] = $props;
+            }
+        }
+        elseif ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql')
+        {
+            $sql = 'SELECT column_name, column_default, is_nullable, data_type
+                          FROM information_schema.columns
+                         WHERE table_name = \''.$table.'\'';
+            $columnsStatement = $this->query($sql);
+            $columnsList = $columnsStatement->fetchAll();
+
+            foreach ($columnsList as $properties)
+            {
+                $props = array(
+                    'serial'   => strpos($properties['column_default'], 'nextval') !== false,
+                    'null'     => $properties['is_nullable'] === 'YES',
+                    'key'      => null,
+                    'default'  => $properties['Default'],
+                    'unsigned' => null
+                );
+
+                if (strpos($properties['data_type'], 'timestamp') !== false)
+                {
+                    $props['type'] = 'timestamp';
+                }
+                elseif (strpos($properties['data_type'], 'time') !== false)
+                {
+                    $props['type'] = 'time';
+                }
+                else
+                {
+                    $props['type'] = $properties['data_type'];
+                }
+
+                $tableColumnsProperties[$properties['column_name']] = $props;
+            }
+        }
+
+        // safe array with table structure in class array
+        $this->dbStructure[$table] = $tableColumnsProperties;
+    }
+
+    /**
+     * Method get all columns and their properties from the database table.
+     * @param string $table Name of the database table for which the columns-properties should be shown.
+     * @return array[array] Returns an array with column-names.
+     */
+    public function getTableColumnsProperties($table)
     {
         if (!array_key_exists($table, $this->dbStructure))
         {
-            $columnProperties = array();
-
-            if ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql')
-            {
-                $sql = 'SHOW COLUMNS FROM '.$table;
-                $columnsStatement = $this->query($sql);
-                $columnsList      = $columnsStatement->fetchAll();
-
-                foreach ($columnsList as $properties)
-                {
-                    $columnProperties[$properties['Field']]['serial'] = false;
-                    $columnProperties[$properties['Field']]['null']   = false;
-                    $columnProperties[$properties['Field']]['key']    = false;
-
-                    if ($properties['Extra'] === 'auto_increment')
-                    {
-                        $columnProperties[$properties['Field']]['serial'] = true;
-                    }
-                    if ($properties['Null'] === 'YES')
-                    {
-                        $columnProperties[$properties['Field']]['null'] = true;
-                    }
-                    if ($properties['Key'] === 'PRI' || $properties['Key'] === 'MUL')
-                    {
-                        $columnProperties[$properties['Field']]['key'] = true;
-                    }
-
-                    if (strpos($properties['Type'], 'tinyint(1)') !== false)
-                    {
-                        $columnProperties[$properties['Field']]['type'] = 'boolean';
-                    }
-                    elseif (strpos($properties['Type'], 'smallint') !== false)
-                    {
-                        $columnProperties[$properties['Field']]['type'] = 'smallint';
-                    }
-                    elseif (strpos($properties['Type'], 'int') !== false)
-                    {
-                        $columnProperties[$properties['Field']]['type'] = 'integer';
-                    }
-                    else
-                    {
-                        $columnProperties[$properties['Field']]['type'] = $properties['Type'];
-                    }
-                }
-            }
-            elseif ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql')
-            {
-                $sql = 'SELECT column_name, column_default, is_nullable, data_type
-                          FROM information_schema.columns
-                         WHERE table_name = \''.$table.'\'';
-                $columnsStatement = $this->query($sql);
-                $columnsList = $columnsStatement->fetchAll();
-
-                foreach ($columnsList as $properties)
-                {
-                    $columnProperties[$properties['column_name']]['serial'] = false;
-                    $columnProperties[$properties['column_name']]['null']   = false;
-                    $columnProperties[$properties['column_name']]['key']    = false;
-
-                    if (strpos($properties['column_default'], 'nextval') !== false)
-                    {
-                        $columnProperties[$properties['column_name']]['serial'] = true;
-                    }
-                    if ($properties['is_nullable'] === 'YES')
-                    {
-                        $columnProperties[$properties['column_name']]['null'] = true;
-                    }
-                    /*if ($properties['Key'] === 'PRI' || $properties['Key'] === 'MUL')
-                    {
-                        $columnProperties[$properties['column_name']]['key'] = true;
-                    }*/
-
-                    if (strpos($properties['data_type'], 'timestamp') !== false)
-                    {
-                        $columnProperties[$properties['column_name']]['type'] = 'timestamp';
-                    }
-                    elseif (strpos($properties['data_type'], 'time') !== false)
-                    {
-                        $columnProperties[$properties['column_name']]['type'] = 'time';
-                    }
-                    else
-                    {
-                        $columnProperties[$properties['column_name']]['type'] = $properties['data_type'];
-                    }
-                }
-            }
-
-            // safe array with table structure in class array
-            $this->dbStructure[$table] = $columnProperties;
+            $this->loadTableColumnsProperties($table);
         }
 
-        if ($showColumnProperties)
+        return $this->dbStructure[$table];
+    }
+
+    /**
+     * Method get all columns-names from the database table.
+     * @param string $table Name of the database table for which the columns should be shown.
+     * @return string[] Returns an array with each column and their properties.
+     */
+    public function getTableColumns($table)
+    {
+        if (!array_key_exists($table, $this->dbStructure))
         {
-            // returns all columns with their properties of the table
-            return $this->dbStructure[$table];
+            $this->loadTableColumnsProperties($table);
         }
 
-        // returns only the column names of the table.
-        $tableColumns = array();
-
-        foreach ($this->dbStructure[$table] as $columnName => $columnProperties)
-        {
-            $tableColumns[] = $columnName;
-        }
-
-        return $tableColumns;
+        return array_keys($this->dbStructure[$table]);
     }
 
     /**
@@ -682,7 +687,7 @@ class Database
      */
     public function showError()
     {
-        global $g_root_path, $gMessage, $gPreferences, $gCurrentOrganization, $gDebug, $gL10n;
+        global $gPreferences, $gDebug, $gL10n;
 
         $backtrace = $this->getBacktrace();
 
@@ -830,5 +835,24 @@ class Database
         }
 
         return null;
+    }
+
+    /**
+     * Method gets all columns and their properties from the database table.
+     * @deprecated 3.2.0:4.0.0 Switch to new methods (getTableColumnsProperties(), getTableColumns()).
+     * @param string $table                Name of the database table for which the columns should be shown.
+     * @param bool   $showColumnProperties If this is set to @b false only the column names were returned.
+     * @return string[]|array[array] Returns an array with each column and their properties if $showColumnProperties is set to @b true.
+     */
+    public function showColumns($table, $showColumnProperties = true)
+    {
+        if ($showColumnProperties)
+        {
+            // returns all columns with their properties of the table
+            return $this->getTableColumnsProperties($table);
+        }
+
+        // returns only the column names of the table.
+        return $this->getTableColumns($table);
     }
 }

@@ -372,7 +372,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                     }
                 }
                 unset($fieldnames);
-                $fieldnames = $gDb->showColumns($gDb->escapeString($SelectedTables[$dbname][$t]), false);
+                $fieldnames = $gDb->getTableColumns($gDb->escapeString($SelectedTables[$dbname][$t]));
 
                 if ($_REQUEST['StartBackup'] === 'complete')
                 {
