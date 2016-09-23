@@ -652,7 +652,7 @@ class Database
     /**
      * Method get all columns and their properties from the database table.
      * @param string $table Name of the database table for which the columns-properties should be shown.
-     * @return array[array] Returns an array with column-names.
+     * @return array[] Returns an array with column-names.
      */
     public function getTableColumnsProperties($table)
     {
@@ -842,7 +842,7 @@ class Database
      * @deprecated 3.2.0:4.0.0 Switch to new methods (getTableColumnsProperties(), getTableColumns()).
      * @param string $table                Name of the database table for which the columns should be shown.
      * @param bool   $showColumnProperties If this is set to @b false only the column names were returned.
-     * @return string[]|array[array] Returns an array with each column and their properties if $showColumnProperties is set to @b true.
+     * @return string[]|array[] Returns an array with each column and their properties if $showColumnProperties is set to @b true.
      */
     public function showColumns($table, $showColumnProperties = true)
     {
