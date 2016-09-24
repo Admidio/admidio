@@ -308,10 +308,10 @@ elseif($getMode === 2)
 
     preg_match('/^(\d+)\.(\d+)\.(\d+)/', $installedDbVersion, $versionArray);
     $versionArray = array_map('intval', $versionArray);
-    list( , $versionMain, $versionMinor, $versionPath) = $versionArray;
+    list( , $versionMain, $versionMinor, $versionPatch) = $versionArray;
 
     $flagNextVersion = true;
-    ++$versionPath;
+    ++$versionPatch;
 
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
     require_once('db_scripts/preferences.php');
@@ -356,9 +356,9 @@ elseif($getMode === 2)
 
                 // in der Schleife wird geschaut ob es Scripte fuer eine Microversion (3.Versionsstelle) gibt
                 // Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
-                for($versionPath; $versionPath < 15; ++$versionPath)
+                for($versionPatch; $versionPatch < 15; ++$versionPatch)
                 {
-                    $version = $versionMain . '_' . $versionMinor . '_' . $versionPath;
+                    $version = $versionMain . '_' . $versionMinor . '_' . $versionPatch;
 
                     // output of the version number for better debugging
                     if($gDebug)
@@ -402,7 +402,7 @@ elseif($getMode === 2)
 
                 // keine Datei mit der Microversion gefunden, dann die Main- oder Subversion hochsetzen,
                 // solange bis die aktuelle Versionsnummer erreicht wurde
-                if(!$flagNextVersion && version_compare($versionMain.'.'.$versionMinor.'.'.$versionPath, ADMIDIO_VERSION, '<'))
+                if(!$flagNextVersion && version_compare($versionMain.'.'.$versionMinor.'.'.$versionPatch, ADMIDIO_VERSION, '<'))
                 {
                     if($versionMinor === 4) // we do not have more then 4 subversions with old updater
                     {
@@ -414,7 +414,7 @@ elseif($getMode === 2)
                         ++$versionMinor;
                     }
 
-                    $versionPath = 0;
+                    $versionPatch = 0;
                     $flagNextVersion = true;
                 }
             }
