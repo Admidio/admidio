@@ -89,7 +89,7 @@ function getBacktrace()
                 $argument = htmlentities($trace['args'][0]);
                 $argument = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $argument);
                 $argument = substr($argument, 1);
-                $args[] = "'{$argument}'";
+                $args[] = '\''.$argument.'\'';
             }
         }
 

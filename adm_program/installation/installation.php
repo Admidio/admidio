@@ -598,22 +598,17 @@ elseif($getMode === 8) // Start installation
     }
 
     // read data from sql script db.sql and execute all statements to the current database
-    $filename = 'db_scripts/db.sql';
-    $file     = fopen($filename, 'r')
-                or showNotice($gL10n->get('INS_DATABASE_FILE_NOT_FOUND', 'db.sql', 'adm_program/installation/db_scripts'),
-                              'installation.php?mode=6', $gL10n->get('SYS_BACK'), 'layout/back.png');
-    $content  = fread($file, filesize($filename));
-    $sql_arr  = explode(';', $content);
-    fclose($file);
+    $sqlQueryResult = querySqlFile('db.sql');
 
-    foreach($sql_arr as $sql)
+    if (is_string($sqlQueryResult))
     {
-        if(trim($sql) !== '')
-        {
-            // Prefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
-            $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
-            $db->query($sql);
-        }
+        showNotice(
+            $sqlQueryResult,
+            'installation.php?mode=6',
+            $gL10n->get('SYS_BACK'),
+            'layout/back.png'
+        );
+        // => EXIT
     }
 
     // create default data
@@ -743,13 +738,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
                  , ('.$categoryIdMasterInventory.', \'NUMBER\', \'PRICE\',   \'SYS_QUANTITY\', NULL, 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
 
-    if($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
-    {
-        // soundex is not a default function in PostgreSQL
-        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'0\'
-                 WHERE prf_name LIKE \'system_search_similar\'';
-        $db->query($sql);
-    }
+    disableSoundexSearchIfPgsql();
 
     // create new organization
     $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);

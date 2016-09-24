@@ -48,7 +48,7 @@ class ConditionParser
         if($last === 'J' || $last === 'Y')
         {
             $age  = (int) substr($date, 0, -1);
-            $date = DateTime::createFromFormat('Y-m-d', date('Y').'-'.date('m').'-'.date('d'));
+            $date = new DateTime();
             $ageCondition = '';
 
             switch ($operator)

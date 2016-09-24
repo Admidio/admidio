@@ -306,11 +306,12 @@ elseif($getMode === 2)
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(300);
 
-    $mainVersion     = (int) substr($installedDbVersion, 0, 1);
-    $subVersion      = (int) substr($installedDbVersion, 2, 1);
-    $microVersion    = (int) substr($installedDbVersion, 4, 1);
+    preg_match('/^(\d+)\.(\d+)\.(\d+)/', $installedDbVersion, $versionArray);
+    $versionArray = array_map('intval', $versionArray);
+    list( , $versionMain, $versionMinor, $versionPath) = $versionArray;
+
     $flagNextVersion = true;
-    ++$microVersion;
+    ++$versionPath;
 
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
     require_once('db_scripts/preferences.php');
@@ -340,59 +341,57 @@ elseif($getMode === 2)
         $gDb->query($sql);
     }
 
-    // before version 3 we had an other update mechanism which will be handled here
-    if($mainVersion < 3)
+    // in version 2 we had an other update mechanism which will be handled here
+    if($versionMain === 2)
     {
         // nun in einer Schleife die Update-Scripte fuer alle Versionen zwischen der Alten und Neuen einspielen
         while($flagNextVersion)
         {
             $flagNextVersion = false;
 
-            if($mainVersion < 3)
+            if($versionMain === 2)
             {
-                // until version 3 Admidio had sql and php files where the update statements where stored
+                // version 2 Admidio had sql and php files where the update statements where stored
                 // these files must be executed
 
                 // in der Schleife wird geschaut ob es Scripte fuer eine Microversion (3.Versionsstelle) gibt
                 // Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
-                for($microVersion; $microVersion < 15; ++$microVersion)
+                for($versionPath; $versionPath < 15; ++$versionPath)
                 {
-                    $version = $mainVersion.'_'.$subVersion.'_'.$microVersion;
-
-                    // Update-Datei der naechsten hoeheren Version ermitteln
-                    $sqlUpdateFile = 'db_scripts/upd_'. $version. '_db.sql';
-                    $phpUpdateFile = 'db_scripts/upd_'. $version. '_conv.php';
+                    $version = $versionMain . '_' . $versionMinor . '_' . $versionPath;
 
                     // output of the version number for better debugging
                     if($gDebug)
                     {
-                        error_log('Update to version '.$version);
+                        error_log('Update to version ' . $version);
                     }
 
-                    if(is_file($sqlUpdateFile))
+                    $dbScriptsPath = SERVER_PATH . '/adm_program/installation/db_scripts/';
+                    $sqlFileName = 'upd_' . $version . '_db.sql';
+                    $phpFileName = 'upd_' . $version . '_conv.php';
+
+                    if (is_file($dbScriptsPath . $sqlFileName))
                     {
-                        // SQL-Script abarbeiten
-                        $file    = fopen($sqlUpdateFile, 'r')
-                                   or showNotice($gL10n->get('INS_ERROR_OPEN_FILE', $sqlUpdateFile), 'update.php',
-                                                 $gL10n->get('SYS_BACK'), 'layout/back.png', true);
-                        $content = fread($file, filesize($sqlUpdateFile));
-                        $sql_arr = explode(';', $content);
-                        fclose($file);
+                        $sqlQueryResult = querySqlFile($sqlFileName);
 
-                        foreach($sql_arr as $sql)
+                        if ($sqlQueryResult === true)
                         {
-                            if(trim($sql) !== '')
-                            {
-                                // replace prefix with installation specific table prefix
-                                $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
-                                // now execute update sql
-                                $gDb->query($sql);
-                            }
+                            $flagNextVersion = true;
                         }
-
-                        $flagNextVersion = true;
+                        else
+                        {
+                            showNotice(
+                                $sqlQueryResult,
+                                'update.php',
+                                $gL10n->get('SYS_BACK'),
+                                'layout/back.png',
+                                true
+                            );
+                            // => EXIT
+                        }
                     }
 
+                    $phpUpdateFile = $dbScriptsPath . $phpFileName;
                     // check if an php update file exists and then execute the script
                     if(is_file($phpUpdateFile))
                     {
@@ -403,35 +402,29 @@ elseif($getMode === 2)
 
                 // keine Datei mit der Microversion gefunden, dann die Main- oder Subversion hochsetzen,
                 // solange bis die aktuelle Versionsnummer erreicht wurde
-                if(!$flagNextVersion && version_compare($mainVersion.'.'.$subVersion.'.'.$microVersion, ADMIDIO_VERSION, '<'))
+                if(!$flagNextVersion && version_compare($versionMain.'.'.$versionMinor.'.'.$versionPath, ADMIDIO_VERSION, '<'))
                 {
-                    if($subVersion === 4) // we do not have more then 4 subversions with old updater
+                    if($versionMinor === 4) // we do not have more then 4 subversions with old updater
                     {
-                        ++$mainVersion;
-                        $subVersion = 0;
+                        ++$versionMain;
+                        $versionMinor = 0;
                     }
                     else
                     {
-                        ++$subVersion;
+                        ++$versionMinor;
                     }
 
-                    $microVersion    = 0;
+                    $versionPath = 0;
                     $flagNextVersion = true;
                 }
             }
         }
     }
 
-    if($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
-    {
-        // soundex is not a default function in PostgreSQL
-        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'0\'
-                 WHERE prf_name LIKE \'system_search_similar\'';
-        $gDb->query($sql);
-    }
+    disableSoundexSearchIfPgsql();
 
     // since version 3 we do the update with xml files and a new class model
-    if($mainVersion >= 3)
+    if($versionMain >= 3)
     {
         // set system user as current user, but this user only exists since version 3
         $sql = 'SELECT usr_id FROM '.TBL_USERS.' WHERE usr_login_name = \''.$gL10n->get('SYS_SYSTEM').'\' ';

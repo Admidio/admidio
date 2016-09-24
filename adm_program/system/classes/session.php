@@ -295,8 +295,7 @@ class Session extends TableAccess
         if($sesRenew === 2 || $sesRenew === 3)
         {
             $organization =& $this->getObject('gCurrentOrganization');
-            $organizationId = $organization->getValue('org_id');
-            $organization->readDataById($organizationId);
+            $organization->readDataById((int) $organization->getValue('org_id'));
             $this->setValue('ses_renew', 0);
         }
     }

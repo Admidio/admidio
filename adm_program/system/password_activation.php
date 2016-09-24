@@ -19,8 +19,8 @@ require_once('common.php');
 $getActivationId = admFuncVariableIsValid($_GET, 'aid',    'string', array('requireValue' => true));
 $getUserId       = admFuncVariableIsValid($_GET, 'usr_id', 'int',    array('requireValue' => true));
 
-// Systemmails und Passwort zusenden muessen aktiviert sein
-if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_recovery'] != 1)
+// "systemmail" and "request password" must be activated
+if($gPreferences['enable_system_mails'] == 0 || $gPreferences['enable_password_recovery'] == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT

@@ -42,25 +42,25 @@ if ($gPreferences['enable_ecard_module'] != 1)
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
+if(isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_id') === $getPhotoId)
 {
-    $photo_album =& $_SESSION['photo_album'];
-    $photo_album->setDatabase($gDb);
+    $photoAlbum =& $_SESSION['photo_album'];
+    $photoAlbum->setDatabase($gDb);
 }
 else
 {
     // einlesen des Albums falls noch nicht in Session gespeichert
-    $photo_album = new TablePhotos($gDb);
+    $photoAlbum = new TablePhotos($gDb);
     if($getPhotoId > 0)
     {
-        $photo_album->readDataById($getPhotoId);
+        $photoAlbum->readDataById($getPhotoId);
     }
 
-    $_SESSION['photo_album'] = $photo_album;
+    $_SESSION['photo_album'] = $photoAlbum;
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
-if($getPhotoId > 0 && $photo_album->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
+if($getPhotoId > 0 && (int) $photoAlbum->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
@@ -117,7 +117,14 @@ $page->enableModal();
 $page->addJavascriptFile('adm_program/libs/lightbox/ekko-lightbox.min.js');
 
 $page->addJavascript('
-    $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) { event.preventDefault(); $(this).ekkoLightbox(); });
+    $(document).delegate(
+        "*[data-toggle=\"lightbox\"]",
+        "click",
+        function(event) {
+            event.preventDefault();
+            $(this).ekkoLightbox();
+        }
+    );
 
     $("#admidio_modal").on("show.bs.modal", function () {
         $(this).find(".modal-dialog").css({width: "800px"});
@@ -147,8 +154,13 @@ $ecardMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->ge
 if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of announcements
-    $ecardMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=ecards',
-                                $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    $ecardMenu->addItem(
+        'menu_item_preferences',
+        $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=ecards',
+        $gL10n->get('SYS_MODULE_PREFERENCES'),
+        'options.png',
+        'right'
+    );
 }
 
 // show form
@@ -234,9 +246,12 @@ while ($row = $statement->fetch())
     $list[] = array($row['usr_id'], $row['last_name']. ', '.$row['first_name']. ' ('.$row['email'].')', $gL10n->get('SYS_MEMBERS'));
 }
 
-$form->addSelectBox('ecard_recipients', $gL10n->get('SYS_TO'), $list, array('property'     => FIELD_REQUIRED,
-                                                                            'defaultValue' => $recipients,
-                                                                            'multiselect'  => true));
+$form->addSelectBox(
+    'ecard_recipients',
+    $gL10n->get('SYS_TO'),
+    $list,
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $recipients, 'multiselect'  => true)
+);
 $form->addLine();
 $form->addInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
 $form->addInput('mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_DISABLED));

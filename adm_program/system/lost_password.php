@@ -15,8 +15,8 @@ $headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
 // save url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// 'systemmail' and 'request password' must be activated
-if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_recovery'] != 1)
+// "systemmail" and "request password" must be activated
+if($gPreferences['enable_system_mails'] == 0 || $gPreferences['enable_password_recovery'] == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT

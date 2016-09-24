@@ -55,7 +55,7 @@ class SystemMail extends Email
         global $gPreferences;
 
         // create organization object of the organization the current user is assigned (at registration this can be every organization)
-        if(!$this->smOrganization instanceof \Organization || $this->smOrganization->getValue('org_id') != $user->getOrganization())
+        if(!$this->smOrganization instanceof \Organization || (int) $this->smOrganization->getValue('org_id') !== $user->getOrganization())
         {
             $this->smOrganization = new Organization($this->db, $user->getOrganization());
         }
