@@ -398,7 +398,7 @@ class Database
                     $argument = htmlentities($trace['args'][0]);
                     $argument = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $argument);
                     $argument = substr($argument, 1);
-                    $args[] = "'{$argument}'";
+                    $args[] = '\''.$argument.'\'';
                 }
             }
 
@@ -490,7 +490,7 @@ class Database
 
         try
         {
-            $this->fetchArray   = array();
+            $this->fetchArray = array();
             $this->pdoStatement = $this->pdo->query($sql);
         }
         catch (PDOException $e)
