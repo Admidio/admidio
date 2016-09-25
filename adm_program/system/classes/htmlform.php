@@ -1079,6 +1079,8 @@ class HtmlForm extends HtmlFormBasic
      *                        - @b multiselect : If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
      *                          where the user could select multiple values from the selectbox. Then an array will be
      *                          created within the $_POST array.
+     *                        - @b search : If set to @b true the jQuery plugin Select2 will be used to create a selectbox
+     *                          with a search field.
      *                        - @b maximumSelectionNumber : If @b multiselect is enabled then you can configure the maximum number
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
@@ -1113,6 +1115,7 @@ class HtmlForm extends HtmlFormBasic
             'showContextDependentFirstEntry' => true,
             'firstEntry'                     => '',
             'multiselect'                    => false,
+            'search'                         => false,
             'maximumSelectionNumber'         => 0,
             'helpTextIdLabel'                => '',
             'helpTextIdInline'               => '',
@@ -1239,18 +1242,20 @@ class HtmlForm extends HtmlFormBasic
             $this->closeOptionGroup();
         }
 
-        if($optionsAll['multiselect'])
+        if($optionsAll['multiselect'] || $optionsAll['search'])
         {
             $maximumSelectionNumber = '';
+            $allowClear = 'false';
 
             if($optionsAll['maximumSelectionNumber'] > 0)
             {
                 $maximumSelectionNumber = ' maximumSelectionLength: '.$optionsAll['maximumSelectionNumber'].', ';
+                $allowClear = 'true';
             }
 
             $javascriptCode = '$("#'.$id.'").select2({
                 theme: "bootstrap",
-                allowClear: true,
+                allowClear: '.$allowClear.',
                 '.$maximumSelectionNumber.'
                 placeholder: "'.$placeholder.'",
                 language: "'.$gPreferences['system_language'].'"
