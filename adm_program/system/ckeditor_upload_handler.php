@@ -4,7 +4,7 @@
  * Handle image uploads from CKEditor
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
@@ -59,35 +59,30 @@ try
 
     // set path to module folder in adm_my_files
     $myFilesProfilePhotos = new MyFiles($folderName);
-    if($myFilesProfilePhotos->checkSettings())
+    // upload photo to images folder of module folder
+    if($myFilesProfilePhotos->checkSettings() && $myFilesProfilePhotos->setSubFolder('images'))
     {
-        // upload photo to images folder of module folder
-        if($myFilesProfilePhotos->setSubFolder('images'))
+        // create a filename with the unix timestamp,
+        // so we have a scheme for the filenames and the risk of duplicates is low
+        $localFile = time() . substr($_FILES['upload']['name'], strrpos($_FILES['upload']['name'], '.'));
+        $serverUrl = $myFilesProfilePhotos->getServerPath().'/'.$localFile;
+        if(is_file($serverUrl))
         {
-            // create a filename with the unix timestamp,
-            // so we have a scheme for the filenames and the risk of duplicates is low
-            $localFile = time() . substr($_FILES['upload']['name'], strrpos($_FILES['upload']['name'], '.'));
-            $serverUrl = $myFilesProfilePhotos->getServerPath().'/'.$localFile;
-            if(is_file($serverUrl))
-            {
-                // if file exists than create a random number and append it to the filename
-                $serverUrl = $myFilesProfilePhotos->getServerPath() . '/' .
-                    substr($localFile, 0, strrpos($localFile, '.')) . '_' .
-                    mt_rand().substr($localFile, strrpos($localFile, '.'));
-            }
-            $htmlUrl = $g_root_path.'/adm_program/system/show_image.php?module='.$folderName.'&file='.$localFile;
-            move_uploaded_file($_FILES['upload']['tmp_name'], $serverUrl);
+            // if file exists than create a random number and append it to the filename
+            $serverUrl = $myFilesProfilePhotos->getServerPath() . '/' .
+                substr($localFile, 0, strrpos($localFile, '.')) . '_' .
+                mt_rand().substr($localFile, strrpos($localFile, '.'));
         }
-        else
-        {
-            $message = strStripTags($gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath,
-                '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
-        }
+        $htmlUrl = $g_root_path.'/adm_program/system/show_image.php?module='.$folderName.'&file='.$localFile;
+        move_uploaded_file($_FILES['upload']['tmp_name'], $serverUrl);
     }
     else
     {
-        $message = strStripTags($gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath,
-            '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+        $message = strStripTags($gL10n->get(
+            $myFilesProfilePhotos->errorText,
+            $myFilesProfilePhotos->errorPath,
+            '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'
+        ));
     }
 
     // now call CKEditor function and send photo data

@@ -2,7 +2,7 @@
 /**
  ***********************************************************************************************
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -177,7 +177,7 @@ abstract class Modules
     protected function setId()
     {
         // check optional user parameter and make secure. Otherwise set default value
-        $this->id = admFuncVariableIsValid($this->properties, 'id', 'numeric');
+        $this->id = admFuncVariableIsValid($this->properties, 'id', 'int');
     }
 
     /**

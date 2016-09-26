@@ -4,7 +4,7 @@
  * Login page
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -92,7 +92,7 @@ $page->addHtml('
         <small><a href="'.$mail_link.'">'.$gL10n->get('SYS_FORGOT_MY_PASSWORD').'</a></small>
     </div>
     <div id="login_admidio_link">
-        <small>Powered by <a href="http://www.admidio.org/">Admidio</a></small>
+        <small>Powered by <a href="'.ADMIDIO_HOMEPAGE.'">Admidio</a></small>
     </div>');
 
 $page->show();

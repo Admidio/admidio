@@ -8,7 +8,7 @@
  *            in the update scripts
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -44,7 +44,7 @@ $orga_preferences = array(
     // E-mail dispatch
     'mail_send_method'               => 'phpmail',
     'mail_bcc_count'                 => '50',
-    'mail_sender_into_to'            => '0',
+    'mail_recipients_with_roles'     => '0',
     'mail_character_encoding'        => 'utf-8',
     'mail_smtp_host'                 => '',
     'mail_smtp_auth'                 => '1',

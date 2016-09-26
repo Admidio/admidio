@@ -4,7 +4,7 @@
  * Common functions for update and installation
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -55,11 +55,11 @@ function checkDatabaseVersion(&$db)
     $message = '';
 
     // check database version
-    if(version_compare($db->getVersion(), $db->getMinimumRequiredVersion()) === -1)
+    if(version_compare($db->getVersion(), $db->getMinimumRequiredVersion(), '<'))
     {
         $message = $gL10n->get('SYS_DATABASE_VERSION').': <strong>'.$db->getVersion().'</strong><br /><br />'.
                    $gL10n->get('INS_WRONG_MYSQL_VERSION', ADMIDIO_VERSION_TEXT, $db->getMinimumRequiredVersion(),
-                               '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
+                               '<a href="'.ADMIDIO_HOMEPAGE.'index.php?page=download">', '</a>');
     }
 
     return $message;
@@ -72,15 +72,72 @@ function checkDatabaseVersion(&$db)
 function checkPhpVersion()
 {
     global $gL10n;
+
     $message = '';
 
     // check PHP version
-    if(version_compare(phpversion(), MIN_PHP_VERSION) === -1)
+    if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
     {
         $message = $gL10n->get('SYS_PHP_VERSION').': <strong>'.phpversion().'</strong><br /><br />'.
                    $gL10n->get('INS_WRONG_PHP_VERSION', ADMIDIO_VERSION_TEXT, MIN_PHP_VERSION,
-                               '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
+                               '<a href="'.ADMIDIO_HOMEPAGE.'index.php?page=download">', '</a>');
     }
 
     return $message;
+}
+
+/**
+ * Read data from sql file and execute all statements to the current database
+ * @param string $sqlFileName
+ * @return true|string Returns true no error occurs ales error message is returned
+ */
+function querySqlFile($sqlFileName)
+{
+    global $gL10n, $gDb, $g_tbl_praefix;
+
+    $sqlPath = SERVER_PATH . '/adm_program/installation/db_scripts/';
+    $sqlFilePath = $sqlPath . $sqlFileName;
+
+    if (!is_file($sqlFilePath))
+    {
+        return $gL10n->get('INS_DATABASE_FILE_NOT_FOUND', $sqlFileName, $sqlPath);
+    }
+
+    $fileHandler = fopen($sqlFilePath, 'r');
+
+    if ($fileHandler === false)
+    {
+        return $gL10n->get('INS_ERROR_OPEN_FILE', $sqlFilePath);
+    }
+
+    $content = fread($fileHandler, filesize($sqlFilePath));
+    fclose($fileHandler);
+
+    $sqlArr = explode(';', $content);
+
+    foreach ($sqlArr as $sql)
+    {
+        if (trim($sql) !== '')
+        {
+            // replace prefix with installation specific table prefix
+            $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
+            // now execute update sql
+            $gDb->query($sql);
+        }
+    }
+
+    return true;
+}
+
+function disableSoundexSearchIfPgsql()
+{
+    global $gDbType, $gDb;
+
+    if ($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
+    {
+        // soundex is not a default function in PostgreSQL
+        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'0\'
+                 WHERE prf_name LIKE \'system_search_similar\'';
+        $gDb->query($sql);
+    }
 }

@@ -1,69 +1,73 @@
 -------------------------------------------------------------------------
                        Calendar Plugin for Admidio
+                     2004 - 2016 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
 
- 1. Einleitung
+ 1. Introduction
  2. Installation
  3. Update
  4. Bugs
- 5. Lizenz
+ 5. Licence
  6. Copyright
 
 
- 1. Einleitung
+ 1. Introduction
 -------------------------------------------------------------------------
-Calendar stellt wechselbaren Kalender-Monat dar und markiert die in der
-Datenbank hinterlegten Termine und Geburtstage ansichtlich. Kurze
-Informationen zu den Terminen und Geburtstagen stehen bei Überfahren mit
-dem Mauszeiger als Tooltip oder Linktext zur Verfügung. Ist ein Termin
-markiert ist er zugleich der Link zum Originaltermin.
+The plugin Calendar will show a small month view and will highlight all
+days with events or birthdays. A short information about the event or the
+birthday will be shown on mouseover. There is also a link to the defailed
+view of an event.
 
-Calendar ist ein Plugin zu der Online-Mitgliederverwaltung
-Admidio ab Version 2.0 (http://www.admidio.org) und kann nicht ohne diese
-benutzt werden.
+Calendar is a plugin of the online membership management
+Admidio (https://www.admidio.org) and can not be used without this.
 
 
  2. Installation
 -------------------------------------------------------------------------
-Beachten Sie bitte für eine fehlerfreie Installation unsere Onlinehilfe !
-http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:plugins
+Please take a look at our Wiki for a detailed description how to integrate
+a plugin to your Admidio installation:
+https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:plugins
 
-Dort wird Ihnen Schritt für Schritt die Installation und Einrichtung
-eines Plugins erklärt. Vergessen Sie bei der Installation das Einfügen
-der CSS-Datei in Ihren Dateikopf nicht.
+Please don't forget to add the calendar.css to the head of your html page.
 
 
  3. Update
 -------------------------------------------------------------------------
-Bei einem Update sollten Sie in der Regel nur die calendar.php
-ersetzen.
+To update this plugin you should only replace the calendar.php
+and the languages folder.
 
-Falls es mit der neuen Version neue Einstellungen gibt, die Sie gerne
-verändern möchten, so müssen Sie diese noch in die bereits vorhandene
-config.php eintragen.
+If there are new settings within the new version and you would like to
+use a different value for this setting than the default you must add
+this new setting to your existing config.php of this plugin.
 
 
  4. Bugs
 -------------------------------------------------------------------------
-Fehler können Sie im Admidio-Forum http://forum.admidio.org melden.
+If you found an issue with this plugin you can report this at our
+plugin forum:
+https://forum.admidio.org/viewforum.php?f=10
+
+It is also possible to report an issue directly in our issue tracker at
+GitHub. There, however, it should be ensured that this is not a
+configuration issue, but in fact an error of the plugin.
+https://github.com/Admidio/admidio/issues
 
 
- 5. Lizenz
+ 5. Licence
 -------------------------------------------------------------------------
-Die Admidio Mitgliederverwaltung sowie dieses Plugin stehen unter der
-GNU General Public License 2. Bevor Sie Admidio oder dieses Plugin benutzen,
-sollten Sie unbedingt die mitgelieferte gpl-de.html durchlesen oder auf
-der GNU Homepage nachschauen.
+The Admidio membership administration and this plugin are under the
+GNU General Public License 2. Before using Admidio or this plugin,
+be sure to read the supplied licence.txt or look at the GNU website.
 https://www.gnu.org/licenses/gpl-2.0.html
 
 
  6. Copyright
 -------------------------------------------------------------------------
-Es ist nicht gestattet den Copyrighthinweis im Quellcode zu entfernen.
-Für weitere Informationen sollten Sie die gpl-de.html durchlesen.
+It is not allowed to remove the copyright notice in the source code.
+For more information you should read licence.txt.
 
 -------------------------------------------------------------------------
-                Copyright (c) 2004 - 2016 The Admidio Team
+                    2004 - 2016 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------

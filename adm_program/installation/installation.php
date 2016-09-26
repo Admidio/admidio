@@ -4,7 +4,7 @@
  * Installation and configuration of Admidio database and config file
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
@@ -54,7 +54,7 @@ if(!isset($g_tbl_praefix))
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1).'/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
-if(version_compare(phpversion(), MIN_PHP_VERSION) === -1)
+if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
 {
     exit('<div style="color: #cc0000;">Error: Your PHP version '.phpversion().' does not fulfill
         the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or higher.</div>');
@@ -598,22 +598,17 @@ elseif($getMode === 8) // Start installation
     }
 
     // read data from sql script db.sql and execute all statements to the current database
-    $filename = 'db_scripts/db.sql';
-    $file     = fopen($filename, 'r')
-                or showNotice($gL10n->get('INS_DATABASE_FILE_NOT_FOUND', 'db.sql', 'adm_program/installation/db_scripts'),
-                              'installation.php?mode=6', $gL10n->get('SYS_BACK'), 'layout/back.png');
-    $content  = fread($file, filesize($filename));
-    $sql_arr  = explode(';', $content);
-    fclose($file);
+    $sqlQueryResult = querySqlFile('db.sql');
 
-    foreach($sql_arr as $sql)
+    if (is_string($sqlQueryResult))
     {
-        if(trim($sql) !== '')
-        {
-            // Prefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
-            $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
-            $db->query($sql);
-        }
+        showNotice(
+            $sqlQueryResult,
+            'installation.php?mode=6',
+            $gL10n->get('SYS_BACK'),
+            'layout/back.png'
+        );
+        // => EXIT
     }
 
     // create default data
@@ -784,13 +779,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
                      error_log($sql);
     $db->query($sql);
 
-    if($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
-    {
-        // soundex is not a default function in PostgreSQL
-        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'0\'
-                 WHERE prf_name LIKE \'system_search_similar\'';
-        $db->query($sql);
-    }
+    disableSoundexSearchIfPgsql();
 
     // create new organization
     $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);
@@ -859,7 +848,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     }
 
     // show dialog with success notification
-    $form = new HtmlFormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
+    $form = new HtmlFormInstallation('installation-form', ADMIDIO_HOMEPAGE.'index.php?page=donate');
     $form->setFormDescription($text, '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span>
                                       <strong>'.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong></div>');
     $form->openButtonGroup();

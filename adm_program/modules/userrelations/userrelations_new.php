@@ -4,7 +4,7 @@
  * Create user relations
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
@@ -140,7 +140,7 @@ else
                AND usr_valid  = 1
           ORDER BY LAST_NAME.usd_value, FIRST_NAME.usd_value, usr_id';
 }
-$form->addSelectBoxFromSql('usr_id2', $gL10n->get('SYS_MEMBER'), $gDb, $sql, array('property' => FIELD_REQUIRED));
+$form->addSelectBoxFromSql('usr_id2', $gL10n->get('SYS_MEMBER'), $gDb, $sql, array('property' => FIELD_REQUIRED, 'search' => true));
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
 

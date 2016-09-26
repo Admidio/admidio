@@ -4,7 +4,7 @@
  * Change password
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
@@ -124,42 +124,42 @@ elseif($getMode === 'html')
 
     $zxcvbnUserInputs = json_encode($user->getPasswordUserData(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
-    echo '<script type="text/javascript"><!--
-    $(function() {
-        $("body").on("shown.bs.modal", ".modal", function () {
-            $("#password_form:first *:input[type!=hidden]:first").focus();
-        });
+    echo '<script type="text/javascript">
+        $(function() {
+            $("body").on("shown.bs.modal", ".modal", function () {
+                $("#password_form:first *:input[type!=hidden]:first").focus();
+            });
 
-        $("#new_password").keyup(function(e) {
-            var result = zxcvbn(e.target.value, '.$zxcvbnUserInputs.');
-            $("#admidio-password-strength-indicator").removeClass().addClass("admidio-password-strength-indicator-" + result.score);
-        });
+            $("#new_password").keyup(function(e) {
+                var result = zxcvbn(e.target.value, '.$zxcvbnUserInputs.');
+                $("#admidio-password-strength-indicator").removeClass().addClass("admidio-password-strength-indicator-" + result.score);
+            });
 
-        $("#password_form").submit(function(event) {
-            var action = $(this).attr("action");
-            var passwordFormAlert = $("#password_form .form-alert");
-            passwordFormAlert.hide();
+            $("#password_form").submit(function(event) {
+                var action = $(this).attr("action");
+                var passwordFormAlert = $("#password_form .form-alert");
+                passwordFormAlert.hide();
 
-            // disable default form submit
-            event.preventDefault();
+                // disable default form submit
+                event.preventDefault();
 
-            $.post(action, $(this).serialize(), function(data) {
-                if(data === "success") {
-                    passwordFormAlert.attr("class", "alert alert-success form-alert");
-                    passwordFormAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
-                    passwordFormAlert.fadeIn("slow");
-                    setTimeout(function () {
-                        $("#admidio_modal").modal("hide");
-                    }, 2000);
-                } else {
-                    passwordFormAlert.attr("class", "alert alert-danger form-alert");
-                    passwordFormAlert.fadeIn();
-                    passwordFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
-                }
+                $.post(action, $(this).serialize(), function(data) {
+                    if(data === "success") {
+                        passwordFormAlert.attr("class", "alert alert-success form-alert");
+                        passwordFormAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
+                        passwordFormAlert.fadeIn("slow");
+                        setTimeout(function () {
+                            $("#admidio_modal").modal("hide");
+                        }, 2000);
+                    } else {
+                        passwordFormAlert.attr("class", "alert alert-danger form-alert");
+                        passwordFormAlert.fadeIn();
+                        passwordFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
+                    }
+                });
             });
         });
-    });
-    --></script>
+    </script>
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

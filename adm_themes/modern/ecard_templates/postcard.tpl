@@ -35,7 +35,7 @@
                                     </table>
                                 </td>
                                 <td style="width: 8px; vertical-align: bottom;">
-                                    <a href="http://www.admidio.org"><img src="<%theme_root_path%>/images/ownertext.png" width="30px" border="0" alt="Admidio"/></a>
+                                    <a href="https://www.admidio.org"><img src="<%theme_root_path%>/images/ownertext.png" width="30px" border="0" alt="Admidio"/></a>
                                 </td>
                                 <td style="background: #000000 none repeat scroll 0; width: 1px; min-width: 1px;"><br/></td>
                                 <td style="width: 8px;">&nbsp;</td>

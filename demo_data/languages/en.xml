@@ -25,7 +25,7 @@
     <string name="DEMO_DAT_TRIP_AMSTERDAM_CONTENT">On this hopefully sunny day it goes to Amsterdam.\n\nA canal cruise and a shopping trip are planned.</string>
     <string name="DEMO_GBO_WEBMASTER_WELCOME">Welcome to the guestbook of the demo area.\n\nHere you can play around and test the capabilities of Admidio.\n\nWe hope you enjoy it and that we can convince you of this great program.</string>
     <string name="DEMO_GBO_GUEST_ENTRY1">Then I'm going to look at the program.</string>
-    <string name="DEMO_GBO_WEBMASTER_COMMENT1">For more information about the program look in the [a href="http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index"]documentation[/a].\n\nFor questions and suggestions just visit our [a href="http://forum.admidio.org"]forum[/a].</string>
+    <string name="DEMO_GBO_WEBMASTER_COMMENT1">For more information about the program look in the [a href="https://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index"]documentation[/a].\n\nFor questions and suggestions just visit our [a href="https://forum.admidio.org"]forum[/a].</string>
     <string name="DEMO_LNK_SAMPLE_PAGE">Sample page</string>
     <string name="DEMO_LNK_SAMPLE_PAGE_CONTENT">On this site there's not much news :(</string>
     <string name="DEMO_LNK_ADMIDIO_CONTENT">The homepage of the [b]best[/b] open source membership management in the net.</string>

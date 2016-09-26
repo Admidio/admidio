@@ -2,7 +2,7 @@
 /**
  ***********************************************************************************************
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -554,28 +554,26 @@ class HtmlPage
         // add javascript code to page
         if($this->javascriptContent !== '')
         {
-            $headerContent .= '<script type="text/javascript"><!--
-                '.$this->javascriptContent.'
-            --></script>';
+            $headerContent .= '<script type="text/javascript">' . $this->javascriptContent . '</script>';
         }
 
         // add javascript code to page that will be executed after page is fully loaded
         if($this->javascriptContentExecute !== '')
         {
-            $headerContent .= '<script type="text/javascript"><!--
+            $headerContent .= '<script type="text/javascript">
                 $(function() {
                     $("[data-toggle=\'popover\']").popover();
                     $(".admidio-icon-info, .admidio-icon-link img, [data-toggle=tooltip]").tooltip();
                     '.$this->javascriptContentExecute.'
                 });
-            --></script>';
+            </script>';
         }
 
         $html = '
             <!DOCTYPE html>
             <html>
             <head>
-                <!-- (c) 2004 - 2016 The Admidio Team - http://www.admidio.org/ -->
+                <!-- (c) 2004 - 2016 The Admidio Team - https://www.admidio.org/ -->
 
                 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -583,10 +581,10 @@ class HtmlPage
 
                 <title>'.$this->title.'</title>
 
-                <script type="text/javascript"><!--
+                <script type="text/javascript">
                     var gRootPath  = "'. $g_root_path. '";
                     var gThemePath = "'. THEME_PATH. '";
-                --></script>';
+                </script>';
 
         $html .= $headerContent;
         $html .= $this->header;

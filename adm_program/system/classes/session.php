@@ -2,7 +2,7 @@
 /**
  ***********************************************************************************************
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -295,8 +295,7 @@ class Session extends TableAccess
         if($sesRenew === 2 || $sesRenew === 3)
         {
             $organization =& $this->getObject('gCurrentOrganization');
-            $organizationId = $organization->getValue('org_id');
-            $organization->readDataById($organizationId);
+            $organization->readDataById((int) $organization->getValue('org_id'));
             $this->setValue('ses_renew', 0);
         }
     }

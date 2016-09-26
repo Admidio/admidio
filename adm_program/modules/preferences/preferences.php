@@ -4,7 +4,7 @@
  * Organization preferences
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
@@ -176,7 +176,7 @@ $page->addHtml('
                             1 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_LOW'),
                             2 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_MID'),
                             3 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_HIGH'),
-                            4 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_EXTREME')
+                            4 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH')
                         );
                         $form->addSelectBox('password_min_strength', $gL10n->get('ORG_PASSWORD_MIN_STRENGTH'), $selectBoxEntries, array('defaultValue' => $form_values['password_min_strength'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_PASSWORD_MIN_STRENGTH_DESC'));
                         $form->addCheckbox('system_browser_update_check', $gL10n->get('ORG_BROWSER_UPDATE_CHECK'), $form_values['system_browser_update_check'], array('helpTextIdInline' => 'ORG_BROWSER_UPDATE_CHECK_DESC'));
@@ -292,7 +292,8 @@ $page->addHtml('
                         $selectBoxEntries = array('phpmail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
                         $form->addSelectBox('mail_send_method', $gL10n->get('MAI_SEND_METHOD'), $selectBoxEntries, array('defaultValue' => $form_values['mail_send_method'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MAI_SEND_METHOD_DESC'));
                         $form->addInput('mail_bcc_count', $gL10n->get('MAI_COUNT_BCC'), $form_values['mail_bcc_count'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'MAI_COUNT_BCC_DESC'));
-                        $form->addCheckbox('mail_sender_into_to', $gL10n->get('MAI_SENDER_INTO_TO'), $form_values['mail_sender_into_to'], array('helpTextIdInline' => 'MAI_SENDER_INTO_TO_DESC'));
+                        $selectBoxEntries = array(0 => $gL10n->get('MAI_HIDDEN'), 1 => $gL10n->get('MAI_SENDER'), 2 => $gL10n->get('SYS_ADMINISTRATOR'));
+                        $form->addSelectBox('mail_recipients_with_roles', $gL10n->get('MAI_RECIPIENTS_WITH_ROLES'), $selectBoxEntries, array('defaultValue' => $form_values['mail_recipients_with_roles'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MAI_RECIPIENTS_WITH_ROLES_DESC'));
                         $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
                         $form->addSelectBox('mail_character_encoding', $gL10n->get('MAI_CHARACTER_ENCODING'), $selectBoxEntries, array('defaultValue' => $form_values['mail_character_encoding'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MAI_CHARACTER_ENCODING_DESC'));
                         $form->addInput('mail_smtp_host', $gL10n->get('MAI_SMTP_HOST'), $form_values['mail_smtp_host'], array('maxLength' => 50, 'helpTextIdInline' => 'MAI_SMTP_HOST_DESC'));
@@ -419,7 +420,7 @@ $page->addHtml('
                         }
                         $form->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $gSystemComponent->getValue('com_update_step'));
 
-                        if(version_compare(phpversion(), MIN_PHP_VERSION) === -1)
+                        if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
                         {
                             $html = '<span class="text-danger"><strong>'.phpversion().'</strong></span> &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', MIN_PHP_VERSION);
                         }
@@ -429,7 +430,7 @@ $page->addHtml('
                         }
                         $form->addStaticControl('php_version', $gL10n->get('SYS_PHP_VERSION'), $html);
 
-                        if(version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion()) == -1)
+                        if(version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion(), '<'))
                         {
                             $html = '<span class="text-danger"><strong>'.$gDb->getVersion().'</strong></span> &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', $gDb->getMinimumRequiredVersion());
                         }

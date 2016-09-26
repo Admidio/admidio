@@ -4,7 +4,7 @@
  * Create the backup
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -113,7 +113,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
     (OUTPUT_COMPRESSION_TYPE === 'none'  && ($fp = @fopen($backupabsolutepath.$tempbackupfilename, 'wb'))))
 {
 
-    $fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION_TEXT.' (http://www.admidio.org)'.LINE_TERMINATOR;
+    $fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION_TEXT.' (https://www.admidio.org)'.LINE_TERMINATOR;
     $fileheaderline .= '-- '.$gL10n->get('BAC_BACKUP_FROM', date('d.m.Y'), date('G:i:s')).LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= '-- '.$gL10n->get('SYS_DATABASE').': '.$g_adm_db.LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= '-- '.$gL10n->get('SYS_USER').': '.$gCurrentUser->getValue('FIRST_NAME', 'database'). ' '. $gCurrentUser->getValue('LAST_NAME', 'database').LINE_TERMINATOR.LINE_TERMINATOR;
@@ -372,7 +372,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                     }
                 }
                 unset($fieldnames);
-                $fieldnames = $gDb->showColumns($gDb->escapeString($SelectedTables[$dbname][$t]), false);
+                $fieldnames = $gDb->getTableColumns($gDb->escapeString($SelectedTables[$dbname][$t]));
 
                 if ($_REQUEST['StartBackup'] === 'complete')
                 {

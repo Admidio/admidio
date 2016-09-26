@@ -4,7 +4,7 @@
  * Class manages access to database table adm_folders
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -94,15 +94,15 @@ class TableFolder extends TableAccess
         $this->folderPath->setFolder($this->getCompletePathOfFolder());
         $this->folderPath->createFolder($folderName, true);
 
-        if (!$this->folderPath->createFolder($folderName, true))
+        if ($this->folderPath->createFolder($folderName, true))
         {
-            return array(
-                'text' => 'SYS_FOLDER_NOT_CREATED',
-                'path' => $this->getCompletePathOfFolder().'/'.$folderName
-            );
+            return null;
         }
 
-        return null;
+        return array(
+            'text' => 'SYS_FOLDER_NOT_CREATED',
+            'path' => $this->getCompletePathOfFolder() . '/' . $folderName
+        );
     }
 
     /**

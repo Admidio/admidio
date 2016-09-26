@@ -4,7 +4,7 @@
  * Show a list of all downloads
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
@@ -295,7 +295,7 @@ if ($gCurrentUser->editDownloadRight())
                 $nextFile = $folderContent['additionalFiles'][$i];
 
                 // Get filetyp
-                $fileExtension  = admStrToLower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], '.')+1));
+                $fileExtension = admStrToLower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], '.')+1));
 
                 // Choose icon for the file
                 $iconFile = 'page_white_question.png';

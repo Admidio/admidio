@@ -4,7 +4,7 @@
  * Constants that will be used within Admidio
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -12,6 +12,8 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'constants.php')
 {
     exit('This page may not be called directly!');
 }
+
+define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
 
 // !!! Please do not edit these version numbers !!!
 define('MIN_PHP_VERSION', '5.3.7');

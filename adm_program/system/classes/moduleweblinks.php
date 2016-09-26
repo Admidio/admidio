@@ -2,7 +2,7 @@
 /**
  ***********************************************************************************************
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -57,8 +57,8 @@
  *                     [lnk_name] => Beispielseite
  *                     [16] => Auf dieser Seite gibt es nicht viele Neuigkeiten :(
  *                     [lnk_description] => Auf dieser Seite gibt es nicht viele Neuigkeiten :(
- *                     [17] => http://www.example.com
- *                     [lnk_url] => http://www.example.com
+ *                     [17] => https://www.example.com
+ *                     [lnk_url] => https://www.example.com
  *                     [18] => 6
  *                     [lnk_counter] => 6
  *                     [19] => 1

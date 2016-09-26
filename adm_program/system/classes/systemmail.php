@@ -4,7 +4,7 @@
  * Diese Klasse dient dazu Systemmails zu verschicken
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -55,7 +55,7 @@ class SystemMail extends Email
         global $gPreferences;
 
         // create organization object of the organization the current user is assigned (at registration this can be every organization)
-        if(!$this->smOrganization instanceof \Organization || $this->smOrganization->getValue('org_id') != $user->getOrganization())
+        if(!$this->smOrganization instanceof \Organization || (int) $this->smOrganization->getValue('org_id') !== $user->getOrganization())
         {
             $this->smOrganization = new Organization($this->db, $user->getOrganization());
         }

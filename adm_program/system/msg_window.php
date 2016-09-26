@@ -4,7 +4,7 @@
  * Popup window with information
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * message_id    - ID of language text, that should be shown
@@ -37,12 +37,6 @@ if($getInlineView)
 switch ($getMessageId)
 {
     case 'CAT_CATEGORY_GLOBAL':
-        // show all organizations where this organization is mother or child organization
-        $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
-        $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
-        echo $gL10n->get(strtoupper($getMessageId), $organizations);
-        break;
-
     case 'SYS_DATA_GLOBAL':
         // show all organizations where this organization is mother or child organization
         $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';

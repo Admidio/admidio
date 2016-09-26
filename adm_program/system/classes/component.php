@@ -2,7 +2,7 @@
 /**
  ***********************************************************************************************
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -76,7 +76,7 @@ class Component extends TableAccess
         elseif ($returnCode === 1) // filesystem has minor version
         {
             throw new AdmException('SYS_FILESYSTEM_VERSION_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT,
-                                   '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
+                                   '<a href="'.ADMIDIO_HOMEPAGE.'index.php?page=download">', '</a>');
         }
     }
 }

@@ -27,8 +27,8 @@ INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_versio
 --
 
 INSERT INTO %PREFIX%_organizations (org_id, org_longname, org_shortname, org_org_id_parent, org_homepage) VALUES
-(1, 'Demo-Organisation', 'DEMO', NULL, 'http://demo.admidio.org'),
-(2, 'Test-Organisation', 'TEST', 1, 'http://demo.admidio.org');
+(1, 'Demo-Organisation', 'DEMO', NULL, 'https://demo.admidio.org/'),
+(2, 'Test-Organisation', 'TEST', 1, 'https://demo.admidio.org/');
 
 --
 -- Data for table adm_preferences
@@ -582,7 +582,7 @@ INSERT INTO %PREFIX%_files (fil_id, fil_fol_id, fil_name, fil_description, fil_l
 --
 
 INSERT INTO %PREFIX%_guestbook (gbo_id, gbo_org_id, gbo_name, gbo_text, gbo_email, gbo_homepage, gbo_ip_address, gbo_locked, gbo_usr_id_create, gbo_timestamp_create, gbo_usr_id_change, gbo_timestamp_change) VALUES
-(1, 1, 'Paul Webmaster', 'DEMO_GBO_WEBMASTER_WELCOME', 'webmaster@admidio.org', 'http://www.admidio.org', '84.63.38.55', 0, 1, '2011-12-25 12:14:42', NULL, NULL),
+(1, 1, 'Paul Webmaster', 'DEMO_GBO_WEBMASTER_WELCOME', 'webmaster@admidio.org', 'https://www.admidio.org/', '84.63.38.55', 0, 1, '2011-12-25 12:14:42', NULL, NULL),
 (2, 1, 'Sepp Mayerchen', 'DEMO_GBO_GUEST_ENTRY1', NULL, NULL, '84.63.38.55', 0, NULL, '2012-01-03 20:16:42', NULL, NULL);
 
 --
@@ -597,10 +597,10 @@ INSERT INTO %PREFIX%_guestbook_comments (gbc_id, gbc_gbo_id, gbc_name, gbc_text,
 --
 
 INSERT INTO %PREFIX%_links (lnk_id, lnk_cat_id, lnk_name, lnk_description, lnk_url, lnk_counter, lnk_usr_id_create, lnk_timestamp_create, lnk_usr_id_change, lnk_timestamp_change) VALUES
-(1, 7, 'DEMO_LNK_SAMPLE_PAGE', 'DEMO_LNK_SAMPLE_PAGE_CONTENT', 'http://www.example.com', 6, 1, '2012-01-04 22:13:26', 1, '2012-01-05 21:16:32'),
-(2, 9, 'Admidio', 'DEMO_LNK_ADMIDIO_CONTENT', 'http://www.admidio.org', 157, 1, '2012-01-08 11:12:05', NULL, NULL),
-(3, 9, 'DEMO_LNK_FORUM', 'DEMO_LNK_FORUM_CONTENT', 'http://forum.admidio.org', 46, 1, '2012-01-04 21:15:44', NULL, NULL),
-(4, 9, 'DEMO_LNK_DOCUMENTATION', 'DEMO_LNK_DOCUMENTATION_CONTENT', 'http://www.admidio.org/dokuwiki', 21, 1, '2012-04-05 14:13:23', NULL, NULL);
+(1, 7, 'DEMO_LNK_SAMPLE_PAGE', 'DEMO_LNK_SAMPLE_PAGE_CONTENT', 'https://www.example.com', 6, 1, '2012-01-04 22:13:26', 1, '2012-01-05 21:16:32'),
+(2, 9, 'Admidio', 'DEMO_LNK_ADMIDIO_CONTENT', 'https://www.admidio.org/', 157, 1, '2012-01-08 11:12:05', NULL, NULL),
+(3, 9, 'DEMO_LNK_FORUM', 'DEMO_LNK_FORUM_CONTENT', 'https://forum.admidio.org/', 46, 1, '2012-01-04 21:15:44', NULL, NULL),
+(4, 9, 'DEMO_LNK_DOCUMENTATION', 'DEMO_LNK_DOCUMENTATION_CONTENT', 'https://www.admidio.org/dokuwiki', 21, 1, '2012-04-05 14:13:23', NULL, NULL);
 
 --
 -- Data for table adm_lists
@@ -973,7 +973,7 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (8, 1, 10, '1968-04-16'),
 (9, 1, 11, '1'),
 (10, 1, 12, 'webmaster@admidio.org'),
-(11, 1, 13, 'http://www.admidio.org'),
+(11, 1, 13, 'https://www.admidio.org/'),
 (12, 1, 20, '001'),
 (13, 1, 21, 'blau'),
 (13000, 1, 22, 'Admidio'),
@@ -2758,7 +2758,7 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1787, 351, 10, '1973-12-24'),
 (1788, 351, 11, '1'),
 (1789, 351, 12, 'demo@admidio.org'),
-(1790, 351, 13, 'http://demo.admidio.org'),
+(1790, 351, 13, 'https://demo.admidio.org/'),
 (1791, 351, 14, 'Demouser'),
 (1792, 351, 20, '4711'),
 (17921, 351, 25, '3'),

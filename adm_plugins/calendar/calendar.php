@@ -12,7 +12,7 @@
  * Compatible with Admidio version 3.1
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -372,7 +372,7 @@ if($firstWeekdayOfMonth === 0)
 echo '<div id="plgCalendarContent" class="admidio-plugin-content">
 <h3>'.$gL10n->get('DAT_CALENDAR').'</h3>
 
-<script type="text/javascript"><!--
+<script type="text/javascript">
     if (typeof gTranslations === "undefined") {
         var gTranslations = [
             "'.$gL10n->get('SYS_MON').'",
@@ -386,7 +386,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
             "'.$gL10n->get('SYS_LOADING_CONTENT').'"
         ];
     }
---></script>
+</script>
 
 <table border="0" id="plgCalendarTable">
     <tr>';

@@ -4,7 +4,7 @@
  * Class handle role rights, cards and other things of users
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -338,12 +338,12 @@ class User extends TableAccess
 
         $sqlAdministrator = '';
         // only check for administrator role if version > 3.1 because before it was webmaster role
-        if ($isAdministrator && version_compare($installedDbVersion, '3.2.0') === 1)
+        if ($isAdministrator && version_compare($installedDbVersion, '3.2.0', '>='))
         {
             $sqlAdministrator = ', rol_administrator AS administrator';
         }
         // only check for webmaster role if version > 2.3 because before we don't have that flag
-        elseif ($isAdministrator && version_compare($installedDbVersion, '2.4.0') === 1)
+        elseif ($isAdministrator && version_compare($installedDbVersion, '2.4.0', '>='))
         {
             $sqlAdministrator = ', rol_webmaster AS administrator';
         }
@@ -370,7 +370,7 @@ class User extends TableAccess
             return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', $userRow['org_longname']);
         }
 
-        if ($isAdministrator && version_compare($installedDbVersion, '2.4.0') === 1 && $userRow['administrator'] == 0)
+        if ($isAdministrator && version_compare($installedDbVersion, '2.4.0', '>=') && $userRow['administrator'] == 0)
         {
             return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', $userRow['org_longname']);
         }

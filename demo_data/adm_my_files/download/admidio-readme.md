@@ -32,15 +32,15 @@ like member lists, event manager, guestbook, photo album or download area.
 ## Installation
 
 You can install Admidio on your webspace if the script language [PHP](https://secure.php.net/) in version 5.3.7
-or higher is available. Admidio also needs a [MySql](http://www.mysql.com/) (version 5.0 or higher) or
-[PostgreSQL](http://www.postgresql.org/) (version 9.0 or higher) database to run.
+or higher is available. Admidio also needs a [MySQL](https://www.mysql.com/) (version 5.0 or higher) or
+[PostgreSQL](https://www.postgresql.org/) (version 9.0 or higher) database to run.
 
-For a successful installation please follow our [online instructions](http://www.admidio.org/dokuwiki/doku.php?id=en:2.0:installation).
+For a successful installation please follow our [online instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:installation).
 There we describe step by step the installation process.
 
 ## Update
 
-Please follow our [online instructions](http://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update) for a successful
+Please follow our [online instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update) for a successful
 update to a new version of Admidio.
 
 Short update description:
@@ -50,28 +50,28 @@ Short update description:
 - Call the index.php in your Admidio folder and start the update.
 - Update all installed plugins in the folder adm_plugins.
 
-If you perform an update from version 2.x to version 3.x please read our [special update instructions](http://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update_von_2.x_auf_3.x).
+If you perform an update from version 2.x to version 3.x please read our [special update instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update_von_2.x_auf_3.x).
 
 ## Contributing
 
 There are several ways how you can contribute to Admidio.
 
-The easiest way to support us will be [our forum](http://forum.admidio.org). There you can help other
+The easiest way to support us will be [our forum](https://forum.admidio.org). There you can help other
 users with your knowledge and answer questions. Try to reproduce errors
 that other users report or give hints to some problems.
 
-Another way is [our documentation](http://admidio.org/dokuwiki/doku.php?id=de:2.0:index). We want to deliver a helpful documentation to
+Another way is [our documentation](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:index). We want to deliver a helpful documentation to
 our users. But there is a lot work to do. You see our current state in the wiki.
 Just ask us for write permissions in the wiki and you can start.
 
-We always need persons who [translate our software Admidio](http://admidio.org/dokuwiki/doku.php?id=en:entwickler:uebersetzen) into another
+We always need persons who [translate our software Admidio](https://www.admidio.org/dokuwiki/doku.php?id=en:entwickler:uebersetzen) into another
 language or just update an existing language to the current version.
-We also need people you translate [our documentation](http://admidio.org/dokuwiki/doku.php?id=de:2.0:index) into english.
+We also need people you translate [our documentation](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:index) into english.
 
-If you habe knowledge in PHP programming and know something about HTML, CSS and
+If you have knowledge in PHP programming and know something about HTML, CSS and
 JavaScript then you can start to help us to improve the software Admidio.
 You will find our software at GitHub. The handling with GitHub and branches
-is described in [our wiki](http://admidio.org/dokuwiki/doku.php?id=de:entwickler:fehlerkorrekturen_in_mehreren_versionen).
+is described in [our wiki](https://www.admidio.org/dokuwiki/doku.php?id=en:entwickler:fehlerkorrekturen_in_mehreren_versionen).
 
 So if you find yourself in one of the above points then we invite you
 to join our team and help to improve Admidio to one of the best free
@@ -79,12 +79,12 @@ membership software.
 
 ## Changelog
 
-Please visit our [changelog](http://admidio.org/index.php?page=changelog) for detail informations about the bugfixes and enhancements in each version.
+Please visit our [changelog](https://www.admidio.org/index.php?page=changelog) for detail information about the bugfixes and enhancements in each version.
 
 ## Donation
 
 If you like the software and our project then we are happy if you [donate
-some money](http://www.admidio.org/index.php?page=donate) to the project.
+some money](https://www.admidio.org/index.php?page=donate) to the project.
 
 ## Copyright and License
 
@@ -101,22 +101,27 @@ We want to thank the people behind these projects for contributing
 and sharing great software.
 
 - [Admidio Team](https://github.com/Admidio/admidio/graphs/contributors): The core developers of this project
-- [Icon Bibliothek famfamfam, Silk Icons](http://www.famfamfam.com): Icon Bibliothek
-- [Tango Desktop Project](http://tango.freedesktop.org): Icon Bibliothek Tango
-- [Bootstrap](http://www.getbootstrap.com): HTML, CSS and JS framework
-- [jQuery](http://www.jquery.com): JavaScript-Library
-- [CKEditor](http://www.ckeditor.com): Javascript-Editor
+- [Icon Bibliothek famfamfam, Silk Icons](http://www.famfamfam.com/): Icon Bibliothek
+- [Tango Desktop Project](http://tango.freedesktop.org/): Icon Bibliothek Tango
+- [Bootstrap](https://getbootstrap.com/): HTML, CSS and JS framework
+- [jQuery](https://jquery.com/): JavaScript-Library
+- [CKEditor](http://ckeditor.com/): Javascript-Editor
 - [PHPMailer](https://github.com/PHPMailer/PHPMailer): Email sending library for PHP
-- [Datatables](http://www.datatables.net): Table plugin for jQuery
+- [SecurImage](https://www.phpcaptcha.org/): PHP CAPTCHA script for generating complex images and CAPTCHA codes to protect forms from spam and abuse.
+- [Datatables](https://www.datatables.net/): Table plugin for jQuery
 - [Select2](https://select2.github.io/): jQuery replacement for select boxes
 - [jQuery-File-Upload](https://blueimp.github.io/jQuery-File-Upload/): jQuery file upload plugin
 - [Bootstrap-Datepicker](https://github.com/eternicode/bootstrap-datepicker): Datepicker for bootstrap 3
-- [Lightbox](http://ashleydw.github.io/lightbox/): Lightbox for bootstrap 3
+- [Lightbox](https://ashleydw.github.io/lightbox/): Lightbox for bootstrap 3
 - [Moment](http://momentjs.com/): Parse, validate, manipulate, and display dates in JavaScript
-- [James Heinrich](http://www.silisoftware.com): backupDB
+- [NobleCount](https://tpgblog.com/NobleCount/): NobleCount… for a more ‘proper’ count of the characters remaining.
+- [James Heinrich](http://www.silisoftware.com/): backupDB
+- [password_compat](https://github.com/ircmaxell/password_compat/): Compatibility with the password_* functions that ship with PHP 5.5
 - [htmLawed](http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/): PHP code to purify & filter HTML
 - [phpass](http://www.openwall.com/phpass/): Portable PHP password hashing framework
 - [Html5Shiv](https://github.com/aFarkas/html5shiv): Enable Html5 for older browsers
 - [Respond](https://github.com/scottjehl/Respond): Polyfill for min/max-width CSS3 Media Queries
+- [zxcvbn](https://github.com/dropbox/zxcvbn): Add password strength indicator
+- [zxcvbn-php](https://github.com/bjeavons/zxcvbn-php): Test password strength in the backend
 
-Copyright (c) 2004 - 2015 The Admidio Team
+Copyright (c) 2004 - 2016 The Admidio Team

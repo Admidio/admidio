@@ -4,7 +4,7 @@
  * Save organization preferences
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
@@ -108,7 +108,7 @@ switch($getMode)
                     break;
 
                 case 'email_dispatch':
-                    $checkboxes = array('mail_sender_into_to', 'mail_smtp_auth');
+                    $checkboxes = array('mail_smtp_auth');
                     break;
 
                 case 'system_notification':

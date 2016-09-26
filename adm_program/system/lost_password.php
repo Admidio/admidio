@@ -4,7 +4,7 @@
  * Show form where user can request a new password and handle the request
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -15,8 +15,8 @@ $headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
 // save url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// 'systemmail' and 'request password' must be activated
-if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_recovery'] != 1)
+// "systemmail" and "request password" must be activated
+if($gPreferences['enable_system_mails'] == 0 || $gPreferences['enable_password_recovery'] == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT

@@ -2,7 +2,7 @@
 /**
  ***********************************************************************************************
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
@@ -169,13 +169,13 @@ class ModuleMenu
         if(isset($menuEntry['js']) && $menuEntry['js'] !== '')
         {
             $html .= '
-                <script type="text/javascript"><!--
+                <script type="text/javascript">
                     $(function() {
                         $("#'.$menuEntry['id'].'").click(function () {
                             '.$menuEntry['js'].'
                         });
                     });
-                //--></script>';
+                </script>';
         }
 
         // add html of menu item

@@ -4,7 +4,7 @@
  * Check message information and save it
  *
  * @copyright 2004-2016 The Admidio Team
- * @see http://www.admidio.org/
+ * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
@@ -243,11 +243,16 @@ if ($getMsgType === 'EMAIL')
                 if($statement->rowCount() > 0)
                 {
                     // normaly we need no To-address and set "undisclosed recipients", but if
-                    // that won't work than the From-address will be set
-                    if($gPreferences['mail_sender_into_to'] == 1)
+                    // that won't work than the following address will be set
+                    if($gPreferences['mail_recipients_with_roles'] == 1)
                     {
-                        // always fill recipient if preference is set to prevent problems with provider
+                        // fill recipient with sender address to prevent problems with provider
                         $email->addRecipient($postFrom, $postName);
+                    }
+                    elseif($gPreferences['mail_recipients_with_roles'] == 2)
+                    {
+                        // fill recipient with administrators address to prevent problems with provider
+                        $email->addRecipient($gPreferences['email_administrator'], $gL10n->get('SYS_ADMINISTRATOR'));
                     }
 
                     // all role members will be attached as BCC
