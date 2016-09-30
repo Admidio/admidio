@@ -45,8 +45,10 @@ class LanguageData
      * @param string $language     The ISO code of the language for which the texts should be read e.g. @b 'de'
      * @param string $languagePath Optional a server path to the language files. If no path is set
      *                             than the default Admidio language path @b adm_program/languages will be set.
+     * @param bool   $determineBrowserLanguage If set to true then set browser language of user to the current
+     *                             language if possible
      */
-    public function __construct($language, $languagePath = '')
+    public function __construct($language, $languagePath = '', $determineBrowserLanguage = true)
     {
         if($languagePath === '')
         {
@@ -56,6 +58,13 @@ class LanguageData
         {
             $this->addLanguagePath($languagePath);
         }
+
+        if($determineBrowserLanguage === true)
+        {
+            // get browser language and set this language as default
+            $language = $this->determineBrowserLanguage($language);
+        }
+
         $this->setLanguage($language);
     }
 
@@ -70,6 +79,59 @@ class LanguageData
         {
             $this->languageFilePath[] = $path;
         }
+    }
+
+    /**
+     * Determine the language from the browser preferences of the user.
+     * @return string Return the preferred language code of the client browser
+     */
+    private function determineBrowserLanguage($defaultLanguage)
+    {
+        if(!isset($_SERVER["HTTP_ACCEPT_LANGUAGE"]) || empty($_SERVER["HTTP_ACCEPT_LANGUAGE"]))
+        {
+            return $defaultLanguage;
+        }
+
+        $accepted = preg_split("{,\s*}", $_SERVER["HTTP_ACCEPT_LANGUAGE"]);
+        $language = $defaultLanguage;
+        $quality = 0;
+
+        if(is_array($accepted) && (count($accepted) > 0))
+        {
+            foreach($accepted as $key => $value)
+            {
+                if(!preg_match("{^([a-z]{1,8}(?:-[a-z]{1,8})*)(?:;\s*q=(0(?:\.[0-9]{1,3})?|1(?:\.0{1,3})?))?$}i", $value, $matches))
+                {
+                    continue;
+                }
+
+                $code = explode("-", $matches[1]);
+
+                if(isset($matches[2]))
+                {
+                    $priority = floatval($matches[2]);
+                }
+                else
+                {
+                    $priority = 1.0;
+                }
+
+                while(count($code) > 0)
+                {
+                    if($priority > $quality)
+                    {
+                        $language = strtolower(implode("-", $code));
+                        $quality = $priority;
+
+                        break;
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return $language;
     }
 
     /**

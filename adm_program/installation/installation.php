@@ -94,6 +94,7 @@ else
 $gL10n = new Language();
 $gLanguageData = new LanguageData($language);
 $gL10n->addLanguageData($gLanguageData);
+$language = $gL10n->getLanguage();
 
 // if config file exists then connect to database
 if(is_file('../../adm_my_files/config.php'))
@@ -153,7 +154,7 @@ if($getMode === 1) // (Default) Choose language
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_CHOOSE_LANGUAGE'));
     $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'),
                                SERVER_PATH.'/adm_program/languages/languages.xml',
-                               'isocode', 'name', array('property' => FIELD_REQUIRED));
+                               'isocode', 'name', array('property' => FIELD_REQUIRED, 'defaultValue' => $gL10n->getLanguage()));
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png'));
     echo $form->show();
