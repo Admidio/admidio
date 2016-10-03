@@ -275,7 +275,7 @@ elseif($getMode === 4)  // Creating organization
         $dbPort = null;
         if (strStripTags($_POST['db_port']))
         {
-            $dbPort = strStripTags($_POST['db_port']);
+            $dbPort = (int) strStripTags($_POST['db_port']);
         }
 
         // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
