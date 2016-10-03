@@ -47,6 +47,11 @@ if(!isset($gDbType))
     $gDbType = 'mysql';
 }
 
+if (!isset($g_adm_prt))
+{
+    $g_adm_prt = null;
+}
+
 /**
  * parts of this function are from get_backtrace out of phpBB3
  * @return string Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
@@ -143,7 +148,7 @@ echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';
 // connect to database
 try
 {
-    $db = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+    $db = new Database($gDbType, $g_adm_srv, $g_adm_prt, $g_adm_db, $g_adm_usr, $g_adm_pw);
 }
 catch(AdmException $e)
 {

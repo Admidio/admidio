@@ -24,6 +24,7 @@ $g_tbl_praefix = 'adm';
 
 // Access to the database of the MySQL-Server
 $g_adm_srv = 'URL_to_your_MySQL-Server';    // Server
+$g_adm_prt = null;                          // Port
 $g_adm_usr = 'Username';                    // User
 $g_adm_pw  = 'Password';                    // Password
 $g_adm_db  = 'Databasename';                // Database

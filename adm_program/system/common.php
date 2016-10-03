@@ -77,9 +77,14 @@ if(!isset($gDbType))
     $gDbType = 'mysql';
 }
 
+if (!isset($g_adm_prt))
+{
+    $g_adm_prt = null;
+}
+
 try
 {
-    $gDb = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+    $gDb = new Database($gDbType, $g_adm_srv, $g_adm_prt, $g_adm_db, $g_adm_usr, $g_adm_pw);
 }
 catch(AdmException $e)
 {
