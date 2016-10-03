@@ -104,6 +104,7 @@
     <step id="350" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'mail_sender_into_to' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name LIKE 'mail_recipients_with_roles'</step>
     <step id="360" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'mail_sender_into_to' AND pr1.prf_name LIKE 'mail_recipients_with_roles'</step>
     <step id="370">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_sender_into_to'</step>
+    <step id="380">UPDATE %PREFIX%_preferences SET prf_name = 'lists_default_configuration' WHERE prf_name = 'lists_default_configuation'</step>
 
     <step>stop</step>
 </update>

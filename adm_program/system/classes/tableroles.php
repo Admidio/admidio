@@ -327,7 +327,7 @@ class TableRoles extends TableAccess
         }
 
         // read system default list configuration
-        return (int) $gPreferences['lists_default_configuation'];
+        return (int) $gPreferences['lists_default_configuration'];
     }
 
     /**
