@@ -456,7 +456,7 @@ class HtmlForm extends HtmlFormBasic
      *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
      *                        - @b toolbar : Optional set a predefined toolbar for the editor. Possible values are
      *                          @b AdmidioDefault, @b AdmidioGuestbook and @b AdmidioPlugin_WC
-     *                        - @b height : Optional set the height in pixel of the editor. The default will be 300px.
+     *                        - @b height : Optional set the height in pixel of the editor. The default will be 300.
      *                        - @b labelVertical : If set to @b true (default) then the label will be display above the control and the control get a width of 100%.
      *                          Otherwise the label will be displayed in front of the control.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
@@ -484,7 +484,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsDefault = array(
             'property'         => FIELD_DEFAULT,
             'toolbar'          => 'AdmidioDefault',
-            'height'           => '300px',
+            'height'           => '300',
             'helpTextIdLabel'  => '',
             'helpTextIdInline' => '',
             'labelVertical'    => true,
@@ -515,7 +515,8 @@ class HtmlForm extends HtmlFormBasic
                 language: "'.$gL10n->getLanguageIsoCode().'",
                 uiColor: "'.$gPreferences['system_js_editor_color'].'",
                 filebrowserImageUploadUrl: "'.$g_root_path.'/adm_program/system/ckeditor_upload_handler.php"
-            });';
+            });
+            CKEDITOR.config.height = '.$optionsAll['height'].';';
 
         if($gPreferences['system_js_editor_enabled'] == 1)
         {
@@ -540,7 +541,7 @@ class HtmlForm extends HtmlFormBasic
                                     $optionsAll['icon'], 'form-group-editor');
         $this->addHtml('
             <div class="'.$attributes['class'].'">
-                <textarea id="'.$id.'" name="'.$id.'"style="width: 100%; height: '.$optionsAll['height'].';">'.$value.'</textarea>
+                <textarea id="'.$id.'" name="'.$id.'"style="width: 100%;">'.$value.'</textarea>
             </div>');
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
 
