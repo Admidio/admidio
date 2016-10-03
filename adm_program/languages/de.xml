@@ -1249,6 +1249,7 @@
     <string name="SYS_PLEASE_CHOOSE">Bitte wählen</string>
     <string name="SYS_PLEASE_WAIT">Bitte warten</string>
     <string name="SYS_PM">Private Nachricht</string>
+    <string name="SYS_PORT">Port</string>
     <string name="SYS_PORTRAIT" description="Format for printing">Hochformat</string>
     <string name="SYS_POST_MAX_SIZE">max. POST-Größe</string>
     <string name="SYS_POSTCODE">PLZ</string>
