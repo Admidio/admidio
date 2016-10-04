@@ -98,28 +98,28 @@ $part2 = '"><img src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MSG
 $href  = 'href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?msg_id=';
 
 // open some additonal functions for messages
-$modulemessages = new ModuleMessages();
+$moduleMessages = new ModuleMessages();
 
 // find all own Email messages
-$statement = $modulemessages->msgGetUserEmails($gCurrentUser->getValue('usr_id'));
+$statement = $moduleMessages->msgGetUserEmails($gCurrentUser->getValue('usr_id'));
 if(isset($statement))
 {
     while ($row = $statement->fetch())
     {
-        $ReceiverName = '';
+        $receiverName = '';
         if (strpos($row['user'], '|') > 0)
         {
-            $reciversplit = explode('|', $row['user']);
-            foreach ($reciversplit as $value)
+            $receiverSplit = explode('|', $row['user']);
+            foreach ($receiverSplit as $value)
             {
                 if (strpos($value, ':') > 0)
                 {
-                    $ReceiverName .= '; ' . $modulemessages->msgGroupNameSplit($value);
+                    $receiverName .= '; ' . $moduleMessages->msgGroupNameSplit($value);
                 }
                 else
                 {
                     $user = new User($gDb, $gProfileFields, $value);
-                    $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                    $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
                 }
             }
         }
@@ -127,15 +127,15 @@ if(isset($statement))
         {
             if (strpos($row['user'], ':') > 0)
             {
-                $ReceiverName .= '; ' . $modulemessages->msgGroupNameSplit($row['user']);
+                $receiverName .= '; ' . $moduleMessages->msgGroupNameSplit($row['user']);
             }
             else
             {
                 $user = new User($gDb, $gProfileFields, $row['user']);
-                $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
             }
         }
-        $ReceiverName = substr($ReceiverName, 2);
+        $receiverName = substr($receiverName, 2);
 
         $message = new TableMessage($gDb, $row['msg_id']);
         ++$key;
@@ -148,7 +148,7 @@ if(isset($statement))
                     <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />
                 </a>',
                 '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
-                $ReceiverName,
+                $receiverName,
                 $message->getValue('msg_timestamp'),
                 $messageAdministration
             ),
@@ -158,7 +158,7 @@ if(isset($statement))
 }
 
 // find all unread PM messages
-$statement = $modulemessages->msgGetUserUnread($gCurrentUser->getValue('usr_id'));
+$statement = $moduleMessages->msgGetUserUnread($gCurrentUser->getValue('usr_id'));
 if(isset($statement))
 {
     while ($row = $statement->fetch())
@@ -171,7 +171,7 @@ if(isset($statement))
         {
             $user = new User($gDb, $gProfileFields, $row['msg_usr_id_sender']);
         }
-        $ReceiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+        $receiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
         $message = new TableMessage($gDb, $row['msg_id']);
         ++$key;
 
@@ -183,7 +183,7 @@ if(isset($statement))
                     <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/pm.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />
                 </a>',
                 '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
-                $ReceiverName,
+                $receiverName,
                 $message->getValue('msg_timestamp'),
                 $messageAdministration
             ),
@@ -194,7 +194,7 @@ if(isset($statement))
 }
 
 // find all read or own PM messages
-$statement = $modulemessages->msgGetUser($gCurrentUser->getValue('usr_id'));
+$statement = $moduleMessages->msgGetUser($gCurrentUser->getValue('usr_id'));
 if(isset($statement))
 {
     while ($row = $statement->fetch())
@@ -208,7 +208,7 @@ if(isset($statement))
             $user = new User($gDb, $gProfileFields, $row['msg_usr_id_sender']);
         }
 
-        $ReceiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+        $receiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
         $message = new TableMessage($gDb, $row['msg_id']);
         ++$key;
 
@@ -220,7 +220,7 @@ if(isset($statement))
                     <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/pm.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />
                 </a>',
                 '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
-                $ReceiverName,
+                $receiverName,
                 $message->getValue('msg_timestamp'),
                 $messageAdministration
             ),

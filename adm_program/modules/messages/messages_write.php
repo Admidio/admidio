@@ -406,7 +406,7 @@ elseif (!isset($messageStatement))
                 }
             }
 
-            $list =  array_merge($list, $active_list, $passive_list);
+            $list = array_merge($list, $active_list, $passive_list);
         }
     }
     else

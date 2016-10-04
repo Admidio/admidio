@@ -414,7 +414,7 @@ class HtmlTable extends HtmlTableBasic
      */
     public function show()
     {
-        global $g_root_path, $gPreferences;
+        global $gPreferences;
 
         if ($this->rowCount === 0 && !$this->serverSideProcessing)
         {

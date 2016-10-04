@@ -103,7 +103,7 @@ class DateTimeExtended extends DateTime
 
         foreach ($formatArray as $formatChar)
         {
-            switch($formatChar)
+            switch ($formatChar)
             {
                 case 'd':
                     $destFormat .= 'dd';
