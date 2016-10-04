@@ -91,7 +91,7 @@ $table->addRowHeadingByArray(array(
     $gL10n->get('SYS_DATE'),
     ''
 ));
-$table->disableDatatablesColumnsSort(5);
+$table->disableDatatablesColumnsSort(array(5));
 $key = 0;
 $part1 = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=msg&amp;element_id=row_message_';
 $part2 = '"><img src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MSG_REMOVE').'" title="'.$gL10n->get('MSG_REMOVE').'" /></a>';
