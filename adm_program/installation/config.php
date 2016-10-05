@@ -17,10 +17,11 @@ $gDbType = '%DB_TYPE%';
 $g_tbl_praefix = '%PREFIX%';
 
 // Access to the database of the MySQL-Server
-$g_adm_srv = '%SERVER%';      // Server
-$g_adm_usr = '%USER%';        // User
-$g_adm_pw  = '%PASSWORD%';    // Password
-$g_adm_db  = '%DATABASE%';    // Database
+$g_adm_srv  = '%SERVER%';      // Server
+$g_adm_port = '%PORT%';        // Port
+$g_adm_usr  = '%USER%';        // User
+$g_adm_pw   = '%PASSWORD%';    // Password
+$g_adm_db   = '%DATABASE%';    // Database
 
 // URL to this Admidio installation
 // Example: 'https://www.admidio.org/example'

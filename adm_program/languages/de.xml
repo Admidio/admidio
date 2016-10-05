@@ -217,6 +217,7 @@
     <string name="INS_DATABASE_LOGIN_DESC">Gib in diesem Formular deine Zugangsdaten zur Datenbank an. Du kannst das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls du mehrere Admidio-Installationen auf derselben Datenbank einrichten möchtest.</string>
     <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Deine Datenbank liegt in Version #VAR1# vor.\n\nEine Aktualisierung der Datenbank auf Version #VAR2# ist erforderlich.</string>
     <string name="INS_DATABASE_SYSTEM">Datenbanksystem</string>
+    <string name="INS_DATABASE_PORT_INFO">Wird dieses Feld nicht ausgefüllt, so wird der Standardport der Datenbank (MySQL: 3306, PostgreSQL: 5432) verwendet. Nutzt du oder dein Webhoster einen speziellen Port, so kann dieser hier eingetragen werden.</string>
     <string name="INS_DELETE_CONFIG_FILE">Im Hauptverzeichnis von Admidio #VAR1_BOLD# existiert noch eine Datei config.php. Diese wurde bereits in den Ordner adm_my_files verschoben. Lösche bitte diese Datei im Hauptverzeichnis.</string>
     <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Konfigurationsdatei herunterladen</string>
     <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Die Konfigurationsdatei #VAR1_BOLD# konnte nicht im Ordner #VAR2_BOLD# abgelegt werden. Bitte gib dem Ordner Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) oder lade die Konfigurationsdatei herunter und kopiere diese mit einem FTP-Programm in das Admidio Verzeichnis #VAR3_BOLD#.\n\nNachdem du die Datei dort abgelegt hast, kannst du die Installation fortsetzen.</string>
@@ -1249,6 +1250,7 @@
     <string name="SYS_PLEASE_CHOOSE">Bitte wählen</string>
     <string name="SYS_PLEASE_WAIT">Bitte warten</string>
     <string name="SYS_PM">Private Nachricht</string>
+    <string name="SYS_PORT">Port</string>
     <string name="SYS_PORTRAIT" description="Format for printing">Hochformat</string>
     <string name="SYS_POST_MAX_SIZE">max. POST-Größe</string>
     <string name="SYS_POSTCODE">PLZ</string>
