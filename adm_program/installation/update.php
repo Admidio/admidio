@@ -308,7 +308,7 @@ elseif($getMode === 2)
 
     preg_match('/^(\d+)\.(\d+)\.(\d+)/', $installedDbVersion, $versionArray);
     $versionArray = array_map('intval', $versionArray);
-    list( , $versionMain, $versionMinor, $versionPatch) = $versionArray;
+    list(, $versionMain, $versionMinor, $versionPatch) = $versionArray;
 
     $flagNextVersion = true;
     ++$versionPatch;

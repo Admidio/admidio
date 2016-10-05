@@ -59,7 +59,7 @@ class HtmlDiv extends HtmlElement
      */
     public function __construct($id = null, $class = null)
     {
-        parent::__construct('div', '', '', true);
+        parent::__construct('div');
 
         if ($id !== null)
         {

@@ -212,7 +212,7 @@ class Email extends PHPMailer
             $attachmentSize = $currentAttachmentSize;
         }
 
-        switch($sizeUnit)
+        switch ($sizeUnit)
         {
             case 'tib':
                 $attachmentSize /= 1024;
