@@ -82,9 +82,9 @@ if(!isset($gDbType))
     $gDbType = 'mysql';
 }
 
-if (!isset($g_adm_prt))
+if (!isset($g_adm_port))
 {
-    $g_adm_prt = null;
+    $g_adm_port = null;
 }
 
 // create language and language data object to handle translations
@@ -105,7 +105,7 @@ if(is_file('../../adm_my_files/config.php'))
 {
     try
     {
-        $db = new Database($gDbType, $g_adm_srv, $g_adm_prt, $g_adm_db, $g_adm_usr, $g_adm_pw);
+        $db = new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
     }
     catch(AdmException $e)
     {
@@ -132,7 +132,7 @@ if(is_file('../../adm_my_files/config.php'))
         // save database parameters of config.php in session variables
         $_SESSION['db_type']     = $gDbType;
         $_SESSION['db_server']   = $g_adm_srv;
-        $_SESSION['db_port']     = $g_adm_prt;
+        $_SESSION['db_port']     = $g_adm_port;
         $_SESSION['db_user']     = $g_adm_usr;
         $_SESSION['db_password'] = $g_adm_pw;
         $_SESSION['db_database'] = $g_adm_db;
@@ -236,7 +236,7 @@ elseif($getMode === 3)  // Enter database access information
     $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), SERVER_PATH.'/adm_program/system/databases.xml',
                                'identifier', 'name', array('property' => FIELD_REQUIRED, 'defaultValue' => $dbType));
     $form->addInput('db_server', $gL10n->get('SYS_SERVER'), $server, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-    $form->addInput('db_port', $gL10n->get('SYS_PORT'), $port, array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1));
+    $form->addInput('db_port', $gL10n->get('SYS_PORT'), $port, array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1, 'helpTextIdInline' => 'INS_DATABASE_PORT_INFO'));
     $form->addInput('db_user', $gL10n->get('SYS_USERNAME'), $user, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('db_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password'));
     $form->addInput('db_database', $gL10n->get('SYS_DATABASE'), $database, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
@@ -605,7 +605,7 @@ elseif($getMode === 8) // Start installation
     &&    ($g_tbl_praefix  !== $_SESSION['prefix']
         || $gDbType        !== $_SESSION['db_type']
         || $g_adm_srv      !== $_SESSION['db_server']
-        || $g_adm_prt      !== $_SESSION['db_port']
+        || $g_adm_port     !== $_SESSION['db_port']
         || $g_adm_usr      !== $_SESSION['db_user']
         || $g_adm_pw       !== $_SESSION['db_password']
         || $g_adm_db       !== $_SESSION['db_database']

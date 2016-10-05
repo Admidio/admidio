@@ -80,15 +80,15 @@ if(!isset($gDbType))
     $gDbType = 'mysql';
 }
 
-if (!isset($g_adm_prt))
+if (!isset($g_adm_port))
 {
-    $g_adm_prt = null;
+    $g_adm_port = null;
 }
 
 // connect to database
 try
 {
-    $gDb = new Database($gDbType, $g_adm_srv, $g_adm_prt, $g_adm_db, $g_adm_usr, $g_adm_pw);
+    $gDb = new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
 }
 catch(AdmException $e)
 {
