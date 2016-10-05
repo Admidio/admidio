@@ -427,8 +427,8 @@ class HtmlTable extends HtmlTableBasic
         global $gPreferences;
 
         $this->htmlPage->addJavascriptFile('adm_program/libs/datatables/datatables.js');
-        $this->htmlPage->addJavascriptFile('adm_program/libs/moment/moment.js');
-        $this->htmlPage->addJavascriptFile('adm_program/libs/moment/datetime-moment.js');
+        $this->htmlPage->addJavascriptFile('adm_program/libs/moment/min/moment.min.js');
+        $this->htmlPage->addJavascriptFile('adm_program/libs/datatables-datetime-moment/datetime-moment.js');
         $this->htmlPage->addCssFile('adm_program/libs/datatables/datatables.css');
 
         if ($this->rowCount > 10 || $this->serverSideProcessing)
