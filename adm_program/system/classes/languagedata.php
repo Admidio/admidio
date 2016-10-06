@@ -46,10 +46,8 @@ class LanguageData
      *                             If no language is set than the browser language will be determined.
      * @param string $languagePath Optional a server path to the language files. If no path is set
      *                             than the default Admidio language path @b adm_program/languages will be set.
-     * @param bool   $determineBrowserLanguage If set to true then set browser language of user to the current
-     *                             language if possible
      */
-    public function __construct($language = '', $languagePath = '', $determineBrowserLanguage = true)
+    public function __construct($language = '', $languagePath = '')
     {
         if($languagePath === '')
         {
@@ -89,25 +87,25 @@ class LanguageData
      */
     public static function determineBrowserLanguage($defaultLanguage)
     {
-        if(!isset($_SERVER["HTTP_ACCEPT_LANGUAGE"]) || empty($_SERVER["HTTP_ACCEPT_LANGUAGE"]))
+        if(!isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) || empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
         {
             return $defaultLanguage;
         }
 
-        $accepted = preg_split("{,\s*}", $_SERVER["HTTP_ACCEPT_LANGUAGE"]);
+        $accepted = preg_split('{,\s*}', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
         $language = $defaultLanguage;
         $quality = 0;
 
-        if(is_array($accepted) && (count($accepted) > 0))
+        if(is_array($accepted) && count($accepted) > 0)
         {
             foreach($accepted as $key => $value)
             {
-                if(!preg_match("{^([a-z]{1,8}(?:-[a-z]{1,8})*)(?:;\s*q=(0(?:\.[0-9]{1,3})?|1(?:\.0{1,3})?))?$}i", $value, $matches))
+                if(!preg_match('{^([a-z]{1,8}(?:-[a-z]{1,8})*)(?:;\s*q=(0(?:\.[0-9]{1,3})?|1(?:\.0{1,3})?))?$}i', $value, $matches))
                 {
                     continue;
                 }
 
-                $code = explode("-", $matches[1]);
+                $code = explode('-', $matches[1]);
 
                 if(isset($matches[2]))
                 {
@@ -122,7 +120,7 @@ class LanguageData
                 {
                     if($priority > $quality)
                     {
-                        $language = strtolower(implode("-", $code));
+                        $language = strtolower(implode('-', $code));
                         $quality = $priority;
 
                         break;

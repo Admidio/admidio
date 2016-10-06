@@ -88,13 +88,11 @@ if (!isset($g_adm_port))
 }
 
 // create language and language data object to handle translations
+$language = '';
+
 if(isset($_SESSION['language']))
 {
     $language = $_SESSION['language'];
-}
-else
-{
-    $language = '';
 }
 
 $gL10n = new Language();
