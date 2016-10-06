@@ -46,12 +46,6 @@ else
     define('CURRENT_URL', 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 }
 
-// set default timezone that could be defined in the config.php
-if(!isset($gTimezone))
-{
-    $gTimezone = 'Europe/Berlin';
-}
-
 date_default_timezone_set($gTimezone);
 
 // date and time for use in scripts

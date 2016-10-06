@@ -16,13 +16,13 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'common.php')
 
 // embed config and constants file
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_my_files/config.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/init_globals.php');
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/constants.php');
 
-// if there is no debug flag in config.php than set debug to false
-if(!isset($gDebug) || !$gDebug)
-{
-    $gDebug = 0;
-}
+// includes WITHOUT database connections
+require_once(SERVER_PATH . '/adm_program/libs/htmlawed/htmlawed.php');
+require_once(SERVER_PATH . '/adm_program/system/function.php');
+require_once(SERVER_PATH . '/adm_program/system/string.php');
 
 if($gDebug)
 {
@@ -36,17 +36,6 @@ if($gDebug)
               $_SERVER['SCRIPT_FILENAME'] . "\n? " . $_SERVER['QUERY_STRING']);
     error_log('memory_used::' . memory_get_usage());
 }
-
-// default prefix is set to 'adm' because of compatibility to old versions
-if($g_tbl_praefix === '')
-{
-    $g_tbl_praefix = 'adm';
-}
-
-// includes WITHOUT database connections
-require_once(SERVER_PATH . '/adm_program/libs/htmlawed/htmlawed.php');
-require_once(SERVER_PATH . '/adm_program/system/function.php');
-require_once(SERVER_PATH . '/adm_program/system/string.php');
 
 // remove HTML & PHP-Code from all parameters
 $_GET    = admStrStripTagsSpecial($_GET);
@@ -64,23 +53,6 @@ if(!get_magic_quotes_gpc())
 
 // global parameters
 $gValidLogin = false;
-
-// set default password-hash algorithm
-if (!isset($gPasswordHashAlgorithm))
-{
-    $gPasswordHashAlgorithm = 'DEFAULT';
-}
-
-// create database object and establish connection to database
-if(!isset($gDbType))
-{
-    $gDbType = 'mysql';
-}
-
-if (!isset($g_adm_port))
-{
-    $g_adm_port = null;
-}
 
 try
 {
