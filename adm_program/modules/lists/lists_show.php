@@ -563,7 +563,7 @@ foreach ($membersList as $member)
         }
         else
         {
-            $table->setDatatablesColumnsHide(2);
+            $table->setDatatablesColumnsHide(array(2));
         }
     }
 

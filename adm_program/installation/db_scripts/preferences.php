@@ -113,7 +113,7 @@ $orga_preferences = array(
     'lists_roles_per_page'        => '10',
     'lists_members_per_page'      => '25',
     'lists_hide_overview_details' => '0',
-    'lists_default_configuation'  => '',
+    'lists_default_configuration' => '',
 
     // Messages
     'enable_mail_module'          => '1',

@@ -80,10 +80,15 @@ if(!isset($gDbType))
     $gDbType = 'mysql';
 }
 
+if (!isset($g_adm_port))
+{
+    $g_adm_port = null;
+}
+
 // connect to database
 try
 {
-    $gDb = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+    $gDb = new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
 }
 catch(AdmException $e)
 {
@@ -308,7 +313,7 @@ elseif($getMode === 2)
 
     preg_match('/^(\d+)\.(\d+)\.(\d+)/', $installedDbVersion, $versionArray);
     $versionArray = array_map('intval', $versionArray);
-    list( , $versionMain, $versionMinor, $versionPatch) = $versionArray;
+    list(, $versionMain, $versionMinor, $versionPatch) = $versionArray;
 
     $flagNextVersion = true;
     ++$versionPatch;

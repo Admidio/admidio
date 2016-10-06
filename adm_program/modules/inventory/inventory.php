@@ -75,7 +75,7 @@ $columnHeading = array(
 );
 
 $itemsTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
-$itemsTable->disableDatatablesColumnsSort(5);
+$itemsTable->disableDatatablesColumnsSort(array(5));
 $itemsTable->addRowHeadingByArray($columnHeading);
 $itemsTable->setDatatablesRowsPerPage($gPreferences['members_users_per_page']);
 $itemsTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');

@@ -136,7 +136,7 @@ class HtmlTableBasic extends HtmlElement {
         $this->columnCount  = 0;
         $this->rowCount     = 0;
 
-        parent::__construct('table', '', '', true);
+        parent::__construct('table');
 
         if ($id !== null)
         {

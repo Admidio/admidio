@@ -75,7 +75,7 @@ class HtmlFormBasic extends HtmlElement
      */
     public function __construct($action = null, $id = null, $method = 'get', $event = null, $script = null)
     {
-        parent::__construct('form', '', '', true);
+        parent::__construct('form');
 
         // set action attribute
         if ($action !== null)

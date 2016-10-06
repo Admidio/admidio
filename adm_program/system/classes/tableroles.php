@@ -59,28 +59,28 @@ class TableRoles extends TableAccess
     public function allowedToAssignMembers(User $user)
     {
         // you aren't allowed to change membership of not active roles
-        if ((int) $this->getValue('rol_valid') === 1)
+        if ((int) $this->getValue('rol_valid') === 0)
         {
-            if ($user->manageRoles())
-            {
-                $rolAdministrator = (int) $this->getValue('rol_administrator');
+            return false;
+        }
 
-                // only administrators are allowed to assign new members to administrator role
-                if ($rolAdministrator === 0 || ($rolAdministrator === 1 && $user->isAdministrator()))
-                {
-                    return true;
-                }
+        if ($user->manageRoles())
+        {
+            // only administrators are allowed to assign new members to administrator role
+            if ((int) $this->getValue('rol_administrator') === 0 || $user->isAdministrator())
+            {
+                return true;
             }
-            else
-            {
-                $rolLeaderRights = (int) $this->getValue('rol_leader_rights');
+        }
+        else
+        {
+            $rolLeaderRights = (int) $this->getValue('rol_leader_rights');
 
-                // leader are allowed to assign members if it's configured in the role
-                if (($rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-                    && $user->isLeaderOfRole((int) $this->getValue('rol_id')))
-                {
-                    return true;
-                }
+            // leader are allowed to assign members if it's configured in the role
+            if (($rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+                && $user->isLeaderOfRole((int) $this->getValue('rol_id')))
+            {
+                return true;
             }
         }
 
@@ -95,21 +95,23 @@ class TableRoles extends TableAccess
     public function allowedToEditMembers(User $user)
     {
         // you aren't allowed to edit users of not active roles
-        if ((int) $this->getValue('rol_valid') === 1)
+        if ((int) $this->getValue('rol_valid') === 0)
         {
-            if ($user->editUsers())
-            {
-                return true;
-            }
+            return false;
+        }
 
-            $rolLeaderRights = (int) $this->getValue('rol_leader_rights');
+        if ($user->editUsers())
+        {
+            return true;
+        }
 
-            // leader are allowed to assign members if it's configured in the role
-            if (($rolLeaderRights === ROLE_LEADER_MEMBERS_EDIT || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-            && $user->isMemberOfRole((int) $this->getValue('rol_id')))
-            {
-                return true;
-            }
+        $rolLeaderRights = (int) $this->getValue('rol_leader_rights');
+
+        // leader are allowed to assign members if it's configured in the role
+        if (($rolLeaderRights === ROLE_LEADER_MEMBERS_EDIT || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+        && $user->isMemberOfRole((int) $this->getValue('rol_id')))
+        {
+            return true;
         }
 
         return false;
@@ -325,7 +327,7 @@ class TableRoles extends TableAccess
         }
 
         // read system default list configuration
-        return (int) $gPreferences['lists_default_configuation'];
+        return (int) $gPreferences['lists_default_configuration'];
     }
 
     /**
@@ -467,6 +469,7 @@ class TableRoles extends TableAccess
                 return false;
             }
         }
+
         return parent::setValue($columnName, $newValue, $checkValue);
     }
 

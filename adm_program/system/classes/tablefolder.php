@@ -51,11 +51,12 @@ class TableFolder extends TableAccess
     /**
      * Add all roles of the array to the current folder and all of the subfolders. The
      * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
+     * @param string $mode                 "mode" could be "add" or "remove"
      * @param string $rolesRightNameIntern Name of the right where the roles should be added
      * @param int[]  $rolesArray
      * @param int    $folderId
      */
-    public function addRolesOnFolder($rolesRightNameIntern, array $rolesArray, $folderId = 0)
+    private function editRolesOnFolder($mode, $rolesRightNameIntern, array $rolesArray, $folderId = 0)
     {
         if (count($rolesArray) === 0)
         {
@@ -74,14 +75,45 @@ class TableFolder extends TableAccess
         while ($folId = (int) $subfoldersStatement->fetchColumn())
         {
             // recursive call for every subfolder
-            $this->addRolesOnFolder($rolesRightNameIntern, $rolesArray, $folId);
+            $this->editRolesOnFolder($mode, $rolesRightNameIntern, $rolesArray, $folId);
         }
 
         // add new rights to folder
         $folderRolesRights = new RolesRights($this->db, $rolesRightNameIntern, $folderId);
-        $folderRolesRights->addRoles($rolesArray);
+        if ($mode === 'add')
+        {
+            $folderRolesRights->addRoles($rolesArray);
+        }
+        else
+        {
+            $folderRolesRights->removeRoles($rolesArray);
+        }
 
         $this->db->endTransaction();
+    }
+
+    /**
+     * Add all roles of the array to the current folder and all of the subfolders. The
+     * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
+     * @param string $rolesRightNameIntern Name of the right where the roles should be added
+     * @param int[]  $rolesArray
+     * @param int    $folderId
+     */
+    public function addRolesOnFolder($rolesRightNameIntern, array $rolesArray, $folderId = 0)
+    {
+        $this->editRolesOnFolder('add', $rolesRightNameIntern, $rolesArray, $folderId);
+    }
+
+    /**
+     * Remove all roles of the array from the current folder and all of the subfolders. The
+     * roles will be removed from the right that was set through parameter $rolesRightNameIntern.
+     * @param string $rolesRightNameIntern Name of the right where the roles should be removed
+     * @param int[]  $rolesArray
+     * @param int    $folderId
+     */
+    public function removeRolesOnFolder($rolesRightNameIntern, array $rolesArray, $folderId = 0)
+    {
+        $this->editRolesOnFolder('remove', $rolesRightNameIntern, $rolesArray, $folderId);
     }
 
     /**
@@ -684,42 +716,6 @@ class TableFolder extends TableAccess
         }
 
         return false;
-    }
-
-    /**
-     * Remove all roles of the array from the current folder and all of the subfolders. The
-     * roles will be removed from the right that was set through parameter $rolesRightNameIntern.
-     * @param string $rolesRightNameIntern Name of the right where the roles should be removed
-     * @param int[]  $rolesArray
-     * @param int    $folderId
-     */
-    public function removeRolesOnFolder($rolesRightNameIntern, array $rolesArray, $folderId = 0)
-    {
-        if (count($rolesArray) === 0)
-        {
-            return;
-        }
-
-        if ($folderId === 0)
-        {
-            $folderId = (int) $this->getValue('fol_id');
-        }
-
-        $this->db->startTransaction();
-
-        $subfoldersStatement = $this->getSubfolderStatement($folderId);
-
-        while ($folId = (int) $subfoldersStatement->fetchColumn())
-        {
-            // recursive call for every subfolder
-            $this->removeRolesOnFolder($rolesRightNameIntern, $rolesArray, $folId);
-        }
-
-        // add new rights to folder
-        $folderRolesRights = new RolesRights($this->db, $rolesRightNameIntern, $folderId);
-        $folderRolesRights->removeRoles($rolesArray);
-
-        $this->db->endTransaction();
     }
 
     /**

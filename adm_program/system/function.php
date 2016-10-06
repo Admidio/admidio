@@ -34,7 +34,7 @@ function admFuncAutoload($className)
         }
         else
         {
-            $fileName = SERVER_PATH.'/adm_program/libs/zxcvbn-php/src/'.str_replace('\\', '/', $className).'.php';
+            $fileName = SERVER_PATH.'/adm_program/libs/zxcvbn-php/src/'.substr(str_replace('\\', '/', $className), 9).'.php';
 
             if (is_file($fileName))
             {
