@@ -43,12 +43,13 @@ class LanguageData
      * Creates an object that stores all necessary language data and can be handled in session.
      * Therefore the language must be set and optional a path where the language files are stored.
      * @param string $language     The ISO code of the language for which the texts should be read e.g. @b 'de'
+     *                             If no language is set than the browser language will be determined.
      * @param string $languagePath Optional a server path to the language files. If no path is set
      *                             than the default Admidio language path @b adm_program/languages will be set.
      * @param bool   $determineBrowserLanguage If set to true then set browser language of user to the current
      *                             language if possible
      */
-    public function __construct($language, $languagePath = '', $determineBrowserLanguage = true)
+    public function __construct($language = '', $languagePath = '', $determineBrowserLanguage = true)
     {
         if($languagePath === '')
         {
@@ -59,10 +60,10 @@ class LanguageData
             $this->addLanguagePath($languagePath);
         }
 
-        if($determineBrowserLanguage === true)
+        if($language === '')
         {
             // get browser language and set this language as default
-            $language = $this->determineBrowserLanguage($language);
+            $language = $this->determineBrowserLanguage($this->referenceLanguage);
         }
 
         $this->setLanguage($language);
@@ -83,9 +84,10 @@ class LanguageData
 
     /**
      * Determine the language from the browser preferences of the user.
+     * @param string $defaultLanguage This language will be set if no browser language could be determined
      * @return string Return the preferred language code of the client browser
      */
-    private function determineBrowserLanguage($defaultLanguage)
+    public static function determineBrowserLanguage($defaultLanguage)
     {
         if(!isset($_SERVER["HTTP_ACCEPT_LANGUAGE"]) || empty($_SERVER["HTTP_ACCEPT_LANGUAGE"]))
         {
