@@ -29,7 +29,7 @@ function prepareReceivers($receiversString)
         }
         else
         {
-            $user = new User($gDb, $gProfileFields, $receivers);
+            $user = new User($gDb, $gProfileFields, (int) trim($receivers));
             $receiverNames .= '; ' . $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
         }
     }
