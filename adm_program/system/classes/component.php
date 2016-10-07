@@ -77,7 +77,7 @@ class Component extends TableAccess
         elseif ($returnCode === 1) // filesystem has minor version
         {
             throw new AdmException('SYS_WEBMASTER_FILESYSTEM_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT,
-                                   '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
+                                   '<a href="https://www.admidio.org/download.php">', '</a>');
         }
     }
 }

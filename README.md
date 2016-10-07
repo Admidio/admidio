@@ -79,12 +79,12 @@ membership software.
 
 ## Changelog
 
-Please visit our [changelog](http://admidio.org/index.php?page=changelog) for detail information about the bugfixes and enhancements in each version.
+Please visit our [changelog](https://admidio.org/changelog.php) for detail information about the bugfixes and enhancements in each version.
 
 ## Donation
 
 If you like the software and our project then we are happy if you [donate
-some money](http://www.admidio.org/index.php?page=donate) to the project.
+some money](https://www.admidio.org/donate.php) to the project.
 
 ## Copyright and License
 
