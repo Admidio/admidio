@@ -19,7 +19,7 @@
  * @code // create object and read the value of the language preference
  * $organization = new Organization($gDb, $organizationId);
  * $preferences  = $organization->getPreferences();
- * $language     = $preferences['system_language'];
+ * $language     = $gPreferences['system_language'];
  * // language = 'de' @endcode
  ***********************************************************************************************
  */

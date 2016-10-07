@@ -87,8 +87,8 @@ $page = new HtmlPage($headline);
 
 $page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/dist/css/datepicker3.css');
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/dist/js/locales/bootstrap-datepicker.'.$gPreferences['system_language'].'.js');
+$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
+$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gL10n->getLanguage().'.js');
 
 $page->addJavascript('
     var profileJS = new ProfileJS(gRootPath);

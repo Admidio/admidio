@@ -1258,7 +1258,7 @@ class HtmlForm extends HtmlFormBasic
                 allowClear: '.$allowClear.',
                 '.$maximumSelectionNumber.'
                 placeholder: "'.$placeholder.'",
-                language: "'.$gPreferences['system_language'].'"
+                language: "'.$gL10n->getLanguage().'"
             });';
 
             // add default values to multi select
