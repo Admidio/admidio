@@ -531,12 +531,18 @@ elseif($getMode === 6)  // Creating configuration file
         }
     }
 
+    $port = 'null';
+    if ($_SESSION['db_port'])
+    {
+        $port = $_SESSION['db_port'];
+    }
+
     // replace placeholders in configuration file structure with data of installation wizard
     $replaceArray = array(
         '%PREFIX%'       => $_SESSION['prefix'],
         '%DB_TYPE%'      => $_SESSION['db_type'],
         '%SERVER%'       => $_SESSION['db_server'],
-        '%PORT%'         => $_SESSION['db_port'],
+        '\'%PORT%\''     => $port,
         '%USER%'         => $_SESSION['db_user'],
         '%PASSWORD%'     => $_SESSION['db_password'],
         '%DATABASE%'     => $_SESSION['db_database'],
@@ -616,7 +622,7 @@ elseif($getMode === 8) // Start installation
     }
 
     // read data from sql script db.sql and execute all statements to the current database
-    $sqlQueryResult = querySqlFile('db.sql');
+    $sqlQueryResult = querySqlFile($db, 'db.sql');
 
     if (is_string($sqlQueryResult))
     {
@@ -756,7 +762,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
                  , ('.$categoryIdMasterInventory.', \'NUMBER\', \'PRICE\',   \'SYS_QUANTITY\', NULL, 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
 
-    disableSoundexSearchIfPgsql();
+    disableSoundexSearchIfPgsql($db);
 
     // create new organization
     $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);
