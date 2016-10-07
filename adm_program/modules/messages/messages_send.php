@@ -422,37 +422,9 @@ if ($getMsgType === 'EMAIL')
     // add sender and receiver to email if template include the variables
     $emailTemplate = str_replace('#sender#', $postName, $emailTemplate);
 
-    $moduleMessages = new ModuleMessages();
-    $receiverName = '';
-    if (strpos($receiverString, '|') > 0)
-    {
-        $receiverSplit = explode('|', $receiverString);
-        foreach ($receiverSplit as $value)
-        {
-            if (strpos($value, ':') > 0)
-            {
-                $receiverName .= '; ' . $moduleMessages->msgGroupNameSplit($value);
-            }
-            else
-            {
-                $user = new User($gDb, $gProfileFields, $value);
-                $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-            }
-        }
-    }
-    else
-    {
-        if (strpos($receiverString, ':') > 0)
-        {
-            $receiverName .= '; ' . $moduleMessages->msgGroupNameSplit($receiverString);
-        }
-        else
-        {
-            $user = new User($gDb, $gProfileFields, $receiverString);
-            $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-        }
-    }
-    $receiverName = substr($receiverName, 2);
+    require_once('messages_functions.php');
+
+    $receiverName = prepareReceivers($receiverString);
     $emailTemplate = str_replace('#receiver#', $receiverName, $emailTemplate);
 
     // prepare body of email with note of sender and homepage

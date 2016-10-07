@@ -542,6 +542,8 @@ elseif (!isset($messageStatement))
 
 if (isset($messageStatement))
 {
+    require_once('messages_functions.php');
+
     $page->addHtml('<br />');
     while ($row = $messageStatement->fetch())
     {
@@ -565,38 +567,10 @@ if (isset($messageStatement))
         {
             $message = new TableMessage($gDb, $getMsgId);
             $receivers = $message->getValue('msg_usr_id_receiver');
-            // open some additonal functions for messages
-            $moduleMessages = new ModuleMessages();
-            $receiverName = '';
-            if (strpos($receivers, '|') > 0)
-            {
-                $receiverSplit = explode('|', $receivers);
-                foreach ($receiverSplit as $value)
-                {
-                    if (strpos($value, ':') > 0)
-                    {
-                        $receiverName .= '; ' . $moduleMessages->msgGroupNameSplit($value);
-                    }
-                    else
-                    {
-                        $user = new User($gDb, $gProfileFields, $value);
-                        $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-                    }
-                }
-            }
-            else
-            {
-                if (strpos($receivers, ':') > 0)
-                {
-                    $receiverName .= '; ' . $moduleMessages->msgGroupNameSplit($receivers);
-                }
-                else
-                {
-                    $user = new User($gDb, $gProfileFields, $receivers);
-                    $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-                }
-            }
-            $receiverName = '<div class="panel-footer">'.$gL10n->get('MSG_OPPOSITE').': '.substr($receiverName, 2).'</div>';
+            // open some additional functions for messages
+
+            $receiverName = prepareReceivers($receivers);
+            $receiverName = '<div class="panel-footer">'.$gL10n->get('MSG_OPPOSITE').': '.$receiverName.'</div>';
         }
 
         $date = DateTime::createFromFormat('Y-m-d H:i:s', $row['msc_timestamp']);

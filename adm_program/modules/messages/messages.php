@@ -104,38 +104,11 @@ $moduleMessages = new ModuleMessages();
 $statement = $moduleMessages->msgGetUserEmails($gCurrentUser->getValue('usr_id'));
 if(isset($statement))
 {
+    require_once('messages_functions.php');
+
     while ($row = $statement->fetch())
     {
-        $receiverName = '';
-        if (strpos($row['user'], '|') > 0)
-        {
-            $receiverSplit = explode('|', $row['user']);
-            foreach ($receiverSplit as $value)
-            {
-                if (strpos($value, ':') > 0)
-                {
-                    $receiverName .= '; ' . $moduleMessages->msgGroupNameSplit($value);
-                }
-                else
-                {
-                    $user = new User($gDb, $gProfileFields, $value);
-                    $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-                }
-            }
-        }
-        else
-        {
-            if (strpos($row['user'], ':') > 0)
-            {
-                $receiverName .= '; ' . $moduleMessages->msgGroupNameSplit($row['user']);
-            }
-            else
-            {
-                $user = new User($gDb, $gProfileFields, $row['user']);
-                $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-            }
-        }
-        $receiverName = substr($receiverName, 2);
+        $receiverName = prepareReceivers($row['user']);
 
         $message = new TableMessage($gDb, $row['msg_id']);
         ++$key;
