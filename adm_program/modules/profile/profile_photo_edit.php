@@ -187,7 +187,7 @@ elseif($getMode === 'upload')
     /*****************************Foto zwischenspeichern bestaetigen***********************************/
 
     // File size
-    if ($_FILES['userfile']['error'][0] == 1)
+    if ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE)
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', round(admFuncMaxUploadSize()/pow(1024, 2))));
         // => EXIT

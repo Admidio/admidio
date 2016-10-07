@@ -328,13 +328,13 @@ if ($getMsgType === 'EMAIL')
                 for($currentAttachmentNo = 0; isset($_FILES['userfile']['name'][$currentAttachmentNo]); ++$currentAttachmentNo)
                 {
                     // check if Upload was OK
-                    if (($_FILES['userfile']['error'][$currentAttachmentNo] != 0) && ($_FILES['userfile']['error'][$currentAttachmentNo] != 4))
+                    if (($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_OK) && ($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_NO_FILE))
                     {
                         $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
                         // => EXIT
                     }
 
-                    if ($_FILES['userfile']['error'][$currentAttachmentNo] == 0)
+                    if ($_FILES['userfile']['error'][$currentAttachmentNo] === UPLOAD_ERR_OK)
                     {
                         // check the size of the attachment
                         $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
