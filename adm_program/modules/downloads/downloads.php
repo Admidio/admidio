@@ -115,7 +115,7 @@ $columnHeading = array(
 if ($currentFolder->hasUploadRight())
 {
     $columnHeading[] = '&nbsp;';
-    $downloadOverview->disableDatatablesColumnsSort(7);
+    $downloadOverview->disableDatatablesColumnsSort(array(7));
 }
 
 $downloadOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right', 'right', 'right'));

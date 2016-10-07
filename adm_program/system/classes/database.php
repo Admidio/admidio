@@ -23,7 +23,7 @@
  * // create object and open connection to database
  * try
  * {
- *     $gDb = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+ *     $gDb = new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
  * }
  * catch (AdmException $e)
  * {
@@ -568,6 +568,7 @@ class Database
      * TODO: Links for improvements
      *       https://secure.php.net/manual/en/pdostatement.getcolumnmeta.php
      *       https://www.postgresql.org/docs/9.5/static/infoschema-columns.html
+     *       https://wiki.postgresql.org/wiki/Retrieve_primary_key_columns
      *       https://dev.mysql.com/doc/refman/5.7/en/columns-table.html
      */
     private function loadTableColumnsProperties($table)

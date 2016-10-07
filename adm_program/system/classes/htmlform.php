@@ -779,9 +779,9 @@ class HtmlForm extends HtmlFormBasic
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if($this->htmlPage instanceof \HtmlPage)
             {
-                $this->htmlPage->addCssFile('adm_program/libs/bootstrap-datepicker/css/bootstrap-datepicker3.css');
-                $this->htmlPage->addJavascriptFile('adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
-                $this->htmlPage->addJavascriptFile('adm_program/libs/bootstrap-datepicker/locales/bootstrap-datepicker.'.$gL10n->getLanguageIsoCode().'.min.js');
+                $this->htmlPage->addCssFile('adm_program/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css');
+                $this->htmlPage->addJavascriptFile('adm_program/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.js');
+                $this->htmlPage->addJavascriptFile('adm_program/libs/bootstrap-datepicker/dist/locales/bootstrap-datepicker.'.$gL10n->getLanguageIsoCode().'.min.js');
             }
             $this->addJavascriptCode($javascriptCode, true);
         }
@@ -1258,7 +1258,7 @@ class HtmlForm extends HtmlFormBasic
                 allowClear: '.$allowClear.',
                 '.$maximumSelectionNumber.'
                 placeholder: "'.$placeholder.'",
-                language: "'.$gPreferences['system_language'].'"
+                language: "'.$gL10n->getLanguage().'"
             });';
 
             // add default values to multi select

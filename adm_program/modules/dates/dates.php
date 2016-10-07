@@ -241,23 +241,23 @@ else
             case 'compact':
                 $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('DAT_LOCATION'));
                 $columnAlign   = array('center', 'left', 'left', 'left', 'left');
-                $compactTable->disableDatatablesColumnsSort(6);
+                $compactTable->disableDatatablesColumnsSort(array(6));
                 break;
             case 'room':
                 $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_ROOM'), $gL10n->get('SYS_LEADERS'), $gL10n->get('SYS_PARTICIPANTS'));
                 $columnAlign   = array('center', 'left', 'left', 'left', 'left', 'left');
-                $compactTable->disableDatatablesColumnsSort(7);
+                $compactTable->disableDatatablesColumnsSort(array(7));
                 break;
             case 'participants':
                 $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'));
                 $columnAlign   = array('center', 'left', 'left', 'left');
-                $compactTable->disableDatatablesColumnsSort(5);
+                $compactTable->disableDatatablesColumnsSort(array(5));
                 $compactTable->setColumnWidth(4, '35%');
                 break;
             case 'description':
                 $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_DESCRIPTION'));
                 $columnAlign   = array('center', 'left', 'left', 'left');
-                $compactTable->disableDatatablesColumnsSort(5);
+                $compactTable->disableDatatablesColumnsSort(array(5));
                 $compactTable->setColumnWidth(4, '35%');
                 break;
         }
@@ -679,13 +679,11 @@ else
             }
 
             // date beginn
-            $objDateBegin = new DateTime($row['dat_begin']);
-            $dateBegin = $objDateBegin->format($gPreferences['system_date']);
+            $dateBegin = $date->getValue('dat_begin', $gPreferences['system_date']);
             $timeBegin = $date->getValue('dat_begin', $gPreferences['system_time']);
 
             // date beginn
-            $objDateEnd = new DateTime($row['dat_end']);
-            $dateEnd = $objDateEnd->format($gPreferences['system_date']);
+            $dateEnd = $date->getValue('dat_end', $gPreferences['system_date']);
             $timeEnd = $date->getValue('dat_end', $gPreferences['system_time']);
 
             $dateTimeValue = '';
@@ -699,6 +697,8 @@ else
                 if ($date->getValue('dat_all_day') == 1)
                 {
                     // full-time event that only exists one day should only show the begin date
+                    $objDateBegin = new DateTime($row['dat_begin']);
+                    $objDateEnd = new DateTime($row['dat_end']);
                     $dateDiff = $objDateBegin->diff($objDateEnd);
 
                     if($dateDiff->d === 1)

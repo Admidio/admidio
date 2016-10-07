@@ -82,25 +82,31 @@ if(!isset($gDbType))
     $gDbType = 'mysql';
 }
 
+if (!isset($g_adm_port))
+{
+    $g_adm_port = null;
+}
+
 // create language and language data object to handle translations
+$language = '';
+
 if(isset($_SESSION['language']))
 {
     $language = $_SESSION['language'];
 }
-else
-{
-    $language = 'en';
-}
+
 $gL10n = new Language();
 $gLanguageData = new LanguageData($language);
+
 $gL10n->addLanguageData($gLanguageData);
+$language = $gL10n->getLanguage();
 
 // if config file exists then connect to database
 if(is_file('../../adm_my_files/config.php'))
 {
     try
     {
-        $db = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+        $db = new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
     }
     catch(AdmException $e)
     {
@@ -127,6 +133,7 @@ if(is_file('../../adm_my_files/config.php'))
         // save database parameters of config.php in session variables
         $_SESSION['db_type']     = $gDbType;
         $_SESSION['db_server']   = $g_adm_srv;
+        $_SESSION['db_port']     = $g_adm_port;
         $_SESSION['db_user']     = $g_adm_usr;
         $_SESSION['db_password'] = $g_adm_pw;
         $_SESSION['db_database'] = $g_adm_db;
@@ -153,7 +160,7 @@ if($getMode === 1) // (Default) Choose language
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_CHOOSE_LANGUAGE'));
     $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'),
                                SERVER_PATH.'/adm_program/languages/languages.xml',
-                               'isocode', 'name', array('property' => FIELD_REQUIRED));
+                               'isocode', 'name', array('property' => FIELD_REQUIRED, 'defaultValue' => $gL10n->getLanguage()));
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png'));
     echo $form->show();
@@ -208,6 +215,7 @@ elseif($getMode === 3)  // Enter database access information
     {
         $dbType   = $_SESSION['db_type'];
         $server   = $_SESSION['db_server'];
+        $port     = $_SESSION['db_port'];
         $user     = $_SESSION['db_user'];
         $database = $_SESSION['db_database'];
         $prefix   = $_SESSION['prefix'];
@@ -216,6 +224,7 @@ elseif($getMode === 3)  // Enter database access information
     {
         $dbType   = 'mysql';
         $server   = '';
+        $port     = '';
         $user     = '';
         $database = '';
         $prefix   = 'adm';
@@ -228,6 +237,7 @@ elseif($getMode === 3)  // Enter database access information
     $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), SERVER_PATH.'/adm_program/system/databases.xml',
                                'identifier', 'name', array('property' => FIELD_REQUIRED, 'defaultValue' => $dbType));
     $form->addInput('db_server', $gL10n->get('SYS_SERVER'), $server, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
+    $form->addInput('db_port', $gL10n->get('SYS_PORT'), $port, array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1, 'helpTextIdLabel' => 'INS_DATABASE_PORT_INFO'));
     $form->addInput('db_user', $gL10n->get('SYS_USERNAME'), $user, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('db_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password'));
     $form->addInput('db_database', $gL10n->get('SYS_DATABASE'), $database, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
@@ -263,9 +273,16 @@ elseif($getMode === 4)  // Creating organization
             }
         }
 
+        $dbPort = null;
+        if (strStripTags($_POST['db_port']))
+        {
+            $dbPort = (int) strStripTags($_POST['db_port']);
+        }
+
         // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
         $_SESSION['db_type']     = strStripTags($_POST['db_type']);
         $_SESSION['db_server']   = strStripTags($_POST['db_server']);
+        $_SESSION['db_port']     = $dbPort;
         $_SESSION['db_user']     = strStripTags($_POST['db_user']);
         $_SESSION['db_password'] = strStripTags($_POST['db_password']);
         $_SESSION['db_database'] = strStripTags($_POST['db_database']);
@@ -286,7 +303,7 @@ elseif($getMode === 4)  // Creating organization
             // check database connections
             try
             {
-                $db = new Database($_SESSION['db_type'], $_SESSION['db_server'], null, $_SESSION['db_database'], $_SESSION['db_user'], $_SESSION['db_password']);
+                $db = new Database($_SESSION['db_type'], $_SESSION['db_server'], $_SESSION['db_port'], $_SESSION['db_database'], $_SESSION['db_user'], $_SESSION['db_password']);
             }
             catch(AdmException $e)
             {
@@ -515,11 +532,18 @@ elseif($getMode === 6)  // Creating configuration file
         }
     }
 
+    $port = 'null';
+    if ($_SESSION['db_port'])
+    {
+        $port = $_SESSION['db_port'];
+    }
+
     // replace placeholders in configuration file structure with data of installation wizard
     $replaceArray = array(
         '%PREFIX%'       => $_SESSION['prefix'],
         '%DB_TYPE%'      => $_SESSION['db_type'],
         '%SERVER%'       => $_SESSION['db_server'],
+        '\'%PORT%\''     => $port,
         '%USER%'         => $_SESSION['db_user'],
         '%PASSWORD%'     => $_SESSION['db_password'],
         '%DATABASE%'     => $_SESSION['db_database'],
@@ -588,6 +612,7 @@ elseif($getMode === 8) // Start installation
     &&    ($g_tbl_praefix  !== $_SESSION['prefix']
         || $gDbType        !== $_SESSION['db_type']
         || $g_adm_srv      !== $_SESSION['db_server']
+        || $g_adm_port     !== $_SESSION['db_port']
         || $g_adm_usr      !== $_SESSION['db_user']
         || $g_adm_pw       !== $_SESSION['db_password']
         || $g_adm_db       !== $_SESSION['db_database']
@@ -598,7 +623,7 @@ elseif($getMode === 8) // Start installation
     }
 
     // read data from sql script db.sql and execute all statements to the current database
-    $sqlQueryResult = querySqlFile('db.sql');
+    $sqlQueryResult = querySqlFile($db, 'db.sql');
 
     if (is_string($sqlQueryResult))
     {
@@ -779,7 +804,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
                      error_log($sql);
     $db->query($sql);
 
-    disableSoundexSearchIfPgsql();
+    disableSoundexSearchIfPgsql($db);
 
     // create new organization
     $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);

@@ -100,8 +100,11 @@
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
     <step id="340">ComponentUpdate::updateStepInstallDefaultUserRelationTypes</step>
     <step id="350" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'mail_sender_into_to' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name LIKE 'mail_recipients_with_roles'</step>
-    <step id="360" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'mail_sender_into_to' AND pr1.prf_name LIKE 'mail_recipients_with_roles'</step>
+    <step id="360" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET pr1.prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'mail_sender_into_to' AND pr1.prf_name LIKE 'mail_recipients_with_roles'</step>
     <step id="370">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_sender_into_to'</step>
+    <step id="380" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'lists_default_configuation' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'lists_default_configuration'</step>
+    <step id="390" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET pr1.prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'lists_default_configuation' AND pr1.prf_name = 'lists_default_configuration'</step>
+    <step id="400">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'lists_default_configuation'</step>
 
     <step id="390">CREATE TABLE %PREFIX%_menu
                 (

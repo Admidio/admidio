@@ -153,7 +153,7 @@ if ($getMsgType === 'EMAIL')
     if (isset($postTo))
     {
         $receiver = array();
-        $ReceiverString = '';
+        $receiverString = '';
 
         // Create new Email Object
         $email = new Email();
@@ -163,8 +163,8 @@ if ($getMsgType === 'EMAIL')
             // check if role or user is given
             if (strpos($value, ':') > 0)
             {
-                $modulemessages = new ModuleMessages();
-                $group = $modulemessages->msgGroupSplit($value);
+                $moduleMessages = new ModuleMessages();
+                $group = $moduleMessages->msgGroupSplit($value);
 
                 // check if role rights are granted to the User
                 $sql = 'SELECT rol_mail_this_role, rol_name, rol_id
@@ -277,9 +277,9 @@ if ($getMsgType === 'EMAIL')
                     $receiver[] = array($user->getValue('EMAIL'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
                 }
             }
-            $ReceiverString .= ' | '.$value;
+            $receiverString .= ' | '.$value;
         }
-        $ReceiverString = substr($ReceiverString, 3);
+        $receiverString = substr($receiverString, 3);
     }
     else
     {
@@ -328,13 +328,13 @@ if ($getMsgType === 'EMAIL')
                 for($currentAttachmentNo = 0; isset($_FILES['userfile']['name'][$currentAttachmentNo]); ++$currentAttachmentNo)
                 {
                     // check if Upload was OK
-                    if (($_FILES['userfile']['error'][$currentAttachmentNo] != 0) && ($_FILES['userfile']['error'][$currentAttachmentNo] != 4))
+                    if (($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_OK) && ($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_NO_FILE))
                     {
                         $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
                         // => EXIT
                     }
 
-                    if ($_FILES['userfile']['error'][$currentAttachmentNo] == 0)
+                    if ($_FILES['userfile']['error'][$currentAttachmentNo] === UPLOAD_ERR_OK)
                     {
                         // check the size of the attachment
                         $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
@@ -422,41 +422,13 @@ if ($getMsgType === 'EMAIL')
     // add sender and receiver to email if template include the variables
     $emailTemplate = str_replace('#sender#', $postName, $emailTemplate);
 
-    $modulemessages = new ModuleMessages();
-    $ReceiverName = '';
-    if (strpos($ReceiverString, '|') > 0)
-    {
-        $reciversplit = explode('|', $ReceiverString);
-        foreach ($reciversplit as $value)
-        {
-            if (strpos($value, ':') > 0)
-            {
-                $ReceiverName .= '; ' . $modulemessages->msgGroupNameSplit($value);
-            }
-            else
-            {
-                $user = new User($gDb, $gProfileFields, $value);
-                $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-            }
-        }
-    }
-    else
-    {
-        if (strpos($ReceiverString, ':') > 0)
-        {
-            $ReceiverName .= '; ' . $modulemessages->msgGroupNameSplit($ReceiverString);
-        }
-        else
-        {
-            $user = new User($gDb, $gProfileFields, $ReceiverString);
-            $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-        }
-    }
-    $ReceiverName = substr($ReceiverName, 2);
-    $emailTemplate = str_replace('#receiver#', $ReceiverName, $emailTemplate);
+    require_once('messages_functions.php');
+
+    $receiverName = prepareReceivers($receiverString);
+    $emailTemplate = str_replace('#receiver#', $receiverName, $emailTemplate);
 
     // prepare body of email with note of sender and homepage
-    $email->setSenderInText($postName, $ReceiverName);
+    $email->setSenderInText($postName, $receiverName);
 
     // set Text
     $email->setText($emailTemplate);
@@ -535,7 +507,7 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
     if ($getMsgType !== 'PM' && $gValidLogin)
     {
         $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-                VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', '.$gCurrentUser->getValue('usr_id').', \''.$ReceiverString.'\', CURRENT_TIMESTAMP, 0)';
+                VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', '.$gCurrentUser->getValue('usr_id').', \''.$receiverString.'\', CURRENT_TIMESTAMP, 0)';
 
         $gDb->query($sql);
         $getMsgId = $gDb->lastInsertId();

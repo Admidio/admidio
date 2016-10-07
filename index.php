@@ -24,13 +24,18 @@ if(is_file('adm_my_files/config.php'))
         $gDbType = 'mysql';
     }
 
+    if (!isset($g_adm_port))
+    {
+        $g_adm_port = null;
+    }
+
     require_once('adm_program/system/constants.php');
     require_once('adm_program/system/function.php');
 
     // connect to database
     try
     {
-        $gDb = new Database($gDbType, $g_adm_srv, null, $g_adm_db, $g_adm_usr, $g_adm_pw);
+        $gDb = new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
     }
     catch(AdmException $e)
     {

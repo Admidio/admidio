@@ -88,12 +88,13 @@ function checkPhpVersion()
 
 /**
  * Read data from sql file and execute all statements to the current database
+ * @param \Database $db
  * @param string $sqlFileName
  * @return true|string Returns true no error occurs ales error message is returned
  */
-function querySqlFile($sqlFileName)
+function querySqlFile($db, $sqlFileName)
 {
-    global $gL10n, $gDb, $g_tbl_praefix;
+    global $gL10n, $g_tbl_praefix;
 
     $sqlPath = SERVER_PATH . '/adm_program/installation/db_scripts/';
     $sqlFilePath = $sqlPath . $sqlFileName;
@@ -117,27 +118,31 @@ function querySqlFile($sqlFileName)
 
     foreach ($sqlArr as $sql)
     {
-        if (trim($sql) !== '')
+        $sql = trim($sql);
+        if ($sql !== '')
         {
             // replace prefix with installation specific table prefix
             $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
             // now execute update sql
-            $gDb->query($sql);
+            $db->query($sql);
         }
     }
 
     return true;
 }
 
-function disableSoundexSearchIfPgsql()
+/**
+ * @param \Database $db
+ */
+function disableSoundexSearchIfPgsql($db)
 {
-    global $gDbType, $gDb;
+    global $gDbType;
 
     if ($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
     {
         // soundex is not a default function in PostgreSQL
         $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'0\'
                  WHERE prf_name LIKE \'system_search_similar\'';
-        $gDb->query($sql);
+        $db->query($sql);
     }
 }

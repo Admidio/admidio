@@ -38,9 +38,9 @@ $postLines    = admFuncVariableIsValid($_POST, 'state',    'int');
 $log = array();
 
 // open some additonal functions for messages
-$modulemessages = new ModuleMessages();
+$moduleMessages = new ModuleMessages();
 // find ID of the admidio Chat
-$msg_id = $modulemessages->msgGetChatId();
+$msg_id = $moduleMessages->msgGetChatId();
 
 $sql = 'SELECT MAX(msc_part_id) AS max_id
           FROM '.TBL_MESSAGES_CONTENT.'
@@ -120,7 +120,7 @@ switch($postFunction)
             $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
                     VALUES (\'CHAT\', \'DUMMY\', \'1\', \''.$msgId.'\', CURRENT_TIMESTAMP, \'0\')';
             $gDb->query($sql);
-            $msg_id = $modulemessages->msgGetChatId();
+            $msg_id = $moduleMessages->msgGetChatId();
         }
 
         ++$msgId;

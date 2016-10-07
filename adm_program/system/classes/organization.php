@@ -19,7 +19,7 @@
  * @code // create object and read the value of the language preference
  * $organization = new Organization($gDb, $organizationId);
  * $preferences  = $organization->getPreferences();
- * $language     = $preferences['system_language'];
+ * $language     = $gPreferences['system_language'];
  * // language = 'de' @endcode
  ***********************************************************************************************
  */
@@ -221,7 +221,7 @@ class Organization extends TableAccess
         // set addresslist to default configuration
         $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$addressList->getValue('lst_id').'\'
                  WHERE prf_org_id = '.$orgId.'
-                   AND prf_name   = \'lists_default_configuation\' ';
+                   AND prf_name   = \'lists_default_configuration\' ';
         $this->db->query($sql);
 
         $phoneList = new ListConfiguration($this->db);

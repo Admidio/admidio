@@ -75,7 +75,7 @@ class HtmlTable extends HtmlTableBasic
         // initialize class member parameters
         $this->id = $id;
         $this->rowsPerPage   = 25;
-        $this->columnsAlign  = null;
+        $this->columnsAlign  = array();
         $this->columnsOrder  = array();
         $this->groupedColumn = -1;
         $this->datatables    = $datatables;
@@ -173,22 +173,15 @@ class HtmlTable extends HtmlTableBasic
     /**
      * Disable the sort function for some columns. This is useful if a sorting of the column doesn't make sense
      * because it only show function icons or something equal.
-     * @param int|int[] $columnsSort An array which contain the columns where the sort should be disabled.
-     *                               The columns of the table starts with 1 (not 0).
+     * @param int[] $columnsSort An array which contain the columns where the sort should be disabled.
+     *                           The columns of the table starts with 1 (not 0).
      */
-    public function disableDatatablesColumnsSort($columnsSort)
+    public function disableDatatablesColumnsSort(array $columnsSort)
     {
         // internal datatable columns starts with 0
-        if (is_array($columnsSort))
+        foreach ($columnsSort as $columnSort)
         {
-            foreach ($columnsSort as $columnSort)
-            {
-                $this->datatablesColumnDefs[] = '{ "orderable":false, "targets":' . ($columnSort - 1) . ' }';
-            }
-        }
-        else
-        {
-            $this->datatablesColumnDefs[] = '{ "orderable":false, "targets":' . ($columnsSort - 1) . ' }';
+            $this->datatablesColumnDefs[] = '{ "orderable":false, "targets":' . ($columnSort - 1) . ' }';
         }
     }
 
@@ -220,7 +213,7 @@ class HtmlTable extends HtmlTableBasic
             $columnAttributes['colspan'] = $colspan;
         }
 
-        if (is_array($this->columnsAlign))
+        if (array_key_exists($key, $this->columnsAlign))
         {
             $columnAttributes['style'] = 'text-align: ' . $this->columnsAlign[$key] . ';';
         }
@@ -267,7 +260,7 @@ class HtmlTable extends HtmlTableBasic
      * @param int|int[] $arrayOrderColumns This are the columns the table will internal be sorted. If you have more
      *                                     than 1 column this must be an array. The columns of the table starts with 1 (not 0).
      */
-    public function setDatatablesAlternativOrderColumns($selectedColumn, $arrayOrderColumns)
+    public function setDatatablesAlternativeOrderColumns($selectedColumn, $arrayOrderColumns)
     {
         // internal datatable columns starts with 0
         if (is_array($arrayOrderColumns))
@@ -293,22 +286,15 @@ class HtmlTable extends HtmlTableBasic
     /**
      * Hide some columns for the user. This is useful if you want to use the column for ordering but
      * won't show the content if this column.
-     * @param int|int[] $columnsHide An array which contain the columns that should be hidden.
-     *                               The columns of the table starts with 1 (not 0).
+     * @param int[] $columnsHide An array which contain the columns that should be hidden.
+     *                           The columns of the table starts with 1 (not 0).
      */
-    public function setDatatablesColumnsHide($columnsHide)
+    public function setDatatablesColumnsHide(array $columnsHide)
     {
-        if (is_array($columnsHide))
+        // internal datatable columns starts with 0
+        foreach ($columnsHide as $columnHide)
         {
-            // internal datatable columns starts with 0
-            foreach ($columnsHide as $columnHide)
-            {
-                $this->datatablesColumnDefs[] = '{ "visible":false, "targets":' . ($columnHide - 1) . ' }';
-            }
-        }
-        else
-        {
-            $this->datatablesColumnDefs[] = '{ "visible":false, "targets":' . ($columnsHide - 1) . ' }';
+            $this->datatablesColumnDefs[] = '{ "visible":false, "targets":' . ($columnHide - 1) . ' }';
         }
     }
 
@@ -380,16 +366,18 @@ class HtmlTable extends HtmlTableBasic
     {
         global $gL10n;
 
+        $message = $gL10n->get($messageId);
+
         switch ($messageType)
         {
             case 'warning':
-                $this->messageNoRowsFound = '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>' . $gL10n->get($messageId) . '</div>';
+                $this->messageNoRowsFound = '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>' . $message . '</div>';
                 break;
             case 'error':
-                $this->messageNoRowsFound = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-exclamation-sign"></span>' . $gL10n->get($messageId) . '</div>';
+                $this->messageNoRowsFound = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-exclamation-sign"></span>' . $message . '</div>';
                 break;
             default:
-                $this->messageNoRowsFound = $gL10n->get($messageId);
+                $this->messageNoRowsFound = $message;
         }
     }
 
@@ -410,12 +398,10 @@ class HtmlTable extends HtmlTableBasic
      * This method send the whole html code of the table to the browser. If the jQuery plugin DataTables
      * is activated then the javascript for that plugin will be added. Call this method if you
      * have finished your form layout. If table has no rows then a message will be shown.
-     * @return string If $directOutput is set to @b false this method will return the html code of the table.
+     * @return string Return the html code of the table.
      */
     public function show()
     {
-        global $g_root_path, $gPreferences;
-
         if ($this->rowCount === 0 && !$this->serverSideProcessing)
         {
             // if table contains no rows then show message and not the table
@@ -425,87 +411,114 @@ class HtmlTable extends HtmlTableBasic
         // show table content
         if ($this->datatables && $this->htmlPage instanceof \HtmlPage)
         {
-            $this->htmlPage->addJavascriptFile('adm_program/libs/datatables/datatables.js');
-            $this->htmlPage->addJavascriptFile('adm_program/libs/moment/moment.js');
-            $this->htmlPage->addJavascriptFile('adm_program/libs/moment/datetime-moment.js');
-            $this->htmlPage->addCssFile('adm_program/libs/datatables/datatables.css');
-
-            if ($this->rowCount > 10 || $this->serverSideProcessing)
-            {
-                // set default page length of the table
-                $this->datatablesInitParameters[] = '"pageLength": ' . $this->rowsPerPage;
-            }
-            else
-            {
-                // disable page length menu
-                $this->datatablesInitParameters[] = '"paging": false';
-            }
-
-            // set order columns
-            $this->datatablesInitParameters[] = '"order": [' . implode(',', $this->columnsOrder) . ']';
-
-            // use DataTables Responsive extension
-            $this->datatablesInitParameters[] = '"responsive": true';
-
-            // set server-side processing
-            if($this->serverSideProcessing)
-            {
-                $this->datatablesInitParameters[] = '"processing": true';
-                $this->datatablesInitParameters[] = '"serverSide": true';
-                $this->datatablesInitParameters[] = '"ajax": "'.$this->serverSideFile.'"';
-            }
-
-            $javascriptGroup = '';
-            $javascriptGroupFunction = '';
-            if ($this->groupedColumn >= 0)
-            {
-                $javascriptGroup = ',
-                    "drawCallback": function (settings) {
-                        var api  = this.api();
-                        var rows = api.rows( {page:\'current\'} ).nodes();
-                        var last = null;
-
-                        api.column(' . $this->groupedColumn . ', {page:\'current\'} ).data().each(function (group, i) {
-                            if (last !== group) {
-                                $(rows).eq(i).before(
-                                    \'<tr class="admidio-group-heading"><td colspan="' . $this->columnCount . '">\'+group+\'</td></tr>\'
-                                );
-
-                                last = group;
-                            }
-                        });
-                    }';
-                $javascriptGroupFunction = '
-                    // Order by the grouping
-                    $("#' . $this->id . ' tbody").on("click", "tr.admidio-group-heading", function () {
-                        var currentOrder = table.order()[0];
-                        if (currentOrder[0] === ' . $this->groupedColumn . ' && currentOrder[1] === "asc") {
-                            table.order([' . $this->groupedColumn . ', "desc"]).draw();
-                        } else {
-                            table.order([' . $this->groupedColumn . ', "asc"]).draw();
-                        }
-                    });';
-            }
-
-            // if columnDefs were defined then create a comma separated string with all elements of the array
-            if (count($this->datatablesColumnDefs) > 0)
-            {
-                $this->datatablesInitParameters[] = '"columnDefs": [' . implode(',', $this->datatablesColumnDefs) . ']';
-            }
-
-            $this->htmlPage->addJavascript('
-                $.fn.dataTable.moment(formatPhpToMoment("' . $gPreferences['system_date'] . '"));
-                $.fn.dataTable.moment(formatPhpToMoment("' . $gPreferences['system_date'] . ' ' . $gPreferences['system_time'] . '"));
-
-                var admidioTable = $("#' . $this->id . '").DataTable({' .
-                    implode(',', $this->datatablesInitParameters) .
-                    $javascriptGroup . '
-                });
-                ' . $javascriptGroupFunction, true);
+            $this->initDatatablesTable();
 
             return $this->getHtmlTable();
         }
 
         return '<div class="table-responsive">' . $this->getHtmlTable() . '</div>';
+    }
+
+    /**
+     * Adds javascript libs and code and inits the datatables params for a datatables table
+     */
+    private function initDatatablesTable()
+    {
+        global $gPreferences;
+
+        $this->htmlPage->addJavascriptFile('adm_program/libs/datatables/datatables.js');
+        $this->htmlPage->addJavascriptFile('adm_program/libs/moment/min/moment.min.js');
+        $this->htmlPage->addJavascriptFile('adm_program/libs/datatables-datetime-moment/datetime-moment.js');
+        $this->htmlPage->addCssFile('adm_program/libs/datatables/datatables.css');
+
+        if ($this->rowCount > 10 || $this->serverSideProcessing)
+        {
+            // set default page length of the table
+            $this->datatablesInitParameters[] = '"pageLength": ' . $this->rowsPerPage;
+        }
+        else
+        {
+            // disable page length menu
+            $this->datatablesInitParameters[] = '"paging": false';
+        }
+
+        // set order columns
+        $this->datatablesInitParameters[] = '"order": [' . implode(',', $this->columnsOrder) . ']';
+
+        // use DataTables Responsive extension
+        $this->datatablesInitParameters[] = '"responsive": true';
+
+        // set server-side processing
+        if ($this->serverSideProcessing)
+        {
+            $this->datatablesInitParameters[] = '"processing": true';
+            $this->datatablesInitParameters[] = '"serverSide": true';
+            $this->datatablesInitParameters[] = '"ajax": "'.$this->serverSideFile.'"';
+        }
+
+        $javascriptGroup = '';
+        $javascriptGroupFunction = '';
+
+        if ($this->groupedColumn >= 0)
+        {
+            $javascriptGroup = ',
+                "drawCallback": function (settings) {
+                    var api  = this.api();
+                    var rows = api.rows( {page:\'current\'} ).nodes();
+                    var last = null;
+
+                    api.column(' . $this->groupedColumn . ', {page:\'current\'} ).data().each(function (group, i) {
+                        if (last !== group) {
+                            $(rows).eq(i).before(
+                                \'<tr class="admidio-group-heading"><td colspan="' . $this->columnCount . '">\'+group+\'</td></tr>\'
+                            );
+
+                            last = group;
+                        }
+                    });
+                }';
+            $javascriptGroupFunction = '
+                // Order by the grouping
+                $("#' . $this->id . ' tbody").on("click", "tr.admidio-group-heading", function () {
+                    var currentOrder = table.order()[0];
+                    if (currentOrder[0] === ' . $this->groupedColumn . ' && currentOrder[1] === "asc") {
+                        table.order([' . $this->groupedColumn . ', "desc"]).draw();
+                    } else {
+                        table.order([' . $this->groupedColumn . ', "asc"]).draw();
+                    }
+                });';
+        }
+
+        // if columnDefs were defined then create a comma separated string with all elements of the array
+        if (count($this->datatablesColumnDefs) > 0)
+        {
+            $this->datatablesInitParameters[] = '"columnDefs": [' . implode(',', $this->datatablesColumnDefs) . ']';
+        }
+
+        $this->htmlPage->addJavascript('
+            $.fn.dataTable.moment(formatPhpToMoment("' . $gPreferences['system_date'] . '"));
+            $.fn.dataTable.moment(formatPhpToMoment("' . $gPreferences['system_date'] . ' ' . $gPreferences['system_time'] . '"));
+
+            var admidioTable = $("#' . $this->id . '").DataTable({' .
+            implode(',', $this->datatablesInitParameters) .
+            $javascriptGroup . '
+            });
+            ' . $javascriptGroupFunction,
+            true
+        );
+    }
+
+    /**
+     * This method will set for a selected column other columns that should be used to order the datatables.
+     * For example if you will click the name column than you could set the columns lastname and firstname
+     * as alternative order columns and the table will be ordered by lastname and firstname.
+     * @deprecated 3.2.0:4.0.0 Switch to new method (setDatatablesAlternativeOrderColumns()).
+     * @param int       $selectedColumn    This is the column the user clicked to be sorted. (started with 1)
+     * @param int|int[] $arrayOrderColumns This are the columns the table will internal be sorted. If you have more
+     *                                     than 1 column this must be an array. The columns of the table starts with 1 (not 0).
+     */
+    public function setDatatablesAlternativOrderColumns($selectedColumn, $arrayOrderColumns)
+    {
+        $this->setDatatablesAlternativeOrderColumns($selectedColumn, $arrayOrderColumns);
     }
 }

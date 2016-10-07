@@ -18,36 +18,24 @@
  */
 function admFuncAutoload($className)
 {
-    $fileName = SERVER_PATH.'/adm_program/system/classes/'.strtolower($className).'.php';
+    $libFiles = array(
+        SERVER_PATH . '/adm_program/system/classes/' . strtolower($className) . '.php',
+//        SERVER_PATH . '/adm_program/libs/phpass/' . strtolower($className) . '.php',
+        SERVER_PATH . '/adm_program/libs/phpmailer/class.' . strtolower($className) . '.php',
+//        SERVER_PATH . '/adm_program/libs/securimage/' . strtolower($className) . '.php',
+        SERVER_PATH . '/adm_program/libs/zxcvbn-php/src/' . substr(str_replace('\\', '/', $className), 9) . '.php'
+    );
 
-    if (is_file($fileName))
+    foreach ($libFiles as $libFile)
     {
-        include($fileName);
-    }
-    else
-    {
-        $fileName = SERVER_PATH.'/adm_program/libs/phpmailer/class.'.strtolower($className).'.php';
-
-        if (is_file($fileName))
+        if (is_file($libFile))
         {
-            include($fileName);
-        }
-        else
-        {
-            $fileName = SERVER_PATH.'/adm_program/libs/zxcvbn-php/src/'.str_replace('\\', '/', $className).'.php';
-
-            if (is_file($fileName))
-            {
-                include($fileName);
-            }
-            else
-            {
-                return false;
-            }
+            include($libFile);
+            return null;
         }
     }
 
-    return null;
+    return false;
 }
 
 // now register this function in this script so only function.php must be included for autoload

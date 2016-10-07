@@ -64,7 +64,7 @@ class HtmlList extends HtmlElement
      */
     public function __construct($list = 'ul', $id = null, $class = null)
     {
-        parent::__construct($list, '', '', true);
+        parent::__construct($list);
 
         if ($id !== null)
         {

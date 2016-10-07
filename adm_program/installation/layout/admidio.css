@@ -163,14 +163,20 @@ a.btn {
 /* Settings for all icons */
 /**************************/
 
-.admidio-icon-link img, .admidio-icon-info, .btn img {
+.admidio-icon-link img,
+.admidio-icon-info,
+.admidio-icon-help,
+.btn img {
     border: none;
     vertical-align: text-top;
     margin-left: 3px;
     height: 16px;
 }
 
-.navbar-link img, .btn img, .alert .glyphicon, .btn {
+.navbar-link img,
+.btn img,
+.alert .glyphicon,
+.btn {
     margin-right: 5px;
 }
 

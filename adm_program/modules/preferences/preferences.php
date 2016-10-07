@@ -681,7 +681,7 @@ $page->addHtml('
                                  WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
                                    AND lst_global = 1
                               ORDER BY lst_name ASC, lst_timestamp DESC';
-                        $form->addSelectBoxFromSql('lists_default_configuation', $gL10n->get('LST_DEFAULT_CONFIGURATION'), $gDb, $sql, array('defaultValue' => $form_values['lists_default_configuation'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_DEFAULT_CONFIGURATION_DESC'));
+                        $form->addSelectBoxFromSql('lists_default_configuration', $gL10n->get('LST_DEFAULT_CONFIGURATION'), $gDb, $sql, array('defaultValue' => $form_values['lists_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_DEFAULT_CONFIGURATION_DESC'));
                         $html = '<a class="btn" href="'. $g_root_path. '/adm_program/modules/categories/categories.php?type=ROL"><img
                                     src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';

@@ -51,11 +51,12 @@ class TableFolder extends TableAccess
     /**
      * Add all roles of the array to the current folder and all of the subfolders. The
      * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
+     * @param string $mode                 "mode" could be "add" or "remove"
      * @param string $rolesRightNameIntern Name of the right where the roles should be added
      * @param int[]  $rolesArray
      * @param int    $folderId
      */
-    public function addRolesOnFolder($rolesRightNameIntern, array $rolesArray, $folderId = 0)
+    private function editRolesOnFolder($mode, $rolesRightNameIntern, array $rolesArray, $folderId = 0)
     {
         if (count($rolesArray) === 0)
         {
@@ -74,14 +75,45 @@ class TableFolder extends TableAccess
         while ($folId = (int) $subfoldersStatement->fetchColumn())
         {
             // recursive call for every subfolder
-            $this->addRolesOnFolder($rolesRightNameIntern, $rolesArray, $folId);
+            $this->editRolesOnFolder($mode, $rolesRightNameIntern, $rolesArray, $folId);
         }
 
         // add new rights to folder
         $folderRolesRights = new RolesRights($this->db, $rolesRightNameIntern, $folderId);
-        $folderRolesRights->addRoles($rolesArray);
+        if ($mode === 'add')
+        {
+            $folderRolesRights->addRoles($rolesArray);
+        }
+        else
+        {
+            $folderRolesRights->removeRoles($rolesArray);
+        }
 
         $this->db->endTransaction();
+    }
+
+    /**
+     * Add all roles of the array to the current folder and all of the subfolders. The
+     * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
+     * @param string $rolesRightNameIntern Name of the right where the roles should be added
+     * @param int[]  $rolesArray
+     * @param int    $folderId
+     */
+    public function addRolesOnFolder($rolesRightNameIntern, array $rolesArray, $folderId = 0)
+    {
+        $this->editRolesOnFolder('add', $rolesRightNameIntern, $rolesArray, $folderId);
+    }
+
+    /**
+     * Remove all roles of the array from the current folder and all of the subfolders. The
+     * roles will be removed from the right that was set through parameter $rolesRightNameIntern.
+     * @param string $rolesRightNameIntern Name of the right where the roles should be removed
+     * @param int[]  $rolesArray
+     * @param int    $folderId
+     */
+    public function removeRolesOnFolder($rolesRightNameIntern, array $rolesArray, $folderId = 0)
+    {
+        $this->editRolesOnFolder('remove', $rolesRightNameIntern, $rolesArray, $folderId);
     }
 
     /**
@@ -230,7 +262,7 @@ class TableFolder extends TableAccess
     {
         if ($folderId === 0)
         {
-            $folderId = $this->getValue('fol_id');
+            $folderId = (int) $this->getValue('fol_id');
             $this->setValue('fol_public', (int) $publicFlag);
         }
 
@@ -266,16 +298,15 @@ class TableFolder extends TableAccess
             // get folder of the parameter
             $condition = ' fol_id   = '.$folderId.'
                        AND fol_type = \'DOWNLOAD\' ';
-            $this->readData($condition);
         }
         else
         {
             // get first folder of current organization
             $condition = ' fol_fol_id_parent IS NULL
                        AND fol_type   = \'DOWNLOAD\'
-                       AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
-            $this->readData($condition);
+                       AND fol_org_id = '.$gCurrentOrganization->getValue('org_id');
         }
+        $this->readData($condition);
 
         // Check if a dataset is found
         if ((int) $this->getValue('fol_id') === 0)
@@ -313,15 +344,15 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * @return array
+     * @return array[] All sub-folders with their properties
      */
-    private function getFolderContentsFolders()
+    private function getSubfoldersWithProperties()
     {
         global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
 
         $folders = array();
 
-        // Erst einmal alle Unterordner auslesen, die in diesem Verzeichnis enthalten sind
+        // Get all subfolder of the current folder
         $sqlFolders = 'SELECT *
                          FROM '.TBL_FOLDERS.'
                         WHERE fol_type          = \'DOWNLOAD\'
@@ -330,48 +361,29 @@ class TableFolder extends TableAccess
                      ORDER BY fol_name';
         $foldersStatement = $this->db->query($sqlFolders);
 
-        // Nun alle Folders und Files in ein mehrdimensionales Array stopfen
-        // angefangen mit den Ordnern:
         while ($rowFolders = $foldersStatement->fetchObject())
         {
+            $folderExists = is_dir(SERVER_PATH . $rowFolders->fol_path . '/' . $rowFolders->fol_name);
+
             $addToArray = false;
 
-            // Wenn der Ordner public ist und nicht gelocked ist, wird er auf jeden Fall ins Array gepackt
-            if (!$rowFolders->fol_locked && $rowFolders->fol_public)
+            // If user has editDownloadRight, show it
+            if ($gCurrentUser->editDownloadRight())
             {
                 $addToArray = true;
             }
-            elseif ($gCurrentUser->editDownloadRight())
+            // If user hasn't editDownloadRight, only show if folder exists
+            elseif ($folderExists)
             {
-                // Falls der User editDownloadRechte hat, bekommt er den Ordner natuerlich auch zu sehen
-                $addToArray = true;
-            }
-            elseif ($gValidLogin)
-            {
-                // check if user has a membership in a role that is assigned to the current folder
-                if ($this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
+                // If user has a membership in a role that is assigned to the current folder, show it
+                if ($gValidLogin && $this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
                 {
                     $addToArray = true;
                 }
-            }
-
-            // Jetzt noch pruefen ob der Ordner physikalisch vorhanden ist
-            if (is_dir(SERVER_PATH . $rowFolders->fol_path . '/' . $rowFolders->fol_name))
-            {
-                $folderExists = true;
-            }
-            else
-            {
-                $folderExists = false;
-
-                if ($gCurrentUser->editDownloadRight())
+                // If folder is public and not locked, show it
+                if ($rowFolders->fol_public && !$rowFolders->fol_locked)
                 {
-                    // falls der Ordner physikalisch nicht existiert wird er nur im Falle von AdminRechten dem Array hinzugefuegt
                     $addToArray = true;
-                }
-                else
-                {
-                    $addToArray = false;
                 }
             }
 
@@ -394,15 +406,15 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * @return array
+     * @return array[] All files with their properties
      */
-    private function getFolderContentsFiles()
+    private function getFilesWithProperties()
     {
         global $gCurrentUser;
 
         $files = array();
 
-        // Nun alle Dateien auslesen, die in diesem Verzeichnis enthalten sind
+        // Get all files of the current folder
         $sqlFiles = 'SELECT *
                        FROM '.TBL_FILES.'
                       WHERE fil_fol_id = '. $this->getValue('fol_id'). '
@@ -412,42 +424,21 @@ class TableFolder extends TableAccess
         // jetzt noch die Dateien ins Array packen:
         while ($rowFiles = $filesStatement->fetchObject())
         {
-            $addToArray = false;
-
-            // Wenn das File nicht gelocked ist, wird es auf jeden Fall in das Array gepackt...
-            if (!$rowFiles->fil_locked)
-            {
-                $addToArray = true;
-            }
-            elseif ($gCurrentUser->editDownloadRight())
-            {
-                // Falls der User editDownloadRechte hat, bekommt er das File natürlich auch zu sehen
-                $addToArray = true;
-            }
-
             $filePath = SERVER_PATH . $this->getValue('fol_path') . '/' . $this->getValue('fol_name') . '/' . $rowFiles->fil_name;
-            // Jetzt noch pruefen ob das File physikalisch vorhanden ist
-            if (is_file($filePath))
-            {
-                $fileExists = true;
+            $fileExists = is_file($filePath);
 
-                // compute filesize
+            $fileSize = 0;
+            if ($fileExists)
+            {
                 $fileSize = round(filesize($filePath) / 1024);
             }
-            else
-            {
-                $fileExists = false;
-                $fileSize   = 0;
 
-                if ($gCurrentUser->editDownloadRight())
-                {
-                    // falls das File physikalisch nicht existiert wird es nur im Falle von AdminRechten dem Array hinzugefuegt
-                    $addToArray = true;
-                }
-                else
-                {
-                    $addToArray = false;
-                }
+            $addToArray = false;
+
+            // If file exists and file isn't locked or user has editDownloadRight, show it
+            if (($fileExists && !$rowFiles->fil_locked) || $gCurrentUser->editDownloadRight())
+            {
+                $addToArray = true;
             }
 
             if ($addToArray)
@@ -472,85 +463,81 @@ class TableFolder extends TableAccess
      * @param array[] $completeFolder
      * @return array[]
      */
-    private function getFolderContentsAddAdditional($completeFolder)
+    private function addAdditionalToFolderContents($completeFolder)
     {
         global $gCurrentUser;
 
-        // Falls der User Downloadadmin ist, wird jetzt noch im physikalischen Verzeichnis geschaut,
-        // ob Sachen drin sind die nicht in der DB sind...
-        if ($gCurrentUser->editDownloadRight())
+        // If user hasn't editDownloadRight, don't add more data
+        if (!$gCurrentUser->editDownloadRight())
         {
-            $folderPath = $this->getCompletePathOfFolder();
-            // pruefen ob der Ordner wirklich existiert
-            if (is_dir($folderPath))
+            return $completeFolder;
+        }
+
+        // Check if folder exists
+        $folderPath = $this->getCompletePathOfFolder();
+        if (!is_dir($folderPath))
+        {
+            return $completeFolder;
+        }
+
+        // User has editDownloadRight and folder exists, so lookup the physical directory for items that aren't in the DB
+        $dirHandle = @opendir($folderPath);
+        if ($dirHandle)
+        {
+            while (($entry = readdir($dirHandle)) !== false)
             {
-                $dirHandle = @opendir($folderPath);
-                if ($dirHandle)
+                if ($entry === '.' || $entry === '..' || strpos($entry, '.') === 0)
                 {
-                    while (($entry = readdir($dirHandle)) !== false)
+                    continue;
+                }
+
+                $alreadyAdded = false;
+
+                // Check if entry is folder or file
+                $entryFolderPath = $folderPath . '/' . $entry;
+
+                if (is_dir($entryFolderPath))
+                {
+                    // Check if folder is already in the regular folders
+                    foreach ($completeFolder['folders'] as $folder)
                     {
-                        if ($entry === '.' || $entry === '..' || strpos($entry, '.') === 0)
+                        if ($folder['fol_name'] === $entry)
                         {
-                            continue;
-                        }
-
-                        // Gucken ob Datei oder Ordner
-                        $entryFolderPath = $folderPath.'/'.$entry;
-
-                        if (is_dir($entryFolderPath))
-                        {
-                            $alreadyAdded = false;
-
-                            // Gucken ob das Verzeichnis bereits bei den regurlären Files dabei ist.
-                            if (array_key_exists('folders', $completeFolder))
-                            {
-                                foreach ($completeFolder['folders'] as $folder)
-                                {
-                                    if ($folder['fol_name'] === $entry)
-                                    {
-                                        $alreadyAdded = true;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            // wenn nicht bereits enthalten wird es nun hinzugefuegt
-                            if (!$alreadyAdded)
-                            {
-                                $completeFolder['additionalFolders'][] = array('fol_name' => $entry);
-                            }
-                        }
-                        elseif (is_file($entryFolderPath))
-                        {
-                            $alreadyAdded = false;
-
-                            // Gucken ob die Datei bereits bei den regurlären Files dabei ist.
-                            if (array_key_exists('files', $completeFolder))
-                            {
-                                foreach ($completeFolder['files'] as $file)
-                                {
-                                    if ($file['fil_name'] === $entry)
-                                    {
-                                        $alreadyAdded = true;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            // wenn nicht bereits enthalten wird es nun hinzugefuegt
-                            if (!$alreadyAdded)
-                            {
-                                // compute filesize
-                                $fileSize = round(filesize($entryFolderPath) / 1024);
-
-                                $completeFolder['additionalFiles'][] = array('fil_name' => $entry, 'fil_size' => $fileSize);
-                            }
+                            $alreadyAdded = true;
+                            break;
                         }
                     }
 
-                    closedir($dirHandle);
+                    // If isn't already in, add it
+                    if (!$alreadyAdded)
+                    {
+                        $completeFolder['additionalFolders'][] = array('fol_name' => $entry);
+                    }
+                }
+                elseif (is_file($entryFolderPath))
+                {
+                    // Check if file is already in the regular files
+                    foreach ($completeFolder['files'] as $file)
+                    {
+                        if ($file['fil_name'] === $entry)
+                        {
+                            $alreadyAdded = true;
+                            break;
+                        }
+                    }
+
+                    // If isn't already in, add it
+                    if (!$alreadyAdded)
+                    {
+                        $completeFolder['additionalFiles'][] = array(
+                            'fil_name' => $entry,
+                            'fil_size' => round(filesize($entryFolderPath) / 1024)
+                        );
+                    }
                 }
             }
+
+            closedir($dirHandle);
         }
 
         return $completeFolder;
@@ -563,13 +550,11 @@ class TableFolder extends TableAccess
     public function getFolderContentsForDownload()
     {
         $completeFolder = array(
-            'folders' => $this->getFolderContentsFolders(),
-            'files'   => $this->getFolderContentsFiles()
+            'folders' => $this->getSubfoldersWithProperties(),
+            'files'   => $this->getFilesWithProperties()
         );
 
-        $completeFolder = $this->getFolderContentsAddAdditional($completeFolder);
-
-        return $completeFolder;
+        return $this->addAdditionalToFolderContents($completeFolder);
     }
 
     /**
@@ -731,42 +716,6 @@ class TableFolder extends TableAccess
         }
 
         return false;
-    }
-
-    /**
-     * Remove all roles of the array from the current folder and all of the subfolders. The
-     * roles will be removed from the right that was set through parameter $rolesRightNameIntern.
-     * @param string $rolesRightNameIntern Name of the right where the roles should be removed
-     * @param int[]  $rolesArray
-     * @param int    $folderId
-     */
-    public function removeRolesOnFolder($rolesRightNameIntern, array $rolesArray, $folderId = 0)
-    {
-        if (count($rolesArray) === 0)
-        {
-            return;
-        }
-
-        if ($folderId === 0)
-        {
-            $folderId = (int) $this->getValue('fol_id');
-        }
-
-        $this->db->startTransaction();
-
-        $subfoldersStatement = $this->getSubfolderStatement($folderId);
-
-        while ($folId = (int) $subfoldersStatement->fetchColumn())
-        {
-            // recursive call for every subfolder
-            $this->removeRolesOnFolder($rolesRightNameIntern, $rolesArray, $folId);
-        }
-
-        // add new rights to folder
-        $folderRolesRights = new RolesRights($this->db, $rolesRightNameIntern, $folderId);
-        $folderRolesRights->removeRoles($rolesArray);
-
-        $this->db->endTransaction();
     }
 
     /**
