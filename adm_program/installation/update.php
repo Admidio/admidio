@@ -249,7 +249,7 @@ if($getMode === 1)
                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                 <strong>'.$gL10n->get('SYS_ERROR').'</strong>
                 <p>'.$gL10n->get('SYS_FILESYSTEM_VERSION_INVALID', $installedDbVersion, ADMIDIO_VERSION_TEXT, '
-                    <a href="'.ADMIDIO_HOMEPAGE.'index.php?page=download">', '</a>').'
+                    <a href="'.ADMIDIO_HOMEPAGE.'download.php">', '</a>').'
                 </p>
             </div>';
         showNotice($message, $g_root_path.'/adm_program/index.php',
@@ -466,7 +466,7 @@ elseif($getMode === 2)
     unset($_SESSION['gCurrentSession']);
 
     // show notice that update was successful
-    $form = new HtmlFormInstallation('installation-form', ADMIDIO_HOMEPAGE.'index.php?page=donate');
+    $form = new HtmlFormInstallation('installation-form', ADMIDIO_HOMEPAGE.'donate.php');
     $form->setUpdateModus();
     $form->setFormDescription($gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION_TEXT).'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'), '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong></div>');
     $form->openButtonGroup();
