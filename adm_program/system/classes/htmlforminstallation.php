@@ -129,6 +129,12 @@ class HtmlFormInstallation extends HtmlForm
             <script type="text/javascript" src="../libs/jquery/jquery.min.js"></script>
             <script type="text/javascript" src="../libs/bootstrap/js/bootstrap.min.js"></script>
             <script type="text/javascript" src="../system/js/common_functions.js"></script>
+
+            <script type="text/javascript">
+                $(function() {
+                    $("[data-toggle=\'popover\']").popover();
+                });
+            </script>
             ' . implode(' ', $this->headers) . '
         </head>
         <body>
