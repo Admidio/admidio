@@ -230,7 +230,7 @@ class ModuleLists extends Modules
     {
         global $gCurrentUser;
 
-        if($this->activeRole === 0 && $gCurrentUser->isAdministrator())
+        if(!$this->activeRole && $gCurrentUser->isAdministrator())
         {
             // if inactive roles should be shown, then show all of them to administrator
             return '';
@@ -289,7 +289,7 @@ class ModuleLists extends Modules
             INNER JOIN '.TBL_CATEGORIES.' cat
                     ON cat_id = rol_cat_id
                  WHERE rol_visible = 1
-                   AND rol_valid   = '.$this->activeRole.'
+                   AND rol_valid   = '.(int) $this->activeRole.'
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
                        '.$sql_conditions.'
@@ -335,7 +335,7 @@ class ModuleLists extends Modules
 
         $sql = 'SELECT COUNT(*) AS count
           FROM '.TBL_ROLES.' rol, '.TBL_CATEGORIES.' cat
-         WHERE rol_valid   = '.$this->activeRole.'
+         WHERE rol_valid   = '.(int) $this->activeRole.'
            AND rol_visible = 1
            AND rol_cat_id = cat_id
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '

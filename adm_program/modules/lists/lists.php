@@ -26,12 +26,10 @@ $getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('def
 if($getActiveRole)
 {
     $headline = $gL10n->get('LST_ACTIVE_ROLES');
-    $getActiveRole = 1;
 }
 else
 {
     $headline = $gL10n->get('LST_INACTIVE_ROLES');
-    $getActiveRole = 0;
 }
 
 // New Modulelist object
@@ -62,7 +60,7 @@ $page->addJavascript('
         roleId    = elementId.substr(elementId.search(/_/)+1);
 
         if($(this).val() === "mylist") {
-            self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + roleId + "&active_role='.$getActiveRole.'";
+            self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + roleId + "&active_role='.(int) $getActiveRole.'";
         } else {
             self.location.href = gRootPath + "/adm_program/modules/lists/lists_show.php?mode=html&lst_id=" + $(this).val() + "&rol_ids=" + roleId;
         }
@@ -89,7 +87,7 @@ if($gCurrentUser->manageRoles() && !$gCurrentUser->isAdministrator())
 }
 
 $page->addJavascript('$("#cat_id").change(function() { $("#navbar_cat_id_form").submit(); });', true);
-$navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/lists/lists.php?active_role='.$getActiveRole, $page, array('type' => 'navbar', 'setFocus' => false));
+$navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/lists/lists.php?active_role='.(int) $getActiveRole, $page, array('type' => 'navbar', 'setFocus' => false));
 $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
 $ListsMenu->addForm($navbarForm->show(false));
 
@@ -112,14 +110,14 @@ if($numberOfRoles === 0)
     if($gValidLogin)
     {
         // If login valid, than show message for non available roles
-        if($getActiveRole == 0)
+        if($getActiveRole)
         {
-            $gMessage->show($gL10n->get('LST_NO_ROLES_REMOVED'));
+            $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
             // => EXIT
         }
         else
         {
-            $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
+            $gMessage->show($gL10n->get('LST_NO_ROLES_REMOVED'));
             // => EXIT
         }
     }
@@ -308,7 +306,7 @@ if($listsResult['numResults'] > 0)
 }
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='.$getCatId.'&active_role='.$getActiveRole;
+$base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='.$getCatId.'&active_role='.(int) $getActiveRole;
 $page->addHtml(admFuncGeneratePagination($base_url, $numberOfRoles, $gPreferences['lists_roles_per_page'], $getStart, true));
 
 $page->addHtml('</div>');
