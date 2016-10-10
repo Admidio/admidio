@@ -142,6 +142,7 @@ foreach($listConfigurations as &$rowConfigurations)
         $rowConfigurations[2] = $gL10n->get('LST_GENERAL_LISTS');
     }
 }
+unset($rowConfigurations);
 
 // add list item for own list
 $listConfigurations[] = array('mylist', $gL10n->get('LST_CREATE_OWN_LIST'), $gL10n->get('LST_CONFIGURATION'));
