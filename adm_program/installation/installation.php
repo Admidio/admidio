@@ -50,8 +50,8 @@ if(!isset($g_tbl_praefix))
     }
 }
 
-// embed constants file
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1).'/adm_program/system/constants.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/init_globals.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
 if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
@@ -60,32 +60,15 @@ if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
         the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or higher.</div>');
 }
 
-require_once('install_functions.php');
-require_once(SERVER_PATH.'/adm_program/system/string.php');
-require_once(SERVER_PATH.'/adm_program/system/function.php');
+require_once(SERVER_PATH . '/adm_program/installation/install_functions.php');
+require_once(SERVER_PATH . '/adm_program/system/function.php');
+require_once(SERVER_PATH . '/adm_program/system/string.php');
 
 // Initialize and check the parameters
 
 define('THEME_PATH', 'layout');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
 $message = '';
-
-// set default password-hash algorithm
-if (!isset($gPasswordHashAlgorithm))
-{
-    $gPasswordHashAlgorithm = 'DEFAULT';
-}
-
-// default database type is always MySQL and must be set because of old config files
-if(!isset($gDbType))
-{
-    $gDbType = 'mysql';
-}
-
-if (!isset($g_adm_port))
-{
-    $g_adm_port = null;
-}
 
 // create language and language data object to handle translations
 $language = '';

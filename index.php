@@ -11,24 +11,7 @@
 if(is_file('adm_my_files/config.php'))
 {
     require_once('adm_my_files/config.php');
-
-    // default prefix is set to 'adm' because of compatibility to old versions
-    if(!isset($g_tbl_praefix))
-    {
-        $g_tbl_praefix = 'adm';
-    }
-
-    // create database object and establish connection to database
-    if(!isset($gDbType))
-    {
-        $gDbType = 'mysql';
-    }
-
-    if (!isset($g_adm_port))
-    {
-        $g_adm_port = null;
-    }
-
+    require_once('adm_program/system/init_globals.php');
     require_once('adm_program/system/constants.php');
     require_once('adm_program/system/function.php');
 
