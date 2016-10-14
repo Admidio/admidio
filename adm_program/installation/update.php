@@ -349,7 +349,7 @@ elseif($getMode === 2)
 
                     if (is_file($dbScriptsPath . $sqlFileName))
                     {
-                        $sqlQueryResult = querySqlFile($db, $sqlFileName);
+                        $sqlQueryResult = querySqlFile($gDb, $sqlFileName);
 
                         if ($sqlQueryResult === true)
                         {
@@ -398,7 +398,7 @@ elseif($getMode === 2)
         }
     }
 
-    disableSoundexSearchIfPgsql($db);
+    disableSoundexSearchIfPgsql($gDb);
 
     // since version 3 we do the update with xml files and a new class model
     if($versionMain >= 3)
