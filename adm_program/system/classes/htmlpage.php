@@ -125,7 +125,7 @@ class HtmlPage
         }
         else
         {
-            $this->javascriptContent .= $javascriptCode;
+            $this->javascriptContent .= $javascriptCode. "\n";
         }
     }
 

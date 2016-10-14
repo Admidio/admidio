@@ -627,6 +627,10 @@ foreach ($membersList as $member)
                         $content = $gL10n->get('SYS_NO');
                     }
                 }
+                elseif($content != 1)
+                {
+                    $content = 0;
+                }
             }
             elseif ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'DATE'
             || $column->getValue('lsc_special_field') === 'mem_begin'
@@ -669,6 +673,7 @@ foreach ($membersList as $member)
                 }
                 else
                 {
+                    // within print mode no links should be set
                     if ($getMode === 'print'
                     &&    ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'EMAIL'
                         || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'PHONE'
@@ -678,7 +683,15 @@ foreach ($membersList as $member)
                     }
                     else
                     {
-                        $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member['usr_id']);
+                        // checkbox must set a sorting value
+                        if($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX')
+                        {
+                            $columnValues[] = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member['usr_id']), 'order' => $content);
+                        }
+                        else
+                        {
+                            $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member['usr_id']);
+                        }
                     }
                 }
             }
