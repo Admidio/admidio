@@ -55,7 +55,7 @@ $getStart   = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue'
 $getLength  = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
 $getSearch  = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 
-error_log('bool::'.$getMembersShowAll);
+$gLogger->info('mem_show_all: ' . $getMembersShowAll);
 
 $jsonArray = array('draw' => $getDraw);
 

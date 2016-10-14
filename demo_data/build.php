@@ -33,6 +33,7 @@ require_once('../adm_program/system/init_globals.php');
 require_once('../adm_program/system/constants.php');
 require_once('../adm_program/system/function.php');
 require_once('../adm_program/system/string.php');
+require_once('../adm_program/system/logging.php');
 
 // import of demo data must be enabled in config.php
 if(!isset($gImportDemoData) || $gImportDemoData != 1)

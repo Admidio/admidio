@@ -63,6 +63,7 @@ if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
 require_once(SERVER_PATH . '/adm_program/installation/install_functions.php');
 require_once(SERVER_PATH . '/adm_program/system/function.php');
 require_once(SERVER_PATH . '/adm_program/system/string.php');
+require_once(SERVER_PATH . '/adm_program/system/logging.php');
 
 // Initialize and check the parameters
 

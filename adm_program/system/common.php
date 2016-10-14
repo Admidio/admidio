@@ -30,12 +30,10 @@ if($gDebug)
     error_reporting(E_ALL | E_STRICT); // PHP 5.3 fallback (https://secure.php.net/manual/en/function.error-reporting.php)
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
-
-    // write actual script with parameters in log file
-    error_log('--------------------------------------------------------------------------------'."\n" .
-              $_SERVER['SCRIPT_FILENAME'] . "\n? " . $_SERVER['QUERY_STRING']);
-    error_log('memory_used::' . memory_get_usage());
 }
+
+// LOGGING
+require_once(SERVER_PATH . '/adm_program/system/logging.php');
 
 // remove HTML & PHP-Code from all parameters
 $_GET    = admStrStripTagsSpecial($_GET);

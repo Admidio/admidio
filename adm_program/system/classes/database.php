@@ -270,7 +270,7 @@ class Database
      */
     public function startTransaction()
     {
-        global $gDebug;
+        global $gLogger;
 
         // If we are within a transaction we will not open another one,
         // but enclose the current one to not loose data (prevening auto commit)
@@ -281,10 +281,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        if ($gDebug)
-        {
-            error_log('START TRANSACTION');
-        }
+        $gLogger->info('START TRANSACTION');
 
         $result = $this->pdo->beginTransaction();
 
@@ -308,7 +305,7 @@ class Database
      */
     public function endTransaction()
     {
-        global $gDebug;
+        global $gLogger;
 
         // if there is no open transaction then do nothing and return
         if ($this->transactions === 0)
@@ -325,10 +322,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        if ($gDebug)
-        {
-            error_log('COMMIT');
-        }
+        $gLogger->info('COMMIT');
 
         $result = $this->pdo->commit();
 
@@ -448,7 +442,7 @@ class Database
      */
     public function query($sql, $showError = true)
     {
-        global $gDebug;
+        global $gLogger;
 
         if ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql')
         {
@@ -483,10 +477,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        if ($gDebug)
-        {
-            error_log($sql);
-        }
+        $gLogger->info($sql);
 
         try
         {
@@ -502,10 +493,9 @@ class Database
             }
         }
 
-        if ($gDebug && strpos(strtoupper($sql), 'SELECT') === 0)
+        if (strpos(strtoupper($sql), 'SELECT') === 0)
         {
-            // if debug modus then show number of selected rows
-            error_log('Found rows: '.$this->pdoStatement->rowCount());
+            $gLogger->info('Found rows: '.$this->pdoStatement->rowCount());
         }
 
         return $this->pdoStatement;
@@ -520,7 +510,7 @@ class Database
      */
     public function rollback()
     {
-        global $gDebug;
+        global $gLogger;
 
         if ($this->transactions === 0)
         {
@@ -528,10 +518,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        if ($gDebug)
-        {
-            error_log('ROLLBACK');
-        }
+        $gLogger->info('ROLLBACK');
 
         $result = $this->pdo->rollBack();
 
@@ -688,7 +675,7 @@ class Database
      */
     public function showError()
     {
-        global $gPreferences, $gDebug, $gL10n;
+        global $gPreferences, $gLogger, $gL10n;
 
         $backtrace = $this->getBacktrace();
 
@@ -713,10 +700,7 @@ class Database
              </div>';
 
         // in debug mode show error in log file
-        if ($gDebug)
-        {
-            error_log($errorCode.': '.$errorInfo[1]."\n".$errorInfo[2]);
-        }
+        $gLogger->error($errorCode.': '.$errorInfo[1]."\n".$errorInfo[2]);
 
         // display database error to user
         if (isset($gPreferences) && defined('THEME_SERVER_PATH') && !headers_sent())

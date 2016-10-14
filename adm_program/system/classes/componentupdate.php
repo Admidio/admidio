@@ -161,7 +161,7 @@ class ComponentUpdate extends Component
      */
     public function update()
     {
-        global $gDebug;
+        global $gLogger;
 
         $this->updateFinished = false;
         $this->currentVersionArray = array_map('intval', explode('.', $this->getValue('com_version')));
@@ -190,10 +190,7 @@ class ComponentUpdate extends Component
                 }
 
                 // output of the version number for better debugging
-                if($gDebug)
-                {
-                    error_log('Update to version '.$mainVersion.'.'.$subVersion);
-                }
+                $gLogger->info('Update to version '.$mainVersion.'.'.$subVersion);
 
                 // open xml file for this version
                 if($this->createXmlObject($mainVersion, $subVersion))
