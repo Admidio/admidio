@@ -531,7 +531,8 @@ class ProfileFields
                     $date = DateTime::createFromFormat($gPreferences['system_date'], $fieldValue);
                     if($date === false)
                     {
-                        if(!$this->noValueCheck)
+                        $date = DateTime::createFromFormat('Y-m-d', $fieldValue);
+                        if($date === false && !$this->noValueCheck)
                         {
                             return false;
                         }

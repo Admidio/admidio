@@ -1502,6 +1502,17 @@ class User extends TableAccess
         $oldFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
         $newValue = (string) $newValue;
 
+        // format of date will be local but database hase stored Y-m-d format must be changed for compare
+        if($this->mProfileFieldsData->getProperty($columnName, 'usf_type') === 'DATE')
+        {
+            $date = DateTime::createFromFormat($gPreferences['system_date'], $newValue);
+
+            if($date !== false)
+            {
+                $newValue = $date->format('Y-m-d');
+            }
+        }
+
         // only to a update if value has changed
         if (strcmp($oldFieldValue, $newValue) === 0) // https://secure.php.net/manual/en/function.strcmp.php#108563
         {
