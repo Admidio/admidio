@@ -121,7 +121,7 @@ class HtmlPage
     {
         if($executeAfterPageLoad)
         {
-            $this->javascriptContentExecute .= $javascriptCode;
+            $this->javascriptContentExecute .= $javascriptCode. "\n";
         }
         else
         {
