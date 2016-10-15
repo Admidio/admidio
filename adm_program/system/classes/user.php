@@ -955,6 +955,8 @@ class User extends TableAccess
      */
     public function hasRightViewProfile(User $user)
     {
+        global $gValidLogin;
+
         // if user is allowed to edit the profile then he can also view it
         if($this->hasRightEditProfile($user))
         {
@@ -991,7 +993,7 @@ class User extends TableAccess
         {
             while($row = $listViewStatement->fetch())
             {
-                if($row['rol_this_list_view'] == 2)
+                if($row['rol_this_list_view'] == 2 && $gValidLogin)
                 {
                     // alle angemeldeten Benutzer duerfen Rollenlisten/-profile sehen
                     return true;

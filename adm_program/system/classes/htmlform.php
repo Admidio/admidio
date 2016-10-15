@@ -493,7 +493,7 @@ class HtmlForm extends HtmlFormBasic
                 uiColor: "'.$gPreferences['system_js_editor_color'].'",
                 filebrowserImageUploadUrl: "'.$g_root_path.'/adm_program/system/ckeditor_upload_handler.php"
             });
-            CKEDITOR.config.height = '.$optionsAll['height'].';';
+            CKEDITOR.config.height = "'.$optionsAll['height'].'";';
 
         if($gPreferences['system_js_editor_enabled'] == 1)
         {

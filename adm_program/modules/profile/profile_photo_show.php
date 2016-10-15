@@ -15,7 +15,6 @@
  ***********************************************************************************************
  */
 require('../../system/common.php');
-require('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUserId   = admFuncVariableIsValid($_GET, 'usr_id',    'int', array('requireValue' => true));
@@ -34,46 +33,47 @@ if($user->getValue('usr_id') == 0)
     // => EXIT
 }
 
-// Testen ob Recht besteht Profil einzusehn
+// if user has no right to view profile then show dummy photo
 if(!$gCurrentUser->hasRightViewProfile($user))
 {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
-// Foto aus adm_my_files
-if($gPreferences['profile_photo_storage'] == 1 && !$getNewPhoto)
-{
-    if(is_file(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
-    {
-        $picPath = SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg';
-    }
     $image = new Image($picPath);
 }
-// Foto aus der Datenbank
-elseif($gPreferences['profile_photo_storage'] == 0 && !$getNewPhoto)
+else
 {
-    if(strlen($user->getValue('usr_photo')) != null)
+    // show photo from folder adm_my_files
+    if($gPreferences['profile_photo_storage'] == 1 && !$getNewPhoto)
     {
-        $image = new Image();
-        $image->setImageFromData($user->getValue('usr_photo'));
-    }
-    else
-    {
+        if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
+        {
+            $picPath = SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg';
+        }
         $image = new Image($picPath);
     }
-}
-// neues Foto, Ordnerspeicherung
-elseif($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto)
-{
-    $picPath = SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg';
-    $image = new Image($picPath);
-}
-// neues Foto, Datenbankspeicherung
-elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto)
-{
-    $image = new Image();
-    $image->setImageFromData($gCurrentSession->getValue('ses_binary'));
+    // show photo from database
+    elseif($gPreferences['profile_photo_storage'] == 0 && !$getNewPhoto)
+    {
+        if(strlen($user->getValue('usr_photo')) != null)
+        {
+            $image = new Image();
+            $image->setImageFromData($user->getValue('usr_photo'));
+        }
+        else
+        {
+            $image = new Image($picPath);
+        }
+    }
+    // show temporary saved new photo from upload in filesystem
+    elseif($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto)
+    {
+        $picPath = SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg';
+        $image = new Image($picPath);
+    }
+    // show temporary saved new photo from upload in database
+    elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto)
+    {
+        $image = new Image();
+        $image->setImageFromData($gCurrentSession->getValue('ses_binary'));
+    }
 }
 
 header('Content-Type: '. $image->getMimeType());
